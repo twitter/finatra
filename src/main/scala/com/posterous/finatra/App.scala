@@ -27,7 +27,9 @@ object App {
       //println(num)
     } 
 
-    get("/", () => 2 + 2)
+    get("/", () => 
+      2 + 2
+    )
 
     def apply(request: HttpRequest) = {
       val response = new DefaultHttpResponse(HTTP_1_1, OK)
