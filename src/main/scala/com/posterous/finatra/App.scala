@@ -14,9 +14,21 @@ import com.twitter.finagle.http.Http
  * @author ${user.name}
  */
 object App {
- 
 
-  class HelloWorld extends Service[HttpRequest, HttpResponse] {
+  class HelloWorld extends Service[HttpRequest, HttpResponse]{  
+
+    var routes: Map[String, Function0[Int]] = Map()
+
+    def get(path: String, callback:() => Int) { 
+      //val result = callback()
+      //println(result)
+      routes += path -> callback 
+      //val num = routes.get("/").getOrElse(null)()
+      //println(num)
+    } 
+
+    get("/", () => 2 + 2)
+
     def apply(request: HttpRequest) = {
       val response = new DefaultHttpResponse(HTTP_1_1, OK)
       response.setContent(copiedBuffer("hello world", UTF_8))
