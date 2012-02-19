@@ -77,10 +77,4 @@ object Router extends Logging {
       //returnFuture(Router.routes.get(key).getOrElse(null)().toString)
   }
 
-  def mount(app: FinatraApp) = {
-    log.info("mounting %s", app)
-  }
-  
-
-
 }
