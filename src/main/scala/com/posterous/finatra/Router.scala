@@ -1,14 +1,26 @@
 package com.posterous.finatra
+
 import com.codahale.logula.Logging
 import scala.collection.mutable.HashSet
+import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
 
 object Router extends Logging {
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
 
   def addRoute(method: String, path: String)(callback: => Any) {
     val regex = SinatraPathPatternParser(path)
-    log.info("lol")
+    log.info("adding regex %s for %s", regex, path)
     routes += Tuple3(method, regex, (() => callback))
+  }
+
+  def dispatch(request: Request) = {
+    val fa = new FinatraApp()
+    fa(request)
+    //returnFuture("asd")
+  }
+
+  def mount(app: FinatraApp) = {
+    log.info("mounting %s", app)
   }
   
 

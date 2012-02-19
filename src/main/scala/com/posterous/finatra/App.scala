@@ -20,24 +20,21 @@ import org.apache.log4j.Level
 
 
 
-object App {
-
+object App extends Logging {
 
   class FinatraService extends Service[Request, Response]{  
    def apply(request: Request) = {
-      SomeShit(request)
-      Whatever(request)
+      Router.dispatch(request)
     }
   }
 
 
   def main(args : Array[String]) {
-    val finatraService = new FinatraService
+    //logger conf
     Logging.configure { log =>
       log.registerWithJMX = true
 
       log.level = Level.INFO
-      //log.loggers("com.posterous.weebits") = Level.OFF
 
       log.console.enabled = true
       log.console.threshold = Level.WARN
@@ -49,13 +46,23 @@ object App {
 
     }
 
+    log.info("starting server")
+    log.info("reading configuration")
+
+    //load the conf
+    Config()
+
+    //init stuff here
+    val finatraService = new FinatraService
+    
     val server: Server = ServerBuilder()
       .codec(RichHttp[Request](Http()))
       .bindTo(new InetSocketAddress(7070))
       .name("finatraService")
       .build(finatraService)
-
-    println("started on 7070")
+    
+    log.info("server started on 7070")
+    println("started on 7070: view logs/finatra.log for more info")
   }
 
 }

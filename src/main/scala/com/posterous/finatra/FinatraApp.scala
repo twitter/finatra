@@ -12,13 +12,9 @@ import com.twitter.finagle.http.path._
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.posterous.finatra.Router.{get,post,put,delete,patch,head}
+import com.codahale.logula.Logging
 
-class Params {
-
-}
-
-
-class FinatraApp { 
+class FinatraApp extends Logging { 
 
     var request:Request = null
     var paramsHash:Map[String, String] = Map()
@@ -31,6 +27,7 @@ class FinatraApp {
     }
 
     def loadUrlParams() {
+      
       this.request.params.foreach(xs => this.paramsHash += xs)
     }
 
@@ -43,7 +40,11 @@ class FinatraApp {
       this.request.params.get(name)
     }
 
-    def apply(request:Request) = {
+    def apply(request: Request) = {
+      returnFuture("a")
+    }
+    def lapply(request:Request) = {
+      log.info("apply: recvd request %s", request.uri)
       this.paramsHash = Map()
       this.request = request
       loadUrlParams()
