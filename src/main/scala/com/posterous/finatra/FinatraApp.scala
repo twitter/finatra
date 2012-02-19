@@ -23,6 +23,7 @@ class FinatraApp {
 
     def apply(request:Request) = {
       val key = Router.hashKey(request.method.toString, request.path.toString)
+      println(Router.routes)
       returnFuture(Router.routes.get(key).getOrElse(null)().toString)
     }
 

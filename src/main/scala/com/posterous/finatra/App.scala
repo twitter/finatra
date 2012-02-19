@@ -20,6 +20,7 @@ object App {
   class FinatraService extends Service[Request, Response]{  
    def apply(request: Request) = {
       SomeShit(request)
+      Whatever(request)
     }
   }
 
