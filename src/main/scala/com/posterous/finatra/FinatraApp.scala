@@ -21,6 +21,7 @@ class Params {
 class FinatraApp { 
 
     var request:Request = null
+    var paramsHash:Map[String, String] = Map()
 
     def returnFuture(x:String) = {
       val response = Response(Http11, InternalServerError)
@@ -29,26 +30,39 @@ class FinatraApp {
       Future.value(response)
     }
 
+    def loadUrlParams() {
+      this.request.params.foreach(xs => this.paramsHash += xs)
+    }
+
+    def loadMatchParams(path:Option[Map[_, _]]) {
+      path.foreach(xs => println(xs))
+    }
+
     def params(name:String):Option[String] = {
+      //this.paramsHash.get(name)
       this.request.params.get(name)
     }
 
     def apply(request:Request) = {
+      this.paramsHash = Map()
       this.request = request
+      loadUrlParams()
       var thematch:Option[Map[_,_]] = None
       val foundRoute = Router.routes.find( route => route match {
         case (method, pattern, callback) =>
           thematch = pattern(request.uri)
-          if(thematch.getOrElse(null) != null)
+          if(thematch.getOrElse(null) != null) {
+            loadMatchParams(thematch)
             true
-          else
+          } else {
             false
+          }
       })
       val result = foundRoute match {
-        case Some(x) => thematch.toString
+        case Some((method, pattern,callback)) => callback()
         case None => "404"
       }
-      returnFuture(result)
+      returnFuture(result.toString)
       //println(Router.routes)
       //returnFuture(Router.routes.get(key).getOrElse(null)().toString)
     }
