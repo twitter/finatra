@@ -1,6 +1,7 @@
 package com.posterous.finatra
 
 import scala.collection.mutable.HashSet
+import scala.collection.mutable.ListBuffer
 import java.net.InetSocketAddress
 import java.util.{NoSuchElementException => NoSuchElement}
 import org.jboss.netty.handler.codec.http.HttpMethod._
@@ -28,14 +29,14 @@ object Router extends Logging {
   }
 
   def parseMatchParam(xs: Tuple2[_, _]) = {
-    log.info("  matching %s", xs._2)
-   // val key = xs.getOrElse(null)
-    //log.info("    key is %s", key)
+    this.paramsHash += Tuple2(xs._1.toString, xs._2.asInstanceOf[ListBuffer[String]].head.toString)
   }
 
-  def params(name:String):Option[String] = {
-    //this.paramsHash.get(name)
-    this.request.params.get(name)
+  def params(name:String):String = {
+    this.paramsHash.get(name) match {
+      case Some(str) => str
+      case None => ""
+    }
   }
 
 
@@ -53,7 +54,7 @@ object Router extends Logging {
   }
 
   def dispatch(request: Request) = {
-    log.info("apply: recvd request %s", request.uri)
+    log.info("recvd request %s", request.uri)
     this.paramsHash = Map()
     this.request = request
     loadUrlParams()
@@ -63,6 +64,7 @@ object Router extends Logging {
         thematch = pattern(request.uri)
         if(thematch.getOrElse(null) != null) {
           thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
+          log.info("paramsHash is %s", this.paramsHash) 
           true
         } else {
           false
