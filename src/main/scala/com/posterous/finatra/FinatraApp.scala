@@ -35,14 +35,20 @@ class FinatraApp {
 
     def apply(request:Request) = {
       this.request = request
-      var res = "none"
-      Router.routes.foreach( route => route match {
+      var thematch:Option[Map[_,_]] = None
+      val foundRoute = Router.routes.find( route => route match {
         case (method, pattern, callback) =>
-          var thematch = pattern(request.uri).getOrElse(null)
-          if(thematch != null)
-            res = "matches"
+          thematch = pattern(request.uri)
+          if(thematch.getOrElse(null) != null)
+            true
+          else
+            false
       })
-      returnFuture(res)
+      val result = foundRoute match {
+        case Some(x) => thematch.toString
+        case None => "404"
+      }
+      returnFuture(result)
       //println(Router.routes)
       //returnFuture(Router.routes.get(key).getOrElse(null)().toString)
     }
