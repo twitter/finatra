@@ -15,7 +15,13 @@ import com.twitter.finagle.builder.{Server, ServerBuilder}
 /**
  * @author ${user.name}
  */
+import com.codahale.logula.Logging
+import org.apache.log4j.Level
+
+
+
 object App {
+
 
   class FinatraService extends Service[Request, Response]{  
    def apply(request: Request) = {
@@ -27,7 +33,21 @@ object App {
 
   def main(args : Array[String]) {
     val finatraService = new FinatraService
+    Logging.configure { log =>
+      log.registerWithJMX = true
 
+      log.level = Level.INFO
+      //log.loggers("com.posterous.weebits") = Level.OFF
+
+      log.console.enabled = true
+      log.console.threshold = Level.WARN
+
+      log.file.enabled = true
+      log.file.filename = "logs/finatra.log"
+      log.file.maxSize = 10 * 1024 // KB
+      log.file.retainedFiles = 5 // keep five old logs around
+
+    }
 
     val server: Server = ServerBuilder()
       .codec(RichHttp[Request](Http()))

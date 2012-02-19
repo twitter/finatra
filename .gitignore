@@ -27,6 +27,7 @@ temp*
 dist
 test-output
 build.log
+logs/*
 
 # other scm
 .svn

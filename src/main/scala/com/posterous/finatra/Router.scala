@@ -1,11 +1,13 @@
 package com.posterous.finatra
+import com.codahale.logula.Logging
 import scala.collection.mutable.HashSet
 
-object Router {
+object Router extends Logging {
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
 
   def addRoute(method: String, path: String)(callback: => Any) {
     val regex = SinatraPathPatternParser(path)
+    log.info("lol")
     routes += Tuple3(method, regex, (() => callback))
   }
   
