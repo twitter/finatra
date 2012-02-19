@@ -12,7 +12,7 @@ object SomeShit extends FinatraApp {
 
   get("/foo") { <h1>foo</h1> }
   
-  get("/doit/:name") { params("name") }
+  get("/doit/:year") { params("name") }
 
 }
 

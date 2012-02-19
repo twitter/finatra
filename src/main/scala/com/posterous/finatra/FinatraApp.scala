@@ -30,14 +30,21 @@ class FinatraApp {
     }
 
     def params(name:String):Option[String] = {
-      this.request.params.get(name).orElse(null)
+      this.request.params.get(name)
     }
 
     def apply(request:Request) = {
       this.request = request
-      val key = Router.hashKey(request.method.toString, request.path.toString)
-      println(Router.routes)
-      returnFuture(Router.routes.get(key).getOrElse(null)().toString)
+      var res = "none"
+      Router.routes.foreach( route => route match {
+        case (method, pattern, callback) =>
+          var thematch = pattern(request.uri).getOrElse(null)
+          if(thematch != null)
+            res = "matches"
+      })
+      returnFuture(res)
+      //println(Router.routes)
+      //returnFuture(Router.routes.get(key).getOrElse(null)().toString)
     }
 
 }

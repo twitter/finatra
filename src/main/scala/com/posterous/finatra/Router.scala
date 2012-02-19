@@ -1,13 +1,14 @@
 package com.posterous.finatra
+import scala.collection.mutable.HashSet
 
 object Router {
-  var routes: Map[String, Function0[Any]] = Map()
+  var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
 
   def addRoute(method: String, path: String)(callback: => Any) {
-    routes += hashKey(method, path) -> (() => callback)
+    val regex = SinatraPathPatternParser(path)
+    routes += Tuple3(method, regex, (() => callback))
   }
-
-  def hashKey(method: String, path: String) = method + path
+  
 
   def get(path: String)(callback: => Any) { addRoute("GET", path)(callback) } 
   def delete(path: String)(callback: => Any) { addRoute("DELETE", path)(callback) } 
