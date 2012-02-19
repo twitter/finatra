@@ -11,6 +11,8 @@ object SomeShit extends FinatraApp {
   get("/") { <h1>asd</h1> } 
 
   get("/foo") { <h1>foo</h1> }
+  
+  get("/doit/:name") { params("name") }
 
 }
 
