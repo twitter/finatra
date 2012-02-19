@@ -19,8 +19,7 @@ object App {
 
   class FinatraService extends Service[Request, Response]{  
    def apply(request: Request) = {
-      val fa = new FinatraApp
-      fa(request)
+      SomeShit(request)
     }
   }
 

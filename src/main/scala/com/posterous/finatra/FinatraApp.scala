@@ -12,7 +12,6 @@ import com.twitter.finagle.http.path._
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.posterous.finatra.Router.{get,post,put,delete,patch,head}
-
 class FinatraApp { 
 
     def returnFuture(x:String) = {
@@ -23,7 +22,8 @@ class FinatraApp {
     }
 
     def apply(request:Request) = {
-      returnFuture("as")
+      val key = Router.hashKey(request.method.toString, request.path.toString)
+      returnFuture(Router.routes.get(key).getOrElse(null)().toString)
     }
 
 }
