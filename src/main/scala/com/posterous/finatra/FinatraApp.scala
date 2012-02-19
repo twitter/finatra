@@ -1,5 +1,4 @@
 package com.posterous.finatra
-
 import java.net.InetSocketAddress
 import java.util.{NoSuchElementException => NoSuchElement}
 import org.jboss.netty.handler.codec.http.HttpMethod._
@@ -12,31 +11,19 @@ import com.twitter.finagle.http.Version.Http11
 import com.twitter.finagle.http.path._
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.builder.{Server, ServerBuilder}
-/**
- * @author ${user.name}
- */
-object App {
+import com.posterous.finatra.Router.{get,post,put,delete,patch,head}
 
-  class FinatraService extends Service[Request, Response]{  
-   def apply(request: Request) = {
-      val fa = new FinatraApp
-      fa(request)
+class FinatraApp { 
+
+    def returnFuture(x:String) = {
+      val response = Response(Http11, InternalServerError)
+      response.mediaType = "text/plain" 
+      response.content = copiedBuffer(x, UTF_8)
+      Future.value(response)
     }
-  }
 
-
-  def main(args : Array[String]) {
-    val finatraService = new FinatraService
-
-
-    val server: Server = ServerBuilder()
-      .codec(RichHttp[Request](Http()))
-      .bindTo(new InetSocketAddress(7070))
-      .name("finatraService")
-      .build(finatraService)
-
-    println("started on 7070")
-  }
+    def apply(request:Request) = {
+      returnFuture("as")
+    }
 
 }
-
