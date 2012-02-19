@@ -35,6 +35,7 @@ object App {
     get("/") { returnFuture("lol") }
 
     def apply(request: Request) = {
+      
       println(routes)
       returnFuture("Asd")
     }
