@@ -19,25 +19,24 @@ object App {
 
   class HelloWorld extends Service[Request, Response]{  
 
-    var routes: Map[String, Function0[Int]] = Map()
+    var routes: Map[String, Function0[Any]] = Map()
 
-    def get(path: String, callback:() => Int) { 
-      //val result = callback()
-      //println(result)
-      routes += path -> callback 
-      //val num = routes.get("/").getOrElse(null)()
-      //println(num)
-    } 
-
-    get("/", () => 
-      2 + 2
-    )
-
-    def apply(request: Request) = {
+    def returnFuture(x:String) = {
       val response = Response(Http11, InternalServerError)
       response.mediaType = "text/plain" 
-      response.content = copiedBuffer("hello world", UTF_8)
+      response.content = copiedBuffer(x, UTF_8)
       Future.value(response)
+    }
+
+    def get(path: String)(callback: => Any) { 
+      routes += path -> (() => callback)
+    } 
+
+    get("/") { returnFuture("lol") }
+
+    def apply(request: Request) = {
+      println(routes)
+      returnFuture("Asd")
     }
   }
 
