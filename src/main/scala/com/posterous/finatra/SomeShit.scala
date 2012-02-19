@@ -1,5 +1,4 @@
 package com.posterous.finatra
-import com.posterous.finatra.Router.{get,post,put,delete,patch,head}
 
 object Whatever extends FinatraApp {
   get("/lol") { <h1>lol</h1> }
