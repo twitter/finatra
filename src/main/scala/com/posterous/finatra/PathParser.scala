@@ -2,7 +2,6 @@ package com.posterous.finatra
 
 /**
  * lifted from https://github.com/scalatra/scalatra/blob/develop/core/src/main/scala/org/scalatra/pathPatternParsers.scala 
- * deal with it
  */
 
 import scala.collection.mutable.{HashMap, ListBuffer}
