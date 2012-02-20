@@ -46,8 +46,9 @@ object Router extends Logging {
 
   def returnFuture(content:String) = {
     val new_response = Response(Http11, InternalServerError)
-    new_response.statusCode = response.status
-    new_response.mediaType = response.mediaType
+    log.info("returning response %s", response)
+    new_response.statusCode = this.response.status
+    new_response.mediaType = this.response.mediaType
     new_response.content = copiedBuffer(content, UTF_8)
     Future.value(new_response)
   }
@@ -71,6 +72,7 @@ object Router extends Logging {
     log.info("recvd request %s", request.uri)
     this.paramsHash = Map()
     this.request = request
+    this.response = FinatraResponse()
     loadUrlParams()
     val result = this.routeExists(request) match {
       case Some((method, pattern,callback)) => callback()
