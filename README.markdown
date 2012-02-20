@@ -1,10 +1,10 @@
 # Finatra
 
-## Description
+### Description
 Finatra is a sinatra clone backed by scala/finagle
 
 
-## Current api/features
+### Current api/features
 
 ```scala
 package com.posterous.finatra
