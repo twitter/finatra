@@ -44,14 +44,9 @@ object Router extends Logging {
     routes += Tuple3(method, regex, (() => callback))
   }
 
-  def returnFuture(content:String) = {
-    val new_response = Response(Http11, InternalServerError)
+  def returnFuture(response: Response) = {
     log.info("returning response %s", response)
-    new_response.statusCode = this.response.status
-    new_response.mediaType = this.response.mediaType
-    this.response.headers.foreach(xs => new_response.addHeader(xs._1, xs._2))
-    new_response.content = copiedBuffer(content, UTF_8)
-    Future.value(new_response)
+    Future.value(response)
   }
 
   def routeExists(request: Request) = {
@@ -69,17 +64,37 @@ object Router extends Logging {
     })
   }
 
-  def dispatch(request: Request) = {
+  def buildResponse(output:String) = {
+    val resp = Response(Http11, InternalServerError)
+    resp.statusCode = this.response.status
+    resp.mediaType = this.response.mediaType
+    this.response.headers.foreach(xs => resp.addHeader(xs._1, xs._2))
+    resp.content = copiedBuffer(output.toString, UTF_8)
+
+    resp
+  }
+
+  def setStatus(status:Int) = {
+    this.response.status = status  
+  }
+
+  def dispatch(request: Request):Response = {
     log.info("recvd request: %s %s %s", request.method, request.uri, request.headers)
+
     this.paramsHash = Map()
-    this.request = request
-    this.response = FinatraResponse()
+    this.request    = request
+    this.response   = FinatraResponse()
+
     loadUrlParams()
+
     val result = this.routeExists(request) match {
       case Some((method, pattern,callback)) => callback()
-      case None => "404"
+      case none => 
+        setStatus(404)
+        "404 Not Found"
     }
-    result.toString
+    
+    buildResponse(result.toString)
   }
   
   def dispatchAndReturn(request: Request) = {
