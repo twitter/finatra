@@ -60,6 +60,7 @@ object Example extends FinatraApp {
 
 ### Configuring
 Create a Config.scala file in your project that mounts your apps
+
 ```scala
 package com.posterous.finatra
 
