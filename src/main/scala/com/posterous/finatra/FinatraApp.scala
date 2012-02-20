@@ -11,8 +11,8 @@ class FinatraApp(var prefix: String = "") extends Logging {
     def head(path: String)(callback: => Any)   { Router.addRoute("HEAD", prefix + path)(callback) } 
     def patch(path: String)(callback: => Any)  { Router.addRoute("PATCH", prefix + path)(callback) } 
 
-    def params(x:String) = {
-      Router.params(x)
+    def params(name:String) = {
+      Router.params(name)
     }
 
     def response() = {
