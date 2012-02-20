@@ -10,11 +10,11 @@ Finatra is a sinatra clone backed by scala/finagle
 package com.posterous.finatra
 
 //You can "mount" your resources on a prefix
-object Whatever extends FinatraApp("/my") {
+object MyResource extends FinatraApp("/my") {
   get("/lol") { <h1>lol</h1> }
 }
 
-object MyResource extends FinatraApp {
+object Example extends FinatraApp {
 
   // set media type
   get("/") { 
@@ -47,6 +47,11 @@ object MyResource extends FinatraApp {
   // will get /doit/2004
   get("/doit/:year") { 
     params("year") 
+  }
+
+  // respond to post
+  post("/file") {
+    "file posted"
   }
 
 }
