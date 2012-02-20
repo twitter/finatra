@@ -70,7 +70,7 @@ object Router extends Logging {
   }
 
   def dispatch(request: Request) = {
-    log.info("recvd request %s", request.uri)
+    log.info("recvd request: %s %s %s", request.method, request.uri, request.headers)
     this.paramsHash = Map()
     this.request = request
     this.response = FinatraResponse()
