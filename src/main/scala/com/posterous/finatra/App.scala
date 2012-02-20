@@ -24,7 +24,7 @@ object App extends Logging {
 
   class FinatraService extends Service[Request, Response]{  
    def apply(request: Request) = {
-      Router.dispatch(request)
+      Router.dispatchAndReturn(request)
     }
   }
 

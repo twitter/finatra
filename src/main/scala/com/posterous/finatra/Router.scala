@@ -79,6 +79,11 @@ object Router extends Logging {
       case Some((method, pattern,callback)) => callback()
       case None => "404"
     }
+    result
+  }
+  
+  def dispatchAndReturn(request: Request) = {
+    val result = dispatch(request)
     returnFuture(result.toString)
   }
 
