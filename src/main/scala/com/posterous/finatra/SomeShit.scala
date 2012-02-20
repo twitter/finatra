@@ -8,12 +8,12 @@ object Whatever extends FinatraApp("/my") {
 object SomeShit extends FinatraApp {
 
   get("/") { 
-    response.mediaType = "application/html"
+    mediaType("application/html")
     "<h1>asd</h1>"
   } 
 
   get("/error") {
-    response.status = 500
+    status(500)
     "error!"
   }
 

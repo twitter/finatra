@@ -19,13 +19,13 @@ object Example extends FinatraApp {
 
   // set media type
   get("/") { 
-    response.mediaType = "application/html"
+    mediaType("application/html")
     "<h1>asd</h1>"
   } 
 
   // set the status code
   get("/error") {
-    response.status = 500
+    status(500)
     "error!"
   }
   
