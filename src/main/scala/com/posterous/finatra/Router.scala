@@ -58,8 +58,8 @@ object Router extends Logging {
     var thematch:Option[Map[_,_]] = None
     val foundRoute = this.routes.find( route => route match {
       case (method, pattern, callback) =>
-        thematch = pattern(request.uri)
-        if(thematch.getOrElse(null) != null) {
+        thematch = pattern(request.path)
+        if(thematch.getOrElse(null) != null && method == request.method.toString) {
           thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
           true
         } else {
