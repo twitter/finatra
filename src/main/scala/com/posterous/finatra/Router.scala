@@ -17,7 +17,7 @@ import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.codahale.logula.Logging
 
 object Router extends Logging {
-  case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/plain", var headers:ListBuffer[Tuple2[String,String]] = new ListBuffer[Tuple2[String,String]])
+  case class FinatraResponse(var status: Int = 200, var mediaType: String = "appliction/html", var headers:ListBuffer[Tuple2[String,String]] = new ListBuffer[Tuple2[String,String]])
   
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
   var request:Request = null

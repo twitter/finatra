@@ -8,7 +8,6 @@ object Whatever extends FinatraApp("/my") {
 object SomeShit extends FinatraApp {
 
   get("/") { 
-    contentType("application/html")
     "<h1>asd</h1>"
   } 
 
@@ -18,7 +17,8 @@ object SomeShit extends FinatraApp {
   }
 
   get("/headertest") {
-    headers("foo","bar")
+    headers("foo" -> "bar")
+    contentType("text/plain")
     "check heads"
   }
 

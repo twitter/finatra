@@ -14,7 +14,7 @@ class FinatraApp(var prefix: String = "") extends Logging {
     def params(name:String) = { Router.params(name) }
     def response() = { Router.response }
     def request() = { Router.request }
-    def headers(k: String, v: String) = { response.headers += Tuple2(k,v) }
+    def headers(pair:Tuple2[String,String]) = { response.headers += pair }
     def status(code:Int) = { response.status = code }
     def contentType(mtype:String) = { response.mediaType = mtype }
 }
