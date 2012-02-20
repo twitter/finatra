@@ -25,7 +25,6 @@ object Router extends Logging {
 
   def loadUrlParams() {
     this.request.params.foreach(xs => this.paramsHash += xs)
-    log.info("paramsHash is %s", this.paramsHash) 
   }
 
   def parseMatchParam(xs: Tuple2[_, _]) = {
@@ -39,10 +38,8 @@ object Router extends Logging {
     }
   }
 
-
   def addRoute(method: String, path: String)(callback: => Any) {
     val regex = SinatraPathPatternParser(path)
-    log.info("adding regex %s for %s", regex, path)
     routes += Tuple3(method, regex, (() => callback))
   }
 
@@ -61,11 +58,9 @@ object Router extends Logging {
     var thematch:Option[Map[_,_]] = None
     val foundRoute = this.routes.find( route => route match {
       case (method, pattern, callback) =>
-        log.info("looking at %s for %s", pattern, request.uri)
         thematch = pattern(request.uri)
         if(thematch.getOrElse(null) != null) {
           thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
-          log.info("paramsHash is %s", this.paramsHash) 
           true
         } else {
           false
@@ -77,8 +72,6 @@ object Router extends Logging {
       case None => "404"
     }
     returnFuture(result.toString)
-    //println(Router.routes)
-    //returnFuture(Router.routes.get(key).getOrElse(null)().toString)
   }
 
 }
