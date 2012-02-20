@@ -7,13 +7,27 @@ object Whatever extends FinatraApp("/my") {
 
 object SomeShit extends FinatraApp {
 
-  get("/") { <h1>asd</h1> } 
+  get("/") { 
+    response.mediaType = "application/html"
+    "<h1>asd</h1>"
+  } 
 
-  post("/foo") { <h1>foo</h1> }
+  get("/error") {
+    response.status = 500
+    "error!"
+  }
   
-  get("/simple") { params("lol") }
+  get("/foo") { 
+    request.headers 
+  }
   
-  get("/doit/:year") { params("year") }
+  get("/simple") { 
+    params("lol") 
+  }
+  
+  get("/doit/:year") { 
+    params("year") 
+  }
 
 }
 

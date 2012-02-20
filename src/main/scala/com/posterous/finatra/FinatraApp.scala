@@ -14,4 +14,12 @@ class FinatraApp(var prefix: String = "") extends Logging {
     def params(x:String) = {
       Router.params(x)
     }
+
+    def response() = {
+      Router.response
+    }
+    
+    def request() = {
+      Router.request
+    }
 }

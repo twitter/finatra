@@ -17,11 +17,12 @@ import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.codahale.logula.Logging
 
 object Router extends Logging {
+  case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/plain")
   
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
   var request:Request = null
   var paramsHash:Map[String, String] = Map()
-
+  var response:FinatraResponse = FinatraResponse()
 
   def loadUrlParams() {
     this.request.params.foreach(xs => this.paramsHash += xs)
@@ -43,11 +44,12 @@ object Router extends Logging {
     routes += Tuple3(method, regex, (() => callback))
   }
 
-  def returnFuture(x:String) = {
-    val response = Response(Http11, InternalServerError)
-    response.mediaType = "text/plain" 
-    response.content = copiedBuffer(x, UTF_8)
-    Future.value(response)
+  def returnFuture(content:String) = {
+    val new_response = Response(Http11, InternalServerError)
+    new_response.statusCode = response.status
+    new_response.mediaType = response.mediaType
+    new_response.content = copiedBuffer(content, UTF_8)
+    Future.value(new_response)
   }
 
   def dispatch(request: Request) = {
