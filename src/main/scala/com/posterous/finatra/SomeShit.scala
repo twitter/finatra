@@ -8,7 +8,7 @@ object Whatever extends FinatraApp("/my") {
 object SomeShit extends FinatraApp {
 
   get("/") { 
-    mediaType("application/html")
+    contentType("application/html")
     "<h1>asd</h1>"
   } 
 
