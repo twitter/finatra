@@ -16,7 +16,12 @@ object SomeShit extends FinatraApp {
     response.status = 500
     "error!"
   }
-  
+
+  get("/headertest") {
+    headers("foo","bar")
+    "check heads"
+  }
+
   get("/foo") { 
     request.headers 
   }

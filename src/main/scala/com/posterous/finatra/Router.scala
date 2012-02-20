@@ -17,7 +17,7 @@ import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.codahale.logula.Logging
 
 object Router extends Logging {
-  case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/plain")
+  case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/plain", var headers:ListBuffer[Tuple2[String,String]] = new ListBuffer[Tuple2[String,String]])
   
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
   var request:Request = null
@@ -49,6 +49,7 @@ object Router extends Logging {
     log.info("returning response %s", response)
     new_response.statusCode = this.response.status
     new_response.mediaType = this.response.mediaType
+    this.response.headers.foreach(xs => new_response.addHeader(xs._1, xs._2))
     new_response.content = copiedBuffer(content, UTF_8)
     Future.value(new_response)
   }
