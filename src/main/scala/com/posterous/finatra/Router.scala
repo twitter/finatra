@@ -61,6 +61,7 @@ object Router extends Logging {
     var thematch:Option[Map[_,_]] = None
     val foundRoute = this.routes.find( route => route match {
       case (method, pattern, callback) =>
+        log.info("looking at %s for %s", pattern, request.uri)
         thematch = pattern(request.uri)
         if(thematch.getOrElse(null) != null) {
           thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
@@ -70,6 +71,7 @@ object Router extends Logging {
           false
         }
     })
+    log.info("found route: %s", foundRoute)
     val result = foundRoute match {
       case Some((method, pattern,callback)) => callback()
       case None => "404"
