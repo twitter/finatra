@@ -6,7 +6,7 @@ Finatra is a sinatra clone backed by scala/finagle
 
 ## Current api/features
 
-```
+```scala
 package com.posterous.finatra
 
 //You can "mount" your resources on a prefix
