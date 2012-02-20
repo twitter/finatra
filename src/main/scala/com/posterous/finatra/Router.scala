@@ -52,13 +52,10 @@ object Router extends Logging {
     Future.value(new_response)
   }
 
-  def dispatch(request: Request) = {
-    log.info("recvd request %s", request.uri)
-    this.paramsHash = Map()
-    this.request = request
-    loadUrlParams()
+  def routeExists(request: Request) = {
     var thematch:Option[Map[_,_]] = None
-    val foundRoute = this.routes.find( route => route match {
+    
+    this.routes.find( route => route match {
       case (method, pattern, callback) =>
         thematch = pattern(request.path)
         if(thematch.getOrElse(null) != null && method == request.method.toString) {
@@ -68,8 +65,14 @@ object Router extends Logging {
           false
         }
     })
-    log.info("found route: %s", foundRoute)
-    val result = foundRoute match {
+  }
+
+  def dispatch(request: Request) = {
+    log.info("recvd request %s", request.uri)
+    this.paramsHash = Map()
+    this.request = request
+    loadUrlParams()
+    val result = this.routeExists(request) match {
       case Some((method, pattern,callback)) => callback()
       case None => "404"
     }
