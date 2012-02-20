@@ -17,9 +17,9 @@ object MyResource extends FinatraApp("/my") {
 
 object Example extends FinatraApp {
 
-  // set media type
+  // set content type
   get("/") { 
-    mediaType("application/html")
+    contentType("application/html")
     "<h1>asd</h1>"
   } 
 
