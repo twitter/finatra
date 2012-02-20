@@ -1,9 +1,10 @@
 package com.posterous.finatra
 import com.codahale.logula.Logging
 
-class FinatraApp extends Logging { 
 
-    def get(path: String)(callback: => Any)    { Router.addRoute("GET", path)(callback) } 
+class FinatraApp(var prefix: String = "") extends Logging { 
+    
+    def get(path: String)(callback: => Any)    { Router.addRoute("GET", prefix + path)(callback) } 
     def delete(path: String)(callback: => Any) { Router.addRoute("DELETE", path)(callback) } 
     def post(path: String)(callback: => Any)   { Router.addRoute("POST", path)(callback) } 
     def put(path: String)(callback: => Any)    { Router.addRoute("PUT", path)(callback) } 

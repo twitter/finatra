@@ -1,6 +1,6 @@
 package com.posterous.finatra
 
-object Whatever extends FinatraApp {
+object Whatever extends FinatraApp("/my") {
   get("/lol") { <h1>lol</h1> }
 }
 
