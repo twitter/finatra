@@ -13,7 +13,7 @@ object FakeApp extends FinatraApp {
  
 class RouterSpec extends Spec {
 
-  class `route hashing` {
+  class `GET '/'` {
 
     FakeApp
 
