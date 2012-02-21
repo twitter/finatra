@@ -25,10 +25,10 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
 
 ### Configuring
 
-import the FinatraServer
+import the FinatraServer and FinatraApp
 
 ```scala
-import com.posterous.finatra.FinatraServer
+import com.posterous.finatra.{FinatraServer, FinatraApp}
 ```
 
 register your apps
