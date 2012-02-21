@@ -97,4 +97,7 @@ object Example extends FinatraApp {
 
 }
 ```
+## Credits
+Julio Capote @capotej
 
+Christopher Burnett @twoism
