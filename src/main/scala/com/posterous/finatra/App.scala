@@ -50,7 +50,7 @@ object App extends Logging {
     log.info("reading configuration")
 
     //load the conf
-    Config()
+    Apps.apps.foreach(app => app())
 
     //init stuff here
     val finatraService = new FinatraService
