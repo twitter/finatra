@@ -12,6 +12,8 @@ object FakeApp extends FinatraApp {
 
   get("/other") { "otherresp" }
   head("/other") { "specialresp" }
+  
+  get("/jsonstuff") { toJson(Map("foo" -> "bar")) }
 }
  
 class RouterSpec extends Spec {
@@ -79,7 +81,7 @@ class RouterSpec extends Spec {
 
   }
 
-  class `GET '/other' (curl -I)` {
+  class `GET '/other'` {
 
     FakeApp
 
@@ -96,6 +98,28 @@ class RouterSpec extends Spec {
 
     @Test def `responds with 'resp'` = {
       response.content.toString("UTF8").must(be("otherresp"))
+    }
+
+  }
+  
+  class `GET '/jsonstuff'` {
+
+    FakeApp
+
+    var request = Request(HttpMethod.GET, "/jsonstuff")
+    var response = Router.dispatch(request)
+
+    @Test def `returns 200` = {
+      response.statusCode.must(be(200))
+    }
+    
+    @Test def `returns a response` = {
+      response.must(beA[Response])
+    }
+
+    @Test def `responds with 'resp'` = {
+      println(response.content.toString("UTF8"))
+      response.content.toString("UTF8").must(be("{\"foo\":\"bar\"}"))
     }
 
   }

@@ -1,6 +1,6 @@
 package com.posterous.finatra
 import com.codahale.logula.Logging
-
+import com.codahale.jerkson.Json._
 
 class FinatraApp(var prefix: String = "") extends Logging { 
      
@@ -17,4 +17,5 @@ class FinatraApp(var prefix: String = "") extends Logging {
     def headers(pair:Tuple2[String,String]) = { response.headers += pair }
     def status(code:Int) = { response.status = code }
     def contentType(mtype:String) = { response.mediaType = mtype }
+    def toJson(obj: Any) = { generate(obj) }
 }
