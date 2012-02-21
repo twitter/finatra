@@ -5,7 +5,7 @@ object Whatever extends FinatraApp("/my") {
 }
 
 
-object SomeShit extends FinatraApp {
+object HelloWorld extends FinatraApp {
 
   get("/") { 
     "<h1>asd</h1>"
