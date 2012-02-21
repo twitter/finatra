@@ -3,6 +3,7 @@
 ### Description
 Finatra is a sinatra clone backed by scala/finagle
 
+
 ### Installation
 Add the repo and dependency to your pom.xml (sbt users to the left)
 
@@ -43,6 +44,11 @@ start the server
 ```scala
 FinatraServer.start() //Default is port 7070, pass Int here to change
 ```
+
+
+### Example project
+Check out (finatra-helloworld)[http://github.com/capotej/finatra-helloworld] for an example finatra project
+
 
 ### API
 
