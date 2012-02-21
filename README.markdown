@@ -3,22 +3,29 @@
 ### Description
 Finatra is a sinatra clone backed by scala/finagle
 
-
-
 ### Configuring
 
-import finagle.Apps
+import the FinatraServer
+
 ```scala
-import com.posterous.finagle.Apps
+import com.posterous.finatra.FinatraServer
 ```
 
-add your apps
+register your apps
+
 ```scala
-Apps.add(Example)
-Apps.add(MyResource)
+FinatraServer.register(Example)
+FinatraServer.register(MyResource)
+```
+
+start the server
+
+```scala
+FinatraServer.start()
 ```
 
 ### API
+
 ```scala
 package com.posterous.finatra
 

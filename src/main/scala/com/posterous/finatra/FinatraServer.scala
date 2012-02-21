@@ -1,6 +1,7 @@
 package com.posterous.finatra
 
 import java.net.InetSocketAddress
+import scala.collection.mutable.ListBuffer
 import java.util.{NoSuchElementException => NoSuchElement}
 import org.jboss.netty.handler.codec.http.HttpMethod._
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
@@ -20,16 +21,19 @@ import org.apache.log4j.Level
 
 
 
-object App extends Logging {
+object FinatraServer extends Logging {
 
   class FinatraService extends Service[Request, Response]{  
    def apply(request: Request) = {
       Router.dispatchAndReturn(request)
     }
   }
+  
+  var apps = ListBuffer[Function0[_]]()
 
+  def register(app: FinatraApp) { apps += (() => app) }
 
-  def main(args : Array[String]) {
+  def start(port:Int = 7070) {
     //logger conf
     Logging.configure { log =>
       log.registerWithJMX = true
@@ -50,14 +54,14 @@ object App extends Logging {
     log.info("reading configuration")
 
     //load the conf
-    Apps.apps.foreach(app => app())
+    apps.foreach(app => app())
 
     //init stuff here
     val finatraService = new FinatraService
     
     val server: Server = ServerBuilder()
       .codec(RichHttp[Request](Http()))
-      .bindTo(new InetSocketAddress(7070))
+      .bindTo(new InetSocketAddress(port))
       .name("finatraService")
       .build(finatraService)
     
