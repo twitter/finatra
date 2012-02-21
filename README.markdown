@@ -1,8 +1,7 @@
 # Finatra
 
 ### Description
-Finatra is a sinatra clone backed by scala/finagle
-
+Finatra is a sinatra clone backed by scala/finagle written by Julio Capote [@capotej](http://twitter.com/capotej) and Christopher Burnett [@twoism](http://twitter.com/twoism)
 
 ### Installation
 Add the repo and dependency to your pom.xml (sbt users to the left)
@@ -113,7 +112,3 @@ object Example extends FinatraApp {
 
 }
 ```
-## Credits
-Julio Capote [@capotej](http://twitter.com/capotej)
-
-Christopher Burnett [@twoism](http://twitter.com/twoism)
