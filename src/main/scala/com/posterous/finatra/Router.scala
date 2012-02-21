@@ -90,8 +90,13 @@ object Router extends Logging {
     val result = this.routeExists(request) match {
       case Some((method, pattern,callback)) => callback()
       case none => 
-        setStatus(404)
-        "404 Not Found"
+        request.method = GET
+        this.routeExists(request) match {
+          case Some((method, patterh, callback)) => callback()
+          case none =>
+            setStatus(404)
+            "404 Not Found"
+        }
     }
     
     buildResponse(result.toString)
