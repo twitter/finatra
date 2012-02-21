@@ -47,7 +47,7 @@ FinatraServer.start() //Default is port 7070, pass Int here to change
 
 
 ### Example project
-Check out (finatra-helloworld)[http://github.com/capotej/finatra-helloworld] for an example finatra project
+Check out [finatra-helloworld](http://github.com/capotej/finatra-helloworld) for an example finatra project
 
 
 ### API
