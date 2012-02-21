@@ -5,6 +5,7 @@ Finatra is a sinatra clone backed by scala/finagle
 
 ### Installation
 Add the repo and dependency to your pom.xml (sbt users to the left)
+
 ```xml
 <repositories>
   <repository>
