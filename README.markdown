@@ -4,8 +4,21 @@
 Finatra is a sinatra clone backed by scala/finagle
 
 
-### Current api/features
 
+### Configuring
+
+import finagle.Apps
+```scala
+import com.posterous.finagle.Apps
+```
+
+add your apps
+```scala
+Apps.add(Example)
+Apps.add(MyResource)
+```
+
+### API
 ```scala
 package com.posterous.finatra
 
@@ -58,17 +71,3 @@ object Example extends FinatraApp {
 }
 ```
 
-### Configuring
-Create a Config.scala file in your project that mounts your apps
-
-```scala
-package com.posterous.finatra
-
-object Config {
-  def apply() {
-    //Add your apps here
-    MyResource
-    Example
-  }
-}
-```
