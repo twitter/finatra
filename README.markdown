@@ -3,6 +3,25 @@
 ### Description
 Finatra is a sinatra clone backed by scala/finagle
 
+### Installation
+Add the repo and dependency to your pom.xml (sbt users to the left)
+```xml
+<repositories>
+  <repository>
+    <id>repo.juliocapote.com</id>
+    <url>http://repo.juliocapote.com</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>com.posterous</groupId>
+    <artifactId>finatra</artifactId>
+    <version>1.0-SNAPSHOT</version>
+  </dependency>
+</dependencies>
+```
+
 ### Configuring
 
 import the FinatraServer
