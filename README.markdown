@@ -21,7 +21,7 @@ FinatraServer.register(MyResource)
 start the server
 
 ```scala
-FinatraServer.start()
+FinatraServer.start() //Default is port 7070, pass Int here to change
 ```
 
 ### API
