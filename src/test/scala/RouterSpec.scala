@@ -14,6 +14,8 @@ object FakeApp extends FinatraApp {
   head("/other") { "specialresp" }
   
   get("/jsonstuff") { toJson(Map("foo" -> "bar")) }
+  
+  get("/redirectme") { redirect("/gohere") }
 }
  
 class RouterSpec extends Spec {
@@ -117,9 +119,30 @@ class RouterSpec extends Spec {
       response.must(beA[Response])
     }
 
-    @Test def `responds with 'resp'` = {
-      println(response.content.toString("UTF8"))
+    @Test def `responds with 'json'` = {
       response.content.toString("UTF8").must(be("{\"foo\":\"bar\"}"))
+    }
+
+  }
+  
+  class `GET '/redirect'` {
+
+    FakeApp
+
+    var request = Request(HttpMethod.GET, "/redirectme")
+    var response = Router.dispatch(request)
+
+    @Test def `returns 301` = {
+      response.statusCode.must(be(301))
+    }
+    
+    @Test def `returns a response` = {
+      response.must(beA[Response])
+    }
+
+    @Test def `redirect with Location: /gohere'` = {
+      response.headers.get("Location").getOrElse(null).toString.must(be("/gohere"))
+      //response.content.toString("UTF8").must(be("{\"foo\":\"bar\"}"))
     }
 
   }

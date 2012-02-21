@@ -18,4 +18,5 @@ class FinatraApp(var prefix: String = "") extends Logging {
     def status(code:Int) = { response.status = code }
     def contentType(mtype:String) = { response.mediaType = mtype }
     def toJson(obj: Any) = { generate(obj) }
+    def redirect(url: String) = { status(301); headers("Location", url) }
 }

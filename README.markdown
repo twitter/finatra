@@ -18,7 +18,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
   <dependency>
     <groupId>com.posterous</groupId>
     <artifactId>finatra</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.4</version>
   </dependency>
 </dependencies>
 ```
@@ -69,6 +69,11 @@ object Example extends FinatraApp {
     "error!"
   }
 
+  // redirect 
+  get("/redirector") {
+    redirect("/gohere")
+  }
+  
   // send json
   get("/somejson") {
     toJson(Map("foo" -> "bar"))
