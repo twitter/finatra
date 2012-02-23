@@ -18,7 +18,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
   <dependency>
     <groupId>com.posterous</groupId>
     <artifactId>finatra</artifactId>
-    <version>1.2.4</version>
+    <version>1.3.0</version>
   </dependency>
 </dependencies>
 ```
@@ -110,5 +110,51 @@ object Example extends FinatraApp {
     "file posted"
   }
 
+}
+```
+
+
+## Writing tests
+Finatra includes FinatraSpec for easy test writing
+
+```scala
+import com.posterous.finatra.FinatraSpec
+
+class IntHandlerSpec extends FinatraSpec {
+
+  FinatraServer.register(IntHandler)
+
+  class `GET for a missing key'` {
+
+    get("/int/foo")
+
+    @Test def `returns 404` = {
+      lastResponse.statusCode.must(be(404))
+    }
+
+  }
+
+  class `POST for a missing key, creates it with 1'` {
+
+    post("/int/foo")
+    get("/int/foo")
+
+    @Test def `returns 200` = {
+      lastResponse.statusCode.must(be(200))
+      lastResponse.content.toString("UTF8").must(be("1"))
+    }
+
+  }
+  class `POST for an existing key, with a value of 10'` {
+
+    post("/int/foo2", List(Tuple2("value", "10")):_*)
+    get("/int/foo2")
+
+    @Test def `returns 200` = {
+      lastResponse.statusCode.must(be(200))
+      lastResponse.content.toString("UTF8").must(be("10"))
+    }
+
+  }
 }
 ```
