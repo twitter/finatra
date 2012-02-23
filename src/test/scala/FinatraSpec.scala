@@ -1,3 +1,5 @@
+package com.posterous.finatra
+
 import org.junit.Test
 import com.posterous.finatra.{FinatraServer, Router}
 import com.codahale.simplespec.Spec
