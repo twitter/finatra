@@ -12,7 +12,7 @@
   <distributionManagement>
     <repository>
       <id>capotej-repo</id>
-      <url>scpexe://repo.juliocapote.com/home/capotej/maven_repo/</url>
+      <url>scpexe://capotej@repo.juliocapote.com/home/capotej/maven_repo/</url>
       <layout>default</layout>
     </repository>
   </distributionManagement>
