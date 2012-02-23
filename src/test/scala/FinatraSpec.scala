@@ -1,7 +1,6 @@
 package com.posterous.finatra
 
 import org.junit.Test
-import com.posterous.finatra.{FinatraServer, Router}
 import com.codahale.simplespec.Spec
 import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
 import com.twitter.finagle.http.Status._
