@@ -44,7 +44,6 @@ object MultipartParsing {
     if(ctype != null){
       val boundaryIndex = ctype.indexOf("boundary=");
       val boundary = ctype.substring(boundaryIndex + 9).getBytes
-      println(request.getContentLength)
       val input = new ByteArrayInputStream(request.getContent.array) 
 
       try {
@@ -54,9 +53,8 @@ object MultipartParsing {
           val paramParser = new ParameterParser
           val headers = paramParser.parse(multistream.readHeaders.toString, ';').asInstanceOf[java.util.Map[String,String]]
           val out = new ByteArrayOutputStream
-          // FILE WORKED HERE val fout = new FileOutputStream("/tmp/lol1.jpg")
           val name = headers.get("name").toString
-          multistream.readBodyData(fout)
+          multistream.readBodyData(out)
           val fileobj = new MultipartItem(Tuple2(headers, out))
           multiParams = multiParams + Tuple2(name, fileobj)
           nextPart = multistream.readBoundary

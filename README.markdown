@@ -113,6 +113,40 @@ object Example extends FinatraApp {
 }
 ```
 
+### File Uploads
+
+```scala
+
+object UploadExample extends FinatraApp {
+
+  //Example curl:
+  //curl -F myfile=@/home/capotej/images/bad-advice-cat.jpeg http://localhost:7070/
+
+  //the multiPart method returns MultiPartItem objects, which have some handy methods
+  post("/upload") {
+    multiPart("myfile").headers 
+    
+    multiPart("myfile").contentType
+    
+    multiPart("myfile").data
+    
+    multiPart("myfile").filename
+    
+    multiPart("myfile").writeToFile("/tmp/file.jpg")
+  }
+
+
+  //Form Example
+  //curl -F foo=bar http://localhost:7070/formsubmit
+
+  post("/formsubmit") {
+    multiPart("foo").data // "bar"
+  }
+
+
+```
+
+
 
 ## Writing tests
 Finatra includes FinatraSpec for easy test writing
