@@ -16,13 +16,16 @@ import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.codahale.logula.Logging
 
+
 object Router extends Logging {
   case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/html", var headers:ListBuffer[Tuple2[String,String]] = new ListBuffer[Tuple2[String,String]])
   
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
   var request:Request = null
   var paramsHash:Map[String, String] = Map()
+  var multiParams:Map[String, MultipartItem] = Map()
   var response:FinatraResponse = FinatraResponse()
+
 
   def loadUrlParams() {
     this.request.params.foreach(xs => this.paramsHash += xs)
@@ -39,6 +42,12 @@ object Router extends Logging {
     }
   }
 
+  def multiPart(name:String):MultipartItem = {
+    this.multiParams.get(name) match {
+      case Some(item) => item
+      case None => null
+    }
+  }
   def addRoute(method: String, path: String)(callback: => Any) {
     val regex = SinatraPathPatternParser(path)
     routes += Tuple3(method, regex, (() => callback))
@@ -84,7 +93,8 @@ object Router extends Logging {
     this.paramsHash = Map()
     this.request    = request
     this.response   = FinatraResponse()
-
+    this.multiParams = MultipartParsing.loadMultiParams(request)
+    
     loadUrlParams()
 
     val result = this.routeExists(request) match {
