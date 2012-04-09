@@ -31,9 +31,13 @@ object FinatraServer extends Logging {
   
   var apps = ListBuffer[Function0[_]]()
 
+  var docroot:String = null
+
   def register(app: FinatraApp) { apps += (() => app) }
 
-  def start(port:Int = 7070) {
+  def start(port:Int = 7070, docroot:String = null) {
+    this.docroot = docroot
+    
     //logger conf
     Logging.configure { log =>
       log.registerWithJMX = true
@@ -58,12 +62,15 @@ object FinatraServer extends Logging {
 
     //init stuff here
     val finatraService = new FinatraService
-    
+    val fileHandler = new FileHandler 
+  
+    val service: Service[Request, Response] = fileHandler andThen finatraService
+
     val server: Server = ServerBuilder()
       .codec(RichHttp[Request](Http()))
       .bindTo(new InetSocketAddress(port))
       .name("finatraService")
-      .build(finatraService)
+      .build(service)
     
     log.info("server started on 7070")
     println("started on 7070: view logs/finatra.log for more info")
