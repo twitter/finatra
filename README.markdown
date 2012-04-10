@@ -43,7 +43,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
   <dependency>
     <groupId>com.posterous</groupId>
     <artifactId>finatra</artifactId>
-    <version>1.4.6</version>
+    <version>1.6.0</version>
   </dependency>
 </dependencies>
 ```
