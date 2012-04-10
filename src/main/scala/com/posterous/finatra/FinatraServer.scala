@@ -31,11 +31,11 @@ object FinatraServer extends Logging {
   
   var apps = ListBuffer[Function0[_]]()
 
-  var docroot:String = null
+  var docroot:String = "public"
 
   def register(app: FinatraApp) { apps += (() => app) }
 
-  def start(port:Int = 7070, docroot:String = null) {
+  def start(port:Int = 7070, docroot:String = "public") {
     this.docroot = docroot
     
     //logger conf
