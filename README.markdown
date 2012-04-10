@@ -3,6 +3,10 @@
 ### Description
 Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://twitter.com/capotej) and [@twoism](http://twitter.com/twoism)
 
+
+### TODO
+Make file serving better (2g limit, buffers whole file into memory for now)
+
 ### Installation
 Add the repo and dependency to your pom.xml (sbt users to the left)
 
@@ -41,7 +45,7 @@ FinatraServer.register(MyResource)
 start the server
 
 ```scala
-FinatraServer.start() //Default is port 7070, pass Int here to change
+FinatraServer.start() //Defaults: 7070, "docroot"
 ```
 
 
