@@ -4,8 +4,29 @@
 Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://twitter.com/capotej) and [@twoism](http://twitter.com/twoism)
 
 
+### Features
+* The routing DSL you've come to know and love
+
+* Asynchronous, uses Finagle-HTTP/Netty
+
+* Multipart file upload/form handling
+
+* Modular app support
+
+* A testing helper
+
+* Built in static file server (note: not designed for huge files(>100mb))
+
+
 ### TODO
-Make file serving better (2g limit, buffers whole file into memory for now)
+* Make file serving more efficient / Use an LRU map
+
+* Support non-multipart browser forms
+
+* Templating support
+
+* Plugin api
+
 
 ### Installation
 Add the repo and dependency to your pom.xml (sbt users to the left)
