@@ -15,7 +15,8 @@ import com.twitter.finagle.http.path._
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.codahale.logula.Logging
-
+import org.fusesource.scalate._
+import java.io._
 
 object Router extends Logging {
   case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/html", var headers:ListBuffer[Tuple2[String,String]] = new ListBuffer[Tuple2[String,String]])
@@ -26,6 +27,23 @@ object Router extends Logging {
   var multiParams:Map[String, MultipartItem] = Map()
   var response:FinatraResponse = FinatraResponse()
 
+
+  def renderTemplate(path: String, map: Map[String,Any] = Map()):String = {
+    val tfile = new File("templates", path) 
+    if(tfile.canRead()){
+      val engine = new TemplateEngine
+      println(tfile.toString)
+      println(engine)
+      val template = engine.layout("~/personal/finatra-helloworld/templates/main.jade")//tfile.toString)
+      println("foo")
+      //val buffer = new StringWriter
+      //val context = new DefaultRenderContext(this.request.path, engine, new PrintWriter(buffer))
+      //buffer.toString
+      template.toString
+    } else {
+      "" 
+    }
+  }
 
   def loadUrlParams() {
     this.request.params.foreach(xs => this.paramsHash += xs)
