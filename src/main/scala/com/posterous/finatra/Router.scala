@@ -26,17 +26,22 @@ object Router extends Logging {
   var paramsHash:Map[String, String] = Map()
   var multiParams:Map[String, MultipartItem] = Map()
   var response:FinatraResponse = FinatraResponse()
-
+  var te:TemplateEngine = new TemplateEngine
 
   def renderTemplate(path: String, map: Map[String,Any] = Map()):String = {
+    log.info("rendering template %s", path)
+    val st = System.currentTimeMillis
     val tfile = new File("templates", path) 
     if(tfile.canRead()){
-      val engine = new TemplateEngine
-      val template = engine.load(tfile.toString)
+      val template = te.load(tfile.toString)
       val buffer = new StringWriter
-      val context = new DefaultRenderContext(this.request.path, engine, new PrintWriter(buffer))
+      val context = new DefaultRenderContext(this.request.path, te, new PrintWriter(buffer))
       template.render(context)
-      buffer.toString
+      val str = buffer.toString
+      val et = System.currentTimeMillis
+      val time = et - st
+      log.info("rendered template %s in %sms", path, time)
+      str
     } else {
       "" 
     }
