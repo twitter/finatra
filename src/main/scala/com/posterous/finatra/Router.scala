@@ -32,14 +32,11 @@ object Router extends Logging {
     val tfile = new File("templates", path) 
     if(tfile.canRead()){
       val engine = new TemplateEngine
-      println(tfile.toString)
-      println(engine)
-      val template = engine.layout("~/personal/finatra-helloworld/templates/main.jade")//tfile.toString)
-      println("foo")
-      //val buffer = new StringWriter
-      //val context = new DefaultRenderContext(this.request.path, engine, new PrintWriter(buffer))
-      //buffer.toString
-      template.toString
+      val template = engine.load(tfile.toString)
+      val buffer = new StringWriter
+      val context = new DefaultRenderContext(this.request.path, engine, new PrintWriter(buffer))
+      template.render(context)
+      buffer.toString
     } else {
       "" 
     }
