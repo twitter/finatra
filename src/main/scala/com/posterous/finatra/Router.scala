@@ -18,24 +18,30 @@ import com.codahale.logula.Logging
 import org.fusesource.scalate._
 import java.io._
 
+
 object Router extends Logging {
   case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/html", var headers:ListBuffer[Tuple2[String,String]] = new ListBuffer[Tuple2[String,String]])
   
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
+  var templateBindings:Map[String, String] = Map()
   var request:Request = null
   var paramsHash:Map[String, String] = Map()
   var multiParams:Map[String, MultipartItem] = Map()
   var response:FinatraResponse = FinatraResponse()
-  var te:TemplateEngine = new TemplateEngine
+
+  def bindTemplateVar(x:String, y:String){
+    templateBindings += Tuple2(x, y) 
+  }
 
   def renderTemplate(path: String, map: Map[String,Any] = Map()):String = {
+    log.info("bindings are %s", templateBindings)
     log.info("rendering template %s", path)
     val st = System.currentTimeMillis
     val tfile = new File("templates", path) 
     if(tfile.canRead()){
-      val template = te.load(tfile.toString)
+      val template = FinatraServer.templateEngine.load(tfile.toString)
       val buffer = new StringWriter
-      val context = new DefaultRenderContext(this.request.path, te, new PrintWriter(buffer))
+      val context = new DefaultRenderContext(this.request.path, FinatraServer.templateEngine, new PrintWriter(buffer))
       template.render(context)
       val str = buffer.toString
       val et = System.currentTimeMillis
@@ -111,6 +117,7 @@ object Router extends Logging {
     log.info("recvd request: %s %s %s", request.method, request.uri, request.headers)
 
     this.paramsHash = Map()
+    this.templateBindings = Map()
     this.request    = request
     this.response   = FinatraResponse()
     this.multiParams = MultipartParsing.loadMultiParams(request)

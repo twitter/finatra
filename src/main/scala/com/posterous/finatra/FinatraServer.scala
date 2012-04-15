@@ -13,6 +13,7 @@ import com.twitter.finagle.http.Version.Http11
 import com.twitter.finagle.http.path._
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.builder.{Server, ServerBuilder}
+import org.fusesource.scalate._
 /**
  * @author ${user.name}
  */
@@ -32,6 +33,8 @@ object FinatraServer extends Logging {
   var apps = ListBuffer[Function0[_]]()
 
   var docroot:String = "public"
+ 
+  var templateEngine:TemplateEngine = new TemplateEngine()
 
   def register(app: FinatraApp) { apps += (() => app) }
 
