@@ -33,24 +33,26 @@ object Router extends Logging {
     templateBindings += Tuple2(x, y) 
   }
 
-  def renderTemplate(path: String, map: Map[String,Any] = Map()):String = {
+  def renderTemplate(path: String):String = {
     log.info("bindings are %s", templateBindings)
     log.info("rendering template %s", path)
     val st = System.currentTimeMillis
     val tfile = new File("templates", path) 
-    if(tfile.canRead()){
-      val template = FinatraServer.templateEngine.load(tfile.toString)
-      val buffer = new StringWriter
+    //val l = List(Binding("foo", "Any", false, Some("bar"), "val", false, None, None))
+    val buffer = new StringWriter
+    var str = ""
+    try {
+      val template = FinatraServer.templateEngine.load(tfile.toString)//, l)
       val context = new DefaultRenderContext(this.request.path, FinatraServer.templateEngine, new PrintWriter(buffer))
       template.render(context)
-      val str = buffer.toString
+      str = buffer.toString
       val et = System.currentTimeMillis
       val time = et - st
       log.info("rendered template %s in %sms", path, time)
-      str
-    } else {
-      "" 
+    } catch {
+      case e: Exception => println(e)
     }
+    str
   }
 
   def loadUrlParams() {
