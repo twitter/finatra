@@ -1,9 +1,19 @@
 package com.posterous.finatra
 
+import com.twitter.finagle.{Service, SimpleFilter}
+import org.jboss.netty.handler.codec.http._
+import org.jboss.netty.handler.codec.http.HttpResponseStatus._
+import org.jboss.netty.handler.codec.http.HttpMethod._
+import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
+import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
+import org.jboss.netty.util.CharsetUtil.UTF_8
+import com.twitter.util.Future
+import java.net.InetSocketAddress
+import com.twitter.finagle.builder.{Server, ServerBuilder}
+import com.twitter.finagle.http.Http
+
 import org.apache.commons.fileupload._
 import java.io._
-import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
-import org.jboss.netty.util.CharsetUtil.UTF_8
 
 // HERE BE DRAGONS
 
@@ -37,10 +47,10 @@ class MultipartItem(val fileobj:Tuple2[java.util.Map[String,String], ByteArrayOu
 
 object MultipartParsing {
   
-  def loadMultiParams(request: Request) = {
+  def loadMultiParams(request: HttpRequest) = {
     
     var multiParams = Map[String, MultipartItem]()
-    val ctype = request.headers.getOrElse("Content-Type", null)
+    val ctype = request.getHeader("Content-Type")
     if(ctype != null){
       val boundaryIndex = ctype.indexOf("boundary=");
       val boundary = ctype.substring(boundaryIndex + 9).getBytes

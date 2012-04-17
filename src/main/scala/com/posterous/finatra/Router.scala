@@ -11,7 +11,7 @@ import com.twitter.util.Future
 import java.net.InetSocketAddress
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http.Http
-
+import scala.collection.JavaConversions._
 
 import scala.collection.mutable.HashSet
 import scala.collection.mutable.ListBuffer
@@ -57,8 +57,8 @@ object Router extends Logging {
   }
 
   def loadUrlParams() {
-    //val qs = new QueryStringDecoder(this.request.getUri);
-    //qs.getParameters.foreach(xs => this.paramsHash += xs)
+    val qs = new QueryStringDecoder(this.request.getUri);
+    qs.getParameters.foreach(xs => this.paramsHash += Tuple2(xs._1, xs._2.first))
   }
 
   def parseMatchParam(xs: Tuple2[_, _]) = {
@@ -124,7 +124,7 @@ object Router extends Logging {
     this.templateBindings = Map()
     this.request    = request
     this.response   = FinatraResponse()
-    //this.multiParams = MultipartParsing.loadMultiParams(request)
+    this.multiParams = MultipartParsing.loadMultiParams(request)
     
     loadUrlParams()
 
