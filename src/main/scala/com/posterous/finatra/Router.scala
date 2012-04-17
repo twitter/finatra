@@ -1,19 +1,20 @@
 package com.posterous.finatra
 
+import com.twitter.finagle.{Service, SimpleFilter}
+import org.jboss.netty.handler.codec.http._
+import org.jboss.netty.handler.codec.http.HttpResponseStatus._
+import org.jboss.netty.handler.codec.http.HttpMethod._
+import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
+import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
+import org.jboss.netty.util.CharsetUtil.UTF_8
+import com.twitter.util.Future
+import java.net.InetSocketAddress
+import com.twitter.finagle.builder.{Server, ServerBuilder}
+import com.twitter.finagle.http.Http
+
+
 import scala.collection.mutable.HashSet
 import scala.collection.mutable.ListBuffer
-import java.net.InetSocketAddress
-import java.util.{NoSuchElementException => NoSuchElement}
-import org.jboss.netty.handler.codec.http.HttpMethod._
-import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
-import com.twitter.util.Future
-import org.jboss.netty.util.CharsetUtil.UTF_8
-import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
-import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.Version.Http11
-import com.twitter.finagle.http.path._
-import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.codahale.logula.Logging
 import org.fusesource.scalate._
 import java.io._
@@ -24,7 +25,7 @@ object Router extends Logging {
   
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
   var templateBindings:Map[String, String] = Map()
-  var request:Request = null
+  var request:HttpRequest = null
   var paramsHash:Map[String, String] = Map()
   var multiParams:Map[String, MultipartItem] = Map()
   var response:FinatraResponse = FinatraResponse()
@@ -43,7 +44,7 @@ object Router extends Logging {
     var str = ""
     try {
       val template = FinatraServer.templateEngine.load(tfile.toString)//, l)
-      val context = new DefaultRenderContext(this.request.path, FinatraServer.templateEngine, new PrintWriter(buffer))
+      val context = new DefaultRenderContext(this.request.getUri, FinatraServer.templateEngine, new PrintWriter(buffer))
       template.render(context)
       str = buffer.toString
       val et = System.currentTimeMillis
@@ -56,7 +57,8 @@ object Router extends Logging {
   }
 
   def loadUrlParams() {
-    this.request.params.foreach(xs => this.paramsHash += xs)
+    //val qs = new QueryStringDecoder(this.request.getUri);
+    //qs.getParameters.foreach(xs => this.paramsHash += xs)
   }
 
   def parseMatchParam(xs: Tuple2[_, _]) = {
@@ -81,18 +83,18 @@ object Router extends Logging {
     routes += Tuple3(method, regex, (() => callback))
   }
 
-  def returnFuture(response: Response) = {
+  def returnFuture(response: HttpResponse) = {
     log.info("returning response %s", response)
     Future.value(response)
   }
 
-  def routeExists(request: Request) = {
+  def routeExists(request: HttpRequest) = {
     var thematch:Option[Map[_,_]] = None
     
     this.routes.find( route => route match {
       case (method, pattern, callback) =>
-        thematch = pattern(request.path)
-        if(thematch.getOrElse(null) != null && method == request.method.toString) {
+        thematch = pattern(request.getUri)
+        if(thematch.getOrElse(null) != null && method == request.getMethod.toString) {
           thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
           true
         } else {
@@ -102,11 +104,11 @@ object Router extends Logging {
   }
 
   def buildResponse(output:String) = {
-    val resp = Response(Http11, InternalServerError)
-    resp.statusCode = this.response.status
-    resp.mediaType = this.response.mediaType
-    this.response.headers.foreach(xs => resp.addHeader(xs._1, xs._2))
-    resp.content = copiedBuffer(output.toString, UTF_8)
+    val resp = new DefaultHttpResponse(HTTP_1_1, OK)
+    resp.setStatus(HttpResponseStatus.valueOf(this.response.status))
+    resp.setHeader("Content-Type", this.response.mediaType)
+    this.response.headers.foreach(xs => resp.setHeader(xs._1, xs._2))
+    resp.setContent(copiedBuffer(output.toString, UTF_8))
 
     resp
   }
@@ -115,21 +117,21 @@ object Router extends Logging {
     this.response.status = status  
   }
 
-  def dispatch(request: Request):Response = {
-    log.info("recvd request: %s %s %s", request.method, request.uri, request.headers)
+  def dispatch(request: HttpRequest):HttpResponse = {
+    log.info("recvd request: %s %s %s", request.getMethod, request.getUri, request.getHeaders)
 
     this.paramsHash = Map()
     this.templateBindings = Map()
     this.request    = request
     this.response   = FinatraResponse()
-    this.multiParams = MultipartParsing.loadMultiParams(request)
+    //this.multiParams = MultipartParsing.loadMultiParams(request)
     
     loadUrlParams()
 
     val result = this.routeExists(request) match {
       case Some((method, pattern,callback)) => callback()
       case none => 
-        request.method = GET
+        request.setMethod(GET)
         this.routeExists(request) match {
           case Some((method, patterh, callback)) => callback()
           case none =>
@@ -141,7 +143,7 @@ object Router extends Logging {
     buildResponse(result.toString)
   }
   
-  def dispatchAndReturn(request: Request) = {
+  def dispatchAndReturn(request: HttpRequest) = {
     returnFuture(dispatch(request))
   }
 

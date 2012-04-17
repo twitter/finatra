@@ -1,19 +1,19 @@
 package com.posterous.finatra
 
-import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
-import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.Version.Http11
-import com.twitter.finagle.http.path._
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.util.LruMap
-import com.twitter.util.Future
+import org.jboss.netty.handler.codec.http._
+import org.jboss.netty.handler.codec.http.HttpResponseStatus._
+import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import org.jboss.netty.util.CharsetUtil.UTF_8
-import org.jboss.netty.buffer.ChannelBuffer
-import org.jboss.netty.buffer.ChannelBuffers
+import com.twitter.util.Future
+import java.net.InetSocketAddress
+import com.twitter.finagle.builder.{Server, ServerBuilder}
+import com.twitter.finagle.http.Http
+
 import java.io._
 
-class FileHandler extends SimpleFilter[Request, Response]  {
+class FileHandler extends SimpleFilter[HttpRequest, HttpResponse]  {
    
 
   //lifted from tiscaf - http://gaydenko.com/scala/tiscaf/httpd/
@@ -124,17 +124,17 @@ class FileHandler extends SimpleFilter[Request, Response]  {
     return true 
   }
   
-  def apply(request: Request, service: Service[Request, Response]) = {
-    if(validPath(request.path)){
-      val file = new File(FinatraServer.docroot, request.path) 
+  def apply(request: HttpRequest, service: Service[HttpRequest, HttpResponse]) = {
+    if(validPath(request.getUri)){
+      val file = new File(FinatraServer.docroot, request.getUri) 
       val fh = new FileInputStream(file)
       val b = new Array[Byte](file.length.toInt)
       fh.read(b)
       
-      val response = Response(Http11, InternalServerError)
+      val response = new DefaultHttpResponse(HTTP_1_1, OK)
       val mtype = exts.get(file.toString.split('.').last).getOrElse("application/octet-stream")
-      response.statusCode = 200
-      response.mediaType = mtype 
+      response.setStatus(OK)
+      response.setHeader("Content-Type", mtype) 
       response.setContent(copiedBuffer(b))
       Future.value(response)
     } else {

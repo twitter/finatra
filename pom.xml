@@ -35,7 +35,7 @@
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.8.1</scala.version>
+    <scala.version>2.9.1</scala.version>
   </properties>
 
   <repositories>
@@ -96,13 +96,13 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http</artifactId>
-      <version>1.11.0</version>
+      <version>3.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core</artifactId>
-      <version>1.11.0</version>
+      <version>3.0.0</version>
     </dependency>
 
     <dependency>
@@ -114,13 +114,13 @@
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-wikitext</artifactId>
-      <version>1.4.1</version>  
+      <version>1.5.3</version>  
     </dependency>
 
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-page</artifactId>
-      <version>1.4.1</version>  
+      <version>1.5.3</version>  
     </dependency>
   </dependencies>
 

@@ -1,18 +1,18 @@
 package com.posterous.finatra
 
-import java.net.InetSocketAddress
-import scala.collection.mutable.ListBuffer
-import java.util.{NoSuchElementException => NoSuchElement}
-import org.jboss.netty.handler.codec.http.HttpMethod._
-import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
-import com.twitter.util.Future
-import org.jboss.netty.util.CharsetUtil.UTF_8
-import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
-import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.Version.Http11
-import com.twitter.finagle.http.path._
 import com.twitter.finagle.{Service, SimpleFilter}
+import org.jboss.netty.handler.codec.http._
+import org.jboss.netty.handler.codec.http.HttpResponseStatus._
+import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
+import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
+import org.jboss.netty.util.CharsetUtil.UTF_8
+import com.twitter.util.Future
+import java.net.InetSocketAddress
 import com.twitter.finagle.builder.{Server, ServerBuilder}
+import com.twitter.finagle.http.Http
+
+
+import scala.collection.mutable.ListBuffer
 import org.fusesource.scalate._
 /**
  * @author ${user.name}
@@ -24,8 +24,8 @@ import org.apache.log4j.Level
 
 object FinatraServer extends Logging {
 
-  class FinatraService extends Service[Request, Response]{  
-   def apply(request: Request) = {
+  class FinatraService extends Service[HttpRequest, HttpResponse]{  
+   def apply(request: HttpRequest) = {
       Router.dispatchAndReturn(request)
     }
   }
@@ -67,10 +67,10 @@ object FinatraServer extends Logging {
     val finatraService = new FinatraService
     val fileHandler = new FileHandler 
   
-    val service: Service[Request, Response] = fileHandler andThen finatraService
+    val service: Service[HttpRequest, HttpResponse] = fileHandler andThen finatraService
 
     val server: Server = ServerBuilder()
-      .codec(RichHttp[Request](Http()))
+      .codec(Http())
       .bindTo(new InetSocketAddress(port))
       .name("finatraService")
       .build(service)
