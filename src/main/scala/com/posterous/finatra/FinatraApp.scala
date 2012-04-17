@@ -5,7 +5,7 @@ import com.codahale.jerkson.Json._
 class FinatraApp(var prefix: String = "") extends Logging { 
      
   class TemplateBindingString(underlying:String){
-    def is(x: String) = { 
+    def <<(x: Any) = { 
       Router.bindTemplateVar(underlying, x) 
     }
   }

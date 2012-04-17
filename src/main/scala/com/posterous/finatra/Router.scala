@@ -24,13 +24,13 @@ object Router extends Logging {
   case class FinatraResponse(var status: Int = 200, var mediaType: String = "text/html", var headers:ListBuffer[Tuple2[String,String]] = new ListBuffer[Tuple2[String,String]])
   
   var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
-  var templateBindings:Map[String, String] = Map()
+  var templateBindings:Map[String, Any] = Map()
   var request:HttpRequest = null
   var paramsHash:Map[String, String] = Map()
   var multiParams:Map[String, MultipartItem] = Map()
   var response:FinatraResponse = FinatraResponse()
 
-  def bindTemplateVar(x:String, y:String){
+  def bindTemplateVar(x:String, y:Any){
     templateBindings += Tuple2(x, y) 
   }
 
@@ -39,14 +39,14 @@ object Router extends Logging {
     log.info("rendering template %s", path)
     val st = System.currentTimeMillis
     val tfile = new File("templates", path) 
-    //val l = List(Binding("foo", "Any", false, Some("bar"), "val", false, None, None))
     val buffer = new StringWriter
     var str = ""
     try {
-      val template = FinatraServer.templateEngine.load(tfile.toString)//, l)
-      val context = new DefaultRenderContext(this.request.getUri, FinatraServer.templateEngine, new PrintWriter(buffer))
-      template.render(context)
-      str = buffer.toString
+      val template = FinatraServer.templateEngine.layout(tfile.toString, templateBindings) 
+      str = template
+      //val context = new DefaultRenderContext(this.request.getUri, FinatraServer.templateEngine, new PrintWriter(buffer))
+      //template.render(context)
+      //str = buffer.toString
       val et = System.currentTimeMillis
       val time = et - st
       log.info("rendered template %s in %sms", path, time)
