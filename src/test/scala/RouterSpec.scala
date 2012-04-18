@@ -1,7 +1,10 @@
 package com.posterous.finatra 
 
-import org.junit.Test
-import com.codahale.simplespec.Spec
+import org.scalatest.junit.JUnitRunner
+import org.junit.runner.RunWith
+
+import org.scalatest.FlatSpec
+import org.scalatest.matchers.ShouldMatchers
 import org.jboss.netty.handler.codec.http.{DefaultHttpRequest, HttpMethod, HttpVersion}
 import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
 import com.twitter.finagle.http.Status._
@@ -19,108 +22,61 @@ object FakeApp extends FinatraApp {
   get("/redirectme") { redirect("/gohere") }
 }
  
-class RouterSpec extends Spec {
+@RunWith(classOf[JUnitRunner])
+class RouterSpec extends FlatSpec with ShouldMatchers {
 
-  class `GET '/'` {
+  FakeApp
 
-    FakeApp
+  "GET /" should "respond 200" in {
 
     var request = Request(HttpMethod.GET, "/")
     var response = Router.dispatch(request)
 
-    @Test def `returns 200` = {
-      response.getStatus.must(be(OK))
-    }
-    
-    @Test def `responds with 'resp'` = {
-      response.getContent.toString("UTF8").must(be("resp"))
-    }
-
+    response.getStatus should equal (OK)
+    response.getContent.toString("UTF8") should equal ("resp")
   }
 
-  class `HEAD '/' (curl -I)` {
-
-    FakeApp
-
+  "HEAD /" should "respond 200" in {
     var request = Request(HttpMethod.HEAD, "/")
     var response = Router.dispatch(request)
 
-    @Test def `returns 200` = {
-      response.getStatus.must(be(OK))
-    }
-    
-    @Test def `responds with 'resp'` = {
-      response.getContent.toString("UTF8").must(be("resp"))
-    }
-
+    response.getStatus should equal (OK)  
+    response.getContent.toString("UTF8") should equal ("resp")
   }
 
-  class `HEAD '/other' (curl -I)` {
-
-    FakeApp
+  "HEAD /other" should "respond 200" in {
 
     var request = Request(HttpMethod.HEAD, "/other")
     var response = Router.dispatch(request)
-
-    @Test def `returns 200` = {
-      response.getStatus.must(be(OK))
-    }
     
-    @Test def `responds with 'resp'` = {
-      response.getContent.toString("UTF8").must(be("specialresp"))
-    }
-
+    response.getStatus should equal (OK)
+    response.getContent.toString("UTF8") should equal ("specialresp")
   }
-
-  class `GET '/other'` {
-
-    FakeApp
-
+  
+  "GET /other" should "respond 200" in {
     var request = Request(HttpMethod.GET, "/other")
     var response = Router.dispatch(request)
 
-    @Test def `returns 200` = {
-      response.getStatus.must(be(OK))
-    }
-    
-    @Test def `responds with 'resp'` = {
-      response.getContent.toString("UTF8").must(be("otherresp"))
-    }
-
+    response.getStatus should equal (OK)
+    response.getContent.toString("UTF8") should equal ("otherresp")
   }
-  
-  class `GET '/jsonstuff'` {
 
-    FakeApp
+  "GET /jsonstuff" should "respond 200" in {
 
     var request = Request(HttpMethod.GET, "/jsonstuff")
     var response = Router.dispatch(request)
 
-    @Test def `returns 200` = {
-      response.getStatus.must(be(OK))
-    }
-    
-    @Test def `responds with 'json'` = {
-      response.getContent.toString("UTF8").must(be("{\"foo\":\"bar\"}"))
-    }
-
+    response.getStatus should equal (OK)
+    response.getContent.toString("UTF8") should equal ("{\"foo\":\"bar\"}")
   }
-  
-  class `GET '/redirect'` {
 
-    FakeApp
-
+  "GET /redirect" should "redirect"  in {
     var request = Request(HttpMethod.GET, "/redirectme")
     var response = Router.dispatch(request)
 
-    @Test def `returns 301` = {
-      response.getStatus.must(be(MOVED_PERMANENTLY))
-    }
-    
-    @Test def `redirect with Location: /gohere'` = {
-      response.getHeader("Location").must(be("/gohere"))
-    }
-
+    response.getStatus should equal (MOVED_PERMANENTLY)
+    response.getHeader("Location") should equal ("/gohere")
   }
+
 }
 
