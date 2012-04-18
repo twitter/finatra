@@ -179,19 +179,19 @@ Rendering a template with a variable
 
 object TemplateExample extends FinatraApp {
    
-   get("/") { 
-     "todays_date" << new java.util.Date 
-     render("main.mustache") 
+   get("/users/:id") { 
+     "user_id" << params("id")
+     render("users.mustache") 
    }
 
 }
+
 ```
 
-in ```templates/main.mustache```
+in ```templates/users.mustache```
 
 ```mustache
-
-<h1>todays date is {{todays_date}}</h1>
+<h1>your user number is {{user_id}}</h1>
 ```
 
 ## Writing tests
