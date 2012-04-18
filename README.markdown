@@ -170,9 +170,11 @@ object UploadExample extends FinatraApp {
 ```
 
 ## Templating
+
 Finatra provides limited support for the Scalate template engine (for now)
 
 Rendering a template with a variable
+
 ```scala
 
 object TemplateExample extends FinatraApp {
