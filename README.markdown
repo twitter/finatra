@@ -41,7 +41,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
   <dependency>
     <groupId>com.posterous</groupId>
     <artifactId>finatra</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.0-SNAPSHOT</version>
   </dependency>
 </dependencies>
 ```
