@@ -17,13 +17,11 @@ Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://
 
 * Built in static file server (note: not designed for huge files(>100mb))
 
+* Template support (mustache, jade, scaml via scalate)
+
 
 ### TODO
 * Make file serving more efficient / Use an LRU map
-
-* Support non-multipart browser forms
-
-* Templating support
 
 * Plugin api
 
@@ -43,7 +41,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
   <dependency>
     <groupId>com.posterous</groupId>
     <artifactId>finatra</artifactId>
-    <version>1.6.0</version>
+    <version>2.0.0</version>
   </dependency>
 </dependencies>
 ```
@@ -171,7 +169,28 @@ object UploadExample extends FinatraApp {
 
 ```
 
+## Templating
+Finatra provides limited support for the Scalate template engine (for now)
 
+Rendering a template with a variable
+```scala
+
+object TemplateExample extends FinatraApp {
+   
+   get("/") { 
+     "todays_date" << new java.util.Date 
+     render("main.mustache") 
+   }
+
+}
+```
+
+in ```templates/main.mustache```
+
+```mustache
+
+<h1>todays date is {{todays_date}}</h1>
+```
 
 ## Writing tests
 Finatra includes FinatraSpec for easy test writing
