@@ -38,25 +38,20 @@ object Router extends Logging {
   def pathOf(x:String) = x.split('?').first 
 
   def renderTemplate(path: String):String = {
-    log.info("bindings are %s", templateBindings)
     log.info("rendering template %s", path)
     val st = System.currentTimeMillis
     val tfile = new File("templates", path) 
     val buffer = new StringWriter
-    var str = ""
+    var template = ""
     try {
-      val template = FinatraServer.templateEngine.layout(tfile.toString, templateBindings) 
-      str = template
-      //val context = new DefaultRenderContext(this.request.getUri, FinatraServer.templateEngine, new PrintWriter(buffer))
-      //template.render(context)
-      //str = buffer.toString
+      template = FinatraServer.templateEngine.layout(tfile.toString, templateBindings) 
       val et = System.currentTimeMillis
       val time = et - st
       log.info("rendered template %s in %sms", path, time)
     } catch {
-      case e: Exception => println(e)
+      case e: Exception => template = e.toString
     }
-    str
+    template
   }
 
   def loadUrlParams() {

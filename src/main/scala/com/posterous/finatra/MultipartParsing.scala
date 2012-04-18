@@ -55,7 +55,6 @@ object MultipartParsing {
       val boundaryIndex = ctype.indexOf("boundary=");
       val boundary = ctype.substring(boundaryIndex + 9).getBytes
       val input = new ByteArrayInputStream(request.getContent.array) 
-      println(request.getContent.toString(UTF_8))
       try {
         val multistream = new MultipartStream(input, boundary)
         var nextPart = multistream.skipPreamble
