@@ -34,6 +34,9 @@ object Router extends Logging {
     templateBindings += Tuple2(x, y) 
   }
 
+  //So, so lame
+  def pathOf(x:String) = x.split('?').first 
+
   def renderTemplate(path: String):String = {
     log.info("bindings are %s", templateBindings)
     log.info("rendering template %s", path)
@@ -57,8 +60,10 @@ object Router extends Logging {
   }
 
   def loadUrlParams() {
-    val qs = new QueryStringDecoder(this.request.getUri);
-    qs.getParameters.foreach(xs => this.paramsHash += Tuple2(xs._1, xs._2.first))
+    val qs = new QueryStringDecoder(this.request.getUri)
+    qs.getParameters.foreach { xs =>
+      this.paramsHash += Tuple2(xs._1, xs._2.first)
+    }
   }
 
   def parseMatchParam(xs: Tuple2[_, _]) = {
@@ -93,7 +98,7 @@ object Router extends Logging {
     
     this.routes.find( route => route match {
       case (method, pattern, callback) =>
-        thematch = pattern(request.getUri)
+        thematch = pattern(pathOf(request.getUri))
         if(thematch.getOrElse(null) != null && method == request.getMethod.toString) {
           thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
           true
