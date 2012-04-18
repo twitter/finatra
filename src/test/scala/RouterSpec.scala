@@ -5,6 +5,7 @@ import com.codahale.simplespec.Spec
 import org.jboss.netty.handler.codec.http.{DefaultHttpRequest, HttpMethod, HttpVersion}
 import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
 import com.twitter.finagle.http.Status._
+import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 
 
 object FakeApp extends FinatraApp {
@@ -28,15 +29,11 @@ class RouterSpec extends Spec {
     var response = Router.dispatch(request)
 
     @Test def `returns 200` = {
-      response.statusCode.must(be(200))
+      response.getStatus.must(be(OK))
     }
     
-    @Test def `returns a response` = {
-      response.must(beA[Response])
-    }
-
     @Test def `responds with 'resp'` = {
-      response.content.toString("UTF8").must(be("resp"))
+      response.getContent.toString("UTF8").must(be("resp"))
     }
 
   }
@@ -49,15 +46,11 @@ class RouterSpec extends Spec {
     var response = Router.dispatch(request)
 
     @Test def `returns 200` = {
-      response.statusCode.must(be(200))
+      response.getStatus.must(be(OK))
     }
     
-    @Test def `returns a response` = {
-      response.must(beA[Response])
-    }
-
     @Test def `responds with 'resp'` = {
-      response.content.toString("UTF8").must(be("resp"))
+      response.getContent.toString("UTF8").must(be("resp"))
     }
 
   }
@@ -70,15 +63,11 @@ class RouterSpec extends Spec {
     var response = Router.dispatch(request)
 
     @Test def `returns 200` = {
-      response.statusCode.must(be(200))
+      response.getStatus.must(be(OK))
     }
     
-    @Test def `returns a response` = {
-      response.must(beA[Response])
-    }
-
     @Test def `responds with 'resp'` = {
-      response.content.toString("UTF8").must(be("specialresp"))
+      response.getContent.toString("UTF8").must(be("specialresp"))
     }
 
   }
@@ -91,15 +80,11 @@ class RouterSpec extends Spec {
     var response = Router.dispatch(request)
 
     @Test def `returns 200` = {
-      response.statusCode.must(be(200))
+      response.getStatus.must(be(OK))
     }
     
-    @Test def `returns a response` = {
-      response.must(beA[Response])
-    }
-
     @Test def `responds with 'resp'` = {
-      response.content.toString("UTF8").must(be("otherresp"))
+      response.getContent.toString("UTF8").must(be("otherresp"))
     }
 
   }
@@ -112,15 +97,11 @@ class RouterSpec extends Spec {
     var response = Router.dispatch(request)
 
     @Test def `returns 200` = {
-      response.statusCode.must(be(200))
+      response.getStatus.must(be(OK))
     }
     
-    @Test def `returns a response` = {
-      response.must(beA[Response])
-    }
-
     @Test def `responds with 'json'` = {
-      response.content.toString("UTF8").must(be("{\"foo\":\"bar\"}"))
+      response.getContent.toString("UTF8").must(be("{\"foo\":\"bar\"}"))
     }
 
   }
@@ -133,16 +114,11 @@ class RouterSpec extends Spec {
     var response = Router.dispatch(request)
 
     @Test def `returns 301` = {
-      response.statusCode.must(be(301))
+      response.getStatus.must(be(MOVED_PERMANENTLY))
     }
     
-    @Test def `returns a response` = {
-      response.must(beA[Response])
-    }
-
     @Test def `redirect with Location: /gohere'` = {
-      response.headers.get("Location").getOrElse(null).toString.must(be("/gohere"))
-      //response.content.toString("UTF8").must(be("{\"foo\":\"bar\"}"))
+      response.getHeader("Location").must(be("/gohere"))
     }
 
   }
