@@ -17,6 +17,9 @@ class FinatraApp(var prefix: String = "") extends Logging {
   def put(path: String)(callback: => Any)    { Router.addRoute("PUT", prefix + path)(callback) } 
   def head(path: String)(callback: => Any)   { Router.addRoute("HEAD", prefix + path)(callback) } 
   def patch(path: String)(callback: => Any)  { Router.addRoute("PATCH", prefix + path)(callback) } 
+
+  def headers() = { Router.request.getHeaders }
+  def header(name:String) = { Router.request.getHeader(name)}
   def params(name:String) = { Router.params(name) }
   def render(path:String) = { Router.renderTemplate(path) }
   def multiPart(name:String) = { Router.multiParams(name) }

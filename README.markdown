@@ -85,10 +85,9 @@ object MyResource extends FinatraApp("/my") {
 
 object Example extends FinatraApp {
 
-  // set content type
+  //render inline html
   get("/") { 
-    contentType("application/html")
-    "<h1>asd</h1>"
+    <h1>asd</h1>
   } 
 
   // set the status code
@@ -104,6 +103,7 @@ object Example extends FinatraApp {
   
   // send json
   get("/somejson") {
+    contentType("application/json")
     toJson(Map("foo" -> "bar"))
   }
   
@@ -115,7 +115,7 @@ object Example extends FinatraApp {
 
   // reading headers
   get("/foo") { 
-    request.headers 
+    headers 
   }
  
   // will get param /simple?lol=value
