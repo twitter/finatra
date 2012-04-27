@@ -90,6 +90,23 @@ object Router extends Logging {
 
   def routeExists(request: HttpRequest) = {
     var thematch:Option[Map[_,_]] = None
+    this.routes.exists( route => route match {
+      case (method, pattern, callback) =>
+        thematch = pattern(pathOf(request.getUri))
+        if(thematch.getOrElse(null) != null && method == request.getMethod.toString) {
+          true
+        } else {
+          if(thematch.getOrElse(null) != null && method == "GET") {
+            true
+          } else {
+            false
+          }
+        }
+    })
+  }
+
+  def findRoute(request: HttpRequest) = {
+    var thematch:Option[Map[_,_]] = None
     
     this.routes.find( route => route match {
       case (method, pattern, callback) =>
@@ -98,7 +115,12 @@ object Router extends Logging {
           thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
           true
         } else {
-          false
+          if(thematch.getOrElse(null) != null && method == "GET") {
+            thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
+            true
+          } else {
+            false
+          }
         }
     })
   }
@@ -128,16 +150,11 @@ object Router extends Logging {
     
     loadUrlParams()
 
-    val result = this.routeExists(request) match {
+    val result = this.findRoute(request) match {
       case Some((method, pattern,callback)) => callback()
       case none => 
-        request.setMethod(GET)
-        this.routeExists(request) match {
-          case Some((method, patterh, callback)) => callback()
-          case none =>
-            setStatus(404)
-            "404 Not Found"
-        }
+        setStatus(404)
+        "404 Not Found"
     }
     
     buildResponse(result.toString)
