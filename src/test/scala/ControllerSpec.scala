@@ -6,8 +6,8 @@ import org.scalatest.matchers.ShouldMatchers
 import org.junit.runner.RunWith
 
 class FakeApp extends Controller {
-  get("/") { request => 
-    renderString("resp") 
+  get("/") { request =>
+    renderString("resp")
   }
 
   get("/other") { r => renderString("otherresp") }
@@ -17,7 +17,7 @@ class FakeApp extends Controller {
 }
 
 @RunWith(classOf[JUnitRunner])
-class RouterSpec extends FlatSpec with ShouldMatchers {
+class ControllerSpec extends FlatSpec with ShouldMatchers {
 
   val fakeApp = new FakeApp
 
