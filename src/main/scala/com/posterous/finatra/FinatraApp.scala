@@ -20,26 +20,26 @@ abstract class Controller(var prefix: String = "") {
 
   var routes: HashSet[(String, PathPattern, Function1[GenericRequest, Array[Byte]])] = HashSet()
 
-  def addRoute(method: String, path: String)(callback: => Array[Byte]) {
+  def addRoute(method: String, path: String)(callback: Function1[GenericRequest, Array[Byte]]) {
     val regex = SinatraPathPatternParser(path)
-    routes += Tuple3(method, regex, (() => callback))
+    routes += Tuple3(method, regex, callback)
   }
 
   def dispatch(request: GenericRequest): GenericResponse = {
     findRoute(request) match {
-      case Some((method, pattern,callback)) =>
-        new GenericResponse(body = callback(), headers = Map(), status = 200)
+      case Some((method, pattern, callback)) =>
+        new GenericResponse(body = callback(request), headers = Map(), status = 200)
       case None => 
         new GenericResponse(body = "Not Found".getBytes, headers = Map(), status = 404)
     }
   }
 
-  def get(path: String)(callback: => Array[Byte])    { addRoute("GET", prefix + path)(callback) }
-  def delete(path: String)(callback: => Array[Byte]) { addRoute("DELETE", prefix + path)(callback) }
-  def post(path: String)(callback: => Array[Byte])   { addRoute("POST", prefix + path)(callback) }
-  def put(path: String)(callback: => Array[Byte])    { addRoute("PUT", prefix + path)(callback) }
-  def head(path: String)(callback: => Array[Byte])   { addRoute("HEAD", prefix + path)(callback) }
-  def patch(path: String)(callback: => Array[Byte])  { addRoute("PATCH", prefix + path)(callback) }
+  def get(path: String)(callback: Function1[GenericRequest, Array[Byte]])    { addRoute("GET", prefix + path)(callback) }
+  def delete(path: String)(callback: Function1[GenericRequest, Array[Byte]]) { addRoute("DELETE", prefix + path)(callback) }
+  def post(path: String)(callback: Function1[GenericRequest, Array[Byte]])   { addRoute("POST", prefix + path)(callback) }
+  def put(path: String)(callback:  Function1[GenericRequest, Array[Byte]])    { addRoute("PUT", prefix + path)(callback) }
+  def head(path: String)(callback: Function1[GenericRequest, Array[Byte]])   { addRoute("HEAD", prefix + path)(callback) }
+  def patch(path: String)(callback: Function1[GenericRequest, Array[Byte]])  { addRoute("PATCH", prefix + path)(callback) }
 
   
   def findRoute(request: GenericRequest) = {
