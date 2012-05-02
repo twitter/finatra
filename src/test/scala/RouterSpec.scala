@@ -13,14 +13,13 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 
 class FakeApp extends Controller {
   get("/lol/:foo") { request => 
-                println(request)
-                "resp".getBytes 
+    renderString("resp") 
   }
 
-  //get("/other") { request => "otherresp".getBytes }
-  //head("/other") { "specialresp".getBytes }
+  get("/other") { r => renderString("otherresp") }
+  head("/other") { r => renderString("specialresp") }
 
-  //jget("/redirectme") { redirect("/gohere") }
+  get("/redirectme") { r => redirect("/gohere") }
 }
 
 @RunWith(classOf[JUnitRunner])

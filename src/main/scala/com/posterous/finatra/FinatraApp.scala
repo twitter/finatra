@@ -8,19 +8,20 @@ import scala.collection.mutable.ListBuffer
 case class GenericRequest
   (var path: String, 
    var method: String = "GET",
-   var params: Map[String,String] = Map())
+   var params: Map[String, String] = Map(),
+   var headers: Map[String, String] = Map())
 
 case class GenericResponse
   (var body: Array[Byte], 
-   var headers: Map[String, String],
-   var status: Int)
+   var headers: Map[String, String] = Map(),
+   var status: Int = 200)
 
 
 abstract class Controller(var prefix: String = "") {
 
-  var routes: HashSet[(String, PathPattern, Function1[GenericRequest, Array[Byte]])] = HashSet()
+  var routes: HashSet[(String, PathPattern, Function1[GenericRequest, GenericResponse])] = HashSet()
 
-  def addRoute(method: String, path: String)(callback: Function1[GenericRequest, Array[Byte]]) {
+  def addRoute(method: String, path: String)(callback: Function1[GenericRequest, GenericResponse]) {
     val regex = SinatraPathPatternParser(path)
     routes += Tuple3(method, regex, callback)
   }
@@ -28,18 +29,18 @@ abstract class Controller(var prefix: String = "") {
   def dispatch(request: GenericRequest): GenericResponse = {
     findRoute(request) match {
       case Some((method, pattern, callback)) =>
-        new GenericResponse(body = callback(request), headers = Map(), status = 200)
+        callback(request)
       case None => 
-        new GenericResponse(body = "Not Found".getBytes, headers = Map(), status = 404)
+        new GenericResponse(body = "Not Found".getBytes, status = 404)
     }
   }
 
-  def get(path: String)(callback: Function1[GenericRequest, Array[Byte]])    { addRoute("GET", prefix + path)(callback) }
-  def delete(path: String)(callback: Function1[GenericRequest, Array[Byte]]) { addRoute("DELETE", prefix + path)(callback) }
-  def post(path: String)(callback: Function1[GenericRequest, Array[Byte]])   { addRoute("POST", prefix + path)(callback) }
-  def put(path: String)(callback:  Function1[GenericRequest, Array[Byte]])    { addRoute("PUT", prefix + path)(callback) }
-  def head(path: String)(callback: Function1[GenericRequest, Array[Byte]])   { addRoute("HEAD", prefix + path)(callback) }
-  def patch(path: String)(callback: Function1[GenericRequest, Array[Byte]])  { addRoute("PATCH", prefix + path)(callback) }
+  def get(path: String)   (callback: Function1[GenericRequest, GenericResponse]) { addRoute("GET", prefix + path)(callback) }
+  def delete(path: String)(callback: Function1[GenericRequest, GenericResponse]) { addRoute("DELETE", prefix + path)(callback) }
+  def post(path: String)  (callback: Function1[GenericRequest, GenericResponse]) { addRoute("POST", prefix + path)(callback) }
+  def put(path: String)   (callback: Function1[GenericRequest, GenericResponse]) { addRoute("PUT", prefix + path)(callback) }
+  def head(path: String)  (callback: Function1[GenericRequest, GenericResponse]) { addRoute("HEAD", prefix + path)(callback) }
+  def patch(path: String) (callback: Function1[GenericRequest, GenericResponse]) { addRoute("PATCH", prefix + path)(callback) }
 
   def extractParams(request:GenericRequest, xs: Tuple2[_, _]) = {
     request.params += Tuple2(xs._1.toString, xs._2.asInstanceOf[ListBuffer[String]].head.toString)
@@ -64,7 +65,7 @@ abstract class Controller(var prefix: String = "") {
         }
     })
   }
-  
+ 
   // def headers() = { Router.request.getHeaders }
   // def header(name:String) = { Router.request.getHeader(name)}
   // def params(name:String) = { Router.params(name) }
@@ -75,5 +76,7 @@ abstract class Controller(var prefix: String = "") {
   // def headers(pair:Tuple2[String,String]) = { response.headers += pair }
   // def status(code:Int) = { response.status = code }
   // def contentType(mtype:String) = { response.mediaType = mtype }
-  // def redirect(url: String) = { status(301); headers("Location", url) }
+  def renderBytes(arr: Array[Byte]) = { new GenericResponse(body = arr, status = 200, headers = Map()) }
+  def renderString(str: String) = { new GenericResponse(body = str.getBytes, status = 200, headers = Map()) }
+  def redirect(url: String) = { new GenericResponse(body = "Moved".getBytes, status = 301, headers = Map("Location" -> "301")) }
 }
