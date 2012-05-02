@@ -12,10 +12,10 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 
 
 class FakeApp extends Controller {
-  get("/") { "resp" }
+  get("/") { "resp".getBytes }
 
-  get("/other") { "otherresp" }
-  head("/other") { "specialresp" }
+  get("/other") { "otherresp".getBytes }
+  head("/other") { "specialresp".getBytes }
 
   //jget("/redirectme") { redirect("/gohere") }
 }
@@ -27,15 +27,11 @@ class RouterSpec extends FlatSpec with ShouldMatchers {
   "GET /" should "respond 200" in {
 
     val fakeApp = new FakeApp
-    
     val request = new GenericRequest(path = "/")
-  
     var response = fakeApp.dispatch(request)
 
     response.status should equal (200)
     response.body should equal ("resp".getBytes)
-    response.status should equal (200) 
-    //response.getContent.toString("UTF8") should equal ("resp")
   }
 
   // "HEAD /" should "respond 200" in {

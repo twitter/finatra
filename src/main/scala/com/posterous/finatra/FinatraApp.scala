@@ -5,29 +5,63 @@ import scala.collection.mutable.ListBuffer
 
 // Generic controller, receive a generic request, and returns a generic response
 
-case class GenericRequest(var path:String)
-case class GenericResponse(var body:Array[Byte], var headers: Map[String, String], var status: Int)
+case class GenericRequest
+  (var path: String, 
+   var method: String = "GET",
+   var params: Map[String,String] = Map())
+
+case class GenericResponse
+  (var body: Array[Byte], 
+   var headers: Map[String, String],
+   var status: Int)
+
 
 abstract class Controller(var prefix: String = "") {
 
-  var routes: HashSet[(String, PathPattern, Function0[Any])] = HashSet()
+  var routes: HashSet[(String, PathPattern, Function0[Array[Byte]])] = HashSet()
 
-  def addRoute(method: String, path: String)(callback: => Any) {
+  def addRoute(method: String, path: String)(callback: => Array[Byte]) {
     val regex = SinatraPathPatternParser(path)
     routes += Tuple3(method, regex, (() => callback))
   }
 
   def dispatch(request: GenericRequest): GenericResponse = {
-    new GenericResponse(body = "resp".getBytes, headers = Map(), status = 200)  
+    findRoute(request) match {
+      case Some((method, pattern,callback)) =>
+        new GenericResponse(body = callback(), headers = Map(), status = 200)
+      case None => 
+        new GenericResponse(body = "Not Found".getBytes, headers = Map(), status = 404)
+    }
   }
 
-  def get(path: String)(callback: => Any)    { addRoute("GET", prefix + path)(callback) }
-  def delete(path: String)(callback: => Any) { addRoute("DELETE", prefix + path)(callback) }
-  def post(path: String)(callback: => Any)   { addRoute("POST", prefix + path)(callback) }
-  def put(path: String)(callback: => Any)    { addRoute("PUT", prefix + path)(callback) }
-  def head(path: String)(callback: => Any)   { addRoute("HEAD", prefix + path)(callback) }
-  def patch(path: String)(callback: => Any)  { addRoute("PATCH", prefix + path)(callback) }
+  def get(path: String)(callback: => Array[Byte])    { addRoute("GET", prefix + path)(callback) }
+  def delete(path: String)(callback: => Array[Byte]) { addRoute("DELETE", prefix + path)(callback) }
+  def post(path: String)(callback: => Array[Byte])   { addRoute("POST", prefix + path)(callback) }
+  def put(path: String)(callback: => Array[Byte])    { addRoute("PUT", prefix + path)(callback) }
+  def head(path: String)(callback: => Array[Byte])   { addRoute("HEAD", prefix + path)(callback) }
+  def patch(path: String)(callback: => Array[Byte])  { addRoute("PATCH", prefix + path)(callback) }
 
+  
+  def findRoute(request: GenericRequest) = {
+    var thematch:Option[Map[_,_]] = None
+    
+    this.routes.find( route => route match {
+      case (_method, pattern, callback) =>
+        thematch = pattern(request.path)
+        if(thematch.getOrElse(null) != null && _method == request.method) {
+          //thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
+          true
+        } else {
+          if(thematch.getOrElse(null) != null && _method == "GET") {
+            //thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
+            true
+          } else {
+            false
+          }
+        }
+    })
+  }
+  
   // def headers() = { Router.request.getHeaders }
   // def header(name:String) = { Router.request.getHeader(name)}
   // def params(name:String) = { Router.params(name) }
