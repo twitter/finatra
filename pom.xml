@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>2.0.0-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -87,7 +87,7 @@
       <version>4.8.1</version>
       <scope>test</scope>
     </dependency>
-  
+
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_2.9.1</artifactId>
@@ -98,14 +98,14 @@
       <groupId>com.codahale</groupId>
       <artifactId>jerkson_${scala.version}</artifactId>
       <version>0.4.2</version>
-    </dependency> 
+    </dependency>
 
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http</artifactId>
       <version>3.0.0</version>
     </dependency>
-    
+
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core</artifactId>
@@ -121,20 +121,20 @@
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-wikitext</artifactId>
-      <version>1.5.3</version>  
+      <version>1.5.3</version>
     </dependency>
 
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-page</artifactId>
-      <version>1.5.3</version>  
+      <version>1.5.3</version>
     </dependency>
 
-    <dependency> 
-      <groupId>org.scala-lang</groupId> 
-      <artifactId>jline</artifactId> 
-      <version>2.9.0-1</version> 
-    </dependency> 
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>jline</artifactId>
+      <version>2.9.0-1</version>
+    </dependency>
 
   </dependencies>
 
@@ -199,7 +199,7 @@
             </launcher>
             <!-- you could define other launcher -->
           </launchers>
-        </configuration> 
+        </configuration>
         <executions>
           <execution>
             <goals>
@@ -260,7 +260,7 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>

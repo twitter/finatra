@@ -24,23 +24,23 @@ import org.apache.log4j.Level
 
 object FinatraServer extends Logging {
 
-  class FinatraService extends Service[HttpRequest, HttpResponse]{  
+  class FinatraService extends Service[HttpRequest, HttpResponse]{
    def apply(request: HttpRequest) = {
       Router.dispatchAndReturn(request)
     }
   }
-  
+
   var apps = ListBuffer[Function0[_]]()
 
   var docroot:String = "public"
- 
+
   var templateEngine:TemplateEngine = new TemplateEngine()
 
-  def register(app: FinatraApp) { apps += (() => app) }
+  //def register(app: FinatraApp) { apps += (() => app) }
 
   def start(port:Int = 7070, docroot:String = "public") {
     this.docroot = docroot
-    
+
     //logger conf
     Logging.configure { log =>
       log.registerWithJMX = true
@@ -65,8 +65,8 @@ object FinatraServer extends Logging {
 
     //init stuff here
     val finatraService = new FinatraService
-    val fileHandler = new FileHandler 
-  
+    val fileHandler = new FileHandler
+
     val service: Service[HttpRequest, HttpResponse] = fileHandler andThen finatraService
 
     val server: Server = ServerBuilder()
@@ -74,7 +74,7 @@ object FinatraServer extends Logging {
       .bindTo(new InetSocketAddress(port))
       .name("finatraService")
       .build(service)
-    
+
     log.info("server started on 7070")
     println("started on 7070: view logs/finatra.log for more info")
   }
