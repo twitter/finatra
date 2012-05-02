@@ -41,6 +41,9 @@ abstract class Controller(var prefix: String = "") {
   def head(path: String)(callback: Function1[GenericRequest, Array[Byte]])   { addRoute("HEAD", prefix + path)(callback) }
   def patch(path: String)(callback: Function1[GenericRequest, Array[Byte]])  { addRoute("PATCH", prefix + path)(callback) }
 
+  def extractParams(request:GenericRequest, xs: Tuple2[_, _]) = {
+    request.params += Tuple2(xs._1.toString, xs._2.asInstanceOf[ListBuffer[String]].head.toString)
+  }
   
   def findRoute(request: GenericRequest) = {
     var thematch:Option[Map[_,_]] = None
@@ -49,11 +52,11 @@ abstract class Controller(var prefix: String = "") {
       case (_method, pattern, callback) =>
         thematch = pattern(request.path)
         if(thematch.getOrElse(null) != null && _method == request.method) {
-          //thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
+          thematch.getOrElse(null).foreach(xs => extractParams(request, xs))
           true
         } else {
           if(thematch.getOrElse(null) != null && _method == "GET") {
-            //thematch.getOrElse(null).foreach(xs => parseMatchParam(xs))
+            thematch.getOrElse(null).foreach(xs => extractParams(request, xs))
             true
           } else {
             false

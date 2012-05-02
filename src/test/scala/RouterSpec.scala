@@ -12,7 +12,7 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 
 
 class FakeApp extends Controller {
-  get("/") { request => 
+  get("/lol/:foo") { request => 
                 println(request)
                 "resp".getBytes 
   }
@@ -30,7 +30,7 @@ class RouterSpec extends FlatSpec with ShouldMatchers {
   "GET /" should "respond 200" in {
 
     val fakeApp = new FakeApp
-    val request = new GenericRequest(path = "/")
+    val request = new GenericRequest(path = "/lol/asdas")
     var response = fakeApp.dispatch(request)
 
     response.status should equal (200)
