@@ -1,18 +1,12 @@
 package com.posterous.finatra
 
 import org.scalatest.junit.JUnitRunner
-import org.junit.runner.RunWith
-
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
-import org.jboss.netty.handler.codec.http.{DefaultHttpRequest, HttpMethod, HttpVersion}
-import com.twitter.finagle.http.{Http, RichHttp, Request, Response}
-import com.twitter.finagle.http.Status._
-import org.jboss.netty.handler.codec.http.HttpResponseStatus._
-
+import org.junit.runner.RunWith
 
 class FakeApp extends Controller {
-  get("/lol/:foo") { request => 
+  get("/") { request => 
     renderString("resp") 
   }
 
@@ -25,58 +19,59 @@ class FakeApp extends Controller {
 @RunWith(classOf[JUnitRunner])
 class RouterSpec extends FlatSpec with ShouldMatchers {
 
+  val fakeApp = new FakeApp
 
   "GET /" should "respond 200" in {
 
-    val fakeApp = new FakeApp
-    val request = new GenericRequest(path = "/lol/asdas")
+    val request = new GenericRequest(path = "/")
     var response = fakeApp.dispatch(request)
 
     response.status should equal (200)
     response.body should equal ("resp".getBytes)
   }
 
-  // "HEAD /" should "respond 200" in {
-  //   var request = Request(HttpMethod.HEAD, "/")
-  //   var response = Router.dispatch(request)
+  "HEAD /" should "respond 200" in {
+    val request = new GenericRequest(path = "/", method = "HEAD")
+    var response = fakeApp.dispatch(request)
 
-  //   response.getStatus should equal (OK)
-  //   response.getContent.toString("UTF8") should equal ("resp")
-  // }
+    response.status should equal (200)
+    response.body should equal ("resp".getBytes)
+  }
 
-  // "HEAD /other" should "respond 200" in {
+  "HEAD /other" should "respond 200" in {
 
-  //   var request = Request(HttpMethod.HEAD, "/other")
-  //   var response = Router.dispatch(request)
+    val request = new GenericRequest(path = "/other", method = "HEAD")
+    var response = fakeApp.dispatch(request)
 
-  //   response.getStatus should equal (OK)
-  //   response.getContent.toString("UTF8") should equal ("specialresp")
-  // }
+    response.status should equal (200)
+    println(response)
+    response.body should equal ("specialresp".getBytes)
+  }
 
-  // "GET /other" should "respond 200" in {
-  //   var request = Request(HttpMethod.GET, "/other")
-  //   var response = Router.dispatch(request)
+  "GET /other" should "respond 200" in {
+    val request = new GenericRequest(path = "/other")
+    var response = fakeApp.dispatch(request)
 
-  //   response.getStatus should equal (OK)
-  //   response.getContent.toString("UTF8") should equal ("otherresp")
-  // }
+    response.status should equal (200)
+    response.body should equal ("otherresp".getBytes)
+  }
 
-  // "GET /jsonstuff" should "respond 200" in {
+//  "GET /jsonstuff" should "respond 200" in {
+//
+//    var request = Request(HttpMethod.GET, "/jsonstuff")
+//    var response = fakeApp.dispatch(request)
+//
+//    response.getStatus should equal (OK)
+//    response.getContent.toString("UTF8") should equal ("{\"foo\":\"bar\"}")
+//  }
 
-  //   var request = Request(HttpMethod.GET, "/jsonstuff")
-  //   var response = Router.dispatch(request)
+  "GET /redirect" should "redirect"  in {
+    val request = new GenericRequest(path = "/redirectme")
+    var response = fakeApp.dispatch(request)
 
-  //   response.getStatus should equal (OK)
-  //   response.getContent.toString("UTF8") should equal ("{\"foo\":\"bar\"}")
-  // }
-
-  // "GET /redirect" should "redirect"  in {
-  //   var request = Request(HttpMethod.GET, "/redirectme")
-  //   var response = Router.dispatch(request)
-
-  //   response.getStatus should equal (MOVED_PERMANENTLY)
-  //   response.getHeader("Location") should equal ("/gohere")
-  // }
+    response.status should equal (301)
+    //response.headers.get("Location") should equal ("/gohere")
+  }
 
 }
 
