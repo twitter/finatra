@@ -18,7 +18,7 @@ case class GenericResponse
 
 abstract class Controller(var prefix: String = "") {
 
-  var routes: HashSet[(String, PathPattern, Function0[Array[Byte]])] = HashSet()
+  var routes: HashSet[(String, PathPattern, Function1[GenericRequest, Array[Byte]])] = HashSet()
 
   def addRoute(method: String, path: String)(callback: => Array[Byte]) {
     val regex = SinatraPathPatternParser(path)
