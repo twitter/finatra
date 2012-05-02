@@ -12,7 +12,10 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 
 
 class FakeApp extends Controller {
-  get("/") { request => "resp".getBytes }
+  get("/") { request => 
+                println(request)
+                "resp".getBytes 
+  }
 
   //get("/other") { request => "otherresp".getBytes }
   //head("/other") { "specialresp".getBytes }
