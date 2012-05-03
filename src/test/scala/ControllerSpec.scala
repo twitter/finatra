@@ -70,7 +70,8 @@ class ControllerSpec extends FlatSpec with ShouldMatchers {
     var response = fakeApp.dispatch(request)
 
     response.status should equal (301)
-    //response.headers.get("Location") should equal ("/gohere")
+    println(response)
+    response.headers.get("Location") should equal (Some("/gohere"))
   }
 
 }

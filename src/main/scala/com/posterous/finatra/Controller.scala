@@ -85,5 +85,5 @@ abstract class Controller(var prefix: String = "") {
   // def contentType(mtype:String) = { response.mediaType = mtype }
   def renderBytes(arr: Array[Byte]) = { new GenericResponse(body = arr, status = 200, headers = Map()) }
   def renderString(str: String) = { new GenericResponse(body = str.getBytes, status = 200, headers = Map()) }
-  def redirect(url: String) = { new GenericResponse(body = "Moved".getBytes, status = 301, headers = Map("Location" -> "301")) }
+  def redirect(url: String) = { new GenericResponse(body = "Moved".getBytes, status = 301, headers = Map("Location" -> url)) }
 }
