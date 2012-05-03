@@ -11,6 +11,7 @@ class FakeApp extends Controller {
   }
 
   get("/other") { r => renderString("otherresp") }
+  
   head("/other") { r => renderString("specialresp") }
 
   get("/redirectme") { r => redirect("/gohere") }
@@ -44,8 +45,7 @@ class ControllerSpec extends FlatSpec with ShouldMatchers {
     var response = fakeApp.dispatch(request)
 
     response.status should equal (200)
-    println(response)
-    response.body should equal ("specialresp".getBytes)
+    new String(response.body) should equal ("specialresp")
   }
 
   "GET /other" should "respond 200" in {

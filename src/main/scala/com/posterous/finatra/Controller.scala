@@ -28,11 +28,24 @@ abstract class Controller(var prefix: String = "") {
 
   def dispatch(request: GenericRequest): GenericResponse = {
     findRoute(request) match {
-      case Some((method, pattern, callback)) =>
+      case Some((method, pattern, callback)) => 
         callback(request)
       case None => 
-        new GenericResponse(body = "Not Found".getBytes, status = 404)
+        request.method = "GET"
+        findRoute(request) match {
+          case Some((method, pattern, callback)) => 
+            callback(request)
+          case None =>
+            new GenericResponse(body = "Not Found".getBytes, status = 404)
+        }
     }
+    
+  //  findRoute(request) match {
+  //    case Some((method, pattern, callback)) =>
+  //      callback(request)
+  //    case None => 
+  //      new GenericResponse(body = "Not Found".getBytes, status = 404)
+  //  }
   }
 
   def get(path: String)   (callback: Function1[GenericRequest, GenericResponse]) { addRoute("GET", prefix + path)(callback) }
@@ -48,20 +61,14 @@ abstract class Controller(var prefix: String = "") {
   
   def findRoute(request: GenericRequest) = {
     var thematch:Option[Map[_,_]] = None
-    
-    this.routes.find( route => route match {
+    routes.find( route => route match {
       case (_method, pattern, callback) =>
         thematch = pattern(request.path)
         if(thematch.getOrElse(null) != null && _method == request.method) {
           thematch.getOrElse(null).foreach(xs => extractParams(request, xs))
           true
         } else {
-          if(thematch.getOrElse(null) != null && _method == "GET") {
-            thematch.getOrElse(null).foreach(xs => extractParams(request, xs))
-            true
-          } else {
-            false
-          }
+          false
         }
     })
   }
