@@ -20,13 +20,14 @@ import org.fusesource.scalate._
 import com.codahale.logula.Logging
 import org.apache.log4j.Level
 import com.capotej.finatra_core._
+import scala.collection.JavaConversions._
 
 
 object FinatraServer extends Logging {
 
   class TestApp extends Controller {
     get("/") { request =>
-      renderString("lol")  
+      renderString(request.params("foo"))  
     } 
   }
 
@@ -35,9 +36,19 @@ object FinatraServer extends Logging {
     
     def pathOf(x:String) = x.split('?').first 
     
+    def paramsOf(request: HttpRequest) = {
+      val qs = new QueryStringDecoder(request.getUri)
+      var paramsHash = Map[String,String]()
+      qs.getParameters.foreach { xs =>
+        paramsHash += Tuple2(xs._1, xs._2.first)
+      }
+      paramsHash
+    }
+    
     def apply(rawRequest: HttpRequest) = {
       val request = new GenericRequest(path=pathOf(rawRequest.getUri()),
-                                       method=rawRequest.getMethod.toString)
+                                       method=rawRequest.getMethod.toString,
+                                       params=paramsOf(rawRequest))
       
       val rawResponse = testApp.dispatch(request)
       val response = new DefaultHttpResponse(HTTP_1_1, OK)
