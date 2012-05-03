@@ -44,6 +44,12 @@
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
     </repository>
+
+    <repository>
+      <id>repo.juliocapote.com</id>
+      <url>http://repo.juliocapote.com</url>
+    </repository>
+    
     <repository>
       <id>repo.codahale.com</id>
       <url>http://repo.codahale.com</url>
@@ -67,6 +73,12 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.capotej</groupId>
+      <artifactId>finatra_core</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -110,12 +122,6 @@
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core</artifactId>
       <version>3.0.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-fileupload</groupId>
-      <artifactId>commons-fileupload</artifactId>
-      <version>1.2.1</version>
     </dependency>
 
     <dependency>
@@ -195,7 +201,7 @@
           <launchers>
             <launcher>
               <id>main</id>
-              <mainClass>com.posterous.finatra.App</mainClass>
+              <mainClass>com.posterous.finatra.FinatraServer</mainClass>
             </launcher>
             <!-- you could define other launcher -->
           </launchers>

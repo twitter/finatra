@@ -19,14 +19,30 @@ import org.fusesource.scalate._
  */
 import com.codahale.logula.Logging
 import org.apache.log4j.Level
-
+import com.capotej.finatra_core._
 
 
 object FinatraServer extends Logging {
 
+  class TestApp extends Controller {
+    get("/") { request =>
+      renderString("lol")  
+    } 
+  }
+
   class FinatraService extends Service[HttpRequest, HttpResponse]{
-   def apply(request: HttpRequest) = {
-      Router.dispatchAndReturn(request)
+    val testApp = new TestApp
+    
+    def pathOf(x:String) = x.split('?').first 
+    
+    def apply(rawRequest: HttpRequest) = {
+      val request = new GenericRequest(path=pathOf(rawRequest.getUri()),
+                                       method=rawRequest.getMethod.toString)
+      
+      val rawResponse = testApp.dispatch(request)
+      val response = new DefaultHttpResponse(HTTP_1_1, OK)
+      response.setContent(copiedBuffer(new String(rawResponse.body), UTF_8))
+      Future.value(response)   
     }
   }
 
@@ -37,6 +53,10 @@ object FinatraServer extends Logging {
   var templateEngine:TemplateEngine = new TemplateEngine()
 
   //def register(app: FinatraApp) { apps += (() => app) }
+
+  def main(args: Array[String]) = {
+    start()
+  }
 
   def start(port:Int = 7070, docroot:String = "public") {
     this.docroot = docroot

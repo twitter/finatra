@@ -56,15 +56,6 @@ class ControllerSpec extends FlatSpec with ShouldMatchers {
     response.body should equal ("otherresp".getBytes)
   }
 
-//  "GET /jsonstuff" should "respond 200" in {
-//
-//    var request = Request(HttpMethod.GET, "/jsonstuff")
-//    var response = fakeApp.dispatch(request)
-//
-//    response.getStatus should equal (OK)
-//    response.getContent.toString("UTF8") should equal ("{\"foo\":\"bar\"}")
-//  }
-
   "GET /redirect" should "redirect"  in {
     val request = new GenericRequest(path = "/redirectme")
     var response = fakeApp.dispatch(request)
