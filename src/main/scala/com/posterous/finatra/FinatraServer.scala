@@ -13,7 +13,6 @@ import com.twitter.finagle.http.Http
 
 
 import scala.collection.mutable.ListBuffer
-import org.fusesource.scalate._
 /**
  * @author ${user.name}
  */
@@ -25,17 +24,12 @@ import scala.collection.JavaConversions._
 
 object FinatraServer extends Logging {
 
-  class TestApp extends Controller {
-    get("/") { request =>
-      renderString(request.params("foo"))  
-    } 
-  }
+  val controllers = new ControllerCollection
 
   class FinatraService extends Service[HttpRequest, HttpResponse]{
-    val testApp = new TestApp
-    
-    def pathOf(x:String) = x.split('?').first 
-    
+
+    def pathOf(x:String) = x.split('?').first
+
     def paramsOf(request: HttpRequest) = {
       val qs = new QueryStringDecoder(request.getUri)
       var paramsHash = Map[String,String]()
@@ -44,16 +38,24 @@ object FinatraServer extends Logging {
       }
       paramsHash
     }
-    
+
+    def notFoundResponse = {
+      val resp = new DefaultHttpResponse(HTTP_1_1, OK)
+      resp.setContent(copiedBuffer("not found", UTF_8))
+      Future.value(resp)
+    }
+
     def apply(rawRequest: HttpRequest) = {
-      val request = new GenericRequest(path=pathOf(rawRequest.getUri()),
+      val request = new FinatraRequest(path=pathOf(rawRequest.getUri()),
                                        method=rawRequest.getMethod.toString,
                                        params=paramsOf(rawRequest))
-      
-      val rawResponse = testApp.dispatch(request)
-      val response = new DefaultHttpResponse(HTTP_1_1, OK)
-      response.setContent(copiedBuffer(new String(rawResponse.body), UTF_8))
-      Future.value(response)   
+
+      FinatraServer.controllers.dispatch(request) match {
+        case Some(response) =>
+          response.asInstanceOf[Future[HttpResponse]]
+        case None =>
+          notFoundResponse
+      }
     }
   }
 
@@ -61,13 +63,9 @@ object FinatraServer extends Logging {
 
   var docroot:String = "public"
 
-  var templateEngine:TemplateEngine = new TemplateEngine()
+  //var templateEngine:TemplateEngine = new TemplateEngine()
 
-  //def register(app: FinatraApp) { apps += (() => app) }
-
-  def main(args: Array[String]) = {
-    start()
-  }
+  def register(app: FinatraApp) { controllers.add(app) }
 
   def start(port:Int = 7070, docroot:String = "public") {
     this.docroot = docroot
@@ -90,9 +88,6 @@ object FinatraServer extends Logging {
 
     log.info("starting server")
     log.info("reading configuration")
-
-    //load the conf
-    apps.foreach(app => app())
 
     //init stuff here
     val finatraService = new FinatraService
