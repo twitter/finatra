@@ -20,11 +20,16 @@ import com.codahale.logula.Logging
 import org.apache.log4j.Level
 import com.capotej.finatra_core._
 import scala.collection.JavaConversions._
+import org.fusesource.scalate._
 
 
 object FinatraServer extends Logging {
 
   val controllers = new ControllerCollection
+  var templateEngine:TemplateEngine = new TemplateEngine
+  var docroot:String = "public"
+
+  def register(app: FinatraApp) { controllers.add(app) }
 
   class FinatraService extends Service[HttpRequest, HttpResponse]{
 
@@ -69,14 +74,6 @@ object FinatraServer extends Logging {
       }
     }
   }
-
-  var apps = ListBuffer[Function0[_]]()
-
-  var docroot:String = "public"
-
-  //var templateEngine:TemplateEngine = new TemplateEngine()
-
-  def register(app: FinatraApp) { controllers.add(app) }
 
   def start(port:Int = 7070, docroot:String = "public") {
     this.docroot = docroot

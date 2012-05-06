@@ -8,9 +8,27 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
 import com.twitter.finagle.http.Http
 
+import java.io._
 import com.capotej.finatra_core._
 
 class FinatraApp extends FinatraController {
+
+  def captureTemplate(path: String, templateBinding: Map[String, String] = Map()): String = {
+    val tfile = new File("templates", path)
+    val buffer = new StringWriter
+    var template = ""
+    try {
+      template = FinatraServer.templateEngine.layout(tfile.toString, templateBinding)
+    } catch {
+        case e: Exception => template = e.toString
+    }
+    template
+  }
+
+  def render(status:Int = 200, path: String, exports: Map[String, String] = Map()) = {
+    val resp = captureTemplate(path, exports)
+    response(body=resp, headers=Map("Content-Type" -> "text/html"))
+  }
 
   def response(status:Int = 200, body: String, headers: Map[String,String] = Map()) = {
     val responseStatus = HttpResponseStatus.valueOf(status)

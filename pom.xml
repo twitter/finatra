@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -35,7 +35,7 @@
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.8.1</scala.version>
+    <scala.version>2.9.1</scala.version>
   </properties>
 
   <repositories>
@@ -77,8 +77,8 @@
 
     <dependency>
       <groupId>com.capotej</groupId>
-      <artifactId>finatra-core</artifactId>
-      <version>0.0.8-SNAPSHOT</version>
+      <artifactId>finatra-core_${scala.version}</artifactId>
+      <version>0.0.8</version>
     </dependency>
 
     <dependency>
@@ -102,7 +102,7 @@
 
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.9.1</artifactId>
+      <artifactId>scalatest_${scala.version}</artifactId>
       <version>1.7.2</version>
     </dependency>
 
@@ -114,16 +114,15 @@
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-http</artifactId>
+      <artifactId>finagle-http_${scala.version}</artifactId>
       <version>3.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-core</artifactId>
+      <artifactId>finagle-core_${scala.version}</artifactId>
       <version>3.0.0</version>
     </dependency>
-<!--
     <dependency>
       <groupId>org.fusesource.scalate</groupId>
       <artifactId>scalate-wikitext</artifactId>
@@ -135,7 +134,6 @@
       <artifactId>scalate-page</artifactId>
       <version>1.5.3</version>
     </dependency>
--->
 
   </dependencies>
 
