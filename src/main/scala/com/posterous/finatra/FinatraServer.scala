@@ -39,6 +39,14 @@ object FinatraServer extends Logging {
       paramsHash
     }
 
+    def headersOf(request: HttpRequest) = {
+      var headers = Map[String,String]()
+      request.getHeaderNames.foreach { name =>
+        headers += Tuple2(name, request.getHeader(name))
+      }
+      headers
+    }
+
     def notFoundResponse = {
       val resp = new DefaultHttpResponse(HTTP_1_1, OK)
       resp.setContent(copiedBuffer("not found", UTF_8))
@@ -48,7 +56,10 @@ object FinatraServer extends Logging {
     def apply(rawRequest: HttpRequest) = {
       val request = new FinatraRequest(path=pathOf(rawRequest.getUri()),
                                        method=rawRequest.getMethod.toString,
-                                       params=paramsOf(rawRequest))
+                                       params=paramsOf(rawRequest),
+                                       headers=headersOf(rawRequest),
+                                       body=(rawRequest.getContent.array))
+
 
       FinatraServer.controllers.dispatch(request) match {
         case Some(response) =>

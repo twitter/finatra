@@ -12,8 +12,9 @@ import com.capotej.finatra_core._
 
 class FinatraApp extends FinatraController {
 
-  def response(body: String) = {
-    val resp = new DefaultHttpResponse(HTTP_1_1, OK)
+  def response(status:Int = 200, body: String, headers: Map[String,String] = Map()) = {
+    val responseStatus = HttpResponseStatus.valueOf(status)
+    val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
     resp.setContent(copiedBuffer(body, UTF_8))
     Future.value(resp)
   }
