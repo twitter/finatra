@@ -14,7 +14,7 @@ import com.capotej.finatra_core._
 
 class FinatraApp extends FinatraController {
 
-  def captureTemplate(path: String, templateBinding: Map[String, String] = Map()): String = {
+  def captureTemplate(path: String, templateBinding: Map[String, Any] = Map()): String = {
     val tfile = new File("templates", path)
     val buffer = new StringWriter
     var template = ""
