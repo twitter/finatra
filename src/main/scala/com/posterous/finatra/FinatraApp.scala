@@ -38,6 +38,9 @@ class FinatraApp extends FinatraController {
   def response(status:Int = 200, body: String, headers: Map[String,String] = Map()) = {
     val responseStatus = HttpResponseStatus.valueOf(status)
     val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
+    headers.foreach { xs =>
+      resp.setHeader(xs._1, xs._2)
+    }
     resp.setContent(copiedBuffer(body, UTF_8))
     Future.value(resp)
   }
