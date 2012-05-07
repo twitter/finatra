@@ -73,6 +73,8 @@ FinatraServer.start() //Defaults: 7070, "docroot"
 ### Example project
 Check out [finatra-helloworld](http://github.com/capotej/finatra-helloworld) for an example finatra project
 
+Here's an [example blog](https://gist.github.com/2626200)
+
 
 ### API
 
