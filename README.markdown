@@ -41,7 +41,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
   <dependency>
     <groupId>com.posterous</groupId>
     <artifactId>finatra</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
   </dependency>
 </dependencies>
 ```
@@ -84,14 +84,14 @@ object Example extends FinatraApp {
   //render inline html
   get("/") { request =>
     response(body="<h1>asd</h1>")
-  } 
+  }
 
   // set the status code
   get("/error") { request =>
     response(status=500, body="error!")
   }
 
-  // redirect 
+  // redirect
   get("/redirector") { request =>
     redirect("/gohere")
   }
@@ -100,7 +100,7 @@ object Example extends FinatraApp {
   get("/somejson") { request =>
     toJson(Map("foo" -> "bar"))
   }
-  
+
   // setting headers
   get("/headertest") { request =>
     response(body="check headers", headers=Map("X-Foo", "bar"))
@@ -108,26 +108,26 @@ object Example extends FinatraApp {
 
   // reading headers
   get("/foo") { request =>
-    request.headers.get("X-Foo") 
+    request.headers.get("X-Foo")
   }
- 
+
   // will get param /simple?lol=value
   get("/simple") { request =>
-    request.params.get("lol") 
+    request.params.get("lol")
   }
- 
+
   // will get /doit/2004
   get("/doit/:year") { request =>
-    request.params("year") 
+    request.params("year")
   }
 
   //works the same with, post, delete, head, and put
   post("/file/:id") { request =>
-    ...handle file here…
+    //handle file here
   }
-  
+
   delete("/file/:id") { request =>
-    …delete the file…
+    //delete the file here
   }
 
 }
@@ -147,26 +147,26 @@ object UploadExample extends FinatraApp {
   //curl -F myfile=@/home/capotej/images/bad-advice-cat.jpeg http://localhost:7070/upload
 
   //the multiPart method returns MultiPartItem objects, which have some handy methods
-  post("/upload") { request => 
-    
+  post("/upload") { request =>
+
     request.multiParams.get("myfile") match {
-      case Some(file) => 
-        
+      case Some(file) =>
+
         //get the content type
         file.contentType
-        
+
         //get the data
         file.data
-        
+
         //get the uploaded filename
         file.filename
-        
+
         //copy the file somewhere
         file.writeToFile("/tmp/uploadedfile.jpg")
       case None =>
         response(status=404, body="not found")
     }
-  } 
+  }
 }
 
 
@@ -189,10 +189,10 @@ Rendering a template with a variable
 ```scala
 
 object TemplateExample extends FinatraApp {
-   
+
    get("/users/:id") { request =>
      request.params.get("id") match {
-       case Some(id) => 
+       case Some(id) =>
          render("users.mustache", Map("user_id" -> id))
      }
    }

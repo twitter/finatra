@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>

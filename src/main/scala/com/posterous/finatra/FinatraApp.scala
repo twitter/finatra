@@ -26,7 +26,7 @@ class FinatraApp extends FinatraController {
     template
   }
 
-  def render(status:Int = 200, path: String, exports: Map[String, String] = Map()) = {
+  def render(status:Int = 200, path: String, exports: Map[String, Any] = Map()) = {
     val resp = captureTemplate(path, exports)
     response(body=resp, headers=Map("Content-Type" -> "text/html"))
   }
