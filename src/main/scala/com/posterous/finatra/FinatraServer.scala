@@ -36,11 +36,16 @@ object FinatraServer extends Logging {
     def pathOf(x:String) = x.split('?').first
 
     def paramsOf(request: HttpRequest) = {
+      val fakeQs = "/?" + new String(request.getContent.array)
       val qs = new QueryStringDecoder(request.getUri)
+      val bs = new QueryStringDecoder(fakeQs)
       var paramsHash = Map[String,String]()
-      qs.getParameters.foreach { xs =>
+      val allParams = qs.getParameters ++ bs.getParameters
+
+      allParams.foreach { xs =>
         paramsHash += Tuple2(xs._1, xs._2.first)
       }
+
       paramsHash
     }
 
