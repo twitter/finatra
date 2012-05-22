@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>4.0.3</version>
+  <version>4.0.4</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -78,7 +78,7 @@
     <dependency>
       <groupId>com.capotej</groupId>
       <artifactId>finatra-core_${scala.version}</artifactId>
-      <version>0.0.8</version>
+      <version>0.0.9</version>
     </dependency>
 
     <dependency>
