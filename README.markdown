@@ -271,10 +271,10 @@ in they layout you can then do
   <body>
     {{render}}
 
-  <script>
-    var code = {{analyticsCode}}
-  </script>
-  <script src="analytics.js"></script>
+    <script>
+      var code = {{analyticsCode}}
+    </script>
+    <script src="analytics.js"></script>
 
   </body>
 </html>
