@@ -16,17 +16,13 @@ import scala.collection.mutable.ListBuffer
 /**
  * @author ${user.name}
  */
-import com.codahale.logula.Logging
-import org.apache.log4j.Level
 import com.capotej.finatra_core._
 import scala.collection.JavaConversions._
-import org.fusesource.scalate._
 
-
-object FinatraServer extends Logging {
+object FinatraServer {
 
   val controllers = new ControllerCollection
-  var templateEngine:TemplateEngine = new TemplateEngine
+  //var templateEngine:TemplateEngine = new TemplateEngine
   var docroot:String = "public"
 
   def register(app: FinatraApp) { controllers.add(app) }
@@ -83,24 +79,8 @@ object FinatraServer extends Logging {
   def start(port:Int = 7070, docroot:String = "public") {
     this.docroot = docroot
 
-    //logger conf
-    Logging.configure { log =>
-      log.registerWithJMX = true
-
-      log.level = Level.INFO
-
-      log.console.enabled = true
-      log.console.threshold = Level.WARN
-
-      log.file.enabled = true
-      log.file.filename = "logs/finatra.log"
-      log.file.maxSize = 10 * 1024 // KB
-      log.file.retainedFiles = 5 // keep five old logs around
-
-    }
-
-    log.info("starting server")
-    log.info("reading configuration")
+    // log.info("starting server")
+    // log.info("reading configuration")
 
     //init stuff here
     val finatraService = new FinatraService
@@ -114,7 +94,7 @@ object FinatraServer extends Logging {
       .name("finatraService")
       .build(service)
 
-    log.info("server started on 7070")
+    // log.info("server started on 7070")
     println("started on 7070: view logs/finatra.log for more info")
   }
 

@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>4.0.5</version>
+  <version>4.0.6</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -54,11 +54,18 @@
       <id>repo.codahale.com</id>
       <url>http://repo.codahale.com</url>
     </repository>
+
     <repository>
       <id>twttr</id>
       <name>twttr</name>
       <url>http://maven.twttr.com</url>
     </repository>
+
+    <repository>
+      <id>Sonatype Snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </repository>
+
   </repositories>
 
   <pluginRepositories>
@@ -79,18 +86,6 @@
       <groupId>com.capotej</groupId>
       <artifactId>finatra-core_${scala.version}</artifactId>
       <version>0.0.10</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-compiler</artifactId>
-      <version>${scala.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.codahale</groupId>
-      <artifactId>logula_${scala.version}</artifactId>
-      <version>2.1.3</version>
     </dependency>
 
     <dependency>
@@ -122,17 +117,6 @@
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core_${scala.version}</artifactId>
       <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.fusesource.scalate</groupId>
-      <artifactId>scalate-wikitext</artifactId>
-      <version>1.5.3</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.fusesource.scalate</groupId>
-      <artifactId>scalate-page</artifactId>
-      <version>1.5.3</version>
     </dependency>
 
   </dependencies>
