@@ -17,8 +17,7 @@ Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://
 
 * Built in static file server (note: not designed for huge files(>100mb))
 
-* Mustache template support
-
+* Mustache template support through [mustache.java](https://github.com/spullara/mustache.java)
 
 ### TODO
 * Make file serving more efficient / Use an LRU map
