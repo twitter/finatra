@@ -15,7 +15,7 @@ import com.capotej.finatra_core._
 class FinatraApp extends FinatraController {
 
   def render(status:Int = 200, path: String, layout: String = "application.mustache", exports: Any = "") = {
-    val resp = FinatraServer.templateEngine.captureTemplate(template, layout, exports)
+    val resp = FinatraServer.templateEngine.captureTemplate(path, layout, exports)
     response(body=resp, headers=Map("Content-Type" -> "text/html"))
   }
 
