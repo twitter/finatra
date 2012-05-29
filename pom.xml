@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>4.0.6</version>
+  <version>4.0.6-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -117,6 +117,12 @@
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core_${scala.version}</artifactId>
       <version>3.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.spullara.mustache.java</groupId>
+      <artifactId>compiler</artifactId>
+      <version>0.7.0</version>
     </dependency>
 
   </dependencies>

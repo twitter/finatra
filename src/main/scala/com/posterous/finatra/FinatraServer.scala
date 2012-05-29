@@ -22,8 +22,8 @@ import scala.collection.JavaConversions._
 object FinatraServer {
 
   val controllers = new ControllerCollection
-  //var templateEngine:TemplateEngine = new TemplateEngine
-  var docroot:String = "public"
+  val templateEngine = new TemplateHandler
+  var docroot = "public"
 
   def register(app: FinatraApp) { controllers.add(app) }
 
