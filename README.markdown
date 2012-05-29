@@ -184,17 +184,23 @@ object UploadExample extends FinatraApp {
 
 ## Templating
 
-
-Rendering a template
+Use the ```render``` method to render out templates, it takes the path of a template (relative from ```templates/```) and an Object. Here's an example:
 
 ```scala
+
+class UserObject(val id: Int) {
+  def displayName = {
+    //do your db/service stuff here
+    "bob"
+  }
+}
 
 object TemplateExample extends FinatraApp {
 
    get("/users/:id") { request =>
      request.params.get("id") match {
        case Some(id) =>
-         render("users.mustache", Map("user_id" -> id))
+         render("users.mustache", new UserObject(id))
      }
    }
 }
@@ -204,5 +210,43 @@ object TemplateExample extends FinatraApp {
 in ```templates/users.mustache```
 
 ```mustache
-<h1>your user number is {{user_id}}</h1>
+<h1>your user name is {{displayName}} with id of {{id}}</h1>
 ```
+
+As you can see, all public methods/fields in your Object can be called from the mustache template.
+
+
+### Layouts
+
+By default all ```render``` calls render a layout in ```templates/layouts/application.mustache```, you can change this by passing a ```layout``` keyword argument to ```render```
+
+
+### Layout Functions
+
+If you'd like to be able to call custom functions besides ```render``` in your layout, you'll have to extend the ```LayoutHelperFactory``` and ```LayoutHelper``` classes with your own and set the ```layoutHelperFactory``` in ```FinatraServer```. Example:
+
+```scala
+
+import com.posterous.finatra.{FinatraApp, FinatraServer, LayoutHelper, LayoutHelperFactory}
+
+class MyLayoutHelper(yld: String) extends LayoutHelper(yld) {
+  val hey = "there"
+}
+
+class MyFactory extends LayoutHelperFactory {
+  override def apply(str: String) = {
+    new MyLayoutHelper(str)
+  }
+}
+
+FinatraServer.layoutHelperFactory = new MyFactory
+
+```
+
+in they layout you can then do
+
+```mustache
+<html>
+{{render}}
+{{hey}}
+</html>

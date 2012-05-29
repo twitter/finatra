@@ -23,6 +23,7 @@ object FinatraServer {
 
   val controllers = new ControllerCollection
   val templateEngine = new TemplateHandler
+  var layoutHelperFactory = new LayoutHelperFactory
   var docroot = "public"
 
   def register(app: FinatraApp) { controllers.add(app) }
