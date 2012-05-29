@@ -221,9 +221,9 @@ Since ```yield``` is a reserved word in scala, it's called ```render``` in your 
 
 ```mustache
 <html>
-<body>
-{{render}}
-</body>
+  <body>
+    {{render}}
+  </body>
 </html>
 ```
 
@@ -239,6 +239,8 @@ object TemplateExample extends FinatraApp {
    }
 }
 ```
+
+If the layout is not found, just the template is rendered.
 
 ### Layout Functions
 
