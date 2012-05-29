@@ -17,7 +17,7 @@ Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://
 
 * Built in static file server (note: not designed for huge files(>100mb))
 
-* Template support (mustache, jade, scaml via scalate)
+* Mustache template support
 
 
 ### TODO
@@ -41,7 +41,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
   <dependency>
     <groupId>com.posterous</groupId>
     <artifactId>finatra</artifactId>
-    <version>4.0.6</version>
+    <version>4.1.0</version>
   </dependency>
 </dependencies>
 ```
@@ -184,7 +184,7 @@ object UploadExample extends FinatraApp {
 
 ## Templating
 
-Use the ```render``` method to render out templates, it takes the path of a template (relative from ```templates/```) and an Object. Here's an example:
+Use the ```render``` method to render out templates, it takes the path of a template (relative from ```templates/```) and an exported object. Here's an example:
 
 ```scala
 
@@ -196,11 +196,10 @@ class UserObject(val id: Int) {
 }
 
 object TemplateExample extends FinatraApp {
-
    get("/users/:id") { request =>
      request.params.get("id") match {
        case Some(id) =>
-         render("users.mustache", new UserObject(id))
+         render(path="users.mustache", exports=new UserObject(id))
      }
    }
 }
@@ -213,24 +212,44 @@ in ```templates/users.mustache```
 <h1>your user name is {{displayName}} with id of {{id}}</h1>
 ```
 
-As you can see, all public methods/fields in your Object can be called from the mustache template.
+As you can see, all public methods/fields in your exported object can be called from the mustache template.
 
 
-### Layouts
+### Layout
 
-By default all ```render``` calls render a layout in ```templates/layouts/application.mustache```, you can change this by passing a ```layout``` keyword argument to ```render```
+Since ```yield``` is a reserved word in scala, it's called ```render``` in your layouts. An example layout:
 
+```mustache
+<html>
+<body>
+{{render}}
+</body>
+</html>
+```
+
+By default, the layout is ```templates/layouts/application.mustache``` but you can change it by passing another path (relative to ```templates/layouts```) like so:
+
+```scala
+object TemplateExample extends FinatraApp {
+   get("/users/:id") { request =>
+     request.params.get("id") match {
+       case Some(id) =>
+         render(path="users.mustache", layout="mylayout.mustache", exports= new UserObject(id))
+     }
+   }
+}
+```
 
 ### Layout Functions
 
-If you'd like to be able to call custom functions besides ```render``` in your layout, you'll have to extend the ```LayoutHelperFactory``` and ```LayoutHelper``` classes with your own and set the ```layoutHelperFactory``` in ```FinatraServer```. Example:
+If you'd like to be able to call custom functions besides ```render``` in your layout, you'll have to extend the ```LayoutHelperFactory``` and ```LayoutHelper``` classes with your own and set the ```layoutHelperFactory``` to it in ```FinatraServer```. Example:
 
 ```scala
 
 import com.posterous.finatra.{FinatraApp, FinatraServer, LayoutHelper, LayoutHelperFactory}
 
 class MyLayoutHelper(yld: String) extends LayoutHelper(yld) {
-  val hey = "there"
+  val analyticsCode = "UA-5121231"
 }
 
 class MyFactory extends LayoutHelperFactory {
@@ -247,6 +266,14 @@ in they layout you can then do
 
 ```mustache
 <html>
-{{render}}
-{{hey}}
+  <body>
+    {{render}}
+
+  <script>
+    var code = {{analyticsCode}}
+  </script>
+  <script src="analytics.js"></script>
+
+  </body>
 </html>
+```
