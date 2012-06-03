@@ -23,6 +23,8 @@ class FinatraApp extends FinatraController {
     response(status=301, body="moved", headers=Map("Location" -> url))
   }
 
+
+  // TODO: refactor these 2 methods some how
   def response(status:Int = 200, body: String, headers: Map[String,String] = Map()) = {
     val responseStatus = HttpResponseStatus.valueOf(status)
     val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
@@ -30,6 +32,16 @@ class FinatraApp extends FinatraController {
       resp.setHeader(xs._1, xs._2)
     }
     resp.setContent(copiedBuffer(body, UTF_8))
+    Future.value(resp)
+  }
+
+  def rawResponse(status:Int = 200, body: Array[Byte], headers: Map[String,String] = Map()) = {
+    val responseStatus = HttpResponseStatus.valueOf(status)
+    val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
+    headers.foreach { xs =>
+      resp.setHeader(xs._1, xs._2)
+    }
+    resp.setContent(copiedBuffer(body))
     Future.value(resp)
   }
 

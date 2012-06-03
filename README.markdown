@@ -131,6 +131,12 @@ object Example extends FinatraApp {
     //delete the file here
   }
 
+
+  // use rawResponse to send bytes instead of strings
+  get("/file") { request =>
+    val file = GetTheFile(params.get("file"))
+    rawResponse(body=file.toBytes)
+  }
 }
 ```
 
