@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>4.1.1</version>
+  <version>4.1.2</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -35,7 +35,7 @@
     <maven.compiler.source>1.5</maven.compiler.source>
     <maven.compiler.target>1.5</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.9.1</scala.version>
+    <scala.version>2.9.2</scala.version>
   </properties>
 
   <repositories>
@@ -85,7 +85,7 @@
     <dependency>
       <groupId>com.capotej</groupId>
       <artifactId>finatra-core_${scala.version}</artifactId>
-      <version>0.0.10</version>
+      <version>0.0.11</version>
     </dependency>
 
     <dependency>
@@ -103,20 +103,20 @@
 
     <dependency>
       <groupId>com.codahale</groupId>
-      <artifactId>jerkson_${scala.version}</artifactId>
+      <artifactId>jerkson_2.9.1</artifactId>
       <version>0.4.2</version>
     </dependency>
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-http_${scala.version}</artifactId>
-      <version>3.0.0</version>
+      <artifactId>finagle-http</artifactId>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-core_${scala.version}</artifactId>
-      <version>3.0.0</version>
+      <artifactId>finagle-core</artifactId>
+      <version>5.0.0</version>
     </dependency>
 
     <dependency>
