@@ -54,6 +54,19 @@ object FinatraServer {
       headers
     }
 
+    def cookiesOf(request: HttpRequest) = {
+      var cookies = Map[String, FinatraCookie]()
+      val cookie = request.getHeader("Cookie")
+      if(cookie != null){
+        val decodedCookie = new CookieDecoder().decode(cookie)
+        decodedCookie.foreach { xs =>
+          println(xs)
+          cookies += Tuple2(xs.getName, FinatraCookieAdapter(xs))
+        }
+      }
+      cookies
+    }
+
     def notFoundResponse = {
       val resp = new DefaultHttpResponse(HTTP_1_1, OK)
       resp.setContent(copiedBuffer("not found", UTF_8))
@@ -65,6 +78,7 @@ object FinatraServer {
                                        method=rawRequest.getMethod.toString,
                                        params=paramsOf(rawRequest),
                                        headers=headersOf(rawRequest),
+                                       cookies=cookiesOf(rawRequest),
                                        body=(rawRequest.getContent.array))
 
 
