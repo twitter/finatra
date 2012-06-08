@@ -1,7 +1,6 @@
 package com.posterous.finatra
 
 import org.jboss.netty.handler.codec.http._
-import scala.collection.JavaConversions._
 import com.capotej.finatra_core.FinatraCookie
 
 object FinatraCookieAdapter {
@@ -12,7 +11,6 @@ object FinatraCookieAdapter {
       commentUrl=c.getCommentUrl,
       domain=c.getDomain,
       path=c.getPath,
-      ports=c.getPorts,
       name=c.getName,
       version=c.getVersion,
       isDiscard=c.isDiscard,
