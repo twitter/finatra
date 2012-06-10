@@ -60,8 +60,7 @@ object FinatraServer {
       if(cookie != null){
         val decodedCookie = new CookieDecoder().decode(cookie)
         decodedCookie.foreach { xs =>
-          println(xs)
-          cookies += Tuple2(xs.getName, FinatraCookieAdapter(xs))
+          cookies += Tuple2(xs.getName, FinatraCookieAdapter.in(xs))
         }
       }
       cookies

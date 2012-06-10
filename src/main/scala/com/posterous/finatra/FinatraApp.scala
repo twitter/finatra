@@ -25,11 +25,14 @@ class FinatraApp extends FinatraController {
 
 
   // TODO: refactor these 2 methods some how
-  def response(status:Int = 200, body: String, headers: Map[String,String] = Map()) = {
+  def response(status:Int = 200, body: String, headers: Map[String,String] = Map(), cookies: Map[String, FinatraCookie] = Map()) = {
     val responseStatus = HttpResponseStatus.valueOf(status)
     val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
     headers.foreach { xs =>
       resp.setHeader(xs._1, xs._2)
+    }
+    if (!cookies.isEmpty) {
+      resp.setHeader("Cookie", FinatraCookieAdapter.out(cookies))
     }
     resp.setContent(copiedBuffer(body, UTF_8))
     Future.value(resp)
