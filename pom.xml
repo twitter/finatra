@@ -84,8 +84,8 @@
 
     <dependency>
       <groupId>com.capotej</groupId>
-      <artifactId>finatra-core_${scala.version}</artifactId>
-      <version>0.0.11</version>
+      <artifactId>finatra-core</artifactId>
+      <version>0.1.1</version>
     </dependency>
 
     <dependency>
