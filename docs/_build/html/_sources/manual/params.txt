@@ -19,7 +19,9 @@ You can extract the year params like this:
    request.params.get("year")
 
 
-Note: this returns a scala Option, making it easy to do default params:
+.. NOTE::
+
+   params return a scala Option, making it easy to do default params
 
 .. code-block:: scala
 

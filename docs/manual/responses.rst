@@ -1,7 +1,7 @@
 Responses
 ==================
 
-Every route you define ends up returning FinatraResponse object, so naturally, there's a bunch of ways of creating them.
+Every route you define ends up returning `FinatraResponse` object, so naturally, there's a bunch of ways of creating them.
 
 There's a `response` function defined in FinatraApp that takes 3 keyword arguments, heres an example
 
@@ -42,7 +42,7 @@ It takes the same keyword arguments as above:
      render(status=403, path="unauth.mustache", exports=UnauthorizedPresenter, headers=headers)
    }
 
-You can also interact with FinatraResponse directly via the builder pattern, like so:
+You can also interact with `FinatraResponse` directly via the builder pattern, like so:
 
 .. code-block:: scala
 

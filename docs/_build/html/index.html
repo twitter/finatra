@@ -48,18 +48,27 @@
             
   <div class="section" id="finatra">
 <h1>Finatra<a class="headerlink" href="#finatra" title="Permalink to this headline">¶</a></h1>
-<p>Finatra is a sinatra clone backed by scala/finagle written by &#64;capotej and &#64;twoism</p>
-<p>Features</p>
-<ul class="simple">
-<li>The routing DSL you&#8217;ve come to know and love</li>
-<li>Asynchronous, uses Finagle-HTTP/Netty</li>
-<li>Multipart file upload/form handling</li>
-<li>Modular app support</li>
-<li>A testing helper</li>
-<li>Built in static file server (note: not designed for huge files(&gt;100mb))</li>
-<li>Mustache template support through <a class="reference internal" href="#mustache-java">[Mustache.java]</a></li>
-</ul>
-<p>The finatra Manual</p>
+<p>Finatra is a sinatra clone backed by scala/finagle written by <a class="reference external" href="http://twitter.com/capotej">&#64;capotej</a> and <a class="reference external" href="http://twitter.com/twoism">&#64;twoism</a></p>
+<p>Source code: <a class="reference external" href="http://github.com/capotej/finatra">http://github.com/capotej/finatra</a></p>
+<p><strong>Latest version: 5.0.0</strong></p>
+<p>Hello World Example:</p>
+<div class="highlight-scala"><div class="highlight"><pre><span class="k">import</span> <span class="nn">com.posterous.finatra._</span>
+
+<span class="k">class</span> <span class="nc">MyApp</span> <span class="k">extends</span> <span class="nc">FinatraApp</span> <span class="o">{</span>
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+    <span class="n">response</span><span class="o">(</span><span class="n">body</span><span class="o">=</span><span class="s">&quot;hello world&quot;</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">myApp</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyApp</span>
+  <span class="nc">FinatraServer</span><span class="o">.</span><span class="n">register</span><span class="o">(</span><span class="n">myApp</span><span class="o">)</span>
+  <span class="nc">FinatraServer</span><span class="o">.</span><span class="n">start</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<div class="section" id="the-finatra-manual">
+<h2>The finatra Manual<a class="headerlink" href="#the-finatra-manual" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="manual/your-first-app.html">Your first app</a></li>
@@ -79,20 +88,13 @@
 <li class="toctree-l1"><a class="reference internal" href="manual/blog-example.html">Blog Example</a></li>
 </ul>
 </div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
-</ul>
 <table class="docutils citation" frame="void" id="mustache-java" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[Mustache.java]</a></td><td><a class="reference external" href="https://github.com/spullara/mustache.java">https://github.com/spullara/mustache.java</a></td></tr>
+<tr><td class="label">[Mustache.java]</td><td><a class="reference external" href="https://github.com/spullara/mustache.java">https://github.com/spullara/mustache.java</a></td></tr>
 </tbody>
 </table>
+</div>
 </div>
 
 
@@ -104,9 +106,11 @@
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Finatra</a><ul>
+<li><a class="reference internal" href="#the-finatra-manual">The finatra Manual</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
 </ul>
 
   <h4>Next topic</h4>

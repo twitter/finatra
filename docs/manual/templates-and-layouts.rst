@@ -106,5 +106,7 @@ in they layout you can then do
       </body>
     </html>
 
-See the :doc:`/manual/blog-example` and the [Mustache.java]_ docs for more elaborate examples
+.. NOTE::
+
+   See the :doc:`/manual/blog-example` and the [Mustache.java]_ docs for more elaborate examples
 

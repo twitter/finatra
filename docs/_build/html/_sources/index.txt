@@ -1,26 +1,35 @@
 Finatra
 ===================================
 
-Finatra is a sinatra clone backed by scala/finagle written by @capotej and @twoism
+Finatra is a sinatra clone backed by scala/finagle written by `@capotej`_ and `@twoism`_
 
-Features
+Source code: http://github.com/capotej/finatra
 
-* The routing DSL you've come to know and love
+.. _@capotej: http://twitter.com/capotej
+.. _@twoism: http://twitter.com/twoism
 
-* Asynchronous, uses Finagle-HTTP/Netty
+**Latest version: 5.0.0**
 
-* Multipart file upload/form handling
+Hello World Example:
 
-* Modular app support
+.. code-block:: scala
 
-* A testing helper
+   import com.posterous.finatra._
 
-* Built in static file server (note: not designed for huge files(>100mb))
+   class MyApp extends FinatraApp {
+     get("/") { request =>
+       response(body="hello world")
+     }
+   }
 
-* Mustache template support through [Mustache.java]_
-
+   def main(args: Array[String]) = {
+     val myApp = new MyApp
+     FinatraServer.register(myApp)
+     FinatraServer.start
+   }
 
 The finatra Manual
+------------------
 
 .. toctree::
    :maxdepth: 2
@@ -35,16 +44,6 @@ The finatra Manual
    manual/testing
    manual/heroku
    manual/blog-example
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 
 
 

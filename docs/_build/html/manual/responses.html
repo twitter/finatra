@@ -52,7 +52,7 @@
             
   <div class="section" id="responses">
 <h1>Responses<a class="headerlink" href="#responses" title="Permalink to this headline">¶</a></h1>
-<p>Every route you define ends up returning FinatraResponse object, so naturally, there&#8217;s a bunch of ways of creating them.</p>
+<p>Every route you define ends up returning <cite>FinatraResponse</cite> object, so naturally, there&#8217;s a bunch of ways of creating them.</p>
 <p>There&#8217;s a <cite>response</cite> function defined in FinatraApp that takes 3 keyword arguments, heres an example</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
   <span class="n">response</span><span class="o">(</span><span class="n">body</span><span class="o">=</span><span class="s">&quot;hello&quot;</span><span class="o">)</span>
@@ -85,7 +85,7 @@
 <span class="o">}</span>
 </pre></div>
 </div>
-<p>You can also interact with FinatraResponse directly via the builder pattern, like so:</p>
+<p>You can also interact with <cite>FinatraResponse</cite> directly via the builder pattern, like so:</p>
 <div class="highlight-scala"><div class="highlight"><pre><span class="n">get</span><span class="o">(</span><span class="s">&quot;/builder-example&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
   <span class="nc">FinatraResponse</span>
     <span class="o">.</span><span class="n">status</span><span class="o">(</span><span class="mi">201</span><span class="o">)</span>
