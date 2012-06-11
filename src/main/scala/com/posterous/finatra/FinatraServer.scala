@@ -26,7 +26,7 @@ object FinatraServer {
   var layoutHelperFactory = new LayoutHelperFactory
   var docroot = "public"
 
-  def register(app: FinatraApp) { controllers.add(app) }
+  def register(app: FinatraController) { controllers.add(app) }
 
   class FinatraService extends Service[HttpRequest, HttpResponse]{
 
