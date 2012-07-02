@@ -1,6 +1,7 @@
 package com.posterous.finatra
 
 import com.github.mustachejava._
+import com.twitter.io.TempFile
 import com.twitter.mustache._
 
 import java.io.IOException
@@ -29,8 +30,8 @@ class FinatraMustacheFactory extends DefaultMustacheFactory {
 class TemplateHandler {
 
   def captureTemplate(template: String, layout: String, exports: Any): String  = {
-    val tpath = new File("templates/" + template)
-    val lpath = new File("templates/layouts/" + layout)
+    val tpath = TempFile.fromResourcePath("/templates/" + template)
+    val lpath = TempFile.fromResourcePath("/templates/layouts/" + layout)
 
     //what remembers the templates
     val mf = new FinatraMustacheFactory
