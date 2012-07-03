@@ -67,7 +67,7 @@ object FinatraServer {
     }
 
     def notFoundResponse = {
-      val resp = new DefaultHttpResponse(HTTP_1_1, OK)
+      val resp = new DefaultHttpResponse(HTTP_1_1, NOT_FOUND)
       resp.setContent(copiedBuffer("not found", UTF_8))
       Future.value(resp)
     }
