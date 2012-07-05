@@ -1,15 +1,12 @@
 package com.posterous.finatra
 
 import org.jboss.netty.handler.codec.http._
-import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-import com.twitter.finagle.http.Http
 
 import com.codahale.jerkson.Json._
-import java.io._
 import com.capotej.finatra_core._
 
 class FinatraApp extends FinatraController {
@@ -19,82 +16,20 @@ class FinatraApp extends FinatraController {
   }
 
   def render(status:Int = 200, path: String, layout: String = "application.mustache", exports: Any = "") = {
-    FinatraResponse.template(path).layout(layout).status(status).exports(exports).header("Content-Type", "text/html").build
+    new FinatraResponse().template(path).layout(layout).status(status).exports(exports).header("Content-Type", "text/html").build
   }
 
   def toJson(obj: Any) = {
-    FinatraResponse.json(obj).header("Content-Type", "application/json").build
+    new FinatraResponse().json(obj).header("Content-Type", "application/json").build
   }
 
   def redirect(location: String) = FinatraResponse(301, "moved", Map("Location" -> location))
 }
 
 object FinatraResponse {
-
-  var resp = new FinatraResponse
-
-  def apply(body: String) = FinatraResponse.body(body).status(200).build
-  def apply(status: Int, body: String) = FinatraResponse.body(body).status(status).build
-  def apply(status: Int, body: String, headers: Map[String, String]) = FinatraResponse.body(body).status(status).headers(headers).build
-
-  def cookie(k: String, v: String) = {
-    resp.simpleCookies += (k -> v)
-    this
-  }
-
-  def cookie(c: FinatraCookie) = {
-    resp.advCookies += (c.value -> c)
-    this
-  }
-
-  def body(s: String) = {
-    resp.strBody = Some(s)
-    this
-  }
-
-  def status(i: Int) = {
-    resp.status = i
-    this
-  }
-
-  def body(b: Array[Byte]) = {
-    resp.binBody = Some(b)
-    this
-  }
-
-  def header(k: String, v: String) = {
-    resp.headers += (k -> v)
-    this
-  }
-
-  def headers(m: Map[String, String]) = {
-    resp.headers = resp.headers ++ m
-    this
-  }
-
-  def json(o: Any) = {
-    resp.json = Some(o)
-    this
-  }
-
-  def template(s: String) = {
-    resp.template = Some(s)
-    this
-  }
-
-  def layout(s: String) = {
-    resp.layout = Some(s)
-    this
-  }
-
-  def exports(o: Any) = {
-    resp.exports = Some(o)
-    this
-  }
-
-  def build = {
-    resp.build
-  }
+  def apply(body: String) = new FinatraResponse().body(body).status(200).build
+  def apply(status: Int, body: String) = new FinatraResponse().body(body).status(status).build
+  def apply(status: Int, body: String, headers: Map[String, String]) = new FinatraResponse().body(body).status(status).headers(headers).build
 }
 
 class FinatraResponse {
@@ -139,6 +74,61 @@ class FinatraResponse {
         }
       }
     resp
+  }
+
+  def cookie(k: String, v: String) = {
+    this.simpleCookies += (k -> v)
+    this
+  }
+
+  def cookie(c: FinatraCookie) = {
+    this.advCookies += (c.value -> c)
+    this
+  }
+
+  def body(s: String) = {
+    this.strBody = Some(s)
+    this
+  }
+
+  def status(i: Int): FinatraResponse = {
+    this.status = i
+    this
+  }
+
+  def body(b: Array[Byte]) = {
+    this.binBody = Some(b)
+    this
+  }
+
+  def header(k: String, v: String) = {
+    this.headers += (k -> v)
+    this
+  }
+
+  def headers(m: Map[String, String]): FinatraResponse = {
+    this.headers = this.headers ++ m
+    this
+  }
+
+  def json(o: Any): FinatraResponse = {
+    this.json = Some(o)
+    this
+  }
+
+  def template(s: String): FinatraResponse = {
+    this.template = Some(s)
+    this
+  }
+
+  def layout(s: String): FinatraResponse = {
+    this.layout = Some(s)
+    this
+  }
+
+  def exports(o: Any): FinatraResponse = {
+    this.exports = Some(o)
+    this
   }
 
   def build = {
