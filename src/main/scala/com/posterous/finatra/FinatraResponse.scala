@@ -7,24 +7,7 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
 
 import com.codahale.jerkson.Json._
-import com.capotej.finatra_core._
-
-class FinatraApp extends FinatraController {
-
-  def response(body: String, status: Int = 200, headers: Map[String, String] = Map()) = {
-    FinatraResponse(status, body, headers)
-  }
-
-  def render(status:Int = 200, path: String, layout: String = "application.mustache", exports: Any = "") = {
-    new FinatraResponse().template(path).layout(layout).status(status).exports(exports).header("Content-Type", "text/html").build
-  }
-
-  def toJson(obj: Any) = {
-    new FinatraResponse().json(obj).header("Content-Type", "application/json").build
-  }
-
-  def redirect(location: String) = FinatraResponse(301, "moved", Map("Location" -> location))
-}
+import com.twitter.finatra_core._
 
 object FinatraResponse {
   def apply(body: String) = new FinatraResponse().body(body).status(200).build

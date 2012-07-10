@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.posterous</groupId>
   <artifactId>finatra</artifactId>
-  <version>4.2.1-SNAPSHOT</version>
+  <version>4.2.2</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -83,9 +83,9 @@
     </dependency>
 
     <dependency>
-      <groupId>com.capotej</groupId>
+      <groupId>com.twitter</groupId>
       <artifactId>finatra-core</artifactId>
-      <version>0.1.1</version>
+      <version>0.4.3</version>
     </dependency>
 
     <dependency>
@@ -102,6 +102,12 @@
     </dependency>
 
     <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.codahale</groupId>
       <artifactId>jerkson_2.9.1</artifactId>
       <version>0.4.2</version>
@@ -110,13 +116,13 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http</artifactId>
-      <version>5.0.0</version>
+      <version>5.3.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core</artifactId>
-      <version>5.0.0</version>
+      <version>5.3.0</version>
     </dependency>
 
     <dependency>

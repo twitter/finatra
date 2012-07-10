@@ -1,4 +1,4 @@
 logs/*
 target
 target/*
-*.DS_store
+*.DS_Store

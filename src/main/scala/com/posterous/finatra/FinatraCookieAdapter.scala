@@ -1,7 +1,6 @@
 package com.posterous.finatra
 
 import org.jboss.netty.handler.codec.http._
-import com.capotej.finatra_core.FinatraCookie
 import scala.collection.JavaConversions._
 
 
