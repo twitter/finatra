@@ -1,4 +1,4 @@
-package com.posterous.finatra
+package com.twitter.finatra
 
 import com.twitter.finagle.{Service, SimpleFilter}
 import org.jboss.netty.handler.codec.http._
@@ -13,8 +13,7 @@ import com.twitter.finagle.http.Http
 
 import java.io._
 
-class FileHandler extends SimpleFilter[HttpRequest, HttpResponse]  {
-   
+class FileService extends SimpleFilter[HttpRequest, HttpResponse]  {
 
   //lifted from tiscaf - http://gaydenko.com/scala/tiscaf/httpd/
   val exts = Map(
@@ -96,7 +95,7 @@ class FileHandler extends SimpleFilter[HttpRequest, HttpResponse]  {
     "odt" -> "application/vnd.oasis.opendocument.text",
     "abw" -> "application/x-abiword"
   )
-  
+
   val gzipable = List(
     "text/html",
     "application/x-javascript",
@@ -114,27 +113,27 @@ class FileHandler extends SimpleFilter[HttpRequest, HttpResponse]  {
     "text/x-java",
     "text/x-python"
   )
-  
+
   //more holes than swiss cheese
   def validPath(path: String):Boolean = {
     val file = new File(FinatraServer.docroot, path)
     if(file.toString.contains(".."))     return false
     if(!file.exists || file.isDirectory) return false
     if(!file.canRead)                    return false
-    return true 
+    return true
   }
-  
+
   def apply(request: HttpRequest, service: Service[HttpRequest, HttpResponse]) = {
     if(validPath(request.getUri)){
-      val file = new File(FinatraServer.docroot, request.getUri) 
+      val file = new File(FinatraServer.docroot, request.getUri)
       val fh = new FileInputStream(file)
       val b = new Array[Byte](file.length.toInt)
       fh.read(b)
-      
+
       val response = new DefaultHttpResponse(HTTP_1_1, OK)
       val mtype = exts.get(file.toString.split('.').last).getOrElse("application/octet-stream")
       response.setStatus(OK)
-      response.setHeader("Content-Type", mtype) 
+      response.setHeader("Content-Type", mtype)
       response.setContent(copiedBuffer(b))
       Future.value(response)
     } else {

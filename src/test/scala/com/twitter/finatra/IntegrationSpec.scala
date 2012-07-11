@@ -1,11 +1,11 @@
-package com.posterous.finatra.test
+package com.twitter.finatra.test
 
-import com.posterous.finatra.FinatraApp
+import com.twitter.finatra.Controller
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import scala.collection.mutable.Map
 
-class MyApp extends FinatraApp {
+class MyApp extends Controller {
   get("/path")    { request => response("get:path") }
   post("/path")   { request => response("post:path") }
   put("/path")    { request => response("put:path") }
@@ -16,7 +16,7 @@ class MyApp extends FinatraApp {
 }
 
 @RunWith(classOf[JUnitRunner])
-class FinatraIntegrationSpec extends FinatraSpecHelper {
+class IntegrationSpec extends SpecHelper {
 
   def app = { new MyApp }
 

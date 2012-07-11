@@ -1,4 +1,4 @@
-package com.posterous.finatra
+package com.twitter.finatra
 
 import scala.collection.mutable.Map
 import com.twitter.finatra_core.FinatraRequest
@@ -11,7 +11,7 @@ class Request extends FinatraRequest {
   var params: Map[String, String] = Map()
   var multiParams: Map[String, MultipartItem] = Map()
   var headers: Map[String, String] = Map()
-  var cookies: Map[String, FinatraCookie] = Map()
+  //var cookies: Map[String, FinatraCookie] = Map()
 
   def finatraPath   = path
   def finatraMethod = method
@@ -47,8 +47,8 @@ class Request extends FinatraRequest {
     this
   }
 
-  def cookies(m: Map[String, FinatraCookie]):Request = {
-    this.cookies = this.cookies ++ m
-    this
-  }
+  // def cookies(m: Map[String, FinatraCookie]):Request = {
+  //   this.cookies = this.cookies ++ m
+  //   this
+  // }
 }

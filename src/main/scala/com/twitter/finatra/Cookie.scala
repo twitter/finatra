@@ -1,6 +1,6 @@
-package com.posterous.finatra
+package com.twitter.finatra
 
-case class FinatraCookie(
+case class Cookie(
   var name: String,
   var value: String,
   var expires: Int = -1,

@@ -1,0 +1,36 @@
+package com.twitter.finatra
+
+import com.twitter.finagle.builder.{Server, ServerBuilder}
+import com.twitter.finagle.http.Http
+import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finatra_core.{AbstractFinatraController, ControllerCollection}
+import com.twitter.util.Future
+import java.net.InetSocketAddress
+import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
+
+object FinatraServer {
+
+  val controllers = new ControllerCollection[Request, Future[HttpResponse]]
+  var docroot = "public"
+
+  def register(app: AbstractFinatraController[Request, Future[HttpResponse]]) { controllers.add(app) }
+
+  def start(port:Int = 7070, docroot:String = "public") {
+    this.docroot = docroot
+
+    val appService = new AppService
+    val fileService = new FileService
+
+    val service: Service[HttpRequest, HttpResponse] = fileService andThen appService
+
+    val server: Server = ServerBuilder()
+      .codec(Http())
+      .bindTo(new InetSocketAddress(port))
+      .name("finatraServer")
+      .build(service)
+
+    println("started on 7070: view logs/finatra.log for more info")
+  }
+
+}
+

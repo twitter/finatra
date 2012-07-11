@@ -1,4 +1,4 @@
-package com.posterous.finatra
+package com.twitter.finatra
 
 import org.apache.commons.fileupload._
 import java.io._
