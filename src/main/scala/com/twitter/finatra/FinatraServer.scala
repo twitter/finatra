@@ -10,10 +10,10 @@ import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
 
 object FinatraServer {
 
-  val controllers = new ControllerCollection[Request, Future[HttpResponse]]
+  val controllers = new ControllerCollection[Request, Response, Future[HttpResponse]]
   var docroot = "public"
 
-  def register(app: AbstractFinatraController[Request, Future[HttpResponse]]) { controllers.add(app) }
+  def register(app: AbstractFinatraController[Request, Response, Future[HttpResponse]]) { controllers.add(app) }
 
   def start(port:Int = 7070, docroot:String = "public") {
     this.docroot = docroot

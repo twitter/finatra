@@ -91,7 +91,13 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finatra-core</artifactId>
-      <version>0.4.3</version>
+      <version>0.5.3-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>finatra-views</artifactId>
+      <version>0.0.1</version>
     </dependency>
 
     <dependency>

@@ -6,13 +6,13 @@ import org.scalatest.junit.JUnitRunner
 import scala.collection.mutable.Map
 
 class MyApp extends Controller {
-  get("/path")    { request => response("get:path") }
-  post("/path")   { request => response("post:path") }
-  put("/path")    { request => response("put:path") }
-  delete("/path") { request => response("delete:path") }
-  patch("/path")  { request => response("patch:path") }
-  get("/params")  { request => response(request.params("p")) }
-  get("/headers") { request => response(request.headers("Referer")) }
+  get("/path")    { request => render.plain("get:path") }
+  post("/path")   { request => render.plain("post:path") }
+  put("/path")    { request => render.plain("put:path") }
+  delete("/path") { request => render.plain("delete:path") }
+  patch("/path")  { request => render.plain("patch:path") }
+  get("/params")  { request => render.plain(request.params("p")) }
+  get("/headers") { request => render.plain(request.headers("Referer")) }
 }
 
 @RunWith(classOf[JUnitRunner])

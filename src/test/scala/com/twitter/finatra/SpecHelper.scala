@@ -8,7 +8,7 @@ import scala.collection.mutable.Map
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.util.CharsetUtil.UTF_8
 
-abstract class SpecHelper extends AbstractFinatraSpec[Request, Future[HttpResponse]] {
+abstract class SpecHelper extends AbstractFinatraSpec[Request, Response, Future[HttpResponse]] {
 
   def response  = lastResponse.get.getContent.toString(UTF_8)
   def request   = new Request
