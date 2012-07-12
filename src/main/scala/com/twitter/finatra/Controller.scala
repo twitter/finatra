@@ -1,20 +1,13 @@
 package com.twitter.finatra
 
-import com.twitter.finatra_core.{AbstractFinatraController, DispatchHandler}
+import com.twitter.finatra_core.AbstractFinatraController
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
 
 
-
-class ResponseCallbackHandler extends DispatchHandler[Response, Future[HttpResponse]] {
-  override def apply(resp: Response) = {
-    resp.build
-  }
-}
-
 class Controller extends AbstractFinatraController[Request, Response, Future[HttpResponse]] {
 
-  override val dispatchHandler = new ResponseCallbackHandler
+  override val responseConverter = new FinatraResponseConverter
 
   def response(body: String, status: Int = 200, headers: Map[String, String] = Map()) = {
     Response(status, body, headers)
