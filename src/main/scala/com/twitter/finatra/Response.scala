@@ -1,7 +1,6 @@
 package com.twitter.finatra
 
 import org.jboss.netty.handler.codec.http._
-import org.jboss.netty.handler.codec.http.{Cookie => JCookie}
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import org.jboss.netty.util.CharsetUtil.UTF_8
@@ -20,8 +19,9 @@ class Response {
   var status:Int = 200
 
   var headers: Map[String, String] = Map()
-  var simpleCookies: Map[String, String] = Map()
-  //var advCookies: Map[String, FinatraCookie] = Map()
+
+  var hasCookies = false
+  lazy val cookies = new CookieEncoder(true)
 
   var template: Option[String]      = None
   var exports: Option[Any]          = None
@@ -59,7 +59,14 @@ class Response {
   }
 
   def cookie(k: String, v: String) = {
-    this.simpleCookies += (k -> v)
+    this.hasCookies = true
+    this.cookies.addCookie(k, v)
+    this
+  }
+
+  def cookie(c: Cookie) = {
+    this.hasCookies = true
+    this.cookies.addCookie(c)
     this
   }
 
@@ -145,21 +152,12 @@ class Response {
   def build = {
     val responseStatus = HttpResponseStatus.valueOf(status)
     val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
-    //var cookies = Map[String, Cookie]()
 
     headers.foreach { xs =>
       resp.setHeader(xs._1, xs._2)
     }
 
-    // simpleCookies.foreach { xs =>
-    //   cookies += (xs._1 -> Cookie(xs._1, xs._2))
-    // }
-
-    // cookies = cookies ++ advCookies
-
-    // if (!cookies.isEmpty) {
-    //   resp.setHeader("Cookie", CookieAdapter.out(cookies))
-    // }
+    if (this.hasCookies) resp.setHeader("Cookie", cookies.encode)
 
     Future.value(setContent(resp))
   }

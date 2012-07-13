@@ -2,16 +2,17 @@ package com.twitter.finatra
 
 import scala.collection.mutable.Map
 import com.twitter.finatra_core.FinatraRequest
+import org.jboss.netty.handler.codec.http.Cookie
 
 class Request extends FinatraRequest {
 
-  var path: String = "/"
-  var method: String = "GET"
-  var body: Array[Byte] = Array()
-  var params: Map[String, String] = Map()
+  var path: String                            = "/"
+  var method: String                          = "GET"
+  var body: Array[Byte]                       = Array()
+  var params: Map[String, String]             = Map()
   var multiParams: Map[String, MultipartItem] = Map()
-  var headers: Map[String, String] = Map()
-  //var cookies: Map[String, FinatraCookie] = Map()
+  var headers: Map[String, String]            = Map()
+  var cookies: Map[String, Cookie]            = Map()
 
   def finatraPath   = path
   def finatraMethod = method
@@ -47,8 +48,9 @@ class Request extends FinatraRequest {
     this
   }
 
-  // def cookies(m: Map[String, FinatraCookie]):Request = {
-  //   this.cookies = this.cookies ++ m
-  //   this
-  // }
+  def cookies(m: Map[String, Cookie]):Request = {
+    this.cookies = this.cookies ++ m
+    this
+  }
+
 }

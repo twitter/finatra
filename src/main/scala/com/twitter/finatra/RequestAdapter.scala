@@ -1,7 +1,6 @@
 package com.twitter.finatra
 
 import org.jboss.netty.handler.codec.http._
-import org.jboss.netty.handler.codec.http.{Cookie => JCookie}
 import scala.collection.JavaConversions._
 import scala.collection.mutable.Map
 import scala.collection.mutable.ListBuffer
@@ -37,24 +36,25 @@ object RequestAdapter {
   }
 
   def cookiesOf(request: HttpRequest) = {
-    var cookies = Map[String, Cookie]()
-    // val cookie = request.getHeader("Cookie")
-    // if(cookie != null){
-    //   val decodedCookie = new CookieDecoder().decode(cookie)
-    //   decodedCookie.foreach { xs =>
-    //     cookies += Tuple2(xs.getName, CookieAdapter.in(xs))
-    //   }
-    // }
+    var cookies: Map[String, Cookie] = Map()
+    val cookie = request.getHeader("Cookie")
+    if(cookie != null){
+      val decodedCookie = new CookieDecoder().decode(cookie)
+      decodedCookie.foreach { xs =>
+        cookies += Tuple2(xs.getName, xs)
+      }
+    }
     cookies
   }
 
   def apply(rawRequest: HttpRequest): Request = {
     val request = new Request
+    //TODO: make these more efficient
     request.path    (pathOf(rawRequest.getUri))
     request.method  (rawRequest.getMethod.toString)
     request.params  (paramsOf(rawRequest))
     request.headers (headersOf(rawRequest))
-    //request.cookies (cookiesOf(rawRequest))
+    request.cookies (cookiesOf(rawRequest))
     request.body    (rawRequest.getContent.array)
   }
 }
