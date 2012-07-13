@@ -36,6 +36,14 @@ class ResponseSpec extends ShouldSpec {
     response.headers("Content-Type") should equal ("text/plain")
   }
 
+  ".nothing()" should "return a 200 empty response" in {
+    val response = resp.nothing
+
+    response.status should equal (200)
+    response.strBody.get should equal ("")
+    response.headers("Content-Type") should equal ("text/plain")
+  }
+
   ".html()" should "return a 200 html response" in {
     val response = resp.html("<h1>howdy</h1>")
 
