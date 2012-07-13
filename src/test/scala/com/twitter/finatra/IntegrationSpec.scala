@@ -22,37 +22,38 @@ class IntegrationSpec extends SpecHelper {
 
   "GET /path" should "respond 200" in {
     get("/path")
-    response should equal ("get:path")
+    response.body   should equal ("get:path")
+    response.code   should equal (200)
   }
 
   "POST /path" should "respond 200" in {
     post("/path")
-    response should equal ("post:path")
+    response.body should equal ("post:path")
   }
 
   "PUT /path" should "respond 200" in {
     put("/path")
-    response should equal ("put:path")
+    response.body should equal ("put:path")
   }
 
   "DELETE /path" should "respond 200" in {
     delete("/path")
-    response should equal ("delete:path")
+    response.body should equal ("delete:path")
   }
 
   "PATCH /path" should "respond 200" in {
     patch("/path")
-    response should equal ("patch:path")
+    response.body should equal ("patch:path")
   }
 
   "GET /params" should "respond 200" in {
     get("/params", Map("p"->"yup"))
-    response should equal ("yup")
+    response.body should equal ("yup")
   }
 
   "GET /headers" should "respond 200" in {
     get("/headers", headers=Map("Referer"->"http://twitter.com"))
-    response should equal ("http://twitter.com")
+    response.body should equal ("http://twitter.com")
   }
 
 }

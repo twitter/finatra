@@ -28,12 +28,12 @@ class CookieSpec extends SpecHelper {
 
   "basic k/v cookie" should "have Foo:Bar" in {
     get("/sendCookie")
-    lastResponse.get.getHeader("Cookie") should be ("Foo=Bar")
+    response.getHeader("Cookie") should be ("Foo=Bar")
   }
 
   "advanced Cookie" should "have Biz:Baz&Secure=true" in {
     get("/sendAdvCookie")
-    lastResponse.get.getHeader("Cookie") should be ("Biz=Baz;Secure")
+    response.getHeader("Cookie") should be ("Biz=Baz;Secure")
   }
 
 }
