@@ -6,7 +6,6 @@ import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-import com.twitter.finatra_views.View
 
 import com.codahale.jerkson.Json._
 import com.twitter.finatra_core._

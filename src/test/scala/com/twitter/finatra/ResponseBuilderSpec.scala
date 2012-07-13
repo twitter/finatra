@@ -5,7 +5,7 @@ import org.scalatest.junit.JUnitRunner
 import org.jboss.netty.util.CharsetUtil.UTF_8
 
 import com.twitter.finatra.Response
-import com.twitter.finatra_views.View
+import com.twitter.finatra.View
 
 class MockView(val title:String) extends View {
   val template = "mock.mustache"
