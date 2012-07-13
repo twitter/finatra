@@ -1,5 +1,6 @@
 package com.twitter.finatra
 
+import org.apache.commons.lang.StringUtils
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
@@ -15,7 +16,7 @@ object Response {
   def apply(status: Int, body: String, headers: Map[String, String]) = new Response().body(body).status(status).headers(headers).build
 }
 
-class Response {
+class Response extends Logging {
   var status:Int = 200
 
   var headers: Map[String, String] = Map()
@@ -23,9 +24,6 @@ class Response {
   var hasCookies = false
   lazy val cookies = new CookieEncoder(true)
 
-  var template: Option[String]      = None
-  var exports: Option[Any]          = None
-  var layout: Option[String]        = None
   var strBody: Option[String]       = None
   var binBody: Option[Array[Byte]]  = None
   var json: Option[Any]             = None
@@ -134,21 +132,6 @@ class Response {
     this
   }
 
-  def template(s: String): Response = {
-    this.template = Some(s)
-    this
-  }
-
-  def layout(s: String): Response = {
-    this.layout = Some(s)
-    this
-  }
-
-  def exports(o: Any): Response = {
-    this.exports = Some(o)
-    this
-  }
-
   def build = {
     val responseStatus = HttpResponseStatus.valueOf(status)
     val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
@@ -160,6 +143,19 @@ class Response {
     if (this.hasCookies) resp.setHeader("Cookie", cookies.encode)
 
     Future.value(setContent(resp))
+  }
+
+  override def toString = {
+    val buf = new StringBuilder
+    buf.append(getClass().getSimpleName())
+    buf.append('\n')
+    buf.append(HTTP_1_1.toString)
+    buf.append(' ')
+    buf.append(this.status)
+    buf.append('\n')
+    appendCollection[String, String](buf, this.headers)
+
+    buf.toString
   }
 
 }

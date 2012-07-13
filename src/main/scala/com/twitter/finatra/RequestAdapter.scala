@@ -9,7 +9,7 @@ import scala.collection.mutable.ListBuffer
 * Adapts an HttpRequest to a (Finatra) Request
 */
 
-object RequestAdapter {
+object RequestAdapter extends Logging {
 
   def pathOf(x:String) = x.split('?').first
 
@@ -48,7 +48,10 @@ object RequestAdapter {
   }
 
   def apply(rawRequest: HttpRequest): Request = {
+    logger.info("%s", rawRequest)
+
     val request = new Request
+
     //TODO: make these more efficient
     request.path    (pathOf(rawRequest.getUri))
     request.method  (rawRequest.getMethod.toString)

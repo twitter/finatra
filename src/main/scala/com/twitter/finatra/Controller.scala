@@ -5,21 +5,15 @@ import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
 
 
-class Controller extends AbstractFinatraController[Request, Response, Future[HttpResponse]] {
+class Controller
+  extends AbstractFinatraController[Request, Response, Future[HttpResponse]]
+  with Logging {
 
   override val responseConverter = new FinatraResponseConverter
 
-  def response(body: String, status: Int = 200, headers: Map[String, String] = Map()) = {
-    Response(status, body, headers)
-  }
+  def render = new Response
 
-  def render = {
-    new Response
+  def redirect(location: String, message: String = "moved") = {
+    render.plain(message).status(301).header("Location", location)
   }
-
-  def toJson(obj: Any) = {
-    new Response().json(obj).header("Content-Type", "application/json").build
-  }
-
-  def redirect(location: String) = Response(301, "moved", Map("Location" -> location))
 }
