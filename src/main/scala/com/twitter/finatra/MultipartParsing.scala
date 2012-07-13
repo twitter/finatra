@@ -2,6 +2,7 @@ package com.twitter.finatra
 
 import org.apache.commons.fileupload._
 import java.io._
+import scala.collection.mutable.Map
 
 // HERE BE DRAGONS
 

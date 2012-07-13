@@ -38,11 +38,6 @@ class Request extends FinatraRequest {
     this
   }
 
-  def multiParams(m: Map[String, MultipartItem]):Request = {
-    this.multiParams = this.multiParams ++ m
-    this
-  }
-
   def headers(m: Map[String, String]):Request = {
     this.headers = this.headers ++ m
     this

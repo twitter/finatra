@@ -53,11 +53,14 @@ object RequestAdapter extends Logging {
     val request = new Request
 
     //TODO: make these more efficient
-    request.path    (pathOf(rawRequest.getUri))
-    request.method  (rawRequest.getMethod.toString)
-    request.params  (paramsOf(rawRequest))
-    request.headers (headersOf(rawRequest))
-    request.cookies (cookiesOf(rawRequest))
-    request.body    (rawRequest.getContent.array)
+    request.path        (pathOf(rawRequest.getUri))
+    request.method      (rawRequest.getMethod.toString)
+    request.params      (paramsOf(rawRequest))
+    request.headers     (headersOf(rawRequest))
+    request.cookies     (cookiesOf(rawRequest))
+    request.body        (rawRequest.getContent.array)
+    request.multiParams = MultipartParsing.loadMultiParams(request)
+
+    request
   }
 }
