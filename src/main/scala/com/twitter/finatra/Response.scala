@@ -84,6 +84,12 @@ class Response {
     this
   }
 
+  def nothing = {
+    this.header("Content-Type", "text/plain")
+    this.body("")
+    this
+  }
+
   def plain(body:String) = {
     this.header("Content-Type", "text/plain")
     this.body(body)
