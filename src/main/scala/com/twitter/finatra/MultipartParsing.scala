@@ -8,6 +8,7 @@ import scala.collection.mutable.Map
 
 object MultipartParsing {
 
+  // TODO: http://commons.apache.org/fileupload/streaming.html update to this
   def loadMultiParams(request: Request) = {
     var multiParams = Map[String, MultipartItem]()
     val ctype = request.headers.get("Content-Type").getOrElse(null)

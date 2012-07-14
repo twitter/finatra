@@ -11,7 +11,7 @@ import scala.collection.mutable.ListBuffer
 
 object RequestAdapter extends Logging {
 
-  def pathOf(x:String) = x.split('?').first
+  def pathOf(x:String) = x.split('?').head
 
   def paramsOf(request: HttpRequest) = {
     val fakeQs = "/?" + new String(request.getContent.array)
@@ -21,7 +21,7 @@ object RequestAdapter extends Logging {
     val allParams = qs.getParameters ++ bs.getParameters
 
     allParams.foreach { xs =>
-      paramsHash += Tuple2(xs._1, xs._2.first)
+      paramsHash += Tuple2(xs._1, xs._2.head)
     }
 
     paramsHash

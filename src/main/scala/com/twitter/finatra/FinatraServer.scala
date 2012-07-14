@@ -5,7 +5,7 @@ import com.twitter.finagle.http.Http
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra_core.{AbstractFinatraController, ControllerCollection}
 import com.twitter.logging.config._
-import com.twitter.logging.Logger
+import com.twitter.logging.{Logger, LoggerFactory, FileHandler}
 import com.twitter.util.Future
 import java.net.InetSocketAddress
 import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
@@ -13,17 +13,12 @@ import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
 object FinatraServer extends Logging {
 
   val controllers = new ControllerCollection[Request, Response, Future[HttpResponse]]
+
   var docroot = "public"
 
-  val config = new LoggerConfig {
-    node = ""
-    level = Logger.INFO
-    handlers = new FileHandlerConfig {
-      filename = "logs/finatra.log"
-      roll = Policy.Daily
-    }
-  }
-  config()
+  val logHandler = FileHandler(filename = "logs/finatra.org", rollPolicy = Policy.Daily)
+  val config = new LoggerFactory(level = Some(Logger.INFO), handlers = List(logHandler))
+  //config()
 
   def register(app: AbstractFinatraController[Request, Response, Future[HttpResponse]]) { controllers.add(app) }
 
