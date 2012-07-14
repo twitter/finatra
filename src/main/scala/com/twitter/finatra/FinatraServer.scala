@@ -17,8 +17,9 @@ object FinatraServer extends Logging {
   var docroot = "public"
 
   val logHandler = FileHandler(filename = "logs/finatra.org", rollPolicy = Policy.Daily)
-  val config = new LoggerFactory(level = Some(Logger.INFO), handlers = List(logHandler))
-  config()
+  val config = new LoggerFactory(node = "finatra",
+                                 level = Some(Logger.INFO),
+                                 handlers = List(logHandler))()
 
   def register(app: AbstractFinatraController[Request, Response, Future[HttpResponse]]) { controllers.add(app) }
 
