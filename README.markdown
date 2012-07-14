@@ -25,7 +25,46 @@ Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://
 * Plugin api
 
 
-### Installation
+### Installation via RubyGems
+    
+    $ gem install finatra
+    
+    $ finatra new MyApp
+    Org Name (com.<username>) com.twitter
+    [finatra] :: Creating MyApp in /Users/cburnett/dev...
+      create  myapp
+      create  myapp/Procfile
+      create  myapp/README.markdown
+      create  myapp/pom.xml
+      create  myapp/src/main/scala/com/twitter/myapp/MyApp.scala
+      create  myapp/src/test/scala/com/twitter/myapp/MyAppSpec.scala
+      create  myapp/src/main/resources/timeline.mustache
+      
+### Start the Server
+
+    $ finatra start
+    [INFO] Scanning for projects...
+    [INFO]                                                                         
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Building MyApp 0.0.1-SNAPSHOT
+    [INFO] ------------------------------------------------------------------------
+    [INFO] No known dependencies. Compiling everything
+    [INFO] launcher 'main' selected => com.twitter.myapp.App
+    started on 7070: view logs/finatra.log for more info
+
+## Other Commands
+
+    $ finatra
+    Tasks:
+      finatra compile          # Compile your app with Maven
+      finatra console          # Starts a scala console
+      finatra help [TASK]      # Describe available tasks or one specific task
+      finatra new <MyAppName>  # Create a new Finatra app
+      finatra package          # Package a jar for your app
+      finatra start            # Run your app on port 7070
+      finatra test             # Run the tests
+
+### Installation via Maven
 Add the repo and dependency to your pom.xml (sbt users to the left)
 
 ```xml
