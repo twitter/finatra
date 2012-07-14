@@ -9,7 +9,11 @@ Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://
 class HelloWorld extends Controller {
 
   def tweets = List(new Tweet("hey!"), new Tweet("lol"))
-
+  
+  get("/plain") { request =>
+    render.plain("hello world")
+  }
+  
   get("/cookies") { request =>
     render.json(request.cookies).header("Content-Type", "text/html")
   }
