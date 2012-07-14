@@ -22,11 +22,18 @@ object FinatraServer extends Logging {
 
   def register(app: AbstractFinatraController[Request, Response, Future[HttpResponse]]) { controllers.add(app) }
 
-  def start(port:Int = 7070, docroot:String = "public") {
+  def start(basePort:Int = 7070, docroot:String = "public") {
     this.docroot = docroot
 
     val appService = new AppService
     val fileService = new FileService
+
+    val envPort = Option(System.getenv("PORT"))
+
+    val port:Int = envPort match {
+      case Some(p) => Integer.valueOf(p)
+      case None => basePort
+    }
 
     val service: Service[HttpRequest, HttpResponse] = fileService andThen appService
 
@@ -37,7 +44,7 @@ object FinatraServer extends Logging {
       .build(service)
 
     logger.info("started on %s, docroot %s", port, docroot)
-    println("started on 7070: view logs/finatra.log for more info")
+    println("started on port: " + port.toString + " view logs/finatra.log for more info")
   }
 
 }
