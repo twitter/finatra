@@ -149,7 +149,7 @@ Template files are found in `src/main/resources` by default. You can change this
 View.baseTemplatePath = "/templates"
 ```
 
-Finatra views currently only support Mustache templates and use can be defined as follows.
+Finatra views currently only support Mustache templates and are defined as follows.
 
 #### timeline.mustache
 ```mustache
