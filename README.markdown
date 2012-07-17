@@ -9,11 +9,11 @@ Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://
 class HelloWorld extends Controller {
 
   def tweets = List(new Tweet("hey!"), new Tweet("lol"))
-  
+
   get("/plain") { request =>
     render.plain("hello world")
   }
-  
+
   get("/cookies") { request =>
     render.json(request.cookies).header("Content-Type", "text/html")
   }
@@ -56,9 +56,9 @@ class HelloWorld extends Controller {
 
 
 ### Installation via RubyGems
-    
+
     $ gem install finatra
-    
+
     $ finatra new MyApp
     Org Name (com.<username>) com.twitter
     [finatra] :: Creating MyApp in /Users/cburnett/dev...
@@ -69,12 +69,12 @@ class HelloWorld extends Controller {
       create  myapp/src/main/scala/com/twitter/myapp/MyApp.scala
       create  myapp/src/test/scala/com/twitter/myapp/MyAppSpec.scala
       create  myapp/src/main/resources/timeline.mustache
-      
+
 ### Start the Server
 
     $ finatra start
     [INFO] Scanning for projects...
-    [INFO]                                                                         
+    [INFO]
     [INFO] ------------------------------------------------------------------------
     [INFO] Building MyApp 0.0.1-SNAPSHOT
     [INFO] ------------------------------------------------------------------------
@@ -143,7 +143,23 @@ Here's an [example blog](https://gist.github.com/2626200)
 
 ### Views
 
+Template files are found in `src/main/resources` by default. You can change this location by setting `baseTemplatePath`.
+
 ```scala
+View.baseTemplatePath = "/templates"
+```
+
+Finatra views currently only support Mustache templates and use can be defined as follows.
+
+#### timeline.mustache
+```mustache
+{{#tweets}}
+  {{status}}
+{{/tweets}}
+```
+
+```scala
+case class Tweet(status:String)
 
 class TimelineView(val tweets:List[Tweet]) extends View {
   val template = "timeline.mustache"
