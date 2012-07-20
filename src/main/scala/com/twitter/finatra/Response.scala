@@ -157,7 +157,11 @@ class Response extends Logging {
 
     if (this.hasCookies) resp.setHeader("Cookie", cookies.encode)
 
-    Future.value(setContent(resp))
+    setContent(resp)
+  }
+
+  def toFuture = {
+    Future.value(this)
   }
 
   override def toString = {

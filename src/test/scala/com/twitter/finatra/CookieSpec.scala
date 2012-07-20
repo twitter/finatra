@@ -25,13 +25,13 @@ import org.jboss.netty.handler.codec.http._
 class CookieApp extends Controller {
 
   get("/sendCookie") {
-    request => render.plain("get:path").cookie("Foo", "Bar")
+    request => render.plain("get:path").cookie("Foo", "Bar").toFuture
   }
 
   get("/sendAdvCookie") {
     val c = new DefaultCookie("Biz", "Baz")
     c.setSecure(true)
-    request => render.plain("get:path").cookie(c)
+    request => render.plain("get:path").cookie(c).toFuture
   }
 
 }

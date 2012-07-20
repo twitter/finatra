@@ -69,7 +69,7 @@ class ResponseSpec extends ShouldSpec {
 
   ".json()" should "return a 200 json response" in {
     val response = resp.json(Map("foo" -> "bar"))
-    val body     = response.build.get.getContent.toString(UTF_8)
+    val body     = response.build.getContent.toString(UTF_8)
 
     response.status should equal (200)
     body should equal ("""{"foo":"bar"}""")
@@ -78,7 +78,7 @@ class ResponseSpec extends ShouldSpec {
 
   ".view()" should "return a 200 view response" in {
     val response = resp.view(view)
-    val body     = response.build.get.getContent.toString(UTF_8)
+    val body     = response.build.getContent.toString(UTF_8)
 
     response.status should equal (200)
     body should include ("howdy view")

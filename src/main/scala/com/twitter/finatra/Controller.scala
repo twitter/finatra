@@ -21,7 +21,7 @@ import org.jboss.netty.handler.codec.http._
 
 
 class Controller
-  extends AbstractFinatraController[Request, Response, Future[HttpResponse]]
+  extends AbstractFinatraController[Request, Future[Response], Future[HttpResponse]]
   with Logging {
 
   override val responseConverter = new FinatraResponseConverter

@@ -11,29 +11,29 @@ class HelloWorld extends Controller {
   def tweets = List(new Tweet("hey!"), new Tweet("lol"))
 
   get("/plain") { request =>
-    render.plain("hello world")
+    render.plain("hello world").toFuture
   }
 
   get("/cookies") { request =>
-    render.json(request.cookies).header("Content-Type", "text/html")
+    render.json(request.cookies).header("Content-Type", "text/html").toFuture
   }
 
   get("/tweets.json") { request =>
-    render.json(tweets)
+    render.json(tweets).toFuture
   }
 
   get("/status/:status") { request =>
     val statusCode = request.params("status").toInt
 
-    render.nothing.status(statusCode)
+    render.nothing.status(statusCode).toFuture
   }
 
   get("/not_found") { request =>
-    render.nothing.notFound
+    render.nothing.notFound.toFuture
   }
 
   get("/headers") { request =>
-    render.nothing.header("X-GitSHA", "1ecd6b1")
+    render.nothing.header("X-GitSHA", "1ecd6b1").toFuture
   }
 
 }
@@ -172,7 +172,7 @@ class HelloWorld extends Controller {
   get("/tweets") { request =>
     val tweetsView  = new TimelineView(tweets)
 
-    render.view(tweetsView)
+    render.view(tweetsView).toFuture
   }
 
 }
@@ -205,20 +205,11 @@ object UploadExample extends Controller {
 
         //copy the file somewhere
         file.writeToFile("/tmp/uploadedfile.jpg")
-        render.ok
+        render.ok.toFuture
       case None =>
-        render.notFound
+        render.notFound.toFuture
     }
   }
 }
-
-
-  //Form Example
-  //curl -F foo=bar http://localhost:7070/formsubmit
-
-  post("/formsubmit") { request =>
-    request.multiParams("foo").getOrElse(null).data // "bar"
-  }
-
 
 ```

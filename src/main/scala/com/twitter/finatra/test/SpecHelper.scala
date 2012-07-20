@@ -33,7 +33,7 @@ class MockResponse(val originalResponse: HttpResponse) {
 
 }
 
-abstract class SpecHelper extends AbstractFinatraSpec[Request, Response, Future[HttpResponse]] {
+abstract class SpecHelper extends AbstractFinatraSpec[Request, Future[Response], Future[HttpResponse]] {
 
   def response  = new MockResponse(lastResponse.get)
   def request   = new Request

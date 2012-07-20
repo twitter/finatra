@@ -20,10 +20,10 @@ import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
 
 class FinatraResponseConverter
-  extends ResponseConverter[Response, Future[HttpResponse]]
+  extends ResponseConverter[Future[Response], Future[HttpResponse]]
   with Logging {
-  override def apply(resp: Response) = {
+  override def apply(resp: Future[Response]) = {
     logger.info("%s", resp)
-    resp.build
+    resp.map(_.build)
   }
 }
