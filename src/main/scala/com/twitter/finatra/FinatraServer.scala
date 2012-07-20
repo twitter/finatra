@@ -29,7 +29,7 @@ import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
 
 object FinatraServer extends Logging {
 
-  val controllers = new ControllerCollection[Request, Response, Future[HttpResponse]]
+  val controllers = new ControllerCollection[Request, Future[Response], Future[HttpResponse]]
 
   var docroot = "public"
   var pidPath = "finatra.pid"
@@ -39,7 +39,7 @@ object FinatraServer extends Logging {
                                  level = Some(Logger.INFO),
                                  handlers = List(logHandler))()
 
-  def register(app: AbstractFinatraController[Request, Response, Future[HttpResponse]]) { controllers.add(app) }
+  def register(app: AbstractFinatraController[Request, Future[Response], Future[HttpResponse]]) { controllers.add(app) }
 
   def shutdown = {
     logger.info("shutting down")
