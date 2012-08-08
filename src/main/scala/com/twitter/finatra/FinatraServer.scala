@@ -51,7 +51,7 @@ object FinatraServer extends Logging {
     this.docroot = docroot
     this.pidPath = pidPath
 
-    val appService = new AppService
+    val appService = new AppService(controllers)
     val fileService = new FileService
 
     val envPort = Option(System.getenv("PORT"))
