@@ -15,14 +15,17 @@
  */
 package com.twitter.finatra
 
+import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.finatra_core.AbstractFinatraController
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
 
 
-class Controller
+class Controller(statsReceiver: StatsReceiver = NullStatsReceiver)
   extends AbstractFinatraController[Request, Future[Response], Future[HttpResponse]]
   with Logging {
+
+  val stats = statsReceiver.scope("Controller")
 
   override val responseConverter = new FinatraResponseConverter
 
@@ -30,5 +33,13 @@ class Controller
 
   def redirect(location: String, message: String = "moved") = {
     render.plain(message).status(301).header("Location", location)
+  }
+
+  override def addRoute(method: String, path: String)(callback: Request => Future[Response]) {
+    super.addRoute(method, path) { request =>
+      stats.timeFuture("%s/%s".format(method, path)) {
+        callback(request)
+      }
+    }
   }
 }
