@@ -37,7 +37,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver)
 
   override def addRoute(method: String, path: String)(callback: Request => Future[Response]) {
     super.addRoute(method, path) { request =>
-      stats.timeFuture("%s/%s".format(method, path)) {
+      stats.timeFuture("%s/Root/%s".format(method, path.stripPrefix("/"))) {
         callback(request)
       }
     }
