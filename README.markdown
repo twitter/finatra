@@ -108,7 +108,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>0.1.7</version>
+  <version>0.2.5</version>
 </dependency>
 ```
 
