@@ -1,7 +1,7 @@
 # Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
 
 ### Description
-Finatra is a sinatra clone backed by scala/finagle written by [@capotej](http://twitter.com/capotej) and [@twoism](http://twitter.com/twoism)
+Finatra is a sinatra clone backed by scala/finagle
 
 ### API
 
