@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
+import com.twitter.finagle.http.{Response => FinagleResponse, Request => FinagleRequest}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
 
@@ -158,6 +159,7 @@ class Response extends Logging {
     if (this.hasCookies) resp.setHeader("Cookie", cookies.encode)
 
     setContent(resp)
+    FinagleResponse(resp)
   }
 
   def toFuture = {

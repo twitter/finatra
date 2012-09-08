@@ -16,6 +16,7 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
@@ -27,8 +28,8 @@ import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http.Http
 
 import java.io._
-
-class FileService extends SimpleFilter[HttpRequest, HttpResponse]  {
+import com.twitter.finagle.http.{Http, Request => FinagleRequest, Response => FinagleResponse}
+class FileService extends SimpleFilter[FinagleRequest, FinagleResponse]  {
 
   //lifted from tiscaf - http://gaydenko.com/scala/tiscaf/httpd/
   val exts = Map(
@@ -138,7 +139,7 @@ class FileService extends SimpleFilter[HttpRequest, HttpResponse]  {
     return true
   }
 
-  def apply(request: HttpRequest, service: Service[HttpRequest, HttpResponse]) = {
+  def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]) = {
     if(validPath(request.getUri)){
       val file = new File(FinatraServer.docroot, request.getUri)
       val fh = new FileInputStream(file)
@@ -150,7 +151,8 @@ class FileService extends SimpleFilter[HttpRequest, HttpResponse]  {
       response.setStatus(OK)
       response.setHeader("Content-Type", mtype)
       response.setContent(copiedBuffer(b))
-      Future.value(response)
+
+      Future.value(FinagleResponse(response))
     } else {
       service(request)
     }

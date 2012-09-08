@@ -22,8 +22,9 @@ import com.twitter.util.Future
 import scala.collection.mutable.Map
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.util.CharsetUtil.UTF_8
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 
-class MockResponse(val originalResponse: HttpResponse) {
+class MockResponse(val originalResponse: FinagleResponse) {
 
   def status                  = originalResponse.getStatus
   def code                    = originalResponse.getStatus.getCode
@@ -33,12 +34,12 @@ class MockResponse(val originalResponse: HttpResponse) {
 
 }
 
-abstract class SpecHelper extends AbstractFinatraSpec[Request, Future[Response], Future[HttpResponse]] {
+abstract class SpecHelper extends AbstractFinatraSpec[Request, Future[Response], Future[FinagleResponse]] {
 
   def response  = new MockResponse(lastResponse.get)
   def request   = new Request
 
-  var lastResponse:Future[HttpResponse] = null
+  var lastResponse:Future[FinagleResponse] = null
 
   def buildRequest(method:String, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
     val req = request
@@ -46,6 +47,6 @@ abstract class SpecHelper extends AbstractFinatraSpec[Request, Future[Response],
     req.path(path)
     req.params(params)
     req.headers(headers)
-    lastResponse = app.dispatch(req).asInstanceOf[Option[Future[HttpResponse]]].get
+    lastResponse = app.dispatch(req).asInstanceOf[Option[Future[FinagleResponse]]].get
   }
 }

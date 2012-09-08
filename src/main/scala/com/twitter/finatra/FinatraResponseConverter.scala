@@ -17,10 +17,11 @@ package com.twitter.finatra
 
 import com.twitter.finatra_core.ResponseConverter
 import com.twitter.util.Future
+import com.twitter.finagle.http.{Response => FinagleResponse}
 import org.jboss.netty.handler.codec.http._
 
 class FinatraResponseConverter
-  extends ResponseConverter[Future[Response], Future[HttpResponse]]
+  extends ResponseConverter[Future[Response], Future[FinagleResponse]]
   with Logging {
   override def apply(resp: Future[Response]) = {
     logger.info("%s", resp)

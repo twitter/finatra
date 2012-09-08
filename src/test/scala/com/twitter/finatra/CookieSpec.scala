@@ -48,7 +48,7 @@ class CookieSpec extends SpecHelper {
 
   "advanced Cookie" should "have Biz:Baz&Secure=true" in {
     get("/sendAdvCookie")
-    response.getHeader("Cookie") should be ("Biz=Baz;Secure")
+    response.getHeader("Cookie") should be ("Biz=Baz; Secure")
   }
 
 }

@@ -19,10 +19,10 @@ import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.finatra_core.AbstractFinatraController
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
-
+import com.twitter.finagle.http.{Http, Request => FinagleRequest, Response => FinagleResponse}
 
 class Controller(statsReceiver: StatsReceiver = NullStatsReceiver)
-  extends AbstractFinatraController[Request, Future[Response], Future[HttpResponse]]
+  extends AbstractFinatraController[Request, Future[Response], Future[FinagleResponse]]
   with Logging {
 
   val stats = statsReceiver.scope("Controller")

@@ -23,23 +23,24 @@ import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.util.CharsetUtil.UTF_8
+import com.twitter.finagle.http.{Http, Request => FinagleRequest, Response => FinagleResponse}
 
 
-class AppService(controllers: ControllerCollection[Request, Future[Response], Future[HttpResponse]])
-  extends Service[HttpRequest, HttpResponse]{
+class AppService(controllers: ControllerCollection[Request, Future[Response], Future[FinagleResponse]])
+  extends Service[FinagleRequest, FinagleResponse]{
 
   def notFoundResponse = {
     val resp = new DefaultHttpResponse(HTTP_1_1, NOT_FOUND)
     resp.setContent(copiedBuffer("not found", UTF_8))
-    Future.value(resp)
+    Future.value(FinagleResponse(resp))
   }
 
-  def apply(rawRequest: HttpRequest) = {
+  def apply(rawRequest: FinagleRequest) = {
     val request = RequestAdapter(rawRequest)
 
     controllers.dispatch(request) match {
       case Some(response) =>
-        response.asInstanceOf[Future[HttpResponse]]
+        response.asInstanceOf[Future[FinagleResponse]]
       case None =>
         notFoundResponse
     }

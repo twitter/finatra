@@ -30,7 +30,6 @@ class Request extends FinatraRequest {
   var cookies: Map[String, Cookie]            = Map()
 
   def finatraPath   = path
-  val a = "newasds"
   def finatraMethod = method
   def finatraParams = params
 
