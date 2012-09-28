@@ -15,7 +15,6 @@
  */
 package com.twitter.finatra
 
-import org.apache.commons.fileupload._
 import java.io._
 
 class MultipartItem(val fileobj:Tuple2[java.util.Map[String,String], ByteArrayOutputStream]) {

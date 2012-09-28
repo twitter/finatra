@@ -18,8 +18,7 @@ package com.twitter.finatra
 import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.finatra_core.AbstractFinatraController
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http._
-import com.twitter.finagle.http.{Http, Request => FinagleRequest, Response => FinagleResponse}
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 
 class Controller(statsReceiver: StatsReceiver = NullStatsReceiver)
   extends AbstractFinatraController[Request, Future[Response], Future[FinagleResponse]]

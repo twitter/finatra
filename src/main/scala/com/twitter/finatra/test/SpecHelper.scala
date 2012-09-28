@@ -16,11 +16,9 @@
 package com.twitter.finatra.test
 
 import com.twitter.finatra._
-import com.twitter.finatra_core.{AbstractFinatraSpec}
-import org.jboss.netty.handler.codec.http.DefaultHttpResponse
+import com.twitter.finatra_core.AbstractFinatraSpec
 import com.twitter.util.Future
 import scala.collection.mutable.Map
-import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 

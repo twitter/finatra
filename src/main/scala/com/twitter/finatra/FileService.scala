@@ -21,14 +21,10 @@ import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
-import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-import java.net.InetSocketAddress
-import com.twitter.finagle.builder.{Server, ServerBuilder}
-import com.twitter.finagle.http.Http
 
 import java.io._
-import com.twitter.finagle.http.{Http, Request => FinagleRequest, Response => FinagleResponse}
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 class FileService extends SimpleFilter[FinagleRequest, FinagleResponse]  {
 
   //lifted from tiscaf - http://gaydenko.com/scala/tiscaf/httpd/

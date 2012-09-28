@@ -18,7 +18,6 @@ package com.twitter.finatra
 import com.twitter.finatra_core.ResponseConverter
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Response => FinagleResponse}
-import org.jboss.netty.handler.codec.http._
 
 class FinatraResponseConverter
   extends ResponseConverter[Future[Response], Future[FinagleResponse]]

@@ -18,7 +18,7 @@ package com.twitter.finatra
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.Service
 import com.twitter.finatra_core.{AbstractFinatraController, ControllerCollection}
 import com.twitter.logging.config._
 import com.twitter.logging.{Logger, LoggerFactory, FileHandler}

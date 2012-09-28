@@ -19,8 +19,6 @@ import com.twitter.finatra.Controller
 import com.twitter.finatra.FinatraServer
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import scala.collection.mutable.Map
-import org.jboss.netty.handler.codec.http._
 
 
 class TestApp extends Controller {
