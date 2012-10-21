@@ -61,7 +61,7 @@ object RequestAdapter extends Logging {
   def apply(rawRequest: FinagleRequest): Request = {
     logger.info("%s", rawRequest)
 
-    val request = new Request
+    val request = new Request(rawRequest)
 
 
     //TODO: make these more efficient
