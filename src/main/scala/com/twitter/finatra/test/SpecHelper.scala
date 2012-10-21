@@ -15,8 +15,6 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra._
-import com.twitter.finatra_core.AbstractFinatraSpec
 import com.twitter.util.Future
 import scala.collection.mutable.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
@@ -32,19 +30,19 @@ class MockResponse(val originalResponse: FinagleResponse) {
 
 }
 
-abstract class SpecHelper extends AbstractFinatraSpec[Request, Future[Response], Future[FinagleResponse]] {
-
-  def response  = new MockResponse(lastResponse.get)
-  def request   = new Request(null)
-
-  var lastResponse:Future[FinagleResponse] = null
-
-  def buildRequest(method:String, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    val req = request
-//    req.method(method)
-//    req.path(path)
-//    req.params(params)
-//    req.headers(headers)
-    lastResponse = app.dispatch(req).asInstanceOf[Option[Future[FinagleResponse]]].get
-  }
-}
+//abstract class SpecHelper extends FinatraSpec[Request, Future[Response], Future[FinagleResponse]] {
+//
+//  def response  = new MockResponse(lastResponse.get)
+//  def request   = new Request(null)
+//
+//  var lastResponse:Future[FinagleResponse] = null
+//
+//  def buildRequest(method:String, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+//    val req = request
+////    req.method(method)
+////    req.path(path)
+////    req.params(params)
+////    req.headers(headers)
+//    lastResponse = app.dispatch(req).asInstanceOf[Option[Future[FinagleResponse]]].get
+//  }
+//}

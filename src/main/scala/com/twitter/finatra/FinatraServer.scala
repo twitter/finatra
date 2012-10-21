@@ -19,7 +19,6 @@ import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finagle.Service
-import com.twitter.finatra_core.{AbstractFinatraController, ControllerCollection}
 import com.twitter.logging.config._
 import com.twitter.logging.{Logger, LoggerFactory, FileHandler}
 import com.twitter.util.Future
@@ -29,7 +28,7 @@ import java.net.InetSocketAddress
 
 object FinatraServer extends Logging {
 
-  val controllers = new ControllerCollection[Request, Future[Response], Future[FinagleResponse]]
+  val controllers = new ControllerCollection
 
   var docroot = "public"
   var pidPath = "finatra.pid"
@@ -39,7 +38,7 @@ object FinatraServer extends Logging {
                                  level = Some(Logger.INFO),
                                  handlers = List(logHandler))()
 
-  def register(app: AbstractFinatraController[Request, Future[Response], Future[FinagleResponse]]) { controllers.add(app) }
+  def register(app: Controller) { controllers.add(app) }
 
   def shutdown = {
     logger.info("shutting down")

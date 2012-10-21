@@ -16,20 +16,14 @@
 package com.twitter.finatra
 
 import scala.collection.mutable.Map
-import com.twitter.finatra_core.FinatraRequest
 import com.twitter.finagle.http.{Request => FinagleRequest, RequestProxy}
 
-class Request(rawRequest: FinagleRequest) extends RequestProxy with FinatraRequest {
+class Request(rawRequest: FinagleRequest) extends RequestProxy {
 
   var body: Array[Byte]                       = Array()
   var multiParams: Map[String, MultipartItem] = Map.empty
   var routeParams:Map[String, String] = Map.empty
 
   var request = rawRequest
-
-  def finatraPath   = path
-  def finatraMethod = method.toString
-  def finatraParams = routeParams
-
 
 }

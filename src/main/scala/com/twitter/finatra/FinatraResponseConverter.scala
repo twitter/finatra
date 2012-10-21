@@ -15,15 +15,13 @@
  */
 package com.twitter.finatra
 
-import com.twitter.finatra_core.ResponseConverter
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Response => FinagleResponse}
 
-class FinatraResponseConverter
-  extends ResponseConverter[Future[Response], Future[FinagleResponse]]
-  with Logging {
-  override def apply(resp: Future[Response]) = {
+class FinatraResponseConverter extends Logging {
+  def apply(resp: Future[Response]):Future[FinagleResponse] = {
     logger.info("%s", resp)
+    println("converting response")
     resp.map(_.build)
   }
 }
