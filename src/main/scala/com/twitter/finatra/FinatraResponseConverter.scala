@@ -21,7 +21,7 @@ import com.twitter.finagle.http.{Response => FinagleResponse}
 class FinatraResponseConverter extends Logging {
   def apply(resp: Future[Response]):Future[FinagleResponse] = {
     logger.info("%s", resp)
-    println("converting response")
+
     resp.map(_.build)
   }
 }

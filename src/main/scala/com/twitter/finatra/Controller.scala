@@ -62,7 +62,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
 
   def findRouteAndMatch(request: Request, method: String) = {
     var thematch:Option[Map[_,_]] = None
-    println("looking for path:" + request.path)
+
     routes.vector.find( route => route match {
       case (_method, pattern, callback) =>
         thematch = pattern(request.path.split('?').head)
