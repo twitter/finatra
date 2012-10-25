@@ -24,11 +24,6 @@ import collection.mutable.ListBuffer
 
 class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Logging {
 
-
-  /*
-   * Adds the route to the routing table
-   */
-
   val responseConverter = new FinatraResponseConverter
 
   val routes = new RouteVector[(String, PathPattern, Request => Future[Response])]
@@ -80,10 +75,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     })
   }
 
-
-
   val stats = statsReceiver.scope("Controller")
-
 
   def render = new Response
 
@@ -91,15 +83,12 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     render.plain(message).status(301).header("Location", location)
   }
 
-//  def addRoute(method: String, path: String)(callback: Request => Future[Response]) {
-//    addRoute(method, path) { request =>
-//      stats.timeFuture("%s/Root/%s".format(method, path.stripPrefix("/"))) {
-//        callback(request)
-//      }
-//    }
-//  }
   def addRoute(method: String, path: String)(callback: Request => Future[Response]) {
     val regex = SinatraPathPatternParser(path)
-    routes.add((method, regex, callback))
+    routes.add((method, regex, (r) => {
+      stats.timeFuture("%s/Root/%s".format(method, path.stripPrefix("/"))) {
+        callback(r)
+      }
+    }))
   }
 }

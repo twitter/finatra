@@ -17,7 +17,7 @@ package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest}
 /**
-* Adapts an HttpRequest to a (Finatra) Request
+* Adapts a FinagleRquest to a FinatraRequest
 */
 
 object RequestAdapter extends Logging {
@@ -59,8 +59,6 @@ object RequestAdapter extends Logging {
 //  }
 
   def apply(rawRequest: FinagleRequest): Request = {
-    logger.info("%s", rawRequest)
-
     val request = new Request(rawRequest)
 
 
