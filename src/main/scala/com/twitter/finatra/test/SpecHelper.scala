@@ -19,6 +19,10 @@ import com.twitter.util.Future
 import scala.collection.mutable.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
+import com.twitter.finatra.{Request, Controller}
+import org.jboss.netty.handler.codec.http.HttpMethod
+import org.scalatest.FlatSpec
+import org.scalatest.matchers.ShouldMatchers
 
 class MockResponse(val originalResponse: FinagleResponse) {
 
@@ -30,19 +34,42 @@ class MockResponse(val originalResponse: FinagleResponse) {
 
 }
 
-//abstract class SpecHelper extends FinatraSpec[Request, Future[Response], Future[FinagleResponse]] {
-//
-//  def response  = new MockResponse(lastResponse.get)
-//  def request   = new Request(null)
-//
-//  var lastResponse:Future[FinagleResponse] = null
-//
-//  def buildRequest(method:String, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-//    val req = request
-////    req.method(method)
-////    req.path(path)
-////    req.params(params)
-////    req.headers(headers)
-//    lastResponse = app.dispatch(req).asInstanceOf[Option[Future[FinagleResponse]]].get
-//  }
-//}
+abstract class SpecHelper extends FlatSpec with ShouldMatchers {
+
+  def response  = new MockResponse(lastResponse.get)
+  var lastResponse:Future[FinagleResponse] = null
+
+  def buildRequest(method: HttpMethod, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+
+    val request = FinagleRequest(path, params.toList:_*)
+    request.httpRequest.setMethod(method)
+    lastResponse = app.dispatch(request).asInstanceOf[Option[Future[FinagleResponse]]].get
+ }
+
+  def app:Controller
+
+  def get(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+    buildRequest(HttpMethod.GET,path,params,headers)
+  }
+
+  def post(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+    buildRequest(HttpMethod.POST,path,params,headers)
+  }
+
+  def put(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+    buildRequest(HttpMethod.PUT,path,params,headers)
+  }
+
+  def delete(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+    buildRequest(HttpMethod.DELETE,path,params,headers)
+  }
+
+  def head(path:String,params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+    buildRequest(HttpMethod.HEAD,path,params,headers)
+  }
+
+  def patch(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+    buildRequest(HttpMethod.PATCH,path,params,headers)
+  }
+
+}

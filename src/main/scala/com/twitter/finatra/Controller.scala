@@ -18,7 +18,7 @@ package com.twitter.finatra
 import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import scala.Tuple2
+import scala.Tuple
 import scala.Some
 import collection.mutable.ListBuffer
 
@@ -41,7 +41,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
   def patch(path: String) (callback: Request => Future[Response]) { addRoute("PATCH",  path)(callback) }
 
 
-  def dispatch(request: Request): Option[FinagleResponse] = {
+  def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
     dispatchRouteOrCallback(request, request.method.toString, (request) => {
       // fallback to GET for 404'ed GET requests (curl -I support)
       if (request.method.toString == "HEAD") {
@@ -52,11 +52,11 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     })
   }
 
-  def dispatchRouteOrCallback(request: Request, method: String,
-                              orCallback: Request => Option[FinagleResponse]): Option[FinagleResponse] = {
-
-    findRouteAndMatch(request, method) match {
-      case Some((method, pattern, callback)) => Some(responseConverter(callback(request))).asInstanceOf[Option[FinagleResponse]]
+  def dispatchRouteOrCallback(request: FinagleRequest, method: String,
+                              orCallback: FinagleRequest => Option[FinagleResponse]): Option[FinagleResponse] = {
+    val req = RequestAdapter(request)
+    findRouteAndMatch(req, method) match {
+      case Some((method, pattern, callback)) => Some(responseConverter(callback(req))).asInstanceOf[Option[FinagleResponse]]
       case None => orCallback(request)
     }
   }
