@@ -35,9 +35,7 @@ class AppService(controllers: ControllerCollection)
   }
 
   def apply(rawRequest: FinagleRequest) = {
-    val request = RequestAdapter(rawRequest)
-
-    controllers.dispatch(request) match {
+    controllers.dispatch(rawRequest) match {
       case Some(response) =>
         response.asInstanceOf[Future[FinagleResponse]]
       case None =>
