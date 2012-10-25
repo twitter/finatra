@@ -43,6 +43,9 @@ abstract class SpecHelper extends FlatSpec with ShouldMatchers {
 
     val request = FinagleRequest(path, params.toList:_*)
     request.httpRequest.setMethod(method)
+    headers.foreach { header =>
+      request.httpRequest.setHeader(header._1, header._2)
+    }
     lastResponse = app.dispatch(request).asInstanceOf[Option[Future[FinagleResponse]]].get
  }
 
