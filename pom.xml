@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>0.3.0-SNAPSHOT</version>
+  <version>0.3.1-SNAPSHOT</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -41,12 +41,6 @@
 
   <repositories>
     <repository>
-      <id>scala-tools.org</id>
-      <name>Scala-Tools Maven2 Repository</name>
-      <url>http://scala-tools.org/repo-releases</url>
-    </repository>
-
-    <repository>
       <id>repo.juliocapote.com</id>
       <url>http://repo.juliocapote.com</url>
     </repository>
@@ -66,6 +60,10 @@
       <id>Sonatype Snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
+      <repository>
+          <id>Sonatype Releases</id>
+          <url>https://oss.sonatype.org/content/repositories/releases/</url>
+      </repository>
   </repositories>
 
   <pluginRepositories>
@@ -101,7 +99,7 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finatra-views</artifactId>
-      <version>0.0.2</version>
+      <version>0.0.3</version>
     </dependency>
 
     <dependency>
@@ -129,13 +127,13 @@
       <version>1.2.1</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.codahale</groupId>
-      <artifactId>jerkson_2.9.1</artifactId>
-      <version>0.4.2</version>
-    </dependency>
+      <dependency>
+          <artifactId>jerkson_2.9.2</artifactId>
+          <version>0.7.0</version>
+          <groupId>io.backchat.jerkson</groupId>
+      </dependency>
 
-    <dependency>
+      <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http</artifactId>
       <version>5.3.9</version>

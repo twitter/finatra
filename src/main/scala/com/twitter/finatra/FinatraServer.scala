@@ -18,17 +18,19 @@ package com.twitter.finatra
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finagle.Service
+import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.logging.config._
 import com.twitter.logging.{Logger, LoggerFactory, FileHandler}
 import com.twitter.util.Future
 import java.io.{File, FileOutputStream}
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
+import org.scalatest.Filter
 
 object FinatraServer extends Logging {
 
   val controllers = new ControllerCollection
+  var filters:Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
 
   var docroot = "public"
   var pidPath = "finatra.pid"
@@ -38,7 +40,14 @@ object FinatraServer extends Logging {
                                  level = Some(Logger.INFO),
                                  handlers = List(logHandler))()
 
+
+  def allFilters(baseService: Service[FinagleRequest, FinagleResponse]) = {
+    filters.foldRight(baseService) { (b,a) => b andThen a }
+  }
+
   def register(app: Controller) { controllers.add(app) }
+
+  def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) { filters = filters ++ Seq(filter) }
 
   def shutdown = {
     logger.info("shutting down")
@@ -60,7 +69,9 @@ object FinatraServer extends Logging {
       case None => basePort
     }
 
-    val service: Service[FinagleRequest, FinagleResponse] = fileService andThen appService
+    addFilter(fileService)
+
+    val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
 
     val server: Server = ServerBuilder()
       .codec(new RichHttp[FinagleRequest](Http()))
