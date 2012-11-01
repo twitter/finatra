@@ -16,42 +16,20 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest}
+import org.jboss.netty.handler.codec.http.{Cookie, CookieDecoder}
+import scala.collection.JavaConverters._
 /**
 * Adapts a FinagleRquest to a FinatraRequest
 */
 
 object RequestAdapter extends Logging {
 
-//  def pathOf(x:String) = x.split('?').head
-//
-//  def paramsOf(request: HttpRequest) = {
-//    val fakeQs = "/?" + new String(request.getContent.array)
-//    val qs = new QueryStringDecoder(request.getUri)
-//    val bs = new QueryStringDecoder(fakeQs)
-//    var paramsHash = Map[String,String]()
-//    val allParams = qs.getParameters ++ bs.getParameters
-//
-//    allParams.foreach { xs =>
-//      paramsHash += Tuple2(xs._1, xs._2.head)
-//    }
-//
-//    paramsHash
-//  }
-//
-//  def headersOf(request: HttpRequest) = {
-//    var headers = Map[String,String]()
-//    request.getHeaderNames.foreach { name =>
-//      headers += Tuple2(name, request.getHeader(name))
-//    }
-//    headers
-//  }
-//
-//  def cookiesOf(request: HttpRequest) = {
+//  def cookiesOf(request: FinagleRequest) = {
 //    var cookies: Map[String, Cookie] = Map()
 //    val cookie = request.getHeader("Cookie")
 //    if(cookie != null){
 //      val decodedCookie = new CookieDecoder().decode(cookie)
-//      decodedCookie.foreach { xs =>
+//      decodedCookie.asScala.foreach { xs =>
 //        cookies += Tuple2(xs.getName, xs)
 //      }
 //    }
@@ -61,15 +39,7 @@ object RequestAdapter extends Logging {
   def apply(rawRequest: FinagleRequest): Request = {
     val request = new Request(rawRequest)
 
-
-    //TODO: make these more efficient
-//    request.path        (pathOf(rawRequest.getUri))
-//    request.method      (rawRequest.getMethod.toString)
-//    request.params      (paramsOf(rawRequest))
-//    request.headers     (headersOf(rawRequest))
-//    request.cookies     (cookiesOf(rawRequest))
-//    request.body        (rawRequest.getContent.array)
-//    request.multiParams = MultipartParsing.loadMultiParams(request)
+    request.multiParams = MultipartParsing.loadMultiParams(request)
 
     request
   }

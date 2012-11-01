@@ -20,7 +20,6 @@ import com.twitter.finagle.http.{Request => FinagleRequest, RequestProxy}
 
 class Request(rawRequest: FinagleRequest) extends RequestProxy {
 
-  var body: Array[Byte]                       = Array()
   var multiParams: Map[String, MultipartItem] = Map.empty
   var routeParams:Map[String, String] = Map.empty
 

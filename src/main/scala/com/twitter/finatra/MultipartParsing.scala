@@ -18,19 +18,20 @@ package com.twitter.finatra
 import org.apache.commons.fileupload._
 import java.io._
 import scala.collection.mutable.Map
-
+import com.twitter.finagle.http.{Request => FinagleRequest}
 // HERE BE DRAGONS
+
 
 object MultipartParsing {
 
   // TODO: http://commons.apache.org/fileupload/streaming.html update to this
-  def loadMultiParams(request: Request) = {
+  def loadMultiParams(request: FinagleRequest) = {
     var multiParams = Map[String, MultipartItem]()
     val ctype = request.headers.get("Content-Type").getOrElse(null)
     if(ctype != null){
       val boundaryIndex = ctype.indexOf("boundary=");
       val boundary = ctype.substring(boundaryIndex + 9).getBytes
-      val input = new ByteArrayInputStream(request.body)
+      val input = new ByteArrayInputStream(request.content.array())
       try {
         val multistream = new MultipartStream(input, boundary)
         var nextPart = multistream.skipPreamble

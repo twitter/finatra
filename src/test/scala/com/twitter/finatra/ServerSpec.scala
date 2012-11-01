@@ -29,7 +29,6 @@ class TestApp extends Controller {
 
 }
 
-@RunWith(classOf[JUnitRunner])
 class ServerSpec extends SpecHelper {
 
   def app = { new TestApp }
