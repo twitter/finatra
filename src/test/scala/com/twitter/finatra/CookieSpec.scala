@@ -35,7 +35,6 @@ class CookieApp extends Controller {
 
 }
 
-@RunWith(classOf[JUnitRunner])
 class CookieSpec extends SpecHelper {
 
   def app = { new CookieApp }

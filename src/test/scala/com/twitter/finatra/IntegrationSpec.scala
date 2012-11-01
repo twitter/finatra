@@ -30,7 +30,6 @@ class MyApp extends Controller {
   get("/headers") { request => render.plain(request.headers("Referer")).toFuture }
 }
 
-@RunWith(classOf[JUnitRunner])
 class IntegrationSpec extends SpecHelper {
 
   def app = { new MyApp }
