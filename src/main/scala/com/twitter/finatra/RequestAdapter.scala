@@ -24,18 +24,6 @@ import scala.collection.JavaConverters._
 
 object RequestAdapter extends Logging {
 
-//  def cookiesOf(request: FinagleRequest) = {
-//    var cookies: Map[String, Cookie] = Map()
-//    val cookie = request.getHeader("Cookie")
-//    if(cookie != null){
-//      val decodedCookie = new CookieDecoder().decode(cookie)
-//      decodedCookie.asScala.foreach { xs =>
-//        cookies += Tuple2(xs.getName, xs)
-//      }
-//    }
-//    cookies
-//  }
-
   def apply(rawRequest: FinagleRequest): Request = {
     val request = new Request(rawRequest)
 
