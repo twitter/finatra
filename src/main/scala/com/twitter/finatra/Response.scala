@@ -15,7 +15,6 @@
  */
 package com.twitter.finatra
 
-import org.apache.commons.lang.StringUtils
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer

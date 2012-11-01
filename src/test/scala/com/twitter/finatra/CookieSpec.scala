@@ -16,8 +16,6 @@
 package com.twitter.finatra.test
 
 import com.twitter.finatra.Controller
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 import org.jboss.netty.handler.codec.http._
 
 

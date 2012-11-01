@@ -1,6 +1,5 @@
 package com.twitter.finatra
 
-import com.twitter.util.Future
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 
 class ControllerCollection {

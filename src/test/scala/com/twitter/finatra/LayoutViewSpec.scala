@@ -1,6 +1,5 @@
 package com.twitter.finatra.test
 
-import com.twitter.finatra_views.View
 
 class LayoutViewSpec extends ShouldSpec {
   "A LayoutView" should "render" in {

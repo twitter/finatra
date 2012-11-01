@@ -21,11 +21,9 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.logging.config._
 import com.twitter.logging.{Logger, LoggerFactory, FileHandler}
-import com.twitter.util.Future
 import java.io.{File, FileOutputStream}
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
-import org.scalatest.Filter
 
 object FinatraServer extends Logging {
 

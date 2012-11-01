@@ -19,7 +19,7 @@ import com.twitter.util.Future
 import scala.collection.mutable.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finatra.{Request, Controller}
+import com.twitter.finatra.Controller
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers

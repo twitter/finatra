@@ -18,7 +18,6 @@ package com.twitter.finatra
 import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import scala.Tuple
 import scala.Some
 import collection.mutable.ListBuffer
 

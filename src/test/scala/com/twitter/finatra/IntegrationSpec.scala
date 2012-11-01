@@ -16,8 +16,6 @@
 package com.twitter.finatra.test
 
 import com.twitter.finatra.Controller
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 import scala.collection.mutable.Map
 
 class MyApp extends Controller {
