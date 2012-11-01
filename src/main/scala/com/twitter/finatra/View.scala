@@ -15,6 +15,47 @@
  */
 package com.twitter.finatra
 
-import com.twitter.finatra_views.{View => FinatraView}
+import com.github.mustachejava._
+import com.twitter.mustache._
 
-abstract class View extends FinatraView
+import java.io.IOException
+import java.io.StringWriter
+import java.io.Writer
+import com.twitter.io.TempFile
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+
+class FinatraMustacheFactory extends DefaultMustacheFactory {
+  override def encode(str: String, wtr: Writer) {
+    wtr.append(str, 0, str.length)
+  }
+}
+
+object View {
+  lazy val mustacheFactory  = new FinatraMustacheFactory
+  var baseTemplatePath      = "/"
+  def templatePath          = baseTemplatePath
+
+
+  mustacheFactory.setObjectHandler(new TwitterObjectHandler)
+  mustacheFactory.setExecutorService(Executors.newCachedThreadPool)
+}
+
+abstract class View extends Callable[String] {
+
+  def template:String
+
+  def templatePath                = TempFile.fromResourcePath(baseTemplatePath + template).toString
+  val factory                     = View.mustacheFactory
+  var baseTemplatePath            = View.templatePath
+  var contentType:Option[String]  = None
+  def mustache                    = factory.compile(templatePath)
+
+  def render = {
+    val output = new StringWriter
+    mustache.execute(output, this).flush()
+    output.toString
+  }
+
+  def call = render
+}
