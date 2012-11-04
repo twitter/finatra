@@ -254,8 +254,8 @@
 
         <plugin>
             <groupId>org.scalatest</groupId>
-            <artifactId>maven-scalatest-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>scalatest-maven-plugin</artifactId>
+            <version>1.0-M2</version>
             <configuration>
                 <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                 <junitxml>.</junitxml>
