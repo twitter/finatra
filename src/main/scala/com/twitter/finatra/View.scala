@@ -18,9 +18,7 @@ package com.twitter.finatra
 import com.github.mustachejava._
 import com.twitter.mustache._
 
-import java.io.IOException
-import java.io.StringWriter
-import java.io.Writer
+import java.io._
 import com.twitter.io.TempFile
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -45,11 +43,11 @@ abstract class View extends Callable[String] {
 
   def template:String
 
-  def templatePath                = TempFile.fromResourcePath(baseTemplatePath + template).toString
+  def templatePath                = baseTemplatePath + template
   val factory                     = View.mustacheFactory
   var baseTemplatePath            = View.templatePath
   var contentType:Option[String]  = None
-  def mustache                    = factory.compile(templatePath)
+  def mustache                    = factory.compile(new InputStreamReader(FileResolver.getInputStream(templatePath)), "template")
 
   def render = {
     val output = new StringWriter

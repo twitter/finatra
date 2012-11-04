@@ -1,31 +1,70 @@
-/**
- * Copyright (C) 2012 Twitter Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.twitter.finatra
 
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpResponseStatus._
-import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import com.twitter.util.Future
-
-import java.io._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-class FileService extends SimpleFilter[FinagleRequest, FinagleResponse]  {
+
+import org.apache.commons.io.IOUtils
+import java.io.{FileInputStream, File, InputStream}
+import org.jboss.netty.handler.codec.http.HttpMethod
+
+object FileResolver {
+
+  def hasFile(path: String):Boolean = {
+    if(System.getProperty("env") == "production"){
+      hasResourceFile(path)
+    } else {
+      hasLocalFile(path)
+    }
+  }
+
+  def getInputStream(path: String): InputStream = {
+    if(System.getProperty("env") == "production"){
+      getResourceInputStream(path)
+    } else {
+      getLocalInputStream(path)
+    }
+  }
+
+  private def getResourceInputStream(path: String): InputStream = {
+    getClass.getResourceAsStream(path)
+  }
+
+  private def getLocalInputStream(path: String): InputStream = {
+    val file = new File("src/main/resources", path)
+    new FileInputStream(file)
+  }
+
+  private def hasResourceFile(path: String):Boolean = {
+    val fi = getClass.getResourceAsStream(path)
+    var result = false
+    try {
+      if (fi != null && fi.available > 0) {
+        result = true
+      } else {
+        result = false
+      }
+    } catch {
+      case e: Exception =>
+        result = false
+    }
+    result
+  }
+
+  private def hasLocalFile(path: String):Boolean = {
+    val file = new File("src/main/resources", path)
+    if(file.toString.contains(".."))     return false
+    if(!file.exists || file.isDirectory) return false
+    if(!file.canRead)                    return false
+    true
+  }
+
+
+}
+
+object FileService {
 
   //lifted from tiscaf - http://gaydenko.com/scala/tiscaf/httpd/
   val exts = Map(
@@ -105,7 +144,9 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse]  {
     "odp" -> "application/vnd.oasis.opendocument.presentation",
     "ods" -> "application/vnd.oasis.opendocument.spreadsheet",
     "odt" -> "application/vnd.oasis.opendocument.text",
-    "abw" -> "application/x-abiword"
+    "abw" -> "application/x-abiword",
+    "md" -> "text/x-markdown",
+    "markdown" -> "text/x-markdown"
   )
 
   val gzipable = List(
@@ -126,32 +167,38 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse]  {
     "text/x-python"
   )
 
-  //more holes than swiss cheese
-  def validPath(path: String):Boolean = {
-    val file = new File(FinatraServer.docroot, path)
-    if(file.toString.contains(".."))     return false
-    if(!file.exists || file.isDirectory) return false
-    if(!file.canRead)                    return false
-    return true
+}
+
+class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Logging {
+  def isValidPath(path: String):Boolean = {
+    val fi = getClass.getResourceAsStream(path)
+    var result = false
+    try {
+      if (fi != null && fi.available > 0) {
+        result = true
+      } else {
+        result = false
+      }
+    } catch {
+      case e: Exception =>
+        result = false
+    }
+    result
   }
 
   def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]) = {
-    if(validPath(request.getUri)){
-      val file = new File(FinatraServer.docroot, request.getUri)
-      val fh = new FileInputStream(file)
-      val b = new Array[Byte](file.length.toInt)
+    if (FileResolver.hasFile(request.uri)) {
+      val fh = FileResolver.getInputStream(request.uri)
+      val b = IOUtils.toByteArray(fh)
       fh.read(b)
-
-      val response = new DefaultHttpResponse(HTTP_1_1, OK)
-      val mtype = exts.get(file.toString.split('.').last).getOrElse("application/octet-stream")
-      response.setStatus(OK)
+      val response = request.response
+      val mtype = FileService.exts.get(request.uri.toString.split('.').last).getOrElse("application/octet-stream")
+      response.status = OK
       response.setHeader("Content-Type", mtype)
       response.setContent(copiedBuffer(b))
-
-      Future.value(FinagleResponse(response))
+      Future.value(response)
     } else {
       service(request)
     }
   }
-
 }
