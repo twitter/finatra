@@ -18,10 +18,8 @@ package com.twitter.finatra
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Response => FinagleResponse}
 
-class FinatraResponseConverter extends Logging {
+class FinatraResponseConverter {
   def apply(resp: Future[Response]):Future[FinagleResponse] = {
-    logger.info("%s", resp)
-
     resp.map(_.build)
   }
 }

@@ -26,11 +26,17 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 
 
 class AppService(controllers: ControllerCollection)
-  extends Service[FinagleRequest, FinagleResponse]{
+  extends Service[FinagleRequest, FinagleResponse] with Logging {
 
   def notFoundResponse = {
     val resp = new DefaultHttpResponse(HTTP_1_1, NOT_FOUND)
     resp.setContent(copiedBuffer("not found", UTF_8))
+    Future.value(FinagleResponse(resp))
+  }
+
+  def errorResponse = {
+    val resp = new DefaultHttpResponse(HTTP_1_1, INTERNAL_SERVER_ERROR)
+    resp.setContent(copiedBuffer("ERROR", UTF_8))
     Future.value(FinagleResponse(resp))
   }
 

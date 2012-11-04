@@ -33,10 +33,15 @@ object FinatraServer extends Logging {
   var docroot = "public"
   var pidPath = "finatra.pid"
 
-  val logHandler = FileHandler(filename = "logs/finatra.org", rollPolicy = Policy.Daily)
-  val config = new LoggerFactory(node = "finatra",
-                                 level = Some(Logger.INFO),
-                                 handlers = List(logHandler))()
+  val config = new LoggerConfig {
+    node = ""
+    level = Logger.INFO
+    handlers = new FileHandlerConfig {
+      filename = "logs/finatra.log"
+      roll = Policy.SigHup
+    }
+  }
+  config()
 
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]) = {
@@ -59,6 +64,7 @@ object FinatraServer extends Logging {
 
     val appService = new AppService(controllers)
     val fileService = new FileService
+    val errorService = new ErrorFilter
 
     val envPort = Option(System.getenv("PORT"))
 
@@ -67,6 +73,7 @@ object FinatraServer extends Logging {
       case None => basePort
     }
 
+    addFilter(errorService)
     addFilter(fileService)
 
     val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
@@ -86,6 +93,7 @@ object FinatraServer extends Logging {
 
     logger.info("process %s started on %s, docroot %s", pid, port, docroot)
     println("process " + pid + " started on port: " + port.toString + " view logs/finatra.log for more info")
+
   }
 
   Runtime.getRuntime().addShutdownHook(

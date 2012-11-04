@@ -36,6 +36,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
 
 
   def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
+    logger.info("%s %s", request.method, request.uri)
     dispatchRouteOrCallback(request, request.method.toString, (request) => {
       // fallback to GET for 404'ed GET requests (curl -I support)
       if (request.method.toString == "HEAD") {
@@ -50,7 +51,8 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
                               orCallback: FinagleRequest => Option[FinagleResponse]): Option[FinagleResponse] = {
     val req = RequestAdapter(request)
     findRouteAndMatch(req, method) match {
-      case Some((method, pattern, callback)) => Some(responseConverter(callback(req))).asInstanceOf[Option[FinagleResponse]]
+      case Some((method, pattern, callback)) =>
+        Some(responseConverter(callback(req))).asInstanceOf[Option[FinagleResponse]]
       case None => orCallback(request)
     }
   }
