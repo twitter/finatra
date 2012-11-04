@@ -23,6 +23,7 @@ class ErrorFilter extends SimpleFilter[FinagleRequest, FinagleResponse] with Log
       val errorResponse = new DefaultHttpResponse(HTTP_1_1, statusCode)
       errorResponse.setContent(copiedBuffer("Internal Server Error".getBytes))
       logger.error(error, "Internal Server Error")
+      error.printStackTrace()
 
       FinagleResponse(errorResponse)
     }
