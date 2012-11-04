@@ -23,7 +23,7 @@ class HelloWorld extends Controller {
   }
 
   get("/status/:status") { request =>
-    val statusCode = request.params("status").toInt
+    val statusCode = request.routeParams("status").toInt
 
     render.nothing.status(statusCode).toFuture
   }
