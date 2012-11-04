@@ -29,9 +29,9 @@ object MultipartParsing {
     var multiParams = Map[String, MultipartItem]()
     val ctype = request.headers.get("Content-Type").getOrElse(null)
     if(ctype != null){
-      val boundaryIndex = ctype.indexOf("boundary=");
+      val boundaryIndex = ctype.indexOf("boundary=")
       val boundary = ctype.substring(boundaryIndex + 9).getBytes
-      val input = new ByteArrayInputStream(request.content.array())
+      val input = request.getInputStream()
       try {
         val multistream = new MultipartStream(input, boundary)
         var nextPart = multistream.skipPreamble
