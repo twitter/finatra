@@ -108,7 +108,7 @@ Add the repo and dependency to your pom.xml (sbt users to the left)
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>0.2.5</version>
+  <version>0.3.2</version>
 </dependency>
 ```
 
@@ -205,6 +205,7 @@ object UploadExample extends Controller {
 
         //copy the file somewhere
         file.writeToFile("/tmp/uploadedfile.jpg")
+
         render.ok.toFuture
       case None =>
         render.notFound.toFuture
