@@ -7,13 +7,7 @@ Finatra is a sinatra clone backed by scala/finagle
 
 ```scala
 
-
-  "GET /" should "respond 200" in {
-    get("/")
-    response.body should equal ("ok")
-    response.code should equal (200)
-  }
-
+###EXAMPLEAPP###
 
 ```
 

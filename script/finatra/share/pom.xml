@@ -107,7 +107,7 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finatra</artifactId>
-      <version>0.3.3</version>
+      <version>###VERSION###</version>
     </dependency>
 
   </dependencies>
