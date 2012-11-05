@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -e
+
+COMMAND="$1"
+if [ -z "$COMMAND" ]; then
+  echo "usage: finatra completions COMMAND [arg1 arg2...]" >&2
+  exit 1
+fi
+
+COMMAND_PATH="$(command -v "finatra-$COMMAND")"
+if grep -i "^# provide finatra completions" "$COMMAND_PATH" >/dev/null; then
+  shift
+  exec "$COMMAND_PATH" --complete "$@"
+fi

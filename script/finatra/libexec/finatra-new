@@ -1,0 +1,68 @@
+#!/bin/sh
+# Usage: finatra new [package-name]
+# Summary: creates a base project in [package-name]
+# Help: finatra new com.twitter.my_awesome_project
+set -e
+
+package_name=$1
+
+package_folders=$(echo $1 | sed -e 's/\./\//g')
+
+project_name=$(basename $package_folders)
+
+dest_path=$project_name/src/main/scala/$package_folders
+test_path=$project_name/src/test/scala/$package_folders
+
+group_id=$(echo $package_name | sed -e "s/\.[a-zA-Z0-9_-]*$//g")
+
+year=$(date +%Y)
+
+
+# check if dest exist
+if [ -e $project_name ]; then
+ echo "$project_name already exists, aborting"
+ exit
+fi
+
+echo "creating project: $project_name"
+mkdir -p $dest_path
+mkdir -p $test_path
+
+echo "  creating App.scala"
+cp $_FINATRA_ROOT/share/App.scala $dest_path/
+echo "  creating AppSpec.scala"
+cp $_FINATRA_ROOT/share/AppSpec.scala $test_path/
+echo "  creating pom.xml"
+cp $_FINATRA_ROOT/share/pom.xml $project_name/
+echo "  creating .gitignore"
+cp $_FINATRA_ROOT/share/.gitignore $project_name/
+echo "  creating .travis.yml"
+cp $_FINATRA_ROOT/share/.travis.yml $project_name/
+
+
+# edit App.scala
+sed -ie "s/###PACKAGE_NAME###/$package_name/g" $dest_path/App.scala
+
+# replace with latest example
+example_app=$(cat $_FINATRA_ROOT/../../src/test/scala/com/twitter/finatra/ExampleSpec.scala | awk '/###BEGIN###/{s=x}{s=s$0"\n"}/###END###/{print s}' | egrep -v 'BEGIN|END')
+example_app_output=$(echo "$example_app" | tr '\n' 'æ')
+sed -ie "s@###EXAMPLEAPP###@$example_app_output@g" $dest_path/App.scala
+tmpfile=$(mktemp /tmp/fin.XXX)
+cat $dest_path/App.scala | tr 'æ' '\n' > $tmpfile
+mv $tmpfile $dest_path/App.scala
+
+# edit AppSpec.scala
+sed -ie "s/###PACKAGE_NAME###/$package_name/g" $test_path/AppSpec.scala
+
+# edit pom.xml
+sed -ie "s/###PACKAGE_NAME###/$package_name/g" $project_name/pom.xml
+sed -ie "s/###YEAR###/$year/g" $project_name/pom.xml
+sed -ie "s/###GROUP_ID###/$group_id/g" $project_name/pom.xml
+sed -ie "s/###PROJECT_NAME###/$project_name/g" $project_name/pom.xml
+
+# delete backup files
+rm -rf $project_name/pom.xmle
+rm -rf $dest_path/App.scalae
+rm -rf $test_path/AppSpec.scalae
+
+echo "Done! run mvn scala:run to start your app"
