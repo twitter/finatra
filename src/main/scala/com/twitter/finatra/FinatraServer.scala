@@ -24,6 +24,7 @@ import com.twitter.logging.{Logger, LoggerFactory, FileHandler}
 import java.io.{File, FileOutputStream}
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
+import com.twitter.finagle.tracing.{Tracer, NullTracer}
 
 object FinatraServer extends Logging {
 
@@ -58,7 +59,7 @@ object FinatraServer extends Logging {
     new File(pidPath).delete
   }
 
-  def start(basePort:Int = 7070, docroot:String = "public", pidPath:String = "finatra.pid") {
+  def start(basePort:Int = 7070, docroot:String = "public", pidPath:String = "finatra.pid", tracerFactory: Tracer.Factory = NullTracer.factory) {
     this.docroot = docroot
     this.pidPath = pidPath
 
@@ -81,6 +82,7 @@ object FinatraServer extends Logging {
     val server: Server = ServerBuilder()
       .codec(new RichHttp[FinagleRequest](Http()))
       .bindTo(new InetSocketAddress(port))
+      .tracerFactory(tracerFactory)
       .name("finatraServer")
       .build(service)
 
