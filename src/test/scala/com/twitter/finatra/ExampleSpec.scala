@@ -3,7 +3,7 @@ package com.twitter.finatra
 import test.SpecHelper
 
 /* This test is used as the base for generating the
- README.markdown and the template for the app generator
+ README.markdown, all new generated apps, and the finatra_example repo
  */
 
 class ExampleSpec extends SpecHelper {
