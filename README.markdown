@@ -48,7 +48,7 @@ Add the repo and dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>###VERSION###</version>
+  <version>0.3.3</version>
 </dependency>
 ```
 
