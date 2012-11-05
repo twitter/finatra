@@ -8,7 +8,7 @@ import test.SpecHelper
 
 class ExampleSpec extends SpecHelper {
 
-  /* ###BEGIN### */
+  /* ###BEGIN_APP### */
 
   class ExampleApp extends Controller {
     get("/") { request =>
@@ -18,12 +18,16 @@ class ExampleSpec extends SpecHelper {
 
   val app = new ExampleApp
 
-  /* ###END### */
+  /* ###END_APP### */
 
+
+  /* ###BEGIN_SPEC### */
 
   "GET /" should "respond 200" in {
     get("/")
     response.body should equal ("ok")
     response.code should equal (200)
   }
+
+  /* ###END_SPEC### */
 }

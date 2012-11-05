@@ -2,9 +2,13 @@ package ###PACKAGE_NAME###
 
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
+import com.twitter.finatra.test._
+import ###PACKAGE_NAME###._
 
-class AppSpec extends FlatSpec with ShouldMatchers {
-  "An App" should "pass" in {
-    (1) should equal(1)
-  }
+class AppSpec extends SpecHelper {
+
+  val app = new App.ExampleApp
+
+  ###EXAMPLESPEC###
+
 }
