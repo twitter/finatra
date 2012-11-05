@@ -1,0 +1,18 @@
+#!/bin/sh
+# Usage: finatra release
+# Summary: updates the example and the docs from example spec
+# Help: Example: finatra release
+set -e
+
+source $_FINATRA_ROOT/lib/base.sh
+
+mvn test
+$_FINATRA_ROOT/bin/finatra update-example
+$_FINATRA_ROOT/bin/finatra update-readme
+
+cd $EXAMPLE_REPO && mvn test
+cd -
+
+
+
+
