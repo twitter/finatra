@@ -1,15 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 # Usage: finatra update-example
 # Summary: generates the example app from the template
 
 set -e
-
+#
 source $_FINATRA_ROOT/lib/base.sh
 
 tmpdir=$(mktemp -d /tmp/finatra_example.XXX)
 
 $_FINATRA_ROOT/bin/finatra new com.twitter.finatra_example $tmpdir
 
-cp -Rv $tmpdir/finatra_example/ $EXAMPLE_REPO/
+cp -Rv $tmpdir/finatra_example/ $EXAMPLE_REPO
 
 rm -rf $tmpdir
+
+# cd $EXAMPLE_REPO
+# git add .
+# git commit -am 'updating example'
+# git push origin master
+# cd -

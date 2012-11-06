@@ -12,15 +12,82 @@ class ExampleSpec extends SpecHelper {
 
   class ExampleApp extends Controller {
 
+    /**
+     * Basic Example
+     *
+     * curl http://localhost:7070/hello => "hello world"
+     */
     get("/hello") { request =>
       render.plain("hello world").toFuture
     }
 
+    /**
+     * Route parameters
+     *
+     * curl http://localhost:7070/user/dave => "hello dave"
+     */
     get("/user/:username") { request =>
-      val username = request.routeParams.getOrElse("username", "unknown")
+      val username = request.routeParams.getOrElse("username", "default_user")
       render.plain("hello " + username).toFuture
     }
 
+    /**
+     * Setting Headers
+     *
+     * curl -I http://localhost:7070/headers => "Foo:Bar"
+     */
+    get("/headers") { request =>
+      render.plain("look at headers").header("Foo", "Bar").toFuture
+    }
+
+    /**
+     * Rendering json
+     *
+     * curl -I http://localhost:7070/headers => "Foo:Bar"
+     */
+    get("/data.json") { request =>
+      render.json(Map("foo" -> "bar")).toFuture
+    }
+
+    /**
+     * Query params
+     *
+     * curl http://localhost:7070/search?q=foo => "no results for foo"
+     */
+    get("/search") { request =>
+      request.params.get("q") match {
+        case Some(q) => render.plain("no results for "+ q).toFuture
+        case None    => render.plain("query param q needed").status(500).toFuture
+      }
+    }
+
+    /**
+     * Uploading files
+     *
+     * curl -F avatar=@/path/to/img http://localhost:7070/profile
+     */
+    post("/profile") { request =>
+      request.multiParams.get("avatar").map { avatar =>
+        println("content type is " + avatar.contentType)
+        avatar.writeToFile("/tmp/avatar") //writes uploaded avatar to /tmp/avatar
+      }
+      render.plain("ok").toFuture
+    }
+
+    /**
+     * Rendering views
+     *
+     * curl http://localhost:7070/posts
+     */
+    class AnView extends View {
+      val template = "an_view.mustache"
+      val some_val = "a value"
+    }
+
+    get("/posts") { request =>
+      val anView = new AnView
+      render.view(anView).toFuture
+    }
   }
 
   val app = new ExampleApp
@@ -30,16 +97,34 @@ class ExampleSpec extends SpecHelper {
 
   /* ###BEGIN_SPEC### */
 
-  "GET /hello" should "response with hello world" in {
+  "GET /hello" should "respond with hello world" in {
     get("/hello")
     response.body should equal ("hello world")
-    response.code should equal (200)
   }
 
-  "GET /user/foo" should "response with foo" in {
+  "GET /user/foo" should "responsd with hello foo" in {
     get("/user/foo")
     response.body should equal ("hello foo")
-    response.code should equal (200)
+  }
+
+  "GET /headers" should "respond with Foo:Bar" in {
+    get("/headers")
+    response.getHeader("Foo") should equal("Bar")
+  }
+
+  "GET /data.json" should """respond with {"foo":"bar"}""" in {
+    get("/data.json")
+    response.body should equal("""{"foo":"bar"}""")
+  }
+
+  "GET /search?q=foo" should "respond with no results for foo" in {
+    get("/search?q=foo")
+    response.body should equal("no results for foo")
+  }
+
+  "GET /posts" should "respond with list of posts" in {
+    get("/posts")
+    response.body should equal("Your value is a value")
   }
 
   /* ###END_SPEC### */

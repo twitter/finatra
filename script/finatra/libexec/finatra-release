@@ -11,7 +11,6 @@ $_FINATRA_ROOT/bin/finatra update-example
 $_FINATRA_ROOT/bin/finatra update-readme
 
 cd $EXAMPLE_REPO && mvn test
-cd -
 
 
 
