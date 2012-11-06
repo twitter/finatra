@@ -53,7 +53,8 @@ echo "  creating .gitignore"
 cp $_FINATRA_ROOT/share/.gitignore $root_path/$project_name/
 echo "  creating .travis.yml"
 cp $_FINATRA_ROOT/share/.travis.yml $root_path/$project_name/
-cp $_FINATRA_ROOT/../src/main/resources/an_view.mustache $root_path/$project_name/src/main/resources
+echo "  creating an_view.mustache"
+cp $_FINATRA_ROOT/../../src/main/resources/an_view.mustache $root_path/$project_name/src/main/resources/
 
 
 

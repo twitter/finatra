@@ -81,10 +81,10 @@ class ExampleSpec extends SpecHelper {
      */
     class AnView extends View {
       val template = "an_view.mustache"
-      val some_val = "a value"
+      val some_val = "random value here"
     }
 
-    get("/posts") { request =>
+    get("/template") { request =>
       val anView = new AnView
       render.view(anView).toFuture
     }
@@ -122,9 +122,9 @@ class ExampleSpec extends SpecHelper {
     response.body should equal("no results for foo")
   }
 
-  "GET /posts" should "respond with list of posts" in {
-    get("/posts")
-    response.body should equal("Your value is a value")
+  "GET /template" should "respond with a rendered template" in {
+    get("/template")
+    response.body should equal("Your value is random value here")
   }
 
   /* ###END_SPEC### */
