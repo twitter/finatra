@@ -48,6 +48,12 @@
     </repository>
 
     <repository>
+      <id>juliocapote</id>
+      <name>juliocapote</name>
+      <url>http://repo.juliocapote.com</url>
+    </repository>
+
+    <repository>
       <id>Sonatype Snapshots</id>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
@@ -161,6 +167,18 @@
 
     <!-- BUILD PLUGINS -->
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals><goal>copy-dependencies</goal></goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
