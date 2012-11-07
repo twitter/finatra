@@ -6,4 +6,9 @@
 
 ### Testing
 
-    mvn Testing
+    mvn test
+
+### To put on heroku
+
+    heroku create
+    git push heroku master

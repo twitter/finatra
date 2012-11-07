@@ -23,6 +23,15 @@ Finatra is a sinatra-inspired web framework for scala, running on top of [Finagl
 
 * Mustache template support through [mustache.java](https://github.com/spullara/mustache.java)
 
+* Heroku support out of the box
+
+### Projects using finatra
+
+[Zipkin](http://twitter.github.com/zipkin/) is an awesome distributed tracing system
+
+[finatra-example](http://github.com/capotej/finatra-example) An example repo to get you started
+
+
 ### Example
 
 ```scala
@@ -185,9 +194,4 @@ Add the repo and dependency to your pom.xml
   <version>0.3.4</version>
 </dependency>
 ```
-
-### Projects using finatra
-[Zipkin](http://twitter.github.com/zipkin/) is an awesome distributed tracing system
-
-[finatra-example](http://github.com/capotej/finatra-example) An example repo to get you started
 
