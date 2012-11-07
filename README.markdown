@@ -1,13 +1,26 @@
 # Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
 
-### Description
-Finatra is a sinatra clone backed by scala/finagle
+### Features
 
-### API
+* Familiar routing DSL
+
+* Asynchronous, uses Finagle/Netty
+
+* Multipart Upload
+
+* File server with live asset reloading
+
+* App Generator
+
+* Mustache template support through [mustache.java](https://github.com/spullara/mustache.java)
+
+### Example
 
 ```scala
 
+object App {
 
+  
   class ExampleApp extends Controller {
 
     /**
@@ -91,22 +104,30 @@ Finatra is a sinatra clone backed by scala/finagle
   val app = new ExampleApp
 
 
+  def main(args: Array[String]) = {
+    FinatraServer.register(app)
+    FinatraServer.start()
+  }
+
+
 ```
 
-### Features
-* The routing DSL you've come to know and love
 
-* Asynchronous, uses Finagle-HTTP/Netty
+### Configuration
 
-* Multipart file upload/form handling
+The available configuration properties and their defaults
 
-* Modular app support
+```sh
+-Dname=finatra
+-Dlog_path=logs/finatra.log
+-Dlog_node=finatra
+-Dport=7070
+-Dlocal_docroot=src/main/resources
+-Dpid_enabled=false
+-Dpid_path=finatra.pid
+-Denv=development
+```
 
-* A testing helper
-
-* Built in static file server (note: not designed for huge files(>100mb))
-
-* Mustache template support through [mustache.java](https://github.com/spullara/mustache.java)
 
 ### Installation via Maven
 Add the repo and dependency to your pom.xml
@@ -122,7 +143,7 @@ Add the repo and dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>0.3.3</version>
+  <version>0.3.4-SNAPSHOT</version>
 </dependency>
 ```
 

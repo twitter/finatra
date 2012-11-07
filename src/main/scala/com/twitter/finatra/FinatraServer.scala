@@ -22,8 +22,7 @@ import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.logging.config._
-import com.twitter.logging.{Logger, LoggerFactory, FileHandler}
-import java.io.{File, FileOutputStream}
+import com.twitter.logging.Logger
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
@@ -41,6 +40,10 @@ object FinatraServer {
     fs.start()
   }
 
+  def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) {
+    fs.addFilter(filter)
+  }
+
 }
 
 class FinatraServer extends Logging {
@@ -50,13 +53,6 @@ class FinatraServer extends Logging {
 
   val pid = ManagementFactory.getRuntimeMXBean().getName().split('@').head
 
-  def leavePid() {
-    val pidFile = new File(Config.get("pid_path"))
-    val pidFileStream = new FileOutputStream(pidFile)
-    pidFileStream.write(pid.getBytes)
-    pidFileStream.close
-  }
-
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]) = {
     filters.foldRight(baseService) { (b,a) => b andThen a }
   }
@@ -65,8 +61,7 @@ class FinatraServer extends Logging {
 
   def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) { filters = filters ++ Seq(filter) }
 
-  def start(tracerFactory: Tracer.Factory = NullTracer.factory) {
-
+  def initLogger() {
     val config = new LoggerConfig {
       node = Config.get("log_node")
       level = Logger.INFO
@@ -76,6 +71,11 @@ class FinatraServer extends Logging {
       }
     }
     config()
+  }
+
+  def start(tracerFactory: Tracer.Factory = NullTracer.factory) {
+
+    initLogger()
 
     val appService = new AppService(controllers)
     val fileService = new FileService

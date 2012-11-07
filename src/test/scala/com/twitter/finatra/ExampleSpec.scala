@@ -17,7 +17,7 @@ class ExampleSpec extends SpecHelper {
      *
      * curl http://localhost:7070/hello => "hello world"
      */
-    get("/hello") { request =>
+    get("/") { request =>
       render.plain("hello world").toFuture
     }
 
@@ -98,7 +98,7 @@ class ExampleSpec extends SpecHelper {
   /* ###BEGIN_SPEC### */
 
   "GET /hello" should "respond with hello world" in {
-    get("/hello")
+    get("/")
     response.body should equal ("hello world")
   }
 

@@ -1,30 +1,83 @@
 # Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
 
-### Description
-Finatra is a sinatra clone backed by scala/finagle
+Finatra is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
 
-### API
+### Features
+
+* Familiar routing DSL
+
+* Asynchronous, uses [Finagle](http://twitter.github.com/finagle/)
+
+* Multipart Upload
+
+* File server with live asset reloading
+
+* App Generator
+
+* Mustache template support through [mustache.java](https://github.com/spullara/mustache.java)
+
+### Example
 
 ```scala
 
-###EXAMPLEAPP###
+object App {
+
+  ###EXAMPLEAPP###
+
+  def main(args: Array[String]) = {
+    FinatraServer.register(app)
+    FinatraServer.start()
+  }
+
 
 ```
 
-### Features
-* The routing DSL you've come to know and love
+### Generating your own finatra app
 
-* Asynchronous, uses Finagle-HTTP/Netty
+```sh
+$ git clone git@github.com:capotej/finatra.git
+$ cd finatra
+$ ./finatra new com.example.myapp /tmp
+```
 
-* Multipart file upload/form handling
+That will generate ```/tmp/myapp/```, start it up like so:
 
-* Modular app support
+```sh
+$ cd /tmp/myapp
+$ mvn scala:run
+```
 
-* A testing helper
+You should now have finatra running on port 7070!
 
-* Built in static file server (note: not designed for huge files(>100mb))
+### Installing the generator
 
-* Mustache template support through [mustache.java](https://github.com/spullara/mustache.java)
+For bash users:
+
+    echo 'eval "$(./finatra init -)"' >> ~/.bash_profile
+    exec bash
+
+For zsh users:
+
+    echo 'eval "$(./finatra init -)"' >> ~/.zshenv
+    source ~/.zshenv
+
+
+Now you can run ```finatra new``` from anywhere.
+
+### Configuration
+
+Available configuration properties and their defaults
+
+```sh
+-Dname=finatra
+-Dlog_path=logs/finatra.log
+-Dlog_node=finatra
+-Dport=7070
+-Dlocal_docroot=src/main/resources
+-Dpid_enabled=false
+-Dpid_path=finatra.pid
+-Denv=development
+```
 
 ### Installation via Maven
 Add the repo and dependency to your pom.xml
@@ -44,7 +97,8 @@ Add the repo and dependency to your pom.xml
 </dependency>
 ```
 
-### Example project
+### Projects using finatra
+
 Check out [finatra-example](http://github.com/capotej/finatra-example) for an example finatra project
 
 Here's an [example blog](https://gist.github.com/2626200)

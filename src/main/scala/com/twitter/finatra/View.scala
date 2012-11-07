@@ -31,7 +31,7 @@ class FinatraMustacheFactory extends DefaultMustacheFactory {
 
 object View {
   lazy val mustacheFactory  = new FinatraMustacheFactory
-  var baseTemplatePath      = "/"
+  var baseTemplatePath      = Config.get("template_path")
   def templatePath          = baseTemplatePath
 
 

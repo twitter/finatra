@@ -9,7 +9,8 @@ object Config {
       "pid_enabled" -> "false",
       "pid_path" -> "finatra.pid",
       "log_path" -> "logs/finatra.log",
-      "log_node" -> "finatra",//"com.twitter.finatra",
+      "log_node" -> "finatra",
+      "template_path" -> "/",
       "local_docroot" -> "src/main/resources"
     )
 

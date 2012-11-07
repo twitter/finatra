@@ -85,7 +85,7 @@ sed -ie "s/###VERSION###/$VERSION/g" $root_path/$project_name/pom.xml
 # delete backup files
 rm -rf $root_path/$project_name/pom.xmle
 rm -rf $dest_path/App.scalae
-rm -rf $dest_path/Procfilee
+rm -rf $root_path/$project_name/Procfilee
 rm -rf $test_path/AppSpec.scalae
 
 echo "Done! run mvn scala:run to start your app"
