@@ -16,6 +16,8 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.builder.{Server, ServerBuilder}
+
+
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finagle.{Service, SimpleFilter}
@@ -26,24 +28,34 @@ import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
 
-object FinatraServer extends Logging {
+
+object FinatraServer {
+
+  var fs:FinatraServer = new FinatraServer
+
+  def register(app: Controller) {
+    fs.register(app)
+  }
+
+  def start() {
+    fs.start()
+  }
+
+}
+
+class FinatraServer extends Logging {
 
   val controllers = new ControllerCollection
   var filters:Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
 
-  var docroot = "public"
-  var pidPath = "finatra.pid"
+  val pid = ManagementFactory.getRuntimeMXBean().getName().split('@').head
 
-  val config = new LoggerConfig {
-    node = ""
-    level = Logger.INFO
-    handlers = new FileHandlerConfig {
-      filename = "logs/finatra.log"
-      roll = Policy.SigHup
-    }
+  def leavePid() {
+    val pidFile = new File(Config.get("pid_path"))
+    val pidFileStream = new FileOutputStream(pidFile)
+    pidFileStream.write(pid.getBytes)
+    pidFileStream.close
   }
-  config()
-
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]) = {
     filters.foldRight(baseService) { (b,a) => b andThen a }
@@ -53,29 +65,26 @@ object FinatraServer extends Logging {
 
   def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) { filters = filters ++ Seq(filter) }
 
-  def shutdown = {
-    logger.info("shutting down")
-    println("shutting down")
-    new File(pidPath).delete
-  }
+  def start(tracerFactory: Tracer.Factory = NullTracer.factory) {
 
-  def start(basePort:Int = 7070, docroot:String = "public", pidPath:String = "finatra.pid", tracerFactory: Tracer.Factory = NullTracer.factory) {
-    this.docroot = docroot
-    this.pidPath = pidPath
+    val config = new LoggerConfig {
+      node = Config.get("log_node")
+      level = Logger.INFO
+      handlers = new FileHandlerConfig {
+        filename = Config.get("log_path")
+        roll = Policy.SigHup
+      }
+    }
+    config()
 
     val appService = new AppService(controllers)
     val fileService = new FileService
     val errorService = new ErrorFilter
 
-    val envPort = Option(System.getenv("PORT"))
-
-    val port:Int = envPort match {
-      case Some(p) => Integer.valueOf(p)
-      case None => basePort
-    }
-
     addFilter(errorService)
     addFilter(fileService)
+
+    val port = Config.getInt("port")
 
     val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
 
@@ -83,25 +92,16 @@ object FinatraServer extends Logging {
       .codec(new RichHttp[FinagleRequest](Http()))
       .bindTo(new InetSocketAddress(port))
       .tracerFactory(tracerFactory)
-      .name("finatraServer")
+      .name(Config.get("name"))
       .build(service)
 
-    val pid = ManagementFactory.getRuntimeMXBean().getName().split('@').head
+    logger.info("process %s started on %s", pid, port)
 
-    val pidFile = new File(pidPath)
-    val pidFileStream = new FileOutputStream(pidFile)
-    pidFileStream.write(pid.getBytes)
-    pidFileStream.close
-
-    logger.info("process %s started on %s, docroot %s", pid, port, docroot)
-    println("process " + pid + " started on port: " + port.toString + " view logs/finatra.log for more info")
+    println("finatra process " + pid + " started on port: " + port.toString)
+    println("config args:")
+    Config.printConfig()
 
   }
-
-  Runtime.getRuntime().addShutdownHook(
-    new Thread(new Runnable() {
-      override def run() { FinatraServer.shutdown }
-    }))
-
 }
+
 
