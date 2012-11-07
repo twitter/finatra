@@ -1,10 +1,19 @@
 # Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
 
+Finatra is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
+
+### Notes to users upgrading to 0.3.4
+
+* route parameters now live in ```request.multiParams```
+
+* public assets now live in ```src/main/resources``` (can be configured, see below)
+
+
 ### Features
 
 * Familiar routing DSL
 
-* Asynchronous, uses Finagle/Netty
+* Asynchronous, uses [Finagle](http://twitter.github.com/finagle/)
 
 * Multipart Upload
 
@@ -28,7 +37,7 @@ object App {
      *
      * curl http://localhost:7070/hello => "hello world"
      */
-    get("/hello") { request =>
+    get("/") { request =>
       render.plain("hello world").toFuture
     }
 
@@ -112,10 +121,41 @@ object App {
 
 ```
 
+### Generating your own finatra app
+
+```sh
+$ git clone git@github.com:capotej/finatra.git
+$ cd finatra
+$ ./finatra new com.example.myapp /tmp
+```
+
+That will generate ```/tmp/myapp/```, start it up like so:
+
+```sh
+$ cd /tmp/myapp
+$ mvn scala:run
+```
+
+You should now have finatra running on port 7070!
+
+### Installing the generator
+
+For bash users:
+
+    echo 'eval "$(./finatra init -)"' >> ~/.bash_profile
+    exec bash
+
+For zsh users:
+
+    echo 'eval "$(./finatra init -)"' >> ~/.zshenv
+    source ~/.zshenv
+
+
+Now you can run ```finatra new``` from anywhere.
 
 ### Configuration
 
-The available configuration properties and their defaults
+Available configuration properties and their defaults
 
 ```sh
 -Dname=finatra
@@ -127,7 +167,6 @@ The available configuration properties and their defaults
 -Dpid_path=finatra.pid
 -Denv=development
 ```
-
 
 ### Installation via Maven
 Add the repo and dependency to your pom.xml
@@ -147,8 +186,8 @@ Add the repo and dependency to your pom.xml
 </dependency>
 ```
 
-### Example project
-Check out [finatra-example](http://github.com/capotej/finatra-example) for an example finatra project
+### Projects using finatra
+[Zipkin](http://twitter.github.com/zipkin/) is an awesome distributed tracing system
 
-Here's an [example blog](https://gist.github.com/2626200)
+[finatra-example](http://github.com/capotej/finatra-example) An example repo to get you started
 

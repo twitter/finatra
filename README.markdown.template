@@ -2,6 +2,13 @@
 
 Finatra is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
 
+### Notes to users upgrading to 0.3.4
+
+* route parameters now live in ```request.multiParams```
+
+* public assets now live in ```src/main/resources``` (can be configured, see below)
+
+
 ### Features
 
 * Familiar routing DSL
@@ -98,8 +105,7 @@ Add the repo and dependency to your pom.xml
 ```
 
 ### Projects using finatra
+[Zipkin](http://twitter.github.com/zipkin/) is an awesome distributed tracing system
 
-Check out [finatra-example](http://github.com/capotej/finatra-example) for an example finatra project
-
-Here's an [example blog](https://gist.github.com/2626200)
+[finatra-example](http://github.com/capotej/finatra-example) An example repo to get you started
 
