@@ -18,36 +18,36 @@ package com.twitter.finatra
 import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import scala.Some
+import org.jboss.netty.handler.codec.http._
 import collection.mutable.ListBuffer
 
 class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Logging {
 
   val responseConverter = new FinatraResponseConverter
 
-  val routes = new RouteVector[(String, PathPattern, Request => Future[Response])]
+  val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[Response])]
 
-  def get(path: String)   (callback: Request => Future[Response]) { addRoute("GET",    path)(callback) }
-  def delete(path: String)(callback: Request => Future[Response]) { addRoute("DELETE", path)(callback) }
-  def post(path: String)  (callback: Request => Future[Response]) { addRoute("POST",   path)(callback) }
-  def put(path: String)   (callback: Request => Future[Response]) { addRoute("PUT",    path)(callback) }
-  def head(path: String)  (callback: Request => Future[Response]) { addRoute("HEAD",   path)(callback) }
-  def patch(path: String) (callback: Request => Future[Response]) { addRoute("PATCH",  path)(callback) }
+  def get(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.GET,    path)(callback) }
+  def delete(path: String)(callback: Request => Future[Response]) { addRoute(HttpMethod.DELETE, path)(callback) }
+  def post(path: String)  (callback: Request => Future[Response]) { addRoute(HttpMethod.POST,   path)(callback) }
+  def put(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.PUT,    path)(callback) }
+  def head(path: String)  (callback: Request => Future[Response]) { addRoute(HttpMethod.HEAD,   path)(callback) }
+  def patch(path: String) (callback: Request => Future[Response]) { addRoute(HttpMethod.PATCH,  path)(callback) }
 
 
   def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
     logger.info("%s %s", request.method, request.uri)
-    dispatchRouteOrCallback(request, request.method.toString, (request) => {
+    dispatchRouteOrCallback(request, request.method, (request) => {
       // fallback to GET for 404'ed GET requests (curl -I support)
-      if (request.method.toString == "HEAD") {
-        dispatchRouteOrCallback(request, "GET", (request) => None)
+      if (request.method == HttpMethod.HEAD) {
+        dispatchRouteOrCallback(request, HttpMethod.GET, (request) => None)
       } else {
         return None
       }
     })
   }
 
-  def dispatchRouteOrCallback(request: FinagleRequest, method: String,
+  def dispatchRouteOrCallback(request: FinagleRequest, method: HttpMethod,
                               orCallback: FinagleRequest => Option[FinagleResponse]): Option[FinagleResponse] = {
     val req = RequestAdapter(request)
     findRouteAndMatch(req, method) match {
@@ -61,7 +61,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     request.routeParams += (xs._1.toString -> xs._2.asInstanceOf[ListBuffer[String]].head.toString)
   }
 
-  def findRouteAndMatch(request: Request, method: String) = {
+  def findRouteAndMatch(request: Request, method: HttpMethod) = {
     var thematch:Option[Map[_,_]] = None
 
     routes.vector.find( route => route match {
@@ -84,10 +84,10 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     render.plain(message).status(301).header("Location", location)
   }
 
-  def addRoute(method: String, path: String)(callback: Request => Future[Response]) {
+  def addRoute(method: HttpMethod, path: String)(callback: Request => Future[Response]) {
     val regex = SinatraPathPatternParser(path)
     routes.add((method, regex, (r) => {
-      stats.timeFuture("%s/Root/%s".format(method, path.stripPrefix("/"))) {
+      stats.timeFuture("%s/Root/%s".format(method.toString, path.stripPrefix("/"))) {
         callback(r)
       }
     }))
