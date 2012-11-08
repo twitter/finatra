@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # Usage: finatra new [package-name] [dest-dir] (defaults to current)
 # Summary: creates a base project
 # Help: Example: finatra new com.twitter.my_awesome_project ~/personal creates ~/personal/my_awesome_project
