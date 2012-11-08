@@ -2,7 +2,7 @@
 
 Finatra is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
 
-### Notes to users upgrading to 0.3.4
+### Notes to users upgrading to 1.0.0 from earlier versions
 
 * route parameters now live in ```request.multiParams```
 
