@@ -16,7 +16,7 @@
 package com.twitter.finatra.test
 
 import com.twitter.util.Future
-import scala.collection.mutable.Map
+import scala.collection.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finatra.Controller
