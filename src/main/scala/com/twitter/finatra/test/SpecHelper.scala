@@ -46,7 +46,11 @@ abstract class SpecHelper extends FlatSpec with ShouldMatchers {
     headers.foreach { header =>
       request.httpRequest.setHeader(header._1, header._2)
     }
-    lastResponse = app.dispatch(request).asInstanceOf[Option[Future[FinagleResponse]]].get
+
+    lastResponse = app.dispatch(request).asInstanceOf[Option[Future[FinagleResponse]]] match {
+      case Some(r) => r
+      case None => throw new IllegalStateException("Unable to route path '" + path +"'")
+    }
  }
 
   def app:Controller
