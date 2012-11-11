@@ -64,7 +64,7 @@ class IntegrationSpec extends SpecHelper {
   }
 
   "POST /params" should "respond 200" in {
-    get("/params", Map("p"->"yup"))
+    post("/params", Map("p"->"yup"))
     response.body should equal ("yup")
   }
 
