@@ -15,8 +15,6 @@
  */
 package com.twitter.finatra.test
 
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 import org.jboss.netty.util.CharsetUtil.UTF_8
 
 import com.twitter.finatra.Response
@@ -26,7 +24,6 @@ class MockView(val title:String) extends View {
   val template = "mock.mustache"
 }
 
-@RunWith(classOf[JUnitRunner])
 class ResponseSpec extends ShouldSpec {
   def resp  = new Response
   def view        = new MockView("howdy view")

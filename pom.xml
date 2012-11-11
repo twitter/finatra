@@ -6,21 +6,32 @@
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
+
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+
   <url>http://github.com/capotej/finatra</url>
 
-  <distributionManagement>
-    <repository>
-      <id>capotej-repo</id>
-      <url>scpexe://capotej@repo.juliocapote.com/home/capotej/maven_repo/</url>
-      <layout>default</layout>
-    </repository>
-  </distributionManagement>
+  <developers>
+    <developer>
+      <id>julio</id>
+      <name>Julio Capote</name>
+      <email>julio@twitter.com</email>
+    </developer>
+    <developer>
+      <id>chris</id>
+      <name>Christopher Burnett</name>
+      <email>cburnett@twitter.com</email>
+    </developer>
+  </developers>
 
   <scm>
     <connection>scm:git:git@github.com:capotej/finatra.git</connection>
     <url>scm:git:git@github.com:capotej/finatra.git</url>
     <developerConnection>scm:git:git@github.com:capotej/finatra.git</developerConnection>
-    <tag>HEAD</tag>
   </scm>
 
   <licenses>
@@ -32,69 +43,23 @@
   </licenses>
 
   <properties>
-    <maven.compiler.source>1.5</maven.compiler.source>
-    <maven.compiler.target>1.5</maven.compiler.target>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
     <encoding>UTF-8</encoding>
     <scala.version>2.9.2</scala.version>
   </properties>
 
   <!-- REPOSITORIES -->
-
   <repositories>
-    <repository>
-      <id>repo.juliocapote.com</id>
-      <url>http://repo.juliocapote.com</url>
-    </repository>
-
-    <repository>
-      <id>repo.codahale.com</id>
-      <url>http://repo.codahale.com</url>
-    </repository>
-
     <repository>
       <id>twttr</id>
       <name>twttr</name>
       <url>http://maven.twttr.com</url>
     </repository>
-
-    <repository>
-      <id>Sonatype Snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-      <repository>
-          <id>Sonatype Releases</id>
-          <url>https://oss.sonatype.org/content/repositories/releases/</url>
-      </repository>
   </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>scala-tools.org</id>
-      <name>Scala-Tools Maven2 Repository</name>
-      <url>http://scala-tools.org/repo-releases</url>
-    </pluginRepository>
-      <pluginRepository>
-          <id>sona</id>
-          <name>sonatype</name>
-          <url>https://oss.sonatype.org/content/groups/public</url>
-      </pluginRepository>
-    <pluginRepository>
-      <id>mc-release</id>
-      <name>Local Maven repository of releases</name>
-      <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
-
   <!-- END REPOSITORIES -->
 
   <!-- DEPENDENCIES -->
-
   <dependencies>
     <dependency>
       <groupId>org.scala-lang</groupId>
@@ -104,15 +69,20 @@
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>util-logging</artifactId>
-      <version>5.3.0</version>
+      <artifactId>finagle-http</artifactId>
+      <version>5.3.22</version>
     </dependency>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.8.1</version>
-      <scope>test</scope>
+      <groupId>com.twitter</groupId>
+      <artifactId>finagle-core</artifactId>
+      <version>5.3.22</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>util-logging</artifactId>
+      <version>5.3.13</version>
     </dependency>
 
     <dependency>
@@ -133,36 +103,22 @@
       <version>1.2.1</version>
     </dependency>
 
-      <dependency>
-          <artifactId>jerkson_2.9.2</artifactId>
-          <version>0.7.0</version>
-          <groupId>io.backchat.jerkson</groupId>
-      </dependency>
-
-      <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>finagle-http</artifactId>
-      <version>5.3.9</version>
-    </dependency>
-
     <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>finagle-core</artifactId>
-      <version>5.3.9</version>
+      <artifactId>jerkson_2.9.2</artifactId>
+      <version>0.7.0</version>
+      <groupId>io.backchat.jerkson</groupId>
     </dependency>
 
     <dependency>
       <groupId>com.github.spullara.mustache.java</groupId>
       <artifactId>compiler</artifactId>
-      <version>0.7.0</version>
+      <version>0.8.8</version>
     </dependency>
 
   </dependencies>
-
   <!-- END DEPENDENCIES -->
 
   <!-- GPG JAR SIGNING -->
-
   <profiles>
     <profile>
       <id>sign</id>
@@ -186,7 +142,6 @@
       </build>
     </profile>
   </profiles>
-
   <!-- END GPG JAR SIGNING -->
 
   <!-- SCALADOC -->
@@ -195,6 +150,7 @@
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
+        <version>3.1.0</version>
       </plugin>
     </plugins>
   </reporting>
@@ -207,12 +163,13 @@
 
     <!-- BUILD PLUGINS -->
     <plugins>
+
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
         <version>3.1.0</version>
         <configuration>
-            <recompileMode>incremental</recompileMode>
+          <recompileMode>incremental</recompileMode>
           <args>
             <arg>-unchecked</arg>
             <arg>-deprecation</arg>
@@ -237,40 +194,18 @@
       </plugin>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.12</version>
-        <configuration>
-          <skipTests>true</skipTests>
-          <useSystemClassLoader>false</useSystemClassLoader>
-          <argLine>-Xmx1024m</argLine>
-          <includes>
-            <include>**/*Spec.java</include>
-          </includes>
-          <excludes>
-            <exclude>**/*Test.java</exclude>
-          </excludes>
-        </configuration>
+        <groupId>org.scalatest</groupId>
+        <artifactId>scalatest-maven-plugin</artifactId>
+        <version>1.0-M2</version>
+        <executions>
+          <execution>
+            <id>test</id>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
-
-        <plugin>
-            <groupId>org.scalatest</groupId>
-            <artifactId>scalatest-maven-plugin</artifactId>
-            <version>1.0-M2</version>
-            <configuration>
-                <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                <junitxml>.</junitxml>
-                <filereports>WDF TestSuite.txt</filereports>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>test</id>
-                    <goals>
-                        <goal>test</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -302,8 +237,9 @@
       </plugin>
 
       <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
+        <groupId>com.cloudbees</groupId>
         <artifactId>maven-license-plugin</artifactId>
+        <version>1.7</version>
         <configuration>
           <header>header.txt</header>
           <excludes>
