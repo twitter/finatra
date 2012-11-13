@@ -191,7 +191,7 @@ Add the repo and dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.1</version>
 </dependency>
 ```
 
