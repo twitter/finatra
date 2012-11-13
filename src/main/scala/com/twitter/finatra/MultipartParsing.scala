@@ -27,6 +27,7 @@ object MultipartParsing {
   // TODO: http://commons.apache.org/fileupload/streaming.html update to this
   def loadMultiParams(request: FinagleRequest) = {
     var multiParams = Map[String, MultipartItem]()
+    request.getContent.markReaderIndex()
     val ctype = request.headers.get("Content-Type").getOrElse(null)
     if(ctype != null){
       val boundaryIndex = ctype.indexOf("boundary=")
@@ -45,6 +46,7 @@ object MultipartParsing {
           nextPart = multistream.readBoundary
         }
     }
+    request.getContent.resetReaderIndex
     multiParams
   }
 

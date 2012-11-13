@@ -16,7 +16,6 @@
 package com.twitter.finatra.test
 
 import com.twitter.finatra.Controller
-import scala.collection.mutable.Map
 
 class MyApp extends Controller {
   get("/path")    { request => render.plain("get:path").toFuture }
@@ -25,6 +24,7 @@ class MyApp extends Controller {
   delete("/path") { request => render.plain("delete:path").toFuture }
   patch("/path")  { request => render.plain("patch:path").toFuture }
   get("/params")  { request => render.plain(request.params("p")).toFuture }
+  post("/params")  { request => render.plain(request.params("p")).toFuture }
   get("/headers") { request => render.plain(request.headers("Referer")).toFuture }
 }
 
@@ -60,6 +60,11 @@ class IntegrationSpec extends SpecHelper {
 
   "GET /params" should "respond 200" in {
     get("/params", Map("p"->"yup"))
+    response.body should equal ("yup")
+  }
+
+  "POST /params" should "respond 200" in {
+    post("/params", Map("p"->"yup"))
     response.body should equal ("yup")
   }
 
