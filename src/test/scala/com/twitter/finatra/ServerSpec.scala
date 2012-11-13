@@ -17,8 +17,6 @@ package com.twitter.finatra.test
 
 import com.twitter.finatra.Controller
 import com.twitter.finatra.FinatraServer
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 
 
 class TestApp extends Controller {
