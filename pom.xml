@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -32,6 +32,7 @@
     <connection>scm:git:git@github.com:capotej/finatra.git</connection>
     <url>scm:git:git@github.com:capotej/finatra.git</url>
     <developerConnection>scm:git:git@github.com:capotej/finatra.git</developerConnection>
+    <tag>finatra-1.0.2</tag>
   </scm>
 
   <licenses>
@@ -118,32 +119,6 @@
   </dependencies>
   <!-- END DEPENDENCIES -->
 
-  <!-- GPG JAR SIGNING -->
-  <profiles>
-    <profile>
-      <id>sign</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.2</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-  <!-- END GPG JAR SIGNING -->
-
   <!-- SCALADOC -->
   <reporting>
     <plugins>
@@ -163,7 +138,20 @@
 
     <!-- BUILD PLUGINS -->
     <plugins>
-
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+                <execution>
+                    <id>sign-artifacts</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>sign</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
