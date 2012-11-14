@@ -33,9 +33,7 @@ object RouterFilter {
 }
 
 class ErrorHandlerFilter(handler: PartialFunction[Throwable, Future[Response]]) extends SimpleFilter[Request, Response] {
-  def apply(originalRequest: Request, service: Service[Request, Response]) = try {
-    service(originalRequest)
-  } catch handler
+  def apply(originalRequest: Request, service: Service[Request, Response]) = service(originalRequest).rescue(handler)
 }
 
 object ErrorHandlerFilter {

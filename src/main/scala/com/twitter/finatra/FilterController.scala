@@ -67,7 +67,9 @@ trait FilteredController {
 
   def patch(path: String)(server: Server): Unit = route(HttpMethodMatcher(HttpMethod.PATCH).andThen(PathPatternMatcher.sinatraPattern(path)))(server)
 
-  def error(handler: PartialFunction[Throwable, Future[Response]]): Unit = errorFilter.andThen(ErrorHandlerFilter(handler))
+  def error(handler: PartialFunction[Throwable, Future[Response]]): Unit = {
+    errorFilter = errorFilter.andThen(ErrorHandlerFilter(handler))
+  }
 
   def route(matcher: Request => Option[Request])(server: Server): Unit = route(Router(matcher, server))
 

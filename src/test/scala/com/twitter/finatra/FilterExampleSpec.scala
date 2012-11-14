@@ -62,7 +62,7 @@ class FilterExampleSpec extends FilterSpecHelper {
     }
 
     error {
-      case NotFoundException => render.notFound.toFuture
+      case NotFoundException => render.notFound.body("Not Found").toFuture
     }
 
     /**
@@ -129,6 +129,11 @@ class FilterExampleSpec extends FilterSpecHelper {
   "GET /template" should "respond with a rendered template" in {
     get("/template")
     response.body should equal("Your value is random value here")
+  }
+
+  "GET /nofile" should "respond with not found" in {
+    get("/nofile")
+    response.body should equal("Not Found")
   }
 
   /* ###END_SPEC### */
