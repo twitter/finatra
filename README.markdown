@@ -181,13 +181,6 @@ Available configuration properties and their defaults
 Add the repo and dependency to your pom.xml
 
 ```xml
-<repositories>
-  <repository>
-    <id>repo.juliocapote.com</id>
-    <url>http://repo.juliocapote.com</url>
-  </repository>
-</repositories>
-
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
