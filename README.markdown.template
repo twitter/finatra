@@ -96,7 +96,7 @@ Available configuration properties and their defaults
 ```
 
 ### Installation via Maven
-Add the repo and dependency to your pom.xml
+Add the dependency to your pom.xml
 
 ```xml
 <dependency>
