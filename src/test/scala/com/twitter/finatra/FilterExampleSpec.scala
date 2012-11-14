@@ -61,6 +61,10 @@ class FilterExampleSpec extends FilterSpecHelper {
       }
     }
 
+    error {
+      case NotFoundException => render.notFound.toFuture
+    }
+
     /**
      * Uploading files
      *
