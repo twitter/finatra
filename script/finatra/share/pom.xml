@@ -8,28 +8,6 @@
   <inceptionYear>###YEAR###</inceptionYear>
   <url>http://github.com/path/to/project</url>
 
-  <distributionManagement>
-    <repository>
-      <id>your-repo</id>
-      <url>scpexe://your@your/maven_repo/</url>
-      <layout>default</layout>
-    </repository>
-  </distributionManagement>
-
-  <scm>
-    <connection>scm:git:git@github.com:path/to/project.git</connection>
-    <url>scm:git:git@github.com:path/to/project.git</url>
-    <developerConnection>scm:git:git@github.com:path/to/project.git</developerConnection>
-  </scm>
-
-  <licenses>
-    <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
@@ -37,62 +15,13 @@
     <scala.version>2.9.2</scala.version>
   </properties>
 
-  <!-- REPOSITORIES -->
-
   <repositories>
-
     <repository>
       <id>twttr</id>
       <name>twttr</name>
       <url>http://maven.twttr.com</url>
     </repository>
-
-    <repository>
-      <id>juliocapote</id>
-      <name>juliocapote</name>
-      <url>http://repo.juliocapote.com</url>
-    </repository>
-
-    <repository>
-      <id>Sonatype Snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-
-    <repository>
-      <id>Sonatype Releases</id>
-      <url>https://oss.sonatype.org/content/repositories/releases/</url>
-    </repository>
-
   </repositories>
-
-  <pluginRepositories>
-
-    <pluginRepository>
-      <id>scala-tools.org</id>
-      <name>Scala-Tools Maven2 Repository</name>
-      <url>http://scala-tools.org/repo-releases</url>
-    </pluginRepository>
-
-    <pluginRepository>
-        <id>sona</id>
-        <name>sonatype</name>
-        <url>https://oss.sonatype.org/content/groups/public</url>
-    </pluginRepository>
-
-    <pluginRepository>
-      <id>mc-release</id>
-      <name>Local Maven repository of releases</name>
-      <url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
-
-  <!-- END REPOSITORIES -->
 
   <!-- DEPENDENCIES -->
 
@@ -119,46 +48,6 @@
   </dependencies>
 
   <!-- END DEPENDENCIES -->
-
-  <!-- GPG JAR SIGNING -->
-
-  <profiles>
-    <profile>
-      <id>sign</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.2</version>
-            <executions>
-              <execution>
-                <id>sign-artifacts</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
-  <!-- END GPG JAR SIGNING -->
-
-  <!-- SCALADOC -->
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>net.alchim31.maven</groupId>
-        <artifactId>scala-maven-plugin</artifactId>
-        <version>3.1.0</version>
-      </plugin>
-    </plugins>
-  </reporting>
-  <!-- END SCALADOC -->
 
   <!-- BUILD SETTINGS -->
   <build>
@@ -240,50 +129,14 @@
       </plugin>
 
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.12</version>
-        <configuration>
-          <skipTests>true</skipTests>
-          <useSystemClassLoader>false</useSystemClassLoader>
-          <argLine>-Xmx1024m</argLine>
-          <includes>
-            <include>**/*Spec.java</include>
-          </includes>
-          <excludes>
-            <exclude>**/*Test.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
-
-        <plugin>
-            <groupId>org.scalatest</groupId>
-            <artifactId>maven-scalatest-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <configuration>
-                <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
-                <junitxml>.</junitxml>
-                <filereports>WDF TestSuite.txt</filereports>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>test</id>
-                    <goals>
-                        <goal>test</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
+        <groupId>org.scalatest</groupId>
+        <artifactId>scalatest-maven-plugin</artifactId>
+        <version>1.0-M2</version>
         <executions>
           <execution>
-            <id>attach-sources</id>
+            <id>test</id>
             <goals>
-              <goal>jar</goal>
+              <goal>test</goal>
             </goals>
           </execution>
         </executions>
@@ -306,16 +159,6 @@
 
     </plugins>
     <!-- END BUILD PLUGINS -->
-
-    <!-- EXTENSIONS -->
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh-external</artifactId>
-        <version>1.0-beta-7</version>
-      </extension>
-    </extensions>
-    <!-- END EXTENSIONS -->
 
   </build>
 </project>
