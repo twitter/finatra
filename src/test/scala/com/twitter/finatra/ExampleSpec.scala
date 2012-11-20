@@ -1,3 +1,18 @@
+/**
+ * Copyright (C) 2012 Twitter Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.twitter.finatra
 
 import test.SpecHelper
@@ -88,6 +103,31 @@ class ExampleSpec extends SpecHelper {
       val anView = new AnView
       render.view(anView).toFuture
     }
+
+
+    /**
+     * Custom Error Handling
+     *
+     * curl http://localhost:7070/error
+     */
+    get("/error")   { request =>
+      1234/0
+      render.plain("we never make it here").toFuture
+    }
+
+    error { request =>
+      render.status(500).plain("whoops!").toFuture
+    }
+
+
+    /**
+     * Custom 404s
+     *
+     * curl http://localhost:7070/notfound
+     */
+    notFound { request =>
+      render.status(404).plain("not found yo").toFuture
+    }
   }
 
   val app = new ExampleApp
@@ -96,6 +136,18 @@ class ExampleSpec extends SpecHelper {
 
 
   /* ###BEGIN_SPEC### */
+
+  "GET /notfound" should "respond 404" in {
+    get("/notfound")
+    response.body   should equal ("not found yo")
+    response.code   should equal (404)
+  }
+
+  "GET /error" should "respond 500" in {
+    get("/error")
+    response.body   should equal ("whoops!")
+    response.code   should equal (500)
+  }
 
   "GET /hello" should "respond with hello world" in {
     get("/")

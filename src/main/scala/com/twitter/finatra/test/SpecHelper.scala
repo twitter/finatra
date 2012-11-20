@@ -19,7 +19,7 @@ import com.twitter.util.Future
 import scala.collection.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finatra.Controller
+import com.twitter.finatra.{AppService, ControllerCollection, Controller}
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.scalatest.FlatSpec
 import org.scalatest.matchers.ShouldMatchers
@@ -47,10 +47,12 @@ abstract class SpecHelper extends FlatSpec with ShouldMatchers {
       request.httpRequest.setHeader(header._1, header._2)
     }
 
-    lastResponse = app.dispatch(request).asInstanceOf[Option[Future[FinagleResponse]]] match {
-      case Some(r) => r
-      case None => throw new IllegalStateException("Unable to route path '" + path +"'")
-    }
+    val collection = new ControllerCollection
+    collection.add(app)
+
+    val appService = new AppService(collection)
+
+    lastResponse = appService(request)
  }
 
   def app:Controller

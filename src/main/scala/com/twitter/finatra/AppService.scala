@@ -17,35 +17,36 @@ package com.twitter.finatra
 
 import com.twitter.finagle.Service
 import com.twitter.util.Future
-import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
-import org.jboss.netty.handler.codec.http._
-import org.jboss.netty.handler.codec.http.HttpResponseStatus._
-import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
-import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-
 
 class AppService(controllers: ControllerCollection)
   extends Service[FinagleRequest, FinagleResponse] with Logging {
 
-  def notFoundResponse = {
-    val resp = new DefaultHttpResponse(HTTP_1_1, NOT_FOUND)
-    resp.setContent(copiedBuffer("not found", UTF_8))
-    Future.value(FinagleResponse(resp))
-  }
-
-  def errorResponse = {
-    val resp = new DefaultHttpResponse(HTTP_1_1, INTERNAL_SERVER_ERROR)
-    resp.setContent(copiedBuffer("ERROR", UTF_8))
-    Future.value(FinagleResponse(resp))
-  }
+  def render = new Response
 
   def apply(rawRequest: FinagleRequest) = {
+    val adaptedRequest  = RequestAdapter(rawRequest)
+    val responseConverter = new FinatraResponseConverter
+
+    try {
+      attemptRequest(rawRequest)
+    } catch {
+      case e: Exception =>
+        logger.error(e, "Internal Server Error")
+        adaptedRequest.error = Some(e)
+        responseConverter(controllers.errorHandler(adaptedRequest))
+    }
+
+  }
+
+  def attemptRequest(rawRequest: FinagleRequest) = {
+    val adaptedRequest  = RequestAdapter(rawRequest)
+    val responseConverter = new FinatraResponseConverter
     controllers.dispatch(rawRequest) match {
       case Some(response) =>
         response.asInstanceOf[Future[FinagleResponse]]
       case None =>
-        notFoundResponse
+        responseConverter(controllers.notFoundHandler(adaptedRequest))
     }
   }
 

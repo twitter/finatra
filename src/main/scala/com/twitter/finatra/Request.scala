@@ -21,8 +21,9 @@ import com.twitter.finagle.http.{Request => FinagleRequest, RequestProxy}
 class Request(rawRequest: FinagleRequest) extends RequestProxy {
 
   var multiParams: Map[String, MultipartItem] = Map.empty
-  var routeParams:Map[String, String] = Map.empty
+  var routeParams: Map[String, String] = Map.empty
 
   var request = rawRequest
+  var error: Option[Exception] = None
 
 }

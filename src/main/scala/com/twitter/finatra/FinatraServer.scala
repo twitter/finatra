@@ -79,9 +79,7 @@ class FinatraServer extends Logging {
 
     val appService = new AppService(controllers)
     val fileService = new FileService
-    val errorService = new ErrorFilter
 
-    addFilter(errorService)
     addFilter(fileService)
 
     val port = Config.getInt("port")

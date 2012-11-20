@@ -27,6 +27,9 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
 
   val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[Response])]
 
+  var notFoundHandler: Option[(Request) => Future[Response]]  = None
+  var errorHandler: Option[(Request) => Future[Response]]     = None
+
   def get(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.GET,    path)(callback) }
   def delete(path: String)(callback: Request => Future[Response]) { addRoute(HttpMethod.DELETE, path)(callback) }
   def post(path: String)  (callback: Request => Future[Response]) { addRoute(HttpMethod.POST,   path)(callback) }
@@ -34,6 +37,13 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
   def head(path: String)  (callback: Request => Future[Response]) { addRoute(HttpMethod.HEAD,   path)(callback) }
   def patch(path: String) (callback: Request => Future[Response]) { addRoute(HttpMethod.PATCH,  path)(callback) }
 
+  def notFound(callback: Request => Future[Response]) {
+    notFoundHandler = Option(callback)
+  }
+
+  def error(callback: Request => Future[Response]) {
+    errorHandler = Option(callback)
+  }
 
   def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
     logger.info("%s %s", request.method, request.uri)
