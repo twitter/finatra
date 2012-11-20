@@ -116,7 +116,13 @@ class ExampleSpec extends SpecHelper {
     }
 
     error { request =>
-      render.status(500).plain("whoops!").toFuture
+      request.error match {
+        case Some(e:ArithmeticException) =>
+          render.status(500).plain("whoops, divide by zero!").toFuture
+        case _ =>
+          println(request.error)
+          render.status(500).plain("Something went wrong!").toFuture
+      }
     }
 
 
@@ -145,7 +151,7 @@ class ExampleSpec extends SpecHelper {
 
   "GET /error" should "respond 500" in {
     get("/error")
-    response.body   should equal ("whoops!")
+    response.body   should equal ("whoops, divide by zero!")
     response.code   should equal (500)
   }
 
