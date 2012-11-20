@@ -115,12 +115,24 @@ class ExampleSpec extends SpecHelper {
       render.plain("we never make it here").toFuture
     }
 
+    /**
+     * Custom Error Handling with custom Exception
+     *
+     * curl http://localhost:7070/unautorized
+     */
+    class Unauthorized extends Exception
+
+    get("/unauthorized") { request =>
+      throw new Unauthorized
+    }
+
     error { request =>
       request.error match {
         case Some(e:ArithmeticException) =>
           render.status(500).plain("whoops, divide by zero!").toFuture
+        case Some(e:Unauthorized) =>
+          render.status(401).plain("Not Authorized!").toFuture
         case _ =>
-          println(request.error)
           render.status(500).plain("Something went wrong!").toFuture
       }
     }
@@ -153,6 +165,12 @@ class ExampleSpec extends SpecHelper {
     get("/error")
     response.body   should equal ("whoops, divide by zero!")
     response.code   should equal (500)
+  }
+
+  "GET /unauthorized" should "respond 401" in {
+    get("/unauthorized")
+    response.body   should equal ("Not Authorized!")
+    response.code   should equal (401)
   }
 
   "GET /hello" should "respond with hello world" in {
