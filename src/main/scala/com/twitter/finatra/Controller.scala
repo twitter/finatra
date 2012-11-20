@@ -23,8 +23,6 @@ import collection.mutable.ListBuffer
 
 class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Logging {
 
-  val responseConverter = new FinatraResponseConverter
-
   val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[Response])]
 
   var notFoundHandler: Option[(Request) => Future[Response]]  = None
@@ -62,7 +60,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     val req = RequestAdapter(request)
     findRouteAndMatch(req, method) match {
       case Some((method, pattern, callback)) =>
-        Some(responseConverter(callback(req))).asInstanceOf[Option[FinagleResponse]]
+        Some(ResponseAdapter(callback(req))).asInstanceOf[Option[FinagleResponse]]
       case None => orCallback(request)
     }
   }

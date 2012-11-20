@@ -26,7 +26,6 @@ class AppService(controllers: ControllerCollection)
 
   def apply(rawRequest: FinagleRequest) = {
     val adaptedRequest  = RequestAdapter(rawRequest)
-    val responseConverter = new FinatraResponseConverter
 
     try {
       attemptRequest(rawRequest)
@@ -34,19 +33,19 @@ class AppService(controllers: ControllerCollection)
       case e: Exception =>
         logger.error(e, "Internal Server Error")
         adaptedRequest.error = Some(e)
-        responseConverter(controllers.errorHandler(adaptedRequest))
+        ResponseAdapter(controllers.errorHandler(adaptedRequest))
     }
 
   }
 
   def attemptRequest(rawRequest: FinagleRequest) = {
     val adaptedRequest  = RequestAdapter(rawRequest)
-    val responseConverter = new FinatraResponseConverter
+
     controllers.dispatch(rawRequest) match {
       case Some(response) =>
         response.asInstanceOf[Future[FinagleResponse]]
       case None =>
-        responseConverter(controllers.notFoundHandler(adaptedRequest))
+        ResponseAdapter(controllers.notFoundHandler(adaptedRequest))
     }
   }
 
