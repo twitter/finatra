@@ -130,7 +130,13 @@ object App {
     }
 
     error { request =>
-      render.status(500).plain("whoops!").toFuture
+      request.error match {
+        case Some(e:ArithmeticException) =>
+          render.status(500).plain("whoops, divide by zero!").toFuture
+        case _ =>
+          println(request.error)
+          render.status(500).plain("Something went wrong!").toFuture
+      }
     }
 
 
