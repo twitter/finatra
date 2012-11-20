@@ -117,6 +117,31 @@ object App {
       val anView = new AnView
       render.view(anView).toFuture
     }
+
+
+    /**
+     * Custom Error Handling
+     *
+     * curl http://localhost:7070/error
+     */
+    get("/error")   { request =>
+      1234/0
+      render.plain("we never make it here").toFuture
+    }
+
+    error { request =>
+      render.status(500).plain("whoops!").toFuture
+    }
+
+
+    /**
+     * Custom 404s
+     *
+     * curl http://localhost:7070/notfound
+     */
+    notFound { request =>
+      render.status(404).plain("not found yo").toFuture
+    }
   }
 
   val app = new ExampleApp
@@ -184,7 +209,7 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.0.3</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
