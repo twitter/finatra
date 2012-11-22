@@ -19,36 +19,39 @@ import org.apache.commons.fileupload._
 import java.io._
 import scala.collection.mutable.Map
 import com.twitter.finagle.http.{Request => FinagleRequest}
-// HERE BE DRAGONS
-
 
 object MultipartParsing {
 
-  // TODO: http://commons.apache.org/fileupload/streaming.html update to this
   def loadMultiParams(request: FinagleRequest) = {
     var multiParams = Map[String, MultipartItem]()
+
     request.getContent.markReaderIndex()
-    val ctype = request.headers.get("Content-Type").getOrElse(null)
-    if(ctype != null){
-      val boundaryIndex = ctype.indexOf("boundary=")
-      val boundary = ctype.substring(boundaryIndex + 9).getBytes
-      val input = request.getInputStream()
-        val multistream = new MultipartStream(input, boundary)
-        var nextPart = multistream.skipPreamble
-        while(nextPart){
-          val paramParser = new ParameterParser
-          val headers = paramParser.parse(multistream.readHeaders.toString, ';').asInstanceOf[java.util.Map[String,String]]
-          val out = new ByteArrayOutputStream
-          val name = headers.get("name").toString
-          multistream.readBodyData(out)
-          val fileobj = new MultipartItem(Tuple2(headers, out))
-          multiParams = multiParams + Tuple2(name, fileobj)
-          nextPart = multistream.readBoundary
-        }
+    val contentType = request.headers.get("Content-Type").getOrElse(null)
+
+    if(contentType != null){
+      val boundaryIndex = contentType.indexOf("boundary=")
+      val boundary      = contentType.substring(boundaryIndex + 9).getBytes
+      val input         = request.getInputStream()
+      val multistream   = new MultipartStream(input, boundary)
+      var nextPart      = multistream.skipPreamble
+
+      while(nextPart){
+        val paramParser = new ParameterParser
+        val headers     = paramParser.parse(multistream.readHeaders.toString, ';').asInstanceOf[java.util.Map[String,String]]
+        val out         = new ByteArrayOutputStream
+        val name        = headers.get("name").toString
+
+        multistream.readBodyData(out)
+
+        val fileobj = new MultipartItem(Tuple2(headers, out))
+        multiParams = multiParams + Tuple2(name, fileobj)
+        nextPart    = multistream.readBoundary
+      }
     }
+
     request.getContent.resetReaderIndex
+
     multiParams
   }
-
 
 }
