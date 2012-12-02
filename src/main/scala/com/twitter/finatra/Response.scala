@@ -154,7 +154,7 @@ class Response extends Logging {
       resp.setHeader(xs._1, xs._2)
     }
 
-    if (this.hasCookies) resp.setHeader("Cookie", cookies.encode)
+    if (this.hasCookies) resp.setHeader("Set-Cookie", cookies.encode)
 
     setContent(resp)
     FinagleResponse(resp)
