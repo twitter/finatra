@@ -7,7 +7,6 @@ set -e
 source $_FINATRA_ROOT/lib/base.sh
 
 #$_FINATRA_ROOT/bin/finatra update-example
-#$_FINATRA_ROOT/bin/finatra update-readme
 
 #cd $EXAMPLE_REPO && mvn test
 
@@ -16,17 +15,32 @@ if [ -z $1 ]; then
   exit
 fi
 
-#making backup
+#generate the readme and javadoc
+$_FINATRA_ROOT/bin/finatra update-readme
+jar cvf finatra-$1-javadoc.jar README.markdown
+
+#making pom backup
 xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1-SNAPSHOT pom.xml > /tmp/pom.xml
 cp /tmp/pom.xml pom.xml
 
+#commiting
 git commit -am "autocommit for $1-SNAPSHOT"
 
+#generate the version
 next_version=$(echo $1 | ruby -e "puts (STDIN.read.gsub('.','').to_i + 1).to_s.split('').join('.')")
 
+#release
 mvn release:clean
 mvn release:prepare -DreleaseVersion=$1 -Dtag=finatra-$1 -DdevelopmentVersion=$next_version
 mvn release:perform
+
+#change the version again, since we need to release the javadoc
+xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1-SNAPSHOT pom.xml > /tmp/pom.xml
+cp /tmp/pom.xml pom.xml
+
+#upload the javadoc
+mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=pom.xml -Dfile=finatra-$1-javadoc.jar -Dclassifier=javadoc
+
 
 
 
