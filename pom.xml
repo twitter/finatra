@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.twitter</groupId>
@@ -6,15 +7,12 @@
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
-
   <parent>
     <groupId>org.sonatype.oss</groupId>
     <artifactId>oss-parent</artifactId>
     <version>7</version>
   </parent>
-
   <url>http://github.com/capotej/finatra</url>
-
   <developers>
     <developer>
       <id>julio</id>
@@ -27,14 +25,12 @@
       <email>cburnett@twitter.com</email>
     </developer>
   </developers>
-
   <scm>
     <connection>scm:git:git@github.com:capotej/finatra.git</connection>
     <url>scm:git:git@github.com:capotej/finatra.git</url>
     <developerConnection>scm:git:git@github.com:capotej/finatra.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
-
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -42,14 +38,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
   <properties>
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <encoding>UTF-8</encoding>
     <scala.version>2.9.2</scala.version>
   </properties>
-
   <!-- REPOSITORIES -->
   <repositories>
     <repository>
@@ -59,7 +53,6 @@
     </repository>
   </repositories>
   <!-- END REPOSITORIES -->
-
   <!-- DEPENDENCIES -->
   <dependencies>
     <dependency>
@@ -67,58 +60,48 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
-
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http</artifactId>
       <version>5.3.22</version>
     </dependency>
-
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core</artifactId>
       <version>5.3.22</version>
     </dependency>
-
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>util-logging</artifactId>
       <version>5.3.13</version>
     </dependency>
-
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>1.3.2</version>
     </dependency>
-
     <dependency>
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_${scala.version}</artifactId>
       <version>1.7.2</version>
     </dependency>
-
     <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.2.1</version>
     </dependency>
-
     <dependency>
       <artifactId>jerkson_2.9.2</artifactId>
       <version>0.7.0</version>
       <groupId>io.backchat.jerkson</groupId>
     </dependency>
-
     <dependency>
       <groupId>com.github.spullara.mustache.java</groupId>
       <artifactId>compiler</artifactId>
       <version>0.8.8</version>
     </dependency>
-
   </dependencies>
   <!-- END DEPENDENCIES -->
-
   <!-- SCALADOC -->
   <reporting>
     <plugins>
@@ -130,28 +113,26 @@
     </plugins>
   </reporting>
   <!-- END SCALADOC -->
-
   <!-- BUILD SETTINGS -->
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
-
     <!-- BUILD PLUGINS -->
     <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.4</version>
-            <executions>
-                <execution>
-                    <id>sign-artifacts</id>
-                    <phase>deploy</phase>
-                    <goals>
-                        <goal>sign</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
@@ -180,7 +161,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.scalatest</groupId>
         <artifactId>scalatest-maven-plugin</artifactId>
@@ -194,7 +174,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -208,7 +187,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -217,13 +195,11 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.3.2</version>
       </plugin>
-
       <plugin>
         <groupId>com.cloudbees</groupId>
         <artifactId>maven-license-plugin</artifactId>
@@ -250,10 +226,8 @@
           </properties>
         </configuration>
       </plugin>
-
     </plugins>
     <!-- END BUILD PLUGINS -->
-
     <!-- EXTENSIONS -->
     <extensions>
       <extension>
@@ -263,6 +237,5 @@
       </extension>
     </extensions>
     <!-- END EXTENSIONS -->
-
   </build>
 </project>
