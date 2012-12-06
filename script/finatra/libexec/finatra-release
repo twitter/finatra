@@ -23,7 +23,7 @@ cp /tmp/pom.xml pom.xml
 git commit -am "autocommit for $1-SNAPSHOT"
 
 mvn release:clean
-mvn release:prepare
+mvn release:prepare -DreleaseVersion=$1
 
 
 
