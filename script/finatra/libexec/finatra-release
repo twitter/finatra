@@ -35,7 +35,7 @@ mvn release:prepare -DreleaseVersion=$1 -Dtag=finatra-$1 -DdevelopmentVersion=$n
 mvn release:perform
 
 #change the version again, since we need to release the javadoc
-xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1-SNAPSHOT pom.xml > /tmp/pom.xml
+xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1 pom.xml > /tmp/pom.xml
 cp /tmp/pom.xml pom.xml
 
 #upload the javadoc
