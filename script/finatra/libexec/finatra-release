@@ -22,8 +22,12 @@ cp /tmp/pom.xml pom.xml
 
 git commit -am "autocommit for $1-SNAPSHOT"
 
+next_version=$(echo $1 | ruby -e "puts (STDIN.read.gsub('.','').to_i + 1).to_s.split('').join('.')")
+
 mvn release:clean
-mvn release:prepare -DreleaseVersion=$1
+mvn release:prepare -DreleaseVersion=$1 -Dtag=finatra-$1 -DdevelopmentVersion=$next_version
+
+
 
 
 
