@@ -1,16 +1,27 @@
 #!/bin/sh
-# Usage: finatra release
+# Usage: finatra release [version]
 # Summary: updates the example and the docs from example spec
-# Help: Example: finatra release
+# Help: Example: finatra release 1.1.1
 set -e
 
 source $_FINATRA_ROOT/lib/base.sh
 
-mvn test
-$_FINATRA_ROOT/bin/finatra update-example
-$_FINATRA_ROOT/bin/finatra update-readme
+#$_FINATRA_ROOT/bin/finatra update-example
+#$_FINATRA_ROOT/bin/finatra update-readme
 
-cd $EXAMPLE_REPO && mvn test
+#cd $EXAMPLE_REPO && mvn test
+
+# change the xml version to $1-snapshot
+if [ -z $1 ]; then
+  exit
+fi
+
+xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1-SNAPSHOT pom.xml
+
+git commit -am 'autocommit for $1-SNAPSHOT'
+
+mvn release:clean
+mvn release:prepare
 
 
 
