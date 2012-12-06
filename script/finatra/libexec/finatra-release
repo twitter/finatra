@@ -26,7 +26,7 @@ next_version=$(echo $1 | ruby -e "puts (STDIN.read.gsub('.','').to_i + 1).to_s.s
 
 mvn release:clean
 mvn release:prepare -DreleaseVersion=$1 -Dtag=finatra-$1 -DdevelopmentVersion=$next_version
-
+mvn release:perform
 
 
 
