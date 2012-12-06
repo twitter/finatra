@@ -6,10 +6,6 @@ set -e
 
 source $_FINATRA_ROOT/lib/base.sh
 
-#$_FINATRA_ROOT/bin/finatra update-example
-
-#cd $EXAMPLE_REPO && mvn test
-
 # change the xml version to $1-snapshot
 if [ -z $1 ]; then
   exit
@@ -41,7 +37,11 @@ cp /tmp/pom.xml pom.xml
 #upload the javadoc
 mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=pom.xml -Dfile=finatra-$1-javadoc.jar -Dclassifier=javadoc
 
+#change the version once more
+xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $next_version-SNAPSHOT pom.xml > /tmp/pom.xml
+cp /tmp/pom.xml pom.xml
 
+echo "go forth, and release https://oss.sonatype.org/index.html#stagingRepositories"
 
 
 
