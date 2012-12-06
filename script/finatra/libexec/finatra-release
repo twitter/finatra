@@ -16,7 +16,8 @@ if [ -z $1 ]; then
   exit
 fi
 
-xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1-SNAPSHOT pom.xml
+#making backup
+xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1-SNAPSHOT pom.xml > /tmp/pom.xml
 
 git commit -am 'autocommit for $1-SNAPSHOT'
 
