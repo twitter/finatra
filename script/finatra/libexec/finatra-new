@@ -59,21 +59,20 @@ echo "  creating an_view.mustache"
 cp $_FINATRA_ROOT/../../src/main/resources/an_view.mustache $root_path/$project_name/src/main/resources/
 
 
+# replace with latest example
+replace_with_example_app $dest_path/App.scala
 
 # edit App.scala
 sed -ie "s/###PACKAGE_NAME###/$package_name/g" $dest_path/App.scala
 
-# replace with latest example
-replace_with_example_app $dest_path/App.scala
-
 # edit Procfile
 sed -ie "s/###PACKAGE_NAME###/$package_name/g" $root_path/$project_name/Procfile
 
-# edit AppSpec.scala
-sed -ie "s/###PACKAGE_NAME###/$package_name/g" $test_path/AppSpec.scala
-
 # replace the spec with the latest example spec
 replace_with_example_spec $test_path/AppSpec.scala
+
+# edit AppSpec.scala
+sed -ie "s/###PACKAGE_NAME###/$package_name/g" $test_path/AppSpec.scala
 
 # edit pom.xml
 sed -ie "s/###PACKAGE_NAME###/$package_name/g" $root_path/$project_name/pom.xml

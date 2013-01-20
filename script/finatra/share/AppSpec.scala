@@ -9,6 +9,6 @@ class AppSpec extends SpecHelper {
 
   val app = new App.ExampleApp
 
-  ###EXAMPLESPEC###
+  __EXAMPLESPEC__
 
 }

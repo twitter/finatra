@@ -4,7 +4,7 @@ import com.twitter.finatra._
 
 object App {
 
-  ###EXAMPLEAPP###
+  __EXAMPLEAPP__
 
   def main(args: Array[String]) = {
     FinatraServer.register(app)
