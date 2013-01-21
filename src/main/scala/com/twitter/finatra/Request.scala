@@ -17,6 +17,9 @@ package com.twitter.finatra
 
 import scala.collection.mutable.Map
 import com.twitter.finagle.http.{Request => FinagleRequest, RequestProxy}
+import util.Sorting
+import com.google.common.base.Splitter
+import scala.collection.JavaConversions._
 
 class Request(rawRequest: FinagleRequest) extends RequestProxy {
 
@@ -26,4 +29,43 @@ class Request(rawRequest: FinagleRequest) extends RequestProxy {
   var request = rawRequest
   var error: Option[Exception] = None
 
+  def accepts: Seq[ContentType] = {
+    val accept = this.getHeader("Accept")
+    println("accept header: " + accept)
+    if (accept != null) {
+      var acceptParts = Splitter.on(',').split(accept).toArray
+      println("acceptParts head b4:" + acceptParts.head)
+      Sorting.quickSort(acceptParts)(AcceptOrdering)
+      println("acceptParts head after:" + acceptParts.head)
+      val seq = acceptParts.map { xs =>
+        val part = Splitter.on(";q=").split(xs).toArray.head
+        ContentType(part).getOrElse(new ContentType.Any)
+      }.toSeq
+      println("seq is" + seq)
+      seq
+    } else {
+      Seq.empty[ContentType]
+    }
+  }
+}
+
+object AcceptOrdering extends Ordering[String] {
+
+  def getWeight(str: String): Double = {
+    val parts = Splitter.on(';').split(str).toArray
+    if (parts.length < 2) {
+      1.0
+    } else {
+      try {
+        Splitter.on("q=").split(parts(1)).toArray.last.toFloat
+      } catch {
+        case e:java.lang.NumberFormatException =>
+          1.0
+      }
+    }
+  }
+
+  def compare(a: String, b: String) = {
+    getWeight(b) compare getWeight(a)
+  }
 }
