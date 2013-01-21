@@ -9,6 +9,7 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import org.apache.commons.io.IOUtils
 import java.io.{FileInputStream, File, InputStream}
 import org.jboss.netty.handler.codec.http.HttpMethod
+import javax.activation.MimetypesFileTypeMap
 
 object FileResolver {
 
@@ -66,106 +67,15 @@ object FileResolver {
 
 object FileService {
 
-  //lifted from tiscaf - http://gaydenko.com/scala/tiscaf/httpd/
-  val exts = Map(
-    "html" -> "text/html",
-    "htm" -> "text/html",
-    "js" -> "application/x-javascript",
-    "css" -> "text/css ",
-    "shtml" -> "text/html",
-    "gif" -> "image/gif",
-    "ico" -> "image/x-icon",
-    "jpeg" -> "image/jpeg ",
-    "jpg" -> "image/jpeg ",
-    "png" -> "image/png",
-    "pdf" -> "application/pdf",
-    "zip" -> "application/zip",
-    "xhtml" -> "application/xhtml+xml",
-    "xht" -> "application/xhtml+xml",
-    "svg" -> "image/svg+xml",
-    "svgz" -> "image/svg+xml",
-    "tiff" -> "image/tiff",
-    "tif" -> "image/tiff",
-    "djvu" -> "image/vnd.djvu",
-    "djv" -> "image/vnd.djvu",
-    "bmp" -> "image/x-ms-bmp",
-    "asc" -> "text/plain",
-    "txt" -> "text/plain",
-    "text" -> "text/plain",
-    "diff" -> "text/plain",
-    "scala" -> "text/plain",
-    "xml" -> "application/xml",
-    "xsl" -> "application/xml",
-    "tgz" -> "application/x-gtar",
-    "jar" -> "application/java-archive",
-    "class" -> "application/java-vm",
-    "flac" -> "application/x-flac",
-    "ogg" -> "application/ogg",
-    "wav" -> "audio/x-wav",
-    "pgp" -> "application/pgp-signatur",
-    "ps" -> "application/postscript",
-    "eps" -> "application/postscript",
-    "rar" -> "application/rar",
-    "rdf" -> "application/rdf+xml",
-    "rss" -> "application/rss+xml",
-    "torrent" -> "application/x-bittorrent",
-    "deb" -> "application/x-debian-package",
-    "udeb" -> "application/x-debian-package",
-    "dvi" -> "application/x-dvi",
-    "gnumeric" -> "application/x-gnumeric",
-    "iso" -> "application/x-iso9660-image",
-    "jnlp" -> "application/x-java-jnlp-file",
-    "latex" -> "application/x-latex",
-    "rpm" -> "application/x-redhat-package-manager",
-    "tar" -> "application/x-tar",
-    "texinfo" -> "application/x-texinfo",
-    "texi" -> "application/x-texinfo",
-    "man" -> "application/x-troff-man",
-    "h++" -> "text/x-c++hdr",
-    "hpp" -> "text/x-c++hdr",
-    "hxx" -> "text/x-c++hdr",
-    "hh" -> "text/x-c++hdr",
-    "c++" -> "text/x-c++src",
-    "cpp" -> "text/x-c++src",
-    "cxx" -> "text/x-c++src",
-    "cc" -> "text/x-c++src",
-    "h" -> "text/x-chdr",
-    "hs" -> "text/x-haskell",
-    "java" -> "text/x-java",
-    "lhs" -> "text/x-literate-haskell",
-    "pas" -> "text/x-pascal",
-    "py" -> "text/x-python",
-    "xul" -> "application/vnd.mozilla.xul+xml",
-    "odc" -> "application/vnd.oasis.opendocument.chart",
-    "odb" -> "application/vnd.oasis.opendocument.database",
-    "odf" -> "application/vnd.oasis.opendocument.formula",
-    "odg" -> "application/vnd.oasis.opendocument.graphics",
-    "odi" -> "application/vnd.oasis.opendocument.image",
-    "odp" -> "application/vnd.oasis.opendocument.presentation",
-    "ods" -> "application/vnd.oasis.opendocument.spreadsheet",
-    "odt" -> "application/vnd.oasis.opendocument.text",
-    "abw" -> "application/x-abiword",
-    "md" -> "text/x-markdown",
-    "markdown" -> "text/x-markdown"
-  )
+  def getContentType(str: String): String = {
+    extMap.getContentType(str)
+  }
 
-  val gzipable = List(
-    "text/html",
-    "application/x-javascript",
-    "text/css ",
-    "text/plain",
-    "application/xml",
-    "application/xhtml+xml",
-    "image/svg+xml",
-    "application/rdf+xml",
-    "application/rss+xml",
-    "text/x-c++hdr",
-    "text/x-c++src",
-    "text/x-chdr",
-    "text/x-haskell",
-    "text/x-java",
-    "text/x-python"
-  )
+  def getContentType(file: File): String = {
+    extMap.getContentType(file)
+  }
+
+  lazy val extMap = new MimetypesFileTypeMap(FileService.getClass.getResourceAsStream("/META-INF/mime.types"))
 
 }
 
@@ -192,7 +102,7 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Log
       val b = IOUtils.toByteArray(fh)
       fh.read(b)
       val response = request.response
-      val mtype = FileService.exts.get(request.uri.toString.split('.').last).getOrElse("application/octet-stream")
+      val mtype = FileService.extMap.getContentType('.' + request.uri.toString.split('.').last)
       response.status = OK
       response.setHeader("Content-Type", mtype)
       response.setContent(copiedBuffer(b))
