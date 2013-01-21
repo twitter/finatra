@@ -92,6 +92,33 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     render.plain(message).status(301).header("Location", location)
   }
 
+  def respondTo(r: Request)(callback: PartialFunction[ContentType, Future[Response]]): Future[Response] = {
+    if (!r.routeParams.get("format").isEmpty) {
+      val format = r.routeParams("format")
+      val mime = FileService.getContentType("." + format)
+      logger.info(".format found: " + format + " for " + mime.toString)
+      val contentType = ContentType(mime).getOrElse(new ContentType.Any)
+      if (callback.isDefinedAt(contentType)) {
+        callback(contentType)
+      } else {
+        render.notFound.toFuture
+      }
+    } else {
+      logger.info("no .format found, falling back on Accept:")
+      logger.info("accept is" + r.getHeader("Accept"))
+      logger.info("accepts is: " + r.accepts.toString)
+      r.accepts.find { mimeType =>
+        callback.isDefinedAt(mimeType)
+      } match {
+        case Some(contentType) =>
+          logger.info("going with: " + contentType.toString)
+          callback(contentType)
+        case None =>
+          render.notFound.toFuture
+      }
+    }
+  }
+
   def addRoute(method: HttpMethod, path: String)(callback: Request => Future[Response]) {
     val regex = SinatraPathPatternParser(path)
     routes.add((method, regex, (r) => {

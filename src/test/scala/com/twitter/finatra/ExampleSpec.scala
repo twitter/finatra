@@ -16,6 +16,7 @@
 package com.twitter.finatra
 
 import test.SpecHelper
+import com.twitter.finatra.ContentType.{Json, Html}
 
 /* This test is used as the base for generating the
  README.markdown, all new generated apps, and the finatra_example repo
@@ -146,6 +147,20 @@ class ExampleSpec extends SpecHelper {
     notFound { request =>
       render.status(404).plain("not found yo").toFuture
     }
+
+
+    /**
+     * Dispatch based on Content-Type
+     *
+     * curl http://localhost:7070/notfound
+     */
+    get("/blog/index.:format") { request =>
+      respondTo(request) {
+        case _:Html => render.html("<h1>Hello</h1>").toFuture
+        case _:Json => render.json(Map("value" -> "hello")).toFuture
+      }
+    }
+
   }
 
   val app = new ExampleApp
@@ -202,6 +217,12 @@ class ExampleSpec extends SpecHelper {
     get("/template")
     response.body should equal("Your value is random value here")
   }
+
+//  "GET /blog/index.json" should "should have json" in {
+//    get("/blog/index.json")
+//    response.body
+//    val foo = "foo"
+//  }
 
   /* ###END_SPEC### */
 }
