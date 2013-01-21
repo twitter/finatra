@@ -26,7 +26,8 @@ import com.twitter.logging.Logger
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
-
+import com.twitter.conversions.storage._
+import com.twitter.util.StorageUnit
 
 object FinatraServer {
 
@@ -86,8 +87,12 @@ class FinatraServer extends Logging {
 
     val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
 
+    val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
+
+    val codec = new RichHttp[FinagleRequest](http)
+
     val server: Server = ServerBuilder()
-      .codec(new RichHttp[FinagleRequest](Http()))
+      .codec(codec)
       .bindTo(new InetSocketAddress(port))
       .tracerFactory(tracerFactory)
       .name(Config.get("name"))

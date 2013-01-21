@@ -27,7 +27,8 @@ object Config {
       "log_path" -> "logs/finatra.log",
       "log_node" -> "finatra",
       "template_path" -> "/",
-      "local_docroot" -> "src/main/resources"
+      "local_docroot" -> "src/main/resources",
+      "max_request_megabytes" -> "5"
     )
 
     def get(key:String):String = {
