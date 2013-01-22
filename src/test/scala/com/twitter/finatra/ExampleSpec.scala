@@ -16,7 +16,7 @@
 package com.twitter.finatra
 
 import test.SpecHelper
-import com.twitter.finatra.ContentType.{Json, Html}
+import com.twitter.finatra.ContentType._
 
 /* This test is used as the base for generating the
  README.markdown, all new generated apps, and the finatra_example repo
@@ -133,6 +133,8 @@ class ExampleSpec extends SpecHelper {
           render.status(500).plain("whoops, divide by zero!").toFuture
         case Some(e:Unauthorized) =>
           render.status(401).plain("Not Authorized!").toFuture
+        case Some(e:UnsupportedMediaType) =>
+          render.status(415).plain("Unsupported Media Type!").toFuture
         case _ =>
           render.status(500).plain("Something went wrong!").toFuture
       }
@@ -152,7 +154,8 @@ class ExampleSpec extends SpecHelper {
     /**
      * Dispatch based on Content-Type
      *
-     * curl http://localhost:7070/notfound
+     * curl http://localhost:7070/index.json
+     * curl http://localhost:7070/index.html
      */
     get("/blog/index.:format") { request =>
       respondTo(request) {
@@ -161,6 +164,21 @@ class ExampleSpec extends SpecHelper {
       }
     }
 
+    /**
+     * Also works without :format route using browser Accept header
+     *
+     * curl -H "Accept: text/html" http://localhost:7070/another/page
+     * curl -H "Accept: application/json" http://localhost:7070/another/page
+     * curl -H "Accept: foo/bar" http://localhost:7070/another/page
+     */
+
+    get("/another/page") { request =>
+      respondTo(request) {
+        case _:Html => render.plain("an html response").toFuture
+        case _:Json => render.plain("an json response").toFuture
+        case _:All => render.plain("default fallback response").toFuture
+      }
+    }
   }
 
   val app = new ExampleApp
@@ -218,11 +236,35 @@ class ExampleSpec extends SpecHelper {
     response.body should equal("Your value is random value here")
   }
 
-//  "GET /blog/index.json" should "should have json" in {
-//    get("/blog/index.json")
-//    response.body
-//    val foo = "foo"
-//  }
+  "GET /blog/index.json" should "should have json" in {
+    get("/blog/index.json")
+    response.body should equal("""{"value":"hello"}""")
+  }
+
+  "GET /blog/index.html" should "should have html" in {
+    get("/blog/index.html")
+    response.body should equal("""<h1>Hello</h1>""")
+  }
+
+  "GET /blog/index.rss" should "respond in a 415" in {
+    get("/blog/index.rss")
+    response.code should equal(415)
+  }
+
+  "GET /another/page with html" should "respond with html" in {
+    get("/another/page", Map.empty, Map("Accept" -> "text/html"))
+    response.body should equal("an html response")
+  }
+
+  "GET /another/page with json" should "respond with json" in {
+    get("/another/page", Map.empty, Map("Accept" -> "application/json"))
+    response.body should equal("an json response")
+  }
+
+  "GET /another/page with unsupported type" should "respond with catch all" in {
+    get("/another/page", Map.empty, Map("Accept" -> "foo/bar"))
+    response.body should equal("default fallback response")
+  }
 
   /* ###END_SPEC### */
 }

@@ -10,7 +10,13 @@ class ControllerCollection {
   }
 
   var errorHandler = { request:Request =>
-    render.status(500).plain("Something went wrong!").toFuture
+    request.error match {
+      case Some(e:com.twitter.finatra.UnsupportedMediaType) =>
+        render.status(415).plain("No handler for this media type found").toFuture
+      case _ =>
+        render.status(500).plain("Something went wrong!").toFuture
+    }
+
   }
 
   def render = new Response
