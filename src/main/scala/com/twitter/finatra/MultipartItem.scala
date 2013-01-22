@@ -16,31 +16,29 @@
 package com.twitter.finatra
 
 import java.io._
+import org.jboss.netty.handler.codec.http.multipart.MixedFileUpload
 
-class MultipartItem(val fileobj:Tuple2[java.util.Map[String,String], ByteArrayOutputStream]) {
-  def headers() = {
-    this.fileobj._1
-  }
+class MultipartItem(httpData: MixedFileUpload) {
 
   def data() = {
-    this.fileobj._2
+    httpData.get
   }
 
   def name() = {
-    headers.get("name")
+    httpData.getName
   }
 
   def contentType = {
-    headers.get("Content-Type")
+    httpData.getContentType
   }
 
   def filename = {
-    headers.get("filename")
+    httpData.getFilename
   }
 
   def writeToFile(path: String) = {
     val fileout = new FileOutputStream(path)
-    data.writeTo(fileout)
+    fileout.write(data)
     fileout.close
   }
 }

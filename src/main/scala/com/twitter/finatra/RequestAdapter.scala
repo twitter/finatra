@@ -16,7 +16,7 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest}
-import org.jboss.netty.handler.codec.http.{Cookie, CookieDecoder}
+import org.jboss.netty.handler.codec.http.{HttpMethod, Cookie, CookieDecoder}
 import scala.collection.JavaConverters._
 /**
 * Adapts a FinagleRquest to a FinatraRequest
@@ -27,7 +27,13 @@ object RequestAdapter extends Logging {
   def apply(rawRequest: FinagleRequest): Request = {
     val request = new Request(rawRequest)
 
-    request.multiParams = MultipartParsing.loadMultiParams(request)
+    request.getContent.markReaderIndex
+
+    if (request.method == HttpMethod.POST) {
+      request.multiParams = MultipartParsing(request)
+    }
+
+    request.getContent.resetReaderIndex()
 
     request
   }
