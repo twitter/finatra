@@ -15,8 +15,6 @@
  */
 package com.twitter.finatra
 
-import org.apache.commons.fileupload._
-import java.io._
 import scala.collection.mutable.Map
 import scala.collection.JavaConversions._
 import com.twitter.finagle.http.{Request => FinagleRequest}
