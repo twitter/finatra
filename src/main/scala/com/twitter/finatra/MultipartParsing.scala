@@ -18,38 +18,22 @@ package com.twitter.finatra
 import org.apache.commons.fileupload._
 import java.io._
 import scala.collection.mutable.Map
+import scala.collection.JavaConversions._
 import com.twitter.finagle.http.{Request => FinagleRequest}
+import org.jboss.netty.handler.codec.http.multipart.{MixedFileUpload, HttpPostRequestDecoder}
 
 object MultipartParsing {
 
-  def loadMultiParams(request: FinagleRequest) = {
+  def apply(request: FinagleRequest) = {
     var multiParams = Map[String, MultipartItem]()
 
-    request.getContent.markReaderIndex()
-    val contentType = request.headers.get("Content-Type").getOrElse(null)
-
-    if(contentType != null){
-      val boundaryIndex = contentType.indexOf("boundary=")
-      val boundary      = contentType.substring(boundaryIndex + 9).getBytes
-      val input         = request.getInputStream()
-      val multistream   = new MultipartStream(input, boundary)
-      var nextPart      = multistream.skipPreamble
-
-      while(nextPart){
-        val paramParser = new ParameterParser
-        val headers     = paramParser.parse(multistream.readHeaders.toString, ';').asInstanceOf[java.util.Map[String,String]]
-        val out         = new ByteArrayOutputStream
-        val name        = headers.get("name").toString
-
-        multistream.readBodyData(out)
-
-        val fileobj = new MultipartItem(Tuple2(headers, out))
-        multiParams = multiParams + Tuple2(name, fileobj)
-        nextPart    = multistream.readBoundary
+    val dec = new HttpPostRequestDecoder(request)
+      if (dec.isMultipart) {
+      dec.getBodyHttpDatas.foreach { data =>
+        val mpi = new MultipartItem(data.asInstanceOf[MixedFileUpload])
+        multiParams += (data.getName -> mpi)
       }
     }
-
-    request.getContent.resetReaderIndex
 
     multiParams
   }
