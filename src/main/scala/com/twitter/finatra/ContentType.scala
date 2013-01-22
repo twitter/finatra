@@ -12,8 +12,8 @@ object ContentType {
     "text/plain"  -> new Txt,
     "application/rss"  -> new Rss,
     "application/xml"  -> new Xml,
-    "*/*"  -> new Any,
-    "application/octet-stream" -> new Any
+    "*/*"  -> new All,
+    "application/octet-stream" -> new All
   )
 
   class Html extends ContentType
@@ -21,7 +21,9 @@ object ContentType {
   class Txt extends ContentType
   class Xml extends ContentType
   class Rss extends ContentType
-  class Any extends ContentType
+  class All extends ContentType
 }
 
 class ContentType
+
+class UnsupportedMediaType extends Exception

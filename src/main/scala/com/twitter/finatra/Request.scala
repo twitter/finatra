@@ -31,17 +31,13 @@ class Request(rawRequest: FinagleRequest) extends RequestProxy {
 
   def accepts: Seq[ContentType] = {
     val accept = this.getHeader("Accept")
-    println("accept header: " + accept)
     if (accept != null) {
       var acceptParts = Splitter.on(',').split(accept).toArray
-      println("acceptParts head b4:" + acceptParts.head)
       Sorting.quickSort(acceptParts)(AcceptOrdering)
-      println("acceptParts head after:" + acceptParts.head)
       val seq = acceptParts.map { xs =>
         val part = Splitter.on(";q=").split(xs).toArray.head
-        ContentType(part).getOrElse(new ContentType.Any)
+        ContentType(part).getOrElse(new ContentType.All)
       }.toSeq
-      println("seq is" + seq)
       seq
     } else {
       Seq.empty[ContentType]
