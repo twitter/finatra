@@ -22,7 +22,7 @@ import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.logging.config._
-import com.twitter.logging.Logger
+import com.twitter.logging.{FileHandler, LoggerFactory, Logger}
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
@@ -63,15 +63,17 @@ class FinatraServer extends Logging {
   def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) { filters = filters ++ Seq(filter) }
 
   def initLogger() {
-    val config = new LoggerConfig {
-      node = Config.get("log_node")
-      level = Logger.INFO
-      handlers = new FileHandlerConfig {
-        filename = Config.get("log_path")
-        roll = Policy.SigHup
-      }
-    }
-    config()
+
+    val handler = FileHandler(
+        filename = "log/test.log",
+        rollPolicy = Policy.Never,
+        append = false,
+        level = Some(Level.INFO))
+
+    val log: Logger = LoggerFactory(
+      node = "com.twitter",
+      level = Some(Level.DEBUG),
+      handlers = List(handler)).apply()
   }
 
   def start(tracerFactory: Tracer.Factory = NullTracer.factory) {
