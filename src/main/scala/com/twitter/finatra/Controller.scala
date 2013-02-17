@@ -44,7 +44,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
   }
 
   def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
-    logger.info("%s %s", request.method, request.uri)
+    logger.info("%s %s".format(request.method, request.uri))
     dispatchRouteOrCallback(request, request.method, (request) => {
       // fallback to GET for 404'ed GET requests (curl -I support)
       if (request.method == HttpMethod.HEAD) {
