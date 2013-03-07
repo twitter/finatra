@@ -47,7 +47,13 @@ object FinatraServer {
 
 }
 
-class FinatraServer extends Logging {
+class FinatraServer(
+  port: Int = Config.getInt("port"),
+  name: String = Config.get("name"),
+  logNode: String = Config.get("log_node"),
+  logPath: String = Config.get("log_path"),
+  tracerFactory: Tracer.Factory = NullTracer.factory
+) extends Logging {
 
   val controllers = new ControllerCollection
   var filters:Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
@@ -64,17 +70,17 @@ class FinatraServer extends Logging {
 
   def initLogger() {
     val config = new LoggerConfig {
-      node = Config.get("log_node")
+      node = logNode
       level = Logger.INFO
       handlers = new FileHandlerConfig {
-        filename = Config.get("log_path")
+        filename = logPath
         roll = Policy.SigHup
       }
     }
     config()
   }
 
-  def start(tracerFactory: Tracer.Factory = NullTracer.factory) {
+  def start() {
 
     initLogger()
 
@@ -82,8 +88,6 @@ class FinatraServer extends Logging {
     val fileService = new FileService
 
     addFilter(fileService)
-
-    val port = Config.getInt("port")
 
     val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
 
@@ -95,7 +99,7 @@ class FinatraServer extends Logging {
       .codec(codec)
       .bindTo(new InetSocketAddress(port))
       .tracerFactory(tracerFactory)
-      .name(Config.get("name"))
+      .name(name)
       .build(service)
 
     logger.info("process %s started on %s", pid, port)
