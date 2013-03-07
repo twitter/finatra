@@ -27,7 +27,7 @@ class Request(rawRequest: FinagleRequest) extends RequestProxy {
   var routeParams: Map[String, String] = Map.empty
 
   var request = rawRequest
-  var error: Option[Exception] = None
+  var error: Option[Throwable] = None
 
   def accepts: Seq[ContentType] = {
     val accept = this.getHeader("Accept")
