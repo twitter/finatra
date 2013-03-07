@@ -27,15 +27,21 @@ class AppService(controllers: ControllerCollection)
   def apply(rawRequest: FinagleRequest) = {
     val adaptedRequest  = RequestAdapter(rawRequest)
 
-    try {
-      attemptRequest(rawRequest)
-    } catch {
-      case e: Exception =>
-        logger.error(e, "Internal Server Error")
-        adaptedRequest.error = Some(e)
-        ResponseAdapter(controllers.errorHandler(adaptedRequest))
+    def handleError(t:Throwable) = {
+      logger.error(t, "Internal Server Error")
+      adaptedRequest.error = Some(t)
+      ResponseAdapter(controllers.errorHandler(adaptedRequest))
     }
 
+    try {
+      attemptRequest(rawRequest).handle {
+        case t:Throwable =>
+          handleError(t).get()
+      }
+    } catch {
+      case e: Exception =>
+        handleError(e)
+    }
   }
 
   def attemptRequest(rawRequest: FinagleRequest) = {
