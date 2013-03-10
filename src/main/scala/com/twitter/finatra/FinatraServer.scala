@@ -28,6 +28,11 @@ import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
 import com.twitter.util.StorageUnit
+import com.twitter.ostrich.admin.AdminServiceFactory
+import com.twitter.ostrich.admin.StatsFactory
+import com.twitter.ostrich.admin.JsonStatsLoggerFactory
+import com.twitter.ostrich.admin.TimeSeriesCollectorFactory
+import com.twitter.ostrich.admin.RuntimeEnvironment
 
 object FinatraServer {
 
@@ -65,7 +70,7 @@ class FinatraServer extends Logging {
   def initLogger() {
 
     val handler = FileHandler(
-        filename = "log/test.log",
+        filename = "log/finatra.log",
         rollPolicy = Policy.Never,
         append = false,
         level = Some(Level.INFO))
@@ -74,9 +79,25 @@ class FinatraServer extends Logging {
       node = "com.twitter",
       level = Some(Level.DEBUG),
       handlers = List(handler)).apply()
+
   }
 
-  def start(tracerFactory: Tracer.Factory = NullTracer.factory) {
+  def initAdminService(runtimeEnv: RuntimeEnvironment) {
+    if(Config.getBool("stats_enabled")){
+      AdminServiceFactory(
+        httpPort = Config.getInt("stats_port"),
+        statsNodes = StatsFactory(
+          reporters = JsonStatsLoggerFactory(serviceName = Some("finatra")) ::
+                  TimeSeriesCollectorFactory() :: Nil
+        ) :: Nil
+      )(runtimeEnv)
+    }
+  }
+
+
+  def start(tracer: Tracer = NullTracer, runtimeEnv: RuntimeEnvironment = new RuntimeEnvironment(this)) {
+
+    initAdminService(runtimeEnv)
 
     initLogger()
 
@@ -96,7 +117,7 @@ class FinatraServer extends Logging {
     val server: Server = ServerBuilder()
       .codec(codec)
       .bindTo(new InetSocketAddress(port))
-      .tracerFactory(tracerFactory)
+      .tracer(tracer)
       .name(Config.get("name"))
       .build(service)
 
