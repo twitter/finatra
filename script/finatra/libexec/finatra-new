@@ -4,6 +4,13 @@
 # Help: Example: finatra new com.twitter.my_awesome_project ~/personal creates ~/personal/my_awesome_project
 set -e
 
+
+snapshot=false
+if [ $(basename $0) = "finatra-new-dev" ]; then
+  snapshot=true
+  snapshot_version=$(xml sel -N x=http://maven.apache.org/POM/4.0.0 -t -v "/x:project/x:version" pom.xml)
+fi
+
 source $_FINATRA_ROOT/lib/base.sh
 
 package_name=$1
@@ -79,7 +86,12 @@ sed -ie "s/###PACKAGE_NAME###/$package_name/g" $root_path/$project_name/pom.xml
 sed -ie "s/###YEAR###/$year/g" $root_path/$project_name/pom.xml
 sed -ie "s/###GROUP_ID###/$group_id/g" $root_path/$project_name/pom.xml
 sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/pom.xml
-sed -ie "s/###VERSION###/$VERSION/g" $root_path/$project_name/pom.xml
+
+if [ $snapshot_version ]; then
+  sed -ie "s/###VERSION###/$snapshot_version/g" $root_path/$project_name/pom.xml
+else
+  sed -ie "s/###VERSION###/$VERSION/g" $root_path/$project_name/pom.xml
+fi
 
 # delete backup files
 rm -rf $root_path/$project_name/pom.xmle
