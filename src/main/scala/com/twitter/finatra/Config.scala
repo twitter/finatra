@@ -26,6 +26,8 @@ object Config {
       "pid_path" -> "finatra.pid",
       "log_path" -> "logs/finatra.log",
       "log_node" -> "finatra",
+      "stats_enabled" -> "true",
+      "stats_port" -> "9990",
       "template_path" -> "/",
       "local_docroot" -> "src/main/resources",
       "max_request_megabytes" -> "5"
