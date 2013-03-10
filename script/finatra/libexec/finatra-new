@@ -64,6 +64,8 @@ echo "  creating .travis.yml"
 cp $_FINATRA_ROOT/share/.travis.yml $root_path/$project_name/
 echo "  creating an_view.mustache"
 cp $_FINATRA_ROOT/../../src/main/resources/an_view.mustache $root_path/$project_name/src/main/resources/
+echo "  creating dealwithit.gif"
+cp $_FINATRA_ROOT/../../src/main/resources/dealwithit.gif $root_path/$project_name/src/main/resources/
 
 
 # replace with latest example
