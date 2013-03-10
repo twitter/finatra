@@ -83,7 +83,6 @@ class FinatraServer extends Logging {
   }
 
   def initAdminService(runtimeEnv: RuntimeEnvironment) {
-    if(Config.getBool("stats_enabled")){
       AdminServiceFactory(
         httpPort = Config.getInt("stats_port"),
         statsNodes = StatsFactory(
@@ -91,13 +90,14 @@ class FinatraServer extends Logging {
                   TimeSeriesCollectorFactory() :: Nil
         ) :: Nil
       )(runtimeEnv)
-    }
   }
 
 
   def start(tracer: Tracer = NullTracer, runtimeEnv: RuntimeEnvironment = new RuntimeEnvironment(this)) {
 
-    initAdminService(runtimeEnv)
+    if(Config.getBool("stats_enabled")){
+      initAdminService(runtimeEnv)
+    }
 
     initLogger()
 
