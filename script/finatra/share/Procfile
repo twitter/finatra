@@ -1,1 +1,1 @@
-web:    java -Dport=$PORT -cp target/classes:target/dependency/* ###PACKAGE_NAME###.App
+web:    java -Denv=production -Dstats_enabled=false -Dport=$PORT -cp target/classes:target/dependency/* ###PACKAGE_NAME###.App
