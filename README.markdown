@@ -1,3 +1,5 @@
+
+
 # Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
 
 Finatra is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
@@ -38,6 +40,7 @@ Finatra is a sinatra-inspired web framework for scala, running on top of [Finagl
 
 object App {
 
+  
   class ExampleApp extends Controller {
 
     /**
@@ -191,14 +194,36 @@ object App {
         case _:All => render.plain("default fallback response").toFuture
       }
     }
+
+    /**
+     * Metrics are supported out of the box via Twitter's Ostrich library.
+     * More details here: https://github.com/twitter/ostrich
+     *
+     * curl http://localhost:7070/slow_thing
+     *
+     * By default a stats server is started on 9990:
+     *
+     * curl http://localhost:9990/stats.txt
+     *
+     */
+
+    get("/slow_thing") { request =>
+      Stats.incr("slow_thing")
+      Stats.time("slow_thing time") {
+        Thread.sleep(100)
+      }
+      render.plain("slow").toFuture
+    }
+
   }
 
-  val app = new ExampleApp 
+  val app = new ExampleApp
 
   def main(args: Array[String]) = {
     FinatraServer.register(app)
     FinatraServer.start()
   }
+
 
 ```
 
@@ -243,8 +268,10 @@ Available configuration properties and their defaults
 -Dlog_path=logs/finatra.log
 -Dlog_node=finatra
 -Dport=7070
--Dlocal_docroot=src/main/resources
 -Dmax_request_megabytes=5
+-Dstats_enabled=true
+-Dstats_port=9990
+-Dlocal_docroot=src/main/resources
 -Dpid_enabled=false
 -Dpid_path=finatra.pid
 -Denv=development
@@ -257,7 +284,7 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.2</version>
 </dependency>
 ```
 
