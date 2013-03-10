@@ -1,3 +1,5 @@
+changequote(<!,!>)
+
 # Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
 
 Finatra is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
@@ -38,7 +40,7 @@ Finatra is a sinatra-inspired web framework for scala, running on top of [Finagl
 
 object App {
 
-  ###EXAMPLEAPP###
+  __EXAMPLEAPP__
 
   def main(args: Array[String]) = {
     FinatraServer.register(app)
@@ -89,6 +91,9 @@ Available configuration properties and their defaults
 -Dlog_path=logs/finatra.log
 -Dlog_node=finatra
 -Dport=7070
+-Dmax_request_megabytes=5
+-Dstats_enabled=true
+-Dstats_port=9990
 -Dlocal_docroot=src/main/resources
 -Dpid_enabled=false
 -Dpid_path=finatra.pid
