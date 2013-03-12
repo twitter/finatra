@@ -28,11 +28,8 @@ import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
 import com.twitter.util.StorageUnit
-import com.twitter.ostrich.admin.AdminServiceFactory
-import com.twitter.ostrich.admin.StatsFactory
-import com.twitter.ostrich.admin.JsonStatsLoggerFactory
-import com.twitter.ostrich.admin.TimeSeriesCollectorFactory
-import com.twitter.ostrich.admin.RuntimeEnvironment
+import com.twitter.ostrich.admin._
+import com.twitter.ostrich.admin.{Service => OstrichService}
 
 object FinatraServer {
 
@@ -52,7 +49,7 @@ object FinatraServer {
 
 }
 
-class FinatraServer extends Logging {
+class FinatraServer extends Logging with OstrichService {
 
   val controllers = new ControllerCollection
   var filters:Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
@@ -93,7 +90,19 @@ class FinatraServer extends Logging {
   }
 
 
+  def shutdown() {
+    logger.info("shutting down")
+    println("finatra process shutting down")
+    System.exit(0)
+  }
+
+  def start() {
+    start(NullTracer, new RuntimeEnvironment(this))
+  }
+
   def start(tracer: Tracer = NullTracer, runtimeEnv: RuntimeEnvironment = new RuntimeEnvironment(this)) {
+
+    ServiceTracker.register(this)
 
     if(Config.getBool("stats_enabled")){
       initAdminService(runtimeEnv)
