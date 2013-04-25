@@ -51,6 +51,8 @@ object FinatraServer {
 
 class FinatraServer extends Logging with OstrichService {
 
+  @volatile private[this] var server: Option[Server] = None
+
   val controllers = new ControllerCollection
   var filters:Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
 
@@ -93,6 +95,7 @@ class FinatraServer extends Logging with OstrichService {
   def shutdown() {
     logger.info("shutting down")
     println("finatra process shutting down")
+    server foreach { s => s.close()() }
     System.exit(0)
   }
 
@@ -123,12 +126,12 @@ class FinatraServer extends Logging with OstrichService {
 
     val codec = new RichHttp[FinagleRequest](http)
 
-    val server: Server = ServerBuilder()
+    server = Some(ServerBuilder()
       .codec(codec)
       .bindTo(new InetSocketAddress(port))
       .tracer(tracer)
       .name(Config.get("name"))
-      .build(service)
+      .build(service))
 
     logger.info("process %s started on %s", pid, port)
 
