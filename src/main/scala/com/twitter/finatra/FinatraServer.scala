@@ -18,18 +18,17 @@ package com.twitter.finatra
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 
 
-import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.logging.config._
+import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
 import com.twitter.logging.{FileHandler, LoggerFactory, Logger}
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
 import com.twitter.util.StorageUnit
-import com.twitter.ostrich.admin._
-import com.twitter.ostrich.admin.{Service => OstrichService}
+import com.twitter.server.TwitterServer
 
 object FinatraServer {
 
@@ -49,7 +48,7 @@ object FinatraServer {
 
 }
 
-class FinatraServer extends Logging with OstrichService {
+class FinatraServer extends TwitterServer with Logging {
 
   @volatile private[this] var server: Option[Server] = None
 
@@ -81,15 +80,15 @@ class FinatraServer extends Logging with OstrichService {
 
   }
 
-  def initAdminService(runtimeEnv: RuntimeEnvironment) {
-      AdminServiceFactory(
-        httpPort = Config.getInt("stats_port"),
-        statsNodes = StatsFactory(
-          reporters = JsonStatsLoggerFactory(serviceName = Some("finatra")) ::
-                  TimeSeriesCollectorFactory() :: Nil
-        ) :: Nil
-      )(runtimeEnv)
-  }
+//  def initAdminService(runtimeEnv: RuntimeEnvironment) {
+//      AdminServiceFactory(
+//        httpPort = Config.getInt("stats_port"),
+//        statsNodes = StatsFactory(
+//          reporters = JsonStatsLoggerFactory(serviceName = Some("finatra")) ::
+//                  TimeSeriesCollectorFactory() :: Nil
+//        ) :: Nil
+//      )(runtimeEnv)
+//  }
 
 
   def shutdown() {
@@ -100,16 +99,12 @@ class FinatraServer extends Logging with OstrichService {
   }
 
   def start() {
-    start(NullTracer, new RuntimeEnvironment(this))
-  }
 
-  def start(tracer: Tracer = NullTracer, runtimeEnv: RuntimeEnvironment = new RuntimeEnvironment(this)) {
 
-    ServiceTracker.register(this)
 
-    if(Config.getBool("stats_enabled")){
-      initAdminService(runtimeEnv)
-    }
+//    if(Config.getBool("stats_enabled")){
+//      initAdminService(runtimeEnv)
+//    }
 
     initLogger()
 
@@ -122,16 +117,14 @@ class FinatraServer extends Logging with OstrichService {
 
     val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
 
-    val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
 
-    val codec = new RichHttp[FinagleRequest](http)
-
-    server = Some(ServerBuilder()
-      .codec(codec)
-      .bindTo(new InetSocketAddress(port))
-      .tracer(tracer)
-      .name(Config.get("name"))
-      .build(service))
+    val server = Http.serve(":8888", service.asInstanceOf[Service[HttpRequest, HttpResponse]])
+//    server = Some(ServerBuilder()
+//      .codec(codec)
+//      .bindTo(new InetSocketAddress(port))
+//      .tracer(tracer)
+//      .name(Config.get("name"))
+//      .build(service))
 
     logger.info("process %s started on %s", pid, port)
 
