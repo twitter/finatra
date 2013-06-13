@@ -22,7 +22,7 @@ import com.twitter.finagle.http.{Response => FinagleResponse, Request => Finagle
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
 
-import com.codahale.jerkson.Json._
+import com.codahale.jerkson.Json
 
 object Response {
   def apply(body: String) = new Response().body(body).status(200).build
@@ -38,6 +38,8 @@ class Response extends Logging {
   var hasCookies = false
   lazy val cookies = new CookieEncoder(true)
 
+  val jsonEncoder = Json
+
   var strBody: Option[String]       = None
   var binBody: Option[Array[Byte]]  = None
   var json: Option[Any]             = None
@@ -47,7 +49,7 @@ class Response extends Logging {
     json match {
       case Some(j) =>
         resp.setHeader("Content-Type", "application/json")
-        resp.setContent(copiedBuffer(generate(j), UTF_8))
+        resp.setContent(copiedBuffer(jsonEncoder.generate(j), UTF_8))
       case None =>
         view match {
            case Some(v) =>
