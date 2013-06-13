@@ -25,7 +25,7 @@ class ControllerCollection {
     var response:Option[FinagleResponse] = None
 
     controllers.find { ctrl =>
-      ctrl.dispatch(request) match {
+      ctrl.route.dispatch(request) match {
         case Some(callbackResponse) =>
           response = Some(callbackResponse)
           true
