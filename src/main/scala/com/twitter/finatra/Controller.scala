@@ -17,9 +17,7 @@ package com.twitter.finatra
 
 import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.util.Future
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import org.jboss.netty.handler.codec.http._
-import collection.mutable.ListBuffer
 
 class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Logging {
 
@@ -43,50 +41,10 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     errorHandler = Option(callback)
   }
 
-  def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
-    logger.info("%s %s".format(request.method, request.uri))
-    dispatchRouteOrCallback(request, request.method, (request) => {
-      // fallback to GET for 404'ed GET requests (curl -I support)
-      if (request.method == HttpMethod.HEAD) {
-        dispatchRouteOrCallback(request, HttpMethod.GET, (request) => None)
-      } else {
-        return None
-      }
-    })
-  }
-
-  def dispatchRouteOrCallback(request: FinagleRequest, method: HttpMethod,
-                              orCallback: FinagleRequest => Option[FinagleResponse]): Option[FinagleResponse] = {
-    val req = RequestAdapter(request)
-    findRouteAndMatch(req, method) match {
-      case Some((method, pattern, callback)) =>
-        Some(ResponseAdapter(callback(req))).asInstanceOf[Option[FinagleResponse]]
-      case None => orCallback(request)
-    }
-  }
-
-  def extractParams(request: Request, xs: Tuple2[_, _]) = {
-    request.routeParams += (xs._1.toString -> xs._2.asInstanceOf[ListBuffer[String]].head.toString)
-  }
-
-  def findRouteAndMatch(request: Request, method: HttpMethod) = {
-    var thematch:Option[Map[_,_]] = None
-
-    routes.vector.find( route => route match {
-      case (_method, pattern, callback) =>
-        thematch = pattern(request.path.split('?').head)
-        if(thematch.orNull != null && _method == method) {
-          thematch.orNull.foreach(xs => extractParams(request, xs))
-          true
-        } else {
-          false
-        }
-    })
-  }
-
   val stats = statsReceiver.scope("Controller")
 
   def render = new Response
+  def route = new Router(this)
 
   def redirect(location: String, message: String = "moved") = {
     render.plain(message).status(301).header("Location", location)

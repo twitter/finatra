@@ -23,6 +23,8 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
 
 import com.codahale.jerkson.{Json, Generator}
+import org.apache.commons.io.IOUtils
+import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 
 object Response {
   def apply(body: String) = new Response().body(body).status(200).build
@@ -45,7 +47,11 @@ class Response extends Logging {
   var json: Option[Any]             = None
   var view: Option[View]            = None
 
-  def setContent(resp: HttpResponse) = {
+  def contentType: Option[String] = {
+    this.headers.get("Content-Type")
+  }
+
+  def setContent(resp: HttpResponse): HttpResponse = {
     json match {
       case Some(j) =>
         resp.setHeader("Content-Type", "application/json")
@@ -145,6 +151,21 @@ class Response extends Logging {
 
   def view(v: View): Response = {
     this.view = Some(v)
+    this
+  }
+
+  def static(path: String): Response = {
+    if (FileResolver.hasFile(path) && path != '/') {
+      val stream = FileResolver.getInputStream(path)
+      val bytes = IOUtils.toByteArray(stream)
+      stream.read(bytes)
+      val mtype = FileService.extMap.getContentType('.' + path.split('.').last)
+      this.status = 200
+      this.header("Content-Type", mtype)
+      this.body(bytes)
+    } else {
+      throw new IllegalArgumentException("File does not exist")
+    }
     this
   }
 
