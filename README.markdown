@@ -46,10 +46,14 @@ object App {
     /**
      * Basic Example
      *
-     * curl http://localhost:7070/hello => "hello world"
+     * curl http://localhost:7070/ => "hello world"
      */
     get("/") { request =>
       render.plain("hello world").toFuture
+    }
+
+    delete("/photos") { request =>
+      render.plain("deleted!").toFuture
     }
 
     /**
@@ -165,6 +169,26 @@ object App {
       render.status(404).plain("not found yo").toFuture
     }
 
+    /**
+     * Arbitrary Dispatch
+     *
+     * curl http://localhost:7070/go_home
+     */
+    get("/go_home") { request =>
+      route.get("/")
+    }
+
+    get("/search_for_dogs") { request =>
+      route.get("/search", Map("q" -> "dogs"))
+    }
+
+    get("/delete_photos") { request =>
+      route.delete("/photos")
+    }
+
+    get("/gif") { request =>
+      render.static("/dealwithit.gif").toFuture
+    }
 
     /**
      * Dispatch based on Content-Type
