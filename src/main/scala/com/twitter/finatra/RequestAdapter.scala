@@ -16,12 +16,11 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest}
-import org.jboss.netty.handler.codec.http.{HttpMethod, Cookie, CookieDecoder}
-import scala.collection.JavaConverters._
+import org.jboss.netty.handler.codec.http.HttpMethod
+
 /**
 * Adapts a FinagleRquest to a FinatraRequest
 */
-
 object RequestAdapter extends Logging {
 
   def apply(rawRequest: FinagleRequest): Request = {

@@ -33,18 +33,18 @@ object Config {
       "max_request_megabytes" -> "5"
     )
 
-    def get(key:String):String = {
+    def get(key:String): String = {
       Option(System.getProperty(key)) match {
         case Some(prop) => prop
         case None => defaults.get(key).get
       }
     }
 
-    def getInt(key:String):Int = {
+    def getInt(key:String): Int = {
       augmentString(get(key)).toInt
     }
 
-    def getBool(key:String):Boolean = {
+    def getBool(key:String): Boolean = {
       get(key) == "true" || get(key) == "1"
     }
 
