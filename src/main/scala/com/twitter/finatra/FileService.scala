@@ -8,12 +8,11 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 
 import org.apache.commons.io.IOUtils
 import java.io.{FileInputStream, File, InputStream}
-import org.jboss.netty.handler.codec.http.HttpMethod
 import javax.activation.MimetypesFileTypeMap
 
 object FileResolver {
 
-  def hasFile(path: String):Boolean = {
+  def hasFile(path: String): Boolean = {
     if(System.getProperty("env") == "production"){
       hasResourceFile(path)
     } else {
@@ -29,18 +28,19 @@ object FileResolver {
     }
   }
 
-  private def getResourceInputStream(path: String): InputStream = {
+  private def getResourceInputStream(path: String): InputStream =
     getClass.getResourceAsStream(path)
-  }
 
   private def getLocalInputStream(path: String): InputStream = {
     val file = new File(Config.get("local_docroot"), path)
+
     new FileInputStream(file)
   }
 
-  private def hasResourceFile(path: String):Boolean = {
-    val fi = getClass.getResourceAsStream(path)
-    var result = false
+  private def hasResourceFile(path: String): Boolean = {
+    val fi      = getClass.getResourceAsStream(path)
+    var result  = false
+
     try {
       if (fi != null && fi.available > 0) {
         result = true
@@ -54,15 +54,15 @@ object FileResolver {
     result
   }
 
-  private def hasLocalFile(path: String):Boolean = {
+  private def hasLocalFile(path: String): Boolean = {
     val file = new File(Config.get("local_docroot"), path)
+
     if(file.toString.contains(".."))     return false
     if(!file.exists || file.isDirectory) return false
     if(!file.canRead)                    return false
+
     true
   }
-
-
 }
 
 object FileService {
@@ -75,14 +75,18 @@ object FileService {
     extMap.getContentType(file)
   }
 
-  lazy val extMap = new MimetypesFileTypeMap(FileService.getClass.getResourceAsStream("/META-INF/mime.types"))
+  lazy val extMap = new MimetypesFileTypeMap(
+    FileService.getClass.getResourceAsStream("/META-INF/mime.types")
+  )
 
 }
 
 class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Logging {
-  def isValidPath(path: String):Boolean = {
-    val fi = getClass.getResourceAsStream(path)
-    var result = false
+
+  def isValidPath(path: String): Boolean = {
+    val fi      = getClass.getResourceAsStream(path)
+    var result  = false
+
     try {
       if (fi != null && fi.available > 0) {
         result = true
@@ -96,16 +100,20 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Log
     result
   }
 
-  def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]) = {
+  def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]): Future[FinagleResponse] = {
     if (FileResolver.hasFile(request.uri) && request.uri != '/') {
-      val fh = FileResolver.getInputStream(request.uri)
-      val b = IOUtils.toByteArray(fh)
+      val fh  = FileResolver.getInputStream(request.uri)
+      val b   = IOUtils.toByteArray(fh)
+
       fh.read(b)
-      val response = request.response
-      val mtype = FileService.extMap.getContentType('.' + request.uri.toString.split('.').last)
+
+      val response  = request.response
+      val mtype     = FileService.extMap.getContentType('.' + request.uri.toString.split('.').last)
+
       response.status = OK
       response.setHeader("Content-Type", mtype)
       response.setContent(copiedBuffer(b))
+
       Future.value(response)
     } else {
       service(request)

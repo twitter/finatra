@@ -23,21 +23,25 @@ import scala.collection.JavaConversions._
 
 class Request(rawRequest: FinagleRequest) extends RequestProxy {
 
-  var multiParams: Map[String, MultipartItem] = Map.empty
-  var routeParams: Map[String, String] = Map.empty
-
-  var request = rawRequest
-  var error: Option[Throwable] = None
+  var multiParams:  Map[String, MultipartItem]  = Map.empty
+  var routeParams:  Map[String, String]         = Map.empty
+  var request:      FinagleRequest              = rawRequest
+  var error:        Option[Throwable]           = None
 
   def accepts: Seq[ContentType] = {
     val accept = this.getHeader("Accept")
+
     if (accept != null) {
       var acceptParts = Splitter.on(',').split(accept).toArray
+
       Sorting.quickSort(acceptParts)(AcceptOrdering)
+
       val seq = acceptParts.map { xs =>
         val part = Splitter.on(";q=").split(xs).toArray.head
+
         ContentType(part).getOrElse(new ContentType.All)
       }.toSeq
+
       seq
     } else {
       Seq.empty[ContentType]
@@ -49,6 +53,7 @@ object AcceptOrdering extends Ordering[String] {
 
   def getWeight(str: String): Double = {
     val parts = Splitter.on(';').split(str).toArray
+
     if (parts.length < 2) {
       1.0
     } else {
@@ -61,7 +66,7 @@ object AcceptOrdering extends Ordering[String] {
     }
   }
 
-  def compare(a: String, b: String) = {
+  def compare(a: String, b: String): Int = {
     getWeight(b) compare getWeight(a)
   }
 }
