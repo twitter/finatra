@@ -84,6 +84,15 @@ class ExampleSpec extends SpecHelper {
     }
 
     /**
+     * Redirects
+     *
+     * curl http://localhost:7070/redirect
+     */
+    get("/redirect") { request =>
+      redirect("http://localhost:7070/", permanent = true).toFuture
+    }
+
+    /**
      * Uploading files
      *
      * curl -F avatar=@/path/to/img http://localhost:7070/profile
@@ -276,6 +285,12 @@ class ExampleSpec extends SpecHelper {
   "GET /search?q=foo" should "respond with no results for foo" in {
     get("/search?q=foo")
     response.body should equal("no results for foo")
+  }
+
+  "GET /redirect" should "respond with /" in {
+    get("/redirect")
+    response.body should equal("Redirecting to <a href=\"http://localhost:7070/\">http://localhost:7070/</a>.")
+    response.code should equal(301)
   }
 
   "GET /template" should "respond with a rendered template" in {
