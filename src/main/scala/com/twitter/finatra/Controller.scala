@@ -46,8 +46,11 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
   def render = new Response
   def route = new Router(this)
 
-  def redirect(location: String, message: String = "moved") = {
-    render.plain(message).status(301).header("Location", location)
+  def redirect(location: String, permanent: Boolean = false) = {
+    val message = "Redirecting to <a href=\"%s\">%s</a>.".format(location, location)
+    val code    = if (permanent) 301 else 302
+
+    render.plain(message).status(code).header("Location", location)
   }
 
   def respondTo(r: Request)(callback: PartialFunction[ContentType, Future[Response]]): Future[Response] = {
