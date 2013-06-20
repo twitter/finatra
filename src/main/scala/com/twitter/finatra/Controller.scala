@@ -23,8 +23,8 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
 
   val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[Response])]
 
-  var notFoundHandler: Option[(Request) => Future[Response]]  = None
-  var errorHandler: Option[(Request) => Future[Response]]     = None
+  var notFoundHandler:  Option[(Request) => Future[Response]]  = None
+  var errorHandler:     Option[(Request) => Future[Response]]  = None
 
   def get(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.GET,    path)(callback) }
   def delete(path: String)(callback: Request => Future[Response]) { addRoute(HttpMethod.DELETE, path)(callback) }
@@ -43,10 +43,10 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
 
   val stats = statsReceiver.scope("Controller")
 
-  def render = new Response
-  def route = new Router(this)
+  def render: Response  = new Response
+  def route:  Router    = new Router(this)
 
-  def redirect(location: String, message: String = "", permanent: Boolean = false) = {
+  def redirect(location: String, message: String = "", permanent: Boolean = false): Response = {
     val msg = if (message == "")
       "Redirecting to <a href=\"%s\">%s</a>.".format(location, location)
     else
@@ -59,9 +59,10 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
 
   def respondTo(r: Request)(callback: PartialFunction[ContentType, Future[Response]]): Future[Response] = {
     if (!r.routeParams.get("format").isEmpty) {
-      val format = r.routeParams("format")
-      val mime = FileService.getContentType("." + format)
+      val format      = r.routeParams("format")
+      val mime        = FileService.getContentType("." + format)
       val contentType = ContentType(mime).getOrElse(new ContentType.All)
+
       if (callback.isDefinedAt(contentType)) {
         callback(contentType)
       } else {
