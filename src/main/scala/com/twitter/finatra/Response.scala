@@ -18,38 +18,38 @@ package com.twitter.finatra
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
-import com.twitter.finagle.http.{Response => FinagleResponse, Request => FinagleRequest}
+import com.twitter.finagle.http.{Response => FinagleResponse}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-
 import com.codahale.jerkson.{Json, Generator}
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 
 object Response {
-  def apply(body: String) = new Response().body(body).status(200).build
-  def apply(status: Int, body: String) = new Response().body(body).status(status).build
-  def apply(status: Int, body: String, headers: Map[String, String]) = new Response().body(body).status(status).headers(headers).build
+  def apply(body: String): FinagleResponse =
+    new Response().body(body).status(200).build
+
+  def apply(status: Int, body: String): FinagleResponse =
+    new Response().body(body).status(status).build
+
+  def apply(status: Int, body: String, headers: Map[String, String]): FinagleResponse =
+    new Response().body(body).status(status).headers(headers).build
 }
 
 class Response extends Logging {
-  var status:Int = 200
+  var status:     Int                  = 200
+  var headers:    Map[String, String]  = Map()
+  var hasCookies: Boolean              = false
+  var strBody:    Option[String]       = None
+  var binBody:    Option[Array[Byte]]  = None
+  var json:       Option[Any]          = None
+  var view:       Option[View]         = None
 
-  var headers: Map[String, String] = Map()
-
-  var hasCookies = false
   lazy val cookies = new CookieEncoder(true)
 
-  val jsonGenerator:Generator = Json
+  val jsonGenerator: Generator = Json
 
-  var strBody: Option[String]       = None
-  var binBody: Option[Array[Byte]]  = None
-  var json: Option[Any]             = None
-  var view: Option[View]            = None
-
-  def contentType: Option[String] = {
+  def contentType: Option[String] =
     this.headers.get("Content-Type")
-  }
 
   def setContent(resp: HttpResponse): HttpResponse = {
     json match {
@@ -78,29 +78,29 @@ class Response extends Logging {
     resp
   }
 
-  def cookie(k: String, v: String) = {
+  def cookie(k: String, v: String): Response = {
     this.hasCookies = true
     this.cookies.addCookie(k, v)
     this
   }
 
-  def cookie(c: Cookie) = {
+  def cookie(c: Cookie): Response = {
     this.hasCookies = true
     this.cookies.addCookie(c)
     this
   }
 
-  def ok = {
+  def ok: Response = {
     status(200)
     this
   }
 
-  def notFound = {
+  def notFound: Response  = {
     status(404)
     this
   }
 
-  def body(s: String) = {
+  def body(s: String): Response = {
     this.strBody = Some(s)
     this
   }
@@ -110,30 +110,30 @@ class Response extends Logging {
     this
   }
 
-  def nothing = {
+  def nothing: Response = {
     this.header("Content-Type", "text/plain")
     this.body("")
     this
   }
 
-  def plain(body:String) = {
+  def plain(body:String): Response = {
     this.header("Content-Type", "text/plain")
     this.body(body)
     this
   }
 
-  def html(body:String) = {
+  def html(body:String): Response = {
     this.header("Content-Type", "text/html")
     this.body(body)
     this
   }
 
-  def body(b: Array[Byte]) = {
+  def body(b: Array[Byte]): Response = {
     this.binBody = Some(b)
     this
   }
 
-  def header(k: String, v: String) = {
+  def header(k: String, v: String): Response = {
     this.headers += (k -> v)
     this
   }
@@ -156,22 +156,26 @@ class Response extends Logging {
 
   def static(path: String): Response = {
     if (FileResolver.hasFile(path) && path != '/') {
-      val stream = FileResolver.getInputStream(path)
-      val bytes = IOUtils.toByteArray(stream)
+      val stream  = FileResolver.getInputStream(path)
+      val bytes   = IOUtils.toByteArray(stream)
+
       stream.read(bytes)
+
       val mtype = FileService.extMap.getContentType('.' + path.split('.').last)
+
       this.status = 200
       this.header("Content-Type", mtype)
       this.body(bytes)
     } else {
       throw new IllegalArgumentException("File does not exist")
     }
+
     this
   }
 
-  def build = {
-    val responseStatus = HttpResponseStatus.valueOf(status)
-    val resp = new DefaultHttpResponse(HTTP_1_1, responseStatus)
+  def build: FinagleResponse  = {
+    val responseStatus  = HttpResponseStatus.valueOf(status)
+    val resp            = new DefaultHttpResponse(HTTP_1_1, responseStatus)
 
     headers.foreach { xs =>
       resp.setHeader(xs._1, xs._2)
@@ -183,12 +187,11 @@ class Response extends Logging {
     FinagleResponse(resp)
   }
 
-  def toFuture = {
-    Future.value(this)
-  }
+  def toFuture:Future[Response] = Future.value(this)
 
-  override def toString = {
+  override def toString: String = {
     val buf = new StringBuilder
+
     buf.append(getClass().getSimpleName())
     buf.append('\n')
     buf.append(HTTP_1_1.toString)

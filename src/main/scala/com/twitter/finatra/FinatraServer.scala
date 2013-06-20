@@ -16,8 +16,6 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.builder.{Server, ServerBuilder}
-
-
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finagle.{Service, SimpleFilter}
@@ -27,13 +25,12 @@ import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
-import com.twitter.util.StorageUnit
 import com.twitter.ostrich.admin._
 import com.twitter.ostrich.admin.{Service => OstrichService}
 
 object FinatraServer {
 
-  var fs:FinatraServer = new FinatraServer
+  var fs: FinatraServer = new FinatraServer
 
   def register(app: Controller) {
     fs.register(app)
@@ -53,18 +50,22 @@ class FinatraServer extends Logging with OstrichService {
 
   @volatile private[this] var server: Option[Server] = None
 
-  val controllers = new ControllerCollection
-  var filters:Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
+  val controllers:  ControllerCollection = new ControllerCollection
+  var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] =
+    Seq.empty
+  val pid:          String =
+    ManagementFactory.getRuntimeMXBean().getName().split('@').head
 
-  val pid = ManagementFactory.getRuntimeMXBean().getName().split('@').head
-
-  def allFilters(baseService: Service[FinagleRequest, FinagleResponse]) = {
-    filters.foldRight(baseService) { (b,a) => b andThen a }
+  def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
+    Service[FinagleRequest, FinagleResponse] = {
+      filters.foldRight(baseService) { (b,a) => b andThen a }
   }
 
   def register(app: Controller) { controllers.add(app) }
 
-  def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) { filters = filters ++ Seq(filter) }
+  def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) {
+    filters = filters ++ Seq(filter)
+  }
 
   def initLogger() {
 
@@ -103,7 +104,9 @@ class FinatraServer extends Logging with OstrichService {
     start(NullTracer, new RuntimeEnvironment(this))
   }
 
-  def start(tracer: Tracer = NullTracer, runtimeEnv: RuntimeEnvironment = new RuntimeEnvironment(this)) {
+  def start(
+    tracer:     Tracer              = NullTracer,
+    runtimeEnv: RuntimeEnvironment  = new RuntimeEnvironment(this)) {
 
     ServiceTracker.register(this)
 
@@ -113,15 +116,13 @@ class FinatraServer extends Logging with OstrichService {
 
     initLogger()
 
-    val appService = new AppService(controllers)
+    val appService  = new AppService(controllers)
     val fileService = new FileService
 
     addFilter(fileService)
 
     val port = Config.getInt("port")
-
     val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
-
     val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
 
     val codec = new RichHttp[FinagleRequest](http)
