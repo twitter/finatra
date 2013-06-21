@@ -22,9 +22,9 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 class AppService(controllers: ControllerCollection)
   extends Service[FinagleRequest, FinagleResponse] with Logging {
 
-  def render = new Response
+  def render: Response = new Response
 
-  def apply(rawRequest: FinagleRequest) = {
+  def apply(rawRequest: FinagleRequest): Future[FinagleResponse] = {
     val adaptedRequest  = RequestAdapter(rawRequest)
 
     def handleError(t:Throwable) = {
@@ -44,8 +44,8 @@ class AppService(controllers: ControllerCollection)
     }
   }
 
-  def attemptRequest(rawRequest: FinagleRequest) = {
-    val adaptedRequest  = RequestAdapter(rawRequest)
+  def attemptRequest(rawRequest: FinagleRequest): Future[FinagleResponse] = {
+    val adaptedRequest = RequestAdapter(rawRequest)
 
     controllers.dispatch(rawRequest) match {
       case Some(response) =>

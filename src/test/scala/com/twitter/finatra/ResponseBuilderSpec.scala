@@ -25,8 +25,8 @@ class MockView(val title:String) extends View {
 }
 
 class ResponseSpec extends ShouldSpec {
-  def resp  = new Response
-  def view        = new MockView("howdy view")
+  def resp = new Response
+  def view = new MockView("howdy view")
 
   ".ok" should "return a 200 response" in {
     resp.ok.status should equal (200)
@@ -45,7 +45,7 @@ class ResponseSpec extends ShouldSpec {
 
     response.status should equal (200)
     response.strBody.get should equal ("howdy")
-    response.headers("Content-Type") should equal ("text/plain")
+    response.contentType should equal (Some("text/plain"))
   }
 
   ".nothing()" should "return a 200 empty response" in {
@@ -53,7 +53,7 @@ class ResponseSpec extends ShouldSpec {
 
     response.status should equal (200)
     response.strBody.get should equal ("")
-    response.headers("Content-Type") should equal ("text/plain")
+    response.contentType should equal (Some("text/plain"))
   }
 
   ".html()" should "return a 200 html response" in {
@@ -61,7 +61,7 @@ class ResponseSpec extends ShouldSpec {
 
     response.status should equal (200)
     response.strBody.get should equal ("<h1>howdy</h1>")
-    response.headers("Content-Type") should equal ("text/html")
+    response.contentType should equal (Some("text/html"))
   }
 
   ".json()" should "return a 200 json response" in {
@@ -70,7 +70,7 @@ class ResponseSpec extends ShouldSpec {
 
     response.status should equal (200)
     body should equal ("""{"foo":"bar"}""")
-    response.headers("Content-Type") should equal ("application/json")
+    response.contentType should equal (Some("application/json"))
   }
 
   ".view()" should "return a 200 view response" in {
@@ -79,5 +79,12 @@ class ResponseSpec extends ShouldSpec {
 
     response.status should equal (200)
     body should include ("howdy view")
+  }
+
+  ".static()" should "return a 200 static file" in {
+    val response = resp.static("dealwithit.gif")
+
+    response.status should equal (200)
+    response.contentType should equal (Some("image/gif"))
   }
 }
