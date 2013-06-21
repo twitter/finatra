@@ -4,7 +4,7 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.collection.mutable.ListBuffer
 import scala.collection.Map
-import com.twitter.util.{Future, Promise}
+import com.twitter.util.Future
 
 class Router(controller: Controller) extends Logging {
 

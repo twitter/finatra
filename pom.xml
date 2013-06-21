@@ -98,7 +98,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>14.0</version>
+      <version>14.0.1</version>
     </dependency>
     <dependency>
       <artifactId>jerkson_2.10</artifactId>
