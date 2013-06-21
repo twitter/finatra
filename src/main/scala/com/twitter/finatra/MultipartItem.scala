@@ -20,24 +20,14 @@ import org.jboss.netty.handler.codec.http.multipart.MixedFileUpload
 
 class MultipartItem(httpData: MixedFileUpload) {
 
-  def data() = {
-    httpData.get
-  }
+  def data        = httpData.get
+  def name        = httpData.getName
+  def contentType = httpData.getContentType
+  def filename    = httpData.getFilename
 
-  def name() = {
-    httpData.getName
-  }
-
-  def contentType = {
-    httpData.getContentType
-  }
-
-  def filename = {
-    httpData.getFilename
-  }
-
-  def writeToFile(path: String) = {
+  def writeToFile(path: String) {
     val fileout = new FileOutputStream(path)
+
     fileout.write(data)
     fileout.close
   }

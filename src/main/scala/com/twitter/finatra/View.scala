@@ -28,7 +28,7 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
     wtr.append(str, 0, str.length)
   }
 
-  override def getReader(resourceName:String) : Reader = {
+  override def getReader(resourceName:String): Reader = {
     if (!"development".equals(Config.get("env"))) {
       super.getReader(resourceName)
     }
@@ -76,13 +76,15 @@ abstract class View extends Callable[String] {
 
   def template:String
 
-  def templatePath                = baseTemplatePath + template
-  val factory                     = View.mustacheFactory
-  var baseTemplatePath            = View.templatePath
-  var contentType:Option[String]  = None
-  def mustache                    = factory.compile(new InputStreamReader(FileResolver.getInputStream(templatePath)), "template")
+  def templatePath: String            = baseTemplatePath + template
+  val factory: FinatraMustacheFactory = View.mustacheFactory
+  var baseTemplatePath: String        = View.templatePath
+  var contentType: Option[String]     = None
+  def mustache: Mustache              = factory.compile(
+    new InputStreamReader(FileResolver.getInputStream(templatePath)), "template"
+  )
 
-  def render = {
+  def render: String = {
     // In development mode, we flush all of our template
     // caches on each render. Otherwise, partials will
     // remain unchanged in the browser while being edited.
@@ -95,5 +97,5 @@ abstract class View extends Callable[String] {
     output.toString
   }
 
-  def call = render
+  def call: String = render
 }

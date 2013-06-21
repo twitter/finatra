@@ -19,13 +19,13 @@ class ControllerCollection {
 
   }
 
-  def render = new Response
+  def render: Response = new Response
 
-  def dispatch(request: FinagleRequest):Option[FinagleResponse] = {
-    var response:Option[FinagleResponse] = None
+  def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
+    var response: Option[FinagleResponse] = None
 
     controllers.find { ctrl =>
-      ctrl.dispatch(request) match {
+      ctrl.route.dispatch(request) match {
         case Some(callbackResponse) =>
           response = Some(callbackResponse)
           true

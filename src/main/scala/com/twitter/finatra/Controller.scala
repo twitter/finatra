@@ -17,16 +17,14 @@ package com.twitter.finatra
 
 import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.util.Future
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import org.jboss.netty.handler.codec.http._
-import collection.mutable.ListBuffer
 
 class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Logging {
 
   val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[Response])]
 
-  var notFoundHandler: Option[(Request) => Future[Response]]  = None
-  var errorHandler: Option[(Request) => Future[Response]]     = None
+  var notFoundHandler:  Option[(Request) => Future[Response]]  = None
+  var errorHandler:     Option[(Request) => Future[Response]]  = None
 
   def get(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.GET,    path)(callback) }
   def delete(path: String)(callback: Request => Future[Response]) { addRoute(HttpMethod.DELETE, path)(callback) }
@@ -43,60 +41,28 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Loggi
     errorHandler = Option(callback)
   }
 
-  def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
-    logger.info("%s %s".format(request.method, request.uri))
-    dispatchRouteOrCallback(request, request.method, (request) => {
-      // fallback to GET for 404'ed GET requests (curl -I support)
-      if (request.method == HttpMethod.HEAD) {
-        dispatchRouteOrCallback(request, HttpMethod.GET, (request) => None)
-      } else {
-        return None
-      }
-    })
-  }
-
-  def dispatchRouteOrCallback(request: FinagleRequest, method: HttpMethod,
-                              orCallback: FinagleRequest => Option[FinagleResponse]): Option[FinagleResponse] = {
-    val req = RequestAdapter(request)
-    findRouteAndMatch(req, method) match {
-      case Some((method, pattern, callback)) =>
-        Some(ResponseAdapter(callback(req))).asInstanceOf[Option[FinagleResponse]]
-      case None => orCallback(request)
-    }
-  }
-
-  def extractParams(request: Request, xs: Tuple2[_, _]) = {
-    request.routeParams += (xs._1.toString -> xs._2.asInstanceOf[ListBuffer[String]].head.toString)
-  }
-
-  def findRouteAndMatch(request: Request, method: HttpMethod) = {
-    var thematch:Option[Map[_,_]] = None
-
-    routes.vector.find( route => route match {
-      case (_method, pattern, callback) =>
-        thematch = pattern(request.path.split('?').head)
-        if(thematch.orNull != null && _method == method) {
-          thematch.orNull.foreach(xs => extractParams(request, xs))
-          true
-        } else {
-          false
-        }
-    })
-  }
-
   val stats = statsReceiver.scope("Controller")
 
-  def render = new Response
+  def render: Response  = new Response
+  def route:  Router    = new Router(this)
 
-  def redirect(location: String, message: String = "moved") = {
-    render.plain(message).status(301).header("Location", location)
+  def redirect(location: String, message: String = "", permanent: Boolean = false): Response = {
+    val msg = if (message == "")
+      "Redirecting to <a href=\"%s\">%s</a>.".format(location, location)
+    else
+      message
+
+    val code = if (permanent) 301 else 302
+
+    render.plain(msg).status(code).header("Location", location)
   }
 
   def respondTo(r: Request)(callback: PartialFunction[ContentType, Future[Response]]): Future[Response] = {
     if (!r.routeParams.get("format").isEmpty) {
-      val format = r.routeParams("format")
-      val mime = FileService.getContentType("." + format)
+      val format      = r.routeParams("format")
+      val mime        = FileService.getContentType("." + format)
       val contentType = ContentType(mime).getOrElse(new ContentType.All)
+
       if (callback.isDefinedAt(contentType)) {
         callback(contentType)
       } else {

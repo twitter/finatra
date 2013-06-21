@@ -33,10 +33,14 @@ class ExampleSpec extends SpecHelper {
     /**
      * Basic Example
      *
-     * curl http://localhost:7070/hello => "hello world"
+     * curl http://localhost:7070/ => "hello world"
      */
     get("/") { request =>
       render.plain("hello world").toFuture
+    }
+
+    delete("/photos") { request =>
+      render.plain("deleted!").toFuture
     }
 
     /**
@@ -77,6 +81,15 @@ class ExampleSpec extends SpecHelper {
         case Some(q) => render.plain("no results for "+ q).toFuture
         case None    => render.plain("query param q needed").status(500).toFuture
       }
+    }
+
+    /**
+     * Redirects
+     *
+     * curl http://localhost:7070/redirect
+     */
+    get("/redirect") { request =>
+      redirect("http://localhost:7070/", permanent = true).toFuture
     }
 
     /**
@@ -152,6 +165,26 @@ class ExampleSpec extends SpecHelper {
       render.status(404).plain("not found yo").toFuture
     }
 
+    /**
+     * Arbitrary Dispatch
+     *
+     * curl http://localhost:7070/go_home
+     */
+    get("/go_home") { request =>
+      route.get("/")
+    }
+
+    get("/search_for_dogs") { request =>
+      route.get("/search", Map("q" -> "dogs"))
+    }
+
+    get("/delete_photos") { request =>
+      route.delete("/photos")
+    }
+
+    get("/gif") { request =>
+      render.static("/dealwithit.gif").toFuture
+    }
 
     /**
      * Dispatch based on Content-Type
@@ -254,6 +287,12 @@ class ExampleSpec extends SpecHelper {
     response.body should equal("no results for foo")
   }
 
+  "GET /redirect" should "respond with /" in {
+    get("/redirect")
+    response.body should equal("Redirecting to <a href=\"http://localhost:7070/\">http://localhost:7070/</a>.")
+    response.code should equal(301)
+  }
+
   "GET /template" should "respond with a rendered template" in {
     get("/template")
     response.body should equal("Your value is random value here")
@@ -272,6 +311,30 @@ class ExampleSpec extends SpecHelper {
   "GET /blog/index.rss" should "respond in a 415" in {
     get("/blog/index.rss")
     response.code should equal(415)
+  }
+
+  "GET /go_home" should "render same as /" in {
+    get("/go_home")
+    response.code should equal(200)
+    response.body should equal("hello world")
+  }
+
+  "GET /search_for_dogs" should "render same as /search?q=dogs" in {
+    get("/search_for_dogs")
+    response.code should equal(200)
+    response.body should equal("no results for dogs")
+  }
+
+  "GET /delete_photos" should "render same as DELETE /photos" in {
+    get("/delete_photos")
+    response.code should equal(200)
+    response.body should equal("deleted!")
+  }
+
+  "GET /gif" should "render dealwithit.gif" in {
+    get("/gif")
+    response.code should equal(200)
+    response.originalResponse.getContent().array().head should equal(71) // capital "G", detects the gif
   }
 
   "GET /another/page with html" should "respond with html" in {

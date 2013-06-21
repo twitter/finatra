@@ -4,9 +4,6 @@ import test.ShouldSpec
 import util.Sorting
 import scala.collection.JavaConversions._
 import com.google.common.base.Splitter
-import com.twitter.finagle.http.{Request => FinagleRequest}
-import org.jboss.netty.handler.codec.http.HttpRequest
-import java.net.InetSocketAddress
 
 class RequestSpec extends ShouldSpec {
 
