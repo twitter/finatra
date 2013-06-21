@@ -1,6 +1,7 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
+import com.twitter.util.Future
 
 class ControllerCollection {
   var controllers: Seq[Controller] = Seq.empty
@@ -21,8 +22,8 @@ class ControllerCollection {
 
   def render: Response = new Response
 
-  def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
-    var response: Option[FinagleResponse] = None
+  def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
+    var response: Option[Future[FinagleResponse]] = None
 
     controllers.find { ctrl =>
       ctrl.route.dispatch(request) match {
