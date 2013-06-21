@@ -27,6 +27,7 @@ import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
 import com.twitter.ostrich.admin._
 import com.twitter.ostrich.admin.{Service => OstrichService}
+import com.twitter.util.Await
 
 object FinatraServer {
 
@@ -96,7 +97,7 @@ class FinatraServer extends Logging with OstrichService {
   def shutdown() {
     logger.info("shutting down")
     println("finatra process shutting down")
-    server foreach { s => s.close()() }
+    server foreach { s => Await.result(s.close()) }
     System.exit(0)
   }
 

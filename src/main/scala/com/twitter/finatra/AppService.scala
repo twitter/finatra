@@ -16,7 +16,7 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.Service
-import com.twitter.util.Future
+import com.twitter.util.{Await, Future}
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 
 class AppService(controllers: ControllerCollection)
@@ -36,7 +36,7 @@ class AppService(controllers: ControllerCollection)
     try {
       attemptRequest(rawRequest).handle {
         case t:Throwable =>
-          handleError(t).get()
+          Await.result(handleError(t))
       }
     } catch {
       case e: Exception =>

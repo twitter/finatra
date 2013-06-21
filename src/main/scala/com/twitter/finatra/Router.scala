@@ -4,11 +4,11 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.collection.mutable.ListBuffer
 import scala.collection.Map
-import com.twitter.util.Future
+import com.twitter.util.{Future, Promise}
 
 class Router(controller: Controller) extends Logging {
 
-  def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
+  def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
     logger.info("%s %s".format(request.method, request.uri))
 
     dispatchRouteOrCallback(request, request.method, (request) => {
@@ -24,13 +24,13 @@ class Router(controller: Controller) extends Logging {
   def dispatchRouteOrCallback(
     request:    FinagleRequest,
     method:     HttpMethod,
-    orCallback: FinagleRequest => Option[FinagleResponse]
-  ): Option[FinagleResponse] = {
+    orCallback: FinagleRequest => Option[Future[FinagleResponse]]
+  ): Option[Future[FinagleResponse]] = {
     val req = RequestAdapter(request)
 
     findRouteAndMatch(req, method) match {
       case Some((method, pattern, callback)) =>
-        Some(ResponseAdapter(callback(req))).asInstanceOf[Option[FinagleResponse]]
+        Some(ResponseAdapter(callback(req)))
       case None => orCallback(request)
     }
   }
