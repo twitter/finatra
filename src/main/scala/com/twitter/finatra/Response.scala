@@ -35,7 +35,7 @@ object Response {
     new Response().body(body).status(status).headers(headers).build
 }
 
-class Response extends Logging {
+class Response {
   var status:     Int                  = 200
   var headers:    Map[String, String]  = Map()
   var hasCookies: Boolean              = false
@@ -192,15 +192,15 @@ class Response extends Logging {
   override def toString: String = {
     val buf = new StringBuilder
 
-    buf.append(getClass().getSimpleName())
+    buf.append(getClass.getSimpleName)
     buf.append('\n')
     buf.append(HTTP_1_1.toString)
     buf.append(' ')
     buf.append(this.status)
     buf.append('\n')
-    appendCollection[String, String](buf, this.headers)
+    buf.append(this.headers)
 
-    buf.toString
+    buf.toString()
   }
 
 }
