@@ -95,6 +95,11 @@
       <artifactId>compiler</artifactId>
       <version>0.8.8</version>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.2.2</version>
+    </dependency>
   </dependencies>
   <!-- END DEPENDENCIES -->
   <!-- SCALADOC -->
