@@ -83,7 +83,7 @@ object FileService {
 
 }
 
-class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Logging with App {
+class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App with Logging {
   override val name = "finatra"
 
   def isValidPath(path: String): Boolean = {

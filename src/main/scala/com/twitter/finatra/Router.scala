@@ -8,7 +8,7 @@ import com.twitter.util.Future
 import com.twitter.logging.Logging
 import com.twitter.app.App
 
-class Router(controller: Controller) extends Logging with App {
+class Router(controller: Controller) extends App with Logging {
 
   override val name = "finatra"
 

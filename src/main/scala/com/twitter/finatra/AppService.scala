@@ -22,7 +22,7 @@ import com.twitter.logging.Logging
 import com.twitter.app.App
 
 class AppService(controllers: ControllerCollection)
-  extends Service[FinagleRequest, FinagleResponse] with Logging with App {
+  extends Service[FinagleRequest, FinagleResponse] with App with Logging {
 
   override val name = "finatra"
 
