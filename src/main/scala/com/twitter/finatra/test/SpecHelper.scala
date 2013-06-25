@@ -15,7 +15,7 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.util.Future
+import com.twitter.util.{Await, Future}
 import scala.collection.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
@@ -36,7 +36,7 @@ class MockResponse(val originalResponse: FinagleResponse) {
 
 abstract class SpecHelper extends FlatSpec with ShouldMatchers {
 
-  def response  = new MockResponse(lastResponse.get)
+  def response  = new MockResponse(Await.result(lastResponse))
   var lastResponse:Future[FinagleResponse] = null
 
   def buildRequest(method: HttpMethod, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
