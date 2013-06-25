@@ -24,7 +24,7 @@ import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
 import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
-import com.twitter.util.StorageUnit
+import com.twitter.util.{Await, StorageUnit}
 import com.twitter.server.TwitterServer
 import com.twitter.finagle.Http
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
@@ -135,7 +135,13 @@ class FinatraServer extends TwitterServer with Logging {
 
     println("finatra process " + pid + " started on port: " + port.toString)
     println("config args:")
+
     Config.printConfig()
+    onExit {
+      server.close()
+    }
+
+    Await.ready(server)
 
   }
 }
