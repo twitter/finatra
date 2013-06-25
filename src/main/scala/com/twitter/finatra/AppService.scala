@@ -24,6 +24,8 @@ import com.twitter.app.App
 class AppService(controllers: ControllerCollection)
   extends Service[FinagleRequest, FinagleResponse] with Logging with App {
 
+  override val name = "finatra"
+
   def render: Response = new Response
 
   def apply(rawRequest: FinagleRequest): Future[FinagleResponse] = {

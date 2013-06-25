@@ -34,7 +34,7 @@ object FileResolver {
     getClass.getResourceAsStream(path)
 
   private def getLocalInputStream(path: String): InputStream = {
-    val file = new File(FinatraServer.docroot(), path)
+    val file = new File(ConfigThing.docroot(), path)
 
     new FileInputStream(file)
   }
@@ -57,7 +57,7 @@ object FileResolver {
   }
 
   private def hasLocalFile(path: String): Boolean = {
-    val file = new File(FinatraServer.docroot(), path)
+    val file = new File(ConfigThing.docroot(), path)
 
     if(file.toString.contains(".."))     return false
     if(!file.exists || file.isDirectory) return false
@@ -84,6 +84,7 @@ object FileService {
 }
 
 class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Logging with App {
+  override val name = "finatra"
 
   def isValidPath(path: String): Boolean = {
     val fi      = getClass.getResourceAsStream(path)
