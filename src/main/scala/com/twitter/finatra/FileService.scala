@@ -9,6 +9,8 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import org.apache.commons.io.IOUtils
 import java.io.{FileInputStream, File, InputStream}
 import javax.activation.MimetypesFileTypeMap
+import com.twitter.app.App
+import com.twitter.logging.Logging
 
 object FileResolver {
 
@@ -32,7 +34,7 @@ object FileResolver {
     getClass.getResourceAsStream(path)
 
   private def getLocalInputStream(path: String): InputStream = {
-    val file = new File(Config.get("local_docroot"), path)
+    val file = new File(FinatraServer.docroot(), path)
 
     new FileInputStream(file)
   }
@@ -55,7 +57,7 @@ object FileResolver {
   }
 
   private def hasLocalFile(path: String): Boolean = {
-    val file = new File(Config.get("local_docroot"), path)
+    val file = new File(FinatraServer.docroot(), path)
 
     if(file.toString.contains(".."))     return false
     if(!file.exists || file.isDirectory) return false
@@ -81,7 +83,7 @@ object FileService {
 
 }
 
-class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Logging {
+class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Logging with App {
 
   def isValidPath(path: String): Boolean = {
     val fi      = getClass.getResourceAsStream(path)

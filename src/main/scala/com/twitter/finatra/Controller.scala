@@ -18,8 +18,10 @@ package com.twitter.finatra
 import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
+import com.twitter.logging.Logging
+import com.twitter.app.App
 
-class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) extends Logging {
+class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) {
 
   val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[Response])]
 

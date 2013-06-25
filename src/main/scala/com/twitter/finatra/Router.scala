@@ -5,11 +5,13 @@ import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.collection.mutable.ListBuffer
 import scala.collection.Map
 import com.twitter.util.Future
+import com.twitter.logging.Logging
+import com.twitter.app.App
 
-class Router(controller: Controller) extends Logging {
+class Router(controller: Controller) extends Logging with App {
 
   def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
-    logger.info("%s %s".format(request.method, request.uri))
+    log.info("%s %s".format(request.method, request.uri))
 
     dispatchRouteOrCallback(request, request.method, (request) => {
       // fallback to GET for 404'ed GET requests (curl -I support)
@@ -95,6 +97,6 @@ class Router(controller: Controller) extends Logging {
     Future[Response] = internalDispatch(HttpMethod.HEAD, path, params, headers)
 
   def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-  Future[Response] = internalDispatch(HttpMethod.PATCH, path, params, headers)
+    Future[Response] = internalDispatch(HttpMethod.PATCH, path, params, headers)
 
 }
