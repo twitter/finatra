@@ -15,14 +15,11 @@
  */
 package com.twitter.finatra
 
-import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse, _}
 import com.twitter.finagle._
-import com.twitter.logging.config._
-import com.twitter.logging.{FileHandler, LoggerFactory, Logger}
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
-import com.twitter.finagle.tracing.{Tracer, NullTracer}
+import com.twitter.finagle.tracing.{Flags, Tracer, NullTracer}
 import com.twitter.conversions.storage._
 import com.twitter.util.{Await, StorageUnit}
 import com.twitter.server.TwitterServer
@@ -48,9 +45,7 @@ object FinatraServer {
 
 }
 
-class FinatraServer extends TwitterServer with Logging {
-
-  @volatile private[this] var server: Option[Server] = None
+class FinatraServer extends TwitterServer {
 
   val controllers:  ControllerCollection = new ControllerCollection
   var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] =
@@ -69,28 +64,6 @@ class FinatraServer extends TwitterServer with Logging {
     filters = filters ++ Seq(filter)
   }
 
-  def initLogger() {
-
-    val handler = FileHandler(
-        filename = "log/finatra.log",
-        rollPolicy = Policy.Never,
-        append = false,
-        level = Some(Level.INFO))
-
-    val log: Logger = LoggerFactory(
-      node = "com.twitter",
-      level = Some(Level.DEBUG),
-      handlers = List(handler)).apply()
-
-  }
-
-  def shutdown() {
-    logger.info("shutting down")
-    println("finatra process shutting down")
-    server foreach { s => Await.result(s.close()) }
-    System.exit(0)
-  }
-
   private[this] val nettyToFinagle =
     Filter.mk[HttpRequest, HttpResponse, FinagleRequest, FinagleResponse] { (req, service) =>
       service(FinagleRequest(req)) map { _.httpResponse }
@@ -103,19 +76,19 @@ class FinatraServer extends TwitterServer with Logging {
 
     addFilter(fileService)
 
-    val port = Config.getInt("port")
     val service = nettyToFinagle andThen allFilters(appService)
+
+    val httpPort = flag("http_port", ":7070", "Http Port")
+    val adminPort = flag("admin_port", ":8080", "Http Port")
 
     //val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
 
-    val server = Http.serve(":8888", service)
+    val server = Http.serve(httpPort(), service)
 
-    logger.info("process %s started on %s", pid, port)
+    log.info("process %s started on %s", pid, httpPort())
 
-    println("finatra process " + pid + " started on port: " + port.toString)
-    println("config args:")
+    println("finatra process " + pid + " started on port: " + httpPort())
 
-    Config.printConfig()
     onExit {
       server.close()
     }
