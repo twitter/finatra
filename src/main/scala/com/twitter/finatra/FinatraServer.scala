@@ -29,9 +29,6 @@ import com.twitter.server.TwitterServer
 import com.twitter.finagle.Http
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 import com.twitter.logging.LoggerFactory
-import com.twitter.ostrich.admin._
-import com.twitter.ostrich.admin.{Service => OstrichService}
-import com.twitter.util.Await
 
 object FinatraServer {
 
