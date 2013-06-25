@@ -25,18 +25,7 @@ import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 import com.twitter.app.App
 
 
-object ConfigThing extends App {
-  override val name = "finatra"
-  val port = flag("http_port", ":7070", "Http Port")
-  val env = flag("env", "development", "Environment")
-  val appName = flag("name", "finatra", "Name of server")
-  val pidEnabled = flag("pid_enabled", false, "whether to write pid file")
-  val pidPath = flag("pid_path", "finatra.pid", "path to pid file")
-  val logPath = flag("log_path", "logs/finatra.log", "path to log")
-  val templatePath = flag("template_path", "/", "path to templates")
-  val docroot = flag("docroot", "src/main/resources", "path to docroot")
-  val maxRequestSize = flag("max_request_size", 5, "size of max request")
-}
+
 
 object FinatraServer {
 
@@ -95,11 +84,11 @@ class FinatraServer extends TwitterServer {
 
     //val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
 
-    val server = Http.serve(ConfigThing.port(), service)
+    val server = Http.serve(Config.port(), service)
 
-    log.info("process %s started on %s", pid, ConfigThing.port())
+    log.info("process %s started on %s", pid, Config.port())
 
-    println("finatra process " + pid + " started on port: " + ConfigThing.port())
+    println("finatra process " + pid + " started on port: " + Config.port())
 
     onExit {
       server.close()
