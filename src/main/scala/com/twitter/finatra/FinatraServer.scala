@@ -84,17 +84,6 @@ class FinatraServer extends TwitterServer with Logging {
 
   }
 
-//  def initAdminService(runtimeEnv: RuntimeEnvironment) {
-//      AdminServiceFactory(
-//        httpPort = Config.getInt("stats_port"),
-//        statsNodes = StatsFactory(
-//          reporters = JsonStatsLoggerFactory(serviceName = Some("finatra")) ::
-//                  TimeSeriesCollectorFactory() :: Nil
-//        ) :: Nil
-//      )(runtimeEnv)
-//  }
-
-
   def shutdown() {
     logger.info("shutting down")
     println("finatra process shutting down")
@@ -102,20 +91,12 @@ class FinatraServer extends TwitterServer with Logging {
     System.exit(0)
   }
 
+  private[this] val nettyToFinagle =
+    Filter.mk[HttpRequest, HttpResponse, FinagleRequest, FinagleResponse] { (req, service) =>
+      service(FinagleRequest(req)) map { _.httpResponse }
+    }
+
   def start() {
-
-
-
-//    if(Config.getBool("stats_enabled")){
-//      initAdminService(runtimeEnv)
-//    }
-
-    val nettyToFinagle =
-      Filter.mk[HttpRequest, HttpResponse, FinagleRequest, FinagleResponse] { (req, service) =>
-        service(FinagleRequest(req)) map { _.httpResponse }
-      }
-
-    initLogger()
 
     val appService  = new AppService(controllers)
     val fileService = new FileService
@@ -125,9 +106,7 @@ class FinatraServer extends TwitterServer with Logging {
     val port = Config.getInt("port")
     val service = nettyToFinagle andThen allFilters(appService)
 
-
-//    val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
-
+    //val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
 
     val server = Http.serve(":8888", service)
 
