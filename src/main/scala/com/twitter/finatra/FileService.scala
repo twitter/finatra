@@ -15,7 +15,7 @@ import com.twitter.logging.Logging
 object FileResolver {
 
   def hasFile(path: String): Boolean = {
-    if(System.getProperty("env") == "production"){
+    if(ConfigThing.env() == "production"){
       hasResourceFile(path)
     } else {
       hasLocalFile(path)
@@ -23,7 +23,7 @@ object FileResolver {
   }
 
   def getInputStream(path: String): InputStream = {
-    if(System.getProperty("env") == "production"){
+    if(ConfigThing.env() == "production"){
       getResourceInputStream(path)
     } else {
       getLocalInputStream(path)
