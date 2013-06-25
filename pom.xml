@@ -60,27 +60,10 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
-
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-http_2.10</artifactId>
-      <version>6.5.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>finagle-core_2.10</artifactId>
-      <version>6.5.0</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>util-logging_2.10</artifactId>
-      <version>6.3.6</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>ostrich_2.10</artifactId>
-      <version>9.1.1</version>
+      <artifactId>twitter-server_2.10</artifactId>
+      <version>1.0.1</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -103,9 +86,9 @@
       <version>14.0.1</version>
     </dependency>
     <dependency>
+      <groupId>com.cloudphysics</groupId>
       <artifactId>jerkson_2.10</artifactId>
       <version>0.6.3</version>
-      <groupId>com.cloudphysics</groupId>
     </dependency>
     <dependency>
       <groupId>com.github.spullara.mustache.java</groupId>
