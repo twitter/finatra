@@ -16,11 +16,9 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.builder.{Server, ServerBuilder}
-import com.twitter.finagle.http._
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse, _}
+import com.twitter.finagle._
 import com.twitter.logging.config._
-import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
 import com.twitter.logging.{FileHandler, LoggerFactory, Logger}
 import java.lang.management.ManagementFactory
 import java.net.InetSocketAddress
@@ -28,8 +26,9 @@ import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
 import com.twitter.util.StorageUnit
 import com.twitter.server.TwitterServer
-import com.twitter.ostrich.admin._
-import com.twitter.ostrich.admin.{Service => OstrichService}
+import com.twitter.finagle.Http
+import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
+import com.twitter.logging.LoggerFactory
 
 object FinatraServer {
 
@@ -111,6 +110,11 @@ class FinatraServer extends TwitterServer with Logging {
 //      initAdminService(runtimeEnv)
 //    }
 
+    val nettyToFinagle =
+      Filter.mk[HttpRequest, HttpResponse, FinagleRequest, FinagleResponse] { (req, service) =>
+        service(FinagleRequest(req)) map { _.httpResponse }
+      }
+
     initLogger()
 
     val appService  = new AppService(controllers)
@@ -119,16 +123,13 @@ class FinatraServer extends TwitterServer with Logging {
     addFilter(fileService)
 
     val port = Config.getInt("port")
-    val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
-    val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
+    val service = nettyToFinagle andThen allFilters(appService)
 
-    val server = Http.serve(":8888", service.asInstanceOf[Service[HttpRequest, HttpResponse]])
-//    server = Some(ServerBuilder()
-//      .codec(codec)
-//      .bindTo(new InetSocketAddress(port))
-//      .tracer(tracer)
-//      .name(Config.get("name"))
-//      .build(service))
+
+//    val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
+
+
+    val server = Http.serve(":8888", service)
 
     logger.info("process %s started on %s", pid, port)
 
