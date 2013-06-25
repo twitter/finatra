@@ -24,7 +24,21 @@ import com.twitter.finagle.Http
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 import com.twitter.app.App
 
-object FinatraServer extends App {
+
+object ConfigThing extends App {
+  override val name = "finatra"
+  val port = flag("http_port", ":7070", "Http Port")
+  val env = flag("env", "development", "Environment")
+  val appName = flag("name", "finatra", "Name of server")
+  val pidEnabled = flag("pid_enabled", false, "whether to write pid file")
+  val pidPath = flag("pid_path", "finatra.pid", "path to pid file")
+  val logPath = flag("log_path", "logs/finatra.log", "path to log")
+  val templatePath = flag("template_path", "/", "path to templates")
+  val docroot = flag("docroot", "src/main/resources", "path to docroot")
+  val maxRequestSize = flag("max_request_size", 5, "size of max request")
+}
+
+object FinatraServer {
 
   val fs: FinatraServer = new FinatraServer
 
@@ -40,19 +54,12 @@ object FinatraServer extends App {
     fs.addFilter(filter)
   }
 
-  val port = flag("http_port", ":7070", "Http Port")
-  val env = flag("env", "development", "Environment")
-  val appName = flag("name", "finatra", "Name of server")
-  val pidEnabled = flag("pid_enabled", false, "whether to write pid file")
-  val pidPath = flag("pid_path", "finatra.pid", "path to pid file")
-  val logPath = flag("log_path", "logs/finatra.log", "path to log")
-  val templatePath = flag("template_path", "/", "path to templates")
-  val docroot = flag("docroot", "src/main/resources/public", "path to docroot")
-  val maxRequestSize = flag("max_request_size", 5, "size of max request")
 
 }
 
 class FinatraServer extends TwitterServer {
+
+  override val name = "finatra"
 
   val controllers:  ControllerCollection = new ControllerCollection
   var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] =
@@ -64,6 +71,7 @@ class FinatraServer extends TwitterServer {
     Service[FinagleRequest, FinagleResponse] = {
       filters.foldRight(baseService) { (b,a) => b andThen a }
   }
+
 
   def register(app: Controller) { controllers.add(app) }
 
@@ -85,29 +93,13 @@ class FinatraServer extends TwitterServer {
 
     val service = nettyToFinagle andThen allFilters(appService)
 
-    val defaults = Map(
-      "env" -> "development",
-      "port" -> "7070",
-      "name" -> "finatra",
-      "pid_enabled" -> "false",
-      "pid_path" -> "finatra.pid",
-      "log_path" -> "logs/finatra.log",
-      "log_node" -> "finatra",
-      "stats_enabled" -> "true",
-      "stats_port" -> "9990",
-      "template_path" -> "/",
-      "local_docroot" -> "src/main/resources",
-      "max_request_megabytes" -> "5"
-    )
-
-
     //val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
 
-    val server = Http.serve(FinatraServer.port(), service)
+    val server = Http.serve(ConfigThing.port(), service)
 
-    log.info("process %s started on %s", pid, FinatraServer.port())
+    log.info("process %s started on %s", pid, ConfigThing.port())
 
-    println("finatra process " + pid + " started on port: " + FinatraServer.port())
+    println("finatra process " + pid + " started on port: " + ConfigThing.port())
 
     onExit {
       server.close()

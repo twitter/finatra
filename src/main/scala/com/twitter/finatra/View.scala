@@ -29,7 +29,7 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
   }
 
   override def getReader(resourceName:String): Reader = {
-    if (!"development".equals(FinatraServer.env())) {
+    if (!"development".equals(ConfigThing.env())) {
       super.getReader(resourceName)
     }
     // In development mode, we look to the local file
@@ -64,8 +64,8 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
 }
 
 object View {
-  lazy val mustacheFactory  = new FinatraMustacheFactory(FinatraServer.docroot())
-  var baseTemplatePath      = FinatraServer.templatePath()
+  lazy val mustacheFactory  = new FinatraMustacheFactory(ConfigThing.docroot())
+  var baseTemplatePath      = ConfigThing.templatePath()
   def templatePath          = baseTemplatePath
 
   mustacheFactory.setObjectHandler(new TwitterObjectHandler)
@@ -88,7 +88,7 @@ abstract class View extends Callable[String] {
     // In development mode, we flush all of our template
     // caches on each render. Otherwise, partials will
     // remain unchanged in the browser while being edited.
-    if ("development".equals(FinatraServer.env())) {
+    if ("development".equals(ConfigThing.env())) {
       factory.invalidateMustacheCaches()
     }
 
