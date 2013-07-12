@@ -10,7 +10,7 @@ import com.twitter.app.App
 
 class Router(controller: Controller) extends App with Logging {
 
-  override val name = "finatra"
+  //override val name = "finatra"
 
   def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
     log.info("%s %s".format(request.method, request.uri))

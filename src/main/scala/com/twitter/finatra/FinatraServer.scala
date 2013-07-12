@@ -22,45 +22,28 @@ import com.twitter.util.Await
 import com.twitter.server.TwitterServer
 import com.twitter.finagle.Http
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
-import com.twitter.app.App
+import com.twitter.app.{GlobalFlag, Flags, App}
 
-
-
-
-object FinatraServer {
-
-  val fs: FinatraServer = new FinatraServer
-
-  def register(app: Controller) {
-    fs.register(app)
-  }
-
-  def start() {
-    fs.start()
-  }
-
-  def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) {
-    fs.addFilter(filter)
-  }
-
-
-}
+object port extends GlobalFlag[String](":7070", "Http Port")
+object env extends GlobalFlag[String]("development", "Environment")
+object appName extends GlobalFlag[String]("finatra", "Name of server")
+object pidEnabled extends GlobalFlag[Boolean](false, "whether to write pid file")
+object pidPath extends GlobalFlag[String]("finatra.pid", "path to pid file")
+object logPath extends GlobalFlag[String]("logs/finatra.log", "path to log")
+object templatePath extends GlobalFlag[String]("/", "path to templates")
+object docroot extends GlobalFlag[String]("src/main/resources", "path to docroot")
+object maxRequestSize extends GlobalFlag[Int](5, "size of max request")
 
 class FinatraServer extends TwitterServer {
 
-  override val name = "finatra"
-
   val controllers:  ControllerCollection = new ControllerCollection
-  var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] =
-    Seq.empty
-  val pid:          String =
-    ManagementFactory.getRuntimeMXBean().getName().split('@').head
+  var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
+  val pid:          String = ManagementFactory.getRuntimeMXBean.getName.split('@').head
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
     Service[FinagleRequest, FinagleResponse] = {
       filters.foldRight(baseService) { (b,a) => b andThen a }
   }
-
 
   def register(app: Controller) { controllers.add(app) }
 
@@ -73,6 +56,10 @@ class FinatraServer extends TwitterServer {
       service(FinagleRequest(req)) map { _.httpResponse }
     }
 
+  def main() {
+    start()
+  }
+
   def start() {
 
     val appService  = new AppService(controllers)
@@ -84,11 +71,11 @@ class FinatraServer extends TwitterServer {
 
     //val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
 
-    val server = Http.serve(Config.port(), service)
+    val server = Http.serve(port(), service)
 
-    log.info("process %s started on %s", pid, Config.port())
+    log.info("process %s started on %s", pid, port())
 
-    println("finatra process " + pid + " started on port: " + Config.port())
+    println("finatra process " + pid + " started on port: " + port())
 
     onExit {
       server.close()
