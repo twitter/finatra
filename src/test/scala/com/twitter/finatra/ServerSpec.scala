@@ -31,8 +31,8 @@ class ServerSpec extends SpecHelper {
 
   def app = { new TestApp }
 
-  "app" should "register" in {
-    FinatraServer.register(app)
-  }
+//  "app" should "register" in {
+//    FinatraServer.register(app)
+//  }
 
 }

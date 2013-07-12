@@ -63,7 +63,7 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>twitter-server_2.10</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.2</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -120,13 +120,46 @@
     <!-- BUILD PLUGINS -->
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
+        <version>1.5</version>
+        <configuration>
+          <organizationName>Twitter, Inc</organizationName>
+          <licenseName>apache_v2</licenseName>
+          <!--<header>header.txt</header>-->
+          <excludes>
+            <exclude>target/**</exclude>
+            <exclude>**/*.mustache</exclude>
+            <exclude>**/*.html</exclude>
+            <exclude>**/*.js</exclude>
+            <exclude>**/*.txt</exclude>
+            <exclude>**/*.css</exclude>
+            <exclude>**/*.yml</exclude>
+            <exclude>**/*.log</exclude>
+            <exclude>docs/**</exclude>
+            <exclude>**/Makefile</exclude>
+            <exclude>LICENSE</exclude>
+            <exclude>README*</exclude>
+            <exclude>.gitignore</exclude>
+          </excludes>
+        </configuration>
+        <executions>
+          <execution>
+            <id>download-licenses</id>
+            <goals>
+              <goal>download-licenses</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <version>1.4</version>
         <executions>
           <execution>
             <id>sign-artifacts</id>
-            <phase>verify</phase>
+            <phase>deploy</phase>
             <goals>
               <goal>sign</goal>
             </goals>
@@ -193,32 +226,32 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>2.3.2</version>
       </plugin>
-      <plugin>
-        <groupId>com.cloudbees</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>1.7</version>
-        <configuration>
-          <header>header.txt</header>
-          <excludes>
-            <exclude>target/**</exclude>
-            <exclude>**/*.mustache</exclude>
-            <exclude>**/*.html</exclude>
-            <exclude>**/*.js</exclude>
-            <exclude>**/*.txt</exclude>
-            <exclude>**/*.css</exclude>
-            <exclude>**/*.yml</exclude>
-            <exclude>**/*.log</exclude>
-            <exclude>docs/**</exclude>
-            <exclude>**/Makefile</exclude>
-            <exclude>LICENSE</exclude>
-            <exclude>README*</exclude>
-            <exclude>.gitignore</exclude>
-          </excludes>
-          <properties>
-            <year>${project.inceptionYear}</year>
-          </properties>
-        </configuration>
-      </plugin>
+      <!--<plugin>-->
+        <!--<groupId>com.cloudbees</groupId>-->
+        <!--<artifactId>maven-license-plugin</artifactId>-->
+        <!--<version>1.7</version>-->
+        <!--<configuration>-->
+          <!--<header>header.txt</header>-->
+          <!--<excludes>-->
+            <!--<exclude>target/**</exclude>-->
+            <!--<exclude>**/*.mustache</exclude>-->
+            <!--<exclude>**/*.html</exclude>-->
+            <!--<exclude>**/*.js</exclude>-->
+            <!--<exclude>**/*.txt</exclude>-->
+            <!--<exclude>**/*.css</exclude>-->
+            <!--<exclude>**/*.yml</exclude>-->
+            <!--<exclude>**/*.log</exclude>-->
+            <!--<exclude>docs/**</exclude>-->
+            <!--<exclude>**/Makefile</exclude>-->
+            <!--<exclude>LICENSE</exclude>-->
+            <!--<exclude>README*</exclude>-->
+            <!--<exclude>.gitignore</exclude>-->
+          <!--</excludes>-->
+          <!--<properties>-->
+            <!--<year>${project.inceptionYear}</year>-->
+          <!--</properties>-->
+        <!--</configuration>-->
+      <!--</plugin>-->
     </plugins>
     <!-- END BUILD PLUGINS -->
     <!-- EXTENSIONS -->

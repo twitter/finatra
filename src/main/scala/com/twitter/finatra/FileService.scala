@@ -15,7 +15,7 @@ import com.twitter.logging.Logging
 object FileResolver {
 
   def hasFile(path: String): Boolean = {
-    if(Config.env() == "production"){
+    if(env() == "production"){
       hasResourceFile(path)
     } else {
       hasLocalFile(path)
@@ -23,7 +23,7 @@ object FileResolver {
   }
 
   def getInputStream(path: String): InputStream = {
-    if(Config.env() == "production"){
+    if(env() == "production"){
       getResourceInputStream(path)
     } else {
       getLocalInputStream(path)
@@ -34,7 +34,7 @@ object FileResolver {
     getClass.getResourceAsStream(path)
 
   private def getLocalInputStream(path: String): InputStream = {
-    val file = new File(Config.docroot(), path)
+    val file = new File(docroot(), path)
 
     new FileInputStream(file)
   }
@@ -57,7 +57,7 @@ object FileResolver {
   }
 
   private def hasLocalFile(path: String): Boolean = {
-    val file = new File(Config.docroot(), path)
+    val file = new File(docroot(), path)
 
     if(file.toString.contains(".."))     return false
     if(!file.exists || file.isDirectory) return false
@@ -84,7 +84,7 @@ object FileService {
 }
 
 class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App with Logging {
-  override val name = "finatra"
+  //override val name = "finatra"
 
   def isValidPath(path: String): Boolean = {
     val fi      = getClass.getResourceAsStream(path)
