@@ -97,6 +97,15 @@ object App {
     }
 
     /**
+     * Redirects
+     *
+     * curl http://localhost:7070/redirect
+     */
+    get("/redirect") { request =>
+      redirect("http://localhost:7070/", permanent = true).toFuture
+    }
+
+    /**
      * Uploading files
      *
      * curl -F avatar=@/path/to/img http://localhost:7070/profile
@@ -107,6 +116,10 @@ object App {
         avatar.writeToFile("/tmp/avatar") //writes uploaded avatar to /tmp/avatar
       }
       render.plain("ok").toFuture
+    }
+
+    options("/some/resource") { request =>
+      render.plain("usage description").toFuture
     }
 
     /**
@@ -308,7 +321,7 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.3.3</version>
+  <version>1.3.4</version>
 </dependency>
 ```
 
