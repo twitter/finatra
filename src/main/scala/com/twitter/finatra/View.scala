@@ -17,7 +17,6 @@ package com.twitter.finatra
 
 import com.github.mustachejava._
 import com.google.common.base.Charsets;
-import com.twitter.io.TempFile
 import com.twitter.mustache._
 import java.io._
 import java.util.concurrent.Callable
@@ -64,19 +63,23 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
 }
 
 object View {
-  lazy val mustacheFactory  = new FinatraMustacheFactory(Config.get("local_docroot"))
+  lazy val mustacheFactory  = new FinatraMustacheFactory(combinePaths(Config.get("local_docroot"), baseTemplatePath))
   var baseTemplatePath      = Config.get("template_path")
   def templatePath          = baseTemplatePath
 
   mustacheFactory.setObjectHandler(new TwitterObjectHandler)
   mustacheFactory.setExecutorService(Executors.newCachedThreadPool)
+
+  private def combinePaths(path1: String, path2: String): String = {
+    new File(new File(path1), path2).getPath
+  }
 }
 
 abstract class View extends Callable[String] {
 
   def template:String
 
-  def templatePath: String            = baseTemplatePath + template
+  def templatePath: String            = View.combinePaths(baseTemplatePath, template)
   val factory: FinatraMustacheFactory = View.mustacheFactory
   var baseTemplatePath: String        = View.templatePath
   var contentType: Option[String]     = None
