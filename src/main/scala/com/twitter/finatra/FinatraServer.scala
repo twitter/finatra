@@ -67,21 +67,6 @@ class FinatraServer extends Logging with OstrichService {
     filters = filters ++ Seq(filter)
   }
 
-  def initLogger() {
-
-    val handler = FileHandler(
-        filename = "log/finatra.log",
-        rollPolicy = Policy.Never,
-        append = false,
-        level = Some(Level.INFO))
-
-    val log: Logger = LoggerFactory(
-      node = "com.twitter",
-      level = Some(Level.DEBUG),
-      handlers = List(handler)).apply()
-
-  }
-
   def initAdminService(runtimeEnv: RuntimeEnvironment) {
       AdminServiceFactory(
         httpPort = Config.getInt("stats_port"),
