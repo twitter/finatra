@@ -15,7 +15,9 @@
  */
 package com.twitter.finatra
 
-import com.twitter.logging.Logger
+import com.twitter.logging.{LoggerFactory, FileHandler, Logger}
+import com.twitter.logging.config._
+import scala.Some
 
 trait Logging {
   val logger = Logger.get(Config.get("log_node"))
@@ -26,6 +28,21 @@ trait Logging {
       buf.append(" : ")
       buf.append(xs._2)
     }
+  }
+
+  def initLogger() {
+
+    val handler = FileHandler(
+      filename = "log/finatra.log",
+      rollPolicy = Policy.Never,
+      append = false,
+      level = Some(Level.INFO))
+
+    LoggerFactory(
+      node = "com.twitter",
+      level = Some(Level.DEBUG),
+      handlers = List(handler)).apply()
+
   }
 }
 
