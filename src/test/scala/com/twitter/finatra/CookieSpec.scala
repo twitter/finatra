@@ -33,7 +33,7 @@ class CookieApp extends Controller {
 
 }
 
-class CookieSpec extends SpecHelper {
+class CookieSpec extends FlatSpecHelper {
 
   def app = { new CookieApp }
 
