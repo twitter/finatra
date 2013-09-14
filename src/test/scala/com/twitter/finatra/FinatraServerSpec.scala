@@ -15,8 +15,8 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.Controller
-import com.twitter.finatra.FinatraServer
+import com.twitter.finatra.{FinatraParams, Config, Controller, FinatraServer}
+import com.twitter.logging.Logger
 
 
 class TestApp extends Controller {
@@ -35,6 +35,9 @@ class FinatraServerSpec extends SpecHelper {
     val server = new FinatraServer
     server.register(app)
     server.start()
+
+    server.logger.debug("SHOULD NOT APPEAR!!")
+    server.logger.info("SHOULD SEE THIS")
     server.shutdown()
   }
 
