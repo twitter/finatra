@@ -305,6 +305,7 @@ Available configuration properties and their defaults
 -Dlog_path=logs/finatra.log
 -Dlog_node=finatra
 -Dlog_level=INFO
+-Dlog_to_stdout=false
 -Dport=7070
 -Dmax_request_megabytes=5
 -Dstats_enabled=true
