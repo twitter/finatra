@@ -15,7 +15,7 @@
  */
 package com.twitter.finatra
 
-import test.SpecHelper
+import com.twitter.finatra.test.{FlatSpecHelper}
 import com.twitter.finatra.ContentType._
 
 
@@ -23,7 +23,7 @@ import com.twitter.finatra.ContentType._
  README.markdown, all new generated apps, and the finatra_example repo
  */
 
-class ExampleSpec extends SpecHelper {
+class ExampleSpec extends FlatSpecHelper {
 
   /* ###BEGIN_APP### */
 

@@ -27,7 +27,7 @@ class TestApp extends Controller {
 
 }
 
-class FinatraServerSpec extends SpecHelper {
+class ServerSpec extends FlatSpecHelper {
 
   def app = { new TestApp }
 
