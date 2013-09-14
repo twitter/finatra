@@ -69,7 +69,7 @@ class FinatraServer extends Logging with OstrichService {
 
   def initAdminService(runtimeEnv: RuntimeEnvironment) {
       AdminServiceFactory(
-        httpPort = Config.getInt("stats_port"),
+        httpPort = Config.getInt(FinatraParams.statsPort),
         statsNodes = StatsFactory(
           reporters = JsonStatsLoggerFactory(serviceName = Some("finatra")) ::
                   TimeSeriesCollectorFactory() :: Nil
@@ -95,7 +95,7 @@ class FinatraServer extends Logging with OstrichService {
 
     ServiceTracker.register(this)
 
-    if(Config.getBool("stats_enabled")){
+    if(Config.getBool(FinatraParams.statsEnabled)){
       initAdminService(runtimeEnv)
     }
 
@@ -106,9 +106,9 @@ class FinatraServer extends Logging with OstrichService {
 
     addFilter(fileService)
 
-    val port = Config.getInt("port")
+    val port = Config.getInt(FinatraParams.port)
     val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
-    val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
+    val http = Http().maxRequestSize(Config.getInt(FinatraParams.maxRequestMegabytes).megabyte)
 
     val codec = new RichHttp[FinagleRequest](http)
 
@@ -116,7 +116,7 @@ class FinatraServer extends Logging with OstrichService {
       .codec(codec)
       .bindTo(new InetSocketAddress(port))
       .tracer(tracer)
-      .name(Config.get("name"))
+      .name(Config.get(FinatraParams.name))
       .build(service))
 
     logger.info("process %s started on %s", pid, port)
