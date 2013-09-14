@@ -33,7 +33,7 @@ trait Logging {
   def initLogger() {
 
     val handler = FileHandler(
-      filename = "log/finatra.log",
+      filename = FinatraParams.logPath,
       rollPolicy = Policy.Never,
       append = false,
       level = Some(Level.INFO))
