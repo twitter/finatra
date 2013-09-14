@@ -97,8 +97,6 @@ class FinatraServer extends Logging with OstrichService {
       initAdminService(runtimeEnv)
     }
 
-    initLogger()
-
     val appService  = new AppService(controllers)
     val fileService = new FileService
 

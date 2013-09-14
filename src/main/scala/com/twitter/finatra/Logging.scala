@@ -17,11 +17,8 @@ package com.twitter.finatra
 
 import com.twitter.logging._
 import com.twitter.logging.LoggerFactory
-import com.twitter.logging.config.Policy
 
 trait Logging {
-  val logger = Logger.get(Config.get(FinatraParams.logNode))
-
   val logLevel = {
     val configuredLogLevelName = Config.get(FinatraParams.logLevel)
     if (!Logger.levelNames.contains(configuredLogLevelName)) {
@@ -32,23 +29,13 @@ trait Logging {
     Some(Logger.levelNames(configuredLogLevelName))
   }
 
-  def stdoutHandlerFactory = () => new ConsoleHandler
+  val logger = {
+      val handler: HandlerFactory = () => new ConsoleHandler()
 
-  def fileHandlerFactory = {
-    FileHandler(
-      filename = Config.get(FinatraParams.logPath),
-      rollPolicy = Policy.Never,
-      append = false,
-      level = logLevel)
-  }
-
-  def initLogger() {
-    val handler: HandlerFactory = if (Config.getBool(FinatraParams.logToStdout)) stdoutHandlerFactory else fileHandlerFactory
-
-    LoggerFactory(
-      node = "com.twitter",
-      level = logLevel,
-      handlers = List(handler)).apply()
+      LoggerFactory(
+        node = Config.get(FinatraParams.logNode),
+        level = logLevel,
+        handlers = List(handler)).apply()
   }
 
   def appendCollection[A, B](buf: StringBuilder, x: Map[A, B]) {
