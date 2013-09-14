@@ -78,7 +78,7 @@ class FinatraServer extends Logging with OstrichService {
 
   def shutdown() {
     logger.info("shutting down")
-    println("finatra process shutting down")
+    logger.info("finatra process shutting down")
     server foreach { s => s.close()() }
     System.exit(0)
   }
@@ -119,8 +119,8 @@ class FinatraServer extends Logging with OstrichService {
 
     logger.info("process %s started on %s", pid, port)
 
-    println("finatra process " + pid + " started on port: " + port.toString)
-    println("config args:")
+    logger.info("finatra process " + pid + " started on port: " + port.toString)
+    logger.info("config args:")
     Config.printConfig()
 
   }
