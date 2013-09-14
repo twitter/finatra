@@ -20,7 +20,7 @@ import com.twitter.logging.config._
 import scala.Some
 
 trait Logging {
-  val logger = Logger.get(Config.get("log_node"))
+  val logger = Logger.get(Config.get(FinatraParams.logNode))
 
   def appendCollection[A,B](buf: StringBuilder, x: Map[A,B]) {
     x foreach { xs =>
