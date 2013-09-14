@@ -22,7 +22,7 @@ import com.twitter.logging.Logger
 class TestApp extends Controller {
 
   get("/hey") {
-    request => render.plain("hello").toFuture
+    request =>  render.plain("hello").toFuture
   }
 
 }

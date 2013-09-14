@@ -22,10 +22,8 @@ object FinatraParams {
   val name: String = "name"
   val pidEnabled: String = "pid_enabled"
   val pidPath: String = "pid_path"
-  val logPath: String = "log_path"
   val logNode: String = "log_node"
   val logLevel: String = "log_level"
-  val logToStdout:String = "log_to_stdout"
   val statsEnabled: String = "stats_enabled"
   val statsPort: String = "stats_port"
   val templatePath: String = "template_path"
@@ -40,9 +38,7 @@ object Config {
       FinatraParams.name -> "finatra",
       FinatraParams.pidEnabled -> "false",
       FinatraParams.pidPath -> "finatra.pid",
-      FinatraParams.logPath -> "logs/finatra.log",
-      FinatraParams.logToStdout -> "false",
-      FinatraParams.logLevel -> "INFO",
+      FinatraParams.logLevel -> "DEBUG",
       FinatraParams.logNode -> "finatra",
       FinatraParams.statsEnabled -> "true",
       FinatraParams.statsPort -> "9990",
