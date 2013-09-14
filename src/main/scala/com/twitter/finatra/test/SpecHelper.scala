@@ -21,8 +21,6 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finatra.{AppService, ControllerCollection, Controller}
 import org.jboss.netty.handler.codec.http.HttpMethod
-import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
 
 class MockResponse(val originalResponse: FinagleResponse) {
 
@@ -34,7 +32,7 @@ class MockResponse(val originalResponse: FinagleResponse) {
 
 }
 
-abstract class SpecHelper extends FlatSpec with ShouldMatchers {
+trait SpecHelper {
 
   def response  = new MockResponse(lastResponse.get)
   var lastResponse:Future[FinagleResponse] = null
@@ -86,3 +84,4 @@ abstract class SpecHelper extends FlatSpec with ShouldMatchers {
   }
 
 }
+
