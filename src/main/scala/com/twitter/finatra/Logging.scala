@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +21,15 @@ import scala.Some
 
 trait Logging {
   val logger = Logger.get(Config.get(FinatraParams.logNode))
+  val logLevel = {
+    val configuredLogLevelName = Config.get(FinatraParams.logLevel)
+    if (!Logger.levelNames.contains(configuredLogLevelName)) {
+      val availableLogLevels: String = Logger.levelNames.keys.mkString(",")
+      throw new IllegalArgumentException("Invalid log level configuration: %s=%s, must be one of %s".format(FinatraParams.logLevel, configuredLogLevelName, availableLogLevels))
+    }
+
+    Some(Logger.levelNames(configuredLogLevelName))
+  }
 
   def appendCollection[A,B](buf: StringBuilder, x: Map[A,B]) {
     x foreach { xs =>
@@ -36,13 +45,14 @@ trait Logging {
       filename = FinatraParams.logPath,
       rollPolicy = Policy.Never,
       append = false,
-      level = Some(Level.INFO))
+      level = logLevel)
 
     LoggerFactory(
       node = "com.twitter",
-      level = Some(Level.DEBUG),
+      level = logLevel,
       handlers = List(handler)).apply()
 
   }
+
 }
 

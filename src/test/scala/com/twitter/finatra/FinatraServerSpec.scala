@@ -34,6 +34,8 @@ class FinatraServerSpec extends SpecHelper {
   "app" should "register" in {
     val server = new FinatraServer
     server.register(app)
+    server.start()
+    server.shutdown()
   }
 
 }
