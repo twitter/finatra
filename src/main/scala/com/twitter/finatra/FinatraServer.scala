@@ -40,6 +40,10 @@ object FinatraServer {
     fs.start()
   }
 
+  def startWithSsl(certPath: String, keyPath: String) {
+    fs.startWithSsl(certPath, keyPath)
+  }
+
   def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) {
     fs.addFilter(filter)
   }
@@ -101,12 +105,19 @@ class FinatraServer extends Logging with OstrichService {
   }
 
   def start() {
-    start(NullTracer, new RuntimeEnvironment(this))
+    start(NullTracer, new RuntimeEnvironment(this), None, None)
+  }
+
+  def startWithSsl(certPath: String, keyPath: String) {
+    start(NullTracer, new RuntimeEnvironment(this), Some(certPath), Some(keyPath))
   }
 
   def start(
     tracer:     Tracer              = NullTracer,
-    runtimeEnv: RuntimeEnvironment  = new RuntimeEnvironment(this)) {
+    runtimeEnv: RuntimeEnvironment  = new RuntimeEnvironment(this),
+    certPathOpt: Option[String],
+    keyPathOpt: Option[String]
+  ) {
 
     ServiceTracker.register(this)
 
@@ -127,12 +138,17 @@ class FinatraServer extends Logging with OstrichService {
 
     val codec = new RichHttp[FinagleRequest](http)
 
-    server = Some(ServerBuilder()
-      .codec(codec)
-      .bindTo(new InetSocketAddress(port))
-      .tracer(tracer)
-      .name(Config.get("name"))
-      .build(service))
+    val serverBuilder = ServerBuilder()
+            .codec(codec)
+            .bindTo(new InetSocketAddress(port))
+            .tracer(tracer)
+            .name(Config.get("name"))
+
+    val server: Server =
+      ((certPathOpt, keyPathOpt) match {
+        case (Some(cert), Some(key)) => serverBuilder.tls(cert, key)
+        case _ => serverBuilder
+      }).build(service)
 
     logger.info("process %s started on %s", pid, port)
 
