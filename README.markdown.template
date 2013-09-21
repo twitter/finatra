@@ -45,6 +45,7 @@ object App {
   def main(args: Array[String]) = {
     FinatraServer.register(app)
     FinatraServer.start()
+    // For SSL, use FinatraServer.startWithSsl(<certificate_path>, <key_path>)
   }
 
 
