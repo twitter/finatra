@@ -15,24 +15,30 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.Controller
-import com.twitter.finatra.FinatraServer
+import com.twitter.finatra.{FinatraParams, Config, Controller, FinatraServer}
+import com.twitter.logging.Logger
 
 
 class TestApp extends Controller {
 
   get("/hey") {
-    request => render.plain("hello").toFuture
+    request =>  render.plain("hello").toFuture
   }
 
 }
 
-class ServerSpec extends SpecHelper {
+class FinatraServerSpec extends SpecHelper {
 
   def app = { new TestApp }
 
   "app" should "register" in {
-    FinatraServer.register(app)
+    val server = new FinatraServer
+    server.register(app)
+    server.start()
+
+    server.logger.debug("SHOULD NOT APPEAR!!")
+    server.logger.info("SHOULD SEE THIS")
+    server.shutdown()
   }
 
 }
