@@ -18,7 +18,6 @@ package com.twitter.finatra
 import com.twitter.finagle.Service
 import com.twitter.util.{Await, Future}
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.logging.Logging
 import com.twitter.app.App
 
 class AppService(controllers: ControllerCollection)

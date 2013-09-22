@@ -10,7 +10,6 @@ import org.apache.commons.io.IOUtils
 import java.io.{FileInputStream, File, InputStream}
 import javax.activation.MimetypesFileTypeMap
 import com.twitter.app.App
-import com.twitter.logging.Logging
 
 object FileResolver {
 

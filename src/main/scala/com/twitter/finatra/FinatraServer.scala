@@ -22,7 +22,7 @@ import com.twitter.util.Await
 import com.twitter.server.TwitterServer
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 
-class FinatraServer extends TwitterServer {
+class FinatraServer extends FinatraTwitterServer {
 
   val controllers:  ControllerCollection = new ControllerCollection
   var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
