@@ -29,13 +29,26 @@ trait Logging {
     Some(Logger.levelNames(configuredLogLevelName))
   }
 
-  val logger = {
-      val handler: HandlerFactory = () => new ConsoleHandler()
+  val logger = Logger.get(Config.get(FinatraParams.logNode))
 
-      LoggerFactory(
-        node = Config.get(FinatraParams.logNode),
-        level = logLevel,
-        handlers = List(handler)).apply()
+  val initLogger = {
+    lazy val consoleHandler: HandlerFactory = ConsoleHandler()
+    lazy val fileHandler: HandlerFactory = FileHandler(
+      filename = Config.get(FinatraParams.logPath),
+      level = logLevel
+    )
+
+    var handlers: List[HandlerFactory] = List(consoleHandler)
+
+    if (Config.hasKey(FinatraParams.logPath)) {
+      handlers = handlers ++ List(fileHandler)
+    }
+
+    LoggerFactory(
+      node = Config.get(FinatraParams.logNode),
+      level = logLevel,
+      handlers = handlers).apply()
+
   }
 
   def appendCollection[A, B](buf: StringBuilder, x: Map[A, B]) {
