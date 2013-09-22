@@ -81,4 +81,8 @@ abstract class SpecHelper extends FlatSpec with ShouldMatchers {
     buildRequest(HttpMethod.PATCH,path,params,headers)
   }
 
+  def options(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
+    buildRequest(HttpMethod.OPTIONS,path,params,headers)
+  }
+
 }

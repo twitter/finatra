@@ -15,19 +15,19 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.Controller
-import com.twitter.finatra.FinatraServer
+import com.twitter.finatra.{ConfigFlags, Config, Controller, FinatraServer}
+import com.twitter.logging.Logger
 
 
 class TestApp extends Controller {
 
   get("/hey") {
-    request => render.plain("hello").toFuture
+    request =>  render.plain("hello").toFuture
   }
 
 }
 
-class ServerSpec extends SpecHelper {
+class FinatraServerSpec extends SpecHelper {
 
   def app = { new TestApp }
 

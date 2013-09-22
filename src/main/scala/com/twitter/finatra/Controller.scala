@@ -34,6 +34,7 @@ class Controller(statsReceiver: StatsReceiver = NullStatsReceiver) {
   def put(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.PUT,    path)(callback) }
   def head(path: String)  (callback: Request => Future[Response]) { addRoute(HttpMethod.HEAD,   path)(callback) }
   def patch(path: String) (callback: Request => Future[Response]) { addRoute(HttpMethod.PATCH,  path)(callback) }
+  def options(path: String)(callback: Request => Future[Response]){ addRoute(HttpMethod.OPTIONS, path)(callback) }
 
   def notFound(callback: Request => Future[Response]) {
     notFoundHandler = Option(callback)

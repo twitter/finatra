@@ -104,14 +104,14 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
   }
 
   def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]): Future[FinagleResponse] = {
-    if (FileResolver.hasFile(request.uri) && request.uri != '/') {
-      val fh  = FileResolver.getInputStream(request.uri)
+    if (FileResolver.hasFile(request.path) && request.path != '/') {
+      val fh  = FileResolver.getInputStream(request.path)
       val b   = IOUtils.toByteArray(fh)
 
       fh.read(b)
 
       val response  = request.response
-      val mtype     = FileService.extMap.getContentType('.' + request.uri.toString.split('.').last)
+      val mtype     = FileService.extMap.getContentType('.' + request.path.toString.split('.').last)
 
       response.status = OK
       response.setHeader("Content-Type", mtype)

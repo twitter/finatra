@@ -104,6 +104,10 @@ class ExampleSpec extends SpecHelper {
       render.plain("ok").toFuture
     }
 
+    options("/some/resource") { request =>
+      render.plain("usage description").toFuture
+    }
+
     /**
      * Rendering views
      *
@@ -290,6 +294,11 @@ class ExampleSpec extends SpecHelper {
     get("/redirect")
     response.body should equal("Redirecting to <a href=\"http://localhost:7070/\">http://localhost:7070/</a>.")
     response.code should equal(301)
+  }
+
+  "OPTIONS /some/resource" should "respond with usage description" in {
+    options("/some/resource")
+    response.body should equal("usage description")
   }
 
   "GET /template" should "respond with a rendered template" in {

@@ -45,6 +45,7 @@ object App {
   def main(args: Array[String]) = {
     FinatraServer.register(app)
     FinatraServer.start()
+    // For SSL, use FinatraServer.startWithSsl(<certificate_path>, <key_path>)
   }
 
 
@@ -88,8 +89,8 @@ Available configuration properties and their defaults
 
 ```sh
 -Dname=finatra
--Dlog_path=logs/finatra.log
 -Dlog_node=finatra
+-Dlog_level=INFO
 -Dport=7070
 -Dmax_request_megabytes=5
 -Dstats_enabled=true

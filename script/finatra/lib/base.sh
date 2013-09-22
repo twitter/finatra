@@ -1,5 +1,5 @@
-VERSION=1.3.3
-EXAMPLE_REPO=~/personal/finatra_example
+VERSION=1.3.8
+EXAMPLE_REPO=~/personal/code/finatra_example
 
 
 function replace_with_example_app {
