@@ -20,32 +20,32 @@ import com.twitter.logging.LoggerFactory
 
 trait Logging {
   val logLevel = {
-    val configuredLogLevelName = Config.get(FinatraParams.logLevel)
+    val configuredLogLevelName = Config.get(ConfigFlags.logLevel)
     if (!Logger.levelNames.contains(configuredLogLevelName)) {
       val availableLogLevels: String = Logger.levelNames.keys.mkString(",")
-      throw new IllegalArgumentException("Invalid log level configuration: %s=%s, must be one of %s".format(FinatraParams.logLevel, configuredLogLevelName, availableLogLevels))
+      throw new IllegalArgumentException("Invalid log level configuration: %s=%s, must be one of %s".format(ConfigFlags.logLevel, configuredLogLevelName, availableLogLevels))
     }
 
     Some(Logger.levelNames(configuredLogLevelName))
   }
 
-  val logger = Logger.get(Config.get(FinatraParams.logNode))
+  val logger = Logger.get(Config.get(ConfigFlags.logNode))
 
   val initLogger = {
     lazy val consoleHandler: HandlerFactory = ConsoleHandler()
     lazy val fileHandler: HandlerFactory = FileHandler(
-      filename = Config.get(FinatraParams.logPath),
+      filename = Config.get(ConfigFlags.logPath),
       level = logLevel
     )
 
     var handlers: List[HandlerFactory] = List(consoleHandler)
 
-    if (Config.hasKey(FinatraParams.logPath)) {
+    if (Config.hasKey(ConfigFlags.logPath)) {
       handlers = handlers ++ List(fileHandler)
     }
 
     LoggerFactory(
-      node = Config.get(FinatraParams.logNode),
+      node = Config.get(ConfigFlags.logNode),
       level = logLevel,
       handlers = handlers).apply()
 

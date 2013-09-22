@@ -16,7 +16,7 @@
 
 package com.twitter.finatra
 
-object FinatraParams {
+object ConfigFlags {
   val env: String = "env"
   val port: String = "port"
   val name: String = "name"
@@ -34,25 +34,33 @@ object FinatraParams {
 
 object Config {
     val defaults = Map(
-      FinatraParams.env -> "development",
-      FinatraParams.port -> "7070",
-      FinatraParams.name -> "finatra",
-      FinatraParams.pidEnabled -> "false",
-      FinatraParams.pidPath -> "finatra.pid",
-      FinatraParams.logPath -> "logs/finatra.log",
-	    FinatraParams.logLevel -> "INFO",
-      FinatraParams.logNode -> "finatra",
-      FinatraParams.statsEnabled -> "true",
-      FinatraParams.statsPort -> "9990",
-      FinatraParams.templatePath -> "/",
-      FinatraParams.localDocroot -> "src/main/resources",
-      FinatraParams.maxRequestMegabytes -> "5"
+      ConfigFlags.env -> "development",
+      ConfigFlags.port -> "7070",
+      ConfigFlags.name -> "finatra",
+      ConfigFlags.pidEnabled -> "false",
+      ConfigFlags.pidPath -> "finatra.pid",
+      ConfigFlags.logPath -> "logs/finatra.log",
+	    ConfigFlags.logLevel -> "INFO",
+      ConfigFlags.logNode -> "finatra",
+      ConfigFlags.statsEnabled -> "true",
+      ConfigFlags.statsPort -> "9990",
+      ConfigFlags.templatePath -> "/",
+      ConfigFlags.localDocroot -> "src/main/resources",
+      ConfigFlags.maxRequestMegabytes -> "5"
     )
 
     def get(key:String): String = {
       Option(System.getProperty(key)) match {
         case Some(prop) => prop
         case None => defaults.get(key).get
+      }
+    }
+
+    def hasKey(key:String): Boolean = {
+      try {
+        !get(key).isEmpty
+      } catch {
+        case e: NoSuchElementException => false
       }
     }
 
