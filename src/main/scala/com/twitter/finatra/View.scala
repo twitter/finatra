@@ -63,9 +63,9 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
 }
 
 object View {
-  lazy val mustacheFactory  = new FinatraMustacheFactory(config.docroot())
   var baseTemplatePath      = config.templatePath()
   def templatePath          = baseTemplatePath
+  lazy val mustacheFactory  = new FinatraMustacheFactory(baseTemplatePath)
 
   mustacheFactory.setObjectHandler(new TwitterObjectHandler)
   mustacheFactory.setExecutorService(Executors.newCachedThreadPool)
@@ -94,7 +94,6 @@ abstract class View extends Callable[String] {
     if ("development".equals(config.env())) {
       factory.invalidateMustacheCaches()
     }
-
     val output = new StringWriter
     mustache.execute(output, this).flush()
     output.toString

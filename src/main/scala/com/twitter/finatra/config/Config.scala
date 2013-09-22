@@ -12,5 +12,6 @@ object logPath        extends GlobalFlag[String]("logs/finatra.log", "path to lo
 object logLevel       extends GlobalFlag[String]("INFO", "log level")
 object logNode        extends GlobalFlag[String]("finatra", "Logging node")
 object templatePath   extends GlobalFlag[String]("/", "path to templates")
+object assetPath     extends GlobalFlag[String]("/public", "path to assets")
 object docroot        extends GlobalFlag[String]("src/main/resources", "path to docroot")
 object maxRequestSize extends GlobalFlag[Int](5, "size of max request")
