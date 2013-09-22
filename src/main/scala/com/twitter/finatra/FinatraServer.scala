@@ -18,11 +18,10 @@ package com.twitter.finatra
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.{Filter, Service, SimpleFilter, Http}
 import java.lang.management.ManagementFactory
 import com.twitter.util.Await
 import com.twitter.server.TwitterServer
-import com.twitter.finagle.Http
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 import com.twitter.app.{GlobalFlag, Flags, App}
 

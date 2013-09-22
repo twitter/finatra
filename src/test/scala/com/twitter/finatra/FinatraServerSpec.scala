@@ -15,7 +15,7 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.{ConfigFlags, Config, Controller, FinatraServer}
+import com.twitter.finatra.{Controller, FinatraServer}
 import com.twitter.logging.Logger
 
 
