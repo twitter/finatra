@@ -9,11 +9,7 @@ import com.twitter.app.App
 
 class Router(controller: Controller) extends App with Logging {
 
-  //override val name = "finatra"
-
   def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
-    log.info("%s %s".format(request.method, request.uri))
-
     dispatchRouteOrCallback(request, request.method, (request) => {
       // fallback to GET for 404'ed GET requests (curl -I support)
       if (request.method == HttpMethod.HEAD) {
