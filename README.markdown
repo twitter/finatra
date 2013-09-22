@@ -259,6 +259,7 @@ object App {
   def main(args: Array[String]) = {
     FinatraServer.register(app)
     FinatraServer.start()
+    // For SSL, use FinatraServer.startWithSsl(<certificate_path>, <key_path>)
   }
 
 
@@ -321,7 +322,7 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.3.7</version>
+  <version>1.3.8</version>
 </dependency>
 ```
 
