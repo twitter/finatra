@@ -71,11 +71,7 @@ class FinatraServer extends Logging with OstrichService {
 
   def initAdminService(runtimeEnv: RuntimeEnvironment) {
       AdminServiceFactory(
-        httpPort = Config.getInt(ConfigFlags.statsPort),
-        statsNodes = StatsFactory(
-          reporters = JsonStatsLoggerFactory(serviceName = Some("finatra")) ::
-                  TimeSeriesCollectorFactory() :: Nil
-        ) :: Nil
+        httpPort = Config.getInt(ConfigFlags.statsPort)
       )(runtimeEnv)
   }
 
@@ -131,10 +127,7 @@ class FinatraServer extends Logging with OstrichService {
         case _ => serverBuilder
       }).build(service)
 
-    logger.info("process %s started on %s", pid, port)
-
     logger.info("finatra process " + pid + " started on port: " + port.toString)
-    logger.info("config args:")
     Config.printConfig()
 
   }
