@@ -68,6 +68,7 @@ class FinatraServer extends FinatraTwitterServer {
     //  }).build(service)
 
     log.info("finatra process " + pid + " started on port: " + config.port())
+    log.info("admin server started on port: " + config.adminPort())
 
     onExit {
       server.close()
