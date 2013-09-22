@@ -41,7 +41,7 @@ object Config {
       FinatraParams.pidEnabled -> "false",
       FinatraParams.pidPath -> "finatra.pid",
       FinatraParams.logPath -> "logs/finatra.log",
-	  FinatraParams.logLevel -> "INFO",
+	    FinatraParams.logLevel -> "INFO",
       FinatraParams.logNode -> "finatra",
       FinatraParams.statsEnabled -> "true",
       FinatraParams.statsPort -> "9990",
