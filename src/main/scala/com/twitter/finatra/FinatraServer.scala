@@ -51,7 +51,9 @@ class FinatraServer extends FinatraTwitterServer {
 
     val appService  = new AppService(controllers)
     val fileService = new FileService
+    val loggingFilter = new LoggingFilter
 
+    addFilter(loggingFilter)
     addFilter(fileService)
 
     val service = nettyToFinagle andThen allFilters(appService)
