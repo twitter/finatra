@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 import org.apache.commons.io.IOUtils
+import java.io.File
 
 object Response {
   def apply(body: String): FinagleResponse =
@@ -160,13 +161,14 @@ class Response {
   }
 
   def static(path: String): Response = {
-    if (FileResolver.hasFile(path) && path != '/') {
-      val stream  = FileResolver.getInputStream(path)
+    val fullAssetPath = new File(config.assetPath(), path).toString
+    if (FileResolver.hasFile(fullAssetPath) && path != '/') {
+      val stream  = FileResolver.getInputStream(fullAssetPath)
       val bytes   = IOUtils.toByteArray(stream)
 
       stream.read(bytes)
 
-      val mtype = FileService.extMap.getContentType('.' + path.split('.').last)
+      val mtype = FileService.extMap.getContentType('.' + fullAssetPath.split('.').last)
 
       this.status = 200
       this.header("Content-Type", mtype)

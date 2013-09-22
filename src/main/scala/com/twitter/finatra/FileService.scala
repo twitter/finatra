@@ -83,7 +83,6 @@ object FileService {
 }
 
 class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App with Logging {
-  //override val name = "finatra"
 
   def isValidPath(path: String): Boolean = {
     val fi      = getClass.getResourceAsStream(path)
@@ -103,8 +102,9 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
   }
 
   def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]): Future[FinagleResponse] = {
-    if (FileResolver.hasFile(request.path) && request.path != '/') {
-      val fh  = FileResolver.getInputStream(request.path)
+    val path = new File(config.assetPath(), request.path).toString
+    if (FileResolver.hasFile(path) && request.path != '/') {
+      val fh  = FileResolver.getInputStream(path)
       val b   = IOUtils.toByteArray(fh)
 
       fh.read(b)

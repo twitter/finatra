@@ -19,7 +19,6 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import com.twitter.finagle.{Filter, Service, SimpleFilter, Http}
 import java.lang.management.ManagementFactory
 import com.twitter.util.Await
-import com.twitter.server.TwitterServer
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 
 class FinatraServer extends FinatraTwitterServer {
