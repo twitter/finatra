@@ -21,7 +21,9 @@ import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import com.twitter.finagle.http.{Response => FinagleResponse}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-import com.codahale.jerkson.{Json, Generator}
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+
 import org.apache.commons.io.IOUtils
 
 object Response {
@@ -46,7 +48,10 @@ class Response {
 
   lazy val cookies = new CookieEncoder(true)
 
-  val jsonGenerator: Generator = Json
+  lazy val jsonMapper = {
+    val m = new ObjectMapper()
+    m.registerModule(DefaultScalaModule)
+  }
 
   def contentType: Option[String] =
     this.headers.get("Content-Type")
@@ -55,7 +60,7 @@ class Response {
     json match {
       case Some(j) =>
         resp.setHeader("Content-Type", "application/json")
-        resp.setContent(copiedBuffer(jsonGenerator.generate(j), UTF_8))
+        resp.setContent(copiedBuffer(jsonMapper.writeValueAsString(j), UTF_8))
       case None =>
         view match {
            case Some(v) =>

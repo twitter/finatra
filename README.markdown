@@ -97,6 +97,15 @@ object App {
     }
 
     /**
+     * Redirects
+     *
+     * curl http://localhost:7070/redirect
+     */
+    get("/redirect") { request =>
+      redirect("http://localhost:7070/", permanent = true).toFuture
+    }
+
+    /**
      * Uploading files
      *
      * curl -F avatar=@/path/to/img http://localhost:7070/profile
@@ -107,6 +116,10 @@ object App {
         avatar.writeToFile("/tmp/avatar") //writes uploaded avatar to /tmp/avatar
       }
       render.plain("ok").toFuture
+    }
+
+    options("/some/resource") { request =>
+      render.plain("usage description").toFuture
     }
 
     /**
@@ -246,6 +259,7 @@ object App {
   def main(args: Array[String]) = {
     FinatraServer.register(app)
     FinatraServer.start()
+    // For SSL, use FinatraServer.startWithSsl(<certificate_path>, <key_path>)
   }
 
 
@@ -289,8 +303,8 @@ Available configuration properties and their defaults
 
 ```sh
 -Dname=finatra
--Dlog_path=logs/finatra.log
 -Dlog_node=finatra
+-Dlog_level=INFO
 -Dport=7070
 -Dmax_request_megabytes=5
 -Dstats_enabled=true
@@ -308,7 +322,7 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.3.3</version>
+  <version>1.3.8</version>
 </dependency>
 ```
 

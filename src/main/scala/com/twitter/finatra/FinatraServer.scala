@@ -15,8 +15,10 @@
  */
 package com.twitter.finatra
 
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse, _}
-import com.twitter.finagle._
+import com.twitter.finagle.builder.{Server, ServerBuilder}
+import com.twitter.finagle.http._
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
+import com.twitter.finagle.{Service, SimpleFilter}
 import java.lang.management.ManagementFactory
 import com.twitter.util.Await
 import com.twitter.server.TwitterServer
@@ -75,8 +77,13 @@ class FinatraServer extends TwitterServer {
     val server = Http.serve(port(), service)
 
     log.info("process %s started on %s", pid, port())
+    //val server: Server =
+    //  ((certPathOpt, keyPathOpt) match {
+    //    case (Some(cert), Some(key)) => serverBuilder.tls(cert, key)
+    //    case _ => serverBuilder
+    //  }).build(service)
 
-    println("finatra process " + pid + " started on port: " + port())
+    log.info("finatra process " + pid + " started on port: " + port())
 
     onExit {
       server.close()
