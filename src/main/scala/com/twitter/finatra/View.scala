@@ -16,7 +16,7 @@
 package com.twitter.finatra
 
 import com.github.mustachejava._
-import com.google.common.base.Charsets;
+import com.google.common.base.Charsets
 import com.twitter.mustache._
 import java.io._
 import java.util.concurrent.Callable
@@ -28,7 +28,7 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
   }
 
   override def getReader(resourceName:String): Reader = {
-    if (!"development".equals(env())) {
+    if (!"development".equals(config.env())) {
       super.getReader(resourceName)
     }
     // In development mode, we look to the local file
@@ -63,8 +63,8 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
 }
 
 object View {
-  lazy val mustacheFactory  = new FinatraMustacheFactory(docroot())
-  var baseTemplatePath      = com.twitter.finatra.templatePath()
+  lazy val mustacheFactory  = new FinatraMustacheFactory(config.docroot())
+  var baseTemplatePath      = config.templatePath()
   def templatePath          = baseTemplatePath
 
   mustacheFactory.setObjectHandler(new TwitterObjectHandler)
@@ -91,7 +91,7 @@ abstract class View extends Callable[String] {
     // In development mode, we flush all of our template
     // caches on each render. Otherwise, partials will
     // remain unchanged in the browser while being edited.
-    if ("development".equals(env())) {
+    if ("development".equals(config.env())) {
       factory.invalidateMustacheCaches()
     }
 
