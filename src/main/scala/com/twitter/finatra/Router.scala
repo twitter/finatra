@@ -5,7 +5,6 @@ import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.collection.mutable.ListBuffer
 import scala.collection.Map
 import com.twitter.util.Future
-import com.twitter.logging.Logging
 import com.twitter.app.App
 
 class Router(controller: Controller) extends App with Logging {
@@ -100,5 +99,8 @@ class Router(controller: Controller) extends App with Logging {
 
   def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
     Future[Response] = internalDispatch(HttpMethod.PATCH, path, params, headers)
+
+  def options(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
+    Future[Response] = internalDispatch(HttpMethod.OPTIONS, path, params, headers)
 
 }
