@@ -73,6 +73,7 @@ object Config {
     }
 
     def printConfig() {
+      println("Config args:")
       defaults.foreach { xs =>
         println("-D" + xs._1 + "=" + Config.get(xs._1) + "\\")
       }
