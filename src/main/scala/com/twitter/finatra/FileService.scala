@@ -32,7 +32,7 @@ object FileResolver {
     getClass.getResourceAsStream(path)
 
   private def getLocalInputStream(path: String): InputStream = {
-    val file = new File(Config.get(FinatraParams.localDocroot), path)
+    val file = new File(Config.get(ConfigFlags.localDocroot), path)
 
     new FileInputStream(file)
   }
@@ -55,7 +55,7 @@ object FileResolver {
   }
 
   private def hasLocalFile(path: String): Boolean = {
-    val file = new File(Config.get(FinatraParams.localDocroot), path)
+    val file = new File(Config.get(ConfigFlags.localDocroot), path)
 
     if(file.toString.contains(".."))     return false
     if(!file.exists || file.isDirectory) return false
