@@ -20,11 +20,12 @@ import com.twitter.finagle._
 import java.lang.management.ManagementFactory
 import com.twitter.util.Await
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
-import com.twitter.finagle.netty3.Netty3Listener
+import com.twitter.finagle.netty3.{Netty3ListenerTLSConfig, Netty3Listener}
 import java.net.SocketAddress
 import com.twitter.conversions.storage._
 import com.twitter.finagle.server.DefaultServer
 import com.twitter.finagle.dispatch.SerialServerDispatcher
+import com.twitter.finagle.ssl.Ssl
 
 class FinatraServer extends FinatraTwitterServer {
 
@@ -69,21 +70,21 @@ class FinatraServer extends FinatraTwitterServer {
               .server(ServerCodecConfig("httpserver", new SocketAddress{}))
               .pipelineFactory
 
-    object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec)
+    val tlsConfig: Option[Netty3ListenerTLSConfig] =
+      if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
+        log.info("SSL Enabled")
+        Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
+      } else {
+        None
+      }
+
+    object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec, tlsConfig = tlsConfig)
 
     object HttpServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
       "http", HttpListener, new SerialServerDispatcher(_, _)
     )
 
     val server = HttpServer.serve(config.port(), service)
-
-
-
-    //val server: Server =
-    //  ((certPathOpt, keyPathOpt) match {
-    //    case (Some(cert), Some(key)) => serverBuilder.tls(cert, key)
-    //    case _ => serverBuilder
-    //  }).build(service)
 
     log.info("finatra process " + pid + " started on port: " + config.port())
     log.info("admin server started on port: " + config.adminPort())

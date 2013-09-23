@@ -27,12 +27,12 @@ class TestApp extends Controller {
 
 }
 
-class ServerSpec extends FlatSpecHelper {
-
-  def app = { new TestApp }
-
+//class ServerSpec extends FlatSpecHelper {
+//
+//  def app = { new TestApp }
+//
 //  "app" should "register" in {
-//    FinatraServer.register(app)
+//    register(app)
 //  }
-
-}
+//
+//}
