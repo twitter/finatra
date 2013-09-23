@@ -16,10 +16,15 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finagle.{Filter, Service, SimpleFilter, Http}
+import com.twitter.finagle._
 import java.lang.management.ManagementFactory
 import com.twitter.util.Await
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
+import com.twitter.finagle.netty3.Netty3Listener
+import java.net.SocketAddress
+import com.twitter.conversions.storage._
+import com.twitter.finagle.server.DefaultServer
+import com.twitter.finagle.dispatch.SerialServerDispatcher
 
 class FinatraServer extends FinatraTwitterServer {
 
@@ -58,9 +63,21 @@ class FinatraServer extends FinatraTwitterServer {
 
     val service = nettyToFinagle andThen allFilters(appService)
 
-    //val http = Http().maxRequestSize(Config.getInt("max_request_megabytes").megabyte)
+    val codec = http.Http()
+              .maxRequestSize(config.maxRequestSize().megabyte)
+              .enableTracing(true)
+              .server(ServerCodecConfig("httpserver", new SocketAddress{}))
+              .pipelineFactory
 
-    val server = Http.serve(config.port(), service)
+    object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec)
+
+    object HttpServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
+      "http", HttpListener, new SerialServerDispatcher(_, _)
+    )
+
+    val server = HttpServer.serve(config.port(), service)
+
+
 
     //val server: Server =
     //  ((certPathOpt, keyPathOpt) match {
