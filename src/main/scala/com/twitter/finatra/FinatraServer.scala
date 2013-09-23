@@ -63,6 +63,7 @@ class FinatraServer extends FinatraTwitterServer {
     addFilter(fileService)
 
     val service = nettyToFinagle andThen allFilters(appService)
+    var secureServer: Option[ListeningServer] = None
 
     val codec = http.Http()
               .maxRequestSize(config.maxRequestSize().megabyte)
@@ -70,15 +71,21 @@ class FinatraServer extends FinatraTwitterServer {
               .server(ServerCodecConfig("httpserver", new SocketAddress{}))
               .pipelineFactory
 
-    val tlsConfig: Option[Netty3ListenerTLSConfig] =
+      //Setup HTTPS Server
       if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
-        log.info("SSL Enabled")
-        Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
+        val tlsConfig =
+          Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
+        object HttpsListener extends Netty3Listener[HttpResponse, HttpRequest]("https", codec, tlsConfig = tlsConfig)
+        object HttpsServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
+          "https", HttpsListener, new SerialServerDispatcher(_, _)
+        )
+        log.info("https server started on port: " + config.sslPort())
+        secureServer = Some(HttpsServer.serve(config.sslPort(), service))
       } else {
         None
       }
 
-    object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec, tlsConfig = tlsConfig)
+    object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec)
 
     object HttpServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
       "http", HttpListener, new SerialServerDispatcher(_, _)
@@ -86,14 +93,18 @@ class FinatraServer extends FinatraTwitterServer {
 
     val server = HttpServer.serve(config.port(), service)
 
-    log.info("finatra process " + pid + " started on port: " + config.port())
+    log.info("finatra process " + pid + " started")
+    log.info("http server started on port: " + config.port())
     log.info("admin server started on port: " + config.adminPort())
 
     onExit {
+      secureServer map { _.close() }
       server.close()
     }
 
     Await.ready(server)
+
+    secureServer map { Await.ready(_) }
 
   }
 }
