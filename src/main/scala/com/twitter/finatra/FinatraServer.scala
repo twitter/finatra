@@ -26,12 +26,16 @@ import com.twitter.conversions.storage._
 import com.twitter.finagle.server.DefaultServer
 import com.twitter.finagle.dispatch.SerialServerDispatcher
 import com.twitter.finagle.ssl.Ssl
+import java.io.{File, FileNotFoundException}
 
 class FinatraServer extends FinatraTwitterServer {
 
   val controllers:  ControllerCollection = new ControllerCollection
   var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
   val pid:          String = ManagementFactory.getRuntimeMXBean.getName.split('@').head
+
+  var secureServer: Option[ListeningServer] = None
+  var server:       Option[ListeningServer] = None
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
     Service[FinagleRequest, FinagleResponse] = {
@@ -44,17 +48,18 @@ class FinatraServer extends FinatraTwitterServer {
     filters = filters ++ Seq(filter)
   }
 
+  def main() {
+    log.info("finatra process " + pid + " started")
+    start()
+  }
+
   private[this] val nettyToFinagle =
     Filter.mk[HttpRequest, HttpResponse, FinagleRequest, FinagleResponse] { (req, service) =>
       service(FinagleRequest(req)) map { _.httpResponse }
     }
 
-  def main() {
-    start()
-  }
 
-  def start() {
-
+  private[this] val service = {
     val appService  = new AppService(controllers)
     val fileService = new FileService
     val loggingFilter = new LoggingFilter
@@ -62,49 +67,66 @@ class FinatraServer extends FinatraTwitterServer {
     addFilter(loggingFilter)
     addFilter(fileService)
 
-    val service = nettyToFinagle andThen allFilters(appService)
-    var secureServer: Option[ListeningServer] = None
+    nettyToFinagle andThen allFilters(appService)
+  }
 
-    val codec = http.Http()
-              .maxRequestSize(config.maxRequestSize().megabyte)
-              .enableTracing(true)
-              .server(ServerCodecConfig("httpserver", new SocketAddress{}))
-              .pipelineFactory
+  private[this] val codec = {
+    http.Http()
+      .maxRequestSize(config.maxRequestSize().megabyte)
+      .enableTracing(true)
+      .server(ServerCodecConfig("httpserver", new SocketAddress{}))
+      .pipelineFactory
+  }
 
-      //Setup HTTPS Server
-      if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
-        val tlsConfig =
-          Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
-        object HttpsListener extends Netty3Listener[HttpResponse, HttpRequest]("https", codec, tlsConfig = tlsConfig)
-        object HttpsServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
-          "https", HttpsListener, new SerialServerDispatcher(_, _)
-        )
-        log.info("https server started on port: " + config.sslPort())
-        secureServer = Some(HttpsServer.serve(config.sslPort(), service))
-      } else {
-        None
-      }
+  def startSecureServer() {
+    val tlsConfig =
+      Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
+    object HttpsListener extends Netty3Listener[HttpResponse, HttpRequest]("https", codec, tlsConfig = tlsConfig)
+    object HttpsServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
+      "https", HttpsListener, new SerialServerDispatcher(_, _)
+    )
+    log.info("https server started on port: " + config.sslPort())
+    secureServer = Some(HttpsServer.serve(config.sslPort(), service))
+  }
 
+  def startHttpServer() {
     object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec)
-
     object HttpServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
       "http", HttpListener, new SerialServerDispatcher(_, _)
     )
-
-    val server = HttpServer.serve(config.port(), service)
-
-    log.info("finatra process " + pid + " started")
     log.info("http server started on port: " + config.port())
-    log.info("admin server started on port: " + config.adminPort())
+    server = Some(HttpServer.serve(config.port(), service))
+  }
+
+  def start() {
+
+    if (!config.port().isEmpty) {
+      startHttpServer()
+    }
+
+    if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
+      if (!new File(config.certificatePath()).canRead){
+        val e = new FileNotFoundException("SSL Certificate not found: " + config.certificatePath())
+        log.fatal(e, "SSL Certificate could not be read: " + config.certificatePath())
+        throw e
+      }
+      if (!new File(config.keyPath()).canRead){
+        val e = new FileNotFoundException("SSL Key not found: " + config.keyPath())
+        log.fatal(e, "SSL Key could not be read: " + config.keyPath())
+        throw e
+      }
+      startSecureServer()
+    }
+
+    log.info("admin http server started on port: " + config.adminPort())
 
     onExit {
       secureServer map { _.close() }
-      server.close()
+      server       map { _.close() }
     }
 
-    Await.ready(server)
-
     secureServer map { Await.ready(_) }
+    server       map { Await.ready(_) }
 
   }
 }
