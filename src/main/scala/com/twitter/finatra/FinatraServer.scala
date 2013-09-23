@@ -26,7 +26,7 @@ import com.twitter.conversions.storage._
 import com.twitter.finagle.server.DefaultServer
 import com.twitter.finagle.dispatch.SerialServerDispatcher
 import com.twitter.finagle.ssl.Ssl
-import java.io.{File, FileNotFoundException}
+import java.io.{FileOutputStream, File, FileNotFoundException}
 
 class FinatraServer extends FinatraTwitterServer {
 
@@ -78,6 +78,18 @@ class FinatraServer extends FinatraTwitterServer {
       .pipelineFactory
   }
 
+  def writePidFile() {
+    val pidFile = new File(config.pidPath())
+    val pidFileStream = new FileOutputStream(pidFile)
+    pidFileStream.write(pid.getBytes)
+    pidFileStream.close()
+  }
+
+  def removePidFile() {
+    val pidFile = new File(config.pidPath())
+    pidFile.delete()
+  }
+
   def startSecureServer() {
     val tlsConfig =
       Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
@@ -99,6 +111,10 @@ class FinatraServer extends FinatraTwitterServer {
   }
 
   def start() {
+
+    if (!config.pidPath().isEmpty) {
+      writePidFile()
+    }
 
     if (!config.port().isEmpty) {
       startHttpServer()
@@ -123,6 +139,7 @@ class FinatraServer extends FinatraTwitterServer {
     onExit {
       secureServer map { _.close() }
       server       map { _.close() }
+      removePidFile()
     }
 
     secureServer map { Await.ready(_) }
