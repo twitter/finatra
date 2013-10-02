@@ -25,6 +25,7 @@ import com.twitter.finagle.tracing.{Tracer, NullTracer}
 import com.twitter.conversions.storage._
 import com.twitter.ostrich.admin._
 import com.twitter.ostrich.admin.{Service => OstrichService}
+import com.twitter.util.Duration
 
 object FinatraServer {
 
@@ -79,8 +80,15 @@ class FinatraServer extends Logging with OstrichService {
   def shutdown() {
     logger.info("shutting down")
     logger.info("finatra process shutting down")
-    server foreach { s => s.close()() }
+    stop
     System.exit(0)
+  }
+
+
+  def stop() {
+    server foreach {
+      s => s.close(Duration.Zero)()
+    }
   }
 
   def start() {
