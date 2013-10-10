@@ -101,7 +101,7 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Log
   }
 
   def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]): Future[FinagleResponse] = {
-    if (FileResolver.hasFile(request.path) && request.path != '/') {
+    if (FileResolver.hasFile(request.path) && request.path != "/") {
       val fh  = FileResolver.getInputStream(request.path)
       val b   = IOUtils.toByteArray(fh)
 
