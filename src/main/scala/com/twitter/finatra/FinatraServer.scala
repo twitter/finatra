@@ -18,7 +18,7 @@ package com.twitter.finatra
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.finagle._
 import java.lang.management.ManagementFactory
-import com.twitter.util.Await
+import com.twitter.util.{Future, Await}
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 import com.twitter.finagle.netty3.{Netty3ListenerTLSConfig, Netty3Listener}
 import java.net.SocketAddress
@@ -108,6 +108,12 @@ class FinatraServer extends FinatraTwitterServer {
     )
     log.info("http server started on port: " + config.port())
     server = Some(HttpServer.serve(config.port(), service))
+  }
+
+  def stop() {
+    server map { _.close() }
+    secureServer map { _.close() }
+    adminHttpServer.close()
   }
 
   def start() {
