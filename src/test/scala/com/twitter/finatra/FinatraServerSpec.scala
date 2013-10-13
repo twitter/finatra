@@ -16,23 +16,29 @@
 package com.twitter.finatra.test
 
 import com.twitter.finatra.{Controller, FinatraServer}
-import com.twitter.logging.Logger
 
 
 class TestApp extends Controller {
 
   get("/hey") {
-    request =>  render.plain("hello").toFuture
+    request => render.plain("hello").toFuture
   }
 
 }
 
-//class ServerSpec extends FlatSpecHelper {
-//
-//  def app = { new TestApp }
-//
-//  "app" should "register" in {
-//    register(app)
-//  }
-//
-//}
+class FinatraServerSpec extends SpecHelper {
+
+  val app = new TestApp
+
+  "app" should "register" in {
+    val server = new FinatraServer
+    server.register(app)
+    server.start()
+
+    get("/hey")
+    response.body should equal("hello")
+
+    server.stop()
+  }
+
+}
