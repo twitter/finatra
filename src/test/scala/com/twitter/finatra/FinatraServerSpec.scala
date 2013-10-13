@@ -33,10 +33,15 @@ class FinatraServerSpec extends FlatSpecHelper {
   "app" should "register" in {
     val server = new FinatraServer
     server.register(app)
-    server.start()
+
+    new Runnable {
+      def run() = server.start()
+    }
 
     get("/hey")
     response.body should equal("hello")
+
+    server.stop()
 
   }
 
