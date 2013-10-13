@@ -26,7 +26,7 @@ class TestApp extends Controller {
 
 }
 
-class FinatraServerSpec extends SpecHelper {
+class FinatraServerSpec extends FlatSpecHelper {
 
   val app = new TestApp
 
@@ -38,7 +38,6 @@ class FinatraServerSpec extends SpecHelper {
     get("/hey")
     response.body should equal("hello")
 
-    server.stop()
   }
 
 }
