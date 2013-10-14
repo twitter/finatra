@@ -1,4 +1,4 @@
-VERSION=1.3.8
+VERSION=1.3.9
 EXAMPLE_REPO=~/personal/code/finatra_example
 
 
