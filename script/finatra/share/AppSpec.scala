@@ -5,7 +5,7 @@ import org.scalatest.matchers.ShouldMatchers
 import com.twitter.finatra.test._
 import ###PACKAGE_NAME###._
 
-class AppSpec extends SpecHelper {
+class AppSpec extends FlatSpecHelper {
 
   val app = new App.ExampleApp
 
