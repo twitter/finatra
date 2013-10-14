@@ -38,7 +38,7 @@ Finatra is a sinatra-inspired web framework for scala, running on top of [Finagl
 
 ```scala
 
-object App {
+object App extends FinatraServer {
 
   
   class ExampleApp extends Controller {
@@ -232,36 +232,33 @@ object App {
       }
     }
 
-    /**
-     * Metrics are supported out of the box via Twitter's Ostrich library.
-     * More details here: https://github.com/twitter/ostrich
-     *
-     * curl http://localhost:7070/slow_thing
-     *
-     * By default a stats server is started on 9990:
-     *
-     * curl http://localhost:9990/stats.txt
-     *
-     */
-
-    get("/slow_thing") { request =>
-      Stats.incr("slow_thing")
-      Stats.time("slow_thing time") {
-        Thread.sleep(100)
-      }
-      render.plain("slow").toFuture
-    }
+//    /**
+//     * Metrics are supported out of the box via Twitter's Ostrich library.
+//     * More details here: https://github.com/twitter/ostrich
+//     *
+//     * curl http://localhost:7070/slow_thing
+//     *
+//     * By default a stats server is started on 9990:
+//     *
+//     * curl http://localhost:9990/stats.txt
+//     *
+//     */
+//
+//    get("/slow_thing") { request =>
+//      Stats.incr("slow_thing")
+//      Stats.time("slow_thing time") {
+//        Thread.sleep(100)
+//      }
+//      render.plain("slow").toFuture
+//    }
 
   }
 
   val app = new ExampleApp
 
-  def main(args: Array[String]) = {
-    FinatraServer.register(app)
-    FinatraServer.start()
-    // For SSL, use FinatraServer.startWithSsl(<certificate_path>, <key_path>)
-  }
+  register(new ExampleApp)
 
+}
 
 ```
 

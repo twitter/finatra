@@ -9,11 +9,12 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import org.apache.commons.io.IOUtils
 import java.io.{FileInputStream, File, InputStream}
 import javax.activation.MimetypesFileTypeMap
+import com.twitter.app.App
 
 object FileResolver {
 
   def hasFile(path: String): Boolean = {
-    if(System.getProperty("env") == "production"){
+    if(config.env() == "production"){
       hasResourceFile(path)
     } else {
       hasLocalFile(path)
@@ -21,7 +22,7 @@ object FileResolver {
   }
 
   def getInputStream(path: String): InputStream = {
-    if(System.getProperty("env") == "production"){
+    if(config.env() == "production"){
       getResourceInputStream(path)
     } else {
       getLocalInputStream(path)
@@ -32,7 +33,7 @@ object FileResolver {
     getClass.getResourceAsStream(path)
 
   private def getLocalInputStream(path: String): InputStream = {
-    val file = new File(Config.get(ConfigFlags.localDocroot), path)
+    val file = new File(config.docRoot(), path)
 
     new FileInputStream(file)
   }
@@ -55,7 +56,7 @@ object FileResolver {
   }
 
   private def hasLocalFile(path: String): Boolean = {
-    val file = new File(Config.get(ConfigFlags.localDocroot), path)
+    val file = new File(config.docRoot(), path)
 
     if(file.toString.contains(".."))     return false
     if(!file.exists || file.isDirectory) return false
@@ -81,7 +82,7 @@ object FileService {
 
 }
 
-class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Logging {
+class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App with Logging {
 
   def isValidPath(path: String): Boolean = {
     val fi      = getClass.getResourceAsStream(path)
@@ -101,8 +102,9 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with Log
   }
 
   def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]): Future[FinagleResponse] = {
-    if (FileResolver.hasFile(request.path) && request.path != "/") {
-      val fh  = FileResolver.getInputStream(request.path)
+    val path = new File(config.assetPath(), request.path).toString
+    if (FileResolver.hasFile(path) && request.path != "/") {
+      val fh  = FileResolver.getInputStream(path)
       val b   = IOUtils.toByteArray(fh)
 
       fh.read(b)

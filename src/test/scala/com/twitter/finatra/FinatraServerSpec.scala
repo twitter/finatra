@@ -26,19 +26,23 @@ class TestApp extends Controller {
 
 }
 
-class FinatraServerSpec extends SpecHelper {
+class FinatraServerSpec extends FlatSpecHelper {
 
   val app = new TestApp
 
   "app" should "register" in {
     val server = new FinatraServer
     server.register(app)
-    server.start()
+
+    new Runnable {
+      def run() = server.start()
+    }
 
     get("/hey")
     response.body should equal("hello")
 
     server.stop()
+
   }
 
 }

@@ -1,6 +1,7 @@
 package com.twitter.finatra
 
 import com.twitter.finatra.test.ShouldSpec
+import com.twitter.util.Await
 import com.twitter.finagle.http.{Request => FinagleRequest}
 import com.twitter.finagle.http.service.NullService
 
@@ -12,12 +13,12 @@ class FileServiceSpec extends ShouldSpec {
   "looking up static files" should "return gif content" in {
     val r = FinagleRequest("/dealwithit.gif")
     val response = fileService(r, NullService)
-    response.get().getContent().array().length should not equal 0
+    Await.result(response).getContent().array().length should not equal 0
   }
 
   "looking up static files with params" should "return gif content" in {
     val r = FinagleRequest("/dealwithit.gif", "foo" -> "bar")
     val response = fileService(r, NullService)
-    response.get().getContent().array().length should not equal 0
+    Await.result(response).getContent().array().length should not equal 0
   }
 }

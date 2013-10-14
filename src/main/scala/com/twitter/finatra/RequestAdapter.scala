@@ -21,7 +21,7 @@ import org.jboss.netty.handler.codec.http.HttpMethod
 /**
 * Adapts a FinagleRquest to a FinatraRequest
 */
-object RequestAdapter extends Logging {
+object RequestAdapter {
 
   def apply(rawRequest: FinagleRequest): Request = {
     val request = new Request(rawRequest)
