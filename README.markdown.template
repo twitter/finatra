@@ -2,104 +2,26 @@ changequote(<!,!>)
 
 # Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
 
-Finatra is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
+[Finatra](http://finatra.info) is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
 
-### Notes to users upgrading to 1.0.0 from earlier versions
-
-* route parameters now live in ```request.multiParams```
-
-* public assets now live in ```src/main/resources``` (can be configured, see below)
-
-
-### Features
-
-* Familiar routing DSL
-
-* Asynchronous, uses [Finagle](http://twitter.github.com/finagle/)
-
-* Multipart Upload
-
-* File server with live asset reloading
-
-* App Generator
-
-* Mustache template support through [mustache.java](https://github.com/spullara/mustache.java)
-
-* Heroku support out of the box
-
-### Projects using finatra
-
-[Zipkin](http://twitter.github.com/zipkin/) is an awesome distributed tracing system
-
-[finatra-example](http://github.com/capotej/finatra-example) An example repo to get you started
-
-
-### Example
+See the [Getting Started](http://finatra.info/docs/tutorial.html) guide or the [Documentation](http://finatra.info/docs/index.html) for more information.
 
 ```scala
+class HelloWorld extends Controller {
 
-object App extends FinatraServer {
-
-  __EXAMPLEAPP__
-
-  register(new ExampleApp)
+  get("/hello/:name") { request =>
+    val name = request.routeParams("name").getOrElse("default user")
+    render.plain("hello " + name).toFuture
+  }
 
 }
 
+object App extends FinatraServer {
+  register(new HelloWorld())
+}
 ```
 
-### Generating your own finatra app
-
-```sh
-$ git clone https://github.com/capotej/finatra.git
-$ cd finatra
-$ ./finatra new com.example.myapp /tmp
-```
-
-That will generate ```/tmp/myapp/```, start it up like so:
-
-```sh
-$ cd /tmp/myapp
-$ mvn scala:run
-```
-
-You should now have finatra running on port 7070!
-
-### Installing the generator
-
-For bash users:
-
-    echo 'eval "$(./finatra init -)"' >> ~/.bash_profile
-    exec bash
-
-For zsh users:
-
-    echo 'eval "$(./finatra init -)"' >> ~/.zshenv
-    source ~/.zshenv
-
-
-Now you can run ```finatra new``` from anywhere.
-
-### Configuration
-
-Available configuration properties and their defaults
-
-```sh
--Dname=finatra
--Dlog_node=finatra
--Dlog_level=INFO
--Dport=7070
--Dmax_request_megabytes=5
--Dstats_enabled=true
--Dstats_port=9990
--Dlocal_docroot=src/main/resources
--Dpid_enabled=false
--Dpid_path=finatra.pid
--Denv=development
-```
-
-### Installation via Maven
-Add the dependency to your pom.xml
+Latest version:
 
 ```xml
 <dependency>
