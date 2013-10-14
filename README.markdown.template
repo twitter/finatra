@@ -38,16 +38,13 @@ Finatra is a sinatra-inspired web framework for scala, running on top of [Finagl
 
 ```scala
 
-object App {
+object App extends FinatraServer {
 
   __EXAMPLEAPP__
 
-  def main(args: Array[String]) = {
-    FinatraServer.register(app)
-    FinatraServer.start()
-    // For SSL, use FinatraServer.startWithSsl(<certificate_path>, <key_path>)
-  }
+  register(new ExampleApp)
 
+}
 
 ```
 

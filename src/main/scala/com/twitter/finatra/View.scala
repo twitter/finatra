@@ -16,7 +16,7 @@
 package com.twitter.finatra
 
 import com.github.mustachejava._
-import com.google.common.base.Charsets;
+import com.google.common.base.Charsets
 import com.twitter.mustache._
 import java.io._
 import java.util.concurrent.Callable
@@ -28,7 +28,7 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
   }
 
   override def getReader(resourceName:String): Reader = {
-    if (!"development".equals(Config.get(ConfigFlags.env))) {
+    if (!"development".equals(config.env())) {
       super.getReader(resourceName)
     }
     // In development mode, we look to the local file
@@ -63,9 +63,9 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
 }
 
 object View {
-  lazy val mustacheFactory  = new FinatraMustacheFactory(combinePaths(Config.get(ConfigFlags.localDocroot), baseTemplatePath))
-  var baseTemplatePath      = Config.get(ConfigFlags.templatePath)
+  var baseTemplatePath      = config.templatePath()
   def templatePath          = baseTemplatePath
+  lazy val mustacheFactory  = new FinatraMustacheFactory(baseTemplatePath)
 
   mustacheFactory.setObjectHandler(new TwitterObjectHandler)
   mustacheFactory.setExecutorService(Executors.newCachedThreadPool)
@@ -91,10 +91,9 @@ abstract class View extends Callable[String] {
     // In development mode, we flush all of our template
     // caches on each render. Otherwise, partials will
     // remain unchanged in the browser while being edited.
-    if ("development".equals(Config.get(ConfigFlags.env))) {
+    if ("development".equals(config.env())) {
       factory.invalidateMustacheCaches()
     }
-
     val output = new StringWriter
     mustache.execute(output, this).flush()
     output.toString

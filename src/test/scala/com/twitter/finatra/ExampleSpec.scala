@@ -15,16 +15,15 @@
  */
 package com.twitter.finatra
 
-import test.SpecHelper
+import com.twitter.finatra.test.{FlatSpecHelper}
 import com.twitter.finatra.ContentType._
-import com.twitter.ostrich.stats.Stats
 
 
 /* This test is used as the base for generating the
  README.markdown, all new generated apps, and the finatra_example repo
  */
 
-class ExampleSpec extends SpecHelper {
+class ExampleSpec extends FlatSpecHelper {
 
   /* ###BEGIN_APP### */
 
@@ -219,25 +218,25 @@ class ExampleSpec extends SpecHelper {
       }
     }
 
-    /**
-     * Metrics are supported out of the box via Twitter's Ostrich library.
-     * More details here: https://github.com/twitter/ostrich
-     *
-     * curl http://localhost:7070/slow_thing
-     *
-     * By default a stats server is started on 9990:
-     *
-     * curl http://localhost:9990/stats.txt
-     *
-     */
-
-    get("/slow_thing") { request =>
-      Stats.incr("slow_thing")
-      Stats.time("slow_thing time") {
-        Thread.sleep(100)
-      }
-      render.plain("slow").toFuture
-    }
+//    /**
+//     * Metrics are supported out of the box via Twitter's Ostrich library.
+//     * More details here: https://github.com/twitter/ostrich
+//     *
+//     * curl http://localhost:7070/slow_thing
+//     *
+//     * By default a stats server is started on 9990:
+//     *
+//     * curl http://localhost:9990/stats.txt
+//     *
+//     */
+//
+//    get("/slow_thing") { request =>
+//      Stats.incr("slow_thing")
+//      Stats.time("slow_thing time") {
+//        Thread.sleep(100)
+//      }
+//      render.plain("slow").toFuture
+//    }
 
   }
 

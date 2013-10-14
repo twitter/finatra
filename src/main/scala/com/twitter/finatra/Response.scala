@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 import org.apache.commons.io.IOUtils
+import java.io.File
 
 object Response {
   def apply(body: String): FinagleResponse =
@@ -37,7 +38,7 @@ object Response {
     new Response().body(body).status(status).headers(headers).build
 }
 
-class Response extends Logging {
+class Response {
   var status:     Int                  = 200
   var headers:    Map[String, String]  = Map()
   var hasCookies: Boolean              = false
@@ -160,13 +161,14 @@ class Response extends Logging {
   }
 
   def static(path: String): Response = {
-    if (FileResolver.hasFile(path) && path != '/') {
-      val stream  = FileResolver.getInputStream(path)
+    val fullAssetPath = new File(config.assetPath(), path).toString
+    if (FileResolver.hasFile(fullAssetPath) && path != '/') {
+      val stream  = FileResolver.getInputStream(fullAssetPath)
       val bytes   = IOUtils.toByteArray(stream)
 
       stream.read(bytes)
 
-      val mtype = FileService.extMap.getContentType('.' + path.split('.').last)
+      val mtype = FileService.extMap.getContentType('.' + fullAssetPath.split('.').last)
 
       this.status = 200
       this.header("Content-Type", mtype)
@@ -197,15 +199,15 @@ class Response extends Logging {
   override def toString: String = {
     val buf = new StringBuilder
 
-    buf.append(getClass().getSimpleName())
+    buf.append(getClass.getSimpleName)
     buf.append('\n')
     buf.append(HTTP_1_1.toString)
     buf.append(' ')
     buf.append(this.status)
     buf.append('\n')
-    appendCollection[String, String](buf, this.headers)
+    buf.append(this.headers)
 
-    buf.toString
+    buf.toString()
   }
 
 }

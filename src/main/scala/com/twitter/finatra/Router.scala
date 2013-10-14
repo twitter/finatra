@@ -5,12 +5,11 @@ import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.collection.mutable.ListBuffer
 import scala.collection.Map
 import com.twitter.util.Future
+import com.twitter.app.App
 
-class Router(controller: Controller) extends Logging {
+class Router(controller: Controller) extends App with Logging {
 
-  def dispatch(request: FinagleRequest): Option[FinagleResponse] = {
-    logger.info("%s %s".format(request.method, request.uri))
-
+  def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
     dispatchRouteOrCallback(request, request.method, (request) => {
       // fallback to GET for 404'ed GET requests (curl -I support)
       if (request.method == HttpMethod.HEAD) {
@@ -24,13 +23,13 @@ class Router(controller: Controller) extends Logging {
   def dispatchRouteOrCallback(
     request:    FinagleRequest,
     method:     HttpMethod,
-    orCallback: FinagleRequest => Option[FinagleResponse]
-  ): Option[FinagleResponse] = {
+    orCallback: FinagleRequest => Option[Future[FinagleResponse]]
+  ): Option[Future[FinagleResponse]] = {
     val req = RequestAdapter(request)
 
     findRouteAndMatch(req, method) match {
       case Some((method, pattern, callback)) =>
-        Some(ResponseAdapter(callback(req))).asInstanceOf[Option[FinagleResponse]]
+        Some(ResponseAdapter(callback(req)))
       case None => orCallback(request)
     }
   }
@@ -95,6 +94,9 @@ class Router(controller: Controller) extends Logging {
     Future[Response] = internalDispatch(HttpMethod.HEAD, path, params, headers)
 
   def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-  Future[Response] = internalDispatch(HttpMethod.PATCH, path, params, headers)
+    Future[Response] = internalDispatch(HttpMethod.PATCH, path, params, headers)
+
+  def options(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
+    Future[Response] = internalDispatch(HttpMethod.OPTIONS, path, params, headers)
 
 }

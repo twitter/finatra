@@ -15,49 +15,27 @@
  */
 package com.twitter.finatra
 
-import com.twitter.finagle.builder.{Server, ServerBuilder}
-import com.twitter.finagle.http._
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle._
 import java.lang.management.ManagementFactory
-import java.net.InetSocketAddress
-import com.twitter.finagle.tracing.{Tracer, NullTracer}
+import com.twitter.util.{Future, Await}
+import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
+import com.twitter.finagle.netty3.{Netty3ListenerTLSConfig, Netty3Listener}
+import java.net.SocketAddress
 import com.twitter.conversions.storage._
-import com.twitter.ostrich.admin._
-import com.twitter.ostrich.admin.{Service => OstrichService}
-import com.twitter.util.Duration
+import com.twitter.finagle.server.DefaultServer
+import com.twitter.finagle.dispatch.SerialServerDispatcher
+import com.twitter.finagle.ssl.Ssl
+import java.io.{FileOutputStream, File, FileNotFoundException}
 
-object FinatraServer {
-
-  var fs: FinatraServer = new FinatraServer
-
-  def register(app: Controller) {
-    fs.register(app)
-  }
-
-  def start() {
-    fs.start()
-  }
-
-  def startWithSsl(certPath: String, keyPath: String) {
-    fs.startWithSsl(certPath, keyPath)
-  }
-
-  def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) {
-    fs.addFilter(filter)
-  }
-
-}
-
-class FinatraServer extends Logging with OstrichService {
-
-  @volatile private[this] var server: Option[Server] = None
+class FinatraServer extends FinatraTwitterServer {
 
   val controllers:  ControllerCollection = new ControllerCollection
-  var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] =
-    Seq.empty
-  val pid:          String =
-    ManagementFactory.getRuntimeMXBean().getName().split('@').head
+  var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
+  val pid:          String = ManagementFactory.getRuntimeMXBean.getName.split('@').head
+
+  var secureServer: Option[ListeningServer] = None
+  var server:       Option[ListeningServer] = None
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
     Service[FinagleRequest, FinagleResponse] = {
@@ -70,73 +48,108 @@ class FinatraServer extends Logging with OstrichService {
     filters = filters ++ Seq(filter)
   }
 
-  def initAdminService(runtimeEnv: RuntimeEnvironment) {
-      AdminServiceFactory(
-        httpPort = Config.getInt(ConfigFlags.statsPort)
-      )(runtimeEnv)
+  def main() {
+    log.info("finatra process " + pid + " started")
+    start()
   }
 
+  private[this] val nettyToFinagle =
+    Filter.mk[HttpRequest, HttpResponse, FinagleRequest, FinagleResponse] { (req, service) =>
+      service(FinagleRequest(req)) map { _.httpResponse }
+    }
 
-  def shutdown() {
-    logger.info("shutting down")
-    logger.info("finatra process shutting down")
-    stop
-    System.exit(0)
+
+  private[this] val service = {
+    val appService  = new AppService(controllers)
+    val fileService = new FileService
+    val loggingFilter = new LoggingFilter
+
+    addFilter(loggingFilter)
+    addFilter(fileService)
+
+    nettyToFinagle andThen allFilters(appService)
   }
 
+  private[this] val codec = {
+    http.Http()
+      .maxRequestSize(config.maxRequestSize().megabyte)
+      .enableTracing(true)
+      .server(ServerCodecConfig("httpserver", new SocketAddress{}))
+      .pipelineFactory
+  }
+
+  def writePidFile() {
+    val pidFile = new File(config.pidPath())
+    val pidFileStream = new FileOutputStream(pidFile)
+    pidFileStream.write(pid.getBytes)
+    pidFileStream.close()
+  }
+
+  def removePidFile() {
+    val pidFile = new File(config.pidPath())
+    pidFile.delete()
+  }
+
+  def startSecureServer() {
+    val tlsConfig =
+      Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
+    object HttpsListener extends Netty3Listener[HttpResponse, HttpRequest]("https", codec, tlsConfig = tlsConfig)
+    object HttpsServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
+      "https", HttpsListener, new SerialServerDispatcher(_, _)
+    )
+    log.info("https server started on port: " + config.sslPort())
+    secureServer = Some(HttpsServer.serve(config.sslPort(), service))
+  }
+
+  def startHttpServer() {
+    object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec)
+    object HttpServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
+      "http", HttpListener, new SerialServerDispatcher(_, _)
+    )
+    log.info("http server started on port: " + config.port())
+    server = Some(HttpServer.serve(config.port(), service))
+  }
 
   def stop() {
-    server foreach {
-      s => s.close(Duration.Zero)()
-    }
+    server map { _.close() }
+    secureServer map { _.close() }
+    adminHttpServer.close()
   }
 
   def start() {
-    start(NullTracer, new RuntimeEnvironment(this), None, None)
-  }
 
-  def startWithSsl(certPath: String, keyPath: String) {
-    start(NullTracer, new RuntimeEnvironment(this), Some(certPath), Some(keyPath))
-  }
-
-  def start(
-    tracer:     Tracer              = NullTracer,
-    runtimeEnv: RuntimeEnvironment  = new RuntimeEnvironment(this),
-    certPathOpt: Option[String],
-    keyPathOpt: Option[String]
-  ) {
-
-    ServiceTracker.register(this)
-
-    if(Config.getBool(ConfigFlags.statsEnabled)){
-      initAdminService(runtimeEnv)
+    if (!config.pidPath().isEmpty) {
+      writePidFile()
     }
 
-    val appService  = new AppService(controllers)
-    val fileService = new FileService
+    if (!config.port().isEmpty) {
+      startHttpServer()
+    }
 
-    addFilter(fileService)
+    if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
+      if (!new File(config.certificatePath()).canRead){
+        val e = new FileNotFoundException("SSL Certificate not found: " + config.certificatePath())
+        log.fatal(e, "SSL Certificate could not be read: " + config.certificatePath())
+        throw e
+      }
+      if (!new File(config.keyPath()).canRead){
+        val e = new FileNotFoundException("SSL Key not found: " + config.keyPath())
+        log.fatal(e, "SSL Key could not be read: " + config.keyPath())
+        throw e
+      }
+      startSecureServer()
+    }
 
-    val port = Config.getInt(ConfigFlags.port)
-    val service: Service[FinagleRequest, FinagleResponse] = allFilters(appService)
-    val http = Http().maxRequestSize(Config.getInt(ConfigFlags.maxRequestMegabytes).megabyte)
+    log.info("admin http server started on port: " + config.adminPort())
 
-    val codec = new RichHttp[FinagleRequest](http)
+    onExit {
+      secureServer map { _.close() }
+      server       map { _.close() }
+      removePidFile()
+    }
 
-    val serverBuilder = ServerBuilder()
-            .codec(codec)
-            .bindTo(new InetSocketAddress(port))
-            .tracer(tracer)
-            .name(ConfigFlags.name)
-
-    val server: Server =
-      ((certPathOpt, keyPathOpt) match {
-        case (Some(cert), Some(key)) => serverBuilder.tls(cert, key)
-        case _ => serverBuilder
-      }).build(service)
-
-    logger.info("finatra process " + pid + " started on port: " + port.toString)
-    Config.printConfig()
+    secureServer map { Await.ready(_) }
+    server       map { Await.ready(_) }
 
   }
 }
