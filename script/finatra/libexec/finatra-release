@@ -26,16 +26,16 @@ git commit -am "autocommit for $1-SNAPSHOT"
 next_version=$(echo $1 | ruby -e "puts (STDIN.read.gsub('.','').to_i + 1).to_s.split('').join('.')")
 
 #release
-mvn release:clean
-mvn release:prepare -DreleaseVersion=$1 -Dtag=finatra-$1 -DdevelopmentVersion=$next_version
-mvn release:perform
+mvn -Prelease release:clean
+mvn -Prelease release:prepare -DreleaseVersion=$1 -Dtag=finatra-$1 -DdevelopmentVersion=$next_version
+mvn -Prelease release:perform
 
 #change the version again, since we need to release the javadoc
 xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $1 pom.xml > /tmp/pom.xml
 cp /tmp/pom.xml pom.xml
 
 #upload the javadoc
-mvn gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=pom.xml -Dfile=finatra-$1-javadoc.jar -Dclassifier=javadoc
+mvn -Prelease gpg:sign-and-deploy-file -Durl=https://oss.sonatype.org/service/local/staging/deploy/maven2/ -DrepositoryId=sonatype-nexus-staging -DpomFile=pom.xml -Dfile=finatra-$1-javadoc.jar -Dclassifier=javadoc
 
 #change the version once more
 xml ed -N x=http://maven.apache.org/POM/4.0.0 -u "/x:project/x:version" -v $next_version-SNAPSHOT pom.xml > /tmp/pom.xml
