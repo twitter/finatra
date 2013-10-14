@@ -218,25 +218,25 @@ class ExampleSpec extends FlatSpecHelper {
       }
     }
 
-//    /**
-//     * Metrics are supported out of the box via Twitter's Ostrich library.
-//     * More details here: https://github.com/twitter/ostrich
-//     *
-//     * curl http://localhost:7070/slow_thing
-//     *
-//     * By default a stats server is started on 9990:
-//     *
-//     * curl http://localhost:9990/stats.txt
-//     *
-//     */
-//
-//    get("/slow_thing") { request =>
-//      Stats.incr("slow_thing")
-//      Stats.time("slow_thing time") {
-//        Thread.sleep(100)
-//      }
-//      render.plain("slow").toFuture
-//    }
+    /**
+     * Metrics are supported out of the box via Twitter's Ostrich library.
+     * More details here: https://github.com/twitter/ostrich
+     *
+     * curl http://localhost:7070/slow_thing
+     *
+     * By default a stats server is started on 9990:
+     *
+     * curl http://localhost:9990/stats.txt
+     *
+     */
+
+    get("/slow_thing") { request =>
+      stats.counter("slow_thing").incr
+      stats.time("slow_thing time") {
+        Thread.sleep(100)
+      }
+      render.plain("slow").toFuture
+    }
 
   }
 
