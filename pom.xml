@@ -203,30 +203,30 @@
         <version>2.3.2</version>
       </plugin>
       <!--<plugin>-->
-        <!--<groupId>com.cloudbees</groupId>-->
-        <!--<artifactId>maven-license-plugin</artifactId>-->
-        <!--<version>1.7</version>-->
-        <!--<configuration>-->
-          <!--<header>header.txt</header>-->
-          <!--<excludes>-->
-            <!--<exclude>target/**</exclude>-->
-            <!--<exclude>**/*.mustache</exclude>-->
-            <!--<exclude>**/*.html</exclude>-->
-            <!--<exclude>**/*.js</exclude>-->
-            <!--<exclude>**/*.txt</exclude>-->
-            <!--<exclude>**/*.css</exclude>-->
-            <!--<exclude>**/*.yml</exclude>-->
-            <!--<exclude>**/*.log</exclude>-->
-            <!--<exclude>docs/**</exclude>-->
-            <!--<exclude>**/Makefile</exclude>-->
-            <!--<exclude>LICENSE</exclude>-->
-            <!--<exclude>README*</exclude>-->
-            <!--<exclude>.gitignore</exclude>-->
-          <!--</excludes>-->
-          <!--<properties>-->
-            <!--<year>${project.inceptionYear}</year>-->
-          <!--</properties>-->
-        <!--</configuration>-->
+      <!--<groupId>com.cloudbees</groupId>-->
+      <!--<artifactId>maven-license-plugin</artifactId>-->
+      <!--<version>1.7</version>-->
+      <!--<configuration>-->
+      <!--<header>header.txt</header>-->
+      <!--<excludes>-->
+      <!--<exclude>target/**</exclude>-->
+      <!--<exclude>**/*.mustache</exclude>-->
+      <!--<exclude>**/*.html</exclude>-->
+      <!--<exclude>**/*.js</exclude>-->
+      <!--<exclude>**/*.txt</exclude>-->
+      <!--<exclude>**/*.css</exclude>-->
+      <!--<exclude>**/*.yml</exclude>-->
+      <!--<exclude>**/*.log</exclude>-->
+      <!--<exclude>docs/**</exclude>-->
+      <!--<exclude>**/Makefile</exclude>-->
+      <!--<exclude>LICENSE</exclude>-->
+      <!--<exclude>README*</exclude>-->
+      <!--<exclude>.gitignore</exclude>-->
+      <!--</excludes>-->
+      <!--<properties>-->
+      <!--<year>${project.inceptionYear}</year>-->
+      <!--</properties>-->
+      <!--</configuration>-->
       <!--</plugin>-->
     </plugins>
     <!-- END BUILD PLUGINS -->
