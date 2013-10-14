@@ -322,7 +322,7 @@ Add the dependency to your pom.xml
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.3.8</version>
+  <version>1.3.9</version>
 </dependency>
 ```
 
