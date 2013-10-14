@@ -15,7 +15,7 @@
  */
 package com.twitter.finatra
 
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse, HttpMuxer}
 import com.twitter.finagle._
 import java.lang.management.ManagementFactory
 import com.twitter.util.{Future, Await}
@@ -36,6 +36,7 @@ class FinatraServer extends FinatraTwitterServer {
 
   var secureServer: Option[ListeningServer] = None
   var server:       Option[ListeningServer] = None
+  var adminServer:       Option[ListeningServer] = None
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
     Service[FinagleRequest, FinagleResponse] = {
@@ -110,10 +111,20 @@ class FinatraServer extends FinatraTwitterServer {
     server = Some(HttpServer.serve(config.port(), service))
   }
 
+  def startAdminServer() {
+    log.info("admin http server started on port: " + config.adminPort())
+    adminServer = Some(HttpServer.serve(config.adminPort(), HttpMuxer))
+  }
+
   def stop() {
     server map { _.close() }
     secureServer map { _.close() }
-    adminHttpServer.close()
+    adminServer map { _.close() }
+  }
+
+  onExit {
+    stop()
+    removePidFile()
   }
 
   def start() {
@@ -124,6 +135,10 @@ class FinatraServer extends FinatraTwitterServer {
 
     if (!config.port().isEmpty) {
       startHttpServer()
+    }
+
+    if (!config.adminPort().isEmpty) {
+      startAdminServer()
     }
 
     if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
@@ -140,16 +155,9 @@ class FinatraServer extends FinatraTwitterServer {
       startSecureServer()
     }
 
-    log.info("admin http server started on port: " + config.adminPort())
-
-    onExit {
-      secureServer map { _.close() }
-      server       map { _.close() }
-      removePidFile()
-    }
-
-    secureServer map { Await.ready(_) }
     server       map { Await.ready(_) }
+    adminServer  map { Await.ready(_) }
+    secureServer map { Await.ready(_) }
 
   }
 }
