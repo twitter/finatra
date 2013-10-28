@@ -15,7 +15,10 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.{Controller, FinatraServer}
+import com.twitter.finatra.{Controller, FinatraServer, AppService, LoggingFilter}
+import com.twitter.finagle.Service
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
+import org.scalatest.matchers.ShouldMatchers
 
 
 class TestApp extends Controller {
@@ -43,6 +46,24 @@ class FinatraServerSpec extends FlatSpecHelper {
 
     server.stop()
 
+  }
+
+  "app" should "add Filter" in {
+
+    class FinatraServerMock extends FinatraServer with ShouldMatchers {
+      override def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
+        Service[FinagleRequest, FinagleResponse] = {
+
+          filters should have length(1) // that is the LoggingFilter added below
+
+          super.allFilters(baseService)
+      }
+    }
+
+    val server = new FinatraServerMock()
+
+    server.addFilter(new LoggingFilter)
+    server.allFilters(new AppService(server.controllers))
   }
 
 }
