@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.twitter.finatra
+package com.twitter.finatra.test
 
-import com.twitter.finatra.test.{FlatSpecHelper}
+import com.twitter.finatra.{Controller, View, FinatraServer, UnsupportedMediaType}
 import com.twitter.finatra.ContentType._
 
 
@@ -240,7 +240,8 @@ class ExampleSpec extends FlatSpecHelper {
 
   }
 
-  val app = new ExampleApp
+  val server = new FinatraServer
+  server.register(new ExampleApp)
 
   /* ###END_APP### */
 
