@@ -15,7 +15,7 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.Controller
+import com.twitter.finatra.{Controller, FinatraServer}
 import org.jboss.netty.handler.codec.http._
 
 
@@ -35,7 +35,8 @@ class CookieApp extends Controller {
 
 class CookieSpec extends FlatSpecHelper {
 
-  def app = { new CookieApp }
+  val server = new FinatraServer
+  server.register(new CookieApp)
 
   "basic k/v cookie" should "have Foo:Bar" in {
     get("/sendCookie")

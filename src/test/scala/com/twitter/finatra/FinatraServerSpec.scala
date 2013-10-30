@@ -31,11 +31,10 @@ class TestApp extends Controller {
 
 class FinatraServerSpec extends FlatSpecHelper {
 
-  val app = new TestApp
+  val server = new FinatraServer
+  server.register(new TestApp)
 
   "app" should "register" in {
-    val server = new FinatraServer
-    server.register(app)
 
     new Runnable {
       def run() = server.start()
@@ -46,24 +45,6 @@ class FinatraServerSpec extends FlatSpecHelper {
 
     server.stop()
 
-  }
-
-  "app" should "add Filter" in {
-
-    class FinatraServerMock extends FinatraServer with ShouldMatchers {
-      override def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
-        Service[FinagleRequest, FinagleResponse] = {
-
-          filters should have length(1) // that is the LoggingFilter added below
-
-          super.allFilters(baseService)
-      }
-    }
-
-    val server = new FinatraServerMock()
-
-    server.addFilter(new LoggingFilter)
-    server.allFilters(new AppService(server.controllers))
   }
 
 }
