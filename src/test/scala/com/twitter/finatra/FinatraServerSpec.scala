@@ -15,16 +15,26 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.{Controller, FinatraServer, AppService, LoggingFilter}
-import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import org.scalatest.matchers.ShouldMatchers
-
+import com.twitter.finatra.{Controller, FinatraServer}
+import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.util.Future
 
 class TestApp extends Controller {
 
   get("/hey") {
     request => render.plain("hello").toFuture
+  }
+
+}
+
+class TestFilter extends SimpleFilter[Request, Response] {
+
+  def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+    service(request) map { response =>
+       response.setContentString("hello from filter")
+       response
+    }
   }
 
 }
@@ -45,6 +55,14 @@ class FinatraServerSpec extends FlatSpecHelper {
 
     server.stop()
 
+  }
+
+  "app" should "add Filter" in {
+
+    server.addFilter(new TestFilter)
+
+    get("/hey")
+    response.body should equal("hello from filter")
   }
 
 }
