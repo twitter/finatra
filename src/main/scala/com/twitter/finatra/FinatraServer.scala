@@ -60,7 +60,7 @@ class FinatraServer extends FinatraTwitterServer {
     }
 
 
-  private[this] val service = {
+  private[this] lazy val service = {
     val appService  = new AppService(controllers)
     val fileService = new FileService
     val loggingFilter = new LoggingFilter
