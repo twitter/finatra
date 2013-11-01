@@ -16,7 +16,9 @@
 package com.twitter.finatra.test
 
 import com.twitter.finatra.{Controller, FinatraServer}
-
+import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.util.Future
 
 class TestApp extends Controller {
 
@@ -26,13 +28,23 @@ class TestApp extends Controller {
 
 }
 
+class TestFilter extends SimpleFilter[Request, Response] {
+
+  def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+    service(request) map { response =>
+       response.setContentString("hello from filter")
+       response
+    }
+  }
+
+}
+
 class FinatraServerSpec extends FlatSpecHelper {
 
-  val app = new TestApp
+  val server = new FinatraServer
+  server.register(new TestApp)
 
   "app" should "register" in {
-    val server = new FinatraServer
-    server.register(app)
 
     new Runnable {
       def run() = server.start()
@@ -43,6 +55,14 @@ class FinatraServerSpec extends FlatSpecHelper {
 
     server.stop()
 
+  }
+
+  "app" should "add Filter" in {
+
+    server.addFilter(new TestFilter)
+
+    get("/hey")
+    response.body should equal("hello from filter")
   }
 
 }
