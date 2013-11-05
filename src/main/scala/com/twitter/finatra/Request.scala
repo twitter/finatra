@@ -26,6 +26,7 @@ object Request {
   def apply(path: String) = new Request(FinagleRequest(path))
 }
 
+
 class Request(val request: FinagleRequest) extends RequestProxy {
 
   var multiParams:  Map[String, MultipartItem]  = Map.empty

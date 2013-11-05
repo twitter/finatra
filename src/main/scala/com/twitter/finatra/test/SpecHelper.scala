@@ -18,8 +18,8 @@ package com.twitter.finatra.test
 import com.twitter.util.{Await, Future}
 import scala.collection.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finatra.{AppService, ControllerCollection, FinatraServer}
+import com.twitter.finagle.http.{Response => FinagleResponse, Request => FinagleRequest}
+import com.twitter.finatra.FinatraServer
 import org.jboss.netty.handler.codec.http.HttpMethod
 
 class MockResponse(val originalResponse: FinagleResponse) {
@@ -35,56 +35,57 @@ class MockResponse(val originalResponse: FinagleResponse) {
 trait SpecHelper {
 
   def response  = new MockResponse(Await.result(lastResponse))
-  var lastResponse:Future[FinagleResponse] = null
+  var lastResponse: Future[FinagleResponse] = null
 
-  def buildRequest(method: HttpMethod, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-
-    val request = FinagleRequest(path, params.toList:_*)
-    request.httpRequest.setMethod(method)
-    headers.foreach { header =>
-      request.httpRequest.headers.set(header._1, header._2)
-    }
-
-    val appService = new AppService(server.controllers)
-    val service = server.allFilters(appService)
-
-    lastResponse = service(request)
- }
-
-  def server:FinatraServer
+  def server: FinatraServer
 
   def get(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    buildRequest(HttpMethod.GET,path,params,headers)
+    executeRequest(HttpMethod.GET,path,params,headers)
   }
 
   def post(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    buildRequest(HttpMethod.POST,path,params,headers)
+    executeRequest(HttpMethod.POST,path,params,headers)
   }
 
   def put(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    buildRequest(HttpMethod.PUT,path,params,headers)
+    executeRequest(HttpMethod.PUT,path,params,headers)
   }
 
   def delete(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    buildRequest(HttpMethod.DELETE,path,params,headers)
+    executeRequest(HttpMethod.DELETE,path,params,headers)
   }
 
   def head(path:String,params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    buildRequest(HttpMethod.HEAD,path,params,headers)
+    executeRequest(HttpMethod.HEAD,path,params,headers)
   }
 
   def patch(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    buildRequest(HttpMethod.PATCH,path,params,headers)
+    executeRequest(HttpMethod.PATCH,path,params,headers)
   }
 
   def options(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    buildRequest(HttpMethod.OPTIONS,path,params,headers)
+    executeRequest(HttpMethod.OPTIONS,path,params,headers)
   }
 
   def send(request: FinagleRequest) {
-    val appService = new AppService(server.controllers)
-    val service = server.allFilters(appService)
-    lastResponse = service(request)
+    executeRequest(request)
+  }
+
+  private def executeRequest(
+    method: HttpMethod,
+    path: String,
+    params: Map[String, String] = Map(),
+    headers: Map[String,String] = Map()
+    ) {
+    val app = MockApp(server)
+    val result: MockResult = app.execute(method = method, path = path, params = params, headers = headers)
+    lastResponse = result.response
+  }
+
+  private def executeRequest(request: FinagleRequest) {
+    val app = MockApp(server)
+    val result: MockResult = app.execute(request)
+    lastResponse = result.response
   }
 
 }
