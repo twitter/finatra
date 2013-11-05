@@ -15,19 +15,11 @@ import java.net.URLEncoder
 /**
  * @author matt.ho@gmail.com
  */
-trait TestHelper {
-  def usingController(controller: Controller): MockApp = MockApp(controller)
-}
-
 case class MockApp(controller: Controller) {
-  def response = new MockResponse(Await.result(lastResponse))
-
-  private[this] var lastResponse: Future[Response] = null
-
   def buildRequest(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): FinagleRequest = {
 
     // ensure that we don't have both params and body
-    if( body != null && !params.isEmpty) {
+    if (body != null && !params.isEmpty) {
       throw new RuntimeException("unable to build request.  You can specify EITHER params OR a body, but not BOTH.")
     }
 
@@ -35,7 +27,7 @@ case class MockApp(controller: Controller) {
     request.httpRequest.setMethod(method)
 
     // apply body
-    for( buffer <- toByteArray(body)) {
+    for (buffer <- toByteArray(body)) {
       request.setContent(ChannelBuffers.wrappedBuffer(buffer))
       request.addHeader("Content-Length", buffer.length.toString)
     }
@@ -48,7 +40,7 @@ case class MockApp(controller: Controller) {
     request
   }
 
-  def execute(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def execute(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     val collection = new ControllerCollection
     collection.add(controller)
 
@@ -57,7 +49,9 @@ case class MockApp(controller: Controller) {
     val server = new FinatraServer
     val service = server.allFilters(appService)
 
-    lastResponse = service(request)
+    // Execute the test
+    val response: Future[Response] = service(request)
+    new MockResponse(Await.result(response))
   }
 
   /**
@@ -78,11 +72,11 @@ case class MockApp(controller: Controller) {
    * intelligently convert an AnyRef into a Array[Byte] using the following rules:
    *
    * <ul>
-   *   <li>value: String         => value.getBytes</li>
-   *   <li>value: Array[Byte]    => value</li>
-   *   <li>value: Map[_, _]      => url-encoded form data</li>
-   *   <li>value: util.Map[_, _] => url-encoded form data</li>
-   *   <li>value: AnyRef         => uses jackson to attempt to convert this to a json string</li>
+   * <li>value: String         => value.getBytes</li>
+   * <li>value: Array[Byte]    => value</li>
+   * <li>value: Map[_, _]      => url-encoded form data</li>
+   * <li>value: util.Map[_, _] => url-encoded form data</li>
+   * <li>value: AnyRef         => uses jackson to attempt to convert this to a json string</li>
    * </ul>
    */
   private[finatra] def toByteArray(body: AnyRef): Option[Array[Byte]] = {
@@ -99,31 +93,31 @@ case class MockApp(controller: Controller) {
     Option(buffer)
   }
 
-  def get(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def get(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     execute(HttpMethod.GET, path, params, headers, body)
   }
 
-  def post(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def post(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     execute(HttpMethod.POST, path, params, headers, body)
   }
 
-  def put(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def put(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     execute(HttpMethod.PUT, path, params, headers, body)
   }
 
-  def delete(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def delete(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     execute(HttpMethod.DELETE, path, params, headers, body)
   }
 
-  def head(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def head(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     execute(HttpMethod.HEAD, path, params, headers, body)
   }
 
-  def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     execute(HttpMethod.PATCH, path, params, headers, body)
   }
 
-  def options(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null) {
+  def options(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
     execute(HttpMethod.OPTIONS, path, params, headers, body)
   }
 }

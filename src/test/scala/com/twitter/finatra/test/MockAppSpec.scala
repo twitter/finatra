@@ -58,5 +58,4 @@ class MockAppSpec extends FlatSpec with ShouldMatchers {
   }
 
   case class Sample(name: String, email: String)
-
 }
