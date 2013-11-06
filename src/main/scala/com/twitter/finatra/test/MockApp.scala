@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,15 +19,17 @@ import com.twitter.finatra._
 import org.jboss.netty.handler.codec.http.HttpMethod
 import com.twitter.util.{Await, Future}
 import com.twitter.finagle.http.Response
-import com.twitter.finagle.http.{Request => FinagleRequest}
+import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import scala.collection.Map
 import scala.collection.JavaConverters._
 import java.util
 import org.jboss.netty.buffer.ChannelBuffers
 import java.net.URLEncoder
+import com.twitter.finagle.Service
 
-case class MockApp(controller: Controller) {
+class MockApp(service: Service[FinagleRequest, FinagleResponse]) {
   def buildRequest(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): FinagleRequest = {
 
     // ensure that we don't have both params and body
@@ -53,15 +55,8 @@ case class MockApp(controller: Controller) {
   }
 
   def execute(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
-    val collection = new ControllerCollection
-    collection.add(controller)
-
-    val request = buildRequest(method, path, params, headers, body)
-    val appService = new AppService(collection)
-    val server = new FinatraServer
-    val service = server.allFilters(appService)
-
     // Execute the test
+    val request = buildRequest(method, path, params, headers, body)
     val response: Future[Response] = service(request)
     new MockResponse(Await.result(response))
   }
@@ -139,6 +134,19 @@ object MockApp {
     val m = new ObjectMapper()
     m.registerModule(DefaultScalaModule)
     m
+  }
+
+  def apply(controller: Controller): MockApp = {
+    val server = new FinatraServer
+    server.register(controller)
+    apply(server)
+  }
+
+  def apply(server: FinatraServer): MockApp = {
+    val appService = new AppService(server.controllers)
+    val service = server.allFilters(appService)
+
+    new MockApp(service)
   }
 }
 

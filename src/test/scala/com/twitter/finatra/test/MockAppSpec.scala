@@ -23,7 +23,7 @@ import org.jboss.netty.handler.codec.http.HttpMethod
 import com.twitter.finagle.http.Request
 
 class MockAppSpec extends FlatSpec with ShouldMatchers {
-  val server = new MockApp(new Controller)
+  val server = MockApp(new Controller)
 
   "#toByteArray" should "directly convert String to Array[Byte]" in {
     val value = "hello world"
