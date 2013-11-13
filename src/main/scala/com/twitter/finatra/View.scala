@@ -27,6 +27,10 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
     wtr.append(str, 0, str.length)
   }
 
+  private def combinePaths(path1: String, path2: String): String = {
+    new File(new File(path1), path2).getPath
+  }
+
   override def getReader(resourceName:String): Reader = {
     if (!"development".equals(config.env())) {
       super.getReader(resourceName)
@@ -35,20 +39,22 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
     // system and avoid using the classloader which has
     // priority in DefaultMustacheFactory.getReader
     else {
-      val file:File = new File(baseTemplatePath, resourceName)
+      val fileName = if (resourceName contains ".mustache") resourceName else resourceName+".mustache"
+      val basePath = combinePaths(config.docRoot(), config.templatePath())
+      val file:File = new File(basePath, fileName)
+
       if (file.exists() && file.isFile()) {
         try {
           new BufferedReader(new InputStreamReader(new FileInputStream(file),
             Charsets.UTF_8));
         } catch {
           case exception:FileNotFoundException =>
-            throw new MustacheException("Found file, could not open: " + file, exception)
+            throw new MustacheException("Found Mustache file, could not open: " + file + " at path: " + basePath, exception)
         }
       }
       else {
-        throw new MustacheException("Template '" + resourceName + "' not found at " + file);
+        throw new MustacheException("Mustache Template '" + resourceName + "' not found at " + file + " at path: " + basePath);
       }
-
     }
   }
 

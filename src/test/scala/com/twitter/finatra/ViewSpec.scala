@@ -9,5 +9,7 @@ class ViewSpec extends ShouldSpec {
     view.contentType should equal (Some("text/plain"))
     view.render should include ("Title: Two")
     view.render should include ("Title: One")
+    view.render should include ("Hi. This is Base.")
+    view.render should include ("Hello World")
   }
 }
