@@ -27,7 +27,7 @@ Latest version:
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.4.0</version>
+  <version>1.4.1</version>
 </dependency>
 ```
 
