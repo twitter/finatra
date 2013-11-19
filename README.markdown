@@ -1,6 +1,4 @@
-
-
-# Finatra [![Build Status](https://secure.travis-ci.org/capotej/finatra.png)](http://travis-ci.org/capotej/finatra)
+# Finatra [![Build Status](https://secure.travis-ci.org/twitter/finatra.png)](http://travis-ci.org/twitter/finatra)
 
 [Finatra](http://finatra.info) is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
 
@@ -31,4 +29,9 @@ Latest version:
 </dependency>
 ```
 
+## License
+
+Copyright 2013 Twitter, Inc and other contributors
+
+Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
 
