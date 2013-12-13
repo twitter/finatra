@@ -7,5 +7,5 @@ object App extends FinatraServer {
 
   __EXAMPLEAPP__
 
-  register(app)
+  register(new ExampleApp())
 }
