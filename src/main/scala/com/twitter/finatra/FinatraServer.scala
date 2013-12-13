@@ -36,7 +36,7 @@ class FinatraServer extends FinatraTwitterServer {
 
   var secureServer: Option[ListeningServer] = None
   var server:       Option[ListeningServer] = None
-  var adminServer:       Option[ListeningServer] = None
+  var adminServer:  Option[ListeningServer] = None
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
     Service[FinagleRequest, FinagleResponse] = {

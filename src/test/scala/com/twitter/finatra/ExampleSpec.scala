@@ -240,9 +240,6 @@ class ExampleSpec extends FlatSpecHelper {
 
   }
 
-  val server = new FinatraServer
-  server.register(new ExampleApp)
-
   /* ###END_APP### */
 
 
