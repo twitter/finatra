@@ -42,7 +42,7 @@
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.10.2</scala.version>
+    <scala.version>2.10.0</scala.version>
   </properties>
   <profiles>
     <profile>
