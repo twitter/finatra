@@ -95,7 +95,7 @@
     </dependency>
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.10.0</artifactId>
+      <artifactId>scalatest_2.10</artifactId>
       <version>1.9.2</version>
     </dependency>
     <dependency>
