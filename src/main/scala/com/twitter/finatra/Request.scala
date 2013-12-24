@@ -16,17 +16,31 @@
 package com.twitter.finatra
 
 import scala.collection.mutable.Map
-import com.twitter.finagle.http.{Request => FinagleRequest, RequestProxy}
+import com.twitter.finagle.http.{Request => FinagleRequest, EmptyParamMap, MapParamMap, ParamMap, RequestProxy}
 import util.Sorting
 import com.google.common.base.Splitter
 import scala.collection.JavaConversions._
+import org.jboss.netty.handler.codec.http.{QueryStringDecoder, HttpMethod}
+import java.util
+import scala.collection.immutable
+import scala.collection.immutable.IndexedSeq
 
-class Request(rawRequest: FinagleRequest) extends RequestProxy {
+class Request(val request: FinagleRequest) extends RequestProxy {
 
   var multiParams:  Map[String, MultipartItem]  = Map.empty
   var routeParams:  Map[String, String]         = Map.empty
-  var request:      FinagleRequest              = rawRequest
   var error:        Option[Throwable]           = None
+
+  override lazy val params: ParamMap = {
+    request.method match {
+      case HttpMethod.GET => request.params
+      case _ =>
+        val queryStringParams = new QueryStringDecoder("?" + request.getContentString(), "UTF-8").getParameters
+        val queryParams = queryStringParams.toMap mapValues { _.toIndexedSeq }
+        val uriParams = request.params.toMap mapValues { x => IndexedSeq(x.toString) }
+        new MapParamMap(queryParams ++ uriParams)
+    }
+  }
 
   def accepts: Seq[ContentType] = {
     val accept = this.getHeader("Accept")

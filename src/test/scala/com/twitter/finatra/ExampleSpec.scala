@@ -15,9 +15,8 @@
  */
 package com.twitter.finatra.test
 
-import com.twitter.finatra.{Controller, View, FinatraServer, UnsupportedMediaType}
+import com.twitter.finatra._
 import com.twitter.finatra.ContentType._
-
 
 /* This test is used as the base for generating the
  README.markdown, all new generated apps, and the finatra_example repo

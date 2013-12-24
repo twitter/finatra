@@ -4,6 +4,9 @@ import test.ShouldSpec
 import util.Sorting
 import scala.collection.JavaConversions._
 import com.google.common.base.Splitter
+import com.twitter.finagle.http.{Request => FinagleRequest, Version}
+import org.jboss.netty.handler.codec.http.{DefaultHttpRequest, HttpMethod}
+import org.jboss.netty.buffer.{ChannelBuffers, ChannelBuffer}
 
 class RequestSpec extends ShouldSpec {
 
@@ -15,6 +18,16 @@ class RequestSpec extends ShouldSpec {
     parts(2) should equal("*/*;q=0.8")
     parts(1) should equal("application/xml;q=0.9")
     parts(0) should equal("application/xhtml+xml;q=2")
+  }
+
+
+  "Url encoded params" should "work with PUT even with query strings" in {
+    val nettyRequest = new DefaultHttpRequest(Version.Http11, HttpMethod.PUT, "/params?q=hi")
+    nettyRequest.setContent(ChannelBuffers.wrappedBuffer("test=foo".getBytes))
+    val finagleRequest = FinagleRequest(nettyRequest)
+    val finatraRequest = new Request(finagleRequest)
+    finatraRequest.params.get("test") should equal(Some("foo"))
+    finatraRequest.params.get("q") should equal(Some("hi"))
   }
 
 }
