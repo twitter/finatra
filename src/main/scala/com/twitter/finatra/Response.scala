@@ -61,19 +61,24 @@ class Response {
     json match {
       case Some(j) =>
         resp.setHeader("Content-Type", "application/json")
-        resp.setContent(copiedBuffer(jsonMapper.writeValueAsString(j), UTF_8))
+        val jsonString = jsonMapper.writeValueAsString(j)
+        resp.setHeader("Content-Length", jsonString.length)
+        resp.setContent(copiedBuffer(jsonString, UTF_8))
       case None =>
         view match {
            case Some(v) =>
              val out = v.render
+             resp.setHeader("Content-Length", out.length)
              resp.setContent(copiedBuffer(out, UTF_8))
            case None =>
             strBody match {
               case Some(sb) =>
+                resp.setHeader("Content-Length", sb.length)
                 resp.setContent(copiedBuffer(sb, UTF_8))
               case None =>
                 binBody match {
                   case Some(bb) =>
+                    resp.setHeader("Content-Length", bb.length)
                     resp.setContent(copiedBuffer(bb))
                   case None =>
                     throw new RuntimeException("nothing to render")
