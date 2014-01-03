@@ -1,3 +1,5 @@
+organization := "com.twitter"
+
 name := "finatra"
 
 version := "1.4.2-SNAPSHOT"
