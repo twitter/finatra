@@ -1,3 +1,5 @@
+organization := "com.twitter"
+
 name := "finatra"
 
 organization := "com.twitter"

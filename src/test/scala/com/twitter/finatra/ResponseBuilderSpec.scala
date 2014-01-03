@@ -42,49 +42,61 @@ class ResponseSpec extends ShouldSpec {
 
   ".plain()" should "return a 200 plain response" in {
     val response = resp.plain("howdy")
+    val built    = response.build
 
     response.status should equal (200)
     response.strBody.get should equal ("howdy")
     response.contentType should equal (Some("text/plain"))
+    built.headers.get("Content-Length").get.toInt should equal (5)
   }
 
   ".nothing()" should "return a 200 empty response" in {
     val response = resp.nothing
+    val built    = response.build
 
     response.status should equal (200)
     response.strBody.get should equal ("")
     response.contentType should equal (Some("text/plain"))
+    built.headers.get("Content-Length").get.toInt should equal (0)
   }
 
   ".html()" should "return a 200 html response" in {
     val response = resp.html("<h1>howdy</h1>")
+    val built = response.build
 
     response.status should equal (200)
     response.strBody.get should equal ("<h1>howdy</h1>")
     response.contentType should equal (Some("text/html"))
+    built.headers.get("Content-Length").get.toInt should equal (14)
   }
 
   ".json()" should "return a 200 json response" in {
     val response = resp.json(Map("foo" -> "bar"))
-    val body     = response.build.getContent.toString(UTF_8)
+    val built    = response.build
+    val body     = built.getContent.toString(UTF_8)
 
     response.status should equal (200)
     body should equal ("""{"foo":"bar"}""")
     response.contentType should equal (Some("application/json"))
+    built.headers.get("Content-Length").get.toInt should equal (13)
   }
 
   ".view()" should "return a 200 view response" in {
     val response = resp.view(view)
-    val body     = response.build.getContent.toString(UTF_8)
+    val built    = response.build
+    val body     = built.getContent.toString(UTF_8)
 
     response.status should equal (200)
     body should include ("howdy view")
+    built.headers.get("Content-Length").get.toInt should equal (11) // 10 character from the title, plus one for the newline in the template
   }
 
   ".static()" should "return a 200 static file" in {
     val response = resp.static("dealwithit.gif")
+    val built = response.build
 
     response.status should equal (200)
     response.contentType should equal (Some("image/gif"))
+    built.headers.get("Content-Length").get.toInt should equal (422488)
   }
 }
