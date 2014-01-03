@@ -31,17 +31,6 @@ class Request(val request: FinagleRequest) extends RequestProxy {
   var routeParams:  Map[String, String]         = Map.empty
   var error:        Option[Throwable]           = None
 
-  override lazy val params: ParamMap = {
-    request.method match {
-      case HttpMethod.GET => request.params
-      case _ =>
-        val queryStringParams = new QueryStringDecoder("?" + request.getContentString(), "UTF-8").getParameters
-        val queryParams = queryStringParams.toMap mapValues { _.toIndexedSeq }
-        val uriParams = request.params.toMap mapValues { x => IndexedSeq(x.toString) }
-        new MapParamMap(queryParams ++ uriParams)
-    }
-  }
-
   def accepts: Seq[ContentType] = {
     val accept = this.getHeader("Accept")
 
