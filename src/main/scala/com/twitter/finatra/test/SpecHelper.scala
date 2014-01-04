@@ -27,8 +27,8 @@ class MockResponse(val originalResponse: FinagleResponse) {
   def status                  = originalResponse.getStatus
   def code                    = originalResponse.getStatus.getCode
   def body                    = originalResponse.getContent.toString(UTF_8)
-  def getHeader(name: String) = originalResponse.getHeader(name)
-  def getHeaders              = originalResponse.getHeaders
+  def getHeader(name: String) = originalResponse.headers.get(name)
+  def getHeaders              = originalResponse.headerMap
 
 }
 
@@ -42,7 +42,7 @@ trait SpecHelper {
     val request = FinagleRequest(path, params.toList:_*)
     request.httpRequest.setMethod(method)
     headers.foreach { header =>
-      request.httpRequest.setHeader(header._1, header._2)
+      request.httpRequest.headers.set(header._1, header._2)
     }
 
     val appService = new AppService(server.controllers)
