@@ -29,7 +29,6 @@
     <connection>scm:git:git@github.com:capotej/finatra.git</connection>
     <url>scm:git:git@github.com:capotej/finatra.git</url>
     <developerConnection>scm:git:git@github.com:capotej/finatra.git</developerConnection>
-    <tag>finatra-1.5.0</tag>
   </scm>
   <licenses>
     <license>

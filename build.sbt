@@ -46,7 +46,6 @@ licenses := Seq("Apache License, Version 2.0" ->
 homepage := Some(url("http://finatra.info"))
 
 pomExtra := (
-  <url>http://finatra.info</url>
   <developers>
     <developer>
       <id>julio</id>
@@ -63,5 +62,4 @@ pomExtra := (
     <connection>scm:git:git@github.com:twitter/finatra.git</connection>
     <url>scm:git:git@github.com:twitter/finatra.git</url>
     <developerConnection>scm:git:git@github.com:twitter/finatra.git</developerConnection>
-    <tag>finatra-1.5.0</tag>
   </scm>)
