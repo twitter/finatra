@@ -28,7 +28,7 @@ class Request(val request: FinagleRequest) extends RequestProxy {
   var error:        Option[Throwable]           = None
 
   def accepts: Seq[ContentType] = {
-    val accept = this.getHeader("Accept")
+    val accept = this.headers.get("Accept")
 
     if (accept != null) {
       var acceptParts = Splitter.on(',').split(accept).toArray
