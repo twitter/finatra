@@ -66,7 +66,7 @@ class Router(controller: Controller) extends App with Logging {
     finagleRequest.httpRequest.setMethod(method)
 
     headers.foreach { header =>
-      finagleRequest.httpRequest.setHeader(header._1, header._2)
+      finagleRequest.httpRequest.headers.set(header._1, header._2)
     }
 
     val req = new Request(finagleRequest)
