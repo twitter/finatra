@@ -47,7 +47,7 @@ class ResponseSpec extends ShouldSpec {
     response.status should equal (200)
     response.strBody.get should equal ("howdy")
     response.contentType should equal (Some("text/plain"))
-    built.headers.get("Content-Length").get.toInt should equal (5)
+    built.headerMap.get("Content-Length").get.toInt should equal (5)
   }
 
   ".nothing()" should "return a 200 empty response" in {
@@ -57,7 +57,7 @@ class ResponseSpec extends ShouldSpec {
     response.status should equal (200)
     response.strBody.get should equal ("")
     response.contentType should equal (Some("text/plain"))
-    built.headers.get("Content-Length").get.toInt should equal (0)
+    built.headerMap.get("Content-Length").get.toInt should equal (0)
   }
 
   ".html()" should "return a 200 html response" in {
@@ -67,7 +67,7 @@ class ResponseSpec extends ShouldSpec {
     response.status should equal (200)
     response.strBody.get should equal ("<h1>howdy</h1>")
     response.contentType should equal (Some("text/html"))
-    built.headers.get("Content-Length").get.toInt should equal (14)
+    built.headerMap.get("Content-Length").get.toInt should equal (14)
   }
 
   ".json()" should "return a 200 json response" in {
@@ -78,7 +78,7 @@ class ResponseSpec extends ShouldSpec {
     response.status should equal (200)
     body should equal ("""{"foo":"bar"}""")
     response.contentType should equal (Some("application/json"))
-    built.headers.get("Content-Length").get.toInt should equal (13)
+    built.headerMap.get("Content-Length").get.toInt should equal (13)
   }
 
   ".view()" should "return a 200 view response" in {
@@ -88,7 +88,7 @@ class ResponseSpec extends ShouldSpec {
 
     response.status should equal (200)
     body should include ("howdy view")
-    built.headers.get("Content-Length").get.toInt should equal (11) // 10 character from the title, plus one for the newline in the template
+    built.headerMap.get("Content-Length").get.toInt should equal (11) // 10 character from the title, plus one for the newline in the template
   }
 
   ".static()" should "return a 200 static file" in {
@@ -97,6 +97,6 @@ class ResponseSpec extends ShouldSpec {
 
     response.status should equal (200)
     response.contentType should equal (Some("image/gif"))
-    built.headers.get("Content-Length").get.toInt should equal (422488)
+    built.headerMap.get("Content-Length").get.toInt should equal (422488)
   }
 }
