@@ -16,14 +16,10 @@
 package com.twitter.finatra
 
 import scala.collection.mutable.Map
-import com.twitter.finagle.http.{Request => FinagleRequest, EmptyParamMap, MapParamMap, ParamMap, RequestProxy}
+import com.twitter.finagle.http.{Request => FinagleRequest, RequestProxy}
 import util.Sorting
 import com.google.common.base.Splitter
 import scala.collection.JavaConversions._
-import org.jboss.netty.handler.codec.http.{QueryStringDecoder, HttpMethod}
-import java.util
-import scala.collection.immutable
-import scala.collection.immutable.IndexedSeq
 
 class Request(val request: FinagleRequest) extends RequestProxy {
 
