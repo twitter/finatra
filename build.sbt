@@ -4,7 +4,7 @@ name := "finatra"
 
 organization := "com.twitter"
 
-version := "1.4.2-SNAPSHOT"
+version := "1.5.0-SNAPSHOT"
 
 scalaVersion := "2.10.3"
 
@@ -17,7 +17,6 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "1.3.2",
   "org.scalatest" %% "scalatest" % "1.9.2",
   "com.google.code.findbugs" % "jsr305" % "2.0.1",
-  "com.google.guava" % "guava" % "15.0",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.2.2",
   "com.github.spullara.mustache.java" % "compiler" % "0.8.13",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
@@ -64,5 +63,5 @@ pomExtra := (
     <connection>scm:git:git@github.com:twitter/finatra.git</connection>
     <url>scm:git:git@github.com:twitter/finatra.git</url>
     <developerConnection>scm:git:git@github.com:twitter/finatra.git</developerConnection>
-    <tag>finatra-1.4.1</tag>
+    <tag>finatra-1.5.0</tag>
   </scm>)
