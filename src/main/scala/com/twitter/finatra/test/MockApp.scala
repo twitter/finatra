@@ -28,6 +28,7 @@ import java.util
 import org.jboss.netty.buffer.ChannelBuffers
 import java.net.URLEncoder
 import com.twitter.finagle.Service
+import org.jboss.netty.util.CharsetUtil._
 
 class MockApp(service: Service[FinagleRequest, FinagleResponse]) {
   def buildRequest(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): FinagleRequest = {
@@ -40,25 +41,25 @@ class MockApp(service: Service[FinagleRequest, FinagleResponse]) {
     val request = FinagleRequest(path, params.toList: _*)
     request.httpRequest.setMethod(method)
 
+    // add headers
+    headers.foreach {
+      header => request.httpRequest.headers().add(header._1, header._2)
+    }
+
     // apply body
     for (buffer <- toByteArray(body)) {
       request.setContent(ChannelBuffers.wrappedBuffer(buffer))
-      request.addHeader("Content-Length", buffer.length.toString)
-    }
-
-    // add headers
-    headers.foreach {
-      header => request.httpRequest.setHeader(header._1, header._2)
+      request.httpRequest.headers().set("Content-Length", buffer.length.toString)
     }
 
     request
   }
 
-  def execute(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def execute(method: HttpMethod, path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     // Execute the test
     val request = buildRequest(method, path, params, headers, body)
-    val response: Future[Response] = service(request)
-    new MockResponse(Await.result(response))
+    val response: Future[FinagleResponse] = service(request)
+    new MockResult(response)
   }
 
   /**
@@ -100,31 +101,31 @@ class MockApp(service: Service[FinagleRequest, FinagleResponse]) {
     Option(buffer)
   }
 
-  def get(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def get(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     execute(HttpMethod.GET, path, params, headers, body)
   }
 
-  def post(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def post(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     execute(HttpMethod.POST, path, params, headers, body)
   }
 
-  def put(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def put(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     execute(HttpMethod.PUT, path, params, headers, body)
   }
 
-  def delete(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def delete(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     execute(HttpMethod.DELETE, path, params, headers, body)
   }
 
-  def head(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def head(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     execute(HttpMethod.HEAD, path, params, headers, body)
   }
 
-  def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     execute(HttpMethod.PATCH, path, params, headers, body)
   }
 
-  def options(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResponse = {
+  def options(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map(), body: AnyRef = null): MockResult = {
     execute(HttpMethod.OPTIONS, path, params, headers, body)
   }
 }
@@ -148,5 +149,14 @@ object MockApp {
 
     new MockApp(service)
   }
+}
+
+class MockResult(val original: Future[Response]) {
+  def originalResponse        = Await.result(original)
+  def status                  = originalResponse.getStatus
+  def code                    = originalResponse.getStatus.getCode
+  def body                    = originalResponse.getContent.toString(UTF_8)
+  def getHeader(name: String) = originalResponse.headers.get(name)
+  def getHeaders              = originalResponse.headerMap
 }
 

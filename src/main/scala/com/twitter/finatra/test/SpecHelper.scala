@@ -18,8 +18,8 @@ package com.twitter.finatra.test
 import com.twitter.util.{Await, Future}
 import scala.collection.Map
 import org.jboss.netty.util.CharsetUtil.UTF_8
-import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.finatra.{AppService, ControllerCollection, FinatraServer}
+import com.twitter.finagle.http.{Response => FinagleResponse}
+import com.twitter.finatra.FinatraServer
 import org.jboss.netty.handler.codec.http.HttpMethod
 
 class MockResponse(val originalResponse: FinagleResponse) {
@@ -38,17 +38,9 @@ trait SpecHelper {
   var lastResponse:Future[FinagleResponse] = null
 
   def buildRequest(method: HttpMethod, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-
-    val request = FinagleRequest(path, params.toList:_*)
-    request.httpRequest.setMethod(method)
-    headers.foreach { header =>
-      request.httpRequest.headers.set(header._1, header._2)
-    }
-
-    val appService = new AppService(server.controllers)
-    val service = server.allFilters(appService)
-
-    lastResponse = service(request)
+    val app  = MockApp(server)
+    val result: MockResult = app.execute(method= method, path = path, params = params, headers = headers)
+    lastResponse = result.original
  }
 
   def server:FinatraServer
