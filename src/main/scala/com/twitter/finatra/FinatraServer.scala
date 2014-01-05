@@ -31,12 +31,12 @@ import java.io.{FileOutputStream, File, FileNotFoundException}
 class FinatraServer extends FinatraTwitterServer {
 
   val controllers:  ControllerCollection = new ControllerCollection
-  var filters:      Seq[SimpleFilter[FinagleRequest, FinagleResponse]] = Seq.empty
+  var filters:      Seq[Filter[FinagleRequest, FinagleResponse,FinagleRequest, FinagleResponse]] = Seq.empty
   val pid:          String = ManagementFactory.getRuntimeMXBean.getName.split('@').head
 
   var secureServer: Option[ListeningServer] = None
   var server:       Option[ListeningServer] = None
-  var adminServer:       Option[ListeningServer] = None
+  var adminServer:  Option[ListeningServer] = None
 
   def allFilters(baseService: Service[FinagleRequest, FinagleResponse]):
     Service[FinagleRequest, FinagleResponse] = {
@@ -45,7 +45,7 @@ class FinatraServer extends FinatraTwitterServer {
 
   def register(app: Controller) { controllers.add(app) }
 
-  def addFilter(filter: SimpleFilter[FinagleRequest, FinagleResponse]) {
+  def addFilter(filter: Filter[FinagleRequest, FinagleResponse,FinagleRequest, FinagleResponse]) {
     filters = filters ++ Seq(filter)
   }
 

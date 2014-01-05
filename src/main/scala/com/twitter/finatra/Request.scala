@@ -21,15 +21,14 @@ import util.Sorting
 import com.google.common.base.Splitter
 import scala.collection.JavaConversions._
 
-class Request(rawRequest: FinagleRequest) extends RequestProxy {
+class Request(val request: FinagleRequest) extends RequestProxy {
 
   var multiParams:  Map[String, MultipartItem]  = Map.empty
   var routeParams:  Map[String, String]         = Map.empty
-  var request:      FinagleRequest              = rawRequest
   var error:        Option[Throwable]           = None
 
   def accepts: Seq[ContentType] = {
-    val accept = this.getHeader("Accept")
+    val accept = this.headers.get("Accept")
 
     if (accept != null) {
       var acceptParts = Splitter.on(',').split(accept).toArray

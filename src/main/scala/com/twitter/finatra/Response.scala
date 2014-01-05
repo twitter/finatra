@@ -60,20 +60,25 @@ class Response {
   def setContent(resp: HttpResponse): HttpResponse = {
     json match {
       case Some(j) =>
-        resp.setHeader("Content-Type", "application/json")
-        resp.setContent(copiedBuffer(jsonMapper.writeValueAsString(j), UTF_8))
+        resp.headers.set("Content-Type", "application/json")
+        val jsonString = jsonMapper.writeValueAsString(j)
+        resp.headers.set("Content-Length", jsonString.length)
+        resp.setContent(copiedBuffer(jsonString, UTF_8))
       case None =>
         view match {
            case Some(v) =>
              val out = v.render
+             resp.headers.set("Content-Length", out.length)
              resp.setContent(copiedBuffer(out, UTF_8))
            case None =>
             strBody match {
               case Some(sb) =>
+                resp.headers.set("Content-Length", sb.length)
                 resp.setContent(copiedBuffer(sb, UTF_8))
               case None =>
                 binBody match {
                   case Some(bb) =>
+                    resp.headers.set("Content-Length", bb.length)
                     resp.setContent(copiedBuffer(bb))
                   case None =>
                     throw new RuntimeException("nothing to render")
@@ -185,10 +190,10 @@ class Response {
     val resp            = new DefaultHttpResponse(HTTP_1_1, responseStatus)
 
     headers.foreach { xs =>
-      resp.setHeader(xs._1, xs._2)
+      resp.headers.set(xs._1, xs._2)
     }
 
-    if (this.hasCookies) resp.setHeader("Set-Cookie", cookies.encode)
+    if (this.hasCookies) resp.headers.set("Set-Cookie", cookies.encode)
 
     setContent(resp)
     FinagleResponse(resp)
