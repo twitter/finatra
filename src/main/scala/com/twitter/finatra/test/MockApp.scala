@@ -151,8 +151,8 @@ object MockApp {
   }
 }
 
-class MockResult(val original: Future[Response]) {
-  def originalResponse        = Await.result(original)
+class MockResult(val response: Future[Response]) {
+  def originalResponse        = Await.result(response)
   def status                  = originalResponse.getStatus
   def code                    = originalResponse.getStatus.getCode
   def body                    = originalResponse.getContent.toString(UTF_8)

@@ -40,7 +40,7 @@ trait SpecHelper {
   def buildRequest(method: HttpMethod, path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
     val app  = MockApp(server)
     val result: MockResult = app.execute(method= method, path = path, params = params, headers = headers)
-    lastResponse = result.original
+    lastResponse = result.response
  }
 
   def server:FinatraServer
