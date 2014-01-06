@@ -12,7 +12,7 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
     <encoding>UTF-8</encoding>
-    <scala.version>2.10.2</scala.version>
+    <scala.version>2.10.3</scala.version>
   </properties>
 
   <repositories>
@@ -34,14 +34,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.10.0</artifactId>
-      <version>1.9.2</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra</artifactId>
+      <artifactId>finatra_2.10</artifactId>
       <version>###VERSION###</version>
     </dependency>
 
