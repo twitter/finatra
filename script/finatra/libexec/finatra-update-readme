@@ -7,6 +7,5 @@ set -e
 source $_FINATRA_ROOT/lib/base.sh
 
 cp README.markdown.template README.markdown
-replace_with_example_app README.markdown.template README.markdown
 sed -ie "s/###VERSION###/$VERSION/g" README.markdown
 rm -rf README.markdowne
