@@ -4,6 +4,8 @@
 
 See the [Getting Started](http://finatra.info/docs/tutorial.html) guide or the [Documentation](http://finatra.info/docs/index.html) for more information.
 
+Get help on the [finatra-users](https://groups.google.com/forum/#!forum/finatra-users) mailing list.
+
 ```scala
 class HelloWorld extends Controller {
 

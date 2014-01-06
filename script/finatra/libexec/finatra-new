@@ -99,6 +99,9 @@ sed -ie "s/###YEAR###/$year/g" $root_path/$project_name/pom.xml
 sed -ie "s/###GROUP_ID###/$group_id/g" $root_path/$project_name/pom.xml
 sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/pom.xml
 
+# edit README.markdown
+sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/README.markdown
+
 #edit build.sbt
 sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/build.sbt
 
@@ -119,6 +122,7 @@ fi
 
 # delete backup files
 rm -rf $root_path/$project_name/pom.xmle
+rm -rf $root_path/$project_name/README.markdowne
 rm -rf $root_path/$project_name/build.sbte
 rm -rf $root_path/$project_name/assembly.sbte
 rm -rf $dest_path/App.scalae
