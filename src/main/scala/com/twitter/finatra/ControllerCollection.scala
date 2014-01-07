@@ -20,7 +20,7 @@ class ControllerCollection {
 
   }
 
-  def render: Response = new Response
+  def render: ResponseBuilder = new ResponseBuilder
 
   def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
     var response: Option[Future[FinagleResponse]] = None
