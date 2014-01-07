@@ -21,7 +21,7 @@ object App extends FinatraServer {
 }
 ```
 
-### SBT
+### SBT (dual published for 2.9.x or 2.10.x)
 
 ```scala
 "com.twitter" %% "finatra" % "1.5.0"
