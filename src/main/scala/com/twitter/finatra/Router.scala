@@ -29,7 +29,7 @@ class Router(controller: Controller) extends App with Logging {
 
     findRouteAndMatch(req, method) match {
       case Some((method, pattern, callback)) =>
-        Some(ResponseAdapter(callback(req)))
+        Some(ResponseAdapter(req, callback(req)))
       case None => orCallback(request)
     }
   }
@@ -38,7 +38,7 @@ class Router(controller: Controller) extends App with Logging {
     request.routeParams += (xs._1.toString -> xs._2.asInstanceOf[ListBuffer[String]].head.toString)
 
   def findRouteAndMatch(request: Request, method: HttpMethod):
-    Option[(HttpMethod, PathPattern, (Request) => Future[Response])] = {
+    Option[(HttpMethod, PathPattern, (Request) => Future[ResponseBuilder])] = {
 
     var thematch: Option[Map[_,_]] = None
 
@@ -59,7 +59,7 @@ class Router(controller: Controller) extends App with Logging {
     path:     String,
     params:   Map[String, String] = Map(),
     headers:  Map[String, String] = Map()
-  ): Future[Response] = {
+  ): Future[ResponseBuilder] = {
 
     val finagleRequest = FinagleRequest(path, params.toList:_*)
 
@@ -79,24 +79,24 @@ class Router(controller: Controller) extends App with Logging {
   }
 
   def get(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-    Future[Response] = internalDispatch(HttpMethod.GET, path, params, headers)
+    Future[ResponseBuilder] = internalDispatch(HttpMethod.GET, path, params, headers)
 
   def post(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-    Future[Response] = internalDispatch(HttpMethod.POST, path, params, headers)
+    Future[ResponseBuilder] = internalDispatch(HttpMethod.POST, path, params, headers)
 
   def put(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-    Future[Response] = internalDispatch(HttpMethod.PUT, path, params, headers)
+    Future[ResponseBuilder] = internalDispatch(HttpMethod.PUT, path, params, headers)
 
   def delete(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-    Future[Response] = internalDispatch(HttpMethod.DELETE, path, params, headers)
+    Future[ResponseBuilder] = internalDispatch(HttpMethod.DELETE, path, params, headers)
 
   def head(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-    Future[Response] = internalDispatch(HttpMethod.HEAD, path, params, headers)
+    Future[ResponseBuilder] = internalDispatch(HttpMethod.HEAD, path, params, headers)
 
   def patch(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-    Future[Response] = internalDispatch(HttpMethod.PATCH, path, params, headers)
+    Future[ResponseBuilder] = internalDispatch(HttpMethod.PATCH, path, params, headers)
 
   def options(path: String, params: Map[String, String] = Map(), headers: Map[String, String] = Map()):
-    Future[Response] = internalDispatch(HttpMethod.OPTIONS, path, params, headers)
+    Future[ResponseBuilder] = internalDispatch(HttpMethod.OPTIONS, path, params, headers)
 
 }

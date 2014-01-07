@@ -23,9 +23,7 @@ import com.twitter.app.App
 class AppService(controllers: ControllerCollection)
   extends Service[FinagleRequest, FinagleResponse] with App with Logging {
 
-  //override val name = "finatra"
-
-  def render: Response = new Response
+  def render: ResponseBuilder = new ResponseBuilder
 
   def apply(rawRequest: FinagleRequest): Future[FinagleResponse] = {
     val adaptedRequest  = RequestAdapter(rawRequest)
@@ -33,7 +31,7 @@ class AppService(controllers: ControllerCollection)
     def handleError(t:Throwable) = {
       log.error(t, "Internal Server Error")
       adaptedRequest.error = Some(t)
-      ResponseAdapter(controllers.errorHandler(adaptedRequest))
+      ResponseAdapter(adaptedRequest, controllers.errorHandler(adaptedRequest))
     }
 
     try {
@@ -54,7 +52,7 @@ class AppService(controllers: ControllerCollection)
       case Some(response) =>
         response.asInstanceOf[Future[FinagleResponse]]
       case None =>
-        ResponseAdapter(controllers.notFoundHandler(adaptedRequest))
+        ResponseAdapter(adaptedRequest, controllers.notFoundHandler(adaptedRequest))
     }
   }
 

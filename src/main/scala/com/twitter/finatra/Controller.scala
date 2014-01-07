@@ -23,33 +23,33 @@ import com.twitter.app.App
 
 class Controller extends App with Logging with Stats {
 
-  val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[Response])]
+  val routes = new RouteVector[(HttpMethod, PathPattern, Request => Future[ResponseBuilder])]
 
-  var notFoundHandler:  Option[(Request) => Future[Response]]  = None
-  var errorHandler:     Option[(Request) => Future[Response]]  = None
+  var notFoundHandler:  Option[(Request) => Future[ResponseBuilder]]  = None
+  var errorHandler:     Option[(Request) => Future[ResponseBuilder]]  = None
 
-  def get(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.GET,    path)(callback) }
-  def delete(path: String)(callback: Request => Future[Response]) { addRoute(HttpMethod.DELETE, path)(callback) }
-  def post(path: String)  (callback: Request => Future[Response]) { addRoute(HttpMethod.POST,   path)(callback) }
-  def put(path: String)   (callback: Request => Future[Response]) { addRoute(HttpMethod.PUT,    path)(callback) }
-  def head(path: String)  (callback: Request => Future[Response]) { addRoute(HttpMethod.HEAD,   path)(callback) }
-  def patch(path: String) (callback: Request => Future[Response]) { addRoute(HttpMethod.PATCH,  path)(callback) }
-  def options(path: String)(callback: Request => Future[Response]){ addRoute(HttpMethod.OPTIONS, path)(callback) }
+  def get(path: String)   (callback: Request => Future[ResponseBuilder]) { addRoute(HttpMethod.GET,    path)(callback) }
+  def delete(path: String)(callback: Request => Future[ResponseBuilder]) { addRoute(HttpMethod.DELETE, path)(callback) }
+  def post(path: String)  (callback: Request => Future[ResponseBuilder]) { addRoute(HttpMethod.POST,   path)(callback) }
+  def put(path: String)   (callback: Request => Future[ResponseBuilder]) { addRoute(HttpMethod.PUT,    path)(callback) }
+  def head(path: String)  (callback: Request => Future[ResponseBuilder]) { addRoute(HttpMethod.HEAD,   path)(callback) }
+  def patch(path: String) (callback: Request => Future[ResponseBuilder]) { addRoute(HttpMethod.PATCH,  path)(callback) }
+  def options(path: String)(callback: Request => Future[ResponseBuilder]){ addRoute(HttpMethod.OPTIONS, path)(callback) }
 
-  def notFound(callback: Request => Future[Response]) {
+  def notFound(callback: Request => Future[ResponseBuilder]) {
     notFoundHandler = Option(callback)
   }
 
-  def error(callback: Request => Future[Response]) {
+  def error(callback: Request => Future[ResponseBuilder]) {
     errorHandler = Option(callback)
   }
 
   val stats = statsReceiver.scope("Controller")
 
-  def render: Response  = new Response
+  def render: ResponseBuilder  = new ResponseBuilder
   def route:  Router    = new Router(this)
 
-  def redirect(location: String, message: String = "", permanent: Boolean = false): Response = {
+  def redirect(location: String, message: String = "", permanent: Boolean = false): ResponseBuilder = {
     val msg = if (message == "")
       "Redirecting to <a href=\"%s\">%s</a>.".format(location, location)
     else
@@ -60,7 +60,7 @@ class Controller extends App with Logging with Stats {
     render.plain(msg).status(code).header("Location", location)
   }
 
-  def respondTo(r: Request)(callback: PartialFunction[ContentType, Future[Response]]): Future[Response] = {
+  def respondTo(r: Request)(callback: PartialFunction[ContentType, Future[ResponseBuilder]]): Future[ResponseBuilder] = {
     if (!r.routeParams.get("format").isEmpty) {
       val format      = r.routeParams("format")
       val mime        = FileService.getContentType("." + format)
@@ -83,7 +83,7 @@ class Controller extends App with Logging with Stats {
     }
   }
 
-  def addRoute(method: HttpMethod, path: String)(callback: Request => Future[Response]) {
+  def addRoute(method: HttpMethod, path: String)(callback: Request => Future[ResponseBuilder]) {
     val regex = SinatraPathPatternParser(path)
     routes.add((method, regex, (r) => {
       stats.timeFuture("%s/Root/%s".format(method.toString, path.stripPrefix("/"))) {

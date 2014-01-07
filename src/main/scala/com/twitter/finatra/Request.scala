@@ -21,6 +21,11 @@ import util.Sorting
 import com.google.common.base.Splitter
 import scala.collection.JavaConversions._
 
+object Request {
+  def apply() = new Request(FinagleRequest("/"))
+  def apply(path: String) = new Request(FinagleRequest(path))
+}
+
 class Request(val request: FinagleRequest) extends RequestProxy {
 
   var multiParams:  Map[String, MultipartItem]  = Map.empty

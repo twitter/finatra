@@ -17,7 +17,7 @@ package com.twitter.finatra.test
 
 import org.jboss.netty.util.CharsetUtil.UTF_8
 
-import com.twitter.finatra.Response
+import com.twitter.finatra.ResponseBuilder
 import com.twitter.finatra.View
 
 class MockView(val title:String) extends View {
@@ -25,28 +25,31 @@ class MockView(val title:String) extends View {
 }
 
 class ResponseSpec extends ShouldSpec {
-  def resp = new Response
+  def resp = new ResponseBuilder
   def view = new MockView("howdy view")
 
   ".ok" should "return a 200 response" in {
-    resp.ok.status should equal (200)
+    resp.ok.build
+      .statusCode should equal(200)
   }
 
   ".notFound" should "return a 404 response" in {
-    resp.notFound.status should equal (404)
+    resp.notFound.build
+      .statusCode should equal (404)
   }
 
   ".status(201)" should "return a 201 response" in {
-    resp.status(201).status should equal (201)
+    resp.status(201).build
+      .statusCode should equal (201)
   }
 
   ".plain()" should "return a 200 plain response" in {
     val response = resp.plain("howdy")
     val built    = response.build
 
-    response.status should equal (200)
-    response.strBody.get should equal ("howdy")
-    response.contentType should equal (Some("text/plain"))
+    built.statusCode should equal (200)
+    built.contentString should equal ("howdy")
+    built.contentType should equal (Some("text/plain"))
     built.headerMap.get("Content-Length").get.toInt should equal (5)
   }
 
@@ -54,9 +57,9 @@ class ResponseSpec extends ShouldSpec {
     val response = resp.nothing
     val built    = response.build
 
-    response.status should equal (200)
-    response.strBody.get should equal ("")
-    response.contentType should equal (Some("text/plain"))
+    built.statusCode should equal (200)
+    built.contentString should equal ("")
+    built.contentType should equal (Some("text/plain"))
     built.headerMap.get("Content-Length").get.toInt should equal (0)
   }
 
@@ -64,9 +67,9 @@ class ResponseSpec extends ShouldSpec {
     val response = resp.html("<h1>howdy</h1>")
     val built = response.build
 
-    response.status should equal (200)
-    response.strBody.get should equal ("<h1>howdy</h1>")
-    response.contentType should equal (Some("text/html"))
+    built.statusCode should equal (200)
+    built.contentString should equal ("<h1>howdy</h1>")
+    built.contentType should equal (Some("text/html"))
     built.headerMap.get("Content-Length").get.toInt should equal (14)
   }
 
@@ -75,9 +78,9 @@ class ResponseSpec extends ShouldSpec {
     val built    = response.build
     val body     = built.getContent.toString(UTF_8)
 
-    response.status should equal (200)
+    built.statusCode should equal (200)
     body should equal ("""{"foo":"bar"}""")
-    response.contentType should equal (Some("application/json"))
+    built.contentType should equal (Some("application/json"))
     built.headerMap.get("Content-Length").get.toInt should equal (13)
   }
 
@@ -86,7 +89,7 @@ class ResponseSpec extends ShouldSpec {
     val built    = response.build
     val body     = built.getContent.toString(UTF_8)
 
-    response.status should equal (200)
+    built.statusCode should equal (200)
     body should include ("howdy view")
     built.headerMap.get("Content-Length").get.toInt should equal (11) // 10 character from the title, plus one for the newline in the template
   }
@@ -95,8 +98,8 @@ class ResponseSpec extends ShouldSpec {
     val response = resp.static("dealwithit.gif")
     val built = response.build
 
-    response.status should equal (200)
-    response.contentType should equal (Some("image/gif"))
+    built.statusCode should equal (200)
+    built.contentType should equal (Some("image/gif"))
     built.headerMap.get("Content-Length").get.toInt should equal (422488)
   }
 }
