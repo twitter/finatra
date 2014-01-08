@@ -33,7 +33,7 @@ object App extends FinatraServer {
 <dependency>
   <groupId>com.twitter</groupId>
   <artifactId>finatra_2.10</artifactId>
-  <!-- for 2.9 <artifactId>finatra_2.9</artifactId> -->
+  <!-- for 2.9 <artifactId>finatra_2.9.2</artifactId> -->
   <version>###VERSION###</version>
 </dependency>
 ```
