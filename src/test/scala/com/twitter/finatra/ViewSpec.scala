@@ -12,4 +12,11 @@ class ViewSpec extends ShouldSpec {
     view.render should include ("Hi. This is Base.")
     view.render should include ("Hello World")
   }
+
+  "A partial" should "render with escaping" in {
+    val view = new MasterView
+
+    view.render should include ("please &lt;escape&gt; me")
+    view.render should include ("<div>") // prove we don't escape the partial's content
+  }
 }
