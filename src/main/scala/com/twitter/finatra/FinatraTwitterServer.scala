@@ -8,4 +8,5 @@ trait FinatraTwitterServer extends App
   with Lifecycle
   with Stats
   with Logging
+  with Admin
 
