@@ -14,6 +14,7 @@ crossScalaVersions := Seq("2.9.2", "2.10.3")
 
 libraryDependencies ++= Seq(
   "com.twitter" %% "twitter-server" % "1.4.0",
+  "com.twitter" %% "finagle-stats" % "6.10.0",
   "commons-io" % "commons-io" % "1.3.2",
   "org.scalatest" %% "scalatest" % "1.9.2",
   "com.google.code.findbugs" % "jsr305" % "2.0.1",
