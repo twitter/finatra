@@ -23,10 +23,6 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFactory {
-  override def encode(str: String, wtr: Writer) {
-    wtr.append(str, 0, str.length)
-  }
-
   private def combinePaths(path1: String, path2: String): String = {
     new File(new File(path1), path2).getPath
   }

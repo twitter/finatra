@@ -15,3 +15,8 @@ class PostsView(val posts:List[Post]) extends View {
 
   def body          = postsListView.render
 }
+
+class MasterView extends View {
+  val template = "master.mustache"
+  val body = "please <escape> me"
+}
