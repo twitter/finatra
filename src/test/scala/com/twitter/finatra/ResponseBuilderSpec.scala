@@ -84,6 +84,17 @@ class ResponseSpec extends ShouldSpec {
     built.headerMap.get("Content-Length").get.toInt should equal (13)
   }
 
+  ".json()" should "return a 200 json response with correct Content-Length for unicode strings" in {
+    val response = resp.json(Map("foo" -> "⛄"))
+    val built    = response.build
+    val body     = built.getContent.toString(UTF_8)
+
+    built.statusCode should equal (200)
+    body should equal ("""{"foo":"⛄"}""")
+    built.contentType should equal (Some("application/json"))
+    built.headerMap.get("Content-Length").get.toInt should equal (13)
+  }
+
   ".view()" should "return a 200 view response" in {
     val response = resp.view(view)
     val built    = response.build
