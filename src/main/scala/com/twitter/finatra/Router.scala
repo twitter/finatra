@@ -1,11 +1,12 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import org.jboss.netty.handler.codec.http.HttpMethod
+import org.jboss.netty.handler.codec.http.{QueryStringDecoder, HttpMethod}
 import scala.collection.mutable.ListBuffer
 import scala.collection.Map
 import com.twitter.util.Future
 import com.twitter.app.App
+import org.jboss.netty.util.CharsetUtil
 
 class Router(controller: Controller) extends App with Logging {
 
@@ -34,8 +35,11 @@ class Router(controller: Controller) extends App with Logging {
     }
   }
 
-  def extractParams(request: Request, xs: Tuple2[_, _]): Map[String, String] =
-    request.routeParams += (xs._1.toString -> xs._2.asInstanceOf[ListBuffer[String]].head.toString)
+  def extractParams(request: Request, xs: Tuple2[_, _]): Map[String, String] = {
+    val decodedKey = QueryStringDecoder.decodeComponent(xs._1.toString, CharsetUtil.UTF_8)
+    val decodedValue = QueryStringDecoder.decodeComponent(xs._2.asInstanceOf[ListBuffer[String]].head.toString)
+    request.routeParams += (decodedKey -> decodedValue)
+  }
 
   def findRouteAndMatch(request: Request, method: HttpMethod):
     Option[(HttpMethod, PathPattern, (Request) => Future[ResponseBuilder])] = {
