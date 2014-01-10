@@ -61,9 +61,9 @@ class ResponseBuilder {
     json match {
       case Some(j) =>
         resp.headers.set("Content-Type", "application/json")
-        val jsonString = jsonMapper.writeValueAsString(j)
-        resp.headers.set("Content-Length", jsonString.length)
-        resp.setContent(copiedBuffer(jsonString, UTF_8))
+        val jsonBytes = jsonMapper.writeValueAsString(j).getBytes(UTF_8)
+        resp.headers.set("Content-Length", jsonBytes.length)
+        resp.setContent(copiedBuffer(jsonBytes))
       case None =>
         view match {
            case Some(v) =>
