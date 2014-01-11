@@ -7,7 +7,7 @@ import com.twitter.app.App
 
 trait Logging { self: App =>
 
-  val logLevel = {
+  def logLevel = {
     val configuredLogLevelName = config.logLevel()
     if (!Logger.levelNames.contains(configuredLogLevelName)) {
       val availableLogLevels: String = Logger.levelNames.keys.mkString(",")
@@ -18,7 +18,7 @@ trait Logging { self: App =>
     Some(Logger.levelNames(configuredLogLevelName))
   }
 
-  lazy val log = Logger(config.logNode())
+  def log = Logger(config.logNode())
 
   premain {
     lazy val consoleHandler: HandlerFactory = ConsoleHandler()
