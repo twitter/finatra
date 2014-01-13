@@ -82,9 +82,9 @@ cp $_FINATRA_ROOT/../../src/main/resources/public/components/bootstrap.css $root
 echo "  creating favicon.ico"
 cp $_FINATRA_ROOT/../../src/main/resources/public/favicon.ico $root_path/$project_name/src/main/resources/public/
 echo "  creating bower.json"
-cp $_FINATRA_ROOT/../../bower.json $root_path/$project_name/
+cp $_FINATRA_ROOT/../../script/finatra/share/bower.json $root_path/$project_name/
 echo "  creating .bowerrc"
-cp $_FINATRA_ROOT/../../.bowerrc $root_path/$project_name/
+cp $_FINATRA_ROOT/../../script/finatra/share/.bowerrc $root_path/$project_name/
 echo "  creating index.html"
 cp $_FINATRA_ROOT/../../src/main/resources/public/index.html $root_path/$project_name/src/main/resources/public/
 
