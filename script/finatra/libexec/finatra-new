@@ -110,6 +110,9 @@ replace_with_example_app $_FINATRA_ROOT/share/App.scala $dest_path/App.scala
 # edit App.scala
 sed -ie "s/###PACKAGE_NAME###/$package_name/g" $dest_path/App.scala
 
+# edit bower.json
+sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/bower.json
+
 # edit Procfile
 sed -ie "s/###PACKAGE_NAME###/$package_name/g" $root_path/$project_name/Procfile
 

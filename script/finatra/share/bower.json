@@ -1,11 +1,6 @@
 {
-  "name": "Finatra Project",
+  "name": "###PROJECT_NAME###",
   "version": "0.0.1",
-  "homepage": "https://github.com/twitter/finatra",
-  "authors": [
-    "Twitter, Inc."
-  ],
-  "description": "The scala web framework inspired by Sinatra and powered by Twitter-Server",
   "license": "MIT",
   "private": true,
   "ignore": [
