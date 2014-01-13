@@ -63,7 +63,7 @@ class ExampleSpec extends FlatSpecHelper {
     /**
      * Rendering json
      *
-     * curl -I http://localhost:7070/headers => "Foo:Bar"
+     * curl -I http://localhost:7070/data.json => "{foo:bar}"
      */
     get("/data.json") { request =>
       render.json(Map("foo" -> "bar")).toFuture
@@ -110,7 +110,7 @@ class ExampleSpec extends FlatSpecHelper {
     /**
      * Rendering views
      *
-     * curl http://localhost:7070/posts
+     * curl http://localhost:7070/template
      */
     class AnView extends View {
       val template = "an_view.mustache"
@@ -136,7 +136,7 @@ class ExampleSpec extends FlatSpecHelper {
     /**
      * Custom Error Handling with custom Exception
      *
-     * curl http://localhost:7070/unautorized
+     * curl http://localhost:7070/unauthorized
      */
     class Unauthorized extends Exception
 
@@ -191,8 +191,8 @@ class ExampleSpec extends FlatSpecHelper {
     /**
      * Dispatch based on Content-Type
      *
-     * curl http://localhost:7070/index.json
-     * curl http://localhost:7070/index.html
+     * curl http://localhost:7070/blog/index.json
+     * curl http://localhost:7070/blog/index.html
      */
     get("/blog/index.:format") { request =>
       respondTo(request) {
