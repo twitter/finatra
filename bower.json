@@ -1,0 +1,21 @@
+{
+  "name": "Finatra",
+  "version": "1.5.1",
+  "homepage": "https://github.com/twitter/finatra",
+  "authors": [
+    "Twitter, Inc."
+  ],
+  "description": "The scala web framework inspired by Sinatra and powered by Twitter-Server",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap" : "twbs/bootstrap"
+  }
+}
