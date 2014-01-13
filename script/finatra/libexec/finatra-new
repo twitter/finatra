@@ -153,6 +153,7 @@ fi
 rm -rf $root_path/$project_name/pom.xmle
 rm -rf $root_path/$project_name/README.markdowne
 rm -rf $root_path/$project_name/build.sbte
+rm -rf $root_path/$project_name/bower.jsone
 rm -rf $root_path/$project_name/assembly.sbte
 rm -rf $dest_path/App.scalae
 rm -rf $root_path/$project_name/Procfilee
