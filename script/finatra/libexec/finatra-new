@@ -45,8 +45,7 @@ fi
 
 echo "creating project: $project_name"
 mkdir -p $dest_path
-mkdir -p $root_path/$project_name/src/main/resources
-mkdir -p $root_path/$project_name/src/main/resources/public
+mkdir -p $root_path/$project_name/src/main/resources/public/components/bootstrap/dist/css
 mkdir -p $root_path/$project_name/project
 mkdir -p $test_path
 
@@ -76,7 +75,34 @@ echo "  creating an_view.mustache"
 cp $_FINATRA_ROOT/../../src/main/resources/an_view.mustache $root_path/$project_name/src/main/resources/
 echo "  creating dealwithit.gif"
 cp $_FINATRA_ROOT/../../src/main/resources/public/dealwithit.gif $root_path/$project_name/src/main/resources/public/
+echo "  creating finatra_logo.jpg"
+cp $_FINATRA_ROOT/../../src/main/resources/public/finatra_logo.jpg $root_path/$project_name/src/main/resources/public/
+echo "  creating default bootstrap file"
+cp $_FINATRA_ROOT/../../src/main/resources/public/components/bootstrap.css $root_path/$project_name/src/main/resources/public/components/bootstrap/dist/css/bootstrap.css
+echo "  creating favicon.ico"
+cp $_FINATRA_ROOT/../../src/main/resources/public/favicon.ico $root_path/$project_name/src/main/resources/public/
+echo "  creating bower.json"
+cp $_FINATRA_ROOT/../../bower.json $root_path/$project_name/
+echo "  creating .bowerrc"
+cp $_FINATRA_ROOT/../../.bowerrc $root_path/$project_name/
+echo "  creating index.html"
+cp $_FINATRA_ROOT/../../src/main/resources/public/index.html $root_path/$project_name/src/main/resources/public/
 
+# check if Bower is in path and run on project creation
+echo "  checking for Bower..."
+if ! which bower > /dev/null; then
+  echo "  Bower not in path or not installed"
+else
+  read -p "Install Bower components? (y/n) " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    echo "  Installing Bower Components"
+    (cd $root_path/$project_name/; bower install)
+  else
+    echo "Bower components will not be installed"
+  fi
+fi
 
 # replace with latest example
 replace_with_example_app $_FINATRA_ROOT/share/App.scala $dest_path/App.scala
