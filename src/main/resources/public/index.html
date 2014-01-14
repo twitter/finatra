@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <title>Finatra - The scala web framework</title>
+    <link rel="stylesheet" type="text/css" href="/components/bootstrap/dist/css/bootstrap.css">
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1><img src="/finatra_logo.jpg" height=64 width=64 class="img-rounded">  Finatra Web Framework</h1>
+      </header>
+      <hr>
+      <p class="lead">Installing front end packages using Bower</p>
+      <p>Use bower to install front end packages such as jQuery, Underscore, Backbone and many others. Learn more about <a href="http://bower.io/">Bower</a> and discover the benefits of using a package manager for the web. <a href="http://sindresorhus.com/bower-components/">Find more Bower components here</a> or create your own.</p>
+      <pre>$ bower install backbone</pre>
+      <hr>
+      <p class="lead">Finatra's default <code>bower.json</code></p>
+      <pre>
+{
+  "name": "Finatra Project",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap" : "twbs/bootstrap"
+  }
+}</pre>
+      <hr>
+      <p class="lead">Pre-configured <code>.bowerrc</code></p>
+      <pre>
+{
+  "directory": "./src/main/resources/public/components"
+}</pre>
+      <hr>
+      <p class="lead">Bootstrap and jQuery at the ready</p>
+      <pre>
+  src
+  |-- main
+      |-- resources
+          |-- public
+              |-- components
+                  |-- bootstrap
+                  |-- jquery
+      </pre>
+    </div>
+  </body>
+</html>
