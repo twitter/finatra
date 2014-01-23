@@ -81,5 +81,11 @@ trait SpecHelper {
     buildRequest(HttpMethod.OPTIONS,path,params,headers)
   }
 
+  def send(request: FinagleRequest) {
+    val appService = new AppService(server.controllers)
+    val service = server.allFilters(appService)
+    lastResponse = service(request)
+  }
+
 }
 
