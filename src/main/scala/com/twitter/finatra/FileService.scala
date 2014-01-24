@@ -107,13 +107,12 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
       val fh  = FileResolver.getInputStream(path)
       val b   = IOUtils.toByteArray(fh)
 
-      fh.read(b)
-
       val response  = request.response
       val mtype     = FileService.extMap.getContentType('.' + request.path.toString.split('.').last)
 
       response.status = OK
       response.headers.set("Content-Type", mtype)
+      response.headers.set("Content-Length", b.length)
       response.setContent(copiedBuffer(b))
 
       Future.value(response)
