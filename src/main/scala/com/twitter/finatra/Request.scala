@@ -51,6 +51,8 @@ class Request(val request: FinagleRequest) extends RequestProxy {
       Seq.empty[ContentType]
     }
   }
+
+  def cookie(s: String) = cookies.get(s).map(_.value)
 }
 
 object AcceptOrdering extends Ordering[String] {
