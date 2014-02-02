@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "1.9.2",
   "com.google.code.findbugs" % "jsr305" % "2.0.1",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.2.2",
-  "com.github.spullara.mustache.java" % "compiler" % "0.8.13",
+  "com.github.spullara.mustache.java" % "compiler" % "0.8.14",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
 )
 
