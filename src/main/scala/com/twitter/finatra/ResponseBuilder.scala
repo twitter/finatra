@@ -49,7 +49,7 @@ class ResponseBuilder {
   private var view:       Option[View]         = None
   private var cookies:    List[Cookie]         = List()
 
-  private lazy val jsonMapper = {
+  lazy val jsonMapper = {
     val m = new ObjectMapper()
     m.registerModule(DefaultScalaModule)
   }
