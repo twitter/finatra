@@ -98,9 +98,8 @@ class ResponseSpec extends ShouldSpec {
         }
       )
     }
-    val responseBuilder = resp
-    responseBuilder.jsonMapper.registerModule(TestModule)
-    val response = responseBuilder.json(TestObject)
+
+    val response = resp.withModule(TestModule).json(TestObject)
     val built    = response.build
     val body     = built.getContent.toString(UTF_8)
 

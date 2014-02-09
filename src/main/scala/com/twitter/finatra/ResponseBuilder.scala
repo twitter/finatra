@@ -21,7 +21,7 @@ import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import com.twitter.finagle.http.{Response => FinagleResponse, Cookie}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.{ObjectMapper, Module}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 import org.apache.commons.io.IOUtils
@@ -49,9 +49,14 @@ class ResponseBuilder {
   private var view:       Option[View]         = None
   private var cookies:    List[Cookie]         = List()
 
-  lazy val jsonMapper = {
+  private lazy val jsonMapper = {
     val m = new ObjectMapper()
     m.registerModule(DefaultScalaModule)
+  }
+
+  def withModule(module: Module) = {
+    jsonMapper.registerModule(module)
+    this
   }
 
   def contentType: Option[String] =
