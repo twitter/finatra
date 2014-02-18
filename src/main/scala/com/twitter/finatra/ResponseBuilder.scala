@@ -68,13 +68,18 @@ class ResponseBuilder {
         view match {
            case Some(v) =>
              val out = v.render
-             resp.headers.set("Content-Length", out.length)
-             resp.setContent(copiedBuffer(out, UTF_8))
+             val bytes = out.getBytes(UTF_8)
+             resp.headers.set("Content-Length", bytes.length)
+             if (v.contentType.isDefined && !resp.headers.contains("Content-Type")) {
+               resp.headers.set("Content-Type", v.contentType.get)
+             }
+             resp.setContent(copiedBuffer(bytes))
            case None =>
             strBody match {
               case Some(sb) =>
-                resp.headers.set("Content-Length", sb.length)
-                resp.setContent(copiedBuffer(sb, UTF_8))
+                val bytes = sb.getBytes(UTF_8)
+                resp.headers.set("Content-Length", bytes.length)
+                resp.setContent(copiedBuffer(bytes))
               case None =>
                 binBody match {
                   case Some(bb) =>
