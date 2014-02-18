@@ -172,6 +172,11 @@ class ResponseBuilder {
     this
   }
 
+  def contentType(ct: String): ResponseBuilder = {
+    this.header("Content-Type", ct)
+    this
+  }
+
   def static(path: String): ResponseBuilder = {
     val fullAssetPath = new File(config.assetPath(), path).toString
     if (FileResolver.hasFile(fullAssetPath) && path != '/') {
