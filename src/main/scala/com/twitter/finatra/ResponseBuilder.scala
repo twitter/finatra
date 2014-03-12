@@ -85,7 +85,7 @@ class ResponseBuilder {
                   case Some(bb) =>
                     resp.headers.set("Content-Length", bb.length)
                     resp.setContent(copiedBuffer(bb))
-                  case None => resp // no-op
+                  case None => resp.headers.set("Content-Length", 0) //no content
                 }
             }
         }
