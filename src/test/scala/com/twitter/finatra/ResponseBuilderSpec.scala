@@ -24,23 +24,29 @@ class MockView(val title:String) extends View {
   val template = "mock.mustache"
 }
 
-class ResponseSpec extends ShouldSpec {
+class ResponseBuilderSpec extends ShouldSpec {
   def resp = new ResponseBuilder
   def view = new MockView("howdy view")
 
   ".ok" should "return a 200 response" in {
-    resp.ok.build
-      .statusCode should equal(200)
+    val built = resp.ok.build
+
+    built.statusCode should equal(200)
+    built.headerMap.get("Content-Length").get.toInt should equal (0)
   }
 
   ".notFound" should "return a 404 response" in {
-    resp.notFound.build
-      .statusCode should equal (404)
+    val built = resp.notFound.build
+
+    built.statusCode should equal (404)
+    built.headerMap.get("Content-Length").get.toInt should equal (0)
   }
 
   ".status(201)" should "return a 201 response" in {
-    resp.status(201).build
-      .statusCode should equal (201)
+    val built = resp.status(201).build
+
+    built.statusCode should equal (201)
+    built.headerMap.get("Content-Length").get.toInt should equal (0)
   }
 
   ".plain()" should "return a 200 plain response" in {
