@@ -40,7 +40,9 @@ object ResponseBuilder {
     new ResponseBuilder().body(body).status(status).headers(headers).build
 }
 
-class ResponseBuilder {
+class ResponseBuilder(modules: Set[Module]) {
+  def this() = this(Set.empty)
+
   private var status:     Option[Int]          = None
   private var headers:    Map[String, String]  = Map()
   private var strBody:    Option[String]       = None
@@ -51,12 +53,14 @@ class ResponseBuilder {
 
   private lazy val jsonMapper = {
     val m = new ObjectMapper()
-    m.registerModule(DefaultScalaModule)
+    for (mod <- modules + DefaultScalaModule) {
+      m.registerModule(mod)
+    }
+    m
   }
 
   def withModule(module: Module) = {
-    jsonMapper.registerModule(module)
-    this
+    new ResponseBuilder(modules + module)
   }
 
   def contentType: Option[String] =
