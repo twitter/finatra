@@ -19,6 +19,10 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 
 import com.twitter.finatra.ResponseBuilder
 import com.twitter.finatra.View
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.SerializerProvider
 
 class MockView(val title:String) extends View {
   val template = "mock.mustache"
@@ -88,6 +92,27 @@ class ResponseBuilderSpec extends ShouldSpec {
     body should equal ("""{"foo":"bar"}""")
     built.contentType should equal (Some("application/json"))
     built.headerMap.get("Content-Length").get.toInt should equal (13)
+  }
+
+  ".json()" should "return a custom mapping" in {
+    class TestClass; object TestObject extends TestClass
+    object TestModule extends SimpleModule {
+      addSerializer(
+        classOf[TestClass],
+        new StdSerializer[TestClass](classOf[TestClass]){
+          def serialize(value: TestClass, jgen: JsonGenerator, provider: SerializerProvider) = jgen.writeString("custom")
+        }
+      )
+    }
+
+    val response = resp.withModule(TestModule).json(TestObject)
+    val built    = response.build
+    val body     = built.getContent.toString(UTF_8)
+
+    built.statusCode should equal (200)
+    body should equal (""""custom"""")
+    built.contentType should equal (Some("application/json"))
+    built.headerMap.get("Content-Length").get.toInt should equal (8)
   }
 
   ".json()" should "return a 200 json response with correct Content-Length for unicode strings" in {
