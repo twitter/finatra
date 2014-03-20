@@ -30,6 +30,8 @@ import org.jboss.netty.handler.codec.http.DefaultCookie
 import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
 
 object ResponseBuilder {
+  import serialization.Jackson.jsonMapper
+
   def apply(body: String): FinagleResponse =
     new ResponseBuilder().body(body).status(200).build
 
@@ -40,7 +42,7 @@ object ResponseBuilder {
     new ResponseBuilder().body(body).status(status).headers(headers).build
 }
 
-class ResponseBuilder {
+class ResponseBuilder(implicit mapper:ObjectMapper) {
   private var status:     Option[Int]          = None
   private var headers:    Map[String, String]  = Map()
   private var strBody:    Option[String]       = None
@@ -48,14 +50,17 @@ class ResponseBuilder {
   private var json:       Option[Any]          = None
   private var view:       Option[View]         = None
   private var cookies:    List[Cookie]         = List()
+  private var jsonMapper: ObjectMapper         = mapper
 
-  private lazy val jsonMapper = {
-    val m = new ObjectMapper()
-    m.registerModule(DefaultScalaModule)
-  }
+
 
   def contentType: Option[String] =
     this.headers.get("Content-Type")
+
+  def withMapper(mapper:ObjectMapper) = {
+    jsonMapper = mapper
+    this
+  }
 
   private def setContent(resp: HttpResponse): HttpResponse = {
     json match {

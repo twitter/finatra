@@ -15,11 +15,11 @@
  */
 package com.twitter.finatra
 
-import com.twitter.finagle.stats.{StatsReceiver, NullStatsReceiver}
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
 import com.twitter.server.Stats
 import com.twitter.app.App
+import serialization.Jackson.jsonMapper
 
 class Controller extends App with Logging with Stats {
 
