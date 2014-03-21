@@ -9,7 +9,7 @@ import com.fasterxml.jackson.module.scala.{JacksonModule, DefaultScalaModule}
  */
 
 object Jackson {
-  implicit def jsonMapper:ObjectMapper  = {
+  implicit var jsonMapper:ObjectMapper = {
     val m = new ObjectMapper()
     m.registerModule(DefaultScalaModule)
   }
