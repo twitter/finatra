@@ -19,7 +19,7 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 
 import com.twitter.finatra.ResponseBuilder
 import com.twitter.finatra.View
-import com.twitter.finatra.serialization.Jackson.jsonMapper
+import com.twitter.finatra.serialization.JsonSerializer.JacksonSerializer
 
 class MockView(val title:String) extends View {
   val template = "mock.mustache"

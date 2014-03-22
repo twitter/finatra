@@ -19,7 +19,7 @@ import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
 import com.twitter.server.Stats
 import com.twitter.app.App
-import serialization.Jackson.jsonMapper
+import serialization.JsonSerializer._
 
 class Controller extends App with Logging with Stats {
 
