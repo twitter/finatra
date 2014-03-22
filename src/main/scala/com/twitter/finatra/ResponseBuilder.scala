@@ -28,9 +28,10 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import org.jboss.netty.handler.codec.http.DefaultCookie
 import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
+import com.twitter.finatra.serialization.JsonSerializer
 
 object ResponseBuilder {
-  import serialization.Jackson.jsonMapper
+  import serialization.JsonSerializer._
 
   def apply(body: String): FinagleResponse =
     new ResponseBuilder().body(body).status(200).build
@@ -42,7 +43,7 @@ object ResponseBuilder {
     new ResponseBuilder().body(body).status(status).headers(headers).build
 }
 
-class ResponseBuilder(implicit mapper:ObjectMapper) {
+class ResponseBuilder(implicit serializer:JsonSerializer) {
   private var status:     Option[Int]          = None
   private var headers:    Map[String, String]  = Map()
   private var strBody:    Option[String]       = None
@@ -50,15 +51,16 @@ class ResponseBuilder(implicit mapper:ObjectMapper) {
   private var json:       Option[Any]          = None
   private var view:       Option[View]         = None
   private var cookies:    List[Cookie]         = List()
-  private var jsonMapper: ObjectMapper         = mapper
+//  private var jsonMapper: ObjectMapper         = mapper
+  private var jsonSerializer: JsonSerializer     = serializer
 
 
 
   def contentType: Option[String] =
     this.headers.get("Content-Type")
 
-  def withMapper(mapper:ObjectMapper) = {
-    jsonMapper = mapper
+  def withSerializer(serializer: JsonSerializer) = {
+    jsonSerializer = serializer
     this
   }
 
@@ -66,7 +68,7 @@ class ResponseBuilder(implicit mapper:ObjectMapper) {
     json match {
       case Some(j) =>
         resp.headers.set("Content-Type", "application/json")
-        val jsonBytes = jsonMapper.writeValueAsString(j).getBytes(UTF_8)
+        val jsonBytes = jsonSerializer.serialize(j)
         resp.headers.set("Content-Length", jsonBytes.length)
         resp.setContent(copiedBuffer(jsonBytes))
       case None =>
