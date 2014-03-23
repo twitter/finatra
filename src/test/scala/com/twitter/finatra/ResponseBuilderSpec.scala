@@ -19,6 +19,7 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 
 import com.twitter.finatra.ResponseBuilder
 import com.twitter.finatra.View
+import com.twitter.finagle.http.Status
 
 class MockView(val title:String) extends View {
   val template = "mock.mustache"
@@ -113,25 +114,25 @@ class CommonStatusesSpec extends ShouldSpec {
 
   Seq(
 
-    (".ok",                  resp.ok,                  200),
-    (".movedPermanently",    resp.movedPermanently,    301),
-    (".found",               resp.found,               302),
-    (".notModified",         resp.notModified,         304),
-    (".temporaryRedirect",   resp.temporaryRedirect,   307),
-    (".badRequest",          resp.badRequest,          400),
-    (".unauthorized",        resp.unauthorized,        401),
-    (".forbidden",           resp.forbidden,           403),
-    (".notFound",            resp.notFound,            404),
-    (".gone",                resp.gone,                410),
-    (".internalServerError", resp.internalServerError, 500),
-    (".notImplemented",      resp.notImplemented,      501),
-    (".serviceUnavailable",  resp.serviceUnavailable,  503)
+    (".ok",                  resp.ok,                  Status.Ok),
+    (".movedPermanently",    resp.movedPermanently,    Status.MovedPermanently),
+    (".found",               resp.found,               Status.Found),
+    (".notModified",         resp.notModified,         Status.NotModified),
+    (".temporaryRedirect",   resp.temporaryRedirect,   Status.TemporaryRedirect),
+    (".badRequest",          resp.badRequest,          Status.BadRequest),
+    (".unauthorized",        resp.unauthorized,        Status.Unauthorized),
+    (".forbidden",           resp.forbidden,           Status.Forbidden),
+    (".notFound",            resp.notFound,            Status.NotFound),
+    (".gone",                resp.gone,                Status.Gone),
+    (".internalServerError", resp.internalServerError, Status.InternalServerError),
+    (".notImplemented",      resp.notImplemented,      Status.NotImplemented),
+    (".serviceUnavailable",  resp.serviceUnavailable,  Status.ServiceUnavailable)
 
   ).foreach { case (actionName, actualResponseBuilder, expectedStatus) =>
     val testMessage = "return a %s response" format expectedStatus
     actionName should testMessage in {
       val built = actualResponseBuilder.build
-      built.statusCode should equal(expectedStatus)
+      built.status should equal(expectedStatus)
     }
   }
 }
