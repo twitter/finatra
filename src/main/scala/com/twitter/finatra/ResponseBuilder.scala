@@ -227,58 +227,19 @@ class ResponseBuilder extends CommonStatuses {
 }
 
 trait CommonStatuses { self: ResponseBuilder =>
-
-  def ok: ResponseBuilder = {
-    buildFromStatus(Status.Ok)
-  }
-
-  def movedPermanently: ResponseBuilder = {
-    buildFromStatus(Status.MovedPermanently)
-  }
-
-  def found: ResponseBuilder = {
-    buildFromStatus(Status.Found)
-  }
-
-  def notModified: ResponseBuilder = {
-    buildFromStatus(Status.NotModified)
-  }
-
-  def temporaryRedirect: ResponseBuilder = {
-    buildFromStatus(Status.TemporaryRedirect)
-  }
-
-  def badRequest: ResponseBuilder = {
-    buildFromStatus(Status.BadRequest)
-  }
-
-  def unauthorized: ResponseBuilder = {
-    buildFromStatus(Status.Unauthorized)
-  }
-
-  def forbidden: ResponseBuilder = {
-    buildFromStatus(Status.Forbidden)
-  }
-
-  def notFound: ResponseBuilder  = {
-    buildFromStatus(Status.NotFound)
-  }
-
-  def gone: ResponseBuilder = {
-    buildFromStatus(Status.Gone)
-  }
-
-  def internalServerError: ResponseBuilder = {
-    buildFromStatus(Status.InternalServerError)
-  }
-
-  def notImplemented: ResponseBuilder = {
-    buildFromStatus(Status.NotImplemented)
-  }
-
-  def serviceUnavailable: ResponseBuilder = {
-    buildFromStatus(Status.ServiceUnavailable)
-  }
+  def ok:                  ResponseBuilder = buildFromStatus(Status.Ok)
+  def movedPermanently:    ResponseBuilder = buildFromStatus(Status.MovedPermanently)
+  def found:               ResponseBuilder = buildFromStatus(Status.Found)
+  def notModified:         ResponseBuilder = buildFromStatus(Status.NotModified)
+  def temporaryRedirect:   ResponseBuilder = buildFromStatus(Status.TemporaryRedirect)
+  def badRequest:          ResponseBuilder = buildFromStatus(Status.BadRequest)
+  def unauthorized:        ResponseBuilder = buildFromStatus(Status.Unauthorized)
+  def forbidden:           ResponseBuilder = buildFromStatus(Status.Forbidden)
+  def notFound:            ResponseBuilder = buildFromStatus(Status.NotFound)
+  def gone:                ResponseBuilder = buildFromStatus(Status.Gone)
+  def internalServerError: ResponseBuilder = buildFromStatus(Status.InternalServerError)
+  def notImplemented:      ResponseBuilder = buildFromStatus(Status.NotImplemented)
+  def serviceUnavailable:  ResponseBuilder = buildFromStatus(Status.ServiceUnavailable)
 
   private def buildFromStatus(st: HttpResponseStatus): ResponseBuilder  = {
     status(st.getCode)
