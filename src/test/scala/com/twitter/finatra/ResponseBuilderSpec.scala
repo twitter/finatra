@@ -128,7 +128,8 @@ class CommonStatusesSpec extends ShouldSpec {
     (".serviceUnavailable",  resp.serviceUnavailable,  503)
 
   ).foreach { case (actionName, actualResponseBuilder, expectedStatus) =>
-    actionName should s"return a $expectedStatus response" in {
+    val testMessage = "return a %s response" format expectedStatus
+    actionName should testMessage in {
       val built = actualResponseBuilder.build
       built.statusCode should equal(expectedStatus)
     }
