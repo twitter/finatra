@@ -28,20 +28,6 @@ class ResponseBuilderSpec extends ShouldSpec {
   def resp = new ResponseBuilder
   def view = new MockView("howdy view")
 
-  ".ok" should "return a 200 response" in {
-    val built = resp.ok.build
-
-    built.statusCode should equal(200)
-    built.headerMap.get("Content-Length").get.toInt should equal (0)
-  }
-
-  ".notFound" should "return a 404 response" in {
-    val built = resp.notFound.build
-
-    built.statusCode should equal (404)
-    built.headerMap.get("Content-Length").get.toInt should equal (0)
-  }
-
   ".status(201)" should "return a 201 response" in {
     val built = resp.status(201).build
 
@@ -118,5 +104,33 @@ class ResponseBuilderSpec extends ShouldSpec {
     built.statusCode should equal (200)
     built.contentType should equal (Some("image/gif"))
     built.headerMap.get("Content-Length").get.toInt should equal (422488)
+  }
+}
+
+
+class CommonStatusesSpec extends ShouldSpec {
+  def resp = new ResponseBuilder
+
+  Seq(
+
+    (".ok",                  resp.ok,                  200),
+    (".movedPermanently",    resp.movedPermanently,    301),
+    (".found",               resp.found,               302),
+    (".notModified",         resp.notModified,         304),
+    (".temporaryRedirect",   resp.temporaryRedirect,   307),
+    (".badRequest",          resp.badRequest,          400),
+    (".unauthorized",        resp.unauthorized,        401),
+    (".forbidden",           resp.forbidden,           403),
+    (".notFound",            resp.notFound,            404),
+    (".gone",                resp.gone,                410),
+    (".internalServerError", resp.internalServerError, 500),
+    (".notImplemented",      resp.notImplemented,      501),
+    (".serviceUnavailable",  resp.serviceUnavailable,  503)
+
+  ).foreach { case (actionName, actualResponseBuilder, expectedStatus) =>
+    actionName should s"return a $expectedStatus response" in {
+      val built = actualResponseBuilder.build
+      built.statusCode should equal(expectedStatus)
+    }
   }
 }
