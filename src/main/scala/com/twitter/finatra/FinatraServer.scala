@@ -59,7 +59,6 @@ class FinatraServer extends FinatraTwitterServer {
       service(FinagleRequest(req)) map { _.httpResponse }
     }
 
-
   private[this] lazy val service = {
     val appService  = new AppService(controllers)
     val fileService = new FileService
@@ -71,7 +70,7 @@ class FinatraServer extends FinatraTwitterServer {
     nettyToFinagle andThen allFilters(appService)
   }
 
-  private[this] val codec = {
+  private[this] lazy val codec = {
     http.Http()
       .maxRequestSize(config.maxRequestSize().megabyte)
       .enableTracing(true)
