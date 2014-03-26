@@ -18,7 +18,7 @@ package com.twitter.finatra
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
-import com.twitter.finagle.http.{Response => FinagleResponse, Cookie}
+import com.twitter.finagle.http.{Response => FinagleResponse, Cookie, Status}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -27,7 +27,7 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.commons.io.IOUtils
 import java.io.File
 import org.jboss.netty.handler.codec.http.DefaultCookie
-import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
+import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie, HttpResponseStatus}
 
 object ResponseBuilder {
   def apply(body: String): FinagleResponse =
@@ -40,7 +40,7 @@ object ResponseBuilder {
     new ResponseBuilder().body(body).status(status).headers(headers).build
 }
 
-class ResponseBuilder {
+class ResponseBuilder extends CommonStatuses {
   private var status:     Option[Int]          = None
   private var headers:    Map[String, String]  = Map()
   private var strBody:    Option[String]       = None
@@ -105,16 +105,6 @@ class ResponseBuilder {
 
   def cookie(c: NettyCookie): ResponseBuilder = {
     this.cookies ::= new Cookie(c)
-    this
-  }
-
-  def ok: ResponseBuilder = {
-    status(200)
-    this
-  }
-
-  def notFound: ResponseBuilder  = {
-    status(404)
     this
   }
 
@@ -232,6 +222,28 @@ class ResponseBuilder {
     buf.append(this.headers)
 
     buf.toString()
+  }
+
+}
+
+trait CommonStatuses { self: ResponseBuilder =>
+  def ok:                  ResponseBuilder = buildFromStatus(Status.Ok)
+  def movedPermanently:    ResponseBuilder = buildFromStatus(Status.MovedPermanently)
+  def found:               ResponseBuilder = buildFromStatus(Status.Found)
+  def notModified:         ResponseBuilder = buildFromStatus(Status.NotModified)
+  def temporaryRedirect:   ResponseBuilder = buildFromStatus(Status.TemporaryRedirect)
+  def badRequest:          ResponseBuilder = buildFromStatus(Status.BadRequest)
+  def unauthorized:        ResponseBuilder = buildFromStatus(Status.Unauthorized)
+  def forbidden:           ResponseBuilder = buildFromStatus(Status.Forbidden)
+  def notFound:            ResponseBuilder = buildFromStatus(Status.NotFound)
+  def gone:                ResponseBuilder = buildFromStatus(Status.Gone)
+  def internalServerError: ResponseBuilder = buildFromStatus(Status.InternalServerError)
+  def notImplemented:      ResponseBuilder = buildFromStatus(Status.NotImplemented)
+  def serviceUnavailable:  ResponseBuilder = buildFromStatus(Status.ServiceUnavailable)
+
+  private def buildFromStatus(st: HttpResponseStatus): ResponseBuilder  = {
+    status(st.getCode)
+    this
   }
 
 }
