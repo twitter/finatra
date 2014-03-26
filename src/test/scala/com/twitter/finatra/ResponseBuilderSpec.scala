@@ -19,6 +19,7 @@ import org.jboss.netty.util.CharsetUtil.UTF_8
 
 import com.twitter.finatra.ResponseBuilder
 import com.twitter.finatra.View
+import com.twitter.finagle.http.Status
 
 class MockView(val title:String) extends View {
   val template = "mock.mustache"
@@ -27,20 +28,6 @@ class MockView(val title:String) extends View {
 class ResponseBuilderSpec extends ShouldSpec {
   def resp = new ResponseBuilder
   def view = new MockView("howdy view")
-
-  ".ok" should "return a 200 response" in {
-    val built = resp.ok.build
-
-    built.statusCode should equal(200)
-    built.headerMap.get("Content-Length").get.toInt should equal (0)
-  }
-
-  ".notFound" should "return a 404 response" in {
-    val built = resp.notFound.build
-
-    built.statusCode should equal (404)
-    built.headerMap.get("Content-Length").get.toInt should equal (0)
-  }
 
   ".status(201)" should "return a 201 response" in {
     val built = resp.status(201).build
@@ -118,5 +105,34 @@ class ResponseBuilderSpec extends ShouldSpec {
     built.statusCode should equal (200)
     built.contentType should equal (Some("image/gif"))
     built.headerMap.get("Content-Length").get.toInt should equal (422488)
+  }
+}
+
+
+class CommonStatusesSpec extends ShouldSpec {
+  def resp = new ResponseBuilder
+
+  Seq(
+
+    (".ok",                  resp.ok,                  Status.Ok),
+    (".movedPermanently",    resp.movedPermanently,    Status.MovedPermanently),
+    (".found",               resp.found,               Status.Found),
+    (".notModified",         resp.notModified,         Status.NotModified),
+    (".temporaryRedirect",   resp.temporaryRedirect,   Status.TemporaryRedirect),
+    (".badRequest",          resp.badRequest,          Status.BadRequest),
+    (".unauthorized",        resp.unauthorized,        Status.Unauthorized),
+    (".forbidden",           resp.forbidden,           Status.Forbidden),
+    (".notFound",            resp.notFound,            Status.NotFound),
+    (".gone",                resp.gone,                Status.Gone),
+    (".internalServerError", resp.internalServerError, Status.InternalServerError),
+    (".notImplemented",      resp.notImplemented,      Status.NotImplemented),
+    (".serviceUnavailable",  resp.serviceUnavailable,  Status.ServiceUnavailable)
+
+  ).foreach { case (actionName, actualResponseBuilder, expectedStatus) =>
+    val testMessage = "return a %s response" format expectedStatus
+    actionName should testMessage in {
+      val built = actualResponseBuilder.build
+      built.status should equal(expectedStatus)
+    }
   }
 }
