@@ -2,7 +2,7 @@ package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.util.Future
-import serialization.JsonSerializer._
+import com.twitter.finatra.serialization.DefaultJacksonJsonSerializer
 
 class ControllerCollection {
   var controllers: Seq[Controller] = Seq.empty
@@ -21,7 +21,7 @@ class ControllerCollection {
 
   }
 
-  def render: ResponseBuilder = new ResponseBuilder
+  def render: ResponseBuilder = new ResponseBuilder(new DefaultJacksonJsonSerializer)
 
   def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
     var response: Option[Future[FinagleResponse]] = None
