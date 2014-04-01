@@ -21,29 +21,25 @@ import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import com.twitter.finagle.http.{Response => FinagleResponse, Cookie}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
 import org.apache.commons.io.IOUtils
 import java.io.File
 import org.jboss.netty.handler.codec.http.DefaultCookie
 import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
-import com.twitter.finatra.serialization.JsonSerializer
+import com.twitter.finatra.serialization.{DefaultJacksonJsonSerializer, JsonSerializer}
 
 object ResponseBuilder {
-  import serialization.JsonSerializer._
-
   def apply(body: String): FinagleResponse =
-    new ResponseBuilder().body(body).status(200).build
+    new ResponseBuilder(new DefaultJacksonJsonSerializer).body(body).status(200).build
 
   def apply(status: Int, body: String): FinagleResponse =
-    new ResponseBuilder().body(body).status(status).build
+    new ResponseBuilder(new DefaultJacksonJsonSerializer).body(body).status(status).build
 
   def apply(status: Int, body: String, headers: Map[String, String]): FinagleResponse =
-    new ResponseBuilder().body(body).status(status).headers(headers).build
+    new ResponseBuilder(new DefaultJacksonJsonSerializer).body(body).status(status).headers(headers).build
 }
 
-class ResponseBuilder(implicit serializer:JsonSerializer) {
+class ResponseBuilder(serializer:JsonSerializer) {
   private var status:     Option[Int]          = None
   private var headers:    Map[String, String]  = Map()
   private var strBody:    Option[String]       = None
