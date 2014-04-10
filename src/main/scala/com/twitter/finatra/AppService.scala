@@ -18,30 +18,25 @@ package com.twitter.finatra
 import com.twitter.finagle.Service
 import com.twitter.util.{Await, Future}
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
-import com.twitter.app.App
 
 class AppService(controllers: ControllerCollection)
-  extends Service[FinagleRequest, FinagleResponse] with App with Logging {
+  extends Service[FinagleRequest, FinagleResponse] {
 
   def render: ResponseBuilder = new ResponseBuilder
 
   def apply(rawRequest: FinagleRequest): Future[FinagleResponse] = {
     val adaptedRequest  = RequestAdapter(rawRequest)
 
-    def handleError(t:Throwable) = {
-      log.error(t, "Internal Server Error")
-      adaptedRequest.error = Some(t)
-      ResponseAdapter(adaptedRequest, controllers.errorHandler(adaptedRequest))
-    }
-
     try {
       attemptRequest(rawRequest).handle {
-        case t:Throwable =>
-          Await.result(handleError(t))
+        case t: Throwable =>
+          Await.result(
+            ErrorHandler(adaptedRequest, t, controllers)
+          )
       }
     } catch {
       case e: Exception =>
-        handleError(e)
+        ErrorHandler(adaptedRequest, e, controllers)
     }
   }
 
