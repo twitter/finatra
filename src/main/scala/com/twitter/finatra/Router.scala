@@ -44,18 +44,13 @@ class Router(controller: Controller) extends App with Logging {
   def findRouteAndMatch(request: Request, method: HttpMethod):
     Option[(HttpMethod, String, PathPattern, (Request) => Future[ResponseBuilder])] = {
 
-    var thematch: Option[Map[_,_]] = None
-
-    controller.routes.vector.find( route => route match {
+    controller.routes.vector.find{
       case (_method, definition, pattern, callback) =>
-        thematch = pattern(request.path.split('?').head)
-        if(thematch.orNull != null && _method == method) {
-          thematch.orNull.foreach(xs => extractParams(request, xs))
-          true
-        } else {
-          false
+        pattern(request.path.split('?').head) match {
+          case Some(thematch) if _method == method => thematch.foreach(xs => extractParams(request, xs)); true
+          case _  => false
         }
-    })
+    }
   }
 
   def internalDispatch (
