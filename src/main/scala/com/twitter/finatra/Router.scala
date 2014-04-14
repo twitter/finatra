@@ -29,7 +29,7 @@ class Router(controller: Controller) extends App with Logging {
     val req = RequestAdapter(request)
 
     findRouteAndMatch(req, method) match {
-      case Some((method, pattern, callback)) =>
+      case Some((method, definition, pattern, callback)) =>
         Some(ResponseAdapter(req, callback(req)))
       case None => orCallback(request)
     }
@@ -42,12 +42,12 @@ class Router(controller: Controller) extends App with Logging {
   }
 
   def findRouteAndMatch(request: Request, method: HttpMethod):
-    Option[(HttpMethod, PathPattern, (Request) => Future[ResponseBuilder])] = {
+    Option[(HttpMethod, String, PathPattern, (Request) => Future[ResponseBuilder])] = {
 
     var thematch: Option[Map[_,_]] = None
 
     controller.routes.vector.find( route => route match {
-      case (_method, pattern, callback) =>
+      case (_method, definition, pattern, callback) =>
         thematch = pattern(request.path.split('?').head)
         if(thematch.orNull != null && _method == method) {
           thematch.orNull.foreach(xs => extractParams(request, xs))
@@ -76,7 +76,7 @@ class Router(controller: Controller) extends App with Logging {
     val req = new Request(finagleRequest)
 
     findRouteAndMatch(req, method) match {
-      case Some((_method, pattern, callback)) =>
+      case Some((_method, definition, pattern, callback)) =>
         callback(req)
       case None => controller.render.notFound.toFuture
     }
