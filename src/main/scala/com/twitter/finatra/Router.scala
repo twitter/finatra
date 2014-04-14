@@ -47,7 +47,7 @@ class Router(controller: Controller) extends App with Logging {
     controller.routes.vector.find{
       case (_method, definition, pattern, callback) =>
         pattern(request.path.split('?').head) match {
-          case Some(thematch) if _method == method => thematch.foreach(xs => extractParams(request, xs)); true
+          case Some(thematch) if _method == method => thematch.foreach((xs: Tuple2[_, _]) => extractParams(request, xs)); true
           case _  => false
         }
     }
