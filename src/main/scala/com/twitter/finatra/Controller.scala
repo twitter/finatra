@@ -46,8 +46,8 @@ class Controller extends App with Logging with Stats {
 
   val stats = statsReceiver.scope("Controller")
 
-  def render: ResponseBuilder  = new ResponseBuilder
-  def route:  Router    = new Router(this)
+  def render: ResponseBuilder = new ResponseBuilder
+  def route: Router = new Router(this)
 
   def redirect(location: String, message: String = "", permanent: Boolean = false): ResponseBuilder = {
     val msg = if (message == "")
