@@ -35,7 +35,7 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
     // system and avoid using the classloader which has
     // priority in DefaultMustacheFactory.getReader
     else {
-      val fileName = if (resourceName contains ".mustache") resourceName else resourceName+".mustache"
+      val fileName = resourceName
       val basePath = combinePaths(config.docRoot(), config.templatePath())
       val file:File = new File(basePath, fileName)
 
