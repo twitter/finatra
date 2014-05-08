@@ -115,6 +115,8 @@ class CommonStatusesSpec extends ShouldSpec {
   Seq(
 
     (".ok",                  resp.ok,                  Status.Ok),
+    (".created",             resp.created,             Status.Created),
+    (".accepted",            resp.accepted,            Status.Accepted),
     (".movedPermanently",    resp.movedPermanently,    Status.MovedPermanently),
     (".found",               resp.found,               Status.Found),
     (".notModified",         resp.notModified,         Status.NotModified),
