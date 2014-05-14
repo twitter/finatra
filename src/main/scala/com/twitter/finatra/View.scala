@@ -22,36 +22,15 @@ import java.io._
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
-class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFactory {
+class FinatraMustacheFactory(val baseTemplatePath:String) extends DefaultMustacheFactory {
   private def combinePaths(path1: String, path2: String): String = {
     new File(new File(path1), path2).getPath
   }
 
   override def getReader(resourceName:String): Reader = {
-    if (!"development".equals(config.env())) {
-      super.getReader(resourceName)
-    }
-    // In development mode, we look to the local file
-    // system and avoid using the classloader which has
-    // priority in DefaultMustacheFactory.getReader
-    else {
-      val fileName = if (resourceName contains ".mustache") resourceName else resourceName+".mustache"
-      val basePath = combinePaths(config.docRoot(), config.templatePath())
-      val file:File = new File(basePath, fileName)
-
-      if (file.exists() && file.isFile()) {
-        try {
-          new BufferedReader(new InputStreamReader(new FileInputStream(file),
-            Charsets.UTF_8));
-        } catch {
-          case exception:FileNotFoundException =>
-            throw new MustacheException("Found Mustache file, could not open: " + file + " at path: " + basePath, exception)
-        }
-      }
-      else {
-        throw new MustacheException("Mustache Template '" + resourceName + "' not found at " + file + " at path: " + basePath);
-      }
-    }
+    val template = if (resourceName contains ".mustache") resourceName else resourceName+".mustache"
+    val templatePath = combinePaths(baseTemplatePath, template)
+    return new InputStreamReader(FileResolver.getInputStream(templatePath))
   }
 
   /**
