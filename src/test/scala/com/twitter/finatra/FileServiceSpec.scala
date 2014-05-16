@@ -4,7 +4,7 @@ import com.twitter.finatra.test.ShouldSpec
 import com.twitter.util.Await
 import com.twitter.finagle.http.{Request => FinagleRequest}
 import com.twitter.finagle.http.service.NullService
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
+import org.jboss.netty.handler.codec.http.{HttpHeaders, HttpResponseStatus}
 
 
 class FileServiceSpec extends ShouldSpec {
@@ -41,9 +41,9 @@ class FileServiceSpec extends ShouldSpec {
     val lastModified = Await.result(res1).lastModified.get
 
     val req2 = FinagleRequest("/dealwithit.gif")
-    req2.lastModified = lastModified
+    req2.headers().set(HttpHeaders.Names.IF_MODIFIED_SINCE, lastModified)
     val res2 = fileService(req2, NullService)
-    Await.result(res2).status should equal(HttpResponseStatus.OK)
+    Await.result(res2).status should equal(HttpResponseStatus.NOT_MODIFIED)
   }
 
   "looking up static files in production" should "set Last-Modified" in {
@@ -65,9 +65,9 @@ class FileServiceSpec extends ShouldSpec {
       val lastModified = Await.result(res1).lastModified.get
 
       val req2 = FinagleRequest("/dealwithit.gif")
-      req2.lastModified = lastModified
+      req2.headers().set(HttpHeaders.Names.IF_MODIFIED_SINCE, lastModified)
       val res2 = fileService(req2, NullService)
-      Await.result(res2).status should equal(HttpResponseStatus.OK)
+      Await.result(res2).status should equal(HttpResponseStatus.NOT_MODIFIED)
     } finally {
       System.setProperty("com.twitter.finatra.config.env", "development")
     }
