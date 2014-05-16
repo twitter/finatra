@@ -6,10 +6,13 @@ import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 
-import org.apache.commons.io.IOUtils
+import org.apache.commons.io.{FileUtils, IOUtils}
 import java.io.{FileInputStream, File, InputStream}
 import javax.activation.MimetypesFileTypeMap
 import com.twitter.app.App
+import java.util.{TimeZone, Locale, Date}
+import org.jboss.netty.handler.codec.http.HttpHeaders
+import java.text.SimpleDateFormat
 
 object FileResolver {
 
@@ -38,7 +41,7 @@ object FileResolver {
     new FileInputStream(file)
   }
 
-  private def hasResourceFile(path: String): Boolean = {
+  private[finatra] def hasResourceFile(path: String): Boolean = {
     val fi      = getClass.getResourceAsStream(path)
     var result  = false
 
@@ -51,11 +54,13 @@ object FileResolver {
     } catch {
       case e: Exception =>
         result = false
+    } finally {
+      IOUtils.closeQuietly(fi)
     }
     result
   }
 
-  private def hasLocalFile(path: String): Boolean = {
+  private[finatra] def hasLocalFile(path: String): Boolean = {
     val file = new File(config.docRoot(), path)
 
     if(file.toString.contains(".."))     return false
@@ -85,39 +90,78 @@ object FileService {
 class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App with Logging {
 
   def isValidPath(path: String): Boolean = {
-    val fi      = getClass.getResourceAsStream(path)
-    var result  = false
-
-    try {
-      if (fi != null && fi.available > 0) {
-        result = true
-      } else {
-        result = false
-      }
-    } catch {
-      case e: Exception =>
-        result = false
-    }
-    result
+    FileResolver.hasResourceFile(path)
   }
 
   def apply(request: FinagleRequest, service: Service[FinagleRequest, FinagleResponse]): Future[FinagleResponse] = {
     val path = new File(config.assetPath(), request.path).toString
-    if (FileResolver.hasFile(path) && request.path != "/") {
-      val fh  = FileResolver.getInputStream(path)
-      val b   = IOUtils.toByteArray(fh)
-
-      val response  = request.response
-      val mtype     = FileService.extMap.getContentType('.' + request.path.toString.split('.').last)
-
-      response.status = OK
-      response.headers.set("Content-Type", mtype)
-      response.headers.set("Content-Length", b.length)
-      response.setContent(copiedBuffer(b))
-
-      Future.value(response)
+    val response = if (config.env() == "production") {
+      resourceFileResponse(request, path)
     } else {
+      localFileResponse(request, path)
+    }
+    if (response.isEmpty) {
       service(request)
+    } else {
+      Future.value(response.get)
+    }
+  }
+
+  private def resourceFileResponse(request: FinagleRequest, path: String) = {
+    var response: Option[FinagleResponse] = None
+    val resourceURL = getClass.getResource(path)
+    if (request.path != "/" && resourceURL != null) {
+      val conn = resourceURL.openConnection
+      val stream = conn.getInputStream
+      if (stream != null) {
+        try {
+          val contentType = FileService.getContentType(path)
+          val lastModified = new Date(conn.getLastModified)
+          response = createResponse(request, contentType, lastModified, () => {
+            IOUtils.toByteArray(stream)
+          })
+        } finally {
+          IOUtils.closeQuietly(stream)
+        }
+      }
+    }
+    response
+  }
+
+  private def localFileResponse(request: FinagleRequest, path: String) = {
+    var response: Option[FinagleResponse] = None
+    if (request.path != "/" && FileResolver.hasLocalFile(path)) {
+      val file = new File(config.docRoot(), path)
+      val contentType = FileService.getContentType(path)
+      val lastModified = new Date(file.lastModified)
+      response = createResponse(request, contentType, lastModified, () => {
+        FileUtils.readFileToByteArray(file)
+      })
+    }
+    response
+  }
+
+  private def createResponse(request: FinagleRequest, contentType: String, lastModified: Date, getBytes: () => Array[Byte]) = {
+    val response = request.response
+    if (ifModifiedSince(request, lastModified).getOrElse(true)) {
+      val bytes = getBytes()
+      response.status = OK
+      response.contentLength = bytes.length
+      response.lastModified = lastModified
+      response.contentType = contentType
+      response.setContent(copiedBuffer(bytes))
+    } else {
+      response.status = NOT_MODIFIED
+      response.contentLength = 0
+    }
+    Some(response)
+  }
+
+  private def ifModifiedSince(request: FinagleRequest, lastModified: Date) = {
+    Option(request.headers().get(HttpHeaders.Names.IF_MODIFIED_SINCE)).map { value =>
+      val format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZ", Locale.US)
+      format.setTimeZone(TimeZone.getTimeZone("UTC"))
+      format.parse(value).before(lastModified)
     }
   }
 }
