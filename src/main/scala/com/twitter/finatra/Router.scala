@@ -8,7 +8,7 @@ import com.twitter.util.Future
 import com.twitter.app.App
 import org.jboss.netty.util.CharsetUtil
 
-class Router(controller: Controller) extends App with Logging {
+class Router(controller: Controller) {
 
   def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
     dispatchRouteOrCallback(request, request.method, (request) => {
