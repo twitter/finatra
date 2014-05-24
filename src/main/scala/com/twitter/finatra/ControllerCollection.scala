@@ -2,7 +2,6 @@ package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 import com.twitter.util.Future
-import com.twitter.finatra.serialization.DefaultJacksonJsonSerializer
 
 class ControllerCollection {
   var controllers: Seq[Controller] = Seq.empty
