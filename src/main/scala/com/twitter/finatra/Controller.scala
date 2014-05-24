@@ -19,7 +19,7 @@ import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http._
 import com.twitter.server.Stats
 import com.twitter.app.App
-import com.twitter.finatra.serialization.DefaultJacksonJsonSerializer
+import com.twitter.finatra.serialization.{JsonSerializer, DefaultJacksonJsonSerializer}
 
 class Controller extends App with Logging with Stats {
 
@@ -46,7 +46,7 @@ class Controller extends App with Logging with Stats {
 
   val stats = statsReceiver.scope("Controller")
 
-  val serializer = new DefaultJacksonJsonSerializer
+  var serializer:JsonSerializer = DefaultJacksonJsonSerializer
 
   def render: ResponseBuilder  = new ResponseBuilder(serializer)
   def route:  Router    = new Router(this)

@@ -21,7 +21,7 @@ class ControllerCollection {
 
   }
 
-  def render: ResponseBuilder = new ResponseBuilder(new DefaultJacksonJsonSerializer)
+  def render: ResponseBuilder = new ResponseBuilder
 
   def dispatch(request: FinagleRequest): Option[Future[FinagleResponse]] = {
     var response: Option[Future[FinagleResponse]] = None

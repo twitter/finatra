@@ -12,7 +12,7 @@ class JacksonJsonSerializer(val mapper: ObjectMapper) extends JsonSerializer {
   def serialize[T](item: T) = mapper.writeValueAsString(item).getBytes(UTF_8)
 }
 
-class DefaultJacksonJsonSerializer() extends JacksonJsonSerializer(
+object DefaultJacksonJsonSerializer extends JacksonJsonSerializer(
   new ObjectMapper().registerModule(new DefaultScalaModule)
 ) {
 
