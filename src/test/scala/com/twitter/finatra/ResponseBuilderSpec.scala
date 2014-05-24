@@ -26,7 +26,7 @@ class MockView(val title:String) extends View {
 }
 
 class ResponseBuilderSpec extends ShouldSpec {
-  def resp = new ResponseBuilder(new DefaultJacksonJsonSerializer)
+  def resp = new ResponseBuilder
   def view = new MockView("howdy view")
 
   ".ok" should "return a 200 response" in {

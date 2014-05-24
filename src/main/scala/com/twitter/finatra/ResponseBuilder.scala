@@ -30,16 +30,16 @@ import com.twitter.finatra.serialization.{DefaultJacksonJsonSerializer, JsonSeri
 
 object ResponseBuilder {
   def apply(body: String): FinagleResponse =
-    new ResponseBuilder(new DefaultJacksonJsonSerializer).body(body).status(200).build
+    new ResponseBuilder().body(body).status(200).build
 
   def apply(status: Int, body: String): FinagleResponse =
-    new ResponseBuilder(new DefaultJacksonJsonSerializer).body(body).status(status).build
+    new ResponseBuilder().body(body).status(status).build
 
   def apply(status: Int, body: String, headers: Map[String, String]): FinagleResponse =
-    new ResponseBuilder(new DefaultJacksonJsonSerializer).body(body).status(status).headers(headers).build
+    new ResponseBuilder().body(body).status(status).headers(headers).build
 }
 
-class ResponseBuilder(serializer:JsonSerializer) {
+class ResponseBuilder(serializer:JsonSerializer = DefaultJacksonJsonSerializer) {
   private var status:     Option[Int]          = None
   private var headers:    Map[String, String]  = Map()
   private var strBody:    Option[String]       = None
@@ -47,7 +47,6 @@ class ResponseBuilder(serializer:JsonSerializer) {
   private var json:       Option[Any]          = None
   private var view:       Option[View]         = None
   private var cookies:    List[Cookie]         = List()
-//  private var jsonMapper: ObjectMapper         = mapper
   private var jsonSerializer: JsonSerializer     = serializer
 
 
