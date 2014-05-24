@@ -24,7 +24,7 @@ import com.twitter.finatra.serialization.DefaultJacksonJsonSerializer
 class AppService(controllers: ControllerCollection)
   extends Service[FinagleRequest, FinagleResponse] with App with Logging {
 
-  def render: ResponseBuilder = new ResponseBuilder(new DefaultJacksonJsonSerializer)
+  def render: ResponseBuilder = new ResponseBuilder
 
   def apply(rawRequest: FinagleRequest): Future[FinagleResponse] = {
     val adaptedRequest  = RequestAdapter(rawRequest)
