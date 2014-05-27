@@ -86,7 +86,7 @@ class Controller extends App with Logging with Stats {
   def addRoute(method: HttpMethod, path: String)(callback: Request => Future[ResponseBuilder]) {
     val regex = SinatraPathPatternParser(path)
     routes.add((method, regex, (r) => {
-      stats.timeFuture("%s/Root/%s".format(method.toString, path.stripPrefix("/"))) {
+      stats.timeFuture("%s/Root/%s".format(method.toString, r.path.stripPrefix("/"))) {
         callback(r)
       }
     }))
