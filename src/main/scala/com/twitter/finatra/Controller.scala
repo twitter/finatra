@@ -48,8 +48,8 @@ class Controller extends App with Logging with Stats {
 
   var serializer:JsonSerializer = DefaultJacksonJsonSerializer
 
-  def render: ResponseBuilder  = new ResponseBuilder(serializer)
-  def route:  Router    = new Router(this)
+  def render: ResponseBuilder = new ResponseBuilder(serializer)
+  def route: Router = new Router(this)
 
   def redirect(location: String, message: String = "", permanent: Boolean = false): ResponseBuilder = {
     val msg = if (message == "")
