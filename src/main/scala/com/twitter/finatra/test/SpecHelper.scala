@@ -43,12 +43,12 @@ trait SpecHelper {
     executeRequest(HttpMethod.GET,path,params,headers)
   }
 
-  def post(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    executeRequest(HttpMethod.POST,path,params,headers)
+  def post(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map(), body:AnyRef=null) {
+    executeRequest(HttpMethod.POST,path,params,headers,body)
   }
 
-  def put(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    executeRequest(HttpMethod.PUT,path,params,headers)
+  def put(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map(), body:AnyRef=null) {
+    executeRequest(HttpMethod.PUT,path,params,headers,body)
   }
 
   def delete(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
@@ -63,8 +63,8 @@ trait SpecHelper {
     executeRequest(HttpMethod.PATCH,path,params,headers)
   }
 
-  def options(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map()) {
-    executeRequest(HttpMethod.OPTIONS,path,params,headers)
+  def options(path:String, params:Map[String,String]=Map(), headers:Map[String,String]=Map(), body:AnyRef=null) {
+    executeRequest(HttpMethod.OPTIONS,path,params,headers,body)
   }
 
   def send(request: FinagleRequest) {
@@ -75,10 +75,11 @@ trait SpecHelper {
     method: HttpMethod,
     path: String,
     params: Map[String, String] = Map(),
-    headers: Map[String,String] = Map()
+    headers: Map[String,String] = Map(),
+    body: AnyRef = null
     ) {
     val app = MockApp(server)
-    val result: MockResult = app.execute(method = method, path = path, params = params, headers = headers)
+    val result: MockResult = app.execute(method = method, path = path, params = params, headers = headers, body = body)
     lastResponse = result.response
   }
 

@@ -24,7 +24,7 @@ object App extends FinatraServer {
 ### SBT (dual published for 2.9.x or 2.10.x)
 
 ```scala
-"com.twitter" %% "finatra" % "1.5.2"
+"com.twitter" %% "finatra" % "1.5.3"
 ```
 
 ### Maven
@@ -34,7 +34,7 @@ object App extends FinatraServer {
   <groupId>com.twitter</groupId>
   <artifactId>finatra_2.10</artifactId>
   <!-- for 2.9 <artifactId>finatra_2.9.2</artifactId> -->
-  <version>1.5.2</version>
+  <version>1.5.3</version>
 </dependency>
 ```
 
