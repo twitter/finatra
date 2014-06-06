@@ -37,6 +37,8 @@ protected class Session(val sessionId: String) {
 
   def get(key: String): Option[String] = values.get(key)
 
+  def getOrElse(key: String, default: String): String = values.getOrElse(key, default)
+
   def put(key: String, value: String) {
     values(key) = value
   }

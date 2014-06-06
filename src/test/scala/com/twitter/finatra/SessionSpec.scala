@@ -10,7 +10,7 @@ class SessionEnabledApp extends Controller with SessionEnabled {
   }
 
   get("/existing_session") { implicit request =>
-    render.plain(session.get("foo").getOrElse("<empty>")).toFuture
+    render.plain(session.getOrElse("foo", "<empty>")).toFuture
   }
 }
 
