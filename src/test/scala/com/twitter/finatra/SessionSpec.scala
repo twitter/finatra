@@ -10,7 +10,11 @@ class SessionEnabledApp extends Controller with SessionEnabled {
   }
 
   get("/existing_session") { implicit request =>
-    render.plain(session.getOrElse("foo", "<empty>")).toFuture
+    var sessionValue: String = ""
+    session.get("foo").onSuccess { value =>
+      sessionValue = value.getOrElse("boo")
+    }
+    render.plain(sessionValue).toFuture
   }
 }
 
@@ -25,24 +29,32 @@ class SessionSpec extends FlatSpecHelper {
   }
 
   "session retrieve" should "retrieve an existing session for a given _session_id" in {
-    val session = SessionHolder.getOrCreateSession(SessionCookie("TEST_SESSION_ID"))
+    val session = DefaultSessionHolder.getOrCreateSession(SessionCookie("TEST_SESSION_ID"))
     session.put("foo", "bar")
     get("/existing_session", headers = Map("Cookie" -> "_session_id=TEST_SESSION_ID"))
     response.body should be("bar")
   }
 
-  "#get" should "retrieve Some(value) or None" in {
-    val session = new Session("TEST_SESSION_ID")
-    session.get("nothing") should be(None)
+  "#get" should "retrieve Some(value) or None from session" in {
+    val session = new DefaultSession("TEST_SESSION_ID")
+    session.get("nothing").onSuccess { value =>
+      value should be(None)
+    }
     session.put("foo", "bar")
-    session.get("foo") should be(Some("bar"))
+    session.get("foo").onSuccess { value =>
+      value should be(Some("bar"))
+    }
   }
 
   "#put" should "set or update values in session" in {
-    val session = new Session("TEST_SESSION_ID")
+    val session = new DefaultSession("TEST_SESSION_ID")
     session.put("foo", "bar")
-    session.get("foo") should be(Some("bar"))
+    session.get("foo").onSuccess { value =>
+      value should be(Some("bar"))
+    }
     session.put("foo", "xyz")
-    session.get("foo") should be(Some("xyz"))
+    session.get("foo").onSuccess { value =>
+      value should be(Some("xyz"))
+    }
   }
 }

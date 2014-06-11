@@ -3,6 +3,7 @@ package com.twitter.finatra
 import java.util.UUID
 import com.twitter.finagle.http.Cookie
 import scala.collection.mutable
+import com.twitter.util.Future
 
 trait SessionEnabled {
   def session(implicit req: Request): Session = {
@@ -12,8 +13,22 @@ trait SessionEnabled {
     }
 
     req.response.addCookie(sessionCookie)
-    SessionHolder.getOrCreateSession(sessionCookie)
+    sessionHolder.getOrCreateSession(sessionCookie)
   }
+
+  protected def sessionHolder: SessionHolder = DefaultSessionHolder
+}
+
+trait Session {
+  def get(key: String): Future[Option[String]]
+
+  def put(key: String, value: String): Future[Unit]
+}
+
+trait SessionHolder {
+  def getOrCreateSession(c: SessionCookie): Session
+
+  def deleteSession(c: SessionCookie)
 }
 
 object SessionCookie {
@@ -32,26 +47,26 @@ case class SessionCookie(cookieValue: String, isHttpOnly: Boolean = true, secure
   override def isSecure = secure
 }
 
-protected class Session(val sessionId: String) {
+private class DefaultSession(val sessionId: String) extends Session {
   private val values = mutable.Map[String, String]()
 
-  def get(key: String): Option[String] = values.get(key)
+  def get(key: String): Future[Option[String]] = Future.value(values.get(key))
 
-  def getOrElse(key: String, default: String): String = values.getOrElse(key, default)
-
-  def put(key: String, value: String) {
-    values(key) = value
-  }
+  def put(key: String, value: String): Future[Unit] = Future.value(values(key) = value)
 }
 
-object SessionHolder {
+private object DefaultSessionHolder extends SessionHolder {
   private val sessions = mutable.Map[SessionCookie, Session]()
 
   private def createAndAddSession(c: SessionCookie) = {
-    val context = new Session(c.value)
+    val context = new DefaultSession(c.value)
     sessions(c) = context
     context
   }
 
-  def getOrCreateSession(c: SessionCookie) = sessions.getOrElse(c, createAndAddSession(c))
+  override def deleteSession(c: SessionCookie) {
+    sessions.remove(c)
+  }
+
+  override def getOrCreateSession(c: SessionCookie) = sessions.getOrElse(c, createAndAddSession(c))
 }
