@@ -68,5 +68,5 @@ private object DefaultSessionHolder extends SessionHolder {
     sessions.remove(c)
   }
 
-  override def getOrCreateSession(c: SessionCookie) = sessions.getOrElse(c, createAndAddSession(c))
+  override def getOrCreateSession(c: SessionCookie): Session = sessions.getOrElse(c, createAndAddSession(c))
 }
