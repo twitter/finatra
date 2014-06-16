@@ -1,6 +1,7 @@
 package com.twitter.finatra
 
 import com.twitter.finatra.test.FlatSpecHelper
+import com.twitter.util.Await
 
 class SessionEnabledApp extends Controller with SessionEnabled {
 
@@ -10,11 +11,7 @@ class SessionEnabledApp extends Controller with SessionEnabled {
   }
 
   get("/existing_session") { implicit request =>
-    var sessionValue: String = ""
-    session.get("foo").onSuccess { value =>
-      sessionValue = value.getOrElse("boo")
-    }
-    render.plain(sessionValue).toFuture
+    render.plain(Await.result(session.get("foo")).getOrElse("boo")).toFuture
   }
 }
 
@@ -37,24 +34,20 @@ class SessionSpec extends FlatSpecHelper {
 
   "#get" should "retrieve Some(value) or None from session" in {
     val session = new DefaultSession("TEST_SESSION_ID")
-    session.get("nothing").onSuccess { value =>
-      value should be(None)
-    }
-    session.put("foo", "bar")
-    session.get("foo").onSuccess { value =>
-      value should be(Some("bar"))
-    }
+    Await.result(session.put("foo", "bar"))  // ensure to be set before retrieving
+
+    Await.result(session.get("nothing")) should be (None)
+    Await.result(session.get("foo")) should be (Some("bar"))
   }
 
   "#put" should "set or update values in session" in {
     val session = new DefaultSession("TEST_SESSION_ID")
-    session.put("foo", "bar")
-    session.get("foo").onSuccess { value =>
-      value should be(Some("bar"))
-    }
-    session.put("foo", "xyz")
-    session.get("foo").onSuccess { value =>
-      value should be(Some("xyz"))
-    }
+
+    Await.result(session.put("foo", "bar"))
+    Await.result(session.get("foo")) should be (Some("bar"))
+
+    Await.result(session.put("foo", "xyz"))
+    Await.result(session.get("foo")) should be (Some("xyz"))
+
   }
 }
