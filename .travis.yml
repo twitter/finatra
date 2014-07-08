@@ -1,4 +1,7 @@
- language: scala
- scala:
-   - 2.9.2
-   - 2.10.0
+language: scala
+script:
+  - sbt test
+  - sbt coveralls
+scala:
+  - 2.9.2
+  - 2.10.0
