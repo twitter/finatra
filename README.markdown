@@ -1,4 +1,4 @@
-# Finatra [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra)
+# Finatra [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
 
 [Finatra](http://finatra.info) is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
 

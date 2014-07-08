@@ -20,6 +20,11 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
 )
 
+// for code coverage
+instrumentSettings 
+
+coverallsSettings
+
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 
 //Release
@@ -29,6 +34,8 @@ resolvers +=
 
 resolvers +=
   "Local Maven Repository" at "file:///"+Path.userHome+"/.m2/repository"
+
+resolvers += Classpaths.sbtPluginReleases
 
 publishMavenStyle := true
 
