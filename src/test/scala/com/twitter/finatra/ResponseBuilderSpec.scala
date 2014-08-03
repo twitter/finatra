@@ -106,6 +106,13 @@ class ResponseBuilderSpec extends ShouldSpec {
     built.contentType should equal (Some("image/gif"))
     built.headerMap.get("Content-Length").get.toInt should equal (422488)
   }
+
+  ".static()" should "return a 404 for missing file" in {
+    val response = resp.static("missing-dealwithit.gif")
+    val built = response.build
+
+    built.statusCode should equal (404)
+  }
 }
 
 
