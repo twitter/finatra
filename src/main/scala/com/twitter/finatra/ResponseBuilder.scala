@@ -181,7 +181,7 @@ class ResponseBuilder extends CommonStatuses {
       this.header("Content-Type", mtype)
       this.body(bytes)
     } else {
-      throw new IllegalArgumentException("File does not exist")
+      this.notFound
     }
 
     this

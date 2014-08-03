@@ -188,6 +188,10 @@ class ExampleSpec extends FlatSpecHelper {
       render.static("/dealwithit.gif").toFuture
     }
 
+    get("/missing-gif") { request =>
+      render.static("/dontdealwithit.gif").toFuture
+    }
+
     /**
      * Dispatch based on Content-Type
      *
@@ -343,6 +347,11 @@ class ExampleSpec extends FlatSpecHelper {
     get("/gif")
     response.code should equal(200)
     response.originalResponse.getContent().array().head should equal(71) // capital "G", detects the gif
+  }
+
+  "GET /missing-gif" should "return a 404" in {
+    get("/missing-gif")
+    response.code should equal(404)
   }
 
   "GET /another/page with html" should "respond with html" in {
