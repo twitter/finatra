@@ -1,5 +1,6 @@
 package com.twitter.finatra
 
+import com.google.common.base.Objects
 import com.twitter.finagle.{Service, SimpleFilter}
 import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
@@ -7,7 +8,7 @@ import com.twitter.util.Future
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 
 import org.apache.commons.io.IOUtils
-import java.io.{FileInputStream, File, InputStream}
+import java.io._
 import javax.activation.MimetypesFileTypeMap
 import com.twitter.app.App
 
@@ -25,12 +26,21 @@ object FileResolver {
     if(config.env() == "production"){
       getResourceInputStream(path)
     } else {
-      getLocalInputStream(path)
+      try {
+        getLocalInputStream(path)
+      } catch {
+        // some of the resources might be in jar dependencies
+        case e: FileNotFoundException => getResourceInputStream(path)
+      }
     }
   }
 
-  private def getResourceInputStream(path: String): InputStream =
-    getClass.getResourceAsStream(path)
+  private def getResourceInputStream(path: String): InputStream = {
+    val ins=getClass.getResourceAsStream(path)
+    if (ins==null) throw new FileNotFoundException(path + " not found in resources")
+    ins
+  }
+
 
   private def getLocalInputStream(path: String): InputStream = {
     val file = new File(config.docRoot(), path)
