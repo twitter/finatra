@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
 )
 
 // for code coverage
-instrumentSettings 
+instrumentSettings
 
 coverallsSettings
 

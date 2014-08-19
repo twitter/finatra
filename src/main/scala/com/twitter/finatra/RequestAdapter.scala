@@ -29,7 +29,11 @@ object RequestAdapter {
     request.getContent.markReaderIndex
 
     if (request.method == HttpMethod.POST) {
-      request.multiParams = MultipartParsing(request)
+      request.contentType match {
+        case Some(c) if !c.matches("""(?i)^multipart\/form-data.*""") =>
+        case _ =>
+          request.multiParams = MultipartParsing(request)
+      }
     }
 
     request.getContent.resetReaderIndex()
