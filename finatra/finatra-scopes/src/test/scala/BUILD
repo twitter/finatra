@@ -1,0 +1,13 @@
+junit_tests(name='scala',
+  dependencies=[
+    '3rdparty:junit',
+    '3rdparty:netty',
+    '3rdparty:scalatest',
+    '3rdparty:specs2',
+    'finatra/finatra/finatra-scopes',
+  ],
+  sources=rglobs('*.scala'),
+  resources=[
+    'finatra/finatra/finatra-scopes/src/test/resources'
+  ]
+)

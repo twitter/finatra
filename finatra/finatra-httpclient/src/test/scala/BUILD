@@ -1,0 +1,21 @@
+junit_tests(name='scala',
+  dependencies=[
+    '3rdparty:junit',
+    '3rdparty:scalatest',
+    '3rdparty:specs2',
+    'finatra/finatra/finatra-httpclient',
+    'finatra/finatra/finatra-utils:tests'
+  ],
+  sources=rglobs('*.scala')
+)
+
+scala_library(name="test-deps",
+  dependencies=[
+    '3rdparty:junit',
+    '3rdparty:scalatest',
+    '3rdparty:specs2',
+    'finatra/finatra/finatra-httpclient',
+    'finatra/finatra/finatra-utils:test-deps'
+  ],
+  sources=globs('com/twitter/finatra/httpclient/*.scala')
+)

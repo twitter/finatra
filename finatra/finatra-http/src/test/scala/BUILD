@@ -1,0 +1,35 @@
+maven_layout()
+
+junit_tests(name='scala',
+  dependencies=[
+    '3rdparty:junit',
+    '3rdparty:mockito-all',
+    '3rdparty:netty',
+    '3rdparty:scalatest',
+    '3rdparty:specs2',
+    'finatra/finatra/finatra-jackson:tests',
+    'finatra/finatra/finatra-http',
+    'finatra/finatra/finatra-logback',
+    'finatra/finatra/finatra-server:tests',
+    'finatra/finatra/finatra-utils:tests'
+  ],
+  sources=rglobs('*.scala'),
+  resources=[
+    'finatra/finatra/finatra-http/src/test/resources',
+    'finatra/finatra/finatra-http/src/test/webapp'
+  ]
+)
+
+scala_library(name="test-deps",
+  dependencies=[
+    '3rdparty:junit',
+    '3rdparty:mockito-all',
+    '3rdparty:scalatest',
+    '3rdparty:specs2',
+    'finatra/finatra/finatra-jackson:test-deps',
+    'finatra/finatra/finatra-http',
+    'finatra/finatra/finatra-server:test-deps',
+    'finatra/finatra/finatra-utils:test-deps'
+  ],
+  sources=globs('com/twitter/finatra/test/*.scala'),
+)

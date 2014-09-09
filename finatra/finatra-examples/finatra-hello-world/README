@@ -1,0 +1,5 @@
+Run:
+mvn exec:java
+
+Test:
+curl -v http://localhost:8888/hi; echo

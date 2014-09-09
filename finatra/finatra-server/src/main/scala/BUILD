@@ -1,0 +1,37 @@
+scala_library(name='scala',
+  provides = scala_artifact(
+    org = 'com.twitter',
+    name = 'finatra-server',
+    repo = pants('pants-support/ivy:internal'),
+  ),
+  dependencies=[
+    '3rdparty:commons-fileupload',
+    '3rdparty:commons-io',
+    '3rdparty:grizzled-slf4j',
+    '3rdparty:guava',
+    '3rdparty:guice',
+    '3rdparty:jackson-core',
+    '3rdparty:jackson-databind',
+    '3rdparty:javax.inject',
+    '3rdparty:javax-servlet',
+    '3rdparty:mustache-compiler',
+    '3rdparty:netty',
+    '3rdparty/jvm/org/scalaj:scalaj-time',
+    '3rdparty:scala-guice',
+    'finagle/finagle-core',
+    'finagle/finagle-http',
+    'finatra/finatra/finatra-jackson',
+    'finatra/finatra/finatra-jackson/src/main/java',
+    'finatra/finatra/finatra-utils',
+    'twitter-server',
+    'util/util-app',
+    'util/util-core'
+  ],
+  sources=rglobs('*.scala'),
+  java_sources=[
+    'finatra/finatra/finatra-server/src/main/java'
+  ],
+  resources=[
+    'finatra/finatra/finatra-server/src/main/resources'
+  ]
+)

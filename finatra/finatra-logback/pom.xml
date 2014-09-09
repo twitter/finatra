@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>finatra-logback</artifactId>
+  <version>2.0.1-SNAPSHOT</version>
+  <parent>
+    <groupId>com.twitter</groupId>
+    <artifactId>finatra</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <dependencies>
+    <!-- Finatra -->
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>finatra-utils</artifactId>
+      <version>2.0.1-SNAPSHOT</version>
+    </dependency>
+    <!-- Logging -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.13</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.7</version>
+    </dependency>
+    <!-- Logback Java Util Logging Bridge -->
+    <!-- See http://www.slf4j.org/legacy.html#jul-to-slf4j -->
+    <!-- The performance penalty is acceptable because:
+         * There are very few jul log msgs in CSL/util-core code
+         * LevelChangePropagator has been installed in production logback.xml -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>1.7.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+      <version>1.7.7</version>
+    </dependency>
+    <!-- Twitter -->
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>util-core_2.10</artifactId>
+      <version>6.21.2-SNAPSHOT</version>
+    </dependency>
+    <!-- Testing -->
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>finatra-http</artifactId>
+      <version>2.0.1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>finatra-http</artifactId>
+      <version>2.0.1-SNAPSHOT</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>finatra-server</artifactId>
+      <version>2.0.1-SNAPSHOT</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>finatra-utils</artifactId>
+      <version>2.0.1-SNAPSHOT</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+  </dependencies>
+</project>
