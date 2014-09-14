@@ -15,6 +15,7 @@
  */
 package com.twitter.finatra
 
+import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
@@ -45,6 +46,7 @@ class ResponseBuilder(serializer:JsonSerializer = DefaultJacksonJsonSerializer) 
   private var binBody:    Option[Array[Byte]]  = None
   private var json:       Option[Any]          = None
   private var view:       Option[View]         = None
+  private var buffer:     Option[ChannelBuffer]= None
   private var cookies:    List[Cookie]         = List()
   private var jsonSerializer: JsonSerializer     = serializer
 
@@ -86,7 +88,13 @@ class ResponseBuilder(serializer:JsonSerializer = DefaultJacksonJsonSerializer) 
                   case Some(bb) =>
                     resp.headers.set("Content-Length", bb.length)
                     resp.setContent(copiedBuffer(bb))
-                  case None => resp.headers.set("Content-Length", 0) //no content
+                  case None =>
+                    buffer match {
+                      case Some(b) =>
+                        resp.headers.set("Content-Length", b.capacity())
+                        resp.setContent(b)
+                      case None => resp.headers.set("Content-Length", 0) //no content
+                    }
                 }
             }
         }
@@ -160,6 +168,11 @@ class ResponseBuilder(serializer:JsonSerializer = DefaultJacksonJsonSerializer) 
 
   def view(v: View): ResponseBuilder = {
     this.view = Some(v)
+    this
+  }
+
+  def buffer(b: ChannelBuffer): ResponseBuilder = {
+    this.buffer = Some(b)
     this
   }
 
