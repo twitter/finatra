@@ -83,32 +83,32 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>scrooge-core_2.10</artifactId>
-      <version>3.16.5-SNAPSHOT</version>
+      <version>3.16.7-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-core_2.10</artifactId>
-      <version>6.20.2-SNAPSHOT</version>
+      <version>6.21.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-http_2.10</artifactId>
-      <version>6.20.2-SNAPSHOT</version>
+      <version>6.21.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>twitter-server_2.10</artifactId>
-      <version>1.7.5-SNAPSHOT</version>
+      <version>1.7.7-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>util-app_2.10</artifactId>
-      <version>6.21.2-SNAPSHOT</version>
+      <version>6.21.3-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>util-core_2.10</artifactId>
-      <version>6.21.2-SNAPSHOT</version>
+      <version>6.21.3-SNAPSHOT</version>
     </dependency>
     <!-- Thirdparty -->
     <dependency>
