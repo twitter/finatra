@@ -1,5 +1,3 @@
-maven_layout()
-
 junit_tests(name='scala',
   dependencies=[
     '3rdparty:junit',
