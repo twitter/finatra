@@ -7,8 +7,8 @@
   <parent>
     <groupId>com.twitter</groupId>
     <artifactId>scala-parent-2104_2.10</artifactId>
-    <version>0.1.14</version>
-    <relativePath/>
+    <version>0.1.15-SNAPSHOT</version>
+    <relativePath>../../parents/scala-parent-2104/pom.xml</relativePath>
   </parent>
   <dependencies>
     <!-- Logging -->
@@ -25,12 +25,52 @@
       <scope>test</scope>
       <exclusions>
         <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-compiler</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-library</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.pegdown</groupId>
+          <artifactId>pegdown</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
         </exclusion>
         <exclusion>
+          <groupId>org.scalaz</groupId>
+          <artifactId>scalaz-core_2.10</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scalaz</groupId>
+          <artifactId>scalaz-concurrent_2.10</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-reflect</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>org.scalacheck</groupId>
           <artifactId>scalacheck_2.10</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.specs2</groupId>
+          <artifactId>classycle</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scalamacros</groupId>
+          <artifactId>quasiquotes_2.10</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

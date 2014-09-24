@@ -39,6 +39,13 @@ abstract class Controller extends Logging {
   protected def options[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit =
     addRoute(OPTIONS, route, callback)
 
+  protected def patch[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit =
+    addRoute(PATCH, route, callback)
+
+  /** head's callback returns Unit since HEAD methods must have empty bodies */
+  protected def head[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => Unit): Unit =
+    addRoute(HEAD, route, callback)
+
   protected def response = responseBuilder
 
   /* Private */
@@ -50,7 +57,7 @@ abstract class Controller extends Logging {
         route,
         callbackConvertor.convertToFutureResponse(callback),
         getClass.getDeclaredAnnotations,
-        manifest[RequestType].erasure,
-        manifest[ResponseType].erasure)) +=: routesBeforeInjection
+        manifest[RequestType].runtimeClass,
+        manifest[ResponseType].runtimeClass)) +=: routesBeforeInjection
   }
 }

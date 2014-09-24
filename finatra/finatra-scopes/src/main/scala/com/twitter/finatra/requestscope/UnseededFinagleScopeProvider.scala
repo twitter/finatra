@@ -7,6 +7,6 @@ class UnseededFinagleScopeProvider[T] extends Provider[T] {
     throw new IllegalStateException("If you got here then it means that" +
       " your code asked for scoped object which should have been" +
       " explicitly seeded in this scope by calling" +
-      " finagleScope.add().")
+      " FinagleRequestScope.seed().")
   }
 }

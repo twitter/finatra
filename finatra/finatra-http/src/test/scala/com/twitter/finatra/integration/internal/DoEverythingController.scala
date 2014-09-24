@@ -311,6 +311,22 @@ class DoEverythingController @Inject()(
   get("/seq") { r: Request =>
     Seq("a", "b")
   }
+
+  delete("/delete") { r: Request =>
+    "delete"
+  }
+
+  options("/options") { r: Request =>
+    "options"
+  }
+
+  head("/head") { r: Request =>
+    "head" // will be discarded since head's can't have bodies
+  }
+
+  patch("/patch") { r: Request =>
+    "patch"
+  }
 }
 
 case class FormPostRequest(

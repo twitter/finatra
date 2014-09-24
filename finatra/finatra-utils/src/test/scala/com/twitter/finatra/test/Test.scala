@@ -7,7 +7,7 @@ import org.joda.time.{DateTime, DateTimeZone, Duration}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.matchers.ShouldMatchers
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, WordSpec}
+import org.scalatest.{Matchers, BeforeAndAfterAll, BeforeAndAfterEach, WordSpec}
 import org.specs2.mock.Mockito
 
 @RunWith(classOf[JUnitRunner])
@@ -16,7 +16,7 @@ abstract class Test
   with Mockito
   with BeforeAndAfterAll
   with BeforeAndAfterEach
-  with ShouldMatchers
+  with Matchers
   with Logging {
 
   protected def setPrivateField(obj: Object, fieldName: String, value: Object) {

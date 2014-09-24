@@ -1,92 +1,114 @@
 package com.twitter.finatra.requestscope
 
+import com.google.common.collect.Maps
 import com.google.inject._
-import com.twitter.finatra.requestscope.FinagleRequestScope.local
+import com.google.inject.internal.CircularDependencyProxy
 import com.twitter.util.Local
-import java.util.concurrent.ConcurrentHashMap
+import java.util.{HashMap => JHashMap, Map => JMap}
 import net.codingwell.scalaguice._
-import scala.collection.JavaConversions._
-import scala.collection.mutable
 
-object FinagleRequestScope {
-  private val local = new Local[mutable.Map[Key[_], AnyRef]]
-}
 
-class FinagleRequestScope extends Scope {
+/**
+ * A Guice 'Request Scope' implemented with com.twitter.util.Local
+ *
+ * @see https://github.com/google/guice/wiki/CustomScopes
+ */
+final class FinagleRequestScope extends Scope {
 
-  private[this] val cachedKeys = asScalaConcurrentMap(
-    new ConcurrentHashMap[Manifest[_], Key[_]]())
+  private[this] val local = new Local[JMap[Key[_], AnyRef]]
+  private[this] val scopeName = "FinagleRequestScope"
 
   /* Public Overrides */
 
-  override def scope[T](key: Key[T], unscoped: Provider[T]): Provider[T] = {
+  override def scope[T](key: Key[T], unscopedProvider: Provider[T]): Provider[T] = {
     new Provider[T] {
       def get: T = {
-        val valuesMap = getMap(key)
-        valuesMap.get(key) match {
-          case None => unscoped.get()
-          case Some(value) => value.asInstanceOf[T]
+        val scopedObjects = getScopedObjectMap(key)
+        val scopedObject = scopedObjects.get(key).asInstanceOf[T]
+        if (scopedObject == null && !scopedObjects.containsKey(key)) {
+          unscopedObject(key, unscopedProvider, scopedObjects)
         }
+        else {
+          scopedObject
+        }
+      }
+
+      override def toString = {
+        s"$unscopedProvider[$scopeName]"
       }
     }
   }
 
+  override def toString = scopeName
+
   /* Public */
 
+  /**
+   * Start the 'request scope'
+   *
+   * TODO: Add following assertion once a proper "Future context" can be started during HTTP warmup:
+   * assert(local().isEmpty, "A FinagleRequestScope is already in progress")
+   */
   def enter() {
-    val localValue = local()
-    //TODO assert(localValue.isEmpty, "A FinagleRequestScope scoping block is already in progress")
-    local.update(new mutable.HashMap[Key[_], AnyRef]())
-  }
-
-  def add[T <: AnyRef : Manifest](value: T) {
-    val key = createKey[T]
-    add(key, value)
-  }
-
-  def add[T <: AnyRef](key: Key[T], value: T) {
-    val valuesMap = getMap(key)
-    valuesMap.put(key, value)
+    local.update(new JHashMap[Key[_], AnyRef]())
   }
 
   /**
-   * Remove's Typed object from Request Scope.
-   * NOTE: Avoid removing objects, otherwise, they will not be available
-   * in request spawned threads (e.g. future pools). Instead, you can rely
-   * on exit() to cleanup the Finagle Local which will lead to eventual GC
-   * of the added objects.
+   * Seed/Add an object into the 'request scope'
    *
-   * @tparam T Type to remove
+   * @param value Value to seed/add into the request scope
+   * @param overwrite Whether to overwrite an existing value already in the request scope (defaults to false)
    */
-  def remove[T: Manifest]() {
-    val key = createKey[T]
-    val valuesMap = getMap(key)
-    valuesMap.remove(key)
+  def seed[T <: AnyRef : Manifest](value: T, overwrite: Boolean = false) {
+    seed(
+      Key.get(typeLiteral[T]),
+      value,
+      overwrite = overwrite)
   }
 
+  /** Seed/Add an object into the 'request scope' */
+  def seed[T <: AnyRef](key: Key[T], value: T, overwrite: Boolean = false) {
+    val scopedObjects = getScopedObjectMap(key)
+
+    if (!overwrite) {
+      assert(
+        !scopedObjects.containsKey(key),
+        "A value for the key " + key + " was already seeded in this scope. " +
+          "Old value: " + scopedObjects.get(key) + " New value: " + value)
+    }
+
+    scopedObjects.put(key, value)
+  }
+
+  /** Exit the 'request scope' */
   def exit() {
-    val localValue = local()
-    assert(localValue.isDefined, "No FinagleRequestScope scoping block in progress")
+    assert(local().isDefined, "No FinagleRequestScope in progress")
     local.clear()
   }
 
   /* Private */
 
-  private def createKey[T: Manifest]: Key[T] = {
-    cachedKeys.getOrElseUpdate(manifest[T], {
-      Key.get(typeLiteral[T])
-    }).asInstanceOf[Key[T]]
-  }
-
-  private def getMap(key: Key[_]) = {
+  private def getScopedObjectMap(key: Key[_]) = {
     local() getOrElse {
       val lookupType = key.getTypeLiteral
       throw new OutOfScopeException(
-        "Cannot access " + lookupType + " outside of a FinagledScope.\n" +
-          "Ensure that FinagleRequestScopeFilter in your filter chain and FinagleRequestScopeModule is in your module list.\n" +
-          "Ensure that the filter adding " + lookupType + " is configured and in your filter chain.\n" +
+        "Cannot access " + key + " outside of a FinagledScope.\n" +
+          "Ensure that FinagleRequestScopeFilter is in your filter chain and FinagleRequestScopeModule is a loaded Guice module.\n" +
+          "Ensure that the filter seeding " + lookupType + " is configured and in your filter chain.\n" +
           "Ensure that you're injecting Provider[" + lookupType + "] if injecting into a Singleton.\n" +
           "Ensure that you're calling provider.get every time (and not caching/storing the providers result in a class val)")
     }
+  }
+
+  // For details on CircularDependencyProxy, see https://github.com/google/guice/issues/843#issuecomment-54749202
+  private[this] def unscopedObject[T](key: Key[T], unscoped: Provider[T], scopedObjects: JMap[Key[_], Object]): T = {
+    val unscopedObject = unscoped.get()
+
+    // don't remember proxies; these exist only to serve circular dependencies
+    if (!unscopedObject.isInstanceOf[CircularDependencyProxy]) {
+      scopedObjects.put(key, unscopedObject.asInstanceOf[Object])
+    }
+
+    unscopedObject
   }
 }

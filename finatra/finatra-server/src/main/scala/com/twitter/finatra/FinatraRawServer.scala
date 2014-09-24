@@ -74,6 +74,8 @@ trait FinatraRawServer extends GuiceTwitterServer {
   /* Lifecycle */
 
   override def postWarmup() {
+    super.postWarmup()
+
     startHttpServer()
     startHttpsServer()
   }

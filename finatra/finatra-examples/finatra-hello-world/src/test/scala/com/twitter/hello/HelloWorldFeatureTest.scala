@@ -5,14 +5,14 @@ import com.twitter.finatra.test.{HttpTest, EmbeddedTwitterServer, HttpFeatureTes
 
 class HelloWorldFeatureTest extends HttpTest {
 
-  val server = EmbeddedTwitterServer(HelloWorldServerMain)
+  val server = EmbeddedTwitterServer(new HelloWorldServer)
 
   "HelloWorld Server" should {
-    "answer yo" in {
+    "ping" in {
       server.httpGet(
-        path = "/hi",
+        path = "/ping",
         andExpect = Ok,
-        withBody = "yo")
+        withBody = "Hello World!")
     }
   }
 }

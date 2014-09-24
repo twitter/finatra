@@ -15,8 +15,8 @@ trait GuiceApp extends App with Logging {
   /* Mutable State */
 
   private val frameworkModules: ArrayBuffer[Module] = ArrayBuffer(statsModule)
-  @transient private[finatra] var postWarmedUp: Boolean = false
-  @transient private[finatra] var autoRunAppMain: Boolean = true
+  @transient private[finatra] var runAppMain: Boolean = true
+  @transient private[finatra] var postWarmupComplete: Boolean = false
   @transient private var _injector: FinatraInjector = _
 
   /* Public */
@@ -48,7 +48,7 @@ trait GuiceApp extends App with Logging {
     warmup()
     postWarmup()
     injector.postWarmup()
-    postWarmedUp = true
+    postWarmupComplete = true
     info("Warmup & PostWarmup Finished.")
 
     callAppMain()
@@ -60,7 +60,9 @@ trait GuiceApp extends App with Logging {
 
   /* Public */
 
-  /** Callback method called after the Guice injector is created */
+  /**
+   * Callback method executed after the Guice injector is created and warmup has fully completed.
+   */
   def appMain() {
   }
 
@@ -74,8 +76,6 @@ trait GuiceApp extends App with Logging {
 
   // TODO: Replace the need for this method with Guice v4 OptionalBinder
   // http://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/multibindings/OptionalBinder.html
-  // This is required for backwards compatibility. There are existing
-  // use cases (in ***REMOVED***) that override the default injected StatsReceiver.
   protected def statsModule: Module = LoadedStatsModule
   
   protected def addFrameworkModules(modules: Module*) {
@@ -104,7 +104,7 @@ trait GuiceApp extends App with Logging {
   /* Private */
 
   private def callAppMain() {
-    if (autoRunAppMain) {
+    if (runAppMain) {
       try {
         appMain()
       } catch {

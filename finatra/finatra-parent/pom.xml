@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>finatra-parent</artifactId>
   <version>2.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <parent>
     <groupId>com.twitter</groupId>
-    <artifactId>scala-parent-2104_2.10</artifactId>
-    <version>0.1.14</version>
-    <relativePath/>
+    <artifactId>service-2104_2.10</artifactId>
+    <version>0.1.11</version>
+    <relativePath>../../../parents/service-2104/pom.xml</relativePath>
   </parent>
   <dependencies>
     <!-- Logging -->
@@ -36,6 +37,12 @@
       <version>1</version>
     </dependency>
     <!-- Testing -->
+     <dependency>
+      <groupId>org.scalatest</groupId>
+      <artifactId>scalatest_2.10</artifactId>
+      <version>2.2.2</version>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.specs2</groupId>
       <artifactId>specs2_2.10</artifactId>
@@ -43,25 +50,52 @@
       <scope>test</scope>
       <exclusions>
         <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-compiler</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-library</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.pegdown</groupId>
+          <artifactId>pegdown</artifactId>
+        </exclusion>
+        <exclusion>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scalaz</groupId>
+          <artifactId>scalaz-core_2.10</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scalaz</groupId>
+          <artifactId>scalaz-concurrent_2.10</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scala-lang</groupId>
+          <artifactId>scala-reflect</artifactId>
         </exclusion>
         <exclusion>
           <groupId>org.scalacheck</groupId>
           <artifactId>scalacheck_2.10</artifactId>
         </exclusion>
-      </exclusions>
-    </dependency>
-    <!-- Logback as an slf4j impl for testing -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.0.13</version>
-      <scope>test</scope>
-      <exclusions>
         <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.specs2</groupId>
+          <artifactId>classycle</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.scalamacros</groupId>
+          <artifactId>quasiquotes_2.10</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.hamcrest</groupId>
+          <artifactId>hamcrest-core</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

@@ -511,5 +511,33 @@ class DoEverythingServerIntegrationTest extends HttpTest {
         andExpect = Ok,
         withJsonBody = """["a", "b"]""")
     }
+
+    "delete" in {
+      server.httpDelete(
+        "/delete",
+        andExpect = Ok,
+        withBody = "delete")
+    }
+
+    "options" in {
+      server.httpOptions(
+        "/options",
+        andExpect = Ok,
+        withBody = "options")
+    }
+
+    "head" in {
+      server.httpHead(
+        "/head",
+        andExpect = Ok,
+        withBody = "") //HEAD requests cannot have bodies
+    }
+
+    "patch" in {
+      server.httpPatch(
+        "/patch",
+        andExpect = Ok,
+        withBody = "patch")
+    }
   }
 }

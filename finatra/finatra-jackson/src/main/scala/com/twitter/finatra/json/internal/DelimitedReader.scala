@@ -45,7 +45,15 @@ class DelimitedReader(
     }
   }
 
-  override def close() = reader.close()
+  override def close() = {
+    if (delimiterFoundInPriorRead) {
+      clearDelimiterFound()
+    }
+    else {
+      endOfStream = true
+      reader.close()
+    }
+  }
 
   def isDone = endOfStream
 

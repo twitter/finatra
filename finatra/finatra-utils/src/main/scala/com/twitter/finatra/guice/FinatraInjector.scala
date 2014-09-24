@@ -3,7 +3,7 @@ package com.twitter.finatra.guice
 import com.google.inject.Stage.PRODUCTION
 import com.google.inject.name.Names
 import com.google.inject.util.Modules
-import com.google.inject.{Guice, Key, Module}
+import com.google.inject.{Injector, Guice, Key, Module}
 import com.twitter.app.Flag
 import com.twitter.finatra.utils.Logging
 import java.lang.annotation.{Annotation => JavaAnnotation}
@@ -37,11 +37,13 @@ object FinatraInjector {
       overrideModules ++ composedOverrideModules
     }
 
-    new FinatraInjector(
-      combinedModule =
+    val combinedModule =
         Modules.`override`(
           allNonOverrideModules.asJava).
-          `with`(allOverrideModules.asJava),
+          `with`(allOverrideModules.asJava)
+
+    new FinatraInjector(
+      guiceInjector = Guice.createInjector(PRODUCTION, combinedModule),
       allModules =
         allNonOverrideModules ++ allOverrideModules)
   }
@@ -71,15 +73,13 @@ object FinatraInjector {
 }
 
 case class FinatraInjector(
-  combinedModule: Module,
-  allModules: Seq[Module])
+  guiceInjector: Injector,
+  allModules: Seq[Module] = Seq())
   extends Logging {
 
   /* Public */
 
-  val rawInjector = Guice.createInjector(PRODUCTION, combinedModule)
-
-  def instance[T: Manifest]: T = rawInjector.getInstance(typeLiteral[T].toKey)
+  def instance[T: Manifest]: T = guiceInjector.getInstance(typeLiteral[T].toKey)
 
   def instance[T: Manifest, Ann <: JavaAnnotation : Manifest]: T = {
     val annotation = manifest[Ann].erasure.asInstanceOf[Class[Ann]]
@@ -90,9 +90,9 @@ case class FinatraInjector(
     instance[T](Names.named(name))
   }
 
-  def instance[T](clazz: Class[T]): T = rawInjector.getInstance(clazz)
+  def instance[T](clazz: Class[T]): T = guiceInjector.getInstance(clazz)
 
-  def instance[T](key: Key[T]): T = rawInjector.getInstance(key)
+  def instance[T](key: Key[T]): T = guiceInjector.getInstance(key)
 
   def postStartup() {
     allModules foreach postStartup
@@ -143,11 +143,11 @@ case class FinatraInjector(
 
   private def instance[T: Manifest](annotationType: Class[_ <: JavaAnnotation]): T = {
     val key = Key.get(typeLiteral[T], annotationType)
-    rawInjector.getInstance(key)
+    guiceInjector.getInstance(key)
   }
 
   private def instance[T: Manifest](annotation: JavaAnnotation): T = {
     val key = Key.get(typeLiteral[T], annotation)
-    rawInjector.getInstance(key)
+    guiceInjector.getInstance(key)
   }
 }

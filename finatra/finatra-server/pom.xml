@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <artifactId>finatra-server</artifactId>
   <version>2.0.1-SNAPSHOT</version>
@@ -21,6 +22,11 @@
       <artifactId>commons-fileupload</artifactId>
       <!-- we're using 1.2.1 because ***REMOVED*** uses this -->
       <version>1.2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
     </dependency>
     <!-- Finatra -->
     <dependency>
@@ -68,11 +74,6 @@
       <artifactId>javax.inject</artifactId>
       <version>1</version>
     </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-    </dependency>
     <!-- Netty -->
     <dependency>
       <groupId>io.netty</groupId>
@@ -82,33 +83,39 @@
     <!-- Twitter -->
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>scrooge-core_2.10</artifactId>
-      <version>3.16.7-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>finagle-core_2.10</artifactId>
-      <version>6.21.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>finagle-http_2.10</artifactId>
-      <version>6.21.1-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter</groupId>
       <artifactId>twitter-server_2.10</artifactId>
       <version>1.7.7-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>util-app_2.10</artifactId>
-      <version>6.21.3-SNAPSHOT</version>
+      <artifactId>finagle-stats_2.10</artifactId>
+      <version>6.21.1-SNAPSHOT</version>
+      <exclusions>
+        <!-- Exclude so we can "upgrade" to newer version used in twitter-server-internal -->
+        <exclusion>
+          <groupId>com.twitter.common</groupId>
+          <artifactId>collections</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.twitter.common</groupId>
+          <artifactId>util</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>util</artifactId>
+      <version>0.0.107</version>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.common</groupId>
+      <artifactId>collections</artifactId>
+      <version>0.0.87</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>util-core_2.10</artifactId>
-      <version>6.21.3-SNAPSHOT</version>
+      <artifactId>scrooge-core_2.10</artifactId>
+      <version>3.16.7-SNAPSHOT</version>
     </dependency>
     <!-- Thirdparty -->
     <dependency>
@@ -117,7 +124,18 @@
       <version>1.7.7</version>
     </dependency>
     <!-- Testing -->
-    <!-- Finatra -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.13</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finatra-utils</artifactId>

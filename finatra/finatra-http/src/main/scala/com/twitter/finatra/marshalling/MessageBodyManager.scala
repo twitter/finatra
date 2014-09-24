@@ -20,9 +20,11 @@ class MessageBodyManager @Inject()(
   defaultMessageBodyWriter: DefaultMessageBodyWriter)
   extends Logging {
 
-  private val readers = mutable.Map[MessageBodyKey, MessageBodyReader[_]]()
-  private val writersByType = mutable.Map[MessageBodyKey, MessageBodyWriter[Any]]()
-  private val writersByAnnotation = mutable.Map[Class[_], MessageBodyWriter[Any]]()
+  private val readers = mutable.Map[Type, MessageBodyReader[_]]()
+  private val writersByType = mutable.Map[Type, MessageBodyWriter[Any]]()
+  private val classToAnnotationWriter = mutable.Map[Type, Option[MessageBodyWriter[Any]]]()
+  private val writersByAnnotation = mutable.Map[Type, MessageBodyWriter[Any]]()
+  private val writersOrDefaultCache = mutable.Map[Type, MessageBodyWriter[Any]]()
 
   /* Public */
 
@@ -50,8 +52,7 @@ class MessageBodyManager @Inject()(
   }
 
   def parse[T: Manifest](request: Request): T = {
-    val key = createKey[T]
-    readers.get(key) map { reader =>
+    readers.get(typeLiteral[T].getType) map { reader =>
       reader.parse(request).asInstanceOf[T]
     } getOrElse {
       defaultMessageBodyReader.parse[T](request)
@@ -59,12 +60,13 @@ class MessageBodyManager @Inject()(
   }
 
   def writer(obj: Any): Option[MessageBodyWriter[Any]] = {
-    val key = createKey(obj.getClass)
-    writersByType.get(key) orElse lookupByAnnotation(key, obj.getClass)
+    writersByType.get(obj.getClass) orElse lookupByAnnotation(obj.getClass)
   }
 
   def writerOrDefault(obj: Any): MessageBodyWriter[Any] = {
-    writer(obj) getOrElse defaultMessageBodyWriter
+    writersOrDefaultCache.getOrElseUpdate(obj.getClass, {
+      writer(obj) getOrElse defaultMessageBodyWriter
+    })
   }
 
   /* Private */
@@ -74,43 +76,28 @@ class MessageBodyManager @Inject()(
       Key.get(
         typeLiteral[MessageBodyComponent]))
 
-    val componentKey = createMessageBodyKey(
-      messageBodyComponent.getClass,
-      typeToReadOrWrite)
-
     messageBodyComponent match {
       case reader: MessageBodyReader[_] =>
-        readers(componentKey) = reader
+        readers(typeToReadOrWrite) = reader
       case writer: MessageBodyWriter[_] =>
-        writersByType(componentKey) = writer.asInstanceOf[MessageBodyWriter[Any]]
+        writersByType(typeToReadOrWrite) = writer.asInstanceOf[MessageBodyWriter[Any]]
     }
   }
 
-  private def createMessageBodyKey(messageBodyComponentClazz: Class[_], typeToReadOrWrite: Type): MessageBodyKey = {
-    MessageBodyKey(
-      typeToReadOrWrite)
-  }
-
   //TODO: Support more than the first annotation
-  private def lookupByAnnotation[T](key: MessageBodyKey, clazz: Class[_]): Option[MessageBodyWriter[Any]] = {
-    val annotations = clazz.getAnnotations filterNot {_.annotationType == classOf[ScalaSignature]}
-    if (annotations.size >= 1)
-      writersByAnnotation.get(annotations.head.annotationType)
-    else
-      None
+  private def lookupByAnnotation[T](clazz: Class[_]): Option[MessageBodyWriter[Any]] = {
+    classToAnnotationWriter.getOrElseUpdate(clazz, {
+      val annotations = clazz.getAnnotations filterNot {_.annotationType == classOf[ScalaSignature]}
+      if (annotations.size >= 1)
+        writersByAnnotation.get(annotations.head.annotationType)
+      else
+        None
+    })
   }
 
   def defaultMessageBodyWriter[T](key: MessageBodyKey): MessageBodyWriter[_] = {
     trace("Using defaultMessageBodyWriter for " + key + " Writers: " + writersByType.keys)
     defaultMessageBodyWriter
-  }
-
-  private def createKey[T: Manifest]: MessageBodyKey = {
-    createKey(typeLiteral[T].getType)
-  }
-
-  private def createKey(objType: Type): MessageBodyKey = {
-    MessageBodyKey(objType)
   }
 
   private def singleTypeParam[T](objType: Type) = {

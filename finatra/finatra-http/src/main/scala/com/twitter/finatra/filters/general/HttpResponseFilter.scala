@@ -1,5 +1,6 @@
 package com.twitter.finatra.filters.general
 
+import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.request.RequestUtils
@@ -11,8 +12,11 @@ import com.twitter.util.Future
  * - adding a special TFE header for preserving response bodies on 4xx/5xx responses
  * - turning a 'partial' Location header into a full URL
  */
-//TODO: DATAAPI-792 Remove "twitter internal" headers
 class HttpResponseFilter extends SimpleFilter[Request, Response] {
+
+  private val locationStatusCodes = Set(
+    Created, Accepted, //2XX
+    MultipleChoices, MovedPermanently, Found, SeeOther, NotModified, UseProxy, TemporaryRedirect) //3XX
 
   /* Public */
 
@@ -28,11 +32,12 @@ class HttpResponseFilter extends SimpleFilter[Request, Response] {
   /* Private */
 
   private def updateLocationHeader(request: Request, response: Response) {
-    for (existingLocation <- response.location) {
-      if (!existingLocation.startsWith("http") && !existingLocation.startsWith("/")) {
-        response.headers.set("Location", RequestUtils.pathUrl(request) + existingLocation)
+    if (locationStatusCodes.contains(response.status)) {
+      for (existingLocation <- response.location) {
+        if (!existingLocation.startsWith("http") && !existingLocation.startsWith("/")) {
+          response.headers.set("Location", RequestUtils.pathUrl(request) + existingLocation)
+        }
       }
     }
   }
 }
-

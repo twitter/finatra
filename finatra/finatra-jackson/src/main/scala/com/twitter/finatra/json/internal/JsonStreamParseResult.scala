@@ -11,6 +11,8 @@ object JsonStreamParseResult {
    * When a JSON object has an array field,
    * this method returns a result object with all elements up to the array,
    * and then a JsonArrayIterator for the array.
+   *
+   * TODO: Support reading elements after the first array
    */
   def create[T: Manifest](
     mapper: FinatraObjectMapper,

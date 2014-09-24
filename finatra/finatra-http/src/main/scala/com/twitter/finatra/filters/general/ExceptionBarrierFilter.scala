@@ -9,9 +9,10 @@ import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException, JsonObjectParseException}
 import com.twitter.finatra.json.internal.caseclass.jackson.JacksonUtils
 import com.twitter.finatra.response._
-import com.twitter.util.{Future, NonFatal}
+import com.twitter.util.{Memoize, Future, NonFatal}
 import grizzled.slf4j.Logging
 import javax.inject.{Inject, Singleton}
+import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 /**
  * Filter which converts exceptions into HTTP responses.
@@ -57,11 +58,15 @@ class ExceptionBarrierFilter @Inject()(
       case e: NoSuchMethodException =>
         internalServerError(request, e)
     } onSuccess { response =>
-      responseCodeStatsReceiver.counter(response.statusCode.toString).incr()
+      statusCodeCounter(response.status).incr()
     }
   }
 
   /* Private */
+
+  private val statusCodeCounter = Memoize { statusCode: HttpResponseStatus =>
+    responseCodeStatsReceiver.counter(statusCode.toString)
+  }
 
   private def internalServerError(request: Request, throwable: Throwable, logStackTrace: Boolean = true) = {
     response.internalServerError.json(

@@ -20,7 +20,11 @@ class JsonArrayIterator[T: Manifest](
   /* Public */
 
   def hasNext = {
-    parser.getCurrentToken != JsonToken.END_ARRAY && !parser.isClosed
+    val hasNextResult = parser.getCurrentToken != JsonToken.END_ARRAY && !parser.isClosed
+    if (!hasNextResult) {
+      parser.close() //close parser so that we skip past all the elements after the array
+    }
+    hasNextResult
   }
 
   def next() = {

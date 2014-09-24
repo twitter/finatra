@@ -9,7 +9,6 @@ import org.specs2.mock.Mockito
 
 class FinagleRequestScopeFilterTest
   extends FunSuite
-  with MustMatchers
   with Mockito {
 
   val service = mock[Service[Request, Response]]
@@ -19,7 +18,7 @@ class FinagleRequestScopeFilterTest
   val finagleScope = new FinagleRequestScope()
   val filter = new FinagleRequestScopeFilter(finagleScope)
 
-  test("TracingFilter: should trace Finagle version") {
+  test("call filter") {
     val composed = filter andThen service
     assert(
       Await.result(

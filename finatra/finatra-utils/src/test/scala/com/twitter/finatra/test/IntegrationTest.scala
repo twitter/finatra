@@ -23,7 +23,7 @@ trait IntegrationTest extends Test {
 
     assert(app.isGuiceApp)
     app.start()
-    app.injector.rawInjector.injectMembers(this)
+    app.injector.guiceInjector.injectMembers(this)
   }
 
   override protected def afterEach() {
@@ -37,7 +37,6 @@ trait IntegrationTest extends Test {
     }
 
     if (resetClearables) {
-      println("Clearable " + clearableObjects.mkString)
       for (clearableObject <- clearableObjects) {
         println("Clearing " + clearableObject)
         clearableObject.clear()

@@ -8,7 +8,7 @@ trait JsonWrappedValue[T] {
   self: Product =>
 
   assert(self.productArity == 1, "JsonWrappedValue can only be used on Case Classes w/ a single value")
-  private[finatra] val onlyValue: T = self.productElement(0).asInstanceOf[T]
+  val onlyValue: T = self.productElement(0).asInstanceOf[T]
 
   def asString =
     onlyValue.toString

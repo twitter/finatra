@@ -4,6 +4,13 @@ import com.twitter.finatra.utils.Logging
 
 object RouteParams {
   val empty = RouteParams()
+
+  def create(pathParams: Map[String, String]) = {
+    if (pathParams.isEmpty)
+      empty
+    else
+      RouteParams(pathParams)
+  }
 }
 
 case class RouteParams(

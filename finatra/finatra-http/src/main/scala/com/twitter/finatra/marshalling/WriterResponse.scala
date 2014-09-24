@@ -5,4 +5,4 @@ import com.google.common.net.MediaType
 case class WriterResponse(
   contentType: MediaType,
   body: Any,
-  headers: Map[String, String] = Map())
+  headers: Map[String, String] = Map.empty)

@@ -16,7 +16,7 @@ trait GuiceTwitterServer
   override final def main() {
     super.main() // Call GuiceApp.main() to create injector
 
-    info("Enabling health port.")
+    info("Enabling health port " + httpAdminPort)
     warmupComplete()
 
     info("Startup complete, server ready.")

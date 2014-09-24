@@ -11,18 +11,28 @@ import com.twitter.finatra.test.Banner._
 import com.twitter.finatra.utils.{Logging, RetryPolicyUtils}
 import com.twitter.scrooge.ThriftService
 import com.twitter.util._
+import org.scalatest.Matchers
 import org.scalatest.matchers.ShouldMatchers
 import scala.annotation.tailrec
 
+/**
+ * EmbeddedApp is used for testing App's locally.
+ *
+ * @param app The app to be started for testing
+ * @param clientFlags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar)
+ * @param resolverMap Resolver map entries (helper for creating the resolverMap clientFlag)
+ * @param extraArgs Extra command line arguments
+ * @param waitForWarmup Once the app is started, wait for App warmup to be completed.
+ * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
+ */
 class EmbeddedApp(
   app: App,
   clientFlags: Map[String, String] = Map(),
   resolverMap: Map[String, String] = Map(),
   extraArgs: Seq[String] = Seq(),
-  startServer: Boolean = false,
   waitForWarmup: Boolean = true,
-  runAppMain: Boolean = false)
-  extends ShouldMatchers
+  skipAppMain: Boolean = false)
+  extends Matchers
   with Logging {
 
   /* Fields */
@@ -35,12 +45,6 @@ class EmbeddedApp(
   private var startupFailed = false
   protected[finatra] var closed = false
   private var _mainResult: Future[Unit] = _
-
-  /* Constructor */
-
-  if (startServer) {
-    start()
-  }
 
   /* Override */
 
@@ -71,8 +75,8 @@ class EmbeddedApp(
   //NOTE: Start is called in various places to "lazily start the server" as needed
   def start() {
     if (!started) {
-      if (isGuiceApp && !runAppMain) {
-        guiceApp.autoRunAppMain = false
+      if (isGuiceApp && skipAppMain) {
+        guiceApp.runAppMain = false
       }
 
       runTwitterUtilAppMain()
@@ -165,7 +169,7 @@ class EmbeddedApp(
       }
 
       println("Waiting for warmup phases to complete...")
-      guiceApp.postWarmedUp
+      guiceApp.postWarmupComplete
     }
 
     if (!started.get()) {

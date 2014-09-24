@@ -1,15 +1,12 @@
 package com.twitter.finatra.logging
 
-import com.twitter.finatra.logging.FinagleMDCAdapter._
 import com.twitter.util.Local
 import java.util.{HashMap => JavaHashMap, Map => JavaMap}
 import org.slf4j.spi.MDCAdapter
 
-object FinagleMDCAdapter {
-  private val LocalMap = new Local[JavaMap[String, String]]
-}
-
 final class FinagleMDCAdapter extends MDCAdapter {
+
+  private[this] val local = new Local[JavaMap[String, String]]
 
   override def put(key: String, value: String) {
     if (key == null) {
@@ -21,36 +18,36 @@ final class FinagleMDCAdapter extends MDCAdapter {
   }
 
   override def get(key: String): String = {
-    (for (map <- LocalMap()) yield {
+    (for (map <- local()) yield {
       map.get(key)
-    }).getOrElse(null)
+    }).orNull
   }
 
   override def remove(key: String) {
-    for (map <- LocalMap()) {
+    for (map <- local()) {
       map.remove(key)
     }
   }
 
   override def clear() {
-    LocalMap.clear()
+    local.clear()
   }
 
   override def getCopyOfContextMap: JavaMap[String, String] = {
-    (for (map <- LocalMap()) yield {
+    (for (map <- local()) yield {
       new JavaHashMap[String, String](map)
     }).orNull
   }
 
   override def setContextMap(contextMap: JavaMap[String, String]) {
-    val newMap = new JavaHashMap[String, String](contextMap)
-    LocalMap.update(newMap)
+    val copiedMap = new JavaHashMap[String, String](contextMap)
+    local.update(copiedMap)
   }
 
   private def getOrCreateMap(): JavaMap[String, String] = {
-    LocalMap().getOrElse {
+    local().getOrElse {
       val newMap = new JavaHashMap[String, String]()
-      LocalMap.update(newMap)
+      local.update(newMap)
       newMap
     }
   }

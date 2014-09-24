@@ -5,6 +5,7 @@ import com.twitter.finatra.request.RouteParams
 import com.twitter.finatra.{Request => FinatraRequest}
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
+import org.apache.commons.lang.StringUtils._
 import org.jboss.netty.handler.codec.http.HttpMethod
 
 case class Route(
@@ -16,10 +17,18 @@ case class Route(
   responseClass: Class[_]) {
 
   private[this] val pattern = PathPattern(path)
+  private[this] val regexChars = Array('?', '[', ']', '\\', '^', '$', '{', '}', '*')
 
   /* Public */
 
-  lazy val captureNames = pattern.captureNames
+  val hasConstantPath = {
+    pattern.captureNames.isEmpty &&
+      containsNone(path, regexChars)
+  }
+
+  def captureNames = pattern.captureNames
+
+  def summary = method + " " + path
 
   def handle(request: Request): Option[Future[Response]] = {
     if (request.method != method)
@@ -27,7 +36,7 @@ case class Route(
     else
       for {
         pathParams <- pattern.extract(request.path)
-        finatraRequest = FinatraRequest(request, RouteParams(pathParams))
+        finatraRequest = FinatraRequest(request, RouteParams.create(pathParams))
       } yield callback(finatraRequest)
   }
 }

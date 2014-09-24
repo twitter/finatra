@@ -39,7 +39,7 @@ class StreamingJsonTest extends WordSpec with ShouldMatchers with Logging {
     val fileReader = createReader("/newline_delimited_keyed_ids.json")
     val streamResults: Iterator[JsonStreamParseResult[Long]] =
       mapper.streamParseDelimited[Long]('\n', "entity_ids", fileReader)
-    
+
     val numParsedIds = for (streamResult <- streamResults) yield {
       val keyName = streamResult.preArrayJsonNode.get("key").asText()
       keyName should startWith("cars")
@@ -50,6 +50,40 @@ class StreamingJsonTest extends WordSpec with ShouldMatchers with Logging {
     }
 
     numParsedIds.sum should be(60)
+  }
+
+  "newline delimited corner case where buffer boundry is between ] and }" in {
+    val fileReader = createReader("/newline_delimited_keyed_ids2.json")
+    val streamResults: Iterator[JsonStreamParseResult[Long]] =
+      mapper.streamParseDelimited[Long]('\n', "entity_ids", fileReader)
+
+    val numParsedIds = for (streamResult <- streamResults) yield {
+      val keyName = streamResult.preArrayJsonNode.get("key").asText()
+      keyName should startWith("POL")
+
+      (streamResult.arrayIterator map { entityId =>
+        println("Parsing id: " + entityId)
+      }).length
+    }
+
+    numParsedIds.sum should be(207)
+  }
+
+  "another newline delimited corner case where buffer boundary spanned two json objects" in {
+    val fileReader = createReader("/newline_delimited_keyed_ids3.json")
+
+    val streamResults: Iterator[JsonStreamParseResult[Long]] =
+      mapper.streamParseDelimited[Long]('\n', "entity_ids", fileReader)
+
+    /* create groups */
+    val groupIds = (for (streamResult <- streamResults) yield {
+      val keyName = streamResult.preArrayJsonNode.get("key").asText()
+      streamResult.arrayIterator.grouped(2000) map { ids =>
+        info("Posting group with key: %s and numIds: %s".format(keyName, ids.size))
+        Seq()
+      }
+    }).flatten.toSeq.distinct
+    info("Created %s groups: %s".format(groupIds.size, groupIds.mkString(",")))
   }
 
   "array of json objects" in {

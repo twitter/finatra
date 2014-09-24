@@ -40,7 +40,6 @@ case class EmbeddedTwitterServer(
   clientFlags: Map[String, String] = Map(),
   resolverMap: Map[String, String] = Map(),
   extraArgs: Seq[String] = Seq(),
-  startServer: Boolean = false,
   waitForWarmup: Boolean = true,
   defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
@@ -50,9 +49,8 @@ case class EmbeddedTwitterServer(
     clientFlags = clientFlags,
     resolverMap = resolverMap,
     extraArgs = extraArgs,
-    startServer = startServer,
     waitForWarmup = waitForWarmup,
-    runAppMain = true) {
+    skipAppMain = true) {
 
   /* Constructor */
 
@@ -271,6 +269,42 @@ case class EmbeddedTwitterServer(
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, HttpMethod.OPTIONS)
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+  }
+
+  def httpPatch(
+    path: String,
+    accept: MediaType = null,
+    headers: Map[String, String] = Map(),
+    suppress: Boolean = false,
+    andExpect: HttpResponseStatus = Status.Ok,
+    withLocation: String = null,
+    withBody: String = null,
+    withJsonBody: String = null,
+    withNormalizer: JsonNode => JsonNode = null,
+    withErrors: Seq[String] = null,
+    routeToAdminServer: Boolean = false,
+    secure: Option[Boolean] = None): Response = {
+
+    val request = createApiRequest(path, HttpMethod.PATCH)
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+  }
+
+  def httpHead(
+    path: String,
+    accept: MediaType = null,
+    headers: Map[String, String] = Map(),
+    suppress: Boolean = false,
+    andExpect: HttpResponseStatus = Status.Ok,
+    withLocation: String = null,
+    withBody: String = null,
+    withJsonBody: String = null,
+    withNormalizer: JsonNode => JsonNode = null,
+    withErrors: Seq[String] = null,
+    routeToAdminServer: Boolean = false,
+    secure: Option[Boolean] = None): Response = {
+
+    val request = createApiRequest(path, HttpMethod.HEAD)
     httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 

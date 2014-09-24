@@ -2,31 +2,33 @@ package com.twitter.finatra.benchmarks
 
 import com.twitter.finagle.http.{Response, Request => FinagleRequest}
 import com.twitter.finatra.Request
-import com.twitter.finatra.marshalling.MessageBodyManager
-import com.twitter.finatra.twitterserver.routing.Route
+import com.twitter.finatra.twitterserver.routing.{Route, RoutingController}
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.openjdk.jmh.annotations._
 
 @State(Scope.Thread)
-class RouteBenchmark {
+class RoutingControllerBenchmark {
 
   def defaultCallback(request: Request) = {
-    Future(Response())
+    Future.value(Response())
   }
 
   val route = Route(
-    method = HttpMethod.POST,
+    method = HttpMethod.GET,
     path = "/groups/",
     callback = defaultCallback,
     annotations = Seq(),
     requestClass = classOf[Request],
     responseClass = classOf[Response])
 
+  val routingContoller = new RoutingController(
+    routes = Seq(route))
+
   val getRequest = FinagleRequest("/groups/")
 
   @Benchmark
-  def testRouteWithoutPathParams() = {
-    route.handle(getRequest)
+  def testRoutingController1() = {
+    routingContoller.apply(getRequest)
   }
 }
