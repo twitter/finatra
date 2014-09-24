@@ -10,7 +10,7 @@ Get help on the [finatra-users](https://groups.google.com/forum/#!forum/finatra-
 class HelloWorld extends Controller {
 
   get("/hello/:name") { request =>
-    val name = request.routeParams("name").getOrElse("default user")
+    val name = request.routeParams.get("name").getOrElse("default user")
     render.plain("hello " + name).toFuture
   }
 
