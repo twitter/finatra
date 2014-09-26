@@ -95,6 +95,7 @@ class Router @Inject()(
   }
 
   def add(controller: Controller) = {
+    _injector.injectMembers(controller)
     controllers += controller
     this
   }

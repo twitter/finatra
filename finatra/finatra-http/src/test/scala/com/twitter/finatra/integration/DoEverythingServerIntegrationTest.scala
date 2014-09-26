@@ -539,5 +539,12 @@ class DoEverythingServerIntegrationTest extends HttpTest {
         andExpect = Ok,
         withBody = "patch")
     }
+
+    "non guice controller" in {
+      server.httpGet(
+        "/legacy",
+        andExpect = Ok,
+        withBody = "pong")
+    }
   }
 }

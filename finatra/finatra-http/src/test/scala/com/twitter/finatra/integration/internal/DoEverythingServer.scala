@@ -16,7 +16,8 @@ class DoEverythingServer extends FinatraServer {
   override def configure(router: Router) {
     router.
       filter[CommonFilters].
-      add[DoEverythingController]
+      add[DoEverythingController].
+      add(new NonGuiceController)
   }
 
   override def warmup() {
