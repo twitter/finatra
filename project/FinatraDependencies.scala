@@ -36,7 +36,7 @@ object FinatraDependencies {
   val log4j_over_slf4j = "org.slf4j" % "log4j-over-slf4j" % "1.6.1"
   val logback_classic = "ch.qos.logback" % "logback-classic" % "1.0.12"
   val mustache_compiler = "com.github.spullara.mustache.java" % "compiler" % "0.8.12.1"
-  val netty = "io.netty" % "netty" % "3.9.1.1.Final"
+  val netty = "io.netty" % "netty" % "3.9.4.Final"
   val scala_guice = "net.codingwell" %% "scala-guice" % "3.0.2"
   val slf4j_api = "org.slf4j" % "slf4j-api" % "1.7.7"
   val swagger_annotations = "com.wordnik" % "swagger-annotations" % "1.3.1"
