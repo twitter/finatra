@@ -28,28 +28,29 @@ class FinatraMustacheFactory(baseTemplatePath:String) extends DefaultMustacheFac
   }
 
   override def getReader(resourceName:String): Reader = {
+    val fileName = if (resourceName endsWith ".mustache") resourceName else resourceName+".mustache"
+
     if (!"development".equals(config.env())) {
-      super.getReader(resourceName)
+      super.getReader(fileName)
     }
     // In development mode, we look to the local file
     // system and avoid using the classloader which has
     // priority in DefaultMustacheFactory.getReader
     else {
-      val fileName = if (resourceName contains ".") resourceName else resourceName+".mustache"
       val basePath = combinePaths(config.docRoot(), config.templatePath())
-      val file:File = new File(basePath, fileName)
+      val file: File = new File(basePath, resourceName)
 
       if (file.exists() && file.isFile()) {
         try {
           new BufferedReader(new InputStreamReader(new FileInputStream(file),
-            Charsets.UTF_8));
+            Charsets.UTF_8))
         } catch {
-          case exception:FileNotFoundException =>
-            throw new MustacheException("Found Mustache file, could not open: " + file + " at path: " + basePath, exception)
+          case exception: FileNotFoundException =>
+            super.getReader(fileName)
         }
       }
       else {
-        throw new MustacheException("Mustache Template '" + resourceName + "' not found at " + file + " at path: " + basePath);
+        super.getReader(fileName)
       }
     }
   }
