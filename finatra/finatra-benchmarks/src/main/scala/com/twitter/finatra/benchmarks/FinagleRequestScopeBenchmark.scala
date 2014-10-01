@@ -1,7 +1,7 @@
 package com.twitter.finatra.benchmarks
 
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.authentication.filters.ClientAuthenticationRequestScopeFilter
+import com.twitter.finatra.***REMOVED***.authentication.filters.ClientAuthenticationRequestScopeFilter
 import com.twitter.finatra.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
 import com.twitter.finatra.twitterserver.routing.{Route, RoutingController}
 import com.twitter.finatra.{Request => FinatraRequest}

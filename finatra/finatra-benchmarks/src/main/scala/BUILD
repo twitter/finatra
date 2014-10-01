@@ -6,8 +6,8 @@ scala_library(name='scala',
   ),
   dependencies=[
     '3rdparty/jvm/org/openjdk/jmh:jmh-core',
-    'finatra/finatra-internal/finatra-internal-authentication',
-    'finatra/finatra-internal/finatra-internal-http'
+    'finatra/finatra-internal/finatra-internal-http',
+***REMOVED***
   ],
   sources=rglobs('*.scala'),
   java_sources=[
