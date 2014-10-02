@@ -20,7 +20,7 @@
     <!-- Finatra -->
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra-internal-http</artifactId>
+***REMOVED***
       <version>2.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
