@@ -6,8 +6,8 @@ scala_library(name='scala',
   ),
   dependencies=[
     '3rdparty/jvm/org/openjdk/jmh:jmh-core',
-***REMOVED***
-***REMOVED***
+    'finatra/***REMOVED***',
+    'finatra/***REMOVED***'
   ],
   sources=rglobs('*.scala'),
   java_sources=[
