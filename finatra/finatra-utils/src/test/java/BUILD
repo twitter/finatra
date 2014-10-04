@@ -2,8 +2,7 @@ junit_tests(name='tests',
   dependencies=[
     '3rdparty:junit',
     '3rdparty:mockito-all',
-    'finatra/finatra/finatra-utils',
-    'finatra/finatra/finatra-utils/src/test/java'
+    'finatra/finatra/finatra-utils'
   ],
   sources=rglobs('*.java'),
   resources=[

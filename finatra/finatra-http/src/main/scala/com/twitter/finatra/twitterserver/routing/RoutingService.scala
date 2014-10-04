@@ -6,7 +6,7 @@ import com.twitter.finatra.utils.Logging
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod._
 
-class RoutingController(
+class RoutingService(
   routes: Seq[Route],
   notFoundService: Service[Request, Response] = new NotFoundService)
   extends Service[Request, Response]

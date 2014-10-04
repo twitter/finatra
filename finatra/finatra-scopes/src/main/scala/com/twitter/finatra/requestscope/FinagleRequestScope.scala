@@ -1,6 +1,5 @@
 package com.twitter.finatra.requestscope
 
-import com.google.common.collect.Maps
 import com.google.inject._
 import com.google.inject.internal.CircularDependencyProxy
 import com.twitter.util.Local
@@ -13,10 +12,10 @@ import net.codingwell.scalaguice._
  *
  * @see https://github.com/google/guice/wiki/CustomScopes
  */
-final class FinagleRequestScope extends Scope {
+class FinagleRequestScope extends Scope {
 
   private[this] val local = new Local[JMap[Key[_], AnyRef]]
-  private[this] val scopeName = "FinagleRequestScope"
+  private val scopeName = "FinagleRequestScope"
 
   /* Public Overrides */
 
@@ -45,11 +44,9 @@ final class FinagleRequestScope extends Scope {
 
   /**
    * Start the 'request scope'
-   *
-   * TODO: Add following assertion once a proper "Future context" can be started during HTTP warmup:
-   * assert(local().isEmpty, "A FinagleRequestScope is already in progress")
    */
   def enter() {
+    assert(local().isEmpty, "A FinagleRequestScope is already in progress")
     local.update(new JHashMap[Key[_], AnyRef]())
   }
 
@@ -66,7 +63,13 @@ final class FinagleRequestScope extends Scope {
       overwrite = overwrite)
   }
 
-  /** Seed/Add an object into the 'request scope' */
+  /**
+   * Seed/Add an object into the 'request scope'
+   *
+   * @param key Key of value to be added
+   * @param value Value to seed/add into the request scope
+   * @param overwrite Whether to overwrite an existing value already in the request scope (defaults to false)
+   */
   def seed[T <: AnyRef](key: Key[T], value: T, overwrite: Boolean = false) {
     val scopedObjects = getScopedObjectMap(key)
 
@@ -101,7 +104,7 @@ final class FinagleRequestScope extends Scope {
   }
 
   // For details on CircularDependencyProxy, see https://github.com/google/guice/issues/843#issuecomment-54749202
-  private[this] def unscopedObject[T](key: Key[T], unscoped: Provider[T], scopedObjects: JMap[Key[_], Object]): T = {
+  private def unscopedObject[T](key: Key[T], unscoped: Provider[T], scopedObjects: JMap[Key[_], Object]): T = {
     val unscopedObject = unscoped.get()
 
     // don't remember proxies; these exist only to serve circular dependencies

@@ -187,7 +187,7 @@
     <module>finatra-httpclient</module>
     <module>finatra-jackson</module>
     <module>finatra-logback</module>
-    <module>finatra-parent</module>
+    <module>finatra-service-parent</module>
     <module>finatra-scopes</module>
     <module>finatra-server</module>
     <module>finatra-utils</module>

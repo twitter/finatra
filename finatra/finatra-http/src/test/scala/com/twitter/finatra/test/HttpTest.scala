@@ -114,12 +114,16 @@ trait HttpTest extends Test with TestMapper {
     injector.instance[Service[FinagleRequest, Response], Ann].asInstanceOf[InMemoryHttpService]
   }
 
-  def assertHealthOk(server: EmbeddedTwitterServer) = {
+  def assertHealth(server: EmbeddedTwitterServer, healthy: Boolean = true) = {
+    server.start()
+    assert(server.twitterServer.httpAdminPort != 0)
+    val expectedBody = if(healthy) "OK\n" else ""
+
     server.httpGet(
       "/health",
       routeToAdminServer = true,
       andExpect = Status.Ok,
-      withBody = "OK\n")
+      withBody = expectedBody)
 
     server
   }

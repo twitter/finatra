@@ -28,12 +28,12 @@ class Router @Inject()(
 
     val adminService = {
       val combinedFilters = internalFilters reduce {_ andThen _}
-      combinedFilters andThen new RoutingController(adminRoutes)
+      combinedFilters andThen new RoutingService(adminRoutes)
     }
 
     val externalService = {
       val combinedExternalFilters = externalFilters reduce {_ andThen _}
-      combinedExternalFilters andThen new RoutingController(externalRoutes, externalNotFoundService)
+      combinedExternalFilters andThen new RoutingService(externalRoutes, externalNotFoundService)
     }
 
     Services(

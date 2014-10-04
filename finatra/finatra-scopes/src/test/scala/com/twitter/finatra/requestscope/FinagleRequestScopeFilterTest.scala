@@ -11,21 +11,24 @@ class FinagleRequestScopeFilterTest
   extends FunSuite
   with Mockito {
 
-  val service = mock[Service[Request, Response]]
-  val response = Response()
-  service(any[Request]) returns Future.value(response)
+  val finagleRequestScope = mock[FinagleRequestScope]
+  val response = mock[Response]
+  val filter = new FinagleRequestScopeFilter(finagleRequestScope)
 
-  val finagleScope = new FinagleRequestScope()
-  val filter = new FinagleRequestScopeFilter(finagleScope)
+  test("verify enter and exit are called") {
+    val service = Service.mk[Request, Response] { request: Request =>
+      there was one(finagleRequestScope).enter()
+      there was no(finagleRequestScope).exit()
+      Future(response)
+    }
 
-  test("call filter") {
     val composed = filter andThen service
-    assert(
-      Await.result(
-        composed(Request())) === response)
 
     assert(
       Await.result(
         composed(Request())) === response)
+
+    there was one(finagleRequestScope).enter()
+    there was one(finagleRequestScope).exit()
   }
 }

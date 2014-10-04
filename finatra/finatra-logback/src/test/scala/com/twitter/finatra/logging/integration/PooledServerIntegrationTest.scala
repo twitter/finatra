@@ -14,8 +14,8 @@ class PooledServerIntegrationTest extends HttpTest {
         server.httpGet("/hi?id=" + i, andExpect = Ok)
       }
 
-      //wait for forked future logging
-      Thread.sleep(10000)
+      //When manually testing, uncomment the next line to wait for forked future logging
+      //Thread.sleep(10000)
     }
   }
 }

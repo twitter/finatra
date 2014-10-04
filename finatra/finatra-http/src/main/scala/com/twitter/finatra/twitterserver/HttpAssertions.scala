@@ -2,14 +2,17 @@ package com.twitter.finatra.twitterserver
 
 import com.twitter.finagle.http._
 import com.twitter.finatra.twitterserver.routing.{NotFoundService, Router}
-import com.twitter.finatra.utils.Logging
-import com.twitter.util.{Await, Future}
+import com.twitter.finatra.utils.{FuturePoolUtils, Logging}
+import com.twitter.util.{ExecutorServiceFuturePool, FuturePool, Await, Future}
 import javax.inject.Inject
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpResponseStatus}
 
 class HttpAssertions @Inject()(
   router: Router)
   extends Logging {
+
+  /* Use a "future pool" to start the first Future in the "Future chain" */
+  private val pool = FuturePoolUtils.fixedPool("HTTP Warmup", 1).asInstanceOf[ExecutorServiceFuturePool]
 
   /* Public */
 
@@ -45,21 +48,29 @@ class HttpAssertions @Inject()(
       routeToAdminServer)
   }
 
+  def close() = {
+    pool.executor.shutdownNow()
+  }
+
   /* Private */
 
   private def send(request: Request, expectedStatus: HttpResponseStatus, expectedBody: String, routeToAdminServer: Boolean) {
-    val httpResponse = Await.result(executeRequest(request, routeToAdminServer))
-    val response = Response(httpResponse)
+    val nettyResponseFuture = pool {
+      executeRequest(request, routeToAdminServer)
+    }.flatten
+
+    val finagleResponse = Response(
+      Await.result(nettyResponseFuture))
 
     assert(
-      expectedStatus == null || response.status == expectedStatus,
-      "Sent " + request + " and expected " + expectedStatus + " but received " + response.status)
+      expectedStatus == null || finagleResponse.status == expectedStatus,
+      "Sent " + request + " and expected " + expectedStatus + " but received " + finagleResponse.status)
 
     assert(
-      expectedBody == null || response.contentString == expectedBody,
-      "Sent " + request + " and expected body " + expectedBody + " but received \"" + response.contentString + "\"")
+      expectedBody == null || finagleResponse.contentString == expectedBody,
+      "Sent " + request + " and expected body " + expectedBody + " but received \"" + finagleResponse.contentString + "\"")
 
-    info("Sent " + request + " and received " + response.status)
+    info("Sent " + request + " and received " + finagleResponse.status)
   }
 
   // Check Finatra's Admin RoutingController before checking the global HttpMuxer
@@ -67,16 +78,20 @@ class HttpAssertions @Inject()(
   private def executeRequest(request: Request, routeToAdminServer: Boolean): Future[HttpResponse] = {
     request.headers().set("Host", "127.0.0.1") /* Mutation */
 
-    if (request.uri.startsWith("/admin") || routeToAdminServer) {
-      router.services.adminService(request) flatMap { response =>
-        if (isAdminRoutingControllerNotFound(request, response))
-          HttpMuxer(request)
-        else
-          Future(response)
-      }
-    }
-    else {
+    if (request.uri.startsWith("/admin") || routeToAdminServer)
+      executeAdminRequest(request)
+    else
       router.services.externalService(request)
+  }
+
+  private def executeAdminRequest(request: Request): Future[HttpResponse] = {
+    router.services.adminService(request) flatMap { response =>
+      if (isAdminRoutingControllerNotFound(request, response)) {
+        HttpMuxer(request)
+      }
+      else {
+        Future.value(response)
+      }
     }
   }
 

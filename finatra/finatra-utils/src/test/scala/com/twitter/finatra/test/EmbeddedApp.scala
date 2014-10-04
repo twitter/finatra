@@ -3,17 +3,15 @@ package com.twitter.finatra.test
 import com.google.inject.util.Types
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.app.App
-import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.guice.GuiceApp
 import com.twitter.finatra.test.Banner._
+import com.twitter.finatra.utils.RetryUtils.retry
 import com.twitter.finatra.utils.{Logging, RetryPolicyUtils}
 import com.twitter.scrooge.ThriftService
 import com.twitter.util._
 import org.scalatest.Matchers
-import org.scalatest.matchers.ShouldMatchers
-import scala.annotation.tailrec
 
 /**
  * EmbeddedApp is used for testing App's locally.
@@ -64,6 +62,7 @@ class EmbeddedApp(
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
 
   def mainResult = {
+    start()
     if (_mainResult == null) {
       throw new Exception("Server needs to be started by calling EmbeddedApp#start()")
     }
@@ -159,7 +158,7 @@ class EmbeddedApp(
 
   private lazy val waitForStartupRetryPolicy = RetryPolicyUtils.constantRetry[Boolean](
     start = 1.second,
-    numRetries = 25,
+    numRetries = 300,
     shouldRetry = {case Return(started) => !started})
 
   def waitForWarmupComplete() {
@@ -177,7 +176,7 @@ class EmbeddedApp(
     }    
     logAppStartup()
   }
-  
+
   protected def logAppStartup() = {
     banner("App warmup completed (" + appName + ")")
   }
@@ -211,17 +210,5 @@ class EmbeddedApp(
   private def isModuleLoaded(name: String): Boolean = {
     isGuiceApp &&
       (guiceApp.requiredModules.mkString contains name)
-  }
-
-  @tailrec
-  private def retry[T](retryPolicy: RetryPolicy[Try[T]])(func: => T): Try[T] = {
-    val result = Try(func)
-    retryPolicy(result) match {
-      case Some((sleepTime, nextPolicy)) =>
-        Thread.sleep(sleepTime.inMillis)
-        retry(nextPolicy)(func)
-      case None =>
-        result
-    }
   }
 }

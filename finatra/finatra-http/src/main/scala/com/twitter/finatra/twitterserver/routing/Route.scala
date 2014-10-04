@@ -2,11 +2,16 @@ package com.twitter.finatra.twitterserver.routing
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.request.RouteParams
+import com.twitter.finatra.twitterserver.routing.Route.regexChars
 import com.twitter.finatra.{Request => FinatraRequest}
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import org.apache.commons.lang.StringUtils._
 import org.jboss.netty.handler.codec.http.HttpMethod
+
+object Route {
+  private val regexChars = Array('?', '[', ']', '\\', '^', '$', '{', '}', '*')
+}
 
 case class Route(
   method: HttpMethod,
@@ -17,7 +22,6 @@ case class Route(
   responseClass: Class[_]) {
 
   private[this] val pattern = PathPattern(path)
-  private[this] val regexChars = Array('?', '[', ']', '\\', '^', '$', '{', '}', '*')
 
   /* Public */
 

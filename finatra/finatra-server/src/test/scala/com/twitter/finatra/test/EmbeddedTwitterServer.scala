@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.finagle.http._
+import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.{ChannelClosedException, Service}
 import com.twitter.finatra.FinatraRawServer
 import com.twitter.finatra.conversions.json._
@@ -70,8 +71,7 @@ case class EmbeddedTwitterServer(
 
   protected lazy val httpAdminClient = createHttpClient(
     "httpAdminClient",
-    twitterServer.httpAdminPort,
-    requestTimeout = 120.seconds)
+    twitterServer.httpAdminPort)
 
   override protected def logAppStartup {
     banner(
@@ -334,6 +334,51 @@ case class EmbeddedTwitterServer(
       secure = secure.getOrElse(defaultHttpSecure))
   }
 
+  /* Protected */
+
+  override protected def combineArgs() = {
+    standardArgs ++ httpArgs ++ super.combineArgs
+  }
+
+  protected def createHttpClient(
+    name: String,
+    port: Int,
+    tcpConnectTimeout: Duration = 60.seconds,
+    connectTimeout: Duration = 60.seconds,
+    requestTimeout: Duration = 120.seconds,
+    retryPolicy: RetryPolicy[Try[Any]] = httpRetryPolicy,
+    secure: Boolean = false): Service[Request, Response] = {
+
+    val builder = ClientBuilder()
+      .name(name)
+      .codec(RichHttp[Request](Http()))
+      .tcpConnectTimeout(tcpConnectTimeout.toTwitterDuration)
+      .connectTimeout(connectTimeout.toTwitterDuration)
+      .requestTimeout(requestTimeout.toTwitterDuration)
+      .hosts(new InetSocketAddress("localhost", port))
+      .hostConnectionLimit(75)
+      .retryPolicy(retryPolicy)
+
+    if (secure)
+      builder.tlsWithoutValidation().build()
+    else
+      builder.build()
+  }
+
+  protected def httpRetryPolicy: RetryPolicy[Try[Any]] = {
+    // go/jira/CSL-565 TwitterServer regularly closing connections
+    val connectionClosedExceptions: PartialFunction[Try[Any], Boolean] = {
+      case Throw(e: ChannelClosedException) =>
+        println("Retrying ChannelClosedException")
+        true
+    }
+
+    RetryPolicyUtils.constantRetry(
+      start = 1.second,
+      numRetries = 10,
+      shouldRetry = connectionClosedExceptions)
+  }
+
   /* Private */
 
   private def httpExecute(
@@ -442,38 +487,11 @@ case class EmbeddedTwitterServer(
     }
   }
 
-  /* Make sure health returns OK three times in a row */
-  def isHealthy: Boolean = {
-    start()
-
-    twitterServer.httpAdminPort != 0 &&
-      healthOk() &&
-      healthOk() &&
-      healthOk()
-  }
-
-  private def healthOk(): Boolean = {
-    Thread.sleep(50)
-    try {
-      val response = httpGet(
-        "/health",
-        routeToAdminServer = true,
-        andExpect = Status.Ok)
-
-      response.contentString == "OK\n"
-    }
-    catch {
-      case NonFatal(e) =>
-        error("Error checking health of server " + appName, e)
-        throw e
-    }
-  }
-
-  def standardArgs = Array(
+  private def standardArgs = Array(
     "-admin.port=:0",
     "-log.level=INFO")
 
-  def httpArgs = {
+  private def httpArgs = {
     if (isHttpServer)
       Seq("-http.port=:0")
     else
@@ -482,10 +500,6 @@ case class EmbeddedTwitterServer(
 
   private def isHttpServer = {
     isFinatraRawServer
-  }
-
-  override def combineArgs() = {
-    standardArgs ++ httpArgs ++ super.combineArgs
   }
 
   private def addHeaders(request: Request, headers: Map[String, String]) {
@@ -499,7 +513,7 @@ case class EmbeddedTwitterServer(
     createRequest(method, pathToUse)
   }
 
-  def createRequest(method: HttpMethod, pathToUse: String): Request = {
+  private def createRequest(method: HttpMethod, pathToUse: String): Request = {
     val request = Request(method, pathToUse)
     request.headers.set("Host", "localhost.twitter.com")
 ***REMOVED***
@@ -525,35 +539,6 @@ case class EmbeddedTwitterServer(
         println("ERROR in request: " + request + " " + e + " in " + elapsed().inUnit(MILLISECONDS) + " ms")
         throw e
     }
-  }
-
-  private def createHttpClient(name: String, port: Int, requestTimeout: Duration = 120.seconds, secure: Boolean = false): Service[Request, Response] = {
-    // go/jira/CSL-565 TwitterServer regularly closing connections
-    val connectionClosedExceptions: PartialFunction[Try[Any], Boolean] = {
-      case Throw(e: ChannelClosedException) =>
-        println("Retrying ChannelClosedException")
-        true
-    }
-
-    val retryPolicy = RetryPolicyUtils.constantRetry(
-      start = 1.second,
-      numRetries = 10,
-      shouldRetry = connectionClosedExceptions)
-
-    val builder = ClientBuilder()
-      .name(name)
-      .codec(RichHttp[Request](Http()))
-      .tcpConnectTimeout(30.seconds.toTwitterDuration)
-      .connectTimeout(30.seconds.toTwitterDuration)
-      .requestTimeout(requestTimeout.toTwitterDuration)
-      .hosts(new InetSocketAddress("localhost", port))
-      .hostConnectionLimit(75)
-      .retryPolicy(retryPolicy)
-
-    if (secure)
-      builder.tlsWithoutValidation().build()
-    else
-      builder.build()
   }
 
   private def normalizeURL(path: String) = {

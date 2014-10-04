@@ -2,7 +2,7 @@ package com.twitter.finatra.test
 
 import com.twitter.finagle.http.{Method, Response, Request => FinagleRequest}
 import com.twitter.finatra.request.RouteParams
-import com.twitter.finatra.twitterserver.routing.RoutingController
+import com.twitter.finatra.twitterserver.routing.RoutingService
 import com.twitter.finatra.{Controller, Request}
 import com.twitter.util.{Await, Future}
 
@@ -13,7 +13,7 @@ abstract class ControllerTest extends HttpTest {
   val controller: Controller
 
   lazy val routingController =
-    new RoutingController(controller.routes)
+    new RoutingService(controller.routes)
 
   protected def performGet(uri: String): Future[Response] = {
     routingController(getRequest(uri))

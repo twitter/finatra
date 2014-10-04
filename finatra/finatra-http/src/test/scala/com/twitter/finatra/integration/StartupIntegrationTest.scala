@@ -17,7 +17,7 @@ class StartupIntegrationTest extends HttpTest {
   "startup" should {
     "ensure health check succeeds when guice config is good" in {
       val server = EmbeddedTwitterServer(SimpleGuiceHttpTwitterServer)
-      server.isHealthy should equal(true)
+      assertHealth(server)
 
       //We can no longer directly get the json, since it's now embedded in HTML :-/
       server.httpGet(
@@ -28,10 +28,11 @@ class StartupIntegrationTest extends HttpTest {
     }
 
     "non HTTP twitter-server passes health check" in {
-      val server = assertHealthOk(
-        EmbeddedTwitterServer(
-          SimpleGuiceTwitterServer))
+      val server = EmbeddedTwitterServer(
+        SimpleGuiceTwitterServer)
 
+      server.start()
+      assertHealth(server)
       server.close()
     }
 
@@ -40,7 +41,8 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = FailFastServer,
         waitForWarmup = false)
 
-      server.isHealthy should equal(false)
+      server.start()
+      server.guiceApp.postWarmupComplete should equal(false)
       assertFailedFuture[StartupTestException](server.mainResult)
     }
 
@@ -49,8 +51,9 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = GuiceStartupHangsServer,
         waitForWarmup = false)
 
+      server.start()
       Thread.sleep(2000) //since the guice module hangs forever, we simply make sure we aren't healthy after 2 seconds...
-      server.isHealthy should equal(false)
+      assertHealth(server, healthy = false)
       server.close()
     }
 
@@ -59,8 +62,8 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = PremainExceptionServer,
         waitForWarmup = false)
 
-      server.isHealthy should equal(false)
-      assertFailedFuture[StartupTestException](server.mainResult)
+      assertFailedFuture[StartupTestException](
+        server.mainResult)
     }
 
     "ensure startup fails when preMain throws exception" in {
@@ -68,8 +71,8 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = ServerPremainException,
         waitForWarmup = false)
 
-      server.isHealthy should equal(false)
-      assertFailedFuture[StartupTestException](server.mainResult)
+      assertFailedFuture[StartupTestException](
+        server.mainResult)
     }
 
     "ensure http server starts after warmup" in {
@@ -93,12 +96,12 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = new WarmupServer,
         waitForWarmup = false)
 
-      server.isHealthy should equal(false)
+      assertHealth(server, healthy = false)
       sleep(3.seconds, verbose = true)
-      server.isHealthy should equal(false)
+      assertHealth(server, healthy = false)
       continueWarmup = false
       sleep(3.seconds, verbose = true)
-      server.isHealthy should equal(true)
+      assertHealth(server)
     }
 
     "calling GuiceModule.install throws exception" in {
@@ -106,8 +109,8 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = ServerWithGuiceModuleInstall,
         waitForWarmup = false)
 
-      server.isHealthy should equal(false)
-      assertFailedFuture[Exception](server.mainResult)
+      assertFailedFuture[Exception](
+        server.mainResult)
     }
   }
 }
