@@ -21,6 +21,7 @@ class RequestScopeIntegrationTest extends HttpTest {
     twitterServer = new PooledServer)
 
   "request scope propagates to multiple future pools" in {
+    pending
     server.httpGet(
       "/hi?msg=hello",
       headers = Map("Username" -> "Bob"),
