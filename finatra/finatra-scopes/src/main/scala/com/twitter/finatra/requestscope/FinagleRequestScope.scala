@@ -44,9 +44,9 @@ class FinagleRequestScope extends Scope {
 
   /**
    * Start the 'request scope'
+   * TODO (JIRA-474): assert local().isEmpty
    */
   def enter() {
-    assert(local().isEmpty, "A FinagleRequestScope is already in progress")
     local.update(new JHashMap[Key[_], AnyRef]())
   }
 
