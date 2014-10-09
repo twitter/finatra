@@ -2,7 +2,7 @@ scala_library(name='scala',
   provides = scala_artifact(
     org = 'com.twitter',
     name = 'finatra-scopes',
-    repo = 'pants-support/ivy:internal',
+    repo = artifactory,
   ),
   dependencies=[
     '3rdparty:javax.inject',
