@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.twitter</groupId>
   <artifactId>finatra</artifactId>
-  <version>1.5.4-SNAPSHOT</version>
+  <version>1.5.4</version>
   <name>${project.artifactId}</name>
   <description>Sinatra clone on top of finagle-http</description>
   <inceptionYear>2012</inceptionYear>
@@ -85,12 +85,7 @@
     <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>twitter-server_2.10</artifactId>
-      <version>1.6.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.twitter</groupId>
-      <artifactId>finagle-stats_2.10</artifactId>
-      <version>6.13.1</version>
+      <version>1.7.1</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -165,7 +160,7 @@
       <plugin>
         <groupId>org.scalatest</groupId>
         <artifactId>scalatest-maven-plugin</artifactId>
-        <version>1.0-M2</version>
+        <version>1.0</version>
         <executions>
           <execution>
             <id>test</id>
@@ -200,6 +195,45 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.3.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.eluder.coveralls</groupId>
+        <artifactId>coveralls-maven-plugin</artifactId>
+        <version>2.2.0</version>
+        <configuration>
+          <sourceDirectory>src/main/scala</sourceDirectory>
+          <serviceName>travis-ci</serviceName>
+        </configuration>
+        <executions>
+          <execution>
+            <id>coveralls-jacoco</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jacoco</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.7.1.201405082137</version>
+        <executions>
+          <execution>
+            <id>jacoco-initialize</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+            </execution>
+            <execution>
+              <id>jacoco-report</id>
+              <phase>prepare-package</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+          </execution>
+        </executions>
       </plugin>
       <!--<plugin>-->
       <!--<groupId>com.cloudbees</groupId>-->

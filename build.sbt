@@ -2,7 +2,7 @@ name := "finatra"
 
 organization := "com.twitter"
 
-version := "1.5.4-SNAPSHOT"
+version := "1.5.4"
 
 scalaVersion := "2.10.3"
 
@@ -11,8 +11,7 @@ crossScalaVersions := Seq("2.9.2", "2.10.3")
 //Main
 
 libraryDependencies ++= Seq(
-  "com.twitter" %% "twitter-server" % "1.6.1",
-  "com.twitter" %% "finagle-stats" % "6.13.1",
+  "com.twitter" %% "twitter-server" % "1.7.1",
   "commons-io" % "commons-io" % "1.3.2",
   "org.scalatest" %% "scalatest" % "1.9.2",
   "com.google.code.findbugs" % "jsr305" % "2.0.1",
@@ -20,6 +19,11 @@ libraryDependencies ++= Seq(
   "com.github.spullara.mustache.java" % "compiler" % "0.8.14",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
 )
+
+// for code coverage
+instrumentSettings 
+
+coverallsSettings
 
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 
@@ -30,6 +34,8 @@ resolvers +=
 
 resolvers +=
   "Local Maven Repository" at "file:///"+Path.userHome+"/.m2/repository"
+
+resolvers += Classpaths.sbtPluginReleases
 
 publishMavenStyle := true
 
