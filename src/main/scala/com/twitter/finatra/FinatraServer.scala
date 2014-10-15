@@ -16,10 +16,10 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse, HttpMuxer}
+import com.twitter.finagle.http.codec.HttpServerDispatcher
 import com.twitter.finagle._
 import java.lang.management.ManagementFactory
 import com.twitter.util.{Future, Await}
-import org.jboss.netty.handler.codec.http.{HttpResponse, HttpRequest}
 import com.twitter.finagle.netty3.{Netty3ListenerTLSConfig, Netty3Listener}
 import java.net.SocketAddress
 import com.twitter.conversions.storage._
@@ -54,11 +54,6 @@ class FinatraServer extends FinatraTwitterServer {
     start()
   }
 
-  private[this] val nettyToFinagle =
-    Filter.mk[HttpRequest, HttpResponse, FinagleRequest, FinagleResponse] { (req, service) =>
-      service(FinagleRequest(req)) map { _.httpResponse }
-    }
-
   private[this] lazy val service = {
     val appService  = new AppService(controllers)
     val fileService = new FileService
@@ -67,7 +62,7 @@ class FinatraServer extends FinatraTwitterServer {
     addFilter(loggingFilter)
     addFilter(fileService)
 
-    nettyToFinagle andThen allFilters(appService)
+    allFilters(appService)
   }
 
   private[this] lazy val codec = {
@@ -93,18 +88,18 @@ class FinatraServer extends FinatraTwitterServer {
   def startSecureServer() {
     val tlsConfig =
       Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
-    object HttpsListener extends Netty3Listener[HttpResponse, HttpRequest]("https", codec, tlsConfig = tlsConfig)
-    object HttpsServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
-      "https", HttpsListener, new SerialServerDispatcher(_, _)
+    object HttpsListener extends Netty3Listener[Any, Any]("https", codec, tlsConfig = tlsConfig)
+    object HttpsServer extends DefaultServer[FinagleRequest, FinagleResponse, Any, Any](
+      "https", HttpsListener, new HttpServerDispatcher(_, _)
     )
     log.info("https server started on port: " + config.sslPort())
     secureServer = Some(HttpsServer.serve(config.sslPort(), service))
   }
 
   def startHttpServer() {
-    object HttpListener extends Netty3Listener[HttpResponse, HttpRequest]("http", codec)
-    object HttpServer extends DefaultServer[HttpRequest, HttpResponse, HttpResponse, HttpRequest](
-      "http", HttpListener, new SerialServerDispatcher(_, _)
+    object HttpListener extends Netty3Listener[Any, Any]("http", codec)
+    object HttpServer extends DefaultServer[FinagleRequest, FinagleResponse, Any, Any](
+      "http", HttpListener, new HttpServerDispatcher(_, _)
     )
     log.info("http server started on port: " + config.port())
     server = Some(HttpServer.serve(config.port(), service))
