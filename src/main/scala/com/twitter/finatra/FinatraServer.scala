@@ -107,7 +107,7 @@ class FinatraServer extends FinatraTwitterServer {
 
   def startAdminServer() {
     log.info("admin http server started on port: " + config.adminPort())
-    adminServer = Some(HttpServer.serve(config.adminPort(), HttpMuxer))
+    adminServer = Some(Http.serve(config.adminPort(), HttpMuxer))
   }
 
   def stop() {
