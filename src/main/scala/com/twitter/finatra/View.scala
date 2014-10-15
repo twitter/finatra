@@ -86,7 +86,7 @@ abstract class View extends Callable[String] {
   var baseTemplatePath: String        = View.templatePath
   var contentType: Option[String]     = None
   def mustache: Mustache              = factory.compile(
-    new InputStreamReader(FileResolver.getInputStream(templatePath)), "template"
+    new InputStreamReader(FileResolver.getInputStream(templatePath)), template
   )
 
   def render: String = {
