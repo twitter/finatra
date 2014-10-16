@@ -104,12 +104,12 @@
     <dependency>
       <groupId>com.twitter.common</groupId>
       <artifactId>util</artifactId>
-      <version>0.0.107</version>
+      <version>0.0.109</version>
     </dependency>
     <dependency>
       <groupId>com.twitter.common</groupId>
       <artifactId>collections</artifactId>
-      <version>0.0.87</version>
+      <version>0.0.90</version>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
