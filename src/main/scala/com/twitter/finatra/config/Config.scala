@@ -32,4 +32,4 @@ object docRoot         extends GlobalFlag[String]("src/main/resources", "path to
 object maxRequestSize  extends GlobalFlag[Int](5, "maximum request size (in megabytes)")
 object certificatePath extends GlobalFlag[String]("", "path to SSL certificate")
 object keyPath         extends GlobalFlag[String]("", "path to SSL key")
-
+object showDirectories extends GlobalFlag[Boolean](true, "allow directory view in asset path")

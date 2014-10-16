@@ -87,4 +87,17 @@ class FileServiceSpec extends ShouldSpec {
       System.setProperty("com.twitter.finatra.config.env", "development")
     }
   }
+
+  "looking up a directory" should "return a non-empty, html response" in {
+    val r  = FinagleRequest("/components")
+    val response = fileService(r, NullService)
+    Await.result(response).contentType should equal(Some("text/html"))
+    Await.result(response).contentLength should not equal(Some(0))
+  }
+
+  "looking up / " should "not serve a file" in {
+    val r  = FinagleRequest("/")
+    val response = fileService(r, NullService)
+    response should not be(None)
+  }
 }

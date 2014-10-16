@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <style>
+        /* apache.org/icons */
+        .icon-folder {
+            width: 30px;
+            height: 20px;
+            position: relative;
+            top: 2px;
+            display: inline-block;
+            background:
+                url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWBAMAAAAyb6E1AAAAElBMVEX/////zJnM//+ZZjMzMzMAAADCEvqoAAAAA3RSTlP//wDXyg1BAAAAAWJLR0QAiAUdSAAAAFJJREFUCFtjUIIDBsLMUCCAMFUFgSAIzAwEMUVDQ4OUGIJBTEMgDyhqDARAnnAQRAEQGLvCmcKuVBYVhgJXBlVjCDBxZVAKcYGAEAYl1VAIcAIAfgAgxXnPTZkAAABWdEVYdGNvbW1lbnQAVGhpcyBhcnQgaXMgaW4gdGhlIHB1YmxpYyBkb21haW4uIEtldmluIEh1Z2hlcywga2V2aW5oQGVpdC5jb20sIFNlcHRlbWJlciAxOTk1dvbvnAAAAABJRU5ErkJggg==")
+                no-repeat left center;
+        }
+
+
+        .icon-file {
+            width: 30px;
+            height: 22px;
+            position: relative;
+            top: 4px;
+            display: inline-block;
+            background:
+                url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWBAMAAAAyb6E1AAAAD1BMVEX////M//+ZmZkzMzMAAABVsTOVAAAAAnRSTlP/AOW3MEoAAAABYktHRACIBR1IAAAAQklEQVQIW73GQQ2AQAxFwReKgVrYIIDmV0L9a+JAN0UBcxokSQp35wYwmxJTmxLdMzN3q6rLsa5dPuX3ar3S8Wr+AGUJDlQ5d35cAAAAVnRFWHRjb21tZW50AFRoaXMgYXJ0IGlzIGluIHRoZSBwdWJsaWMgZG9tYWluLiBLZXZpbiBIdWdoZXMsIGtldmluaEBlaXQuY29tLCBTZXB0ZW1iZXIgMTk5NXb275wAAAAASUVORK5CYII=")
+                no-repeat left center;
+            }
+    </style>
+
+</head>
+<body>
+<h1>Listing for {{root.relativeName}}</h1>
+<ul>
+    {{#directories}}
+        <li><span class="icon-folder"></span><a href="{{relativeName}}">{{shortName}}</a></li>
+    {{/directories}}
+</ul>
+<ul>
+    {{#files}}
+        <li><span class="icon-file"></span><a href="{{relativeName}}">{{shortName}}</a></li>
+    {{/files}}
+</ul>
+</body>
+</html>
+
