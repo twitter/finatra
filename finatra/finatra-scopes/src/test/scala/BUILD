@@ -5,6 +5,7 @@ junit_tests(name='scala',
     '3rdparty:scalatest',
     '3rdparty:specs2',
     'finatra/finatra/finatra-scopes',
+    'finatra/finatra/finatra-utils/src/test/scala',
   ],
   sources=rglobs('*.scala'),
   resources=[
