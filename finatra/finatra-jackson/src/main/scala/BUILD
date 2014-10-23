@@ -17,7 +17,7 @@ scala_library(name='scala',
     '3rdparty:jackson-databind',
     '3rdparty:jackson-datatype-joda',
     '3rdparty:jackson-module-scala',
-    '3rdparty:joda-time',
+    '3rdparty/jvm/joda-time',
     '3rdparty/jvm/org/scalaj:scalaj-time',
     'finatra/finatra/finatra-utils'
   ],
