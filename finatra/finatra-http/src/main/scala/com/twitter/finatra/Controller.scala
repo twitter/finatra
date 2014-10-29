@@ -1,8 +1,8 @@
 package com.twitter.finatra
 
-import com.twitter.finatra.marshalling.CallbackConvertor
+import com.twitter.finatra.marshalling.CallbackConverter
 import com.twitter.finatra.response._
-import com.twitter.finatra.twitterserver.routing.Route
+import com.twitter.finatra.routing.Route
 import com.twitter.finatra.utils.Logging
 import javax.inject.Inject
 import org.jboss.netty.handler.codec.http.HttpMethod
@@ -15,12 +15,12 @@ abstract class Controller extends Logging {
    * Using constructor-injection would complicate client usage,
    * so we use vars here to allow direct class injection
    */
-  @Inject private var callbackConvertor: CallbackConvertor = _
+  @Inject private var callbackConvertor: CallbackConverter = _
   @Inject private var responseBuilder: ResponseBuilder = _
 
   /* We need to create "lazy routes" first, since the closed over messageBodyManager is injected after object creation :-/ */
   private val routesBeforeInjection = ArrayBuffer[() => Route]()
-  private[finatra] lazy val routes = routesBeforeInjection map {_()}
+  private[finatra] lazy val routes = (routesBeforeInjection map {_()}).toSeq
 
   /* Protected */
 

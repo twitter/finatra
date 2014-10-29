@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.internal
 
+import com.twitter.finatra.json.internal.streaming.DelimitedReader
 import java.io.StringReader
 import org.apache.commons.io.IOUtils
 import org.scalatest.WordSpec

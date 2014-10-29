@@ -1,6 +1,7 @@
 package com.twitter.finatra.json.internal
 
 import com.fasterxml.jackson.databind.{ObjectMapper, SerializationFeature}
+import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
 import org.joda.time.{DateTime, DateTimeZone}
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers

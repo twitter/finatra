@@ -3,20 +3,21 @@ package com.twitter.finatra
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.exceptions.NotFoundException
-import com.twitter.finatra.guice.TwitterTestInjector
+import com.twitter.finatra.guice.FinatraTestInjector
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.marshalling.CallbackConvertor
+import com.twitter.finatra.marshalling.CallbackConverter
+import com.twitter.finatra.modules.{CallbackConverterModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.response.SimpleResponse
 import com.twitter.finatra.test.Test
-import com.twitter.finatra.twitterserver.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.util.{Await, Future}
+import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 class CallbackConverterIntegrationTest extends Test {
 
-  val injector = TwitterTestInjector(
-    MessageBodyModule, FinatraJacksonModule, MustacheModule)
+  val injector = FinatraTestInjector(
+    MessageBodyModule, FinatraJacksonModule, MustacheModule, CallbackConverterModule)
 
-  val callbackConverter = injector.instance[CallbackConvertor]
+  val callbackConverter = injector.instance[CallbackConverter]
 
   val request = mock[Request]
   val ford = Car("Ford")
@@ -28,10 +29,9 @@ class CallbackConverterIntegrationTest extends Test {
   }
 
   "Future None String" in {
-    val convertedFunc = callbackConverter.convertToFutureResponse(futureNoneString)
-    intercept[NotFoundException] {
-      Await.result(convertedFunc(request))
-    }
+    assertStatus(
+      callbackConverter.convertToFutureResponse(futureNoneString),
+      expectedStatus = NotFound)
   }
 
   "Future Some Product" in {
@@ -83,10 +83,9 @@ class CallbackConverterIntegrationTest extends Test {
   }
 
   "None" in {
-    val convertedFunc = callbackConverter.convertToFutureResponse(noneCallback)
-    intercept[NotFoundException] {
-      Await.result(convertedFunc(request))
-    }
+    assertStatus(
+      callbackConverter.convertToFutureResponse(noneCallback),
+      expectedStatus = NotFound)
   }
 
   "Some" in {
@@ -164,6 +163,10 @@ class CallbackConverterIntegrationTest extends Test {
     assertOk(response, withBody)
   }
 
+  private def assertStatus(convertedFunc: (Request) => Future[Response], expectedStatus: HttpResponseStatus) {
+    val response = Await.result(convertedFunc(request))
+    response.status should equal(expectedStatus)
+  }
 }
 
 case class Car(name: String) extends CarTrait

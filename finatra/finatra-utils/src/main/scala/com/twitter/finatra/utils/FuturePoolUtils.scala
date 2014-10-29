@@ -11,4 +11,10 @@ object FuturePoolUtils {
       Executors.newFixedThreadPool(size,
         new NamedPoolThreadFactory(name)))
   }
+
+  def unboundedPool(name: String): FuturePool = {
+    new ExecutorServiceFuturePool(
+      Executors.newCachedThreadPool(
+        new NamedPoolThreadFactory(name)))
+  }
 }

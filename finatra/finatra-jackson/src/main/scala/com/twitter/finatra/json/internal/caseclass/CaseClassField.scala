@@ -1,16 +1,16 @@
 package com.twitter.finatra.json.internal.caseclass
 
 import com.fasterxml.jackson.core.ObjectCodec
+import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
-import com.fasterxml.jackson.databind.{DeserializationContext, JavaType, JsonNode, PropertyNamingStrategy}
+import com.twitter.finatra.json.annotations.Validation
 import com.twitter.finatra.json.internal.caseclass.exceptions.JsonFieldParseException
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 import com.twitter.finatra.json.internal.caseclass.reflection.DefaultMethodUtils.defaultFunction
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection.FieldInjection
-import com.twitter.finatra.json.internal.caseclass.validation.Validation
 import com.twitter.finatra.utils.Logging
 import java.lang.annotation.Annotation
 import scala.reflect.NameTransformer
@@ -89,9 +89,12 @@ case class CaseClassField(
       val fieldJsonNode = objectJsonNode.get(name)
       if (fieldJsonNode != null)
         if (isOption)
-          Option(parseFieldValue(codec, fieldJsonNode, firstTypeParam))
+          Option(
+            parseFieldValue(codec, fieldJsonNode, firstTypeParam))
         else
-          parseFieldValue(codec, fieldJsonNode, javaType)
+          assertNotNull(
+            fieldJsonNode,
+            parseFieldValue(codec, fieldJsonNode, javaType))
       else if (defaultFuncOpt.isDefined)
         defaultFuncOpt.get.apply()
       else if (isOption)
@@ -105,12 +108,22 @@ case class CaseClassField(
 
   //optimized
   private[this] def parseFieldValue(fieldCodec: ObjectCodec, field: JsonNode, fieldType: JavaType): Object = {
-    if (isString)
+    if (isString) {
       field.asText()
-    else
-      fieldCodec.readValue(
+    }
+    else {
+      fieldCodec.readValue[Object](
         new TreeTraversingParser(field, fieldCodec),
         fieldType)
+    }
+  }
+
+  //optimized
+  private[this] def assertNotNull(field: JsonNode, value: Object): Object = {
+    if (value == null) {
+      throw new JsonMappingException("error parsing '" + field.asText + "'")
+    }
+    value
   }
 
   private def defaultValue: Option[Object] = {

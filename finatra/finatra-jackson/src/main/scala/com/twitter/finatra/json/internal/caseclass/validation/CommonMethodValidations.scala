@@ -1,7 +1,8 @@
 package com.twitter.finatra.json.internal.caseclass.validation
 
 import com.twitter.finatra.conversions.time._
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationResult._
+import com.twitter.finatra.json.ValidationResult
+import com.twitter.finatra.json.ValidationResult._
 import org.joda.time.DateTime
 
 object CommonMethodValidations {

@@ -15,7 +15,7 @@
       </timeBasedFileNamingAndTriggeringPolicy>
     </rollingPolicy>
     <encoder>
-      <pattern>%date %.-3level %-16X{transactionId} %-16X{traceId} %-8X{appId} %-55X{uri} %-25logger{0} %msg%n</pattern>
+      <pattern>%date %.-3level %-16X{transactionId} %-8X{appId} %-55X{uri} %-25logger{0} %msg%n</pattern>
     </encoder>
   </appender>
 

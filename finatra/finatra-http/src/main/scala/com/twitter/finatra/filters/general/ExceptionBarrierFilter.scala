@@ -58,13 +58,13 @@ class ExceptionBarrierFilter @Inject()(
       case e: NoSuchMethodException =>
         internalServerError(request, e)
     } onSuccess { response =>
-      statusCodeCounter(response.status).incr()
+      statusCodeCounter(response.status.getCode).incr()
     }
   }
 
   /* Private */
 
-  private val statusCodeCounter = Memoize { statusCode: HttpResponseStatus =>
+  private val statusCodeCounter = Memoize { statusCode: Int =>
     responseCodeStatsReceiver.counter(statusCode.toString)
   }
 

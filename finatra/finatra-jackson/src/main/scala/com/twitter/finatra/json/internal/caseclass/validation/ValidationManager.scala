@@ -1,6 +1,8 @@
 package com.twitter.finatra.json.internal.caseclass.validation
 
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationResult._
+import com.twitter.finatra.json.ValidationResult
+import com.twitter.finatra.json.ValidationResult._
+import com.twitter.finatra.json.annotations.{Validation, MethodValidation}
 import com.twitter.finatra.json.internal.caseclass.validation.validators.Validator
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method

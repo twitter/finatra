@@ -23,7 +23,7 @@ trait IntegrationTest extends Test {
 
     assert(app.isGuiceApp)
     app.start()
-    app.injector.guiceInjector.injectMembers(this)
+    app.injector.underlying.injectMembers(this)
   }
 
   override protected def afterEach() {

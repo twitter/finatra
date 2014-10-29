@@ -9,7 +9,7 @@ class TweetsController @Inject()(
   extends Controller {
 
   get("/tweets/:id") { request: Request =>
-    val id = request.routeParams("id").toLong
+    val id = request.params("id").toLong
     tweetsRepository.getById(id)
   }
 

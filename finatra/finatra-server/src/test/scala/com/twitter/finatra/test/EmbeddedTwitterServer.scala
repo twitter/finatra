@@ -2,11 +2,11 @@ package com.twitter.finatra.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.{HttpHeaders, MediaType}
+import com.google.inject.Stage
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.finagle.http._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.{ChannelClosedException, Service}
-import com.twitter.finatra.FinatraRawServer
 import com.twitter.finatra.conversions.json._
 import com.twitter.finatra.conversions.options._
 import com.twitter.finatra.conversions.time._
@@ -16,7 +16,6 @@ import com.twitter.finatra.test.Banner._
 import com.twitter.finatra.test.EmbeddedTwitterServer.requestNum
 import com.twitter.finatra.twitterserver.TwitterServerPorts
 import com.twitter.finatra.utils.RetryPolicyUtils
-import com.twitter.server.handler.ReplyHandler
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
@@ -44,19 +43,16 @@ case class EmbeddedTwitterServer(
   waitForWarmup: Boolean = true,
   defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
-  mapper: FinatraObjectMapper = FinatraObjectMapper.create())
+  mapper: FinatraObjectMapper = FinatraObjectMapper.create(),
+  stage: Stage = Stage.DEVELOPMENT)
   extends EmbeddedApp(
     app = twitterServer,
     clientFlags = clientFlags,
     resolverMap = resolverMap,
     extraArgs = extraArgs,
     waitForWarmup = waitForWarmup,
-    skipAppMain = true) {
-
-  /* Constructor */
-
-  //workaround for singleton HttpMuxer (only helps with sequential (non-parallel) server startup)
-  HttpMuxer.addHandler("/health", new ReplyHandler(""))
+    skipAppMain = true,
+    stage = stage) {
 
   /* Protected */
 
@@ -73,7 +69,7 @@ case class EmbeddedTwitterServer(
     "httpAdminClient",
     twitterServer.httpAdminPort)
 
-  override protected def logAppStartup {
+  override protected def logAppStartup() {
     banner(
       "Server Started (" + appName + ")" +
         "\nAdminHttp    -> http://localhost:%s/admin".format(twitterServer.httpAdminPort) +
@@ -84,7 +80,6 @@ case class EmbeddedTwitterServer(
   /* Public */
 
   lazy val isGuiceTwitterServer = twitterServer.isInstanceOf[GuiceApp]
-  lazy val isFinatraRawServer = twitterServer.isInstanceOf[FinatraRawServer]
   lazy val adminHostAndPort = "localhost:" + twitterServer.httpAdminPort
   lazy val httpExternalPort = twitterServer.httpExternalPort.get
   lazy val externalHttpHostAndPort = "localhost:" + httpExternalPort
@@ -345,7 +340,7 @@ case class EmbeddedTwitterServer(
     port: Int,
     tcpConnectTimeout: Duration = 60.seconds,
     connectTimeout: Duration = 60.seconds,
-    requestTimeout: Duration = 120.seconds,
+    requestTimeout: Duration = 300.seconds,
     retryPolicy: RetryPolicy[Try[Any]] = httpRetryPolicy,
     secure: Boolean = false): Service[Request, Response] = {
 
@@ -499,7 +494,7 @@ case class EmbeddedTwitterServer(
   }
 
   private def isHttpServer = {
-    isFinatraRawServer
+    twitterServer.flag.getAll(includeGlobal = false) exists {_.name == "http.port"}
   }
 
   private def addHeaders(request: Request, headers: Map[String, String]) {
@@ -533,7 +528,7 @@ case class EmbeddedTwitterServer(
     val futureResponse = client(request)
     val elapsed = Stopwatch.start()
     try {
-      Await.result(futureResponse, 30000.seconds.toTwitterDuration)
+      Await.result(futureResponse)
     } catch {
       case e: Throwable =>
         println("ERROR in request: " + request + " " + e + " in " + elapsed().inUnit(MILLISECONDS) + " ms")

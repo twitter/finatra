@@ -12,14 +12,19 @@ class AccessLoggingFilter @Inject()(
   extends SimpleFilter[Request, Response]
   with Logging {
 
+  //optimized
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
-    val elapsed = Stopwatch.start()
-
-    service(request) onSuccess { response =>
-      info(logFormatter.format(request, response, elapsed()))
-    } onFailure { e =>
-      // should never get here since this filter is meant to be after the access barrier
-      info(logFormatter.formatException(request, e, elapsed()))
+    if (!isInfoEnabled) {
+      service(request)
+    }
+    else {
+      val elapsed = Stopwatch.start()
+      service(request) onSuccess { response =>
+        info(logFormatter.format(request, response, elapsed()))
+      } onFailure { e =>
+        // should never get here since this filter is meant to be after the exception barrier
+        info(logFormatter.formatException(request, e, elapsed()))
+      }
     }
   }
 }

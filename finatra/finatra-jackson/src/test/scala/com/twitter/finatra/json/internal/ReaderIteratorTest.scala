@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.internal
 
+import com.twitter.finatra.json.internal.streaming.ReaderIterator
 import com.twitter.finatra.utils.Logging
 import java.io.{InputStreamReader, Reader}
 import org.apache.commons.io.IOUtils

@@ -6,10 +6,9 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{HttpMuxer, Response, Status, Request => FinagleRequest}
 import com.twitter.finatra.conversions.json._
 import com.twitter.finatra.guice.FinatraInjector
-import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.marshalling.{MessageBodyManager, MustacheService}
 import com.twitter.finatra.response.ResponseBuilder
-import com.twitter.finatra.twitterserver.routing.FileResolver
+import com.twitter.finatra.routing.FileResolver
 import com.twitter.logging.Logger
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import java.util.logging.Level

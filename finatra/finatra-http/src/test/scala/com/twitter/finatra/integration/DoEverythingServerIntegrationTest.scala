@@ -263,7 +263,14 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       server.httpGet(
         "/testfile",
         andExpect = Ok,
-        withBody = "testfile")
+        withBody = "testfile123")
+    }
+
+    "testfile when not found" in {
+      server.httpGet(
+        "/testfileWhenNotfound",
+        andExpect = NotFound,
+        withBody = "/doesntexist.txt not found")
     }
 
     "exception" in {
@@ -369,7 +376,7 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       server.httpGet(
         "/index/testfile.txt",
         andExpect = Ok,
-        withBody = "testfile")
+        withBody = "testfile123")
     }
 
     "implicitOkAndException when ok" in {
@@ -400,9 +407,9 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       response.headers().get("a") should equal("b")
     }
 
-    "finagle request" in {
+    "finatra request" in {
       server.httpGet(
-        "/finagleRequest",
+        "/finatraRequest",
         andExpect = Ok)
     }
 

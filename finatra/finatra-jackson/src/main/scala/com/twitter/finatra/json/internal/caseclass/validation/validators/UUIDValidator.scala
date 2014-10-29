@@ -1,9 +1,9 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.annotations
 import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.internal.caseclass.validation.ValidationMessageResolver
 import com.twitter.finatra.json.internal.caseclass.validation.validators.UUIDValidator._
-import com.twitter.finatra.json.internal.caseclass.validation.{ValidationMessageResolver, ValidationResult}
+import com.twitter.finatra.json.{ValidationResult, annotations}
 import com.twitter.util.Try
 import java.util.UUID._
 

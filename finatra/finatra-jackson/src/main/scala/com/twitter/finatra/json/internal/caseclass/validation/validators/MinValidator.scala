@@ -1,7 +1,8 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
+import com.twitter.finatra.json.ValidationResult
 import com.twitter.finatra.json.annotations.Min
-import com.twitter.finatra.json.internal.caseclass.validation.{ValidationMessageResolver, ValidationResult}
+import com.twitter.finatra.json.internal.caseclass.validation.ValidationMessageResolver
 
 object MinValidator {
 

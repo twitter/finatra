@@ -2,7 +2,7 @@ package com.twitter.finatra.marshalling
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
-import com.twitter.finatra.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.conversions.strings._
 import com.twitter.finatra.exceptions.BadRequestException
 import com.twitter.finatra.json.FinatraObjectMapper

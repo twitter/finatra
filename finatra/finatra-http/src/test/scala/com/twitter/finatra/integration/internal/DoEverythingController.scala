@@ -1,6 +1,6 @@
 package com.twitter.finatra.integration.internal
 
-import com.twitter.finagle.http.{Status, Request => FinagleRequest}
+import com.twitter.finagle.http.{Status, Request}
 import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
 import com.twitter.finatra.annotations.{Flag, Mustache}
 import com.twitter.finatra.exceptions.{BadRequestException, InternalServerErrorException, NotFoundException, ServiceUnavailableException}
@@ -9,7 +9,7 @@ import com.twitter.finatra.json.annotations.{FormParam, JsonInject, QueryParam}
 import com.twitter.finatra.json.internal.caseclass.wrapped.JsonWrappedValue
 import com.twitter.finatra.request.RequestUtils
 import com.twitter.finatra.response._
-import com.twitter.finatra.{Controller, Request}
+import com.twitter.finatra.{Controller}
 import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
@@ -33,7 +33,7 @@ class DoEverythingController @Inject()(
 
   get("/example/routing/json/:id") { request: Request =>
     ExampleResponse(
-      id = request.routeParams("id"),
+      id = request.params("id"),
       name = "bob",
       magic = magicNum,
       moduleMagic = moduleMagicNum)
@@ -179,9 +179,13 @@ class DoEverythingController @Inject()(
     response.ok.file("/testfile.txt")
   }
 
+  get("/testfileWhenNotfound") { request: Request =>
+    response.ok.file("/doesntexist.txt")
+  }
+
   get("/index/:*") { request: Request =>
     response.ok.fileOrIndex(
-      request.routeParams("*"),
+      request.params("*"),
       "testindex.html")
   }
 
@@ -201,7 +205,7 @@ class DoEverythingController @Inject()(
   }
 
   get("/complexpath/:name") { request: Request =>
-    val name = request.routeParams("name")
+    val name = request.params("name")
     complexServiceFactory.create(name).execute
   }
 
@@ -255,7 +259,7 @@ class DoEverythingController @Inject()(
     "slow"
   }
 
-  get("/finagleRequest") { request: FinagleRequest =>
+  get("/finatraRequest") { request: com.twitter.finatra.Request =>
     response.
       ok.
       header("a", "b")
@@ -321,7 +325,7 @@ class DoEverythingController @Inject()(
   }
 
   head("/head") { r: Request =>
-    "head" // will be discarded since head's can't have bodies
+    "head" // testing that body will be discarded since HTTP Head cannot have a body
   }
 
   patch("/patch") { r: Request =>

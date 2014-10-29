@@ -7,7 +7,7 @@ import com.twitter.finatra.FinatraServer
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.guice.GuiceModule
 import com.twitter.finatra.test.{EmbeddedTwitterServer, HttpTest}
-import com.twitter.finatra.twitterserver.routing.Router
+import com.twitter.finatra.routing.Router
 import com.twitter.finatra.twitterserver.{GuiceTwitterServer, TwitterServerWithPorts}
 import com.twitter.server.Lifecycle.Warmup
 

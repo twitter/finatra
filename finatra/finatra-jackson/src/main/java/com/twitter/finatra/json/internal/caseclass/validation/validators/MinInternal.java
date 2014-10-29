@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators;
 
-import com.twitter.finatra.json.internal.caseclass.validation.Validation;
+import com.twitter.finatra.json.annotations.Validation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

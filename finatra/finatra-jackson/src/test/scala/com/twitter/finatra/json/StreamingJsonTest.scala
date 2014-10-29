@@ -1,15 +1,14 @@
 package com.twitter.finatra.json
 
-import com.twitter.finatra.json.internal.{JsonStreamParseResult, JsonArrayNotFoundException}
+import com.twitter.finatra.json.internal.streaming.{JsonArrayNotFoundException, JsonStreamParseResult}
 import com.twitter.finatra.utils.Logging
 import java.io.{InputStreamReader, Reader}
 import org.junit.runner.RunWith
-import org.scalatest.WordSpec
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.{Matchers, WordSpec}
 
 @RunWith(classOf[JUnitRunner])
-class StreamingJsonTest extends WordSpec with ShouldMatchers with Logging {
+class StreamingJsonTest extends WordSpec with Matchers with Logging {
 
   val mapper = FinatraObjectMapper.create()
 

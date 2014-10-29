@@ -4,7 +4,7 @@ import com.twitter.finatra.FinatraServer
 import com.twitter.finatra.example.main.controllers.TweetsController
 import com.twitter.finatra.example.main.domain.{CarMessageBodyWriter, TweetMessageBodyWriter}
 import com.twitter.finatra.filters.CommonFilters
-import com.twitter.finatra.twitterserver.routing.Router
+import com.twitter.finatra.routing.Router
 
 object TweetsEndpointServerMain extends TweetsEndpointServer
 

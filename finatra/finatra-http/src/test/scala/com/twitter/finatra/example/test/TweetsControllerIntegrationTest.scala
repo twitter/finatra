@@ -7,7 +7,7 @@ import com.twitter.util.{Await, Future, FuturePool}
 
 class TweetsControllerIntegrationTest extends Test {
 
-  lazy val server = EmbeddedTwitterServer(new TweetsEndpointServer)
+  val server = EmbeddedTwitterServer(new TweetsEndpointServer)
 
   "get tweet 20" in {
     val tweet = server.httpGetJson[Map[String, Long]](

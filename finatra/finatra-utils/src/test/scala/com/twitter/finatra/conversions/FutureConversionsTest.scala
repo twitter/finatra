@@ -27,7 +27,7 @@ class FutureConversionsTest extends Test {
         Future(None) getInnerOrElseFail TestException)
     }
     "#getInnerOrElseFail when already failed" in {
-      assertFailedFuture[ExistingException](
+      assertFailedFuture[TestException](
         Future.exception(ExistingException).getInnerOrElseFail(TestException))
     }
     "#mapInner" in {

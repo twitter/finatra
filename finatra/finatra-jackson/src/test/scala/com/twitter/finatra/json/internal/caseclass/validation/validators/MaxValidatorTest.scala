@@ -1,9 +1,8 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidatorTest
+import com.twitter.finatra.json.ValidationResult.{invalid, valid}
 import com.twitter.finatra.json.annotations._
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationResult
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationResult.{invalid, valid}
+import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
 
 case class MaxIntExample(@Max(0) numberValue: Int)
 case class MaxLongExample(@Max(0) numberValue: Long)

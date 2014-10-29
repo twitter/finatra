@@ -1,13 +1,14 @@
 package com.twitter.finatra.test
 
+import com.twitter.finatra.logging.Timing
 import com.twitter.util.{Await, Future}
 import grizzled.slf4j.Logging
+import java.util.TimeZone
 import org.apache.commons.io.IOUtils
-import org.joda.time.{DateTime, DateTimeZone, Duration}
+import org.joda.time.{DateTimeZone, Duration}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.matchers.ShouldMatchers
-import org.scalatest.{Matchers, BeforeAndAfterAll, BeforeAndAfterEach, WordSpec}
+import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpec}
 import org.specs2.mock.Mockito
 
 @RunWith(classOf[JUnitRunner])
@@ -17,7 +18,19 @@ abstract class Test
   with BeforeAndAfterAll
   with BeforeAndAfterEach
   with Matchers
-  with Logging {
+  with Logging
+  with Timing {
+
+  /* Constructor */
+
+  setTimeZone()
+
+  /* Protected */
+
+  protected def setTimeZone() = {
+    DateTimeZone.setDefault(DateTimeZone.UTC)
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+  }
 
   protected def setPrivateField(obj: Object, fieldName: String, value: Object) {
     val field = obj.getClass.getDeclaredField(fieldName)
@@ -35,16 +48,16 @@ abstract class Test
     org.mockito.Mockito.reset(mocks: _*)
   }
 
-  def banner(str: String) {
+  protected def banner(str: String) {
     Banner.banner(str)
   }
 
-  def resourceAsString(resource: String) = {
+  protected def resourceAsString(resource: String) = {
     IOUtils.toString(
       getClass.getResourceAsStream(resource))
   }
 
-  def sleep(duration: Duration, verbose: Boolean = false) {
+  protected def sleep(duration: Duration, verbose: Boolean = false) {
     if (verbose) {
       println("Starting sleep for " + duration)
     }
@@ -56,13 +69,13 @@ abstract class Test
     }
   }
 
-  def assertFuture[A](result: Future[A], expected: Future[A]) {
+  protected def assertFuture[A](result: Future[A], expected: Future[A]) {
     val resultVal = Await.result(result)
     val expectedVal = Await.result(expected)
     resultVal should equal(expectedVal)
   }
 
-  def assertFailedFuture[T <: Throwable : Manifest](result: Future[_]): T = {
+  protected def assertFailedFuture[T <: Throwable : Manifest](result: Future[_]): T = {
     try {
       Await.result(result)
       fail("Expected exception " + manifest[T].erasure + " never thrown")
@@ -75,12 +88,7 @@ abstract class Test
     }
   }
 
-  /** Current DateTime in UTC */
-  def now = {
-    DateTime.now.withZone(DateTimeZone.UTC)
-  }
-
-  def bytes(str: String) = {
+  protected def bytes(str: String) = {
     str.getBytes("UTF-8")
   }
 

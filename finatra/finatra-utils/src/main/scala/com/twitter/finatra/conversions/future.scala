@@ -14,18 +14,20 @@ object future {
   object RichFutureOption {
 
     //static since reused in httpfuture.scala
-    def getInnerOrElseFail[A](futureOption: Future[Option[A]], throwable: Throwable): Future[A] = {
+    def getInnerOrElseFail[A](futureOption: Future[Option[A]], throwable: => Throwable): Future[A] = {
       futureOption.transform {
         case Return(Some(value)) => Future.value(value)
         case Return(None) => Future.exception(throwable)
-        case Throw(t) => Future.exception(t)
+        case Throw(origThrowable) =>
+          log.warn("Failed future " + origThrowable + " converted into " + throwable)
+          Future.exception(throwable)
       }
     }
   }
 
   class RichFutureOption[A](futureOption: Future[Option[A]]) {
 
-    def getInnerOrElseFail(throwable: Throwable): Future[A] = {
+    def getInnerOrElseFail(throwable: => Throwable): Future[A] = {
       RichFutureOption.getInnerOrElseFail(futureOption, throwable)
     }
 

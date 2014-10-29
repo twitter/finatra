@@ -1,11 +1,11 @@
 package com.twitter.finatra.twitterserver.http
 
 import com.twitter.finatra.Request
-import com.twitter.finatra.guice.TwitterTestInjector
+import com.twitter.finatra.guice.FinatraTestInjector
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.marshalling.{MessageBodyManager, MessageBodyReader}
 import com.twitter.finatra.test.Test
-import com.twitter.finatra.twitterserver.modules.{MessageBodyModule, MustacheModule}
+import com.twitter.finatra.modules.{MessageBodyModule, MustacheModule}
 
 class MessageBodyManagerTest extends Test {
 
@@ -21,7 +21,7 @@ class MessageBodyManagerTest extends Test {
   }
 
   def createManager(): MessageBodyManager = {
-    val injector = TwitterTestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule)
+    val injector = FinatraTestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule)
     injector.instance[MessageBodyManager]
   }
 }

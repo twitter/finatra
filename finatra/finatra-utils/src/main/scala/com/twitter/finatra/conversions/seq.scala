@@ -24,6 +24,16 @@ object seq {
       })(breakOut)
     }
 
+    def foreachPartial(
+      pf: PartialFunction[A, Unit]): Unit = {
+
+      seq map { elem =>
+        if (pf.isDefinedAt(elem)) {
+          pf(elem)
+        }
+      }
+    }
+
     /**
      * Chooses last element in seq when key collision occurs
      */

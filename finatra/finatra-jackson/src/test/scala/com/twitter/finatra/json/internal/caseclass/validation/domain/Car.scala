@@ -1,8 +1,8 @@
 package com.twitter.finatra.json.internal.caseclass.validation.domain
 
-import com.twitter.finatra.json.annotations.Min
+import com.twitter.finatra.json.ValidationResult
+import com.twitter.finatra.json.annotations.{MethodValidation, Min}
 import com.twitter.finatra.json.internal.CarMake
-import com.twitter.finatra.json.internal.caseclass.validation.{MethodValidation, ValidationResult}
 
 case class Car(
   id: Long,

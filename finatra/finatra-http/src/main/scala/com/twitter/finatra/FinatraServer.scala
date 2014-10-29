@@ -4,18 +4,20 @@ import com.google.inject.Module
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Response, Request => FinagleRequest}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.finatra.modules.{AccessLogModule, CallbackConverterModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.routing.AdminUtils.addAdminRoutes
+import com.twitter.finatra.routing.Router
+import com.twitter.finatra.server.FinatraHttpServer
 import com.twitter.finatra.twitterserver.Handler
-import com.twitter.finatra.twitterserver.modules.{AccessLogModule, MessageBodyModule, MustacheModule}
-import com.twitter.finatra.twitterserver.routing.AdminUtils.addAdminRoutes
-import com.twitter.finatra.twitterserver.routing.Router
 
-trait FinatraServer extends FinatraRawServer {
+trait FinatraServer extends FinatraHttpServer {
 
   addFrameworkModules(
-    AccessLogModule,
+    accessLogModule,
     mustacheModule,
     messageBodyModule,
-    jacksonModule)
+    jacksonModule,
+    callbackModule)
 
   /* Abstract */
 
@@ -24,6 +26,7 @@ trait FinatraServer extends FinatraRawServer {
   /* Overrides */
 
   override protected def postStartup() {
+    super.postStartup()
     val router = injector.instance[Router]
     configure(router)
   }
@@ -40,9 +43,11 @@ trait FinatraServer extends FinatraRawServer {
     injector.instance[T].handle()
   }
 
-  //TODO: Replace the need for these methods with Guice v4 OptionalBinder
+  //TODO: Replace the need for these protected methods with "Guice v4" OptionalBinder
   //http://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/multibindings/OptionalBinder.html
+  protected def accessLogModule: Module = AccessLogModule
   protected def mustacheModule: Module = MustacheModule
   protected def messageBodyModule: Module = MessageBodyModule
   protected def jacksonModule: Module = FinatraJacksonModule
+  protected def callbackModule: Module = CallbackConverterModule
 }

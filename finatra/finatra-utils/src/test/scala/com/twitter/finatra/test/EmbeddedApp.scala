@@ -1,7 +1,7 @@
 package com.twitter.finatra.test
 
 import com.google.inject.util.Types
-import com.google.inject.{Key, TypeLiteral}
+import com.google.inject.{Key, Stage, TypeLiteral}
 import com.twitter.app.App
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.finatra.conversions.time._
@@ -29,9 +29,27 @@ class EmbeddedApp(
   resolverMap: Map[String, String] = Map(),
   extraArgs: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
-  skipAppMain: Boolean = false)
+  skipAppMain: Boolean = false,
+  stage: Stage = Stage.DEVELOPMENT)
   extends Matchers
   with Logging {
+
+  /* Constructor */
+
+  /*
+   * Overwrite Guice stage if app is a GuiceApp.
+   *
+   * This allows optionally performing tests in Stage.PRODUCTION which eagerly creates
+   * all Guice classes at startup.
+   *
+   * By default Stage.DEVELOPMENT is used which lazily creates objects. This makes it possible to
+   * only mock objects that are used in a given test, at the expense of not checking that the
+   * entire object graph is valid. As such, you should always have at lease one Stage.PRODUCTION
+   * test for your service.
+   */
+  if (isGuiceApp) {
+    guiceApp.guiceStage = stage
+  }
 
   /* Fields */
 
@@ -105,16 +123,21 @@ class EmbeddedApp(
   }
 
   private def runTwitterUtilAppMain() {
-    val allArgs = combineArgs
-    println("Starting " + appName + " with " + allArgs.mkString(" "))
+    val allArgs = combineArgs()
+    println("Starting " + appName + " with args: " + allArgs.mkString(" "))
 
     _mainResult = futurePool {
       try {
         app.main(allArgs)
       } catch {
+        case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
+          println("OutOfMemoryError(PermGen) in server startup. " +
+            "This is most likely due to the incorrect setting of a client " +
+            "flag (not defined or invalid). Increase your permgen to see the exact error message (e.g. -XX:MaxPermSize=256m)")
+          e.printStackTrace()
+          System.exit(-1)
         case e if !NonFatal.isNonFatal(e) =>
           println("Fatal exception in server startup.")
-          e.printStackTrace()
           throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
       }
     } onFailure { e =>
@@ -150,11 +173,29 @@ class EmbeddedApp(
   /* Protected */
 
   protected def combineArgs(): Array[String] = {
-    (guiceServerArgs ++ deciderArgs ++ extraArgs ++
-      ResolverMapUtils.resolverMapStr(resolverMap)).toArray
+    (extraArgs ++ flagsStr(clientFlags) ++
+      resolverMapStr(resolverMap)).toArray
   }
 
   /* Private */
+
+  private def flagsStr(flagsMap: Map[String, String]) = {
+    for ((key, value) <- flagsMap) yield {
+      "-" + key + "=" + value
+    }
+  }
+
+  private def resolverMapStr(resolverMap: Map[String, String]): Seq[String] = {
+    if (resolverMap.isEmpty)
+      Seq()
+    else
+      Seq(
+        "-com.twitter.server.resolverMap=" + {
+          resolverMap map { case (k, v) =>
+            k + "=" + v
+          } mkString ","
+        })
+  }
 
   private lazy val waitForStartupRetryPolicy = RetryPolicyUtils.constantRetry[Boolean](
     start = 1.second,
@@ -162,7 +203,7 @@ class EmbeddedApp(
     shouldRetry = {case Return(started) => !started})
 
   def waitForWarmupComplete() {
-    val started = retry(waitForStartupRetryPolicy) {
+    val started = retry(waitForStartupRetryPolicy, suppress = true) {
       if (startupFailed) {
         fail("Server startup failed")
       }
@@ -173,38 +214,12 @@ class EmbeddedApp(
 
     if (!started.get()) {
       throw new Exception("App: %s failed to startup.".format(appName))
-    }    
+    }
     logAppStartup()
   }
 
   protected def logAppStartup() = {
     banner("App warmup completed (" + appName + ")")
-  }
-
-  private def guiceServerArgs =
-    if (isEnvironmentModuleLoaded)
-      Seq(
-        "-environment=prod")
-    else
-      Seq()
-
-  private def deciderArgs = {
-    if (isDeciderModuleLoaded)
-      Seq(
-        "-decider.environment=production",
-        "-decider.base=decider.yml")
-    else
-      Seq()
-  }
-
-  //TODO: Hack: Internal specific and will not work for non-Guice TwitterServer's
-  private def isDeciderModuleLoaded: Boolean = {
-    isModuleLoaded("DeciderModule")
-  }
-
-  //TODO: Hack: Internal specific and will not work for non-Guice TwitterServer's
-  private def isEnvironmentModuleLoaded: Boolean = {
-    isModuleLoaded("EnvironmentModule")
   }
 
   private def isModuleLoaded(name: String): Boolean = {

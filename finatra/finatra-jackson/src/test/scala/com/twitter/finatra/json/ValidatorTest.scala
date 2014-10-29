@@ -3,7 +3,7 @@ package com.twitter.finatra.json
 import com.twitter.finatra.json.internal.caseclass.CaseClassField._
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser._
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils
-import com.twitter.finatra.json.internal.caseclass.validation.{ValidationManager, ValidationMessageResolver, ValidationResult}
+import com.twitter.finatra.json.internal.caseclass.validation.{ValidationManager, ValidationMessageResolver}
 import java.lang.annotation.Annotation
 import org.junit.runner.RunWith
 import org.scalatest.WordSpec

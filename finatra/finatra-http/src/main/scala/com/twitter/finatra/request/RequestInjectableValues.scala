@@ -11,6 +11,11 @@ class RequestInjectableValues(
   injector: Injector)
   extends InjectableValues {
 
+  private val paramsAnnotation = Seq(
+    classOf[RouteParamInternal],
+    classOf[QueryParamInternal],
+    classOf[FormParamInternal])
+
   /* Public */
 
   /**
@@ -25,11 +30,9 @@ class RequestInjectableValues(
   override def findInjectableValue(valueId: Object, ctxt: DeserializationContext, forProperty: BeanProperty, beanInstance: Object) = {
     val fieldName = forProperty.getName
 
-    if (hasAnnot[RouteParamInternal](forProperty))
-      request.routeParams.get(fieldName).orNull
-    else if (hasAnnot[QueryParamInternal](forProperty) || hasAnnot[FormParamInternal](forProperty))
+    if (hasAnnotation(forProperty, paramsAnnotation))
       request.params.get(fieldName).orNull
-    else if (hasAnnot[HeaderInternal](forProperty))
+    else if (hasAnnotation[HeaderInternal](forProperty))
       Option(request.headers().get(fieldName)).orNull
     else if (isRequest(forProperty))
       request
@@ -40,9 +43,15 @@ class RequestInjectableValues(
 
   /* Private */
 
-  private def hasAnnot[T <: Annotation : Manifest](beanProperty: BeanProperty): Boolean = {
+  private def hasAnnotation[T <: Annotation : Manifest](beanProperty: BeanProperty): Boolean = {
     val annotClass = manifest[T].erasure.asInstanceOf[Class[_ <: Annotation]]
     beanProperty.getContextAnnotation(annotClass) != null
+  }
+
+  private def hasAnnotation(beanProperty: BeanProperty, annotationClasses: Seq[Class[_ <: Annotation]]): Boolean = {
+    annotationClasses exists { annotationClass =>
+      beanProperty.getContextAnnotation(annotationClass) != null
+    }
   }
 
   private def isRequest(forProperty: BeanProperty): Boolean = {

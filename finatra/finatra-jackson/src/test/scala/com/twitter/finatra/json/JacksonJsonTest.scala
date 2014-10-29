@@ -13,12 +13,13 @@ import com.twitter.finatra.utils.Logging
 import java.io.ByteArrayInputStream
 import org.joda.time.{DateTime, DateTimeZone}
 import org.junit.runner.RunWith
-import org.scalatest.FeatureSpec
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.{FeatureSpec, Matchers}
 
 @RunWith(classOf[JUnitRunner])
-class JacksonJsonTest extends FeatureSpec with ShouldMatchers with Logging {
+class JacksonJsonTest extends FeatureSpec with Matchers with Logging {
+
+  DateTimeZone.setDefault(DateTimeZone.UTC)
 
   /* Class under test */
   val mapper = FinatraObjectMapper.create()
@@ -226,6 +227,14 @@ class JacksonJsonTest extends FeatureSpec with ShouldMatchers with Logging {
          }""") should equal(CaseClassWithDateTime(new DateTime("2014-05-30T03:57:59.302Z", DateTimeZone.UTC)))
     }
 
+    scenario("invalid DateTime") {
+      assertJsonParse[CaseClassWithDateTime]( """{
+           "date_time" : ""
+         }""",
+        withErrors = Seq(
+          """date_time: field cannot be empty"""))
+    }
+
     scenario("invalid DateTime's") {
       assertJsonParse[CaseClassWithIntAndDateTime]( """{
            "name" : "Bob",
@@ -239,8 +248,10 @@ class JacksonJsonTest extends FeatureSpec with ShouldMatchers with Logging {
          }""",
         withErrors = Seq(
           "age's value 'old' is not a valid int",
-          """date_time: error parsing 'today' as an ISO 8601 datetime""",
-          """date_time4: error parsing '' as an ISO 8601 datetime"""))
+          "age3: error parsing ''",
+          """date_time: error parsing 'today' into an ISO 8601 datetime""",
+          """date_time3: field cannot be negative""",
+          """date_time4: field cannot be empty"""))
     }
   }
 
@@ -257,7 +268,7 @@ class JacksonJsonTest extends FeatureSpec with ShouldMatchers with Logging {
        }""") should equal(CaseClassWithEscapedString(`1-5` = "10"))
     }
 
-    scenario("non-unicode escpaed") {
+    scenario("non-unicode escaped") {
       parse[CaseClassWithEscapedNormalString](
         """{
             "a" : "foo"
@@ -782,8 +793,8 @@ class JacksonJsonTest extends FeatureSpec with ShouldMatchers with Logging {
       trace(e.fieldErrors.mkString("\n"))
       clearStackTrace(e.fieldErrors)
 
-      val expectedFieldParseExceptions = clearStackTrace(withErrors map JsonFieldParseException.apply)
-      JsonDiff.jsonDiff(e.fieldErrors, expectedFieldParseExceptions)
+      val actualMessages = e.fieldErrors map {_.getMessage}
+      JsonDiff.jsonDiff(actualMessages, withErrors)
       null
     }
     else {

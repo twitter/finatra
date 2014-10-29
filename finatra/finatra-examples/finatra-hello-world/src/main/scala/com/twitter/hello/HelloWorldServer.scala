@@ -2,7 +2,7 @@ package com.twitter.hello
 
 import com.twitter.finatra.FinatraServer
 import com.twitter.finatra.filters.CommonFilters
-import com.twitter.finatra.twitterserver.routing.Router
+import com.twitter.finatra.routing.Router
 
 object HelloWorldServerMain extends HelloWorldServer
 

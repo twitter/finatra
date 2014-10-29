@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException
 import com.twitter.finatra.json.internal.caseclass.utils.ByteBufferBackedInputStream
-import com.twitter.finatra.json.internal.{JsonArrayIterator, JsonStreamParseResult, ReaderIterator}
+import com.twitter.finatra.json.internal.streaming.{JsonArrayIterator, JsonStreamParseResult, ReaderIterator}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import java.io.{InputStream, OutputStream, Reader, StringWriter}
 import java.nio.ByteBuffer

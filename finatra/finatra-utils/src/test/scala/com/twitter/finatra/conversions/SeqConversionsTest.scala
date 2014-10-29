@@ -29,5 +29,13 @@ class SeqConversionsTest extends Test {
       Vector(1, 2, 3).findItemAfter(1) should equal(Some(2))
       Vector[Int]().findItemAfter(5) should equal(None)
     }
+    "#foreachPartial" in {
+      var numStrings = 0
+      Seq("a", 1) foreachPartial {
+        case str: String =>
+          numStrings += 1
+      }
+      numStrings should equal(1)
+    }
   }
 }

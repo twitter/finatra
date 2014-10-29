@@ -1,9 +1,9 @@
 package com.twitter.finatra.guice
 
-import com.google.inject.Module
+import com.google.inject.{Module, Stage}
 import com.twitter.app.App
-import com.twitter.finatra.guice.FinatraInjector.findModuleFlags
-import com.twitter.finatra.modules.LoadedStatsModule
+import com.twitter.finatra.guice.FinatraInstalledModules.findModuleFlags
+import com.twitter.finatra.modules.{FinatraInjectorModule, LoadedStatsModule}
 import com.twitter.finatra.utils.Logging
 import scala.collection.mutable.ArrayBuffer
 
@@ -14,18 +14,22 @@ trait GuiceApp extends App with Logging {
 
   /* Mutable State */
 
-  private val frameworkModules: ArrayBuffer[Module] = ArrayBuffer(statsModule)
+  @transient private val frameworkModules: ArrayBuffer[Module] = ArrayBuffer(
+    FinatraInjectorModule,
+    statsModule)
+
   @transient private[finatra] var runAppMain: Boolean = true
   @transient private[finatra] var postWarmupComplete: Boolean = false
-  @transient private var _injector: FinatraInjector = _
+  @transient private[finatra] var guiceStage: Stage = Stage.PRODUCTION
+  @transient private var installedModules: FinatraInstalledModules = _
 
   /* Public */
 
   def injector: FinatraInjector = {
-    if (_injector == null)
+    if (installedModules == null)
       throw new Exception("injector is not available before main() is called")
     else
-      _injector
+      installedModules.injector
   }
 
   /* Lifecycle */
@@ -41,20 +45,20 @@ trait GuiceApp extends App with Logging {
   }
 
   def main() {
-    _injector = createInjector()
+    installedModules = loadModules()
     postStartup()
-    injector.postStartup()
+    installedModules.postStartup()
 
     warmup()
     postWarmup()
-    injector.postWarmup()
+    installedModules.postWarmup()
     postWarmupComplete = true
     info("Warmup & PostWarmup Finished.")
 
     callAppMain()
 
     onExit {
-      injector.shutdown()
+      installedModules.shutdown()
     }
   }
 
@@ -71,13 +75,9 @@ trait GuiceApp extends App with Logging {
   /** Production Guice modules */
   protected def modules: Seq[Module] = Seq()
 
-  /** Override Guice modules which redefine production bindings */
+  /** Override Guice modules which redefine production bindings (Note: Only override during testing) */
   protected def overrideModules: Seq[Module] = Seq()
 
-  // TODO: Replace the need for this method with Guice v4 OptionalBinder
-  // http://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/multibindings/OptionalBinder.html
-  protected def statsModule: Module = LoadedStatsModule
-  
   protected def addFrameworkModules(modules: Module*) {
     frameworkModules ++= modules
   }
@@ -94,12 +94,22 @@ trait GuiceApp extends App with Logging {
   protected def postWarmup() {
   }
 
-  protected[finatra] def createInjector() = {
-    FinatraInjector(
+  protected[finatra] def loadModules() = {
+    FinatraInstalledModules.create(
       flags = flag.getAll(includeGlobal = false).toSeq,
       modules = requiredModules,
-      overrideModules = overrideModules)
+      overrideModules = overrideModules,
+      stage = guiceStage)
   }
+
+  @deprecated("use loadModules().injector", "now")
+  protected[finatra] def createInjector() = {
+    loadModules().injector
+  }
+
+  // TODO: Replace the need for this method with Guice v4 OptionalBinder
+  // http://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/multibindings/OptionalBinder.html
+  protected def statsModule: Module = LoadedStatsModule
 
   /* Private */
 

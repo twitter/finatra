@@ -1,7 +1,8 @@
 package com.twitter.finatra.integration.internal
 
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.twitterserver.{Handler, HttpAssertions}
+import com.twitter.finatra.routing.HttpAssertions
+import com.twitter.finatra.twitterserver.Handler
 import javax.inject.Inject
 
 class DoEverythingWarmupHandler @Inject()(

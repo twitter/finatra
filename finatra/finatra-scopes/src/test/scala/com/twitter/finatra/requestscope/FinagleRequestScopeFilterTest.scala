@@ -4,7 +4,6 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.util.{Await, Future}
 import org.scalatest.FunSuite
-import org.scalatest.matchers.MustMatchers
 import org.specs2.mock.Mockito
 
 class FinagleRequestScopeFilterTest

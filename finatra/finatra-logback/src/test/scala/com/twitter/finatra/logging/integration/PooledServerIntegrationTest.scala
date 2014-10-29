@@ -7,7 +7,7 @@ class PooledServerIntegrationTest extends HttpTest {
 
   "PooledServer" should {
     val server = new EmbeddedTwitterServer(
-      twitterServer = PooledServerMain)
+      twitterServer = new PooledServer)
 
     "return right away" in {
       for (i <- 1 to 100) {

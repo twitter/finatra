@@ -4,10 +4,13 @@ import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.http.{Response, Status, Cookie => FinagleCookie}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.marshalling.{MessageBodyManager, MustacheService}
-import com.twitter.finatra.twitterserver.routing.FileResolver
-import com.twitter.util.Future
+import com.twitter.finatra.routing.FileResolver
+import com.twitter.util.{Future, Memoize}
+import java.io.InputStream
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
+import org.apache.commons.io.IOUtils
+import org.jboss.netty.buffer.ChannelBuffers
 import org.jboss.netty.buffer.ChannelBuffers._
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names._
 import org.jboss.netty.handler.codec.http.{DefaultCookie, HttpResponseStatus, Cookie => NettyCookie}
@@ -153,6 +156,11 @@ class ResponseBuilder @Inject()(
       this
     }
 
+    def body(inputStream: InputStream): EnrichedResponse = {
+      httpResponse.setContent(channelBuffer(inputStream))
+      this
+    }
+
     def contentTypeJson() = {
       contentType("application/json")
       this
@@ -220,15 +228,21 @@ class ResponseBuilder @Inject()(
     }
 
     def contentType(mimeType: MediaType) = {
-      httpResponse.headers().set(CONTENT_TYPE, mimeType)
+      httpResponse.headers().set(
+        CONTENT_TYPE,
+        mediaToString(mimeType))
+
       this
     }
 
-
     def file(file: String): Response = {
-      fileResolver.getResponse(file, httpResponse) getOrElse
-        notFound.plain(file + " not found")
-      this
+      val fileWithSlash = if (file.startsWith("/")) file else "/" + file
+      fileResolver.getInputStream(fileWithSlash) map { inputStream =>
+        contentType(fileResolver.getContentType(file))
+        body(inputStream)
+      } getOrElse {
+        notFound.plain(fileWithSlash + " not found")
+      }
     }
 
     /**
@@ -238,9 +252,9 @@ class ResponseBuilder @Inject()(
      */
     def fileOrIndex(filePath: String, indexPath: String) = {
       if (isFile(filePath))
-        file("/" + filePath)
+        file(filePath)
       else
-        file("/" + indexPath)
+        file(indexPath)
     }
 
     def view(template: String, obj: Any) = {
@@ -253,6 +267,17 @@ class ResponseBuilder @Inject()(
 
     private def isFile(requestPath: String) = {
       getExtension(requestPath).nonEmpty
+    }
+
+    //optimized: MediaType.toString is a hotspot when profiling
+    private val mediaToString = Memoize { mediaType: MediaType =>
+      mediaType.toString
+    }
+
+    //TODO: Optimize
+    private def channelBuffer(inputStream: InputStream) = {
+      ChannelBuffers.copiedBuffer(
+        IOUtils.toByteArray(inputStream))
     }
   }
 

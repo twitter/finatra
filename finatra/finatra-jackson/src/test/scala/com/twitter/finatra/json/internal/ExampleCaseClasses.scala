@@ -2,7 +2,7 @@ package com.twitter.finatra.json.internal
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationResult
+import com.twitter.finatra.json.ValidationResult
 import com.twitter.finatra.json.internal.caseclass.wrapped.JsonWrappedValue
 
 case class CaseClass(id: Long, name: String)

@@ -13,7 +13,7 @@ import com.twitter.finatra.json.annotations.CamelCaseMapper
 import com.twitter.finatra.json.internal.caseclass.guice.GuiceInjectableValues
 import com.twitter.finatra.json.internal.caseclass.jackson.FinatraCaseClassModule
 import com.twitter.finatra.json.internal.caseclass.utils.NamingStrategyUtils._
-import com.twitter.finatra.json.internal.{FinatraSerDeSimpleModule, LongKeyDeserializers}
+import com.twitter.finatra.json.internal.serde.{FinatraSerDeSimpleModule, LongKeyDeserializers}
 import javax.inject.Singleton
 import scala.collection.JavaConverters._
 

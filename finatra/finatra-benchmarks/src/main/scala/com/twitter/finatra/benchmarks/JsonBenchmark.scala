@@ -4,7 +4,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.twitter.finatra.benchmarks.domain.TestImpressionTaskRequest
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.FinatraSerDeSimpleModule
+import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import java.io.ByteArrayInputStream
 import org.openjdk.jmh.annotations._

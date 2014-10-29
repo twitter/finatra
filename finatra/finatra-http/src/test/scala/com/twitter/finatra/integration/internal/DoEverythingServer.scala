@@ -2,7 +2,7 @@ package com.twitter.finatra.integration.internal
 
 import com.twitter.finatra.FinatraServer
 import com.twitter.finatra.filters.CommonFilters
-import com.twitter.finatra.twitterserver.routing.Router
+import com.twitter.finatra.routing.Router
 
 object DoEverythingServerMain extends DoEverythingServer
 
@@ -15,7 +15,7 @@ class DoEverythingServer extends FinatraServer {
 
   override def configure(router: Router) {
     router.
-      filter[CommonFilters].
+      commonFilter[CommonFilters].
       add[DoEverythingController].
       add(new NonGuiceController)
   }

@@ -1,13 +1,12 @@
 package com.twitter.finatra.marshalling
 
 import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
-import com.google.inject.{Injector, Key}
-import com.twitter.finatra.Request
+import com.twitter.finagle.http.Request
+import com.twitter.finatra.guice.FinatraInjector
 import com.twitter.finatra.utils.Logging
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import javax.inject.{Inject, Singleton}
-import net.codingwell.scalaguice.InjectorExtensions._
 import net.codingwell.scalaguice._
 import scala.collection.mutable
 import scala.reflect.ScalaSignature
@@ -15,7 +14,7 @@ import scala.reflect.ScalaSignature
 //TODO: Refactor class
 @Singleton
 class MessageBodyManager @Inject()(
-  injector: Injector,
+  injector: FinatraInjector,
   defaultMessageBodyReader: DefaultMessageBodyReader,
   defaultMessageBodyWriter: DefaultMessageBodyWriter)
   extends Logging {
@@ -25,6 +24,7 @@ class MessageBodyManager @Inject()(
   private val classToAnnotationWriter = mutable.Map[Type, Option[MessageBodyWriter[Any]]]()
   private val writersByAnnotation = mutable.Map[Type, MessageBodyWriter[Any]]()
   private val writersOrDefaultCache = mutable.Map[Type, MessageBodyWriter[Any]]()
+  private val manifestToTypeCache = mutable.Map[Manifest[_], Type]()
 
   /* Public */
 
@@ -50,9 +50,10 @@ class MessageBodyManager @Inject()(
     add[MBC](
       typeLiteral[TypeToReadOrWrite].getType)
   }
-
+  
   def parse[T: Manifest](request: Request): T = {
-    readers.get(typeLiteral[T].getType) map { reader =>
+    val objType = manifestToTypeCache.getOrElseUpdate(manifest[T], typeLiteral[T].getType)
+    readers.get(objType) map { reader =>
       reader.parse(request).asInstanceOf[T]
     } getOrElse {
       defaultMessageBodyReader.parse[T](request)
@@ -72,9 +73,7 @@ class MessageBodyManager @Inject()(
   /* Private */
 
   private def add[MessageBodyComponent: Manifest](typeToReadOrWrite: Type) {
-    val messageBodyComponent = injector.getInstance(
-      Key.get(
-        typeLiteral[MessageBodyComponent]))
+    val messageBodyComponent = injector.instance[MessageBodyComponent]
 
     messageBodyComponent match {
       case reader: MessageBodyReader[_] =>

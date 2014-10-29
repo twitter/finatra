@@ -1,9 +1,8 @@
 package com.twitter.finatra.test
 
 import com.twitter.finagle.http.{Method, Response, Request => FinagleRequest}
-import com.twitter.finatra.request.RouteParams
-import com.twitter.finatra.twitterserver.routing.RoutingService
-import com.twitter.finatra.{Controller, Request}
+import com.twitter.finatra.Controller
+import com.twitter.finatra.routing.RoutingService
 import com.twitter.util.{Await, Future}
 
 //POC for unit testing finatra controllers
@@ -27,8 +26,6 @@ abstract class ControllerTest extends HttpTest {
   }
 
   protected def getRequest(uri: String) = {
-    new Request(
-      FinagleRequest(Method.Get, uri),
-      routeParams = RouteParams.empty)
+    FinagleRequest(Method.Get, uri)
   }
 }

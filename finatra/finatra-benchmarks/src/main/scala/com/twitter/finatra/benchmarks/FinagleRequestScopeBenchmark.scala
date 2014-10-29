@@ -3,7 +3,7 @@ package com.twitter.finatra.benchmarks
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.***REMOVED***.authentication.filters.ClientAuthenticationRequestScopeFilter
 import com.twitter.finatra.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
-import com.twitter.finatra.twitterserver.routing.{Route, RoutingService}
+import com.twitter.finatra.routing.{Route, RoutingService}
 import com.twitter.finatra.{Request => FinatraRequest}
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod

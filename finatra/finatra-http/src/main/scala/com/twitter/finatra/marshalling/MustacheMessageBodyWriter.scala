@@ -4,15 +4,15 @@ import com.google.common.net.MediaType
 import com.twitter.finatra.annotations.{Mustache => MustacheAnnotation}
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}
-import scala.collection.JavaConversions.asScalaConcurrentMap
+import scala.collection.JavaConversions.mapAsScalaConcurrentMap
 
 @Singleton
 class MustacheMessageBodyWriter @Inject()(
   mustacheService: MustacheService)
   extends MessageBodyWriter[Any] {
 
-  private val classToViewNameCache =
-    asScalaConcurrentMap(new ConcurrentHashMap[Class[_], String]())
+  private val classToViewNameCache = mapAsScalaConcurrentMap(
+    new ConcurrentHashMap[Class[_], String]())
 
   /* Public */
 

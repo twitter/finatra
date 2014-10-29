@@ -99,6 +99,10 @@
           <groupId>com.twitter.common</groupId>
           <artifactId>util</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>com.twitter.common</groupId>
+          <artifactId>base</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
