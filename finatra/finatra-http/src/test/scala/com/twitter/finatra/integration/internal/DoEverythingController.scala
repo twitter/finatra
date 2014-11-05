@@ -300,6 +300,11 @@ class DoEverythingController @Inject()(
       request.id4.getOrElse(0)
   }
 
+  get("/users/:name") { r: Request =>
+    val user = TestUser(r.params("name"))
+    response.ok.body(user) // test ResponseBuilder
+  }
+
   post("/users") { user: TestUser =>
     user.name
   }
@@ -309,7 +314,7 @@ class DoEverythingController @Inject()(
   }
 
   get("/set") { r: Request =>
-    SortedSet("a", "b")
+    response.ok.body(SortedSet("a", "b"))
   }
 
   get("/seq") { r: Request =>

@@ -20,7 +20,7 @@ class FinatraDefaultMessageBodyWriter @Inject()(
       case bytes: Array[Byte] =>
         WriterResponse(APPLICATION_BINARY, bytes)
       case _ =>
-        WriterResponse(PLAIN_TEXT_UTF_8, obj)
+        WriterResponse(PLAIN_TEXT_UTF_8, obj.toString)
     }
   }
 

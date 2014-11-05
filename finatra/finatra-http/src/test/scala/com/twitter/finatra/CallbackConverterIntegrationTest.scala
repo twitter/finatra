@@ -21,6 +21,7 @@ class CallbackConverterIntegrationTest extends Test {
 
   val request = mock[Request]
   val ford = Car("Ford")
+  val okResponse = SimpleResponse(Ok, "bob")
 
   "Future Some String" in {
     assertOk(
@@ -52,10 +53,22 @@ class CallbackConverterIntegrationTest extends Test {
       withBody = "bob")
   }
 
-  "Future Ok String" in {
+  "Future Response" in {
     assertOk(
-      callbackConverter.convertToFutureResponse(futureOk),
+      callbackConverter.convertToFutureResponse(futureResponse),
       withBody = "bob")
+  }
+
+  "Future Some Response" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(futureSomeResponse),
+      withBody = "bob")
+  }
+
+  "Future None Response" in {
+    assertStatus(
+      callbackConverter.convertToFutureResponse(futureNoneResponse),
+      expectedStatus = NotFound)
   }
 
   "Future Seq String" in {
@@ -137,8 +150,16 @@ class CallbackConverterIntegrationTest extends Test {
     Future("bob")
   }
 
-  def futureOk(request: Request): Future[Response] = {
-    Future(SimpleResponse(Ok, "bob"))
+  def futureResponse(request: Request): Future[Response] = {
+    Future(okResponse)
+  }
+
+  def futureSomeResponse(request: Request): Future[Option[Response]] = {
+    Future(Some(okResponse))
+  }
+
+  def futureNoneResponse(request: Request): Future[Option[Response]] = {
+    Future.None
   }
 
   def futureSeqString(request: Request): Future[Seq[String]] = {

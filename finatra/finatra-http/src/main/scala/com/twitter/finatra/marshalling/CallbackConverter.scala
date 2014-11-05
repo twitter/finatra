@@ -76,12 +76,10 @@ class CallbackConverter @Inject()(
   }
 
   private def createHttpResponse(any: Any): Response = {
-    val writer = messageBodyManager.writerOrDefault(any)
-    val writerResponse = writer.write(any)
-    responseBuilder.ok.
-      body(writerResponse.body).
-      contentType(writerResponse.contentType).
-      headers(writerResponse.headers)
+    any match {
+      case response: Response => response
+      case _ => responseBuilder.ok(any)
+    }
   }
 
   private def isFutureResponse[T: Manifest]: Boolean = {

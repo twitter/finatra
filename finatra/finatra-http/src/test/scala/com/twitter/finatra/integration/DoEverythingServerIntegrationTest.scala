@@ -1,5 +1,6 @@
 package com.twitter.finatra.integration
 
+import com.google.common.net.MediaType.JSON_UTF_8
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.integration.internal.{DoEverythingServer, DoEverythingService}
@@ -461,6 +462,15 @@ class DoEverythingServerIntegrationTest extends HttpTest {
         andExpect = BadRequest,
         withErrors = Seq(
           "Unexpected character ('a' (code 97)): was expecting double-quote to start field name"))
+    }
+
+    "GET json user" in {
+      val response = server.httpGet(
+        "/users/mary",
+        andExpect = Ok,
+        withJsonBody = """{ "name" : "mary" }""")
+
+      response.headerMap("content-type") should equal(JSON_UTF_8.toString)
     }
 
     "POST json user" in {

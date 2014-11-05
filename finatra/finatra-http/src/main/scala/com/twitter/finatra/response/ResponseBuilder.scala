@@ -126,22 +126,20 @@ class ResponseBuilder @Inject()(
     }
 
     def body(any: Any): EnrichedResponse = {
-      messageBodyManager.writer(any) match {
-        case Some(writer) =>
-          val writerResponse = writer.write(any)
-          headers(writerResponse.headers)
-          body(writerResponse.body)
+      any match {
+        case null => nothing
+        case bytes: Array[Byte] => body(bytes)
+        case "" => nothing
+        case Unit => nothing
+        case _: BoxedUnit => nothing
+        case opt if opt == None => nothing
+        case str: String => body(str)
         case _ =>
-          any match {
-            case null => nothing
-            case bytes: Array[Byte] => body(bytes)
-            case "" => nothing
-            case Unit => nothing
-            case _: BoxedUnit => nothing
-            case opt if opt == None => nothing
-            case str: String => body(str)
-            case _ => body(any.toString)
-          }
+          val writer = messageBodyManager.writerOrDefault(any)
+          val writerResponse = writer.write(any)
+          body(writerResponse.body)
+          contentType(writerResponse.contentType)
+          headers(writerResponse.headers)
       }
       this
     }
