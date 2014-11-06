@@ -17,6 +17,11 @@ junit_tests(name='scala',
 )
 
 scala_library(name="test-deps",
+  provides = scala_artifact(
+    org = 'com.twitter.finatra',
+    name = 'finatra-jackson-test-jar',
+    repo = artifactory,
+  ),
   dependencies=[
     '3rdparty:junit',
     '3rdparty:mockito-all',
@@ -24,7 +29,6 @@ scala_library(name="test-deps",
     '3rdparty:specs2',
     'finatra/finatra/finatra-jackson',
     'finatra/finatra/finatra-jackson/src/main/java',
-    'finatra/finatra/finatra-jackson/src/test/java',
   ],
   sources=[
     'com/twitter/finatra/json/JsonDiff.scala',

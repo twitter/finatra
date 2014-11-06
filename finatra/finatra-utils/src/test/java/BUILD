@@ -11,6 +11,11 @@ junit_tests(name='tests',
 )
 
 java_library(name='java',
+  provides = scala_artifact(
+    org = 'com.twitter.finatra',
+    name = 'finatra-utils-java-test-jar',
+    repo = artifactory,
+  ),
   dependencies=[
     '3rdparty:guava',
     '3rdparty:guice'

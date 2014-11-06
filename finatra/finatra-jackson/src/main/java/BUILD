@@ -1,6 +1,6 @@
 java_library(name='java',
   provides = artifact(
-    org = 'com.twitter',
+    org = 'com.twitter.finatra',
     name = 'finatra-jackson-java',
     repo = artifactory,
   ),

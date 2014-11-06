@@ -1,6 +1,6 @@
 scala_library(name='scala',
   provides = scala_artifact(
-    org = 'com.twitter',
+    org = 'com.twitter.finatra',
     name = 'finatra-server',
     repo = artifactory,
   ),
@@ -29,9 +29,6 @@ scala_library(name='scala',
     'util/util-core'
   ],
   sources=rglobs('*.scala'),
-  java_sources=[
-    'finatra/finatra/finatra-server/src/main/java'
-  ],
   resources=[
     'finatra/finatra/finatra-server/src/main/resources'
   ]
