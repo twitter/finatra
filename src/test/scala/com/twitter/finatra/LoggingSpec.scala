@@ -15,6 +15,7 @@
  */
 package com.twitter.finatra
 
+import com.twitter.finatra.config.logLevel
 import test.ShouldSpec
 import com.twitter.app.App
 import com.twitter.logging.Level
@@ -22,9 +23,9 @@ import com.twitter.logging.Level
 class LoggingSpec extends ShouldSpec {
 
   def changeLevel(level: String)(f: => Unit) = {
-    System.setProperty("com.twitter.finatra.config.logLevel", level)
-    f
-    System.setProperty("com.twitter.finatra.config.logLevel", "INFO")
+    logLevel.let(level) {
+      f
+    }
   }
 
   trait TestApp extends App with Logging
