@@ -22,5 +22,13 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
         server.mainResult,
         Future.Unit)
     }
+    
+    "fail if server is a singleton" in {
+      intercept[IllegalArgumentException] {
+        EmbeddedTwitterServer(SingletonServer)
+      }
+    }
   }
 }
+
+object SingletonServer extends GuiceTwitterServer

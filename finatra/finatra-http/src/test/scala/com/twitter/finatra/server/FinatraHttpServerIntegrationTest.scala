@@ -9,7 +9,7 @@ class FinatraHttpServerIntegrationTest extends Test {
 
   "HiServiceServer" should {
     "respond" in {
-      val server = EmbeddedTwitterServer(HiServer)
+      val server = EmbeddedTwitterServer(new HiServer)
       server.httpGet(
         "/asdf",
         andExpect = Status.Ok,
@@ -18,7 +18,7 @@ class FinatraHttpServerIntegrationTest extends Test {
   }
 }
 
-object HiServer extends FinatraHttpServer {
+class HiServer extends FinatraHttpServer {
   override def httpService = new Service[Request, Response] {
     def apply(request: Request) = {
       val response = Response()

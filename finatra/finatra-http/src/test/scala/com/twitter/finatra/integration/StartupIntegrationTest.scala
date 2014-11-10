@@ -16,7 +16,7 @@ class StartupIntegrationTest extends HttpTest {
 
   "startup" should {
     "ensure health check succeeds when guice config is good" in {
-      val server = EmbeddedTwitterServer(SimpleGuiceHttpTwitterServer)
+      val server = EmbeddedTwitterServer(new SimpleGuiceHttpTwitterServer)
       assertHealth(server)
 
       //We can no longer directly get the json, since it's now embedded in HTML :-/
@@ -29,7 +29,7 @@ class StartupIntegrationTest extends HttpTest {
 
     "non HTTP twitter-server passes health check" in {
       val server = EmbeddedTwitterServer(
-        SimpleGuiceTwitterServer)
+        new SimpleGuiceTwitterServer)
 
       server.start()
       assertHealth(server)
@@ -38,7 +38,7 @@ class StartupIntegrationTest extends HttpTest {
 
     "ensure server health check fails when guice config fails fast" in {
       val server = EmbeddedTwitterServer(
-        twitterServer = FailFastServer,
+        twitterServer = new FailFastServer,
         waitForWarmup = false)
 
       server.start()
@@ -48,7 +48,7 @@ class StartupIntegrationTest extends HttpTest {
 
     "ensure startup fails when guice config hangs" in {
       val server = EmbeddedTwitterServer(
-        twitterServer = GuiceStartupHangsServer,
+        twitterServer = new GuiceStartupHangsServer,
         waitForWarmup = false)
 
       server.start()
@@ -59,7 +59,7 @@ class StartupIntegrationTest extends HttpTest {
 
     "ensure startup fails when simple server preMain throws exception" in {
       val server = new EmbeddedTwitterServer(
-        twitterServer = PremainExceptionServer,
+        twitterServer = new PremainExceptionServer,
         waitForWarmup = false)
 
       assertFailedFuture[StartupTestException](
@@ -68,7 +68,7 @@ class StartupIntegrationTest extends HttpTest {
 
     "ensure startup fails when preMain throws exception" in {
       val server = new EmbeddedTwitterServer(
-        twitterServer = ServerPremainException,
+        twitterServer = new ServerPremainException,
         waitForWarmup = false)
 
       assertFailedFuture[StartupTestException](
@@ -106,7 +106,7 @@ class StartupIntegrationTest extends HttpTest {
 
     "calling GuiceModule.install throws exception" in {
       val server = new EmbeddedTwitterServer(
-        twitterServer = ServerWithGuiceModuleInstall,
+        twitterServer = new ServerWithGuiceModuleInstall,
         waitForWarmup = false)
 
       assertFailedFuture[Exception](
@@ -115,7 +115,7 @@ class StartupIntegrationTest extends HttpTest {
   }
 }
 
-object GuiceStartupHangsServer extends FinatraServer {
+class GuiceStartupHangsServer extends FinatraServer {
   override def overrideModules = Seq(new AbstractModule {
     def configure() {
       Thread.sleep(99999999)
@@ -125,7 +125,7 @@ object GuiceStartupHangsServer extends FinatraServer {
   protected override def configure(router: Router) {}
 }
 
-object FailFastServer extends FinatraServer {
+class FailFastServer extends FinatraServer {
   override val modules = Seq(new AbstractModule {
     def configure() {
       throw new StartupTestException("guice module exception")
@@ -135,15 +135,15 @@ object FailFastServer extends FinatraServer {
   protected override def configure(router: Router) {}
 }
 
-object SimpleGuiceTwitterServer extends GuiceTwitterServer {
+class SimpleGuiceTwitterServer extends GuiceTwitterServer {
   override val modules = Seq()
 }
 
-object SimpleGuiceHttpTwitterServer extends FinatraServer {
+class SimpleGuiceHttpTwitterServer extends FinatraServer {
   protected override def configure(router: Router) {}
 }
 
-object ServerWithGuiceModuleInstall extends FinatraServer {
+class ServerWithGuiceModuleInstall extends FinatraServer {
   override val modules = Seq(new GuiceModule {
     override def configure() {
       install(new FooModule)
@@ -157,7 +157,7 @@ class FooModule extends AbstractModule {
   override def configure() {}
 }
 
-object PremainExceptionServer extends TwitterServerWithPorts with Warmup {
+class PremainExceptionServer extends TwitterServerWithPorts with Warmup {
   premain {
     throw new StartupTestException("premain exception")
   }
@@ -168,7 +168,7 @@ object PremainExceptionServer extends TwitterServerWithPorts with Warmup {
   }
 }
 
-object ServerPremainException extends FinatraServer {
+class ServerPremainException extends FinatraServer {
   premain {
     throw new StartupTestException("premain exception")
   }

@@ -36,6 +36,11 @@ class EmbeddedApp(
 
   /* Constructor */
 
+  require(!isSingletonObject(app),
+    "app must be a new instance rather than a singleton (e.g. \"new " +
+    "FooServer\" instead of \"FooServerMain\" where FooServerMain is " +
+    "defined as \"object FooServerMain extends FooServer\"")
+
   /*
    * Overwrite Guice stage if app is a GuiceApp.
    *
@@ -122,32 +127,6 @@ class EmbeddedApp(
     injector.instance(thriftKey).asInstanceOf[T]
   }
 
-  private def runTwitterUtilAppMain() {
-    val allArgs = combineArgs()
-    println("Starting " + appName + " with args: " + allArgs.mkString(" "))
-
-    _mainResult = futurePool {
-      try {
-        app.main(allArgs)
-      } catch {
-        case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
-          println("OutOfMemoryError(PermGen) in server startup. " +
-            "This is most likely due to the incorrect setting of a client " +
-            "flag (not defined or invalid). Increase your permgen to see the exact error message (e.g. -XX:MaxPermSize=256m)")
-          e.printStackTrace()
-          System.exit(-1)
-        case e if !NonFatal.isNonFatal(e) =>
-          println("Fatal exception in server startup.")
-          throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
-      }
-    } onFailure { e =>
-      println("Error in embedded twitter-server thread ")
-      e.printStackTrace()
-      println()
-      startupFailed = true //mutation
-    }
-  }
-
   def appMain() {
     banner("Run AppMain for " + appName)
     guiceApp.appMain()
@@ -177,7 +156,37 @@ class EmbeddedApp(
       resolverMapStr(resolverMap)).toArray
   }
 
+  protected def logAppStartup() = {
+    banner("App warmup completed (" + appName + ")")
+  }
+
   /* Private */
+
+  private def runTwitterUtilAppMain() {
+    val allArgs = combineArgs()
+    println("Starting " + appName + " with args: " + allArgs.mkString(" "))
+
+    _mainResult = futurePool {
+      try {
+        app.main(allArgs)
+      } catch {
+        case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
+          println("OutOfMemoryError(PermGen) in server startup. " +
+            "This is most likely due to the incorrect setting of a client " +
+            "flag (not defined or invalid). Increase your permgen to see the exact error message (e.g. -XX:MaxPermSize=256m)")
+          e.printStackTrace()
+          System.exit(-1)
+        case e if !NonFatal.isNonFatal(e) =>
+          println("Fatal exception in server startup.")
+          throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
+      }
+    } onFailure { e =>
+      println("Error in embedded twitter-server thread ")
+      e.printStackTrace()
+      println()
+      startupFailed = true //mutation
+    }
+  }
 
   private def flagsStr(flagsMap: Map[String, String]) = {
     for ((key, value) <- flagsMap) yield {
@@ -196,13 +205,18 @@ class EmbeddedApp(
           } mkString ","
         })
   }
+  
+  // hack
+  private def isSingletonObject(app: App) = {
+    app.getClass.getSimpleName.endsWith("$")
+  }
 
   private lazy val waitForStartupRetryPolicy = RetryPolicyUtils.constantRetry[Boolean](
     start = 1.second,
     numRetries = 300,
     shouldRetry = {case Return(started) => !started})
 
-  def waitForWarmupComplete() {
+  private def waitForWarmupComplete() {
     val started = retry(waitForStartupRetryPolicy, suppress = true) {
       if (startupFailed) {
         fail("Server startup failed")
@@ -216,10 +230,6 @@ class EmbeddedApp(
       throw new Exception("App: %s failed to startup.".format(appName))
     }
     logAppStartup()
-  }
-
-  protected def logAppStartup() = {
-    banner("App warmup completed (" + appName + ")")
   }
 
   private def isModuleLoaded(name: String): Boolean = {
