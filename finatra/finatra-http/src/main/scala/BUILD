@@ -31,10 +31,3 @@ scala_library(name='scala',
     'finatra/finatra/finatra-http/src/main/resources'
   ]
 )
-
-java_library(name='java',
-  dependencies=[
-    'finatra/finatra/finatra-http/src/main/scala'
-  ],
-  sources=rglobs('*.java')
-)
