@@ -685,6 +685,14 @@ class JacksonJsonTest extends FeatureSpec with Matchers with Logging {
     }
   }
 
+  feature("A case class that throws an exception") {
+    scenario("is not parsable from a JSON object") {
+      intercept[NullPointerException] {
+        parse[CaseClassWithException]("""{}""")
+      }
+    }
+  }
+
   feature("A case class nested inside of an object") {
     scenario("is parsable from a JSON object") {
       parse[OuterObject.NestedCaseClass]( """{"id": 1}""") should be(OuterObject.NestedCaseClass(1))

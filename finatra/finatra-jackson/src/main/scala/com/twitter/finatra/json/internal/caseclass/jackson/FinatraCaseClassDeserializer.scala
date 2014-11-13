@@ -1,5 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
+import java.lang.reflect.InvocationTargetException
+
 import com.fasterxml.jackson.core.{JsonParser, JsonProcessingException, JsonToken}
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
@@ -177,9 +179,23 @@ class FinatraCaseClassDeserializer(
       throw new JsonObjectParseException(fieldErrors)
     }
 
-    val obj = constructor.newInstance(constructorValues: _*)
+    val obj = create(constructorValues)
     executeMethodValidations(fieldErrors, obj)
-    obj.asInstanceOf[Object]
+    obj
+  }
+
+  private def create(constructorValues: Array[Object]): Object = {
+    try {
+      constructor.newInstance(constructorValues: _*).asInstanceOf[Object]
+    } catch {
+      case e @ (_: InvocationTargetException | _: ExceptionInInitializerError) =>
+        warn("Add validation to avoid instantiating invalid object of type: " + javaType.getRawClass)
+        // propagate the underlying cause of the failed instantiation if available
+        if(e.getCause == null)
+          throw e
+        else
+          throw e.getCause
+    }
   }
 
   private def executeFieldValidations(value: Any, field: CaseClassField) = {

@@ -61,6 +61,10 @@ case class CaseClassWithAllTypes(map: Map[String, String],
   intMap: Map[Int, Int] = Map(),
   longMap: Map[Long, Long] = Map())
 
+case class CaseClassWithException() {
+  throw new NullPointerException("Oops!!!")
+}
+
 object OuterObject {
 
   case class NestedCaseClass(id: Long)
