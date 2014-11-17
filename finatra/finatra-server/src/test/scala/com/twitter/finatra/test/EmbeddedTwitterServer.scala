@@ -452,11 +452,9 @@ case class EmbeddedTwitterServer(
   private def printResponse(response: Response, suppress: Boolean) {
     if (!suppress) {
       println("-" * 120)
-      println("Status      " + response.status)
-      println("ContentType " + Option(response.headers.get("Content-Type")).getOrElse("<Empty>"))
-      val location = response.headers.get("Location")
-      if (location != null) {
-        println("Location    " + location)
+      println("[Status]      " + response.status)
+      response.headerMap foreach { case (k, v) =>
+        println(s"[Header] $k: $v")
       }
     }
   }
