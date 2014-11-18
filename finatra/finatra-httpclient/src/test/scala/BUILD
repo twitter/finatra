@@ -8,19 +8,3 @@ junit_tests(name='scala',
   ],
   sources=rglobs('*.scala')
 )
-
-scala_library(name="test-deps",
-  provides = scala_artifact(
-    org = 'com.twitter.finatra',
-    name = 'finatra-httpclient-test-jar',
-    repo = artifactory,
-  ),
-  dependencies=[
-    '3rdparty:junit',
-    '3rdparty:scalatest',
-    '3rdparty:specs2',
-    'finatra/finatra/finatra-httpclient',
-    'finatra/finatra/finatra-utils:test-deps'
-  ],
-  sources=globs('com/twitter/finatra/httpclient/*.scala')
-)

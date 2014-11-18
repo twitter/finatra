@@ -4,9 +4,16 @@ junit_tests(name='scala',
     '3rdparty:scalatest',
     '3rdparty:specs2',
     'finatra/finatra/finatra-utils',
-    'finatra/finatra/finatra-utils/src/test/java'
+    'finatra/finatra/finatra-utils/src/test/scala:test-deps',
+    'finatra/finatra/finatra-utils/src/test/java',
   ],
-  sources=rglobs('*.scala'),
+  sources=rglobs(
+    'com/twitter/finatra/conversions/*.scala',
+    'com/twitter/finatra/exceptions/*.scala',
+    'com/twitter/finatra/integration/*.scala',
+    'com/twitter/finatra/logging/*.scala',
+    'com/twitter/finatra/utils/*.scala',
+  ),
   resources=[
     'finatra/finatra/finatra-utils/src/test/resources'
   ]
@@ -24,9 +31,8 @@ scala_library(name="test-deps",
     '3rdparty:specs2',
     'finatra/finatra/finatra-jackson:test-deps',
     'finatra/finatra/finatra-utils',
-    'finatra/finatra/finatra-utils/src/test/java'
   ],
-  sources = globs(
+  sources=globs(
     'com/twitter/finatra/test/*.scala',
     'com/twitter/finatra/guice/*.scala',
   ),

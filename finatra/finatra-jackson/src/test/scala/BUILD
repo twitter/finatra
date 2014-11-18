@@ -8,9 +8,12 @@ junit_tests(name='scala',
     'finatra/finatra/finatra-jackson',
     'finatra/finatra/finatra-jackson/src/main/java',
     'finatra/finatra/finatra-jackson/src/test/java',
+    'finatra/finatra/finatra-jackson/src/test/scala:test-deps',
     'util/util-core'
   ],
-  sources=rglobs('*.scala'),
+  sources=rglobs(
+    'com/twitter/finatra/tests/*.scala',
+  ),
   resources=[
     'finatra/finatra/finatra-jackson/src/test/resources'
   ]
@@ -27,12 +30,10 @@ scala_library(name="test-deps",
     '3rdparty:mockito-all',
     '3rdparty:scalatest',
     '3rdparty:specs2',
-    'finatra/finatra/finatra-jackson',
-    'finatra/finatra/finatra-jackson/src/main/java',
+    'finatra/finatra/finatra-jackson/src/main/scala',
   ],
-  sources=[
-    'com/twitter/finatra/json/JsonDiff.scala',
-    'com/twitter/finatra/json/ValidatorTest.scala',
-    'com/twitter/finatra/conversions/json.scala'
-  ]
+  sources=rglobs(
+    'com/twitter/finatra/json/*.scala',
+    'com/twitter/finatra/conversions/*.scala',
+  ),
 )

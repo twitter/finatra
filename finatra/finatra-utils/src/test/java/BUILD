@@ -2,20 +2,17 @@ junit_tests(name='tests',
   dependencies=[
     '3rdparty:junit',
     '3rdparty:mockito-all',
-    'finatra/finatra/finatra-utils'
+    'finatra/finatra/finatra-http/src/test/scala:test-deps',
+    'finatra/finatra/finatra-utils',
+    'finatra/finatra/finatra-utils/src/test/java',
   ],
-  sources=rglobs('*.java'),
+  sources=rglobs('*.scala'),
   resources=[
     'finatra/finatra/finatra-utils/src/test/resources'
   ]
 )
 
 java_library(name='java',
-  provides = scala_artifact(
-    org = 'com.twitter.finatra',
-    name = 'finatra-utils-java-test-jar',
-    repo = artifactory,
-  ),
   dependencies=[
     '3rdparty:guava',
     '3rdparty:guice'
