@@ -495,9 +495,14 @@ case class EmbeddedTwitterServer(
     twitterServer.flag.getAll(includeGlobal = false) exists {_.name == "http.port"}
   }
 
-  private def addHeaders(request: Request, headers: Map[String, String]) {
+  // Deletes request headers with null-values in map.
+  private def addOrRemoveHeaders(request: Request, headers: Map[String, String]): Unit = {
     for ((key, value) <- headers) {
-      request.headers.set(key, value)
+      if (value == null) {
+        request.headers.remove(key)
+      } else {
+        request.headers.set(key, value)
+      }
     }
   }
 
@@ -521,8 +526,8 @@ case class EmbeddedTwitterServer(
   }
 
   private def handleRequest(request: Request, client: Service[Request, Response], additionalHeaders: Map[String, String] = Map()): Response = {
-    addHeaders(request, defaultRequestHeaders)
-    addHeaders(request, additionalHeaders) //additional headers get added second so they can overwrite defaults
+    addOrRemoveHeaders(request, defaultRequestHeaders)
+    addOrRemoveHeaders(request, additionalHeaders) //additional headers get added second so they can overwrite defaults
     val futureResponse = client(request)
     val elapsed = Stopwatch.start()
     try {
