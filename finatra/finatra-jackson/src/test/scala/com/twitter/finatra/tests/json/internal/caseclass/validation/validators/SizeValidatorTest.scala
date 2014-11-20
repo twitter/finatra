@@ -1,10 +1,9 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult
 import com.twitter.finatra.json.ValidationResult._
 import com.twitter.finatra.json.annotations._
 import com.twitter.finatra.json.internal.caseclass.validation.validators.SizeValidator
-import com.twitter.finatra.tests.json.ValidatorTest
+import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
 
 
 case class SizeArrayExample(@Size(min = 1, max = 5) sizeValue: Array[Int])

@@ -1,6 +1,5 @@
-package com.twitter.finatra.tests.json
+package com.twitter.finatra.json
 
-import com.twitter.finatra.json.ValidationResult
 import com.twitter.finatra.json.internal.caseclass.CaseClassField._
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser._
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils
