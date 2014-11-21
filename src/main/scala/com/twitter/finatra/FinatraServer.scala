@@ -19,12 +19,11 @@ import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleR
 import com.twitter.finagle.http.codec.HttpServerDispatcher
 import com.twitter.finagle._
 import java.lang.management.ManagementFactory
-import com.twitter.util.{Future, Await}
+import com.twitter.util.Await
 import com.twitter.finagle.netty3.{Netty3ListenerTLSConfig, Netty3Listener}
 import java.net.SocketAddress
 import com.twitter.conversions.storage._
 import com.twitter.finagle.server.DefaultServer
-import com.twitter.finagle.dispatch.SerialServerDispatcher
 import com.twitter.finagle.ssl.Ssl
 import java.io.{FileOutputStream, File, FileNotFoundException}
 
@@ -85,15 +84,37 @@ class FinatraServer extends FinatraTwitterServer {
     pidFile.delete()
   }
 
-  def startSecureServer() {
-    val tlsConfig =
+  /**
+   * Allow custom TLS configuration
+   */
+  def getTlsConfig(): Option[Netty3ListenerTLSConfig] = {
+    if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
+      if (!new File(config.certificatePath()).canRead) {
+        val e = new FileNotFoundException("SSL Certificate not found: " + config.certificatePath())
+        log.fatal(e, "SSL Certificate could not be read: " + config.certificatePath())
+        throw e
+      }
+      if (!new File(config.keyPath()).canRead) {
+        val e = new FileNotFoundException("SSL Key not found: " + config.keyPath())
+        log.fatal(e, "SSL Key could not be read: " + config.keyPath())
+        throw e
+      }
+
       Some(Netty3ListenerTLSConfig(() => Ssl.server(config.certificatePath(), config.keyPath(), null, null, null)))
-    object HttpsListener extends Netty3Listener[Any, Any]("https", codec, tlsConfig = tlsConfig)
-    object HttpsServer extends DefaultServer[FinagleRequest, FinagleResponse, Any, Any](
-      "https", HttpsListener, new HttpServerDispatcher(_, _)
-    )
-    log.info("https server started on port: " + config.sslPort())
-    secureServer = Some(HttpsServer.serve(config.sslPort(), service))
+    } else {
+      None
+    }
+  }
+
+  def startSecureServer() {
+    getTlsConfig() foreach { tlsConfig =>
+      object HttpsListener extends Netty3Listener[Any, Any]("https", codec, tlsConfig = Some(tlsConfig))
+      object HttpsServer extends DefaultServer[FinagleRequest, FinagleResponse, Any, Any](
+        "https", HttpsListener, new HttpServerDispatcher(_, _)
+      )
+      log.info("https server started on port: " + config.sslPort())
+      secureServer = Some(HttpsServer.serve(config.sslPort(), service))
+    }
   }
 
   def startHttpServer() {
@@ -135,17 +156,7 @@ class FinatraServer extends FinatraTwitterServer {
       startAdminServer()
     }
 
-    if (!config.certificatePath().isEmpty && !config.keyPath().isEmpty) {
-      if (!new File(config.certificatePath()).canRead){
-        val e = new FileNotFoundException("SSL Certificate not found: " + config.certificatePath())
-        log.fatal(e, "SSL Certificate could not be read: " + config.certificatePath())
-        throw e
-      }
-      if (!new File(config.keyPath()).canRead){
-        val e = new FileNotFoundException("SSL Key not found: " + config.keyPath())
-        log.fatal(e, "SSL Key could not be read: " + config.keyPath())
-        throw e
-      }
+    if (!config.sslPort().isEmpty) {
       startSecureServer()
     }
 
