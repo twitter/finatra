@@ -135,9 +135,6 @@ sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/README.m
 #edit build.sbt
 sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/build.sbt
 
-#edit assembly.sbt
-sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/assembly.sbt
-
 if [ $snapshot_version ]; then
   sed -ie "s/###VERSION###/$snapshot_version/g" $root_path/$project_name/pom.xml
 else
@@ -155,7 +152,6 @@ rm -rf $root_path/$project_name/pom.xmle
 rm -rf $root_path/$project_name/README.markdowne
 rm -rf $root_path/$project_name/build.sbte
 rm -rf $root_path/$project_name/bower.jsone
-rm -rf $root_path/$project_name/assembly.sbte
 rm -rf $dest_path/App.scalae
 rm -rf $root_path/$project_name/Procfilee
 rm -rf $test_path/AppSpec.scalae
