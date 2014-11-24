@@ -44,6 +44,7 @@ You may also need to install foreman:
 ### To put on heroku
 
     heroku create
+    heroku config:set ENV=production
     git push heroku master
 
 ### To run locally like it does on heroku
