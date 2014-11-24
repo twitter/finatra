@@ -45,6 +45,7 @@ You may also need to install foreman:
 
     heroku create
     heroku config:set ENV=production
+    heroku config:set BUILDPACK_URL=https://github.com/heroku/heroku-buildpack-scala
     git push heroku master
 
 ### To run locally like it does on heroku
