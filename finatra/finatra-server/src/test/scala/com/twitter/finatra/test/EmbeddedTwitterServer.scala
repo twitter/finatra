@@ -15,7 +15,7 @@ import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.test.Banner._
 import com.twitter.finatra.test.EmbeddedTwitterServer.requestNum
 import com.twitter.finatra.twitterserver.TwitterServerPorts
-import com.twitter.finatra.utils.RetryPolicyUtils
+import com.twitter.finatra.utils.{PortUtils, RetryPolicyUtils}
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
@@ -485,14 +485,18 @@ case class EmbeddedTwitterServer(
     "-log.level=INFO")
 
   private def httpArgs = {
-    if (isHttpServer)
-      Seq("-http.port=:0")
-    else
-      Seq()
+    httpPortFlagName match {
+      case Some(name) =>
+        Seq(s"-$name=${PortUtils.getLoopbackHostAddress}:0")
+      case None =>
+        Seq.empty
+    }
   }
 
-  private def isHttpServer = {
-    twitterServer.flag.getAll(includeGlobal = false) exists {_.name == "http.port"}
+  private def httpPortFlagName: Option[String] = {
+    twitterServer.flag.getAll(includeGlobal = false) map { _.name } find { name =>
+      name == "http.port" || name == "service.port"
+    }
   }
 
   // Deletes request headers with null-values in map.

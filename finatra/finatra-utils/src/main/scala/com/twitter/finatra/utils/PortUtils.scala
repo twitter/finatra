@@ -3,9 +3,12 @@ package com.twitter.finatra.utils
 import com.twitter.app.Flaggable
 import com.twitter.finagle.ListeningServer
 import com.twitter.finagle.builder.{Server => BuilderServer}
-import java.net.{InetSocketAddress, SocketAddress}
+import java.net.{InetAddress, InetSocketAddress, SocketAddress}
 
 object PortUtils {
+  def getLoopbackHostAddress: String =
+    InetAddress.getLoopbackAddress.getHostAddress
+  
   def getPort(server: ListeningServer): Int = {
     server.boundAddress.asInstanceOf[InetSocketAddress].getPort
   }
