@@ -1,1 +1,1 @@
-web:    java -Dcom.twitter.finatra.config.env=production -Dcom.twitter.finatra.config.adminPort='' -Dcom.twitter.finatra.config.port=:$PORT -cp target/classes:target/dependency/* ###PACKAGE_NAME###.App
+web: target/universal/stage/bin/###PROJECT_NAME### -Dcom.twitter.finatra.config.env=$ENV -Dcom.twitter.finatra.config.adminPort=$ADMIN_PORT -Dcom.twitter.finatra.config.port=:$PORT
