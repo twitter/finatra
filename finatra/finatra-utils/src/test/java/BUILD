@@ -1,17 +1,3 @@
-junit_tests(name='tests',
-  dependencies=[
-    '3rdparty:junit',
-    '3rdparty:mockito-all',
-    'finatra/finatra/finatra-http/src/test/scala:test-deps',
-    'finatra/finatra/finatra-utils',
-    'finatra/finatra/finatra-utils/src/test/java',
-  ],
-  sources=rglobs('*.scala'),
-  resources=[
-    'finatra/finatra/finatra-utils/src/test/resources'
-  ]
-)
-
 java_library(name='java',
   dependencies=[
     '3rdparty:guava',

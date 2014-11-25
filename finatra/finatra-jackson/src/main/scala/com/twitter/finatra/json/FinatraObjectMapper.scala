@@ -1,11 +1,12 @@
 package com.twitter.finatra.json
 
 import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{JsonNode, Module, ObjectMapper, ObjectReader}
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.Request
+import com.twitter.finatra.annotations.Experimental
 import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException
-import com.twitter.finatra.json.internal.caseclass.utils.ByteBufferBackedInputStream
 import com.twitter.finatra.json.internal.streaming.{JsonArrayIterator, JsonStreamParseResult, ReaderIterator}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import java.io.{InputStream, OutputStream, Reader, StringWriter}
@@ -14,9 +15,8 @@ import java.nio.ByteBuffer
 object FinatraObjectMapper {
 
   /**
-   * This factory method is not recommended in production, but it may be useful in tests.
-   * The recommended way of obtaining an FinatraObjectMapper is through Guice injection.
-   * Note: The @JsonInject annotation is not supported when this method of creation is used.
+   * If Guice is not available, this factory method can be used, but be aware that the @JsonInject annotation will not work.
+   * NOTE: The preferred way of obtaining a FinatraObjectMapper is through Guice injection using FinatraJacksonModule.
    */
   def create() = {
     val guiceJacksonModule = new FinatraJacksonModule()
@@ -76,6 +76,7 @@ case class FinatraObjectMapper(
     mapper.readValue[T](jsonParser)
   }
 
+  @Experimental
   def streamParse[T: Manifest](arrayName: String, input: InputStream): JsonStreamParseResult[T] = {
     JsonStreamParseResult.create(
       mapper = this,
@@ -84,13 +85,14 @@ case class FinatraObjectMapper(
       arrayName = arrayName)
   }
 
-  /** TODO: Handle escaped delimiters */
+  @Experimental
   def streamParseDelimited[T: Manifest](delimiter: Char, arrayName: String, reader: Reader): Iterator[JsonStreamParseResult[T]] = {
     for (delimitedReader <- new ReaderIterator(reader, delimiter)) yield {
       streamParse(arrayName, delimitedReader)
     }
   }
 
+  @Experimental
   def streamParse[T: Manifest](arrayName: String, reader: Reader): JsonStreamParseResult[T] = {
     JsonStreamParseResult.create(
       mapper = this,
@@ -99,12 +101,14 @@ case class FinatraObjectMapper(
       arrayName = arrayName)
   }
 
+  @Experimental
   def streamParse[T: Manifest](input: InputStream): Iterator[T] = {
     new JsonArrayIterator[T](
       this,
       mapper.getFactory.createParser(input))
   }
 
+  @Experimental
   def streamParse[T: Manifest](reader: Reader): Iterator[T] = {
     new JsonArrayIterator[T](
       this,

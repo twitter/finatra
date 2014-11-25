@@ -9,10 +9,10 @@ import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.google.inject.{Injector, Provides}
 import com.twitter.finatra.guice.GuiceModule
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.json.NamingStrategyUtils._
 import com.twitter.finatra.json.annotations.CamelCaseMapper
 import com.twitter.finatra.json.internal.caseclass.guice.GuiceInjectableValues
 import com.twitter.finatra.json.internal.caseclass.jackson.FinatraCaseClassModule
-import com.twitter.finatra.json.internal.caseclass.utils.NamingStrategyUtils._
 import com.twitter.finatra.json.internal.serde.{FinatraSerDeSimpleModule, LongKeyDeserializers}
 import javax.inject.Singleton
 import scala.collection.JavaConverters._

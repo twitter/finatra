@@ -9,10 +9,9 @@ import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException, JsonObjectParseException}
 import com.twitter.finatra.json.internal.caseclass.jackson.JacksonUtils
 import com.twitter.finatra.response._
-import com.twitter.util.{Memoize, Future, NonFatal}
-import grizzled.slf4j.Logging
+import com.twitter.finatra.utils.Logging
+import com.twitter.util.{Future, Memoize, NonFatal}
 import javax.inject.{Inject, Singleton}
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 /**
  * Filter which converts exceptions into HTTP responses.

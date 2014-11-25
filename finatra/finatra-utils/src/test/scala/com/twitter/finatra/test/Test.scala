@@ -2,7 +2,7 @@ package com.twitter.finatra.test
 
 import com.twitter.finatra.logging.Timing
 import com.twitter.util.{Await, Future}
-import grizzled.slf4j.Logging
+import com.twitter.finatra.utils.Logging
 import java.util.TimeZone
 import org.apache.commons.io.IOUtils
 import org.joda.time.{DateTimeZone, Duration}

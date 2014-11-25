@@ -1,13 +1,9 @@
 junit_tests(name='scala',
   dependencies=[
-    '3rdparty:junit',
-    '3rdparty:netty',
-    '3rdparty:scalatest',
-    '3rdparty:specs2',
     'finatra/finatra/finatra-scopes',
     'finatra/finatra/finatra-http:test-deps',
     'finatra/finatra/finatra-server:test-deps',
-    'finatra/finatra/finatra-utils/src/test/scala',
+    'finatra/finatra/finatra-utils:test-deps',
   ],
   sources=rglobs('*.scala'),
   resources=[

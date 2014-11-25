@@ -1,11 +1,6 @@
 junit_tests(name='scala',
   dependencies=[
-    '3rdparty:junit',
-    '3rdparty:logback-classic',
-    '3rdparty:mockito-all',
-    '3rdparty:scalatest',
-    '3rdparty:specs2',
-    'finatra/finatra/finatra-jackson',
+    'finatra/finatra/finatra-jackson/src/main/scala',
     'finatra/finatra/finatra-jackson/src/main/java',
     'finatra/finatra/finatra-jackson/src/test/java',
     'finatra/finatra/finatra-jackson/src/test/scala:test-deps',
@@ -27,9 +22,8 @@ scala_library(name="test-deps",
   ),
   dependencies=[
     '3rdparty:junit',
-    '3rdparty:mockito-all',
     '3rdparty:scalatest',
-    '3rdparty:specs2',
+    'finatra/finatra/finatra-jackson/src/main/java',
     'finatra/finatra/finatra-jackson/src/main/scala',
   ],
   sources=rglobs(

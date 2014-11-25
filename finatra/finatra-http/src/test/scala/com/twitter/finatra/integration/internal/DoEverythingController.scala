@@ -4,9 +4,8 @@ import com.twitter.finagle.http.{Status, Request}
 import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
 import com.twitter.finatra.annotations.{Flag, Mustache}
 import com.twitter.finatra.exceptions.{BadRequestException, InternalServerErrorException, NotFoundException, ServiceUnavailableException}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.json.{WrappedValue, FinatraObjectMapper}
 import com.twitter.finatra.json.annotations.{FormParam, JsonInject, QueryParam}
-import com.twitter.finatra.json.internal.caseclass.wrapped.JsonWrappedValue
 import com.twitter.finatra.request.RequestUtils
 import com.twitter.finatra.response._
 import com.twitter.finatra.{Controller}
@@ -359,7 +358,7 @@ case class RequestWithNotFoundInjections(
 
 case class UserId(
   id: Long)
-  extends JsonWrappedValue[Long]
+  extends WrappedValue[Long]
 
 case class FooClass(id: String)
 

@@ -6,8 +6,7 @@ import com.twitter.finatra.conversions.json._
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.json.annotations._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonFieldParseException, JsonInjectionNotSupportedException, JsonObjectParseException}
-import com.twitter.finatra.json.internal.caseclass.wrapped.JsonWrappedValue
-import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
+import com.twitter.finatra.json.{WrappedValue, FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.tests.json.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.tests.json.internal._
 import com.twitter.finatra.utils.Logging
@@ -833,13 +832,13 @@ class JacksonJsonTest extends FeatureSpec with Matchers with Logging {
 }
 
 case class WrappedValueInt(value: Int)
-  extends JsonWrappedValue[Int]
+  extends WrappedValue[Int]
 
 case class WrappedValueLong(value: Long)
-  extends JsonWrappedValue[Long]
+  extends WrappedValue[Long]
 
 case class WrappedValueString(value: String)
-  extends JsonWrappedValue[String]
+  extends WrappedValue[String]
 
 case class WrappedValueIntInObj(
   foo: WrappedValueInt)

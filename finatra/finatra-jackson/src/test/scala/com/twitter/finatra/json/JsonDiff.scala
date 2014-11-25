@@ -2,7 +2,7 @@ package com.twitter.finatra.json
 
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapperCopier, SerializationFeature}
 import com.twitter.finatra.conversions.json._
-import grizzled.slf4j.Logging
+import com.twitter.finatra.utils.Logging
 import org.apache.commons.lang.StringUtils
 import org.scalatest.exceptions.TestFailedException
 

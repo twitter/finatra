@@ -19,6 +19,8 @@ class JsonMessageBodyReader @Inject()(
   objectMapper: FinatraObjectMapper)
   extends DefaultMessageBodyReader {
 
+  /* Public */
+
   override def parse[T: Manifest](request: Request): T = {
     val requestInjectableValues = new RequestInjectableValues(request, injector)
     val requestAwareObjectReader = objectMapper.reader[T].`with`(requestInjectableValues)

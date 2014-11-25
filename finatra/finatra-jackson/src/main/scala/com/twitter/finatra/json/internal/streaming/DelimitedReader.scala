@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.internal.streaming
 
+import com.twitter.finatra.annotations.Experimental
 import com.twitter.finatra.utils.InputStreamUtils.makeMarkable
 import java.io.Reader
 import org.apache.commons.lang.ArrayUtils
@@ -14,6 +15,7 @@ import org.apache.commons.lang.ArrayUtils
  *
  * TODO: Handle escaped delimiters
  */
+@Experimental
 class DelimitedReader(
   _reader: Reader,
   delimiter: Char)

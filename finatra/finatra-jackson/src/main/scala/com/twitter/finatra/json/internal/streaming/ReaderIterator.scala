@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.internal.streaming
 
+import com.twitter.finatra.annotations.Experimental
 import java.io.Reader
 
 object ReaderIterator {
@@ -8,7 +9,10 @@ object ReaderIterator {
   }
 }
 
-/** TODO: Handle escaped delimiters */
+/**
+ * TODO: Handle escaped delimiters
+ */
+@Experimental
 class ReaderIterator(
   reader: Reader,
   delimiter: Char)

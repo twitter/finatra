@@ -1,4 +1,4 @@
-package com.twitter.finatra.json.internal.caseclass.utils
+package com.twitter.finatra.json
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy
 

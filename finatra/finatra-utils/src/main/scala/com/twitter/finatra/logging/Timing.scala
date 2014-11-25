@@ -1,7 +1,7 @@
 package com.twitter.finatra.logging
 
 import com.twitter.util.{NonFatal, Stopwatch}
-import grizzled.slf4j.Logging
+import com.twitter.finatra.utils.Logging
 
 trait Timing extends Logging {
   def time[T](formatStr: String)(func: => T): T = {

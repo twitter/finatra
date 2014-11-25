@@ -2,8 +2,7 @@ package com.twitter.finatra.tests.json.internal
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finatra.json.ValidationResult
-import com.twitter.finatra.json.internal.caseclass.wrapped.JsonWrappedValue
+import com.twitter.finatra.json.{WrappedValue, ValidationResult}
 
 case class CaseClass(id: Long, name: String)
 
@@ -131,7 +130,7 @@ case class CaseClassWithNestedSeqLong(
 case class Blah(foo: String)
 
 case class TestIdStringWrapper(id: String)
-  extends JsonWrappedValue[String]
+  extends WrappedValue[String]
 
 case class ObjWithTestId(id: TestIdStringWrapper)
 

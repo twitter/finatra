@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
+import com.twitter.finatra.json.{NamingStrategyUtils, WrappedValue}
 import java.lang.reflect.InvocationTargetException
 
 import com.fasterxml.jackson.core.{JsonParser, JsonProcessingException, JsonToken}
@@ -9,25 +10,24 @@ import com.twitter.finatra.conversions.booleans._
 import com.twitter.finatra.json.annotations.JsonCamelCase
 import com.twitter.finatra.json.internal.caseclass.CaseClassField
 import com.twitter.finatra.json.internal.caseclass.exceptions._
-import com.twitter.finatra.json.internal.caseclass.utils.NamingStrategyUtils
 import com.twitter.finatra.json.internal.caseclass.validation.{ValidationManager, ValidationMessageResolver}
-import com.twitter.finatra.json.internal.caseclass.wrapped.JsonWrappedValue
 import com.twitter.finatra.utils.Logging
 import com.twitter.util.NonFatal
 import javax.annotation.concurrent.ThreadSafe
 import scala.collection.mutable.ArrayBuffer
 
 /**
- * Custom case class deserializer to overcome limitations in jackson-scala-module
+ * Custom case class deserializer which overcomes limitations in jackson-scala-module.
  *
- * The limitations which are fixed below are:
- * * We throw a JsonException when 'required' fields are missing in the json
- * * We use default values if a field is missing
- * * We properly deserialize a case class with a Seq[Long] (https://github.com/FasterXML/jackson-module-scala/issues/62)
- * * We support "wrapped values" using JsonWrappedValue which would normally use @JsonCreator which is not supported
+ * Our improvements:
+ * - Throw a JsonException when 'non Option' fields are missing in the incoming json
+ * - Use default values when fields are missing in the incoming json
+ * - Properly deserialize a Seq[Long] (see https://github.com/FasterXML/jackson-module-scala/issues/62)
+ * - Support "wrapped values" using WrappedValue which would normally use @JsonCreator which is not supported
+ * - Support for field and method level validations
  *
  * NOTE: This class is inspired by Jerkson' CaseClassDeserializer which can be found here:
- * https://github.com.cloudphysics.jerkson/blob/master/src/main/scala/com.cloudphysics.jerkson/deser/CaseClassDeserializer.scala
+ * https://github.com/codahale/jerkson/blob/master/src/main/scala/com/codahale/jerkson/deser/CaseClassDeserializer.scala
  */
 @ThreadSafe
 class FinatraCaseClassDeserializer(
@@ -48,7 +48,7 @@ class FinatraCaseClassDeserializer(
     assert(constructors.size == 1, "Multiple case class constructors not supported")
     constructors.head
   }
-  private val isWrapperClass = classOf[JsonWrappedValue[_]].isAssignableFrom(javaType.getRawClass)
+  private val isWrapperClass = classOf[WrappedValue[_]].isAssignableFrom(javaType.getRawClass)
   private val messageResolver = new ValidationMessageResolver
   private val validationManager = new ValidationManager(messageResolver)
   private lazy val firstFieldName = caseClassFields.head.name

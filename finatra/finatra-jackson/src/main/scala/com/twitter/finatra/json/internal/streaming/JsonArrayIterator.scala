@@ -1,8 +1,10 @@
 package com.twitter.finatra.json.internal.streaming
 
 import com.fasterxml.jackson.core.{JsonParser, JsonToken}
+import com.twitter.finatra.annotations.Experimental
 import com.twitter.finatra.json.FinatraObjectMapper
 
+@Experimental
 class JsonArrayIterator[T: Manifest](
   mapper: FinatraObjectMapper,
   parser: JsonParser)

@@ -3,13 +3,12 @@ package com.twitter.finatra.tests.json
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.JsonDiff._
-import grizzled.slf4j.Logging
-import org.scalatest.WordSpec
-import org.scalatest.matchers.ShouldMatchers
+import com.twitter.finatra.utils.Logging
+import org.scalatest.{Matchers, WordSpec}
 
 class JsonDiffTest
   extends WordSpec
-  with ShouldMatchers
+  with Matchers
   with Logging {
 
   "json diff test" in {

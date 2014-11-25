@@ -1,8 +1,8 @@
 package com.twitter.finatra
 
+import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Response, Status}
-import com.twitter.finatra.exceptions.NotFoundException
 import com.twitter.finatra.guice.FinatraTestInjector
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.marshalling.CallbackConverter

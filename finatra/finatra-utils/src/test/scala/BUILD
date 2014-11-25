@@ -1,9 +1,6 @@
 junit_tests(name='scala',
   dependencies=[
-    '3rdparty:junit',
-    '3rdparty:scalatest',
-    '3rdparty:specs2',
-    'finatra/finatra/finatra-utils',
+    'finatra/finatra/finatra-utils/src/main/scala',
     'finatra/finatra/finatra-utils/src/test/scala:test-deps',
     'finatra/finatra/finatra-utils/src/test/java',
   ],
