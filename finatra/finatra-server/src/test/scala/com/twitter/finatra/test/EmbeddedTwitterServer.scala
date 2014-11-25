@@ -481,7 +481,7 @@ case class EmbeddedTwitterServer(
   }
 
   private def standardArgs = Array(
-    "-admin.port=:0",
+    s"-admin.port=${PortUtils.getLoopbackHostAddress}:0",
     "-log.level=INFO")
 
   private def httpArgs = {
