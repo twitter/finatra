@@ -8,19 +8,16 @@ import com.twitter.util.Future
 class EmbeddedTwitterServerIntegrationTest extends Test {
 
   "server" should {
-    "start and quit" in {
+    "start" in {
       val server = EmbeddedTwitterServer(new GuiceTwitterServer {})
 
-      server.httpPost(
-        "/quitquitquit",
-        postBody = "",
+      server.httpGet(
+        "/health",
         routeToAdminServer = true,
         andExpect = Status.Ok,
-        withBody = "quitting\n")
+        withBody = "OK\n")
 
-      assertFuture(
-        server.mainResult,
-        Future.Unit)
+      server.close()
     }
     
     "fail if server is a singleton" in {

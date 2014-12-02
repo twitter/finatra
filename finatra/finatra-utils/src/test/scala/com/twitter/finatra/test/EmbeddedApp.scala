@@ -128,13 +128,13 @@ class EmbeddedApp(
   }
 
   def appMain() {
-    banner("Run AppMain for " + appName)
+    banner("Run AppMain for class " + appName)
     guiceApp.appMain()
   }
 
   def close() {
     if (!closed) {
-      banner("Closing EmbeddedTwitterServer for " + appName)
+      banner("Closing EmbeddedApp for class " + appName)
       app.close()
       closed = true
     }
