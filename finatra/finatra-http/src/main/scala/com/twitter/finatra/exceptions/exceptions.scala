@@ -83,6 +83,25 @@ case class NotFoundException(
   }
 }
 
+object ConflictException {
+  def plainText(body: String) = {
+    new ConflictException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
+  }
+
+  def apply(errors: String*) = {
+    new ConflictException(MediaType.JSON_UTF_8, errors)
+  }
+}
+case class ConflictException(
+  override val mediaType: MediaType,
+  override val errors: Seq[String])
+  extends HttpException(Status.Conflict, mediaType, errors) {
+
+  def this(error: String) = {
+    this(MediaType.JSON_UTF_8, Seq(error))
+  }
+}
+
 
 object InternalServerErrorException {
   def plainText(body: String) = {

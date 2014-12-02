@@ -41,7 +41,7 @@ object json {
         case bytes: Array[Byte] =>
           mapper.parse(bytes)
         case _ =>
-          throw new Exception(any + " not yet supprted")
+          throw new Exception(any + " not yet supported")
       }
     }
   }

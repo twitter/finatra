@@ -51,11 +51,12 @@ class FileResolver extends Logging {
     } yield bis
   }
 
-  private def getLocalFileInputStream(path: String): Option[FileInputStream] = {
+  private def getLocalFileInputStream(path: String): Option[InputStream] = {
     val file = new File(localDocRoot, path)
     if (validLocalFile(file))
       Option(
-        new FileInputStream(file))
+        new BufferedInputStream(
+          new FileInputStream(file)))
     else
       None
   }

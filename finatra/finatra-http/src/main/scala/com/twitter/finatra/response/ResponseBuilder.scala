@@ -6,7 +6,7 @@ import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.marshalling.{MessageBodyManager, MustacheService}
 import com.twitter.finatra.routing.FileResolver
 import com.twitter.util.{Future, Memoize}
-import java.io.InputStream
+import java.io.{FileInputStream, BufferedInputStream, File, InputStream}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
@@ -33,6 +33,12 @@ class ResponseBuilder @Inject()(
 
   def ok(body: Any): EnrichedResponse = EnrichedResponse(Status.Ok).body(body)
 
+  def noContent: EnrichedResponse = EnrichedResponse(Status.NoContent)
+
+  def notAcceptable: EnrichedResponse = EnrichedResponse(Status.NotAcceptable)
+
+  def notAcceptable(body: Any): EnrichedResponse = EnrichedResponse(Status.NotAcceptable).body(body)
+
   def created = EnrichedResponse(Status.Created)
 
   def created(body: Any) = EnrichedResponse(Status.Created).body(body)
@@ -56,6 +62,8 @@ class ResponseBuilder @Inject()(
   def badRequest = EnrichedResponse(Status.BadRequest)
 
   def badRequest(body: Any) = EnrichedResponse(Status.BadRequest).body(body)
+
+  def conflict(body: Any) = EnrichedResponse(Status.Conflict).body(body)
 
   def unauthorized = EnrichedResponse(Status.Unauthorized)
 
@@ -119,12 +127,6 @@ class ResponseBuilder @Inject()(
       this
     }
 
-    def json(str: String) = {
-      contentTypeJson()
-      httpResponse.setContentString(str)
-      this
-    }
-
     def body(any: Any): EnrichedResponse = {
       any match {
         case null => nothing
@@ -134,6 +136,7 @@ class ResponseBuilder @Inject()(
         case _: BoxedUnit => nothing
         case opt if opt == None => nothing
         case str: String => body(str)
+        case file: File => body(file)
         case _ =>
           val writer = messageBodyManager.writerOrDefault(any)
           val writerResponse = writer.write(any)
@@ -144,14 +147,24 @@ class ResponseBuilder @Inject()(
       this
     }
 
+    def body(file: File): EnrichedResponse = {
+      body(
+        new BufferedInputStream(
+          new FileInputStream(file)))
+    }
+
     def body(b: Array[Byte]): EnrichedResponse = {
       httpResponse.setContent(wrappedBuffer(b))
       this
     }
 
     def body(bodyStr: String): EnrichedResponse = {
-      httpResponse.setContentString(bodyStr)
-      this
+      if(bodyStr == "") {
+        nothing
+      } else {
+        httpResponse.setContentString(bodyStr)
+        this
+      }
     }
 
     def body(inputStream: InputStream): EnrichedResponse = {
