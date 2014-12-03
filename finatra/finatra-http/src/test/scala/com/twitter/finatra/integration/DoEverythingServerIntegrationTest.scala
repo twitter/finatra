@@ -156,7 +156,6 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       server.httpFormPost(
         "/formPost",
         params = Map("name" -> "bob", "age" -> "18"),
-        multipart = false,
         andExpect = Ok,
         withBody = "bob")
     }
@@ -165,7 +164,6 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       server.httpFormPost(
         "/formPostView",
         params = Map("name" -> "bob", "age" -> "18"),
-        multipart = false,
         andExpect = Ok,
         withBody = "age:18\nname:bob\nuser1\nuser2\n")
     }
@@ -181,7 +179,6 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       server.httpFormPost(
         "/formPostViewFromBuilderView",
         params = Map("name" -> "bob", "age" -> "18"),
-        multipart = false,
         andExpect = Ok,
         withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
     }
@@ -190,7 +187,6 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       server.httpFormPost(
         "/formPostViewFromBuilderHtml",
         params = Map("name" -> "bob", "age" -> "18"),
-        multipart = false,
         andExpect = Ok,
         withBody = "age:18\nname:bob\nuser1\nuser2\n")
     }
@@ -199,7 +195,6 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       val response = server.httpFormPost(
         "/formPostViewFromBuilderCreatedView",
         params = Map("name" -> "bob", "age" -> "18"),
-        multipart = false,
         andExpect = Created,
         withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
 
@@ -210,7 +205,6 @@ class DoEverythingServerIntegrationTest extends HttpTest {
       val response = server.httpFormPost(
         "/formPostViewFromBuilderCreatedHtml",
         params = Map("name" -> "bob", "age" -> "18"),
-        multipart = false,
         andExpect = Created,
         withBody = "age:18\nname:bob\nuser1\nuser2\n")
 

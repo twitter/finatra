@@ -30,5 +30,15 @@ class MapsConversionsTest extends Test {
       Map(1 -> "a", 2 -> "a", 3 -> "b") filterValues {_ == "b"} should
         equal(Map(3 -> "b"))
     }
+
+    "#filterNotValues" in {
+      Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotValues {_ == "b"} should
+        equal(Map(1 -> "a", 2 -> "a"))
+    }
+
+    "#filterNotKeys" in {
+      Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotKeys {_ == 3} should
+        equal(Map(1 -> "a", 2 -> "a"))
+    }
   }
 }

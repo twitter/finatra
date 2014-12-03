@@ -31,9 +31,17 @@ object maps {
     }
 
     def filterValues(func: V => Boolean): Map[K, V] = {
-      wrappedMap filter { case (key, value) =>
+      wrappedMap filter { case (_, value) =>
         func(value)
       }
+    }
+
+    def filterNotValues(func: V => Boolean): Map[K, V] = {
+      filterValues(!func(_))
+    }
+
+    def filterNotKeys(func: K => Boolean): Map[K, V] = {
+      wrappedMap.filterKeys(!func(_))
     }
   }
 

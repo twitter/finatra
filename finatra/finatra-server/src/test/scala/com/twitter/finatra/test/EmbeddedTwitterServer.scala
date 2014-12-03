@@ -9,6 +9,7 @@ import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.{ChannelClosedException, Service}
 import com.twitter.finatra.conversions.json._
 import com.twitter.finatra.conversions.options._
+import com.twitter.finatra.conversions.maps._
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.guice.GuiceApp
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
@@ -306,9 +307,9 @@ case class EmbeddedTwitterServer(
   def httpFormPost(
     path: String,
     params: Map[String, String],
-    multipart: Boolean,
+    multipart: Boolean = false,
     routeToAdminServer: Boolean = false,
-    headers: Seq[(String, String)] = Seq(),
+    headers: Map[String, String] = Map.empty,
     andExpect: HttpResponseStatus = Status.Ok,
     withBody: String = null,
     withJsonBody: String = null,
@@ -316,7 +317,7 @@ case class EmbeddedTwitterServer(
 
     val request = RequestBuilder().
       url(normalizeURL(path)).
-      addHeaders(headers.toMap).
+      addHeaders(headers).
       add(paramsToElements(params)).
       buildFormPost(multipart = multipart)
 
@@ -530,7 +531,9 @@ case class EmbeddedTwitterServer(
   }
 
   private def handleRequest(request: Request, client: Service[Request, Response], additionalHeaders: Map[String, String] = Map()): Response = {
-    addOrRemoveHeaders(request, defaultRequestHeaders)
+    // Don't overwrite request.headers set by RequestBuilder in httpFormPost.
+    val defaultNewHeaders = defaultRequestHeaders filterNotKeys request.headerMap.contains
+    addOrRemoveHeaders(request, defaultNewHeaders)
     addOrRemoveHeaders(request, additionalHeaders) //additional headers get added second so they can overwrite defaults
     val futureResponse = client(request)
     val elapsed = Stopwatch.start()
