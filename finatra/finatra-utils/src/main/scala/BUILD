@@ -6,8 +6,8 @@ scala_library(name='scala',
   ),
   dependencies=[
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations',
+    '3rdparty/jvm/commons-io',
     '3rdparty/jvm/org/scalaj:scalaj-time',
-    '3rdparty:commons-io',
     '3rdparty:grizzled-slf4j',
     '3rdparty:guice',
     '3rdparty:guice-assistedinject',
@@ -18,7 +18,7 @@ scala_library(name='scala',
     'finagle/finagle-http',
     'finatra/finatra/finatra-utils/src/main/java',
     'scrooge/scrooge-core',
-    'util/util-core'
+    'util/util-core',
   ],
   sources=rglobs('*.scala'),
 )
