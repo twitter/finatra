@@ -9,12 +9,14 @@ import org.joda.time.{DateTimeZone, Duration}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpec}
+import org.specs2.matcher.ScalaTestExpectations
 import org.specs2.mock.Mockito
 
 @RunWith(classOf[JUnitRunner])
 abstract class Test
   extends WordSpec
   with Mockito
+  with ScalaTestExpectations
   with BeforeAndAfterAll
   with BeforeAndAfterEach
   with Matchers
