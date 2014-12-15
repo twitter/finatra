@@ -16,6 +16,6 @@
 package com.twitter.finatra.test
 
 import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 
-trait FlatSpecHelper extends FlatSpec with ShouldMatchers with SpecHelper
+trait FlatSpecHelper extends FlatSpec with Matchers with SpecHelper

@@ -16,13 +16,13 @@
 package com.twitter.finatra.test
 
 import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import com.twitter.finatra.Controller
 import scala.collection.JavaConverters._
 import org.jboss.netty.handler.codec.http.HttpMethod
 import com.twitter.finagle.http.Request
 
-class MockAppSpec extends FlatSpec with ShouldMatchers {
+class MockAppSpec extends FlatSpec with Matchers {
   val server = MockApp(new Controller)
 
   "#toByteArray" should "directly convert String to Array[Byte]" in {
@@ -67,9 +67,9 @@ class MockAppSpec extends FlatSpec with ShouldMatchers {
   it should "not allow both params AND a non-null body in the same request" in {
     val sample = Sample("matt", "matt@does-not-exist.com")
 
-    evaluating {
+    a [RuntimeException] shouldBe thrownBy {
       server.buildRequest(HttpMethod.POST, "/", params = Map("hello" -> "world"), body = sample)
-    } should produce[RuntimeException]
+    }
   }
 
   case class Sample(name: String, email: String)
