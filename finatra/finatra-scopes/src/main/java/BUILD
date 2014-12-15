@@ -5,7 +5,7 @@ java_library(name='java',
     repo = artifactory,
   ),
   dependencies=[
-    '3rdparty:guice',
+    '3rdparty/jvm/com/google/inject:guice',
   ],
   sources=rglobs('*.java'),
 )

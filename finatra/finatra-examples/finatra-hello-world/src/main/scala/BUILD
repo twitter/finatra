@@ -1,8 +1,8 @@
 scala_library(
   name='scala',
   dependencies=[
+    '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/javax/inject:javax.inject',
-    '3rdparty:guice',
     'finatra/finatra/finatra-http',
     'finatra/finatra/finatra-logback',
   ],
