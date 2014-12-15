@@ -20,11 +20,6 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
 )
 
-// for code coverage
-instrumentSettings 
-
-coverallsSettings
-
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 
 //Release
