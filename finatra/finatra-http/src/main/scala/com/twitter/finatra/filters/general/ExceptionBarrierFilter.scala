@@ -37,10 +37,10 @@ class ExceptionBarrierFilter @Inject()(
         e.createResponse(response)
       case e: HttpResponseException =>
         e.response
-      case e: JsonProcessingException =>
+      case e: JsonObjectParseException =>
         response.badRequest.json(
           errorsResponse(e))
-      case e: JsonObjectParseException =>
+      case e: JsonProcessingException =>
         response.badRequest.json(
           errorsResponse(e))
       case e: JsonInjectException =>

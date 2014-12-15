@@ -126,16 +126,16 @@ class FinatraCaseClassDeserializer(
             field,
             invalidFormatJsonFieldParseError(field, e))
 
+        case e: JsonObjectParseException =>
+          addConstructorValue(field.missingValue)
+          errors ++= e.fieldErrors map {_.nestFieldName(field)}
+          errors ++= e.methodValidationErrors map { ve => methodValidationJsonFieldParseError(field, ve)}
+
         case e: JsonProcessingException =>
           // Don't include source info since it's often blank. Consider adding e.getCause.getMessage
           addException(
             field,
             jsonProcessingJsonFieldParseError(field, e))
-
-        case e: JsonObjectParseException =>
-          addConstructorValue(field.missingValue)
-          errors ++= e.fieldErrors map {_.nestFieldName(field)}
-          errors ++= e.methodValidationErrors map { ve => methodValidationJsonFieldParseError(field, ve)}
 
         // we rethrow, to prevent leaking internal injection details in the "errors" array
         case e: JsonInjectionNotSupportedException =>

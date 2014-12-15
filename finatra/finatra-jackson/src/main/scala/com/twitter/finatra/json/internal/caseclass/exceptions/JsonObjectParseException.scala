@@ -1,9 +1,11 @@
 package com.twitter.finatra.json.internal.caseclass.exceptions
 
+import com.fasterxml.jackson.databind.JsonMappingException
+
 case class JsonObjectParseException(
   fieldErrors: Seq[JsonFieldParseException] = Seq(),
   methodValidationErrors: Seq[JsonMethodValidationException] = Seq())
-  extends Exception {
+  extends JsonMappingException("") {
 
   override def getMessage: String = {
     "\nFieldErrors:\t\t" + fieldErrors.mkString(", ") +
