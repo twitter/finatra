@@ -3,7 +3,7 @@ package com.twitter.finatra
 import java.util.concurrent.Callable
 
 import com.twitter.mustache.ScalaObjectHandler
-import com.twitter.util.Future
+import com.twitter.util.{Await, Future}
 
 class TwitterObjectHandler extends ScalaObjectHandler {
 
@@ -12,7 +12,7 @@ class TwitterObjectHandler extends ScalaObjectHandler {
           case f: Future[_] => {
               new Callable[Any]() {
                   def call() = {
-                      val value = f.get().asInstanceOf[Object]
+                      val value = Await.result(f, Future.DEFAULT_TIMEOUT).asInstanceOf[Object]
                       coerce(value)
                     }
                 }
