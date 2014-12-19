@@ -21,7 +21,7 @@ object App extends FinatraServer {
 }
 ```
 
-### SBT (dual published for 2.9.x or 2.10.x)
+### SBT (dual published for 2.10.x or 2.11.x)
 
 First you need to add the following repository to your build.sbt
 
