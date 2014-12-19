@@ -15,11 +15,11 @@
  */
 package com.twitter.finatra.test
 
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.scalatest.FlatSpec
 import com.twitter.finatra.Controller
 
-class SampleSpec extends FlatSpec with ShouldMatchers {
+class SampleSpec extends FlatSpec with Matchers {
 
   class SampleController extends Controller {
     get("/testing") {

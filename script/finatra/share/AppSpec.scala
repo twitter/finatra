@@ -1,7 +1,7 @@
 package ###PACKAGE_NAME###
 
 import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import com.twitter.finatra.test._
 import com.twitter.finatra.FinatraServer
 import ###PACKAGE_NAME###._

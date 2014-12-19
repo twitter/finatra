@@ -52,11 +52,11 @@ class LoggingSpec extends ShouldSpec {
 
   "logLevel" should "throw on a wrong level name" in {
     changeLevel("Blah") {
-      evaluating {
+      an [IllegalArgumentException] should be thrownBy {
         new TestApp {
           val foo = logLevel
         }
-      } should produce [IllegalArgumentException]
+      }
     }
   }
 

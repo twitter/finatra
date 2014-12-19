@@ -16,6 +16,6 @@
 package com.twitter.finatra.test
 
 import org.scalatest.FlatSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 
-class ShouldSpec extends FlatSpec with ShouldMatchers
+class ShouldSpec extends FlatSpec with Matchers
