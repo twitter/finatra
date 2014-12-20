@@ -223,6 +223,7 @@ case class EmbeddedTwitterServer(
 
   def httpDelete(
     path: String,
+    deleteBody: String = null,
     accept: MediaType = null,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
@@ -236,6 +237,9 @@ case class EmbeddedTwitterServer(
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, Method.Delete)
+    if(deleteBody != null) {
+      request.setContentString(deleteBody)
+    }
     httpExecute(
       request,
       addAcceptHeader(accept, headers),
