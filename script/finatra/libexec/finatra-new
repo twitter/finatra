@@ -59,10 +59,10 @@ echo "  creating build.sbt"
 cp $_FINATRA_ROOT/share/build.sbt $root_path/$project_name/
 echo "  creating build.properties"
 cp $_FINATRA_ROOT/share/build.properties $root_path/$project_name/project
-echo "  creating project/assembly.sbt"
-cp $_FINATRA_ROOT/share/assembly_plugin.sbt $root_path/$project_name/project
-echo "  creating assembly.sbt"
-cp $_FINATRA_ROOT/share/assembly.sbt $root_path/$project_name/
+echo "  creating project/plugins.sbt"
+cp $_FINATRA_ROOT/share/plugins.sbt $root_path/$project_name/project
+echo "  creating .env"
+cp $_FINATRA_ROOT/share/dot-env $root_path/$project_name/.env
 echo "  creating README"
 cp $_FINATRA_ROOT/share/README.markdown $root_path/$project_name/
 echo "  creating Procfile"
@@ -115,6 +115,7 @@ sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/bower.js
 
 # edit Procfile
 sed -ie "s/###PACKAGE_NAME###/$package_name/g" $root_path/$project_name/Procfile
+sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/Procfile
 
 # replace the spec with the latest example spec
 replace_with_example_spec $_FINATRA_ROOT/share/AppSpec.scala $test_path/AppSpec.scala
@@ -134,9 +135,6 @@ sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/README.m
 #edit build.sbt
 sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/build.sbt
 
-#edit assembly.sbt
-sed -ie "s/###PROJECT_NAME###/$project_name/g" $root_path/$project_name/assembly.sbt
-
 if [ $snapshot_version ]; then
   sed -ie "s/###VERSION###/$snapshot_version/g" $root_path/$project_name/pom.xml
 else
@@ -154,7 +152,6 @@ rm -rf $root_path/$project_name/pom.xmle
 rm -rf $root_path/$project_name/README.markdowne
 rm -rf $root_path/$project_name/build.sbte
 rm -rf $root_path/$project_name/bower.jsone
-rm -rf $root_path/$project_name/assembly.sbte
 rm -rf $dest_path/App.scalae
 rm -rf $root_path/$project_name/Procfilee
 rm -rf $test_path/AppSpec.scalae

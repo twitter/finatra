@@ -2,6 +2,9 @@
 
 Finatra requires either [maven](http://maven.apache.org/) or [sbt](http://www.scala-sbt.org/release/docs/Getting-Started/Setup.html) to build and run your app.
 
+The `.env` file is used to configure Heroku environment variables locally. See [heroku's docs](https://devcenter.heroku.com/articles/config-vars) for more information. *Do not check it into source control!*.
+
+
 ## SBT Instructions
 
 ### Runs your app on port 7070
@@ -12,10 +15,9 @@ Finatra requires either [maven](http://maven.apache.org/) or [sbt](http://www.sc
 
     sbt test
 
-### Packaging (fatjar)
+### Packaging
 
-    sbt assembly
-
+    sbt stage
 
 ## Maven Instructions
 
@@ -31,14 +33,29 @@ Finatra requires either [maven](http://maven.apache.org/) or [sbt](http://www.sc
 
     mvn package
 
-
 ## Heroku
+
+Install [heroku toolbelt](https://toolbelt.heroku.com/).
+
+You may also need to install foreman:
+
+    gem install foreman
 
 ### To put on heroku
 
-    heroku create
+    heroku login
+    git init
+    heroku create --buildpack https://github.com/heroku/heroku-buildpack-scala.git
+    heroku config:set ENV=production
+    git add .
+    git commit -am "Initial commit"
     git push heroku master
+
+### To run locally like it does on heroku
+
+    foreman start web
 
 ### To run anywhere else
 
-    java -jar target/*-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+    ./target/universal/stage/bin/<appname>
+    
