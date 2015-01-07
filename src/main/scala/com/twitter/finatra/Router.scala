@@ -45,7 +45,10 @@ class Router(controller: Controller) {
 
     findRouteAndMatch(req, method) match {
       case Some((method, definition, pattern, callback)) =>
-        Some(ResponseAdapter(req, callback(req)))
+        val response = callback(req).rescue {
+          case e if(controller.errorHandler.isDefined) => req.error = Some(e);controller.errorHandler.get(req)
+        }
+        Some(ResponseAdapter(req, response))
       case None => orCallback(request)
     }
   }
@@ -88,6 +91,9 @@ class Router(controller: Controller) {
     findRouteAndMatch(req, method) match {
       case Some((_method, definition, pattern, callback)) =>
         callback(req)
+          .rescue {
+            case e if(controller.errorHandler.isDefined) => req.error = Some(e);controller.errorHandler.get(req)
+          }
       case None => controller.render.notFound.toFuture
     }
   }
