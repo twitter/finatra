@@ -15,6 +15,7 @@
  */
 package com.twitter.finatra.test
 
+import org.jboss.netty.buffer.ChannelBuffers
 import org.jboss.netty.util.CharsetUtil.UTF_8
 
 import com.twitter.finatra.ResponseBuilder
@@ -28,6 +29,7 @@ class MockView(val title:String) extends View {
 class ResponseBuilderSpec extends ShouldSpec {
   def resp = new ResponseBuilder
   def view = new MockView("howdy view")
+  def buffer = ChannelBuffers.wrappedBuffer("buffer".getBytes(UTF_8))
 
   ".status(201)" should "return a 201 response" in {
     val built = resp.status(201).build
@@ -106,6 +108,17 @@ class ResponseBuilderSpec extends ShouldSpec {
     built.contentType should equal (Some("image/gif"))
     built.headerMap.get("Content-Length").get.toInt should equal (422488)
   }
+
+  ".buffer()" should "return a 200 buffer response" in {
+    val response = resp.buffer(buffer)
+    val built    = response.build
+    val body     = built.getContent.toString(UTF_8)
+
+    built.statusCode should equal (200)
+    body should include ("buffer")
+    built.headerMap.get("Content-Length").get.toInt should equal (6)
+  }
+
 }
 
 
