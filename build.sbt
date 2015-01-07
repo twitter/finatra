@@ -4,14 +4,14 @@ organization := "com.twitter"
 
 version := "1.5.4-SNAPSHOT"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.10.4"
 
-crossScalaVersions := Seq("2.9.2", "2.10.3")
+crossScalaVersions := Seq("2.9.2", "2.10.4")
 
 //Main
 
 libraryDependencies ++= Seq(
-  "com.twitter" %% "twitter-server" % "1.8.0",
+  "com.twitter" %% "twitter-server" % "1.7.3",
   "commons-io" % "commons-io" % "1.3.2",
   "org.scalatest" %% "scalatest" % "1.9.2" % "test",
   "com.google.code.findbugs" % "jsr305" % "2.0.1",
@@ -19,11 +19,6 @@ libraryDependencies ++= Seq(
   "com.github.spullara.mustache.java" % "compiler" % "0.8.14",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.2.2"
 )
-
-// for code coverage
-instrumentSettings 
-
-coverallsSettings
 
 scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation")
 
