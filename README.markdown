@@ -10,7 +10,7 @@ Get help on the [finatra-users](https://groups.google.com/forum/#!forum/finatra-
 class HelloWorld extends Controller {
 
   get("/hello/:name") { request =>
-    val name = request.routeParams("name").getOrElse("default user")
+    val name = request.routeParams.get("name").getOrElse("default user")
     render.plain("hello " + name).toFuture
   }
 
@@ -23,8 +23,15 @@ object App extends FinatraServer {
 
 ### SBT (dual published for 2.9.x or 2.10.x)
 
+First you need to add the following repository to your build.sbt
+
 ```scala
-"com.twitter" %% "finatra" % "1.5.3"
+resolvers +=
+  "Twitter" at "http://maven.twttr.com"
+```
+
+```scala
+"com.twitter" %% "finatra" % "1.5.4"
 ```
 
 ### Maven

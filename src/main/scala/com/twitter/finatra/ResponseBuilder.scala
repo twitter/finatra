@@ -15,18 +15,17 @@
  */
 package com.twitter.finatra
 
+import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.handler.codec.http._
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
 import com.twitter.finagle.http.{Response => FinagleResponse, Cookie, Status}
 import org.jboss.netty.util.CharsetUtil.UTF_8
 import com.twitter.util.Future
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
-
 import org.apache.commons.io.IOUtils
 import java.io.File
 import org.jboss.netty.handler.codec.http.DefaultCookie
+import com.twitter.finatra.serialization.{DefaultJacksonJsonSerializer, JsonSerializer}
 import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie, HttpResponseStatus}
 
 object ResponseBuilder {
@@ -40,28 +39,32 @@ object ResponseBuilder {
     new ResponseBuilder().body(body).status(status).headers(headers).build
 }
 
-class ResponseBuilder extends CommonStatuses {
+class ResponseBuilder(serializer:JsonSerializer = DefaultJacksonJsonSerializer) extends CommonStatuses {
   private var status:     Option[Int]          = None
   private var headers:    Map[String, String]  = Map()
   private var strBody:    Option[String]       = None
   private var binBody:    Option[Array[Byte]]  = None
   private var json:       Option[Any]          = None
   private var view:       Option[View]         = None
+  private var buffer:     Option[ChannelBuffer]= None
   private var cookies:    List[Cookie]         = List()
+  private var jsonSerializer: JsonSerializer     = serializer
 
-  private lazy val jsonMapper = {
-    val m = new ObjectMapper()
-    m.registerModule(DefaultScalaModule)
-  }
+
 
   def contentType: Option[String] =
     this.headers.get("Content-Type")
+
+  def withSerializer(serializer: JsonSerializer) = {
+    jsonSerializer = serializer
+    this
+  }
 
   private def setContent(resp: HttpResponse): HttpResponse = {
     json match {
       case Some(j) =>
         resp.headers.set("Content-Type", "application/json")
-        val jsonBytes = jsonMapper.writeValueAsString(j).getBytes(UTF_8)
+        val jsonBytes = jsonSerializer.serialize(j)
         resp.headers.set("Content-Length", jsonBytes.length)
         resp.setContent(copiedBuffer(jsonBytes))
       case None =>
@@ -85,7 +88,13 @@ class ResponseBuilder extends CommonStatuses {
                   case Some(bb) =>
                     resp.headers.set("Content-Length", bb.length)
                     resp.setContent(copiedBuffer(bb))
-                  case None => resp.headers.set("Content-Length", 0) //no content
+                  case None =>
+                    buffer match {
+                      case Some(b) =>
+                        resp.headers.set("Content-Length", b.capacity())
+                        resp.setContent(b)
+                      case None => resp.headers.set("Content-Length", 0) //no content
+                    }
                 }
             }
         }
@@ -159,6 +168,11 @@ class ResponseBuilder extends CommonStatuses {
 
   def view(v: View): ResponseBuilder = {
     this.view = Some(v)
+    this
+  }
+
+  def buffer(b: ChannelBuffer): ResponseBuilder = {
+    this.buffer = Some(b)
     this
   }
 
