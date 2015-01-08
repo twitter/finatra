@@ -1,4 +1,4 @@
-# Finatra [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
+# Finatra [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra)
 
 [Finatra](http://finatra.info) is a sinatra-inspired web framework for scala, running on top of [Finagle](http://twitter.github.com/finagle/)
 
@@ -10,7 +10,7 @@ Get help on the [finatra-users](https://groups.google.com/forum/#!forum/finatra-
 class HelloWorld extends Controller {
 
   get("/hello/:name") { request =>
-    val name = request.routeParams.get("name").getOrElse("default user")
+    val name = request.routeParams("name").getOrElse("default user")
     render.plain("hello " + name).toFuture
   }
 
@@ -23,15 +23,8 @@ object App extends FinatraServer {
 
 ### SBT (dual published for 2.9.x or 2.10.x)
 
-First you need to add the following repository to your build.sbt
-
 ```scala
-resolvers +=
-  "Twitter" at "http://maven.twttr.com"
-```
-
-```scala
-"com.twitter" %% "finatra" % "1.5.4"
+"com.twitter" %% "finatra" % "1.6.0"
 ```
 
 ### Maven
@@ -41,7 +34,7 @@ resolvers +=
   <groupId>com.twitter</groupId>
   <artifactId>finatra_2.10</artifactId>
   <!-- for 2.9 <artifactId>finatra_2.9.2</artifactId> -->
-  <version>1.5.3</version>
+  <version>1.6.0</version>
 </dependency>
 ```
 
