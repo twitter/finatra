@@ -15,11 +15,10 @@
  */
 package com.twitter.finatra
 
-import com.google.common.base.Objects
 import com.twitter.finagle.{Service, SimpleFilter}
 import org.jboss.netty.handler.codec.http.HttpResponseStatus._
 import org.jboss.netty.buffer.ChannelBuffers.copiedBuffer
-import com.twitter.util.Future
+import com.twitter.util.{Try, Return, Throw, Future}
 import com.twitter.finagle.http.{Request => FinagleRequest, Response => FinagleResponse}
 
 import org.apache.commons.io.{FileUtils, IOUtils}
@@ -39,6 +38,16 @@ object FileResolver {
       hasLocalFile(path)
     }
   }
+
+  def hasDirectory(path: String) = {
+    if (config.env() == "production") {
+      false
+    } else {
+      hasLocalDirectory(path)
+    }
+
+  }
+
 
   def getInputStream(path: String): InputStream = {
     if(config.env() == "production"){
@@ -94,6 +103,15 @@ object FileResolver {
 
     true
   }
+
+  def hasLocalDirectory(path: String): Boolean = {
+    getLocalDirectory(path).isReturn
+  }
+
+  def getLocalDirectory(path: String): Try[File] = {
+    val f = Try(new File(config.docRoot(), path))
+    f.filter( _.isDirectory )
+  }
 }
 
 object FileService {
@@ -123,7 +141,7 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
     val response = if (config.env() == "production") {
       resourceFileResponse(request, path)
     } else {
-      localFileResponse(request, path)
+      localFileSystemResponse(request, path)
     }
     if (response.isEmpty) {
       service(request)
@@ -153,7 +171,7 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
     response
   }
 
-  private def localFileResponse(request: FinagleRequest, path: String) = {
+  private def localFileSystemResponse(request: FinagleRequest, path: String) = {
     var response: Option[FinagleResponse] = None
     if (request.path != "/" && FileResolver.hasLocalFile(path)) {
       val file = new File(config.docRoot(), path)
@@ -162,6 +180,20 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
       response = createResponse(request, contentType, lastModified, () => {
         FileUtils.readFileToByteArray(file)
       })
+    } else if (config.showDirectories() && FileResolver.hasDirectory(path) && request.path != "/" ) {
+      val mustache: Try[(Long, String)] = for {
+       directory <- FileResolver.getLocalDirectory(path)
+       lastModified = directory.lastModified
+       content <- DirectoryViewer.getListing(directory)
+      } yield (lastModified, content)
+
+      mustache match {
+        case Return((lastModified, content)) =>
+          response = createResponse(request, "text/html", new Date(), content.getBytes)
+        case Throw(e)=>
+          val content = ("could not read directory " + path)
+          response = createResponse(request, "plain/text", new Date(), content.getBytes)
+      }
     }
     response
   }
