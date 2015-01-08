@@ -2,7 +2,6 @@ language: scala
 sudo: false
 script:
   - sbt test
-  - sbt coveralls
 scala:
   - 2.9.2
   - 2.10.4
