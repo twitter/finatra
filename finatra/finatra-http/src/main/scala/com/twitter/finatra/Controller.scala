@@ -51,13 +51,13 @@ abstract class Controller extends Logging {
   /* Private */
 
   private def addRoute[RequestType: Manifest, ResponseType: Manifest](method: HttpMethod, route: String, callback: RequestType => ResponseType) {
-    (() =>
+    routesBeforeInjection += (() =>
       Route(
         method,
         route,
         callbackConvertor.convertToFutureResponse(callback),
         getClass.getDeclaredAnnotations,
         manifest[RequestType].runtimeClass,
-        manifest[ResponseType].runtimeClass)) +=: routesBeforeInjection
+        manifest[ResponseType].runtimeClass))
   }
 }

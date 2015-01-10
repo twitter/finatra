@@ -8,12 +8,12 @@ class TweetsController @Inject()(
   tweetsRepository: TweetsRepository)
   extends Controller {
 
+  get("/tweets/hello") { request: Request =>
+    "hello world"
+  }
+
   get("/tweets/:id") { request: Request =>
     val id = request.params("id").toLong
     tweetsRepository.getById(id)
-  }
-
-  get("/tweets/hello") { request: Request =>
-    "hello world"
   }
 }
