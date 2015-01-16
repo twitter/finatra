@@ -63,7 +63,7 @@ class EmbeddedApp(
 
   //Mutable state
   private var started = false
-  private var startupFailed = false
+  private var startupFailedMessage: Option[String] = None
   protected[finatra] var closed = false
   private var _mainResult: Future[Unit] = _
 
@@ -168,7 +168,7 @@ class EmbeddedApp(
 
     _mainResult = futurePool {
       try {
-        app.main(allArgs)
+        app.nonExitingMain(allArgs)
       } catch {
         case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
           println("OutOfMemoryError(PermGen) in server startup. " +
@@ -184,7 +184,7 @@ class EmbeddedApp(
       println("Error in embedded twitter-server thread ")
       e.printStackTrace()
       println()
-      startupFailed = true //mutation
+      startupFailedMessage = Some(e.getMessage)
     }
   }
 
@@ -218,9 +218,7 @@ class EmbeddedApp(
 
   private def waitForWarmupComplete() {
     val started = retry(waitForStartupRetryPolicy, suppress = true) {
-      if (startupFailed) {
-        fail("Server startup failed")
-      }
+      startupFailedMessage.map(msg => fail(s"Server startup failed on exception=$msg"))
 
       println("Waiting for warmup phases to complete...")
       guiceApp.postWarmupComplete
