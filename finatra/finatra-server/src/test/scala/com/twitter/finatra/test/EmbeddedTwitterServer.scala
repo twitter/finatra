@@ -45,14 +45,15 @@ case class EmbeddedTwitterServer(
   defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
   mapper: FinatraObjectMapper = FinatraObjectMapper.create(),
-  stage: Stage = Stage.DEVELOPMENT)
+  stage: Stage = Stage.DEVELOPMENT,
+  skipAppMain: Boolean = true)
   extends EmbeddedApp(
     app = twitterServer,
     clientFlags = clientFlags,
     resolverMap = resolverMap,
     extraArgs = extraArgs,
     waitForWarmup = waitForWarmup,
-    skipAppMain = true,
+    skipAppMain = skipAppMain,
     stage = stage) {
 
   /* Protected */

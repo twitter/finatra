@@ -221,7 +221,11 @@ class EmbeddedApp(
       startupFailedMessage.map(msg => fail(s"Server startup failed on exception=$msg"))
 
       println("Waiting for warmup phases to complete...")
-      guiceApp.postWarmupComplete
+      if (isGuiceApp) {
+        guiceApp.postWarmupComplete
+      } else {
+        true
+      }
     }
 
     if (!started.get()) {
