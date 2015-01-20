@@ -5,7 +5,7 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.Service
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http.service.NullService
-import com.twitter.finagle.http.{Http, Response, RichHttp, Request => FinatraRequest}
+import com.twitter.finagle.http.{Http, Response, RichHttp, Request}
 import com.twitter.finatra.twitterserver.GuiceTwitterServer
 import com.twitter.finatra.utils.PortUtils
 import com.twitter.finatra.utils.PortUtils._
@@ -60,7 +60,7 @@ trait FinatraHttpServer extends GuiceTwitterServer {
 
   /* Protected */
 
-  protected def httpService: Service[FinatraRequest, Response] = {
+  protected def httpService: Service[Request, Response] = {
     NullService
   }
 
@@ -111,7 +111,7 @@ trait FinatraHttpServer extends GuiceTwitterServer {
   private def startHttpServer() {
     for (port <- httpPort) {
       httpServer = ServerBuilder()
-        .codec(new RichHttp[FinatraRequest](httpCodec))
+        .codec(new RichHttp[Request](httpCodec))
         .bindTo(port)
         .name("http")
         .build(httpService)
@@ -127,7 +127,7 @@ trait FinatraHttpServer extends GuiceTwitterServer {
       keys <- keyPath.get
     } {
       httpsServer = ServerBuilder()
-        .codec(new RichHttp[FinatraRequest](httpCodec))
+        .codec(new RichHttp[Request](httpCodec))
         .bindTo(PortUtils.parseAddr(httpsPortFlag()))
         .name("https")
         .tls(

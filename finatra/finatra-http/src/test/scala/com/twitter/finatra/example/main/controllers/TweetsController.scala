@@ -1,7 +1,8 @@
 package com.twitter.finatra.example.main.controllers
 
 import com.twitter.finatra.example.main.services.TweetsRepository
-import com.twitter.finatra.{Controller, Request}
+import com.twitter.finagle.http.Request
+import com.twitter.finatra.Controller
 import javax.inject.Inject
 
 class TweetsController @Inject()(

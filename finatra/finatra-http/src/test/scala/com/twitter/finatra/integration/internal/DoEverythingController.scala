@@ -258,7 +258,7 @@ class DoEverythingController @Inject()(
     "slow"
   }
 
-  get("/finatraRequest") { request: com.twitter.finatra.Request =>
+  get("/finatraRequest") { request: com.twitter.finagle.http.Request =>
     response.
       ok.
       header("a", "b")

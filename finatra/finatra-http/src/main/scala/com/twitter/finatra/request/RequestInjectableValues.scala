@@ -2,7 +2,7 @@ package com.twitter.finatra.request
 
 import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues}
 import com.google.inject.{Injector, Key}
-import com.twitter.finatra.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.json.internal.caseclass.annotations.{FormParamInternal, HeaderInternal, QueryParamInternal, RouteParamInternal}
 import java.lang.annotation.Annotation
 

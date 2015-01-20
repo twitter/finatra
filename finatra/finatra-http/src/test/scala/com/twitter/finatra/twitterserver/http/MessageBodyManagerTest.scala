@@ -1,6 +1,6 @@
 package com.twitter.finatra.twitterserver.http
 
-import com.twitter.finatra.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.guice.FinatraTestInjector
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.marshalling.{MessageBodyManager, MessageBodyReader}

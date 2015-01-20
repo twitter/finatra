@@ -4,7 +4,6 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.***REMOVED***.authentication.filters.ClientApplicationFilter
 import com.twitter.finatra.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
 import com.twitter.finatra.routing.{Route, RoutingService}
-import com.twitter.finatra.{Request => FinatraRequest}
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.openjdk.jmh.annotations._
@@ -14,7 +13,7 @@ import org.openjdk.jmh.runner.options.{OptionsBuilder, TimeValue}
 @State(Scope.Thread)
 class FinagleRequestScopeBenchmark {
 
-  def defaultCallback(request: FinatraRequest) = {
+  def defaultCallback(request: Request) = {
     Future.value(Response())
   }
 
@@ -23,7 +22,7 @@ class FinagleRequestScopeBenchmark {
     path = "/groups/",
     callback = defaultCallback,
     annotations = Seq(),
-    requestClass = classOf[FinatraRequest],
+    requestClass = classOf[Request],
     responseClass = classOf[Response])
 
   val routingContoller = new RoutingService(routes = Seq(route))
