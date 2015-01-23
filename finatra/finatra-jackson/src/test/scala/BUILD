@@ -21,8 +21,8 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
-    '3rdparty:junit',
-    '3rdparty:scalatest',
+    '3rdparty/jvm/junit',
+    '3rdparty/jvm/org/scalatest',
     'finatra/finatra/finatra-jackson/src/main/scala',
   ],
   sources=rglobs(

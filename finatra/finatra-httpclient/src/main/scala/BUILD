@@ -7,7 +7,7 @@ scala_library(name='scala',
   dependencies=[
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/joda-time',
-    '3rdparty:netty',
+    '3rdparty/jvm/io/netty',
     'finagle/finagle-core',
     'finagle/finagle-http',
     'finatra/finatra/finatra-jackson',

@@ -1,6 +1,6 @@
 junit_tests(name='scala',
   dependencies=[
-    '3rdparty:slf4j-jdk14',
+    '3rdparty/jvm/org/slf4j:slf4j-jdk14',
     'finatra/finatra/finatra-server',
     'finatra/finatra/finatra-server/src/test/scala:test-deps',
     'finatra/finatra/finatra-utils:test-deps'
