@@ -1,19 +1,27 @@
+// The trait below needs to be inside a specs2 package because Expectable's
+// constructor is package-protected.
 package org.specs2.matcher
 
 import org.scalatest.exceptions.TestFailedException
-import org.specs2.mock.Mockito
 
 /**
- * This trait ensures specs2 Mockito errors result in ScalaTest errors.
- *
- * Simply mixing in ThrownExpectations results in compile errors
- * regarding specs and ScalaTest. See ThrownExpectations including
- * scaladoc describing integration with Scalatest.
- *
- * TODO(AF-177): come up with a less hacky solution.
+ * Convert match failures into ScalaTest TestFailedExceptions.
+ * The Specs2 documentation tells us to extend ThrownExpectations:
+ * ```
+ * trait ScalaTestExpectations extends ThrownExpectations {
+ *   override protected def checkFailure[T](m: =>MatchResult[T]) = {
+ *     m match {
+ *       case f @ MatchFailure(ok, ko, _, _, _) => throw new TestFailedException(f.message, f.exception, 0)
+ *       case _ => ()
+ *     }
+ *     m
+ *   }
+ * }
+ * ```
+ * However, this causes a compile error when org.scalatest.Suite is mixed in; we avoid
+ * this by directly extending Expectations.
  */
-trait ScalaTestExpectations extends Mockito {
-
+trait ScalaTestExpectations extends Expectations {
   override def createExpectable[T](t: => T, alias: Option[String => String]): Expectable[T] = {
     new Expectable(() => t) {
       override def check[S >: T](r: MatchResult[S]): MatchResult[S] = {

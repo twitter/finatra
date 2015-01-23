@@ -3,7 +3,6 @@ package com.twitter.finatra.test
 import com.google.inject.testing.fieldbinder.{Bind, BoundFieldModule}
 import com.twitter.finatra.utils.Clearable
 import java.lang.reflect.Field
-import org.mockito.Mockito
 import org.mockito.internal.util.MockUtil
 
 /** See https://github.com/google/guice/wiki/BoundFields */
@@ -30,10 +29,7 @@ trait IntegrationTest extends Test {
     super.afterEach()
 
     if (resetMocks) {
-      for (mockObject <- mockObjects) {
-        println("Reseting " + mockObject)
-        Mockito.reset(mockObject)
-      }
+      resetMocks(mockObjects: _*)
     }
 
     if (resetClearables) {

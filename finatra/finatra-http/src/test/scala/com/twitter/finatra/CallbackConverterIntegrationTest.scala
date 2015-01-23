@@ -8,11 +8,11 @@ import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.marshalling.CallbackConverter
 import com.twitter.finatra.modules.{CallbackConverterModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.response.SimpleResponse
-import com.twitter.finatra.test.Test
+import com.twitter.finatra.test.{Mockito, Test}
 import com.twitter.util.{Await, Future}
 import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
-class CallbackConverterIntegrationTest extends Test {
+class CallbackConverterIntegrationTest extends Test with Mockito {
 
   val injector = FinatraTestInjector(
     MessageBodyModule, FinatraJacksonModule, MustacheModule, CallbackConverterModule)

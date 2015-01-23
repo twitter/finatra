@@ -32,6 +32,7 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/test/*.scala',
     'com/twitter/finatra/guice/*.scala',
+    'org/specs2/matcher/ScalaTestExpectations.scala',
   ),
   java_sources=[
     'finatra/finatra/finatra-utils/src/test/java'

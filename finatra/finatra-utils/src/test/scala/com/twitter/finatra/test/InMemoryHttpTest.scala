@@ -4,7 +4,7 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.util.Await
 import org.jboss.netty.handler.codec.http.HttpMethod
 
-class InMemoryHttpTest extends Test {
+class InMemoryHttpTest extends Test with Mockito {
 
   val inMemoryHttpService = new InMemoryHttpService()
   val mockResponse1 = mock[Response]

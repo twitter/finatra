@@ -2,10 +2,10 @@ package com.twitter.finatra.requestscope
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.test.Test
+import com.twitter.finatra.test.{Mockito, Test}
 import com.twitter.util.{Await, Future}
 
-class FinagleRequestScopeFilterTest extends Test {
+class FinagleRequestScopeFilterTest extends Test with Mockito {
   val finagleRequestScope = mock[FinagleRequestScope]
   val response = mock[Response]
   val filter = new FinagleRequestScopeFilter(finagleRequestScope)

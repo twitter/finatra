@@ -4,10 +4,10 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.guice.FinatraTestInjector
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.marshalling.{MessageBodyManager, MessageBodyReader}
-import com.twitter.finatra.test.Test
+import com.twitter.finatra.test.{Mockito, Test}
 import com.twitter.finatra.modules.{MessageBodyModule, MustacheModule}
 
-class MessageBodyManagerTest extends Test {
+class MessageBodyManagerTest extends Test with Mockito {
 
   val request = mock[Request]
 
