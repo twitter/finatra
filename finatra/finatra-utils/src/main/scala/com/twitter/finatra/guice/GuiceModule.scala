@@ -11,6 +11,7 @@ import net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder
 import net.codingwell.scalaguice._
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
+import scala.reflect.runtime.universe.TypeTag
 
 abstract class GuiceModule
   extends AbstractModule
@@ -29,6 +30,12 @@ abstract class GuiceModule
   /** Create a flag and add it to the modules flags list */
   protected def flag[T: Flaggable](name: String, default: T, help: String): Flag[T] = {
     val flag = FlagFactory.create(name, default, help)
+    flags += flag
+    flag
+  }
+
+  protected def flag[T: Flaggable : TypeTag](name: String, help: String): Flag[T] = {
+    val flag = FlagFactory.create[T](name, help)
     flags += flag
     flag
   }
