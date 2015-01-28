@@ -1,7 +1,6 @@
 package com.twitter.finatra.benchmarks
 
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.***REMOVED***.authentication.filters.ClientApplicationFilter
 import com.twitter.finatra.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
 import com.twitter.finatra.routing.{Route, RoutingService}
 import com.twitter.util.Future
@@ -34,12 +33,8 @@ class FinagleRequestScopeBenchmark {
   val finagleRequestScopeFilter =
     new FinagleRequestScopeFilter(finagleRequestScope)
 
-  val clientApplicationAuthFilter =
-    new ClientApplicationFilter(finagleRequestScope)
-
   val filtersAndService =
     finagleRequestScopeFilter andThen
-      clientApplicationAuthFilter andThen
       routingContoller
 
   @Benchmark

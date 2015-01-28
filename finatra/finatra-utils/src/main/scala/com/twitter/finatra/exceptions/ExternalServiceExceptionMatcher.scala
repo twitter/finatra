@@ -7,7 +7,6 @@ import org.apache.thrift.transport.TTransportException
 /** Exceptions caused by requests to external services */
 object ExternalServiceExceptionMatcher {
   def apply(t: Throwable): Boolean = t match {
-    case _: ExternalServiceException => true
     case _: RequestException => true
     case _: ApiException => true
     case _: WriteException => true

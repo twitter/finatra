@@ -1,6 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.reflection
 
 import scala.reflect.ScalaSignature
+import scala.reflect.internal.pickling.ByteCodecs
 import scala.tools.scalap.scalax.rules.scalasig._
 
 /*

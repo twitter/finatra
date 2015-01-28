@@ -5,7 +5,8 @@ import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.response.{ErrorsResponse, ResponseBuilder}
 import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
-/* General Exceptions (TODO: Redesign) */
+/* HTTP Exceptions */
+// TODO: Redesign to avoid boilderplate below (@see ResponseBuilder) */
 
 /**
  * HttpException which will be rendered as an HTTP response.
@@ -40,9 +41,6 @@ class HttpException(
       builder.plain(errors.mkString(", "))
   }
 
-  @deprecated
-  lazy val body = errors.mkString(",")
-
   /* Generated Equals/Hashcode */
 
   override def equals(other: Any): Boolean = other match {
@@ -73,6 +71,7 @@ object NotFoundException {
     new NotFoundException(MediaType.JSON_UTF_8, errors)
   }
 }
+
 case class NotFoundException(
   override val mediaType: MediaType,
   override val errors: Seq[String])
@@ -92,6 +91,7 @@ object ConflictException {
     new ConflictException(MediaType.JSON_UTF_8, errors)
   }
 }
+
 case class ConflictException(
   override val mediaType: MediaType,
   override val errors: Seq[String])
@@ -112,6 +112,7 @@ object InternalServerErrorException {
     new InternalServerErrorException(MediaType.JSON_UTF_8, errors)
   }
 }
+
 case class InternalServerErrorException(
   override val mediaType: MediaType,
   override val errors: Seq[String])
@@ -126,13 +127,14 @@ object ServiceUnavailableException {
     new ServiceUnavailableException(MediaType.JSON_UTF_8, errors)
   }
 }
+
 case class ServiceUnavailableException(
   override val mediaType: MediaType,
   override val errors: Seq[String])
   extends HttpException(Status.ServiceUnavailable, mediaType, errors)
 
 
-object BadRequestException{
+object BadRequestException {
   def plainText(body: String) = {
     new BadRequestException(MediaType.PLAIN_TEXT_UTF_8, Seq(body))
   }
@@ -141,6 +143,7 @@ object BadRequestException{
     new BadRequestException(MediaType.JSON_UTF_8, errors)
   }
 }
+
 case class BadRequestException(
   override val mediaType: MediaType,
   override val errors: Seq[String])
@@ -161,6 +164,7 @@ object ForbiddenException {
     new ForbiddenException(MediaType.JSON_UTF_8, errors)
   }
 }
+
 case class ForbiddenException(
   override val mediaType: MediaType,
   override val errors: Seq[String])
@@ -176,6 +180,7 @@ object NotAcceptableException {
     new NotAcceptableException(MediaType.JSON_UTF_8, errors)
   }
 }
+
 case class NotAcceptableException(
   override val mediaType: MediaType,
   override val errors: Seq[String])

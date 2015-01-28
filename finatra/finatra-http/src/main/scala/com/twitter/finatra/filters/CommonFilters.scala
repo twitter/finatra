@@ -1,7 +1,5 @@
 package com.twitter.finatra.filters
 
-import com.twitter.finatra.filters.general.{ExceptionBarrierFilter, HttpResponseFilter}
-import com.twitter.finatra.filters.logging.AccessLoggingFilter
 import javax.inject.Inject
 
 class CommonFilters @Inject()(

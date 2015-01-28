@@ -1,22 +1,23 @@
 package com.twitter.finatra.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
-import com.twitter.finagle.http.{Response, Status, Cookie => FinagleCookie}
+import com.twitter.finagle.http.{Cookie => FinagleCookie, Response, Status}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.marshalling.{MessageBodyManager, MustacheService}
+import com.twitter.finatra.marshalling.MessageBodyManager
+import com.twitter.finatra.marshalling.mustache.MustacheService
 import com.twitter.finatra.routing.FileResolver
 import com.twitter.util.{Future, Memoize}
-import java.io.{FileInputStream, BufferedInputStream, File, InputStream}
+import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.buffer.ChannelBuffers
 import org.jboss.netty.buffer.ChannelBuffers._
+import org.jboss.netty.buffer.{ChannelBuffer, ChannelBuffers}
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names._
-import org.jboss.netty.handler.codec.http.{DefaultCookie, HttpResponseStatus, Cookie => NettyCookie}
+import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie, DefaultCookie, HttpResponseStatus}
 import scala.runtime.BoxedUnit
 
-//TODO: DATAAPI-794 Generate more response permutations e.g. Conflict
+//TODO: Generate more response permutations
 class ResponseBuilder @Inject()(
   objectMapper: FinatraObjectMapper,
   fileResolver: FileResolver,
@@ -66,6 +67,8 @@ class ResponseBuilder @Inject()(
   def conflict(body: Any) = EnrichedResponse(Status.Conflict).body(body)
 
   def unauthorized = EnrichedResponse(Status.Unauthorized)
+
+  def unauthorized(body: Any) = EnrichedResponse(Status.Unauthorized).body(body)
 
   def forbidden = EnrichedResponse(Status.Forbidden)
 
@@ -131,12 +134,13 @@ class ResponseBuilder @Inject()(
       any match {
         case null => nothing
         case bytes: Array[Byte] => body(bytes)
+        case cbos: ChannelBuffer => body(cbos)
         case "" => nothing
         case Unit => nothing
         case _: BoxedUnit => nothing
         case opt if opt == None => nothing
         case str: String => body(str)
-        case file: File => body(file)
+        case _file: File => file(_file)
         case _ =>
           val writer = messageBodyManager.writerOrDefault(any)
           val writerResponse = writer.write(any)
@@ -147,10 +151,13 @@ class ResponseBuilder @Inject()(
       this
     }
 
-    def body(file: File): EnrichedResponse = {
+    def file(file: File): EnrichedResponse = {
       body(
         new BufferedInputStream(
           new FileInputStream(file)))
+
+      contentType(
+        fileResolver.getContentType(file.getName))
     }
 
     def body(b: Array[Byte]): EnrichedResponse = {
@@ -159,16 +166,26 @@ class ResponseBuilder @Inject()(
     }
 
     def body(bodyStr: String): EnrichedResponse = {
-      if(bodyStr == "") {
+      if (bodyStr == "") {
         nothing
-      } else {
+      }
+      else {
         httpResponse.setContentString(bodyStr)
         this
       }
     }
 
     def body(inputStream: InputStream): EnrichedResponse = {
-      httpResponse.setContent(channelBuffer(inputStream))
+      body(
+        ChannelBuffers.wrappedBuffer(
+          IOUtils.toByteArray(
+            inputStream)))
+
+      this
+    }
+
+    def body(channelBuffer: ChannelBuffer): EnrichedResponse = {
+      httpResponse.setContent(channelBuffer)
       this
     }
 
@@ -179,7 +196,6 @@ class ResponseBuilder @Inject()(
 
     def nothing = {
       httpResponse.headers().set(HttpHeaders.CONTENT_TYPE, MediaType.PLAIN_TEXT_UTF_8)
-      //TODO: needed? httpResponse.setContentString("")
       this
     }
 
@@ -269,7 +285,7 @@ class ResponseBuilder @Inject()(
     }
 
     def view(template: String, obj: Any) = {
-      html(mustacheService.writeBytes(template, obj))
+      html(mustacheService.createChannelBuffer(template, obj))
     }
 
     def toFuture: Future[Response] = Future.value(this)
@@ -283,12 +299,6 @@ class ResponseBuilder @Inject()(
     //optimized: MediaType.toString is a hotspot when profiling
     private val mediaToString = Memoize { mediaType: MediaType =>
       mediaType.toString
-    }
-
-    //TODO: Optimize
-    private def channelBuffer(inputStream: InputStream) = {
-      ChannelBuffers.copiedBuffer(
-        IOUtils.toByteArray(inputStream))
     }
   }
 

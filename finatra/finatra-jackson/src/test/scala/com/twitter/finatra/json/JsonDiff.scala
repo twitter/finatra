@@ -1,7 +1,6 @@
 package com.twitter.finatra.json
 
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapperCopier, SerializationFeature}
-import com.twitter.finatra.conversions.json._
 import com.twitter.finatra.utils.Logging
 import org.apache.commons.lang.StringUtils
 import org.scalatest.exceptions.TestFailedException
@@ -10,7 +9,12 @@ object JsonDiff extends Logging {
 
   private val finatraMapper = FinatraObjectMapper.create()
 
-  def jsonDiff[T](recvJson: Any, expectedJson: Any, normalizer: JsonNode => JsonNode = null) {
+  def jsonDiff[T](
+    recvJson: Any,
+    expectedJson: Any,
+    normalizer: JsonNode => JsonNode = null,
+    verbose: Boolean = true) {
+
     val recvJsonStr = jsonString(recvJson)
     val expectedJsonStr = jsonString(expectedJson)
 
@@ -23,10 +27,10 @@ object JsonDiff extends Logging {
     }
 
     val expectedJsonNode = finatraMapper.parse[JsonNode](expectedJsonStr)
-    assertJsonNodesSame(recvJsonNode, expectedJsonNode)
+    assertJsonNodesSame(recvJsonNode, expectedJsonNode, verbose)
   }
 
-  private def assertJsonNodesSame(recv: JsonNode, expected: JsonNode) = {
+  private def assertJsonNodesSame(recv: JsonNode, expected: JsonNode, verbose: Boolean) = {
     if (recv != expected) {
       val recvJsonNormalized = generateSortedAlpha(recv)
       val expectedJsonNormalized = generateSortedAlpha(expected)
@@ -35,8 +39,10 @@ object JsonDiff extends Logging {
       val diffStartIdx = StringUtils.indexOfDifference(recvJsonNormalized, expectedJsonNormalized)
 
       println("JSON DIFF FAILED!")
-      println("Received:\n" + finatraMapper.writePrettyString(recv) + "\n")
-      println("Expected:\n" + finatraMapper.writePrettyString(expected) + "\n")
+      if (verbose) {
+        println("Received:\n" + finatraMapper.writePrettyString(recv) + "\n")
+        println("Expected:\n" + finatraMapper.writePrettyString(expected) + "\n")
+      }
 
       println(" " * (expectedHeader.length + diffStartIdx) + "*")
       println("Received Json: " + recvJsonNormalized)
@@ -47,7 +53,7 @@ object JsonDiff extends Logging {
 
   private def jsonString(recvJson: Any): String = recvJson match {
     case str: String => str
-    case _ => recvJson.toJson
+    case _ => finatraMapper.writeValueAsString(recvJson)
   }
 
   /** Normalizer function is optional. We default to null to make the calling API cleaner */
@@ -80,7 +86,9 @@ object JsonDiff extends Logging {
     val recvJsonNodes = toSortedJsonNodes(recvJsonSet)
     val expJsonNodes = toSortedJsonNodes(recvJsonSet)
     val compares = recvJsonNodes.zip(expJsonNodes)
-    compares.foreach { p => assertJsonNodesSame(p._1, p._2)}
+    compares.foreach { case (received, expected) =>
+      assertJsonNodesSame(received, expected, verbose = true)
+    }
   }
 
   /* Used in tests to provide stable sorted output for assertions */
@@ -90,7 +98,7 @@ object JsonDiff extends Logging {
   }
 
   private lazy val sortingObjectMapper = {
-    val newMapper = ObjectMapperCopier.copy(finatraMapper.mapper)
+    val newMapper = ObjectMapperCopier.copy(finatraMapper.objectMapper)
     newMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
     newMapper
   }

@@ -1,11 +1,9 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.annotations._
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationMessageResolver
 import com.twitter.finatra.json.internal.caseclass.validation.validators.UUIDValidator._
-import com.twitter.finatra.json.{ValidationResult, annotations}
+import com.twitter.finatra.validation.{UUID, ValidationMessageResolver, ValidationResult, Validator}
 import com.twitter.util.Try
-import java.util.UUID._
+import java.util.{UUID => JUUID}
 
 object UUIDValidator {
 
@@ -17,14 +15,14 @@ object UUIDValidator {
   }
 
   def isValid(value: String) = {
-    Try(fromString(value)).isReturn
+    Try(JUUID.fromString(value)).isReturn
   }
 }
 
 class UUIDValidator(
   validationMessageResolver: ValidationMessageResolver,
-  annotation: annotations.UUID)
-  extends Validator[annotations.UUID, String](
+  annotation: UUID)
+  extends Validator[UUID, String](
     validationMessageResolver,
     annotation) {
 

@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult._
-import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.NotEmptyValidator
-import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.ValidationResult._
+import com.twitter.finatra.validation.{NotEmpty, ValidationResult}
 
 case class NotEmptyExample(@NotEmpty stringValue: String)
 case class NotEmptySeqExample(@NotEmpty stringValue: Seq[String])
@@ -15,8 +15,7 @@ class NotEmptyValidatorTest extends ValidatorTest {
 
     "pass validation for valid value" in {
       val value = "abc"
-      validate[NotEmptyExample](value) should equal(
-        valid(errorMessage))
+      validate[NotEmptyExample](value) should equal(valid)
     }
 
     "fail validation for invalid value" in {
@@ -27,14 +26,12 @@ class NotEmptyValidatorTest extends ValidatorTest {
 
     "pass validation for all whitespace value" in {
       val value = "    "
-      validate[NotEmptyExample](value) should equal(
-        valid(errorMessage))
+      validate[NotEmptyExample](value) should equal(valid)
     }
 
     "pass validation for valid values in seq" in {
       val value = Seq("abc", "de")
-      validate[NotEmptySeqExample](value) should equal(
-        valid(errorMessage))
+      validate[NotEmptySeqExample](value) should equal(valid)
     }
 
     "fail validation for empty seq" in {
@@ -51,7 +48,7 @@ class NotEmptyValidatorTest extends ValidatorTest {
   }
 
   private def validate[C : Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].erasure, "stringValue", classOf[NotEmpty], value)
+    super.validate(manifest[C].runtimeClass, "stringValue", classOf[NotEmpty], value)
   }
 
   private def errorMessage = {

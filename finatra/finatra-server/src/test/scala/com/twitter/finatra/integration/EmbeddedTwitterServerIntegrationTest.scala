@@ -3,7 +3,6 @@ package com.twitter.finatra.integration
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.test.{EmbeddedTwitterServer, Test}
 import com.twitter.finatra.twitterserver.GuiceTwitterServer
-import com.twitter.util.Future
 
 class EmbeddedTwitterServerIntegrationTest extends Test {
 

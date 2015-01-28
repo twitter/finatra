@@ -1,7 +1,6 @@
 package com.twitter.finatra.benchmarks
 
-import com.twitter.finagle.http.{Response, Request => FinagleRequest}
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.routing.{Route, RoutingService}
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod
@@ -25,7 +24,7 @@ class RoutingServiceBenchmark {
   val routingService = new RoutingService(
     routes = Seq(route))
 
-  val getRequest = FinagleRequest("/groups/")
+  val getRequest = Request("/groups/")
 
   @Benchmark
   def testRoutingController1() = {

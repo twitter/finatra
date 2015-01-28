@@ -1,7 +1,6 @@
 package com.twitter.finatra.fileupload
 
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.request.MultipartItem
 import org.apache.commons.fileupload.{FileItemFactory, FileItemIterator, FileUploadBase}
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.HttpMethod

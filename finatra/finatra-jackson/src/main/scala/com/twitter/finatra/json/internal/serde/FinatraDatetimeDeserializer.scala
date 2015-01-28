@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import org.joda.time.DateTime
 
 /**
- * A Datetime deserializer with improved exception handling
+ * A Datetime deserializer with improved exception handling (compared to jackson-datatype-joda)
  */
 object FinatraDatetimeDeserializer extends StdDeserializer[DateTime](classOf[DateTime]) {
 

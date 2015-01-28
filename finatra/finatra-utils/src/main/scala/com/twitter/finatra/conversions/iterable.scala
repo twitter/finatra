@@ -2,10 +2,11 @@ package com.twitter.finatra.conversions
 
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.{HashSet => MutableHashSet}
+import scala.language.higherKinds
 
 object iterable {
 
-  class RichIterable[Elem, From[Elem] <: Iterable[Elem]](iterable: From[Elem]) {
+  implicit class RichIterable[Elem, From[Elem] <: Iterable[Elem]](iterable: From[Elem]) {
 
     /**
      * Distinct 'iterable' elements using the passed in 'hash' function
@@ -25,7 +26,7 @@ object iterable {
 
       builder.result()
     }
+
   }
 
-  implicit def iterableToRichIterable[A](iterable: Iterable[A]) = new RichIterable(iterable)
 }

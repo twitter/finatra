@@ -2,9 +2,11 @@ package com.twitter.finatra.utils
 
 import com.twitter.app.Flaggable
 import com.twitter.finagle.ListeningServer
+import com.twitter.finagle.builder.{Server => BuilderServer}
 import java.net.{InetAddress, InetSocketAddress, SocketAddress}
 
 object PortUtils {
+
   def getLoopbackHostAddress: String =
     InetAddress.getLoopbackAddress.getHostAddress
 
@@ -12,12 +14,12 @@ object PortUtils {
     server.boundAddress.asInstanceOf[InetSocketAddress].getPort
   }
 
-  def getSocketAddress(server: ListeningServer): SocketAddress = {
-    server.boundAddress
+  def getPort(server: BuilderServer): Int = {
+    getSocketAddress(server).asInstanceOf[InetSocketAddress].getPort
   }
 
-  def getPort(socketAddress: SocketAddress): Int = {
-    socketAddress.asInstanceOf[InetSocketAddress].getPort
+  def getSocketAddress(server: BuilderServer): SocketAddress = {
+    server.localAddress
   }
 
   def parseAddr(addrStr: String): InetSocketAddress = {

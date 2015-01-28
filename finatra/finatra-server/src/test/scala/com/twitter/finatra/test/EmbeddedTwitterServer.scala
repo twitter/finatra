@@ -7,34 +7,56 @@ import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.finagle.http._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.{ChannelClosedException, Service}
-import com.twitter.finatra.conversions.json._
-import com.twitter.finatra.conversions.options._
-import com.twitter.finatra.conversions.maps._
+import com.twitter.finatra.conversions.map._
+import com.twitter.finatra.conversions.option._
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.guice.GuiceApp
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.test.Banner._
-import com.twitter.finatra.test.EmbeddedTwitterServer.requestNum
+import com.twitter.finatra.test.EmbeddedTwitterServer._
 import com.twitter.finatra.twitterserver.TwitterServerPorts
 import com.twitter.finatra.utils.{PortUtils, RetryPolicyUtils}
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
-import java.util.concurrent.atomic.AtomicInteger
 import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 import org.joda.time.Duration
 
 object EmbeddedTwitterServer {
-  val requestNum = new AtomicInteger(1)
+  private def resolveClientFlags(useSocksProxy: Boolean, clientFlags: Map[String, String]) = {
+    if (useSocksProxy) {
+      clientFlags ++ Map(
+        "com.twitter.server.resolverZkHosts" -> "localhost:2181",
+        "com.twitter.finagle.socks.socksProxyHost" -> "localhost",
+        "com.twitter.finagle.socks.socksProxyPort" -> "50001")
+    }
+    else {
+      clientFlags
+    }
+  }
 }
 
 /**
  * EmbeddedTwitterServer allows a twitter-server serving http or thrift endpoints to be started
  * locally (on ephemeral ports), and tested through it's http/thrift interfaces.
- * When testing HTTP endpoints, defaultRequestHeaders can be set for all test requests.
  *
- * All initialization fields are lazy to aid running multiple tests inside Intellij at the same time
+ * Note: All initialization fields are lazy to aid running multiple tests inside Intellij at the same time
  * since Intellij "pre-constructs" ALL the tests before running each one.
+ *
+ * @param twitterServer The twitter server to be started locally for integration testing
+ * @param clientFlags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar)
+ * @param resolverMap Resolver map entries (helper for creating the resolverMap clientFlag)
+ * @param extraArgs Extra command line arguments
+ * @param waitForWarmup Once the app is started, wait for App warmup to be completed
+ * @param defaultRequestHeaders HTTP headers set for all HTTP requests (individual headers can be overridden in request methods e.g. httpGet(headers = Map(...)))
+ * @param defaultHttpSecure Default HTTPS mode (can be overridden in request methods e.g. httpGet(secure = true/false))
+ * @param mapper Override the default json mapper (used in HTTP json method e.g. httpGetJson)
+ * @param stage Guice Stage used to create the server's injector. Since EmbeddedTwitterServer is used for testing, we default to Stage.DEVELOPMENT.
+ *              This makes it possible to only mock objects that are used in a given test, at the expense of not checking that the entire
+ *              object graph is valid. As such, you should always have at lease one Stage.PRODUCTION test for your service (which eagerly
+ *              creates all Guice classes at startup)
+ * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external integration tests that connect to external services)
+ * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
  */
 case class EmbeddedTwitterServer(
   twitterServer: TwitterServerPorts,
@@ -46,10 +68,11 @@ case class EmbeddedTwitterServer(
   defaultHttpSecure: Boolean = false,
   mapper: FinatraObjectMapper = FinatraObjectMapper.create(),
   stage: Stage = Stage.DEVELOPMENT,
-  skipAppMain: Boolean = true)
+  useSocksProxy: Boolean = false,
+  skipAppMain: Boolean = false)
   extends EmbeddedApp(
     app = twitterServer,
-    clientFlags = clientFlags,
+    clientFlags = resolveClientFlags(useSocksProxy, clientFlags),
     resolverMap = resolverMap,
     extraArgs = extraArgs,
     waitForWarmup = waitForWarmup,
@@ -70,6 +93,11 @@ case class EmbeddedTwitterServer(
   protected lazy val httpAdminClient = createHttpClient(
     "httpAdminClient",
     twitterServer.httpAdminPort)
+
+
+  override protected def nonGuiceWarmupComplete(): Boolean = {
+    twitterServer.httpAdminPort != 0
+  }
 
   override protected def logAppStartup() {
     banner(
@@ -103,6 +131,18 @@ case class EmbeddedTwitterServer(
     }
   }
 
+  def assertHealthy(healthy: Boolean = true) {
+    start()
+    assert(twitterServer.httpAdminPort != 0)
+    val expectedBody = if(healthy) "OK\n" else ""
+
+    httpGet(
+      "/health",
+      routeToAdminServer = true,
+      andExpect = Status.Ok,
+      withBody = expectedBody)
+  }
+
   def httpGet(
     path: String,
     accept: MediaType = null,
@@ -112,32 +152,36 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, HttpMethod.GET)
-    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
   def httpGetJson[T: Manifest](
-    url: String,
+    path: String,
+    accept: MediaType = null,
+    headers: Map[String, String] = Map(),
     suppress: Boolean = false,
     andExpect: HttpResponseStatus = Status.Ok,
+    withLocation: String = null,
+    withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null): T = {
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
+    normalizeJsonParsedReturnValue: Boolean = true,
+    withErrors: Seq[String] = null,
+    routeToAdminServer: Boolean = false,
+    secure: Option[Boolean] = None): T = {
 
-    val response = httpGet(url, accept = MediaType.JSON_UTF_8, suppress = suppress, andExpect = andExpect, withJsonBody = withJsonBody, withNormalizer = withNormalizer)
-    val jsonStr = response.contentString
-    try {
-      mapper.parse[T](jsonStr)
-    } catch {
-      case e: Exception =>
-        println("JsonParsingError " + response + " " + e.getMessage)
-        println("HTTP GET Received: " + jsonStr)
-        throw e
-    }
+    val response =
+      httpGet(path, accept = MediaType.JSON_UTF_8, headers = headers, suppress = suppress,
+        andExpect = andExpect, withLocation = withLocation,
+        withJsonBody = withJsonBody, withJsonBodyNormalizer = withJsonBodyNormalizer)
+
+    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
   def httpPost(
@@ -151,7 +195,7 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
@@ -161,7 +205,7 @@ case class EmbeddedTwitterServer(
     request.headers.set(HttpHeaders.CONTENT_LENGTH, postBody.length)
     request.headers.set(HttpHeaders.CONTENT_TYPE, contentType)
 
-    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
   def httpPostJson[ResponseType: Manifest](
@@ -173,13 +217,14 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
+    normalizeJsonParsedReturnValue: Boolean = false,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): ResponseType = {
 
-    val response = httpPost(path, postBody, MediaType.JSON_UTF_8, suppress, Message.ContentTypeJson, headers, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure)
-    mapper.parse[ResponseType](response.contentString)
+    val response = httpPost(path, postBody, MediaType.JSON_UTF_8, suppress, Message.ContentTypeJson, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
   def httpPut(
@@ -192,7 +237,7 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
@@ -201,7 +246,7 @@ case class EmbeddedTwitterServer(
     request.setContentString(putBody)
     request.headers().set(HttpHeaders.CONTENT_LENGTH, putBody.length)
 
-    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
   def httpPutJson[ResponseType: Manifest](
@@ -213,13 +258,14 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
+    normalizeJsonParsedReturnValue: Boolean = false,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): ResponseType = {
 
-    val response = httpPut(path, putBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure)
-    mapper.parse[ResponseType](response.contentString)
+    val response = httpPut(path, putBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
   def httpDelete(
@@ -232,13 +278,13 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, Method.Delete)
-    if(deleteBody != null) {
+    if (deleteBody != null) {
       request.setContentString(deleteBody)
     }
     httpExecute(
@@ -249,7 +295,7 @@ case class EmbeddedTwitterServer(
       withLocation,
       withBody,
       withJsonBody,
-      withNormalizer,
+      withJsonBodyNormalizer,
       withErrors,
       routeToAdminServer,
       secure = secure.getOrElse(defaultHttpSecure))
@@ -264,13 +310,13 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, HttpMethod.OPTIONS)
-    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
   def httpPatch(
@@ -282,13 +328,13 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, HttpMethod.PATCH)
-    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
   def httpHead(
@@ -300,13 +346,13 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, HttpMethod.HEAD)
-    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+    httpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
   def httpFormPost(
@@ -338,7 +384,7 @@ case class EmbeddedTwitterServer(
   /* Protected */
 
   override protected def combineArgs() = {
-    standardArgs ++ httpArgs ++ super.combineArgs
+    adminAndLogArgs ++ serviceArgs ++ super.combineArgs
   }
 
   protected def createHttpClient(
@@ -359,6 +405,7 @@ case class EmbeddedTwitterServer(
       .hosts(new InetSocketAddress("localhost", port))
       .hostConnectionLimit(75)
       .retryPolicy(retryPolicy)
+      .failFast(false)
 
     if (secure)
       builder.tlsWithoutValidation().build()
@@ -390,7 +437,7 @@ case class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
-    withNormalizer: JsonNode => JsonNode = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
     withErrors: Seq[String] = null,
     routeToAdminServer: Boolean = false,
     secure: Boolean): Response = {
@@ -429,7 +476,7 @@ case class EmbeddedTwitterServer(
 
     if (withJsonBody != null) {
       if (!withJsonBody.isEmpty)
-        JsonDiff.jsonDiff(response.contentString, withJsonBody, withNormalizer)
+        JsonDiff.jsonDiff(response.contentString, withJsonBody, withJsonBodyNormalizer, verbose = false)
       else
         response.contentString should equal("")
     }
@@ -439,7 +486,7 @@ case class EmbeddedTwitterServer(
     }
 
     if (withErrors != null) {
-      JsonDiff.jsonDiff(response.contentString, Map("errors" -> withErrors), withNormalizer)
+      JsonDiff.jsonDiff(response.contentString, Map("errors" -> withErrors), withJsonBodyNormalizer)
     }
 
     response
@@ -448,7 +495,7 @@ case class EmbeddedTwitterServer(
   private def postBodyStr(request: Request) = {
     val bodyStr = request.contentString
     try {
-      bodyStr.toPrettyJson
+      mapper.writePrettyString(bodyStr)
     } catch {
       case e: Exception =>
         bodyStr
@@ -474,7 +521,8 @@ case class EmbeddedTwitterServer(
         try {
           val jsonNode = mapper.parse[JsonNode](response.contentString)
           if (jsonNode.isObject || jsonNode.isArray)
-            println(jsonNode.toPrettyJson)
+            println(
+              mapper.writePrettyString(jsonNode))
           else
             println(response.contentString)
         } catch {
@@ -486,12 +534,12 @@ case class EmbeddedTwitterServer(
     }
   }
 
-  private def standardArgs = Array(
+  private def adminAndLogArgs = Array(
     s"-admin.port=${PortUtils.getLoopbackHostAddress}:0",
     "-log.level=INFO")
 
-  private def httpArgs = {
-    httpPortFlagName match {
+  private def serviceArgs = {
+    servicePortFlagName match {
       case Some(name) =>
         Seq(s"-$name=${PortUtils.getLoopbackHostAddress}:0")
       case None =>
@@ -499,8 +547,8 @@ case class EmbeddedTwitterServer(
     }
   }
 
-  private def httpPortFlagName: Option[String] = {
-    twitterServer.flag.getAll(includeGlobal = false) map { _.name } find { name =>
+  private def servicePortFlagName: Option[String] = {
+    twitterServer.flag.getAll(includeGlobal = false) map {_.name} find { name =>
       name == "http.port" || name == "service.port"
     }
   }
@@ -524,7 +572,6 @@ case class EmbeddedTwitterServer(
   private def createRequest(method: HttpMethod, pathToUse: String): Request = {
     val request = Request(method, pathToUse)
     request.headers.set("Host", "localhost.twitter.com")
-***REMOVED***
     request
   }
 
@@ -578,5 +625,27 @@ case class EmbeddedTwitterServer(
       headers + (HttpHeaders.ACCEPT -> accept.toString)
     else
       headers
+  }
+
+  private def jsonParseWithNormalizer[T: Manifest](
+    response: Response,
+    normalizer: JsonNode => JsonNode,
+    normalizeParsedJsonNode: Boolean) = {
+    val jsonNode = {
+      val parsedJsonNode = mapper.parse[JsonNode](response.contentString)
+
+      if (normalizer != null && normalizeParsedJsonNode)
+        normalizer(parsedJsonNode)
+      else
+        parsedJsonNode
+    }
+
+    try {
+      mapper.parse[T](jsonNode)
+    } catch {
+      case e: Exception =>
+        println(s"Json parsing error $e trying to parse response $response with body " + response.contentString)
+        throw e
+    }
   }
 }

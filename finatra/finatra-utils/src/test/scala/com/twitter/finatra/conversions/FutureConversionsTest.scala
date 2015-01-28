@@ -92,6 +92,39 @@ class FutureConversionsTest extends Test {
         Future(Seq[Int]()) flatMapInnerOpt intToFutureOptionString,
         Future(Seq[Int]()))
     }
+    "#filter" in {
+      assertFuture(
+        Future(Seq(0, 1, 2, 3)) filterInner {_ > 1},
+        Future(Seq(2, 3)))
+    }
+    "#headOption when seq of size 1" in {
+      assertFuture(
+        Future(Seq(0)).headOption,
+        Future(Some(0)))
+    }
+    "#headOption when seq of size > 1" in {
+      assertFuture(
+        Future(Seq(0, 1, 2, 3)).headOption,
+        Future(Some(0)))
+    }
+    "#headOption when empty" in {
+      assertFuture(
+        Future(Seq[Int]()).headOption,
+        Future(None))
+    }
+    "#collectInner" in {
+      assertFuture(
+        Future(Seq("a", 1)).collectInner { case num: Int => num + 1},
+        Future(Seq(2)))
+    }
+    "#groupBySingleValue" in {
+      assertFuture(
+        Future(Seq("a", "aa", "bb", "ccc")).groupBySingleValue {_.size},
+        Future(Map(
+          1 -> "a",
+          2 -> "bb",
+          3 -> "ccc")))
+    }
   }
 
   "Future[Option[Seq[T]]]" should {
@@ -172,6 +205,28 @@ class FutureConversionsTest extends Test {
       assertFailedFuture[ExistingException](
         Future.exception(ExistingException).flatMapIfTrue(sideeffect))
       ran should equal(false)
+    }
+  }
+
+  "Future[Seq[Seq[A]]]" should {
+    "flattenInnerSeq" in {
+      assertFuture(
+        Future(Seq(Seq(), Seq("a", "b"), Seq("c"))).flattenInnerSeq,
+        Future(Seq("a", "b", "c")))
+    }
+  }
+
+  "Future[T]" should {
+    "chainedOnFailure when success" in {
+      assertFuture(
+        Future(1).chainedOnFailure { e => Future(2).unit},
+        Future(1))
+    }
+
+    "chainedOnFailure when failure" in {
+      assertFuture(
+        Future(1).chainedOnFailure { e => Future.exception(new RuntimeException("failure in chained"))},
+        Future(1))
     }
   }
 

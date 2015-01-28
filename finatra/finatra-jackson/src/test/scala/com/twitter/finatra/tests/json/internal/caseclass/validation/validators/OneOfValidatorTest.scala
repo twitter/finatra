@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult._
-import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.OneOfValidator
-import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{OneOf, ValidationResult}
+import com.twitter.finatra.validation.ValidationResult._
 
 case class OneOfExample(@OneOf(value = Array("a", "B", "c")) enumValue: String)
 case class OneOfSeqExample(@OneOf(Array("a", "B", "c")) enumValue: Seq[String])
@@ -17,10 +17,7 @@ class OneOfValidatorTest extends ValidatorTest {
 
     "pass validation for single value" in {
       val value = "a"
-      validate[OneOfExample](value) should equal(
-        valid(
-          errorMessage(
-            value)))
+      validate[OneOfExample](value) should equal(valid)
     }
 
     "fail validation for single value" in {
@@ -33,18 +30,12 @@ class OneOfValidatorTest extends ValidatorTest {
 
     "pass validation for seq" in {
       val value = oneOfValues
-      validate[OneOfSeqExample](value) should equal(
-        valid(
-          errorMessage(
-            value)))
+      validate[OneOfSeqExample](value) should equal(valid)
     }
 
     "pass validation for empty seq" in {
       val value = Seq()
-      validate[OneOfSeqExample](value) should equal(
-        valid(
-          errorMessage(
-            value)))
+      validate[OneOfSeqExample](value) should equal(valid)
     }
 
     "fail validation for invalid value in seq" in {
@@ -65,7 +56,7 @@ class OneOfValidatorTest extends ValidatorTest {
   }
 
   private def validate[C : Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].erasure, "enumValue", classOf[OneOf], value)
+    super.validate(manifest[C].runtimeClass, "enumValue", classOf[OneOf], value)
   }
 
   private def errorMessage(value: Any): String = {

@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{JsonNode, Module, ObjectMapper, ObjectReader}
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.annotations.Experimental
 import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException
-import com.twitter.finatra.json.internal.streaming.{JsonArrayIterator, JsonStreamParseResult, ReaderIterator}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import java.io.{InputStream, OutputStream, Reader, StringWriter}
+import java.io.{InputStream, OutputStream, StringWriter}
 import java.nio.ByteBuffer
 
 object FinatraObjectMapper {
@@ -36,10 +34,10 @@ object FinatraObjectMapper {
 }
 
 case class FinatraObjectMapper(
-  mapper: ObjectMapper with ScalaObjectMapper) {
+  objectMapper: ObjectMapper with ScalaObjectMapper) {
 
   def reader[T: Manifest] = {
-    mapper.reader[T]
+    objectMapper.reader[T]
   }
 
   def parse[T: Manifest](request: Request): T = {
@@ -47,99 +45,60 @@ case class FinatraObjectMapper(
     if (length == 0)
       throw new RequestFieldInjectionNotSupportedException()
     else
-      FinatraObjectMapper.parseRequestBody(request, mapper.reader[T])
+      FinatraObjectMapper.parseRequestBody(request, objectMapper.reader[T])
   }
 
   def parse[T: Manifest](byteBuffer: ByteBuffer): T = {
     val is = new ByteBufferBackedInputStream(byteBuffer)
-    mapper.readValue[T](is)
+    objectMapper.readValue[T](is)
   }
 
   def parse[T: Manifest](jsonNode: JsonNode): T = {
-    mapper.convertValue[T](jsonNode)
+    objectMapper.convertValue[T](jsonNode)
   }
 
   /** Parse InputStream (caller must close) */
   def parse[T: Manifest](inputStream: InputStream): T = {
-    mapper.readValue[T](inputStream)
+    objectMapper.readValue[T](inputStream)
   }
 
   def parse[T: Manifest](bytes: Array[Byte]): T = {
-    mapper.readValue[T](bytes)
+    objectMapper.readValue[T](bytes)
   }
 
   def parse[T: Manifest](string: String): T = {
-    mapper.readValue[T](string)
+    objectMapper.readValue[T](string)
   }
 
   def parse[T: Manifest](jsonParser: JsonParser): T = {
-    mapper.readValue[T](jsonParser)
-  }
-
-  @Experimental
-  def streamParse[T: Manifest](arrayName: String, input: InputStream): JsonStreamParseResult[T] = {
-    JsonStreamParseResult.create(
-      mapper = this,
-      parser = mapper.getFactory.createParser(input),
-      factory = mapper.getNodeFactory,
-      arrayName = arrayName)
-  }
-
-  @Experimental
-  def streamParseDelimited[T: Manifest](delimiter: Char, arrayName: String, reader: Reader): Iterator[JsonStreamParseResult[T]] = {
-    for (delimitedReader <- new ReaderIterator(reader, delimiter)) yield {
-      streamParse(arrayName, delimitedReader)
-    }
-  }
-
-  @Experimental
-  def streamParse[T: Manifest](arrayName: String, reader: Reader): JsonStreamParseResult[T] = {
-    JsonStreamParseResult.create(
-      mapper = this,
-      parser = mapper.getFactory.createParser(reader),
-      factory = mapper.getNodeFactory,
-      arrayName = arrayName)
-  }
-
-  @Experimental
-  def streamParse[T: Manifest](input: InputStream): Iterator[T] = {
-    new JsonArrayIterator[T](
-      this,
-      mapper.getFactory.createParser(input))
-  }
-
-  @Experimental
-  def streamParse[T: Manifest](reader: Reader): Iterator[T] = {
-    new JsonArrayIterator[T](
-      this,
-      mapper.getFactory.createParser(reader))
+    objectMapper.readValue[T](jsonParser)
   }
 
   def convert[T: Manifest](any: Any): T = {
-    mapper.convertValue[T](any)
+    objectMapper.convertValue[T](any)
   }
 
   def writeValueAsBytes(any: Any): Array[Byte] = {
-    mapper.writeValueAsBytes(any)
+    objectMapper.writeValueAsBytes(any)
   }
 
   def writeValue(any: Any, outputStream: OutputStream) {
-    mapper.writeValue(outputStream, any)
+    objectMapper.writeValue(outputStream, any)
   }
 
   def writeValueAsString(any: Any): String = {
-    mapper.writeValueAsString(any)
+    objectMapper.writeValueAsString(any)
   }
 
   def writePrettyString(any: Any): String = {
     val writer = new StringWriter()
-    val generator = mapper.getFactory.createGenerator(writer)
+    val generator = objectMapper.getFactory.createGenerator(writer)
     generator.useDefaultPrettyPrinter()
     generator.writeObject(any)
     writer.toString
   }
 
   def registerModule(module: Module) = {
-    mapper.registerModule(module)
+    objectMapper.registerModule(module)
   }
 }

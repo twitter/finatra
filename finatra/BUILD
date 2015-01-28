@@ -1,6 +1,15 @@
+page(name="readme",
+     source="README.md",
+     provides=[
+       wiki_artifact(
+         wiki=confluence,
+         space='PLATENG',
+         title='Finatra'
+     )])
+
 target(name='tests',
   dependencies=[
-    'finatra/finatra/finatra-examples:tests',
+    'finatra/finatra/finatra-opensource-examples:tests',
     'finatra/finatra/finatra-http:tests',
     'finatra/finatra/finatra-httpclient:tests',
     'finatra/finatra/finatra-jackson:tests',

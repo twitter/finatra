@@ -3,12 +3,12 @@ package com.twitter.finatra.guice
 import com.google.inject._
 import com.google.inject.assistedinject.FactoryModuleBuilder
 import com.google.inject.matcher.Matchers
-import com.google.inject.name.Names
 import com.google.inject.spi.TypeConverter
 import com.twitter.app.{Flag, FlagFactory, Flaggable}
 import com.twitter.finatra.utils.Logging
+import java.lang.annotation.Annotation
 import net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder
-import net.codingwell.scalaguice._
+import net.codingwell.scalaguice.{ScalaMultibinder, annotation, typeLiteral}
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.reflect.runtime.universe.TypeTag
@@ -20,7 +20,7 @@ abstract class GuiceModule
   private def binderAccess = super.binder
 
   /* Mutable State */
-  private val postStartupFunctions = mutable.Buffer[() => Unit]()
+  private val postStartupFunctions = mutable.Buffer[FinatraInjector => Unit]()
   private val postWarmupFunctions = mutable.Buffer[() => Unit]()
   private val shutdownFunctions = mutable.Buffer[() => Unit]()
   protected[guice] val flags = ArrayBuffer[Flag[_]]()
@@ -44,9 +44,9 @@ abstract class GuiceModule
     * NOTE: This Seq of modules is used instead of the standard Guice 'install' method */
   protected[guice] def modules: Seq[Module] = Seq()
 
-  protected def bindAssistedFactory[T: Manifest] = {
+  protected def bindAssistedFactory[T: Manifest] {
     super.install(
-      new FactoryModuleBuilder().build(manifest[T].erasure))
+      new FactoryModuleBuilder().build(manifest[T].runtimeClass))
   }
 
   protected def addTypeConvertor[T: Manifest](converter: TypeConverter) {
@@ -66,16 +66,16 @@ abstract class GuiceModule
     }
   }
 
-  protected def bindSingleton[T: Manifest](name: String): ScalaAnnotatedBindingBuilder[T] = {
+  protected def bindSingleton[T: Manifest](annot: Annotation): ScalaAnnotatedBindingBuilder[T] = {
     new ScalaAnnotatedBindingBuilder[T] {
-      val builder = createBuilder(nameOpt = Some(name))
+      val builder = createBuilder(annotationOpt = Some(annot))
       override val self = builder
     }
   }
 
-  protected def bind[T: Manifest](name: String): ScalaAnnotatedBindingBuilder[T] = {
+  protected def bind[T: Manifest](annot: Annotation): ScalaAnnotatedBindingBuilder[T] = {
     new ScalaAnnotatedBindingBuilder[T] {
-      val builder = createBuilder(nameOpt = Some(name), singleton = false)
+      val builder = createBuilder(annotationOpt = Some(annot), singleton = false)
       override val self = builder
     }
   }
@@ -93,8 +93,7 @@ abstract class GuiceModule
 
   /*
    * Protected Lifecycle
-   * TODO: In future eliminate the need for these lifecycle methods by integrating
-   * with Onami-Lifecycle or Governator for support of @PostConstruct, @PreDestroy, and @Warmup annotations
+   * TODO: Eliminate following lifecycle methods by more generally supporting @PostConstruct, @PreDestroy, and @Warmup (see Onami-Lifecycle or Governator)
    */
 
   /**
@@ -102,8 +101,8 @@ abstract class GuiceModule
    * NOTE: This method should only be called from a @Singleton 'provides' method to avoid registering
    * multiple startup hooks every time an object is created.
    */
-  protected def singletonStartup(func: => Unit) {
-    postStartupFunctions += (() => func)
+  protected def singletonStartup(func: FinatraInjector => Unit) {
+    postStartupFunctions += func
   }
 
   /**
@@ -128,7 +127,8 @@ abstract class GuiceModule
 
   /* Overrides */
 
-  override protected def configure() {} // Provide default configure method so Module's using @Provider don't need an empty configure method
+  // Provide default configure method so Module's using only @Provider don't need an empty configure method
+  override protected def configure() {}
 
   override protected def install(module: Module) {
     throw new Exception("Install not supported. Please place modules override val modules = Seq(module1, module2, ...)")
@@ -136,29 +136,29 @@ abstract class GuiceModule
 
   /* Private */
 
-  private[guice] def callPostStartupCallbacks() {
-    postStartupFunctions foreach {_()}
+  private[guice] def callPostStartupCallbacks(injector: FinatraInjector) {
     if (postStartupFunctions.nonEmpty) {
       info("Calling PostStartup methods in " + this)
     }
+    postStartupFunctions foreach {_(injector)}
   }
 
   private[guice] def callPostWarmupCallbacks() {
-    postWarmupFunctions foreach {_()}
     if (postWarmupFunctions.nonEmpty) {
       info("Calling PostWarmup methods in " + this)
     }
+    postWarmupFunctions foreach {_()}
   }
 
   private[guice] def callShutdownCallbacks() {
-    shutdownFunctions foreach {_()}
     if (shutdownFunctions.nonEmpty) {
       info("Calling Shutdown methods in " + this)
     }
+    shutdownFunctions foreach {_()}
   }
 
   /* Copying stacktrace hacks found in scalaguice's ScalaModule.scala */
-  private def createBuilder[T: Manifest](nameOpt: Option[String] = None, singleton: Boolean = true) = {
+  private def createBuilder[T: Manifest](annotationOpt: Option[Annotation] = None, singleton: Boolean = true) = {
     val mybinder = binderAccess.withSource((new Throwable).getStackTrace()(3))
     val builder = mybinder bind typeLiteral[T]
 
@@ -167,10 +167,9 @@ abstract class GuiceModule
       builder.in(annotation[Singleton])
     }
 
-    /* Set name annotation if specified */
-    for (name <- nameOpt) {
-      val nameAnnotation = Names.named(name)
-      builder.annotatedWith(nameAnnotation)
+    /* Set annotation if specified */
+    for (annot <- annotationOpt) {
+      builder.annotatedWith(annot)
     }
 
     builder

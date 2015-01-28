@@ -1,9 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult
-import com.twitter.finatra.json.annotations._
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationMessageResolver
 import com.twitter.finatra.json.internal.caseclass.validation.validators.FutureTimeValidator._
+import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, FutureTime, ValidationResult}
 import org.joda.time.DateTime
 
 object FutureTimeValidator {

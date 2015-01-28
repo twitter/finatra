@@ -11,12 +11,10 @@ trait GuiceTwitterServer
   with Warmup
   with Logging {
 
-  /* Public */
-
   override final def main() {
     super.main() // Call GuiceApp.main() to create injector
 
-    info("Enabling health port " + httpAdminPort)
+    info("Enabling health endpoint on port " + httpAdminPort)
     warmupComplete()
 
     info("Startup complete, server ready.")

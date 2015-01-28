@@ -1,13 +1,15 @@
 junit_tests(name='scala',
   dependencies=[
-    'finatra/finatra/finatra-utils/src/main/scala',
-    'finatra/finatra/finatra-utils/src/test/scala:test-deps',
+    'finatra/finatra/finatra-utils',
+    'finatra/finatra/finatra-utils:test-deps',
     'finatra/finatra/finatra-utils/src/test/java',
   ],
-  sources=rglobs(
+  sources=globs(
+    'com/twitter/finatra/annotations/*.scala',
     'com/twitter/finatra/conversions/*.scala',
     'com/twitter/finatra/exceptions/*.scala',
     'com/twitter/finatra/integration/*.scala',
+    'com/twitter/finatra/integration/app/*.scala',
     'com/twitter/finatra/logging/*.scala',
     'com/twitter/finatra/utils/*.scala',
   ),

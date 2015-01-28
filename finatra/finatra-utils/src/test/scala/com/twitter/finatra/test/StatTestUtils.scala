@@ -1,9 +1,9 @@
 package com.twitter.finatra.test
 
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 
-object StatTestUtils extends ShouldMatchers {
+object StatTestUtils extends Matchers {
 
   def clear(statsReceiver: InMemoryStatsReceiver) {
     statsReceiver.counters.clear()

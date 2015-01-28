@@ -7,6 +7,6 @@ class HttpResponseException(
   extends Exception {
 
   override def getMessage: String = {
-    response.toString
+    s"HttpResponseException with response $response"
   }
 }

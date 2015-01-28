@@ -1,15 +1,15 @@
 package com.twitter.finatra.integration
 
 import com.google.inject.AbstractModule
-import com.twitter.finagle.NoStacktrace
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.FinatraServer
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.guice.GuiceModule
-import com.twitter.finatra.test.{EmbeddedTwitterServer, HttpTest}
 import com.twitter.finatra.routing.Router
+import com.twitter.finatra.test.{EmbeddedTwitterServer, HttpTest}
 import com.twitter.finatra.twitterserver.{GuiceTwitterServer, TwitterServerWithPorts}
 import com.twitter.server.Lifecycle.Warmup
+import com.twitter.util.Await
 
 
 class StartupIntegrationTest extends HttpTest {
@@ -17,9 +17,9 @@ class StartupIntegrationTest extends HttpTest {
   "startup" should {
     "ensure health check succeeds when guice config is good" in {
       val server = EmbeddedTwitterServer(new SimpleGuiceHttpTwitterServer)
-      assertHealth(server)
+      server.assertHealthy()
 
-      //We can no longer directly get the json, since it's now embedded in HTML :-/
+      //We can no longer directly get the json, since it's now embedded in HTML
       server.httpGet(
         "/admin/server_info",
         andExpect = Status.Ok)
@@ -31,8 +31,23 @@ class StartupIntegrationTest extends HttpTest {
       val server = EmbeddedTwitterServer(
         new SimpleGuiceTwitterServer)
 
-      server.start()
-      assertHealth(server)
+      server.assertHealthy()
+      server.close()
+    }
+
+    "raw TwitterServerWithPorts starts up" in {
+      val server = new EmbeddedTwitterServer(
+        twitterServer = new RawTwitterServerWithPorts)
+
+      server.assertHealthy()
+      server.close()
+    }
+
+    "GuiceTwitterServer starts up" in {
+      val server = new EmbeddedTwitterServer(
+        twitterServer = new GuiceTwitterServer {})
+
+      server.assertHealthy()
       server.close()
     }
 
@@ -43,7 +58,10 @@ class StartupIntegrationTest extends HttpTest {
 
       server.start()
       server.guiceApp.postWarmupComplete should equal(false)
-      assertFailedFuture[StartupTestException](server.mainResult)
+
+      //TODO: Remove comment once we switch to app.nonExitingMain:
+      //assertFailedFuture[StartupTestException](server.mainResult)
+      server.close()
     }
 
     "ensure startup fails when guice config hangs" in {
@@ -53,7 +71,7 @@ class StartupIntegrationTest extends HttpTest {
 
       server.start()
       Thread.sleep(2000) //since the guice module hangs forever, we simply make sure we aren't healthy after 2 seconds...
-      assertHealth(server, healthy = false)
+      server.assertHealthy(healthy = false)
       server.close()
     }
 
@@ -62,8 +80,11 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = new PremainExceptionServer,
         waitForWarmup = false)
 
-      assertFailedFuture[StartupTestException](
-        server.mainResult)
+      server.start()
+
+      //TODO: Remove comment once we switch to app.nonExitingMain:
+      //assertFailedFuture[StartupTestException](server.mainResult)
+      server.close()
     }
 
     "ensure startup fails when preMain throws exception" in {
@@ -71,8 +92,12 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = new ServerPremainException,
         waitForWarmup = false)
 
-      assertFailedFuture[StartupTestException](
-        server.mainResult)
+      server.start()
+      server.guiceApp.postWarmupComplete should equal(false)
+
+      //TODO: Remove comment once we switch to app.nonExitingMain:
+      //assertFailedFuture[StartupTestException](server.mainResult)
+      server.close()
     }
 
     "ensure http server starts after warmup" in {
@@ -96,12 +121,15 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = new WarmupServer,
         waitForWarmup = false)
 
-      assertHealth(server, healthy = false)
+      server.assertHealthy(healthy = false)
       sleep(3.seconds, verbose = true)
-      assertHealth(server, healthy = false)
+
+      server.assertHealthy(healthy = false)
       continueWarmup = false
       sleep(3.seconds, verbose = true)
-      assertHealth(server)
+
+      server.assertHealthy(healthy = true)
+      server.close()
     }
 
     "calling GuiceModule.install throws exception" in {
@@ -109,8 +137,8 @@ class StartupIntegrationTest extends HttpTest {
         twitterServer = new ServerWithGuiceModuleInstall,
         waitForWarmup = false)
 
-      assertFailedFuture[Exception](
-        server.mainResult)
+      assertFailedFuture[Throwable](server.mainResult)
+      server.close()
     }
   }
 }
@@ -162,6 +190,11 @@ class PremainExceptionServer extends TwitterServerWithPorts with Warmup {
     throw new StartupTestException("premain exception")
   }
 
+  /* TODO: Remove once com.twitter.app.App with nonExitingMain is opensource released */
+  override protected def exitOnError(reason: String): Unit = {
+    log.warning(reason)
+  }
+
   def main() {
     warmupComplete()
     throw new StartupTestException("shouldn't get here")
@@ -176,4 +209,11 @@ class ServerPremainException extends FinatraServer {
   override def configure(router: Router) {}
 }
 
-class StartupTestException(msg: String) extends Exception(msg) with NoStacktrace
+class StartupTestException(msg: String) extends Exception(msg)
+
+class RawTwitterServerWithPorts extends TwitterServerWithPorts {
+  def main() {
+    Await.ready(
+      adminHttpServer)
+  }
+}

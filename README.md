@@ -1,8 +1,6 @@
 Overview
-===========
-Finatra 2.x is the merging between Finatra 1.x and the ***REMOVED*** framework, and Finatra-***REMOVED*** is the merging between Finatra-Internal and the ***REMOVED*** framework.
+===============================
+Finatra v2 is Twitter's next generation HTTP framework, built on Twitter Server and Finagle, and focused on building fast, testable APIs.
 
-***REMOVED***
-
-An initial migration guide from Finatra v1 can be found here: 
+* OpenSource Finatra: ./finatra/
 ***REMOVED***

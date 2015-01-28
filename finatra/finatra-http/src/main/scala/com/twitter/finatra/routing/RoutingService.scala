@@ -3,15 +3,9 @@ package com.twitter.finatra.routing
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.response.SimpleResponse
-import com.twitter.finatra.routing.RoutingService.NotFoundSuffix
 import com.twitter.finatra.utils.Logging
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod._
-
-object RoutingService {
-  // Created constant for reuse in HttpAssertions
-  val NotFoundSuffix = " route not found"
-}
 
 class RoutingService(
   routes: Seq[Route])
@@ -51,6 +45,6 @@ class RoutingService(
     Future.value(
       SimpleResponse(
         Status.NotFound,
-        request.uri + NotFoundSuffix))
+        request.uri + " route not found"))
   }
 }

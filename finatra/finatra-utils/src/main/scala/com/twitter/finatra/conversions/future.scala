@@ -1,6 +1,6 @@
 package com.twitter.finatra.conversions
 
-import com.twitter.finatra.conversions.options.addToFutureOptionToOptionFuture
+import com.twitter.finatra.conversions.option._
 import com.twitter.finatra.conversions.seq._
 import com.twitter.util.{Future, NonFatal, Return, Throw}
 import grizzled.slf4j.Logger
@@ -25,7 +25,7 @@ object future {
     }
   }
 
-  class RichFutureOption[A](futureOption: Future[Option[A]]) {
+  implicit class RichFutureOption[A](futureOption: Future[Option[A]]) {
 
     def getInnerOrElseFail(throwable: => Throwable): Future[A] = {
       RichFutureOption.getInnerOrElseFail(futureOption, throwable)
@@ -47,13 +47,6 @@ object future {
       futureOption mapInner func flatMap {_.toFutureOption}
     }
 
-    def flatMapInnerIf(cond: Boolean)(func: A => Future[A]): Future[Option[A]] = {
-      if (!cond)
-        futureOption
-      else
-        futureOption mapInner func flatMap {_.toFutureOption}
-    }
-
     def flatMapInnerOpt[B](func: A => Future[Option[B]]): Future[Option[B]] = {
       futureOption flatMapInner func map {_.getOrElse(None)}
     }
@@ -61,17 +54,15 @@ object future {
     def flatMapIfUndefined(func: Unit => Future[Option[A]]): Future[Option[A]] = {
       futureOption flatMap {
         case Some(_) => futureOption
-        case _ => func()
+        case _ => func(())
       }
     }
   }
 
-  implicit def enrichFutureOption[A](futureOption: Future[Option[A]]): RichFutureOption[A] = new RichFutureOption[A](futureOption)
-
   /* ---------------------------------------------------------- */
   /* Future[Option[Seq[A]]] */
 
-  class RichFutureOptionSeq[A](futureOptionSeq: Future[Option[Seq[A]]]) {
+  implicit class RichFutureOptionSeq[A](futureOptionSeq: Future[Option[Seq[A]]]) {
     def flattenInner: Future[Seq[A]] = {
       for (optionSeq <- futureOptionSeq) yield {
         optionSeq getOrElse Seq()
@@ -79,12 +70,10 @@ object future {
     }
   }
 
-  implicit def addFlattenToFutureOptionSeq[A](futureOptionSeq: Future[Option[Seq[A]]]): RichFutureOptionSeq[A] = new RichFutureOptionSeq[A](futureOptionSeq)
-
   /* ---------------------------------------------------------- */
   /* Future[Seq[Seq[A]]] */
 
-  class RichFutureSeqSeq[A](futureSeqSeq: Future[Seq[Seq[A]]]) {
+  implicit class RichFutureSeqSeq[A](futureSeqSeq: Future[Seq[Seq[A]]]) {
     def flattenInnerSeq: Future[Seq[A]] = {
       for (seqSeq <- futureSeqSeq) yield {
         seqSeq.flatten
@@ -92,12 +81,10 @@ object future {
     }
   }
 
-  implicit def addFlattenToFutureSeqSeq[A](futureSeqSeq: Future[Seq[Seq[A]]]): RichFutureSeqSeq[A] = new RichFutureSeqSeq[A](futureSeqSeq)
-
   /* ---------------------------------------------------------- */
   /* Future[Seq[A]] */
 
-  class RichFutureSeq[A](futureSeq: Future[Seq[A]]) {
+  implicit class RichFutureSeq[A](futureSeq: Future[Seq[A]]) {
 
     def mapInner[B](func: A => B): Future[Seq[B]] = {
       for (seq <- futureSeq) yield {
@@ -130,26 +117,34 @@ object future {
         seq groupBySingleValue func
       }
     }
-  }
 
-  implicit def enrichFutureSeq[A](futureSeq: Future[Seq[A]]): RichFutureSeq[A] = new RichFutureSeq[A](futureSeq)
+    def filterInner(func: A => Boolean): Future[Seq[A]] = {
+      for (seq <- futureSeq) yield {
+        seq filter func
+      }
+    }
+
+    def headOption: Future[Option[A]] = {
+      for (seq <- futureSeq) yield {
+        seq.headOption
+      }
+    }
+  }
 
   /* ---------------------------------------------------------- */
   /* Future[Seq[Future[A]] */
 
-  class RichFutureSeqFutures[A](futureSeqFutures: Future[Seq[Future[A]]]) {
+  implicit class RichFutureSeqFutures[A](futureSeqFutures: Future[Seq[Future[A]]]) {
 
     def flattenInner: Future[Seq[A]] = {
       futureSeqFutures flatMap {Future.collect(_)}
     }
   }
 
-  implicit def addFlattenToFutureSeqFutures[A](futureSeqFutures: Future[Seq[Future[A]]]): RichFutureSeqFutures[A] = new RichFutureSeqFutures[A](futureSeqFutures)
-
   /* ---------------------------------------------------------- */
   /* Future[Boolean] */
 
-  class RichFutureBoolean(futureBoolean: Future[Boolean]) {
+  implicit class RichFutureBoolean(futureBoolean: Future[Boolean]) {
 
     def flatMapIfTrue(func: => Future[Unit]): Future[Unit] = {
       futureBoolean flatMap { boolean =>
@@ -161,12 +156,10 @@ object future {
     }
   }
 
-  implicit def futureBooleanToRichFutureBoolean[A](futureBoolean: Future[Boolean]): RichFutureBoolean = new RichFutureBoolean(futureBoolean)
-
   /* ---------------------------------------------------------- */
   /* Future[T] */
 
-  class RichFuture[A](future: Future[A]) {
+  implicit class RichFuture[A](future: Future[A]) {
 
     def chainedOnFailure(failureFunc: Throwable => Future[Unit]): Future[A] = {
       future rescue {
@@ -190,5 +183,4 @@ object future {
     }
   }
 
-  implicit def futureToRichFuture[A](future: Future[A]): RichFuture[A] = new RichFuture[A](future)
 }

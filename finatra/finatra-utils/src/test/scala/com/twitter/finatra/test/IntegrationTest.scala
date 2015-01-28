@@ -1,7 +1,7 @@
 package com.twitter.finatra.test
 
 import com.google.inject.testing.fieldbinder.{Bind, BoundFieldModule}
-import com.twitter.finatra.utils.Clearable
+import com.twitter.finatra.utils.Resettable
 import java.lang.reflect.Field
 import org.mockito.internal.util.MockUtil
 
@@ -12,8 +12,7 @@ trait IntegrationTest extends Test {
 
   protected def app: EmbeddedApp
 
-  protected val resetMocks = true
-  protected val resetClearables = true
+  protected val resetBindings = true
 
   protected val integrationTestModule = BoundFieldModule.of(this)
 
@@ -28,14 +27,14 @@ trait IntegrationTest extends Test {
   override protected def afterEach() {
     super.afterEach()
 
-    if (resetMocks) {
-      resetMocks(mockObjects: _*)
-    }
+    if (resetBindings) {
+      for (mockObject <- mockObjects) {
+        resetMocks(mockObject)
+      }
 
-    if (resetClearables) {
-      for (clearableObject <- clearableObjects) {
-        println("Clearing " + clearableObject)
-        clearableObject.clear()
+      for (resettable <- resettableObjects) {
+        println("Clearing " + resettable)
+        resettable.reset()
       }
     }
   }
@@ -51,13 +50,13 @@ trait IntegrationTest extends Test {
     } yield fieldValue
   }
 
-  private lazy val clearableObjects = {
+  private lazy val resettableObjects = {
     for {
       field <- boundFields
-      if classOf[Clearable].isAssignableFrom(field.getType)
+      if classOf[Resettable].isAssignableFrom(field.getType)
       _ = field.setAccessible(true)
       fieldValue = field.get(this)
-    } yield fieldValue.asInstanceOf[Clearable]
+    } yield fieldValue.asInstanceOf[Resettable]
   }
 
   private lazy val boundFields = {

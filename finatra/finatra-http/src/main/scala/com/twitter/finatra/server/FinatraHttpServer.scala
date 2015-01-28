@@ -1,14 +1,16 @@
 package com.twitter.finatra.server
 
+import com.twitter.app.Flag
 import com.twitter.conversions.storage._
 import com.twitter.conversions.time._
 import com.twitter.finagle.Service
+import com.twitter.finagle.builder.ServerConfig.Yes
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http.service.NullService
-import com.twitter.finagle.http.{Http, Response, RichHttp, Request}
+import com.twitter.finagle.http.{Response, Request, Http, RichHttp}
+import com.twitter.finatra.conversions.string._
 import com.twitter.finatra.twitterserver.GuiceTwitterServer
 import com.twitter.finatra.utils.PortUtils
-import com.twitter.finatra.utils.PortUtils._
 import com.twitter.util.{Await, Future, Time}
 import java.net.InetSocketAddress
 
@@ -29,10 +31,8 @@ import java.net.InetSocketAddress
  * AdminHttpServer Trait (premain)
  * - Create admin http server
  *
- * GuiceApp (premain)
+ * GuiceApp (main)
  * - Create Guice Injector
- *
- * GuiceApp Trait (main)
  * - Call postStartup methods
  * - Call warmup method
  * - Call postWarmup methods
@@ -71,6 +71,12 @@ trait FinatraHttpServer extends GuiceTwitterServer {
       .enableTracing(tracingEnabled())
   }
 
+  type FinagleServerBuilder = ServerBuilder[Request, Response, Yes, Yes, Yes]
+
+  protected def configureHttpServer(serverBuilder: FinagleServerBuilder) = {}
+
+  protected def configureHttpsServer(serverBuilder: ServerBuilder[Request, Response, Yes, Yes, Yes]) = {}
+
   /* Lifecycle */
 
   override def postWarmup() {
@@ -90,51 +96,51 @@ trait FinatraHttpServer extends GuiceTwitterServer {
 
   /* Overrides */
 
-  override def httpExternalPort = Option(httpServer) map getPort
+  override def httpExternalPort = Option(httpServer) map PortUtils.getPort
 
-  override def httpExternalSocketAddress = Option(httpServer) map getSocketAddress
+  override def httpExternalSocketAddress = Option(httpServer) map PortUtils.getSocketAddress
 
-  override def httpsExternalPort = Option(httpsServer) map getPort
+  override def httpsExternalPort = Option(httpsServer) map PortUtils.getPort
 
   /* Private */
 
   /* We parse the port as a string, so that clients can
      set the port to "" to prevent a http server from being started */
-  private def httpPort: Option[InetSocketAddress] = {
-    val port = httpPortFlag()
-    if (port.isEmpty)
-      None
-    else
-      Some(PortUtils.parseAddr(port))
+  private def parsePort(port: Flag[String]): Option[InetSocketAddress] = {
+    port().toOption map PortUtils.parseAddr
   }
 
   private def startHttpServer() {
-    for (port <- httpPort) {
-      httpServer = ServerBuilder()
+    for (port <- parsePort(httpPortFlag)) {
+      val serverBuilder = ServerBuilder()
         .codec(new RichHttp[Request](httpCodec))
         .bindTo(port)
         .name("http")
-        .build(httpService)
 
+      configureHttpServer(serverBuilder)
+
+      httpServer = serverBuilder.build(httpService)
       info("http server started on port: " + httpExternalPort.get)
     }
   }
 
   private def startHttpsServer() {
     for {
-      port <- httpsPortFlag.get
+      port <- parsePort(httpsPortFlag)
       certs <- certificatePath.get
       keys <- keyPath.get
     } {
-      httpsServer = ServerBuilder()
+      val serverBuilder = ServerBuilder()
         .codec(new RichHttp[Request](httpCodec))
-        .bindTo(PortUtils.parseAddr(httpsPortFlag()))
+        .bindTo(port)
         .name("https")
         .tls(
           certs,
           keys)
-        .build(httpService)
 
+      configureHttpsServer(serverBuilder)
+
+      httpsServer = serverBuilder.build(httpService)
       info("https server started on port: " + httpsExternalPort)
     }
   }

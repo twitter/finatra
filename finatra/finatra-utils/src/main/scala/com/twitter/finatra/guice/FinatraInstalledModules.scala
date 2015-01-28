@@ -3,9 +3,9 @@ package com.twitter.finatra.guice
 import com.google.inject._
 import com.google.inject.util.Modules
 import com.twitter.app.Flag
+import com.twitter.finatra.conversions.seq._
 import com.twitter.finatra.utils.Logging
 import scala.collection.JavaConverters._
-import com.twitter.finatra.conversions.seq._
 
 
 object FinatraInstalledModules {
@@ -76,7 +76,7 @@ case class FinatraInstalledModules(
     modules foreachPartial {
       case guiceModule: GuiceModule =>
         try {
-          guiceModule.callPostStartupCallbacks()
+          guiceModule.callPostStartupCallbacks(injector)
         } catch {
           case e: Throwable =>
             error("Startup method error in " + guiceModule, e)

@@ -20,5 +20,5 @@ case class TestImpressionRequestResults(
 /* Not supported in scala-jackson-module
 case class CountryCode(
   id: String)
-  extends JsonWrappedValue
+  extends WrappedValue
 */

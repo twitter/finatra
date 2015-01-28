@@ -1,9 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult
-import com.twitter.finatra.json.annotations._
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationMessageResolver
 import com.twitter.finatra.json.internal.caseclass.validation.validators.TimeGranularityValidator._
+import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, TimeGranularity, ValidationResult}
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit._
 import org.joda.time.{DateTime, DateTimeZone}

@@ -21,7 +21,7 @@ abstract class GuiceTestModule
 
   protected def bindToMock[T: Manifest, Ann <: java.lang.annotation.Annotation : Manifest]: T = {
     val mocked = smartMock[T]
-    val annotation = manifest[Ann].erasure.asInstanceOf[Class[Ann]]
+    val annotation = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
     bind[T].annotatedWith(annotation).toInstance(mocked)
     mocked
   }

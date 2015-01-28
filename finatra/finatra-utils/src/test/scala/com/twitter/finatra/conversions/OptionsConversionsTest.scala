@@ -1,6 +1,6 @@
 package com.twitter.finatra.conversions
 
-import com.twitter.finatra.conversions.options._
+import com.twitter.finatra.conversions.option._
 import com.twitter.finatra.test.Test
 import com.twitter.util.Future
 
@@ -16,15 +16,26 @@ class OptionsConversionsTest extends Test {
       assertFailedFuture[TestException](
         None.toFutureOrFail(TestException))
     }
-    "#toFutureOrFallback when Some" in {
+    "#toFutureOrElse when Some" in {
       assertFuture(
-        Some(1).toFutureWithFallback(2),
+        Some(1).toFutureOrElse(2),
         Future(1))
     }
-    "#toFutureOrFallback when None" in {
+    "#toFutureOrElse when None" in {
       val noneInt: Option[Int] = None
       assertFuture(
-        noneInt.toFutureWithFallback(2),
+        noneInt.toFutureOrElse(2),
+        Future(2))
+    }
+    "#toFutureOrElse with Future when Some" in {
+      assertFuture(
+        Some(1).toFutureOrElse(Future(2)),
+        Future(1))
+    }
+    "#toFutureOrElse with Future when None" in {
+      val noneInt: Option[Int] = None
+      assertFuture(
+        noneInt.toFutureOrElse(Future(2)),
         Future(2))
     }
   }

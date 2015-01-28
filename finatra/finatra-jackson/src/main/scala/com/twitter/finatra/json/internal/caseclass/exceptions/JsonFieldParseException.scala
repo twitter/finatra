@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.exceptions
 
-import com.twitter.finatra.json.internal.caseclass.CaseClassField
+import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField
 
 case class JsonFieldParseException(
   msg: String)

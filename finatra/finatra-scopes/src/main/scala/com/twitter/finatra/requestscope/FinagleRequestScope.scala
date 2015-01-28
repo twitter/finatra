@@ -70,7 +70,7 @@ class FinagleRequestScope extends Scope {
    * @param value Value to seed/add into the request scope
    * @param overwrite Whether to overwrite an existing value already in the request scope (defaults to false)
    */
-  def seed[T <: AnyRef](key: Key[T], value: T, overwrite: Boolean = false) {
+  def seed[T <: AnyRef](key: Key[T], value: T, overwrite: Boolean) {
     val scopedObjects = getScopedObjectMap(key)
 
     if (!overwrite) {

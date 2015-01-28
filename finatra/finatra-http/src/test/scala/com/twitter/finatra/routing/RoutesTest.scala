@@ -1,6 +1,6 @@
 package com.twitter.finatra.routing
 
-import com.twitter.finagle.http.{Response, Request => FinagleRequest}
+import com.twitter.finagle.http.{Request => FinagleRequest, Response}
 import com.twitter.finatra.test.Test
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod

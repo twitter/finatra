@@ -1,7 +1,7 @@
 package com.twitter.finatra.marshalling
 
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.annotations.CallbackConverterPool
+import com.twitter.finatra.bindings.CallbackConverterPool
 import com.twitter.finatra.response.ResponseBuilder
 import com.twitter.util.{Future, FuturePool}
 import javax.inject.Inject

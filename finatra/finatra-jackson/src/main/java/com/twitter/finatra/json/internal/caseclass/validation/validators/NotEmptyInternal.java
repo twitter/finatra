@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators;
 
-import com.twitter.finatra.json.annotations.Validation;
+import com.twitter.finatra.validation.Validation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -13,6 +13,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Validation(validatedBy = NotEmptyValidator.class)
 public @interface NotEmptyInternal {
 
-    // TODO configurable whether whitespace should be used in determining if value is nonempty
+    // TODO Make configurable whether whitespace should be used in determining if value is nonempty
     // boolean ignoreWhitespace() default false
 }

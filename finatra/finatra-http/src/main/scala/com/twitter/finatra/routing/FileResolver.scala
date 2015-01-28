@@ -1,18 +1,17 @@
 package com.twitter.finatra.routing
 
-import com.twitter.finatra.conversions.booleans._
+import com.twitter.finatra.conversions.boolean._
 import com.twitter.finatra.utils.Logging
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.activation.MimetypesFileTypeMap
 import javax.inject.Singleton
 import org.apache.commons.io.FilenameUtils
 
-// Modified from Finatra 1.x
-// In the future, this class should handle caching headers and perform some level of in-memory caching
+// NOTE: Not for production use serving static resources (Use a real static file server!)
 @Singleton
 class FileResolver extends Logging {
 
-  private val localDocRoot = "src%1$smain%1$swebapp%1$s".format(System.getProperty("file.separator"))
+  private val localDocRoot = "src/main/webapp/" //TODO: Don't hardcode
   private val extMap = new MimetypesFileTypeMap()
   private val localFileMode = {
     (System.getProperty("env") == "dev").onTrue {
@@ -23,7 +22,7 @@ class FileResolver extends Logging {
   /* Public */
 
   def getInputStream(path: String): Option[InputStream] = {
-    assert(path.startsWith("/")) //TODO
+    assert(path.startsWith("/"))
     if (isDirectory(path))
       None
     else if (localFileMode)

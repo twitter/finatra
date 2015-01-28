@@ -1,7 +1,6 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.domain
 
-import com.twitter.finatra.json.ValidationResult
-import com.twitter.finatra.json.annotations.{MethodValidation, NotEmpty}
+import com.twitter.finatra.validation.{MethodValidation, NotEmpty, ValidationResult}
 
 case class Address(
   @NotEmpty street: Option[String] = None,

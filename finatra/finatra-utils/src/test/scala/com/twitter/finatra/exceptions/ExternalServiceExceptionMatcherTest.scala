@@ -11,7 +11,6 @@ class ExternalServiceExceptionMatcherTest extends Test {
 
   "match external exceptions" in {
     val externalExceptions = Seq(
-      new ExternalServiceException("a") {},
       new RequestException(),
       new ApiException(),
       new ChannelWriteException(new Exception),

@@ -1,12 +1,13 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult._
-import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.UUIDValidator
-import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.ValidationResult._
+import com.twitter.finatra.validation.{UUID, ValidationResult}
 import java.util.{UUID => JUUID}
 
-case class UUIDExample(@UUID uuid: String)
+case class UUIDExample(
+  @UUID uuid: String)
 
 class UUIDValidatorTest extends ValidatorTest {
 
@@ -14,9 +15,7 @@ class UUIDValidatorTest extends ValidatorTest {
 
     "pass validation for valid value" in {
       val value = JUUID.randomUUID().toString
-      validate[UUIDExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[UUIDExample](value) should equal(valid)
     }
 
     "fail validation for invalid value" in {
@@ -28,7 +27,7 @@ class UUIDValidatorTest extends ValidatorTest {
   }
 
   private def validate[C : Manifest](value: String): ValidationResult = {
-    super.validate(manifest[C].erasure, "uuid", classOf[UUID], value)
+    super.validate(manifest[C].runtimeClass, "uuid", classOf[UUID], value)
   }
 
   private def errorMessage(value: String) = {

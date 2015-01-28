@@ -28,9 +28,7 @@ class RouteBenchmark {
     method = HttpMethod.POST,
     path = "/groups/",
     callback = defaultCallback,
-    annotations = Seq(),
-    requestClass = classOf[Request],
-    responseClass = classOf[Response])
+    annotations = Seq())
 
   val routeWithPathParams = Route(
     method = HttpMethod.POST,
@@ -44,9 +42,7 @@ class RouteBenchmark {
     method = HttpMethod.POST,
     path = "/groups/:id",
     callback = defaultCallback,
-    annotations = Seq(),
-    requestClass = classOf[Request],
-    responseClass = classOf[Response])
+    annotations = Seq())
 
   val postGroupsPath = "/groups/"
   val postGroupsRequest = Request(HttpMethod.POST, postGroupsPath)

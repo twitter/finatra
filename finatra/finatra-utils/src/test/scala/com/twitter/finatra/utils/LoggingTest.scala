@@ -18,5 +18,9 @@ class LoggingTest extends Test with Logging {
     debugFutureResult("%s") {
       Future("a")
     }
+
+    time("time %s ms") {
+      1 + 2
+    }
   }
 }

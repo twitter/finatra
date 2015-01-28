@@ -12,9 +12,10 @@ import com.twitter.finatra.utils.{Logging, RetryPolicyUtils}
 import com.twitter.scrooge.ThriftService
 import com.twitter.util._
 import org.scalatest.Matchers
+import scala.reflect.{ClassTag, classTag}
 
 /**
- * EmbeddedApp is used for testing App's locally.
+ * EmbeddedApp allow's an App to be started locally for integration and feature testing.
  *
  * @param app The app to be started for testing
  * @param clientFlags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar)
@@ -22,6 +23,10 @@ import org.scalatest.Matchers
  * @param extraArgs Extra command line arguments
  * @param waitForWarmup Once the app is started, wait for App warmup to be completed.
  * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
+ * @param stage Guice Stage used to create the server's injector. Since EmbeddedApp is used for testing, we default to Stage.DEVELOPMENT.
+ *              This makes it possible to only mock objects that are used in a given test, at the expense of not checking that the entire
+ *              object graph is valid. As such, you should always have at lease one Stage.PRODUCTION test for your service (which eagerly
+ *              creates all Guice classes at startup).
  */
 class EmbeddedApp(
   app: App,
@@ -38,19 +43,11 @@ class EmbeddedApp(
 
   require(!isSingletonObject(app),
     "app must be a new instance rather than a singleton (e.g. \"new " +
-    "FooServer\" instead of \"FooServerMain\" where FooServerMain is " +
-    "defined as \"object FooServerMain extends FooServer\"")
+      "FooServer\" instead of \"FooServerMain\" where FooServerMain is " +
+      "defined as \"object FooServerMain extends FooServer\"")
 
   /*
    * Overwrite Guice stage if app is a GuiceApp.
-   *
-   * This allows optionally performing tests in Stage.PRODUCTION which eagerly creates
-   * all Guice classes at startup.
-   *
-   * By default Stage.DEVELOPMENT is used which lazily creates objects. This makes it possible to
-   * only mock objects that are used in a given test, at the expense of not checking that the
-   * entire object graph is valid. As such, you should always have at lease one Stage.PRODUCTION
-   * test for your service.
    */
   if (isGuiceApp) {
     guiceApp.guiceStage = stage
@@ -66,12 +63,6 @@ class EmbeddedApp(
   private var startupFailedMessage: Option[String] = None
   protected[finatra] var closed = false
   private var _mainResult: Future[Unit] = _
-
-  /* Override */
-
-  override def finalize() {
-    close() //close embedded GuiceApp
-  }
 
   /* Public */
 
@@ -112,15 +103,15 @@ class EmbeddedApp(
   }
 
   /*
+   * Workaround for not being able to get a Manifest from a scrooge3 generated FooService[Future] which uses higher-kinded types :-/
+   *
    * Note: The preferred solution is to use @Bind found in IntegrationTest. Only use this technique
    * when needing to test multiple EmbeddedTwitterServer's (since for now, IntegrationTest only supports a single server at a time...)
-   *
-   * Workaround for not being able to get a Manifest from a scrooge3 generated FooService[Future] which uses higher-kinded types :-/
    */
-  def getThriftMock[T <: ThriftService : ClassManifest]: T = {
+  def getThriftMock[T <: ThriftService : ClassTag]: T = {
     val thriftType =
       Types.newParameterizedType(
-        classManifest[T].erasure,
+        classTag[T].runtimeClass,
         classOf[Future[_]])
 
     val thriftKey = Key.get(TypeLiteral.get(thriftType))
@@ -168,7 +159,8 @@ class EmbeddedApp(
 
     _mainResult = futurePool {
       try {
-        app.nonExitingMain(allArgs)
+        //TODO: Switch to app.nonExitingMain once next version of util-core is open-source released
+        app.main(allArgs)
       } catch {
         case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
           println("OutOfMemoryError(PermGen) in server startup. " +
@@ -205,7 +197,7 @@ class EmbeddedApp(
           } mkString ","
         })
   }
-  
+
   // hack
   private def isSingletonObject(app: App) = {
     app.getClass.getSimpleName.endsWith("$")
@@ -223,8 +215,9 @@ class EmbeddedApp(
       println("Waiting for warmup phases to complete...")
       if (isGuiceApp) {
         guiceApp.postWarmupComplete
-      } else {
-        true
+      }
+      else {
+        nonGuiceWarmupComplete()
       }
     }
 
@@ -234,8 +227,7 @@ class EmbeddedApp(
     logAppStartup()
   }
 
-  private def isModuleLoaded(name: String): Boolean = {
-    isGuiceApp &&
-      (guiceApp.requiredModules.mkString contains name)
+  protected def nonGuiceWarmupComplete(): Boolean = {
+    true
   }
 }

@@ -1,9 +1,9 @@
 package com.twitter.finatra.request
 
-import com.twitter.finagle.http.{ParamMap, RequestProxy, Request => FinagleRequest}
+import com.twitter.finagle.http.{ParamMap, Request, RequestProxy}
 
 class RequestWithPathParams(
-  override val request: FinagleRequest,
+  override val request: Request,
   incomingParams: Map[String, String])
   extends RequestProxy {
 

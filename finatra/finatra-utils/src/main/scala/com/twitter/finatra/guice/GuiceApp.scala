@@ -4,7 +4,7 @@ import com.google.inject.{Module, Stage}
 import com.twitter.app.App
 import com.twitter.finatra.guice.FinatraInstalledModules.findModuleFlags
 import com.twitter.finatra.modules.{FinatraInjectorModule, LoadedStatsModule}
-import com.twitter.finatra.utils.Logging
+import com.twitter.finatra.utils.{ResolverUtils, Logging}
 import scala.collection.mutable.ArrayBuffer
 
 
@@ -24,6 +24,13 @@ trait GuiceApp extends App with Logging {
   @transient private var installedModules: FinatraInstalledModules = _
 
   /* Public */
+
+  /* TODO: Remove once opensource twitter-util with nonExitingMain is released */
+  override protected def exitOnError(reason: String) {
+    error(reason)
+    close()
+    throw new Error(reason)
+  }
 
   def injector: FinatraInjector = {
     if (installedModules == null)
@@ -49,23 +56,27 @@ trait GuiceApp extends App with Logging {
     postStartup()
     installedModules.postStartup()
 
+    if (resolveFinagleClientsBeforeWarmup) {
+      ResolverUtils.waitUntilAllClientsAreResolved()
+    }
     warmup()
     postWarmup()
     installedModules.postWarmup()
     postWarmupComplete = true
     info("Warmup & PostWarmup Finished.")
 
-    callAppMain()
-
     onExit {
       installedModules.shutdown()
     }
+
+    callAppMain()
   }
 
   /* Public */
 
   /**
    * Callback method executed after the Guice injector is created and warmup has fully completed.
+   * Note: Not intended for use when using FinatraServer
    */
   def appMain() {
   }
@@ -85,6 +96,9 @@ trait GuiceApp extends App with Logging {
   /** Method to be called after injector creation */
   protected def postStartup() {
   }
+
+  /** Resolve all Finagle clients before warmup method called */
+  protected def resolveFinagleClientsBeforeWarmup = false
 
   /** Warmup method to be called before postWarmup */
   protected def warmup() {

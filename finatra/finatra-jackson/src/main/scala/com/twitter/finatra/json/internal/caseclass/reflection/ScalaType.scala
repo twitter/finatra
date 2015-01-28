@@ -9,7 +9,7 @@ case class ScalaType(
 
   /* Public */
 
-  val erasure: Class[_] = {
+  val runtimeClass: Class[_] = {
     CaseClassSigParser.loadClass(path)
   }
 
@@ -23,15 +23,15 @@ case class ScalaType(
   }
 
   def isPrimitive: Boolean = {
-    erasure != classOf[AnyRef]
+    runtimeClass != classOf[AnyRef]
   }
 
   def isCollection: Boolean = {
-    classOf[Iterable[Any]].isAssignableFrom(erasure)
+    classOf[Iterable[Any]].isAssignableFrom(runtimeClass)
   }
 
   def isMap: Boolean = {
-    classOf[Map[Any, Any]].isAssignableFrom(erasure)
+    classOf[Map[Any, Any]].isAssignableFrom(runtimeClass)
   }
 
   def isArray: Boolean = {
@@ -39,7 +39,7 @@ case class ScalaType(
   }
 
   def isEnum: Boolean = {
-    erasure.isEnum
+    runtimeClass.isEnum
   }
 
   /* Private */

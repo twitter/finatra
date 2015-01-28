@@ -1,8 +1,7 @@
 package com.twitter.finatra.test
 
-import com.twitter.finatra.logging.Timing
-import com.twitter.util.{Await, Future}
 import com.twitter.finatra.utils.Logging
+import com.twitter.util.{Await, Future}
 import java.util.TimeZone
 import org.apache.commons.io.IOUtils
 import org.joda.time.{DateTimeZone, Duration}
@@ -16,8 +15,7 @@ abstract class Test
   with BeforeAndAfterAll
   with BeforeAndAfterEach
   with Matchers
-  with Logging
-  with Timing {
+  with Logging {
 
   /* Constructor */
 
@@ -79,13 +77,13 @@ abstract class Test
   protected def assertFailedFuture[T <: Throwable : Manifest](result: Future[_]): T = {
     try {
       Await.result(result)
-      fail("Expected exception " + manifest[T].erasure + " never thrown")
+      fail("Expected exception " + manifest[T].runtimeClass + " never thrown")
     } catch {
       case e: Throwable =>
-        if (manifest[T].erasure.isAssignableFrom(e.getClass))
+        if (manifest[T].runtimeClass.isAssignableFrom(e.getClass))
           e.asInstanceOf[T]
         else
-          fail("Expected exception " + manifest[T].erasure + " but caught " + e)
+          fail("Expected exception " + manifest[T].runtimeClass + " but caught " + e)
     }
   }
 

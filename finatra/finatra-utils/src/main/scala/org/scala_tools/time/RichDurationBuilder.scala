@@ -1,11 +1,11 @@
 package org.scala_tools.time
 
-import com.twitter.util.Duration
+import com.twitter.util.{Duration => TwitterDuration}
 
 trait RichDurationBuilder {
-  implicit def durationBuilderToRichDurationBuilder(durationBuilder: DurationBuilder) = new {
-    def toTwitterDuration: Duration = {
-      Duration.fromMilliseconds(
+  implicit class RichDurationBuilder(durationBuilder: DurationBuilder) {
+    def toTwitterDuration: TwitterDuration = {
+      TwitterDuration.fromMilliseconds(
         durationBuilder.toDuration.getMillis)
     }
   }

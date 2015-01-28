@@ -1,8 +1,7 @@
 package com.twitter.finatra.conversions
 
-import com.twitter.finatra.conversions.tuples._
+import com.twitter.finatra.conversions.tuple._
 import com.twitter.finatra.test.Test
-
 
 class TuplesConversionsTest extends Test {
 
@@ -21,9 +20,13 @@ class TuplesConversionsTest extends Test {
     "#mapValues" in {
       tuples.mapValues {_.size} should equal(Seq(1 -> 3, 2 -> 5))
     }
-    "#toMultiMap" in {
+    "#groupByKey" in {
       val multiTuples = Seq(1 -> "a", 1 -> "b", 2 -> "ab")
-      multiTuples.toMultiMap should equal(Map(1 -> Seq("b", "a"), 2-> Seq("ab")))
+      multiTuples.groupByKey should equal(Map(2-> Seq("ab"), 1 -> Seq("a", "b")))
+    }
+    "#groupByKeyAndReduce" in {
+      val multiTuples = Seq(1 -> 5, 1 -> 6, 2 -> 7)
+      multiTuples.groupByKeyAndReduce(_ + _) should equal(Map(2-> 7, 1 -> 11))
     }
   }
 }

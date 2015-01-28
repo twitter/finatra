@@ -14,7 +14,7 @@ object GuiceFlagsModule {
   }
 }
 
-//TODO: Use type information in Flag instead of hardcoding String
+//TODO: Use type information in Flag instead of hardcoding java.lang.String
 class GuiceFlagsModule(
   flags: Map[String, Any])
   extends AbstractModule

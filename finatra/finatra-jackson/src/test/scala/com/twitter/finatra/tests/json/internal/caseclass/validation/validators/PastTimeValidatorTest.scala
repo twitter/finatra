@@ -1,13 +1,11 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult._
-import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.PastTimeValidator._
-import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{PastTime, ValidationResult}
+import com.twitter.finatra.validation.ValidationResult._
 import org.joda.time.DateTime
 
-
-case class PastExample(@PastTime dateTime: DateTime)
 
 class PastTimeValidatorTest extends ValidatorTest {
 
@@ -15,20 +13,21 @@ class PastTimeValidatorTest extends ValidatorTest {
 
     "pass validation for valid datetime" in {
       val minDateTime = new DateTime(0)
-      validate[PastExample](minDateTime) should equal(
-        valid(
-          errorMessage(messageResolver, minDateTime)))
+      validate[PastExample](minDateTime) should equal(valid)
     }
 
     "fail validation for invalid datetime" in {
-      val maxDateTime = new DateTime(Long.MaxValue)
-      validate[PastExample](maxDateTime) should equal(
+      val futureDateTime = DateTime.now().plusDays(1)
+      validate[PastExample](futureDateTime) should equal(
         invalid(
-          errorMessage(messageResolver, maxDateTime)))
+          errorMessage(messageResolver, futureDateTime)))
     }
   }
 
-  private def validate[C : Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].erasure, "dateTime", classOf[PastTime], value)
+  private def validate[C: Manifest](value: Any): ValidationResult = {
+    super.validate(manifest[C].runtimeClass, "dateTime", classOf[PastTime], value)
   }
 }
+
+case class PastExample(
+  @PastTime dateTime: DateTime)

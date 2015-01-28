@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult.{invalid, valid}
-import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MinValidator
-import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.ValidationResult.{invalid, valid}
+import com.twitter.finatra.validation.{Min, ValidationResult}
 
 case class MinIntExample(@Min(1) numberValue: Int)
 case class MinLongExample(@Min(1) numberValue: Long)
@@ -25,9 +25,7 @@ class MinValidatorTest extends ValidatorTest {
 
     "pass validation for int type" in {
       val value = 1
-      validate[MinIntExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[MinIntExample](value) should equal(valid)
     }
 
     "fail validation for int type" in {
@@ -39,9 +37,7 @@ class MinValidatorTest extends ValidatorTest {
 
     "pass validation for long type" in {
       val value = 1L
-      validate[MinLongExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[MinLongExample](value) should equal(valid)
     }
 
     "fail validation for long type" in {
@@ -53,23 +49,17 @@ class MinValidatorTest extends ValidatorTest {
 
     "pass validation for big int type" in {
       val value = BigInt(1)
-      validate[MinBigIntExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[MinBigIntExample](value) should equal(valid)
     }
 
     "pass validation for very small big int type" in {
       val value = BigInt(Long.MinValue)
-      validate[MinSmallestLongBigIntExample](value) should equal(
-        valid(
-          errorMessage(value, minValue = Long.MinValue)))
+      validate[MinSmallestLongBigIntExample](value) should equal(valid)
     }
 
     "pass validation for very large big int type" in {
       val value = BigInt(Long.MaxValue)
-      validate[MinLargestLongBigIntExample](value) should equal(
-        valid(
-          errorMessage(value, minValue = Long.MaxValue)))
+      validate[MinLargestLongBigIntExample](value) should equal(valid)
     }
 
     "fail validation for big int type" in {
@@ -95,23 +85,17 @@ class MinValidatorTest extends ValidatorTest {
 
     "pass validation for big decimal type" in {
       val value = BigDecimal(1.0)
-      validate[MinBigDecimalExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[MinBigDecimalExample](value) should equal(valid)
     }
 
     "pass validation for very small big decimal type" in {
       val value = BigDecimal(Long.MinValue)
-      validate[MinSmallestLongBigDecimalExample](value) should equal(
-        valid(
-          errorMessage(value, minValue = Long.MinValue)))
+      validate[MinSmallestLongBigDecimalExample](value) should equal(valid)
     }
 
     "pass validation for very large big decimal type" in {
       val value = BigDecimal(Long.MaxValue)
-      validate[MinLargestLongBigDecimalExample](value) should equal(
-        valid(
-          errorMessage(value, minValue = Long.MaxValue)))
+      validate[MinLargestLongBigDecimalExample](value) should equal(valid)
     }
 
     "fail validation for big decimal type" in {
@@ -137,9 +121,7 @@ class MinValidatorTest extends ValidatorTest {
 
     "pass validation for sequence of integers" in {
       val value = Seq(10)
-      validate[MinSeqExample](value) should equal(
-        valid(
-          errorMessage(value = value.size)))
+      validate[MinSeqExample](value) should equal(valid)
     }
 
     "fail validation for sequence of integers" in {
@@ -151,9 +133,7 @@ class MinValidatorTest extends ValidatorTest {
 
     "pass validation for array of integers" in {
       val value = Array(10)
-      validate[MinArrayExample](value) should equal(
-        valid(
-          errorMessage(value = value.length)))
+      validate[MinArrayExample](value) should equal(valid)
     }
 
     "fail validation for array of integers" in {
@@ -171,7 +151,7 @@ class MinValidatorTest extends ValidatorTest {
   }
 
   private def validate[C : Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].erasure, "numberValue", classOf[Min], value)
+    super.validate(manifest[C].runtimeClass, "numberValue", classOf[Min], value)
   }
 
   private def errorMessage(value: Number, minValue: Long = 1): String = {

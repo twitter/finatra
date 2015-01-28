@@ -1,9 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation
 
-import com.twitter.finatra.json.ValidationResult
-import com.twitter.finatra.json.ValidationResult._
-import com.twitter.finatra.json.annotations.{Validation, MethodValidation}
-import com.twitter.finatra.json.internal.caseclass.validation.validators.Validator
+import com.twitter.finatra.validation.ValidationResult._
+import com.twitter.finatra.validation.{MethodValidation, Validation, ValidationMessageResolver, ValidationResult, Validator}
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 import scala.collection.mutable
@@ -16,15 +14,23 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
 
   /* Public */
 
-  def validate[V](value: V, validationAnnotations: Seq[Annotation]): Seq[ValidationResult] = {
+  /**
+   * Validate a field's value according to the field's validation annotations
+   * @return Failed ValidationResults
+   */
+  def validateField[V](fieldValue: V, fieldValidationAnnotations: Seq[Annotation]): Seq[ValidationResult] = {
     for {
-      annotation <- validationAnnotations
-      result = isValid(value, findValidator[V](annotation))
+      annotation <- fieldValidationAnnotations
+      result = isValid(fieldValue, findValidator[V](annotation))
       if !result.valid
     } yield result
   }
 
-  def validate(obj: Any): Seq[ValidationResult] = {
+  /**
+   * Validate an object using @MethodValidation annotated methods
+   * @return Failed ValidationResults
+   */
+  def validateObject(obj: Any): Seq[ValidationResult] = {
     for {
       method <- findMethodValidations(obj.getClass)
       result = method.invoke(obj).asInstanceOf[ValidationResult]
@@ -75,7 +81,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
 
   private def getValidatedBy[A <: Annotation, V](annotationClass: Class[A]): Class[Validator[A, V]] = {
     val validationAnnotation = annotationClass.getAnnotation(classOf[Validation])
-    if(validationAnnotation == null)
+    if (validationAnnotation == null)
       throw new IllegalArgumentException("Missing annotation: " + classOf[Validation])
     else
       validationAnnotation.validatedBy().asInstanceOf[Class[Validator[A, V]]]
@@ -85,7 +91,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
     validatorMap.getOrElseUpdate(
       annotation,
       getValidator(annotation))
-    .asInstanceOf[Validator[_, V]]
+      .asInstanceOf[Validator[_, V]]
   }
 
   private def findMethodValidations(clazz: Class[_]): Seq[Method] = {

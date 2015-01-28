@@ -14,8 +14,6 @@ case class Route2NoPrivateThis(
   path: String,
   callback: Request => Future[Response],
   annotations: Seq[Annotation] = Seq(),
-  requestClass: Class[_],
-  responseClass: Class[_],
   filterOpt: Option[Filter[Request, Response, Request, Response]] = None) {
 
   private val pattern = PathPattern(path)

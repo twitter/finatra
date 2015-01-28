@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult._
-import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.SizeValidator
-import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.ValidationResult._
+import com.twitter.finatra.validation.{Size, ValidationResult}
 
 
 case class SizeArrayExample(@Size(min = 1, max = 5) sizeValue: Array[Int])
@@ -16,9 +16,7 @@ class SizeValidatorTest extends ValidatorTest {
 
     "pass validation for array type" in {
       val value = Array(1, 2, 3, 4, 5)
-      validate[SizeArrayExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[SizeArrayExample](value) should equal(valid)
     }
 
     "fail validation for too few array type" in {
@@ -37,9 +35,7 @@ class SizeValidatorTest extends ValidatorTest {
 
     "pass validation for seq type" in {
       val value = Seq(1, 2, 3, 4, 5)
-      validate[SizeArrayExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[SizeArrayExample](value) should equal(valid)
     }
 
     "fail validation for too few seq type" in {
@@ -64,7 +60,7 @@ class SizeValidatorTest extends ValidatorTest {
   }
 
   private def validate[C : Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].erasure, "sizeValue", classOf[Size], value)
+    super.validate(manifest[C].runtimeClass, "sizeValue", classOf[Size], value)
   }
 
   private def errorMessage(value: Any, minValue: Long = 1, maxValue: Long = 5): String = {

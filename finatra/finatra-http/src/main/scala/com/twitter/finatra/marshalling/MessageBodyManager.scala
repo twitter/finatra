@@ -11,7 +11,6 @@ import net.codingwell.scalaguice._
 import scala.collection.mutable
 import scala.reflect.ScalaSignature
 
-//TODO: Refactor class
 @Singleton
 class MessageBodyManager @Inject()(
   injector: FinatraInjector,
@@ -30,7 +29,7 @@ class MessageBodyManager @Inject()(
 
   def add[MBC <: MessageBodyComponent : Manifest]() {
     val componentSupertypeClass =
-      if (classOf[MessageBodyReader[_]].isAssignableFrom(manifest[MBC].erasure))
+      if (classOf[MessageBodyReader[_]].isAssignableFrom(manifest[MBC].runtimeClass))
         classOf[MessageBodyReader[_]]
       else
         classOf[MessageBodyWriter[_]]
@@ -41,9 +40,10 @@ class MessageBodyManager @Inject()(
       singleTypeParam(componentSupertypeType))
   }
 
-  def addByAnnotation[T <: MessageBodyWriter[_] : Manifest](annotation: Class[_ <: Annotation]) {
+  def addByAnnotation[Ann <: Annotation : Manifest, T <: MessageBodyWriter[_] : Manifest] {
     val messageBodyWriter = injector.instance[T]
-    writersByAnnotation(annotation) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
+    val annot = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
+    writersByAnnotation(annot) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
   }
 
   def addExplicit[MBC <: MessageBodyComponent : Manifest, TypeToReadOrWrite: Manifest]() {
@@ -83,7 +83,7 @@ class MessageBodyManager @Inject()(
     }
   }
 
-  //TODO: Support more than the first annotation
+  //TODO: Support more than the first annotation (e.g. @Mustache could be combined w/ other annotations)
   private def lookupByAnnotation[T](clazz: Class[_]): Option[MessageBodyWriter[Any]] = {
     classToAnnotationWriter.getOrElseUpdate(clazz, {
       val annotations = clazz.getAnnotations filterNot {_.annotationType == classOf[ScalaSignature]}
@@ -92,11 +92,6 @@ class MessageBodyManager @Inject()(
       else
         None
     })
-  }
-
-  def defaultMessageBodyWriter[T](key: MessageBodyKey): MessageBodyWriter[_] = {
-    trace("Using defaultMessageBodyWriter for " + key + " Writers: " + writersByType.keys)
-    defaultMessageBodyWriter
   }
 
   private def singleTypeParam[T](objType: Type) = {

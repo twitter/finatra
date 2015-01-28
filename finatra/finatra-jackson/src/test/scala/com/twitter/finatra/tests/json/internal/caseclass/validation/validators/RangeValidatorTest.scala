@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidationResult.{invalid, valid}
-import com.twitter.finatra.json.annotations._
+import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.RangeValidator
-import com.twitter.finatra.json.{ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{Range, ValidationResult}
+import com.twitter.finatra.validation.ValidationResult.{invalid, valid}
 
 case class RangeIntExample(@Range(min = 1, max = 5) pointValue: Int)
 case class RangeLongExample(@Range(min = 1, max = 5) pointValue: Long)
@@ -26,9 +26,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for int type" in {
       val value = 1
-      validate[RangeIntExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[RangeIntExample](value) should equal(valid)
     }
 
     "fail validation for int type" in {
@@ -40,9 +38,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for long type" in {
       val value = 1L
-      validate[RangeLongExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[RangeLongExample](value) should equal(valid)
     }
 
     "fail validation for long type" in {
@@ -54,9 +50,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for big decimal type" in {
       val value = BigDecimal(1.0)
-      validate[RangeBigDecimalExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[RangeBigDecimalExample](value) should equal(valid)
     }
 
     "fail validation for big decimal type" in {
@@ -68,9 +62,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for big int type" in {
       val value = BigInt(1)
-      validate[RangeBigIntExample](value) should equal(
-        valid(
-          errorMessage(value)))
+      validate[RangeBigIntExample](value) should equal(valid)
     }
 
     "fail validation for big int type" in {
@@ -82,9 +74,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for very large big decimal type" in {
       val value = BigDecimal(Long.MaxValue)
-      validate[RangeLargestLongBigDecimalExample](value) should equal(
-        valid(
-          errorMessage(value, maxValue = Long.MaxValue)))
+      validate[RangeLargestLongBigDecimalExample](value) should equal(valid)
     }
 
     "fail validation for very large big decimal type" in {
@@ -96,9 +86,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for very large big int type" in {
       val value = BigInt(Long.MaxValue)
-      validate[RangeLargestLongBigIntExample](value) should equal(
-        valid(
-          errorMessage(value, maxValue = Long.MaxValue)))
+      validate[RangeLargestLongBigIntExample](value) should equal(valid)
     }
 
     "fail validation for very large big int type" in {
@@ -110,9 +98,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for very small big int type" in {
       val value = BigInt(Long.MinValue)
-      validate[RangeSmallestLongBigIntExample](value) should equal(
-        valid(
-          errorMessage(value, minValue = Long.MinValue)))
+      validate[RangeSmallestLongBigIntExample](value) should equal(valid)
     }
 
     "fail validation for very small big int type" in {
@@ -124,9 +110,7 @@ class RangeValidatorTest extends ValidatorTest {
 
     "pass validation for very small big decimal type" in {
       val value = BigDecimal(Long.MinValue)
-      validate[RangeSmallestLongBigDecimalExample](value) should equal(
-        valid(
-          errorMessage(value, minValue = Long.MinValue)))
+      validate[RangeSmallestLongBigDecimalExample](value) should equal(valid)
     }
 
     "fail validation for a very small big decimal type" in {
@@ -144,7 +128,7 @@ class RangeValidatorTest extends ValidatorTest {
   }
 
   private def validate[C : Manifest](value: Any): ValidationResult = {
-    super.validate(manifest[C].erasure, "pointValue", classOf[Range], value)
+    super.validate(manifest[C].runtimeClass, "pointValue", classOf[Range], value)
   }
 
   private def errorMessage(

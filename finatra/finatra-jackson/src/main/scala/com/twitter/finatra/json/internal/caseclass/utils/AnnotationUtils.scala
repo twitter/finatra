@@ -24,6 +24,6 @@ object AnnotationUtils {
 
   def isAnnotationPresent[A <: Annotation : Manifest](annotation: Annotation): Boolean = {
     annotation.annotationType.isAnnotationPresent(
-      manifest[A].erasure.asInstanceOf[Class[A]])
+      manifest[A].runtimeClass.asInstanceOf[Class[A]])
   }
 }

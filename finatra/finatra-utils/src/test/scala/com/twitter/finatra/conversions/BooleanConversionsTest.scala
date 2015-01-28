@@ -1,6 +1,6 @@
 package com.twitter.finatra.conversions
 
-import com.twitter.finatra.conversions.booleans._
+import com.twitter.finatra.conversions.boolean._
 import com.twitter.finatra.test.Test
 
 class BooleanConversionsTest extends Test {
@@ -40,16 +40,6 @@ class BooleanConversionsTest extends Test {
       var triggered = false
       true.onFalse {triggered = true} should equal(true)
       triggered should equal(false)
-    }
-
-    "#ifTrue with string" in {
-      true.ifTrue("abc") should equal("abc")
-      false.ifTrue("abc") should equal("")
-    }
-
-    "#ifFalse with string" in {
-      false.ifFalse("abc") should equal("abc")
-      true.ifFalse("abc") should equal("")
     }
   }
 }

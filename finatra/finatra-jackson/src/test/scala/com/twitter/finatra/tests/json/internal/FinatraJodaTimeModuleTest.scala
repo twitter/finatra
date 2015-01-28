@@ -1,26 +1,26 @@
 package com.twitter.finatra.tests.json.internal
 
 import com.fasterxml.jackson.databind.{ObjectMapper, SerializationFeature}
+import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
+import com.twitter.finatra.tests.JsonTest
 import org.joda.time.{DateTime, DateTimeZone}
-import org.scalatest.WordSpec
-import org.scalatest.matchers.ShouldMatchers
 
-class FinatraJodaTimeModuleTest extends WordSpec with ShouldMatchers {
+class FinatraJodaTimeModuleTest extends JsonTest {
 
   val nowUtc = DateTime.now.withZone(DateTimeZone.UTC)
 
   "serialize text" in {
     val mapper = new ObjectMapper()
     mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
-    mapper.registerModule(FinatraSerDeSimpleModule)
+    mapper.registerModule(new JodaModule)
     mapper.writeValueAsString(nowUtc) should equal(quote(nowUtc.toString()))
   }
 
   "serialize long" in {
     val mapper = new ObjectMapper()
     mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true)
-    mapper.registerModule(FinatraSerDeSimpleModule)
+    mapper.registerModule(new JodaModule)
     mapper.writeValueAsString(nowUtc) should equal(nowUtc.getMillis.toString)
   }
 

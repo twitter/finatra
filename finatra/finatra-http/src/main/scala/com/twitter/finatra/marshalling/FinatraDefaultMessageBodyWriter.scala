@@ -4,7 +4,6 @@ import com.google.common.net.MediaType._
 import com.twitter.finatra.json.FinatraObjectMapper
 import javax.inject.Inject
 
-//TODO: DATAAPI-793 Support streaming responses
 class FinatraDefaultMessageBodyWriter @Inject()(
   mapper: FinatraObjectMapper)
   extends DefaultMessageBodyWriter {

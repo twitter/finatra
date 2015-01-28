@@ -1,6 +1,6 @@
 package com.twitter.finatra.conversions
 
-import com.twitter.finatra.conversions.maps._
+import com.twitter.finatra.conversions.map._
 import com.twitter.finatra.test.Test
 
 class MapsConversionsTest extends Test {

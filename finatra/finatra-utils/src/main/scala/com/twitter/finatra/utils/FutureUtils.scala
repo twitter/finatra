@@ -3,7 +3,7 @@ package com.twitter.finatra.utils
 import com.twitter.finagle.util.DefaultTimer
 import com.twitter.util.{Duration, Future, Promise, Time}
 
-object FutureUtils extends Logging {
+object FutureUtils {
 
   /**
    * Note: Ordering of results is preserved

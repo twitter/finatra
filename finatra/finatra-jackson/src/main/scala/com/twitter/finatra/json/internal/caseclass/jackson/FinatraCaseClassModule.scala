@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.scala._
 
 object FinatraCaseClassModule
   extends JacksonModule {
-  override def getModuleName = "TwitterScalaModule"
+  override def getModuleName = "FinatraCaseClassModule"
 
   this += {_.addDeserializers(new FinatraCaseClassDeserializers())}
 }

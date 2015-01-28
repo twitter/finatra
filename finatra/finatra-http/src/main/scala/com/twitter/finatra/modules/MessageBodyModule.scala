@@ -1,24 +1,23 @@
 package com.twitter.finatra.modules
 
-import com.twitter.finatra.annotations.Mustache
-import com.twitter.finatra.guice.{FinatraInjector, GuiceModule}
+import com.twitter.finatra.guice.GuiceModule
 import com.twitter.finatra.marshalling._
-import javax.inject.Inject
+import com.twitter.finatra.marshalling.mustache.MustacheMessageBodyWriter
+import com.twitter.finatra.response.Mustache
 
-object MessageBodyModule extends GuiceModule {
+object MessageBodyModule extends MessageBodyModule
+
+class MessageBodyModule extends GuiceModule {
 
   override val modules = Seq(FinatraInjectorModule)
 
   override def configure() {
-    bind[MessageBodyManagerConfig].asEagerSingleton()
-    bindSingleton[DefaultMessageBodyReader].to[JsonMessageBodyReader]
+    bindSingleton[DefaultMessageBodyReader].to[FinatraDefaultMessageBodyReader]
     bindSingleton[DefaultMessageBodyWriter].to[FinatraDefaultMessageBodyWriter]
+
+    singletonStartup { injector =>
+      val manager = injector.instance[MessageBodyManager]
+      manager.addByAnnotation[Mustache, MustacheMessageBodyWriter]
+    }
   }
-
-  class MessageBodyManagerConfig @Inject()(
-    manager: MessageBodyManager) {
-
-    manager.addByAnnotation[MustacheMessageBodyWriter](classOf[Mustache])
-  }
-
 }

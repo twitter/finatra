@@ -2,16 +2,15 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation
 
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonFieldParseException, JsonObjectParseException}
+import com.twitter.finatra.tests.JsonTest
 import com.twitter.finatra.tests.json.internal.CarMake
 import com.twitter.finatra.tests.json.internal.caseclass.validation.domain.{Address, Car, Person}
 import org.joda.time.DateTime
 import org.junit.runner.RunWith
-import org.scalatest.FeatureSpec
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.matchers.ShouldMatchers
 
 @RunWith(classOf[JUnitRunner])
-class CaseClassValidationTest extends FeatureSpec with ShouldMatchers {
+class CaseClassValidationTest extends JsonTest {
 
   val mapper = FinatraObjectMapper.create()
   val prototypeCar = Car(
@@ -23,9 +22,8 @@ class CaseClassValidationTest extends FeatureSpec with ShouldMatchers {
     numDoors = 2,
     manual = true)
 
-  feature("class and field level validations") {
-
-    scenario("top-level failed validations") {
+  "class and field level validations" should {
+    "top-level failed validations" in {
       val car = prototypeCar.copy(id = 2, year = 1910)
 
       val parseError = intercept[JsonObjectParseException] {
@@ -37,7 +35,7 @@ class CaseClassValidationTest extends FeatureSpec with ShouldMatchers {
         Seq(JsonFieldParseException("year [1910] is not greater than or equal to 2000"))))
     }
 
-    scenario("nested failed validations") {
+    "nested failed validations" in {
       val owners = Seq(
         Person(
           name = "joe smith",

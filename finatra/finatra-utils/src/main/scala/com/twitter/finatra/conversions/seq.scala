@@ -5,7 +5,7 @@ import scala.collection.breakOut
 
 object seq {
 
-  class RichSeq[A](seq: Seq[A]) {
+  implicit class RichSeq[A](seq: Seq[A]) {
 
     def createMap[K, V](
       keys: A => K,
@@ -53,6 +53,4 @@ object seq {
       recurse(itemToFind, seq)
     }
   }
-
-  implicit def seqToRichSeq[A](seq: Seq[A]): RichSeq[A] = new RichSeq[A](seq)
 }

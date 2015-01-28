@@ -1,7 +1,7 @@
 package com.twitter.finatra.utils
 
-import com.fasterxml.jackson.annotation.{JsonIgnoreProperties, JsonIgnore}
-import com.twitter.util.Future
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.twitter.util.{Future, NonFatal, Stopwatch}
 
 
 /**
@@ -11,18 +11,18 @@ import com.twitter.util.Future
  *
  * The methods below are used as so:
  *
- * // Before
+ * //Before
  * def foo = {
- * val result = 4 + 5
- * debugResult("Foo returned " + result)
- * result
+ *   val result = 4 + 5
+ *   debugResult("Foo returned " + result)
+ *   result
  * }
  *
  * //After
  * def foo = {
- * debugResult("Foo returned %s") {
- * 4 + 5
- * }
+ *   debugResult("Foo returned %s") {
+ *     4 + 5
+ *   }
  * }
  */
 @JsonIgnoreProperties(Array("trace_enabled", "debug_enabled", "error_enabled", "info_enabled", "warn_enabled"))
@@ -107,6 +107,19 @@ trait Logging
       debug(msg.format(result))
     } onFailure { e =>
       debug(msg.format(e))
+    }
+  }
+
+  protected def time[T](formatStr: String)(func: => T): T = {
+    val elapsed = Stopwatch.start()
+    try {
+      val result = func
+      info(formatStr.format(elapsed().inMillis, result))
+      result
+    } catch {
+      case NonFatal(e) =>
+        error(formatStr.format(elapsed().inMillis, e))
+        throw e
     }
   }
 }
