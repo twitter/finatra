@@ -27,7 +27,7 @@ scala_library(name="test-deps",
   dependencies=[
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
-    '3rdparty:specs2',
+    '3rdparty/jvm/org/specs2',
     'finatra/finatra/finatra-jackson:test-deps',
     'finatra/finatra/finatra-utils',
   ],

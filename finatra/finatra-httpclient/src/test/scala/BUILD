@@ -2,7 +2,7 @@ junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
-    '3rdparty:specs2',
+    '3rdparty/jvm/org/specs2',
     'finatra/finatra/finatra-http',
     'finatra/finatra/finatra-httpclient',
     'finatra/finatra/finatra-httpclient/src/test/scala:test-deps',
