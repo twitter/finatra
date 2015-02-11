@@ -12,7 +12,7 @@ class ResponseBuilderTest extends HttpTest {
 
   protected lazy val responseBuilder = new ResponseBuilder(
     mapper,
-    new FileResolver,
+    new FileResolver("src/main/webapp/"),
     new MessageBodyManager(null, null, null),
     new MustacheService(null))
 

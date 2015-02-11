@@ -23,6 +23,10 @@
     <!-- Twitter -->
     <dependency>
       <groupId>com.twitter</groupId>
+      <artifactId>finagle-stats_${scala.suffix}</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter</groupId>
       <artifactId>finagle-core_${scala.suffix}</artifactId>
     </dependency>
     <dependency>

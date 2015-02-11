@@ -11,13 +11,10 @@
     <version>2.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
+
   <dependencies>
+
     <!-- Finatra -->
-    <dependency>
-      <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-http</artifactId>
-      <version>${project.version}</version>
-    </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
       <artifactId>finatra-utils</artifactId>
@@ -33,6 +30,13 @@
     <!-- Test Deps -->
     <dependency>
       <groupId>com.twitter.finatra</groupId>
+      <artifactId>finatra-server</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.finatra</groupId>
       <artifactId>finatra-utils</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
@@ -43,11 +47,10 @@
       <artifactId>finatra-http</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-      <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-server</artifactId>
+      <artifactId>finatra-http</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>

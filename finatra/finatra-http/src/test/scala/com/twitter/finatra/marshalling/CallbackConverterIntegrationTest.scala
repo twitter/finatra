@@ -4,7 +4,7 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.guice.FinatraTestInjector
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.modules.{CallbackConverterModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.modules.{LocalDocRootFlagModule, CallbackConverterModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.response.SimpleResponse
 import com.twitter.finatra.test.{Mockito, Test}
 import com.twitter.util.{Await, Future}
@@ -13,7 +13,8 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus
 class CallbackConverterIntegrationTest extends Test with Mockito {
 
   val injector = FinatraTestInjector(
-    MessageBodyModule, FinatraJacksonModule, MustacheModule, CallbackConverterModule)
+    MessageBodyModule, FinatraJacksonModule,
+    MustacheModule, CallbackConverterModule, LocalDocRootFlagModule)
 
   val callbackConverter = injector.instance[CallbackConverter]
 

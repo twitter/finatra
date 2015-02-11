@@ -13,6 +13,7 @@
   </parent>
 
   <dependencies>
+
     <!-- Finatra -->
     <dependency>
       <groupId>com.twitter.finatra</groupId>

@@ -1,6 +1,7 @@
 package com.twitter.finatra.test
 
 import com.google.inject.testing.fieldbinder.{Bind, BoundFieldModule}
+import ReflectionUtils._
 import com.twitter.finatra.utils.Resettable
 import java.lang.reflect.Field
 import org.mockito.internal.util.MockUtil
@@ -61,7 +62,7 @@ trait IntegrationTest extends Test {
 
   private lazy val boundFields = {
     for {
-      field <- getClass.getDeclaredFields
+      field <- getDeclaredFieldsRespectingInheritance(getClass)
       if hasBindAnnotation(field)
       _ = field.setAccessible(true)
     } yield field

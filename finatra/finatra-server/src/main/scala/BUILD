@@ -6,6 +6,7 @@ scala_library(name='scala',
   ),
   dependencies=[
     'finagle/finagle-core',
+    'finagle/finagle-stats',
     'finatra/finatra/finatra-utils',
     'twitter-server',
     'util/util-app',

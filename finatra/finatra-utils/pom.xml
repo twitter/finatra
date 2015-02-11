@@ -14,6 +14,12 @@
 
   <dependencies>
 
+    <!-- Scala Reflect -->
+    <dependency>
+      <groupId>org.scala-lang</groupId>
+      <artifactId>scala-reflect</artifactId>
+    </dependency>
+
     <!-- Twitter -->
     <dependency>
       <groupId>com.twitter</groupId>

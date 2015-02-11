@@ -1,17 +1,19 @@
 package com.twitter.finatra.routing
 
+import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.conversions.boolean._
 import com.twitter.finatra.utils.Logging
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.activation.MimetypesFileTypeMap
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 import org.apache.commons.io.FilenameUtils
 
 // NOTE: Not for production use serving static resources (Use a real static file server!)
 @Singleton
-class FileResolver extends Logging {
+class FileResolver @Inject()(
+  @Flag("local.doc.root") localDocRoot: String)
+  extends Logging {
 
-  private val localDocRoot = "src/main/webapp/" //TODO: Don't hardcode
   private val extMap = new MimetypesFileTypeMap()
   private val localFileMode = {
     (System.getProperty("env") == "dev").onTrue {

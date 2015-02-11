@@ -66,7 +66,7 @@ class HelloWorldFeatureTest extends HttpTest {
 
 Controllers and Routing
 ======================================================
-Routes are defined inside a Controller, and are comprised of a HTTP method, a matching pattern, and a callback function. When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route. All [HTTP verbs](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) are supported.
+Routes are defined inside a Controller, and are comprised of a HTTP method, a matching pattern, and a callback function. When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller. All [HTTP verbs](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) are supported.
 
 The following route will return "hi" when an HTTP GET of / is received.
 ```scala

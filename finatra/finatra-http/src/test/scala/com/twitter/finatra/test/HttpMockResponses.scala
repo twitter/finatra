@@ -12,7 +12,7 @@ trait HttpMockResponses {
   //NOTE: TestResponses may not be able to use all features provided by normally injected dependencies
   protected lazy val testResponseBuilder = new ResponseBuilder(
     FinatraObjectMapper.create(),
-    new FileResolver,
+    new FileResolver("src/main/webapp/"),
     new MessageBodyManager(null, null, null),
     new MustacheService(null))
 
