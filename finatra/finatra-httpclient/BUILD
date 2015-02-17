@@ -11,3 +11,9 @@ target(name='tests',
     'finatra/finatra/finatra-httpclient/src/test/scala'
   ]
 )
+
+target(name='test-deps',
+  dependencies=[
+    'finatra/finatra/finatra-httpclient/src/test/scala:test-deps'
+  ]
+)
