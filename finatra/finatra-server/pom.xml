@@ -23,15 +23,15 @@
     <!-- Twitter -->
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-stats_${scala.suffix}</artifactId>
+      <artifactId>finagle-stats_${scala.artifact.version}</artifactId>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finagle-core_${scala.suffix}</artifactId>
+      <artifactId>finagle-core_${scala.artifact.version}</artifactId>
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>twitter-server_${scala.suffix}</artifactId>
+      <artifactId>twitter-server_${scala.artifact.version}</artifactId>
     </dependency>
 
     <!-- Testing -->

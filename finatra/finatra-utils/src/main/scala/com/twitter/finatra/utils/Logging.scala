@@ -69,20 +69,6 @@ trait Logging
   }
 
   /**
-   * Log an info msg that contains the result of the passed in func applying the given transform to the result.
-   *
-   * @param msg A string containing a single %s which will be replaced with the result of func.
-   * @param func The function whose result will be placed in msg.
-   * @param transform The function to apply to the result to use in the passed in message.
-   * @return Result of func
-   */
-  protected def infoResult[T](msg: String, func: => T)(transform: T => Any) = {
-    val result = func
-    info(msg.format(transform(result)))
-    result
-  }
-
-  /**
    * Log an debug msg that contains the result of the passed in func.
    *
    * @param msg A string containing a single %s which will be replaced with the result of func.

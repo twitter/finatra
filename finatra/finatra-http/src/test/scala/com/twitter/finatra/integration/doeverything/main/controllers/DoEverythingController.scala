@@ -372,4 +372,8 @@ class DoEverythingController @Inject()(
   get("/InternalServerErrorExceptionPlain") { r: Request =>
     throw InternalServerErrorException.plainText("foo1")
   }
+
+  get("/UnserializableClassField") { r: RequestWithInjectedMapper =>
+    r
+  }
 }

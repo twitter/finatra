@@ -618,4 +618,15 @@ class DoEverythingServerFeatureTest extends HttpTest {
       }
       """)
   }
+
+  "Unserializable class field" in {
+    server.httpGet(
+      "/UnserializableClassField",
+      andExpect = InternalServerError,
+      withJsonBody = """
+      {
+        "errors" : [ "internal server error" ]
+      }
+      """)
+  }
 }

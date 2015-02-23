@@ -1,6 +1,6 @@
 package com.twitter.finatra.filters
 
-import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.core.{JsonParseException, JsonProcessingException}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{CancelledRequestException, Service, SimpleFilter}
@@ -36,9 +36,11 @@ class ExceptionBarrierFilter @Inject()(
       case e: JsonObjectParseException =>
         response.badRequest.json(
           errorsResponse(e))
-      case e: JsonProcessingException =>
+      case e: JsonParseException =>
         response.badRequest.json(
           errorsResponse(e))
+      case e: JsonProcessingException =>
+        internalServerError(request, e)
       case e: JsonInjectException =>
         internalServerError(request, e, logStackTrace = false)
       case e: JsonInjectionNotSupportedException =>

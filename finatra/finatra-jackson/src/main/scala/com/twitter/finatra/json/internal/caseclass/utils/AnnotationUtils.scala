@@ -22,6 +22,17 @@ object AnnotationUtils {
     }
   }
 
+  def findAnnotation[A <: Annotation : Manifest](annotations: Seq[Annotation]): Option[A] = {
+    annotations collectFirst {
+      case annotation if annotationEquals[A](annotation) =>
+        annotation.asInstanceOf[A]
+    }
+  }
+
+  def annotationEquals[A <: Annotation : Manifest](annotation: Annotation): Boolean = {
+    annotation.annotationType() == manifest[A].runtimeClass.asInstanceOf[Class[A]]
+  }
+
   def isAnnotationPresent[A <: Annotation : Manifest](annotation: Annotation): Boolean = {
     annotation.annotationType.isAnnotationPresent(
       manifest[A].runtimeClass.asInstanceOf[Class[A]])

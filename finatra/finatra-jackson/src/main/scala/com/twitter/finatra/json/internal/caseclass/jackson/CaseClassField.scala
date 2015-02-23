@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.`type`.TypeFactory
@@ -18,20 +19,21 @@ import scala.reflect.NameTransformer
 object CaseClassField {
 
   def createFields(clazz: Class[_], namingStrategy: PropertyNamingStrategy, typeFactory: TypeFactory): Seq[CaseClassField] = {
-    val annotations = constructorAnnotations(clazz)
+    val allAnnotations = constructorAnnotations(clazz)
     val constructorParams = CaseClassSigParser.parseConstructorParams(clazz)
-    assert(annotations.size == constructorParams.size, "Non-static inner 'case classes' not supported")
+    assert(allAnnotations.size == constructorParams.size, "Non-static inner 'case classes' not supported")
 
     for {
       (constructorParam, idx) <- constructorParams.zipWithIndex
-      name = jsonNameForField(namingStrategy, constructorParam.name)
+      annotations = allAnnotations(idx)
+      name = jsonNameForField(annotations, namingStrategy, constructorParam.name)
     } yield {
       CaseClassField(
         name = name,
         javaType = JacksonTypes.javaType(typeFactory, constructorParam.scalaType),
         parentClass = clazz,
         defaultFuncOpt = defaultFunction(clazz, idx),
-        annotations = annotations(idx))
+        annotations = annotations)
     }
   }
 
@@ -39,12 +41,16 @@ object CaseClassField {
     clazz.getConstructors.head.getParameterAnnotations.toSeq
   }
 
-  private def jsonNameForField(namingStrategy: PropertyNamingStrategy, name: String): String = {
-    val decodedName = NameTransformer.decode(name) //decode unicode escaped field names
-    namingStrategy.nameForField(//apply json naming strategy (e.g. snake_case)
-      /* config = */ null,
-      /* field = */ null,
-      /* defaultName = */ decodedName)
+  private def jsonNameForField(annotations: Seq[Annotation], namingStrategy: PropertyNamingStrategy, name: String): String = {
+    findAnnotation[JsonProperty](annotations) match {
+      case Some(jsonProperty) => jsonProperty.value
+      case _ =>
+        val decodedName = NameTransformer.decode(name) //decode unicode escaped field names
+        namingStrategy.nameForField(//apply json naming strategy (e.g. snake_case)
+          /* config = */ null,
+          /* field = */ null,
+          /* defaultName = */ decodedName)
+    }
   }
 }
 
@@ -73,6 +79,7 @@ case class CaseClassField(
 
   val validationAnnotations =
     filterIfAnnotationPresent[Validation](annotations)
+
 
   /**
    * Parse the field from a JsonNode representing a JSON object

@@ -97,6 +97,22 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       person should equal(steve)
     }
 
+    scenario("parse json with extra field name with dot") {
+      val person = parse[PersonWithDottedName]("""
+      {
+        "id" : 1,
+        "name.last" : "Cosenza"
+      }
+                                  """
+      )
+
+      person should equal(
+        PersonWithDottedName(
+          id = 1,
+          lastName = "Cosenza"
+        ))
+    }
+
     scenario("parse json with missing 'id' and 'name' field and invalid age field") {
       assertJsonParse[Person](
         """ {
@@ -213,7 +229,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       }
       e.fieldErrors map {_.msg} should equal(Seq("""make's value 'foo' is not a valid CarMakeEnum with valid values: ford, vw"""))
     }
-    
+
     scenario("invalid validation") {
       val e = intercept[RuntimeException] {
         parse[CaseClassWithInvalidValidation]("""{

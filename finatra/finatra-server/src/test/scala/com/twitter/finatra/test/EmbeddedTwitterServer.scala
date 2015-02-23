@@ -134,7 +134,7 @@ case class EmbeddedTwitterServer(
   def assertHealthy(healthy: Boolean = true) {
     start()
     assert(twitterServer.httpAdminPort != 0)
-    val expectedBody = if(healthy) "OK\n" else ""
+    val expectedBody = if (healthy) "OK\n" else ""
 
     httpGet(
       "/health",
@@ -475,10 +475,21 @@ case class EmbeddedTwitterServer(
     }
 
     if (withJsonBody != null) {
-      if (!withJsonBody.isEmpty)
-        JsonDiff.jsonDiff(response.contentString, withJsonBody, withJsonBodyNormalizer, verbose = false)
-      else
+      if (!withJsonBody.isEmpty) {
+        if (response.contentString.isEmpty) {
+          response.contentString should equal(withJsonBody)
+        }
+        else {
+          JsonDiff.jsonDiff(
+            recvJson = response.contentString,
+            expectedJson = withJsonBody,
+            normalizer = withJsonBodyNormalizer,
+            verbose = false)
+        }
+      }
+      else {
         response.contentString should equal("")
+      }
     }
 
     if (withLocation != null) {

@@ -24,38 +24,39 @@ class FutureUtilsTest extends Test {
 
       ActionLog should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3"))
     }
-    "#collectMap" in {
-      val result = Await.result(
-        collectMap(Seq(1, 2, 3))(mockSvcCall))
-      result.sorted should equal(Seq("1", "2", "3"))
+  }
 
-      ActionLog.sorted should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3").sorted)
-    }
+  "#collectMap" in {
+    val result = Await.result(
+      collectMap(Seq(1, 2, 3))(mockSvcCall))
+    result.sorted should equal(Seq("1", "2", "3"))
 
-    "success future" in {
-      val f = Await.result(FutureUtils.exceptionsToFailedFuture {
-        Future("hi")
+    ActionLog.sorted should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3").sorted)
+  }
+
+  "success future" in {
+    val f = Await.result(FutureUtils.exceptionsToFailedFuture {
+      Future("hi")
+    })
+    f should equal("hi")
+  }
+
+  "failed future" in {
+    val e = intercept[Exception] {
+      Await.result(FutureUtils.exceptionsToFailedFuture {
+        Future.exception(new Exception("failure"))
       })
-      f should equal("hi")
     }
+    e.getMessage should equal("failure")
+  }
 
-    "failed future" in {
-      val e = intercept[Exception] {
-        Await.result(FutureUtils.exceptionsToFailedFuture {
-          Future.exception(new Exception("failure"))
-        })
-      }
-      e.getMessage should equal("failure")
+  "thrown exception" in {
+    val e = intercept[Exception] {
+      Await.result(FutureUtils.exceptionsToFailedFuture {
+        throw new Exception("failure")
+      })
     }
-
-    "thrown exception" in {
-      val e = intercept[Exception] {
-        Await.result(FutureUtils.exceptionsToFailedFuture {
-          throw new Exception("failure")
-        })
-      }
-      e.getMessage should equal("failure")
-    }
+    e.getMessage should equal("failure")
   }
 
   def mockSvcCall(num: Int): Future[String] = {

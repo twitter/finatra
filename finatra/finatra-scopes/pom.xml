@@ -24,7 +24,7 @@
     <!-- Twitter -->
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>util-core_${scala.suffix}</artifactId>
+      <artifactId>util-core_${scala.artifact.version}</artifactId>
     </dependency>
 
     <!-- Test Deps -->

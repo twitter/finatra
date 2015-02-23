@@ -35,7 +35,7 @@
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.module</groupId>
-      <artifactId>jackson-module-scala_${scala.suffix}</artifactId>
+      <artifactId>jackson-module-scala_${scala.artifact.version}</artifactId>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -47,7 +47,7 @@
     </dependency>
     <dependency>
       <groupId>org.clapper</groupId>
-      <artifactId>grizzled-slf4j_${scala.suffix}</artifactId>
+      <artifactId>grizzled-slf4j_${scala.artifact.version}</artifactId>
     </dependency>
 
     <!-- Guice -->
@@ -60,10 +60,6 @@
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scalap</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-reflect</artifactId>
     </dependency>
 
     <!-- Commons -->

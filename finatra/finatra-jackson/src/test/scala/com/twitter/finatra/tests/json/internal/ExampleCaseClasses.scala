@@ -1,6 +1,6 @@
 package com.twitter.finatra.tests.json.internal
 
-import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties}
+import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonProperty}
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.request._
@@ -125,6 +125,10 @@ case class Person(
   age: Option[Int],
   age_with_default: Option[Int] = None,
   nickname: String = "unknown")
+
+case class PersonWithDottedName(
+  id: Int,
+  @JsonProperty("name.last") lastName: String)
 
 case class SimplePerson(name: String)
 

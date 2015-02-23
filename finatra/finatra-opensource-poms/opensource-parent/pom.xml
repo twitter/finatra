@@ -57,66 +57,66 @@
     <dependencies>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>twitter-server_${scala.suffix}</artifactId>
+        <artifactId>twitter-server_${scala.artifact.version}</artifactId>
         <version>${twitter.server.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>finagle-stats_${scala.suffix}</artifactId>
+        <artifactId>finagle-stats_${scala.artifact.version}</artifactId>
         <version>${finagle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>finagle-thrift_${scala.suffix}</artifactId>
+        <artifactId>finagle-thrift_${scala.artifact.version}</artifactId>
         <version>${finagle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>finagle-thriftmux_${scala.suffix}</artifactId>
+        <artifactId>finagle-thriftmux_${scala.artifact.version}</artifactId>
         <version>${finagle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>finagle-core_${scala.suffix}</artifactId>
+        <artifactId>finagle-core_${scala.artifact.version}</artifactId>
         <version>${finagle.version}</version>
       </dependency>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>finagle-http_${scala.suffix}</artifactId>
+        <artifactId>finagle-http_${scala.artifact.version}</artifactId>
         <version>${finagle.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>util-core_${scala.suffix}</artifactId>
+        <artifactId>util-core_${scala.artifact.version}</artifactId>
         <version>${util.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>scrooge-runtime_${scala.suffix}</artifactId>
+        <artifactId>scrooge-runtime_${scala.artifact.version}</artifactId>
         <version>${scrooge.version}</version>
       </dependency>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>scrooge-core_${scala.suffix}</artifactId>
+        <artifactId>scrooge-core_${scala.artifact.version}</artifactId>
         <version>${scrooge.version}</version>
       </dependency>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>scrooge-serializer_${scala.suffix}</artifactId>
+        <artifactId>scrooge-serializer_${scala.artifact.version}</artifactId>
         <version>${scrooge.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>bijection-core_${scala.suffix}</artifactId>
+        <artifactId>bijection-core_${scala.artifact.version}</artifactId>
         <version>${bijection.version}</version>
       </dependency>
       <dependency>
         <groupId>com.twitter</groupId>
-        <artifactId>bijection-scrooge_${scala.suffix}</artifactId>
+        <artifactId>bijection-scrooge_${scala.artifact.version}</artifactId>
         <version>${bijection.version}</version>
         <exclusions>
           <exclusion>
@@ -292,7 +292,7 @@
       </dependency>
       <dependency>
         <groupId>com.fasterxml.jackson.module</groupId>
-        <artifactId>jackson-module-scala_${scala.suffix}</artifactId>
+        <artifactId>jackson-module-scala_${scala.artifact.version}</artifactId>
         <version>${jackson.version}</version>
       </dependency>
       <dependency>
@@ -309,7 +309,7 @@
       </dependency>
       <dependency>
         <groupId>com.github.nscala-time</groupId>
-        <artifactId>nscala-time_${scala.suffix}</artifactId>
+        <artifactId>nscala-time_${scala.artifact.version}</artifactId>
         <version>${nscala-time.version}</version>
       </dependency>
       <dependency>
@@ -351,7 +351,7 @@
       </dependency>
       <dependency>
         <groupId>org.clapper</groupId>
-        <artifactId>grizzled-slf4j_${scala.suffix}</artifactId>
+        <artifactId>grizzled-slf4j_${scala.artifact.version}</artifactId>
         <version>${grizzled-slf4j_2.10.version}</version>
       </dependency>
 
@@ -380,13 +380,13 @@
       <!-- 3rdparty Test -->
       <dependency>
         <groupId>org.scalatest</groupId>
-        <artifactId>scalatest_${scala.suffix}</artifactId>
+        <artifactId>scalatest_${scala.artifact.version}</artifactId>
         <version>${scalatest.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.specs2</groupId>
-        <artifactId>specs2_${scala.suffix}</artifactId>
+        <artifactId>specs2_${scala.artifact.version}</artifactId>
         <version>${specs2.version}</version>
         <scope>test</scope>
         <exclusions>
@@ -396,7 +396,7 @@
           </exclusion>
           <exclusion>
             <groupId>org.scalaz.stream</groupId>
-            <artifactId>scalaz-stream_${scala.suffix}</artifactId>
+            <artifactId>scalaz-stream_${scala.artifact.version}</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.scala-lang</groupId>
@@ -416,7 +416,7 @@
           </exclusion>
           <exclusion>
             <groupId>org.scalaz</groupId>
-            <artifactId>scalaz-concurrent_${scala.suffix}</artifactId>
+            <artifactId>scalaz-concurrent_${scala.artifact.version}</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.scala-lang</groupId>
@@ -424,7 +424,7 @@
           </exclusion>
           <exclusion>
             <groupId>org.scalacheck</groupId>
-            <artifactId>scalacheck_${scala.suffix}</artifactId>
+            <artifactId>scalacheck_${scala.artifact.version}</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.mockito</groupId>
@@ -436,7 +436,7 @@
           </exclusion>
           <exclusion>
             <groupId>org.scalamacros</groupId>
-            <artifactId>quasiquotes_${scala.suffix}</artifactId>
+            <artifactId>quasiquotes_${scala.artifact.version}</artifactId>
           </exclusion>
           <exclusion>
             <groupId>org.hamcrest</groupId>
@@ -483,12 +483,12 @@
     <!-- Test Deps -->
     <dependency>
       <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_${scala.suffix}</artifactId>
+      <artifactId>scalatest_${scala.artifact.version}</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.specs2</groupId>
-      <artifactId>specs2_${scala.suffix}</artifactId>
+      <artifactId>specs2_${scala.artifact.version}</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -744,7 +744,7 @@
                 </dependency>
                 <dependency>
                   <groupId>org.specs2</groupId>
-                  <artifactId>specs2_${scala.suffix}</artifactId>
+                  <artifactId>specs2_${scala.artifact.version}</artifactId>
                 </dependency>
               </conflictingDependencies>
               <classes>
@@ -810,7 +810,7 @@
 
       <properties>
         <scala.version>2.11.4</scala.version>
-        <scala.suffix>2.11</scala.suffix>
+        <scala.artifact.version>2.11</scala.artifact.version>
         <test.suffix>_2.11</test.suffix>
       </properties>
     </profile>
@@ -826,7 +826,7 @@
 
       <properties>
         <scala.version>2.10.4</scala.version>
-        <scala.suffix>2.10</scala.suffix>
+        <scala.artifact.version>2.10</scala.artifact.version>
         <test.suffix>_2.10</test.suffix>
       </properties>
 

@@ -2,12 +2,14 @@ package com.twitter.finatra.test
 
 import com.twitter.finatra.utils.Logging
 import com.twitter.util.{Await, Future}
+import java.io.File
 import java.util.TimeZone
 import org.apache.commons.io.IOUtils
 import org.joda.time.{DateTimeZone, Duration}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpec}
+import scala.io.Source
 
 @RunWith(classOf[JUnitRunner])
 abstract class Test
