@@ -1,5 +1,6 @@
 package com.twitter.finatra.response
 
+import com.twitter.finagle.http.Status
 import com.twitter.finatra.marshalling.MessageBodyManager
 import com.twitter.finatra.marshalling.mustache.MustacheService
 import com.twitter.finatra.routing.FileResolver
@@ -31,6 +32,12 @@ class ResponseBuilderTest extends HttpTest {
 
       response.getContentString() should equal(expectedContent)
       response.headerMap("Content-Type") should equal("application/json;charset=utf-8")
+    }
+    
+    "convert to an exception" in {
+      val e = responseBuilder.notFound.header("foo", "bar").toException
+      e.response.status should equal(Status.NotFound)
+      e.response.headerMap("foo") should equal("bar")
     }
   }
 }

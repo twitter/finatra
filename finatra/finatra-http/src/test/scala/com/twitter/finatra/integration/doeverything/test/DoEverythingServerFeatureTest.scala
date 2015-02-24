@@ -561,6 +561,13 @@ class DoEverythingServerFeatureTest extends HttpTest {
       withBody = "conflicted")
   }
 
+  "toFutureException" in {
+    server.httpGet(
+      "/toFutureException",
+      andExpect = Conflict,
+      withBody = "conflicted")
+  }
+
   "HttpExceptionPlain" in {
     server.httpGet(
       "/HttpExceptionPlain",

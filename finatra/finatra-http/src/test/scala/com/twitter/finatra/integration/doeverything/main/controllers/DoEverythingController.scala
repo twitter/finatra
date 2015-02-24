@@ -343,6 +343,10 @@ class DoEverythingController @Inject()(
       response.conflict("conflicted"))
   }
 
+  get("/toFutureException") { r: Request =>
+    response.conflict("conflicted").toFutureException
+  }
+
   get("/admin/finatra/foo") { r: Request =>
     "bar"
   }

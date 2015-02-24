@@ -2,6 +2,7 @@ package com.twitter.finatra.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.http.{Cookie => FinagleCookie, Response, Status}
+import com.twitter.finatra.exceptions.HttpResponseException
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.marshalling.MessageBodyManager
 import com.twitter.finatra.marshalling.mustache.MustacheService
@@ -289,6 +290,10 @@ class ResponseBuilder @Inject()(
     }
 
     def toFuture: Future[Response] = Future.value(this)
+    
+    def toException: HttpResponseException = new HttpResponseException(this)
+    
+    def toFutureException[T]: Future[T] = Future.exception(toException)
 
     /* Private */
 
