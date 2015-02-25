@@ -43,6 +43,10 @@ abstract class GuiceModule
     * NOTE: This Seq of modules is used instead of the standard Guice 'install' method */
   protected[guice] def modules: Seq[Module] = Seq()
 
+  protected def getProvider[T: Manifest]: Provider[T] = {
+    getProvider(createKey[T])
+  }
+
   protected def bindAssistedFactory[T: Manifest] {
     super.install(
       new FactoryModuleBuilder().build(manifest[T].runtimeClass))
@@ -88,6 +92,10 @@ abstract class GuiceModule
 
   protected def createMultiBinder[MultiBindType: Manifest] = {
     ScalaMultibinder.newSetBinder[MultiBindType](binder.withSource((new Throwable).getStackTrace()(1)))
+  }
+
+  protected def createKey[T: Manifest] = {
+    Key.get(typeLiteral[T])
   }
 
   /*
