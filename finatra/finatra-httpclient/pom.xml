@@ -13,6 +13,13 @@
   </parent>
 
   <dependencies>
+    <!-- Inject -->
+    <dependency>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- Finatra -->
     <dependency>
       <groupId>com.twitter.finatra</groupId>
@@ -32,6 +39,20 @@
     </dependency>
 
     <!-- Testing -->
+    <dependency>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-core</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-app</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
       <artifactId>finatra-utils</artifactId>

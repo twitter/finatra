@@ -1,6 +1,7 @@
 package com.twitter.finatra.routing
 
-import com.twitter.finatra.test.Test
+import com.twitter.finatra.internal.routing.PathPattern
+import com.twitter.inject.Test
 import java.net.URI
 
 class PathPatternTest extends Test {

@@ -1,13 +1,13 @@
 package com.twitter.finatra.tests.json
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.IntNode
+import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonFieldParseException, JsonInjectionNotSupportedException, JsonObjectParseException}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.tests.json.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.tests.json.internal._
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import java.io.ByteArrayInputStream
 import org.joda.time.{DateTime, DateTimeZone}
 import org.junit.runner.RunWith
@@ -330,6 +330,13 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       val origObj = WrappedValueString("1")
       val obj = parse[WrappedValueString](generate(origObj))
       origObj should equal(obj)
+    }
+
+    scenario("direct WrappedValue for String when asked to parse wrapped json object should throw exception") {
+      val origObj = WrappedValueString("1")
+      intercept[JsonMappingException] {
+        parse[WrappedValueString]("""{"value": "1"}""")
+      }
     }
 
     scenario("direct WrappedValue for Long") {

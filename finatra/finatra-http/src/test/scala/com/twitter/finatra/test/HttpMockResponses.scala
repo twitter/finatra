@@ -1,8 +1,8 @@
 package com.twitter.finatra.test
 
+import com.twitter.finatra.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.internal.marshalling.mustache.MustacheService
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.marshalling.MessageBodyManager
-import com.twitter.finatra.marshalling.mustache.MustacheService
 import com.twitter.finatra.response.ResponseBuilder
 import com.twitter.finatra.routing.FileResolver
 import org.jboss.netty.handler.codec.http.HttpResponseStatus

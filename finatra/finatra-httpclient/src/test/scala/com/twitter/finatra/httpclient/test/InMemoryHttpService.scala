@@ -3,13 +3,22 @@ package com.twitter.finatra.httpclient.test
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.conversions.string._
-import com.twitter.finatra.test.Banner._
-import com.twitter.finatra.utils.{Resettable, Logging}
+import com.twitter.finatra.utils.Resettable
+import com.twitter.inject.app.Banner
+import com.twitter.inject.{Injector, Logging}
 import com.twitter.util.Future
+import java.lang.annotation.{Annotation => JavaAnnotation}
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.jboss.netty.handler.codec.http.HttpMethod._
 import scala.collection._
 import scala.collection.mutable.ArrayBuffer
+
+
+object InMemoryHttpService {
+  def fromInjector[Ann <: JavaAnnotation : Manifest](injector: Injector): InMemoryHttpService = {
+    injector.instance[Service[Request, Response], Ann].asInstanceOf[InMemoryHttpService]
+  }
+}
 
 class InMemoryHttpService
   extends Service[Request, Response]
@@ -52,7 +61,7 @@ class InMemoryHttpService
   }
 
   def printRequests() {
-    banner("Requests")
+    Banner.banner("Requests")
     for (request <- recordedRequests) {
       println(request + " " + request.contentString)
     }

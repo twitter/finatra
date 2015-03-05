@@ -513,7 +513,7 @@ First add a jar dependency on finatra-request-scope
 Then define a module
 ```scala
 import com.myapp.User
-import com.twitter.finatra.guice.GuiceModule
+import com.twitter.inject.TwitterModule
 import com.twitter.finatra.requestscope.RequestScopeBinding
 import ***REMOVED***
 

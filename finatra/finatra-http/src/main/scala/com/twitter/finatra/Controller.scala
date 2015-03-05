@@ -1,9 +1,9 @@
 package com.twitter.finatra
 
-import com.twitter.finatra.marshalling.CallbackConverter
+import com.twitter.finatra.internal.marshalling.CallbackConverter
+import com.twitter.finatra.internal.routing.Route
 import com.twitter.finatra.response._
-import com.twitter.finatra.routing.Route
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import javax.inject.Inject
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.jboss.netty.handler.codec.http.HttpMethod._
@@ -31,6 +31,8 @@ abstract class Controller extends Logging {
   protected def options[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(OPTIONS, route, callback)
   protected def patch[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(PATCH, route, callback)
   protected def head[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(HEAD, route, callback)
+  protected def connect[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(CONNECT, route, callback)
+  protected def trace[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(TRACE, route, callback)
 
   protected def response = responseBuilder
 

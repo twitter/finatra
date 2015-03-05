@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, Range, ValidationResult}
+import com.twitter.finatra.validation.{Range, ValidationMessageResolver, ValidationResult, Validator}
 
 object RangeValidator {
 

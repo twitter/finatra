@@ -31,6 +31,13 @@ object StatTestUtils extends Matchers {
   }
 
   def printStatsAndCounters(statsReceiver: InMemoryStatsReceiver) {
+    def pretty(map: Iterator[(Seq[String], Any)]) = {
+      for ((keys, value) <- map) {
+        println(
+          keys.mkString("/") + " = " + value)
+      }
+    }
+
     pretty(statsReceiver.stats.iterator)
     pretty(statsReceiver.counters.iterator)
     pretty(statsReceiver.gauges.iterator)

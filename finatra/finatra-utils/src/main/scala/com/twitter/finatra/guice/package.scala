@@ -1,0 +1,16 @@
+package com.twitter.finatra
+
+package object guice {
+
+  @deprecated("Use com.twitter.inject.thrift.ThriftClientModule")
+  type ThriftClientModule[T] = com.twitter.inject.thrift.ThriftClientModule[T]
+
+  @deprecated("Use com.twitter.inject.GuiceModule")
+  type GuiceModule = com.twitter.inject.TwitterModule
+
+  @deprecated("Use com.twitter.inject.app.App")
+  type GuiceApp = com.twitter.inject.app.App
+
+  @deprecated("Use com.twitter.inject.Injector")
+  type FinatraInjector = com.twitter.inject.Injector
+}

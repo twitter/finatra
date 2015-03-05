@@ -1,9 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.OneOfValidator
-import com.twitter.finatra.validation.{OneOf, ValidationResult}
 import com.twitter.finatra.validation.ValidationResult._
+import com.twitter.finatra.validation.{OneOf, ValidationResult, ValidatorTest}
 
 case class OneOfExample(@OneOf(value = Array("a", "B", "c")) enumValue: String)
 case class OneOfSeqExample(@OneOf(Array("a", "B", "c")) enumValue: Seq[String])

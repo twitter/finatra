@@ -1,13 +1,13 @@
 package com.twitter.finatra.integration.doeverything.main.modules
 
 import com.google.inject.Provides
-import com.google.inject.name.{Names, Named}
+import com.google.inject.name.{Named, Names}
 import com.twitter.conversions.time._
-import com.twitter.finatra.guice.GuiceModule
 import com.twitter.finatra.integration.doeverything.main.services.{ComplexServiceFactory, MultiService, OneMultiService, TwoMultiService}
 import com.twitter.finatra.test.Prod
+import com.twitter.inject.TwitterModule
 
-object DoEverythingModule extends GuiceModule {
+object DoEverythingModule extends TwitterModule {
 
   // Note: The following flag values are not used in this module, but are @Flag injected elsewhere
   flag("moduleMagicNum", "30", "Module Magic number")
@@ -29,10 +29,6 @@ object DoEverythingModule extends GuiceModule {
 
     singletonStartup { injector =>
       assert(injector.instance[String, Prod] == "prod string")
-    }
-
-    singletonPostWarmup {
-      info("post warmup")
     }
 
     singletonShutdown {

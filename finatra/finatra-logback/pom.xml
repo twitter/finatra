@@ -14,11 +14,14 @@
 
   <dependencies>
 
-    <!-- Finatra -->
+    <!-- Finagle -->
     <dependency>
-      <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-utils</artifactId>
-      <version>${project.version}</version>
+      <groupId>com.twitter</groupId>
+      <artifactId>finagle-core_${scala.artifact.version}</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter</groupId>
+      <artifactId>finagle-http_${scala.artifact.version}</artifactId>
     </dependency>
 
     <!-- Logging -->
@@ -39,7 +42,7 @@
     <!-- See http://www.slf4j.org/legacy.html#jul-to-slf4j -->
     <!-- The performance penalty is acceptable because:
          * There are very few jul log msgs in CSL/util-core code
-         * LevelChangePropagator has been installed in production logback.xml -->
+         * LevelChangePropagator will be installed in production logback.xml -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>
@@ -53,8 +56,14 @@
 
     <!-- Testing -->
     <dependency>
-      <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-http</artifactId>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-app</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-server</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
@@ -63,11 +72,10 @@
       <artifactId>finatra-http</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
-      <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-server</artifactId>
+      <artifactId>finatra-http</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>

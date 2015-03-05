@@ -6,7 +6,8 @@ junit_tests(name='scala',
     'finatra/finatra/finatra-http',
     'finatra/finatra/finatra-httpclient',
     'finatra/finatra/finatra-httpclient/src/test/scala:test-deps',
-    'finatra/finatra/finatra-utils:tests'
+    'finatra/finatra/finatra-utils:tests',
+    'finatra/inject/inject-app:test-deps',
   ],
   sources=globs(
     'com/twitter/finatra/httpclient/*.scala')

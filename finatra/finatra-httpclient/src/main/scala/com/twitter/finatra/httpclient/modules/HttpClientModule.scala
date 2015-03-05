@@ -3,12 +3,12 @@ package com.twitter.finatra.httpclient.modules
 import com.google.inject.Provides
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.guice.GuiceModule
 import com.twitter.finatra.httpclient.{HttpClient, RichHttpClient}
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 
-abstract class HttpClientModule extends GuiceModule {
+abstract class HttpClientModule extends TwitterModule {
 
   val clientName: String
 

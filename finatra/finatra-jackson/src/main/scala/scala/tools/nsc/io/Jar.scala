@@ -6,11 +6,10 @@
 package scala.tools.nsc
 package io
 
-import java.io.{ InputStream, OutputStream, IOException, FileNotFoundException, FileInputStream, DataOutputStream }
+import java.io.{DataOutputStream, InputStream, OutputStream}
+import java.util.jar.Attributes.Name
 import java.util.jar._
 import scala.collection.JavaConverters._
-import Attributes.Name
-import util.ClassPath
 import scala.language.implicitConversions
 
 

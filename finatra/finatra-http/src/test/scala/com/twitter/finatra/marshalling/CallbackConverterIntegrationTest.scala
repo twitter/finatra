@@ -2,18 +2,19 @@ package com.twitter.finatra.marshalling
 
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finatra.guice.FinatraTestInjector
+import com.twitter.finatra.internal.marshalling.CallbackConverter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.modules.{LocalDocRootFlagModule, CallbackConverterModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.modules.{CallbackConverterModule, LocalDocRootFlagModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.response.SimpleResponse
-import com.twitter.finatra.test.{Mockito, Test}
+import com.twitter.inject.app.TestInjector
+import com.twitter.inject.{Mockito, Test}
 import com.twitter.util.{Await, Future}
 import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 class CallbackConverterIntegrationTest extends Test with Mockito {
 
-  val injector = FinatraTestInjector(
-    MessageBodyModule, FinatraJacksonModule,
+  val injector = TestInjector(
+    new MessageBodyModule, FinatraJacksonModule,
     MustacheModule, CallbackConverterModule, LocalDocRootFlagModule)
 
   val callbackConverter = injector.instance[CallbackConverter]

@@ -6,7 +6,7 @@
 package scala.tools.nsc
 package io
 
-import java.io.{ InputStream }
+import java.io.InputStream
 import java.util.jar.JarEntry
 
 /** A common interface for File-based things and Stream-based things.

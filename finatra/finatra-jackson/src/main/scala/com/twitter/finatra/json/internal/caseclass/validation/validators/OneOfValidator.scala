@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.OneOfValidator._
-import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, OneOf, ValidationResult}
+import com.twitter.finatra.validation.{OneOf, ValidationMessageResolver, ValidationResult, Validator}
 
 object OneOfValidator {
 

@@ -1,9 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.NotEmptyValidator
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{NotEmpty, ValidationResult}
+import com.twitter.finatra.validation.{NotEmpty, ValidationResult, ValidatorTest}
 
 case class NotEmptyExample(@NotEmpty stringValue: String)
 case class NotEmptySeqExample(@NotEmpty stringValue: Seq[String])

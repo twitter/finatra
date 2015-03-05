@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.NotEmptyValidator._
-import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, NotEmpty, ValidationResult}
+import com.twitter.finatra.validation.{NotEmpty, ValidationMessageResolver, ValidationResult, Validator}
 
 object NotEmptyValidator {
 

@@ -3,6 +3,7 @@ junit_tests(name='scala',
     'finatra/finatra/finatra-jackson/src/main/scala',
     'finatra/finatra/finatra-jackson/src/main/java',
     'finatra/finatra/finatra-jackson/src/test/scala:test-deps',
+    'finatra/finatra/finatra-logback',
     'util/util-core'
   ],
   sources=rglobs(
@@ -24,8 +25,9 @@ scala_library(name="test-deps",
     '3rdparty/jvm/org/scalatest',
     'finatra/finatra/finatra-jackson/src/main/scala',
   ],
-  sources=rglobs(
-    'com/twitter/finatra/json/*.scala'
+  sources=globs(
+    'com/twitter/finatra/json/*.scala',
+    'com/twitter/finatra/validation/*.scala',
   ),
   java_sources=[
     'finatra/finatra/finatra-jackson/src/test/java'

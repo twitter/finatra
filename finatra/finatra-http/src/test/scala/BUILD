@@ -5,7 +5,7 @@ junit_tests(name='scala',
     'finatra/finatra/finatra-http/src/test/java',
     'finatra/finatra/finatra-jackson:test-deps',
     'finatra/finatra/finatra-logback',
-    'finatra/finatra/finatra-server:test-deps',
+    'finatra/inject/inject-server:test-deps',
     'finatra/finatra/finatra-utils:test-deps',
   ],
   sources=rglobs(
@@ -33,9 +33,10 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
+    'finagle/finagle-http',
     'finatra/finatra/finatra-http',
     'finatra/finatra/finatra-jackson:test-deps',
-    'finatra/finatra/finatra-server:test-deps',
+    'finatra/inject/inject-server:test-deps',
     'finatra/finatra/finatra-utils:test-deps'
   ],
   sources=globs(

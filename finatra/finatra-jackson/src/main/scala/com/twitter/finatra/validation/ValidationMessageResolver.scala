@@ -2,12 +2,12 @@ package com.twitter.finatra.validation
 
 import java.lang.annotation.Annotation
 import java.util.Properties
-import scala.io.Source
 
 class ValidationMessageResolver {
 
   val validationProperties = load
 
+  //TODO: Use [T <: Annotation : Manifest] instead of clazz
   def resolve(clazz: Class[_ <: Annotation], values: Any*): String = {
     val unresolvedMessage = validationProperties.getProperty(clazz.getName)
     if(unresolvedMessage == null)

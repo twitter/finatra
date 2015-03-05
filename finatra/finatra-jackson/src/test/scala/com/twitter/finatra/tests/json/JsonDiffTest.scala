@@ -3,7 +3,7 @@ package com.twitter.finatra.tests.json
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import org.scalatest.{Matchers, WordSpec}
 
 class JsonDiffTest

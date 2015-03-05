@@ -1,6 +1,6 @@
 package com.twitter.finatra.test
 
-@deprecated("use TwitterServerFeatureTest", "1/22/15")
+@deprecated("Use com.twitter.inject.server.FeatureTest and com.twitter.finatra.test.HttpTest")
 trait HttpFeatureTest
-  extends TwitterServerFeatureTest
-  with HttpTest
+  extends com.twitter.inject.server.FeatureTest
+  with com.twitter.finatra.test.HttpTest

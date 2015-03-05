@@ -1,17 +1,14 @@
 package com.twitter.finatra.logging.filter
 
-import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finagle.tracing.{Trace, TraceId}
+import com.twitter.finagle.tracing.Trace
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.util.Future
-import org.slf4j.{FinagleMDCInitializer, MDC}
+import org.slf4j.MDC
 
-class TraceIdMDCFilter extends SimpleFilter[Request, Response] {
+class TraceIdMDCFilter[Req, Rep] extends SimpleFilter[Req, Rep] {
 
-  override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+  override def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
     MDC.put("traceId", Trace.id.traceId.toString())
-    service(request).ensure {
-      MDC.clear()
-    }
+    service(request)
   }
 }

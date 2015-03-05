@@ -7,19 +7,15 @@
 package scala.tools.nsc
 package util
 
-import java.net.URL
-import scala.collection.{ mutable, immutable }
-import scala.reflect.internal.FatalError
-import scala.reflect.internal.util.StringOps._
-import scala.tools.nsc.io.Jar._
-import scala.tools.nsc.io._
-import scala.reflect.internal.util.StringOps.splitWhere
-import scala.reflect.ClassTag
-import Jar.isJarOrZip
-import File.pathSeparator
-import java.net.MalformedURLException
+import java.net.{MalformedURLException, URL}
 import java.util.regex.PatternSyntaxException
+import scala.collection.{immutable, mutable}
+import scala.reflect.internal.FatalError
+import scala.reflect.internal.util.StringOps.splitWhere
 import scala.reflect.runtime.ReflectionUtils
+import scala.tools.nsc.io.File.pathSeparator
+import scala.tools.nsc.io.Jar.isJarOrZip
+import scala.tools.nsc.io._
 
 /** <p>
  *    This module provides star expansion of '-classpath' option arguments, behaves the same as
@@ -182,7 +178,7 @@ object ClassPath {
     else throw new FatalError("Unexpected source file ending: " + name)
   }
 }
-import ClassPath._
+import scala.tools.nsc.util.ClassPath._
 
 /**
  * Represents a package which contains classes and other packages

@@ -2,7 +2,7 @@ package com.twitter.finatra.routing
 
 import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.conversions.boolean._
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.activation.MimetypesFileTypeMap
 import javax.inject.{Inject, Singleton}

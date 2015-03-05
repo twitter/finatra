@@ -1,7 +1,7 @@
 package com.twitter.finatra.json
 
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapperCopier, SerializationFeature}
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import org.apache.commons.lang.StringUtils
 import org.scalatest.exceptions.TestFailedException
 

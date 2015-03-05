@@ -2,7 +2,7 @@ junit_tests(name='scala',
   dependencies=[
     'finatra/finatra/finatra-http:test-deps',
     'finatra/finatra/finatra-logback',
-    'finatra/finatra/finatra-server:test-deps',
+    'finatra/inject/inject-server:test-deps',
     'finatra/finatra/finatra-utils:test-deps'
   ],
   sources=rglobs('*.scala'),

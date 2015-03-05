@@ -8,7 +8,7 @@ import com.twitter.finatra.exceptions._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException, JsonObjectParseException}
 import com.twitter.finatra.json.internal.caseclass.jackson.JacksonUtils
 import com.twitter.finatra.response._
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import com.twitter.util.{Future, Memoize, NonFatal}
 import javax.inject.{Inject, Singleton}
 

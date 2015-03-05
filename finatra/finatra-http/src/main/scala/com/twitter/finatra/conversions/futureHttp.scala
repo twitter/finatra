@@ -2,7 +2,7 @@ package com.twitter.finatra.conversions
 
 import com.twitter.finatra.conversions.future.RichFutureOption
 import com.twitter.finatra.exceptions.{HttpException, NotFoundException}
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpResponseStatus
 

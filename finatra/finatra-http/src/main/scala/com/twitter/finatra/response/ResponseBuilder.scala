@@ -2,10 +2,10 @@ package com.twitter.finatra.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.http.{Cookie => FinagleCookie, Response, Status}
+import com.twitter.finatra.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.internal.marshalling.mustache.MustacheService
 import com.twitter.finatra.exceptions.HttpResponseException
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.marshalling.MessageBodyManager
-import com.twitter.finatra.marshalling.mustache.MustacheService
 import com.twitter.finatra.routing.FileResolver
 import com.twitter.util.{Future, Memoize}
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}

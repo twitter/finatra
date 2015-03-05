@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonP
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.request._
-import com.twitter.finatra.utils.Logging
 import com.twitter.finatra.validation.{NotEmpty, ValidationResult}
+import com.twitter.inject.Logging
 import org.joda.time.DateTime
 import scala.annotation.meta.param
 

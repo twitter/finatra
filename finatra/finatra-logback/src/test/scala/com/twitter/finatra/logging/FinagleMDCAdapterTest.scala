@@ -1,6 +1,6 @@
 package com.twitter.finatra.logging
 
-import com.twitter.finatra.test.Test
+import com.twitter.inject.Test
 
 class FinagleMDCAdapterTest extends Test {
 

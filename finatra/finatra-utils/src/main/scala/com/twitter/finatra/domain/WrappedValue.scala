@@ -7,7 +7,7 @@ package com.twitter.finatra.domain
 trait WrappedValue[T] {
   self: Product =>
 
-  assert(self.productArity == 1, "WrappedValue can only be used on 'case class' w/ a single value")
+  assert(self.productArity == 1, "WrappedValue can only be used with single field case classes")
   val onlyValue: T = self.productElement(0).asInstanceOf[T]
 
   def asString =

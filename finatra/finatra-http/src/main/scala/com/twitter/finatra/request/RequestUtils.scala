@@ -2,7 +2,8 @@ package com.twitter.finatra.request
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.exceptions.BadRequestException
-import com.twitter.finatra.fileupload.{FinatraFileUpload, MultipartItem}
+import com.twitter.finatra.fileupload.MultipartItem
+import com.twitter.finatra.internal.marshalling.FinatraFileUpload
 import org.jboss.netty.handler.codec.http.HttpHeaders
 
 object RequestUtils {

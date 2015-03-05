@@ -8,12 +8,12 @@ import com.fasterxml.jackson.module.scala._
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.google.inject.{Injector, Provides}
 import com.twitter.finatra.annotations.CamelCaseMapper
-import com.twitter.finatra.guice.GuiceModule
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.guice.GuiceInjectableValues
 import com.twitter.finatra.json.internal.caseclass.jackson.FinatraCaseClassModule
 import com.twitter.finatra.json.internal.serde.{FinatraSerDeSimpleModule, LongKeyDeserializers}
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
+import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 import scala.collection.JavaConverters._
 
@@ -26,7 +26,7 @@ object FinatraJacksonModule extends FinatraJacksonModule
  * Note: Simply extend this module to override defaults or provide
  * additional configuration. See SampleApiServer for an example.
  */
-class FinatraJacksonModule extends GuiceModule {
+class FinatraJacksonModule extends TwitterModule {
 
   /* Public */
 

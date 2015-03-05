@@ -7,11 +7,17 @@
   <packaging>jar</packaging>
   <description>Finatra benchmarks built with JMH</description>
 
-  <parent>
+  <!--<parent>
     <groupId>com.twitter.finatra</groupId>
     <artifactId>finatra</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
+  </parent>-->
+  <parent>
+    <groupId>com.twitter.data</groupId>
+    <artifactId>dataproducts-source-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath>../../../../../DataProducts/poms/dataproducts-source-parent/pom.xml</relativePath>
   </parent>
 
   <prerequisites>
@@ -42,8 +48,8 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-scopes</artifactId>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-request-scope</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>

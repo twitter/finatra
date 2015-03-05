@@ -2,13 +2,14 @@ package com.twitter.finatra.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.twitter.finagle.http.Status
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.logging.Logger
 import java.net.URLEncoder
 import java.util.logging.Level
 
-trait HttpTest extends Test {
+trait HttpTest
+  extends com.twitter.inject.Test
+  with HttpMockResponses {
 
   protected val testClientAppId = 12345L
   protected val mapper = FinatraObjectMapper.create()
@@ -23,6 +24,26 @@ trait HttpTest extends Test {
     finagleLog.setLevel(Level.WARNING)
   }
 
+  val NormalizedId = "0"
+
+  def idNormalizer(jsonNode: JsonNode): JsonNode = {
+    val objNode = jsonNode.asInstanceOf[ObjectNode]
+    objNode.put("id", NormalizedId)
+    objNode
+  }
+
+  @deprecated("Use server.assertHealthy()")
+  def assertHealth(server: EmbeddedTwitterServer) = {
+    server.assertHealthy()
+    server
+  }
+
+  @deprecated("Use server.assertHealthy()")
+  def assertHealth(server: EmbeddedHttpServer, healthy: Boolean = true) = {
+    server.assertHealthy(healthy)
+    server
+  }
+
   def urlEncode(str: String) = {
     URLEncoder.encode(str, "UTF-8")
       .replaceAll("\\+", "%20")
@@ -33,26 +54,30 @@ trait HttpTest extends Test {
       .replaceAll("\\%7E", "~")
   }
 
-  val NormalizedId = "0"
+  /* JSON Implicit Utils */
 
-  def idNormalizer(jsonNode: JsonNode): JsonNode = {
-    val objNode = jsonNode.asInstanceOf[ObjectNode]
-    objNode.put("id", NormalizedId)
-    objNode
+  implicit class RichAny(any: Any) {
+    def toJson = {
+      mapper.writeValueAsString(any)
+    }
+
+    def toPrettyJson = {
+      mapper.writePrettyString(any)
+    }
+
+    def toPrettyJsonStdout(): Unit = {
+      println(
+        mapper.writePrettyString(any))
+    }
+
+    def parseJson[T: Manifest]: T = {
+      any match {
+        case str: String =>
+          mapper.parse[JsonNode](str).parseJson[T]
+        case _ =>
+          mapper.convert[T](any)
+      }
+    }
   }
 
-  @deprecated("use server.assertHealthy()", "1/21/15")
-  def assertHealth(server: EmbeddedTwitterServer, healthy: Boolean = true) = {
-    server.start()
-    assert(server.twitterServer.httpAdminPort != 0)
-    val expectedBody = if(healthy) "OK\n" else ""
-
-    server.httpGet(
-      "/health",
-      routeToAdminServer = true,
-      andExpect = Status.Ok,
-      withBody = expectedBody)
-
-    server
-  }
 }

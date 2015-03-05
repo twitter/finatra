@@ -9,13 +9,11 @@ page(name="readme",
 
 target(name='tests',
   dependencies=[
-    'finatra/finatra/finatra-opensource-examples:tests',
+    'finatra/finatra/finatra-examples:tests',
     'finatra/finatra/finatra-http:tests',
     'finatra/finatra/finatra-httpclient:tests',
     'finatra/finatra/finatra-jackson:tests',
     'finatra/finatra/finatra-logback:tests',
-    'finatra/finatra/finatra-scopes:tests',
-    'finatra/finatra/finatra-server:tests',
     'finatra/finatra/finatra-utils:tests',
   ]
 )

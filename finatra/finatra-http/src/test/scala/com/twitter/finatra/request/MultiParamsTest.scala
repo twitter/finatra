@@ -3,7 +3,7 @@ package com.twitter.finatra.request
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.{http => finagle}
 import com.twitter.finatra.fileupload.MultipartItem
-import com.twitter.finatra.test.Test
+import com.twitter.inject.Test
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.specs2.mock.Mockito

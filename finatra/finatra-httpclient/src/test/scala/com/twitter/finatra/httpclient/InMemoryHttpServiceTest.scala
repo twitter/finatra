@@ -2,7 +2,7 @@ package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
-import com.twitter.finatra.test.Test
+import com.twitter.inject.Test
 import com.twitter.util.Await
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.specs2.mock.Mockito

@@ -5,7 +5,7 @@ import com.twitter.finagle._
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.conversions.futureHttp._
 import com.twitter.finatra.exceptions.{HttpException, NotFoundException}
-import com.twitter.finatra.test.Test
+import com.twitter.inject.Test
 import com.twitter.util.{Await, Future}
 
 class FutureHttpConversionsTest extends Test {

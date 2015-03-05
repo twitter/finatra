@@ -1,7 +1,7 @@
 package com.twitter.finatra.conversions
 
 import com.twitter.util.{Duration => TwitterDuration, Time}
-import org.joda.time.{ReadableInstant, DateTime, DateTimeZone, Duration}
+import org.joda.time.{DateTime, DateTimeZone, Duration, ReadableInstant}
 import org.scala_tools.time.{Implicits, RichDurationBuilder}
 
 /**

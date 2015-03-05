@@ -2,16 +2,11 @@ junit_tests(name='scala',
   dependencies=[
     'finatra/finatra/finatra-utils',
     'finatra/finatra/finatra-utils:test-deps',
-    'finatra/finatra/finatra-utils/src/test/java',
+    'finatra/inject/inject-core:test-deps',
+    'finatra/inject/inject-server:test-deps',
   ],
-  sources=globs(
-    'com/twitter/finatra/annotations/*.scala',
-    'com/twitter/finatra/conversions/*.scala',
-    'com/twitter/finatra/exceptions/*.scala',
-    'com/twitter/finatra/integration/*.scala',
-    'com/twitter/finatra/integration/app/*.scala',
-    'com/twitter/finatra/logging/*.scala',
-    'com/twitter/finatra/utils/*.scala',
+  sources=rglobs(
+    'com/twitter/finatra/tests/*.scala',
   ),
   resources=[
     'finatra/finatra/finatra-utils/src/test/resources'
@@ -25,18 +20,13 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
-    '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
-    '3rdparty/jvm/org/specs2',
-    'finatra/finatra/finatra-jackson:test-deps',
-    'finatra/finatra/finatra-utils',
+    'finagle/finagle-stats',
+    'finatra/inject/inject-core:test-deps',
+    'finatra/inject/inject-server:test-deps',
   ],
   sources=globs(
-    'com/twitter/finatra/test/*.scala',
     'com/twitter/finatra/guice/*.scala',
-    'org/specs2/matcher/ScalaTestExpectations.scala',
-  ),
-  java_sources=[
-    'finatra/finatra/finatra-utils/src/test/java'
-  ]
+    'com/twitter/finatra/test/*.scala'
+  )
 )

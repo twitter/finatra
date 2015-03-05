@@ -4,7 +4,8 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.utils.{Logging, RetryUtils}
+import com.twitter.finatra.utils.RetryUtils
+import com.twitter.inject.Logging
 import com.twitter.util.{Future, Try}
 import org.jboss.netty.buffer.ChannelBuffer
 import org.jboss.netty.handler.codec.http.HttpHeaders.Names._

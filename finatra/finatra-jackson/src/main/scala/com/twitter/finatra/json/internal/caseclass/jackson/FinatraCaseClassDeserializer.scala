@@ -8,8 +8,8 @@ import com.twitter.finatra.json.internal.caseclass.exceptions._
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.utils.Logging
 import com.twitter.finatra.validation.ValidationMessageResolver
+import com.twitter.inject.Logging
 import com.twitter.util.NonFatal
 import java.lang.reflect.InvocationTargetException
 import javax.annotation.concurrent.ThreadSafe
@@ -66,6 +66,10 @@ class FinatraCaseClassDeserializer(
   /* Private */
 
   private def deserializeWrapperClass(jp: JsonParser, context: DeserializationContext): Object = {
+    if (jp.getCurrentToken.isStructStart) {
+      throw context.mappingException("Unable to deserialize wrapped value from a json object")
+    }
+
     val jsonNode = context.getNodeFactory.objectNode()
     jsonNode.put(firstFieldName, jp.getText)
     deserialize(jp, context, jsonNode)

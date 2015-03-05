@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.CountryCodeValidator._
-import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, CountryCode, ValidationResult}
+import com.twitter.finatra.validation.{CountryCode, ValidationMessageResolver, ValidationResult, Validator}
 import java.util.Locale
 
 object CountryCodeValidator {
@@ -40,9 +40,9 @@ class CountryCodeValidator(
 
   override def isValid(value: Any): ValidationResult = {
     value match {
-      case typedValue: Array[_] =>
+      case typedValue: Array[Any] =>
         validationResult(typedValue)
-      case typedValue: Traversable[_] =>
+      case typedValue: Traversable[Any] =>
         validationResult(typedValue)
       case anyValue =>
         validationResult(
@@ -52,12 +52,15 @@ class CountryCodeValidator(
 
   /* Private */
 
-  private def findInvalidCountryCodes(value: Traversable[_]) = {
-    val uppercaseCountryCodes = (value map { _.toString.toUpperCase }).toSet
+  private def findInvalidCountryCodes(values: Traversable[Any]) = {
+    val uppercaseCountryCodes = values.toSet map { value: Any =>
+      value.toString.toUpperCase
+    }
+
     uppercaseCountryCodes diff countryCodes
   }
 
-  private def validationResult(value: Traversable[_]) = {
+  private def validationResult(value: Traversable[Any]) = {
     val invalidCountryCodes = findInvalidCountryCodes(value)
     ValidationResult(
       invalidCountryCodes.isEmpty,

@@ -2,7 +2,7 @@ package com.twitter.finatra.benchmarks
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.benchmarks.alternatives.Route2NoPrivateThis
-import com.twitter.finatra.routing.Route
+import com.twitter.finatra.internal.routing.Route
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.openjdk.jmh.annotations._

@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.SizeValidator._
-import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, Size, ValidationResult}
+import com.twitter.finatra.validation.{Size, ValidationMessageResolver, ValidationResult, Validator}
 
 object SizeValidator {
 

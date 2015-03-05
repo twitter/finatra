@@ -310,6 +310,22 @@ class DoEverythingController @Inject()(
     user.name
   }
 
+  post("/userWithMissingField") { user: TestUser =>
+    user.name
+  }
+
+  post("/userWithInvalidFieldValidation") { user: TestUserWithInvalidFieldValidation =>
+    user.name
+  }
+
+  post("/userWithInvalidMethodValidation") { user: TestUserWithInvalidMethodValidation =>
+    user.name
+  }
+
+  post("/userWithMessageBodyReader") { user: DomainTestUser =>
+    user
+  }
+
   get("/array") { r: Request =>
     Array("a", "b")
   }

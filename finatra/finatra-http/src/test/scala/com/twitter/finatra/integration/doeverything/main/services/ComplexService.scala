@@ -2,7 +2,7 @@ package com.twitter.finatra.integration.doeverything.main.services
 
 import com.google.inject.assistedinject.Assisted
 import com.twitter.finatra.annotations.Flag
-import javax.inject.{Named, Inject}
+import javax.inject.{Inject, Named}
 import org.joda.time.Duration
 
 class ComplexService @Inject()(

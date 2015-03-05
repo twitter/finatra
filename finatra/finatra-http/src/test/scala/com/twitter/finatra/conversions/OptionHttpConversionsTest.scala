@@ -2,7 +2,7 @@ package com.twitter.finatra.conversions
 
 import com.twitter.finatra.conversions.optionHttp._
 import com.twitter.finatra.exceptions._
-import com.twitter.finatra.test.Test
+import com.twitter.inject.Test
 import com.twitter.util.Future
 
 class OptionHttpConversionsTest extends Test {

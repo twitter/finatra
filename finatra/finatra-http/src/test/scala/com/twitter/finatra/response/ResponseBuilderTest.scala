@@ -1,21 +1,23 @@
 package com.twitter.finatra.response
 
+import com.twitter.finatra.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.internal.marshalling.mustache.MustacheService
 import com.twitter.finagle.http.Status
-import com.twitter.finatra.marshalling.MessageBodyManager
-import com.twitter.finatra.marshalling.mustache.MustacheService
 import com.twitter.finatra.routing.FileResolver
 import com.twitter.finatra.test.HttpTest
+import com.twitter.inject.Mockito
 import java.io.{File, FileWriter}
 import org.apache.commons.io.IOUtils
 
 
-class ResponseBuilderTest extends HttpTest {
-
+class ResponseBuilderTest extends HttpTest with Mockito 
+{
+  
   protected lazy val responseBuilder = new ResponseBuilder(
     mapper,
     new FileResolver("src/main/webapp/"),
-    new MessageBodyManager(null, null, null),
-    new MustacheService(null))
+    mock[MessageBodyManager],
+    mock[MustacheService])
 
   "response builder" should {
 

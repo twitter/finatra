@@ -1,17 +1,17 @@
 package com.twitter.finatra.integration.tweetexample.main.modules
 
 import com.google.inject.{Exposed, Provides}
-import com.twitter.finatra.guice.{GuiceModule, GuicePrivateModule}
 import com.twitter.finatra.integration.tweetexample.main.services.admin.{DatabaseClient, UserService}
 import com.twitter.finatra.test.{Prod, Staging}
+import com.twitter.inject.{TwitterModule, PrivateModule}
 import javax.inject.Singleton
 
-object AdminModule extends GuiceModule {
+object AdminModule extends TwitterModule {
 
   override val modules = Seq(
 
     // Prod
-    new GuicePrivateModule {
+    new PrivateModule {
 
       @Singleton
       @Provides
@@ -29,7 +29,7 @@ object AdminModule extends GuiceModule {
     },
 
     // Staging
-    new GuicePrivateModule {
+    new PrivateModule {
 
       @Singleton
       @Provides

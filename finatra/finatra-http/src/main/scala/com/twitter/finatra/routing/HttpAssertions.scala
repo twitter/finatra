@@ -1,14 +1,15 @@
 package com.twitter.finatra.routing
 
 import com.twitter.finagle.http._
-import com.twitter.finatra.utils.{FuturePools, Logging}
+import com.twitter.finatra.utils.FuturePools
+import com.twitter.inject.Logging
 import com.twitter.util.{Await, ExecutorServiceFuturePool, Future}
 import javax.inject.Inject
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpResponseStatus}
 
 //TODO: Add additional HTTP methods
 class HttpAssertions @Inject()(
-  router: Router)
+  router: HttpRouter)
   extends Logging {
 
   /* Use a FuturePool to avoid getting a ConstFuture from Future.apply(...) */

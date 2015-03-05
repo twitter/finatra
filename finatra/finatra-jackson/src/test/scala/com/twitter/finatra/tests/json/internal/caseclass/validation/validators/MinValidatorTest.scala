@@ -1,9 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MinValidator
 import com.twitter.finatra.validation.ValidationResult.{invalid, valid}
-import com.twitter.finatra.validation.{Min, ValidationResult}
+import com.twitter.finatra.validation.{Min, ValidationResult, ValidatorTest}
 
 case class MinIntExample(@Min(1) numberValue: Int)
 case class MinLongExample(@Min(1) numberValue: Long)

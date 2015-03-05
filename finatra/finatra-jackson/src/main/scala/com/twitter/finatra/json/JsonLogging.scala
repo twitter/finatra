@@ -1,7 +1,7 @@
 package com.twitter.finatra.json
 
 import com.twitter.finatra.json.JsonLogging.nonGuiceMapper
-import com.twitter.finatra.utils.Logging
+import com.twitter.inject.Logging
 import javax.inject.Inject
 
 object JsonLogging {

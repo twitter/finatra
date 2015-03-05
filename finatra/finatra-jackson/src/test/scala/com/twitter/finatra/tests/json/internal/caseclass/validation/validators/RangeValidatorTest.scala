@@ -1,9 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.RangeValidator
-import com.twitter.finatra.validation.{Range, ValidationResult}
 import com.twitter.finatra.validation.ValidationResult.{invalid, valid}
+import com.twitter.finatra.validation.{Range, ValidationResult, ValidatorTest}
 
 case class RangeIntExample(@Range(min = 1, max = 5) pointValue: Int)
 case class RangeLongExample(@Range(min = 1, max = 5) pointValue: Long)

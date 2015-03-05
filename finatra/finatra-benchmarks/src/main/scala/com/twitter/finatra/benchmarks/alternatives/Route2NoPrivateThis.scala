@@ -2,8 +2,8 @@ package com.twitter.finatra.benchmarks.alternatives
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Filter, Service}
-import com.twitter.finatra.request.RequestWithPathParams
-import com.twitter.finatra.routing.PathPattern
+import com.twitter.finatra.internal.request.RequestWithPathParams
+import com.twitter.finatra.internal.routing.PathPattern
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import org.jboss.netty.handler.codec.http.HttpMethod

@@ -6,11 +6,12 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finatra.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.finatra.test.{EmbeddedTwitterServer, HttpTest}
+import com.twitter.finatra.test.EmbeddedHttpServer
+import com.twitter.inject.Test
 
-class DoEverythingServerFeatureTest extends HttpTest {
+class DoEverythingServerFeatureTest extends Test {
 
-  val server = EmbeddedTwitterServer(
+  val server = new EmbeddedHttpServer(
     extraArgs = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer)
 
@@ -474,6 +475,65 @@ class DoEverythingServerFeatureTest extends HttpTest {
         withBody = "bob")
     }
 
+    "POST json user with missing required field" in {
+      server.httpPost(
+        "/users",
+        """
+          {
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("name is a required field"))
+    }
+
+    "POST json user with failed field validation" in {
+      server.httpPost(
+        "/users",
+        """
+          {
+            "name": "a"
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("name size [1] is not between 2 and 20"))
+    }
+
+    "POST json user with failed method validation" in {
+      server.httpPost(
+        "/users",
+        """
+          {
+            "name": "foo"
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("name cannot be foo"))
+    }
+
+     "POST json user with invalid field validation" in {
+      server.httpPost(
+        "/userWithInvalidFieldValidation",
+        """
+          {
+            "name": "a"
+          }
+        """,
+        andExpect = InternalServerError,
+        withErrors = Seq("internal server error"))
+    }
+
+    "POST json user with invalid method validation" in {
+      server.httpPost(
+        "/userWithInvalidMethodValidation",
+        """
+          {
+            "name": "foo"
+          }
+        """,
+        andExpect = InternalServerError,
+        withErrors = Seq("internal server error"))
+    }
+
     "POST json user with invalid content type" in {
       server.httpPost(
         "/users",
@@ -484,6 +544,31 @@ class DoEverythingServerFeatureTest extends HttpTest {
         """,
         contentType = "foo",
         andExpect = BadRequest)
+    }
+
+    "POST json user with missing required field when message body reader uses intermediate JsonNode" in {
+      pending //IllegalArgumentException (ObjectMapper.java:2774)
+      server.httpPost(
+        "/userWithMessageBodyReader",
+        """
+          {
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("name is a required field"))
+    }
+
+    "POST json user with method validation error when message body reader uses intermediate JsonNode" in {
+      pending //IllegalArgumentException (ObjectMapper.java:2774)
+      server.httpPost(
+        "/userWithMessageBodyReader",
+        """
+          {
+            "name": "foo"
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("name cannot be foo"))
     }
 
     "injector test" in {

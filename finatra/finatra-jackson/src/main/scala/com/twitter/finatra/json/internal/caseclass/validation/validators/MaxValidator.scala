@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.validation.{Validator, ValidationMessageResolver, Max, ValidationResult}
+import com.twitter.finatra.validation.{Max, ValidationMessageResolver, ValidationResult, Validator}
 
 object MaxValidator {
 

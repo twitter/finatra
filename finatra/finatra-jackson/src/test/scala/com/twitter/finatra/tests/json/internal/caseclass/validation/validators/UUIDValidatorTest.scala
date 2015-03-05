@@ -1,9 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.json.ValidatorTest
 import com.twitter.finatra.json.internal.caseclass.validation.validators.UUIDValidator
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{UUID, ValidationResult}
+import com.twitter.finatra.validation.{UUID, ValidationResult, ValidatorTest}
 import java.util.{UUID => JUUID}
 
 case class UUIDExample(

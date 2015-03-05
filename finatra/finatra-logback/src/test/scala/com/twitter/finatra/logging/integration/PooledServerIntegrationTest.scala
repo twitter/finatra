@@ -1,12 +1,13 @@
 package com.twitter.finatra.logging.integration
 
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.test.{EmbeddedTwitterServer, HttpTest}
+import com.twitter.finatra.test.EmbeddedHttpServer
+import com.twitter.inject.Test
 
-class PooledServerIntegrationTest extends HttpTest {
+class PooledServerIntegrationTest extends Test {
 
   "PooledServer" should {
-    val server = new EmbeddedTwitterServer(
+    val server = new EmbeddedHttpServer(
       twitterServer = new PooledServer)
 
     "return right away" in {
