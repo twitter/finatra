@@ -1,7 +1,9 @@
 junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/org/scalatest',
-    'finatra/inject/inject-request-scope'
+    'finatra/finatra/finatra-http:test-deps',
+    'finatra/inject/inject-request-scope',
+    'finatra/inject/inject-request-scope/src/test/java'
   ],
   sources=rglobs('*.scala'),
   resources=[
