@@ -721,4 +721,35 @@ class DoEverythingServerFeatureTest extends Test {
       }
       """)
   }
+
+  "FooException" in {
+    val response = server.httpGet(
+      "/FooException/42",
+      andExpect = Forbidden,
+      withBody = "foo")
+    response.headerMap("Foo-ID") should equal("42")
+  }
+
+  "BarException" in {
+    val response = server.httpGet(
+      "/BarException",
+      andExpect = Unauthorized,
+      withBody = "bar")
+    response.headerMap.contains("Foo-ID") should equal(false)
+    response.headerMap("Bar-ID") should equal("123")
+  }
+
+  "BazException" in {
+    val response = server.httpGet(
+      "/BazException",
+      andExpect = Forbidden,
+      withBody = "foo")
+    response.headerMap("Foo-ID") should equal("321")
+  }
+
+  "NoSuchMethodException" in {
+    server.httpGet(
+      "/NoSuchMethodException",
+      andExpect = InternalServerError)
+  }
 }

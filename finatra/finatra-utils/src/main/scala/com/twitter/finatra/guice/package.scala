@@ -5,7 +5,7 @@ package object guice {
   @deprecated("Use com.twitter.inject.thrift.ThriftClientModule")
   type ThriftClientModule[T] = com.twitter.inject.thrift.ThriftClientModule[T]
 
-  @deprecated("Use com.twitter.inject.GuiceModule")
+  @deprecated("Use com.twitter.inject.TwitterModule")
   type GuiceModule = com.twitter.inject.TwitterModule
 
   @deprecated("Use com.twitter.inject.app.App")

@@ -6,6 +6,7 @@ import com.twitter.finatra.Controller
 import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.exceptions._
 import com.twitter.finatra.integration.doeverything.main.domain._
+import com.twitter.finatra.integration.doeverything.main.exceptions._
 import com.twitter.finatra.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.RequestUtils
@@ -278,12 +279,12 @@ class DoEverythingController @Inject()(
     request.fooClass
   }
 
-  post("/requestInjectionsNotAvailable") { finatraRequest: Request =>
-    val request = objectMapper.parse[RequestWithInjections](finatraRequest)
-    request.id.id +
-      request.id2.map(_.id).getOrElse(0L) +
-      request.id3.getOrElse(0) +
-      request.id4.getOrElse(0)
+  post("/requestInjectionsNotAvailable") { request: Request =>
+    val requestWithInjections = objectMapper.parse[RequestWithInjections](request)
+    requestWithInjections.id.id +
+      requestWithInjections.id2.map(_.id).getOrElse(0L) +
+      requestWithInjections.id3.getOrElse(0) +
+      requestWithInjections.id4.getOrElse(0)
   }
 
   get("/requestInjection") { request: RequestWithInjections =>
@@ -293,12 +294,12 @@ class DoEverythingController @Inject()(
       request.id4.getOrElse(0)
   }
 
-  get("/requestInjectionsNotAvailable") { finatraRequest: Request =>
-    val request = objectMapper.parse[RequestWithInjections](finatraRequest)
-    request.id.id +
-      request.id2.map(_.id).getOrElse(0L) +
-      request.id3.getOrElse(0) +
-      request.id4.getOrElse(0)
+  get("/requestInjectionsNotAvailable") { request: Request =>
+    val requestWithInjections = objectMapper.parse[RequestWithInjections](request)
+    requestWithInjections.id.id +
+      requestWithInjections.id2.map(_.id).getOrElse(0L) +
+      requestWithInjections.id3.getOrElse(0) +
+      requestWithInjections.id4.getOrElse(0)
   }
 
   get("/users/:name") { r: Request =>
@@ -395,5 +396,21 @@ class DoEverythingController @Inject()(
 
   get("/UnserializableClassField") { r: RequestWithInjectedMapper =>
     r
+  }
+
+  get("/FooException/:id") { r: Request =>
+    throw new FooException(r.params("id"))
+  }
+
+  get("/BarException") { r: Request =>
+    throw new BarException
+  }
+
+  get("/BazException") { r: Request =>
+    throw new BazException
+  }
+
+  get("/NoSuchMethodException") { r: Request =>
+    throw new NoSuchMethodException
   }
 }

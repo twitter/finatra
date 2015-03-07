@@ -4,6 +4,7 @@ import com.twitter.finatra.HttpServer
 import com.twitter.finatra.filters.CommonFilters
 import com.twitter.finatra.integration.doeverything.main.controllers.{DoEverythingController, NonGuiceController}
 import com.twitter.finatra.integration.doeverything.main.domain.DomainTestUserReader
+import com.twitter.finatra.integration.doeverything.main.exceptions.{FooExceptionMapper, BarExceptionMapper}
 import com.twitter.finatra.integration.doeverything.main.modules.DoEverythingModule
 import com.twitter.finatra.routing.HttpRouter
 
@@ -21,8 +22,10 @@ class DoEverythingServer extends HttpServer {
       register[DomainTestUserReader].
       filter[CommonFilters].
       add[DoEverythingController].
-      add(new NonGuiceController)
-  }
+      add(new NonGuiceController).
+      exceptionMapper[FooExceptionMapper].
+      exceptionMapper(injector.instance[BarExceptionMapper])
+ }
 
   override def warmup() {
     run[DoEverythingWarmupHandler]()

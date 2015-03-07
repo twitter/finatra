@@ -5,7 +5,7 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{HttpMuxer, Request, Response}
 import com.twitter.finatra.internal.server.RawHttpServer
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.modules.{AccessLogModule, CallbackConverterModule, LocalDocRootFlagModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.modules.{AccessLogModule, CallbackConverterModule, ExceptionMapperModule, LocalDocRootFlagModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.routing.{HttpRouter, Router}
 import com.twitter.finatra.utils.Handler
 
@@ -14,6 +14,7 @@ trait HttpServer extends RawHttpServer {
   addDefaultModule(accessLogModule)
   addDefaultModule(mustacheModule)
   addDefaultModule(messageBodyModule)
+  addDefaultModule(exceptionMapperModule)
   addDefaultModule(jacksonModule)
   addDefaultModule(callbackModule)
   addDefaultModule(LocalDocRootFlagModule)
@@ -61,6 +62,8 @@ trait HttpServer extends RawHttpServer {
   protected def mustacheModule: Module = MustacheModule
 
   protected def messageBodyModule: Module = new MessageBodyModule
+
+  protected def exceptionMapperModule: Module = new ExceptionMapperModule
 
   protected def jacksonModule: Module = FinatraJacksonModule
 

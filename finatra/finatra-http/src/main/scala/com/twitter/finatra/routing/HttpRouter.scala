@@ -3,6 +3,8 @@ package com.twitter.finatra.routing
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.Controller
+import com.twitter.finatra.exceptions.ExceptionMapper
+import com.twitter.finatra.internal.exceptions.ExceptionManager
 import com.twitter.finatra.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.internal.routing.{Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.marshalling.MessageBodyComponent
@@ -17,7 +19,8 @@ object HttpRouter {
 @Singleton
 class HttpRouter @Inject()(
   injector: Injector,
-  messageBodyManager: MessageBodyManager)
+  messageBodyManager: MessageBodyManager,
+  exceptionManager: ExceptionManager)
   extends Logging {
 
   private type HttpFilter = Filter[Request, Response, Request, Response]
@@ -37,6 +40,16 @@ class HttpRouter @Inject()(
   }
 
   /* Public */
+
+  def exceptionMapper[T <: ExceptionMapper[_]: Manifest] = {
+    exceptionManager.add[T]
+    this
+  }
+
+  def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T]) = {
+    exceptionManager.add[T](mapper)
+    this
+  }
 
   def register[MBR <: MessageBodyComponent : Manifest] = {
     messageBodyManager.add[MBR]()

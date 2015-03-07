@@ -290,9 +290,9 @@ class ResponseBuilder @Inject()(
     }
 
     def toFuture: Future[Response] = Future.value(this)
-    
+
     def toException: HttpResponseException = new HttpResponseException(this)
-    
+
     def toFutureException[T]: Future[T] = Future.exception(toException)
 
     /* Private */

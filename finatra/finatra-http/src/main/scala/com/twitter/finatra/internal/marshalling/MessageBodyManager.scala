@@ -1,9 +1,10 @@
 package com.twitter.finatra.internal.marshalling
 
-import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter, MessageBodyComponent, MessageBodyReader, MessageBodyWriter}
+import com.twitter.finatra.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter,
+  MessageBodyComponent, MessageBodyReader, MessageBodyWriter}
 import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.TypeUtils.singleTypeParam
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import javax.inject.{Inject, Singleton}
@@ -18,6 +19,7 @@ class MessageBodyManager @Inject()(
   defaultMessageBodyWriter: DefaultMessageBodyWriter)
   extends Logging {
 
+  // TODO (AF-292): use java.util.concurrent.ConcurrentHashMap for caches
   private val readers = mutable.Map[Type, MessageBodyReader[_]]()
   private val writersByType = mutable.Map[Type, MessageBodyWriter[Any]]()
   private val classToAnnotationWriter = mutable.Map[Type, Option[MessageBodyWriter[Any]]]()
@@ -50,7 +52,7 @@ class MessageBodyManager @Inject()(
     add[MBC](
       typeLiteral[TypeToReadOrWrite].getType)
   }
-  
+
   def parse[T: Manifest](request: Request): T = {
     val objType = manifestToTypeCache.getOrElseUpdate(manifest[T], typeLiteral[T].getType)
     readers.get(objType) map { reader =>
@@ -92,11 +94,5 @@ class MessageBodyManager @Inject()(
       else
         None
     })
-  }
-
-  private def singleTypeParam[T](objType: Type) = {
-    objType match {
-      case parametricType: ParameterizedTypeImpl => parametricType.getActualTypeArguments.head
-    }
   }
 }
