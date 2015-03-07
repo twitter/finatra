@@ -3,12 +3,14 @@ package com.twitter.finatra.domain
 /**
  * Marker interface for Case Classes wrapping a single value.
  * When used with finatra-jackson, the wrapped value will be directly serialized/deserialized without the wrapping object.
+ *
+ * WrappedValue is a Universal Trait (http://docs.scala-lang.org/overviews/core/value-classes.html)
+ * so that it can be used by value classes.
  */
-trait WrappedValue[T] {
+trait WrappedValue[T] extends Any {
   self: Product =>
 
-  assert(self.productArity == 1, "WrappedValue can only be used with single field case classes")
-  val onlyValue: T = self.productElement(0).asInstanceOf[T]
+  def onlyValue: T = self.productElement(0).asInstanceOf[T]
 
   def asString =
     onlyValue.toString
