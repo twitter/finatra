@@ -1,8 +1,6 @@
 package com.twitter.finatra
 
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.inject.requestscope.{FinagleRequestScopeFilter => NewFinagleRequestScopeFilter}
-import com.twitter.inject.thrift.{ThriftClientModule => NewThriftClientModule}
 
 package object requestscope {
 
