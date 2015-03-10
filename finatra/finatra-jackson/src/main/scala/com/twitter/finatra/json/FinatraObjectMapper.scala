@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{JsonNode, Module, ObjectMapper, ObjectReader}
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException
+import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonObjectParseException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import java.io.{InputStream, OutputStream, StringWriter}
 import java.nio.ByteBuffer
@@ -54,7 +54,7 @@ case class FinatraObjectMapper(
   }
 
   def parse[T: Manifest](jsonNode: JsonNode): T = {
-    objectMapper.convertValue[T](jsonNode)
+    convert[T](jsonNode)
   }
 
   /** Parse InputStream (caller must close) */
@@ -74,8 +74,22 @@ case class FinatraObjectMapper(
     objectMapper.readValue[T](jsonParser)
   }
 
+  /*
+   When Finatra's JsonObjectParseException is thrown inside 'convertValue', newer versions of Jackson wrap
+   JsonObjectParseException inside an IllegalArgumentException. As such, we unwrap to restore the original exception here.
+
+   Details:
+   See https://github.com/FasterXML/jackson-databind/blob/2.4/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java#L2773
+   The wrapping occurs because JsonObjectParseException is an IOException (because we extend JsonMappingException which extends JsonProcessingException which extends IOException).
+   We must extend JsonMappingException otherwise JsonObjectParseException is not properly handled when deserializing into nested case-classes
+  */
   def convert[T: Manifest](any: Any): T = {
-    objectMapper.convertValue[T](any)
+    try {
+      objectMapper.convertValue[T](any)
+    } catch {
+      case e: IllegalArgumentException if e.getCause.isInstanceOf[JsonObjectParseException] =>
+        throw e.getCause
+    }
   }
 
   def writeValueAsBytes(any: Any): Array[Byte] = {

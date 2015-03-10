@@ -828,19 +828,31 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   private def assertJsonParse[T: Manifest](json: String, withErrors: Seq[String]) = {
     if (withErrors.nonEmpty) {
-      val e = intercept[JsonObjectParseException] {
+      val e1 = intercept[JsonObjectParseException] {
         parse[T](json)
       }
-      trace(e.fieldErrors.mkString("\n"))
-      clearStackTrace(e.fieldErrors)
+      assertObjectParseException(e1, withErrors)
 
-      val actualMessages = e.fieldErrors map {_.getMessage}
-      JsonDiff.jsonDiff(actualMessages, withErrors)
+      // also check that we can parse into an intermediate JsonNode
+      val e2 = intercept[JsonObjectParseException] {
+        val jsonNode = parse[JsonNode](json)
+        parse[T](jsonNode)
+      }
+      assertObjectParseException(e2, withErrors)
+
       null
     }
     else {
       parse[T](json)
     }
+  }
+
+  private def assertObjectParseException(e: JsonObjectParseException, withErrors: Seq[String]) = {
+    trace(e.fieldErrors.mkString("\n"))
+    clearStackTrace(e.fieldErrors)
+
+    val actualMessages = e.fieldErrors map {_.getMessage}
+    JsonDiff.jsonDiff(actualMessages, withErrors)
   }
 
   private def clearStackTrace(exceptions: Seq[JsonFieldParseException]) = {
@@ -850,6 +862,10 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   private def parse[T: Manifest](string: String): T = {
     mapper.parse[T](string)
+  }
+
+  private def parse[T: Manifest](jsonNode: JsonNode): T = {
+    mapper.parse[T](jsonNode)
   }
 
   private def generate(any: Any): String = {
