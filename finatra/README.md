@@ -316,7 +316,7 @@ Or to obtain the request full path URL as follows:
 	RequestUtils.pathUrl(request)
 	```
 
-### [Future Conversion](#future-conversion)
+### <a name="future-conversion">Future Conversion</a>
 Callbacks that do not return a Future will have their return values converted into a future by running the callback in a framework future pool. If you wish to have greater control into the future pool's threading strategy, override the following:
 ```scala
 class Server extends HttpServer {
@@ -345,7 +345,7 @@ Message Body Readers and Writers
 ======================================================
 [TODO]
 
-[JSON](#json)
+<a name="json">JSON</a>
 ===============================
 Finatra improves on the already excellent [jackson-scala-module](http://...). JSON support is provided in the finatra-jackson library, which can be used outside of Finatra HTTP as a replacement for jackson-scala-module or jerkson.
 
@@ -953,7 +953,7 @@ Finatra Best Practices
 Utils
 ===============================
 
-## [Conversions](#conversions)
+## <a name="conversions">Conversions</a>
 Many Finatra utilities are provided as *conversions* which add methods to common Scala and Finagle classes. They can be found in the *com.twitter.finatra.conversions* package. Currently, the best documentation is the unit tests showing their usage:
 * Futures
 * Options
@@ -965,11 +965,11 @@ Many Finatra utilities are provided as *conversions* which add methods to common
 * Maps
 
 ## HTTP Client
-A barebones httpclient built on Finagle-HTTP is included in the finatra-httpclient jar. Stay tuned for further documentation and examples.
+***REMOVED***
 
 ## App Integration
 Finatra's HTTP server is built on top of several reusable traits. 
-One of these traits is GuiceApp which provides the integration between Guice and com.twitter.app.App. GuiceApp can be used standalone to create command line apps which may also reuse your Guice modules defined in other libraries. 
+***REMOVED***
 
 ***REMOVED***
 
@@ -988,12 +988,13 @@ FAQ
 
 Change Log
 ===============================
-* 1-15-2015: Finatra v2 released with initial documentation
+* 2015-01-15: Finatra v2 released with initial documentation.
+* 2015-03-11: Documentation updated.
 
-[Version 1 Migration Guide](#migration)
+<a name="migration">Version 1 Migration Guide</a>
 ===============================
 ## Controllers
-You no longer need to return a Future from controller routes (however, always return a Future if you already have one)
+You no longer need to return a `Future` from controller routes (however, always return a `Future` if you already have one).
 
 ###Add Request type to controller callbacks
 ```scala
@@ -1015,7 +1016,7 @@ render.json(ret)
 response.ok.json(ret)
 ```
 
-Route params are now stored in request.params (which allows us to reuse finagle.http.Request without defining our own). 
+Route params are now stored in request.params (which allows us to reuse `finagle.http.Request` without defining our own). 
 //v1
 request.routeParams("q")
 
@@ -1024,7 +1025,7 @@ request.params("q")
 
 ## Logging
 To continue using "Java Util Logging", add a jar dependency on 'slf4j-jdk14'.
-Otherwise, we recommend using Logback by adding a jar dependency on finatra-logback.
+Otherwise, we recommend using Logback by adding a jar dependency on `finatra-logback`.
 
 ```scala
 //v1
@@ -1079,8 +1080,8 @@ class Server extends HttpServer {
 ```
 
 ## Static Files
-* Web resources (html/js) go in src/main/webapp
-* Mustache templates now go in src/main/resources/templates
+* Web resources (html/js) go in `src/main/webapp`
+* Mustache templates now go in `src/main/resources/templates`
 
 To serve static files, you now need explicit routes:
 ```scala
