@@ -398,6 +398,14 @@ class DoEverythingController @Inject()(
     r
   }
 
+  get("/RequestWithQueryParamSeqString") { r: RequestWithQueryParamSeqString =>
+    ResponseOfQueryParamSeqString(r.foo.map(_ + 1).seq)
+  }
+
+  get("/RequestWithQueryParamSeqLong") { r: RequestWithQueryParamSeqLong =>
+    ResponseOfQueryParamSeqLong(r.foo.map(_ + 1).seq)
+  }
+
   get("/FooException/:id") { r: Request =>
     throw new FooException(r.params("id"))
   }

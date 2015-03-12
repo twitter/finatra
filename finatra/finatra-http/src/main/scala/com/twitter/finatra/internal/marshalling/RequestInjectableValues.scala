@@ -3,7 +3,7 @@ package com.twitter.finatra.internal.marshalling
 import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues}
 import com.google.inject.{Injector, Key}
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.json.internal.caseclass.annotations.{FormParamInternal, HeaderInternal, QueryParamInternal, RouteParamInternal}
+import com.twitter.finatra.json.internal.caseclass.annotations._
 import java.lang.annotation.Annotation
 
 class RequestInjectableValues(
@@ -31,7 +31,10 @@ class RequestInjectableValues(
     val fieldName = forProperty.getName
 
     if (hasAnnotation(forProperty, paramsAnnotation))
-      request.params.get(fieldName).orNull
+      if (forProperty.getType.isCollectionLikeType)
+        request.params.getAll(fieldName) map {queryParamsResolveRawClass(forProperty, _)}
+      else
+        request.params.get(fieldName).orNull
     else if (hasAnnotation[HeaderInternal](forProperty))
       Option(request.headers().get(fieldName)).orNull
     else if (isRequest(forProperty))
@@ -56,5 +59,21 @@ class RequestInjectableValues(
 
   private def isRequest(forProperty: BeanProperty): Boolean = {
     forProperty.getType.getRawClass == classOf[Request]
+  }
+
+  private def queryParamsResolveRawClass(forProperty: BeanProperty, value: String) = {
+    val clazz = forProperty.getType.getContentType.getRawClass
+    if (clazz == classOf[java.lang.Long])
+      value.toLong
+    else if (clazz == classOf[java.lang.Integer])
+      value.toInt
+    else if (clazz == classOf[java.lang.Short])
+      value.toShort
+    else if (clazz == classOf[java.lang.Boolean])
+      value.toBoolean
+    else if (clazz == classOf[java.lang.String])
+      value
+    else
+      null
   }
 }

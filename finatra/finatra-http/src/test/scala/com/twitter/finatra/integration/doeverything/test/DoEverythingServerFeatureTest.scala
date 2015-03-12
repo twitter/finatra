@@ -637,6 +637,28 @@ class DoEverythingServerFeatureTest extends Test {
         andExpect = Ok,
         withBody = "pong")
     }
+
+    "GET with query parameters as string sequence" in {
+      server.httpGet(
+        "/RequestWithQueryParamSeqString?foo=1&foo=2&foo=3",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            |{ "foo": ["11", "21", "31"] }
+          """.stripMargin
+      )
+    }
+
+    "GET with query parameters as long sequence" in {
+      server.httpGet(
+        "/RequestWithQueryParamSeqLong?foo=1&foo=2&foo=3",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            |{ "foo": [2, 3, 4] }
+          """.stripMargin
+      )
+    }
   }
 
   "HttpResponseException" in {
