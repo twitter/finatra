@@ -10,8 +10,8 @@ Finatra v2 is Twitter's Scala service framework built on TwitterServer and Finag
 Team
 -----------------------------------------------------------
 * [Steve Cosenza](mailto:***REMOVED***): Tech Lead
-* [Christopher Coco](***REMOVED***): Developer
-* [Jason Carey](***REMOVED***): Developer
+* [Christopher Coco](mailto:***REMOVED***): Developer
+* [Jason Carey](mailto:***REMOVED***): Developer
 * [Eugene Ma](mailto:***REMOVED***): Developer
 
 Quick Start
@@ -562,7 +562,7 @@ class UserFilter @Inject()(
 }
 ```
 
-Next add the FinagleRequestScopeFilter filter to your server before the UserFilter (shown below w/ other common filters in a recommended filter order):
+***REMOVED***
 ```scala
 class Server extends HttpServer {
   override def configureHttp(router: HttpRouter) {
@@ -574,8 +574,11 @@ class Server extends HttpServer {
 }
 ```
 
-Then inject a User or a Provider[User] wherever you need to access the request scope user. Note, Provider[User] must be used when injecting into a Singleton class.
+Then inject a User or a `Provider[User]` wherever you need to access the request scope user. Note, `Provider[User]` must be used when injecting into a Singleton class.
 ```scala
+import javax.inject.Provider	
+
+
 class MyController @Inject()(
   dao: GroupsDAO,
   user: Provider[User])
