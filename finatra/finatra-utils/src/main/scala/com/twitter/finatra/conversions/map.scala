@@ -5,7 +5,7 @@ import scala.collection.{SortedMap, immutable, mutable}
 
 object map {
 
-  implicit class RichMap[K, V](wrappedMap: Map[K, V]) {
+  implicit class RichMap[K, V](val wrappedMap: Map[K, V]) extends AnyVal {
     def mapKeys[T](func: K => T): Map[T, V] = {
       for ((k, v) <- wrappedMap) yield {
         func(k) -> v
@@ -50,9 +50,22 @@ object map {
     }
   }
 
-  implicit class RichMapOfMaps[A, B, C](wrapped: scala.collection.Map[A, scala.collection.Map[B, C]]) {
+  // TODO Investigate why this fails as a Value class
+  /*
+    [error] overriding method applyOrElse in trait PartialFunction of type [A1 <: (K, Option[V]), B1 >: (K, V)](x: A1, default: A1 => B1)B1;
+    [error]  method applyOrElse has incompatible type
+    [error]     def flattenEntries: Map[K, V] = wrappedMap collect {^
+   */
+  implicit class RichOptionValueMap[K, V](wrappedMap: Map[K, Option[V]]) {
+    def flattenEntries: Map[K, V] = wrappedMap collect {
+      case (key, Some(value)) =>
+        key -> value
+    }
+  }
 
-    /**
+  implicit class RichMapOfMaps[A, B, C](val wrapped: scala.collection.Map[A, scala.collection.Map[B, C]]) extends AnyVal {
+
+  /**
      * Swap the keys between the inner and outer maps
      * Input: Map[A,Map[B,C]] Output: Map[B, Map[A,C]]
      */
@@ -67,7 +80,7 @@ object map {
     }
   }
 
-  implicit class RichSortedMapOfSortedMaps[A, B, C](wrapped: SortedMap[A, SortedMap[B, C]]) {
+  implicit class RichSortedMapOfSortedMaps[A, B, C](val wrapped: SortedMap[A, SortedMap[B, C]]) extends AnyVal {
 
     /**
      * Swap the keys between the inner and outer maps
@@ -79,7 +92,7 @@ object map {
     }
   }
 
-  implicit class RichSortedMap[K, V](wrappedMap: SortedMap[K, V]) {
+  implicit class RichSortedMap[K, V](val wrappedMap: SortedMap[K, V]) extends AnyVal {
     def mapKeys[T](func: K => T)(implicit ordering: Ordering[T]): SortedMap[T, V] = {
       (for ((k, v) <- wrappedMap) yield {
         func(k) -> v
