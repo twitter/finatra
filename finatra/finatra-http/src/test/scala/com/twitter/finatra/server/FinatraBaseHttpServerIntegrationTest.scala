@@ -2,12 +2,12 @@ package com.twitter.finatra.server
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finatra.internal.server.RawHttpServer
+import com.twitter.finatra.internal.server.BaseHttpServer
 import com.twitter.finatra.test.EmbeddedHttpServer
 import com.twitter.inject.Test
 import com.twitter.util.Future
 
-class FinatraRawHttpServerIntegrationTest extends Test {
+class FinatraBaseHttpServerIntegrationTest extends Test {
 
   "HiServiceServer" should {
     "respond" in {
@@ -20,7 +20,7 @@ class FinatraRawHttpServerIntegrationTest extends Test {
   }
 }
 
-class HiServer extends RawHttpServer {
+class HiServer extends BaseHttpServer {
   override def httpService = new Service[Request, Response] {
     def apply(request: Request) = {
       val response = Response()

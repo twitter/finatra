@@ -13,7 +13,7 @@ import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Future, Time}
 import java.net.InetSocketAddress
 
-trait RawHttpServer extends TwitterServer {
+trait BaseHttpServer extends TwitterServer {
 
   private val httpPortFlag = flag("http.port", ":8888", "External HTTP server port")
   private val maxRequestSize = flag("maxRequestSize", 5.megabytes, "HTTP(s) Max Request Size")

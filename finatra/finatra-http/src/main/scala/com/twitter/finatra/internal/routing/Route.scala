@@ -27,7 +27,7 @@ case class Route(
 
   def hasEmptyCaptureNames = captureNames.isEmpty
 
-  def summary: String = method + " " + path
+  def summary: String = method + "\t" + path
 
   def withFilter(filter: Filter[Request, Response, Request, Response]): Route = {
     this.copy(filter = filter)
