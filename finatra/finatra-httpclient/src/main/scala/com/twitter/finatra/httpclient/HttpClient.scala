@@ -27,7 +27,7 @@ class HttpClient(
     val request = createRequest(Method.Get, uri)
     setHeaders(request, headers)
 
-    handleRequest(request)
+    sendRequest(request)
   }
 
   def post(uri: String, channelBuffer: ChannelBuffer, contentLength: Long, contentType: String, headers: (String, String)*): Future[Response] = {
@@ -37,12 +37,25 @@ class HttpClient(
     request.headers().set(CONTENT_LENGTH, contentLength.toString)
     request.headers().set(CONTENT_TYPE, contentType)
 
-    handleRequest(request)
+    sendRequest(request)
   }
 
   def head(uri: String): Future[Response] = {
-    handleRequest(
+    sendRequest(
       createRequest(Method.Head, uri))
+  }
+
+  def sendRequest(request: Request): Future[Response] = {
+    debug(request + " with headers: " + request.headerMap.mkString(", "))
+
+    retryPolicy match {
+      case Some(policy) =>
+        RetryUtils.retryFuture(policy) {
+          httpService.apply(request)
+        }
+      case _ =>
+        httpService(request)
+    }
   }
 
   /* Private */
@@ -62,18 +75,5 @@ class HttpClient(
       request.headers().set("Host", hostname)
     }
     request
-  }
-
-  private def handleRequest(request: Request): Future[Response] = {
-    debug(request + " with headers: " + request.headerMap.mkString(", "))
-
-    retryPolicy match {
-      case Some(policy) =>
-        RetryUtils.retryFuture(policy) {
-          httpService.apply(request)
-        }
-      case _ =>
-        httpService(request)
-    }
   }
 }

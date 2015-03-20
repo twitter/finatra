@@ -10,8 +10,13 @@ object RichHttpClient {
   /* Public */
 
   def newClientService(target: String) = {
-    createService(
-      Http.newClient(target))
+    nettyToFinagleHttp(
+      Http.newClient(target).toService)
+  }
+
+  def newSslClientService(sslHostname: String, target: String) = {
+    nettyToFinagleHttp(
+      Http.client.withTls(sslHostname).newService(target))
   }
 
   def nettyToFinagleHttp(nettyService: Service[HttpRequest, HttpResponse]): Service[Request, Response] = {
@@ -20,12 +25,5 @@ object RichHttpClient {
         nettyService.apply(request) map Response.apply
       }
     }
-  }
-
-  /* Private */
-
-  private def createService(serviceFactory: ServiceFactory[HttpRequest, HttpResponse]): Service[Request, Response] = {
-    nettyToFinagleHttp(
-      serviceFactory.toService)
   }
 }
