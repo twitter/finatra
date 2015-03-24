@@ -52,6 +52,23 @@ class ExceptionManagerTest extends Test with Mockito {
       exceptionManager.add[ForbiddenExceptionMapper]
     }
   }
+
+  "replace an exception mapper" in {
+    val exceptionManager = newExceptionManager
+    exceptionManager.add[ForbiddenExceptionMapper]
+    exceptionManager.replace[ForbiddenIsOkExceptionMapper]
+    val request = mock[Request]
+    val response = exceptionManager.toResponse(request, new ForbiddenException)
+    response.status should equal(Status.Ok)
+  }
+
+  "replace the default exception mapper" in {
+    val exceptionManager = newExceptionManager
+    exceptionManager.replace[EverythingIsFineMapper]
+    val request = mock[Request]
+    val response = exceptionManager.toResponse(request, new Exception)
+    response.status should equal(Status.Ok)
+  }
 }
 
 class UnregisteredException extends Exception
@@ -72,6 +89,11 @@ class ForbiddenExceptionMapper extends ExceptionMapper[ForbiddenException] {
     new SimpleResponse(Status.Forbidden)
 }
 
+class ForbiddenIsOkExceptionMapper extends ExceptionMapper[ForbiddenException] {
+  def toResponse(request: Request, throwable: ForbiddenException): Response =
+    new SimpleResponse(Status.Ok)
+}
+
 class UnauthorizedExceptionMapper extends ExceptionMapper[UnauthorizedException] {
   def toResponse(request: Request, throwable: UnauthorizedException): Response =
     new SimpleResponse(Status.Unauthorized)
@@ -80,4 +102,9 @@ class UnauthorizedExceptionMapper extends ExceptionMapper[UnauthorizedException]
 class UnauthorizedException1Mapper extends ExceptionMapper[UnauthorizedException1] {
   def toResponse(request: Request, throwable: UnauthorizedException1): Response =
     new SimpleResponse(Status.NotFound)
+}
+
+class EverythingIsFineMapper extends ExceptionMapper[Throwable] {
+  def toResponse(request: Request, throwable: Throwable): Response =
+    new SimpleResponse(Status.Ok)
 }

@@ -15,12 +15,6 @@ class FinatraDefaultExceptionMapper @Inject()(
 
   override def toResponse(request: Request, throwable: Throwable): Response = {
     throwable match {
-      case e: HttpException =>
-        e.createResponse(response)
-      case e: HttpResponseException =>
-        e.response
-      case e: CancelledRequestException =>
-        response.clientClosed
       case ExternalServiceExceptionMatcher(e) =>
         warn("service unavailable", e)
         response.serviceUnavailable.json(
