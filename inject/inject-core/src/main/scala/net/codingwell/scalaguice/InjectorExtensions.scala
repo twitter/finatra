@@ -25,5 +25,7 @@ object InjectorExtensions {
     def instance[T : Manifest] = i.getInstance(typeLiteral[T].toKey)
   }
 
-  implicit def enrichInjector(i:Injector): ScalaInjector = new ScalaInjector(i)
+  implicit class RichInjector(val i:Injector) extends AnyVal {
+    def instance[T : Manifest] = i.getInstance(typeLiteral[T].toKey)
+  }
 }

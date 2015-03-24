@@ -100,7 +100,7 @@ object ScalaModule {
   import java.lang.annotation.{Annotation => JAnnotation}
 
   trait ScalaScopedBindingBuilder extends ScopedBindingBuilderProxy {
-    def in[TAnn <: JAnnotation : ClassManifest] = self in annotation[TAnn]
+    def in[TAnn <: JAnnotation : Manifest] = self in annotation[TAnn]
   }
 
   trait ScalaLinkedBindingBuilder[T] extends ScalaScopedBindingBuilder
@@ -115,13 +115,13 @@ object ScalaModule {
 
   trait ScalaAnnotatedBindingBuilder[T] extends ScalaLinkedBindingBuilder[T]
     with AnnotatedBindingBuilderProxy[T] { outer =>
-    def annotatedWith[TAnn <: JAnnotation : ClassManifest] = new ScalaLinkedBindingBuilder[T] {
+    def annotatedWith[TAnn <: JAnnotation : Manifest] = new ScalaLinkedBindingBuilder[T] {
       val self = outer.self annotatedWith annotation[TAnn]
     }
   }
 
   trait ScalaAnnotatedElementBuilder[T] extends AnnotatedElementBuilderProxy[T] {
-    def annotatedWith[TAnn <: JAnnotation : ClassManifest] = self annotatedWith annotation[TAnn]
+    def annotatedWith[TAnn <: JAnnotation : Manifest] = self annotatedWith annotation[TAnn]
   }
 
 }

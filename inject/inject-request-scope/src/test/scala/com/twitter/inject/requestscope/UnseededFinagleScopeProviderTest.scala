@@ -1,12 +1,10 @@
 package com.twitter.inject.requestscope
 
-import org.junit.runner.RunWith
-import org.scalatest.FunSuite
-import org.scalatest.junit.JUnitRunner
+import com.twitter.inject.Test
 
-@RunWith(classOf[JUnitRunner])
-class UnseededFinagleScopeProviderTest extends FunSuite {
-  test("expect exception") {
+
+class UnseededFinagleScopeProviderTest extends Test {
+  "expect exception" in {
     intercept[IllegalStateException] {
       new UnseededFinagleScopeProvider[String].get
     }
