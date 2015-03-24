@@ -1,6 +1,6 @@
 package com.twitter.finatra
 
 package object routing {
-  @deprecated
-  type Router = HttpRouter
+  @deprecated("Use com.twitter.finatra.routing.HttpRouter", "")
+  type Router = com.twitter.finatra.routing.HttpRouter
 }

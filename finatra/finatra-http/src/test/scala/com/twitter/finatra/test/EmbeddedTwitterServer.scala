@@ -6,7 +6,7 @@ import com.twitter.inject.server.Ports
 
 object EmbeddedTwitterServer {
 
-  @deprecated("Use com.twitter.finatra.test.EmbeddedHttpServer or com.twitter.inject.server.EmbeddedTwitterServer")
+  @deprecated("Use com.twitter.finatra.test.EmbeddedHttpServer or com.twitter.inject.server.EmbeddedTwitterServer", "")
   def apply(
     twitterServer: Ports,
     clientFlags: Map[String, String] = Map(),

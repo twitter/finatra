@@ -6,6 +6,7 @@ import com.twitter.finatra.internal.request.RequestWithPathParams
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import org.jboss.netty.handler.codec.http.HttpMethod
+import scala.language.existentials
 
 //optimized
 case class Route(

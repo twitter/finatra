@@ -20,6 +20,8 @@ import com.google.inject._
 import com.google.inject.binder._
 import java.lang.annotation.{Annotation => JAnnotation}
 import java.lang.reflect.{Constructor => JConstructor}
+import scala.language.postfixOps
+
 /**
  * Proxy for [[com.google.inject.binder.ScopedBindingBuilder]]
  */

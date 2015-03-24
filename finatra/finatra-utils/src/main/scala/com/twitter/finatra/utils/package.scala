@@ -6,10 +6,10 @@ import java.net.InetSocketAddress
 
 package object utils {
 
-  @deprecated("Use com.twitter.inject.Logging")
+  @deprecated("Use com.twitter.inject.Logging", "")
   type Logging = com.twitter.inject.Logging
 
-  @deprecated("Use com.twitter.inject.server.PortUtils")
+  @deprecated("Use com.twitter.inject.server.PortUtils", "")
   object PortUtils {
     def ephemeralLoopback: String = {
       NewPortUtils.ephemeralLoopback

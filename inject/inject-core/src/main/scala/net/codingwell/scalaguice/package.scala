@@ -65,8 +65,8 @@ package object scalaguice {
     /**
      * Get the class for a Java Annotation using a [[scala.Manifest]].
      */
-    def annotation[T <: JAnnotation : ClassManifest]: AnnotationClass[T] = {
-        classManifest[T].runtimeClass.asInstanceOf[AnnotationClass[T]]
+    def annotation[T <: JAnnotation : Manifest]: AnnotationClass[T] = {
+        manifest[T].runtimeClass.asInstanceOf[AnnotationClass[T]]
     }
 
 }

@@ -4,7 +4,7 @@ import com.google.inject.Stage
 import com.twitter.app.Flag
 import com.twitter.inject.app.internal.InstalledModules
 
-@deprecated("Use com.twitter.inject.app.TestInjector")
+@deprecated("Use com.twitter.inject.app.TestInjector", "")
 object FinatraInstalledModules {
 
   def create(

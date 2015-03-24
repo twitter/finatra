@@ -11,9 +11,10 @@ import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 import com.twitter.finatra.json.internal.caseclass.reflection.DefaultMethodUtils.defaultFunction
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection
-import com.twitter.finatra.utils.Logging
 import com.twitter.finatra.validation.Validation
+import com.twitter.inject.Logging
 import java.lang.annotation.Annotation
+import scala.language.existentials
 import scala.reflect.NameTransformer
 
 object CaseClassField {

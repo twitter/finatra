@@ -12,6 +12,7 @@ import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection.InjectableAnnotations
 import java.lang.annotation.Annotation
 import javax.inject.Inject
+import scala.language.existentials
 
 object FieldInjection {
   private val InjectableAnnotations: Set[Class[_ <: Annotation]] = Set(

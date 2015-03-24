@@ -5,11 +5,11 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.filters.CommonFilters
-import com.twitter.finatra.routing.Router
+import com.twitter.finatra.routing.{HttpRouter, Router}
 import com.twitter.finatra.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.utils.RetryPolicyUtils.constantRetry
 import com.twitter.finatra.utils.RetryUtils.retry
-import com.twitter.finatra.{Controller, FinatraServer}
+import com.twitter.finatra.{HttpServer, Controller, FinatraServer}
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
 import com.twitter.util.{Future, FuturePool, Return, Try}
@@ -119,10 +119,10 @@ class FuturePooledController @Inject()(
 
 /* ==================================================== */
 /* Server */
-class PooledServer extends FinatraServer {
+class PooledServer extends HttpServer {
   override def modules = Seq(TestUserRequestScopeFilterModule)
 
-  override def configure(router: Router) {
+  override def configureHttp(router: HttpRouter) {
     router.
       filter[CommonFilters].
       filter[FinagleRequestScopeFilter[Request, Response]].

@@ -32,13 +32,13 @@ trait HttpTest
     objNode
   }
 
-  @deprecated("Use server.assertHealthy()")
+  @deprecated("Use server.assertHealthy()", "")
   def assertHealth(server: EmbeddedTwitterServer) = {
     server.assertHealthy()
     server
   }
 
-  @deprecated("Use server.assertHealthy()")
+  @deprecated("Use server.assertHealthy()", "")
   def assertHealth(server: EmbeddedHttpServer, healthy: Boolean = true) = {
     server.assertHealthy(healthy)
     server
