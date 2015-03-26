@@ -19,7 +19,7 @@ class EmbeddedHttpServer(
   skipAppMain: Boolean = false,
   defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
-  mapper: FinatraObjectMapper = FinatraObjectMapper.create(),
+  mapperOverride: Option[FinatraObjectMapper] = None,
   httpPortFlag: String = "http.port")
   extends com.twitter.inject.server.EmbeddedTwitterServer(
     twitterServer,
@@ -45,6 +45,8 @@ class EmbeddedHttpServer(
       twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound")),
       secure = true)
   }
+
+  protected lazy val mapper = mapperOverride getOrElse injector.instance[FinatraObjectMapper]
 
   override protected def logAppStartup() {
     super.logAppStartup()
