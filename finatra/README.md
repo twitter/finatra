@@ -1,11 +1,14 @@
-Finatra Overview [v2]
+Finatra[v2] Overview
 ==========================================================
 ![Finatra Logo](https://pbs.twimg.com/media/B-uRzgOUAAAq6nD.png:small)
 
-Finatra v2 is Twitter's Scala service framework built on TwitterServer and Finagle. Finatra supports building both HTTP and Thrift based services.
+Finatra[v2] is Twitter's Scala service framework built on TwitterServer and Finagle. Finatra supports building both HTTP and Thrift based services.
 
 ** NOTE: THESE DOCS ARE IN-PROGRESS!!! We are currently finishing them in anticipation of our v2 release to https://github.com/twitter/finatra **
+
 ** Please provide feedback! **
+
+***REMOVED***
 
 Team
 -----------------------------------------------------------
@@ -227,8 +230,7 @@ Notes:
      * `@Header`
      * `@Cookie`
  * Other
-     * `@Request`: Injects the Finagle Http Request
-     * `@JsonInject`: Injects any class from your Guice object graph
+     * `@RequestInject`: Injects the Finagle Http Request
 
 *Note: HTTP requests with a content-type of application/json, are similarly parsed without the use of "Request Field" annotations. See [JSON](#json) section below.*
 
@@ -836,20 +838,19 @@ File Uploads
 
 Testing
 ===============================
-## Startup Tests
-* Startup tests should mimic production as close as possible. As such, avoid using `@Bind` and "override modules" in startup tests.
-* Set the Guice "stage" to `PRODUCTION` so that all singletons will be eagerly created at startup 
-(integration/feature tests run in `State.DEVELOPMENT` by default).
-* Prevent Finagle clients from making outbound connections during startup tests by setting the resolverMap entries for your clients to `nil!`. 
+## <a name="startup-tests">Startup Tests</a>
+* Startup tests should mimic production as close as possible. As such: 
+    - avoid using `@Bind` and "override modules" in startup tests.
+    - set the Guice `stage` to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `State.DEVELOPMENT` by default).
+    - prevent Finagle clients from making outbound connections during startup tests by setting any resolverMap entries for your clients to `nil!`. 
 
 For example:
 ```scala
-val server = EmbeddedTwitterServer(
-  twitterServer = new SampleApiServer,
+val server = EmbeddedHttpServer(
   stage = Stage.PRODUCTION,
-  resolverMap = Map(
-    "service1" -> "nil!",
-    "service2" -> "nil!"))))
+  twitterServer = new SampleApiServer,  
+  extraArgs = Seq(
+    "-com.twitter.server.resolverMap=client1=nil!,client2=nil!"))
 ```
 
 ## Integration Tests
@@ -952,6 +953,7 @@ Finatra Best Practices
 ===============================
 * Avoid `private[this]` unless you are in a hotspot identified during profiling.
 ***REMOVED***
+***REMOVED***
 
 Utils
 ===============================
@@ -1020,11 +1022,13 @@ response.ok.json(ret)
 ```
 
 Route params are now stored in request.params (which allows us to reuse `finagle.http.Request` without defining our own). 
+```scala
 //v1
 request.routeParams("q")
 
 //v2
 request.params("q")
+```
 
 ## Logging
 To continue using "Java Util Logging", add a jar dependency on 'slf4j-jdk14'.
