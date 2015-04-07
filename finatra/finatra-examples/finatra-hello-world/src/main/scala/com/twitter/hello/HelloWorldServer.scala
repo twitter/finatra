@@ -7,8 +7,6 @@ import com.twitter.finatra.routing.HttpRouter
 object HelloWorldServerMain extends HelloWorldServer
 
 class HelloWorldServer extends HttpServer {
-  override val name = "hello-world"
-
   override def configureHttp(router: HttpRouter) {
     router.
       filter[CommonFilters].

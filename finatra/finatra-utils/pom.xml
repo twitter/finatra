@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>finatra-utils</artifactId>
+  <artifactId>finatra-utils_2.11</artifactId>
   <version>2.0.0-SNAPSHOT</version>
   <description>General Finatra utils</description>
 
   <parent>
     <groupId>com.twitter.finatra</groupId>
-    <artifactId>finatra</artifactId>
+    <artifactId>finatra_2.11</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -17,19 +17,19 @@
     <!-- Inject Dependencies for Deprecated Bridges -->
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-thrift-client</artifactId>
+      <artifactId>inject-thrift-client_${scala.artifact.version}</artifactId>
     </dependency>
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-request-scope</artifactId>
+      <artifactId>inject-request-scope_${scala.artifact.version}</artifactId>
     </dependency>
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-app</artifactId>
+      <artifactId>inject-app_${scala.artifact.version}</artifactId>
     </dependency>
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-server</artifactId>
+      <artifactId>inject-server_${scala.artifact.version}</artifactId>
     </dependency>
 
     <!-- Twitter -->
@@ -68,8 +68,8 @@
       <artifactId>jackson-annotations</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.scalaj</groupId>
-      <artifactId>scalaj-time_2.10.2</artifactId>
+      <groupId>com.github.nscala-time</groupId>
+      <artifactId>nscala-time_${scala.artifact.version}</artifactId>
     </dependency>
     <dependency>
       <groupId>joda-time</groupId>

@@ -3,11 +3,10 @@ package com.twitter.inject.server.tests
 import com.google.inject.AbstractModule
 import com.twitter.finagle.http.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, Ports, TwitterServer}
-import com.twitter.inject.{TwitterModule, Test}
+import com.twitter.inject.{Test, TwitterModule}
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.{TwitterServer => BaseTwitterServer}
 import com.twitter.util.Await
-import org.scala_tools.time.Imports._
 
 
 class StartupIntegrationTest extends Test {
@@ -118,11 +117,11 @@ class StartupIntegrationTest extends Test {
         waitForWarmup = false)
 
       server.assertHealthy(healthy = false)
-      sleep(3.seconds, verbose = true)
+      Thread.sleep(3000)
 
       server.assertHealthy(healthy = false)
       continueWarmup = false
-      sleep(3.seconds, verbose = true)
+      Thread.sleep(3000)
 
       server.assertHealthy(healthy = true)
       server.close()

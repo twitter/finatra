@@ -65,6 +65,8 @@ class ResponseBuilder @Inject()(
 
   def badRequest(body: Any) = EnrichedResponse(Status.BadRequest).body(body)
 
+  def conflict = EnrichedResponse(Status.Conflict)
+
   def conflict(body: Any) = EnrichedResponse(Status.Conflict).body(body)
 
   def unauthorized = EnrichedResponse(Status.Unauthorized)

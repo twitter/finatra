@@ -1,19 +1,14 @@
 package com.twitter.finatra.conversions
 
+import com.github.nscala_time.time.{DurationBuilder, Implicits}
 import com.twitter.util.{Duration => TwitterDuration, Time}
-import org.joda.time.{DateTime, DateTimeZone, Duration, ReadableInstant}
-import org.scala_tools.time.{Implicits, RichDurationBuilder}
+import org.joda.time.{DateTime, DateTimeZone, Duration}
 
 /**
  * Add additional conversions to 'scala-time' and also
  * overcome issues with scala time joda wrappers not being serializable by jackson
  */
-object time extends Implicits with RichDurationBuilder {
-
-  //TODO: Remove once we switch from scalaj-time to nscala-time
-  implicit val DateTimeOrdering = ReadableInstantOrdering[DateTime]
-  implicit def ReadableInstantOrdering[A <: ReadableInstant]: Ordering[A] = order[A, ReadableInstant]
-  private def order[A, B <: Comparable[B]](implicit ev: A <:< B): Ordering[A] = Ordering.by[A, B](ev)
+object time extends Implicits {
 
   /* ------------------------------------------------ */
   implicit class FinatraRichDateTime(dateTime: org.joda.time.DateTime) {
@@ -50,10 +45,17 @@ object time extends Implicits with RichDurationBuilder {
   }
 
   /* ------------------------------------------------ */
+  implicit class FinatraRichDurationBuilder(duration: DurationBuilder) {
+    def toTwitterDuration: TwitterDuration = {
+      TwitterDuration.fromMilliseconds(
+        duration.toDuration.getMillis)
+    }
+  }
+
+  /* ------------------------------------------------ */
   implicit class RichStringTime(string: String) {
     def toDateTime: DateTime = {
       DateTime.parse(string)
     }
   }
-
 }

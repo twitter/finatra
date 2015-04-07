@@ -28,7 +28,7 @@ case class Route(
 
   def hasEmptyCaptureNames = captureNames.isEmpty
 
-  def summary: String = method + "\t" + path
+  def summary: String = f"$method%-7s $path"
 
   def withFilter(filter: Filter[Request, Response, Request, Response]): Route = {
     this.copy(filter = filter)

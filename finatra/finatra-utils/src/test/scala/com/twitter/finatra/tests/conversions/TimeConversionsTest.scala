@@ -35,7 +35,7 @@ class TimeConversionsTest extends Test {
   }
 
   "Duration" should {
-    "be convertable to twitter duration" in {
+    "be convertible to twitter duration" in {
       val duration = 5.seconds
       val twitterDuration = duration.toTwitterDuration
       duration.millis should be(twitterDuration.inMillis)

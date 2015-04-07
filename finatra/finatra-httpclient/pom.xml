@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>finatra-httpclient</artifactId>
+  <artifactId>finatra-httpclient_2.11</artifactId>
   <version>2.0.0-SNAPSHOT</version>
   <description>A basic httpclient built on finagle</description>
 
   <parent>
     <groupId>com.twitter.finatra</groupId>
-    <artifactId>finatra</artifactId>
+    <artifactId>finatra_2.11</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -16,19 +16,19 @@
     <!-- Inject -->
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-core</artifactId>
+      <artifactId>inject-core_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <!-- Finatra -->
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-jackson</artifactId>
+      <artifactId>finatra-jackson_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-utils</artifactId>
+      <artifactId>finatra-utils_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
     </dependency>
 
@@ -41,21 +41,21 @@
     <!-- Testing -->
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-core</artifactId>
+      <artifactId>inject-core_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-app</artifactId>
+      <artifactId>inject-app_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-utils</artifactId>
+      <artifactId>finatra-utils_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>

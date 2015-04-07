@@ -24,7 +24,7 @@ object PortUtils {
   }
 
   def getSocketAddress(server: BuilderServer): SocketAddress = {
-    server.boundAddress
+    server.localAddress
   }
 
   def parseAddr(addrStr: String): InetSocketAddress = {

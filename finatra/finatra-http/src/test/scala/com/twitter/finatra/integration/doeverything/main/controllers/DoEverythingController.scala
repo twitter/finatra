@@ -348,7 +348,7 @@ class DoEverythingController @Inject()(
   }
 
   head("/head") { r: Request =>
-    response.conflict()
+    response.conflict
   }
 
   patch("/patch") { r: Request =>

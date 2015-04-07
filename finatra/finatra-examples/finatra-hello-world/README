@@ -1,5 +1,6 @@
-Run:
-mvn exec:java
+Build:
+mvn clean install
 
-Test:
+Run locally
+mvn exec:java
 curl -v http://localhost:8888/hi; echo

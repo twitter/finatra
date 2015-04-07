@@ -50,7 +50,7 @@ class EmbeddedHttpServer(
 
   override protected def logAppStartup() {
     super.logAppStartup()
-    println("ExternalHttp -> http://localhost:" + twitterServer.httpExternalPort)
+    println("ExternalHttp -> http://localhost:" + twitterServer.httpExternalPort.get)
   }
 
   lazy val httpExternalPort = twitterServer.httpExternalPort.get

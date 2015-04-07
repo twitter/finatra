@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>finatra-logback</artifactId>
+  <artifactId>finatra-logback_2.11</artifactId>
   <version>2.0.0-SNAPSHOT</version>
   <description>Logback utils and an MDC implementation on twitter.util.Local</description>
 
   <parent>
     <groupId>com.twitter.finatra</groupId>
-    <artifactId>finatra</artifactId>
+    <artifactId>finatra_2.11</artifactId>
     <version>2.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -57,32 +57,32 @@
     <!-- Testing -->
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-app</artifactId>
+      <artifactId>inject-app_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.twitter.inject</groupId>
-      <artifactId>inject-server</artifactId>
+      <artifactId>inject-server_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-http</artifactId>
+      <artifactId>finatra-http_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-http</artifactId>
+      <artifactId>finatra-http_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
     <dependency>
       <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-utils</artifactId>
+      <artifactId>finatra-utils_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
