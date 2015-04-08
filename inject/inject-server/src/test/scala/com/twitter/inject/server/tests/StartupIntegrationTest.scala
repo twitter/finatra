@@ -16,7 +16,6 @@ class StartupIntegrationTest extends Test {
       val server = new EmbeddedTwitterServer(new SimpleGuiceHttpTwitterServer)
       server.assertHealthy()
 
-      //We can no longer directly get the json, since it's now embedded in HTML
       server.httpGetAdmin(
         "/admin/server_info",
         andExpect = Status.Ok)
@@ -25,15 +24,13 @@ class StartupIntegrationTest extends Test {
     }
 
     "non HTTP twitter-server passes health check" in {
-      val server = new EmbeddedTwitterServer(
-        new SimpleGuiceTwitterServer)
-
+      val server = new EmbeddedTwitterServer(new SimpleGuiceTwitterServer)
       server.assertHealthy()
       server.close()
     }
 
     "raw TwitterServerWithPorts starts up" in {
-      val server =new EmbeddedTwitterServer(
+      val server = new EmbeddedTwitterServer(
         twitterServer = new RawTwitterServerWithPorts)
 
       server.assertHealthy()
@@ -49,52 +46,24 @@ class StartupIntegrationTest extends Test {
     }
 
     "ensure server health check fails when guice config fails fast" in {
-      val server = new EmbeddedTwitterServer(
-        twitterServer = new FailFastServer,
-        waitForWarmup = false)
-
-      server.start()
-      server.guiceApp.appStarted should equal(false)
-
-      //TODO: Remove comment once we switch to app.nonExitingMain:
-      //assertFailedFuture[StartupTestException](server.mainResult)
-      server.close()
+      intercept[Exception] {
+        new EmbeddedTwitterServer(
+          new FailFastServer).start()
+      }
     }
 
-    "ensure startup fails when guice config hangs" in {
-      val server = new EmbeddedTwitterServer(
-        twitterServer = new GuiceStartupHangsServer,
-        waitForWarmup = false)
-
-      server.start()
-      Thread.sleep(2000) //since the guice module hangs forever, we simply make sure we aren't healthy after 2 seconds...
-      server.assertHealthy(healthy = false)
-      server.close()
-    }
-
-    "ensure startup fails when simple server preMain throws exception" in {
-      val server = new EmbeddedTwitterServer(
-        twitterServer = new PremainExceptionServer,
-        waitForWarmup = false)
-
-      server.start()
-
-      //TODO: Remove comment once we switch to app.nonExitingMain:
-      //assertFailedFuture[StartupTestException](server.mainResult)
-      server.close()
+    "ensure startup fails when base twitter server preMain throws exception" in {
+      intercept[Exception] {
+        new EmbeddedTwitterServer(
+          twitterServer = new PremainErrorBaseTwitterServer).start()
+      }
     }
 
     "ensure startup fails when preMain throws exception" in {
-      val server = new EmbeddedTwitterServer(
-        twitterServer = new ServerPremainException,
-        waitForWarmup = false)
-
-      server.start()
-      server.guiceApp.appStarted should equal(false)
-
-      //TODO: Remove comment once we switch to app.nonExitingMain:
-      //assertFailedFuture[StartupTestException](server.mainResult)
-      server.close()
+      intercept[Exception] {
+        new EmbeddedTwitterServer(
+          new ServerPremainException).start()
+      }
     }
 
     "ensure http server starts after warmup" in {
@@ -128,22 +97,12 @@ class StartupIntegrationTest extends Test {
     }
 
     "calling GuiceModule.install throws exception" in {
-      val server = new EmbeddedTwitterServer(
-        twitterServer = new ServerWithGuiceModuleInstall,
-        waitForWarmup = false)
-
-      assertFailedFuture[Throwable](server.mainResult)
-      server.close()
+      intercept[Exception] {
+        new EmbeddedTwitterServer(
+          twitterServer = new ServerWithGuiceModuleInstall).start()
+      }
     }
   }
-}
-
-class GuiceStartupHangsServer extends TwitterServer {
-  override def overrideModules = Seq(new AbstractModule {
-    def configure() {
-      Thread.sleep(99999999)
-    }
-  })
 }
 
 class FailFastServer extends TwitterServer {
@@ -152,6 +111,13 @@ class FailFastServer extends TwitterServer {
       throw new StartupTestException("guice module exception")
     }
   })
+
+  //TODO: Remove override once App#nonExitingMain in opensource released
+  override protected def exitOnError(reason: String) {
+    System.err.println(reason)
+    close()
+    throw new Exception(reason)
+  }
 }
 
 class SimpleGuiceTwitterServer extends TwitterServer {
@@ -167,20 +133,29 @@ class ServerWithGuiceModuleInstall extends TwitterServer {
       install(new FooModule)
     }
   })
+
+  //TODO: Remove override once App#nonExitingMain in opensource released
+  override protected def exitOnError(reason: String) {
+    System.err.println(reason)
+    close()
+    throw new Exception(reason)
+  }
 }
 
 class FooModule extends AbstractModule {
   override def configure() {}
 }
 
-class PremainExceptionServer extends BaseTwitterServer with Ports with Warmup {
+class PremainErrorBaseTwitterServer extends BaseTwitterServer with Ports with Warmup {
   premain {
     throw new StartupTestException("premain exception")
   }
 
   /* TODO: Remove once com.twitter.app.App with nonExitingMain is opensource released */
   override protected def exitOnError(reason: String): Unit = {
-    log.warning(reason)
+    System.err.println(reason)
+    close()
+    throw new Exception(reason)
   }
 
   def main() {
@@ -192,6 +167,13 @@ class PremainExceptionServer extends BaseTwitterServer with Ports with Warmup {
 class ServerPremainException extends TwitterServer {
   premain {
     throw new StartupTestException("premain exception")
+  }
+
+  //TODO: Remove override once App#nonExitingMain in opensource released
+  override protected def exitOnError(reason: String) {
+    System.err.println(reason)
+    close()
+    throw new Exception(reason)
   }
 }
 

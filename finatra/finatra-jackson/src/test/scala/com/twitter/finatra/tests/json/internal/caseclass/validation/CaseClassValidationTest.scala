@@ -12,6 +12,8 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class CaseClassValidationTest extends JsonTest {
 
+  val now = DateTime.now
+
   val mapper = FinatraObjectMapper.create()
   val prototypeCar = Car(
     id = 1,
@@ -20,7 +22,11 @@ class CaseClassValidationTest extends JsonTest {
     year = 2000,
     owners = Seq(),
     numDoors = 2,
-    manual = true)
+    manual = true,
+    ownershipStart = now,
+    ownershipEnd = now.plusMinutes(1),
+    warrantyStart = Some(now),
+    warrantyEnd = Some(now.plusHours(1)))
 
   "class and field level validations" should {
     "top-level failed validations" in {

@@ -6,8 +6,6 @@ import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScope
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.openjdk.jmh.annotations._
-import org.openjdk.jmh.runner.Runner
-import org.openjdk.jmh.runner.options.{OptionsBuilder, TimeValue}
 
 @State(Scope.Thread)
 class FinagleRequestScopeBenchmark {
@@ -38,22 +36,7 @@ class FinagleRequestScopeBenchmark {
       routingContoller
 
   @Benchmark
-  def testRequestScope() = {
+  def timeServiceWithRequestScopeFilter() = {
     filtersAndService.apply(getRequest)
-  }
-}
-
-object FinagleRequestScopeBenchmarkMain {
-  def main(args: Array[String]) {
-    new Runner(new OptionsBuilder()
-      .include(".*FinagleRequestScopeBenchmark.*")
-      .warmupIterations(5)
-      .warmupTime(TimeValue.seconds(5))
-      .measurementIterations(5)
-      .measurementTime(TimeValue.seconds(5))
-      .forks(1)
-      //.addProfiler(classOf[StackProfiler])
-      //.jvmArgsAppend("-Djmh.stack.period=1")
-      .build()).run()
   }
 }

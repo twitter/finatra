@@ -213,6 +213,25 @@ class DoEverythingServerFeatureTest extends Test {
       response.location should equal(Some("/foo/1"))
     }
 
+    "post user with injected group_id from route param" in {
+      server.httpPost(
+        "/groups/123/users",
+        postBody =
+          """
+          {
+            "name" : "Bob"
+          }
+          """",
+        andExpect = Created,
+        withJsonBody =
+          """
+            {
+              "group_id":123,
+              "name":"Bob"
+            }
+          """)
+    }
+
     "null" in {
       pending
       server.httpGet(
@@ -510,7 +529,7 @@ class DoEverythingServerFeatureTest extends Test {
         withErrors = Seq("name cannot be foo"))
     }
 
-     "POST json user with invalid field validation" in {
+    "POST json user with invalid field validation" in {
       server.httpPost(
         "/userWithInvalidFieldValidation",
         """
@@ -686,33 +705,36 @@ class DoEverythingServerFeatureTest extends Test {
     server.httpGet(
       "/HttpExceptionErrors",
       andExpect = Created,
-      withJsonBody = """
-      {
-        "errors" : [ "foo1", "foo2" ]
-      }
-      """)
+      withJsonBody =
+        """
+        {
+          "errors" : [ "foo1", "foo2" ]
+        }
+        """)
   }
 
   "NotFoundException" in {
     server.httpGet(
       "/NotFoundException",
       andExpect = NotFound,
-      withJsonBody = """
-      {
-        "errors" : [ "foo1" ]
-      }
-      """)
+      withJsonBody =
+        """
+        {
+          "errors" : [ "foo1" ]
+        }
+        """)
   }
 
   "ConflictException" in {
     server.httpGet(
       "/ConflictException",
       andExpect = Conflict,
-      withJsonBody = """
-      {
-        "errors" : [ "foo1" ]
-      }
-      """)
+      withJsonBody =
+        """
+        {
+          "errors" : [ "foo1" ]
+        }
+        """)
   }
 
   "InternalServerErrorExceptionPlain" in {
@@ -726,22 +748,24 @@ class DoEverythingServerFeatureTest extends Test {
     server.httpGet(
       "/NotAcceptableException",
       andExpect = NotAcceptable,
-      withJsonBody = """
-      {
-        "errors" : [ "foo1" ]
-      }
-      """)
+      withJsonBody =
+        """
+        {
+          "errors" : [ "foo1" ]
+        }
+        """)
   }
 
   "Unserializable class field" in {
     server.httpGet(
       "/UnserializableClassField",
       andExpect = InternalServerError,
-      withJsonBody = """
-      {
-        "errors" : [ "internal server error" ]
-      }
-      """)
+      withJsonBody =
+        """
+        {
+          "errors" : [ "internal server error" ]
+        }
+        """)
   }
 
   "FooException" in {

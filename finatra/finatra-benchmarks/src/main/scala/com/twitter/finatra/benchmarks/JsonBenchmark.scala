@@ -2,15 +2,13 @@ package com.twitter.finatra.benchmarks
 
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.twitter.finatra.benchmarks.domain.TestImpressionTaskRequest
+import com.twitter.finatra.benchmarks.domain.{TestDemographic, TestFormat}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import java.io.ByteArrayInputStream
+import org.joda.time.DateTime
 import org.openjdk.jmh.annotations._
-import org.openjdk.jmh.profile.StackProfiler
-import org.openjdk.jmh.runner.Runner
-import org.openjdk.jmh.runner.options.{OptionsBuilder, TimeValue}
 
 @State(Scope.Thread)
 class JsonBenchmark {
@@ -57,37 +55,29 @@ class JsonBenchmark {
   @Benchmark
   def finatraCustomCaseClassDeserializer() = {
     val is = new ByteArrayInputStream(bytes)
-    finatraObjectMapper.parse[TestImpressionTaskRequest](is)
+    finatraObjectMapper.parse[TestTask](is)
   }
 
   @Benchmark
   def jacksonScalaModuleCaseClassDeserializer() = {
     val is = new ByteArrayInputStream(bytes)
-    jacksonScalaModuleObjectMapper.parse[TestImpressionTaskRequest](is)
+    jacksonScalaModuleObjectMapper.parse[TestTask](is)
   }
 }
 
-object JsonBenchmarkMain {
-  def main(args: Array[String]) {
-    new Runner(new OptionsBuilder()
-      .include(".*JsonBenchmark.*")
-      .warmupIterations(10)
-      .warmupTime(TimeValue.seconds(1))
-      .measurementIterations(10)
-      .measurementTime(TimeValue.seconds(2))
-      .forks(1)
-      .addProfiler(classOf[StackProfiler])
-      .jvmArgsAppend("-Djmh.stack.period=1")
-      .build()).run()
-  }
-}
+case class TestTask(
+  request_id: String,
+  group_ids: Seq[String],
+  params: TestTaskParams)
 
-object JsonBenchmarkProfilingMain {
-  def main(args: Array[String]) {
-    val jsonBenchmark = new JsonBenchmark()
-    println("Starting")
-    while (true) {
-      jsonBenchmark.finatraCustomCaseClassDeserializer()
-    }
-  }
-}
+case class TestTaskParams(
+  results: TaskTaskResults,
+  start_time: DateTime,
+  end_time: DateTime,
+  priority: String)
+
+case class TaskTaskResults(
+  country_codes: Seq[String],
+  group_by: Seq[String],
+  format: Option[TestFormat],
+  demographics: Seq[TestDemographic])

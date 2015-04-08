@@ -1,7 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.domain
 
 import com.twitter.finatra.tests.json.internal.CarMake
-import com.twitter.finatra.validation.{MethodValidation, Min, ValidationResult}
+import com.twitter.finatra.validation.{CommonMethodValidations, MethodValidation, Min, ValidationResult}
+import org.joda.time.DateTime
 
 case class Car(
   id: Long,
@@ -10,7 +11,11 @@ case class Car(
   @Min(2000) year: Int,
   owners: Seq[Person],
   @Min(0) numDoors: Int,
-  manual: Boolean) {
+  manual: Boolean,
+  ownershipStart: DateTime,
+  ownershipEnd: DateTime,
+  warrantyStart: Option[DateTime],
+  warrantyEnd: Option[DateTime]) {
 
   @MethodValidation
   def validateId = {
@@ -19,4 +24,21 @@ case class Car(
       "id may not be even")
   }
 
+  @MethodValidation
+  def ownershipTimesValid = {
+    CommonMethodValidations.validateTimeRange(
+      ownershipStart,
+      ownershipEnd,
+      "ownershipStart",
+      "ownershipEnd")
+  }
+
+  @MethodValidation
+  def warrantyTimeValid = {
+    CommonMethodValidations.validateTimeRange(
+      warrantyStart,
+      warrantyEnd,
+      "warrantyStart",
+      "warrantyEnd")
+  }
 }

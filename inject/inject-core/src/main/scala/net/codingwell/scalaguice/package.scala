@@ -16,6 +16,9 @@
 // Modified to remove 2.10 deprecations
 package net.codingwell
 
+import com.google.inject.util.Types
+import scala.reflect.ClassTag
+
 package object scalaguice {
 
     import com.google.inject._
@@ -68,5 +71,4 @@ package object scalaguice {
     def annotation[T <: JAnnotation : Manifest]: AnnotationClass[T] = {
         manifest[T].runtimeClass.asInstanceOf[AnnotationClass[T]]
     }
-
 }

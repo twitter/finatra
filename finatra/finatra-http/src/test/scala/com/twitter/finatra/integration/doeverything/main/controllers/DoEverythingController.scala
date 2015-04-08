@@ -87,6 +87,10 @@ class DoEverythingController @Inject()(
         TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
+  post("/groups/:group_id/users") { user: TestUserWithGroupIdFromRoute =>
+    response.created(user)
+  }
+
   get("/example/routing/flaky") { request: Request =>
     val num = flakyCount.incrementAndGet()
     if (num == 1)

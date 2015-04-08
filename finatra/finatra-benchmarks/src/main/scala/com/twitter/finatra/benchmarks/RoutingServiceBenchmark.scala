@@ -27,7 +27,7 @@ class RoutingServiceBenchmark {
   val getRequest = Request("/groups/")
 
   @Benchmark
-  def testRoutingController1() = {
+  def testRoutingController() = {
     routingService.apply(getRequest)
   }
 }

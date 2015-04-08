@@ -35,6 +35,13 @@
     </dependency>
     <dependency>
       <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-app_${scala.artifact.version}</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.twitter.inject</groupId>
       <artifactId>inject-modules_${scala.artifact.version}</artifactId>
       <version>${project.version}</version>
       <type>test-jar</type>
