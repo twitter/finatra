@@ -3,7 +3,6 @@ package com.twitter.inject.app
 import com.google.inject.Stage
 import com.twitter.inject.Logging
 import com.twitter.inject.app.Banner.banner
-import com.twitter.inject.app.{App => TwitterApp}
 import com.twitter.util._
 import org.scalatest.Matchers
 
@@ -142,10 +141,11 @@ class EmbeddedApp(
     }
   }
 
+  //TODO: Remove method once App#nonExitingMain is opensource released
   private def callMain(allArgs: Array[String]): Unit = {
     try {
-      val nonExitingMain = app.getClass.getMethod("nonExitingMain")
-      nonExitingMain.invoke(allArgs)
+      val nonExitingMain = app.getClass.getMethod("nonExitingMain", classOf[Array[String]])
+      nonExitingMain.invoke(app, allArgs)
     }
     catch {
       case e: NoSuchMethodException =>

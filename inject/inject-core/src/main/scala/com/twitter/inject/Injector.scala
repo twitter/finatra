@@ -5,6 +5,7 @@ import com.google.inject.{Injector => GuiceInjector, Key}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import net.codingwell.scalaguice.KeyExtensions._
 import net.codingwell.scalaguice._
+import scala.reflect.ClassTag
 
 case class Injector(
   underlying: GuiceInjector) {

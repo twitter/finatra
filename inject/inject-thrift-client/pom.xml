@@ -21,6 +21,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-app_${scala.artifact.version}</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
       <groupId>com.twitter</groupId>
       <artifactId>finagle-thrift_${scala.artifact.version}</artifactId>
     </dependency>
@@ -45,5 +50,35 @@
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.twitter.inject</groupId>
+      <artifactId>inject-app_${scala.artifact.version}</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.twitter</groupId>
+        <artifactId>scrooge-maven-plugin</artifactId>
+        <configuration>
+          <thriftOpts>
+            <thriftOpt>--finagle</thriftOpt>
+          </thriftOpts>
+        </configuration>
+        <executions>
+          <execution>
+            <id>thrift-test-sources</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
