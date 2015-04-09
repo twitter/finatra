@@ -18,7 +18,7 @@ trait TwitterServer
   with Warmup
   with Logging {
 
-  addDefaultModule(statsModule)
+  addFrameworkModule(statsModule)
 
   /* Protected */
 

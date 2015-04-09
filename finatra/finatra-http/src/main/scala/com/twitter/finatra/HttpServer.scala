@@ -11,13 +11,14 @@ import com.twitter.finatra.utils.Handler
 
 trait HttpServer extends BaseHttpServer {
 
-  addDefaultModule(accessLogModule)
-  addDefaultModule(mustacheModule)
-  addDefaultModule(messageBodyModule)
-  addDefaultModule(exceptionMapperModule)
-  addDefaultModule(jacksonModule)
-  addDefaultModule(callbackModule)
-  addDefaultModule(LocalDocRootFlagModule)
+  addFrameworkModules(
+    mustacheModule,
+    messageBodyModule,
+    exceptionMapperModule,
+    jacksonModule,
+    callbackModule,
+    LocalDocRootFlagModule,
+    accessLogModule)
 
   /* Abstract */
 
