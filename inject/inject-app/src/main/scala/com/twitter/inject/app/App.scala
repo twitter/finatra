@@ -7,7 +7,6 @@ import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
 import com.twitter.inject.{Injector, InjectorModule, Logging}
 import scala.collection.mutable.ArrayBuffer
 
-
 trait App extends TwitterUtilApp with Logging {
 
   private[inject] lazy val requiredModules = modules ++ frameworkModules
@@ -81,18 +80,21 @@ trait App extends TwitterUtilApp with Logging {
   /** Override Guice modules which redefine production bindings (Note: Only override during testing) */
   protected def overrideModules: Seq[Module] = Seq()
 
-  protected def addFrameworkModules(modules: Module*) {
-    frameworkModules ++= modules
-  }
-
   /**
    * Default modules can be overridden in production by overriding methods in your App or Server
    * We take special care to make sure the module is not null, since a common bug
    * is overriding the default methods using a val instead of a def
    */
-  protected def addDefaultModule(module: Module) {
-    assert(module != null, "Default modules must be overridden with a 'def' instead of a 'val'")
+  protected def addFrameworkModule(module: Module) {
+    assert(
+      module != null,
+      "Module cannot be null. If you are overriding a default module, " +
+      "override it with 'def' instead of 'val'")
     frameworkModules += module
+  }
+
+  protected def addFrameworkModules(modules: Module*) {
+    modules foreach addFrameworkModule
   }
 
   protected[inject] def addFrameworkOverrideModules(modules: Module*) {
