@@ -11,7 +11,7 @@ object StatsFilterModule extends TwitterModule {
 
   @Provides
   @Singleton
-  def providesStatsFilter(statsReceiver: StatsReceiver): StatsFilter[Request] = {
+  def provideStatsFilter(statsReceiver: StatsReceiver): StatsFilter[Request] = {
     new StatsFilter[Request](statsReceiver)
   }
 }

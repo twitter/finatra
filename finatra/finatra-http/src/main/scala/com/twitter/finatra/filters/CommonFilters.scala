@@ -1,11 +1,12 @@
 package com.twitter.finatra.filters
 
+import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.filter.StatsFilter
 import javax.inject.Inject
 
-// TODO: replace ExceptionBarrierFilter (which is deprecated)
-// with ExceptionMappingFilter and (finagle-http) StatsFilter
 class CommonFilters @Inject()(
   a: AccessLoggingFilter,
   b: HttpResponseFilter,
-  c: ExceptionBarrierFilter)
-  extends MergedFilter(a, b, c)
+  c: StatsFilter[Request],
+  d: ExceptionMappingFilter)
+  extends MergedFilter(a, b, c, d)
