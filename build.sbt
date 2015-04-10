@@ -24,7 +24,7 @@ lazy val compilerOptions = scalacOptions ++= Seq(
     case Some((2, 11)) => Seq("-Ywarn-unused-import")
     case _ => Seq.empty
   }
-  )
+)
 
 val baseSettings = Seq(
   libraryDependencies ++= Seq(
@@ -43,6 +43,8 @@ val baseSettings = Seq(
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact := true,
+  publishArtifact in Test := false,
+  pomIncludeRepository := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -50,7 +52,6 @@ lazy val publishSettings = Seq(
     else
       Some("releases" at nexus + "service/local/staging/deploy/maven2")
   },
-  publishArtifact in Test := false,
   licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
@@ -91,11 +92,11 @@ lazy val versions = new {
   val util = "6.23.0"
 }
 
-lazy val injectBuildSettings = baseSettings ++ buildSettings ++ Seq(
+lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
   organization := "com.twitter.inject"
 )
 
-lazy val finatraBuildSettings = baseSettings ++ buildSettings ++ Seq(
+lazy val finatraBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
   organization := "com.twitter.finatra"
 )
 
