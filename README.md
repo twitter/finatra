@@ -8,7 +8,7 @@ Current version: `2.0.0.M1`
 
 ## Documentation and Getting Started
 
-* [**Getting Started**](https://github.com/twitter/finatra/finatra/README.md)
+* [**Getting Started**](https://github.com/twitter/finatrav2/blob/master/finatra/README.md)
 * [Finatra Scaladocs](http://twitter.github.com/finatra) provide details beyond the API References. Prefer using this as it's always up to date.
 
 We use [Travis CI](http://travis-ci.org/) to verify the build:

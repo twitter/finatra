@@ -574,7 +574,7 @@ class MyController @Inject()(
 
 ## Best Practices
 * The server's injector is available as a protected method in `HttpServer`, but it's use should be avoided except for calling *warmup* classes, and for extending the Finatra framework.
-* Avoid `@Named` annotations in favor of specific [Binding Annotations](https://github.com/google/guice/wiki/BindingAnnotations). If building with Maven, simply place your Java annotations in src/main/java for cross-compilation with your Scala code.
+* Avoid `@Named` annotations in favor of specific [Binding Annotations](https://github.com/google/guice/wiki/BindingAnnotations). If building with Maven or sbt, simply place your Java annotations in src/main/java for cross-compilation with your Scala code.
 
 Finatra Without Guice
 ===============================
@@ -886,48 +886,6 @@ See [logback.xml](https://github.com/twitter/finatrav2/tree/master/finatra/finat
 
 ### [MDC](http://logback.qos.ch/manual/mdc.html) Filters
 Place the [LoggingMDCFilter](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-logback/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
-
-
-Maven POMs
-===============================
-If building with Maven, we have reusable parent poms for use:
-```xml
-<?xml version="1.0"?>
-<project>
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.mygroup</groupId>
-  <artifactId>myserver</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
-
-  <parent>
-    <groupId>com.twitter.finatra</groupId>
-    <artifactId>finatra-http-service-parent</artifactId>
-    <version>2.0.0</version>
-    <relativePath></relativePath>
-  </parent>
-
-  <properties>
-    <mainClass>com.mygroup.MyServerMain</mainClass>
-  </properties>
-</project>
-```
-
-To run the service locally:
-```
-mvn exec:java
-```
-
-To build a zip distribution:
-```
-mvn package
-```
-
-To run the zip distribution on your server:
-```
-unzip myservice.zip
-cd myservice
-java -jar myservice.jar
-```
 
 Finatra Best Practices
 ===============================
