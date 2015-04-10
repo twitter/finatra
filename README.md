@@ -1,6 +1,6 @@
 # Finatra
 
-Finatra is a scala service framework built on [`twitter-server`](https://github.com/twitter/twitter-server) and [`finagle`](https://github.com/twitter/finagle).
+The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) powered by [`twitter-server`](https://github.com/twitter/twitter-server) and [`finagle`](https://github.com/twitter/finagle).
 
 ![Finatra Logo](finatra_logo.jpg)
 
