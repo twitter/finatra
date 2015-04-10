@@ -1,21 +1,18 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation
 
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonFieldParseException, JsonObjectParseException}
-import com.twitter.finatra.tests.JsonTest
+import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonMethodValidationException, JsonFieldParseException, JsonObjectParseException}
 import com.twitter.finatra.tests.json.internal.CarMake
 import com.twitter.finatra.tests.json.internal.caseclass.validation.domain.{Address, Car, Person}
+import com.twitter.inject.Test
 import org.joda.time.DateTime
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 
-@RunWith(classOf[JUnitRunner])
-class CaseClassValidationTest extends JsonTest {
+class CaseClassValidationTest extends Test {
 
-  val now = DateTime.now
+  val now = new DateTime("2015-04-09T05:17:15Z")
 
   val mapper = FinatraObjectMapper.create()
-  val prototypeCar = Car(
+  val baseCar = Car(
     id = 1,
     make = CarMake.Ford,
     model = "Model-T",
@@ -29,12 +26,13 @@ class CaseClassValidationTest extends JsonTest {
     warrantyEnd = Some(now.plusHours(1)))
 
   "class and field level validations" should {
-    "top-level failed validations" in {
-      val car = prototypeCar.copy(id = 2, year = 1910)
+    "success" in {
+      parseCar(baseCar)
+    }
 
+    "top-level failed validations" in {
       val parseError = intercept[JsonObjectParseException] {
-        mapper.parse[Car](
-          mapper.writeValueAsBytes(car))
+        parseCar(baseCar.copy(id = 2, year = 1910))
       }
 
       parseError should equal(JsonObjectParseException(
@@ -51,11 +49,10 @@ class CaseClassValidationTest extends JsonTest {
             city = "", // invalid
             state = "FL")))
       )
-      val car = prototypeCar.copy(owners = owners)
+      val car = baseCar.copy(owners = owners)
 
       val parseError = intercept[JsonObjectParseException] {
-        mapper.parse[Car](
-          mapper.writeValueAsBytes(car))
+        parseCar(car)
       }
 
       parseError should equal(JsonObjectParseException(
@@ -63,5 +60,30 @@ class CaseClassValidationTest extends JsonTest {
           JsonFieldParseException("owners.address.street cannot be empty"),
           JsonFieldParseException("owners.address.city cannot be empty"))))
     }
+
+    "end before start" in {
+      intercept[JsonObjectParseException] {
+        parseCar(baseCar.copy(
+          ownershipStart = baseCar.ownershipEnd,
+          ownershipEnd = baseCar.ownershipStart))
+      } should equal(
+        JsonObjectParseException(methodValidationErrors = Seq(
+          JsonMethodValidationException("ownershipEnd [2015-04-09T05:17:15.000Z] must be after ownershipStart [2015-04-09T05:18:15.000Z]"))))
+    }
+
+    "optional end before start" in {
+      intercept[JsonObjectParseException] {
+        parseCar(baseCar.copy(
+          warrantyStart = baseCar.warrantyEnd,
+          warrantyEnd = baseCar.warrantyStart))
+      } should equal(
+        JsonObjectParseException(methodValidationErrors = Seq(
+          JsonMethodValidationException("warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]"))))
+    }
+  }
+
+  private def parseCar(car: Car): Car = {
+    mapper.parse[Car](
+      mapper.writeValueAsBytes(car))
   }
 }

@@ -13,7 +13,7 @@ Features
 * Powerful feature and integration test support
 * JSR-330 Dependency Injection using [Google Guice][guice]
 * [Jackson][jackson] based JSON parsing with additional support for required fields, default values, and custom validations
-* [Logback][logback] [MDC][mdc] integration with [util-core][util-core] [Local][local] for contextual logging across futures
+* [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across futures
 
 ## Libraries
 
@@ -43,7 +43,9 @@ Inject provides libraries for integration [`twitter-server`][twitter-server] and
 
 Quick Start
 -----------------------------------------------------------
-To get started we'll focus on building an HTTP API for a simple "Todo" list application. 
+To get started we'll focus on building an HTTP API for a simple "Todo" list application which will support adding tasks to a todo list.
+The full example can be found [here][todo-example].
+
 
 First, we define our `TaskRequest` domain object:
 
@@ -57,7 +59,7 @@ case class TaskRequest(
   @Size(min = 10, max = 140) description: String)
 ```
 
-Then, assuming we already have a `TaskRepository` to store tasks, let's create a [`Controller`][Controller]:
+Then, assuming we already have a `TaskRepository` (configured with a `TaskRepositoryModule`) to store tasks, let's create a [`Controller`][Controller]:
 
 ### Controller
 
@@ -152,8 +154,6 @@ class TodoFeatureTest extends FeatureTest {
 }
 ```
 
-A more complete example can be found [here][todo-example].
-
 ## Authors:
 * Steve Cosenza <https://github.com/scosenza>
 * Christopher Coco <https://github.com/cacoco>
@@ -173,7 +173,7 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [twitter-server]: https://github.com/twitter/twitter-server
 [finagle]: https://github.com/twitter/finagle
 [util-app]: https://github.com/twitter/util/tree/master/util-app
-[util-core]: https://github.com/twitter/util/tree/master/util-core
+[util-core]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala#L90
 [guice]: https://github.com/google/guice
 [jackson]: https://github.com/FasterXML/jackson
 [logback]: http://logback.qos.ch/

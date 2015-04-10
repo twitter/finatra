@@ -10,11 +10,8 @@ import com.twitter.finatra.tests.json.internal._
 import com.twitter.inject.Logging
 import java.io.ByteArrayInputStream
 import org.joda.time.{DateTime, DateTimeZone}
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import org.scalatest.{FeatureSpec, Matchers}
+import org.scalatest.{Matchers, FeatureSpec}
 
-@RunWith(classOf[JUnitRunner])
 class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   DateTimeZone.setDefault(DateTimeZone.UTC)

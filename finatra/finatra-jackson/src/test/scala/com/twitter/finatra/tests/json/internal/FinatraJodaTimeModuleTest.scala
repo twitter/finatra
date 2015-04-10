@@ -3,10 +3,10 @@ package com.twitter.finatra.tests.json.internal
 import com.fasterxml.jackson.databind.{ObjectMapper, SerializationFeature}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
-import com.twitter.finatra.tests.JsonTest
+import com.twitter.inject.Test
 import org.joda.time.{DateTime, DateTimeZone}
 
-class FinatraJodaTimeModuleTest extends JsonTest {
+class FinatraJodaTimeModuleTest extends Test {
 
   val nowUtc = DateTime.now.withZone(DateTimeZone.UTC)
 

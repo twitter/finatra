@@ -4,15 +4,10 @@ import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField._
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser._
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
+import com.twitter.inject.Test
 import java.lang.annotation.Annotation
-import org.joda.time.DateTimeZone
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-import org.scalatest.{Matchers, WordSpec}
 
-@RunWith(classOf[JUnitRunner])
-class ValidatorTest extends WordSpec with Matchers {
-  DateTimeZone.setDefault(DateTimeZone.UTC)
+class ValidatorTest extends Test {
 
   val messageResolver = new ValidationMessageResolver
   val validationManager = new ValidationManager(messageResolver)

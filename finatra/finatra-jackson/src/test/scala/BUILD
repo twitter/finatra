@@ -23,6 +23,7 @@ scala_library(name="test-deps",
   dependencies=[
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
+    'finatra/inject/inject-core:test-deps',
     'finatra/finatra/finatra-jackson/src/main/scala',
   ],
   sources=globs(
