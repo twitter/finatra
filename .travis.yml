@@ -13,4 +13,7 @@ before_script:
   - unset SBT_OPTS
 
 script:
-  - ./sbt clean test
+  - ./sbt clean coverage test &&
+    ./sbt coverageAggregate
+after_success:
+  - ./sbt coveralls

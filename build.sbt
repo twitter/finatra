@@ -4,7 +4,7 @@ import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages
 
 
 lazy val buildSettings = Seq(
-  version := "2.0.0-SNAPSHOT",
+  version := "2.0.0.rc1",
   scalaVersion := "2.11.6",
   crossScalaVersions := Seq("2.10.5", "2.11.6")
 )
@@ -43,7 +43,9 @@ val baseSettings = Seq(
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact := true,
-  publishArtifact in Test := false,
+  publishArtifact in Test := true,
+  publishArtifact in (Compile, packageDoc) := false,
+  publishArtifact in (Test, packageDoc) := false,
   pomIncludeRepository := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -320,6 +322,7 @@ lazy val finatraLogback = project
  */
 lazy val finatraBenchmarks = project
   .in(file("finatra/finatra-benchmarks"))
+  .settings(moduleName := "finatra-benchmarks")
   .settings(finatraBuildSettings ++ jmhSettings)
   .settings(
     publishLocal := {},
@@ -332,10 +335,9 @@ lazy val finatraBenchmarks = project
  */
 lazy val finatraHelloWorld = project
   .in(file("finatra/finatra-examples/finatra-hello-world"))
+  .settings(moduleName := "finatra-hello-world")
   .settings(finatraBuildSettings)
   .settings(
-    publishLocal := {},
-    publish := {},
     assemblyMergeStrategy in assembly := {
       case "BUILD" => MergeStrategy.discard
       case other => MergeStrategy.defaultMergeStrategy(other)
