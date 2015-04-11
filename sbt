@@ -4,10 +4,10 @@ sbtver=0.13.8
 sbtjar=sbt-launch.jar
 sbtsha128=57d0f04f4b48b11ef7e764f4cea58dee4e806ffd
 
-sbtrepo=${1-http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$sbtver/$sbtjar}
+sbtrepo=${1-"http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$sbtver/$sbtjar"}
 
 if [ ! -f $sbtjar ]; then
-  echo "downloading $sbtjar" 1>&2
+  echo "downloading $sbtjar from $sbtrepo" 1>&2
   if ! curl --silent --fail --remote-name $sbtrepo > $sbtjar; then
     exit 1
   fi
