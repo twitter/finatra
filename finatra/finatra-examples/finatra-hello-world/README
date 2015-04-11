@@ -1,6 +1,4 @@
-Build:
-mvn clean install
+./sbt "project finatraHelloWorld" assembly
+java -jar finatra/finatra-examples/finatra-hello-world/target/scala-2.11/finatraHelloWorld-assembly-2.0.0-SNAPSHOT.jar
 
-Run locally
-mvn exec:java
-curl -v http://localhost:8888/hi; echo
+Browse to http://localhost:8888/hi?name=foo

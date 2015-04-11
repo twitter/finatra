@@ -425,4 +425,8 @@ class DoEverythingController @Inject()(
   get("/NoSuchMethodException") { r: Request =>
     throw new NoSuchMethodException
   }
+
+  get("/users") { r: UsersRequest =>
+    r
+  }
 }

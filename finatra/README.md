@@ -1,71 +1,23 @@
+Finatra HTTP Overview
+==========================================================
+The scala HTTP framework inspired by [Sinatra][sinatra] powered by [`twitter-server`][twitter-server]
+
 Quick Start
 -----------------------------------------------------------
-To get started we'll focus only on an HTTP service.
-
-First, we define a `Controller` and add it to a Finatra `HttpServer`:
-
-
-### Controller
-```scala
-import com.twitter.finagle.http.Request
-import com.twitter.finatra.Controller
-
-class HelloWorldController extends Controller {
-  get("/hi") { request: Request =>
-    "Hello " + request.params("name")
-  }
-}
-```
-
-### Server
-```scala
-import com.twitter.finatra.HttpServer
-import com.twitter.finatra.filters.CommonFilters
-import com.twitter.finatra.routing.HttpRouter
-
-object HelloWorldServerMain extends HelloWorldServer
-
-class HelloWorldServer extends HttpServer {
-  override val name = "hello-world"
-
-  override def configureHttp(router: HttpRouter) {
-    router.
-      add[HelloWorldController]
-  }
-}
-```
-
-We then can write a [Feature Test](https://wiki.documentfoundation.org/QA/Testing/Feature_Tests) to test the features of our server:
-
-### Feature Test
-```scala
-import com.twitter.finagle.http.Status._
-import com.twitter.finatra.test.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
-
-class HelloWorldFeatureTest extends FeatureTest {
-  override val server = new EmbeddedHttpServer(new HelloWorldServer)
-
-  "Server" should {
-    "Say hi" in {
-      server.httpGet(
-        path = "/hi?name=Bob",
-        andExpect = Ok,
-        withBody = "Hello Bob")
-    }
-  }
-}
-```
+* Depend on finatra-http_2.11 or finatra-http_2.10 library
+* We also recommed depending on finatra-logback_2.1x to choose logback as your slf4j implementation
+* See [finatra-hello-world](finatra/finatra-examples/finatra-hello-world) example
+* See also [todo list example][quick-start]
 
 Controllers and Routing
 ======================================================
-Routes are defined inside a Controller and are comprised of:
+Routes are defined inside a [Controller][controller] and are comprised of: 
 
 - an [HTTP method](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
 - a matching pattern
-- and a callback function.
+- and a callback function. 
 
-When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller. All [HTTP verbs](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) are supported.
+When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller.
 
 The following route will return "hi" when an HTTP GET of / is received.
 ```scala
@@ -91,7 +43,7 @@ get("/users/:id") { request: Request =>
 
 ### Wildcard Parameter
 
-Routes can also contain the wildcard pattern. The wildcard can only appear once at the end of a pattern, and it will capture all text in its place. For example
+Routes can also contain the wildcard pattern. The wildcard can only appear once at the end of a pattern, and it will capture all text in its place. For example 
 ```scala
 get("/files/:*") { request: Request =>
   request.params("*")
@@ -133,7 +85,7 @@ Custom requests allow declarative request parsing with support for type conversi
 
 For example suppose you wanted to parse a GET request with three query params -- `max`, `startDate`, and `verbose`:
 ```
-http://foo.com/users?max=10&startDate=2014-05-30TZ&verbose=true
+http://foo.com/users?max=10&start_date=2014-05-30TZ&verbose=true
 ```
 
 This can be parsed with the following `case class`:
@@ -147,18 +99,18 @@ case class UsersRequest(
 The custom `UsersRequest` is then used as the callbacks input type:
 ```scala
 get("/users") { request: UsersRequest =>
-	request
+  request
 }
 ```
 
 The following integration test shows how this endpoint will now respond.
 ```scala
 server.httpGet(
-  path = "/users?startDate=2013&max=10&verbose=true",
+  path = "/users?start_date=2013&max=10&verbose=true",
   andExpect = Ok,
   withJsonBody = """
   {
-    "start_date": "2014-05-30T00:00:00.000Z",
+    "start_date": "2013-01-01T00:00:00.000Z",
     "max": 10,
     "verbose": true
   }
@@ -190,8 +142,8 @@ server.httpGet(
   withJsonBody = """
   {
     "errors": [
-      "max query param is required",
-      "verbose value of 5 is not allowed"
+      "max is a required field",
+      "verbose's value '5' is not a valid boolean"]
     ]
   }
   """)
@@ -199,9 +151,9 @@ server.httpGet(
 
 Notes:
 
-* The `case class` field names must match the request parameter names. However, a [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in `FinatraJacksonModule`).
+* The `case class` field names must match the request parameter names. However, a [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`][finatra-jackson-module]).
 
-* Non optional fields without default values are required. If required fields are missing, a JsonObjectParseException is thrown. Normally, the ExceptionBarrierFilter (included in CommonFilters) turns this exception into a HTTP 400 BadRequest with a JSON errors array (however this behavior can be customized)
+* Non optional fields without default values are required. If required fields are missing, a JsonObjectParseException is thrown. Normally, the default ExceptionMapper (included in ExceptionMapperModule) turns this exception into a HTTP 400 BadRequest with a JSON errors array (however this behavior can be customized)
 
 * The following field annotations specify where to parse the field out of the request
   * Request Fields
@@ -213,7 +165,7 @@ Notes:
  * Other
      * `@RequestInject`: Injects the Finagle Http Request
 
-*Note: HTTP requests with a content-type of application/json, are similarly parsed without the use of "Request Field" annotations. See [JSON](#json) section below.*
+*Note: HTTP requests with a content-type of application/json, are similarly parsed (but "Request Field" annotations are ignored). See [JSON](#json) section below.*
 
 ## Responses
 
@@ -262,19 +214,20 @@ post("/users") { request: FormPostRequest =>
 ```
 
 ### Response Exceptions
-Exceptions can be thrown which will get converted into HTTP responses.
+Responses can be embedded inside exceptions with .toException. You can throw the exception to terminate control flow, or wrap it inside a Future.exception to return a failed Future. However, instead of directly returning error responses in this manner, a better convention is to handle application-specific exceptions in an ExceptionMapper.
 
 ```scala
 get("/NotFound") { request: Request =>
-  throw NotFoundException("abc not found")
+  response.notFound("abc not found").toFutureException
 }
 
 get("/ServerError") { request: Request =>
-  throw InternalServerErrorException()
+  response.internalServerError.toFutureException
 }
 
 get("/ServiceUnavailable") { request: Request =>
-  throw ServiceUnavailableException()
+  // can throw a raw exception too
+  throw response.serviceUnavailable.toException
 }
 ```
 
@@ -290,9 +243,9 @@ post("/users") { request: Request =>
 ```
 
  which can be used:
-
-   * if the URI starts with "http" or "/" then the URI is placed in the Location header unchanged.
-   * `response.location("123")` will get turned into the correct full URL in the [HttpResponseFilter](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-http/src/main/scala/com/twitter/finatra/filters/HttpResponseFilter.scala) (e.g. `http://host.com/users/123`)
+   
+   * if the URI starts with "http" or "/" then the URI is placed in the Location header unchanged. 
+   * `response.location("123")` will get turned into the correct full URL in the [HttpResponseFilter](finatra/finatra/finatra-http/src/main/scala/com/twitter/finatra/filters/HttpResponseFilter.scala) (e.g. `http://host.com/users/123`)
 
 Or to obtain the request full path URL as follows:
 	```
@@ -308,7 +261,7 @@ class Server extends HttpServer {
 }
 ```
 
-See [CallbackConverterModule](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-http/src/main/scala/com/twitter/finatra/modules/CallbackConverterModule.scala) for details.
+See [CallbackConverterModule][CallbackConverterModule] for details.
 
 *Note: For processes requiring blocking or long running CPU computations, consider creating specific future pools inside your application, and then directly returning a future from your route callbacks.*
 
@@ -326,13 +279,15 @@ This allows your server to be instantiated multiple times in tests without worry
 
 Message Body Readers and Writers
 ======================================================
-[TODO]
+Documentation coming soon. See [example](finatra-http/src/test/scala/com/twitter/finatra/integration/tweetexample/main/TweetsEndpointServer.scala#L21).
+
 
 <a name="json">JSON</a>
 ===============================
-Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala). JSON support is provided in the [finatra-jackson](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-jackson) library, which can be used outside of Finatra as a replacement for jackson-module-scala or jerkson.
+Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala). JSON support is provided in the [finatra-jackson][finatra-jackson] library, which can be used outside of Finatra HTTP as a replacement for jackson-scala-module or jerkson.
 
 ## Features
+* Usable outside of finatra (and will become ***REMOVED***'s default json renderer in the future). 
 * FinatraObjectMapper which provides additional Scala friendly methods not found in ScalaObjectMapper.
 * Guice module for injecting FinatraObjectMapper (with support for customization e.g. snake_case vs camelCase).
 * Custom `case class` deserializer which overcomes limitations in jackson-scala-module.
@@ -343,19 +298,19 @@ Integration with Finatra HTTP routing to support binding and validation of query
 * Experimental support for iterator based json stream parsing.
 
 ## Configuration
-The default configuration of Jackson is provided by the [FinatraObjectMapper](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala).
+The default configuration of Jackson is provided by the [FinatraObjectMapper](finatra/finatra/finatra-jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala). 
 
 The following Jackson integrations are provided by default.
 * [Joda Module](http://...)
-* [Scala Module](https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java):
-* [LongKeyDeserializer](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala): Allow de-serializing maps with long keys.
+* [Scala Module](http://...):
+* [LongKeyDeserializer](http://...): Allow deserializing maps with long keys.
 * [Wrapped Value Serializer](http://...):
 * [Duration Millis Serializer](http://...):
 * [Improved DateTime Deserializer](http://...):
-* [Improved `case class` Deserializer](https://github.com/twitter/finatrav2/tree/master/finatra/finatra/finatra-jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassModule.scala): See details below
+* [Improved `case class` Deserializer](http://...): See details below
 
 ### Customization
-To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
+To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](finatra/finatra/finatra-jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
 ```scala
 class Server extends HttpServer {
   override def jacksonModule = CustomJacksonModule
@@ -364,9 +319,9 @@ class Server extends HttpServer {
 
 object CustomJacksonModule extends FinatraJacksonModule {
   override val serializationInclusion = Include.NON_EMPTY
-
+  
   override val propertyNamingStrategy = CamelCasePropertyNamingStrategy
-
+  
   override def additionalMapperConfiguration(mapper: ObjectMapper) {
     mapper.configure(Feature.WRITE_NUMBERS_AS_STRINGS, true)
   }
@@ -383,7 +338,6 @@ Finatra provides a custom `case class` deserializer which overcomes limitations 
 * Support for field and method level validations which also accumulate errors.
 
 ## Integration with Routing
-TODO: Move w/ Get BadRequest example?
 If a custom `case class` is used as a route callback's input type, Finatra will parse the request body into the custom request. Similar to declaritively parsing a GET request (described above), Finatra will perform validations and return a 400 BadRequest with a list of the accumulated errors (in JSON format).
 
 Suppose you wanted to handle POST's of the following JSON (representing a group of tweet ids):
@@ -406,7 +360,7 @@ case class GroupRequest(
   description: Option[String],
   tweetIds: Set[Long],
   dates: Dates) {
-
+  
   @MethodValidation
   def validateName = {
     ValidationResult(
@@ -420,12 +374,9 @@ case class Dates(
   @PastTime end: DateTime)
 ```
 
-## Streaming (Experimental)
-See [StreamingJsonTest](https://.../finatra/finatra-jackson/src/test/scala/com/twitter/finatra/tests/json/StreamingJsonTest.scala)
-
 Validation Framework
 ===============================
-We provide a simple validation framework inspired by [JSR-xxx](http://jsr...). Our framework integrates with our custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validations are included, and additional validations can be provided:
+We provide a simple validation framework inspired by [JSR-330](https://github.com/google/guice/wiki/JSR330). Our framework integrates with our custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validations are included, and additional validations can be provided:
 
 * CountryCode
 * FutureTime
@@ -442,16 +393,22 @@ We provide a simple validation framework inspired by [JSR-xxx](http://jsr...). O
 
 ## Method Validation
 Use for:
-* Non-generic validations, a MethodValidation can be used instead of defining a reusable annotation and validator.
+* Non-generic validations, a MethodValidation can be used instead of defining a reusable annotation and validator. 
 * Cross field validations (e.g. startDate before endDate)
+* See the GroupRequest example above for details.
+* See also [CommonMethodValidations](finatra-jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala)
 
-See the GroupRequest example above for details.
+## Best Practices
+Use Java Enums for representing enumerations since they integrate well with Jackson's ObjectMapper, and now have exhaustiveness checking as of Scala 2.10. The following Jackson annotations may be useful when working with Enums
+
+* @JsonCreator: Useful on a custom fromString method
+* @JsonValue: Useful to place on an overridden toString method
 
 Guice
 ===============================
-The Finatra framework internally uses Guice extensively, and it's also exposed for end users if they choose to use it. However, for end-users not wanting to use Guice, please see [FinatraWithoutGuice].
+The Finatra framework internally uses Guice extensively, and it's also availble for service writers if they choose to use it. For projects not wishing to use Guice, please see [FinatraWithoutGuice].
 
-Finatra's Guice integration usually starts with Controllers as the root objects in the Guice object graph. As such, controllers are added to Finatra's router by type as such:
+Finatra's Guice integration usually starts with Controllers as the root objects in the object graph. As such, controllers are added to Finatra's router by type as such:
 ```scala
 class Server extends HttpServer {
   override def configureHttp(router: HttpRouter) {
@@ -461,7 +418,7 @@ class Server extends HttpServer {
 }
 ```
 
-Controllers are then annotated with JSR-xxx inject annotations (Note: The somewhat strange syntax required to add an annotation to a Scala class constructor:
+Controllers are then annotated with [JSR-330](https://github.com/google/guice/wiki/JSR330) inject annotations (Note: The somewhat strange syntax required to add an annotation to a Scala class constructor:
 ```scala
 class MyController @Inject()(
   dao: GroupsDAO,
@@ -470,19 +427,19 @@ class MyController @Inject()(
 ```
 
 ## Modules
-We provide a [TwitterModule](https://github.com/twitter/finatrav2/tree/master/finatra/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala) base class which extends the capabilities of the excellent [scala-guice-module](http://guice).
+We provide a [TwitterModule](finatra/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala) base class which extends the capabilities of the excellent [scala-guice-module](https://github.com/codingwell/scala-guice).
 
 ### Module Definition
 * Twitter Util Flags can be defined inside modules. This allows various reusable modules that require external configuration to be composed in a server.
 * Prefer using a `@Provider` method over using the *bind* dsl.
-* Usually modules are Scala *objects* since the modules contain no state and usage of the module is less verbose.
+* Usually modules are Scala *objects* since the modules contain no state and usage of the module is less verbose. 
 * Always remember to add `@Singleton` to your provides method if desired.
 * Usually, modules are only required for creating classes that you don't control. Otherwise, you would simply add the JSR inject annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following Guice module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
 
 ```scala
 object MyModule1 extends TwitterModule {
   val key = flag("key", "defaultkey", "The key to use.")
-
+  
   @Singleton
   @Provides
   def providesThirdPartyFoo: ThirdPartyFoo = {
@@ -544,7 +501,7 @@ class UserFilter @Inject()(
 }
 ```
 
-Next add the [`FinagleRequestScopeFilter`](https://github.com/twitter/finatrav2/tree/master/finatra/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala) filter to your server before the `UserFilter` (shown below w/ other common filters in a recommended filter order):
+Next add the [`FinagleRequestScopeFilter`](finatra/inject/inject-request-scope/src/main/scala/com/twitter/inject/requestscope/FinagleRequestScopeFilter.scala) filter to your server before the `UserFilter` (shown below w/ other common filters in a recommended filter order):
 ```scala
 class Server extends HttpServer {
   override def configureHttp(router: HttpRouter) {
@@ -558,14 +515,14 @@ class Server extends HttpServer {
 
 Then inject a User or a `Provider[User]` wherever you need to access the request scope user. Note, `Provider[User]` must be used when injecting into a Singleton class.
 ```scala
-import javax.inject.Provider
+import javax.inject.Provider	
 
 
 class MyController @Inject()(
   dao: GroupsDAO,
   user: Provider[User])
   extends Controller {
-
+  
   get("/") { request: Request =>
     "The incoming user has id " + user.get.id
   }
@@ -574,7 +531,7 @@ class MyController @Inject()(
 
 ## Best Practices
 * The server's injector is available as a protected method in `HttpServer`, but it's use should be avoided except for calling *warmup* classes, and for extending the Finatra framework.
-* Avoid `@Named` annotations in favor of specific [Binding Annotations](https://github.com/google/guice/wiki/BindingAnnotations). If building with Maven or sbt, simply place your Java annotations in src/main/java for cross-compilation with your Scala code.
+* Avoid `@Named` annotations in favor of specific [Binding Annotations](https://github.com/google/guice/wiki/BindingAnnotations). If building with Maven, simply place your Java annotations in src/main/java for cross-compilation with your Scala code.
 
 Finatra Without Guice
 ===============================
@@ -593,6 +550,7 @@ class NonGuiceServer extends HttpServer {
 Filters
 ===============================
 TODO: Document common filters.
+TODO: Document per controller filters.
 
 A common filter order is as follows:
 ```scala
@@ -600,7 +558,8 @@ class Server extends HttpServer {
   override configureHttp(router: HttpRouter) {
     router.
       filter[AccessLoggingFilter].
-      filter[ExceptionBarrierFilter].
+      filter[StatsFilter].
+      filter[ExceptionMappingFilter].
       filter[LoggingMDCFilter].
       filter[FinagleRequestScopeFilter].
       filter[UserFilter].
@@ -633,11 +592,11 @@ import javax.inject.Inject
 
 class MyWarmupHandler @Inject()(
   httpAsserter: HttpAssertions) {
-
+  
   override def warmup() = {
     httpAsserter.get(
-      "/ok",
-      andExpect = Ok,
+      "/ok", 
+      andExpect = Ok, 
       withBody = "ok")
   }
 }
@@ -678,7 +637,7 @@ class MyModule extends TwitterModule {
 ```scala
 object MyModule1 extends TwitterModule {
   val key = flag("key", "defaultkey", "The key to use.")
-
+  
   @Singleton
   @Provides
   def providesThirdPartyFoo: ThirdPartyFoo = {
@@ -750,7 +709,7 @@ Filters are code that runs before any request is dispatched to a particular Cont
 class DurationLoggingFilter
   extends SimpleFilter[FinagleRequest, FinagleResponse]
   with Logging {
-
+  
   def apply(
     request: FinagleRequest,
     service: Service[FinagleRequest, FinagleResponse]
@@ -814,15 +773,16 @@ See the Cookie class for more details.
 
 File Uploads
 ===============================
-See [MultiParamsTest](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-http/src/test/scala/com/twitter/finatra/request/MultiParamsTest.scala).
+See [MultiParamsTest](finatra/finatra/finatra-http/src/test/scala/com/twitter/finatra/request/MultiParamsTest.scala).
+
 
 Testing
 ===============================
 ## <a name="startup-tests">Startup Tests</a>
-* Startup tests should mimic production as close as possible. As such:
+* Startup tests should mimic production as close as possible. As such: 
     - avoid using `@Bind` and "override modules" in startup tests.
     - set the Guice `stage` to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `State.DEVELOPMENT` by default).
-    - prevent Finagle clients from making outbound connections during startup tests by setting any resolverMap entries for your clients to `nil!`.
+    - prevent Finagle clients from making outbound connections during startup tests by setting any resolverMap entries for your clients to `nil!`. 
 
 For example:
 ```scala
@@ -834,10 +794,10 @@ val server = EmbeddedHttpServer(
 ```
 
 ## Integration Tests
-See [TestInjector](https://github.com/twitter/finatrav2/tree/master/finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala)
+See [TestInjector](finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala)
 
 ## Feature Tests
-See [EmbeddedTwitterServer](https://github.com/twitter/finatrav2/tree/master/finatra/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)
+See [EmbeddedTwitterServer](finatra/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)
 
 Logging
 ===============================
@@ -848,13 +808,13 @@ Most JVM code at Twitter uses twitter/util-logging which is based on java.util.l
 #### From the [slf4j](http://www.slf4j.org/manual.html) documentation:
 >"The Simple Logging Facade for Java serves as a simple facade or abstraction for various logging frameworks, such as java.util.logging, logback and log4j. SLF4J allows the end-user to plug in the desired logging framework at deployment time."
 
-Note that while java.util.logging is a complete implementation, slf4j is an interface that requires an actual logging implementation. If you are familiar with log4j, this concept will be familiar as it separates the logging api interface from implementation allowing you to pick an appropriate implementation.
+Note that while java.util.logging is a complete implementation, slf4j is an interface that requires an actual logging implementation. If you are familiar with log4j, this concept will be familiar as it separates the logging api interface from implementation allowing you to pick an appropriate implementation. 
 
 With that, when you are using slf4j you should ensure that you do not end-up with multiple implementations on your classpath, e.g., you should not have multiple slf4j bindings and/or a java.util.logging implementation, etc on your classpath as these are all competing implementations and classpath order is non-deterministic.
 
 While there are several scala-wrappers for slf4j, Finatra uses and exposes some additional features on top of the excellent [grizzled-slf4j](http://software.clapper.org/grizzled-slf4j/) project.
 
-The logging main utility is the [com.twitter.finatra.utils.Logging](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-utils/src/main/scala/com/twitter/finatra/utils/Logging.scala) trait which can be mixed into any object or class:
+The logging main utility is the [com.twitter.finatra.utils.Logging](finatra/finatra/finatra-utils/src/main/scala/com/twitter/finatra/utils/Logging.scala) trait which can be mixed into any object or class:
 ```scala
 class MyClass extends Logging {
   def foo() = {
@@ -865,7 +825,7 @@ class MyClass extends Logging {
 ```
 
 ## Logback
-We highly recommend using [logback](http://logback.qos.ch/) as an slf4j binding. If you choose to use logback, simply include a jar dependency on [finatra-logback](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-logback) which will provide a logback slf4j implementation and also includes bridges from the 3 most popular jvm logging libraries:
+We highly recommend using [logback](http://logback.qos.ch/) as an slf4j binding. If you choose to use logback, simply include a jar dependency on [finatra-logback](finatra/finatra/finatra-logback) which will provide a logback slf4j implementation and also includes bridges from the 3 most popular jvm logging libraries:
 
 * [log4j](http://logging.apache.org/log4j/1.2/)
 * [commons-logging](http://commons.apache.org/proper/commons-logging/)
@@ -882,16 +842,58 @@ class Server extends HttpServer {
 ```
 
 ### Configuration
-See [logback.xml](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-examples/finatra-hello-world/src/main/resources/logback.xml) and [logback-test.xml](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-examples/finatra-hello-world/src/test/resources/logback-test.xml) in [finatra-hello-world](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-examples/finatra-hello-world) project.
+See [logback.xml](finatra/finatra/finatra-examples/finatra-hello-world/src/main/resources/logback.xml) and [logback-test.xml](finatra/finatra/finatra-examples/finatra-hello-world/src/test/resources/logback-test.xml) in [finatra-hello-world](finatra/finatra/finatra-examples/finatra-hello-world) project.
 
 ### [MDC](http://logback.qos.ch/manual/mdc.html) Filters
-Place the [LoggingMDCFilter](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-logback/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
+Place the [LoggingMDCFilter](finatra/finatra/finatra-logback/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
+
+
+Maven POMs
+===============================
+If building with Maven, we have reusable parent poms for use:
+```xml
+<?xml version="1.0"?>
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mygroup</groupId>
+  <artifactId>myserver</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <parent>
+    <groupId>com.twitter.finatra</groupId>
+    <artifactId>finatra-http-service-parent</artifactId>
+    <version>2.0.0</version>
+    <relativePath></relativePath>
+  </parent>
+
+  <properties>
+    <mainClass>com.mygroup.MyServerMain</mainClass>
+  </properties>
+</project>
+``` 
+
+To run the service locally:
+```
+mvn exec:java
+```
+
+To build a zip distribution:
+```
+mvn package
+```
+
+To run the zip distribution on your server:
+```
+unzip myservice.zip
+cd myservice
+java -jar myservice.jar
+```
 
 Finatra Best Practices
 ===============================
 * Avoid `private[this]` unless you are in a hotspot identified during profiling.
 ***REMOVED***
-    - See the related [TwitterResolver](https://github.com/twitter/twitter-server/tree/master/src/main/scala/com/twitter/server/resolver/TwitterResolver.scala).
+    - See the related [TwitterResolver](twitter-server-internal/src/main/scala/com/twitter/server/resolver/TwitterResolver.scala).
 
 Utils
 ===============================
@@ -908,31 +910,17 @@ Many Finatra utilities are provided as *conversions* which add methods to common
 * Maps
 
 ## HTTP Client
-A barebones httpclient built on `finagle-http` is included in the [`finatra-httpclient`](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-httpclient) project. Stay tuned for further documentation and examples.
+A barebones httpclient built on `finagle-http` is included in the [`finatra-httpclient`](finatra/finatra/finatra-httpclient) project. Stay tuned for further documentation and examples.
 
 ## App Integration
-Finatra's HTTP server is built on top of several reusable traits.
-One of these traits is [`com.twitter.inject.App`](https://github.com/twitter/finatrav2/tree/master/finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala) which provides the integration between Guice and `com.twitter.app.App`. `com.twitter.inject.App` can be used standalone to create command line apps which may also reuse your Guice modules defined in other libraries.
+Finatra's HTTP server is built on top of several reusable traits. 
+One of these traits is [`com.twitter.inject.App`](finatra/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala) which provides the integration between Guice and `com.twitter.app.App`. `com.twitter.inject.App` can be used standalone to create command line apps which may also reuse your Guice modules defined in other libraries. 
 
-See [SampleGuiceApp](https://github.com/twitter/finatrav2/tree/master/finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/tests/SampleGuiceApp.scala) and [SampleAppIntegrationTest](https://github.com/twitter/finatrav2/tree/master/finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/tests/SampleAppIntegrationTest.scala)
+See [SampleGuiceApp](finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/tests/SampleGuiceApp.scala) and [SampleAppIntegrationTest](finatra/inject/inject-app/src/test/scala/com/twitter/inject/app/tests/SampleAppIntegrationTest.scala)
 
 Service Samples
 ===============================
-* [finatra-hello-world](https://github.com/twitter/finatrav2/tree/master/finatra/finatra-examples/finatra-hello-world)
-* twitter-bot
-
-Service Tutorial
-===============================
-[TODO]
-
-FAQ
-===============================
-[TODO]
-
-Change Log
-===============================
-* 2015-01-15: Finatra v2 released with initial documentation.
-* 2015-03-11: Documentation updated.
+* [finatra-hello-world](finatra/finatra/finatra-examples/finatra-hello-world)
 
 <a name="migration">Version 1 Migration Guide</a>
 ===============================
@@ -959,7 +947,7 @@ render.json(ret)
 response.ok.json(ret)
 ```
 
-Route params are now stored in request.params (which allows us to reuse `finagle.http.Request` without defining our own).
+Route params are now stored in request.params (which allows us to reuse `finagle.http.Request` without defining our own). 
 ```scala
 //v1
 request.routeParams("q")
@@ -980,7 +968,18 @@ log.info("hello")
 info("hello")
 ```
 
-## Error Handling
+## Exception Mappers
+ExceptionMappers map exceptions to responses. It needs to implement the following trait:
+```scala
+trait ExceptionMapper[T <: Throwable] {
+  def toResponse(request: Request, throwable: T): Response
+}
+```
+which says it will handle `T`-typed exceptions. The request that triggered the exception is also provided as an argument. You can install exception mappers with
+```scala
+router.
+```
+
 ```scala
 //v1
 notFound { request => ... }
@@ -990,7 +989,7 @@ error { request => ... }
 class ErrorFilter @Inject()(
  response: ResponseBuilder)
  extends SimpleFilter[Request, Response] {
-
+ 
  def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
    service(request) map { origResponse =>
      if (origResponse.status == Status.NotFound)
@@ -1004,6 +1003,7 @@ class ErrorFilter @Inject()(
  }
 }
 ```
+
 
 ## App
 Override the configure method and add your controllers there
@@ -1038,17 +1038,17 @@ get("/:*") { request: Request =>
 
 If you have an "index" page (e.g. index.html) add the following route.
 ```scala
-get("/:*") { request: Request =>
+get("/:*") { request: Request => 
   response.ok.fileOrIndex(
     filePath = request.params("*"),
     indexPath = "index.html")
 ```
-
+ 
 ## Command Line Flags
 Global flags are no longer used for standard server configuration. Instead:
 ```
 //v2
--log.output=twitter-server.log
+-log.output=twitter-server.log 
 -http.port=:8080
 -admin.port=:8081
 ```
@@ -1063,7 +1063,25 @@ Global flags are no longer used for standard server configuration. Instead:
 * Render a route from another route.
 * Controller *notFound* and *error* handler methods.
 
-## TODO: Road Map
-* Content Negotiation
-* Route passing
-* Hardcoded template path
+
+
+
+[twitter-server]: https://github.com/twitter/twitter-server
+[finagle]: https://github.com/twitter/finagle
+[util-app]: https://github.com/twitter/util/tree/master/util-app
+[util-core]: https://github.com/twitter/util/tree/master/util-core
+[guice]: https://github.com/google/guice
+[jackson]: https://github.com/FasterXML/jackson
+[logback]: http://logback.qos.ch/
+[slf4j]: http://www.slf4j.org/manual.html
+[grizzled-slf4j]: http://software.clapper.org/grizzled-slf4j/
+[local]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala
+[mdc]: http://logback.qos.ch/manual/mdc.html
+[controller]: finatra/finatra-http/src/main/scala/com/twitter/finatra/Controller.scala
+[HttpServer]: inatra-http/src/main/scala/com/twitter/finatra/HttpServer.scala
+[quick-start]: README.md#quick-start
+[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
+[sinatra]: http://www.sinatrarb.com/
+[finatra-jackson-module]: finatra-jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala
+[finatra-jackson]: finatra-jackson
+[CallbackConverterModule]: finatra-http/src/main/scala/com/twitter/finatra/modules/CallbackConverterModule.scala

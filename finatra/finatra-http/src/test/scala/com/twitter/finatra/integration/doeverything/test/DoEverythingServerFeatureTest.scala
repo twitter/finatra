@@ -798,4 +798,49 @@ class DoEverythingServerFeatureTest extends Test {
       "/NoSuchMethodException",
       andExpect = InternalServerError)
   }
+
+  "UsersRequest" in {
+    server.httpGet(
+      path = "/users?start_date=2013&max=10&verbose=true",
+      andExpect = Ok,
+      withJsonBody = """
+      {
+        "start_date": "2013-01-01T00:00:00.000Z",
+        "max": 10,
+        "verbose": true
+      }
+                     """)
+
+    server.httpGet(
+      path = "/users?max=10",
+      andExpect = Ok,
+      withJsonBody = """
+      {
+        "max": 10,
+        "verbose": false
+      }
+                     """)
+
+    server.httpGet(
+      path = "/users?max=10&verbose=true",
+      andExpect = Ok,
+      withJsonBody = """
+      {
+        "max": 10,
+        "verbose": true
+      }
+                     """)
+
+    server.httpGet(
+      path = "/users?verbose=5",
+      andExpect = BadRequest,
+      withJsonBody = """
+      {
+        "errors": [
+          "max is a required field",
+          "verbose's value '5' is not a valid boolean"
+        ]
+      }
+                     """)
+  }
 }

@@ -1,11 +1,14 @@
 Finatra
 ==========================================================
+The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) powered by [`twitter-server`][twitter-server].
 
-The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) powered by [`twitter-server`][twitter-server]
-
-Current version: `2.0.0.M1` 
+Current version: `2.0.0.rc1` 
 
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
+
+## Announcing the first release candidate of Finatra version 2!
+
+Documentation for prior versions can be found [here](https://github.com/twitter/finatra/tree/5d1d1cbb7640d8c4b1d11a85b53570d11a323e55).
 
 Features
 -----------------------------------------------------------
@@ -19,10 +22,10 @@ Features
 
 * Scala 2.10 and 2.11 compatible libraries published to [Maven central][maven-central]
  
-### [Inject](https://github.com/twitter/finatrav2/blob/master/inject/README.md) `com.twitter.inject`
-Inject provides libraries for integration [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice] 
+### [`com.twitter.inject`](inject/README.md) 
+Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice]. 
 
-[Detailed documentation](https://github.com/twitter/finatrav2/blob/master/inject/README.md)
+[Detailed documentation](inject/README.md)
 
 * inject-core_2.11
 * inject-app_2.11
@@ -31,9 +34,9 @@ Inject provides libraries for integration [`twitter-server`][twitter-server] and
 * inject-thrift-client_2.11
 * inject-request-scope_2.11
 
-### [Finatra](https://github.com/twitter/finatrav2/blob/master/finatra/README.md) `com.twitter.finatra` 
+### [`com.twitter.finatra`](finatra/README.md)  
 
-[Detailed documentation](https://github.com/twitter/finatrav2/blob/master/finatra/README.md)
+[Detailed documentation](finatra/README.md)
 
 * finatra-http_2.11
 * finatra-jackson_2.11
