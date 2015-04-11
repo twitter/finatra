@@ -61,14 +61,25 @@ lazy val publishSettings = Seq(
       <url>git://github.com/twitter/finatra.git</url>
       <connection>scm:git://github.com/twitter/finatra.git</connection>
     </scm>
-      <developers>
-        <developer>
-          <id>twitter</id>
-          <name>Twitter Inc.</name>
-          <url>https://www.twitter.com/</url>
-        </developer>
-      </developers>
-    )
+    <developers>
+      <developer>
+        <id>twitter</id>
+        <name>Twitter Inc.</name>
+        <url>https://www.twitter.com/</url>
+      </developer>
+    </developers>
+  ),
+  pomPostProcess := { (node: scala.xml.Node) =>
+    val rule = new scala.xml.transform.RewriteRule {
+      override def transform(n: scala.xml.Node): scala.xml.NodeSeq =
+        n.nameToString(new StringBuilder()).toString match {
+          case "dependency" if (n \ "groupId").text.trim == "org.scoverage" => Nil
+          case _ => n
+        }
+    }
+
+    new scala.xml.transform.RuleTransformer(rule).transform(node).head
+  }
 )
 
 lazy val versions = new {
@@ -243,10 +254,10 @@ lazy val finatraJackson = project
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson exclude("org.scala-lang", "scala-compiler"),
-      "org.scala-lang" % "scalap" % scalaVersion.value
+      "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler")
     )
   )
-  .dependsOn(finatraUtils)
+  .dependsOn(injectServer % "test->test", finatraUtils)
 
 lazy val finatraHttp = project
   .in(file("finatra/finatra-http"))
@@ -324,7 +335,11 @@ lazy val finatraHelloWorld = project
   .settings(finatraBuildSettings)
   .settings(
     publishLocal := {},
-    publish := {}
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    }
   )
   .dependsOn(
     finatraHttp,
