@@ -38,7 +38,7 @@ val baseSettings = Seq(
 /**
  * Can run in the SBT console in this project with `> run`.
  */
-lazy val finatraStandaloneHelloWorld = project
+lazy val finatraHelloWorld = project
   .in(file("."))
   .settings(organization := "com.twitter.example")
   .settings(moduleName := "finatra-hello-world")
