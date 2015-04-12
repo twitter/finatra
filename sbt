@@ -3,25 +3,21 @@
 sbtver=0.13.8
 sbtjar=sbt-launch.jar
 sbtsha128=57d0f04f4b48b11ef7e764f4cea58dee4e806ffd
+sbtrepo="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$sbtver/$sbtjar"
 
-sbtrepo=${1-"http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$sbtver/$sbtjar"}
-
-if [ ! -f $sbtjar ]; then
+if [ ! -f "./$sbtjar" ]; then
   echo "downloading $sbtjar from $sbtrepo" 1>&2
   if ! curl --silent --fail --remote-name $sbtrepo > $sbtjar; then
     exit 1
   fi
+  checksum=`openssl dgst -sha1 $sbtjar | awk '{ print $2 }'`
+  if [ "$checksum" != $sbtsha128 ]; then
+    echo "[error] Bad $sbtjar. Delete $sbtjar and run $0 again."
+    exit 1
+  fi
+else
+  echo "[info] Skipping download of sbt-launch.jar."
 fi
-
-################################################################################
-# The sbtjar is parameterized, so the SHA128 should be as well. It is not
-# currently, hence this is commented out.
-################################################################################
-# checksum=`openssl dgst -sha1 $sbtjar | awk '{ print $2 }'`
-# if [ "$checksum" != $sbtsha128 ]; then
-#   echo "bad $sbtjar.  delete $sbtjar and run $0 again."
-#   exit 1
-# fi
 
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
