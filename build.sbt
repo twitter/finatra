@@ -34,7 +34,8 @@ val baseSettings = Seq(
     "org.specs2" %% "specs2" % "2.3.12" % "test"
   ),
   resolvers ++= Seq(
-    "twitter-repo" at "http://maven.twttr.com",
+    Resolver.sonatypeRepo("releases"),
+    "Twitter Maven" at "http://maven.twttr.com",
     Resolver.sonatypeRepo("snapshots")
   ),
   compilerOptions
@@ -115,10 +116,12 @@ lazy val finatraBuildSettings = baseSettings ++ buildSettings ++ publishSettings
 
 lazy val root = project
   .in(file("."))
-  .settings(baseSettings ++ buildSettings ++ unidocSettings)
+  .settings(organization := "com.twitter.finatra")
+  .settings(moduleName := "finatra-root")
+  .settings(baseSettings ++ buildSettings ++ publishSettings ++ unidocSettings)
   .settings(
     unidocProjectFilter in(ScalaUnidoc, unidoc) :=
-      inAnyProject -- inProjects(finatraBenchmarks, finatraHelloWorld)
+      inAnyProject -- inProjects(finatraBenchmarks)
   )
   .aggregate(
     injectCore,
@@ -132,8 +135,7 @@ lazy val root = project
     finatraHttp,
     finatraHttpclient,
     finatraLogback,
-    finatraBenchmarks,
-    finatraHelloWorld
+    finatraBenchmarks
   )
 
 lazy val injectCore = project
@@ -329,21 +331,3 @@ lazy val finatraBenchmarks = project
     publish := {}
   )
   .dependsOn(finatraHttp, injectCore % "test->test")
-
-/**
- * Can run in the SBT console in this project with `> run`.
- */
-lazy val finatraHelloWorld = project
-  .in(file("finatra/finatra-examples/finatra-hello-world"))
-  .settings(moduleName := "finatra-hello-world")
-  .settings(finatraBuildSettings)
-  .settings(
-    assemblyMergeStrategy in assembly := {
-      case "BUILD" => MergeStrategy.discard
-      case other => MergeStrategy.defaultMergeStrategy(other)
-    }
-  )
-  .dependsOn(
-    finatraHttp,
-    finatraHttp % "test->test"
-  )

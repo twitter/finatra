@@ -1,7 +1,7 @@
+/*
 lazy val buildSettings = Seq(
   version := "2.0.0-SNAPSHOT",
-  scalaVersion := "2.11.6",
-  crossScalaVersions := Seq("2.10.5", "2.11.6")
+  scalaVersion := "2.11.6"
 )
 
 lazy val compilerOptions = scalacOptions ++= Seq(
@@ -13,13 +13,9 @@ lazy val compilerOptions = scalacOptions ++= Seq(
   "-language:implicitConversions",
   "-unchecked",
   "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen"
-) ++ (
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 11)) => Seq("-Ywarn-unused-import")
-    case _ => Seq.empty
-  }
-  )
+  "-Ywarn-numeric-widen",
+  "-Ywarn-unused-import"
+)
 
 val baseSettings = Seq(
   libraryDependencies ++= Seq(
@@ -58,3 +54,4 @@ lazy val finatraHelloWorld = project
       "com.twitter.inject" %% "inject-server" % "2.0.0.rc1" % "test->test"
     )
   )
+*/

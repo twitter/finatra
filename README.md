@@ -4,9 +4,10 @@ The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) pow
 
 Current version: `2.0.0.rc1` 
 
-[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
+[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=2.0.0.rc1)](http://travis-ci.org/twitter/finatra?branch=2.0.0.rc1) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=2.0.0.rc1)](https://coveralls.io/r/twitter/finatra?branch=2.0.0.rc1)
 
-## Announcing the first release candidate of Finatra version 2!
+Announcing the first release candidate of Finatra version 2!
+-----------------------------------------------------------
 
 Documentation for prior versions can be found [here](https://github.com/twitter/finatra/tree/5d1d1cbb7640d8c4b1d11a85b53570d11a323e55).
 
@@ -18,11 +19,13 @@ Features
 * [Jackson][jackson] based JSON parsing with additional support for required fields, default values, and custom validations
 * [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across futures
 
-## Libraries
+Libraries
+-----------------------------------------------------------
 
-* Scala 2.10 and 2.11 compatible libraries published to [Maven central][maven-central]
+We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central]. 
+The Finatra project is currently split up into two components: (Inject and Finatra HTTP).
  
-### [`com.twitter.inject`](inject/README.md) 
+### Inject (`com.twitter.inject`) 
 Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice]. 
 
 [Detailed documentation](inject/README.md)
@@ -34,7 +37,7 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 * inject-thrift-client_2.11
 * inject-request-scope_2.11
 
-### [`com.twitter.finatra`](finatra/README.md)  
+### Finatra HTTP (`com.twitter.finatra`)  
 
 [Detailed documentation](finatra/README.md)
 
@@ -52,7 +55,7 @@ The full example can be found [here][todo-example].
 
 First, we define our `TaskRequest` domain object:
 
-## Domain
+### Domain
 
 ```scala
 import com.twitter.finatra.validation.{NotEmpty, Size}
@@ -157,7 +160,8 @@ class TodoFeatureTest extends FeatureTest {
 }
 ```
 
-## Authors:
+Authors
+-----------------------------------------------------------
 * Steve Cosenza <https://github.com/scosenza>
 * Christopher Coco <https://github.com/cacoco>
 * Jason Carey <https://github.com/jcarey03>
@@ -168,7 +172,8 @@ A full list of [contributors](https://github.com/twitter/finatra/graphs/contribu
 Follow [@finatra](http://twitter.com/finatra) on Twitter for updates.
 
 
-## License
+License
+-----------------------------------------------------------
 Copyright 2015 Twitter, Inc.
 
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
