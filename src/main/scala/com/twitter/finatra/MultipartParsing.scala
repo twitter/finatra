@@ -40,6 +40,8 @@ object MultipartParsing {
         }
     }
 
+    dec.cleanFiles()
+
     multiParams
   }
 
