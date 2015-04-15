@@ -29,7 +29,7 @@ object RequestAdapter {
 
     request.getContent.markReaderIndex
 
-    if (request.method == HttpMethod.POST && HttpPostRequestDecoder.isMultipart(request)) {
+    if ((request.method == HttpMethod.POST || request.method == HttpMethod.PUT) && HttpPostRequestDecoder.isMultipart(request)) {
       request.multiParams = MultipartParsing(request)
     }
 
