@@ -287,7 +287,7 @@ Documentation coming soon. See [example](finatra-http/src/test/scala/com/twitter
 Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala). JSON support is provided in the [finatra-jackson][finatra-jackson] library, which can be used outside of Finatra HTTP as a replacement for jackson-scala-module or jerkson.
 
 ## Features
-* Usable outside of finatra (and will become ***REMOVED***'s default json renderer in the future). 
+* Usable outside of finatra.
 * FinatraObjectMapper which provides additional Scala friendly methods not found in ScalaObjectMapper.
 * Guice module for injecting FinatraObjectMapper (with support for customization e.g. snake_case vs camelCase).
 * Custom `case class` deserializer which overcomes limitations in jackson-scala-module.
@@ -474,7 +474,6 @@ Then define a module
 import com.myapp.User
 import com.twitter.finatra.requestscope.RequestScopeBinding
 import com.twitter.inject.TwitterModule
-import ***REMOVED***
 
 object UserModule
   extends TwitterModule
@@ -892,8 +891,7 @@ java -jar myservice.jar
 Finatra Best Practices
 ===============================
 * Avoid `private[this]` unless you are in a hotspot identified during profiling.
-***REMOVED***
-    - See the related [TwitterResolver](twitter-server-internal/src/main/scala/com/twitter/server/resolver/TwitterResolver.scala).
+* Avoid using custom flags for server locations in Finagle clients. Instead use the Finagle provided `resolverMap`.
 
 Utils
 ===============================

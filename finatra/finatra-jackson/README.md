@@ -1,9 +1,6 @@
 # Summary
 finatra-jackson is a library integrating jackson, scala, and guice.
 
-# Summary
-finatra-jackson is a library integrating jackson, scala, and guice.
-
 # Features
 * Usable outside of finatra 
 * FinatraObjectMapper which provides additional Scala friendly methods not found in ScalaObjectMapper.
