@@ -287,7 +287,7 @@ Documentation coming soon. See [example](finatra-http/src/test/scala/com/twitter
 Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala). JSON support is provided in the [finatra-jackson][finatra-jackson] library, which can be used outside of Finatra HTTP as a replacement for jackson-scala-module or jerkson.
 
 ## Features
-* Usable outside of finatra.
+* Usable outside of Finatra.
 * FinatraObjectMapper which provides additional Scala friendly methods not found in ScalaObjectMapper.
 * Guice module for injecting FinatraObjectMapper (with support for customization e.g. snake_case vs camelCase).
 * Custom `case class` deserializer which overcomes limitations in jackson-scala-module.
