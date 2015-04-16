@@ -198,13 +198,16 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
     response
   }
 
+  private val lastModifiedFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
+  lastModifiedFormat.setTimeZone(TimeZone.getTimeZone("GTM"))
+
   private def createResponse(request: FinagleRequest, contentType: String, lastModified: Date, getBytes: () => Array[Byte]) = {
     val response = request.response
     if (ifModifiedSince(request, lastModified).getOrElse(true)) {
       val bytes = getBytes()
       response.status = OK
       response.contentLength = bytes.length
-      response.lastModified = lastModified
+      response.lastModified = lastModifiedFormat.format(lastModified)
       response.contentType = contentType
       response.setContent(copiedBuffer(bytes))
     } else {
@@ -216,9 +219,7 @@ class FileService extends SimpleFilter[FinagleRequest, FinagleResponse] with App
 
   private def ifModifiedSince(request: FinagleRequest, lastModified: Date) = {
     Option(request.headers().get(HttpHeaders.Names.IF_MODIFIED_SINCE)).map { value =>
-      val format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZ", Locale.US)
-      format.setTimeZone(TimeZone.getTimeZone("UTC"))
-      format.parse(value).before(lastModified)
+      lastModifiedFormat.parse(value).before(lastModified)
     }
   }
 }
