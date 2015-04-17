@@ -1,3 +1,0 @@
-PORT=7070
-ADMIN_PORT=:9990
-ENV=development
