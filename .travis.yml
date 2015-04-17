@@ -1,0 +1,14 @@
+language: scala
+sudo: false
+
+scala:
+   - 2.11.6
+
+jdk:
+  - openjdk7
+
+script:
+  - sbt clean coverage test &&
+    sbt coverageAggregate
+after_success:
+  - sbt coveralls
