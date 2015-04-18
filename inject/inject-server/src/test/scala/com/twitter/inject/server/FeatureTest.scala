@@ -1,12 +1,18 @@
 package com.twitter.inject.server
 
 import com.twitter.inject.app.{EmbeddedApp, IntegrationTest}
+import com.twitter.util.{Await, Future}
 
 trait FeatureTest extends IntegrationTest {
+
+  def printStats = true
 
   override protected def afterEach() {
     super.afterEach()
     if (server.isGuiceApp) {
+      if (printStats) {
+        server.printStats()
+      }
       server.clearStats()
     }
   }
@@ -23,4 +29,10 @@ trait FeatureTest extends IntegrationTest {
   protected def server: EmbeddedTwitterServer
 
   override protected def app: EmbeddedApp = server
+
+  implicit class RichFuture[T](future: Future[T]) {
+    def value: T = {
+      Await.result(future)
+    }
+  }
 }

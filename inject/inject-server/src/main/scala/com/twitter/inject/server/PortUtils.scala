@@ -8,11 +8,15 @@ import java.net.{InetAddress, InetSocketAddress, SocketAddress}
 object PortUtils {
 
   def ephemeralLoopback: String = {
-    loopbackAddress + ":0"
+    loopbackAddressForPort(0)
   }
 
   def loopbackAddress = {
     InetAddress.getLoopbackAddress.getHostAddress
+  }
+
+  def loopbackAddressForPort(port: Int) = {
+    s"$loopbackAddress:$port"
   }
 
   def getPort(server: ListeningServer): Int = {

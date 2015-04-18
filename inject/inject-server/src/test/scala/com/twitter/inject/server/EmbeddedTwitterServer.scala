@@ -87,7 +87,7 @@ class EmbeddedTwitterServer(
 
   lazy val statsReceiver = if (isGuiceApp) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
-  lazy val adminHostAndPort = PortUtils.loopbackAddress + ":" + twitterServer.httpAdminPort
+  lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(twitterServer.httpAdminPort)
 
   /* Protected */
 
@@ -98,6 +98,14 @@ class EmbeddedTwitterServer(
   override protected def logAppStartup() {
     Banner.banner("Server Started (" + appName + ")")
     println("AdminHttp    -> http://localhost:%s/admin".format(twitterServer.httpAdminPort))
+  }
+
+  protected def thriftPort: Option[Int] = {
+    None
+  }
+
+  protected def externalHostAndPort: Option[String] = {
+    None
   }
 
   /* Public */
