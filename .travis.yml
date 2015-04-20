@@ -7,6 +7,8 @@ scala:
 jdk:
   - openjdk7
 
+before_script: travis_retry sbt +update
+
 script:
   - sbt clean coverage test &&
     sbt coverageAggregate
