@@ -1,0 +1,5 @@
+Finatra Benchmarks live here.
+We use JMH as our benchmarking framework.
+
+The following thread compares JMH w/ Caliper:
+https://groups.google.com/d/msg/mechanical-sympathy/m4opvy4xq3U/7lY8x8SvHgwJ

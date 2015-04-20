@@ -1,0 +1,12 @@
+junit_tests(
+  name='scala',
+  dependencies=[
+    'finatra/finatra/finatra-examples/finatra-hello-world',
+    'finatra/finatra/finatra-http:test-deps',
+    'finatra/inject/inject-server:test-deps'
+  ],
+  sources=rglobs('*.scala'),
+  resources=[
+    'finatra/finatra/finatra-examples/finatra-hello-world/src/test/resources'
+  ]
+)

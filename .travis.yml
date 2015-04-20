@@ -1,7 +1,16 @@
 language: scala
 sudo: false
-script:
-  - sbt test
+
 scala:
-  - 2.9.2
-  - 2.10.4
+   - 2.11.6
+
+jdk:
+  - openjdk7
+
+before_script: travis_retry sbt +update
+
+script:
+  - sbt clean coverage test &&
+    sbt coverageAggregate
+after_success:
+  - sbt coveralls
