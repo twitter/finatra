@@ -39,7 +39,7 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 
 ### Finatra HTTP (`com.twitter.finatra`)  
 
-[Detailed documentation](finatra/README.md)
+[Detailed documentation](http/README.md)
 
 * finatra-http_2.11
 * finatra-jackson_2.11

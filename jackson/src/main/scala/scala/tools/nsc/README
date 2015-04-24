@@ -1,0 +1,2 @@
+scalap depends on several classes in the scala-compiler jar.
+To avoid requiring scala-compiler at runtime (a 14 MB jar), we've copied the 4 required files here.
