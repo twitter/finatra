@@ -2,7 +2,7 @@ package com.twitter.finatra.internal.marshalling
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.fileupload.MultipartItem
-import org.apache.commons.fileupload.{FileItemFactory, FileItemIterator, FileUploadBase}
+import org.apache.commons.fileupload.{FileItemFactory, FileItemHeaders, FileItemIterator, FileUploadBase}
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.collection.mutable
@@ -21,7 +21,8 @@ class FinatraFileUpload extends FileUploadBase {
           fieldName = multipartItemStream.getFieldName,
           isFormField = multipartItemStream.isFormField,
           contentType = Option(multipartItemStream.getContentType),
-          filename = Option(multipartItemStream.getName))
+          filename = Option(multipartItemStream.getName),
+          headers = multipartItemStream.getHeaders)
 
         multipartMap += multipartItemInMemory.fieldName -> multipartItemInMemory
       }

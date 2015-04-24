@@ -3,10 +3,12 @@ package com.twitter.finatra.request
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.{http => finagle}
 import com.twitter.finatra.fileupload.MultipartItem
-import com.twitter.inject.Test
+import com.twitter.finatra.test.Test
+import org.apache.commons.fileupload.util.FileItemHeadersImpl
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.specs2.mock.Mockito
+import scala.collection.JavaConverters._
 
 class MultiParamsTest extends Test with Mockito {
 
@@ -37,21 +39,26 @@ class MultiParamsTest extends Test with Mockito {
           fieldName = "type",
           isFormField = true,
           contentType = None,
-          filename = None),
+          filename = None,
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"type\""))),
 
         "submit" -> MultipartItem(
           data = "Submit".getBytes("utf-8"),
           fieldName = "submit",
           isFormField = true,
           contentType = None,
-          filename = None),
+          filename = None,
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"submit\""))),
 
         "groups" -> MultipartItem(
           data = fileUploadFileBytes,
           fieldName = "groups",
           isFormField = false,
           contentType = Some("image/gif"),
-          filename = Some("dealwithit.gif")))
+          filename = Some("dealwithit.gif"),
+          headers = mkHeader(Map(
+            "content-disposition" -> "form-data; name=\"groups\"; filename=\"dealwithit.gif\"", 
+            "content-type" -> "image/gif"))))
 
       assertMultiParams(finagleRequest, expectedMultiParams)
     }
@@ -67,7 +74,8 @@ class MultiParamsTest extends Test with Mockito {
           fieldName = "banner",
           isFormField = false,
           contentType = None,
-          filename = Some("TempProfileImageCrop.png")))
+          filename = Some("TempProfileImageCrop.png"),
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=banner; filename=TempProfileImageCrop.png"))))
 
       assertMultiParams(finagleRequest, expectedMultiParams)
     }
@@ -84,42 +92,50 @@ class MultiParamsTest extends Test with Mockito {
           fieldName = "offset_top",
           isFormField = true,
           contentType = None,
-          filename = None),
+          filename = None,
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"offset_top\""))),
 
         "offset_left" -> MultipartItem(
           data = "0".getBytes("utf-8"),
           fieldName = "offset_left",
           isFormField = true,
           contentType = None,
-          filename = None),
+          filename = None,
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"offset_left\""))),
 
         "height" -> MultipartItem(
           data = "626".getBytes("utf-8"),
           fieldName = "height",
           isFormField = true,
           contentType = None,
-          filename = None),
+          filename = None,
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"height\""))),
 
         "width" -> MultipartItem(
           data = "1252".getBytes("utf-8"),
           fieldName = "width",
           isFormField = true,
           contentType = None,
-          filename = None),
+          filename = None,
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"width\""))),
 
         "true" -> MultipartItem(
           data = "include_user_entities".getBytes("utf-8"),
           fieldName = "true",
           isFormField = true,
           contentType = None,
-          filename = None),
+          filename = None,
+          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"true\""))),
 
         "banner" -> MultipartItem(
           data = fileUploadFileBytes,
           fieldName = "banner",
           isFormField = false,
           contentType = Some("image/jpeg"),
-          filename = Some("image.jpg")))
+          filename = Some("image.jpg"),
+          headers = mkHeader(Map(
+            "content-disposition" -> "form-data; name=\"banner\"; filename=\"image.jpg\"",
+            "content-type" -> "image/jpeg"))))
 
       assertMultiParams(finagleRequest, expectedMultiParams)
     }
@@ -135,7 +151,11 @@ class MultiParamsTest extends Test with Mockito {
           fieldName = "banner",
           isFormField = false,
           contentType = Some("image/jpeg"),
-          filename = Some("kM1K5C4p")))
+          filename = Some("kM1K5C4p"),
+          headers = mkHeader(Map(
+            "content-disposition" -> "form-data; name=\"banner\"; filename=\"kM1K5C4p\"",
+            "content-type" -> "image/jpeg",
+            "content-transfer-encoding" -> "binary"))))
 
       assertMultiParams(finagleRequest, expectedMultiParams)
     }
@@ -194,5 +214,20 @@ class MultiParamsTest extends Test with Mockito {
     // need to convert from Array[Byte] to Seq[Byte] for equality check
     // TODO make 'should equal" with with MultipartItem case class
     actual.data.toSeq should equal(expected.data.toSeq)
+
+    val actualHeaderString = headerString(actual)
+    val expectedHeaderString = headerString(expected)
+    actualHeaderString should equal(expectedHeaderString)
   }
+
+  private def mkHeader(map: Map[String, String]) = {
+    val headers = new FileItemHeadersImpl
+    for((key, value) <- map) {
+      headers.addHeader(key, value)
+    }
+    headers
+  }
+
+  private def headerString(item: MultipartItem) = 
+    item.headers.getHeaderNames.asScala.map(name => name + ":" + item.headers.getHeader(name)).mkString("|")
 }
