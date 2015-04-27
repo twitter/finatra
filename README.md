@@ -2,9 +2,9 @@ Finatra
 ==========================================================
 The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) powered by [`twitter-server`][twitter-server].
 
-Current version: `2.0.0.rc1` 
+Current version: `2.0.0.M1`
 
-[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=2.0.0.rc1)](http://travis-ci.org/twitter/finatra?branch=2.0.0.rc1) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=2.0.0.rc1)](https://coveralls.io/r/twitter/finatra?branch=2.0.0.rc1)
+[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=2.0.0.M1)](http://travis-ci.org/twitter/finatra?branch=2.0.0.M1) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=2.0.0.M1)](https://coveralls.io/r/twitter/finatra?branch=2.0.0.M1)
 
 Announcing the first release candidate of Finatra version 2!
 -----------------------------------------------------------
@@ -22,11 +22,11 @@ Features
 Libraries
 -----------------------------------------------------------
 
-We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central]. 
+We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central].
 The Finatra project is currently split up into two components: (Inject and Finatra HTTP).
- 
-### Inject (`com.twitter.inject`) 
-Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice]. 
+
+### Inject (`com.twitter.inject`)
+Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice].
 
 [Detailed documentation](inject/README.md)
 
@@ -77,9 +77,9 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class TasksController @Inject()(
-  repository: TaskRepository) 
+  repository: TaskRepository)
   extends Controller {
-  
+
   post("/todo/tasks") { request: TaskRequest =>
     val task = repository.add(request.name, request.description)
     response
@@ -122,7 +122,7 @@ import com.twitter.inject.server.FeatureTest
 import com.twitter.todo.domain.Task
 
 class TodoFeatureTest extends FeatureTest {
-  
+
   override val server = new EmbeddedHttpServer(new TodoServer)
 
   "post good task" in {
@@ -136,7 +136,7 @@ class TodoFeatureTest extends FeatureTest {
       """,
       andExpect = Created)
   }
-      
+
   "post bad task" in {
     server.httpPost(
       "/todo/tasks",
@@ -147,7 +147,7 @@ class TodoFeatureTest extends FeatureTest {
       }
       """,
       andExpect = BadRequest,
-      withJsonBody = 
+      withJsonBody =
       """
       {
         "errors": [

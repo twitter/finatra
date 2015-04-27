@@ -49,9 +49,9 @@ lazy val finatraHelloWorld = project
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.twitter.finatra" %% "finatra-http" % "2.0.0.rc1",
-      "com.twitter.finatra" %% "finatra-http" % "2.0.0.rc1" % "test->test",
-      "com.twitter.inject" %% "inject-server" % "2.0.0.rc1" % "test->test"
+      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1",
+      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1" % "test->test",
+      "com.twitter.inject" %% "inject-server" % "2.0.0.M1" % "test->test"
     )
   )
 */
