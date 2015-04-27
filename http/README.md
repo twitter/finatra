@@ -1,11 +1,10 @@
 Finatra HTTP Overview
 ==========================================================
-The scala HTTP framework inspired by [Sinatra][sinatra] powered by [`twitter-server`][twitter-server]
 
 Quick Start
 -----------------------------------------------------------
-* Depend on finatra-http_2.11 or finatra-http_2.10 library
-* We also recommed depending on finatra-logback_2.1x to choose logback as your slf4j implementation
+* Depend on `com.twitter.finatra:http_2.11` or `com.twitter.finatra:http_2.10` library
+* We also recommend depending on `com.twitter.finatra:logback_2.1x` to choose logback as your [slf4j](http://www.slf4j.org/manual.html) implementation
 * See [finatra-hello-world](finatra-examples/finatra-hello-world) example
 * See also [todo list example][quick-start]
 
@@ -800,20 +799,20 @@ See [EmbeddedTwitterServer](inject/inject-server/src/test/scala/com/twitter/inje
 
 Logging
 ===============================
-Most JVM code at Twitter uses twitter/util-logging which is based on java.util.logging. However, Finatra uses [slf4j](http://www.slf4j.org/manual.html) for framework logging which is a more modern logging framework.
+Finatra uses [slf4j](http://www.slf4j.org/manual.html) for framework logging.
 
 ## Basics
 
 #### From the [slf4j](http://www.slf4j.org/manual.html) documentation:
 >"The Simple Logging Facade for Java serves as a simple facade or abstraction for various logging frameworks, such as java.util.logging, logback and log4j. SLF4J allows the end-user to plug in the desired logging framework at deployment time."
 
-Note that while java.util.logging is a complete implementation, slf4j is an interface that requires an actual logging implementation. If you are familiar with log4j, this concept will be familiar as it separates the logging api interface from implementation allowing you to pick an appropriate implementation.
+Note that slf4j is an interface that requires an actual logging implementation. If you are familiar with log4j, this concept will be familiar as it separates the logging api interface from implementation allowing you to pick an appropriate implementation.
 
 With that, when you are using slf4j you should ensure that you do not end-up with multiple implementations on your classpath, e.g., you should not have multiple slf4j bindings and/or a java.util.logging implementation, etc on your classpath as these are all competing implementations and classpath order is non-deterministic.
 
 While there are several scala-wrappers for slf4j, Finatra uses and exposes some additional features on top of the excellent [grizzled-slf4j](http://software.clapper.org/grizzled-slf4j/) project.
 
-The logging main utility is the [com.twitter.finatra.utils.Logging](finatra-utils/src/main/scala/com/twitter/finatra/utils/Logging.scala) trait which can be mixed into any object or class:
+The main logging utility is the [com.twitter.finatra.utils.Logging](finatra-utils/src/main/scala/com/twitter/finatra/utils/Logging.scala) trait which can be mixed into any object or class:
 ```scala
 class MyClass extends Logging {
   def foo() = {
