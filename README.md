@@ -47,7 +47,7 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 * `finatra-httpclient`
 * `finatra-utils`
 
-Quick Start
+<a name="quick-start">Quick Start</a>
 -----------------------------------------------------------
 To get started we'll focus on building an HTTP API for a simple "Todo" list application which will support adding tasks to a todo list.
 The full example can be found [here][todo-example].
