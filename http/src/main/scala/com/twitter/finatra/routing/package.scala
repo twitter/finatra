@@ -1,6 +1,18 @@
 package com.twitter.finatra
 
 package object routing {
-  @deprecated("Use com.twitter.finatra.routing.HttpRouter", "")
-  type Router = com.twitter.finatra.routing.HttpRouter
+  @deprecated("Use com.twitter.finatra.http.routing.HttpRouter", "")
+  type Router = com.twitter.finatra.http.routing.HttpRouter
+
+  @deprecated("Use com.twitter.finatra.http.routing.FileResolver", "")
+  type FileResolver = com.twitter.finatra.http.routing.FileResolver
+
+  @deprecated("Use com.twitter.finatra.http.routing.HttpAssertions", "")
+  type HttpAssertions = com.twitter.finatra.http.routing.HttpAssertions
+
+  @deprecated("Use com.twitter.finatra.http.routing.HttpRouter", "")
+  type HttpRouter = com.twitter.finatra.http.routing.HttpRouter
+
+  @deprecated("Use com.twitter.finatra.http.routing.HttpRouter", "")
+  val HttpRouter = com.twitter.finatra.http.routing.HttpRouter
 }

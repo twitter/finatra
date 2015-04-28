@@ -1,12 +1,13 @@
 package com.twitter.finatra.test
 
 import com.google.inject.Stage
+import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.server.Ports
 
 object EmbeddedTwitterServer {
 
-  @deprecated("Use com.twitter.finatra.test.EmbeddedHttpServer or com.twitter.inject.server.EmbeddedTwitterServer", "")
+  @deprecated("Use com.twitter.finatra.http.test.EmbeddedHttpServer or com.twitter.inject.server.EmbeddedTwitterServer", "")
   def apply(
     twitterServer: Ports,
     clientFlags: Map[String, String] = Map(),
@@ -44,6 +45,7 @@ object EmbeddedTwitterServer {
   }
 }
 
+@deprecated("Use com.twitter.finatra.http.test.EmbeddedHttpServer or com.twitter.inject.server.EmbeddedTwitterServer", "")
 class EmbeddedTwitterServer(
   twitterServer: Ports,
   clientFlags: Map[String, String] = Map(),

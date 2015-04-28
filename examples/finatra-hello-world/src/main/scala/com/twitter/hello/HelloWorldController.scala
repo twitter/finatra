@@ -1,7 +1,7 @@
 package com.twitter.hello
 
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.Controller
+import com.twitter.finatra.http.Controller
 
 class HelloWorldController extends Controller {
 

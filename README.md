@@ -71,7 +71,7 @@ Then, assuming we already have a `TaskRepository` (configured with a `TaskReposi
 
 ```scala
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.Controller
+import com.twitter.finatra.http.Controller
 import com.twitter.todo.domain.{Task, GetTaskRequest, PostTaskRequest, TaskRepository}
 import javax.inject.{Inject, Singleton}
 
@@ -94,9 +94,9 @@ Next, let's create a [HttpServer][HttpServer]:
 ### Server
 
 ```scala
-import com.twitter.finatra.HttpServer
-import com.twitter.finatra.filters.CommonFilters
-import com.twitter.finatra.routing.HttpRouter
+import com.twitter.finatra.http.HttpServer
+import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.todo.modules.TaskRepositoryModule
 
 class TodoServer extends HttpServer {
@@ -117,7 +117,7 @@ And finally, we can write a Feature Test:
 
 ```scala
 import com.twitter.finagle.http.Status.{Created, BadRequest}
-import com.twitter.finatra.test.EmbeddedHttpServer
+import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 import com.twitter.todo.domain.Task
 

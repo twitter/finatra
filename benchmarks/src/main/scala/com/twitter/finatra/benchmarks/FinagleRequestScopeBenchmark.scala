@@ -1,7 +1,7 @@
 package com.twitter.finatra.benchmarks
 
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.internal.routing.{Route, RoutingService}
+import com.twitter.finatra.http.internal.routing.{Route, RoutingService}
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
 import com.twitter.util.Future
 import org.jboss.netty.handler.codec.http.HttpMethod

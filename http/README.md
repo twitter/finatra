@@ -604,7 +604,7 @@ class DoEverythingServer extends HttpServer {
 
 ```scala
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.routing.HttpAssertions
+import com.twitter.finatra.http.routing.HttpAssertions
 import com.twitter.finatra.utils.Handler
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
 package com.twitter.finatra.logging.integration
 
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.test.EmbeddedHttpServer
+import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.inject.Test
 
 class PooledServerIntegrationTest extends Test {
