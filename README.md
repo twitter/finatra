@@ -23,29 +23,29 @@ Libraries
 -----------------------------------------------------------
 
 We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central].
-The Finatra project is currently split up into two components: (Inject and Finatra HTTP).
+The Finatra project is currently split up into multiple components: (Inject and Finatra HTTP libraries).
 
 ### Inject (`com.twitter.inject`)
 Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice].
 
 [Detailed documentation](inject/README.md)
 
-* inject-core_2.11
-* inject-app_2.11
-* inject-server_2.11
-* inject-modules_2.11
-* inject-thrift-client_2.11
-* inject-request-scope_2.11
+* `inject-core`
+* `inject-app`
+* `inject-server`
+* `inject-modules`
+* `inject-thrift-client`
+* `inject-request-scope`
 
 ### Finatra HTTP (`com.twitter.finatra`)  
 
 [Detailed documentation](http/README.md)
 
-* finatra-http_2.11
-* finatra-jackson_2.11
-* finatra-logback_2.11
-* finatra-httpclient_2.11
-* finatra-utils_2.11
+* `finatra-http`
+* `finatra-jackson`
+* `finatra-logback`
+* `finatra-httpclient`
+* `finatra-utils`
 
 Quick Start
 -----------------------------------------------------------
@@ -189,7 +189,7 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [grizzled-slf4j]: http://software.clapper.org/grizzled-slf4j/
 [local]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala
 [mdc]: http://logback.qos.ch/manual/mdc.html
-[Controller]: https://github.com/twitter/finatra/blob/master/finatra/finatra-http/src/main/scala/com/twitter/finatra/Controller.scala
-[HttpServer]: https://github.com/twitter/finatra/blob/master/finatra/finatra-http/src/main/scala/com/twitter/finatra/HttpServer.scala
-[todo-example]: https://github.com/twitter/finatra/blob/master/finatra/finatra-examples/finatra-todo/
+[Controller]: http/src/main/scala/com/twitter/finatra/http/Controller.scala
+[HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
+[todo-example]: examples/finatra-todo/
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
