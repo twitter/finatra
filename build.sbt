@@ -87,7 +87,7 @@ lazy val publishSettings = Seq(
 
 lazy val versions = new {
   val commonsCodec = "1.9"
-  val commonsFileupload = "1.2.1"
+  val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
   val finagle = "6.25.0"
   val grizzled = "1.0.2"
