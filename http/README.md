@@ -790,7 +790,7 @@ See the Cookie class for more details.
 
 File Uploads
 ===============================
-See [MultiParamsTest](src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala).
+See [MultiParamsTest](../http/src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala).
 
 
 Testing
