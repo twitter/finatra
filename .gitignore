@@ -1,2 +1,4 @@
 classes/
 target/
+finatra/
+sbt-launch.jar
