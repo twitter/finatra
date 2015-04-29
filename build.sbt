@@ -226,7 +226,7 @@ lazy val injectThriftClient = project
   .dependsOn(injectCore, injectCore % "test->test", injectApp % "test->test")
 
 lazy val finatraUtils = project
-  .in(file("finatra/utils"))
+  .in(file("utils"))
   .settings(moduleName := "finatra-utils")
   .settings(finatraBuildSettings)
   .settings(
@@ -249,7 +249,7 @@ lazy val finatraUtils = project
   )
 
 lazy val finatraJackson = project
-  .in(file("finatra/jackson"))
+  .in(file("jackson"))
   .settings(moduleName := "finatra-jackson")
   .settings(finatraBuildSettings)
   .settings(coverageExcludedPackages := "scala.tools.nsc.*")
@@ -264,7 +264,7 @@ lazy val finatraJackson = project
   .dependsOn(injectServer % "test->test", finatraUtils)
 
 lazy val finatraHttp = project
-  .in(file("finatra/http"))
+  .in(file("http"))
   .settings(moduleName := "finatra-http")
   .settings(finatraBuildSettings)
   .settings(coverageExcludedPackages := "com.twitter.finatra.internal.marshalling.mustache.ScalaObjectHandler.*")
@@ -286,7 +286,7 @@ lazy val finatraHttp = project
   )
 
 lazy val finatraHttpclient = project
-  .in(file("finatra/httpclient"))
+  .in(file("httpclient"))
   .settings(moduleName := "finatra-httpclient")
   .settings(finatraBuildSettings)
   .settings(
@@ -301,7 +301,7 @@ lazy val finatraHttpclient = project
   )
 
 lazy val finatraLogback = project
-  .in(file("finatra/logback"))
+  .in(file("logback"))
   .settings(moduleName := "finatra-logback")
   .settings(finatraBuildSettings)
   .settings(
@@ -323,7 +323,7 @@ lazy val finatraLogback = project
  * Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
  */
 lazy val finatraBenchmarks = project
-  .in(file("finatra/benchmarks"))
+  .in(file("benchmarks"))
   .settings(moduleName := "finatra-benchmarks")
   .settings(finatraBuildSettings ++ jmhSettings)
   .settings(
