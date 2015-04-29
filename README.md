@@ -6,7 +6,7 @@ Current version: `2.0.0.M1`
 
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=2.0.0.M1)](http://travis-ci.org/twitter/finatra?branch=2.0.0.M1) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=2.0.0.M1)](https://coveralls.io/r/twitter/finatra?branch=2.0.0.M1)
 
-Announcing the first release candidate of Finatra version 2!
+Announcing the first milestone release of Finatra version 2!
 -----------------------------------------------------------
 
 Documentation for prior versions can be found [here](https://github.com/twitter/finatra/tree/5d1d1cbb7640d8c4b1d11a85b53570d11a323e55).
