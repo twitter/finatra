@@ -229,10 +229,6 @@ class MultiParamsTest extends Test with Mockito {
   }
 
   private def headerString(item: MultipartItem) = {
-    (for {
-      nameAny <- item.headers.getHeaderNames.asScala
-      name = nameAny.toString
-      value = item.headers.getHeader(name)
-    } yield name + ":" + value).mkString("|")
+    item.headers.getHeaderNames.asScala.map(name => name + ":" + item.headers.getHeader(name)).mkString("|")
   }
 }
