@@ -1,9 +1,4 @@
-logs/*
-target
-target/*
-*.DS_Store
-*.releaseBackup
-release.properties
-*.iml
-.idea
-.idea/*
+classes/
+target/
+finatra/
+sbt-launch.jar
