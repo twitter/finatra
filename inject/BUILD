@@ -1,0 +1,19 @@
+page(name="readme",
+     source="README.md",
+     provides=[
+       wiki_artifact(
+         wiki=confluence,
+         space='PLATENG',
+         title='TwitterInject'
+     )])
+
+target(name='tests',
+  dependencies=[
+    'finatra/inject/inject-app:tests',
+    'finatra/inject/inject-core:tests',
+    'finatra/inject/inject-modules:tests',
+    'finatra/inject/inject-request-scope:tests',
+    'finatra/inject/inject-server:tests',
+   #'finatra/inject/inject-thrift-client:tests',
+  ]
+)
