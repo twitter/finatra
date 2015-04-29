@@ -1,7 +1,18 @@
 language: scala
+
 sudo: false
-script:
-  - sbt test
+
 scala:
-  - 2.9.2
-  - 2.10.4
+  - 2.10.5
+  - 2.11.6
+
+jdk:
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
+
+script:
+  - travis_retry sbt ++$TRAVIS_SCALA_VERSION clean coverage test && sbt coverageAggregate
+
+after_success:
+  - sbt coveralls
