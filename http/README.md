@@ -467,7 +467,7 @@ class Server extends HttpServer {
 ## Request Scope
 Guice supports custom scopes in addition to the most common Singelton and *Unscoped*. Request scopes are often used to allow injecting classes that change depending on the incoming request (e.g. the authenticated User). Finatra provides an implementation of a *request scope* that works across Finagle non-blocking threads (Guice's included request scope implementation uses ThreadLocal's which will not work with Finagle Futures).
 
-Note: Fields added to the Finagle request scope will remain present in threads launched from [Finagle future pools](com.twitter.util.FuturePool)
+Note: Fields added to the Finagle request scope will remain present in threads launched from [Finagle future pools](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/FuturePool.scala)
 
 ### Adding Classes into the Finatra Request Scope
 
@@ -790,7 +790,7 @@ See the Cookie class for more details.
 
 File Uploads
 ===============================
-See [MultiParamsTest](src/test/scala/com/twitter/finatra/request/MultiParamsTest.scala).
+See [MultiParamsTest](src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala).
 
 
 Testing
@@ -823,7 +823,7 @@ Finatra uses the [slf4j](http://www.slf4j.org/manual.html) for framework logging
 ## Basics
 
 #### From the [slf4j](http://www.slf4j.org/manual.html) documentation:
->"The Simple Logging Facade for Java serves as a simple facade or abstraction for various logging frameworks, such as java.util.logging, logback and log4j. SLF4J allows the end-user to plug in the desired logging framework at deployment time."
+>"The Simple Logging Facade for Java serves as a simple facade or abstraction for various logging frameworks, such as java.util.logging, Logback and log4j. SLF4J allows the end-user to plug in the desired logging framework at deployment time."
 
 Note that slf4j is an interface that requires an actual logging implementation. If you are familiar with [Log4j](http://en.wikipedia.org/wiki/Log4j), this concept will be familiar as it separates the logging api interface from implementation allowing you to pick an appropriate implementation.
 
@@ -831,7 +831,7 @@ With that, when you are using slf4j you should ensure that you do not end-up wit
 
 While there are several scala-wrappers for slf4j, Finatra uses and exposes some additional features on top of the excellent [grizzled-slf4j](http://software.clapper.org/grizzled-slf4j/) project.
 
-The main logging utility is the [com.twitter.finatra.utils.Logging](../utils/src/main/scala/com/twitter/finatra/utils/Logging.scala) trait which can be mixed into any object or class:
+The main logging utility is the [com.twitter.inject.Logging](../inject/inject-core/src/main/scala/com/twitter/inject/Logging.scala) trait which can be mixed into any object or class:
 ```scala
 class MyClass extends Logging {
   def foo() = {
@@ -842,11 +842,11 @@ class MyClass extends Logging {
 ```
 
 ## Logback
-We highly recommend using [logback](http://logback.qos.ch/) as an slf4j binding. If you choose to use logback, simply include a jar dependency on [`com.twitter.finatra:logback`](logback) which will provide a logback slf4j implementation and also includes bridges from the 3 most popular jvm logging libraries:
+We highly recommend using [Logback](http://logback.qos.ch/) as an slf4j binding. If you choose to use Logback, simply include a jar dependency on `com.twitter.finatra:finatra-logback` which provides a Logback slf4j implementation and also includes bridges from the 3 most popular jvm logging libraries:
 
 * [log4j](http://logging.apache.org/log4j/1.2/)
 * [commons-logging](http://commons.apache.org/proper/commons-logging/)
-* Java Util Logging: There is a performance penalty for intercepting jul log messages, so make sure to also include the [LogbackModule](../logback/src/main/scala/com/twitter/finatra/logging/modules/LogbackModule.scala) in your servers list of Guice modules, as this will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty. e.g.,
+* [`java.util.logging`](https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html): There is a performance penalty for intercepting jul log messages, so make sure to also include the [LogbackModule](../logback/src/main/scala/com/twitter/finatra/logging/modules/LogbackModule.scala) in your servers list of Guice modules, as this will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty. e.g.,
 
 ```scala
 class Server extends HttpServer {
