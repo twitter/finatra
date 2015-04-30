@@ -1,4 +1,4 @@
+.DS_Store
 classes/
 target/
-finatra/
 sbt-launch.jar
