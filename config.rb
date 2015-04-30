@@ -4,11 +4,11 @@ require 'sass-globbing'
 project_type = :stand_alone
 
 # Publishing paths
-http_path = "/"
-http_images_path = "/images"
+http_path = "/finatra/"
+http_images_path = "/finatra/images"
 http_generated_images_path = "/images"
-http_fonts_path = "/fonts"
-css_dir = "public/stylesheets"
+http_fonts_path = "/finatra/fonts"
+css_dir = "public/finatra/stylesheets"
 
 # Local development paths
 sass_dir = "sass"
