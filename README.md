@@ -4,7 +4,9 @@ The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) pow
 
 Current version: `2.0.0.M1`
 
-[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=2.0.0.M1)](http://travis-ci.org/twitter/finatra?branch=2.0.0.M1) [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=2.0.0.M1)](https://coveralls.io/r/twitter/finatra?branch=2.0.0.M1)
+[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
+[![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.png?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
 Announcing the first milestone release of Finatra version 2!
 -----------------------------------------------------------
