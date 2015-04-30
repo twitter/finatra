@@ -18,7 +18,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - travis_retry sbt ++$TRAVIS_SCALA_VERSION clean coverage test && sbt coverageAggregate
+  - travis_retry sbt --debug ++$TRAVIS_SCALA_VERSION clean coverage test && sbt coverageAggregate
   
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.sbt -name "*.lock" | xargs rm
