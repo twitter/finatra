@@ -8,11 +8,11 @@ case class MaxIntExample(@Max(0) numberValue: Int)
 case class MaxLongExample(@Max(0) numberValue: Long)
 case class MaxBigIntExample(@Max(0) numberValue: BigInt)
 case class MaxLargestLongBigIntExample(@Max(Long.MaxValue) numberValue: BigInt)
-//case class MaxSecondLargestLongBigIntExample(@Max(Long.MaxValue - 1) numberValue: BigInt)*/
+//case class MaxSecondLargestLongBigIntExample(@Max(Long.MaxValue - 1) numberValue: BigInt)
 case class MaxSmallestLongBigIntExample(@Max(Long.MinValue) numberValue: BigInt)
 case class MaxBigDecimalExample(@Max(0) numberValue: BigDecimal)
 case class MaxLargestLongBigDecimalExample(@Max(Long.MaxValue) numberValue: BigDecimal)
-//case class MaxSecondLargestLongBigDecimalExample(@Max(Long.MaxValue - 1) numberValue: BigDecimal)*/
+//case class MaxSecondLargestLongBigDecimalExample(@Max(Long.MaxValue - 1) numberValue: BigDecimal)
 case class MaxSmallestLongBigDecimalExample(@Max(Long.MinValue) numberValue: BigDecimal)
 case class MaxSeqExample(@Max(0) numberValue: Seq[Int])
 case class MaxArrayExample(@Max(0) numberValue: Array[Int])
