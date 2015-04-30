@@ -15,6 +15,7 @@ junit_tests(name='scala',
     'com/twitter/finatra/http/example/*.scala',
     'com/twitter/finatra/http/integration/*.scala',
     'com/twitter/finatra/http/internal/*.scala',
+    'com/twitter/finatra/http/marshalling/*.scala',
     'com/twitter/finatra/http/request/*.scala',
     'com/twitter/finatra/http/response/*.scala',
     'com/twitter/finatra/http/routing/*.scala',
@@ -42,6 +43,7 @@ scala_library(name="test-deps",
   ],
   sources=globs(
     'com/twitter/finatra/test/*.scala',
-    'com/twitter/finatra/http/test/*.scala'
+    'com/twitter/finatra/http/test/*.scala',
+    'com/twitter/finatra/http/utils/*.scala'
   ),
 )

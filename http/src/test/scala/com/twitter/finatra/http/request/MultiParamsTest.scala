@@ -8,6 +8,7 @@ import org.apache.commons.fileupload.util.FileItemHeadersImpl
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.HttpMethod
 import org.specs2.mock.Mockito
+
 import scala.collection.JavaConverters._
 
 class MultiParamsTest extends Test with Mockito {
@@ -230,5 +231,5 @@ class MultiParamsTest extends Test with Mockito {
 
   private def headerString(item: MultipartItem) = {
     item.headers.getHeaderNames.asScala.map(name => name + ":" + item.headers.getHeader(name)).mkString("|")
-  }
+   }
 }
