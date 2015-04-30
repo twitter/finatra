@@ -1,5 +1,7 @@
 Finatra
 ==========================================================
+
+[![Join the chat at https://gitter.im/twitter/finatra](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) powered by [`twitter-server`][twitter-server].
 
 Current version: `2.0.0.M1`
