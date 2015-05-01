@@ -19,7 +19,7 @@ Features
 * JSR-330 Dependency Injection using [Google Guice][guice]
 * [Jackson][jackson] based JSON parsing supporting required fields, default values, and custom validations
 * [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across futures
-• Guice request scope integration with Futures
+* Guice request scope integration with Futures
 
 <a name="quick-start">Quick Start</a>
 -----------------------------------------------------------
