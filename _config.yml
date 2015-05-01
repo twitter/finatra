@@ -29,7 +29,7 @@ email:
 root: /finatra
 permalink: /blog/:year/:month/:day/:title/
 source: source
-destination: public/finatra
+destination: _deploy/public/finatra
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories

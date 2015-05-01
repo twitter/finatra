@@ -38,7 +38,7 @@ body > .navbar {
 body > .navbar .brand {
   padding-right: 0;
   padding-left: 0;
-  margin-left: 20px;
+  /*margin-left: 20px;*/
   float: right;
   font-weight: bold;
   color: #000;
@@ -51,7 +51,6 @@ body > .navbar .brand:hover {
   text-decoration: none;
   text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.4);
 }
-
 
 /* Sections
 -------------------------------------------------- */
