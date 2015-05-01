@@ -1,10 +1,9 @@
 Finatra
 ==========================================================
-The scala service framework inspired by [Sinatra](http://www.sinatrarb.com/) powered by [`twitter-server`][twitter-server].
+Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) and powered by [`twitter-server`][twitter-server].
 
 Current version: `2.0.0.M1`
 
-[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
 Announcing the first milestone release of Finatra version 2!
@@ -14,100 +13,68 @@ Documentation for prior versions can be found [here](https://github.com/twitter/
 
 Features
 -----------------------------------------------------------
-* Significant performance improvements over v1.6.0
+* Production use as Twitter’s HTTP framework
+* ~50 times faster than v1.6 in several benchmarks
 * Powerful feature and integration test support
 * JSR-330 Dependency Injection using [Google Guice][guice]
-* [Jackson][jackson] based JSON parsing with additional support for required fields, default values, and custom validations
+* [Jackson][jackson] based JSON parsing supporting required fields, default values, and custom validations
 * [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across futures
-
-Libraries
------------------------------------------------------------
-
-We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central].
-The Finatra project is currently split up into multiple components: (Inject and Finatra HTTP libraries).
-
-### Inject (`com.twitter.inject`)
-Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice].
-
-[Detailed documentation](inject/README.md)
-
-* `inject-core`
-* `inject-app`
-* `inject-server`
-* `inject-modules`
-* `inject-thrift-client`
-* `inject-request-scope`
-
-### Finatra HTTP (`com.twitter.finatra`)  
-
-[Detailed documentation](http/README.md)
-
-* `finatra-http`
-* `finatra-jackson`
-* `finatra-logback`
-* `finatra-httpclient`
-* `finatra-utils`
+• Guice request scope integration with Futures
 
 <a name="quick-start">Quick Start</a>
 -----------------------------------------------------------
-To get started we'll focus on building an HTTP API for a simple "Todo" list application which will support adding tasks to a todo list.
-The full example can be found [here][todo-example].
-
-
-First, we define our `TaskRequest` domain object:
+To get started we'll focus on building an HTTP API for posting and getting tweets:
 
 ### Domain
 
 ```scala
-import com.twitter.finatra.validation.{NotEmpty, Size}
-
-case class TaskRequest(
-  @NotEmpty name: String,
-  @Size(min = 10, max = 140) description: String)
+case class PostedTweet(
+  @Size(min = 1, max = 140) message: String,
+  location: Option[Location],
+  sensitive: Boolean = false) {
+  
+case class GetTweet(
+  @RouteParam id: StatusId)
 ```
 
-Then, assuming we already have a `TaskRepository` (configured with a `TaskRepositoryModule`) to store tasks, let's create a [`Controller`][Controller]:
+Then, let's create a [`Controller`][Controller]:
 
 ### Controller
 
 ```scala
-import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.Controller
-import com.twitter.todo.domain.{Task, GetTaskRequest, PostTaskRequest, TaskRepository}
-import javax.inject.{Inject, Singleton}
-
 @Singleton
-class TasksController @Inject()(
-  repository: TaskRepository)
+class TweetsController @Inject()(
+  tweetsService: TweetsService)
   extends Controller {
 
-  post("/todo/tasks") { request: TaskRequest =>
-    val task = repository.add(request.name, request.description)
-    response
-      .created(task)
-      .location(task.id)
+  post("/tweet") { postedTweet: PostedTweet =>
+    tweetsService.save(postedTweet) map { savedTweet =>
+      response
+        .created(savedTweet)
+        .location(savedTweet.id)
+    }
+  }
+
+  get("/tweet/:id") { request: GetTweet =>
+    tweetsService.get(request.id)
   }
 }
 ```
 
-Next, let's create a [HttpServer][HttpServer]:
+Next, let's create a server:
 
 ### Server
 
 ```scala
-import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.CommonFilters
-import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.todo.modules.TaskRepositoryModule
+class TwitterCloneServer extends HttpServer {
+  
+  override val modules = Seq(FirebaseHttpClientModule)
 
-class TodoServer extends HttpServer {
-  override val modules = Seq(
-    TaskRepositoryModule)
-
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
+      .register[StatusMessageBodyWriter]
       .filter[CommonFilters]
-      .add[TasksController]
+      .add[TweetsController]
   }
 }
 ```
@@ -117,49 +84,100 @@ And finally, we can write a Feature Test:
 ### Feature Test
 
 ```scala
-import com.twitter.finagle.http.Status.{Created, BadRequest}
-import com.twitter.finatra.http.test.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
-import com.twitter.todo.domain.Task
+class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
-class TodoFeatureTest extends FeatureTest {
+  override val server = new EmbeddedHttpServer(
+    twitterServer = new TwitterCloneServer {
+      override val overrideModules = Seq(integrationTestModule)
+    })
 
-  override val server = new EmbeddedHttpServer(new TodoServer)
+  @Bind val firebaseClient = smartMock[FirebaseClient]
 
-  "post good task" in {
-    server.httpPost(
-      "/todo/tasks",
-      """
-      {
-        "name": "my-task",
-        "description": "pick up milk"
-      }
-      """,
-      andExpect = Created)
+  @Bind val idService = smartMock[IdService]
+
+  "tweet creation" in {
+    idService.getId returns Future(StatusId("123"))
+
+    val mockStatus = Status(
+      id = StatusId("123"),
+      text = "Hello #SFScala",
+      lat = Some(37.7821120598956),
+      long = Some(-122.400612831116),
+      sensitive = false)
+
+    firebaseClient.put("/statuses/123.json", mockStatus) returns Future.Unit
+    firebaseClient.get("/statuses/123.json")(manifest[Status]) returns Future(Option(mockStatus))
+
+    val result = server.httpPost(
+      path = "/tweet",
+      postBody = """
+        {
+          "message": "Hello #SFScala",
+          "location": {
+            "lat": "37.7821120598956",
+            "long": "-122.400612831116"
+          },
+          "sensitive": false
+        }""",
+      andExpect = Created,
+      withJsonBody = """
+        {
+          "id": "123",
+          "message": "Hello #SFScala",
+          "location": {
+            "lat": "37.7821120598956",
+            "long": "-122.400612831116"
+          },
+          "sensitive": false
+        }""")
+
+    server.httpGet(
+      path = result.location.get,
+      andExpect = Ok,
+      withJsonBody = result.contentString)
   }
 
-  "post bad task" in {
+  "Post bad tweet" in {
     server.httpPost(
-      "/todo/tasks",
-      """
-      {
-        "name": "",
-        "description": "short"
-      }
-      """,
+      path = "/tweet",
+      postBody = """
+        {
+          "message": "",
+          "location": {
+            "lat": "9999"
+          },
+          "sensitive": "abc"
+        }""",
       andExpect = BadRequest,
-      withJsonBody =
-      """
-      {
-        "errors": [
-          "name cannot be empty",
-          "description size [5] is not between 10 and 140"
-        ]
-      }
-      """)
+      withJsonBody = """
+        {
+          "errors" : [
+            "message size [0] is not between 1 and 140",
+            "location.lat [9999.0] is not between -85 and 85",
+            "location.long is a required field",
+            "sensitive's value 'abc' is not a valid boolean"
+          ]
+        }
+        """)
   }
 }
 ```
+
+Libraries
+-----------------------------------------------------------
+
+We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central].
+The Finatra project is currently split up into multiple components: (Twitter Inject and Finatra libraries).
+
+### Twitter Inject (`com.twitter.inject`)
+Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice].
+
+[Detailed documentation](inject/README.md)
+
+### Finatra (`com.twitter.finatra`)  
+Finatra is a framework for easily building API services on top of Twitter’s Scala stack (twitter-server, finagle, twitter-util)
+
+[Detailed documentation](http/README.md)
 
 Authors
 -----------------------------------------------------------
@@ -192,5 +210,5 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [mdc]: http://logback.qos.ch/manual/mdc.html
 [Controller]: http/src/main/scala/com/twitter/finatra/http/Controller.scala
 [HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
-[todo-example]: examples/finatra-todo/
+[twitter-clone-example]: examples/finatra-twitter-clone/
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
