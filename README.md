@@ -96,6 +96,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
   @Bind val idService = smartMock[IdService]
 
   "tweet creation" in {
+    //Setup mocks
     idService.getId returns Future(StatusId("123"))
 
     val mockStatus = Status(
@@ -108,6 +109,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
     firebaseClient.put("/statuses/123.json", mockStatus) returns Future.Unit
     firebaseClient.get("/statuses/123.json")(manifest[Status]) returns Future(Option(mockStatus))
 
+    //Assert tweet post
     val result = server.httpPost(
       path = "/tweet",
       postBody = """
@@ -131,6 +133,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
           "sensitive": false
         }""")
 
+    //Assert tweet get
     server.httpGet(
       path = result.location.get,
       andExpect = Ok,
