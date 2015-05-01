@@ -1,0 +1,4 @@
+.DS_Store
+classes/
+target/
+sbt-launch.jar
