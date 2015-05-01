@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>util - scala.tools.nsc.util</title>
+          <meta name="description" content="util - scala.tools.nsc.util" />
+          <meta name="keywords" content="util scala.tools.nsc.util" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../index.html';
+            var hash = 'scala.tools.nsc.util.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../package.html" class="extype" name="scala">scala</a>.<a href="../../package.html" class="extype" name="scala.tools">tools</a>.<a href="../package.html" class="extype" name="scala.tools.nsc">nsc</a></p>
+        <h1>util</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">util</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="scala.tools.nsc.util.ClassPath" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ClassPath[T]extendsAnyRef"></a>
+      <a id="ClassPath[T]:ClassPath[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassPath.html"><span class="name">ClassPath</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Represents a package which contains classes and other packages
+</p>
+    </li><li name="scala.tools.nsc.util.DeltaClassPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DeltaClassPath[T]extendsMergedClassPath[T]"></a>
+      <a id="DeltaClassPath[T]:DeltaClassPath[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DeltaClassPath.html"><span class="name">DeltaClassPath</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="MergedClassPath.html" class="extype" name="scala.tools.nsc.util.MergedClassPath">MergedClassPath</a>[<span class="extype" name="scala.tools.nsc.util.DeltaClassPath.T">T</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="scala.tools.nsc.util.DirectoryClassPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DirectoryClassPathextendsClassPath[tools.nsc.io.AbstractFile]"></a>
+      <a id="DirectoryClassPath:DirectoryClassPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DirectoryClassPath.html"><span class="name">DirectoryClassPath</span></a><span class="result"> extends <a href="ClassPath.html" class="extype" name="scala.tools.nsc.util.ClassPath">ClassPath</a>[<a href="../io/package.html#AbstractFile=scala.reflect.io.AbstractFile" class="extmbr" name="scala.tools.nsc.io.AbstractFile">AbstractFile</a>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A directory (or a .</p>
+    </li><li name="scala.tools.nsc.util.JavaClassPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JavaClassPathextendsMergedClassPath[tools.nsc.io.AbstractFile]"></a>
+      <a id="JavaClassPath:JavaClassPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="JavaClassPath.html"><span class="name">JavaClassPath</span></a><span class="result"> extends <a href="MergedClassPath.html" class="extype" name="scala.tools.nsc.util.MergedClassPath">MergedClassPath</a>[<a href="../io/package.html#AbstractFile=scala.reflect.io.AbstractFile" class="extmbr" name="scala.tools.nsc.io.AbstractFile">AbstractFile</a>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The classpath when compiling with target:jvm.</p>
+    </li><li name="scala.tools.nsc.util.MergedClassPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MergedClassPath[T]extendsClassPath[T]"></a>
+      <a id="MergedClassPath[T]:MergedClassPath[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="MergedClassPath.html"><span class="name">MergedClassPath</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="ClassPath.html" class="extype" name="scala.tools.nsc.util.ClassPath">ClassPath</a>[<span class="extype" name="scala.tools.nsc.util.MergedClassPath.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A classpath unifying multiple class- and sourcepath entries.</p>
+    </li><li name="scala.tools.nsc.util.SourcePath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SourcePath[T]extendsClassPath[T]"></a>
+      <a id="SourcePath[T]:SourcePath[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SourcePath.html"><span class="name">SourcePath</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="ClassPath.html" class="extype" name="scala.tools.nsc.util.ClassPath">ClassPath</a>[<span class="extype" name="scala.tools.nsc.util.SourcePath.T">T</span>]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A Classpath containing source files
+</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="scala.tools.nsc.util.ClassPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ClassPath"></a>
+      <a id="ClassPath:ClassPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ClassPath$.html"><span class="name">ClassPath</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">   This module provides star expansion of '-classpath' option arguments, behaves the same as
+   java, see [http://java.</p>
+    </li><li name="scala.tools.nsc.util.JavaClassPath" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JavaClassPath"></a>
+      <a id="JavaClassPath:JavaClassPath"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="JavaClassPath$.html"><span class="name">JavaClassPath</span></a>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../lib/template.js"></script>
+    </body>
+      </html>
