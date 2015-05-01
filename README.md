@@ -21,22 +21,6 @@ Features
 * [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across futures
 • Guice request scope integration with Futures
 
-Libraries
------------------------------------------------------------
-
-We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central].
-The Finatra project is currently split up into multiple components: (Twitter Inject and Finatra libraries).
-
-### Twitter Inject (`com.twitter.inject`)
-Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice].
-
-[Detailed documentation](inject/README.md)
-
-### Finatra (`com.twitter.finatra`)  
-Finatra is a framework for easily building API services on top of Twitter’s Scala stack (twitter-server, finagle, twitter-util)
-
-[Detailed documentation](http/README.md)
-
 <a name="quick-start">Quick Start</a>
 -----------------------------------------------------------
 To get started we'll focus on building an HTTP API for posting and getting tweets:
@@ -178,6 +162,22 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
   }
 }
 ```
+
+Libraries
+-----------------------------------------------------------
+
+We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central].
+The Finatra project is currently split up into multiple components: (Twitter Inject and Finatra libraries).
+
+### Twitter Inject (`com.twitter.inject`)
+Inject provides libraries for integrating [`twitter-server`][twitter-server] and [`util-app`][util-app] with [Google Guice][guice].
+
+[Detailed documentation](inject/README.md)
+
+### Finatra (`com.twitter.finatra`)  
+Finatra is a framework for easily building API services on top of Twitter’s Scala stack (twitter-server, finagle, twitter-util)
+
+[Detailed documentation](http/README.md)
 
 Authors
 -----------------------------------------------------------
