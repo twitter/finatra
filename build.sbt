@@ -36,6 +36,7 @@ val baseSettings = Seq(
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     "Twitter Maven" at "http://maven.twttr.com",
+    "Finatra Repo" at "http://twitter.github.com/finatra",
     Resolver.sonatypeRepo("snapshots")
   ),
   compilerOptions
