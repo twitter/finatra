@@ -3,7 +3,7 @@ layout: post
 title: "Announcing first milestone release of Finatra 2.0.0!"
 date: 2015-04-30 14:05:13 -0700
 comments: false
-categories:
+categories: ["blog", "milestone", "releases"]
 author: cacoco
 ---
 
