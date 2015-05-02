@@ -8,6 +8,7 @@ Current version: `2.0.0.M1`
 
 Announcing the first milestone release of Finatra version 2!
 -----------------------------------------------------------
+[Finatra v2 slides](http://twitter.github.io/finatra/assets/FinatraSFScala.pdf) from SFScala meetup
 
 Documentation for prior versions can be found [here](https://github.com/twitter/finatra/tree/5d1d1cbb7640d8c4b1d11a85b53570d11a323e55).
 
