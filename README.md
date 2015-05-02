@@ -5,6 +5,7 @@ Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) a
 Current version: `2.0.0.M1`
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11)
 
 Announcing the first milestone release of Finatra version 2!
 -----------------------------------------------------------
