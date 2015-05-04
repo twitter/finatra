@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Announcing first milestone release of Finatra 2.0.0!"
+title: "Announcing first milestone release of Finatra 2.0.0 &mdash; ~50x faster than v1.6.0!"
 date: 2015-04-30 14:05:13 -0700
 comments: false
 categories: ["blog", "milestone", "releases"]
