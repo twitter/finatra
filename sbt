@@ -7,7 +7,7 @@ sbtrepo="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch
 
 if [ ! -f "./$sbtjar" ]; then
   echo "downloading $sbtjar from $sbtrepo" 1>&2
-  if ! curl --silent --fail --remote-name $sbtrepo > $sbtjar; then
+  if ! curl --location --silent --fail --remote-name $sbtrepo > $sbtjar; then
     exit 1
   fi
   checksum=`openssl dgst -sha1 $sbtjar | awk '{ print $2 }'`
