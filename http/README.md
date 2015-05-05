@@ -553,6 +553,17 @@ class NonGuiceServer extends HttpServer {
 
 <a name="filters">Filters</a>
 ===============================
+Per controller filters are added as such:
+
+```scala
+class Server extends HttpServer {
+  override configureHttp(router: HttpRouter) {
+    router.
+      add[MyFilter, MyController]      
+  }
+}
+```
+
 A common filter order is as follows:
 
 ```scala
