@@ -2,6 +2,7 @@ import UnidocKeys._
 import com.twitter.scrooge.ScroogeSBT
 import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages
 
+
 lazy val buildSettings = Seq(
   version := "2.0.0.M1",
   scalaVersion := "2.11.6",
