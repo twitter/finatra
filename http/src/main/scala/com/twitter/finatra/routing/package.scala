@@ -7,7 +7,7 @@ package object routing {
   @deprecated("Use com.twitter.finatra.http.routing.FileResolver", "")
   type FileResolver = com.twitter.finatra.http.routing.FileResolver
 
-  @deprecated("Use com.twitter.finatra.http.routing.HttpAssertions", "")
+  @deprecated("Use com.twitter.finatra.http.routing.HttpWarmup", "")
   type HttpAssertions = com.twitter.finatra.http.routing.HttpAssertions
 
   @deprecated("Use com.twitter.finatra.http.routing.HttpRouter", "")

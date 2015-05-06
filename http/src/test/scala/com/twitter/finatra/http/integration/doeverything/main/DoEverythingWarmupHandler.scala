@@ -1,46 +1,32 @@
 package com.twitter.finatra.http.integration.doeverything.main
 
-import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.routing.HttpAssertions
+import com.twitter.finatra.http.routing.HttpWarmup
+import com.twitter.finatra.httpclient.RequestBuilder._
 import com.twitter.finatra.utils.Handler
 import javax.inject.Inject
 
 class DoEverythingWarmupHandler @Inject()(
-  httpAsserter: HttpAssertions)
+  httpWarmup: HttpWarmup)
   extends Handler {
 
   override def handle() = {
-    httpAsserter.get(
-      "/ok",
-      andExpect = Ok,
-      withBody = "ok")
+    httpWarmup.send(
+      get("/ok"))
 
-    httpAsserter.post(
-      "/post",
-      body = "postit",
-      andExpect = Ok,
-      withBody = "post")
+    httpWarmup.send(
+      post("/post"))
 
-    httpAsserter.put(
-      "/put",
-      body = "putit",
-      andExpect = Ok,
-      withBody = "putit")
+    httpWarmup.send(
+      put("/put"))
 
-    httpAsserter.delete(
-      "/delete",
-      andExpect = Ok,
-      withBody = "delete")
+    httpWarmup.send(
+      delete("/delete"))
 
-    httpAsserter.get(      "/admin/finatra/foo",
-      andExpect = Ok,
-      withBody = "bar")
+    httpWarmup.send(
+      get("/admin/finatra/foo"))
 
-    //we haven't started until warmup completes, so an empty body should be returned from the health check
-    httpAsserter.get(
-      "/health",
-      routeToAdminServer = true,
-      andExpect = Ok,
-      withBody = "")
+    httpWarmup.send(
+      get("/health"),
+      forceRouteToAdminHttpMuxers = true)
   }
 }

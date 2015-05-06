@@ -7,7 +7,7 @@ import com.twitter.util.{Await, ExecutorServiceFuturePool, Future}
 import javax.inject.Inject
 import org.jboss.netty.handler.codec.http.{HttpResponse, HttpResponseStatus}
 
-//TODO: Add additional HTTP methods
+@deprecated("Use com.twitter.finatra.http.routing.HttpWarmup", "")
 class HttpAssertions @Inject()(
   router: HttpRouter)
   extends Logging {

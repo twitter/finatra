@@ -1,79 +1,75 @@
 package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.RetryUtils
 import com.twitter.inject.Logging
 import com.twitter.util.{Future, Try}
-import org.jboss.netty.buffer.ChannelBuffer
-import org.jboss.netty.handler.codec.http.HttpHeaders.Names._
-import org.jboss.netty.handler.codec.http.HttpMethod
+import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
-// Barebones HTTP client
-// TODO: Add additional HTTP methods
+/**
+ * Barebones HTTP client
+ */
 class HttpClient(
   hostname: String = "",
   httpService: Service[Request, Response],
   retryPolicy: Option[RetryPolicy[Try[Response]]] = None,
-  authorizationHeaderValue: Option[String] = None,
+  defaultHeaders: Map[String, String] = Map(),
   mapper: FinatraObjectMapper)
   extends Logging {
 
   /* Public */
 
-  def get(uri: String, headers: Seq[(String, String)] = Seq()): Future[Response] = {
-    val request = createRequest(Method.Get, uri)
-    setHeaders(request, headers)
-
-    sendRequest(request)
-  }
-
-  def post(uri: String, channelBuffer: ChannelBuffer, contentLength: Long, contentType: String, headers: (String, String)*): Future[Response] = {
-    val request = createRequest(Method.Post, uri)
-    request.setContent(channelBuffer)
-    setHeaders(request, headers)
-    request.headers().set(CONTENT_LENGTH, contentLength.toString)
-    request.headers().set(CONTENT_TYPE, contentType)
-
-    sendRequest(request)
-  }
-
-  def head(uri: String): Future[Response] = {
-    sendRequest(
-      createRequest(Method.Head, uri))
-  }
-
-  def sendRequest(request: Request): Future[Response] = {
+  def execute(request: Request): Future[Response] = {
     debug(request + " with headers: " + request.headerMap.mkString(", "))
+    setHeaders(request)
+    setHostname(request)
 
     retryPolicy match {
-      case Some(policy) =>
-        RetryUtils.retryFuture(policy) {
-          httpService.apply(request)
-        }
-      case _ =>
-        httpService(request)
+      case Some(policy) => RetryUtils.retryFuture(policy)(httpService(request))
+      case _ => httpService(request)
     }
+  }
+
+  def executeJson[T: Manifest](
+    request: Request,
+    expectedStatus: HttpResponseStatus = Status.Ok): Future[T] = {
+
+    execute(request) flatMap { httpResponse =>
+      if (httpResponse.status != expectedStatus) {
+        Future.exception(new HttpClientException(
+          httpResponse.status,
+          httpResponse.contentString))
+      }
+      else {
+        Future.value(
+          FinatraObjectMapper.parseResponseBody[T](httpResponse, mapper.reader[T]))
+      }
+    }
+  }
+
+  @deprecated("Use execute(RequestBuilder.get(...))", "")
+  def get(uri: String, headers: Seq[(String, String)] = Seq()): Future[Response] = {
+    execute(RequestBuilder
+      .get(uri)
+      .headers(headers))
   }
 
   /* Private */
 
-  private def setHeaders(request: Request, headers: Seq[(String, String)]) {
-    for ((key, value) <- headers) {
-      request.headers().set(key, value)
-    }
-    for (value <- authorizationHeaderValue) {
-      request.headers().set("Authorization", "Bearer " + value)
+  private def setHostname(request: Request) = {
+    if (hostname.nonEmpty) {
+      request.headerMap.add("Host", hostname)
     }
   }
 
-  private def createRequest(method: HttpMethod, uri: String): Request = {
-    val request = Request(method, uri)
-    if (!hostname.isEmpty) {
-      request.headers().set("Host", hostname)
+  private def setHeaders(request: Request): Unit = {
+    if (defaultHeaders.nonEmpty) {
+      for ((key, value) <- defaultHeaders) {
+        request.headerMap.add(key, value)
+      }
     }
-    request
   }
 }

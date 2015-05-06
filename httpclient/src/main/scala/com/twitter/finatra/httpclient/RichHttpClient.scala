@@ -9,14 +9,14 @@ object RichHttpClient {
 
   /* Public */
 
-  def newClientService(target: String) = {
+  def newClientService(dest: String) = {
     nettyToFinagleHttp(
-      Http.newClient(target).toService)
+      Http.newClient(dest).toService)
   }
 
-  def newSslClientService(sslHostname: String, target: String) = {
+  def newSslClientService(sslHostname: String, dest: String) = {
     nettyToFinagleHttp(
-      Http.client.withTls(sslHostname).newService(target))
+      Http.client.withTls(sslHostname).newService(dest))
   }
 
   def nettyToFinagleHttp(nettyService: Service[HttpRequest, HttpResponse]): Service[Request, Response] = {
