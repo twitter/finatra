@@ -4,8 +4,8 @@ object Banner {
 
   def banner(str: String) {
     println("\n")
-    println("=" * 120)
+    println("=" * 75)
     println(str)
-    println("=" * 120)
+    println("=" * 75)
   }
 }

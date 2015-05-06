@@ -2,6 +2,7 @@ package com.twitter.finatra.json.modules
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include
+import com.fasterxml.jackson.core.JsonGenerator.Feature
 import com.fasterxml.jackson.databind.{Module => JacksonModule, _}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala._
@@ -64,7 +65,12 @@ class FinatraJacksonModule extends TwitterModule {
 
     mapper.setPropertyNamingStrategy(propertyNamingStrategy)
     mapper.registerModules(defaultJacksonModules.asJava)
+    finatraCaseClassModule foreach mapper.registerModule
     mapper.registerModules(additionalJacksonModules.asJava)
+
+    if (numbersAsStrings) {
+      mapper.configure(Feature.WRITE_NUMBERS_AS_STRINGS, true)
+    }
 
     if (injector != null) {
       mapper.setInjectableValues(new GuiceInjectableValues(injector))
@@ -80,8 +86,13 @@ class FinatraJacksonModule extends TwitterModule {
     new JodaModule,
     DefaultScalaModule,
     LongKeyDeserializers,
-    FinatraSerDeSimpleModule, //FinatraModule's need to be added 'last' so they can override existing deser's
-    FinatraCaseClassModule)
+    FinatraSerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
+
+  protected def finatraCaseClassModule: Option[JacksonModule] = {
+    Some(FinatraCaseClassModule)
+  }
+
+  protected def numbersAsStrings: Boolean = false
 
   protected def defaultMapperConfiguration(mapper: ObjectMapper) {
     /* Serialization Config */
@@ -116,7 +127,8 @@ class FinatraJacksonModule extends TwitterModule {
 
   protected def additionalJacksonModules: Seq[JacksonModule] = Seq()
 
-  protected def additionalMapperConfiguration(mapper: ObjectMapper) {}
+  protected def additionalMapperConfiguration(mapper: ObjectMapper) {
+  }
 
   protected def copy(objectMapper: ObjectMapper with ScalaObjectMapper) = {
     ObjectMapperCopier.copy(objectMapper)

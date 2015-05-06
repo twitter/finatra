@@ -32,8 +32,7 @@ class DoEverythingWarmupHandler @Inject()(
       andExpect = Ok,
       withBody = "delete")
 
-    httpAsserter.get(
-      "/admin/finatra/foo",
+    httpAsserter.get(      "/admin/finatra/foo",
       andExpect = Ok,
       withBody = "bar")
 

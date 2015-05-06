@@ -1,5 +1,6 @@
 package com.twitter.inject
 
+import org.mockito.Matchers
 import org.specs2.matcher.ScalaTestExpectations
 
 /**
@@ -13,6 +14,14 @@ trait Mockito
   extends org.specs2.mock.Mockito
   with ScalaTestExpectations
   with Logging {
+
+  protected def meq[T](obj: T): T = {
+    Matchers.eq(obj)
+  }
+
+  protected def eqManifest[T: Manifest]: Manifest[T] = {
+    meq(manifest[T])
+  }
 
   protected def reset(mocks: AnyRef*) {
     for (mock <- mocks) {

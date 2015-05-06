@@ -31,5 +31,4 @@ object futureHttp {
       }
     }
   }
-
 }

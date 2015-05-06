@@ -175,11 +175,19 @@ object future {
     }
 
     def toOption: Future[Option[A]] = {
-      future map Some.apply handle { case e => None}
+      future map Some.apply handle {
+        case NonFatal(e) =>
+          log.warn(e)
+          None
+      }
     }
 
     def toBoolean: Future[Boolean] = {
-      future map { _ => true} handle { case e => false}
+      future map { _ => true } handle {
+        case NonFatal(e) =>
+          log.warn(e)
+          false
+      }
     }
   }
 

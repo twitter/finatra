@@ -40,6 +40,18 @@ trait BaseHttpServer extends TwitterServer {
       .enableTracing(tracingEnabled())
   }
 
+  /**
+   * If true, the client pipeline collects HttpChunks into the body of each HttpResponse
+   * Set to false if you wish to stream parse requests using request.reader
+   */
+  protected def aggregateChunks: Boolean = true
+
+  protected def createCodec: RichHttp[Request] = {
+    new RichHttp[Request](
+      httpFactory = httpCodec,
+      aggregateChunks = aggregateChunks)
+  }
+
   type FinagleServerBuilder = ServerBuilder[Request, Response, Yes, Yes, Yes]
 
   protected def configureHttpServer(serverBuilder: FinagleServerBuilder) = {}
@@ -82,7 +94,7 @@ trait BaseHttpServer extends TwitterServer {
   private def startHttpServer() {
     for (port <- parsePort(httpPortFlag)) {
       val serverBuilder = ServerBuilder()
-        .codec(new RichHttp[Request](httpCodec))
+        .codec(createCodec)
         .bindTo(port)
         .name("http")
 
@@ -100,7 +112,7 @@ trait BaseHttpServer extends TwitterServer {
       keys <- keyPath.get
     } {
       val serverBuilder = ServerBuilder()
-        .codec(new RichHttp[Request](httpCodec))
+        .codec(createCodec)
         .bindTo(port)
         .name("https")
         .tls(

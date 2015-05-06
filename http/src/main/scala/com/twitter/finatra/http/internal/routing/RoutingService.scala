@@ -47,11 +47,10 @@ class RoutingService(
   /* Private */
 
   private def notFound(request: Request): Future[Response] = {
-    debug(request + " not found in " + routesStr)
+    debug(request + " not found in registered routes: " + routesStr)
     Future.value(
       SimpleResponse(
-        Status.NotFound,
-        request.uri + " route not found"))
+        Status.NotFound))
   }
 
   private def badRequest(method: HttpMethod): Option[Future[Response]] = {

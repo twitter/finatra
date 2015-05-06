@@ -2,6 +2,7 @@ package com.twitter.finatra.http.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.twitter.finagle.http.Response
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.test.EmbeddedTwitterServer
 import com.twitter.logging.Logger
@@ -29,7 +30,9 @@ trait HttpTest
 
   def idNormalizer(jsonNode: JsonNode): JsonNode = {
     val objNode = jsonNode.asInstanceOf[ObjectNode]
-    objNode.put("id", NormalizedId)
+    if (objNode.has("id")) {
+      objNode.put("id", NormalizedId)
+    }
     objNode
   }
 
@@ -80,5 +83,4 @@ trait HttpTest
       }
     }
   }
-
 }

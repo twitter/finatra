@@ -1,7 +1,9 @@
 package com.twitter.finatra.json
 
+import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapperCopier, SerializationFeature}
 import com.twitter.inject.Logging
+import com.twitter.util.NonFatal
 import org.apache.commons.lang.StringUtils
 import org.scalatest.exceptions.TestFailedException
 
@@ -19,15 +21,26 @@ object JsonDiff extends Logging {
     val expectedJsonStr = jsonString(expectedJson)
 
     val recvJsonNode = {
-      val jsonNode = finatraMapper.parse[JsonNode](recvJsonStr)
+      val jsonNode = tryJsonNodeParse(recvJsonStr)
+
       if (normalizer != null)
         normalizer(jsonNode)
       else
         jsonNode
     }
 
-    val expectedJsonNode = finatraMapper.parse[JsonNode](expectedJsonStr)
+    val expectedJsonNode = tryJsonNodeParse(expectedJsonStr)
     assertJsonNodesSame(recvJsonNode, expectedJsonNode, verbose)
+  }
+
+  private def tryJsonNodeParse(expectedJsonStr: String): JsonNode = {
+    try {
+      finatraMapper.parse[JsonNode](expectedJsonStr)
+    } catch {
+      case NonFatal(e) =>
+        println(e.getMessage)
+        new TextNode(expectedJsonStr)
+    }
   }
 
   private def assertJsonNodesSame(recv: JsonNode, expected: JsonNode, verbose: Boolean) = {
@@ -35,7 +48,7 @@ object JsonDiff extends Logging {
       val recvJsonNormalized = generateSortedAlpha(recv)
       val expectedJsonNormalized = generateSortedAlpha(expected)
 
-      val expectedHeader = "Expected Json: "
+      val expectedHeader = "Expected: "
       val diffStartIdx = StringUtils.indexOfDifference(recvJsonNormalized, expectedJsonNormalized)
 
       println("JSON DIFF FAILED!")
@@ -45,7 +58,7 @@ object JsonDiff extends Logging {
       }
 
       println(" " * (expectedHeader.length + diffStartIdx) + "*")
-      println("Received Json: " + recvJsonNormalized)
+      println("Received: " + recvJsonNormalized)
       println(expectedHeader + expectedJsonNormalized)
       throw new TestFailedException("Json diff failed", 1)
     }
@@ -93,8 +106,12 @@ object JsonDiff extends Logging {
 
   /* Used in tests to provide stable sorted output for assertions */
   def generateSortedAlpha(jsonNode: JsonNode): String = {
-    val node = sortingObjectMapper.treeToValue(jsonNode, classOf[Object])
-    sortingObjectMapper.writeValueAsString(node)
+    if (jsonNode.isTextual) {
+      jsonNode.textValue()
+    } else {
+      val node = sortingObjectMapper.treeToValue(jsonNode, classOf[Object])
+      sortingObjectMapper.writeValueAsString(node)
+    }
   }
 
   private lazy val sortingObjectMapper = {

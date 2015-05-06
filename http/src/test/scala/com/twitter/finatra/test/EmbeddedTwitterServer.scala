@@ -24,12 +24,12 @@ object EmbeddedTwitterServer {
       twitterServer,
       clientFlags,
       extraArgs,
-      waitForWarmup,
-      stage,
-      useSocksProxy,
-      skipAppMain,
-      defaultRequestHeaders,
-      defaultHttpSecure)
+      waitForWarmup = waitForWarmup,
+      stage = stage,
+      useSocksProxy = useSocksProxy,
+      skipAppMain = skipAppMain,
+      defaultRequestHeaders = defaultRequestHeaders,
+      defaultHttpSecure = defaultHttpSecure)
   }
 
   def resolverMapStr(resolverMap: Map[String, String]): Seq[String] = {

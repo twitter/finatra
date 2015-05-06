@@ -41,17 +41,22 @@ class InMemoryHttpService
   /* Mock Support */
 
   def mockGet(path: String, andReturn: Response, sticky: Boolean = false) {
-    val existing = responseMap(RequestKey(POST, path))
-    val newEntry = ResponseWithExpectedBody(andReturn, None, sticky = sticky)
-    responseMap(
-      RequestKey(GET, path)) = existing :+ newEntry
+    mock(GET, path, andReturn, sticky)
   }
 
   def mockPost(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
-    val existing = responseMap(RequestKey(POST, path))
-    val newEntry = ResponseWithExpectedBody(andReturn, withBody.toOption, sticky = sticky)
+    mock(POST, path, andReturn, sticky)
+  }
+
+  def mockPut(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
+    mock(PUT, path, andReturn, sticky)
+  }
+
+  def mock(method: HttpMethod, path: String, andReturn: Response, sticky: Boolean): Unit = {
+    val existing = responseMap(RequestKey(method, path))
+    val newEntry = ResponseWithExpectedBody(andReturn, None, sticky = sticky)
     responseMap(
-      RequestKey(POST, path)) = existing :+ newEntry
+      RequestKey(method, path)) = existing :+ newEntry
   }
 
   override def reset() {
@@ -76,7 +81,7 @@ class InMemoryHttpService
       throw new Exception(key + " not mocked in\n" + responseMap.mkString("\n"))
     }
 
-    if (request.method == HttpMethod.POST && hasExpectedBodies(existing))
+    if (request.method != HttpMethod.GET && hasExpectedBodies(existing))
       lookupPostResponseWithBody(request, existing)
     else if (existing.head.sticky)
       existing.head.response
@@ -85,11 +90,11 @@ class InMemoryHttpService
   }
 
   private def hasExpectedBodies(existing: ArrayBuffer[ResponseWithExpectedBody]): Boolean = {
-    existing exists {_.expectedPostBody.isDefined}
+    existing exists {_.expectedBody.isDefined}
   }
 
   private def lookupPostResponseWithBody(request: Request, existing: ArrayBuffer[ResponseWithExpectedBody]): Response = {
-    val found = existing find {_.expectedPostBody == Some(request.contentString)} getOrElse {
+    val found = existing find {_.expectedBody == Some(request.contentString)} getOrElse {
       throw new Exception(request + " with expected body not mocked")
     }
 
@@ -107,7 +112,7 @@ class InMemoryHttpService
 
   case class ResponseWithExpectedBody(
     response: Response,
-    expectedPostBody: Option[String],
+    expectedBody: Option[String],
     sticky: Boolean)
 
 }

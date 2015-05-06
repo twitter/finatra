@@ -12,7 +12,7 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 
 * inject-modules - provides common Twitter modules.
 
-* inject-thrift-client - support for creating [Finagle][finagle] clients to [Thrift][apache-thrift] servies.
+* inject-thrift-client - support for creating [Finagle][finagle] clients to [Thrift][apache-thrift] services.
 
 * inject-request-scope - provides utilities for working with Guice request [scopes][guice-scopes].
 

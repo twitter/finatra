@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{JsonNode, Module, ObjectMapper, ObjectReader}
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.{Message, Request, Response}
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonObjectParseException, RequestFieldInjectionNotSupportedException}
+import com.twitter.finatra.json.internal.serde.ArrayElementsOnNewLinesPrettyPrinter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import java.io.{InputStream, OutputStream, StringWriter}
+import java.io.{InputStream, OutputStream}
 import java.nio.ByteBuffer
 
 object FinatraObjectMapper {
@@ -22,8 +23,8 @@ object FinatraObjectMapper {
       guiceJacksonModule.provideScalaObjectMapper(injector = null))
   }
 
-  def parseRequestBody[T: Manifest](request: Request, reader: ObjectReader): T = {
-    val inputStream = request.getInputStream()
+  def parseMessageBody[T: Manifest](message: Message, reader: ObjectReader): T = {
+    val inputStream = message.getInputStream()
     try {
       reader.readValue[T](inputStream)
     }
@@ -31,21 +32,33 @@ object FinatraObjectMapper {
       inputStream.close()
     }
   }
+
+  def parseRequestBody[T: Manifest](request: Request, reader: ObjectReader): T =
+    parseMessageBody[T](request, reader)
+
+  def parseResponseBody[T: Manifest](response: Response, reader: ObjectReader): T =
+    parseMessageBody[T](response, reader)
 }
 
 case class FinatraObjectMapper(
   objectMapper: ObjectMapper with ScalaObjectMapper) {
 
+  lazy val prettyObjectMapper = {
+    objectMapper.writer(ArrayElementsOnNewLinesPrettyPrinter)
+  }
+
   def reader[T: Manifest] = {
     objectMapper.reader[T]
   }
 
-  def parse[T: Manifest](request: Request): T = {
-    val length = request.contentLength.getOrElse(0L)
-    if (length == 0)
-      throw new RequestFieldInjectionNotSupportedException()
-    else
-      FinatraObjectMapper.parseRequestBody(request, objectMapper.reader[T])
+  def parse[T: Manifest](message: Message): T = {
+    if (message.isRequest) {
+      val length = message.contentLength.getOrElse(0L)
+      if (length == 0) {
+        throw new RequestFieldInjectionNotSupportedException()
+      }
+    }
+    FinatraObjectMapper.parseMessageBody(message, objectMapper.reader[T])
   }
 
   def parse[T: Manifest](byteBuffer: ByteBuffer): T = {
@@ -104,12 +117,12 @@ case class FinatraObjectMapper(
     objectMapper.writeValueAsString(any)
   }
 
-  def writePrettyString(any: Any): String = {
-    val writer = new StringWriter()
-    val generator = objectMapper.getFactory.createGenerator(writer)
-    generator.useDefaultPrettyPrinter()
-    generator.writeObject(any)
-    writer.toString
+  def writePrettyString(any: Any): String = any match {
+    case str: String =>
+      val jsonNode = objectMapper.readValue[JsonNode](str)
+      prettyObjectMapper.writeValueAsString(jsonNode)
+    case _ =>
+      prettyObjectMapper.writeValueAsString(any)
   }
 
   def registerModule(module: Module) = {

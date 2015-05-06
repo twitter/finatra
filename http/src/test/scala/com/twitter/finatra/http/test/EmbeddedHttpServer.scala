@@ -5,8 +5,9 @@ import com.google.common.net.{HttpHeaders, MediaType}
 import com.google.inject.Stage
 import com.twitter.finagle.http._
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
-import com.twitter.inject.server.PortUtils.ephemeralLoopback
-import com.twitter.inject.server.Ports
+import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
+import com.twitter.inject.server.{PortUtils, Ports}
+import com.twitter.util.Try
 import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 
 class EmbeddedHttpServer(
@@ -53,8 +54,28 @@ class EmbeddedHttpServer(
     println("ExternalHttp -> http://localhost:" + twitterServer.httpExternalPort.get)
   }
 
+  override protected def printNonEmptyResponseBody(response: Response): Unit = {
+    try {
+      println(mapper.writePrettyString(
+        response.getContentString()))
+    } catch {
+      case e: Exception =>
+        println(response.contentString)
+    }
+    println()
+  }
+
+  override protected def prettyRequestBody(request: Request): String = {
+    Try {
+      mapper.writePrettyString(
+        request.contentString)
+    } getOrElse {
+      request.contentString
+    }
+  }
+
   lazy val httpExternalPort = twitterServer.httpExternalPort.get
-  lazy val externalHttpHostAndPort = "localhost:" + httpExternalPort
+  lazy val externalHttpHostAndPort = PortUtils.loopbackAddressForPort(httpExternalPort)
 
   override def close() {
     if (!closed) {
@@ -325,7 +346,9 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Boolean): Response = {
 
-    val client = chooseHttpClient(request.path, routeToAdminServer, secure)
+    val (client, port) = chooseHttpClient(request.path, routeToAdminServer, secure)
+    request.headers.set("Host", loopbackAddressForPort(port))
+
     val response = httpExecute(client, request, headers, suppress, andExpect, withLocation, withBody)
 
     if (withJsonBody != null) {
@@ -357,11 +380,11 @@ class EmbeddedHttpServer(
 
   private def chooseHttpClient(path: String, forceAdmin: Boolean, secure: Boolean) = {
     if (path.startsWith("/admin") || forceAdmin)
-      httpAdminClient
+      (httpAdminClient, twitterServer.httpAdminPort)
     else if (secure)
-      httpsClient
+      (httpsClient, twitterServer.httpsExternalPort.get)
     else
-      httpClient
+      (httpClient, twitterServer.httpExternalPort.get)
   }
 
   private def addAcceptHeader(accept: MediaType, headers: Map[String, String]): Map[String, String] = {
@@ -392,4 +415,5 @@ class EmbeddedHttpServer(
         throw e
     }
   }
+
 }

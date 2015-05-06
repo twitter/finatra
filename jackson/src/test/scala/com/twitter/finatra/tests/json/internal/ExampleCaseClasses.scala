@@ -255,3 +255,5 @@ case class CaseClassWithInvalidValidation(
   make: CarMakeEnum)
 
 case class NoConstructorArgs()
+
+case class CaseClassWithBoolean(foo: Boolean)

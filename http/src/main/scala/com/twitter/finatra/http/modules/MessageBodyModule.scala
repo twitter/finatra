@@ -15,7 +15,7 @@ class MessageBodyModule extends TwitterModule {
     bindSingleton[DefaultMessageBodyWriter].to[FinatraDefaultMessageBodyWriter]
 
     singletonStartup { injector =>
-      info("Configuring MessageBodyManager")
+      debug("Configuring MessageBodyManager")
       val manager = injector.instance[MessageBodyManager]
       manager.addByAnnotation[Mustache, MustacheMessageBodyWriter]
     }

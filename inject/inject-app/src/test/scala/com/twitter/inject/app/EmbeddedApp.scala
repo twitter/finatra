@@ -47,7 +47,7 @@ class EmbeddedApp(
 
   /* Fields */
 
-  val appName = app.getClass.getName
+  val appName = app.name
   private val futurePool = FuturePool.unboundedPool
 
   //Mutable state
@@ -112,7 +112,7 @@ class EmbeddedApp(
   }
 
   protected def logAppStartup() = {
-    banner("App warmup completed (" + appName + ")")
+    banner("App warmup completed: " + appName)
   }
 
   /* Private */

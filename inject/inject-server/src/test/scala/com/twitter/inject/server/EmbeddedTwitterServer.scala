@@ -96,7 +96,7 @@ class EmbeddedTwitterServer(
   }
 
   override protected def logAppStartup() {
-    Banner.banner("Server Started (" + appName + ")")
+    Banner.banner("Server Started: " + appName)
     println("AdminHttp    -> http://localhost:%s/admin".format(twitterServer.httpAdminPort))
   }
 
@@ -133,7 +133,7 @@ class EmbeddedTwitterServer(
       }
     }
 
-    banner(appName + "Server Stats")
+    banner("Server Stats: " + appName)
     pretty(inMemoryStatsReceiver.stats.iterator)
     pretty(inMemoryStatsReceiver.counters.iterator)
     pretty(inMemoryStatsReceiver.gauges.iterator)
@@ -182,7 +182,7 @@ class EmbeddedTwitterServer(
     val response = handleRequest(request, client = client, additionalHeaders = headers)
 
     /* Post - Execute */
-    printResponse(response, suppress)
+    printResponseMetadata(response, suppress)
     printResponseBody(response, suppress)
     if (andExpect != null && response.status != andExpect) {
       response.status should equal(andExpect)
@@ -193,7 +193,7 @@ class EmbeddedTwitterServer(
     }
 
     if (withLocation != null) {
-      response.location should equal(Some(withLocation))
+      response.location.get should endWith(withLocation)
     }
 
     response
@@ -255,34 +255,49 @@ class EmbeddedTwitterServer(
 
   private def printRequest(request: Request, suppress: Boolean) {
     if (!suppress) {
-      val msg = "HTTP " + request.method + " " + request.uri
+      val headers = request.headerMap.mkString(
+        "[Header]\t",
+        "\n[Header]\t",
+        "")
+
+      val msg = "HTTP " + request.method + " " + request.uri + "\n" + headers
+
       if (request.contentString.isEmpty)
         banner(msg)
       else
-        banner(msg + "\n" + request.contentString)
+        banner(msg + "\n" + prettyRequestBody(request))
     }
   }
 
-  private def printResponse(response: Response, suppress: Boolean) {
+  protected def prettyRequestBody(request: Request): String = {
+    request.contentString
+  }
+
+  private def printResponseMetadata(response: Response, suppress: Boolean) {
     if (!suppress) {
-      println("-" * 120)
+      println("-" * 75)
       println("[Status]\t" + response.status)
-      response.headerMap foreach { case (k, v) =>
-        println(s"[Header]\t$k: $v")
-      }
+      println(response.headerMap.mkString(
+        "[Header]\t",
+        "\n[Header]\t",
+        ""))
     }
   }
 
   private def printResponseBody(response: Response, suppress: Boolean) {
     if (!suppress) {
       if (response.contentString.isEmpty) {
-        println("<EmptyBody>")
+        println("*EmptyBody*")
       }
       else {
-        println(response.contentString)
-        println()
+        printNonEmptyResponseBody(response)
       }
     }
+  }
+
+  protected def printNonEmptyResponseBody(response: Response): Unit = {
+    println(response.contentString)
+    println()
   }
 
   private def adminAndLogArgs = Array(
@@ -301,21 +316,12 @@ class EmbeddedTwitterServer(
   }
 
   protected def createApiRequest(path: String, method: HttpMethod = Method.Get) = {
-    val pathToUse = determinePath(path)
-    createRequest(method, pathToUse)
-  }
-
-  private def createRequest(method: HttpMethod, pathToUse: String): Request = {
-    val request = Request(method, pathToUse)
-    request.headers.set("Host", "localhost.twitter.com")
-    request
-  }
-
-  private def determinePath(path: String): String = {
-    if (path.startsWith("http"))
+    val pathToUse = if (path.startsWith("http"))
       URI.create(path).getPath
     else
       path
+
+    Request(method, pathToUse)
   }
 
   private def addAcceptHeader(accept: MediaType, headers: Map[String, String]): Map[String, String] = {

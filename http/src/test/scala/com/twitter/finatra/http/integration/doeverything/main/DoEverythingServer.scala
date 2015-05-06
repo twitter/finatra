@@ -1,6 +1,5 @@
 package com.twitter.finatra.http.integration.doeverything.main
 
-import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.integration.doeverything.main.controllers.{DoEverythingController, NonGuiceController}

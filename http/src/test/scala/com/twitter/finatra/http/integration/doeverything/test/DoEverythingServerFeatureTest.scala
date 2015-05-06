@@ -258,7 +258,7 @@ class DoEverythingServerFeatureTest extends Test {
       server.httpGet(
         "/sdafasdfsadfsadfsafd",
         andExpect = NotFound,
-        withBody = "/sdafasdfsadfsadfsafd route not found")
+        withBody = "")
     }
 
     "complex path" in {
@@ -296,17 +296,19 @@ class DoEverythingServerFeatureTest extends Test {
     }
 
     "pathUrl" in {
-      server.httpGet(
+      val request = server.httpGet(
         "/pathUrl",
-        andExpect = Ok,
-        withBody = "http://localhost.twitter.com/pathUrl/")
+        andExpect = Ok)
+
+      request.contentString should endWith("/pathUrl/")
     }
 
     "path" in {
-      server.httpGet(
+      val request = server.httpGet(
         "/path",
-        andExpect = Ok,
-        withBody = "http://localhost.twitter.com/path/")
+        andExpect = Ok)
+
+      request.contentString should endWith("/path/")
     }
 
     "get to put" in {
