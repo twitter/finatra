@@ -572,7 +572,7 @@ class Server extends HttpServer {
     router.
       filter[AccessLoggingFilter].
       filter[StatsFilter].
-      filter[ExceptionMappingFilter].
+      filter[ExceptionMappingFilter[Request]].
       filter[LoggingMDCFilter].
       filter[FinagleRequestScopeFilter].
       filter[UserFilter].
@@ -963,7 +963,7 @@ trait ExceptionMapper[T <: Throwable] {
 ```
 which says it will handle `T`-typed exceptions. The request that triggered the exception is also provided as an argument. You can make use of exception mapping by adding the [`ExceptionMappingFilter`](../http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) to your `com.twitter.finatra.routing.HttpRouter`, e.g.,
 ```scala
-router.filter[ExceptionMappingFilter]
+router.filter[ExceptionMappingFilter[Request]]
 ```
 
 The `ExceptionMappingFilter` takes an [`ExceptionManager`](../http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ExceptionManager.scala) which is provided by default in the [`ExceptionMapperModule`](../http/src/main/scala/com/twitter/finatra/http/modules/ExceptionMapperModule.scala). You can override the default module if necessary by overriding the value in the [`HttpServer`](../http/src/main/scala/com/twitter/finatra/http/HttpServer.scala).

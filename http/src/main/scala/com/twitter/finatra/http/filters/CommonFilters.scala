@@ -9,5 +9,5 @@ class CommonFilters @Inject()(
   a: AccessLoggingFilter,
   b: HttpResponseFilter,
   c: StatsFilter[Request],
-  d: ExceptionMappingFilter)
+  d: ExceptionMappingFilter[Request])
   extends MergedFilter(a, b, c, d)

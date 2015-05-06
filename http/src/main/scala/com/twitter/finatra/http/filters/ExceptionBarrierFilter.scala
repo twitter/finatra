@@ -12,7 +12,7 @@ import javax.inject.{Inject, Singleton}
 class ExceptionBarrierFilter @Inject()(
   statsReceiver: StatsReceiver,
   exceptionManager: ExceptionManager)
-  extends ExceptionMappingFilter(exceptionManager) {
+  extends ExceptionMappingFilter[Request](exceptionManager) {
 
   private val responseCodeStatsReceiver = statsReceiver.scope("server/response/status")
 

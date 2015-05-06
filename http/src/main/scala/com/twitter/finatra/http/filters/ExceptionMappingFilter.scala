@@ -14,11 +14,11 @@ import javax.inject.{Inject, Singleton}
  * TODO (AF-302): Are we handling Fatal errors properly?
  */
 @Singleton
-class ExceptionMappingFilter @Inject()(
+class ExceptionMappingFilter[Req <: Request] @Inject()(
   exceptionManager: ExceptionManager)
-  extends SimpleFilter[Request, Response] {
+  extends SimpleFilter[Req, Response] {
 
-  override def apply(request: Request, service: Service[Request, Response]) = {
+  override def apply(request: Req, service: Service[Req, Response]) = {
     (try service(request) catch {
       case e: NoSuchMethodException =>
         // Catch this instead of propagating it to the RootMonitor and then
