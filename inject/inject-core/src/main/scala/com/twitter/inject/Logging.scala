@@ -1,8 +1,19 @@
 package com.twitter.inject
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.twitter.inject.Logging._
 import com.twitter.util.{Future, NonFatal, Stopwatch}
+import grizzled.slf4j.{Logger => GrizzledLogger}
 
+object Logging {
+
+  /*
+   * Suffix added to the class name of Guice-AOP intercepted classes.
+   * When these cglib created classes are detected by name, we'll pass the
+   * superclass into the logger to avoid seeing "EnhancerByGuice" in the logs.
+   */
+  private val GuiceEnhancedSuffix = "$$EnhancerByGuice$$"
+}
 
 /**
  * Mix this trait into a class/object to get helpful logging methods.
@@ -13,21 +24,25 @@ import com.twitter.util.{Future, NonFatal, Stopwatch}
  *
  * //Before
  * def foo = {
- *   val result = 4 + 5
- *   debugResult("Foo returned " + result)
- *   result
+ * val result = 4 + 5
+ * debugResult("Foo returned " + result)
+ * result
  * }
  *
  * //After
  * def foo = {
- *   debugResult("Foo returned %s") {
- *     4 + 5
- *   }
+ * debugResult("Foo returned %s") {
+ * 4 + 5
+ * }
  * }
  */
 @JsonIgnoreProperties(Array("trace_enabled", "debug_enabled", "error_enabled", "info_enabled", "warn_enabled"))
 trait Logging
   extends grizzled.slf4j.Logging {
+
+  override protected def logger: GrizzledLogger = {
+    guiceAwareLogger
+  }
 
   /**
    * Log an error msg that contains the result of the passed in func.
@@ -107,5 +122,16 @@ trait Logging
         error(formatStr.format(elapsed().inMillis, e))
         throw e
     }
+  }
+
+  /*
+   * If we detect an AOP wrapped class, pass the superclass into the
+   * logger to avoid seeing $$EnhancerByGuice$$ in the logs
+   */
+  private val guiceAwareLogger: GrizzledLogger = {
+    if (getClass.getName.contains(GuiceEnhancedSuffix))
+      GrizzledLogger(getClass.getSuperclass)
+    else
+      GrizzledLogger(getClass)
   }
 }

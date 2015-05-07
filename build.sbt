@@ -221,10 +221,15 @@ lazy val injectThriftClient = project
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thrift" % versions.finagle,
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
-      "com.twitter" %% "scrooge-core" % versions.scrooge
-    )
+      "com.twitter" %% "scrooge-core" % versions.scrooge,
+      "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
+      "com.twitter" %% "finagle-http" % versions.finagle % "test->compile")
   )
-  .dependsOn(injectCore, injectCore % "test->test", injectApp % "test->test")
+  .dependsOn(
+    injectCore,
+    injectCore % "test->test",
+    injectApp % "test->test",
+    finatraHttp % "test->test")
 
 lazy val finatraUtils = project
   .in(file("utils"))
@@ -245,8 +250,7 @@ lazy val finatraUtils = project
   .dependsOn(
     injectRequestScope,
     injectServer,
-    injectServer % "test->test",
-    injectThriftClient
+    injectServer % "test->test"
   )
 
 lazy val finatraJackson = project
@@ -264,7 +268,7 @@ lazy val finatraJackson = project
   )
   .dependsOn(injectServer % "test->test", finatraUtils)
 
-lazy val finatraHttp = project
+lazy val finatraHttp: Project = project
   .in(file("http"))
   .settings(moduleName := "finatra-http")
   .settings(finatraBuildSettings)
@@ -282,6 +286,7 @@ lazy val finatraHttp = project
   )
   .dependsOn(
     finatraJackson,
+    finatraHttpclient % "test->test",
     finatraJackson % "test->test",
     injectServer % "test->test"
   )
@@ -319,6 +324,7 @@ lazy val finatraLogback = project
     injectCore,
     injectCore % "test->test"
   )
+
 
 /**
  * Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.

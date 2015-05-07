@@ -41,8 +41,8 @@ trait BaseHttpServer extends TwitterServer {
   }
 
   /**
-   * If true, the client pipeline collects HttpChunks into the body of each HttpResponse
-   * Set to false if you wish to stream parse requests using request.reader
+   * If true, the client pipeline collects HttpChunks into the body of each Request
+   * Set to false if you wish to stream parse requests using request.reader.read
    */
   protected def aggregateChunks: Boolean = true
 

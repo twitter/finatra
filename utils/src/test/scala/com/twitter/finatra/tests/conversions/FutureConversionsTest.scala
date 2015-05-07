@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.future._
 import com.twitter.inject.Test
-import com.twitter.util.Future
+import com.twitter.util.{Return, Future}
 
 class FutureConversionsTest extends Test {
 
@@ -227,6 +227,23 @@ class FutureConversionsTest extends Test {
       assertFuture(
         Future(1).chainedOnFailure { e => Future.exception(new RuntimeException("failure in chained"))},
         Future(1))
+    }
+
+    "partialTransform when success matches" in {
+      assertFailedFuture[RuntimeException](
+        Future(1).partialTransform {
+          case Return(r) if r == 1 =>
+            Future.exception(new RuntimeException("bad"))
+        })
+    }
+
+    "partialTransform when success doesn't match" in {
+      assertFuture(
+        Future(2).partialTransform {
+          case Return(r) if r == 1 =>
+            Future.exception(new RuntimeException("bad"))
+        },
+        Future(2))
     }
   }
 

@@ -89,6 +89,15 @@ class EmbeddedTwitterServer(
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
   lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(twitterServer.httpAdminPort)
 
+  def thriftPort: Int = {
+    start()
+    twitterServer.thriftPort.get
+  }
+
+  def thriftHostAndPort: String = {
+    PortUtils.loopbackAddressForPort(thriftPort)
+  }
+
   /* Protected */
 
   override protected def nonGuiceAppStarted(): Boolean = {
@@ -97,15 +106,7 @@ class EmbeddedTwitterServer(
 
   override protected def logAppStartup() {
     Banner.banner("Server Started: " + appName)
-    println("AdminHttp    -> http://localhost:%s/admin".format(twitterServer.httpAdminPort))
-  }
-
-  protected def thriftPort: Option[Int] = {
-    None
-  }
-
-  protected def externalHostAndPort: Option[String] = {
-    None
+    println(s"AdminHttp    -> http://$adminHostAndPort/admin")
   }
 
   /* Public */
@@ -126,17 +127,24 @@ class EmbeddedTwitterServer(
   }
 
   def printStats() {
-    def pretty(statsMap: Iterator[(Seq[String], Any)]) = {
-      for ((keys, value) <- statsMap) {
-        println(
-          keys.mkString("/") + " = " + value)
-      }
+    def prettyKeys(keys: Seq[String]): String = {
+      keys.mkString("/")
     }
 
-    banner("Server Stats: " + appName)
-    pretty(inMemoryStatsReceiver.stats.iterator)
-    pretty(inMemoryStatsReceiver.counters.iterator)
-    pretty(inMemoryStatsReceiver.gauges.iterator)
+    banner(appName + " Stats")
+
+    for ((keys, values) <- inMemoryStatsReceiver.stats.iterator.toSeq.sortBy {_._1.head}) {
+      val avg = values.sum / values.size
+      println(prettyKeys(keys) + "\t = Avg " + avg + " with values " + values.mkString(", "))
+    }
+
+    for ((keys, value) <- inMemoryStatsReceiver.counters.iterator.toSeq.sortBy {_._1.head}) {
+      println(prettyKeys(keys) + "\t = " + value)
+    }
+
+    for ((keys, value) <- inMemoryStatsReceiver.gauges.iterator.toSeq.sortBy {_._1.head}) {
+      println(prettyKeys(keys) + "\t = " + value)
+    }
   }
 
   def assertHealthy(healthy: Boolean = true) {

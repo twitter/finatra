@@ -2,7 +2,7 @@ package com.twitter.finatra.conversions
 
 import com.twitter.finatra.conversions.option._
 import com.twitter.finatra.conversions.seq._
-import com.twitter.util.{Future, NonFatal, Return, Throw}
+import com.twitter.util._
 import grizzled.slf4j.Logger
 
 object future {
@@ -187,6 +187,17 @@ object future {
         case NonFatal(e) =>
           log.warn(e)
           false
+      }
+    }
+
+    def partialTransform(pf: PartialFunction[Try[A], Future[A]]): Future[A] = {
+      future.transform {
+        case ret@Return(r) if pf.isDefinedAt(ret) =>
+          pf(ret)
+        case thr@Throw(t) if pf.isDefinedAt(thr) =>
+          pf(thr)
+        case _ =>
+          future
       }
     }
   }

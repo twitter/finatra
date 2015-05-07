@@ -1,4 +1,3 @@
-/*
 lazy val buildSettings = Seq(
   version := "2.0.0-SNAPSHOT",
   scalaVersion := "2.11.6"
@@ -54,4 +53,3 @@ lazy val finatraHelloWorld = project
       "com.twitter.inject" %% "inject-server" % "2.0.0.M1" % "test->test"
     )
   )
-*/

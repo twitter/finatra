@@ -8,10 +8,11 @@ import com.twitter.finatra.http.integration.doeverything.main.services.DoEveryth
 import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Test
+import com.twitter.inject.server.FeatureTest
 
-class DoEverythingServerFeatureTest extends Test {
+class DoEverythingServerFeatureTest extends FeatureTest {
 
-  val server = new EmbeddedHttpServer(
+  override val server = new EmbeddedHttpServer(
     extraArgs = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer)
 

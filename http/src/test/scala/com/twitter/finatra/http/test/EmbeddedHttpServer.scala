@@ -51,7 +51,7 @@ class EmbeddedHttpServer(
 
   override protected def logAppStartup() {
     super.logAppStartup()
-    println("ExternalHttp -> http://localhost:" + twitterServer.httpExternalPort.get)
+    println(s"ExternalHttp -> http://$externalHttpHostAndPort")
   }
 
   override protected def printNonEmptyResponseBody(response: Response): Unit = {

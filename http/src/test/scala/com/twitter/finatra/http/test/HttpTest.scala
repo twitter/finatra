@@ -48,6 +48,17 @@ trait HttpTest
     server
   }
 
+  def resolverMap(resolverMap: (String, String)*): String = {
+    if (resolverMap.isEmpty)
+      ""
+    else
+      "-com.twitter.server.resolverMap=" + {
+        resolverMap map { case (k, v) =>
+          k + "=" + v
+        } mkString ","
+      }
+  }
+
   def urlEncode(str: String) = {
     URLEncoder.encode(str, "UTF-8")
       .replaceAll("\\+", "%20")

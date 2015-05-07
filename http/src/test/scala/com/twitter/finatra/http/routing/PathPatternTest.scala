@@ -62,7 +62,7 @@ class PathPatternTest extends Test {
       pending
       val path = "위키백과"
       val escapedUri = "/" + new URI(path).toASCIIString
-      PathPattern("/" + path).extract(escapedUri) should equal(Some())
+      PathPattern("/" + path).extract(escapedUri).isDefined should equal(true)
     }
   }
 }

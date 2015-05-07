@@ -3,7 +3,7 @@ package com.twitter.inject.app.internal
 import com.google.inject.util.Modules
 import com.google.inject.{Module => GuiceModule, _}
 import com.twitter.app.Flag
-import com.twitter.inject.{Injector, Logging, TwitterModule}
+import com.twitter.inject.{TwitterBaseModule, Injector, Logging, TwitterModule}
 import scala.collection.JavaConverters._
 
 object InstalledModules {
@@ -50,14 +50,14 @@ object InstalledModules {
    */
   private[inject] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {
     (modules collect {
-      case injectModule: TwitterModule =>
+      case injectModule: TwitterBaseModule =>
         injectModule.flags ++ findModuleFlags(injectModule.modules)
     }).flatten.distinct
   }
 
   /** Recursively finds all 'composed' modules */
   private def findInstalledModules(module: GuiceModule): Seq[GuiceModule] = module match {
-    case injectModule: TwitterModule =>
+    case injectModule: TwitterBaseModule =>
       injectModule.modules ++
         (injectModule.modules flatMap findInstalledModules)
     case _ =>
@@ -72,7 +72,7 @@ case class InstalledModules(
 
   def postStartup() {
     modules foreach {
-      case injectModule: TwitterModule =>
+      case injectModule: TwitterBaseModule =>
         try {
           injectModule.callPostStartupCallbacks(injector)
         } catch {
@@ -87,7 +87,7 @@ case class InstalledModules(
   // Note: We don't rethrow so that all modules have a change to shutdown
   def shutdown() {
     modules foreach {
-      case injectModule: TwitterModule =>
+      case injectModule: TwitterBaseModule =>
         try {
           injectModule.callShutdownCallbacks()
         } catch {

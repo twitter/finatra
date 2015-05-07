@@ -1,6 +1,6 @@
 package com.twitter.inject.app
 
-import com.google.inject.Stage
+import com.google.inject.{Module, Stage}
 import com.twitter.app.Flag
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.{Injector, TwitterModule}
@@ -9,14 +9,14 @@ object TestInjector {
 
   /* Public */
 
-  def apply(modules: TwitterModule*): Injector = {
+  def apply(modules: Module*): Injector = {
     apply(modules = modules)
   }
 
   def apply(
     clientFlags: Map[String, String] = Map(),
-    modules: Seq[TwitterModule],
-    overrideModules: Seq[TwitterModule] = Seq(),
+    modules: Seq[Module],
+    overrideModules: Seq[Module] = Seq(),
     stage: Stage = Stage.DEVELOPMENT): Injector = {
 
     val moduleFlags = InstalledModules.findModuleFlags(modules ++ overrideModules)

@@ -111,13 +111,6 @@ class FailFastServer extends TwitterServer {
       throw new StartupTestException("guice module exception")
     }
   })
-
-  //TODO: Remove override once App#nonExitingMain in opensource released
-  override protected def exitOnError(reason: String) {
-    System.err.println(reason)
-    close()
-    throw new Exception(reason)
-  }
 }
 
 class SimpleGuiceTwitterServer extends TwitterServer {
@@ -133,13 +126,6 @@ class ServerWithGuiceModuleInstall extends TwitterServer {
       install(new FooModule)
     }
   })
-
-  //TODO: Remove override once App#nonExitingMain in opensource released
-  override protected def exitOnError(reason: String) {
-    System.err.println(reason)
-    close()
-    throw new Exception(reason)
-  }
 }
 
 class FooModule extends AbstractModule {
@@ -151,13 +137,6 @@ class PremainErrorBaseTwitterServer extends BaseTwitterServer with Ports with Wa
     throw new StartupTestException("premain exception")
   }
 
-  /* TODO: Remove once com.twitter.app.App with nonExitingMain is opensource released */
-  override protected def exitOnError(reason: String): Unit = {
-    System.err.println(reason)
-    close()
-    throw new Exception(reason)
-  }
-
   def main() {
     warmupComplete()
     throw new StartupTestException("shouldn't get here")
@@ -167,13 +146,6 @@ class PremainErrorBaseTwitterServer extends BaseTwitterServer with Ports with Wa
 class ServerPremainException extends TwitterServer {
   premain {
     throw new StartupTestException("premain exception")
-  }
-
-  //TODO: Remove override once App#nonExitingMain in opensource released
-  override protected def exitOnError(reason: String) {
-    System.err.println(reason)
-    close()
-    throw new Exception(reason)
   }
 }
 

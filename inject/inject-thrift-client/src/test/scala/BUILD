@@ -1,0 +1,16 @@
+junit_tests(name='scala',
+  dependencies=[
+    '3rdparty:logback-classic',
+    'finagle/finagle-thriftmux',
+    'finagle/finagle-http',
+    'finatra/http:test-deps',
+    'finatra/inject/inject-server',
+    'finatra/inject/inject-server:test-deps',
+    'finatra/inject/inject-thrift-client',
+    'finatra/inject/inject-thrift-client/src/test/thrift:thrift-scala',
+    'finatra/inject/inject-core:test-deps',
+    'finatra/inject/inject-modules',
+    'finatra/inject/inject-app:test-deps',
+  ],
+  sources=rglobs('com/twitter/inject/thrift/*.scala'),
+)

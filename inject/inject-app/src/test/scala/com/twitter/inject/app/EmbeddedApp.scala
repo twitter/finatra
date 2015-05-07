@@ -123,7 +123,7 @@ class EmbeddedApp(
 
     _mainResult = futurePool {
       try {
-        callMain(allArgs)
+        app.nonExitingMain(allArgs)
       } catch {
         case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
           println("OutOfMemoryError(PermGen) in server startup. " +
@@ -138,18 +138,6 @@ class EmbeddedApp(
     } onFailure { e =>
       //If we rethrow, the exception will be suppressed by the Future Pool's monitor. Instead we save off the exception and rethrow outside the pool
       startupFailedThrowable = Some(e)
-    }
-  }
-
-  //TODO: Remove method once App#nonExitingMain is opensource released
-  private def callMain(allArgs: Array[String]): Unit = {
-    try {
-      val nonExitingMain = app.getClass.getMethod("nonExitingMain", classOf[Array[String]])
-      nonExitingMain.invoke(app, allArgs)
-    }
-    catch {
-      case e: NoSuchMethodException =>
-        app.main(allArgs)
     }
   }
 

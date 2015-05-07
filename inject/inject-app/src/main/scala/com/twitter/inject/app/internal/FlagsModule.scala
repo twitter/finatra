@@ -16,12 +16,12 @@ object FlagsModule {
 
 //TODO: Use type information in Flag instead of hardcoding java.lang.String
 class FlagsModule(
-  flags: Map[String, Any])
+  flagsMap: Map[String, Any])
   extends TwitterModule
   with Logging {
 
   override def configure() {
-    for ((flagName, value) <- flags) {
+    for ((flagName, value) <- flagsMap) {
       debug("Binding flag: " + flagName + " = " + value)
       val key = Key.get(classOf[java.lang.String], new FlagImpl(flagName))
       binder.bind(key).toInstance(value.toString)
