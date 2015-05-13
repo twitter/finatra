@@ -64,22 +64,22 @@ class MultiParamsTest extends Test with Mockito {
       assertMultiParams(finagleRequest, expectedMultiParams)
     }
 
-    "handle MS Surface Upload with quoted boundary" in {
-      val fileUploadFileBytes = resourceAsBytes("/multipart/TempProfileImageCrop.png")
-      val requestAsBytes = resourceAsBytes("/multipart/ms-surface.bytes")
-      val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    // "handle MS Surface Upload with quoted boundary" in {
+    //   val fileUploadFileBytes = resourceAsBytes("/multipart/TempProfileImageCrop.png")
+    //   val requestAsBytes = resourceAsBytes("/multipart/ms-surface.bytes")
+    //   val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
 
-      val expectedMultiParams = Map[String, MultipartItem](
-        "banner" -> MultipartItem(
-          data = fileUploadFileBytes,
-          fieldName = "banner",
-          isFormField = false,
-          contentType = None,
-          filename = Some("TempProfileImageCrop.png"),
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=banner; filename=TempProfileImageCrop.png"))))
+    //   val expectedMultiParams = Map[String, MultipartItem](
+    //     "banner" -> MultipartItem(
+    //       data = fileUploadFileBytes,
+    //       fieldName = "banner",
+    //       isFormField = false,
+    //       contentType = None,
+    //       filename = Some("TempProfileImageCrop.png"),
+    //       headers = mkHeader(Map("content-disposition" -> "form-data; name=banner; filename=TempProfileImageCrop.png"))))
 
-      assertMultiParams(finagleRequest, expectedMultiParams)
-    }
+    //   assertMultiParams(finagleRequest, expectedMultiParams)
+    // }
 
     // "handle Iphone Upload with multiple boundaries" in {
     //   val fileUploadFileBytes = resourceAsBytes("/multipart/image.jpg")
