@@ -22,7 +22,7 @@ class FinagleRequestScopeBenchmark {
     requestClass = classOf[Request],
     responseClass = classOf[Response])
 
-  val routingContoller = new RoutingService(routes = Seq(route))
+  val routingController = new RoutingService(routes = Seq(route))
 
   val getRequest = Request("/groups/")
 
@@ -33,7 +33,7 @@ class FinagleRequestScopeBenchmark {
 
   val filtersAndService =
     finagleRequestScopeFilter andThen
-      routingContoller
+      routingController
 
   @Benchmark
   def timeServiceWithRequestScopeFilter() = {

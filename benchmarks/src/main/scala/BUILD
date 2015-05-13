@@ -6,9 +6,14 @@ scala_library(name='scala',
   ),
   dependencies=[
     '3rdparty/jvm/org/openjdk/jmh:jmh-core',
+    '3rdparty/jvm/com/google/inject:guice',
+    '3rdparty/jvm/javax/inject:javax.inject',
+    '3rdparty:logback-classic',
+    'finagle/finagle-stats',
     'finatra/benchmarks/src/main/java',
-    'finatra-internal/authentication',
-    'finatra-internal/server'
+    'finatra/http',
+    'twitter-server',
+    'util/util-core',
   ],
   sources=rglobs('*.scala'),
 )
