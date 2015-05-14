@@ -220,3 +220,4 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
 [twitter-clone-example]: examples/finatra-twitter-clone/
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
+
