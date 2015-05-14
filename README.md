@@ -2,7 +2,7 @@ Finatra
 ==========================================================
 Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) and powered by [`twitter-server`][twitter-server].
 
-Current version: `2.0.0.M1`
+Current version: `2.0.0.M2-SNAPSHOT`, released version: `2.0.0.M1`
 
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
