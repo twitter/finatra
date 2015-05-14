@@ -1,6 +1,8 @@
-Finatra
-==========================================================
+# Finatra
+
 Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) and powered by [`twitter-server`][twitter-server].
+
+![finatra logo](finatra_logo.png)
 
 Current version: `2.0.0.M2-SNAPSHOT`
 
