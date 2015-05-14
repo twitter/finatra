@@ -827,7 +827,7 @@ See [TestInjector](../inject/inject-app/src/test/scala/com/twitter/inject/app/Te
 ## Feature Tests
 See [EmbeddedTwitterServer](../inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)
 
-Logging
+<a name="logging">Logging</a>
 ===============================
 Finatra uses the [slf4j](http://www.slf4j.org/manual.html) for framework logging.
 
