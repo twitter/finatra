@@ -331,6 +331,21 @@ class EmbeddedHttpServer(
       secure = secure.getOrElse(defaultHttpSecure))
   }
 
+  def httpRequest(
+    request: Request,
+    suppress: Boolean = false,
+    andExpect: HttpResponseStatus = null,
+    withLocation: String = null,
+    withBody: String = null,
+    withJsonBody: String = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
+    withErrors: Seq[String] = null,
+    routeToAdminServer: Boolean = false,
+    secure: Option[Boolean] = None): Response = {
+
+    jsonAwareHttpExecute(request, request.headerMap.toMap, suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+  }
+
   /* Private */
 
   private def jsonAwareHttpExecute(

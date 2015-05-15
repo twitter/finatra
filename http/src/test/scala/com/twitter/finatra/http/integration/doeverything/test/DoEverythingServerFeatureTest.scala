@@ -2,6 +2,7 @@ package com.twitter.finatra.http.integration.doeverything.test
 
 import com.google.common.net.MediaType.JSON_UTF_8
 import com.google.inject.{Key, TypeLiteral}
+import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.integration.doeverything.main.services.DoEverythingService
@@ -9,6 +10,7 @@ import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Test
 import com.twitter.inject.server.FeatureTest
+import org.apache.commons.io.IOUtils
 
 class DoEverythingServerFeatureTest extends FeatureTest {
 
@@ -161,6 +163,17 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         params = Map("name" -> "bob", "age" -> "18"),
         andExpect = Ok,
         withBody = "bob")
+    }
+
+    "post multipart" in {
+      val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream("/multipart/request-POST-android.bytes"))
+      val request = Request.decodeBytes(requestBytes)
+      request.uri = "/multipartParamsEcho"
+
+      server.httpRequest(
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """["banner"]""")
     }
 
     "formPostView" in {
