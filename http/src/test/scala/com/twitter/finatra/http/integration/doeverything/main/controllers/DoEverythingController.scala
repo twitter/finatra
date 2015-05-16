@@ -433,4 +433,8 @@ class DoEverythingController @Inject()(
   post("/multipartParamsEcho") { r: Request =>
     RequestUtils.multiParams(r).keys
   }
+
+  put("/multipartParamsPutEcho") { r: Request =>
+    RequestUtils.multiParams(r).keys
+  }
 }

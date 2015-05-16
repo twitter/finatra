@@ -32,7 +32,7 @@ class FinatraFileUpload extends FileUploadBase {
   }
 
   def fileItemIterator(request: Request): Option[FileItemIterator] = {
-    if(isPost(request) && isMultipart(request))
+    if(isPostOrPut(request) && isMultipart(request))
       Some(
         getItemIterator(
           new FinatraRequestContext(request)))
@@ -57,7 +57,8 @@ class FinatraFileUpload extends FileUploadBase {
     }
   }
 
-  private def isPost(request: Request): Boolean = {
-    request.getMethod() == HttpMethod.POST
+  private def isPostOrPut(request: Request): Boolean = {
+    HttpMethod.POST == request.getMethod() ||
+    HttpMethod.PUT == request.getMethod()
   }
 }

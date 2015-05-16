@@ -11,6 +11,7 @@ import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Test
 import com.twitter.inject.server.FeatureTest
 import org.apache.commons.io.IOUtils
+import org.jboss.netty.handler.codec.http.HttpMethod
 
 class DoEverythingServerFeatureTest extends FeatureTest {
 
@@ -20,6 +21,11 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
   val doEverythingService = server.injector.instance[DoEverythingService]
   val namedExampleString = server.injector.instance[String]("example")
+
+  def deserializeRequest(name: String) = {
+    val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
+    Request.decodeBytes(requestBytes)
+  }
 
   "ExampleServer" should {
     "named string" in {
@@ -166,9 +172,19 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "post multipart" in {
-      val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream("/multipart/request-POST-android.bytes"))
-      val request = Request.decodeBytes(requestBytes)
+      val request = deserializeRequest("/multipart/request-POST-android.bytes")
       request.uri = "/multipartParamsEcho"
+
+      server.httpRequest(
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """["banner"]""")
+    }
+
+    "put multipart" in {
+      val request = deserializeRequest("/multipart/request-POST-android.bytes")
+      request.uri = "/multipartParamsPutEcho"
+      request.method = HttpMethod.PUT
 
       server.httpRequest(
         request = request,
