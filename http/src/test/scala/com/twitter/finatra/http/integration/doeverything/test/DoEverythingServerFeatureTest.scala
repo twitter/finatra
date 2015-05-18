@@ -171,26 +171,26 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "bob")
     }
 
-    "post multipart" in {
-      val request = deserializeRequest("/multipart/request-POST-android.bytes")
-      request.uri = "/multipartParamsEcho"
+    // "post multipart" in {
+    //   val request = deserializeRequest("/multipart/request-POST-android.bytes")
+    //   request.uri = "/multipartParamsEcho"
 
-      server.httpRequest(
-        request = request,
-        andExpect = Ok,
-        withJsonBody = """["banner"]""")
-    }
+    //   server.httpRequest(
+    //     request = request,
+    //     andExpect = Ok,
+    //     withJsonBody = """["banner"]""")
+    // }
 
-    "put multipart" in {
-      val request = deserializeRequest("/multipart/request-POST-android.bytes")
-      request.uri = "/multipartParamsPutEcho"
-      request.method = HttpMethod.PUT
+    // "put multipart" in {
+    //   val request = deserializeRequest("/multipart/request-POST-android.bytes")
+    //   request.uri = "/multipartParamsPutEcho"
+    //   request.method = HttpMethod.PUT
 
-      server.httpRequest(
-        request = request,
-        andExpect = Ok,
-        withJsonBody = """["banner"]""")
-    }
+    //   server.httpRequest(
+    //     request = request,
+    //     andExpect = Ok,
+    //     withJsonBody = """["banner"]""")
+    // }
 
     "formPostView" in {
       server.httpFormPost(
