@@ -5,15 +5,16 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.inject.Logging
 import com.twitter.util.{Future, Stopwatch}
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
-class AccessLoggingFilter @Inject()(
-  logFormatter: LogFormatter[Request, Response])
-  extends SimpleFilter[Request, Response]
+@Singleton
+class AccessLoggingFilter[R <: Request] @Inject()(
+  logFormatter: LogFormatter[R, Response])
+  extends SimpleFilter[R, Response]
   with Logging {
 
   //optimized
-  override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+  override def apply(request: R, service: Service[R, Response]): Future[Response] = {
     if (!isInfoEnabled) {
       service(request)
     }

@@ -6,8 +6,8 @@ import com.twitter.finatra.filters.MergedFilter
 import javax.inject.Inject
 
 class CommonFilters @Inject()(
-  a: AccessLoggingFilter,
-  b: HttpResponseFilter,
+  a: AccessLoggingFilter[Request],
+  b: HttpResponseFilter[Request],
   c: StatsFilter[Request],
   d: ExceptionMappingFilter[Request])
   extends MergedFilter(a, b, c, d)

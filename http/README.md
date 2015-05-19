@@ -570,13 +570,13 @@ A common filter order is as follows:
 class Server extends HttpServer {
   override configureHttp(router: HttpRouter) {
     router.
-      filter[AccessLoggingFilter].
+      filter[AccessLoggingFilter[Request]].
       filter[StatsFilter].
       filter[ExceptionMappingFilter[Request]].
       filter[LoggingMDCFilter].
       filter[FinagleRequestScopeFilter].
       filter[UserFilter].
-      filter[HttpResponseFilter].
+      filter[HttpResponseFilter[Request]].
       add[MyController1].
       add[MyController2]
   }
