@@ -18,6 +18,7 @@ class EchoHttpServerFeatureTest extends HttpTest {
 
   "EchoHttpServer" should {
     "Echo 3 times" in {
+      pending //Will re-enable once new ThriftClientModule RB merges
       httpServer.httpPost(
         path = "/config?timesToEcho=2",
         postBody = "",
