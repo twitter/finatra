@@ -356,7 +356,7 @@ Suppose you wanted to handle POST's of the following JSON (representing a group 
 Then you'd create the following <a name="group-request-example">`case classes`</a>
 ```scala
 case class GroupRequest(
-  @NonEmpty name: String,
+  @NotEmpty name: String,
   description: Option[String],
   tweetIds: Set[Long],
   dates: Dates) {
@@ -383,7 +383,7 @@ We provide a simple validation framework inspired by [JSR-330](https://github.co
 * PastTime
 * Max
 * Min
-* NonEmpty
+* NotEmpty
 * OneOf
 * Range
 * Size
