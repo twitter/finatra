@@ -177,6 +177,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
       server.httpRequest(
         request = request,
+        suppress = true,
         andExpect = Ok,
         withJsonBody = """["banner"]""")
     }
@@ -188,6 +189,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
       server.httpRequest(
         request = request,
+        suppress = true,
         andExpect = Ok,
         withJsonBody = """["banner"]""")
     }
