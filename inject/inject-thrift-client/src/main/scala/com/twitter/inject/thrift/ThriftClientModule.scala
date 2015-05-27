@@ -51,14 +51,14 @@ abstract class ThriftClientModule[T: ClassTag]
 
     if (mux) {
       ThriftMux.client.
-        withClientId(ClientId(clientId)).
         withParams(params).
+        withClientId(ClientId(clientId)).
         newIface[T](labelAndDest)
     }
     else {
       Thrift.client.
-        withClientId(ClientId(clientId)).
         withParams(params).
+        withClientId(ClientId(clientId)).
         newIface[T](labelAndDest)
     }
   }
