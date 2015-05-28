@@ -1,4 +1,11 @@
-lazy val finatraHelloWorld = project
+import com.typesafe.sbt.SbtNativePackager._
+import NativePackagerKeys._
+
+packageArchetype.java_application
+
+bashScriptConfigLocation := Some("${app_home}/../conf/application.ini")
+
+lazy val finatraHelloWorldHeroku = project
   .in(file("."))
   .settings(
     name := "finatra-hello-world",
@@ -6,6 +13,7 @@ lazy val finatraHelloWorld = project
     scalaVersion := "2.11.6",
     organization := "com.twitter.example",
     moduleName := "finatra-hello-world",
+    fork in run := true,
     resolvers += "twitter-repo" at "http://maven.twttr.com",
     scalacOptions ++= Seq(
       "-encoding", "UTF-8", "-deprecation", "-feature", "-unchecked",
