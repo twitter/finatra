@@ -1,6 +1,6 @@
 ---
 title: Roadmap - Finatra
-layout: finatrav1x
+layout: finatrav1
 ---
 <div class="page-header">
 <h1>Roadmap</h1>
