@@ -1,0 +1,25 @@
+---
+layout: finatrav1x
+title: Blog
+---
+<div class="row">
+  <div class="span8">
+  {% for post in site.posts %}
+<h1><a href="/finatra{{ post.url }}">{{ post.title }}</a></h1>
+<p>by <a href="http://twitter.com/capotej">@capotej </a><span class="icon-time"></span> {{ post.date | date_to_string }}</p>
+
+<div class="post">
+  {{ post.content }}
+</div>
+
+      <hr>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+  {% endfor %}
+  </div>
+  <div class="span4">
+  </div>
+</div>

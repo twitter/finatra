@@ -13,6 +13,7 @@ vendor
 node_modules
 Gemfile.lock
 benchmarks/
+examples/
 http/
 httpclient/
 inject/
@@ -20,4 +21,5 @@ jackson/
 logback/
 project/
 sbt-launch.jar
+target/
 utils/
