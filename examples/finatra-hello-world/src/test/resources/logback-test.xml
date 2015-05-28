@@ -2,7 +2,7 @@
   <!-- Console Appender -->
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%date %.-3level %-16X{transactionId} %-16X{traceId} %-25X{uri} %-25logger{0} %msg%n</pattern>
+      <pattern>%date %.-3level %-25X{traceId} %-25logger{0} %msg%n</pattern>
     </encoder>
   </appender>
 

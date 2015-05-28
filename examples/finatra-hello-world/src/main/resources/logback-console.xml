@@ -1,0 +1,24 @@
+<configuration>
+  <!-- Console Appender -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%date %.-3level %-10X{uri} %-25logger{0} %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Per Package Config -->
+  <logger name="com.twitter" level="warn"/>
+  <logger name="com.twitter.finatra" level="info"/>
+  <logger name="ch.qos.logback" level="warn"/>
+
+  <logger name="com.twitter.finatra.filters.AccessLoggingFilter"
+          level="info"
+          additivity="false">
+    <appender-ref ref="STDOUT"/>
+  </logger>
+
+  <!-- Root Logger -->
+  <root level="info">
+    <appender-ref ref="STDOUT"/>
+  </root>
+</configuration>

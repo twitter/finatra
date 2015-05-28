@@ -6,6 +6,7 @@ import com.twitter.finatra.http.Controller
 class HelloWorldController extends Controller {
 
   get("/hi") { request: Request =>
-    "Hello " + request.params("name")
+  	info("hi")
+    "Hello " + request.params.getOrElse("name", "unnamed")
   }
 }

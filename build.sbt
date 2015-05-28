@@ -28,7 +28,7 @@ lazy val compilerOptions = scalacOptions ++= Seq(
 
 val baseSettings = Seq(
   libraryDependencies ++= Seq(
-    "ch.qos.logback" % "logback-classic" % "1.0.13" % "test",
+    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
     "org.scalatest" %% "scalatest" % "2.2.3" % "test",
     "org.specs2" %% "specs2" % "2.3.12" % "test"
@@ -136,7 +136,8 @@ lazy val root = project
     finatraHttp,
     finatraHttpclient,
     finatraLogback,
-    finatraBenchmarks
+    finatraBenchmarks,
+    finatraTwitterCloneExample
   )
 
 lazy val injectCore = project
@@ -325,14 +326,23 @@ lazy val finatraLogback = project
     injectCore % "test->test"
   )
 
-
 /**
- * Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
- */
+  * Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
+  */
 lazy val finatraBenchmarks = project
   .in(file("benchmarks"))
   .settings(moduleName := "finatra-benchmarks")
   .settings(finatraBuildSettings ++ jmhSettings)
+  .settings(
+    publishLocal := {},
+    publish := {}
+  )
+  .dependsOn(finatraHttp, injectCore % "test->test")
+
+lazy val finatraTwitterCloneExample = project
+  .in(file("examples/twitter-clone-example"))
+  .settings(moduleName := "twitter-clone-example")
+  .settings(finatraBuildSettings)
   .settings(
     publishLocal := {},
     publish := {}

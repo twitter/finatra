@@ -1,55 +1,43 @@
-lazy val buildSettings = Seq(
-  version := "2.0.0-SNAPSHOT",
-  scalaVersion := "2.11.6"
-)
+import com.typesafe.sbt.SbtNativePackager._
+import NativePackagerKeys._
 
-lazy val compilerOptions = scalacOptions ++= Seq(
-  "-deprecation",
-  "-encoding", "UTF-8",
-  "-feature",
-  "-language:existentials",
-  "-language:higherKinds",
-  "-language:implicitConversions",
-  "-unchecked",
-  "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen",
-  "-Ywarn-unused-import"
-)
+packageArchetype.java_application
 
-val baseSettings = Seq(
-  libraryDependencies ++= Seq(
-    "ch.qos.logback" % "logback-classic" % "1.0.13" % "test",
-    "org.mockito" % "mockito-core" % "1.9.5" % "test",
-    "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-    "org.specs2" %% "specs2" % "2.3.12" % "test"
-  ),
-  resolvers ++= Seq(
-    "twitter-repo" at "http://maven.twttr.com",
-    Resolver.sonatypeRepo("snapshots")
-  ),
-  compilerOptions
-)
+bashScriptConfigLocation := Some("${app_home}/../conf/application.ini")
 
-/**
- * Can run in the SBT console in this project with `> run`.
- */
 lazy val finatraHelloWorld = project
   .in(file("."))
-  .settings(organization := "com.twitter.example")
-  .settings(moduleName := "finatra-hello-world")
-  .settings(baseSettings ++ buildSettings)
   .settings(
-    publishLocal := {},
-    publish := {},
+    name := "finatra-hello-world",
+    version := "1.0.0-SNAPSHOT",
+    scalaVersion := "2.11.6",
+    organization := "com.twitter.example",
+    moduleName := "finatra-hello-world",
+    fork in run := true,
+    resolvers += "twitter-repo" at "http://maven.twttr.com",
+    scalacOptions ++= Seq(
+      "-encoding", "UTF-8", "-deprecation", "-feature", "-unchecked",
+      "-Ywarn-dead-code", "-Ywarn-numeric-widen", "-Ywarn-unused-import",
+      "-language:existentials", "-language:higherKinds", "-language:implicitConversions"),
     assemblyMergeStrategy in assembly := {
       case "BUILD" => MergeStrategy.discard
       case other => MergeStrategy.defaultMergeStrategy(other)
-    }
-  )
-  .settings(
+    },
     libraryDependencies ++= Seq(
       "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1",
-      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1" % "test->test",
-      "com.twitter.inject" %% "inject-server" % "2.0.0.M1" % "test->test"
-    )
-  )
+      "com.twitter.finatra" %% "finatra-logback" % "2.0.0.M1",
+
+      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1" % "test",
+      "com.twitter.inject" %% "inject-server" % "2.0.0.M1" % "test",
+      "com.twitter.inject" %% "inject-app" % "2.0.0.M1" % "test",
+      "com.twitter.inject" %% "inject-core" % "2.0.0.M1" % "test",
+      "com.twitter.inject" %% "inject-modules" % "2.0.0.M1" % "test",
+      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1" % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-server" % "2.0.0.M1" % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-app" % "2.0.0.M1" % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-core" % "2.0.0.M1" % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-modules" % "2.0.0.M1" % "test" classifier "tests",
+
+      "org.mockito" % "mockito-core" % "1.9.5" % "test",
+      "org.scalatest" %% "scalatest" % "2.2.3" % "test",
+      "org.specs2" %% "specs2" % "2.3.12" % "test"))
