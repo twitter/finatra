@@ -8,7 +8,6 @@ import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.inject.Test
 import com.twitter.inject.server.FeatureTest
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.HttpMethod
@@ -25,6 +24,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   def deserializeRequest(name: String) = {
     val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
     Request.decodeBytes(requestBytes)
+  }
+
+  def counter(key: String): Int = {
+    server.inMemoryStatsReceiver.counter(key.split("/"): _*)()
+  }
+
+  def stat(key: String): Seq[Float] = {
+    server.inMemoryStatsReceiver.stat(key.split("/"): _*)()
   }
 
   "ExampleServer" should {
@@ -876,5 +883,39 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         ]
       }
                      """)
+  }
+
+  "per-route stats" in {
+    server.httpGet(
+      "/ok",
+      andExpect = Ok)
+
+    server.httpPost(
+      "/foo",
+      postBody = "",
+      andExpect = Ok)
+
+    // global stats
+    // compatible with com.twitter.finagle.http.filter.StatsFilter
+    counter("status/200")    should be(2)
+    counter("status/2XX")    should be(2)
+       stat("response_size") should contain inOrder(2.0, 3.0)
+       stat("time/200")      should have size(2)
+       stat("time/2XX")      should have size(2)
+
+    // per-route stats
+    counter("route/do-everything/GET/requests")      should be(1)
+    counter("route/do-everything/GET/status/200")    should be(1)
+    counter("route/do-everything/GET/status/2XX")    should be(1)
+       stat("route/do-everything/GET/response_size") should contain(2.0)
+       stat("route/do-everything/GET/time/200")      should have size(1)
+       stat("route/do-everything/GET/time/2XX")      should have size(1)
+
+    counter("route/do-everything/POST/requests")      should be(1)
+    counter("route/do-everything/POST/status/200")    should be(1)
+    counter("route/do-everything/POST/status/2XX")    should be(1)
+       stat("route/do-everything/POST/response_size") should contain(3.0)
+       stat("route/do-everything/POST/time/200")      should have size(1)
+       stat("route/do-everything/POST/time/2XX")      should have size(1)
   }
 }

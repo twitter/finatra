@@ -14,6 +14,7 @@ class RoutingServiceBenchmark {
   }
 
   val route = Route(
+    name = "groups",
     method = HttpMethod.GET,
     path = "/groups/",
     callback = defaultCallback,

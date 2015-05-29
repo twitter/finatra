@@ -14,6 +14,7 @@ class RouteBenchmark {
   }
 
   val route = Route(
+    name = "groups",
     method = HttpMethod.POST,
     path = "/groups/",
     callback = defaultCallback,
@@ -22,6 +23,7 @@ class RouteBenchmark {
     responseClass = classOf[Response])
 
   val routeWithPathParams = Route(
+    name = "groups",
     method = HttpMethod.POST,
     path = "/groups/:id",
     callback = defaultCallback,

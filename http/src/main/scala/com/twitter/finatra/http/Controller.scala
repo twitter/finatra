@@ -10,6 +10,11 @@ import org.jboss.netty.handler.codec.http.HttpMethod._
 import scala.collection.mutable.ArrayBuffer
 
 abstract class Controller extends Logging {
+  /**
+   * The name of the controller. Defaults to the class name. All routes
+   * defined within the controller inherit this name for metrics.
+   */
+  val name: String = getClass.getSimpleName
 
   /*
    * NOTE: Using constructor-injection for the following fields would add boilerplate to all
@@ -44,6 +49,7 @@ abstract class Controller extends Logging {
     callback: RequestType => ResponseType) {
     routesBeforeInjection += (() =>
       Route(
+        name,
         method,
         route,
         callbackConverter.convertToFutureResponse(callback),

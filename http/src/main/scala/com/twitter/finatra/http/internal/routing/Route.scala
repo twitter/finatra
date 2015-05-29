@@ -2,6 +2,7 @@ package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Filter, Service}
+import com.twitter.finatra.http.internal.contexts.RouteInfo
 import com.twitter.finatra.http.internal.request.RequestWithPathParams
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
@@ -10,6 +11,7 @@ import scala.language.existentials
 
 //optimized
 case class Route(
+  name: String,
   method: HttpMethod,
   path: String,
   callback: Request => Future[Response],
@@ -19,8 +21,8 @@ case class Route(
   filter: Filter[Request, Response, Request, Response] = Filter.identity) {
 
   private val pattern = PathPattern(path)
-
   private val service = Service.mk[Request, Response](callback)
+  private val routeInfo = RouteInfo(name, method)
 
   /* Public */
 
@@ -43,7 +45,10 @@ case class Route(
       for {
         pathParams <- pattern.extract(incomingPath)
         request = createRequest(incomingRequest, pathParams)
-      } yield filter(request, service)
+      } yield {
+        RouteInfo.set(request, routeInfo)
+        filter(request, service)
+      }
     }
   }
 
