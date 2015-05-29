@@ -27,6 +27,29 @@ class Example extends Controller {
 }
 ```
 
+## <a name="controller-best-practices">Best Practices</a>
+* Follow REST conventions if possible. When deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stats in [StatsFilter](../http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala) work best when this convention is followed.
+
+```scala
+class GroupsController extends Controller {
+  override val name = "groups"
+
+  get("/groups/:id") { ... }
+
+  post("/groups") { ... }
+
+  delete("/groups/:id") { ... }
+}
+```
+
+yields the following stats:
+
+```
+route/groups/get/...
+route/groups/post/...
+route/groups/delete/...
+```
+
 ## Route Matching Patterns
 
 ### Named Parameters
@@ -559,7 +582,7 @@ Per controller filters are added as such:
 class Server extends HttpServer {
   override configureHttp(router: HttpRouter) {
     router.
-      add[MyFilter, MyController]      
+      add[MyFilter, MyController]
   }
 }
 ```
@@ -816,7 +839,7 @@ For example:
 ```scala
 val server = EmbeddedHttpServer(
   stage = Stage.PRODUCTION,
-  twitterServer = new SampleApiServer,  
+  twitterServer = new SampleApiServer,
   extraArgs = Seq(
     "-com.twitter.server.resolverMap=client1=nil!,client2=nil!"))
 ```
@@ -974,8 +997,9 @@ To replicate v1 functionality around `notFound` and `error`, you could do the fo
 notFound { request => ... }
 error { request => ... }
 
-//v2: Create a filter and add it before you're controller:
-class ErrorFilter @Inject()(
+//v2 notFound: Create a filter and add it before your controller:
+@Singleton
+class NotFoundFilter @Inject()(
  response: ResponseBuilder)
  extends SimpleFilter[Request, Response] {
 
@@ -985,14 +1009,26 @@ class ErrorFilter @Inject()(
        response.notFound("bar")
      else
        origResponse
-   } handle {
-     case e: HttpException =>
-       response.internalServerError("foo")
    }
  }
 }
-```
 
+//v2 error: Write an exception mapper and register it with HttpRouter
+@Singleton
+class ArithmeticExceptionMapper @Inject()(
+  response: ResponseBuilder)
+  extends ExceptionMapper[ArithmeticException] {
+
+  override def toResponse(request: Request, e: ArithmeticException): Response = {
+    response.internalServerError("whoops, divide by zero!")
+  }
+}
+
+router.
+  filter[NotFoundFilter].
+  filter[ExceptionMappingFilter[Request]].
+  exceptionMapper[ArithmeticExceptionMapper]
+```
 
 ## App
 Override the configure method and add your controllers there.
@@ -1007,7 +1043,7 @@ class Server extends HttpServer {
     val controller2 = new Controller2(...)
     router.
       commonFilter[CommonFilters].
-      commonFilter[ErrorFilter]. // if needed (see above section on Error Handling)
+      commonFilter[NotFoundFilter]. // if needed (see above section on Error Handling)
       add(controller1).
       add(controller2)
   }
