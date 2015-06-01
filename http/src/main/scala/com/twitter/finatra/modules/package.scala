@@ -15,7 +15,4 @@ package object modules {
 
   @deprecated("Use com.twitter.finatra.http.modules.MustacheModule", "")
   val MustacheModule = com.twitter.finatra.http.modules.MustacheModule
-
-  @deprecated("Use com.twitter.finatra.http.modules.StatsFilterModule", "")
-  val StatsFilterModule = com.twitter.finatra.http.modules.StatsFilterModule
 }

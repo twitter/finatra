@@ -8,7 +8,7 @@ import com.twitter.util.Memoize
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-@deprecated("Use ExceptionMapperFilter with com.twitter.finagle.http.filter.StatsFilter[Request] & StatsFilterModule", "")
+@deprecated("Use ExceptionMapperFilter with com.twitter.finatra.http.filters.StatsFilter[Request]", "")
 class ExceptionBarrierFilter @Inject()(
   statsReceiver: StatsReceiver,
   exceptionManager: ExceptionManager)

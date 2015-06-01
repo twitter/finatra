@@ -4,7 +4,7 @@ import com.google.inject.Module
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{HttpMuxer, Request, Response}
 import com.twitter.finatra.http.internal.server.BaseHttpServer
-import com.twitter.finatra.http.modules.{AccessLogModule, CallbackConverterModule, ExceptionMapperModule, DocRootModule, MessageBodyModule, MustacheModule, StatsFilterModule}
+import com.twitter.finatra.http.modules.{AccessLogModule, CallbackConverterModule, ExceptionMapperModule, DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.routing.Router
@@ -19,8 +19,7 @@ trait HttpServer extends BaseHttpServer {
     jacksonModule,
     callbackModule,
     DocRootModule,
-    accessLogModule,
-    statsFilterModule)
+    accessLogModule)
 
   /* Abstract */
 
@@ -61,8 +60,6 @@ trait HttpServer extends BaseHttpServer {
   //Note: After upgrading to Guice v4, replace the need for these protected methods with OptionalBinder
   //http://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/multibindings/OptionalBinder.html
   protected def accessLogModule: Module = AccessLogModule
-
-  protected def statsFilterModule: Module = StatsFilterModule
 
   protected def mustacheModule: Module = MustacheModule
 
