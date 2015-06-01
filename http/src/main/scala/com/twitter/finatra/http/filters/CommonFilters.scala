@@ -2,7 +2,6 @@ package com.twitter.finatra.http.filters
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.filters.MergedFilter
-import com.twitter.finatra.http.filters.StatsFilter
 import javax.inject.Inject
 
 class CommonFilters @Inject()(

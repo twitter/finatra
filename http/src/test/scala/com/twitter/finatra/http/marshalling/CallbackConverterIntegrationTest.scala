@@ -3,7 +3,7 @@ package com.twitter.finatra.http.marshalling
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
-import com.twitter.finatra.http.modules.{CallbackConverterModule, LocalDocRootFlagModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.{CallbackConverterModule, DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
@@ -15,7 +15,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
 
   val injector = TestInjector(
     new MessageBodyModule, FinatraJacksonModule,
-    MustacheModule, CallbackConverterModule, LocalDocRootFlagModule)
+    MustacheModule, CallbackConverterModule, DocRootModule)
 
   val callbackConverter = injector.instance[CallbackConverter]
 

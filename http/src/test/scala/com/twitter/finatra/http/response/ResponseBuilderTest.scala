@@ -15,7 +15,9 @@ class ResponseBuilderTest extends HttpTest with Mockito
 
   protected lazy val responseBuilder = new ResponseBuilder(
     mapper,
-    new FileResolver("src/main/webapp/"),
+    new FileResolver(
+      localDocRoot = "src/main/webapp/",
+      docRoot = ""),
     mock[MessageBodyManager],
     mock[MustacheService])
 

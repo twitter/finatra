@@ -10,9 +10,6 @@ package object modules {
   @deprecated("Use com.twitter.finatra.http.modules.ExceptionMapperModule", "")
   type ExceptionMapperModule = com.twitter.finatra.http.modules.ExceptionMapperModule
 
-  @deprecated("Use com.twitter.finatra.http.modules.LocalDocRootFlagModule", "")
-  val LocalDocRootFlagModule = com.twitter.finatra.http.modules.LocalDocRootFlagModule
-
   @deprecated("Use com.twitter.finatra.http.modules.MessageBodyModule", "")
   type MessageBodyModule = com.twitter.finatra.http.modules.MessageBodyModule
 

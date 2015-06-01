@@ -7,7 +7,7 @@ import com.twitter.inject.TwitterModule
 object ResponseBuilderModule extends TwitterModule {
   override val modules = Seq(
     FinatraJacksonModule,
-    LocalDocRootFlagModule,
+    DocRootModule,
     new MessageBodyModule,
     MustacheModule)
 }
