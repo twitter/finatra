@@ -25,7 +25,7 @@ trait TwitterServer
   protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
 
   /** Resolve all Finagle clients before warmup method called */
-  protected def resolveFinagleClientsOnStartup = false
+  protected def resolveFinagleClientsOnStartup = true
 
   /* Overrides */
 

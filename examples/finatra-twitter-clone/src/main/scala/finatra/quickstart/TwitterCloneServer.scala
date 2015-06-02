@@ -9,8 +9,6 @@ import finatra.quickstart.firebase.FirebaseHttpClientModule
 import finatra.quickstart.warmup.TwitterCloneWarmup
 
 class TwitterCloneServer extends HttpServer {
-  override val resolveFinagleClientsOnStartup = true
-
   override val modules = Seq(FirebaseHttpClientModule)
 
   override def configureHttp(router: HttpRouter): Unit = {

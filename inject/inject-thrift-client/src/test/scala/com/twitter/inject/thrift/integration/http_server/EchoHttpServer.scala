@@ -6,7 +6,6 @@ import com.twitter.finatra.http.routing.HttpRouter
 
 class EchoHttpServer extends HttpServer {
   override val name = "echo-http-server"
-  override val resolveFinagleClientsOnStartup = true
 
   override val modules = Seq(
     EchoThriftClientModule)

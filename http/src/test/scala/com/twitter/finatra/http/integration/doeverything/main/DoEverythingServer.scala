@@ -13,7 +13,6 @@ object DoEverythingServerMain extends DoEverythingServer
 class DoEverythingServer extends HttpServer {
 
   override val name = "example-server"
-  override val resolveFinagleClientsOnStartup = true
 
   flag("magicNum", "26", "Magic number")
 
