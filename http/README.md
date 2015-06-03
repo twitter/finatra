@@ -488,7 +488,7 @@ class Server extends HttpServer {
 ```
 
 ## Request Scope
-Guice supports custom scopes in addition to the most common Singelton and *Unscoped*. Request scopes are often used to allow injecting classes that change depending on the incoming request (e.g. the authenticated User). Finatra provides an implementation of a *request scope* that works across Finagle non-blocking threads (Guice's included request scope implementation uses ThreadLocal's which will not work with Finagle Futures).
+Guice supports custom scopes in addition to the most common Singleton and *Unscoped*. Request scopes are often used to allow injecting classes that change depending on the incoming request (e.g. the authenticated User). Finatra provides an implementation of a *request scope* that works across Finagle non-blocking threads (Guice's included request scope implementation uses ThreadLocal's which will not work with Finagle Futures).
 
 Note: Fields added to the Finagle request scope will remain present in threads launched from [Finagle future pools](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/FuturePool.scala)
 
