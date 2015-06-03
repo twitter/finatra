@@ -1,0 +1,11 @@
+.DS_Store
+classes/
+**/target/
+.sbtserver/
+.sbtserver
+.sbtserver.lock
+play-fork-run.sbt
+sbt-ui.sbt
+*.log
+sbt-launch.jar
+RUNNING_PID
