@@ -23,7 +23,7 @@ scala_library(name="test-deps",
   dependencies=[
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
-    '3rdparty:logback-classic',
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/org/slf4j:jul-to-slf4j',
     '3rdparty/jvm/org/slf4j:jcl-over-slf4j',
     '3rdparty/jvm/org/slf4j:log4j-over-slf4j',

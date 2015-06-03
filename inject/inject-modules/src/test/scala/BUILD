@@ -1,7 +1,7 @@
 junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/junit',
-    '3rdparty:logback-classic',
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/specs2',
     'finatra/inject/inject-app:test-deps',
