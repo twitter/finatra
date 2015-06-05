@@ -1,16 +1,15 @@
 package com.twitter.finatra.filters
 
-import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.util.Future
 
-class MergedFilter[R <: Request](
-  filters: Filter[R, Response, R, Response]*)
-  extends Filter[R, Response, R, Response] {
+class MergedFilter[Req, Resp](
+  filters: Filter[Req, Resp, Req, Resp]*)
+  extends Filter[Req, Resp, Req, Resp] {
 
   private val CombinedFilter = filters reduceLeft {_ andThen _}
 
-  def apply(request: R, service: Service[R, Response]): Future[Response] = {
+  def apply(request: Req, service: Service[Req, Resp]): Future[Resp] = {
     CombinedFilter(request, service)
   }
 }
