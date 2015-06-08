@@ -8,7 +8,7 @@ import com.twitter.finagle.http._
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
-import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.{NullStatsReceiver, InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Service}
 import com.twitter.inject.app.Banner._
 import com.twitter.inject.app.{Banner, EmbeddedApp, App}
@@ -227,6 +227,7 @@ class EmbeddedTwitterServer(
       .hosts(host)
       .hostConnectionLimit(75)
       .retryPolicy(retryPolicy)
+      .reportTo(NullStatsReceiver)
       .failFast(false)
 
     if (secure)
