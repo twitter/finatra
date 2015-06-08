@@ -7,7 +7,7 @@ import com.twitter.finagle.http._
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{PortUtils, Ports}
-import com.twitter.util.Try
+import com.twitter.util.{Future, Try}
 import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 
 class EmbeddedHttpServer(
@@ -21,7 +21,8 @@ class EmbeddedHttpServer(
   defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
   mapperOverride: Option[FinatraObjectMapper] = None,
-  httpPortFlag: String = "http.port")
+  httpPortFlag: String = "http.port",
+  responseStreaming: Boolean = false)
   extends com.twitter.inject.server.EmbeddedTwitterServer(
     twitterServer,
     clientFlags + (httpPortFlag -> ephemeralLoopback),
@@ -30,7 +31,8 @@ class EmbeddedHttpServer(
     stage,
     useSocksProxy,
     skipAppMain,
-    defaultRequestHeaders) {
+    defaultRequestHeaders,
+    responseStreaming) {
 
   protected lazy val httpClient = {
     start()
