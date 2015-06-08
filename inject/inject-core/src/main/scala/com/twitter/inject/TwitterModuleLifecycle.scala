@@ -28,6 +28,12 @@ trait TwitterModuleLifecycle extends Logging {
   }
 
   /**
+   * Invoke after Guice injector is started
+   * NOTE: This method should only get singleton instances from the injector.
+   */
+  protected def singletonStartup(injector: Injector) {}
+
+  /**
    * Invoke 'singleton func' as JVM shuts down.
    * NOTE: This method should only be called from a @Singleton 'provides' method to avoid registering
    * multiple shutdown hooks every time an object is created.
@@ -38,6 +44,12 @@ trait TwitterModuleLifecycle extends Logging {
     })
   }
 
+  /**
+   * Invoke as JVM shuts down.
+   * NOTE: This method should only get singleton instances from the injector.
+   */
+  protected def singletonShutdown(injector: Injector) {}
+
   /* Private */
 
   private[inject] def callPostStartupCallbacks(injector: Injector) {
@@ -45,12 +57,14 @@ trait TwitterModuleLifecycle extends Logging {
       info("Calling PostStartup methods in " + this.getClass.getSimpleName)
     }
     postStartupFunctions foreach {_(injector)}
+    singletonStartup(injector)
   }
 
-  private[inject] def callShutdownCallbacks() {
+  private[inject] def callShutdownCallbacks(injector: Injector) {
     if (shutdownFunctions.nonEmpty) {
       info("Calling Shutdown methods in " + this.getClass.getSimpleName)
     }
     shutdownFunctions foreach {_()}
+    singletonShutdown(injector)
   }
 }

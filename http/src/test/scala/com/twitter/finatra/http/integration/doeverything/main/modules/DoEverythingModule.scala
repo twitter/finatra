@@ -5,7 +5,7 @@ import com.google.inject.name.{Named, Names}
 import com.twitter.conversions.time._
 import com.twitter.finatra.http.integration.doeverything.main.services.{ComplexServiceFactory, MultiService, OneMultiService, TwoMultiService}
 import com.twitter.finatra.test.Prod
-import com.twitter.inject.TwitterModule
+import com.twitter.inject.{Injector, TwitterModule}
 
 object DoEverythingModule extends TwitterModule {
 
@@ -26,14 +26,14 @@ object DoEverythingModule extends TwitterModule {
     val multiBinder = createMultiBinder[MultiService]
     multiBinder.addBinding.to[OneMultiService]
     multiBinder.addBinding.to[TwoMultiService]
+  }
 
-    singletonStartup { injector =>
-      assert(injector.instance[String, Prod] == "prod string")
-    }
+  override protected def singletonStartup(injector: Injector) {
+    assert(injector.instance[String, Prod] == "prod string")
+  }
 
-    singletonShutdown {
-      info("shutdown")
-    }
+  override protected def singletonShutdown(injector: Injector) {
+    info("shutdown")
   }
 
   @Provides

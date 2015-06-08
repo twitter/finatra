@@ -14,7 +14,7 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus
 class CallbackConverterIntegrationTest extends Test with Mockito {
 
   val injector = TestInjector(
-    new MessageBodyModule, FinatraJacksonModule,
+    MessageBodyModule, FinatraJacksonModule,
     MustacheModule, CallbackConverterModule, DocRootModule)
 
   val callbackConverter = injector.instance[CallbackConverter]

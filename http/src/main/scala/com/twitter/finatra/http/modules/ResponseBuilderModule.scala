@@ -8,6 +8,6 @@ object ResponseBuilderModule extends TwitterModule {
   override val modules = Seq(
     FinatraJacksonModule,
     DocRootModule,
-    new MessageBodyModule,
+    MessageBodyModule,
     MustacheModule)
 }

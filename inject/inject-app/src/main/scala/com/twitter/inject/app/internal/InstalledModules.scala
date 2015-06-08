@@ -3,7 +3,7 @@ package com.twitter.inject.app.internal
 import com.google.inject.util.Modules
 import com.google.inject.{Module => GuiceModule, _}
 import com.twitter.app.Flag
-import com.twitter.inject.{TwitterBaseModule, Injector, Logging, TwitterModule}
+import com.twitter.inject.{TwitterBaseModule, TwitterModuleLifecycle, Injector, Logging, TwitterModule}
 import scala.collection.JavaConverters._
 
 object InstalledModules {
@@ -72,7 +72,7 @@ case class InstalledModules(
 
   def postStartup() {
     modules foreach {
-      case injectModule: TwitterBaseModule =>
+      case injectModule: TwitterModuleLifecycle =>
         try {
           injectModule.callPostStartupCallbacks(injector)
         } catch {
@@ -87,9 +87,9 @@ case class InstalledModules(
   // Note: We don't rethrow so that all modules have a change to shutdown
   def shutdown() {
     modules foreach {
-      case injectModule: TwitterBaseModule =>
+      case injectModule: TwitterModuleLifecycle =>
         try {
-          injectModule.callShutdownCallbacks()
+          injectModule.callShutdownCallbacks(injector)
         } catch {
           case e: Throwable =>
             error("Shutdown method error in " + injectModule, e)

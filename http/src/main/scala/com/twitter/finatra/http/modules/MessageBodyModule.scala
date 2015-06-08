@@ -4,20 +4,20 @@ import com.twitter.finatra.http.internal.marshalling.mustache.MustacheMessageBod
 import com.twitter.finatra.http.internal.marshalling.{FinatraDefaultMessageBodyReader, FinatraDefaultMessageBodyWriter, MessageBodyManager}
 import com.twitter.finatra.http.marshalling._
 import com.twitter.finatra.response.Mustache
-import com.twitter.inject.{InjectorModule, TwitterModule}
+import com.twitter.inject.{InjectorModule, Injector, TwitterModule}
 
-class MessageBodyModule extends TwitterModule {
+object MessageBodyModule extends TwitterModule {
 
   override val modules = Seq(InjectorModule)
 
   override def configure() {
     bindSingleton[DefaultMessageBodyReader].to[FinatraDefaultMessageBodyReader]
     bindSingleton[DefaultMessageBodyWriter].to[FinatraDefaultMessageBodyWriter]
+  }
 
-    singletonStartup { injector =>
-      debug("Configuring MessageBodyManager")
-      val manager = injector.instance[MessageBodyManager]
-      manager.addByAnnotation[Mustache, MustacheMessageBodyWriter]
-    }
+  override protected def singletonStartup(injector: Injector) {
+    debug("Configuring MessageBodyManager")
+    val manager = injector.instance[MessageBodyManager]
+    manager.addByAnnotation[Mustache, MustacheMessageBodyWriter]
   }
 }

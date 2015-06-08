@@ -63,9 +63,9 @@ trait HttpServer extends BaseHttpServer {
 
   protected def mustacheModule: Module = MustacheModule
 
-  protected def messageBodyModule: Module = new MessageBodyModule
+  protected def messageBodyModule: Module = MessageBodyModule
 
-  protected def exceptionMapperModule: Module = new ExceptionMapperModule
+  protected def exceptionMapperModule: Module = ExceptionMapperModule
 
   protected def jacksonModule: Module = FinatraJacksonModule
 
