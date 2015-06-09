@@ -28,11 +28,11 @@ object DoEverythingModule extends TwitterModule {
     multiBinder.addBinding.to[TwoMultiService]
   }
 
-  override protected def singletonStartup(injector: Injector) {
+  override def singletonStartup(injector: Injector) {
     assert(injector.instance[String, Prod] == "prod string")
   }
 
-  override protected def singletonShutdown(injector: Injector) {
+  override def singletonShutdown(injector: Injector) {
     info("shutdown")
   }
 

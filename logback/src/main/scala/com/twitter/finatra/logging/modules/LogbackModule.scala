@@ -4,7 +4,7 @@ import com.twitter.inject.{Injector, TwitterModule}
 import org.slf4j.bridge.SLF4JBridgeHandler
 
 object LogbackModule extends TwitterModule {
-  override protected def singletonStartup(injector: Injector) {
+  override def singletonStartup(injector: Injector) {
     SLF4JBridgeHandler.removeHandlersForRootLogger()
     SLF4JBridgeHandler.install()
   }

@@ -12,7 +12,7 @@ object ExceptionMapperModule extends TwitterModule {
     bindSingleton[DefaultExceptionMapper].to[FinatraDefaultExceptionMapper]
   }
 
-  override protected def singletonStartup(injector: Injector) {
+  override def singletonStartup(injector: Injector) {
       val manager = injector.instance[ExceptionManager]
       manager.add[JsonParseExceptionMapper]
       manager.add[JsonObjectParseExceptionMapper]

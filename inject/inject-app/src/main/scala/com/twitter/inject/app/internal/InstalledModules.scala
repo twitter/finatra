@@ -74,7 +74,7 @@ case class InstalledModules(
     modules foreach {
       case injectModule: TwitterModuleLifecycle =>
         try {
-          injectModule.callPostStartupCallbacks(injector)
+          injectModule.singletonStartup(injector)
         } catch {
           case e: Throwable =>
             error("Startup method error in " + injectModule, e)
@@ -89,7 +89,7 @@ case class InstalledModules(
     modules foreach {
       case injectModule: TwitterModuleLifecycle =>
         try {
-          injectModule.callShutdownCallbacks(injector)
+          injectModule.singletonShutdown(injector)
         } catch {
           case e: Throwable =>
             error("Shutdown method error in " + injectModule, e)
