@@ -12,6 +12,8 @@ object TweetsEndpointServerMain extends TweetsEndpointServer
 
 class TweetsEndpointServer extends HttpServer {
 
+  override val streamRequest = true
+
   override val modules = Seq(
     TweetsEndpointServerModule,
     AdminModule)

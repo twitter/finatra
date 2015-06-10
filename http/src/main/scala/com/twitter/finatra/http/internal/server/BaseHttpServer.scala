@@ -8,6 +8,7 @@ import com.twitter.finagle.builder.ServerConfig.Yes
 import com.twitter.finagle.builder.{Server, ServerBuilder}
 import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Http, Request, Response, RichHttp}
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Future, Time}
@@ -41,15 +42,15 @@ trait BaseHttpServer extends TwitterServer {
   }
 
   /**
-   * If true, the client pipeline collects HttpChunks into the body of each Request
-   * Set to false if you wish to stream parse requests using request.reader.read
+   * If false, the underlying Netty pipeline collects HttpChunks into the body of each Request
+   * Set to true if you wish to stream parse requests using request.reader.read
    */
-  protected def aggregateChunks: Boolean = true
+  protected def streamRequest: Boolean = false
 
   protected def createCodec: RichHttp[Request] = {
     new RichHttp[Request](
       httpFactory = httpCodec,
-      aggregateChunks = aggregateChunks)
+      aggregateChunks = !streamRequest)
   }
 
   type FinagleServerBuilder = ServerBuilder[Request, Response, Yes, Yes, Yes]
@@ -96,6 +97,7 @@ trait BaseHttpServer extends TwitterServer {
       val serverBuilder = ServerBuilder()
         .codec(createCodec)
         .bindTo(port)
+        .reportTo(injector.instance[StatsReceiver])
         .name("http")
 
       configureHttpServer(serverBuilder)
@@ -114,6 +116,7 @@ trait BaseHttpServer extends TwitterServer {
       val serverBuilder = ServerBuilder()
         .codec(createCodec)
         .bindTo(port)
+        .reportTo(injector.instance[StatsReceiver])
         .name("https")
         .tls(
           certs,

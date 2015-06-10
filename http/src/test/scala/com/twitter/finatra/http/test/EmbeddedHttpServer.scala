@@ -22,7 +22,7 @@ class EmbeddedHttpServer(
   defaultHttpSecure: Boolean = false,
   mapperOverride: Option[FinatraObjectMapper] = None,
   httpPortFlag: String = "http.port",
-  responseStreaming: Boolean = false)
+  streamResponse: Boolean = false)
   extends com.twitter.inject.server.EmbeddedTwitterServer(
     twitterServer,
     clientFlags + (httpPortFlag -> ephemeralLoopback),
@@ -32,7 +32,7 @@ class EmbeddedHttpServer(
     useSocksProxy,
     skipAppMain,
     defaultRequestHeaders,
-    responseStreaming) {
+    streamResponse) {
 
   protected lazy val httpClient = {
     start()

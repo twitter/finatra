@@ -8,6 +8,7 @@ import com.twitter.finagle.http.{Message, Request, Response}
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonObjectParseException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.serde.ArrayElementsOnNewLinesPrettyPrinter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
+import com.twitter.io.Buf
 import java.io.{InputStream, OutputStream}
 import java.nio.ByteBuffer
 
@@ -123,6 +124,11 @@ case class FinatraObjectMapper(
       prettyObjectMapper.writeValueAsString(jsonNode)
     case _ =>
       prettyObjectMapper.writeValueAsString(any)
+  }
+
+  def writeValueAsBuf(any: Any): Buf = {
+    Buf.ByteArray.Shared(
+      objectMapper.writeValueAsBytes(any))
   }
 
   def registerModule(module: Module) = {

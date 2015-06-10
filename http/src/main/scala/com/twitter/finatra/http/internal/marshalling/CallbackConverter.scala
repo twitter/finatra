@@ -1,8 +1,10 @@
 package com.twitter.finatra.http.internal.marshalling
 
+import com.twitter.concurrent.exp.AsyncStream
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.bindings.CallbackConverterPool
-import com.twitter.finatra.http.response.ResponseBuilder
+import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
+import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.util.{Future, FuturePool}
 import javax.inject.Inject
 
@@ -13,7 +15,8 @@ import javax.inject.Inject
 class CallbackConverter @Inject()(
   @CallbackConverterPool pool: FuturePool,
   messageBodyManager: MessageBodyManager,
-  responseBuilder: ResponseBuilder) {
+  responseBuilder: ResponseBuilder,
+  mapper: FinatraObjectMapper) {
 
   /* Public */
 
@@ -47,9 +50,23 @@ class CallbackConverter @Inject()(
       request: Request =>
         requestCallback(request).asInstanceOf[Future[Option[U]]] map optionToHttpResponse
     }
+    else if (isAsyncStream[ResponseType]) {
+      request: Request =>
+        val asyncStream = requestCallback(request).asInstanceOf[AsyncStream[U]]
+
+        val streamingResponse = StreamingResponse.jsonArray(
+          toBuf = mapper.writeValueAsBuf,
+          asyncStream = asyncStream)
+
+        streamingResponse.toFutureFinagleResponse
+    }
     else if (isFuture[ResponseType]) {
       request: Request =>
         requestCallback(request).asInstanceOf[Future[U]] map createHttpResponse
+    }
+    else if (isStreamingResponse[ResponseType]) {
+      request: Request =>
+        requestCallback(request).asInstanceOf[StreamingResponse[_]].toFutureFinagleResponse
     }
     else if (isResponse[ResponseType]) {
       request: Request =>
@@ -92,6 +109,14 @@ class CallbackConverter @Inject()(
 
   private def isResponse[T: Manifest]: Boolean = {
     manifest[T] <:< classManifest[Response]
+  }
+
+  private def isStreamingResponse[T: Manifest]: Boolean = {
+    manifest[T].runtimeClass == classOf[StreamingResponse[_]]
+  }
+
+  private def isAsyncStream[T: Manifest]: Boolean = {
+    manifest[T].runtimeClass == classOf[AsyncStream[_]]
   }
 
   private def isFutureOption[T: Manifest]: Boolean = {

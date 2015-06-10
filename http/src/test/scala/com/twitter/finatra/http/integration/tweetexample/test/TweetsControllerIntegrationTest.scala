@@ -3,22 +3,22 @@ package com.twitter.finatra.http.integration.tweetexample.test
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
 import com.twitter.finatra.http.test.EmbeddedHttpServer
-import com.twitter.inject.Test
+import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future, FuturePool}
 
-class TweetsControllerIntegrationTest extends Test {
+class TweetsControllerIntegrationTest extends FeatureTest {
 
-  val server = new EmbeddedHttpServer(
+  override val server = new EmbeddedHttpServer(
     new TweetsEndpointServer)
 
-  "get tweet 20" in {
+  "get tweet 1" in {
     val tweet =
       server.httpGetJson[Map[String, Long]](
-        "/tweets/20",
+        "/tweets/1",
         headers = Map("X-UserId" -> "123"),
         andExpect = Status.Ok)
 
-    tweet("idonly") should equal(20) //confirm response was transformed by registered TweetMessageBodyWriter
+    tweet("idonly") should equal(1) //confirm response was transformed by registered TweetMessageBodyWriter
   }
 
   "post valid tweet" in {
@@ -74,6 +74,49 @@ class TweetsControllerIntegrationTest extends Test {
       headers = Map("X-UserId" -> "123"),
       andExpect = Status.BadRequest,
       withErrors = Seq("username cannot be foo"))
+  }
+
+  "get streaming json" in {
+    server.httpGet(
+      "/tweets/streaming_json",
+      headers = Map("X-UserId" -> "123"),
+      andExpect = Status.Ok,
+      withJsonBody =
+        """
+          [
+            {
+              "id" : 1,
+              "user" : "Bob",
+              "msg" : "whats up"
+            },
+            {
+              "id" : 2,
+              "user" : "Sally",
+              "msg" : "yo"
+            },
+            {
+              "id" : 3,
+              "user" : "Fred",
+              "msg" : "hey"
+            }
+          ]
+        """)
+  }
+
+  "get streaming custom toBuf" in {
+    server.httpGet(
+      "/tweets/streaming_custom_tobuf",
+      headers = Map("X-UserId" -> "123"),
+      andExpect = Status.Ok,
+      withBody = "ABC")
+  }
+
+  "get streaming manual writes" in {
+    server.httpGet(
+        "/tweets/streaming_manual_writes",
+      headers = Map("X-UserId" -> "123"),
+      andExpect = Status.Ok,
+      withBody = "helloworld")
   }
 
   "get admin yo" in {

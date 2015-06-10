@@ -8,6 +8,7 @@ junit_tests(name='scala',
     'finatra/http/src/test/java',
     'finatra/http/src/test/scala:test-deps',
     'finatra/inject/inject-server:test-deps',
+    'util/util-core',
   ],
   sources=rglobs(
     'com/twitter/finatra/http/CallbackConverterIntegrationTest.scala',

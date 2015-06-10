@@ -60,7 +60,7 @@ class EmbeddedTwitterServer(
   useSocksProxy: Boolean = false,
   skipAppMain: Boolean = false,
   defaultRequestHeaders: Map[String, String] = Map(),
-  responseStreaming: Boolean = false)
+  streamResponse: Boolean = false)
   extends EmbeddedApp(
     app = twitterServer,
     clientFlags = resolveClientFlags(useSocksProxy, clientFlags),
@@ -220,7 +220,7 @@ class EmbeddedTwitterServer(
     val host = new InetSocketAddress(PortUtils.loopbackAddress, port)
     val builder = ClientBuilder()
       .name(name)
-      .codec(RichHttp[Request](Http(), aggregateChunks = !responseStreaming))
+      .codec(RichHttp[Request](Http(), aggregateChunks = !streamResponse))
       .tcpConnectTimeout(tcpConnectTimeout)
       .connectTimeout(connectTimeout)
       .requestTimeout(requestTimeout)
