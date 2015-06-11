@@ -1,5 +1,6 @@
 import UnidocKeys._
 import com.twitter.scrooge.ScroogeSBT
+import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedFiles
 import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages
 
 
@@ -236,6 +237,7 @@ lazy val finatraUtils = project
   .in(file("utils"))
   .settings(moduleName := "finatra-utils")
   .settings(finatraBuildSettings)
+  .settings(coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*")
   .settings(
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
@@ -273,7 +275,7 @@ lazy val finatraHttp: Project = project
   .in(file("http"))
   .settings(moduleName := "finatra-http")
   .settings(finatraBuildSettings)
-  .settings(coverageExcludedPackages := "com.twitter.finatra.internal.marshalling.mustache.ScalaObjectHandler.*")
+  .settings(coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*")
   .settings(
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,

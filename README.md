@@ -7,8 +7,11 @@ Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) a
 Current version: `2.0.0.M2-SNAPSHOT`
 
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
+[![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.svg?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
+
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11)
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
 Announcing the first milestone release of Finatra version 2!
 -----------------------------------------------------------

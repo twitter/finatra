@@ -801,12 +801,18 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("string wrapper deserialization") {
-      parse[ObjWithTestId](
+      val parsedValue = parse[ObjWithTestId](
         """
       {
         "id": "5"
       }
-        """) should equal(ObjWithTestId(TestIdStringWrapper("5")))
+        """)
+      val expectedValue = ObjWithTestId(TestIdStringWrapper("5"))
+
+      parsedValue should equal(expectedValue)
+      parsedValue.id.onlyValue should equal(expectedValue.id.onlyValue)
+      parsedValue.id.asString should equal(expectedValue.id.asString)
+      parsedValue.id.toString should equal(expectedValue.id.toString)
     }
 
     scenario("parse input stream") {

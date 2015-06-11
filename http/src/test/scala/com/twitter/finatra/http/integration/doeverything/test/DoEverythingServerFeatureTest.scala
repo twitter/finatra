@@ -918,4 +918,17 @@ class DoEverythingServerFeatureTest extends FeatureTest {
        stat("route/do-everything/POST/time/200")      should have size(1)
        stat("route/do-everything/POST/time/2XX")      should have size(1)
   }
+
+  "ports" in {
+    server.twitterServer.httpExternalPort should not be None
+    server.twitterServer.httpExternalPort.get should be > 0
+
+    server.twitterServer.httpExternalSocketAddress should not be None
+
+    // no https server configured
+    server.twitterServer.httpsExternalPort shouldBe None
+
+    // not a thrift server so, port should be None
+    server.twitterServer.thriftPort shouldBe None
+  }
 }
