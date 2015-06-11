@@ -736,12 +736,11 @@ File Server
 ===============================
 Finatra's file server support is meant for internal apps only. Do not use the fileserver for production apps requiring a robust high performance file serving solution.
 
-All files are served out of src/main/webapp.
+By default, files are served from the classpath. You can use the flag `-doc.root` to customize the classpath root.
 
-To run the server locally with hotloaded files resolved from disk (instead of from classpath), set the following Java System Property
-```scala
-env=dev
-```
+To serve files from the local file system, use the flag `-local.doc.root`. Note that setting Java System Property `-Denv=env` is no longer required nor supported. Setting the `-local.doc.root` flag will trigger the same `localFileMode` behavior. 
+
+Also note that it is **an error** to attempt to set both the `-doc.root` and the `-local.doc.root` flags. Either do nothing to load resources from the base of the classpath, configure a classpath "namespace" by setting the `-doc.root` **or** load files from a local filesystem location specified by the `-local.doc.root` flag.
 
 ## File Serving Examples
 
