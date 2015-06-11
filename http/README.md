@@ -332,7 +332,7 @@ The following Jackson integrations are provided by default:
 * [Improved DateTime Deserializer](../jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala)
 * [Improved `case class` Deserializer](../jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala): See details [below](#case-class-deserializer).
 
-### Customization
+### <a name="jackson-customization">Customization</a>
 To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](../jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
 ```scala
 class Server extends HttpServer {
@@ -341,6 +341,11 @@ class Server extends HttpServer {
 }
 
 object CustomJacksonModule extends FinatraJacksonModule {
+  override val additionalJacksonModules = Seq(
+    new SimpleModule {
+      addSerializer(LocalDateParser)
+    })
+
   override val serializationInclusion = Include.NON_EMPTY
 
   override val propertyNamingStrategy = CamelCasePropertyNamingStrategy
