@@ -31,7 +31,7 @@ val baseSettings = Seq(
     "org.slf4j" % "slf4j-simple" % versions.slf4j % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
     "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-    "org.specs2" %% "specs2" % "2.3.12" % "test"
+    "org.specs2" %% "specs2" % "2.3.12" % "test" exclude("org.scala-lang", "scala-compiler")
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -326,6 +326,7 @@ lazy val finatraLogback = project
     injectCore % "test->test"
   )
 
+
 /**
   * Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
   */
@@ -345,6 +346,10 @@ lazy val finatraTwitterCloneExample = project
   .settings(finatraBuildSettings)
   .settings(
     publishLocal := {},
-    publish := {}
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    }
   )
   .dependsOn(finatraHttp, injectCore % "test->test")

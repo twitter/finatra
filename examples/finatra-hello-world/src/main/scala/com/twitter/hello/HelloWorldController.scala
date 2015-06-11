@@ -9,4 +9,8 @@ class HelloWorldController extends Controller {
   	info("hi")
     "Hello " + request.params.getOrElse("name", "unnamed")
   }
+
+  post("/hi") { hiRequest: HiRequest =>
+    "Hello " + hiRequest.name + " with id " + hiRequest.id
+  }
 }

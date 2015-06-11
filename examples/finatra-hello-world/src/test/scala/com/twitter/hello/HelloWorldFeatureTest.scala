@@ -15,5 +15,18 @@ class HelloWorldFeatureTest extends FeatureTest {
         andExpect = Ok,
         withBody = "Hello Bob")
     }
+    "Say hi for Post" in {
+      server.httpPost(
+        path = "/hi",
+        postBody =
+          """
+          {
+            "id": 10,
+            "name" : "Sally"
+          }
+          """,
+        andExpect = Ok,
+        withBody = "Hello Sally with id 10")
+    }
   }
 }
