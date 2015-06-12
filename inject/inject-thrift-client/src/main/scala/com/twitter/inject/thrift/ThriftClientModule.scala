@@ -27,12 +27,6 @@ abstract class ThriftClientModule[T: ClassTag]
   val dest: String
 
   /**
-   * ClientId to identify client calling the thrift service.
-   * Note: clientId is a def so that it's value can come from a flag
-   */
-  def clientId: String = ""
-
-  /**
    * Enable thrift mux for this connection.
    *
    * Note: Both server and client must have mux enabled otherwise
@@ -46,19 +40,19 @@ abstract class ThriftClientModule[T: ClassTag]
 
   @Singleton
   @Provides
-  def providesClient: T = {
+  def providesClient(clientId: ClientId): T = {
     val labelAndDest = s"$label=$dest"
 
     if (mux) {
       ThriftMux.client.
         withParams(params).
-        withClientId(ClientId(clientId)).
+        withClientId(clientId).
         newIface[T](labelAndDest)
     }
     else {
       Thrift.client.
         withParams(params).
-        withClientId(ClientId(clientId)).
+        withClientId(clientId).
         newIface[T](labelAndDest)
     }
   }
