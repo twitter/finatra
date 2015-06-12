@@ -5,7 +5,7 @@ import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages
 
 
 lazy val buildSettings = Seq(
-  version := "2.0.0.M2",
+  version := "2.0.0.M3-SNAPSHOT",
   scalaVersion := "2.11.6",
   crossScalaVersions := Seq("2.10.5", "2.11.6")
 )
@@ -47,8 +47,8 @@ lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact := true,
   publishArtifact in Test := true,
-  publishArtifact in (Compile, packageDoc) := false,
-  publishArtifact in (Test, packageDoc) := false,
+  publishArtifact in (Compile, packageDoc) := true,
+  publishArtifact in (Test, packageDoc) := true,
   pomIncludeRepository := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"

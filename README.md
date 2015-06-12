@@ -4,8 +4,6 @@ Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) a
 
 ![finatra logo](finatra_logo.png)
 
-Current version: `2.0.0.M2-SNAPSHOT`
-
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
 [![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.svg?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
 
@@ -13,7 +11,7 @@ Current version: `2.0.0.M2-SNAPSHOT`
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
-Announcing the first milestone release of Finatra version 2!
+Announcing the next milestone release of Finatra version 2!
 -----------------------------------------------------------
 [Finatra v2 slides](http://twitter.github.io/finatra/assets/FinatraSFScala.pdf) from SFScala meetup
 

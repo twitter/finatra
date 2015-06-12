@@ -4,6 +4,7 @@ import NativePackagerKeys._
 packageArchetype.java_application
 
 bashScriptConfigLocation := Some("${app_home}/../conf/application.ini")
+val finatraVersion = "2.0.0.M2"
 
 lazy val finatraHelloWorldHeroku = project
   .in(file("."))
@@ -24,19 +25,19 @@ lazy val finatraHelloWorldHeroku = project
       case other => MergeStrategy.defaultMergeStrategy(other)
     },
     libraryDependencies ++= Seq(
-      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1",
-      "com.twitter.finatra" %% "finatra-logback" % "2.0.0.M1",
+      "com.twitter.finatra" %% "finatra-http" % finatraVersion,
+      "com.twitter.finatra" %% "finatra-logback" % finatraVersion,
 
-      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1" % "test",
-      "com.twitter.inject" %% "inject-server" % "2.0.0.M1" % "test",
-      "com.twitter.inject" %% "inject-app" % "2.0.0.M1" % "test",
-      "com.twitter.inject" %% "inject-core" % "2.0.0.M1" % "test",
-      "com.twitter.inject" %% "inject-modules" % "2.0.0.M1" % "test",
-      "com.twitter.finatra" %% "finatra-http" % "2.0.0.M1" % "test" classifier "tests",
-      "com.twitter.inject" %% "inject-server" % "2.0.0.M1" % "test" classifier "tests",
-      "com.twitter.inject" %% "inject-app" % "2.0.0.M1" % "test" classifier "tests",
-      "com.twitter.inject" %% "inject-core" % "2.0.0.M1" % "test" classifier "tests",
-      "com.twitter.inject" %% "inject-modules" % "2.0.0.M1" % "test" classifier "tests",
+      "com.twitter.finatra" %% "finatra-http" % finatraVersion % "test",
+      "com.twitter.inject" %% "inject-server" % finatraVersion % "test",
+      "com.twitter.inject" %% "inject-app" % finatraVersion % "test",
+      "com.twitter.inject" %% "inject-core" % finatraVersion % "test",
+      "com.twitter.inject" %% "inject-modules" % finatraVersion % "test",
+      "com.twitter.finatra" %% "finatra-http" % finatraVersion % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-server" % finatraVersion % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-app" % finatraVersion % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-core" % finatraVersion % "test" classifier "tests",
+      "com.twitter.inject" %% "inject-modules" % finatraVersion % "test" classifier "tests",
 
       "org.mockito" % "mockito-core" % "1.9.5" % "test",
       "org.scalatest" %% "scalatest" % "2.2.3" % "test",
