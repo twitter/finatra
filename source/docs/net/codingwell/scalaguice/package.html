@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>scalaguice - net.codingwell.scalaguice</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../index.html';
@@ -26,7 +30,11 @@
       <div id="definition">
         <img src="../../../lib/package_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="net">net</a>.<a href="../package.html" class="extype" name="net.codingwell">codingwell</a></p>
-        <h1>scalaguice</h1>
+        <h1>scalaguice</h1><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -41,7 +49,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -92,9 +100,13 @@
       <span class="symbol">
         <span class="name">AnnotationClass</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="result"> = <span class="extype" name="java.lang.Class">Class</span>[<span class="extype" name="net.codingwell.scalaguice.AnnotationClass.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@AnnotationClass[T&lt;:java.lang.annotation.Annotation]=Class[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       
-    </li><li name="net.codingwell.scalaguice.ScalaModule" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="net.codingwell.scalaguice.ScalaModule" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="ScalaModuleextendsAbstractModule"></a>
       <a id="ScalaModule:ScalaModule"></a>
       <h4 class="signature">
@@ -105,8 +117,31 @@
       <span class="symbol">
         <a href="ScalaModule.html"><span class="name">ScalaModule</span></a><span class="result"> extends <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span></span>
       </span>
-      </h4>
-      <p class="comment cmt">Allows binding via type parameters.</p>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaModuleextendsAbstractModule" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Allows binding via type parameters.</p><div class="fullcomment"><div class="comment cmt"><p>Allows binding via type parameters. Mix into <code>AbstractModule</code>
+ (or subclass) to allow using a type parameter instead of
+<code>classOf[Foo]</code> or <code>new TypeLiteral[Bar[Foo]] {}</code>.</p><p>For example, instead of</p><pre><span class="kw">class</span> MyModule <span class="kw">extends</span> AbstractModule {
+  <span class="kw">def</span> configure {
+    bind(classOf[Service]).to(classOf[ServiceImpl]).in(classOf[Singleton])
+    bind(classOf[CreditCardPaymentService])
+    bind(<span class="kw">new</span> TypeLiteral[Bar[Foo]]{}).to(classOf[FooBarImpl])
+    bind(classOf[PaymentService]).to(classOf[CreditCardPaymentService])
+  }
+}</pre><p>use</p><pre><span class="kw">class</span> MyModule <span class="kw">extends</span> AbstractModule <span class="kw">with</span> ScalaModule {
+  <span class="kw">def</span> configure {
+    bind[Service].to[ServiceImpl].in[Singleton]
+    bind[CreditCardPaymentService]
+    bind[Bar[Foo]].to[FooBarImpl]
+    bind[PaymentService].to[CreditCardPaymentService]
+  }
+}</pre><p><b>Note</b> This syntax allows binding to and from generic types.
+It doesn't currently allow bindings between wildcard types because the
+manifests for wildcard types don't provide access to type bounds.
+</p></div></div>
     </li><li name="net.codingwell.scalaguice.ScalaMultibinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ScalaMultibinder[T]extendsAnyRef"></a>
       <a id="ScalaMultibinder[T]:ScalaMultibinder[T]"></a>
@@ -118,8 +153,12 @@
       <span class="symbol">
         <a href="ScalaMultibinder.html"><span class="name">ScalaMultibinder</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
-      <p class="comment cmt">Analog to the Guice Multibinder
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaMultibinder[T]extendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Analog to the Guice Multibinder
 </p>
     </li><li name="net.codingwell.scalaguice.ScalaPrivateModule" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="ScalaPrivateModuleextendsPrivateModule"></a>
@@ -132,9 +171,13 @@
       <span class="symbol">
         <a href="ScalaPrivateModule.html"><span class="name">ScalaPrivateModule</span></a><span class="result"> extends <span class="extype" name="com.google.inject.PrivateModule">PrivateModule</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaPrivateModuleextendsPrivateModule" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       
-    </li><li name="net.codingwell.scalaguice.SetProvider" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.codingwell.scalaguice.SetProvider" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="SetProvider[T]extendsProviderWithDependencies[scala.collection.immutable.Set[T]]"></a>
       <a id="SetProvider[T]:SetProvider[T]"></a>
       <h4 class="signature">
@@ -145,8 +188,12 @@
       <span class="symbol">
         <a href="SetProvider.html"><span class="name">SetProvider</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="com.google.inject.spi.ProviderWithDependencies">ProviderWithDependencies</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="net.codingwell.scalaguice.SetProvider.T">T</span>]]</span>
       </span>
-      </h4>
-      <p class="comment cmt">Provider for a Scala Immutable Set from a Java Set.</p>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@SetProvider[T]extendsProviderWithDependencies[scala.collection.immutable.Set[T]]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Provider for a Scala Immutable Set from a Java Set.</p><div class="fullcomment"><div class="comment cmt"><p>Provider for a Scala Immutable Set from a Java Set.</p><p>Example:</p><pre>.toProvider( <span class="kw">new</span> SetProvider[T]( Key.get( typeLiteral[JSet[T]] ) ) )</pre></div></div>
     </li></ol>
             </div>
 
@@ -165,7 +212,11 @@
       <span class="symbol">
         <a href="InjectorExtensions$.html"><span class="name">InjectorExtensions</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@InjectorExtensions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="net.codingwell.scalaguice.KeyExtensions" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="KeyExtensions"></a>
@@ -178,7 +229,11 @@
       <span class="symbol">
         <a href="KeyExtensions$.html"><span class="name">KeyExtensions</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@KeyExtensions" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       
     </li><li name="net.codingwell.scalaguice.ScalaModule" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ScalaModule"></a>
@@ -191,9 +246,13 @@
       <span class="symbol">
         <a href="ScalaModule$.html"><span class="name">ScalaModule</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaModule" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       
-    </li><li name="net.codingwell.scalaguice.ScalaMultibinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="net.codingwell.scalaguice.ScalaMultibinder" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ScalaMultibinder"></a>
       <a id="ScalaMultibinder:ScalaMultibinder"></a>
       <h4 class="signature">
@@ -204,9 +263,13 @@
       <span class="symbol">
         <a href="ScalaMultibinder$.html"><span class="name">ScalaMultibinder</span></a>
       </span>
-      </h4>
-      <p class="comment cmt">Analog to the Guice Multibinder</p>
-    </li><li name="net.codingwell.scalaguice.package#annotation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaMultibinder" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Analog to the Guice Multibinder</p><div class="fullcomment"><div class="comment cmt"><p>Analog to the Guice Multibinder</p><p>Use <code>newSetBinder</code> to create a multibinder instance</p></div></div>
+    </li><li name="net.codingwell.scalaguice#annotation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="annotation[T&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[T]):net.codingwell.scalaguice.package.AnnotationClass[T]"></a>
       <a id="annotation[T&lt;:Annotation](Manifest[T]):AnnotationClass[T]"></a>
       <h4 class="signature">
@@ -217,7 +280,11 @@
       <span class="symbol">
         <span class="name">annotation</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.annotation.T">T</span>]</span>)</span><span class="result">: <a href="#AnnotationClass[T&lt;:java.lang.annotation.Annotation]=Class[T]" class="extmbr" name="net.codingwell.scalaguice.AnnotationClass">AnnotationClass</a>[<span class="extype" name="net.codingwell.scalaguice.annotation.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@annotation[T&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[T]):net.codingwell.scalaguice.package.AnnotationClass[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Get the class for a Java Annotation using a <span class="extype" name="scala.Manifest">scala.Manifest</span>.</p>
     </li><li name="net.codingwell.scalaguice.binder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="binder"></a>
@@ -230,9 +297,13 @@
       <span class="symbol">
         <a href="binder/package.html"><span class="name">binder</span></a>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@binder" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       
-    </li><li name="net.codingwell.scalaguice.package#typeLiteral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="net.codingwell.scalaguice#typeLiteral" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="typeLiteral[T](implicitevidence$1:Manifest[T]):com.google.inject.TypeLiteral[T]"></a>
       <a id="typeLiteral[T](Manifest[T]):TypeLiteral[T]"></a>
       <h4 class="signature">
@@ -243,9 +314,13 @@
       <span class="symbol">
         <span class="name">typeLiteral</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="net.codingwell.scalaguice.typeLiteral.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.TypeLiteral">TypeLiteral</span>[<span class="extype" name="net.codingwell.scalaguice.typeLiteral.T">T</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../index.html#net.codingwell.scalaguice.package@typeLiteral[T](implicitevidence$1:Manifest[T]):com.google.inject.TypeLiteral[T]" title="Permalink" target="_top">
+        <img src="../../../lib/permalink.png" />
+      </a>
+    </span>
       <p class="shortcomment cmt">Create a <span class="extype" name="com.google.inject.TypeLiteral">com.google.inject.TypeLiteral</span> from a <span class="extype" name="scala.Manifest">scala.Manifest</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <span class="extype" name="com.google.inject.TypeLiteral">com.google.inject.TypeLiteral</span> from a <span class="extype" name="scala.Manifest">scala.Manifest</span>.
-Subtypes of <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.AnyVal" class="extype" target="_top">scala.AnyVal</a> will be converted to their corresponding
+Subtypes of <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyVal" class="extype" target="_top">scala.AnyVal</a> will be converted to their corresponding
 Java wrapper classes.
 </p></div></div>
     </li></ol>
@@ -260,7 +335,7 @@ Java wrapper classes.
         <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>
@@ -277,6 +352,7 @@ Java wrapper classes.
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../lib/template.js"></script>
+
+
     </body>
       </html>

@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!DOCTYPE html >
 <html>
         <head>
           <title>FinatraDatetimeDeserializer - com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer</title>
@@ -9,6 +8,11 @@
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
       <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
@@ -26,7 +30,13 @@
       <div id="definition">
         <img src="../../../../../../lib/object_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../../package.html" class="extype" name="com.twitter.finatra.json">json</a>.<a href="../package.html" class="extype" name="com.twitter.finatra.json.internal">internal</a>.<a href="package.html" class="extype" name="com.twitter.finatra.json.internal.serde">serde</a></p>
-        <h1>FinatraDatetimeDeserializer</h1>
+        <h1>FinatraDatetimeDeserializer</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="com.twitter.finatra.json.internal.serde">package serde</a>
+          </div></span></h3><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       </div>
 
       <h4 id="signature" class="signature">
@@ -42,7 +52,7 @@
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Datetime deserializer with improved exception handling (compared to jackson-datatype-joda)
 </p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="com.fasterxml.jackson.databind.deser.std.StdDeserializer">StdDeserializer</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>], <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.fasterxml.jackson.databind.deser.std.StdDeserializer">StdDeserializer</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>], <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>], <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -87,19 +97,6 @@
         <div id="values" class="values members">
               <h3>Value Members</h3>
               <ol><li name="scala.AnyRef#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="!=(x$1:AnyRef):Boolean"></a>
-      <a id="!=(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#!=" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a>
       <a id="!=(Any):Boolean"></a>
       <h4 class="signature">
@@ -108,10 +105,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef###" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <a id="##():Int"></a>
@@ -121,24 +122,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@##():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="==(x$1:AnyRef):Boolean"></a>
-      <a id="==(AnyRef):Boolean"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
-      </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Any#==" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a>
       <a id="==(Any):Boolean"></a>
       <h4 class="signature">
@@ -147,10 +139,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#_hasTextualNull" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="_hasTextualNull(x$1:String):Boolean"></a>
       <a id="_hasTextualNull(String):Boolean"></a>
@@ -160,9 +156,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_hasTextualNull</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">_hasTextualNull</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_hasTextualNull(x$1:String):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#_isNaN" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="_isNaN(x$1:String):Boolean"></a>
@@ -173,9 +173,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_isNaN</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">_isNaN</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_isNaN(x$1:String):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#_isNegInf" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="_isNegInf(x$1:String):Boolean"></a>
@@ -186,9 +190,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_isNegInf</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">_isNegInf</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_isNegInf(x$1:String):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#_isPosInf" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="_isPosInf(x$1:String):Boolean"></a>
@@ -199,9 +207,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_isPosInf</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">_isPosInf</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_isPosInf(x$1:String):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#_parseBoolean" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="_parseBoolean(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Boolean"></a>
@@ -214,7 +226,11 @@
       <span class="symbol">
         <span class="name">_parseBoolean</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Boolean">Boolean</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseBoolean(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -231,9 +247,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_parseBooleanFromNumber</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">_parseBooleanFromNumber</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseBooleanFromNumber(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -250,9 +270,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_parseBooleanPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">_parseBooleanPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseBooleanPrimitive(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -271,7 +295,11 @@
       <span class="symbol">
         <span class="name">_parseByte</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Byte">Byte</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseByte(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Byte" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -290,7 +318,11 @@
       <span class="symbol">
         <span class="name">_parseDate</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.util.Date">Date</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseDate(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):java.util.Date" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -309,7 +341,11 @@
       <span class="symbol">
         <span class="name">_parseDouble</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Double">Double</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseDouble(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -326,9 +362,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_parseDoublePrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Double" class="extype" target="_top">Double</a></span>
+        <span class="name">_parseDoublePrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Double" class="extype" target="_top">Double</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseDoublePrimitive(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Double" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -347,7 +387,11 @@
       <span class="symbol">
         <span class="name">_parseFloat</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Float">Float</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseFloat(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Float" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -364,9 +408,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_parseFloatPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Float" class="extype" target="_top">Float</a></span>
+        <span class="name">_parseFloatPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Float" class="extype" target="_top">Float</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseFloatPrimitive(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Float" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -383,9 +431,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_parseIntPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">_parseIntPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseIntPrimitive(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -404,7 +456,11 @@
       <span class="symbol">
         <span class="name">_parseInteger</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Integer">Integer</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseInteger(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Integer" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -423,7 +479,11 @@
       <span class="symbol">
         <span class="name">_parseLong</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Long">Long</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseLong(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Long" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -440,9 +500,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_parseLongPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>
+        <span class="name">_parseLongPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseLongPrimitive(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Long" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -461,7 +525,11 @@
       <span class="symbol">
         <span class="name">_parseShort</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Short">Short</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseShort(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Short" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -478,9 +546,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">_parseShortPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Short" class="extype" target="_top">Short</a></span>
+        <span class="name">_parseShortPrimitive</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Short" class="extype" target="_top">Short</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseShortPrimitive(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):Short" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -499,7 +571,11 @@
       <span class="symbol">
         <span class="name">_parseString</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@_parseString(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext):String" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -518,7 +594,11 @@
       <span class="symbol">
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
@@ -531,7 +611,11 @@
       <span class="symbol">
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@clone():Object" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -550,7 +634,11 @@
       <span class="symbol">
         <span class="name">deserialize</span><span class="params">(<span name="jp">jp: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="ctxt">ctxt: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@deserialize(jp:com.fasterxml.jackson.core.JsonParser,ctxt:com.fasterxml.jackson.databind.DeserializationContext):org.joda.time.DateTime" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer">FinatraDatetimeDeserializer</a> → JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#deserialize" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="deserialize(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext,x$3:T):T"></a>
@@ -563,7 +651,11 @@
       <span class="symbol">
         <span class="name">deserialize</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>, <span name="arg2">arg2: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>)</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@deserialize(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext,x$3:T):T" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -587,7 +679,11 @@
       <span class="symbol">
         <span class="name">deserializeWithType</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>, <span name="arg2">arg2: <span class="extype" name="com.fasterxml.jackson.databind.jsontype.TypeDeserializer">TypeDeserializer</span></span>)</span><span class="result">: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@deserializeWithType(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext,x$3:com.fasterxml.jackson.databind.jsontype.TypeDeserializer):Object" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StdDeserializer → JsonDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -604,9 +700,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#equals" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a>
@@ -617,9 +717,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
@@ -630,9 +734,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@finalize():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../../java$lang.html" class="extype" name="java.lang">java.lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -651,7 +759,11 @@
       <span class="symbol">
         <span class="name">findBackReference</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.deser.SettableBeanProperty">SettableBeanProperty</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@findBackReference(x$1:String):com.fasterxml.jackson.databind.deser.SettableBeanProperty" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#findConvertingContentDeserializer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="findConvertingContentDeserializer(x$1:com.fasterxml.jackson.databind.DeserializationContext,x$2:com.fasterxml.jackson.databind.BeanProperty,x$3:com.fasterxml.jackson.databind.JsonDeserializer[_]):com.fasterxml.jackson.databind.JsonDeserializer[_]"></a>
@@ -664,7 +776,11 @@
       <span class="symbol">
         <span class="name">findConvertingContentDeserializer</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.BeanProperty">BeanProperty</span></span>, <span name="arg2">arg2: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[_]</span>)</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@findConvertingContentDeserializer(x$1:com.fasterxml.jackson.databind.DeserializationContext,x$2:com.fasterxml.jackson.databind.BeanProperty,x$3:com.fasterxml.jackson.databind.JsonDeserializer[_]):com.fasterxml.jackson.databind.JsonDeserializer[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -683,7 +799,11 @@
       <span class="symbol">
         <span class="name">findDeserializer</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.JavaType">JavaType</span></span>, <span name="arg2">arg2: <span class="extype" name="com.fasterxml.jackson.databind.BeanProperty">BeanProperty</span></span>)</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[<a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@findDeserializer(x$1:com.fasterxml.jackson.databind.DeserializationContext,x$2:com.fasterxml.jackson.databind.JavaType,x$3:com.fasterxml.jackson.databind.BeanProperty):com.fasterxml.jackson.databind.JsonDeserializer[Object]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -702,7 +822,11 @@
       <span class="symbol">
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#getDelegatee" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getDelegatee():com.fasterxml.jackson.databind.JsonDeserializer[_]"></a>
@@ -715,7 +839,11 @@
       <span class="symbol">
         <span class="name">getDelegatee</span><span class="params">()</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getDelegatee():com.fasterxml.jackson.databind.JsonDeserializer[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#getEmptyValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getEmptyValue():T"></a>
@@ -728,7 +856,11 @@
       <span class="symbol">
         <span class="name">getEmptyValue</span><span class="params">()</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getEmptyValue():T" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#getKnownPropertyNames" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getKnownPropertyNames():java.util.Collection[Object]"></a>
@@ -741,7 +873,11 @@
       <span class="symbol">
         <span class="name">getKnownPropertyNames</span><span class="params">()</span><span class="result">: <span class="extype" name="java.util.Collection">Collection</span>[<a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getKnownPropertyNames():java.util.Collection[Object]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#getNullValue" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getNullValue():T"></a>
@@ -754,7 +890,11 @@
       <span class="symbol">
         <span class="name">getNullValue</span><span class="params">()</span><span class="result">: <span class="extype" name="org.joda.time.DateTime">DateTime</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getNullValue():T" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#getObjectIdReader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getObjectIdReader():com.fasterxml.jackson.databind.deser.impl.ObjectIdReader"></a>
@@ -767,7 +907,11 @@
       <span class="symbol">
         <span class="name">getObjectIdReader</span><span class="params">()</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.deser.impl.ObjectIdReader">ObjectIdReader</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getObjectIdReader():com.fasterxml.jackson.databind.deser.impl.ObjectIdReader" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#getValueType" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getValueType():com.fasterxml.jackson.databind.JavaType"></a>
@@ -780,7 +924,11 @@
       <span class="symbol">
         <span class="name">getValueType</span><span class="params">()</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.JavaType">JavaType</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getValueType():com.fasterxml.jackson.databind.JavaType" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StdDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#handleUnknownProperty" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handleUnknownProperty(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext,x$3:Any,x$4:String):Unit"></a>
@@ -791,9 +939,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handleUnknownProperty</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>, <span name="arg2">arg2: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="arg3">arg3: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">handleUnknownProperty</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.core.JsonParser">JsonParser</span></span>, <span name="arg1">arg1: <span class="extype" name="com.fasterxml.jackson.databind.DeserializationContext">DeserializationContext</span></span>, <span name="arg2">arg2: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="arg3">arg3: <span class="extype" name="java.lang.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@handleUnknownProperty(x$1:com.fasterxml.jackson.core.JsonParser,x$2:com.fasterxml.jackson.databind.DeserializationContext,x$3:Any,x$4:String):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -812,7 +964,11 @@
       <span class="symbol">
         <span class="name">handledType</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@handledType():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StdDeserializer → JsonDeserializer</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
@@ -823,9 +979,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@hashCode():Int" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#isCachable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isCachable():Boolean"></a>
@@ -836,9 +996,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isCachable</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isCachable</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@isCachable():Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#isDefaultDeserializer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDefaultDeserializer(x$1:com.fasterxml.jackson.databind.JsonDeserializer[_]):Boolean"></a>
@@ -849,9 +1013,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isDefaultDeserializer</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[_]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isDefaultDeserializer</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[_]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@isDefaultDeserializer(x$1:com.fasterxml.jackson.databind.JsonDeserializer[_]):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.deser.std.StdDeserializer#isDefaultKeyDeserializer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDefaultKeyDeserializer(x$1:com.fasterxml.jackson.databind.KeyDeserializer):Boolean"></a>
@@ -862,9 +1030,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isDefaultKeyDeserializer</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.KeyDeserializer">KeyDeserializer</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isDefaultKeyDeserializer</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.KeyDeserializer">KeyDeserializer</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@isDefaultKeyDeserializer(x$1:com.fasterxml.jackson.databind.KeyDeserializer):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../../fasterxml/jackson/databind/deser$std.html" class="extype" name="com.fasterxml.jackson.databind.deser.std">com.fasterxml.jackson.databind.deser.std</a>] </dd><dt>Definition Classes</dt><dd>StdDeserializer</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -875,9 +1047,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
@@ -888,9 +1064,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
@@ -901,9 +1081,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@notify():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
@@ -914,9 +1098,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@notifyAll():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#replaceDelegatee" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="replaceDelegatee(x$1:com.fasterxml.jackson.databind.JsonDeserializer[_]):com.fasterxml.jackson.databind.JsonDeserializer[_]"></a>
@@ -929,7 +1117,11 @@
       <span class="symbol">
         <span class="name">replaceDelegatee</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[_]</span>)</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@replaceDelegatee(x$1:com.fasterxml.jackson.databind.JsonDeserializer[_]):com.fasterxml.jackson.databind.JsonDeserializer[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
@@ -942,7 +1134,11 @@
       <span class="symbol">
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
@@ -955,7 +1151,11 @@
       <span class="symbol">
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@toString():String" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.fasterxml.jackson.databind.JsonDeserializer#unwrappingDeserializer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="unwrappingDeserializer(x$1:com.fasterxml.jackson.databind.util.NameTransformer):com.fasterxml.jackson.databind.JsonDeserializer[T]"></a>
@@ -968,7 +1168,11 @@
       <span class="symbol">
         <span class="name">unwrappingDeserializer</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.fasterxml.jackson.databind.util.NameTransformer">NameTransformer</span></span>)</span><span class="result">: <span class="extype" name="com.fasterxml.jackson.databind.JsonDeserializer">JsonDeserializer</span>[<span class="extype" name="org.joda.time.DateTime">DateTime</span>]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@unwrappingDeserializer(x$1:com.fasterxml.jackson.databind.util.NameTransformer):com.fasterxml.jackson.databind.JsonDeserializer[T]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>JsonDeserializer</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
@@ -979,9 +1183,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@wait():Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -998,9 +1206,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -1017,9 +1229,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
                 <span class="name">@throws</span><span class="args">(<span>
       
@@ -1045,7 +1261,11 @@
       <span class="symbol">
         <span class="name deprecated" title="Deprecated: (Since version ) see corresponding Javadoc for more information.">getValueClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
-      </h4>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.json.internal.serde.FinatraDatetimeDeserializer$@getValueClass():Class[_]" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" />
+      </a>
+    </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>StdDeserializer</dd><dt>Annotations</dt><dd>
                 <span class="name">@Deprecated</span>
               
@@ -1066,7 +1286,7 @@
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="../../../../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.5/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>
@@ -1083,6 +1303,7 @@
       <div id="tooltip"></div>
 
       <div id="footer">  </div>
-      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+
+
     </body>
       </html>
