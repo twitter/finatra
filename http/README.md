@@ -4,7 +4,7 @@ Finatra HTTP Overview
 Quick Start
 -----------------------------------------------------------
 * Depend on the `com.twitter.finatra:finatra-http` library.
-* We also recommend depending on `com.twitter.finatra:finatra-logback` to choose [Logback][logback] as your [slf4j](http://www.slf4j.org/manual.html) implementation.
+* We also recommend depending on `com.twitter.finatra:finatra-slf4j` and `ch.qos.logback:logback-classic` to choose [Logback][logback] as your [slf4j](http://www.slf4j.org/manual.html) implementation.
 * See the [finatra-hello-world](../examples/finatra-hello-world) example.
 * See also [todo list example][quick-start].
 

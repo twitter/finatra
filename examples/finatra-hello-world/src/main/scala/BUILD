@@ -1,9 +1,10 @@
 scala_library(
   name='scala',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/javax/inject:javax.inject',
-    'finatra/logback',
+    'finatra/slf4j',
     'finatra/http',
   ],
   excludes = [

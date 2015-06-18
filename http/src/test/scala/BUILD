@@ -1,7 +1,8 @@
 junit_tests(name='scala',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     'finatra/jackson:test-deps',
-    'finatra/logback',
+    'finatra/slf4j',
     'finatra/utils:test-deps',
     'finatra/http',
     'finatra/httpclient',

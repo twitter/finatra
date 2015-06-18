@@ -136,7 +136,7 @@ lazy val root = project
     finatraJackson,
     finatraHttp,
     finatraHttpclient,
-    finatraLogback,
+    finatraSlf4j,
     finatraBenchmarks,
     finatraTwitterCloneExample
   )
@@ -309,13 +309,12 @@ lazy val finatraHttpclient = project
     injectApp % "test->test"
   )
 
-lazy val finatraLogback = project
-  .in(file("logback"))
-  .settings(moduleName := "finatra-logback")
+lazy val finatraSlf4j = project
+  .in(file("slf4j"))
+  .settings(moduleName := "finatra-slf4j")
   .settings(finatraBuildSettings)
   .settings(
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback,
       "com.twitter" %% "finagle-http" % versions.finagle,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
