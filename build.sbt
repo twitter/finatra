@@ -116,37 +116,38 @@ lazy val finatraBuildSettings = baseSettings ++ buildSettings ++ publishSettings
   organization := "com.twitter.finatra"
 )
 
-lazy val root = project
-  .in(file("."))
-  .settings(organization := "com.twitter.finatra")
-  .settings(moduleName := "finatra-root")
-  .settings(baseSettings ++ buildSettings ++ publishSettings ++ unidocSettings)
-  .settings(
-    unidocProjectFilter in(ScalaUnidoc, unidoc) :=
-      inAnyProject -- inProjects(finatraBenchmarks)
-  )
-  .aggregate(
+lazy val commonSettings = baseSettings ++ buildSettings ++ publishSettings ++ unidocSettings
+
+lazy val root = (project in file(".")).
+  settings(commonSettings: _*).
+  settings(
+    organization := "com.twitter.finatra",
+    moduleName := "finatra-root",
+    unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject -- inProjects(benchmarks)
+  ).
+  aggregate(
     injectCore,
     injectModules,
     injectApp,
     injectServer,
     injectRequestScope,
     injectThriftClient,
-    finatraUtils,
-    finatraJackson,
-    finatraHttp,
-    finatraHttpclient,
-    finatraSlf4j,
-    finatraBenchmarks,
-    finatraTwitterCloneExample
+    utils,
+    jackson,
+    http,
+    httpclient,
+    slf4j,
+    benchmarks,
+    helloWorld,
+    twitterClone
   )
 
-lazy val injectCore = project
-  .in(file("inject/inject-core"))
-  .settings(moduleName := "inject-core")
-  .settings(injectBuildSettings)
-  .settings(coverageExcludedPackages := "net.codingwell.scalaguice.*")
-  .settings(
+lazy val injectCore = (project in file("inject/inject-core")).
+  settings(injectBuildSettings: _*).
+  settings(
+    name := "inject-core",
+    moduleName := "inject-core",
+    coverageExcludedPackages := "net.codingwell.scalaguice.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.google.guava" % "guava" % versions.guava,
@@ -162,83 +163,92 @@ lazy val injectCore = project
     )
   )
 
-lazy val injectModules = project
-  .in(file("inject/inject-modules"))
-  .settings(moduleName := "inject-modules")
-  .settings(injectBuildSettings)
-  .settings(
+lazy val injectModules = (project in file("inject/inject-modules")).
+  settings(injectBuildSettings: _*).
+  settings(
+    name := "inject-modules",
+    moduleName := "inject-modules",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagle,
       "com.twitter" %% "util-stats" % versions.util
     )
+  ).
+  dependsOn(
+    injectCore,
+    injectCore % "test->test"
   )
-  .dependsOn(injectCore, injectCore % "test->test")
 
-lazy val injectApp = project
-  .in(file("inject/inject-app"))
-  .settings(moduleName := "inject-app")
-  .settings(injectBuildSettings)
-  .settings(
+lazy val injectApp = (project in file("inject/inject-app")).
+  settings(injectBuildSettings: _*).
+  settings(
+    name := "inject-app",
+    moduleName := "inject-app",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.util
     )
+  ).
+  dependsOn(
+    injectCore,
+    injectCore % "test->test"
   )
-  .dependsOn(injectCore, injectCore % "test->test")
 
-lazy val injectServer = project
-  .in(file("inject/inject-server"))
-  .settings(moduleName := "inject-server")
-  .settings(injectBuildSettings)
-  .settings(
+lazy val injectServer = (project in file("inject/inject-server")).
+  settings(injectBuildSettings: _*).
+  settings(
+    name := "inject-server",
+    moduleName := "inject-server",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-stats" % versions.finagle,
       "com.twitter" %% "twitter-server" % versions.twitterServer
     )
-  )
-  .dependsOn(
+  ).
+  dependsOn(
     injectApp,
     injectApp % "test->test",
     injectModules,
     injectModules % "test->test"
   )
 
-lazy val injectRequestScope = project
-  .in(file("inject/inject-request-scope"))
-  .settings(moduleName := "inject-request-scope")
-  .settings(injectBuildSettings)
-  .settings(
+lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
+  settings(injectBuildSettings: _*).
+  settings(
+    name := "inject-request-scope",
+    moduleName := "inject-request-scope",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagle
     )
+  ).
+  dependsOn(
+    injectCore,
+    injectCore % "test->test"
   )
-  .dependsOn(injectCore, injectCore % "test->test")
 
-lazy val injectThriftClient = project
-  .in(file("inject/inject-thrift-client"))
-  .settings(moduleName := "inject-thrift-client")
-  .settings(injectBuildSettings)
-  .settings(ScroogeSBT.newSettings)
-  .settings(coverageExcludedPackages := "com.twitter.test.thriftscala.*")
-  .settings(
+lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
+  settings((ScroogeSBT.newSettings ++ injectBuildSettings): _*).
+  settings(
+    name := "inject-thrift-client",
+    moduleName := "inject-thrift-client",
+    coverageExcludedPackages := "com.twitter.test.thriftscala.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thrift" % versions.finagle,
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
       "com.twitter" %% "scrooge-core" % versions.scrooge,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.finagle % "test->compile")
-  )
-  .dependsOn(
+  ).
+  dependsOn(
     injectCore,
     injectCore % "test->test",
     injectApp % "test->test",
-    finatraHttp % "test->test")
+    http % "test->test"
+  )
 
-lazy val finatraUtils = project
-  .in(file("utils"))
-  .settings(moduleName := "finatra-utils")
-  .settings(finatraBuildSettings)
-  .settings(coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*")
-  .settings(
+lazy val utils = project.
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-utils",
+    moduleName := "finatra-utils",
+    coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
@@ -249,34 +259,37 @@ lazy val finatraUtils = project
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.joda" % "joda-convert" % versions.jodaConvert
     )
-  )
-  .dependsOn(
+  ).
+  dependsOn(
     injectRequestScope,
     injectServer,
     injectServer % "test->test"
   )
 
-lazy val finatraJackson = project
-  .in(file("jackson"))
-  .settings(moduleName := "finatra-jackson")
-  .settings(finatraBuildSettings)
-  .settings(coverageExcludedPackages := "scala.tools.nsc.*")
-  .settings(
+lazy val jackson = project.
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-jackson",
+    moduleName := "finatra-jackson",
+    coverageExcludedPackages := "scala.tools.nsc.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson exclude("org.scala-lang", "scala-compiler"),
       "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler")
     )
+  ).
+  dependsOn(
+    injectServer % "test->test",
+    utils
   )
-  .dependsOn(injectServer % "test->test", finatraUtils)
 
-lazy val finatraHttp: Project = project
-  .in(file("http"))
-  .settings(moduleName := "finatra-http")
-  .settings(finatraBuildSettings)
-  .settings(coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*")
-  .settings(
+lazy val http = project.
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-http",
+    moduleName := "finatra-http",
+    coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -286,71 +299,104 @@ lazy val finatraHttp: Project = project
       _ / "src" / "test" / "webapp"
     ),
     excludeFilter in Test in unmanagedResources := "BUILD"
-  )
-  .dependsOn(
-    finatraJackson,
-    finatraHttpclient % "test->test",
-    finatraJackson % "test->test",
+  ).
+  dependsOn(
+    jackson,
+    httpclient % "test->test",
+    jackson % "test->test",
     injectServer % "test->test"
   )
 
-lazy val finatraHttpclient = project
-  .in(file("httpclient"))
-  .settings(moduleName := "finatra-httpclient")
-  .settings(finatraBuildSettings)
-  .settings(
+lazy val httpclient = project.
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-httpclient",
+    moduleName := "finatra-httpclient",
     libraryDependencies ++= Seq(
       "commons-codec" % "commons-codec" % versions.commonsCodec
     )
-  )
-  .dependsOn(
-    finatraJackson,
-    finatraUtils % "test->test",
+  ).
+  dependsOn(
+    jackson,
+    utils % "test->test",
     injectApp % "test->test"
   )
 
-lazy val finatraSlf4j = project
-  .in(file("slf4j"))
-  .settings(moduleName := "finatra-slf4j")
-  .settings(finatraBuildSettings)
-  .settings(
+lazy val slf4j = project.
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-slf4j",
+    moduleName := "finatra-slf4j",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-http" % versions.finagle,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
     )
-  )
-  .dependsOn(
-    finatraHttp % "test->test",
+  ).
+  dependsOn(
+    http % "test->test",
     injectCore,
     injectCore % "test->test"
   )
 
 
-/**
-  * Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
-  */
-lazy val finatraBenchmarks = project
-  .in(file("benchmarks"))
-  .settings(moduleName := "finatra-benchmarks")
-  .settings(finatraBuildSettings ++ jmhSettings)
-  .settings(
-    publishLocal := {},
-    publish := {}
-  )
-  .dependsOn(finatraHttp, injectCore % "test->test")
-
-lazy val finatraTwitterCloneExample = project
-  .in(file("examples/twitter-clone-example"))
-  .settings(moduleName := "twitter-clone-example")
-  .settings(finatraBuildSettings)
-  .settings(
+// Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
+lazy val benchmarks = project.
+  settings((finatraBuildSettings ++ jmhSettings): _*).
+  settings(
+    name := "finatra-benchmarks",
+    moduleName := "finatra-benchmarks",
     publishLocal := {},
     publish := {},
+    assemblyJarName in assembly := s"${name.value}-assembly-${version.value}",
     assemblyMergeStrategy in assembly := {
       case "BUILD" => MergeStrategy.discard
       case other => MergeStrategy.defaultMergeStrategy(other)
     }
+  ).
+  dependsOn(
+    http,
+    injectCore % "test->test"
   )
-  .dependsOn(finatraHttp, injectCore % "test->test")
+
+lazy val helloWorld = (project in file("examples/finatra-hello-world")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-hello-world",
+    moduleName := "finatra-hello-world",
+    publishLocal := {},
+    publish := {},
+    assemblyJarName in assembly := s"${name.value}-assembly-${version.value}",
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    }
+  ).
+  dependsOn(
+    http,
+    http % "test->test",
+    slf4j,
+    injectCore % "test->test"
+  )
+
+lazy val twitterClone = (project in file("examples/finatra-twitter-clone")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-twitter-clone",
+    moduleName := "finatra-twitter-clone",
+    publishLocal := {},
+    publish := {},
+    assemblyJarName in assembly := s"${name.value}-assembly-${version.value}",
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    }
+  ).
+  dependsOn(
+    http,
+    http % "test->test",
+    httpclient,
+    slf4j,
+    injectCore % "test->test"
+  )
