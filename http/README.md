@@ -643,18 +643,19 @@ class DoEverythingServer extends HttpServer {
 
 ```scala
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.routing.HttpAssertions
+import com.twitter.finatra.http.routing.HttpWarmup
+import com.twitter.finatra.httpclient.RequestBuilder._
 import com.twitter.finatra.utils.Handler
+import com.twitter.finatra.utils.ResponseUtils.expectOkResponse
 import javax.inject.Inject
 
 class MyWarmupHandler @Inject()(
-  httpAsserter: HttpAssertions) {
+  httpWarmup: HttpWarmup) {
 
   override def warmup() = {
-    httpAsserter.get(
-      "/ok",
-      andExpect = Ok,
-      withBody = "ok")
+    httpWarmup.send(
+      request = get("/ok"),
+      responseCallback = expectOkResponse(_, "ok"))
   }
 }
 ```

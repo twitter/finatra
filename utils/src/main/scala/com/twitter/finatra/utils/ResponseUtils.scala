@@ -1,6 +1,8 @@
 package com.twitter.finatra.utils
 
-import org.jboss.netty.handler.codec.http.HttpResponse
+import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.Status._
+import org.jboss.netty.handler.codec.http.{HttpResponseStatus, HttpResponse}
 
 object ResponseUtils {
 
@@ -13,7 +15,48 @@ object ResponseUtils {
     errClass == 4 || errClass == 5
   }
 
+  def expectOkResponse(response: Response): Unit = {
+    expectResponseStatus(response)(Ok)
+  }
+
+  def expectOkResponse(response: Response, withBody: String = null): Unit = {
+    expectResponseStatus(response)(Ok, withBody)
+  }
+
+  def expectForbiddenResponse(response: Response): Unit = {
+    expectResponseStatus(response)(Forbidden)
+  }
+
+  def expectForbiddenResponse(response: Response, withBody: String = null): Unit = {
+    expectResponseStatus(response)(Forbidden, withBody)
+  }
+
+  def expectNotFoundResponse(response: Response): Unit = {
+    expectResponseStatus(response)(NotFound)
+  }
+
+  def expectNotFoundResponse(response: Response, withBody: String = null): Unit = {
+    expectResponseStatus(response)(NotFound, withBody)
+  }
+
+
+  /* Private */
+
   private def errorClass(response: HttpResponse): Int = {
     response.getStatus.getCode / 100
+  }
+
+  private def expectResponseStatus(
+    response: Response)(
+    expectedStatus: HttpResponseStatus = null,
+    withBody: String = null): Unit = {
+
+    assert(
+      expectedStatus == null || response.status == expectedStatus,
+      "Expected " + expectedStatus + " but received " + response.status)
+
+    assert(
+      withBody == null || response.contentString == withBody,
+      "Expected body " + withBody + " but received \"" + response.contentString + "\"")
   }
 }
