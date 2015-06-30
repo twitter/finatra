@@ -273,9 +273,10 @@ class EmbeddedHttpServer(
 
   def httpPatch(
     path: String,
+    patchBody: String,
     accept: MediaType = null,
-    headers: Map[String, String] = Map(),
     suppress: Boolean = false,
+    headers: Map[String, String] = Map(),
     andExpect: HttpResponseStatus = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
@@ -286,7 +287,29 @@ class EmbeddedHttpServer(
     secure: Option[Boolean] = None): Response = {
 
     val request = createApiRequest(path, HttpMethod.PATCH)
+    request.setContentString(patchBody)
+    request.headers().set(HttpHeaders.CONTENT_LENGTH, patchBody.length)
+
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
+  }
+
+  def httpPatchJson[ResponseType: Manifest](
+    path: String,
+    patchBody: String,
+    suppress: Boolean = false,
+    headers: Map[String, String] = Map(),
+    andExpect: HttpResponseStatus = Status.Ok,
+    withLocation: String = null,
+    withBody: String = null,
+    withJsonBody: String = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
+    normalizeJsonParsedReturnValue: Boolean = false,
+    withErrors: Seq[String] = null,
+    routeToAdminServer: Boolean = false,
+    secure: Option[Boolean] = None): ResponseType = {
+
+    val response = httpPatch(path, patchBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
   def httpHead(

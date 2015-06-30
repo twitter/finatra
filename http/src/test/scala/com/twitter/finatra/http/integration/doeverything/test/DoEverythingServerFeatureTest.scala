@@ -687,6 +687,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     "patch" in {
       server.httpPatch(
         "/patch",
+        patchBody = "asdf",
         andExpect = Ok,
         withBody = "patch")
     }
