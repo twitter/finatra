@@ -57,7 +57,7 @@ trait BaseHttpServer extends TwitterServer {
 
   protected def configureHttpServer(serverBuilder: FinagleServerBuilder) = {}
 
-  protected def configureHttpsServer(serverBuilder: ServerBuilder[Request, Response, Yes, Yes, Yes]) = {}
+  protected def configureHttpsServer(serverBuilder: FinagleServerBuilder) = {}
 
   /* Lifecycle */
 
