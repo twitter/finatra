@@ -33,7 +33,7 @@ To get started we'll focus on building an HTTP API for posting and getting tweet
 
 ### Domain
 
-```scala
+```Scala
 case class PostedTweet(
   @Size(min = 1, max = 140) message: String,
   location: Option[Location],
@@ -47,7 +47,7 @@ Then, let's create a [`Controller`][Controller]:
 
 ### Controller
 
-```scala
+```Scala
 @Singleton
 class TweetsController @Inject()(
   tweetsService: TweetsService)
@@ -71,7 +71,7 @@ Next, let's create a server:
 
 ### Server
 
-```scala
+```Scala
 class TwitterCloneServer extends HttpServer {
   
   override val modules = Seq(FirebaseHttpClientModule)
@@ -89,7 +89,7 @@ And finally, we can write a Feature Test:
 
 ### Feature Test
 
-```scala
+```Scala
 class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
   override val server = new EmbeddedHttpServer(
@@ -184,9 +184,24 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 [Detailed documentation](inject/README.md)
 
 ### Finatra (`com.twitter.finatra`)  
-Finatra is a framework for easily building API services on top of Twitter’s Scala stack (twitter-server, finagle, twitter-util)
+Finatra is a framework for easily building API services on top of Twitter’s Scala stack ([twitter-server][twitter-server], [finagle][finagle], [twitter/util](https://github.com/twitter/util/))
 
 [Detailed documentation](http/README.md)
+
+### Examples
+You can run the examples in [finatra/examples](examples) using sbt, e.g., to run the [finatra/examples/finatra-hello-world](examples/finatra-hello-world) example,
+
+```Shell
+$ sbt helloWorld/run
+```
+
+Or you can create an assembly and run the assembly,
+
+```Shell
+$ sbt helloWorld/assembly
+...
+$ java -jar examples/finatra-hello-world/target/scala-2.11/finatra-hello-world-assembly-2.0.0.M3-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
+```
 
 Authors
 -----------------------------------------------------------

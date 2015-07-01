@@ -8,6 +8,8 @@ import finatra.quickstart.domain.StatusMessageBodyWriter
 import finatra.quickstart.firebase.FirebaseHttpClientModule
 import finatra.quickstart.warmup.TwitterCloneWarmup
 
+object TwitterCloneServerMain extends TwitterCloneServer
+
 class TwitterCloneServer extends HttpServer {
   override val modules = Seq(FirebaseHttpClientModule)
 

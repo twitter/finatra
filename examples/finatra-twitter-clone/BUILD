@@ -15,7 +15,7 @@ target(name='tests',
 jvm_binary(
   name='bin',
   basename='finatra-twitter-clone',
-  main='finatra.quickstart.TwitterCloneServer',
+  main='finatra.quickstart.TwitterCloneServerMain',
   dependencies=[
     ':finatra-twitter-clone'
   ],

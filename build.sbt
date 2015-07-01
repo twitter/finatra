@@ -349,11 +349,13 @@ lazy val benchmarks = project.
     moduleName := "finatra-benchmarks",
     publishLocal := {},
     publish := {},
-    assemblyJarName in assembly := s"${name.value}-assembly-${version.value}",
     assemblyMergeStrategy in assembly := {
       case "BUILD" => MergeStrategy.discard
       case other => MergeStrategy.defaultMergeStrategy(other)
-    }
+    },
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % "1.7.7"
+    )
   ).
   dependsOn(
     http,
@@ -367,11 +369,13 @@ lazy val helloWorld = (project in file("examples/finatra-hello-world")).
     moduleName := "finatra-hello-world",
     publishLocal := {},
     publish := {},
-    assemblyJarName in assembly := s"${name.value}-assembly-${version.value}",
     assemblyMergeStrategy in assembly := {
       case "BUILD" => MergeStrategy.discard
       case other => MergeStrategy.defaultMergeStrategy(other)
-    }
+    },
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % "1.7.7"
+    )
   ).
   dependsOn(
     http,
@@ -387,11 +391,13 @@ lazy val twitterClone = (project in file("examples/finatra-twitter-clone")).
     moduleName := "finatra-twitter-clone",
     publishLocal := {},
     publish := {},
-    assemblyJarName in assembly := s"${name.value}-assembly-${version.value}",
     assemblyMergeStrategy in assembly := {
       case "BUILD" => MergeStrategy.discard
       case other => MergeStrategy.defaultMergeStrategy(other)
-    }
+    },
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % "1.7.7"
+    )
   ).
   dependsOn(
     http,
