@@ -897,17 +897,24 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
     // global stats
     // compatible with com.twitter.finagle.http.filter.StatsFilter
-    counter("status/200")    should be(2)
-    counter("status/2XX")    should be(2)
-       stat("response_size") should contain inOrder(2.0, 3.0)
-       stat("time/200")      should have size(2)
-       stat("time/2XX")      should have size(2)
+    counter("status/200")              should be(2)
+    counter("status/2XX")              should be(2)
+       stat("response_size")           should contain inOrder(2.0, 3.0)
+       stat("time/200")                should have size(2)
+       stat("time/2XX")                should have size(2)
+
+    // don't record stats that finagle already has
+    counter("requests")                should be(0)
+       stat("time")                    should be('empty)
+    counter("http/requests")           should be(2)
+       stat("http/request_latency_ms") should have size(2)
 
     // per-route stats
     counter("route/do-everything/GET/requests")      should be(1)
     counter("route/do-everything/GET/status/200")    should be(1)
     counter("route/do-everything/GET/status/2XX")    should be(1)
        stat("route/do-everything/GET/response_size") should contain(2.0)
+       stat("route/do-everything/GET/time")      should have size(1)
        stat("route/do-everything/GET/time/200")      should have size(1)
        stat("route/do-everything/GET/time/2XX")      should have size(1)
 
@@ -915,6 +922,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     counter("route/do-everything/POST/status/200")    should be(1)
     counter("route/do-everything/POST/status/2XX")    should be(1)
        stat("route/do-everything/POST/response_size") should contain(3.0)
+       stat("route/do-everything/POST/time")      should have size(1)
        stat("route/do-everything/POST/time/200")      should have size(1)
        stat("route/do-everything/POST/time/2XX")      should have size(1)
   }

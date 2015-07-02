@@ -12,12 +12,16 @@ import javax.inject.{Inject, Singleton}
 
 object StatsFilter {
   private object Stats {
-    def mk(statsReceiver: StatsReceiver, statusCode: Int): Stats = {
+    // Unless stats are per-endpoint, don't track request count/time
+    // since those are handled by [[com.twitter.finagle.service.StatsFilter]]
+    // already.
+    def mk(statsReceiver: StatsReceiver, statusCode: Int, perEndpoint: Boolean): Stats = {
       val statusClass = s"${statusCode / 100}XX"
       Stats(
-        requestCount = statsReceiver.counter("requests"),
+        requestCount = if (perEndpoint) Some(statsReceiver.counter("requests")) else None,
         statusCodeCount = statsReceiver.scope("status").counter(statusCode.toString),
         statusClassCount = statsReceiver.scope("status").counter(statusClass),
+        requestTime = if (perEndpoint) Some(statsReceiver.stat("time")) else None,
         statusCodeTime = statsReceiver.scope("time").stat(statusCode.toString),
         statusClassTime = statsReceiver.scope("time").stat(statusClass),
         responseSize = statsReceiver.stat("response_size"))
@@ -25,21 +29,23 @@ object StatsFilter {
   }
 
   private case class Stats(
-    requestCount: Counter,
+    requestCount: Option[Counter],
     statusCodeCount: Counter,
     statusClassCount: Counter,
+    requestTime: Option[Stat],
     statusCodeTime: Stat,
     statusClassTime: Stat,
-    responseSize: Stat
-  ) {
-    def count(duration: Duration, response: Response, totalRequests: Boolean): Unit = {
-      if (totalRequests) {
-        requestCount.incr()
-      }
+    responseSize: Stat) {
+    def count(duration: Duration, response: Response): Unit = {
+      requestCount.foreach { _.incr() }
       statusCodeCount.incr()
       statusClassCount.incr()
-      statusCodeTime.add(duration.inMilliseconds)
-      statusClassTime.add(duration.inMilliseconds)
+
+      val durationMs = duration.inMilliseconds
+      requestTime.foreach { _.add(durationMs) }
+      statusCodeTime.add(durationMs)
+      statusClassTime.add(durationMs)
+
       responseSize.add(response.length)
     }
   }
@@ -62,11 +68,11 @@ class StatsFilter[R <: Request] @Inject()(
           scope("route").
           scope(name).
           scope(method.getName)
-      Stats.mk(scopedStatsReceiver, statusCode)
+      Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
 
   private val globalStats = Memoize[Int, Stats] { statusCode =>
-    Stats.mk(statsReceiver, statusCode)
+    Stats.mk(statsReceiver, statusCode, perEndpoint = false)
   }
 
   /* Public */
@@ -85,9 +91,9 @@ class StatsFilter[R <: Request] @Inject()(
   /* Private */
 
   private def record(request: Request, response: Response, duration: Duration): Unit = {
-    globalStats(response.statusCode).count(duration, response, totalRequests = false)
+    globalStats(response.statusCode).count(duration, response)
     RouteInfo(request) foreach { info =>
-      perRouteStats(info, response.statusCode).count(duration, response, totalRequests = true)
+      perRouteStats(info, response.statusCode).count(duration, response)
     }
   }
 }
