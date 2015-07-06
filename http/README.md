@@ -881,16 +881,16 @@ class MyClass extends Logging {
 ```
 
 ## Logback
-We highly recommend using [Logback](http://logback.qos.ch/) as an slf4j binding. If you choose to use Logback, simply include a jar dependency on `com.twitter.finatra:finatra-logback` which provides a Logback slf4j implementation and also includes bridges from the 3 most popular jvm logging libraries:
+We highly recommend using [Logback](http://logback.qos.ch/) as an slf4j binding. If you choose to use Logback, include jar dependencies on `ch.qos.logback:logback-classic` and `com.twitter.finatra:finatra-slf4j` which will give a Logback slf4j implementation (`logback-classic`) and bridges from the 3 most popular jvm logging libraries (via `finatra-slf4j`):
 
 * [log4j](http://logging.apache.org/log4j/1.2/)
 * [commons-logging](http://commons.apache.org/proper/commons-logging/)
-* [`java.util.logging`](https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html): There is a performance penalty for intercepting jul log messages, so make sure to also include the [LogbackModule](../logback/src/main/scala/com/twitter/finatra/logging/modules/LogbackModule.scala) in your servers list of Guice modules, as this will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty. e.g.,
+* [`java.util.logging`](https://docs.oracle.com/javase/7/docs/api/java/util/logging/package-summary.html): There is a performance penalty for intercepting jul log messages, so make sure to also include the [Slf4jBridgeModule](../slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala) in your servers list of Guice modules, as this will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty. e.g.,
 
 ```scala
 class Server extends HttpServer {
   override val modules = Seq(
-    LogbackModule,
+    Slf4jBridgeModule,
     ...)
 
   ...
@@ -972,7 +972,7 @@ request.params("q")
 ```
 
 ## Logging
-To continue using "Java Util Logging", add a jar dependency on [`slf4j-jdk14`](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.slf4j%22%20AND%20a%3A%22slf4j-jdk14%22). Otherwise, we recommend using [Logback][logback] by adding a jar dependency on `com.twitter.finatra:finatra-logback`.
+To continue using "Java Util Logging", add a jar dependency on [`slf4j-jdk14`](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.slf4j%22%20AND%20a%3A%22slf4j-jdk14%22). Otherwise, we recommend using [Logback][logback] by adding jar dependencies on `ch.qos.logback:logback-classic` and `com.twitter.finatra:finatra-slf4j`.
 
 ```scala
 //v1
