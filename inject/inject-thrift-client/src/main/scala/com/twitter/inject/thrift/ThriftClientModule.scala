@@ -4,13 +4,14 @@ import com.github.nscala_time.time
 import com.google.inject.Provides
 import com.twitter.finagle._
 import com.twitter.finagle.factory.TimeoutFactory
+import com.twitter.finagle.param.Stats
 import com.twitter.finagle.service.TimeoutFilter
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.TwitterModule
 import com.twitter.util.Duration
 import javax.inject.Singleton
 import scala.reflect.ClassTag
-
 
 abstract class ThriftClientModule[T: ClassTag]
   extends TwitterModule
@@ -40,26 +41,24 @@ abstract class ThriftClientModule[T: ClassTag]
 
   @Singleton
   @Provides
-  def providesClient(clientId: ClientId): T = {
+  def providesClient(clientId: ClientId, statsReceiver: StatsReceiver): T = {
     val labelAndDest = s"$label=$dest"
 
     if (mux) {
       ThriftMux.client.
-        withParams(params).
+        configured(TimeoutFilter.Param(requestTimeout)).
+        configured(TimeoutFactory.Param(connectTimeout)).
+        configured(Stats(statsReceiver.scope("clnt"))).
         withClientId(clientId).
         newIface[T](labelAndDest)
     }
     else {
       Thrift.client.
-        withParams(params).
+        configured(TimeoutFilter.Param(requestTimeout)).
+        configured(TimeoutFactory.Param(connectTimeout)).
+        configured(Stats(statsReceiver.scope("clnt"))).
         withClientId(clientId).
         newIface[T](labelAndDest)
     }
-  }
-
-  def params = {
-    Stack.Params.empty +
-      TimeoutFilter.Param(requestTimeout) +
-      TimeoutFactory.Param(connectTimeout)
   }
 }

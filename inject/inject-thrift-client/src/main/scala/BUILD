@@ -14,6 +14,7 @@ scala_library(name='scala',
     'finatra/inject/inject-core',
     'scrooge/scrooge-core',
     'util/util-core',
+    'util/util-stats',
   ],
   sources=rglobs('*.scala'),
 )
