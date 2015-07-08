@@ -91,7 +91,7 @@ lazy val versions = new {
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
-  val finagle = "6.25.0"
+  val finagle = "6.26.0"
   val grizzled = "1.0.2"
   val guava = "16.0.1"
   val guice = "3.0"
@@ -104,8 +104,8 @@ lazy val versions = new {
   val servletApi = "2.5"
   val scrooge = "3.17.0"
   val slf4j = "1.7.7"
-  val twitterServer = "1.10.0"
-  val util = "6.24.0"
+  val twitterServer = "1.11.0"
+  val util = "6.25.0"
 }
 
 lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
