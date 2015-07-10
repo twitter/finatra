@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.http.internal.contexts.RouteInfo
+import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.routing.{Route, Routes}
 import com.twitter.inject.Test
 import com.twitter.util.Future

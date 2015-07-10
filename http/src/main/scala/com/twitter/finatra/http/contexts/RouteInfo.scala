@@ -1,12 +1,12 @@
-package com.twitter.finatra.http.internal.contexts
+package com.twitter.finatra.http.contexts
 
 import com.twitter.finagle.http.Request
 import org.jboss.netty.handler.codec.http.HttpMethod
 
-private[http] object RouteInfo {
-  private val field = Request.Schema.newField[Option[RouteInfo]](None)
+object RouteInfo {
+  private[http] val field = Request.Schema.newField[Option[RouteInfo]](None)
 
-  private[internal] def set(request: Request, info: RouteInfo): Unit = {
+  private[http] def set(request: Request, info: RouteInfo): Unit = {
     request.ctx.updateAndLock(field, Some(info))
   }
 
@@ -15,6 +15,6 @@ private[http] object RouteInfo {
   }
 }
 
-private[http] case class RouteInfo(
+case class RouteInfo(
   name: String,
   method: HttpMethod)

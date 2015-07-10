@@ -3,8 +3,8 @@ package com.twitter.finatra.http.filters
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.{Counter, Stat, StatsReceiver}
 import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.StatsFilter.Stats
-import com.twitter.finatra.http.internal.contexts.RouteInfo
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.{Duration, Future, Memoize, Stopwatch, Return, Throw}
