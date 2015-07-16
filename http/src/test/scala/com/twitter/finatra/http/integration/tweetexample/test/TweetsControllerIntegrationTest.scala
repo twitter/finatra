@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.integration.tweetexample.test
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
 import com.twitter.finatra.http.test.EmbeddedHttpServer
@@ -156,6 +157,14 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       "/health",
       routeToAdminServer = true,
       withBody = "OK\n")
+  }
+
+  "verify max request size overridden" in {
+    val registry = server.httpGetJson[JsonNode](
+      "/admin/registry.json")
+
+    val maxRequestSize = registry.get("registry").get("flags").get("maxRequestSize").textValue()
+    maxRequestSize should equal("10485760.bytes")
   }
 
   def sayHello() = {

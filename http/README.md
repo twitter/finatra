@@ -704,6 +704,21 @@ object MyModule1 extends TwitterModule {
 }
 ```
 
+## <a name="setting-flags-from-code">Setting flags from code</a>
+Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra HTTP's core flags can be set from code.
+For example, instead of setting the "maxRequestSize" flag, you can override the following method in your server.
+
+```scala
+class TweetsEndpointServer extends HttpServer {
+
+  override val defaultMaxRequestSize = 10.megabytes
+
+  override def configureHttp(router: HttpRouter) {
+    ...
+  }
+}
+```
+
 Mustache
 ===============================
 Mustache templates must be placed in `src/main/resources/templates`.

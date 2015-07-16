@@ -11,20 +11,34 @@ import com.twitter.finagle.http.{Http, Request, Response, RichHttp}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}
-import com.twitter.util.{Await, Future, Time}
+import com.twitter.util._
 import java.net.InetSocketAddress
 
 trait BaseHttpServer extends TwitterServer {
 
-  private val httpPortFlag = flag("http.port", ":8888", "External HTTP server port")
-  private val maxRequestSize = flag("maxRequestSize", 5.megabytes, "HTTP(s) Max Request Size")
-  private val tracingEnabled = flag("tracingEnabled", true, "Tracing enabled")
-  private val httpsPortFlag = flag("https.port", "", "HTTPs Port")
-  private val certificatePath = flag("cert.path", "", "path to SSL certificate")
-  private val keyPath = flag("key.path", "", "path to SSL key")
-  private val shutdownTimeout = flag("shutdown.time", 1.minute, "Maximum amount of time to wait for pending requests to complete on shutdown")
+  protected def defaultFinatraHttpPort: String = ":8888"
+  private val httpPortFlag = flag("http.port", defaultFinatraHttpPort, "External HTTP server port")
+
+  protected def defaultMaxRequestSize: StorageUnit = 5.megabytes
+  private val maxRequestSizeFlag = flag("maxRequestSize", defaultMaxRequestSize, "HTTP(s) Max Request Size")
+
+  protected def defaultTracingEnabled: Boolean = true
+  private val tracingEnabledFlag = flag("tracingEnabled", defaultTracingEnabled, "Tracing enabled")
+
+  protected def defaultHttpsPort: String = ""
+  private val httpsPortFlag = flag("https.port", defaultHttpsPort, "HTTPs Port")
+
+  protected def defaultCertificatePath: String = ""
+  private val certificatePathFlag = flag("cert.path", defaultCertificatePath, "path to SSL certificate")
+
+  protected def defaultKeyPath: String = ""
+  private val keyPathFlag = flag("key.path", defaultKeyPath, "path to SSL key")
+
+  protected def defaultShutdownTimeout: Duration = 1.minute
+  private val shutdownTimeoutFlag = flag("shutdown.time", defaultShutdownTimeout, "Maximum amount of time to wait for pending requests to complete on shutdown")
 
   /* Private Mutable State */
+
   private var httpServer: Server = _
   private var httpsServer: Server = _
 
@@ -37,8 +51,8 @@ trait BaseHttpServer extends TwitterServer {
   protected def httpCodec: Http = {
     Http()
       .enableTracing(enable = true)
-      .maxRequestSize(maxRequestSize())
-      .enableTracing(tracingEnabled())
+      .maxRequestSize(maxRequestSizeFlag())
+      .enableTracing(tracingEnabledFlag())
   }
 
   /**
@@ -70,10 +84,10 @@ trait BaseHttpServer extends TwitterServer {
 
   onExit {
     Await.result(
-      close(httpServer, shutdownTimeout().fromNow))
+      close(httpServer, shutdownTimeoutFlag().fromNow))
 
     Await.result(
-      close(httpsServer, shutdownTimeout().fromNow))
+      close(httpsServer, shutdownTimeoutFlag().fromNow))
   }
 
   /* Overrides */
@@ -108,19 +122,15 @@ trait BaseHttpServer extends TwitterServer {
   }
 
   private def startHttpsServer() {
-    for {
-      port <- parsePort(httpsPortFlag)
-      certs <- certificatePath.get
-      keys <- keyPath.get
-    } {
+    for (port <- parsePort(httpsPortFlag)) {
       val serverBuilder = ServerBuilder()
         .codec(createCodec)
         .bindTo(port)
         .reportTo(injector.instance[StatsReceiver])
         .name("https")
         .tls(
-          certs,
-          keys)
+          certificatePathFlag(),
+          keyPathFlag())
 
       configureHttpsServer(serverBuilder)
 
