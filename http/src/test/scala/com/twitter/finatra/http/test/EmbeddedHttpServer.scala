@@ -253,6 +253,26 @@ class EmbeddedHttpServer(
       secure = secure.getOrElse(defaultHttpSecure))
   }
 
+  def httpDeleteJson[ResponseType: Manifest](
+    path: String,
+    deleteBody: String,
+    suppress: Boolean = false,
+    headers: Map[String, String] = Map(),
+    andExpect: HttpResponseStatus = Status.Ok,
+    withLocation: String = null,
+    withBody: String = null,
+    withJsonBody: String = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
+    normalizeJsonParsedReturnValue: Boolean = false,
+    withErrors: Seq[String] = null,
+    routeToAdminServer: Boolean = false,
+    secure: Option[Boolean] = None): ResponseType = {
+
+    val response = httpDelete(path, deleteBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
+  }
+
+
   def httpOptions(
     path: String,
     accept: MediaType = null,
