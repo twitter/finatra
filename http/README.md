@@ -32,8 +32,6 @@ class Example extends Controller {
 
 ```scala
 class GroupsController extends Controller {
-  override val name = "groups"
-
   get("/groups/:id") { ... }
 
   post("/groups") { ... }
@@ -45,9 +43,29 @@ class GroupsController extends Controller {
 yields the following stats:
 
 ```
-route/groups/get/...
-route/groups/post/...
-route/groups/delete/...
+route/groups_id/GET/...
+route/groups/POST/...
+route/groups_id/DELETE/...
+```
+
+Alternatively, each route can be assigned a name which will then be used to create stat names.
+
+```scala
+class GroupsController extends Controller {
+  get("/groups/:id", name = "group_by_id") { ... }
+
+  post("/groups", name = "create_group") { ... }
+
+  delete("/groups/:id", name = "delete_group") { ... }
+}
+```
+
+which will yield the stats:
+
+```
+route/group_by_id/GET/...
+route/create_group/POST/...
+route/delete_group/DELETE/...
 ```
 
 ## Route Matching Patterns

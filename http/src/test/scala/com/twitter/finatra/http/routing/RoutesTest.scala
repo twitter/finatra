@@ -65,7 +65,7 @@ class RoutesTest extends Test with OptionValues {
     val request = Request("/groups/")
     routes.handle(request) should be('defined)
 
-    RouteInfo(request).value should be(RouteInfo("groups", GET))
+    RouteInfo(request).value should be(RouteInfo("my_endpoint", "/groups/"))
   }
 
   def defaultCallback(request: Request) = {
@@ -74,7 +74,7 @@ class RoutesTest extends Test with OptionValues {
 
   def createRoute(method: HttpMethod, path: String): Route = {
     Route(
-      name = "groups",
+      name = "my_endpoint",
       method = method,
       path = path,
       callback = defaultCallback,

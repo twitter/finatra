@@ -10,12 +10,6 @@ import org.jboss.netty.handler.codec.http.HttpMethod._
 import scala.collection.mutable.ArrayBuffer
 
 abstract class Controller extends Logging {
-  /**
-   * The name of the controller. Defaults to the class name. All routes
-   * defined within the controller inherit this name for metrics.
-   */
-  val name: String = getClass.getSimpleName
-
   /*
    * NOTE: Using constructor-injection for the following fields would add boilerplate to all
    * controllers, so instead we use vars to allow setter injection after object creation
@@ -29,15 +23,15 @@ abstract class Controller extends Logging {
 
   /* Protected */
 
-  protected def get[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(GET, route, callback)
-  protected def post[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(POST, route, callback)
-  protected def put[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(PUT, route, callback)
-  protected def delete[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(DELETE, route, callback)
-  protected def options[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(OPTIONS, route, callback)
-  protected def patch[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(PATCH, route, callback)
-  protected def head[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(HEAD, route, callback)
-  protected def connect[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(CONNECT, route, callback)
-  protected def trace[RequestType: Manifest, ResponseType: Manifest](route: String)(callback: RequestType => ResponseType): Unit = addRoute(TRACE, route, callback)
+  protected def get[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(GET, route, name, callback)
+  protected def post[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(POST, route, name, callback)
+  protected def put[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(PUT, route, name, callback)
+  protected def delete[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(DELETE, route, name, callback)
+  protected def options[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(OPTIONS, route, name, callback)
+  protected def patch[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(PATCH, route, name, callback)
+  protected def head[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(HEAD, route, name, callback)
+  protected def connect[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(CONNECT, route, name, callback)
+  protected def trace[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = addRoute(TRACE, route, name, callback)
 
   protected def response = responseBuilder
 
@@ -46,6 +40,7 @@ abstract class Controller extends Logging {
   private def addRoute[RequestType: Manifest, ResponseType: Manifest](
     method: HttpMethod,
     route: String,
+    name: String,
     callback: RequestType => ResponseType) {
     routesBeforeInjection += (() =>
       Route(

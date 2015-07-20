@@ -9,6 +9,7 @@ import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.{Duration, Future, Memoize, Stopwatch, Return, Throw}
 import javax.inject.{Inject, Singleton}
+import org.jboss.netty.handler.codec.http.HttpMethod
 
 object StatsFilter {
   private object Stats {
@@ -61,12 +62,19 @@ class StatsFilter[R <: Request] @Inject()(
   extends SimpleFilter[R, Response]
   with Logging {
 
-  private val perRouteStats = Memoize[(RouteInfo, Int), Stats] {
-    case (RouteInfo(name, method), statusCode) =>
+  private val perRouteStats = Memoize[(RouteInfo, HttpMethod, Int), Stats] {
+    case (routeInfo, method, statusCode) =>
+
+      val nameOrPath = 
+        if (routeInfo.name.nonEmpty)
+          routeInfo.name
+        else
+          routeInfo.sanitizedPath
+
       val scopedStatsReceiver =
         statsReceiver.
           scope("route").
-          scope(name).
+          scope(nameOrPath).
           scope(method.getName)
       Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
@@ -92,8 +100,8 @@ class StatsFilter[R <: Request] @Inject()(
 
   private def record(request: Request, response: Response, duration: Duration): Unit = {
     globalStats(response.statusCode).count(duration, response)
-    RouteInfo(request) foreach { info =>
-      perRouteStats(info, response.statusCode).count(duration, response)
+    RouteInfo(request) foreach { routeInfo =>
+      perRouteStats(routeInfo, request.method, response.statusCode).count(duration, response)
     }
   }
 }

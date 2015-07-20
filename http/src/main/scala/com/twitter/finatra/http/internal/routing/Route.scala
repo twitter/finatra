@@ -22,7 +22,7 @@ case class Route(
 
   private val pattern = PathPattern(path)
   private val service = Service.mk[Request, Response](callback)
-  private val routeInfo = RouteInfo(name, method)
+  private val routeInfo = RouteInfo(name, path)
 
   /* Public */
 

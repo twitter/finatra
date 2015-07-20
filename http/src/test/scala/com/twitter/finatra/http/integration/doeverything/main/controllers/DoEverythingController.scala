@@ -25,8 +25,6 @@ class DoEverythingController @Inject()(
   objectMapper: FinatraObjectMapper)
   extends Controller {
 
-  override val name = "do-everything"
-
   private val flakyCount = new AtomicInteger()
 
   get("/example/routing/always") { request: Request =>
@@ -42,6 +40,14 @@ class DoEverythingController @Inject()(
   }
 
   post("/foo") { request: Request =>
+    "bar"
+  }
+
+  post("/longer/post/path/:capture") { request: Request =>
+    "bar"
+  }
+
+  post("/longer/post/path/with/name/:capture", name = "my_cool_endpoint") { request: Request =>
     "bar"
   }
 
