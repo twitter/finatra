@@ -1,12 +1,12 @@
 junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
-    'finatra/inject/inject-server',
-    'finatra/inject/inject-server:test-deps'
+    'inject/inject-server',
+    'inject/inject-server:test-deps'
   ],
   sources=globs('com/twitter/inject/server/tests/*.scala'),
   resources=[
-    'finatra/inject/inject-server/src/test/resources'
+    'inject/inject-server/src/test/resources'
   ]
 )
 
@@ -17,10 +17,10 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
-    'finatra/inject/inject-app:test-deps',
-    'finatra/inject/inject-core:test-deps',
-    'finatra/inject/inject-modules:test-deps',
-    'finatra/inject/inject-server'
+    'inject/inject-app:test-deps',
+    'inject/inject-core:test-deps',
+    'inject/inject-modules:test-deps',
+    'inject/inject-server'
   ],
   sources=globs('com/twitter/inject/server/*.scala'),
 )

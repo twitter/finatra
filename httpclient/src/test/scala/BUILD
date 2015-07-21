@@ -3,14 +3,14 @@ junit_tests(name='scala',
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/specs2',
-    'finatra/httpclient',
-    'finatra/httpclient/src/test/scala:test-deps',
-    'finatra/utils:tests',
-    'finatra/http',
-    'finatra/inject/inject-app:test-deps',
+    'httpclient',
+    'httpclient/src/test/scala:test-deps',
+    'utils:tests',
+    'http',
+    'inject/inject-app:test-deps',
   ],
   sources=globs(
-    'com/twitter/finatra/httpclient/*.scala')
+    'com/twitter/httpclient/*.scala')
 )
 
 
@@ -21,10 +21,10 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
-    'finatra/httpclient',
-    'finatra/utils:test-deps'
+    'httpclient',
+    'utils:test-deps'
   ],
   sources=globs(
-    'com/twitter/finatra/httpclient/test/*.scala'
+    'com/twitter/httpclient/test/*.scala'
   ),
 )

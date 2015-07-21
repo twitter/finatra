@@ -19,8 +19,8 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 
 
 [twitter-server]: https://github.com/twitter/twitter-server
-[embedded-app]: https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala
-[embedded-twitter-server]: https://github.com/twitter/finatra/blob/master/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala
+[embedded-app]: https://github.com/twitter/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala
+[embedded-twitter-server]: https://github.com/twitter/blob/master/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala
 [module]: http://google.github.io/guice/api-docs/latest/javadoc/index.html?com/google/inject/Module.html
 [finagle]: https://github.com/twitter/finagle
 [util-app]: https://github.com/twitter/util/tree/master/util-app

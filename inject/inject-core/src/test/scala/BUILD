@@ -3,14 +3,14 @@ junit_tests(name='scala',
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/specs2',
-    'finatra/inject/inject-core',
-    'finatra/inject/inject-core:test-deps',
+    'inject/inject-core',
+    'inject/inject-core:test-deps',
   ],
   sources=globs(
     'com/twitter/inject/tests/*.scala',
   ),
   resources=[
-    'finatra/inject/inject-core/src/test/resources'
+    'inject/inject-core/src/test/resources'
   ]
 )
 
@@ -28,7 +28,7 @@ scala_library(name="test-deps",
     '3rdparty/jvm/org/slf4j:jcl-over-slf4j',
     '3rdparty/jvm/org/slf4j:log4j-over-slf4j',
     '3rdparty/jvm/org/specs2',
-    'finatra/inject/inject-core',
+    'inject/inject-core',
   ],
   sources=globs(
     'com/twitter/inject/*.scala',

@@ -8,11 +8,11 @@ scala_library(name='scala',
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/javax/inject:javax.inject',
     'finagle/finagle-core',
-    'finatra/inject/inject-core',
+    'inject/inject-core',
     'util/util-core',
   ],
   sources=rglobs('*.scala'),
   java_sources=[
-    'finatra/inject/inject-request-scope/src/main/java',
+    'inject/inject-request-scope/src/main/java',
   ],
 )

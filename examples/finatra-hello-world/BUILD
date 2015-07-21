@@ -2,13 +2,13 @@ maven_layout()
 
 target(name='finatra-hello-world',
   dependencies=[
-    'finatra/examples/finatra-hello-world/src/main/scala'
+    'examples/finatra-hello-world/src/main/scala'
   ]
 )
 
 target(name='tests',
   dependencies=[
-    'finatra/examples/finatra-hello-world/src/test/scala'
+    'examples/finatra-hello-world/src/test/scala'
   ]
 )
 

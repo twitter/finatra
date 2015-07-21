@@ -9,11 +9,11 @@ scala_library(name='scala',
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/joda-time:joda-time',
     '3rdparty/jvm/org/joda:joda-convert',
-    'finatra/inject/inject-core',
+    'inject/inject-core',
     'util/util-app',
   ],
   sources=rglobs('*.scala'),
   java_sources=[
-    'finatra/inject/inject-app/src/main/java',
+    'inject/inject-app/src/main/java',
   ],
 )

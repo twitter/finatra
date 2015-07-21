@@ -2,5 +2,5 @@
 host='finatra.firebaseio.com'
 
 cd $(git rev-parse --show-toplevel)/birdcage
-./pants run finatra/finatra/finatra-examples/finatra-twitter-clone:bin \
+./pants run finatra-examples/finatra-twitter-clone:bin \
   --run-jvm-args="-com.twitter.server.resolverMap=firebase=inet\!$host:443 -firebase.host=$host"

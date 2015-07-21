@@ -1,17 +1,17 @@
 junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
-    'finatra/jackson/src/main/scala',
-    'finatra/jackson/src/main/java',
-    'finatra/jackson/src/test/scala:test-deps',
-    'finatra/slf4j',
+    'jackson/src/main/scala',
+    'jackson/src/main/java',
+    'jackson/src/test/scala:test-deps',
+    'slf4j',
     'util/util-core'
   ],
   sources=rglobs(
-    'com/twitter/finatra/tests/*.scala',
+    'com/twitter/tests/*.scala',
   ),
   resources=[
-    'finatra/jackson/src/test/resources'
+    'jackson/src/test/resources'
   ]
 )
 
@@ -24,14 +24,14 @@ scala_library(name="test-deps",
   dependencies=[
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
-    'finatra/inject/inject-core:test-deps',
-    'finatra/jackson/src/main/scala',
+    'inject/inject-core:test-deps',
+    'jackson/src/main/scala',
   ],
   sources=globs(
-    'com/twitter/finatra/json/*.scala',
-    'com/twitter/finatra/validation/*.scala',
+    'com/twitter/json/*.scala',
+    'com/twitter/validation/*.scala',
   ),
   java_sources=[
-    'finatra/jackson/src/test/java'
+    'jackson/src/test/java'
   ],
 )

@@ -1,13 +1,13 @@
 target(name='examples',
   dependencies=[
-    'finatra/examples/finatra-hello-world',
-    'finatra/examples/finatra-twitter-clone'
+    'examples/finatra-hello-world',
+    'examples/finatra-twitter-clone'
   ]
 )
 
 target(name='tests',
   dependencies=[
-    'finatra/examples/finatra-hello-world:tests',
-    'finatra/examples/finatra-twitter-clone:tests'
+    'examples/finatra-hello-world:tests',
+    'examples/finatra-twitter-clone:tests'
   ]
 )

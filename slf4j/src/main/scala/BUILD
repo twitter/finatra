@@ -10,7 +10,7 @@ scala_library(name='scala',
     '3rdparty/jvm/org/slf4j:jcl-over-slf4j',
     '3rdparty/jvm/org/slf4j:log4j-over-slf4j',
     '3rdparty/jvm/org/slf4j:slf4j-api',
-    'finatra/inject/inject-core',
+    'inject/inject-core',
     'loglens/loglens-logging',
     'util/util-core'
   ],

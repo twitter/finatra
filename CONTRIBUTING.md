@@ -23,9 +23,9 @@ We follow the [GitHub Flow Workflow](https://guides.github.com/introduction/flow
 2.  Check out the `master` branch
 3.  Create a feature branch
 4.  Write code and tests for your change
-6.  From your branch, make a pull request against `twitter/finatra/master`
+6.  From your branch, make a pull request against `twitter/master`
 7.  Work with repo maintainers to get your change reviewed
-8.  Wait for your change to be pulled into `twitter/finatra/master`
+8.  Wait for your change to be pulled into `twitter/master`
 9.  Delete your feature branch
 
 ## Testing
@@ -76,8 +76,8 @@ We also welcome improvements to the Finatra documentation or to the existing Sca
 [scalatest]: http://www.scalatest.org/
 [scala-style-guide]: http://docs.scala-lang.org/style/scaladoc.html
 [travis-ci]: https://travis-ci.org/twitter/finatra
-[test-trait]: https://github.com/twitter/finatra/blob/master/finatra/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
+[test-trait]: https://github.com/twitter/blob/master/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
 
 ### License
 By contributing your code, you agree to license your contribution under the terms of the APLv2:
-https://github.com/twitter/finatra/blob/master/LICENSE
+https://github.com/twitter/blob/master/LICENSE

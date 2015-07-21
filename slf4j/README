@@ -18,7 +18,7 @@ can choose the logging implementation.  Adding finatra-slf4j as a dependency add
 
 A sample Logback configuration is provided here:
 
-finatra/slf4j/src/test/resources/Logback-sample.xml.
+slf4j/src/test/resources/Logback-sample.xml.
 
 This configuration file makes use of log.access.output and log.service.output variables for configuring two appenders.
 A variable's value is specified at runtime as a Java system property (e.g., -Dlog.service.output=myservice.log).
@@ -33,7 +33,7 @@ logged with every log statement sent to the service log.  It is the responsibili
 MDC with contextual information.  In order to use Logback's MDC, the application must first initialize an MDC finagle
 adapter provided by finatra.  An example of initialization can be found here:
 
-finatra/slf4j/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala
+slf4j/src/main/scala/com/twitter/logging/filter/LoggingMDCFilter.scala
 
 More information on Logback's MDC can be found here:
 
@@ -49,7 +49,7 @@ implementations. Instead it has to register a handler on the root logger and lis
 other handler. It will then redirect those logging statements.  This redirection is accomplished via SLF4J's
 SLF4JBridgeHandler.  finatra-slf4j provides a Guice module for initializing this handler here:
 
-finatra-slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala
+finatra-slf4j/src/main/scala/com/twitter/logging/modules/Slf4jBridgeModule.scala
 
 To use this module, simply include it with the application's other Guice modules.  Alternatively, an application can
 initialize the handler directly as described here:

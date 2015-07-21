@@ -7,7 +7,7 @@ scala_library(name='scala',
   dependencies=[
     '3rdparty/jvm/com/google/inject:guice',
     'finagle/finagle-core',
-    'finatra/inject/inject-core',
+    'inject/inject-core',
   ],
   sources=rglobs('*.scala'),
 )

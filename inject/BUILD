@@ -9,11 +9,11 @@ page(name="readme",
 
 target(name='tests',
   dependencies=[
-    'finatra/inject/inject-app:tests',
-    'finatra/inject/inject-core:tests',
-    'finatra/inject/inject-modules:tests',
-    'finatra/inject/inject-request-scope:tests',
-    'finatra/inject/inject-server:tests',
-    'finatra/inject/inject-thrift-client:tests',
+    'inject/inject-app:tests',
+    'inject/inject-core:tests',
+    'inject/inject-modules:tests',
+    'inject/inject-request-scope:tests',
+    'inject/inject-server:tests',
+    'inject/inject-thrift-client:tests',
   ]
 )
