@@ -15,13 +15,13 @@ scala_library(name='scala',
     '3rdparty/jvm/commons-lang',
     '3rdparty/jvm/joda-time',
     '3rdparty/jvm/org/scala-lang:scalap',
-    'utils',
+    'finatra/utils',
   ],
   sources=rglobs('*.scala'),
   java_sources=[
-    'jackson/src/main/java'
+    'finatra/jackson/src/main/java'
   ],
   resources=[
-    'jackson/src/main/resources'
+    'finatra/jackson/src/main/resources'
   ]
 )

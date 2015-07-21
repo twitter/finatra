@@ -23,8 +23,8 @@ object EmbeddedTwitterServer {
   private def resolveClientFlags(useSocksProxy: Boolean, clientFlags: Map[String, String]) = {
     if (useSocksProxy) {
       clientFlags ++ Map(
-        "com.twitter.server.resolverZkHosts" -> PortUtils.loopbackAddressForPort(2181),
-        "com.twitter.finagle.socks.socksProxyHost" -> PortUtils.loopbackAddress,
+        "com.twitter.server.resolverZkHosts" -> "localhost:2181",
+        "com.twitter.finagle.socks.socksProxyHost" -> "localhost",
         "com.twitter.finagle.socks.socksProxyPort" -> "50001")
     }
     else {

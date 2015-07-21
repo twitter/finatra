@@ -11,18 +11,18 @@ page(name="readme",
 
 target(name='http',
   dependencies=[
-    'http/src/main/scala'
+    'finatra/http/src/main/scala'
   ]
 )
 
 target(name='tests',
   dependencies=[
-    'http/src/test/scala'
+    'finatra/http/src/test/scala'
   ]
 )
 
 target(name='test-deps',
   dependencies=[
-    'http/src/test/scala:test-deps'
+    'finatra/http/src/test/scala:test-deps'
   ]
 )

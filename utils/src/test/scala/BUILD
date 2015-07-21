@@ -1,15 +1,15 @@
 junit_tests(name='scala',
   dependencies=[
-    'utils',
-    'utils:test-deps',
-    'inject/inject-core:test-deps',
-    'inject/inject-server:test-deps',
+    'finatra/utils',
+    'finatra/utils:test-deps',
+    'finatra/inject/inject-core:test-deps',
+    'finatra/inject/inject-server:test-deps',
   ],
   sources=rglobs(
-    'com/twitter/tests/*.scala',
+    'com/twitter/finatra/tests/*.scala',
   ),
   resources=[
-    'utils/src/test/resources'
+    'finatra/utils/src/test/resources'
   ]
 )
 
@@ -22,11 +22,11 @@ scala_library(name="test-deps",
   dependencies=[
     '3rdparty/jvm/org/scalatest',
     'finagle/finagle-stats',
-    'inject/inject-core:test-deps',
-    'inject/inject-server:test-deps',
+    'finatra/inject/inject-core:test-deps',
+    'finatra/inject/inject-server:test-deps',
   ],
   sources=globs(
-    'com/twitter/guice/*.scala',
-    'com/twitter/test/*.scala'
+    'com/twitter/finatra/guice/*.scala',
+    'com/twitter/finatra/test/*.scala'
   )
 )

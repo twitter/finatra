@@ -7,9 +7,9 @@ scala_library(name='scala',
   dependencies=[
     'finagle/finagle-core',
     'finagle/finagle-stats',
-    'inject/inject-app',
-    'inject/inject-core',
-    'inject/inject-modules',
+    'finatra/inject/inject-app',
+    'finatra/inject/inject-core',
+    'finatra/inject/inject-modules',
     'twitter-server',
     'util/util-app',
     'util/util-core',
@@ -17,6 +17,6 @@ scala_library(name='scala',
   ],
   sources=rglobs('*.scala'),
   resources=[
-    'inject/inject-server/src/main/resources'
+    'finatra/inject/inject-server/src/main/resources'
   ]
 )

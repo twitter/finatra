@@ -3,7 +3,7 @@ finatra-jackson is a library integrating jackson, scala, and guice.
 
 ## Features
 * Usable outside of Finatra.
-* [`FinatraObjectMapper`](../jackson/src/main/scala/com/twitter/json/FinatraObjectMapper.scala) which provides additional Scala friendly methods not found in `ScalaObjectMapper`.
+* [`FinatraObjectMapper`](../jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala) which provides additional Scala friendly methods not found in `ScalaObjectMapper`.
 * Guice module for injecting `FinatraObjectMapper` (with support for customization e.g. snake_case vs camelCase).
 * Custom `case class` deserializer which overcomes limitations in jackson-scala-module.
 * Support for `case class` validations which accumulate errors (without failing fast) during json parsing.
@@ -13,20 +13,20 @@ Integration with Finatra HTTP routing to support binding and validation of query
 * Experimental support for iterator based json stream parsing.
 
 ## Configuration
-The default configuration of Jackson is provided by the [`FinatraObjectMapper`](../jackson/src/main/scala/com/twitter/json/FinatraObjectMapper.scala).
+The default configuration of Jackson is provided by the [`FinatraObjectMapper`](../jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala).
 
 The following Jackson integrations are provided by default:
 
 * [Joda Module](https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java)
 * [Scala Module](https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java)
-* [LongKeyDeserializer](../jackson/src/main/scala/com/twitter/json/internal/serde/LongKeyDeserializer.scala): Allow deserializing maps with long keys.
-* [Wrapped Value Serializer](../jackson/src/main/scala/com/twitter/json/internal/caseclass/wrapped/WrappedValueSerializer.scala)
-* [Duration Millis Serializer](../jackson/src/main/scala/com/twitter/json/internal/serde/DurationMillisSerializer.scala)
-* [Improved DateTime Deserializer](../jackson/src/main/scala/com/twitter/json/internal/serde/FinatraDatetimeDeserializer.scala)
-* [Improved `case class` Deserializer](../jackson/src/main/scala/com/twitter/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala): See details [below](#case-class-deserializer).
+* [LongKeyDeserializer](../jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala): Allow deserializing maps with long keys.
+* [Wrapped Value Serializer](../jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala)
+* [Duration Millis Serializer](../jackson/src/main/scala/com/twitter/finatra/json/internal/serde/DurationMillisSerializer.scala)
+* [Improved DateTime Deserializer](../jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala)
+* [Improved `case class` Deserializer](../jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala): See details [below](#case-class-deserializer).
 
 ### <a name="jackson-customization">Customization</a>
-To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](../jackson/src/main/scala/com/twitter/json/modules/FinatraJacksonModule.scala)).
+To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](../jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
 ```scala
 class Server extends HttpServer {
   override def jacksonModule = CustomJacksonModule
@@ -121,7 +121,7 @@ Can be used for:
 
 See the implementation of the `GroupRequest` [above](#group-request-example) for an example of using `MethodValidation`.
 
-See also: [CommonMethodValidations](../jackson/src/main/scala/com/twitter/validation/CommonMethodValidations.scala)
+See also: [CommonMethodValidations](../jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala)
 
 ## <a name="json-best-practices">Best Practices</a>
 Use Java Enums for representing enumerations since they integrate well with Jackson's ObjectMapper and now have exhaustiveness checking as of Scala 2.10. The following Jackson annotations may be useful when working with Enums:

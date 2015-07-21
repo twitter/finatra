@@ -16,15 +16,15 @@ scala_library(name='scala',
     '3rdparty/jvm/joda-time',
     'finagle/finagle-core',
     'finagle/finagle-http',
-    'http/src/main/java',
-    'inject/inject-server',
-    'jackson',
-    'utils',
+    'finatra/http/src/main/java',
+    'finatra/inject/inject-server',
+    'finatra/jackson',
+    'finatra/utils',
     'util/util-core',
     'util/util-stats',
   ],
   sources=rglobs('*.scala'),
   resources=[
-    'http/src/main/resources'
+    'finatra/http/src/main/resources'
   ]
 )

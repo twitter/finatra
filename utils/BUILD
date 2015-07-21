@@ -2,18 +2,18 @@ maven_layout()
 
 target(name='utils',
   dependencies=[
-    'utils/src/main/scala'
+    'finatra/utils/src/main/scala'
   ]
 )
 
 target(name='tests',
   dependencies=[
-    'utils/src/test/scala'
+    'finatra/utils/src/test/scala'
   ]
 )
 
 target(name='test-deps',
   dependencies=[
-    'utils/src/test/scala:test-deps'
+    'finatra/utils/src/test/scala:test-deps'
   ]
 )

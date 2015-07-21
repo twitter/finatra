@@ -2,13 +2,13 @@ maven_layout()
 
 target(name='finatra-twitter-clone',
   dependencies=[
-    'examples/finatra-twitter-clone/src/main/scala'
+    'finatra/examples/finatra-twitter-clone/src/main/scala'
   ]
 )
 
 target(name='tests',
   dependencies=[
-    'examples/finatra-twitter-clone/src/test/scala'
+    'finatra/examples/finatra-twitter-clone/src/test/scala'
   ]
 )
 
