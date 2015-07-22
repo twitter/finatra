@@ -1,8 +1,11 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
+import com.twitter.finatra.validation.ValidationResult.ErrorCode
 import com.twitter.finatra.validation.{Max, ValidationMessageResolver, ValidationResult, Validator}
 
 object MaxValidator {
+
+  case class MaxValueExceeded(maxValue: Long, value: Number) extends ErrorCode
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -46,28 +49,36 @@ class MaxValidator(
   private def validationResult(value: Traversable[_]) = {
     ValidationResult(
       value.size <= maxValue,
-      errorMessage(value.size))
+      errorMessage(value.size),
+      errorCode(value.size))
   }
 
   private def validationResult(value: BigDecimal) = {
     ValidationResult(
       value <= BigDecimal(maxValue),
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def validationResult(value: BigInt) = {
     ValidationResult(
       value <= BigInt(maxValue),
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def validationResult(value: Number) = {
     ValidationResult(
       value.longValue() <= maxValue,
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def errorMessage(value: Number) = {
     MaxValidator.errorMessage(validationMessageResolver, value, maxValue)
+  }
+  
+  private def errorCode(value: Number) = {
+    MaxValidator.MaxValueExceeded(maxValue, value)
   }
 }

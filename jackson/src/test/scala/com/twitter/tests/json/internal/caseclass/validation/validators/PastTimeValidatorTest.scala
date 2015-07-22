@@ -12,13 +12,13 @@ class PastTimeValidatorTest extends ValidatorTest {
 
     "pass validation for valid datetime" in {
       val minDateTime = new DateTime(0)
-      validate[PastExample](minDateTime) should equal(valid)
+      validate[PastExample](minDateTime) should equal(Valid)
     }
 
     "fail validation for invalid datetime" in {
       val futureDateTime = DateTime.now().plusDays(1)
       validate[PastExample](futureDateTime) should equal(
-        invalid(
+        Invalid(
           errorMessage(messageResolver, futureDateTime)))
     }
   }

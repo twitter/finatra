@@ -46,7 +46,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       }""",
       headers = Map("X-UserId" -> "123"),
       andExpect = Status.BadRequest,
-      withErrors = Seq("username is a required field"))
+      withErrors = Seq("username: field is required"))
   }
 
   "post tweet with field validation issue" in {
@@ -60,7 +60,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       }""",
       headers = Map("X-UserId" -> "123"),
       andExpect = Status.BadRequest,
-      withErrors = Seq("custom_id [0] is not greater than or equal to 1"))
+      withErrors = Seq("custom_id: [0] is not greater than or equal to 1"))
   }
 
   "post tweet with method validation issue" in {

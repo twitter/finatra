@@ -14,29 +14,29 @@ class NotEmptyValidatorTest extends ValidatorTest {
 
     "pass validation for valid value" in {
       val value = "abc"
-      validate[NotEmptyExample](value) should equal(valid)
+      validate[NotEmptyExample](value) should equal(Valid)
     }
 
     "fail validation for invalid value" in {
       val value = ""
       validate[NotEmptyExample](value) should equal(
-        invalid(errorMessage))
+        Invalid(errorMessage))
     }
 
     "pass validation for all whitespace value" in {
       val value = "    "
-      validate[NotEmptyExample](value) should equal(valid)
+      validate[NotEmptyExample](value) should equal(Valid)
     }
 
     "pass validation for valid values in seq" in {
       val value = Seq("abc", "de")
-      validate[NotEmptySeqExample](value) should equal(valid)
+      validate[NotEmptySeqExample](value) should equal(Valid)
     }
 
     "fail validation for empty seq" in {
       val value = Seq()
       validate[NotEmptySeqExample](value) should equal(
-        invalid(errorMessage))
+        Invalid(errorMessage))
     }
 
     "fail validation for invalid value type" in {

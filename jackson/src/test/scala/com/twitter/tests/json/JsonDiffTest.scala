@@ -3,14 +3,9 @@ package com.twitter.finatra.tests.json
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.inject.Logging
-import org.scalatest.{Matchers, WordSpec}
+import com.twitter.inject.Test
 
-class JsonDiffTest
-  extends WordSpec
-  with Matchers
-  with Logging {
-
+class JsonDiffTest extends Test {
   "json diff test" in {
     val a =
       """

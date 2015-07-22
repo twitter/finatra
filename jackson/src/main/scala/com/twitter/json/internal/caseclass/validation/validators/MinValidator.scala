@@ -1,8 +1,10 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
+import com.twitter.finatra.validation.ValidationResult.ErrorCode
 import com.twitter.finatra.validation.{Min, ValidationMessageResolver, ValidationResult, Validator}
 
 object MinValidator {
+  case class MinValueNotObtained(minValue: Long, value: Number) extends ErrorCode
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -46,28 +48,36 @@ class MinValidator(
   private def validationResult(value: Traversable[_]) = {
     ValidationResult(
       minValue <= value.size,
-      errorMessage(value.size))
+      errorMessage(value.size),
+      errorCode(value.size))
   }
 
   private def validationResult(value: BigDecimal) = {
     ValidationResult(
       BigDecimal(minValue) <= value,
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def validationResult(value: BigInt) = {
     ValidationResult(
       BigInt(minValue) <= value,
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def validationResult(value: Number) = {
     ValidationResult(
       minValue <= value.longValue(),
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def errorMessage(value: Number) = {
     MinValidator.errorMessage(validationMessageResolver, value, minValue)
+  }
+  
+  private def errorCode(value: Number) = {
+    MinValidator.MinValueNotObtained(minValue, value)
   }
 }

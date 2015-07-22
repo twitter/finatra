@@ -3,15 +3,18 @@ package com.twitter.finatra.tests.json
 import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
 import com.twitter.finatra.conversions.time._
-import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonFieldParseException, JsonInjectionNotSupportedException, JsonObjectParseException}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassValidationException, JsonInjectionNotSupportedException, CaseClassMappingException}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.tests.json.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.tests.json.internal._
 import com.twitter.inject.Logging
 import java.io.ByteArrayInputStream
 import org.joda.time.{DateTime, DateTimeZone}
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import org.scalatest.{Matchers, FeatureSpec}
 
+@RunWith(classOf[JUnitRunner])
 class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   DateTimeZone.setDefault(DateTimeZone.UTC)
@@ -118,9 +121,9 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
                "nickname" : "ace"
             }""",
         withErrors = Seq(
-          "id is a required field",
-          "name is a required field",
-          "age's value 'foo' is not a valid int"))
+          "id: field is required",
+          "name: field is required",
+          "age: 'foo' is not a valid int"))
     }
 
     scenario("parse nested json with missing fields") {
@@ -134,10 +137,10 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
          }
         """,
         withErrors = Seq(
-          "make's value 'Foo' is not a valid CarMake with valid values: Ford, Honda",
-          "model is a required field",
-          "passengers.name is a required field",
-          "passengers.age's value 'blah' is not a valid int"))
+          "make: 'Foo' is not a valid CarMake with valid values: Ford, Honda",
+          "model: field is required",
+          "passengers.name: field is required",
+          "passengers.age: 'blah' is not a valid int"))
     }
 
     scenario("parse json with missing 'nickname' field that has a string default") {
@@ -218,13 +221,13 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("invalid enum entry") {
-      val e = intercept[JsonObjectParseException] {
+      val e = intercept[CaseClassMappingException] {
         parse[CaseClassWithEnum]( """{
           "name" : "Bob",
           "make" : "foo"
          }""")
       }
-      e.fieldErrors map {_.msg} should equal(Seq( """make's value 'foo' is not a valid CarMakeEnum with valid values: ford, vw"""))
+      e.errors map {_.getMessage} should equal(Seq( """make: 'foo' is not a valid CarMakeEnum with valid values: ford, vw"""))
     }
 
     scenario("invalid validation") {
@@ -267,7 +270,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
            "date_time4" : ""
          }""",
         withErrors = Seq(
-          "age's value 'old' is not a valid int",
+          "age: 'old' is not a valid int",
           "age3: error parsing ''",
           """date_time: error parsing 'today' into an ISO 8601 datetime""",
           """date_time3: field cannot be negative""",
@@ -785,7 +788,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("missing required field") {
-      val e = intercept[JsonObjectParseException] {
+      val e = intercept[CaseClassMappingException] {
         parse[Person](
           """
           {
@@ -850,19 +853,19 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
             "foo": "bar"
           }""",
       withErrors = Seq(
-        "foo's value 'bar' is not a valid boolean"))
+        "foo: 'bar' is not a valid boolean"))
   }
 
   private def assertJsonParse[T: Manifest](json: String, withErrors: Seq[String]) = {
     if (withErrors.nonEmpty) {
-      val e1 = intercept[JsonObjectParseException] {
+      val e1 = intercept[CaseClassMappingException] {
         val parsed = parse[T](json)
         println("Incorrectly parsed: " + mapper.writePrettyString(parsed))
       }
       assertObjectParseException(e1, withErrors)
 
       // also check that we can parse into an intermediate JsonNode
-      val e2 = intercept[JsonObjectParseException] {
+      val e2 = intercept[CaseClassMappingException] {
         val jsonNode = parse[JsonNode](json)
         parse[T](jsonNode)
       }
@@ -875,15 +878,15 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
   }
 
-  private def assertObjectParseException(e: JsonObjectParseException, withErrors: Seq[String]) = {
-    trace(e.fieldErrors.mkString("\n"))
-    clearStackTrace(e.fieldErrors)
+  private def assertObjectParseException(e: CaseClassMappingException, withErrors: Seq[String]) = {
+    trace(e.errors.mkString("\n"))
+    clearStackTrace(e.errors)
 
-    val actualMessages = e.fieldErrors map {_.getMessage}
+    val actualMessages = e.errors map {_.getMessage}
     JsonDiff.jsonDiff(actualMessages, withErrors)
   }
 
-  private def clearStackTrace(exceptions: Seq[JsonFieldParseException]) = {
+  private def clearStackTrace(exceptions: Seq[CaseClassValidationException]) = {
     exceptions map {_.setStackTrace(Array())}
     exceptions
   }

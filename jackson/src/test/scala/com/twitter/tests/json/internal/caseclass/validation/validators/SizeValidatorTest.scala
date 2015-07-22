@@ -15,39 +15,39 @@ class SizeValidatorTest extends ValidatorTest {
 
     "pass validation for array type" in {
       val value = Array(1, 2, 3, 4, 5)
-      validate[SizeArrayExample](value) should equal(valid)
+      validate[SizeArrayExample](value) should equal(Valid)
     }
 
     "fail validation for too few array type" in {
       val value = Array()
       validate[SizeArrayExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(value)))
     }
 
     "fail validation for too many array type" in {
       val value = Array(1, 2, 3, 4, 5, 6)
       validate[SizeArrayExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(value)))
     }
 
     "pass validation for seq type" in {
       val value = Seq(1, 2, 3, 4, 5)
-      validate[SizeArrayExample](value) should equal(valid)
+      validate[SizeArrayExample](value) should equal(Valid)
     }
 
     "fail validation for too few seq type" in {
       val value = Seq()
       validate[SizeArrayExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(value)))
     }
 
     "fail validation for too many seq type" in {
       val value = Seq(1, 2, 3, 4, 5, 6)
       validate[SizeArrayExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(value)))
     }
 

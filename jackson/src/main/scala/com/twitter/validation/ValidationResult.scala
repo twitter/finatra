@@ -1,25 +1,34 @@
 package com.twitter.finatra.validation
 
-object ValidationResult {
+import com.fasterxml.jackson.core.JsonProcessingException
 
-  def apply(isValid: Boolean, failedReason: => String): ValidationResult = {
-    if (isValid)
-      valid
-    else
-      invalid(failedReason)
-  }
-
-  val valid: ValidationResult = {
-    ValidationResult(valid = true)
-  }
-
-  def invalid(failedReason: String) = {
-    ValidationResult(
-      valid = false,
-      Some(failedReason))
-  }
+sealed trait ValidationResult {
+  def isValid: Boolean
 }
 
-case class ValidationResult(
-  valid: Boolean,
-  failedReason: Option[String] = None)
+object ValidationResult {
+  case object Valid extends ValidationResult {
+    override val isValid = true
+  }
+  
+  case class Invalid(message: String, code: ErrorCode = ErrorCode.Unknown) extends ValidationResult {
+    override val isValid = false
+  }
+  
+  /**
+   * A descriptor for the type of validation error. May be pattern-matched
+   * to customize handling specific errors.
+   */
+  trait ErrorCode
+
+  object ErrorCode {
+    case object Unknown extends ErrorCode
+    case object RequiredFieldMissing extends ErrorCode
+    case class JsonProcessingError(cause: JsonProcessingException) extends ErrorCode
+  }
+
+  def apply(isValid: Boolean, message: => String, code: ErrorCode = ErrorCode.Unknown): ValidationResult = {
+    if (isValid) Valid
+    else Invalid(message, code)
+  }
+}

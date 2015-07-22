@@ -1,7 +1,7 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator
-import com.twitter.finatra.validation.ValidationResult.{invalid, valid}
+import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation.{Max, ValidationResult, ValidatorTest}
 
 case class MaxIntExample(@Max(0) numberValue: Int)
@@ -24,122 +24,130 @@ class MaxValidatorTest extends ValidatorTest {
 
     "pass validation for int type" in {
       val value = 0
-      validate[MaxIntExample](value) should equal(valid)
+      validate[MaxIntExample](value) should equal(Valid)
     }
 
     "fail validation for int type" in {
       val value = 1
       validate[MaxIntExample](value) should equal(
-        invalid(
-          errorMessage(value)))
+        Invalid(
+          errorMessage(value),
+          errorCode(value)))
     }
 
     "pass validation for long type" in {
       val value = 0L
-      validate[MaxLongExample](value) should equal(valid)
+      validate[MaxLongExample](value) should equal(Valid)
     }
 
     "fail validation for long type" in {
       val value = 1L
       validate[MaxLongExample](value) should equal(
-        invalid(
-          errorMessage(value)))
+        Invalid(
+          errorMessage(value),
+          errorCode(value)))
     }
 
     "pass validation for big int type" in {
       val value = BigInt(0)
-      validate[MaxBigIntExample](value) should equal(valid)
+      validate[MaxBigIntExample](value) should equal(Valid)
     }
 
     "pass validation for very small big int type" in {
       val value = BigInt(Long.MinValue)
-      validate[MaxSmallestLongBigIntExample](value) should equal(valid)
+      validate[MaxSmallestLongBigIntExample](value) should equal(Valid)
     }
 
     "pass validation for very large big int type" in {
       val value = BigInt(Long.MaxValue)
-      validate[MaxLargestLongBigIntExample](value) should equal(valid)
+      validate[MaxLargestLongBigIntExample](value) should equal(Valid)
     }
 
     "fail validation for big int type" in {
       val value = BigInt(1)
       validate[MaxBigIntExample](value) should equal(
-        invalid(
-          errorMessage(value)))
+        Invalid(
+          errorMessage(value),
+          errorCode(value)))
     }
 
     "fail validation for very small big int type" in {
       val value = BigInt(Long.MinValue) + 1
       validate[MaxSmallestLongBigIntExample](value) should equal(
-        invalid(
-          errorMessage(value, maxValue = Long.MinValue)))
+        Invalid(
+          errorMessage(value, maxValue = Long.MinValue),
+          errorCode(value, maxValue = Long.MinValue)))
     }
 
 //    "fail validation for very large big int type" in {
 //      val value = BigInt(Long.MaxValue)
 //      validate[MaxSecondLargestLongBigIntExample](value) should equal(
-//        invalid(
+//        Invalid(
 //          errorMessage(value, maxValue = Long.MaxValue - 1)))
 //    }
 
     "pass validation for big decimal type" in {
       val value = BigDecimal(0)
-      validate[MaxBigDecimalExample](value) should equal(valid)
+      validate[MaxBigDecimalExample](value) should equal(Valid)
     }
 
     "pass validation for very small big decimal type" in {
       val value = BigDecimal(Long.MinValue)
-      validate[MaxSmallestLongBigDecimalExample](value) should equal(valid)
+      validate[MaxSmallestLongBigDecimalExample](value) should equal(Valid)
     }
 
     "pass validation for very large big decimal type" in {
       val value = BigDecimal(Long.MaxValue)
-      validate[MaxLargestLongBigDecimalExample](value) should equal(valid)
+      validate[MaxLargestLongBigDecimalExample](value) should equal(Valid)
     }
 
     "fail validation for big decimal type" in {
       val value = BigDecimal(0.9)
       validate[MaxBigDecimalExample](value) should equal(
-        invalid(
-          errorMessage(value)))
+        Invalid(
+          errorMessage(value),
+          errorCode(value)))
     }
 
     "fail validation for very small big decimal type" in {
       val value = BigDecimal(Long.MinValue) + 0.1
       validate[MaxSmallestLongBigDecimalExample](value) should equal(
-        invalid(
-          errorMessage(value, maxValue = Long.MinValue)))
+        Invalid(
+          errorMessage(value, maxValue = Long.MinValue),
+          errorCode(value, maxValue = Long.MinValue)))
     }
 
 //    "fail validation for very large big decimal type" in {
 //      val value = BigDecimal(Long.MaxValue) - 0.1
 //      validate[MaxSecondLargestLongBigDecimalExample](value) should equal(
-//        invalid(
+//        Invalid(
 //          errorMessage(value, maxValue = Long.MaxValue - 1)))
 //    }
 
     "pass validation for sequence of integers" in {
       val value = Seq()
-      validate[MaxSeqExample](value) should equal(valid)
+      validate[MaxSeqExample](value) should equal(Valid)
     }
 
     "fail validation for sequence of integers" in {
       val value = Seq(10)
       validate[MaxSeqExample](value) should equal(
-        invalid(
-          errorMessage(value = value.size)))
+        Invalid(
+          errorMessage(value = value.size),
+          errorCode(value.size)))
     }
 
     "pass validation for array of integers" in {
       val value = Array()
-      validate[MaxArrayExample](value) should equal(valid)
+      validate[MaxArrayExample](value) should equal(Valid)
     }
 
     "fail validation for array of integers" in {
       val value = Array(10)
       validate[MaxArrayExample](value) should equal(
-        invalid(
-          errorMessage(value = value.length)))
+        Invalid(
+          errorMessage(value = value.length),
+          errorCode(value.length)))
     }
 
     "fail for unsupported class type" in {
@@ -158,5 +166,9 @@ class MaxValidatorTest extends ValidatorTest {
       messageResolver,
       value,
       maxValue)
+  }
+
+  private def errorCode(value: Number, maxValue: Long = 0) = {
+    MaxValidator.MaxValueExceeded(maxValue, value)
   }
 }
