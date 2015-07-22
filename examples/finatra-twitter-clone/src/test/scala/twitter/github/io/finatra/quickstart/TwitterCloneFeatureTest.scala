@@ -79,10 +79,10 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
       withJsonBody = """
         {
           "errors" : [
-            "message size [0] is not between 1 and 140",
-            "location.lat [9999.0] is not between -85 and 85",
-            "location.long is a required field",
-            "sensitive's value 'abc' is not a valid boolean"
+            "message: size [0] is not between 1 and 140",
+            "location.lat: [9999.0] is not between -85 and 85",
+            "location.long: field is required",
+            "sensitive: 'abc' is not a valid boolean"
           ]
         }
         """)

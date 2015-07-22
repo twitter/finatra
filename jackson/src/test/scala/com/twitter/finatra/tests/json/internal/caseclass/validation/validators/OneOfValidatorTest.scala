@@ -16,31 +16,31 @@ class OneOfValidatorTest extends ValidatorTest {
 
     "pass validation for single value" in {
       val value = "a"
-      validate[OneOfExample](value) should equal(valid)
+      validate[OneOfExample](value) should equal(Valid)
     }
 
     "fail validation for single value" in {
       val value = "A"
       validate[OneOfExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(
             value)))
     }
 
     "pass validation for seq" in {
       val value = oneOfValues
-      validate[OneOfSeqExample](value) should equal(valid)
+      validate[OneOfSeqExample](value) should equal(Valid)
     }
 
     "pass validation for empty seq" in {
       val value = Seq()
-      validate[OneOfSeqExample](value) should equal(valid)
+      validate[OneOfSeqExample](value) should equal(Valid)
     }
 
     "fail validation for invalid value in seq" in {
       val value = Seq("z")
       validate[OneOfSeqExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(
             value)))
     }
@@ -48,7 +48,7 @@ class OneOfValidatorTest extends ValidatorTest {
     "fail validation for invalid type" in {
       val value = 2
       validate[OneOfInvalidTypeExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(
             value)))
     }

@@ -22,7 +22,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
     for {
       annotation <- fieldValidationAnnotations
       result = isValid(fieldValue, findValidator[V](annotation))
-      if !result.valid
+      if !result.isValid
     } yield result
   }
 
@@ -34,7 +34,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
     for {
       method <- findMethodValidations(obj.getClass)
       result = method.invoke(obj).asInstanceOf[ValidationResult]
-      if !result.valid
+      if !result.isValid
     } yield result
   }
 
@@ -75,7 +75,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
       case Some(actualVal) =>
         validator.isValid(actualVal)
       case _ =>
-        valid
+        Valid
     }
   }
 

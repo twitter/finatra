@@ -14,13 +14,13 @@ class UUIDValidatorTest extends ValidatorTest {
 
     "pass validation for valid value" in {
       val value = JUUID.randomUUID().toString
-      validate[UUIDExample](value) should equal(valid)
+      validate[UUIDExample](value) should equal(Valid)
     }
 
     "fail validation for invalid value" in {
       val value = "bad uuid"
       validate[UUIDExample](value) should equal(
-        invalid(
+        Invalid(
           errorMessage(value)))
     }
   }

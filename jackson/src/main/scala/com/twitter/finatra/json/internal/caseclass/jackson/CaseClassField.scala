@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
-import com.twitter.finatra.json.internal.caseclass.exceptions.JsonFieldParseException
+import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 import com.twitter.finatra.json.internal.caseclass.reflection.DefaultMethodUtils.defaultFunction
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection
 import com.twitter.finatra.validation.Validation
+import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.inject.Logging
 import java.lang.annotation.Annotation
 import scala.language.existentials
@@ -67,7 +68,7 @@ case class CaseClassField(
   private val isString = javaType.getRawClass == classOf[String]
   private val fieldInjection = new FieldInjection(name, javaType, parentClass, annotations)
   private lazy val firstTypeParam = javaType.containedType(0)
-  private lazy val requiredFieldException = JsonFieldParseException(name + " is a required field")
+  private lazy val requiredFieldException = CaseClassValidationException(name, Invalid("field is required", ErrorCode.RequiredFieldMissing))
 
   /* Public */
 
@@ -91,7 +92,7 @@ case class CaseClassField(
    * @param codec Codec for field
    * @param objectJsonNode The JSON object
    * @return The parsed object for this field
-   * @throws JsonFieldParseException with reason for the parsing error
+   * @throws CaseClassValidationException with reason for the parsing error
    */
   def parse(context: DeserializationContext, codec: ObjectCodec, objectJsonNode: JsonNode): Object = {
     if (fieldInjection.isInjectable)

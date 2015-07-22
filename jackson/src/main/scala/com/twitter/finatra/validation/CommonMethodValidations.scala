@@ -18,12 +18,12 @@ object CommonMethodValidations {
     if (rangeDefined)
       validateTimeRange(startTime.get, endTime.get, startTimeProperty, endTimeProperty)
     else if (partialRange)
-      invalid(
+      Invalid(
         "both %s and %s are required for a valid range".format(
           startTimeProperty,
           endTimeProperty))
     else
-      valid
+      Valid
   }
 
   def validateTimeRange(

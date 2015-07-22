@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{JsonNode, Module, ObjectMapper, ObjectReader}
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Message, Request, Response}
-import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonObjectParseException, RequestFieldInjectionNotSupportedException}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.serde.ArrayElementsOnNewLinesPrettyPrinter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.io.Buf
@@ -89,19 +89,19 @@ case class FinatraObjectMapper(
   }
 
   /*
-   When Finatra's JsonObjectParseException is thrown inside 'convertValue', newer versions of Jackson wrap
-   JsonObjectParseException inside an IllegalArgumentException. As such, we unwrap to restore the original exception here.
+   When Finatra's CaseClassMappingException is thrown inside 'convertValue', newer versions of Jackson wrap
+   CaseClassMappingException inside an IllegalArgumentException. As such, we unwrap to restore the original exception here.
 
    Details:
    See https://github.com/FasterXML/jackson-databind/blob/2.4/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java#L2773
-   The wrapping occurs because JsonObjectParseException is an IOException (because we extend JsonMappingException which extends JsonProcessingException which extends IOException).
-   We must extend JsonMappingException otherwise JsonObjectParseException is not properly handled when deserializing into nested case-classes
+   The wrapping occurs because CaseClassMappingException is an IOException (because we extend JsonMappingException which extends JsonProcessingException which extends IOException).
+   We must extend JsonMappingException otherwise CaseClassMappingException is not properly handled when deserializing into nested case-classes
   */
   def convert[T: Manifest](any: Any): T = {
     try {
       objectMapper.convertValue[T](any)
     } catch {
-      case e: IllegalArgumentException if e.getCause.isInstanceOf[JsonObjectParseException] =>
+      case e: IllegalArgumentException if e.getCause.isInstanceOf[CaseClassMappingException] =>
         throw e.getCause
     }
   }

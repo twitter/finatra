@@ -11,14 +11,15 @@ class FutureValidatorTest extends ValidatorTest {
 
     "pass validation for valid datetime" in {
       val futureDateTime = DateTime.now().plusDays(5)
-      validate[FutureExample](futureDateTime) should equal(valid)
+      validate[FutureExample](futureDateTime) should equal(Valid)
     }
 
     "fail validation for invalid datetime" in {
       val pastDateTime = DateTime.now.minusDays(5)
       validate[FutureExample](pastDateTime) should equal(
-        invalid(
-          errorMessage(pastDateTime)))
+        Invalid(
+          errorMessage(pastDateTime),
+          FutureTimeValidator.NotFutureTime(pastDateTime)))
     }
   }
 

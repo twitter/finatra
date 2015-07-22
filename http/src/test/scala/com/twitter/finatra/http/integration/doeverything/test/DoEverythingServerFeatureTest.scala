@@ -543,7 +543,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
           }
         """,
         andExpect = BadRequest,
-        withErrors = Seq("name is a required field"))
+        withErrors = Seq("name: field is required"))
     }
 
     "POST json user with failed field validation" in {
@@ -555,7 +555,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
           }
         """,
         andExpect = BadRequest,
-        withErrors = Seq("name size [1] is not between 2 and 20"))
+        withErrors = Seq("name: size [1] is not between 2 and 20"))
     }
 
     "POST json user with failed method validation" in {
@@ -879,8 +879,8 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       withJsonBody = """
       {
         "errors": [
-          "max is a required field",
-          "verbose's value '5' is not a valid boolean"
+          "max: field is required",
+          "verbose: '5' is not a valid boolean"
         ]
       }
                      """)
