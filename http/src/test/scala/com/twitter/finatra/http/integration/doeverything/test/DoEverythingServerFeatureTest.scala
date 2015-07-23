@@ -45,6 +45,15 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.contentString should equal("always response")
     }
 
+    "response should contain server/date headers" in {
+      val response = server.httpGet("/example/routing/always")
+      response.statusCode should equal(200)
+      response.contentString should equal("always response")
+
+      response.headers.get("Date") should not be empty
+      response.headers.get("Server") should not be empty
+    }
+
     "json response to /example" in {
       val response = server.httpGet("/example/routing/json/1")
       response.statusCode should equal(200)

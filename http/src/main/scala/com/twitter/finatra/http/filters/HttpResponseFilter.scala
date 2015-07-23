@@ -3,14 +3,17 @@ package com.twitter.finatra.http.filters
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.util.Future
 import javax.inject.Singleton
+import org.joda.time.{DateTimeZone, DateTime}
 
 /**
  * HttpResponseFilter does the following:
- * - setting the HTTP protocol version
- * - turning a 'partial' Location header into a full URL
+ * - sets the HTTP protocol version
+ * - sets the 'Server' and 'Date' response headers
+ * - turns a 'partial' Location header into a full URL
  */
 @Singleton
 class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
@@ -24,6 +27,7 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
   def apply(request: R, service: Service[R, Response]): Future[Response] = {
     for (response <- service(request)) yield {
       response.setProtocolVersion(request.version)
+      setResponseHeaders(response)
       updateLocationHeader(request, response)
       response
     }
@@ -41,5 +45,16 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
         }
       }
     }
+  }
+
+  /**
+   * Sets the HTTP Date and Server header values.
+   * @see Date: <a href="http://tools.ietf.org/html/rfc7231#section-7.1.1.2">Section 7.1.1.2 of RFC 7231</a>
+   * @see Server <a href="http://tools.ietf.org/html/rfc7231#section-7.4.2">Section 7.4.2 of RFC 7231</a>
+   * @param response- the response on which to set the header values.
+   */
+  private def setResponseHeaders(response: Response) {
+    HttpHeaders.set(response, HttpHeaders.Server, "Finatra")
+    HttpHeaders.setDate(response, HttpHeaders.Date, DateTime.now)
   }
 }
