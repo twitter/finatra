@@ -38,7 +38,7 @@ class CaseClassValidationTest extends Test {
       }
 
       parseError should equal(CaseClassMappingException(
-        Seq(CaseClassValidationException("year", Invalid("[1910] is not greater than or equal to 2000", MinValidator.MinValueNotObtained(2000, 1910))))))
+        Seq(CaseClassValidationException(Seq("year"), Invalid("[1910] is not greater than or equal to 2000", MinValidator.MinValueNotObtained(2000, 1910))))))
     }
 
     "nested failed validations" in {
@@ -59,8 +59,30 @@ class CaseClassValidationTest extends Test {
 
       parseError should equal(CaseClassMappingException(
         Seq(
-          CaseClassValidationException("owners.address.street", Invalid("cannot be empty")),
-          CaseClassValidationException("owners.address.city", Invalid("cannot be empty")))))
+          CaseClassValidationException(Seq("owners", "address", "street"), Invalid("cannot be empty")),
+          CaseClassValidationException(Seq("owners", "address", "city"), Invalid("cannot be empty")))))
+    }
+
+    "nested method validations" in {
+      val owners = Seq(
+        Person(
+          name = "joe smith",
+          dob = Some(DateTime.now),
+          address = Some(Address(
+            city = "pyongyang",
+            state = "KP" /* invalid */ )))
+      )
+      val car = baseCar.copy(owners = owners)
+
+      val parseError = intercept[CaseClassMappingException] {
+        parseCar(car)
+      }
+
+      parseError should equal(CaseClassMappingException(
+        Seq(
+          CaseClassValidationException(Seq("owners", "address"), Invalid("state must be one of [CA, MD, WI]")))))
+
+      parseError.errors.map(_.getMessage) should equal(Seq("owners.address: state must be one of [CA, MD, WI]"))
     }
 
     "end before start" in {
@@ -72,7 +94,7 @@ class CaseClassValidationTest extends Test {
         CaseClassMappingException(
           Seq(
             CaseClassValidationException(
-              "",
+              Seq.empty,
               Invalid("ownershipEnd [2015-04-09T05:17:15.000Z] must be after ownershipStart [2015-04-09T05:18:15.000Z]")))))
     }
 
@@ -85,7 +107,7 @@ class CaseClassValidationTest extends Test {
         CaseClassMappingException(
           Seq(
             CaseClassValidationException(
-              "",
+              Seq.empty,
               Invalid("warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]")))))
     }
   }

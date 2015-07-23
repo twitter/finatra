@@ -68,7 +68,7 @@ case class CaseClassField(
   private val isString = javaType.getRawClass == classOf[String]
   private val fieldInjection = new FieldInjection(name, javaType, parentClass, annotations)
   private lazy val firstTypeParam = javaType.containedType(0)
-  private lazy val requiredFieldException = CaseClassValidationException(name, Invalid("field is required", ErrorCode.RequiredFieldMissing))
+  private lazy val requiredFieldException = CaseClassValidationException(Seq(name), Invalid("field is required", ErrorCode.RequiredFieldMissing))
 
   /* Public */
 

@@ -11,6 +11,6 @@ case class Address(
   def validateState = {
     ValidationResult(
       state == "CA" || state == "MD" || state == "WI",
-      "state can be one of [CA, MD, WI]")
+      "state must be one of [CA, MD, WI]")
   }
 }
