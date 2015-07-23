@@ -10,13 +10,12 @@ object CaseClassValidationException {
 
 /**
  * An exception that bundles together a failed validation with the
- * associated field that failed the validation.  An empty `field`
- * string means the top-level object failed the (method) validation.
- * Otherwise, `field` is a dot-separated path to a particular case
- * class field.
+ * associated field that failed the validation.
+ * @param fieldPath - path to the case class field that caused the validation failure
+ * @param reason - the validation failure
  */
 case class CaseClassValidationException(
-  field: String,
+  fieldPath: Seq[String],
   reason: ValidationResult.Invalid)
   extends Exception {
 
@@ -25,11 +24,15 @@ case class CaseClassValidationException(
    * a specific field it is prefixed with the field's name.
    */
   override def getMessage: String = {
-    if (field.isEmpty) reason.message
-    else s"${field}: ${reason.message}"
+    if (fieldPath.isEmpty) {
+      reason.message
+    } else {
+      val field = fieldPath.mkString(FieldSeparator)
+      s"${field}: ${reason.message}"
+    }
   }
 
-  private[finatra] def nest(outerField: CaseClassField): CaseClassValidationException = {
-    CaseClassValidationException(outerField.name + FieldSeparator + field,  reason)
+  private[finatra] def scoped(field: CaseClassField): CaseClassValidationException = {
+    copy(fieldPath = field.name +: fieldPath)
   }
 }

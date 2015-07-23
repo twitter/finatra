@@ -132,7 +132,7 @@ class FinatraCaseClassDeserializer(
 
         case e: CaseClassMappingException =>
           addConstructorValue(field.missingValue)
-          errors ++= e.errors map {_.nest(field)}
+          errors ++= e.errors map {_.scoped(field)}
 
         case e: JsonProcessingException =>
           // Don't include source info since it's often blank. Consider adding e.getCause.getMessage
@@ -158,7 +158,7 @@ class FinatraCaseClassDeserializer(
   // TODO don't leak class name details in error message
   private def invalidFormatJsonFieldParseError(field: CaseClassField, e: InvalidFormatException): CaseClassValidationException = {
     CaseClassValidationException(
-      field.name,
+      Seq(field.name),
       Invalid(
         s"'${e.getValue}' is not a valid ${e.getTargetType.getSimpleName}${validValuesString(e)}",
         ErrorCode.JsonProcessingError(e)))
@@ -166,7 +166,7 @@ class FinatraCaseClassDeserializer(
 
   private def jsonProcessingJsonFieldParseError(field: CaseClassField, e: JsonProcessingException): CaseClassValidationException = {
     CaseClassValidationException(
-      field.name,
+      Seq(field.name),
       Invalid(
         JacksonUtils.errorMessage(e),
         ErrorCode.JsonProcessingError(e)))
@@ -207,14 +207,14 @@ class FinatraCaseClassDeserializer(
     for {
       invalid@Invalid(_, _) <- validationManager.validateField(value, field.validationAnnotations)
     } yield {
-      CaseClassValidationException(field.name,  invalid)
+      CaseClassValidationException(Seq(field.name),  invalid)
     }
   }
 
   private def executeMethodValidations(fieldErrors: Seq[CaseClassValidationException], obj: Any) {
     val methodValidationErrors = for {
       invalid@Invalid(_, _) <- validationManager.validateObject(obj)
-    } yield CaseClassValidationException("", invalid)
+    } yield CaseClassValidationException(Seq.empty, invalid)
 
     if (methodValidationErrors.nonEmpty) {
       throw new CaseClassMappingException(fieldErrors ++ methodValidationErrors)
