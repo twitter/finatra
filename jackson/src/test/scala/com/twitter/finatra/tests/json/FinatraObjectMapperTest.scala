@@ -853,6 +853,15 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
         "foo's value 'bar' is not a valid boolean"))
   }
 
+  feature("jackson JsonDeserialize annotations") {
+    scenario("deserializes json to case class with 2 decimal places") {
+      parse[CaseClassWithCustomDecimalFormat](
+        """ {
+            "my_big_decimal": 23.1201
+          }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12)))
+    }
+  }
+
   private def assertJsonParse[T: Manifest](json: String, withErrors: Seq[String]) = {
     if (withErrors.nonEmpty) {
       val e1 = intercept[JsonObjectParseException] {

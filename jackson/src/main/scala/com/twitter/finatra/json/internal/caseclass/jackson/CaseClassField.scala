@@ -1,9 +1,10 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.ObjectCodec
+import com.fasterxml.jackson.core.{JsonParser, ObjectCodec}
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.`type`.TypeFactory
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
 import com.twitter.finatra.json.internal.caseclass.exceptions.JsonFieldParseException
@@ -28,13 +29,16 @@ object CaseClassField {
       (constructorParam, idx) <- constructorParams.zipWithIndex
       annotations = allAnnotations(idx)
       name = jsonNameForField(annotations, namingStrategy, constructorParam.name)
+      deserializer = deserializerOrNone(annotations)
     } yield {
       CaseClassField(
         name = name,
         javaType = JacksonTypes.javaType(typeFactory, constructorParam.scalaType),
         parentClass = clazz,
         defaultFuncOpt = defaultFunction(clazz, idx),
-        annotations = annotations)
+        annotations = annotations,
+        deserializer = deserializer
+      )
     }
   }
 
@@ -53,6 +57,15 @@ object CaseClassField {
           /* defaultName = */ decodedName)
     }
   }
+
+  private def deserializerOrNone(annotations: Array[Annotation]): Option[JsonDeserializer[_ <: Object]] = {
+    findAnnotation[JsonDeserialize](annotations) match {
+      case Some(jsonDeserializer) => {
+        Some(ClassUtil.createInstance(jsonDeserializer.using, false).asInstanceOf[JsonDeserializer[_ <: Object]])
+      }
+      case _ => None
+    }
+  }
 }
 
 case class CaseClassField(
@@ -60,7 +73,8 @@ case class CaseClassField(
   javaType: JavaType,
   parentClass: Class[_],
   defaultFuncOpt: Option[() => Object],
-  annotations: Seq[Annotation])
+  annotations: Seq[Annotation],
+  deserializer: Option[JsonDeserializer[_ <: Object]])
   extends Logging {
 
   private val isOption = javaType.getRawClass == classOf[Option[_]]
@@ -88,30 +102,35 @@ case class CaseClassField(
    * NOTE: Option fields default to None even if no default is specified
    *
    * @param context DeserializationContext for deserialization
-   * @param codec Codec for field
+   * @param jp JsonParser for field
    * @param objectJsonNode The JSON object
    * @return The parsed object for this field
    * @throws JsonFieldParseException with reason for the parsing error
    */
-  def parse(context: DeserializationContext, codec: ObjectCodec, objectJsonNode: JsonNode): Object = {
+  def parse(context: DeserializationContext, jp: JsonParser, objectJsonNode: JsonNode): Object = {
+    val codec = jp.getCodec
     if (fieldInjection.isInjectable)
       fieldInjection.inject(context, codec) orElse defaultValue getOrElse throwRequiredFieldException()
     else {
       val fieldJsonNode = objectJsonNode.get(name)
-      if (fieldJsonNode != null)
-        if (isOption)
-          Option(
-            parseFieldValue(codec, fieldJsonNode, firstTypeParam))
+      if (deserializer.isDefined) {
+        deserializer.get.deserialize(new TreeTraversingParser(fieldJsonNode, codec), context)
+      } else {
+        if (fieldJsonNode != null)
+          if (isOption)
+            Option(
+              parseFieldValue(codec, fieldJsonNode, firstTypeParam))
+          else
+            assertNotNull(
+              fieldJsonNode,
+              parseFieldValue(codec, fieldJsonNode, javaType))
+        else if (defaultFuncOpt.isDefined)
+          defaultFuncOpt.get.apply()
+        else if (isOption)
+          None
         else
-          assertNotNull(
-            fieldJsonNode,
-            parseFieldValue(codec, fieldJsonNode, javaType))
-      else if (defaultFuncOpt.isDefined)
-        defaultFuncOpt.get.apply()
-      else if (isOption)
-        None
-      else
-        throwRequiredFieldException()
+          throwRequiredFieldException()
+      }
     }
   }
 
