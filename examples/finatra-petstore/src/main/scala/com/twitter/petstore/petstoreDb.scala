@@ -1,7 +1,8 @@
 package com.twitter.petstore
 
-import com.twitter.util.{Await, Future}
 
+import com.twitter.finatra.response
+import com.twitter.util.{Await, Future}
 import scala.collection.mutable
 
 /**

@@ -1,12 +1,12 @@
-//package com.twitter.petstore
-//
-//import com.twitter.finagle.{Service, SimpleFilter}
-//import com.twitter.finagle.httpx.{Request, Response}
-//import com.twitter.util.Future
-//
+package com.twitter.petstore
+
+import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.util.Future
+
 ///**
-// * Tells the API how to respond when certain exceptions are thrown.
-// */
+//* Tells the API how to respond when certain exceptions are thrown.
+//*/
 //trait ErrorHandling {
 //  /**
 //   * Tells the service how to handle certain types of servable errors (i.e. PetstoreError)

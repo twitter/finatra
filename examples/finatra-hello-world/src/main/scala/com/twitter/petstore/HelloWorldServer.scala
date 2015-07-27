@@ -1,4 +1,4 @@
-package com.twitter.hello
+package com.twitter.petstore
 
 import com.twitter.finagle.http.{Response, Request}
 import com.twitter.finatra.http.HttpServer
