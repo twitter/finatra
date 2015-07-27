@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finagle.httpx.{Request, Response}

@@ -3,7 +3,7 @@ package com.twitter
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
-package object petstore {
+package object hello {
   implicit val statusArbitrary: Arbitrary[Status] =
     Arbitrary(Gen.oneOf(Available, Pending, Adopted))
 

@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 import com.google.inject.Singleton
 import com.twitter.finagle.http.{Response, Request}

@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 /**
  * Represents a User in the system, who can interact with the petstore and purchase

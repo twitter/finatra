@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 /**
  * Represents Pets in the Petstore. Each Pet has a unique ID that should not be known by

@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 /**
  * Represents the current state of the Petstore and how many pets are currently of which [[Status]].

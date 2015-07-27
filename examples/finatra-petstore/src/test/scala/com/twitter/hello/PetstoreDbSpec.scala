@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 import com.twitter.util.{Await, Future}
 import org.scalatest.prop.Checkers

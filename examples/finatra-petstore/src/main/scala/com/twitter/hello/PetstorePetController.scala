@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 import javax.inject.Inject
 import com.twitter.finagle.http.Request

@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 /**
 * Represents the general status of a [[Pet]]. This should either be [[Available]], [[Pending]], or [[Adopted]].

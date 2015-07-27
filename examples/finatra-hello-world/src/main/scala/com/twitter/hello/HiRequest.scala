@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 case class HiRequest(
   id: Long,

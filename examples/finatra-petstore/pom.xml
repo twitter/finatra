@@ -13,8 +13,8 @@
     <scala.version>2.11.6</scala.version>
     <finatra.version>2.0.0.M2</finatra.version>
 
-    <mainClass>com.twitter.petstore.HelloWorldServerMain</mainClass>
-    <buildPropertiesPackage>com.twitter.petstore</buildPropertiesPackage>
+    <mainClass>com.twitter.hello.HelloWorldServerMain</mainClass>
+    <buildPropertiesPackage>com.twitter.hello</buildPropertiesPackage>
   </properties>
 
   <dependencies>

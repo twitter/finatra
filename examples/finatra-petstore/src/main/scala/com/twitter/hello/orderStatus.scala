@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 /**
 * Represents the status of a particular order for pets. Can be "placed," "approved," or "delivered."

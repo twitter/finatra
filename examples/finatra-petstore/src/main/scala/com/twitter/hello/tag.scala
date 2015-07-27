@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 /**
  * Represents a Tag for pets. Tags cannot be passed with user-made, IDs.

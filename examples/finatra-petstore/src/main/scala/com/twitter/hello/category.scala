@@ -1,4 +1,4 @@
-package com.twitter.petstore
+package com.twitter.hello
 
 /**
  * Represents a Category attribute for pets. This is the type of animal a pet is.
