@@ -60,7 +60,7 @@ lazy val publishSettings = Seq(
   licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://twitter.github.io/docs/")),
+  apiURL := Some(url("https://twitter.github.io/finatra/docs/")),
   pomExtra := (
     <scm>
       <url>git://github.com/twitter/finatra.git</url>
