@@ -5,17 +5,17 @@ Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) a
 ![finatra logo](finatra_logo.png)
 
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
-[![Coverage Status](https://coveralls.io/repos/twitter/badge.svg?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
+[![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.svg?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra-http_2.11)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11)
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
 Announcing the next milestone release of Finatra version 2!
 -----------------------------------------------------------
-[Finatra v2 slides](http://twitter.github.io/assets/FinatraSFScala.pdf) from SFScala meetup
+[Finatra v2 slides](http://twitter.github.io/finatra/assets/FinatraSFScala.pdf) from SFScala meetup
 
-Documentation for prior versions can be found [here](https://github.com/twitter/tree/5d1d1cbb7640d8c4b1d11a85b53570d11a323e55).
+Documentation for prior versions can be found [here](https://github.com/twitter/finatra/tree/5d1d1cbb7640d8c4b1d11a85b53570d11a323e55).
 
 Features
 -----------------------------------------------------------
@@ -189,7 +189,7 @@ Finatra is a framework for easily building API services on top of Twitter’s Sc
 [Detailed documentation](http/README.md)
 
 ### Examples
-You can run the examples in [examples](examples) using sbt, e.g., to run the [examples/finatra-hello-world](examples/finatra-hello-world) example,
+You can run the examples in [finatra/examples](examples) using sbt, e.g., to run the [finatra/examples/finatra-hello-world](examples/finatra-hello-world) example,
 
 ```Shell
 $ sbt helloWorld/run
@@ -210,7 +210,7 @@ Authors
 * Jason Carey <https://github.com/jcarey03>
 * Eugene Ma <https://github.com/edma2>
 
-A full list of [contributors](https://github.com/twitter/graphs/contributors?type=a) can be found on GitHub.
+A full list of [contributors](https://github.com/twitter/finatra/graphs/contributors?type=a) can be found on GitHub.
 
 Follow [@finatra](http://twitter.com/finatra) on Twitter for updates.
 
@@ -232,8 +232,7 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [grizzled-slf4j]: http://software.clapper.org/grizzled-slf4j/
 [local]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala
 [mdc]: http://logback.qos.ch/manual/mdc.html
-[Controller]: http/src/main/scala/com/twitter/http/Controller.scala
-[HttpServer]: http/src/main/scala/com/twitter/http/HttpServer.scala
+[Controller]: http/src/main/scala/com/twitter/finatra/http/Controller.scala
+[HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
 [twitter-clone-example]: examples/finatra-twitter-clone/
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
-
