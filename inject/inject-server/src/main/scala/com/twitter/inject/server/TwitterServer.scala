@@ -8,7 +8,7 @@ import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.handler.ReplyHandler
-import com.twitter.server.internal.PromoteToOldGenUtils
+import com.twitter.server.internal.{FinagleBuildRevision, PromoteToOldGenUtils}
 import com.twitter.util.Await
 
 trait TwitterServer
@@ -48,6 +48,8 @@ trait TwitterServer
         }
       }
     }
+
+    FinagleBuildRevision.register(injector)
   }
 
   /**
