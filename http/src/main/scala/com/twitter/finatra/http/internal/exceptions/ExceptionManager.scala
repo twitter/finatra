@@ -42,25 +42,16 @@ class ExceptionManager @Inject()(
   private val mappers = mapAsScalaConcurrentMap(
     new ConcurrentHashMap[Type, ExceptionMapper[_]]())
 
-  // run after constructing `mappers`
-  add[Throwable](defaultExceptionMapper)
-
   /* Public */
 
   def add[T <: Throwable : Manifest](mapper: ExceptionMapper[T]) {
-    set(manifest[T].runtimeClass, mapper, replace = false)
+    add(manifest[T].runtimeClass, mapper)
   }
 
   def add[T <: ExceptionMapper[_]: Manifest] {
-    set[T](replace = false)
-  }
-
-  def replace[T <: Throwable : Manifest](mapper: ExceptionMapper[T]) {
-    set(manifest[T].runtimeClass, mapper, replace = true)
-  }
-
-  def replace[T <: ExceptionMapper[_]: Manifest] {
-    set[T](replace = true)
+    val mapperType = typeLiteral[T].getSupertype(classOf[ExceptionMapper[_]]).getType
+    val throwableType = singleTypeParam(mapperType)
+    add(throwableType, injector.instance[T])
   }
 
   def toResponse(request: Request, throwable: Throwable): Response = {
@@ -70,14 +61,8 @@ class ExceptionManager @Inject()(
 
   /* Private */
 
-  private def set[T <: ExceptionMapper[_]: Manifest](replace: Boolean) {
-    val mapperType = typeLiteral[T].getSupertype(classOf[ExceptionMapper[_]]).getType
-    val throwableType = singleTypeParam(mapperType)
-    set(throwableType, injector.instance[T], replace)
-  }
-
-  private def set(throwableType: Type, mapper: ExceptionMapper[_], replace: Boolean) {
-    if (!replace && mappers.contains(throwableType)) {
+  private def add(throwableType: Type, mapper: ExceptionMapper[_]) {
+    if (mappers.contains(throwableType)) {
       throw new IllegalStateException(s"ExceptionMapper for $throwableType already registered")
     } else {
       mappers(throwableType) = mapper // mutation
@@ -91,16 +76,19 @@ class ExceptionManager @Inject()(
   }
 
   // Get mapper for this throwable class if it exists, otherwise
-  // search for parent throwable class. This will always terminate
-  // because we added an ExceptionMapper[Throwable] in our constructor
-  // body.
+  // search for parent throwable class. If we reach the Throwable
+  // class then return the default mapper.
   //
   // Note: we avoid getOrElse so we have tail recursion
   @tailrec
   private def getMapper(cls: Class[_]): ExceptionMapper[_] = {
-    mappers.get(cls) match {
-      case Some(mapper) => mapper
-      case None => getMapper(cls.getSuperclass)
+    if (cls == classOf[Throwable]) {
+      defaultExceptionMapper
+    } else {
+      mappers.get(cls) match {
+        case Some(mapper) => mapper
+        case None => getMapper(cls.getSuperclass)
+      }
     }
   }
 }
