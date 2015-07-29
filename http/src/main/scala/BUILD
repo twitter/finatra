@@ -7,7 +7,7 @@ scala_library(name='scala',
   dependencies=[
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-core',
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind',
-    '3rdparty/jvm/com/github/spullara/mustache/java:mustache-compiler',
+    '3rdparty/jvm/com/github/spullara/mustache/java',
     '3rdparty/jvm/commons-fileupload',
     '3rdparty/jvm/commons-io',
     '3rdparty/jvm/io/netty',
