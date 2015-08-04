@@ -868,18 +868,34 @@ See [MultiParamsTest](../http/src/test/scala/com/twitter/finatra/http/request/Mu
 Testing
 ===============================
 ## <a name="startup-tests">Startup Tests</a>
+One common and simple test is to check that the service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that can otherwise cause the service to fail to start.
+
 * Startup tests should mimic production as close as possible. As such:
     - avoid using `@Bind` and "override modules" in startup tests.
     - set the Guice `stage` to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `State.DEVELOPMENT` by default).
-    - prevent Finagle clients from making outbound connections during startup tests by setting any resolverMap entries for your clients to `nil!`.
+    - prevent Finagle clients from making outbound connections during startup tests by setting Dtab entries to `nil!`.
 
 For example:
+
 ```scala
-val server = EmbeddedHttpServer(
-  stage = Stage.PRODUCTION,
-  twitterServer = new SampleApiServer,
-  extraArgs = Seq(
-    "-com.twitter.server.resolverMap=client1=nil!,client2=nil!"))
+import com.google.inject.Stage
+import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.inject.server.FeatureTest
+
+class MyServiceStartupTests extends FeatureTest {
+  val server = EmbeddedHttpServer(
+    stage = Stage.PRODUCTION,
+    twitterServer = new SampleApiServer, 
+    extraArgs = Seq(
+      "-dtab.add=/srv => /$/nil",
+      "-dtab.add=/srv# => /$/nil"))
+
+  "SampleApiServer" should {
+    "startup" in {
+      server.assertHealthy()
+    }
+  }
+}
 ```
 
 ## Integration Tests
