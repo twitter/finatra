@@ -384,6 +384,28 @@ lazy val helloWorld = (project in file("examples/finatra-hello-world")).
     injectCore % "test->test"
   )
 
+lazy val petstore = (project in file("examples/finatra-petstore")).
+    settings(finatraBuildSettings: _*).
+    settings(
+      name := "finatra-petstore",
+      moduleName := "finatra-petstore",
+      publishLocal := {},
+      publish := {},
+      assemblyMergeStrategy in assembly := {
+        case "BUILD" => MergeStrategy.discard
+        case other => MergeStrategy.defaultMergeStrategy(other)
+      },
+      libraryDependencies ++= Seq(
+        "org.slf4j" % "slf4j-simple" % "1.7.7"
+      )
+    ).
+    dependsOn(
+      http,
+      http % "test->test",
+      slf4j,
+      injectCore % "test->test"
+    )
+
 lazy val twitterClone = (project in file("examples/finatra-twitter-clone")).
   settings(finatraBuildSettings: _*).
   settings(
