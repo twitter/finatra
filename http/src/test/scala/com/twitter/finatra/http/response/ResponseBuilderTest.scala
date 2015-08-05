@@ -88,6 +88,16 @@ class ResponseBuilderTest extends HttpTest with Mockito {
         responseBuilder.gone("foo"),
         Gone)
 
+      responseBuilder.preconditionFailed.status should equal(PreconditionFailed)
+      assertResponseWithFooBody(
+        responseBuilder.preconditionFailed("foo"),
+        PreconditionFailed)
+
+      responseBuilder.requestEntityTooLarge.status should equal(RequestEntityTooLarge)
+      assertResponseWithFooBody(
+        responseBuilder.requestEntityTooLarge("foo"),
+        RequestEntityTooLarge)
+
 
       assertResponseWithFooBody(
         responseBuilder.internalServerError("foo"),

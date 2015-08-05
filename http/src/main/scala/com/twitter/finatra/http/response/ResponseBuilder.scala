@@ -83,6 +83,14 @@ class ResponseBuilder @Inject()(
 
   def notFound(body: Any) = EnrichedResponse(Status.NotFound).body(body)
 
+  def preconditionFailed = EnrichedResponse(Status.PreconditionFailed)
+
+  def preconditionFailed(body: Any) = EnrichedResponse(Status.PreconditionFailed).body(body)
+
+  def requestEntityTooLarge = EnrichedResponse(Status.RequestEntityTooLarge)
+
+  def requestEntityTooLarge(body: Any) = EnrichedResponse(Status.RequestEntityTooLarge).body(body)
+
   def gone = EnrichedResponse(Status.Gone)
 
   def gone(body: Any) = EnrichedResponse(Status.Gone).body(body)
