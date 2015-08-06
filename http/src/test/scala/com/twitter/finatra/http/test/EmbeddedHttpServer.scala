@@ -184,6 +184,7 @@ class EmbeddedHttpServer(
     putBody: String,
     accept: MediaType = null,
     suppress: Boolean = false,
+    contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
     andExpect: HttpResponseStatus = null,
     withLocation: String = null,
