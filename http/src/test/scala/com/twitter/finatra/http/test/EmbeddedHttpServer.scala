@@ -184,6 +184,7 @@ class EmbeddedHttpServer(
     putBody: String,
     accept: MediaType = null,
     suppress: Boolean = false,
+    contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
     andExpect: HttpResponseStatus = null,
     withLocation: String = null,
@@ -197,6 +198,7 @@ class EmbeddedHttpServer(
     val request = createApiRequest(path, Method.Put)
     request.setContentString(putBody)
     request.headers().set(HttpHeaders.CONTENT_LENGTH, putBody.length)
+    request.headers.set(HttpHeaders.CONTENT_TYPE, contentType)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
@@ -216,7 +218,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): ResponseType = {
 
-    val response = httpPut(path, putBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    val response = httpPut(path, putBody, MediaType.JSON_UTF_8, suppress, Message.ContentTypeJson, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
     jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
