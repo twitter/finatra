@@ -31,6 +31,10 @@ class DoEverythingController @Inject()(
     response.ok.body("always response")
   }
 
+  get("/useragent") { request: UserAgentRequest =>
+    request.`user-agent`
+  }
+
   get("/example/routing/json/:id") { request: Request =>
     ExampleResponse(
       id = request.params("id"),

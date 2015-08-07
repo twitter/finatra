@@ -45,6 +45,13 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.contentString should equal("always response")
     }
 
+    "/useragent" in {
+      server.httpGet(
+        "/useragent",
+        headers = Map("User-Agent" -> "Firefox"),
+        withBody = "Firefox")
+    }
+
     "response should contain server/date headers" in {
       val response = server.httpGet("/example/routing/always")
       response.statusCode should equal(200)
