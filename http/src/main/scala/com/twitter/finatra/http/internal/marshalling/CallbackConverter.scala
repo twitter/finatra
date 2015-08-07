@@ -20,9 +20,9 @@ class CallbackConverter @Inject()(
 
   /* Public */
 
-  def convertToFutureResponse[RequestType: Manifest, ResponseType: Manifest, U](callback: RequestType => ResponseType): Request => Future[Response] = {
+  def convertToFutureResponse[RequestType: Manifest, ResponseType: Manifest](callback: RequestType => ResponseType): Request => Future[Response] = {
     val requestConvertedCallback: (Request => ResponseType) = createRequestCallback[RequestType, ResponseType](callback)
-    createResponseCallback[ResponseType, U](requestConvertedCallback)
+    createResponseCallback[ResponseType](requestConvertedCallback)
   }
 
   /* Private */
@@ -42,17 +42,17 @@ class CallbackConverter @Inject()(
     }
   }
 
-  private def createResponseCallback[ResponseType: Manifest, U](requestCallback: (Request) => ResponseType): (Request) => Future[Response] = {
+  private def createResponseCallback[ResponseType: Manifest](requestCallback: (Request) => ResponseType): (Request) => Future[Response] = {
     if (isFutureResponse[ResponseType]) {
       requestCallback.asInstanceOf[(Request => Future[Response])]
     }
     else if (isFutureOption[ResponseType]) {
       request: Request =>
-        requestCallback(request).asInstanceOf[Future[Option[U]]] map optionToHttpResponse
+        requestCallback(request).asInstanceOf[Future[Option[_]]] map optionToHttpResponse
     }
     else if (isAsyncStream[ResponseType]) {
       request: Request =>
-        val asyncStream = requestCallback(request).asInstanceOf[AsyncStream[U]]
+        val asyncStream = requestCallback(request).asInstanceOf[AsyncStream[_]]
 
         val streamingResponse = StreamingResponse.jsonArray(
           toBuf = mapper.writeValueAsBuf,
@@ -62,7 +62,7 @@ class CallbackConverter @Inject()(
     }
     else if (isFuture[ResponseType]) {
       request: Request =>
-        requestCallback(request).asInstanceOf[Future[U]] map createHttpResponse
+        requestCallback(request).asInstanceOf[Future[_]] map createHttpResponse
     }
     else if (isStreamingResponse[ResponseType]) {
       request: Request =>
