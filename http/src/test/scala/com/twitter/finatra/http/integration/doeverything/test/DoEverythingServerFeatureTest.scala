@@ -736,6 +736,20 @@ class DoEverythingServerFeatureTest extends FeatureTest {
           """.stripMargin
       )
     }
+
+    "Apply route filter" in {
+      server.httpGet(
+        "/forbiddenByFilter",
+        andExpect = Forbidden)
+    }
+
+    "Apply multiple route filters" in {
+      server.httpGet(
+        "/multipleRouteFilters",
+        andExpect = Ok,
+        withBody = "abc"
+      )
+    }
   }
 
   "HttpResponseException" in {

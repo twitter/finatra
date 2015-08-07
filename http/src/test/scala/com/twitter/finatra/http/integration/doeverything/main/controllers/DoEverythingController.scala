@@ -6,6 +6,7 @@ import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.integration.doeverything.main.domain._
+import com.twitter.finatra.http.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter}
 import com.twitter.finatra.http.integration.doeverything.main.exceptions._
 import com.twitter.finatra.http.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.http.request.RequestUtils
@@ -448,5 +449,17 @@ class DoEverythingController @Inject()(
 
   put("/multipartParamsPutEcho") { r: Request =>
     RequestUtils.multiParams(r).keys
+  }
+
+  filter[ForbiddenFilter].get("/forbiddenByFilter") { r: Request =>
+    "ok!"
+  }
+
+  filter(new AppendToHeaderFilter("test", "a")).
+    filter(new AppendToHeaderFilter("test", "b")).
+    filter(new AppendToHeaderFilter("test", "c")).
+    get("/multipleRouteFilters") { r: Request =>
+
+    r.headerMap("test")
   }
 }
