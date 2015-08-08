@@ -13,12 +13,12 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
   callback: RequestType => ResponseType,
   routeDsl: RouteDSL) {
 
-  def build(callbackConverter: CallbackConverter, injector: Injector, annotations: Array[Annotation]) = Route(
+  def build(callbackConverter: CallbackConverter, injector: Injector) = Route(
     name,
     method,
     route,
     callbackConverter.convertToFutureResponse(callback),
-    annotations,
+    routeDsl.annotations,
     manifest[RequestType].runtimeClass,
     manifest[ResponseType].runtimeClass,
     routeDsl.buildFilter(injector))

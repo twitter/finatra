@@ -5,7 +5,7 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.internal.exceptions.ExceptionManager
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
+import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
 import com.twitter.finatra.http.internal.routing.{Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
 import com.twitter.inject.{Injector, Logging}
@@ -19,6 +19,7 @@ object HttpRouter {
 @Singleton
 class HttpRouter @Inject()(
   injector: Injector,
+  callbackConverter: CallbackConverter,
   messageBodyManager: MessageBodyManager,
   exceptionManager: ExceptionManager)
   extends Logging {
@@ -130,14 +131,18 @@ class HttpRouter @Inject()(
   }
 
   private def addInjected(controller: Controller) = {
-    routes ++= controller.routes
+    routes ++= buildRoutes(controller)
     this
   }
 
   private def addInjected(filter: HttpFilter, controller: Controller) = {
-    val routesWithFilter = controller.routes map {_.withFilter(filter)}
+    val routesWithFilter = buildRoutes(controller) map { _.withFilter(filter) }
     routes ++= routesWithFilter
     this
+  }
+
+  private def buildRoutes(controller: Controller): Seq[Route] = {
+    controller.routeBuilders.map { _.build(callbackConverter, injector) }
   }
 
   private[finatra] def partitionRoutesByType(): RoutesByType = {

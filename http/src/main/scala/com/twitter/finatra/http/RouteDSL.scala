@@ -10,12 +10,14 @@ private[http] trait RouteDSL { self =>
 
   private type HttpFilter = Filter[Request, Response, Request, Response]
 
-  protected val routeBuilders = ArrayBuffer[RouteBuilder[_, _]]()
+  private[http] val routeBuilders = ArrayBuffer[RouteBuilder[_, _]]()
+  private[http] val annotations = getClass.getDeclaredAnnotations
 
   private[http] def buildFilter(injector: Injector): HttpFilter = Filter.identity
 
   protected def filter[FilterType <: HttpFilter : Manifest] = new RouteDSL {
     override val routeBuilders = self.routeBuilders
+    override val annotations = self.annotations
     override def buildFilter(injector: Injector) = self.buildFilter(injector).andThen(injector.instance[FilterType])
   }
 
