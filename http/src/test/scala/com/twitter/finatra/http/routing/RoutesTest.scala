@@ -25,17 +25,6 @@ class RoutesTest extends Test with OptionValues {
       Request("/foo")) should be('empty)
   }
 
-  "constant route with optional trailing slash" in {
-    val routes = Routes.createForMethod(
-      Seq(createRoute(GET, "/groups/?")), GET)
-
-    routes.handle(
-      Request("/groups/")) should be('defined)
-
-    routes.handle(
-      Request("/groups")) should be('defined)
-  }
-
   "path pattern route" in {
     val routes = Routes.createForMethod(
       Seq(createRoute(GET, "/groups/:id")), GET)
@@ -45,17 +34,6 @@ class RoutesTest extends Test with OptionValues {
 
     routes.handle(
       Request("/groups/")) should be('empty)
-  }
-
-  "path pattern route with optional trailing slash" in {
-    val routes = Routes.createForMethod(
-      Seq(createRoute(GET, "/groups/:id/foo/?")), GET)
-
-    routes.handle(
-      Request("/groups/1/foo/")) should be('defined)
-
-    routes.handle(
-      Request("/groups/1/foo")) should be('defined)
   }
 
   "route info" in {

@@ -17,7 +17,7 @@ import javax.inject.{Inject, Provider}
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
-/* ==================================================== */
+//TODO: Rename class and file
 class RequestScopeIntegrationTest extends HttpTest {
 
   val server = new EmbeddedHttpServer(

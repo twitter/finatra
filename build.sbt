@@ -2,6 +2,7 @@ import UnidocKeys._
 import com.twitter.scrooge.ScroogeSBT
 import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedFiles
 import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages
+import sbt.Keys._
 
 
 lazy val buildSettings = Seq(
@@ -29,7 +30,7 @@ lazy val compilerOptions = scalacOptions ++= Seq(
 
 val baseSettings = Seq(
   libraryDependencies ++= Seq(
-    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test",
+    "ch.qos.logback" % "logback-classic" % versions.logback % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
     "org.scalatest" %% "scalatest" % "2.2.3" % "test",
     "org.specs2" %% "specs2" % "2.3.12" % "test" exclude("org.scala-lang", "scala-compiler")
@@ -104,7 +105,7 @@ lazy val versions = new {
   val servletApi = "2.5"
   val scrooge = "3.20.0"
   val slf4j = "1.7.7"
-  val twitterServer = "1.11.0"
+  val twitterServer = "1.12.0"
   val util = "6.26.0"
 }
 
@@ -139,7 +140,8 @@ lazy val root = (project in file(".")).
     slf4j,
     benchmarks,
     helloWorld,
-    twitterClone
+    twitterClone,
+    benchmarkServer
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -374,7 +376,7 @@ lazy val helloWorld = (project in file("examples/finatra-hello-world")).
       case other => MergeStrategy.defaultMergeStrategy(other)
     },
     libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-simple" % "1.7.7"
+      "ch.qos.logback" % "logback-classic" % versions.logback
     )
   ).
   dependsOn(
@@ -389,6 +391,29 @@ lazy val twitterClone = (project in file("examples/finatra-twitter-clone")).
   settings(
     name := "finatra-twitter-clone",
     moduleName := "finatra-twitter-clone",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % versions.logback
+    )
+  ).
+  dependsOn(
+    http,
+    http % "test->test",
+    httpclient,
+    slf4j,
+    injectCore % "test->test"
+  )
+
+lazy val benchmarkServer = (project in file("examples/finatra-benchmark-server")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-benchmark-server",
+    moduleName := "finatra-benchmark-server",
     publishLocal := {},
     publish := {},
     assemblyMergeStrategy in assembly := {

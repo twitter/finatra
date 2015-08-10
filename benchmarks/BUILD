@@ -6,3 +6,8 @@ target(name='benchmarks',
   ]
 )
 
+target(name='tests',
+  dependencies=[
+    'finatra/benchmarks/src/test/scala'
+  ]
+)

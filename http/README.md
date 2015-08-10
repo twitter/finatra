@@ -103,13 +103,7 @@ get("/admin/finatra/users/") { request: Request =>
 ```
 
 ### Regular Expressions
-The following will optionally match a trailing slash (e.g. /users or /users/)
-```scala
-get("/users/?") { request: Request =>
-  ...
-}
-```
-*Note: You cannot mix named path params with regular expression capture groups. If you require regular expression groups, make sure they are non-capturing e.g. (?:...)*
+Regular expressions are no longer allowed in string defined paths. Note: We are planning to support regular expression based paths in a future release.
 
 ## Requests
 Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types:

@@ -46,8 +46,16 @@ class TweetsController @Inject()(
     Future(response)
   }
 
+  get("/tweets/") { request: Request =>
+    "tweets root"
+  }
+
   get("/tweets/:id") { request: Request =>
     val id = request.params("id").toLong
     tweetsRepository.getById(id)
+  }
+
+  get("/tweets/test/:id/") { request: Request =>
+    request.params("id")
   }
 }

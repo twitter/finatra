@@ -13,22 +13,37 @@ class RoutingServiceBenchmark {
     Future.value(Response())
   }
 
-  val route = Route(
-    name = "groups",
+  val routes = Seq(
+    route("/groups/"),
+    route("/groups/:id"),
+    route("/tasks/"),
+    route("/tasks/:id"),
+    route("/foo/"),
+    route("/foo/:id"),
+    route("/users/"),
+    route("/users/:id"))
+
+  val routingService = new RoutingService(routes)
+
+  val getRequest1 = Request("/users/")
+  val getRequest2 = Request("/users/123")
+
+  @Benchmark
+  def timeOldLastConstant() = {
+    routingService.apply(getRequest1)
+  }
+
+  @Benchmark
+  def timeOldLastNonConstant() = {
+    routingService.apply(getRequest2)
+  }
+
+  def route(path: String) = Route(
+    name = path,
     method = HttpMethod.GET,
-    path = "/groups/",
+    path = path,
     callback = defaultCallback,
     annotations = Seq(),
     requestClass = classOf[Request],
     responseClass = classOf[Response])
-
-  val routingService = new RoutingService(
-    routes = Seq(route))
-
-  val getRequest = Request("/groups/")
-
-  @Benchmark
-  def testRoutingController() = {
-    routingService.apply(getRequest)
-  }
 }

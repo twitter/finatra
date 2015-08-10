@@ -10,13 +10,13 @@ import com.twitter.util.{Await, Future, FuturePool}
 class TweetsControllerIntegrationTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(
-    new TweetsEndpointServer)
+    new TweetsEndpointServer,
+    defaultRequestHeaders = Map("X-UserId" -> "123"))
 
   "get tweet 1" in {
     val tweet =
       server.httpGetJson[Map[String, Long]](
         "/tweets/1",
-        headers = Map("X-UserId" -> "123"),
         andExpect = Status.Ok)
 
     tweet("idonly") should equal(1) //confirm response was transformed by registered TweetMessageBodyWriter
@@ -31,7 +31,6 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "username": "bob",
         "tweet_msg": "hello"
       }""",
-      headers = Map("X-UserId" -> "123"),
       andExpect = Status.Ok,
       withBody = "tweet with id 5 is valid")
   }
@@ -44,7 +43,6 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "custom_id": 5,
         "tweet_msg": "hello"
       }""",
-      headers = Map("X-UserId" -> "123"),
       andExpect = Status.BadRequest,
       withErrors = Seq("username: field is required"))
   }
@@ -58,7 +56,6 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "username": "foo",
         "tweet_msg": "hello"
       }""",
-      headers = Map("X-UserId" -> "123"),
       andExpect = Status.BadRequest,
       withErrors = Seq("custom_id: [0] is not greater than or equal to 1"))
   }
@@ -72,7 +69,6 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "username": "foo",
         "tweet_msg": "hello"
       }""",
-      headers = Map("X-UserId" -> "123"),
       andExpect = Status.BadRequest,
       withErrors = Seq("username cannot be foo"))
   }
@@ -80,7 +76,6 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   "get streaming json" in {
     server.httpGet(
       "/tweets/streaming_json",
-      headers = Map("X-UserId" -> "123"),
       andExpect = Status.Ok,
       withJsonBody =
         """
@@ -107,15 +102,13 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   "get streaming custom toBuf" in {
     server.httpGet(
       "/tweets/streaming_custom_tobuf",
-      headers = Map("X-UserId" -> "123"),
       andExpect = Status.Ok,
       withBody = "ABC")
   }
 
   "get streaming manual writes" in {
     server.httpGet(
-        "/tweets/streaming_manual_writes",
-      headers = Map("X-UserId" -> "123"),
+      "/tweets/streaming_manual_writes",
       andExpect = Status.Ok,
       withBody = "helloworld")
   }
@@ -170,7 +163,6 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   def sayHello() = {
     server.httpGet(
       "/tweets/hello",
-      headers = Map("X-UserId" -> "123"),
       andExpect = Status.Ok,
       withBody = "hello world",
       suppress = true)

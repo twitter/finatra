@@ -6,6 +6,7 @@ class RoutingServiceBenchmarkTest extends Test {
 
   "test" in {
     val benchmark = new RoutingServiceBenchmark()
-    benchmark.testRoutingController()
+    benchmark.timeOldLastConstant()
+    benchmark.timeOldLastNonConstant()
   }
 }

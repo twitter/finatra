@@ -14,8 +14,8 @@ class PathPatternTest extends Test {
       PathPattern("/cars/").extract("/cars") should equal(None)
       PathPattern("/cars/").extract("/cars/") should equal(Some(Map()))
 
-      PathPattern("/cars/?").extract("/cars") should equal(Some(Map()))
-      PathPattern("/cars/?").extract("/cars/") should equal(Some(Map()))
+      PathPattern("/cars/?").extract("/cars") should equal(None)
+      PathPattern("/cars/?").extract("/cars/") should equal(None)
 
       PathPattern("/cars:*").extract("/cars") should equal(Some(Map("*" -> "")))
       PathPattern("/cars:*").extract("/cars/") should equal(Some(Map("*" -> "/")))
@@ -34,18 +34,16 @@ class PathPatternTest extends Test {
       PathPattern("/cars/:make/:model").extract("/cars/ford") should equal(None)
 
       PathPattern("/store/cars/:make/:model").extract("/store/cars/ford/explorer") should equal(Some(Map("make" -> "ford", "model" -> "explorer")))
-      PathPattern("/cars/:make/:model/.*").extract("/cars/ford/explorer/foo/bar") should equal(Some(Map("make" -> "ford", "model" -> "explorer")))
+      PathPattern("/cars/:make/:model/:*").extract("/cars/ford/explorer/foo/bar") should equal(Some(Map("make" -> "ford", "model" -> "explorer", "*" -> "foo/bar")))
     }
 
     "non capture group syntax" in {
-      PathPattern("/(?:cars|boats)/:id").extract("/cars/123") should equal(Some(Map("id" -> "123")))
-      PathPattern("/(?:cars|boats)/:id").extract("/boats/123") should equal(Some(Map("id" -> "123")))
+      PathPattern("/(?:cars|boats)/:id").extract("/cars/123") should equal(None)
+      PathPattern("/(?:cars|boats)/:id").extract("/boats/123") should equal(None)
     }
 
-    "capture group syntax is an assertion error" in {
-      intercept[AssertionError] {
-        PathPattern("/(cars|boats)/:id")
-      }
+    "capture group syntax is escaped and ignored" in {
+      PathPattern("/(cars|boats)/:id").extract("/boats/123") should equal(None)
     }
 
     "routes w/ special '*' token" in {
@@ -56,6 +54,10 @@ class PathPatternTest extends Test {
       PathPattern("/ui/:*").extract("/ui/") should equal(Some(Map("*" -> "")))
       PathPattern("/ui/:*").extract("/ui/abc") should equal(Some(Map("*" -> "abc")))
       PathPattern("/ui/:*").extract("/ui/abc/123") should equal(Some(Map("*" -> "abc/123")))
+    }
+
+    "constant" in {
+      PathPattern("/cars/ford/explorer").extract("/cars/ford/explorer") should equal(Some(Map()))
     }
 
     "unicode" in {

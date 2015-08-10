@@ -18,17 +18,23 @@ case class Route(
   annotations: Seq[Annotation] = Seq(),
   requestClass: Class[_],
   responseClass: Class[_],
-  filter: Filter[Request, Response, Request, Response] = Filter.identity) {
+  filter: Filter[Request, Response, Request, Response] = null) {
 
-  private val pattern = PathPattern(path)
-  private val service = Service.mk[Request, Response](callback)
-  private val routeInfo = RouteInfo(name, path)
+  private[this] val pattern = PathPattern(path)
+  private[this] val routeInfo = RouteInfo(name, path)
+
+  private[this] val filteredCallback: Request => Future[Response] = {
+    if (filter != null)
+      filter andThen Service.mk[Request, Response](callback)
+    else
+      callback
+  }
 
   /* Public */
 
-  def captureNames: Seq[String] = pattern.captureNames
+  def captureNames = pattern.captureNames
 
-  def hasEmptyCaptureNames = captureNames.isEmpty
+  def constantRoute = captureNames.isEmpty
 
   def summary: String = f"$method%-7s $path"
 
@@ -38,23 +44,27 @@ case class Route(
 
   // Note: incomingPath is an optimization to avoid calling incomingRequest.path for every potential route
   def handle(incomingRequest: Request, incomingPath: String): Option[Future[Response]] = {
-    if (incomingRequest.method != method) {
+    val pathParamsOpt = pattern.extract(incomingPath)
+    if (pathParamsOpt.isEmpty) {
       None
     }
     else {
-      for {
-        pathParams <- pattern.extract(incomingPath)
-        request = createRequest(incomingRequest, pathParams)
-      } yield {
-        RouteInfo.set(request, routeInfo)
-        filter(request, service)
-      }
+      handleMatch(
+        createRequest(
+          incomingRequest,
+          pathParamsOpt.get))
     }
+  }
+
+  def handleMatch(request: Request): Some[Future[Response]] = {
+    RouteInfo.set(request, routeInfo)
+    Some(
+      filteredCallback(request))
   }
 
   /* Private */
 
-  private def createRequest(request: Request, pathParams: Map[String, String]) = {
+  private[this] def createRequest(request: Request, pathParams: Map[String, String]) = {
     if (pathParams.isEmpty)
       request
     else

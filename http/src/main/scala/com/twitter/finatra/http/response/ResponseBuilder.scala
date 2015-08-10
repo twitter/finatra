@@ -35,6 +35,8 @@ class ResponseBuilder @Inject()(
 
   def ok(body: Any): EnrichedResponse = EnrichedResponse(Status.Ok).body(body)
 
+  def ok(body: String): EnrichedResponse = EnrichedResponse(Status.Ok).body(body)
+
   def noContent: EnrichedResponse = EnrichedResponse(Status.NoContent)
 
   def notAcceptable: EnrichedResponse = EnrichedResponse(Status.NotAcceptable)
