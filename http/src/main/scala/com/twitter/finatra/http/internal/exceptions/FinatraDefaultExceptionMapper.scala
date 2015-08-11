@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.internal.exceptions
 
+import com.google.common.net.MediaType
 import com.twitter.finagle.CancelledRequestException
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.exceptions.ExternalServiceExceptionMatcher
@@ -17,7 +18,11 @@ class FinatraDefaultExceptionMapper @Inject()(
   override def toResponse(request: Request, throwable: Throwable): Response = {
     throwable match {
       case e: HttpException =>
-        e.createResponse(response)
+        val builder = response.status(e.statusCode)
+        if (e.mediaType.is(MediaType.JSON_UTF_8))
+          builder.json(ErrorsResponse(e.errors))
+        else
+          builder.plain(e.errors.mkString(", "))
       case e: HttpResponseException =>
         e.response
       case e: CancelledRequestException =>

@@ -33,14 +33,6 @@ class HttpException(
     "HttpException(" + statusCode + ":" + mediaType + ") with errors: " + errors.mkString(",")
   }
 
-  def createResponse(response: ResponseBuilder): Response = {
-    val builder = response.status(statusCode)
-    if (mediaType.is(MediaType.JSON_UTF_8))
-      builder.json(ErrorsResponse(errors))
-    else
-      builder.plain(errors.mkString(", "))
-  }
-
   /* Generated Equals/Hashcode */
 
   override def equals(other: Any): Boolean = other match {
