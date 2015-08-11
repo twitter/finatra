@@ -2,10 +2,9 @@ package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.concurrent.exp.AsyncStream
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.bindings.CallbackConverterPool
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.util.{Future, FuturePool}
+import com.twitter.util.Future
 import javax.inject.Inject
 
 /*
@@ -13,7 +12,6 @@ import javax.inject.Inject
  * with 2.10 reflection methods. See http://docs.scala-lang.org/overviews/reflection/thread-safety.html
  */
 class CallbackConverter @Inject()(
-  @CallbackConverterPool pool: FuturePool,
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
   mapper: FinatraObjectMapper) {
@@ -70,23 +68,18 @@ class CallbackConverter @Inject()(
     }
     else if (isResponse[ResponseType]) {
       request: Request =>
-        pool {
-          requestCallback(request).asInstanceOf[Response]
-        }
+        Future(
+          requestCallback(request).asInstanceOf[Response])
     }
     else if (isOption[ResponseType]) {
       request: Request =>
-        pool {
-          optionToHttpResponse(
-            requestCallback(request).asInstanceOf[Option[_]])
-        }
+        Future(
+          optionToHttpResponse(requestCallback(request).asInstanceOf[Option[_]]))
     }
     else {
       request: Request =>
-        pool {
-          createHttpResponse(
-            requestCallback(request))
-        }
+        Future(
+          createHttpResponse(requestCallback(request)))
     }
   }
 

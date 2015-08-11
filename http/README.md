@@ -290,17 +290,22 @@ Or to obtain the request full path URL as follows:
 	```
 
 ### <a name="future-conversion">Future Conversion</a>
-Callbacks that do not return a Future will have their return values converted into a future by running the callback in a framework future pool. If you wish to have greater control into the future pool's threading strategy, override the following:
+Callbacks that do not return a Future will have their return values wrapped in a [ConstFuture](https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture). If your non-future result calls a blocking method, you must [avoid blocking the Finagle request](https://twitter.github.io/scala_school/finagle.html#DontBlock) by wrapping your blocking operation in a FuturePool e.g.
+
 ```scala
-class Server extends HttpServer {
-  override def callbackModule = CustomCallbackModule
-  ...
+import com.twitter.finatra.utils.FuturePools
+
+class MyController extends Controller {
+
+  private val futurePool = FuturePools.unboundedPool("CallbackConverter")
+  
+  get("/") { request: Request =>
+    futurePool {
+      blockingCall()
+    }
+  }
 }
 ```
-
-See [CallbackConverterModule][CallbackConverterModule] for details.
-
-*Note: For processes requiring blocking or long running CPU computations, consider creating specific future pools inside your application, and then directly returning a future from your route callbacks.*
 
 Server and Router
 ======================================================
