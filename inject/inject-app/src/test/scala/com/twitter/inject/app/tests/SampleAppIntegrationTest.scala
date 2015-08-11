@@ -1,9 +1,9 @@
 package com.twitter.inject.app.tests
 
-import com.twitter.inject.app.{EmbeddedApp, IntegrationTest}
+import com.twitter.inject.app.{EmbeddedApp, FeatureTest}
 import com.twitter.util.Await
 
-class SampleAppIntegrationTest extends IntegrationTest {
+class SampleAppIntegrationTest extends FeatureTest {
 
   override val app =
     new EmbeddedApp(

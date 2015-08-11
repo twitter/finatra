@@ -14,9 +14,7 @@ import finatra.quickstart.services.IdService
 class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
   override val server = new EmbeddedHttpServer(
-    twitterServer = new TwitterCloneServer {
-      override val overrideModules = Seq(integrationTestModule)
-    })
+    twitterServer = new TwitterCloneServer)
 
   @Bind val firebaseClient = smartMock[FirebaseClient]
 

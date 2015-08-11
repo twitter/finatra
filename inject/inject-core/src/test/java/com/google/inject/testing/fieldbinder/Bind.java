@@ -1,4 +1,6 @@
-// Copied from Guice 4.0 Beta 4
+// Copied from Guice 4.0
+// https://github.com/google/guice/blob/4.0/extensions/testlib/
+// src/com/google/inject/testing/fieldbinder/Bind.java
 
 /*
  * Copyright (C) 2014 Google Inc.
@@ -32,11 +34,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @author eatnumber1@google.com (Russ Harmon)
  */
 @Retention(RUNTIME)
-@Target({FIELD})
+@Target(FIELD)
 public @interface Bind {
   /**
    * If specified, {@link BoundFieldModule} will bind the annotated field's value to this type,
    * rather than to the field's actual type.
    */
   Class<?> to() default Bind.class;
+
+  /**
+   * If true, {@link BoundFieldModule} will delay retrieving the field's value until injection time
+   * rather than eagerly fetching it at configure time.
+   *
+   * <p>This option is not supported with Provider valued fields.
+   */
+  boolean lazy() default false;
 }

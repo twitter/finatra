@@ -30,8 +30,5 @@ scala_library(name="test-deps",
   ],
   sources=globs(
     'com/twitter/inject/app/*.scala',
-  ),
-  java_sources=[
-    'finatra/inject/inject-app/src/test/java'
-  ]
+  )
 )

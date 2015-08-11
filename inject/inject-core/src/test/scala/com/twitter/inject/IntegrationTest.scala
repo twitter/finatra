@@ -1,28 +1,24 @@
-package com.twitter.inject.app
+package com.twitter.inject
 
+import com.google.inject.Module
 import com.google.inject.testing.fieldbinder.{Bind, BoundFieldModule}
-import com.twitter.inject.Test
 import java.lang.reflect.Field
-import org.mockito.Mockito
 import org.mockito.internal.util.MockUtil
 
-/** See https://github.com/google/guice/wiki/BoundFields */
 trait IntegrationTest extends Test {
 
   /* Protected */
 
-  protected def app: EmbeddedApp
+  protected def injector: Injector
 
   protected val resetBindings = true
 
-  protected val integrationTestModule = BoundFieldModule.of(this)
+  /** See https://github.com/google/guice/wiki/BoundFields */
+  protected val integrationTestModule: Module = BoundFieldModule.of(this)
 
   override protected def beforeAll() {
     super.beforeAll()
-
-    assert(app.isGuiceApp)
-    app.start()
-    app.injector.underlying.injectMembers(this)
+    injector.underlying.injectMembers(this)
   }
 
   override protected def afterEach() {
@@ -30,7 +26,7 @@ trait IntegrationTest extends Test {
 
     if (resetBindings) {
       for (mockObject <- mockObjects) {
-        Mockito.reset(mockObject)
+        org.mockito.Mockito.reset(mockObject)
       }
 
       for (resettable <- resettableObjects) {

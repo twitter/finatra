@@ -1,9 +1,9 @@
 package com.twitter.inject.server
 
-import com.twitter.inject.app.{EmbeddedApp, IntegrationTest}
+import com.twitter.inject.app.EmbeddedApp
 import com.twitter.util.{Await, Future}
 
-trait FeatureTest extends IntegrationTest {
+trait FeatureTest extends com.twitter.inject.app.FeatureTest {
 
   def printStats = true
 

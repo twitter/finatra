@@ -33,5 +33,8 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/inject/*.scala',
     'org/specs2/matcher/ScalaTestExpectations.scala',
-  )
+  ),
+  java_sources=[
+    'finatra/inject/inject-core/src/test/java'
+  ]
 )
