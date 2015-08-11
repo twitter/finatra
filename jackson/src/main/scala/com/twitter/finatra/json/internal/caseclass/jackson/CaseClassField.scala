@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException
+import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 import com.twitter.finatra.json.internal.caseclass.reflection.DefaultMethodUtils.defaultFunction
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
@@ -68,7 +69,7 @@ case class CaseClassField(
   private val isString = javaType.getRawClass == classOf[String]
   private val fieldInjection = new FieldInjection(name, javaType, parentClass, annotations)
   private lazy val firstTypeParam = javaType.containedType(0)
-  private lazy val requiredFieldException = CaseClassValidationException(Seq(name), Invalid("field is required", ErrorCode.RequiredFieldMissing))
+  private lazy val requiredFieldException = CaseClassValidationException(PropertyPath.leaf(name), Invalid("field is required", ErrorCode.RequiredFieldMissing))
 
   /* Public */
 

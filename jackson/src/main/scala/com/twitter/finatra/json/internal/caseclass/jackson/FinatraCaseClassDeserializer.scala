@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.json.internal.caseclass.exceptions._
+import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.finatra.response.JsonCamelCase
@@ -158,7 +159,7 @@ class FinatraCaseClassDeserializer(
   // TODO don't leak class name details in error message
   private def invalidFormatJsonFieldParseError(field: CaseClassField, e: InvalidFormatException): CaseClassValidationException = {
     CaseClassValidationException(
-      Seq(field.name),
+      PropertyPath.leaf(field.name),
       Invalid(
         s"'${e.getValue}' is not a valid ${e.getTargetType.getSimpleName}${validValuesString(e)}",
         ErrorCode.JsonProcessingError(e)))
@@ -166,7 +167,7 @@ class FinatraCaseClassDeserializer(
 
   private def jsonProcessingJsonFieldParseError(field: CaseClassField, e: JsonProcessingException): CaseClassValidationException = {
     CaseClassValidationException(
-      Seq(field.name),
+      PropertyPath.leaf(field.name),
       Invalid(
         JacksonUtils.errorMessage(e),
         ErrorCode.JsonProcessingError(e)))
@@ -207,14 +208,14 @@ class FinatraCaseClassDeserializer(
     for {
       invalid@Invalid(_, _) <- validationManager.validateField(value, field.validationAnnotations)
     } yield {
-      CaseClassValidationException(Seq(field.name),  invalid)
+      CaseClassValidationException(PropertyPath.leaf(field.name),  invalid)
     }
   }
 
   private def executeMethodValidations(fieldErrors: Seq[CaseClassValidationException], obj: Any) {
     val methodValidationErrors = for {
       invalid@Invalid(_, _) <- validationManager.validateObject(obj)
-    } yield CaseClassValidationException(Seq.empty, invalid)
+    } yield CaseClassValidationException(PropertyPath.empty, invalid)
 
     if (methodValidationErrors.nonEmpty) {
       throw new CaseClassMappingException(fieldErrors ++ methodValidationErrors)

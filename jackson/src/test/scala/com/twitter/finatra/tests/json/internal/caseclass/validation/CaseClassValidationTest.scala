@@ -2,6 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation
 
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassValidationException, CaseClassMappingException}
+import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MinValidator
 import com.twitter.finatra.tests.json.internal.CarMake
 import com.twitter.finatra.tests.json.internal.caseclass.validation.domain.{Address, Car, Person}
@@ -38,7 +39,7 @@ class CaseClassValidationTest extends Test {
       }
 
       parseError should equal(CaseClassMappingException(
-        Seq(CaseClassValidationException(Seq("year"), Invalid("[1910] is not greater than or equal to 2000", MinValidator.MinValueNotObtained(2000, 1910))))))
+        Seq(CaseClassValidationException(PropertyPath.leaf("year"), Invalid("[1910] is not greater than or equal to 2000", MinValidator.MinValueNotObtained(2000, 1910))))))
     }
 
     "nested failed validations" in {
@@ -59,8 +60,8 @@ class CaseClassValidationTest extends Test {
 
       parseError should equal(CaseClassMappingException(
         Seq(
-          CaseClassValidationException(Seq("owners", "address", "street"), Invalid("cannot be empty")),
-          CaseClassValidationException(Seq("owners", "address", "city"), Invalid("cannot be empty")))))
+          CaseClassValidationException(PropertyPath.leaf("street").withParent("address").withParent("owners"), Invalid("cannot be empty")),
+          CaseClassValidationException(PropertyPath.leaf("city").withParent("address").withParent("owners"), Invalid("cannot be empty")))))
     }
 
     "nested method validations" in {
@@ -80,7 +81,7 @@ class CaseClassValidationTest extends Test {
 
       parseError should equal(CaseClassMappingException(
         Seq(
-          CaseClassValidationException(Seq("owners", "address"), Invalid("state must be one of [CA, MD, WI]")))))
+          CaseClassValidationException(PropertyPath.leaf("address").withParent("owners"), Invalid("state must be one of [CA, MD, WI]")))))
 
       parseError.errors.map(_.getMessage) should equal(Seq("owners.address: state must be one of [CA, MD, WI]"))
     }
@@ -94,7 +95,7 @@ class CaseClassValidationTest extends Test {
         CaseClassMappingException(
           Seq(
             CaseClassValidationException(
-              Seq.empty,
+              PropertyPath.empty,
               Invalid("ownershipEnd [2015-04-09T05:17:15.000Z] must be after ownershipStart [2015-04-09T05:18:15.000Z]")))))
     }
 
@@ -107,7 +108,7 @@ class CaseClassValidationTest extends Test {
         CaseClassMappingException(
           Seq(
             CaseClassValidationException(
-              Seq.empty,
+              PropertyPath.empty,
               Invalid("warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]")))))
     }
   }
