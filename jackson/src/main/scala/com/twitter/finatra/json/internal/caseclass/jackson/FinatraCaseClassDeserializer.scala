@@ -113,7 +113,7 @@ class FinatraCaseClassDeserializer(
 
     for (field <- caseClassFields) {
       try {
-        val value = field.parse(context, jp, jsonNode)
+        val value = field.parse(context, jp.getCodec, jsonNode)
         addConstructorValue(value)
 
         if (field.validationAnnotations.nonEmpty) {

@@ -37,8 +37,7 @@ object CaseClassField {
         parentClass = clazz,
         defaultFuncOpt = defaultFunction(clazz, idx),
         annotations = annotations,
-        deserializer = deserializer
-      )
+        deserializer = deserializer)
     }
   }
 
@@ -58,12 +57,9 @@ object CaseClassField {
     }
   }
 
-  private def deserializerOrNone(annotations: Array[Annotation]): Option[JsonDeserializer[_ <: Object]] = {
-    findAnnotation[JsonDeserialize](annotations) match {
-      case Some(jsonDeserializer) => {
-        Some(ClassUtil.createInstance(jsonDeserializer.using, false).asInstanceOf[JsonDeserializer[_ <: Object]])
-      }
-      case _ => None
+  private def deserializerOrNone(annotations: Array[Annotation]): Option[JsonDeserializer[Object]] = {
+    findAnnotation[JsonDeserialize](annotations) map { jsonDeserializer =>
+        ClassUtil.createInstance(jsonDeserializer.using, false).asInstanceOf[JsonDeserializer[Object]]
     }
   }
 }
@@ -74,7 +70,7 @@ case class CaseClassField(
   parentClass: Class[_],
   defaultFuncOpt: Option[() => Object],
   annotations: Seq[Annotation],
-  deserializer: Option[JsonDeserializer[_ <: Object]])
+  deserializer: Option[JsonDeserializer[Object]])
   extends Logging {
 
   private val isOption = javaType.getRawClass == classOf[Option[_]]
@@ -102,49 +98,49 @@ case class CaseClassField(
    * NOTE: Option fields default to None even if no default is specified
    *
    * @param context DeserializationContext for deserialization
-   * @param jp JsonParser for field
+   * @param codec Codec for field
    * @param objectJsonNode The JSON object
    * @return The parsed object for this field
    * @throws JsonFieldParseException with reason for the parsing error
    */
-  def parse(context: DeserializationContext, jp: JsonParser, objectJsonNode: JsonNode): Object = {
-    val codec = jp.getCodec
+  def parse(context: DeserializationContext, codec: ObjectCodec, objectJsonNode: JsonNode): Object = {
     if (fieldInjection.isInjectable)
       fieldInjection.inject(context, codec) orElse defaultValue getOrElse throwRequiredFieldException()
     else {
       val fieldJsonNode = objectJsonNode.get(name)
-      if (deserializer.isDefined) {
-        deserializer.get.deserialize(new TreeTraversingParser(fieldJsonNode, codec), context)
-      } else {
-        if (fieldJsonNode != null)
-          if (isOption)
-            Option(
-              parseFieldValue(codec, fieldJsonNode, firstTypeParam))
-          else
-            assertNotNull(
-              fieldJsonNode,
-              parseFieldValue(codec, fieldJsonNode, javaType))
-        else if (defaultFuncOpt.isDefined)
-          defaultFuncOpt.get.apply()
-        else if (isOption)
-          None
+      if (fieldJsonNode != null)
+        if (isOption)
+          Option(
+            parseFieldValue(codec, fieldJsonNode, firstTypeParam, context))
         else
-          throwRequiredFieldException()
-      }
+          assertNotNull(
+            fieldJsonNode,
+            parseFieldValue(codec, fieldJsonNode, javaType, context))
+      else if (defaultFuncOpt.isDefined)
+        defaultFuncOpt.get.apply()
+      else if (isOption)
+        None
+      else
+        throwRequiredFieldException()
     }
   }
 
   /* Private */
 
   //optimized
-  private[this] def parseFieldValue(fieldCodec: ObjectCodec, field: JsonNode, fieldType: JavaType): Object = {
+  private[this] def parseFieldValue(fieldCodec: ObjectCodec, field: JsonNode, fieldType: JavaType, context: DeserializationContext): Object = {
     if (isString) {
       field.asText()
     }
     else {
-      fieldCodec.readValue[Object](
-        new TreeTraversingParser(field, fieldCodec),
-        fieldType)
+      val treeTraversingParser = new TreeTraversingParser(field, fieldCodec)
+      if (deserializer.isDefined) {
+        deserializer.get.deserialize(treeTraversingParser, context)
+      } else {
+        fieldCodec.readValue[Object](
+          treeTraversingParser,
+          fieldType)
+      }
     }
   }
 

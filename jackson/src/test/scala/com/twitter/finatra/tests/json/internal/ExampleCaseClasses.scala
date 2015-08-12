@@ -264,7 +264,9 @@ case class CaseClassWithBoolean(foo: Boolean)
 
 case class CaseClassWithCustomDecimalFormat(
    @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
-   myBigDecimal: BigDecimal)
+   myBigDecimal: BigDecimal,
+   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
+   optMyBigDecimal: Option[BigDecimal])
 
 
 class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {

@@ -854,11 +854,18 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   }
 
   feature("jackson JsonDeserialize annotations") {
-    scenario("deserializes json to case class with 2 decimal places") {
+    scenario("deserializes json to case class with 2 decimal places for mandatory field") {
       parse[CaseClassWithCustomDecimalFormat](
         """ {
             "my_big_decimal": 23.1201
-          }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12)))
+          }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12), None))
+    }
+    scenario("deserializes json to case class with 2 decimal places for option field") {
+      parse[CaseClassWithCustomDecimalFormat](
+        """ {
+            "my_big_decimal": 23.1201,
+            "opt_my_big_decimal": 23.1201
+          }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12), Some(BigDecimal(23.12))))
     }
   }
 
