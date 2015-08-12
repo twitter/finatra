@@ -194,15 +194,19 @@ class EmbeddedTwitterServer(
     printResponseMetadata(response, suppress)
     printResponseBody(response, suppress)
     if (andExpect != null && response.status != andExpect) {
-      response.status should equal(andExpect)
+      assert(response.status == andExpect, response.encodeString())
     }
 
     if (withBody != null) {
-      response.contentString should equal(withBody)
+      assert(response.contentString == withBody, response.encodeString())
     }
 
     if (withLocation != null) {
-      response.location.get should endWith(withLocation)
+      assert(response.location.get.endsWith(withLocation), "\nDiffering Location\n\nExpected Location is: "
+        + withLocation
+        + " \nActual Location is: "
+        + response.location.get + "\n"
+        + response.encodeString())
     }
 
     response
