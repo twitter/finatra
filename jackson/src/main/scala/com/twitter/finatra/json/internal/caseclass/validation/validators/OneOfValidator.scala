@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.OneOfValidator._
-import com.twitter.finatra.validation.{OneOf, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{ErrorCode, OneOf, ValidationMessageResolver, ValidationResult, Validator}
 
 object OneOfValidator {
 
@@ -69,6 +69,7 @@ class OneOfValidator(
       errorMessage(
         validationMessageResolver,
         oneOfValues,
-        value))
+        value),
+      ErrorCode.InvalidValues(invalidValues, oneOfValues))
   }
 }

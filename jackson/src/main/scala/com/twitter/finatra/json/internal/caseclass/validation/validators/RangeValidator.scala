@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.validation.{Range, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{ErrorCode, Range, ValidationMessageResolver, ValidationResult, Validator}
 
 object RangeValidator {
 
@@ -44,20 +44,23 @@ class RangeValidator(
   private def validationResult(value: BigDecimal) = {
     ValidationResult(
       BigDecimal(minValue) <= value && value <= BigDecimal(maxValue),
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def validationResult(value: BigInt) = {
     ValidationResult(
       BigInt(minValue) <= value && value <= BigInt(maxValue),
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def validationResult(value: Number) = {
     val longValue = value.longValue()
     ValidationResult(
       minValue <= longValue && longValue <= maxValue,
-      errorMessage(value))
+      errorMessage(value),
+      errorCode(value))
   }
 
   private def errorMessage(value: Number) = {
@@ -66,5 +69,9 @@ class RangeValidator(
       value,
       minValue,
       maxValue)
+  }
+  
+  private def errorCode(value: Number) = {
+    ErrorCode.ValueOutOfRange(value.longValue, minValue, maxValue)
   }
 }

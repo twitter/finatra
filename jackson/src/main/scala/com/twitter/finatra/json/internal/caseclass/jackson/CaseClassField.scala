@@ -12,7 +12,7 @@ import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 import com.twitter.finatra.json.internal.caseclass.reflection.DefaultMethodUtils.defaultFunction
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection
-import com.twitter.finatra.validation.Validation
+import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.inject.Logging
 import java.lang.annotation.Annotation

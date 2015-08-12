@@ -1,9 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.CountryCodeValidator
-import com.twitter.finatra.json.internal.caseclass.validation.validators.CountryCodeValidator.InvalidCountryCodes
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{CountryCode, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, CountryCode, ValidationResult, ValidatorTest}
 
 case class CountryCodeExample(@CountryCode countryCode: String)
 case class CountryCodeSeqExample(@CountryCode countryCode: Seq[String])
@@ -24,7 +23,7 @@ class CountryCodeValidatorTest extends ValidatorTest {
       validate[CountryCodeExample](value) should equal(
         Invalid(
           errorMessage(value),
-          InvalidCountryCodes(Set(value))))
+          ErrorCode.InvalidCountryCodes(Set(value))))
     }
 
     "pass validation for valid country codes in seq" in {
@@ -42,7 +41,7 @@ class CountryCodeValidatorTest extends ValidatorTest {
       validate[CountryCodeSeqExample](value) should equal(
         Invalid(
           errorMessage(value),
-          InvalidCountryCodes(Set("USA"))))
+          ErrorCode.InvalidCountryCodes(Set("USA"))))
     }
 
     "pass validation for valid country codes in array" in {
@@ -55,7 +54,7 @@ class CountryCodeValidatorTest extends ValidatorTest {
       validate[CountryCodeArrayExample](value) should equal(
         Invalid(
           errorMessage(value),
-          InvalidCountryCodes(Set("USA"))))
+          ErrorCode.InvalidCountryCodes(Set("USA"))))
     }
 
     "fail validation for invalid country code type" in {
@@ -63,7 +62,7 @@ class CountryCodeValidatorTest extends ValidatorTest {
       validate[CountryCodeInvalidTypeExample](value) should equal(
         Invalid(
           errorMessage(value),
-          InvalidCountryCodes(Set("2"))))
+          ErrorCode.InvalidCountryCodes(Set("2"))))
     }
   }
 

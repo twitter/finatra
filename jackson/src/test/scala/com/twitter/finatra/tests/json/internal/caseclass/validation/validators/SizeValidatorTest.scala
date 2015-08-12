@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.SizeValidator
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{Size, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, Size, ValidationResult, ValidatorTest}
 
 
 case class SizeArrayExample(@Size(min = 1, max = 5) sizeValue: Array[Int])
@@ -22,14 +22,16 @@ class SizeValidatorTest extends ValidatorTest {
       val value = Array()
       validate[SizeArrayExample](value) should equal(
         Invalid(
-          errorMessage(value)))
+          errorMessage(value),
+          ErrorCode.SizeOutOfRange(0, 1, 5)))
     }
 
     "fail validation for too many array type" in {
       val value = Array(1, 2, 3, 4, 5, 6)
       validate[SizeArrayExample](value) should equal(
         Invalid(
-          errorMessage(value)))
+          errorMessage(value),
+          ErrorCode.SizeOutOfRange(6, 1, 5)))
     }
 
     "pass validation for seq type" in {
@@ -41,14 +43,16 @@ class SizeValidatorTest extends ValidatorTest {
       val value = Seq()
       validate[SizeArrayExample](value) should equal(
         Invalid(
-          errorMessage(value)))
+          errorMessage(value),
+          ErrorCode.SizeOutOfRange(0, 1, 5)))
     }
 
     "fail validation for too many seq type" in {
       val value = Seq(1, 2, 3, 4, 5, 6)
       validate[SizeArrayExample](value) should equal(
         Invalid(
-          errorMessage(value)))
+          errorMessage(value),
+          ErrorCode.SizeOutOfRange(6, 1, 5)))
     }
 
     "fail for unsupported class type" in {

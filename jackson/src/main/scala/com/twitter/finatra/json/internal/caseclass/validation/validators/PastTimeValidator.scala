@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.PastTimeValidator._
-import com.twitter.finatra.validation.{PastTime, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{ErrorCode, PastTime, ValidationMessageResolver, ValidationResult, Validator}
 import org.joda.time.DateTime
 
 object PastTimeValidator {
@@ -27,7 +27,8 @@ class PastTimeValidator(
   override def isValid(value: DateTime) = {
     ValidationResult(
       value.isBeforeNow,
-      errorMessage(validationMessageResolver, value))
+      errorMessage(validationMessageResolver, value),
+      ErrorCode.TimeNotPast(value))
   }
 }
 

@@ -1,12 +1,10 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.FutureTimeValidator._
-import com.twitter.finatra.validation.{FutureTime, ValidationMessageResolver, ValidationResult, Validator}
-import com.twitter.finatra.validation.ValidationResult.ErrorCode
+import com.twitter.finatra.validation.{ErrorCode, FutureTime, ValidationMessageResolver, ValidationResult, Validator}
 import org.joda.time.DateTime
 
 object FutureTimeValidator {
-  case class NotFutureTime(time: DateTime) extends ErrorCode
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -30,7 +28,6 @@ class FutureTimeValidator(
     ValidationResult(
       value.isAfterNow,
       errorMessage(validationMessageResolver, value),
-      NotFutureTime(value))
+      ErrorCode.TimeNotFuture(value))
   }
 }
-

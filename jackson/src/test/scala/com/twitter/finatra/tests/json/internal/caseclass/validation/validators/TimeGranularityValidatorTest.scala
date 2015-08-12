@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.TimeGranularityValidator
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{TimeGranularity, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, TimeGranularity, ValidationResult, ValidatorTest}
 import java.util.concurrent.TimeUnit
 import org.joda.time.DateTime
 
@@ -27,7 +27,8 @@ class TimeGranularityValidatorTest extends ValidatorTest {
       val value = new DateTime("2014-3-26T01:00:00Z")
       validate[TimeGranularityDaysExample](value) should equal(
         Invalid(
-          errorMessage[TimeGranularityDaysExample](value)))
+          errorMessage[TimeGranularityDaysExample](value),
+          ErrorCode.InvalidTimeGranularity(value, TimeUnit.DAYS)))
     }
 
     "pass validation for a hour granularity value" in {
@@ -39,7 +40,8 @@ class TimeGranularityValidatorTest extends ValidatorTest {
       val value = new DateTime("2014-3-26T04:01:00Z")
       validate[TimeGranularityHoursExample](value) should equal(
         Invalid(
-          errorMessage[TimeGranularityHoursExample](value)))
+          errorMessage[TimeGranularityHoursExample](value),
+          ErrorCode.InvalidTimeGranularity(value, TimeUnit.HOURS)))
     }
 
     "pass validation for a minute granularity value" in {
@@ -51,7 +53,8 @@ class TimeGranularityValidatorTest extends ValidatorTest {
       val value = new DateTime("2014-3-26T04:07:01Z")
       validate[TimeGranularityMinutesExample](value) should equal(
         Invalid(
-          errorMessage[TimeGranularityMinutesExample](value)))
+          errorMessage[TimeGranularityMinutesExample](value),
+          ErrorCode.InvalidTimeGranularity(value, TimeUnit.MINUTES)))
     }
 
     "pass validation for a second granularity value" in {
@@ -63,7 +66,8 @@ class TimeGranularityValidatorTest extends ValidatorTest {
       val value = new DateTime("2014-3-26T04:07:31.001Z")
       validate[TimeGranularitySecondsExample](value) should equal(
         Invalid(
-          errorMessage[TimeGranularitySecondsExample](value)))
+          errorMessage[TimeGranularitySecondsExample](value),
+          ErrorCode.InvalidTimeGranularity(value, TimeUnit.SECONDS)))
     }
 
     "pass validation for a millisecond granularity value" in {

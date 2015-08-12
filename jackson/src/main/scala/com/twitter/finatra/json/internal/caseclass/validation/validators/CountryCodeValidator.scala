@@ -1,12 +1,10 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.CountryCodeValidator._
-import com.twitter.finatra.validation.{CountryCode, ValidationMessageResolver, ValidationResult, Validator}
-import com.twitter.finatra.validation.ValidationResult.ErrorCode
+import com.twitter.finatra.validation.{CountryCode, ErrorCode, ValidationMessageResolver, ValidationResult, Validator}
 import java.util.Locale
 
 object CountryCodeValidator {
-  case class InvalidCountryCodes(code: Set[String]) extends ErrorCode
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -69,6 +67,6 @@ class CountryCodeValidator(
       errorMessage(
         validationMessageResolver,
         value),
-      InvalidCountryCodes(invalidCountryCodes))
+      ErrorCode.InvalidCountryCodes(invalidCountryCodes))
   }
 }

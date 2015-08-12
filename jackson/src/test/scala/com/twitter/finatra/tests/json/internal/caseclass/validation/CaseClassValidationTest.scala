@@ -6,6 +6,7 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidatio
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MinValidator
 import com.twitter.finatra.tests.json.internal.CarMake
 import com.twitter.finatra.tests.json.internal.caseclass.validation.domain.{Address, Car, Person}
+import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult.Invalid
 import com.twitter.inject.Test
 import org.joda.time.DateTime
@@ -39,7 +40,7 @@ class CaseClassValidationTest extends Test {
       }
 
       parseError should equal(CaseClassMappingException(
-        Seq(CaseClassValidationException(PropertyPath.leaf("year"), Invalid("[1910] is not greater than or equal to 2000", MinValidator.MinValueNotObtained(2000, 1910))))))
+        Seq(CaseClassValidationException(PropertyPath.leaf("year"), Invalid("[1910] is not greater than or equal to 2000", ErrorCode.ValueTooSmall(2000, 1910))))))
     }
 
     "nested failed validations" in {
@@ -60,8 +61,8 @@ class CaseClassValidationTest extends Test {
 
       parseError should equal(CaseClassMappingException(
         Seq(
-          CaseClassValidationException(PropertyPath.leaf("street").withParent("address").withParent("owners"), Invalid("cannot be empty")),
-          CaseClassValidationException(PropertyPath.leaf("city").withParent("address").withParent("owners"), Invalid("cannot be empty")))))
+          CaseClassValidationException(PropertyPath.leaf("street").withParent("address").withParent("owners"), Invalid("cannot be empty", ErrorCode.ValueCannotBeEmpty)),
+          CaseClassValidationException(PropertyPath.leaf("city").withParent("address").withParent("owners"), Invalid("cannot be empty", ErrorCode.ValueCannotBeEmpty)))))
     }
 
     "nested method validations" in {

@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.OneOfValidator
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{OneOf, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, OneOf, ValidationResult, ValidatorTest}
 
 case class OneOfExample(@OneOf(value = Array("a", "B", "c")) enumValue: String)
 case class OneOfSeqExample(@OneOf(Array("a", "B", "c")) enumValue: Seq[String])
@@ -24,7 +24,8 @@ class OneOfValidatorTest extends ValidatorTest {
       validate[OneOfExample](value) should equal(
         Invalid(
           errorMessage(
-            value)))
+            value),
+        ErrorCode.InvalidValues(Set(value), oneOfValues)))
     }
 
     "pass validation for seq" in {
@@ -42,7 +43,8 @@ class OneOfValidatorTest extends ValidatorTest {
       validate[OneOfSeqExample](value) should equal(
         Invalid(
           errorMessage(
-            value)))
+            value),
+        ErrorCode.InvalidValues(value.toSet, oneOfValues)))
     }
 
     "fail validation for invalid type" in {
@@ -50,7 +52,8 @@ class OneOfValidatorTest extends ValidatorTest {
       validate[OneOfInvalidTypeExample](value) should equal(
         Invalid(
           errorMessage(
-            value)))
+            value),
+        ErrorCode.InvalidValues(Set("2"), oneOfValues)))
     }
   }
 

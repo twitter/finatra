@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MinValidator
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.{Min, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, Min, ValidationResult, ValidatorTest}
 
 case class MinIntExample(@Min(1) numberValue: Int)
 case class MinLongExample(@Min(1) numberValue: Long)
@@ -169,6 +169,6 @@ class MinValidatorTest extends ValidatorTest {
   }
   
   private def errorCode(value: Number, minValue: Long = 1) = {
-    MinValidator.MinValueNotObtained(minValue, value)
+    ErrorCode.ValueTooSmall(minValue, value)
   }
 }

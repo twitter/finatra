@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.TimeGranularityValidator._
-import com.twitter.finatra.validation.{TimeGranularity, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{ErrorCode, TimeGranularity, ValidationMessageResolver, ValidationResult, Validator}
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit._
 import org.joda.time.{DateTime, DateTimeZone}
@@ -45,7 +45,8 @@ class TimeGranularityValidator(
       errorMessage(
         validationMessageResolver,
         timeGranularity,
-        value))
+        value),
+      ErrorCode.InvalidTimeGranularity(value, timeGranularity))
   }
 
   /* Private */

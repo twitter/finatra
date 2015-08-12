@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.{Max, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, Max, ValidationResult, ValidatorTest}
 
 case class MaxIntExample(@Max(0) numberValue: Int)
 case class MaxLongExample(@Max(0) numberValue: Long)
@@ -169,6 +169,6 @@ class MaxValidatorTest extends ValidatorTest {
   }
 
   private def errorCode(value: Number, maxValue: Long = 0) = {
-    MaxValidator.MaxValueExceeded(maxValue, value)
+    ErrorCode.ValueTooLarge(maxValue, value)
   }
 }

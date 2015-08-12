@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.NotEmptyValidator
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{NotEmpty, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, NotEmpty, ValidationResult, ValidatorTest}
 
 case class NotEmptyExample(@NotEmpty stringValue: String)
 case class NotEmptySeqExample(@NotEmpty stringValue: Seq[String])
@@ -20,7 +20,7 @@ class NotEmptyValidatorTest extends ValidatorTest {
     "fail validation for invalid value" in {
       val value = ""
       validate[NotEmptyExample](value) should equal(
-        Invalid(errorMessage))
+        Invalid(errorMessage, ErrorCode.ValueCannotBeEmpty))
     }
 
     "pass validation for all whitespace value" in {
@@ -36,7 +36,7 @@ class NotEmptyValidatorTest extends ValidatorTest {
     "fail validation for empty seq" in {
       val value = Seq()
       validate[NotEmptySeqExample](value) should equal(
-        Invalid(errorMessage))
+        Invalid(errorMessage, ErrorCode.ValueCannotBeEmpty))
     }
 
     "fail validation for invalid value type" in {

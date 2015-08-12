@@ -9,7 +9,7 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidatio
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.validation.{ValidationMessageResolver, ValidationResult}
+import com.twitter.finatra.validation.{ErrorCode, ValidationMessageResolver, ValidationResult}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.inject.Logging
 import com.twitter.util.NonFatal

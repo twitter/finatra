@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.RangeValidator
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.{Range, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, Range, ValidationResult, ValidatorTest}
 
 case class RangeIntExample(@Range(min = 1, max = 5) pointValue: Int)
 case class RangeLongExample(@Range(min = 1, max = 5) pointValue: Long)
@@ -31,8 +31,7 @@ class RangeValidatorTest extends ValidatorTest {
     "fail validation for int type" in {
       val value = 0
       validate[RangeIntExample](value) should equal(
-        Invalid(
-          errorMessage(value)))
+        invalid(value))
     }
 
     "pass validation for long type" in {
@@ -43,8 +42,7 @@ class RangeValidatorTest extends ValidatorTest {
     "fail validation for long type" in {
       val value = 0L
       validate[RangeLongExample](value) should equal(
-        Invalid(
-          errorMessage(value)))
+        invalid(value))
     }
 
     "pass validation for big decimal type" in {
@@ -55,8 +53,7 @@ class RangeValidatorTest extends ValidatorTest {
     "fail validation for big decimal type" in {
       val value = BigDecimal(0.9)
       validate[RangeBigDecimalExample](value) should equal(
-        Invalid(
-          errorMessage(value)))
+        invalid(value))
     }
 
     "pass validation for big int type" in {
@@ -67,8 +64,7 @@ class RangeValidatorTest extends ValidatorTest {
     "fail validation for big int type" in {
       val value = BigInt(0)
       validate[RangeBigIntExample](value) should equal(
-        Invalid(
-          errorMessage(value)))
+        invalid(value))
     }
 
     "pass validation for very large big decimal type" in {
@@ -79,8 +75,7 @@ class RangeValidatorTest extends ValidatorTest {
 //    "fail validation for very large big decimal type" in {
 //      val value = BigDecimal(Long.MaxValue)
 //      validate[RangeSecondLargestLongBigDecimalExample](value) should equal(
-//        Invalid(
-//          errorMessage(value, maxValue = Long.MaxValue - 1)))
+//        invalid(value, maxValue = Long.MaxValue - 1))
 //    }
 
     "pass validation for very large big int type" in {
@@ -91,8 +86,7 @@ class RangeValidatorTest extends ValidatorTest {
 //    "fail validation for very large big int type" in {
 //      val value = BigInt(Long.MaxValue)
 //      validate[RangeSecondLargestLongBigIntExample](value) should equal(
-//        Invalid(
-//          errorMessage(value, maxValue = Long.MaxValue - 1)))
+//        invalid(value, maxValue = Long.MaxValue - 1))
 //    }
 
     "pass validation for very small big int type" in {
@@ -103,8 +97,7 @@ class RangeValidatorTest extends ValidatorTest {
 //    "fail validation for very small big int type" in {
 //      val value = BigInt(Long.MinValue)
 //      validate[RangeSecondSmallestLongBigIntExample](value) should equal(
-//        Invalid(
-//          errorMessage(value, minValue = Long.MinValue + 1)))
+//        invalid(value, minValue = Long.MinValue + 1))
 //    }
 
     "pass validation for very small big decimal type" in {
@@ -115,8 +108,7 @@ class RangeValidatorTest extends ValidatorTest {
 //    "fail validation for a very small big decimal type" in {
 //      val value = BigDecimal(Long.MinValue)
 //      validate[RangeSecondSmallestLongBigDecimalExample](value) should equal(
-//        Invalid(
-//          errorMessage(value, minValue = Long.MinValue + 1)))
+//        invalid(value, minValue = Long.MinValue + 1))
 //    }
 
     "fail for unsupported class type" in {
@@ -140,5 +132,21 @@ class RangeValidatorTest extends ValidatorTest {
       value,
       minValue,
       maxValue)
+  }
+  
+  private def errorCode(
+    value: Number,
+    minValue: Long = 1,
+    maxValue: Long = 5) = {
+    ErrorCode.ValueOutOfRange(value.longValue, minValue, maxValue)
+  }
+  
+  private def invalid(
+    value: Number,
+    minValue: Long = 1,
+    maxValue: Long = 5) = {
+    Invalid(
+      errorMessage(value, minValue, maxValue),
+      errorCode(value, minValue, maxValue))
   }
 }

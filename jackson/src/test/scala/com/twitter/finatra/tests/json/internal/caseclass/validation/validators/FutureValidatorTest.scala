@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.FutureTimeValidator
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{FutureTime, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation.{ErrorCode, FutureTime, ValidationResult, ValidatorTest}
 import org.joda.time.DateTime
 
 class FutureValidatorTest extends ValidatorTest {
@@ -19,7 +19,7 @@ class FutureValidatorTest extends ValidatorTest {
       validate[FutureExample](pastDateTime) should equal(
         Invalid(
           errorMessage(pastDateTime),
-          FutureTimeValidator.NotFutureTime(pastDateTime)))
+          ErrorCode.TimeNotFuture(pastDateTime)))
     }
   }
 
