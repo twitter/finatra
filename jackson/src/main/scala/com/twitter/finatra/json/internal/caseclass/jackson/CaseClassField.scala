@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.{JsonParser, ObjectCodec}
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
