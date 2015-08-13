@@ -1,19 +1,18 @@
 package finatra.quickstart.domain.http
 
 import com.twitter.finatra.validation.Size
-import finatra.quickstart.domain.{Status, StatusId}
+import finatra.quickstart.domain.{Tweet, TweetId}
 
 case class PostedTweet(
   @Size(min = 1, max = 140) message: String,
-  location: Option[Location],
-  sensitive: Boolean = false) {
+  location: Option[PostedLocation],
+  nsfw: Boolean = false) {
 
-  def toDomain(id: StatusId) = {
-    Status(
+  def toDomain(id: TweetId) = {
+    Tweet(
       id = id,
-      text = message,
-      lat = location map {_.lat},
-      long = location map {_.long},
-      sensitive = sensitive)
+      message = message,
+      location = location map {_.toDomain},
+      nsfw = nsfw)
   }
 }

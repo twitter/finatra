@@ -1,5 +1,8 @@
 package com.twitter.finatra.http.marshalling
 
+import com.twitter.finatra.conversions.buf
+import buf._
+import com.twitter.concurrent.exp.AsyncStream
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
@@ -8,8 +11,9 @@ import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Mockito, Test}
+import com.twitter.io.{Reader, Buf}
 import com.twitter.util.{Await, Future}
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
+import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 
 class CallbackConverterIntegrationTest extends Test with Mockito {
 
@@ -19,7 +23,6 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
 
   val callbackConverter = injector.instance[CallbackConverter]
 
-  val request = mock[Request]
   val ford = Car("Ford")
   val okResponse = SimpleResponse(Ok, "bob")
 
@@ -107,6 +110,43 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
       withBody = """asdf""")
   }
 
+  "AsyncStream request" in {
+    val jsonStr = "[1,2]"
+    val request = Request(HttpMethod.POST, "/")
+    request.setChunked(true)
+    request.writer.write(Buf.Utf8(jsonStr)) ensure {
+      request.writer.close()
+    }
+
+    val converted = callbackConverter.convertToFutureResponse(asyncStreamRequest)
+
+    val response = Await.result(converted(request))
+    assertOk(response, "List(1, 2)")
+  }
+  
+  "AsyncStream response" in {
+    val converted = callbackConverter.convertToFutureResponse(asyncStreamResponse)
+
+    val response = Await.result(converted(Request()))
+    response.status should equal(Status.Ok)
+    Await.result(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
+  }
+  
+  "AsyncStream request and response" in {
+    val jsonStr = "[1,2]"
+    val request = Request(HttpMethod.POST, "/")
+    request.setChunked(true)
+    request.writer.write(Buf.Utf8(jsonStr)) ensure {
+      request.writer.close()
+    }
+
+    val converted = callbackConverter.convertToFutureResponse(asyncStreamRequestAndResponse)
+
+    val response = Await.result(converted(request))
+    response.status should equal(Status.Ok)
+    Await.result(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+  }
+
   "Null" in {
     pending
     assertOk(
@@ -174,18 +214,32 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
     Future(Seq(ford))
   }
 
+  def asyncStreamRequestAndResponse(stream: AsyncStream[Int]): AsyncStream[String] = {
+    stream map { _.toString }
+  }
+
+  def asyncStreamRequest(stream: AsyncStream[Int]): Future[String] = {
+    stream.toSeq() map { _.toString }
+  }
+
+  def asyncStreamResponse(request: Request): AsyncStream[Int] = {
+    AsyncStream(1, 2, 3)
+  }
+
   private def assertOk(response: Response, expectedBody: String) {
     response.status should equal(Status.Ok)
     response.contentString should equal(expectedBody)
   }
 
   private def assertOk(convertedFunc: (Request) => Future[Response], withBody: String) {
-    val response = Await.result(convertedFunc(request))
+    val response = Await.result(convertedFunc(Request()))
     assertOk(response, withBody)
   }
 
-  private def assertStatus(convertedFunc: (Request) => Future[Response], expectedStatus: HttpResponseStatus) {
-    val response = Await.result(convertedFunc(request))
+  private def assertStatus(
+    convertedFunc: (Request) => Future[Response],
+    expectedStatus: HttpResponseStatus) {
+    val response = Await.result(convertedFunc(Request()))
     response.status should equal(expectedStatus)
   }
 }

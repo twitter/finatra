@@ -12,10 +12,7 @@ junit_tests(name='scala',
     'util/util-core',
   ],
   sources=rglobs(
-    'com/twitter/finatra/http/CallbackConverterIntegrationTest.scala',
-    'com/twitter/finatra/http/PathPatternTest.scala',
     'com/twitter/finatra/http/conversions/*.scala',
-    'com/twitter/finatra/http/example/*.scala',
     'com/twitter/finatra/http/integration/*.scala',
     'com/twitter/finatra/http/internal/*.scala',
     'com/twitter/finatra/http/marshalling/*.scala',
@@ -23,7 +20,6 @@ junit_tests(name='scala',
     'com/twitter/finatra/http/response/*.scala',
     'com/twitter/finatra/http/routing/*.scala',
     'com/twitter/finatra/http/server/*.scala',
-    'com/twitter/finatra/http/twitterserver/*.scala',
   ),
   resources=[
     'finatra/http/src/test/resources',
@@ -46,7 +42,6 @@ scala_library(name="test-deps",
   ],
   sources=globs(
     'com/twitter/finatra/test/*.scala',
-    'com/twitter/finatra/http/test/*.scala',
-    'com/twitter/finatra/http/utils/*.scala'
+    'com/twitter/finatra/http/test/*.scala'
   ),
 )

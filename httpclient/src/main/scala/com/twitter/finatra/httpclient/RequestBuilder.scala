@@ -64,6 +64,11 @@ class RequestBuilder(
     this
   }
 
+  def chunked = {
+    request.setChunked(true)
+    this
+  }
+
   def body(string: String, contentType: String = Message.ContentTypeJson): RequestBuilder = {
     request.setContentString(string)
     request.headerMap.add(HttpHeaders.CONTENT_LENGTH, string.length.toString)

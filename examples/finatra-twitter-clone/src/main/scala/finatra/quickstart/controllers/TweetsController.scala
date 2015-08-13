@@ -1,7 +1,10 @@
 package finatra.quickstart.controllers
 
+import com.twitter.concurrent.exp.AsyncStream
+import com.twitter.finatra.conversions.asyncStream._
 import com.twitter.finatra.http.Controller
-import finatra.quickstart.domain.http.{GetTweet, PostedTweet}
+import finatra.quickstart.domain.TweetId
+import finatra.quickstart.domain.http.{GetTweetRequest, PostedTweet}
 import finatra.quickstart.services.TweetsService
 import javax.inject.{Inject, Singleton}
 
@@ -18,7 +21,14 @@ class TweetsController @Inject()(
     }
   }
 
-  get("/tweet/:id") { request: GetTweet =>
-    tweetsService.get(request.id)
+  get("/tweet/:id") { request: GetTweetRequest =>
+    tweetsService.getResponseTweet(request.id)
+  }
+
+  post("/tweet/lookup") { ids: AsyncStream[TweetId] =>
+    for {
+      id <- ids
+      tweet <- tweetsService.getResponseTweet(id).toAsyncStream
+    } yield tweet
   }
 }

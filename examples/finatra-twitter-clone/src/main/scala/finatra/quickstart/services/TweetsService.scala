@@ -1,8 +1,9 @@
 package finatra.quickstart.services
 
+import com.twitter.finatra.conversions.future._
 import com.twitter.util.Future
-import finatra.quickstart.domain.http.PostedTweet
-import finatra.quickstart.domain.{Status, StatusId}
+import finatra.quickstart.domain.http.{PostedTweet, ResponseTweet}
+import finatra.quickstart.domain.{Tweet, TweetId}
 import finatra.quickstart.firebase.FirebaseClient
 import javax.inject.{Inject, Singleton}
 
@@ -11,21 +12,26 @@ class TweetsService @Inject()(
   idService: IdService,
   firebase: FirebaseClient) {
 
-  def save(postedTweet: PostedTweet): Future[Status] = {
+  def save(postedTweet: PostedTweet): Future[Tweet] = {
     for {
       id <- idService.getId()
-      status = postedTweet.toDomain(id)
-      firebasePath = firebaseUrl(status.id)
-      _ <- firebase.put(firebasePath, status)
-    } yield status
+      tweet = postedTweet.toDomain(id)
+      responseTweet = ResponseTweet.fromDomain(tweet)
+      firebasePath = firebaseUrl(tweet.id)
+      _ <- firebase.put(firebasePath, responseTweet)
+    } yield tweet
   }
 
-  def get(statusId: StatusId): Future[Option[Status]] = {
-    firebase.get[Status](
-      firebaseUrl(statusId))
+  def getResponseTweet(tweetId: TweetId): Future[Option[ResponseTweet]] = {
+    firebase.get[ResponseTweet](
+      firebaseUrl(tweetId))
   }
 
-  private def firebaseUrl(statusId: StatusId): String = {
-    s"/statuses/${statusId.id}.json"
+  def getTweet(tweetId: TweetId): Future[Option[Tweet]] = {
+    getResponseTweet(tweetId) mapInner { _.toDomain }
+  }
+
+  private def firebaseUrl(tweetId: TweetId): String = {
+    s"/tweets/${tweetId.id }.json"
   }
 }

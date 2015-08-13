@@ -140,6 +140,7 @@ lazy val root = (project in file(".")).
     slf4j,
     benchmarks,
     helloWorld,
+    streamingExample,
     twitterClone,
     benchmarkServer
   )
@@ -377,6 +378,29 @@ lazy val helloWorld = (project in file("examples/finatra-hello-world")).
     },
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % versions.logback
+    )
+  ).
+  dependsOn(
+    http,
+    http % "test->test",
+    slf4j,
+    injectCore % "test->test"
+  )
+
+lazy val streamingExample = (project in file("examples/streaming-example")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "streaming-example",
+    moduleName := "streaming-example",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "com.twitter" % "joauth" % "6.0.2"
     )
   ).
   dependsOn(

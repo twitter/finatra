@@ -7,7 +7,7 @@ import com.twitter.finagle.http._
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{PortUtils, Ports}
-import com.twitter.util.{Future, Try}
+import com.twitter.util.Try
 import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 
 class EmbeddedHttpServer(
@@ -68,11 +68,12 @@ class EmbeddedHttpServer(
   }
 
   override protected def prettyRequestBody(request: Request): String = {
+    val printableBody = request.contentString.replaceAll("[\\p{Cntrl}&&[^\n\t\r]]", "?") //replace non-printable characters
+
     Try {
-      mapper.writePrettyString(
-        request.contentString)
+      mapper.writePrettyString(printableBody)
     } getOrElse {
-      request.contentString
+      printableBody
     }
   }
 
@@ -447,7 +448,9 @@ class EmbeddedHttpServer(
       (httpClient, twitterServer.httpExternalPort.get)
   }
 
-  private def addAcceptHeader(accept: MediaType, headers: Map[String, String]): Map[String, String] = {
+  private def addAcceptHeader(
+    accept: MediaType,
+    headers: Map[String, String]): Map[String, String] = {
     if (accept != null)
       headers + (HttpHeaders.ACCEPT -> accept.toString)
     else

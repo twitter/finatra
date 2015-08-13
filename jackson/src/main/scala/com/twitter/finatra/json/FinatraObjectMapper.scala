@@ -67,6 +67,11 @@ case class FinatraObjectMapper(
     objectMapper.readValue[T](is)
   }
 
+  def parse[T: Manifest](buf: Buf): T = {
+    parse[T](
+      Buf.ByteBuffer.Shared.extract(buf))
+  }
+
   def parse[T: Manifest](jsonNode: JsonNode): T = {
     convert[T](jsonNode)
   }

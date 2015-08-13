@@ -2,11 +2,16 @@ package com.twitter.finatra.http.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.test.EmbeddedTwitterServer
+import com.twitter.inject.server.AsyncStreamUtils
+import com.twitter.io.Buf
 import com.twitter.logging.Logger
+import com.twitter.util.{Await, FuturePool}
 import java.net.URLEncoder
 import java.util.logging.Level
+import org.apache.commons.io.IOUtils
 
 trait HttpTest
   extends com.twitter.inject.Test
@@ -14,6 +19,7 @@ trait HttpTest
 
   protected val testClientAppId = 12345L
   protected val mapper = FinatraObjectMapper.create()
+  protected val pool = FuturePool.unboundedPool
 
   override protected def beforeAll() {
     super.beforeAll()
@@ -68,6 +74,22 @@ trait HttpTest
       .replaceAll("\\%7E", "~")
   }
 
+  def deserializeRequest(name: String) = {
+    val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
+    Request.decodeBytes(requestBytes)
+  }
+
+  def writeJsonArray(request: Request, seq: Seq[Any], delayMs: Long): Unit = {
+    request.writeAndWait("[")
+    request.writeAndWait(seq.head.toJson)
+    for (elem <- seq.tail) {
+      request.writeAndWait("," + elem.toJson)
+      Thread.sleep(delayMs)
+    }
+    request.writeAndWait("]")
+    request.closeAndWait()
+  }
+
   /* JSON Implicit Utils */
 
   implicit class RichAny(any: Any) {
@@ -93,4 +115,33 @@ trait HttpTest
       }
     }
   }
+
+  /* Request Implicit Utils */
+
+  implicit class RichRequest(request: Request) {
+    def writeAndWait(str: String) {
+      println("Write:\t" + str)
+      Await.result(
+        request.writer.write(Buf.Utf8(str)))
+    }
+
+    def closeAndWait() {
+      Await.result(
+        request.close())
+    }
+  }
+
+  implicit class RichResponse(response: Response) {
+    def asyncStrings = {
+      AsyncStreamUtils.readerToAsyncStream(response.reader) map { case Buf.Utf8(str) =>
+        str
+      }
+    }
+
+    def printAsyncStrings() = {
+      Await.result(
+        response.asyncStrings map { "Read:\t" + _ } foreach println)
+    }
+  }
+
 }

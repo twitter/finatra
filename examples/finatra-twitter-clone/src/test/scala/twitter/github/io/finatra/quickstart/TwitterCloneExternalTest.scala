@@ -3,6 +3,7 @@ package twitter.github.io.finatra.quickstart
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import finatra.quickstart.TwitterCloneServer
+import finatra.quickstart.domain.http.ResponseTweet
 
 class TwitterCloneExternalTest extends HttpTest {
 
@@ -19,10 +20,12 @@ class TwitterCloneExternalTest extends HttpTest {
       postBody =
         """
         {
-          "message": "Hello #SFScala",
-          "lat": "37.7821120598956",
-          "long": "-122.400612831116",
-          "sensitive": false
+          "message": "Hello #FinagleCon",
+          "location": {
+            "lat": "37.7821120598956",
+            "long": "-122.400612831116"
+          },
+          "nsfw": false
         }
         """,
       andExpect = Created,
@@ -30,17 +33,21 @@ class TwitterCloneExternalTest extends HttpTest {
         """
         {
           "id": "0",
-          "message": "Hello #SFScala",
-          "lat": "37.7821120598956",
-          "long": "-122.400612831116",
-          "sensitive": false
+          "message": "Hello #FinagleCon",
+          "location": {
+            "lat": "37.7821120598956",
+            "long": "-122.400612831116"
+          },
+          "nsfw": false
         }
         """,
       withJsonBodyNormalizer = idNormalizer)
 
-    server.httpGet(
+    val tweet = server.httpGetJson[ResponseTweet](
       path = result.location.get,
       andExpect = Ok,
       withJsonBody = result.contentString)
+
+    println(s"Firebase Tweet: https://finatra.firebaseio.com/tweets/${tweet.id}")
   }
 }

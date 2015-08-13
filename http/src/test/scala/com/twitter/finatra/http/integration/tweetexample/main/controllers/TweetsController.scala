@@ -21,6 +21,10 @@ class TweetsController @Inject()(
   post("/tweets/") { tweet: Tweet =>
     "tweet with id " + tweet.id + " is valid"
   }
+  
+  post("/tweets/streaming") { ids: AsyncStream[Long] =>
+    tweetsRepository.getByIds(ids)
+  }
 
   get("/tweets/streaming_json") { request: Request =>
     tweetsRepository.getByIds(

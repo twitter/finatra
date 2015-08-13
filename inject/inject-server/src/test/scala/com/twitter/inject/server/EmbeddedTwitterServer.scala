@@ -8,10 +8,10 @@ import com.twitter.finagle.http._
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
-import com.twitter.finagle.stats.{NullStatsReceiver, InMemoryStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Service}
 import com.twitter.inject.app.Banner._
-import com.twitter.inject.app.{Banner, EmbeddedApp, App}
+import com.twitter.inject.app.{App, Banner, EmbeddedApp}
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.util._
@@ -300,7 +300,10 @@ class EmbeddedTwitterServer(
 
   private def printResponseBody(response: Response, suppress: Boolean) {
     if (!suppress) {
-      if (response.contentString.isEmpty) {
+      if (response.isChunked()) {
+        //no-op
+      }
+      else if (response.contentString.isEmpty) {
         println("*EmptyBody*")
       }
       else {

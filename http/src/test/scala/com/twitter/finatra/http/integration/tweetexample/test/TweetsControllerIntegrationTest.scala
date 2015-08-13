@@ -3,11 +3,12 @@ package com.twitter.finatra.http.integration.tweetexample.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.test.{HttpTest, EmbeddedHttpServer}
+import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future, FuturePool}
 
-class TweetsControllerIntegrationTest extends FeatureTest {
+class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
 
   override val server = new EmbeddedHttpServer(
     new TweetsEndpointServer,
@@ -73,6 +74,32 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       withErrors = Seq("username cannot be foo"))
   }
 
+  "post streaming json" in {
+    server.start()
+
+    val request = RequestBuilder
+      .post("/tweets/streaming")
+      .header("X-UserId", "123")
+      .chunked
+
+    val ids = (1 to 5).toSeq
+
+    // Write to request in separate thread
+    pool {
+      writeJsonArray(request, ids, delayMs = 10)
+    }
+
+    server.httpRequest(request)
+  }
+
+  "post streaming json without chunks" in {
+    server.httpPost(
+      "/tweets/streaming",
+      """
+      [1,2,3,4,5]
+      """)
+  }
+
   "get streaming json" in {
     server.httpGet(
       "/tweets/streaming_json",
@@ -120,7 +147,6 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       withBody = "yo yo")
   }
 
-  val pool = FuturePool.unboundedPool
   "get hello in parallel" in {
     Await.result {
       Future.collect {

@@ -4,7 +4,8 @@ import com.twitter.concurrent.exp.AsyncStream
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.util.Future
+import com.twitter.finatra.json.internal.streaming.JsonStreamParser
+import com.twitter.util.{Future, FuturePool}
 import javax.inject.Inject
 
 /*
@@ -14,7 +15,8 @@ import javax.inject.Inject
 class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
-  mapper: FinatraObjectMapper) {
+  mapper: FinatraObjectMapper,
+  jsonStreamParser: JsonStreamParser) {
 
   /* Public */
 
@@ -26,11 +28,18 @@ class CallbackConverter @Inject()(
   /* Private */
 
   private def createRequestCallback[RequestType: Manifest, ResponseType: Manifest](callback: (RequestType) => ResponseType): (Request) => ResponseType = {
-    manifest[RequestType] match {
+    val requestManifest = manifest[RequestType]
+    requestManifest match {
 
       // The callback takes a finagle Request
       case finagleRequest if finagleRequest <:< classManifest[Request] =>
         callback.asInstanceOf[(Request => ResponseType)]
+
+      // AsyncStream[T] //TODO Also support AsyncStream[Try[T]]
+      case stream if isAsyncStream[RequestType] =>
+        request: Request =>
+          val parsedStream = jsonStreamParser.parseArray(request.reader)(requestManifest.typeArguments.head).asInstanceOf[RequestType]
+          callback(parsedStream)
 
       // Otherwise convert Request into the callback's input type
       case _ =>

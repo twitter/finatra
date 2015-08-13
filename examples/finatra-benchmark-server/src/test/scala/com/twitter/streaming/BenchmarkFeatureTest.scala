@@ -1,4 +1,4 @@
-package com.twitter.hello
+package com.twitter.streaming
 
 import com.twitter.benchmark.{FinagleBenchmarkServer, FinatraBenchmarkServer}
 import com.twitter.finatra.http.test.EmbeddedHttpServer
