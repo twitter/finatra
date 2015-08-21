@@ -33,7 +33,7 @@ val baseSettings = Seq(
     "ch.qos.logback" % "logback-classic" % versions.logback % "test",
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
     "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-    "org.specs2" %% "specs2" % "2.3.12" % "test" exclude("org.scala-lang", "scala-compiler")
+    "org.specs2" %% "specs2" % "2.3.12" % "test"
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -278,8 +278,8 @@ lazy val jackson = project.
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
-      "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson exclude("org.scala-lang", "scala-compiler"),
-      "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler")
+      "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
+      "org.scala-lang" % "scalap" % scalaVersion.value
     )
   ).
   dependsOn(
