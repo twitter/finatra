@@ -1,19 +1,17 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Request, Response, Method}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.routing.{Route, Routes}
 import com.twitter.inject.Test
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http.HttpMethod
-import org.jboss.netty.handler.codec.http.HttpMethod._
 import org.scalatest.OptionValues
 
 class RoutesTest extends Test with OptionValues {
 
   "constant route" in {
     val routes = Routes.createForMethod(
-      Seq(createRoute(GET, "/groups/")), GET)
+      Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 
     routes.handle(
       Request("/groups/")) should be('defined)
@@ -27,7 +25,7 @@ class RoutesTest extends Test with OptionValues {
 
   "path pattern route" in {
     val routes = Routes.createForMethod(
-      Seq(createRoute(GET, "/groups/:id")), GET)
+      Seq(createRoute(Method.Get, "/groups/:id")), Method.Get)
 
     routes.handle(
       Request("/groups/1")) should be('defined)
@@ -38,7 +36,7 @@ class RoutesTest extends Test with OptionValues {
 
   "route info" in {
     val routes = Routes.createForMethod(
-      Seq(createRoute(GET, "/groups/")), GET)
+      Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 
     val request = Request("/groups/")
     routes.handle(request) should be('defined)
@@ -50,7 +48,7 @@ class RoutesTest extends Test with OptionValues {
     Future(Response())
   }
 
-  def createRoute(method: HttpMethod, path: String): Route = {
+  def createRoute(method: Method, path: String): Route = {
     Route(
       name = "my_endpoint",
       method = method,

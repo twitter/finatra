@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.internal.exceptions.ExceptionManager

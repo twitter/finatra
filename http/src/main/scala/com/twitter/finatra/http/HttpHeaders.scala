@@ -1,6 +1,6 @@
 package com.twitter.finatra.http
 
-import com.twitter.finagle.http.Response
+import com.twitter.finagle.httpx.Response
 import java.text.SimpleDateFormat
 import java.util.{Locale, Date, TimeZone}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -48,6 +48,6 @@ object HttpHeaders {
    * @param value - the value to set for the given header
    */
   def set(response: Response, header: String, value: String): Unit = {
-    response.headers.set(header, value)
+    response.headerMap.set(header, value)
   }
 }

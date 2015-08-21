@@ -2,15 +2,14 @@ package com.twitter.finatra.http.integration.doeverything.test
 
 import com.google.common.net.MediaType.JSON_UTF_8
 import com.google.inject.{Key, TypeLiteral}
-import com.twitter.finagle.http.Request
-import com.twitter.finagle.http.Status._
+import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.httpx.{Method, Request}
 import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.HttpMethod
 
 class DoEverythingServerFeatureTest extends FeatureTest {
 
@@ -57,8 +56,8 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.statusCode should equal(200)
       response.contentString should equal("always response")
 
-      response.headers.get("Date") should not be empty
-      response.headers.get("Server") should not be empty
+      response.headerMap.get("Date") should not be empty
+      response.headerMap.get("Server") should not be empty
     }
 
     "json response to /example" in {
@@ -208,7 +207,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     "put multipart" in {
       val request = deserializeRequest("/multipart/request-POST-android.bytes")
       request.uri = "/multipartParamsPutEcho"
-      request.method = HttpMethod.PUT
+      request.method = Method.Put
 
       server.httpRequest(
         request = request,
@@ -477,7 +476,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Created,
         withLocation = "http://foo.com/1")
 
-      response.headers().get("a") should equal("b")
+      response.headerMap.get("a") should equal(Some("b"))
     }
 
     "request injection" in {

@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.exceptions
 
-import com.twitter.finagle.http.Response
+import com.twitter.finagle.httpx.Response
 
 class HttpResponseException(
   val response: Response)

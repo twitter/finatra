@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.httpx.Request
 import com.twitter.finatra.http.fileupload.FileUploadException
+import com.twitter.io.BufInputStream
 import java.io.InputStream
 import org.apache.commons.fileupload.RequestContext
-import org.jboss.netty.buffer.ChannelBufferInputStream
 
 class FinatraRequestContext(request: Request) extends RequestContext {
 
@@ -24,6 +24,6 @@ class FinatraRequestContext(request: Request) extends RequestContext {
   }
 
   override def getInputStream: InputStream = {
-    new ChannelBufferInputStream(request.content)
+    new BufInputStream(request.content)
   }
 }

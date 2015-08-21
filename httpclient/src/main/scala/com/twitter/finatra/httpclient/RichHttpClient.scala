@@ -1,29 +1,18 @@
 package com.twitter.finatra.httpclient
 
-import com.twitter.finagle._
-import com.twitter.finagle.http.{Request, Response}
-import com.twitter.util.Future
+import com.twitter.finagle.{Service, Httpx}
+import com.twitter.finagle.httpx.{Request, Response}
 import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
 
 object RichHttpClient {
 
   /* Public */
 
-  def newClientService(dest: String) = {
-    nettyToFinagleHttp(
-      Http.newClient(dest).toService)
+  def newClientService(dest: String): Service[Request, Response] = {
+    Httpx.newClient(dest).toService
   }
 
-  def newSslClientService(sslHostname: String, dest: String) = {
-    nettyToFinagleHttp(
-      Http.client.withTls(sslHostname).newService(dest))
-  }
-
-  def nettyToFinagleHttp(nettyService: Service[HttpRequest, HttpResponse]): Service[Request, Response] = {
-    new Service[Request, Response] {
-      def apply(request: Request): Future[Response] = {
-        nettyService.apply(request) map Response.apply
-      }
-    }
+  def newSslClientService(sslHostname: String, dest: String): Service[Request, Response] = {
+    Httpx.client.withTls(sslHostname).newService(dest)
   }
 }

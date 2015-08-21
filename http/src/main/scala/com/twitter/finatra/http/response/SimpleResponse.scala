@@ -1,19 +1,11 @@
 package com.twitter.finatra.http.response
 
-import com.twitter.finagle.http.Response
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
+import com.twitter.finagle.httpx.{Response, Status, Version}
 
 object SimpleResponse {
-  def apply(status: HttpResponseStatus, body: String = "") = {
-    val response = new SimpleResponse(status)
+  def apply(status: Status, body: String = ""): Response = {
+    val response = Response(Version.Http11, status)
     response.setContentString(body)
     response
   }
-}
-
-class SimpleResponse(
-  override val status: HttpResponseStatus)
-  extends Response {
-
-  override val httpResponse = Response(status)
 }

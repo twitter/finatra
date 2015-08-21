@@ -1,13 +1,13 @@
 package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.httpx.{Fields => HttpFields, Method, Request, Response, Status}
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.RetryUtils
 import com.twitter.inject.Logging
+import com.twitter.io.Buf
 import com.twitter.util.{Future, Try}
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 /**
  * Barebones HTTP client
@@ -35,7 +35,7 @@ class HttpClient(
 
   def executeJson[T: Manifest](
     request: Request,
-    expectedStatus: HttpResponseStatus = Status.Ok): Future[T] = {
+    expectedStatus: Status = Status.Ok): Future[T] = {
 
     execute(request) flatMap { httpResponse =>
       if (httpResponse.status != expectedStatus) {
@@ -54,7 +54,7 @@ class HttpClient(
   def get(uri: String, headers: Seq[(String, String)] = Seq()): Future[Response] = {
     execute(RequestBuilder
       .get(uri)
-      .headers(headers))
+      .headers(headers).request)
   }
 
   /* Private */

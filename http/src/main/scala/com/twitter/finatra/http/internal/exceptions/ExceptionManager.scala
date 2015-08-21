@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.internal.exceptions
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionMapper}
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam

@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.marshalling
 
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.httpx.Request
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule

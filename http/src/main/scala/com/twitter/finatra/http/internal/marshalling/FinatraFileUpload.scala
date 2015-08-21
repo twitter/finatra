@@ -1,10 +1,9 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.httpx.{Method, Request}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import org.apache.commons.fileupload.{FileItemFactory, FileItemHeaders, FileItemIterator, FileUploadBase}
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.collection.mutable
 
 class FinatraFileUpload extends FileUploadBase {
@@ -58,7 +57,7 @@ class FinatraFileUpload extends FileUploadBase {
   }
 
   private def isPostOrPut(request: Request): Boolean = {
-    HttpMethod.POST == request.getMethod() ||
-    HttpMethod.PUT == request.getMethod()
+    Method.Post == request.method ||
+    Method.Put == request.method
   }
 }

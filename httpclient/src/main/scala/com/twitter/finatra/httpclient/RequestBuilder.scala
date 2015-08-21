@@ -1,35 +1,34 @@
 package com.twitter.finatra.httpclient
 
 import com.google.common.net.HttpHeaders
-import com.twitter.finagle.http.{Message, Request, RequestProxy}
+import com.twitter.finagle.httpx.{Message, Method, Request, RequestProxy}
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.HttpMethod
 
 /**
- * Provides a class for building <code>finagle.http.Request</code> objects
+ * Provides a class for building <code>finagle.httpx.Request</code> objects
  */
 object RequestBuilder {
   def get(url: String): RequestBuilder = {
-    method(HttpMethod.GET, url)
+    method(Method.Get, url)
   }
 
   def post(url: String): RequestBuilder = {
-    method(HttpMethod.POST, url)
+    method(Method.Post, url)
   }
 
   def put(url: String): RequestBuilder = {
-    method(HttpMethod.PUT, url)
+    method(Method.Put, url)
   }
 
   def delete(url: String): RequestBuilder = {
-    method(HttpMethod.DELETE, url)
+    method(Method.Delete, url)
   }
 
   def head(url: String): RequestBuilder = {
-    method(HttpMethod.HEAD, url)
+    method(Method.Head, url)
   }
 
-  def method(method: HttpMethod, url: String): RequestBuilder = {
+  def method(method: Method, url: String): RequestBuilder = {
     new RequestBuilder(
       Request(method, url))
   }

@@ -1,6 +1,6 @@
 package com.twitter.finatra.logging.integration
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.HttpServer
 import com.twitter.finatra.filters.CommonFilters
 import com.twitter.finatra.logging.filter.LoggingMDCFilter

@@ -2,7 +2,7 @@ package com.twitter.finatra.http.internal.marshalling
 
 import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues}
 import com.google.inject.{Injector, Key}
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.httpx.Request
 import com.twitter.finatra.json.internal.caseclass.annotations._
 import java.lang.annotation.Annotation
 
@@ -36,7 +36,7 @@ class RequestInjectableValues(
       else
         request.params.get(fieldName).orNull
     else if (hasAnnotation[HeaderInternal](forProperty))
-      Option(request.headers().get(fieldName)).orNull
+      request.headerMap.get(fieldName).orNull
     else if (isRequest(forProperty))
       request
     else

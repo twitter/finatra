@@ -1,11 +1,11 @@
 package com.twitter.finatra.http.test
 
+import com.twitter.finagle.httpx.Status
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 trait HttpMockResponses {
 
@@ -38,5 +38,5 @@ trait HttpMockResponses {
 
   def response(statusCode: Int) = testResponseBuilder.status(statusCode)
 
-  def response(httpResponseStatus: HttpResponseStatus) = testResponseBuilder.status(httpResponseStatus)
+  def response(status: Status) = testResponseBuilder.status(status)
 }

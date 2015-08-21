@@ -1,10 +1,9 @@
 package com.twitter.finatra.benchmarks
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Method, Request, Response}
 import com.twitter.finatra.http.internal.routing.{Route, RoutingService}
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http.HttpMethod
 import org.openjdk.jmh.annotations._
 
 @State(Scope.Thread)
@@ -16,7 +15,7 @@ class FinagleRequestScopeBenchmark {
 
   val route = Route(
     name = "groups",
-    method = HttpMethod.GET,
+    method = Method.Get,
     path = "/groups/",
     callback = defaultCallback,
     annotations = Seq(),

@@ -1,13 +1,13 @@
 package com.twitter.finatra.http.filters
 
-import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.httpx.Status._
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.util.Future
 import javax.inject.Singleton
-import org.joda.time.{DateTimeZone, DateTime}
+import org.joda.time.DateTime
 
 /**
  * HttpResponseFilter does the following:
@@ -26,7 +26,7 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
 
   def apply(request: R, service: Service[R, Response]): Future[Response] = {
     for (response <- service(request)) yield {
-      response.setProtocolVersion(request.version)
+      response.version = request.version
       setResponseHeaders(response)
       updateLocationHeader(request, response)
       response
@@ -39,7 +39,7 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
     if (locationStatusCodes.contains(response.status)) {
       for (existingLocation <- response.location) {
         if (!existingLocation.startsWith("http") && !existingLocation.startsWith("/")) {
-          response.headers.set(
+          response.headerMap.set(
             "Location",
             RequestUtils.pathUrl(request) + existingLocation)
         }

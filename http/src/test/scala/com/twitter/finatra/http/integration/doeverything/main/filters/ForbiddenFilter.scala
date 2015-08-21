@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.integration.doeverything.main.filters
 
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finagle.http.{Response, Request, Status}
+import com.twitter.finagle.httpx.{Response, Request, Status}
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.Future
 import javax.inject.Inject

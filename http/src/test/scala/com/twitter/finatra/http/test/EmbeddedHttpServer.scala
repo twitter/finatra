@@ -3,12 +3,13 @@ package com.twitter.finatra.http.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.google.inject.Stage
-import com.twitter.finagle.http._
+import com.twitter.finagle.httpx._
+import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.httpx.Method
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{PortUtils, Ports}
 import com.twitter.util.Try
-import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 
 class EmbeddedHttpServer(
   twitterServer: Ports,
@@ -101,7 +102,7 @@ class EmbeddedHttpServer(
     accept: MediaType = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -110,7 +111,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
-    val request = createApiRequest(path, HttpMethod.GET)
+    val request = createApiRequest(path, Method.Get)
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
@@ -119,7 +120,7 @@ class EmbeddedHttpServer(
     accept: MediaType = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -144,7 +145,7 @@ class EmbeddedHttpServer(
     suppress: Boolean = false,
     contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = null,
+    andExpect: Status = null,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -155,8 +156,8 @@ class EmbeddedHttpServer(
 
     val request = createApiRequest(path, Method.Post)
     request.setContentString(postBody)
-    request.headers.set(HttpHeaders.CONTENT_LENGTH, postBody.length)
-    request.headers.set(HttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.add(HttpHeaders.CONTENT_LENGTH, postBody.length.toString)
+    request.headerMap.add(HttpHeaders.CONTENT_TYPE, contentType)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
@@ -166,7 +167,7 @@ class EmbeddedHttpServer(
     postBody: String,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -186,7 +187,7 @@ class EmbeddedHttpServer(
     accept: MediaType = null,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = null,
+    andExpect: Status = null,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -197,7 +198,7 @@ class EmbeddedHttpServer(
 
     val request = createApiRequest(path, Method.Put)
     request.setContentString(putBody)
-    request.headers().set(HttpHeaders.CONTENT_LENGTH, putBody.length)
+    request.headerMap.add(HttpHeaders.CONTENT_LENGTH, putBody.length.toString)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
@@ -207,7 +208,7 @@ class EmbeddedHttpServer(
     putBody: String,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -227,7 +228,7 @@ class EmbeddedHttpServer(
     accept: MediaType = null,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = null,
+    andExpect: Status = null,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -259,7 +260,7 @@ class EmbeddedHttpServer(
     deleteBody: String,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -279,7 +280,7 @@ class EmbeddedHttpServer(
     accept: MediaType = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -288,7 +289,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
-    val request = createApiRequest(path, HttpMethod.OPTIONS)
+    val request = createApiRequest(path, Method.Options)
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
@@ -298,7 +299,7 @@ class EmbeddedHttpServer(
     accept: MediaType = null,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -307,9 +308,9 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
-    val request = createApiRequest(path, HttpMethod.PATCH)
+    val request = createApiRequest(path, Method.Patch)
     request.setContentString(patchBody)
-    request.headers().set(HttpHeaders.CONTENT_LENGTH, patchBody.length)
+    request.headerMap.set(HttpHeaders.CONTENT_LENGTH, patchBody.length.toString)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
@@ -319,7 +320,7 @@ class EmbeddedHttpServer(
     patchBody: String,
     suppress: Boolean = false,
     headers: Map[String, String] = Map(),
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -338,7 +339,7 @@ class EmbeddedHttpServer(
     accept: MediaType = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -347,7 +348,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): Response = {
 
-    val request = createApiRequest(path, HttpMethod.HEAD)
+    val request = createApiRequest(path, Method.Head)
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
 
@@ -357,7 +358,7 @@ class EmbeddedHttpServer(
     multipart: Boolean = false,
     routeToAdminServer: Boolean = false,
     headers: Map[String, String] = Map.empty,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withBody: String = null,
     withJsonBody: String = null,
     secure: Option[Boolean] = None): Response = {
@@ -369,7 +370,7 @@ class EmbeddedHttpServer(
       buildFormPost(multipart = multipart)
 
     jsonAwareHttpExecute(
-      Request(request),
+      request,
       routeToAdminServer = routeToAdminServer,
       andExpect = andExpect,
       withBody = withBody,
@@ -380,7 +381,7 @@ class EmbeddedHttpServer(
   def httpRequest(
     request: Request,
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = null,
+    andExpect: Status = null,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -398,7 +399,7 @@ class EmbeddedHttpServer(
     request: Request,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null,
     withJsonBody: String = null,
@@ -408,7 +409,7 @@ class EmbeddedHttpServer(
     secure: Boolean): Response = {
 
     val (client, port) = chooseHttpClient(request.path, routeToAdminServer, secure)
-    request.headers.set("Host", loopbackAddressForPort(port))
+    request.headerMap.set("Host", loopbackAddressForPort(port))
 
     val response = httpExecute(client, request, headers, suppress, andExpect, withLocation, withBody)
 

@@ -1,7 +1,7 @@
 package com.twitter.inject.server.tests
 
 import com.google.inject.AbstractModule
-import com.twitter.finagle.http.Status
+import com.twitter.finagle.httpx.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, Ports, TwitterServer}
 import com.twitter.inject.{Test, TwitterModule}
 import com.twitter.server.Lifecycle.Warmup

@@ -20,7 +20,7 @@ class MustacheMessageBodyWriter @Inject()(
   override def write(obj: Any): WriterResponse = {
     WriterResponse(
       MediaType.HTML_UTF_8,
-      mustacheService.createChannelBuffer(
+      mustacheService.createBuffer(
         lookupTemplateName(obj),
         obj))
   }

@@ -1,9 +1,9 @@
 package com.twitter.finatra.http.internal.request
 
-import com.twitter.finagle.http.{ParamMap, Request, RequestProxy}
+import com.twitter.finagle.httpx.{ParamMap, Request, RequestProxy}
 
 class RequestWithPathParams(
-  override val request: Request,
+  wrapped: Request,
   incomingParams: Map[String, String])
   extends RequestProxy {
 
@@ -12,4 +12,6 @@ class RequestWithPathParams(
       super.params,
       incomingParams)
   }
+
+  def request: Request = wrapped
 }

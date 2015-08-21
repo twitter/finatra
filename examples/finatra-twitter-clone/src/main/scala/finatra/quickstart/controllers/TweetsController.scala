@@ -13,7 +13,7 @@ class TweetsController @Inject()(
   tweetsService: TweetsService)
   extends Controller {
 
-  post("/tweet") { postedTweet: PostedTweet =>
+  post("/tweet/") { postedTweet: PostedTweet =>
     tweetsService.save(postedTweet) map { savedTweet =>
       response
         .created(savedTweet)

@@ -1,10 +1,10 @@
 package com.twitter.finatra.httpclient
 
+import com.twitter.finagle.httpx.Status
 import com.twitter.finagle.NoStacktrace
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 class HttpClientException(
-  status: HttpResponseStatus,
+  status: Status,
   msg: String)
   extends Exception(msg)
   with NoStacktrace

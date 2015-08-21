@@ -2,7 +2,7 @@ package com.twitter.finatra.http.internal.exceptions
 
 import com.google.common.net.MediaType
 import com.twitter.finagle.CancelledRequestException
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.exceptions.ExternalServiceExceptionMatcher
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, HttpException, HttpResponseException}
 import com.twitter.finatra.http.response.{ResponseBuilder, ErrorsResponse}

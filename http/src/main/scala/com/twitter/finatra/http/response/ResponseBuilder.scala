@@ -1,21 +1,21 @@
 package com.twitter.finatra.http.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
-import com.twitter.finagle.http.{Cookie => FinagleCookie, Response, Status}
+import com.twitter.finagle.httpx.{Cookie => FinagleCookie, Fields, ResponseProxy, Response, Status, Version}
+import com.twitter.finagle.netty3.ChannelBufferBuf
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.io.Buf
 import com.twitter.util.{Future, Memoize}
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.buffer.ChannelBuffers._
 import org.jboss.netty.buffer.{ChannelBuffer, ChannelBuffers}
-import org.jboss.netty.handler.codec.http.HttpHeaders.Names._
-import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie, DefaultCookie, HttpResponseStatus}
+import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie, DefaultCookie}
 import scala.runtime.BoxedUnit
 
 //TODO: Generate more response permutations
@@ -27,9 +27,9 @@ class ResponseBuilder @Inject()(
 
   /* Status Codes */
 
-  def status(statusCode: Int): EnrichedResponse = status(HttpResponseStatus.valueOf(statusCode))
+  def status(statusCode: Int): EnrichedResponse = status(Status(statusCode))
 
-  def status(httpResponseStatus: HttpResponseStatus): EnrichedResponse = EnrichedResponse(httpResponseStatus)
+  def status(responseStatus: Status): EnrichedResponse = EnrichedResponse(responseStatus)
 
   def ok: EnrichedResponse = EnrichedResponse(Status.Ok)
 
@@ -105,12 +105,16 @@ class ResponseBuilder @Inject()(
 
   def serviceUnavailable = EnrichedResponse(Status.ServiceUnavailable)
 
-  def clientClosed = EnrichedResponse(new HttpResponseStatus(499, "Client Closed Request"))
+  def clientClosed = EnrichedResponse(Status.ClientClosedRequest)
+
+  object EnrichedResponse {
+    def apply(s: Status): EnrichedResponse = EnrichedResponse(Response(Version.Http11, s))
+  }
 
   /* Wrapper around Finagle Response which exposes a builder like API */
-  case class EnrichedResponse(
-    override val status: HttpResponseStatus)
-    extends SimpleResponse(status) {
+  case class EnrichedResponse(resp: Response)
+    extends ResponseProxy {
+    override val response = resp
 
     /* Public */
 
@@ -120,12 +124,12 @@ class ResponseBuilder @Inject()(
     }
 
     def cookie(c: FinagleCookie): EnrichedResponse = {
-      httpResponse.addCookie(c)
+      response.addCookie(c)
       this
     }
 
     def cookie(c: NettyCookie): EnrichedResponse = {
-      httpResponse.addCookie(new FinagleCookie(c))
+      response.addCookie(new FinagleCookie(c))
       this
     }
 
@@ -136,7 +140,7 @@ class ResponseBuilder @Inject()(
         case bytes: Array[Byte] => body(bytes)
         case str: String => body(str)
         case _ =>
-          httpResponse.withOutputStream { os =>
+          response.withOutputStream { os =>
             objectMapper.writeValue(obj, os)
           }
       }
@@ -146,6 +150,7 @@ class ResponseBuilder @Inject()(
     def body(any: Any): EnrichedResponse = {
       any match {
         case null => nothing
+        case buf: Buf => body(buf)
         case bytes: Array[Byte] => body(bytes)
         case cbos: ChannelBuffer => body(cbos)
         case "" => nothing
@@ -174,7 +179,7 @@ class ResponseBuilder @Inject()(
     }
 
     def body(b: Array[Byte]): EnrichedResponse = {
-      httpResponse.setContent(wrappedBuffer(b))
+      response.content = Buf.ByteArray.Owned(b)
       this
     }
 
@@ -183,7 +188,7 @@ class ResponseBuilder @Inject()(
         nothing
       }
       else {
-        httpResponse.setContentString(bodyStr)
+        response.setContentString(bodyStr)
         this
       }
     }
@@ -197,8 +202,14 @@ class ResponseBuilder @Inject()(
       this
     }
 
+    @deprecated("use body(Buf)")
     def body(channelBuffer: ChannelBuffer): EnrichedResponse = {
-      httpResponse.setContent(channelBuffer)
+      response.content = ChannelBufferBuf.Owned(channelBuffer)
+      this
+    }
+
+    def body(buffer: Buf): EnrichedResponse = {
+      response.content = buffer
       this
     }
 
@@ -208,18 +219,18 @@ class ResponseBuilder @Inject()(
     }
 
     def nothing = {
-      httpResponse.headers().set(HttpHeaders.CONTENT_TYPE, MediaType.PLAIN_TEXT_UTF_8)
+      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.PLAIN_TEXT_UTF_8))
       this
     }
 
     def plain(any: Any): EnrichedResponse = {
-      httpResponse.headers().set(HttpHeaders.CONTENT_TYPE, MediaType.PLAIN_TEXT_UTF_8)
+      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.PLAIN_TEXT_UTF_8))
       body(any)
     }
 
     def html(body: String) = {
-      httpResponse.headers().set("Content-Type", "text/html")
-      httpResponse.setContentString(body)
+      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.HTML_UTF_8))
+      response.setContentString(body)
       this
     }
 
@@ -234,44 +245,43 @@ class ResponseBuilder @Inject()(
     }
 
     def location(uri: String): EnrichedResponse = {
-      httpResponse.headers().set("Location", uri)
+      response.headerMap.set("Location", uri)
       this
     }
 
     def header(k: String, v: Any) = {
-      httpResponse.headers().set(k, v)
+      response.headerMap.set(k, v.toString)
       this
     }
 
     def header(k: String, v: MediaType) = {
-      httpResponse.headers().set(k, v)
+      response.headerMap.set(k, mediaToString(v))
       this
     }
 
     def headers(map: Map[String, String]) = {
       for ((k, v) <- map) {
-        httpResponse.headers().set(k, v)
+        response.headerMap.set(k, v)
       }
       this
     }
 
     def headers(entries: (String, Any)*) = {
       for ((k, v) <- entries) {
-        httpResponse.headers().set(k, v)
+        response.headerMap.set(k, v.toString)
       }
       this
     }
 
     def contentType(mimeType: String) = {
-      httpResponse.headers().set(CONTENT_TYPE, mimeType + ";charset=utf-8")
+      response.headerMap.set(Fields.ContentType, mimeType + ";charset=utf-8")
       this
     }
 
     def contentType(mimeType: MediaType) = {
-      httpResponse.headers().set(
-        CONTENT_TYPE,
+      response.headerMap.set(
+        Fields.ContentType,
         mediaToString(mimeType))
-
       this
     }
 
@@ -298,12 +308,12 @@ class ResponseBuilder @Inject()(
     }
 
     def view(template: String, obj: Any) = {
-      html(mustacheService.createChannelBuffer(template, obj))
+      html(mustacheService.createBuffer(template, obj))
     }
 
-    def toFuture: Future[Response] = Future.value(this)
+    def toFuture: Future[Response] = Future.value(response)
 
-    def toException: HttpResponseException = new HttpResponseException(this)
+    def toException: HttpResponseException = new HttpResponseException(response)
 
     def toFutureException[T]: Future[T] = Future.exception(toException)
 

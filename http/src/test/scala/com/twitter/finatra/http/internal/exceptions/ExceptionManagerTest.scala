@@ -1,11 +1,10 @@
 package com.twitter.finatra.http.internal.exceptions
 
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.httpx.{Request, Response, Status}
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionMapper}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Test
 import com.twitter.inject.app.TestInjector
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 import org.specs2.mock.Mockito
 
 class ExceptionManagerTest extends Test with Mockito {
@@ -18,7 +17,7 @@ class ExceptionManagerTest extends Test with Mockito {
   exceptionManager.add(new UnauthorizedExceptionMapper)
   exceptionManager.add[UnauthorizedException1Mapper]
 
-  def testException(e: Throwable, status: HttpResponseStatus) {
+  def testException(e: Throwable, status: Status) {
     val request = mock[Request]
     val response = exceptionManager.toResponse(request, e)
     response.status should equal(status)
@@ -63,21 +62,21 @@ class UnauthorizedException1 extends UnauthorizedException
 
 object TestDefaultExceptionMapper extends DefaultExceptionMapper {
   def toResponse(request: Request, throwable: Throwable): Response = {
-    new SimpleResponse(Status.InternalServerError)
+    SimpleResponse(Status.InternalServerError)
   }
 }
 
 class ForbiddenExceptionMapper extends ExceptionMapper[ForbiddenException] {
   def toResponse(request: Request, throwable: ForbiddenException): Response =
-    new SimpleResponse(Status.Forbidden)
+    SimpleResponse(Status.Forbidden)
 }
 
 class UnauthorizedExceptionMapper extends ExceptionMapper[UnauthorizedException] {
   def toResponse(request: Request, throwable: UnauthorizedException): Response =
-    new SimpleResponse(Status.Unauthorized)
+    SimpleResponse(Status.Unauthorized)
 }
 
 class UnauthorizedException1Mapper extends ExceptionMapper[UnauthorizedException1] {
   def toResponse(request: Request, throwable: UnauthorizedException1): Response =
-    new SimpleResponse(Status.NotFound)
+    SimpleResponse(Status.NotFound)
 }

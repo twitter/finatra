@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.integration.requestscope
 
-import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.http.filters.CommonFilters
@@ -66,7 +66,7 @@ class TestUserRequestScopeFilter @Inject()(
   extends SimpleFilter[Request, Response] {
 
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
-    val username = request.headers.get("Username")
+    val username = request.headerMap.get("Username").get
     requestScope.seed[TestUser](TestUser(username))
     service(request)
   }

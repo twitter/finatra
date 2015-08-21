@@ -1,11 +1,10 @@
 package com.twitter.finatra.http.response
 
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.http.{Response, Status}
+import com.twitter.finagle.httpx.{Response, Status}
 import com.twitter.inject.Logging
 import com.twitter.io.{Buf, Writer}
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 object StreamingResponse {
 
@@ -22,7 +21,7 @@ object StreamingResponse {
 
   def jsonArray[T](
     toBuf: T => Buf,
-    status: HttpResponseStatus = Status.Ok,
+    status: Status = Status.Ok,
     asyncStream: AsyncStream[T]) = {
 
     new StreamingResponse[T](
@@ -37,7 +36,7 @@ object StreamingResponse {
 
 case class StreamingResponse[T](
   toBuf: T => Buf,
-  status: HttpResponseStatus = Status.Ok,
+  status: Status = Status.Ok,
   prefixOpt: Option[Buf] = None,
   separatorOpt: Option[Buf] = None,
   suffixOpt: Option[Buf] = None,

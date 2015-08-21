@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.conversions
 
+import com.twitter.finagle.httpx.Status
 import com.twitter.finatra.conversions.future.RichFutureOption
 import com.twitter.finatra.http.exceptions.{HttpException, NotFoundException}
 import com.twitter.inject.Logging
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 object futureHttp {
 
@@ -19,7 +19,7 @@ object futureHttp {
   /* -------------------------------------------------------- */
   implicit class RichHttpFuture[A](future: Future[A]) extends Logging {
 
-    def httpRescue[ExceptionToRescue: Manifest](status: HttpResponseStatus, errors: Seq[String] = Seq(), log: String = ""): Future[A] = {
+    def httpRescue[ExceptionToRescue: Manifest](status: Status, errors: Seq[String] = Seq(), log: String = ""): Future[A] = {
       future.rescue {
         case t if manifest[ExceptionToRescue].runtimeClass.isAssignableFrom(t.getClass) =>
           if (log.nonEmpty) {

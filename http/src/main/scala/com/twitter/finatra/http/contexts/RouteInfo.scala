@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.contexts
 
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.httpx.Request
 
 object RouteInfo {
   private[http] val field = Request.Schema.newField[Option[RouteInfo]](None)

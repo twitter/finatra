@@ -1,9 +1,8 @@
 package com.twitter.finatra.http.exceptions
 
 import com.google.common.net.MediaType
-import com.twitter.finagle.http.{Response, Status}
+import com.twitter.finagle.httpx.{Response, Status}
 import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 /* HTTP Exceptions */
 // TODO: Redesign to avoid boilderplate below (@see ResponseBuilder) */
@@ -12,17 +11,17 @@ import org.jboss.netty.handler.codec.http.HttpResponseStatus
  * HttpException which will be rendered as an HTTP response.
  */
 object HttpException {
-  def plainText(status: HttpResponseStatus, body: String) = {
+  def plainText(status: Status, body: String) = {
     new HttpException(status, MediaType.PLAIN_TEXT_UTF_8, Seq(body))
   }
 
-  def apply(status: HttpResponseStatus, errors: String*) = {
+  def apply(status: Status, errors: String*) = {
     new HttpException(status, MediaType.JSON_UTF_8, errors)
   }
 }
 
 class HttpException(
-  val statusCode: HttpResponseStatus,
+  val statusCode: Status,
   val mediaType: MediaType,
   val errors: Seq[String] = Seq())
   extends Exception {

@@ -1,51 +1,43 @@
 package com.twitter.finatra.tests.utils
 
-import com.twitter.finagle.http.{Version, Response}
+import com.twitter.finagle.httpx.{Version, Response, Status}
 import com.twitter.finatra.utils.ResponseUtils
 import com.twitter.inject.Test
-import org.jboss.netty.handler.codec.http.{HttpResponseStatus, DefaultHttpResponse}
 
 class ResponseUtilsTest
   extends Test {
 
   val internalServerErrorResponse = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.INTERNAL_SERVER_ERROR))
+      Status.InternalServerError)
 
   val notFoundResponse = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.NOT_FOUND))
+      Status.NotFound)
   val notFoundResponseWithBody = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.NOT_FOUND))
+      Status.NotFound)
   notFoundResponseWithBody.setContentString("not found")
 
   val forbiddenResponse = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.FORBIDDEN))
+      Status.Forbidden)
   val forbiddenResponseWithBody = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.FORBIDDEN))
+      Status.Forbidden)
   forbiddenResponseWithBody.setContentString("forbidden")
 
   val movedPermanentlyResponse = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.MOVED_PERMANENTLY))
+      Status.MovedPermanently)
 
   val okResponse = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.OK))
+      Status.Ok)
+
   val okResponseWithBody = Response(
-    new DefaultHttpResponse(
       Version.Http11,
-      HttpResponseStatus.OK))
+      Status.Ok)
   okResponseWithBody.setContentString("ok")
 
   "ResponseUtils" should {

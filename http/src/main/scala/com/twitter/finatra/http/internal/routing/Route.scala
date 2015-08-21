@@ -1,18 +1,17 @@
 package com.twitter.finatra.http.internal.routing
 
-import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Filter, Service}
+import com.twitter.finagle.httpx.{Method, Request, Response}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.request.RequestWithPathParams
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
-import org.jboss.netty.handler.codec.http.HttpMethod
 import scala.language.existentials
 
 //optimized
 case class Route(
   name: String,
-  method: HttpMethod,
+  method: Method,
   path: String,
   callback: Request => Future[Response],
   annotations: Seq[Annotation] = Seq(),

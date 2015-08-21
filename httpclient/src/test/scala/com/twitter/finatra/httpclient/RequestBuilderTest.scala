@@ -1,8 +1,8 @@
 package com.twitter.finatra.httpclient
 
+import com.twitter.finagle.httpx.Method
+import com.twitter.finagle.httpx.Method._
 import com.twitter.inject.Test
-import org.jboss.netty.handler.codec.http.HttpMethod
-import org.jboss.netty.handler.codec.http.HttpMethod._
 
 class RequestBuilderTest extends Test {
 
@@ -14,7 +14,7 @@ class RequestBuilderTest extends Test {
         "b" -> "2")
 
     request.uri should be("/abc")
-    request.method should be(GET)
+    request.method should be(Get)
 
     request.headerMap should be(Map(
       "a" -> "1",
@@ -30,7 +30,7 @@ class RequestBuilderTest extends Test {
         "a" -> "1",
         "b" -> "2")
 
-    assertRequestWithBody(POST, request)
+    assertRequestWithBody(Post, request)
   }
 
   "put" in {
@@ -41,7 +41,7 @@ class RequestBuilderTest extends Test {
         "a" -> "1",
         "b" -> "2")
 
-    assertRequestWithBody(PUT, request)
+    assertRequestWithBody(Put, request)
   }
 
   "delete" in {
@@ -52,7 +52,7 @@ class RequestBuilderTest extends Test {
         "a" -> "1",
         "b" -> "2")
 
-    assertRequestWithBody(DELETE, request)
+    assertRequestWithBody(Delete, request)
   }
 
   "head" in {
@@ -63,7 +63,7 @@ class RequestBuilderTest extends Test {
         "a" -> "1",
         "b" -> "2")
 
-    assertRequestWithBody(HEAD, request)
+    assertRequestWithBody(Head, request)
   }
 
   "post json" in {
@@ -74,7 +74,7 @@ class RequestBuilderTest extends Test {
     request.contentString should be("{}")
   }
 
-  def assertRequestWithBody(expectedMethod: HttpMethod, request: RequestBuilder): Unit = {
+  def assertRequestWithBody(expectedMethod: Method, request: RequestBuilder): Unit = {
     request.uri should be("/abc")
     request.method should be(expectedMethod)
 

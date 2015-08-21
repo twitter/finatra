@@ -1,14 +1,13 @@
 package com.twitter.finatra.http.internal.routing
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Method, Request, Response}
 import com.twitter.util.Future
 import java.util.{HashMap => JMap}
-import org.jboss.netty.handler.codec.http.HttpMethod
 
 
 object Routes {
 
-  def createForMethod(routes: Seq[Route], method: HttpMethod) = {
+  def createForMethod(routes: Seq[Route], method: Method) = {
     new Routes((routes filter { _.method == method }).toArray)
   }
 }

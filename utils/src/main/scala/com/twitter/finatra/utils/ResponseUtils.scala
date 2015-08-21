@@ -1,16 +1,16 @@
 package com.twitter.finatra.utils
 
-import com.twitter.finagle.http.Response
-import com.twitter.finagle.http.Status._
-import org.jboss.netty.handler.codec.http.{HttpResponseStatus, HttpResponse}
+import com.twitter.finagle.httpx.Response
+import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.httpx.Status._
 
 object ResponseUtils {
 
-  def is5xxResponse(response: HttpResponse) = {
+  def is5xxResponse(response: Response) = {
     errorClass(response) == 5
   }
 
-  def is4xxOr5xxResponse(response: HttpResponse) = {
+  def is4xxOr5xxResponse(response: Response) = {
     val errClass = errorClass(response)
     errClass == 4 || errClass == 5
   }
@@ -42,13 +42,13 @@ object ResponseUtils {
 
   /* Private */
 
-  private def errorClass(response: HttpResponse): Int = {
-    response.getStatus.getCode / 100
+  private def errorClass(response: Response): Int = {
+    response.statusCode / 100
   }
 
   private def expectResponseStatus(
     response: Response)(
-    expectedStatus: HttpResponseStatus = null,
+    expectedStatus: Status = null,
     withBody: String = null): Unit = {
 
     assert(

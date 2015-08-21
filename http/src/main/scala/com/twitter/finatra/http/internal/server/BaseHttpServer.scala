@@ -6,8 +6,8 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.Service
 import com.twitter.finagle.builder.ServerConfig.Yes
 import com.twitter.finagle.builder.{Server, ServerBuilder}
-import com.twitter.finagle.http.service.NullService
-import com.twitter.finagle.http.{Http, Request, Response, RichHttp}
+import com.twitter.finagle.httpx.service.NullService
+import com.twitter.finagle.httpx.{Http, Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}
@@ -53,6 +53,7 @@ trait BaseHttpServer extends TwitterServer {
       .enableTracing(enable = true)
       .maxRequestSize(maxRequestSizeFlag())
       .enableTracing(tracingEnabledFlag())
+      .streaming(streamRequest)
   }
 
   /**
@@ -60,12 +61,6 @@ trait BaseHttpServer extends TwitterServer {
    * Set to true if you wish to stream parse requests using request.reader.read
    */
   protected def streamRequest: Boolean = false
-
-  protected def createCodec: RichHttp[Request] = {
-    new RichHttp[Request](
-      httpFactory = httpCodec,
-      aggregateChunks = !streamRequest)
-  }
 
   type FinagleServerBuilder = ServerBuilder[Request, Response, Yes, Yes, Yes]
 
@@ -109,7 +104,7 @@ trait BaseHttpServer extends TwitterServer {
   private def startHttpServer() {
     for (port <- parsePort(httpPortFlag)) {
       val serverBuilder = ServerBuilder()
-        .codec(createCodec)
+        .codec(httpCodec)
         .bindTo(port)
         .reportTo(injector.instance[StatsReceiver])
         .name("http")
@@ -124,7 +119,7 @@ trait BaseHttpServer extends TwitterServer {
   private def startHttpsServer() {
     for (port <- parsePort(httpsPortFlag)) {
       val serverBuilder = ServerBuilder()
-        .codec(createCodec)
+        .codec(httpCodec)
         .bindTo(port)
         .reportTo(injector.instance[StatsReceiver])
         .name("https")

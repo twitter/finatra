@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser

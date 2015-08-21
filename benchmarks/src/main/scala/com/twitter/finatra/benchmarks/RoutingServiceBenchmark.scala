@@ -1,9 +1,8 @@
 package com.twitter.finatra.benchmarks
 
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Method, Request, Response}
 import com.twitter.finatra.http.internal.routing.{Route, RoutingService}
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http.HttpMethod
 import org.openjdk.jmh.annotations._
 
 @State(Scope.Thread)
@@ -40,7 +39,7 @@ class RoutingServiceBenchmark {
 
   def route(path: String) = Route(
     name = path,
-    method = HttpMethod.GET,
+    method = Method.Get,
     path = path,
     callback = defaultCallback,
     annotations = Seq(),

@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.doeverything.main.controllers
 
-import com.twitter.finagle.http.{Request, Status}
+import com.twitter.finagle.httpx.{Request, Status}
 import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
 import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.http.Controller
@@ -81,8 +81,7 @@ class DoEverythingController @Inject()(
   }
 
   post("/formPostViewFromBuilderHtml") { formPost: FormPostRequest =>
-    response.ok.html(
-      TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
+    response.ok.html(TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
   post("/formPostViewFromBuilderCreatedView") { formPost: FormPostRequest =>
@@ -374,7 +373,8 @@ class DoEverythingController @Inject()(
 
   get("/HttpResponseException") { r: Request =>
     throw new HttpResponseException(
-      response.conflict("conflicted"))
+      response.conflict("conflicted")
+    )
   }
 
   get("/toFutureException") { r: Request =>

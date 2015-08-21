@@ -256,7 +256,7 @@ lazy val utils = project.
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.google.guava" % "guava" % versions.guava,
-      "com.twitter" %% "finagle-http" % versions.finagle,
+      "com.twitter" %% "finagle-httpx" % versions.finagle,
       "commons-io" % "commons-io" % versions.commonsIo,
       "joda-time" % "joda-time" % versions.jodaTime,
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
@@ -331,7 +331,7 @@ lazy val slf4j = project.
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-http" % versions.finagle,
+      "com.twitter" %% "finagle-httpx" % versions.finagle,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j

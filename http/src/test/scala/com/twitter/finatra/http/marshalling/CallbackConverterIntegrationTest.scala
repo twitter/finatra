@@ -3,8 +3,8 @@ package com.twitter.finatra.http.marshalling
 import com.twitter.finatra.conversions.buf
 import buf._
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.httpx.{Method => HttpMethod, Request, Response, Status}
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
@@ -13,7 +13,6 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Mockito, Test}
 import com.twitter.io.{Reader, Buf}
 import com.twitter.util.{Await, Future}
-import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 
 class CallbackConverterIntegrationTest extends Test with Mockito {
 
@@ -24,7 +23,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
   val callbackConverter = injector.instance[CallbackConverter]
 
   val ford = Car("Ford")
-  val okResponse = SimpleResponse(Ok, "bob")
+  val okResponse = SimpleResponse(Status.Ok, "bob")
 
   "Future Some String" in {
     assertOk(
@@ -35,7 +34,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
   "Future None String" in {
     assertStatus(
       callbackConverter.convertToFutureResponse(futureNoneString),
-      expectedStatus = NotFound)
+      expectedStatus = Status.NotFound)
   }
 
   "Future Some Product" in {
@@ -71,7 +70,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
   "Future None Response" in {
     assertStatus(
       callbackConverter.convertToFutureResponse(futureNoneResponse),
-      expectedStatus = NotFound)
+      expectedStatus = Status.NotFound)
   }
 
   "Future Seq String" in {
@@ -101,7 +100,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
   "None" in {
     assertStatus(
       callbackConverter.convertToFutureResponse(noneCallback),
-      expectedStatus = NotFound)
+      expectedStatus = Status.NotFound)
   }
 
   "Some" in {
@@ -112,7 +111,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
 
   "AsyncStream request" in {
     val jsonStr = "[1,2]"
-    val request = Request(HttpMethod.POST, "/")
+    val request = Request(HttpMethod.Post, "/")
     request.setChunked(true)
     request.writer.write(Buf.Utf8(jsonStr)) ensure {
       request.writer.close()
@@ -134,7 +133,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
   
   "AsyncStream request and response" in {
     val jsonStr = "[1,2]"
-    val request = Request(HttpMethod.POST, "/")
+    val request = Request(HttpMethod.Post, "/")
     request.setChunked(true)
     request.writer.write(Buf.Utf8(jsonStr)) ensure {
       request.writer.close()
@@ -238,7 +237,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
 
   private def assertStatus(
     convertedFunc: (Request) => Future[Response],
-    expectedStatus: HttpResponseStatus) {
+    expectedStatus: Status) {
     val response = Await.result(convertedFunc(Request()))
     response.status should equal(expectedStatus)
   }

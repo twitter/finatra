@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.response
 
 import com.google.common.net.MediaType
-import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{Cookie => FinagleCookie, Response, Status}
+import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.httpx.{Cookie => FinagleCookie, Response}
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.routing.FileResolver
@@ -11,7 +11,7 @@ import com.twitter.inject.Mockito
 import com.twitter.util.Await
 import java.io.{File, FileWriter}
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.handler.codec.http.{DefaultCookie, HttpResponseStatus}
+import org.jboss.netty.handler.codec.http.DefaultCookie
 
 
 class ResponseBuilderTest extends HttpTest with Mockito {
@@ -59,55 +59,55 @@ class ResponseBuilderTest extends HttpTest with Mockito {
     }
 
     "properly return responses" in {
-      responseBuilder.noContent.status should equal(NoContent)
-      responseBuilder.notAcceptable.status should equal(NotAcceptable)
+      responseBuilder.noContent.status should equal(Status.NoContent)
+      responseBuilder.notAcceptable.status should equal(Status.NotAcceptable)
 
       assertResponseWithFooBody(
         responseBuilder.notAcceptable("foo"),
-        NotAcceptable)
+        Status.NotAcceptable)
 
-      responseBuilder.accepted.status should equal(Accepted)
+      responseBuilder.accepted.status should equal(Status.Accepted)
 
-      responseBuilder.movedPermanently.status should equal(MovedPermanently)
+      responseBuilder.movedPermanently.status should equal(Status.MovedPermanently)
       assertResponseWithFooBody(
         responseBuilder.movedPermanently("foo"),
-        MovedPermanently)
+        Status.MovedPermanently)
 
-      responseBuilder.notModified.status should equal(NotModified)
+      responseBuilder.notModified.status should equal(Status.NotModified)
 
       assertResponseWithFooBody(
         responseBuilder.badRequest("foo"),
-        BadRequest)
+        Status.BadRequest)
 
       assertResponseWithFooBody(
         responseBuilder.notFound("foo"),
-        NotFound)
+        Status.NotFound)
 
-      responseBuilder.gone.status should equal(Gone)
+      responseBuilder.gone.status should equal(Status.Gone)
       assertResponseWithFooBody(
         responseBuilder.gone("foo"),
-        Gone)
+        Status.Gone)
 
-      responseBuilder.preconditionFailed.status should equal(PreconditionFailed)
+      responseBuilder.preconditionFailed.status should equal(Status.PreconditionFailed)
       assertResponseWithFooBody(
         responseBuilder.preconditionFailed("foo"),
-        PreconditionFailed)
+        Status.PreconditionFailed)
 
-      responseBuilder.requestEntityTooLarge.status should equal(RequestEntityTooLarge)
+      responseBuilder.requestEntityTooLarge.status should equal(Status.RequestEntityTooLarge)
       assertResponseWithFooBody(
         responseBuilder.requestEntityTooLarge("foo"),
-        RequestEntityTooLarge)
+        Status.RequestEntityTooLarge)
 
 
       assertResponseWithFooBody(
         responseBuilder.internalServerError("foo"),
-        InternalServerError)
+        Status.InternalServerError)
 
       assertResponseWithFooBody(
         responseBuilder.ok.html("foo"),
-        Ok)
+        Status.Ok)
 
-      responseBuilder.notImplemented.status should equal(NotImplemented)
+      responseBuilder.notImplemented.status should equal(Status.NotImplemented)
 
       responseBuilder.clientClosed.statusCode should equal(499)
 
@@ -119,7 +119,7 @@ class ResponseBuilderTest extends HttpTest with Mockito {
 
       responseBuilder.ok.headers(("Content-Type", "Foo"), ("A", "B")).asInstanceOf[Response].contentType.get should equal("Foo")
 
-      Await.result(responseBuilder.ok.toFuture).status should equal(Ok)
+      Await.result(responseBuilder.ok.toFuture).status should equal(Status.Ok)
     }
   }
 
@@ -129,7 +129,7 @@ class ResponseBuilderTest extends HttpTest with Mockito {
     cookie.value should equal("bar")
   }
 
-  def assertResponseWithFooBody(response: Response, expectedStatus: HttpResponseStatus): Unit = {
+  def assertResponseWithFooBody(response: Response, expectedStatus: Status): Unit = {
     response.status should equal(expectedStatus)
     response.contentString should equal("foo")
   }

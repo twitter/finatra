@@ -1,14 +1,13 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finagle.http.{HttpMuxer, Request, Response, Status}
-import com.twitter.finagle.httpx.compat.NettyClientAdaptor
-import com.twitter.finagle.{Service, httpx}
+import com.twitter.finagle.httpx.{Request, Response, Status}
+import com.twitter.finagle.httpx.compat.NettyAdaptor
+import com.twitter.finagle.{httpx, http}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
 import com.twitter.util.{Await, ExecutorServiceFuturePool, Future}
 import javax.inject.Inject
-import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
 
 class HttpWarmup @Inject()(
   router: HttpRouter,
@@ -19,9 +18,6 @@ class HttpWarmup @Inject()(
 
   /* Use a FuturePool to avoid getting a ConstFuture from Future.apply(...) */
   private val pool = FuturePools.fixedPool("HTTP Warmup", 1).asInstanceOf[ExecutorServiceFuturePool]
-
-  private val httpxMuxer: Service[HttpRequest, HttpResponse] =
-    NettyClientAdaptor.andThen(httpx.HttpMuxer)
 
   /* Public */
 
@@ -52,16 +48,15 @@ class HttpWarmup @Inject()(
   /* Private */
 
   private def executeRequest(request: Request, forceRouteToHttpMuxer: Boolean): Response = {
-    val nettyResponseFuture = pool {
+    val response = pool {
       info("Warmup " + request)
       routeRequest(request, forceRouteToHttpMuxer)
     }.flatten
 
-    Response(
-      Await.result(nettyResponseFuture))
+    Await.result(response)
   }
 
-  private def routeRequest(request: Request, forceRouteToHttpMuxer: Boolean): Future[HttpResponse] = {
+  private def routeRequest(request: Request, forceRouteToHttpMuxer: Boolean): Future[Response] = {
     /* Mutation */
     request.headerMap.add("Host", "127.0.0.1")
     request.headerMap.add("User-Agent", userAgent)
@@ -76,10 +71,12 @@ class HttpWarmup @Inject()(
       router.services.externalService(request)
   }
 
-  private def routeToAdminMuxers(request: Request): Future[HttpResponse] = {
-    httpxMuxer(request.getHttpRequest()) flatMap { response =>
-      if (response.getStatus == Status.NotFound)
-        HttpMuxer(request)
+  private[this] val httpMuxer = NettyAdaptor.andThen(http.HttpMuxer)
+
+  private def routeToAdminMuxers(request: Request): Future[Response] = {
+    httpx.HttpMuxer(request) flatMap { response =>
+      if (response.status == Status.NotFound)
+        httpMuxer(request)
       else
         Future(response)
     }

@@ -1,8 +1,8 @@
 package com.twitter.finatra.http
 
 import com.google.inject.Module
-import com.twitter.finagle.Service
-import com.twitter.finagle.http.{HttpMuxer, Request, Response}
+import com.twitter.finagle._
+import com.twitter.finagle.httpx.{HttpMuxer, Request, Response}
 import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.modules.{AccessLogModule, ExceptionMapperModule, DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.routing.HttpRouter

@@ -4,7 +4,7 @@ import com.google.common.net.{HttpHeaders, MediaType}
 import com.google.inject.Stage
 import com.twitter.conversions.time._
 import com.twitter.finagle.builder.ClientBuilder
-import com.twitter.finagle.http._
+import com.twitter.finagle.httpx._
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
@@ -17,7 +17,6 @@ import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
-import org.jboss.netty.handler.codec.http.{HttpMethod, HttpResponseStatus}
 
 object EmbeddedTwitterServer {
   private def resolveClientFlags(useSocksProxy: Boolean, clientFlags: Map[String, String]) = {
@@ -162,12 +161,12 @@ class EmbeddedTwitterServer(
     accept: MediaType = null,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null): Response = {
 
     start()
-    val request = createApiRequest(path, HttpMethod.GET)
+    val request = createApiRequest(path, Method.Get)
     httpExecute(httpAdminClient, request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody)
   }
 
@@ -180,7 +179,7 @@ class EmbeddedTwitterServer(
     request: Request,
     headers: Map[String, String] = Map(),
     suppress: Boolean = false,
-    andExpect: HttpResponseStatus = Status.Ok,
+    andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null): Response = {
 
@@ -224,7 +223,7 @@ class EmbeddedTwitterServer(
     val host = new InetSocketAddress(PortUtils.loopbackAddress, port)
     val builder = ClientBuilder()
       .name(name)
-      .codec(RichHttp[Request](Http(), aggregateChunks = !streamResponse))
+      .codec(Http(_streaming = streamResponse))
       .tcpConnectTimeout(tcpConnectTimeout)
       .connectTimeout(connectTimeout)
       .requestTimeout(requestTimeout)
@@ -241,10 +240,12 @@ class EmbeddedTwitterServer(
   }
 
   private def handleRequest(request: Request, client: Service[Request, Response], additionalHeaders: Map[String, String] = Map()): Response = {
+
     // Don't overwrite request.headers set by RequestBuilder in httpFormPost.
     val defaultNewHeaders = defaultRequestHeaders filterKeys {!request.headerMap.contains(_)}
     addOrRemoveHeaders(request, defaultNewHeaders)
     addOrRemoveHeaders(request, additionalHeaders) //additional headers get added second so they can overwrite defaults
+
     val futureResponse = client(request)
     val elapsed = Stopwatch.start()
     try {
@@ -300,7 +301,7 @@ class EmbeddedTwitterServer(
 
   private def printResponseBody(response: Response, suppress: Boolean) {
     if (!suppress) {
-      if (response.isChunked()) {
+      if (response.isChunked) {
         //no-op
       }
       else if (response.contentString.isEmpty) {
@@ -325,14 +326,14 @@ class EmbeddedTwitterServer(
   private def addOrRemoveHeaders(request: Request, headers: Map[String, String]): Unit = {
     for ((key, value) <- headers) {
       if (value == null) {
-        request.headers.remove(key)
+        request.headerMap.remove(key)
       } else {
-        request.headers.set(key, value)
+        request.headerMap.set(key, value)
       }
     }
   }
 
-  protected def createApiRequest(path: String, method: HttpMethod = Method.Get) = {
+  protected def createApiRequest(path: String, method: Method = Method.Get) = {
     val pathToUse = if (path.startsWith("http"))
       URI.create(path).getPath
     else

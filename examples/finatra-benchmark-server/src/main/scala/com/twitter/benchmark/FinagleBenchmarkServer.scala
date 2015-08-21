@@ -3,8 +3,8 @@ package com.twitter.benchmark
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.path.{Path, Root, _}
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.httpx.path.{Path, Root, _}
+import com.twitter.finagle.httpx.{Request, Response, Status}
 import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.util.Future
 

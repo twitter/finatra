@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.integration.tweetexample.test
 
+import com.twitter.finagle.httpx.Status
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
 import com.twitter.finatra.http.test.{HttpTest, EmbeddedHttpServer}
 import com.twitter.finatra.httpclient.RequestBuilder

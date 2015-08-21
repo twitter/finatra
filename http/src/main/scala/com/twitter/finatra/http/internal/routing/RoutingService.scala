@@ -1,27 +1,26 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.httpx.{Method, Request, Response, Status}
+import com.twitter.finagle.httpx.Method._
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.Future
-import org.jboss.netty.handler.codec.http.HttpMethod
-import org.jboss.netty.handler.codec.http.HttpMethod._
 
 class RoutingService(
   routes: Seq[Route])
   extends Service[Request, Response]
   with Logging {
 
-  private val get = Routes.createForMethod(routes, GET)
-  private val post = Routes.createForMethod(routes, POST)
-  private val put = Routes.createForMethod(routes, PUT)
-  private val delete = Routes.createForMethod(routes, DELETE)
-  private val options = Routes.createForMethod(routes, OPTIONS)
-  private val patch = Routes.createForMethod(routes, PATCH)
-  private val head = Routes.createForMethod(routes, HEAD)
-  private val connect = Routes.createForMethod(routes, CONNECT)
-  private val trace = Routes.createForMethod(routes, TRACE)
+  private val get = Routes.createForMethod(routes, Get)
+  private val post = Routes.createForMethod(routes, Post)
+  private val put = Routes.createForMethod(routes, Put)
+  private val delete = Routes.createForMethod(routes, Delete)
+  private val options = Routes.createForMethod(routes, Options)
+  private val patch = Routes.createForMethod(routes, Patch)
+  private val head = Routes.createForMethod(routes, Head)
+  private val connect = Routes.createForMethod(routes, Connect)
+  private val trace = Routes.createForMethod(routes, Trace)
 
   private val routesStr = routes map {_.summary} mkString ", "
 
@@ -29,15 +28,15 @@ class RoutingService(
 
   override def apply(request: Request): Future[Response] = {
     (request.method match {
-      case GET => get.handle(request)
-      case POST => post.handle(request)
-      case PUT => put.handle(request)
-      case DELETE => delete.handle(request)
-      case OPTIONS => options.handle(request)
-      case PATCH => patch.handle(request)
-      case HEAD => head.handle(request)
-      case CONNECT => connect.handle(request)
-      case TRACE => trace.handle(request)
+      case Get => get.handle(request)
+      case Post => post.handle(request)
+      case Put => put.handle(request)
+      case Delete => delete.handle(request)
+      case Options => options.handle(request)
+      case Patch => patch.handle(request)
+      case Head => head.handle(request)
+      case Connect => connect.handle(request)
+      case Trace => trace.handle(request)
       case _ => badRequest(request.method)
     }).getOrElse {
       notFound(request)
@@ -53,10 +52,10 @@ class RoutingService(
         Status.NotFound))
   }
 
-  private def badRequest(method: HttpMethod): Option[Future[Response]] = {
+  private def badRequest(method: Method): Option[Future[Response]] = {
     Some(Future.value(
       SimpleResponse(
         Status.BadRequest,
-        method.getName + " is not a valid HTTP method")))
+        method.toString + " is not a valid HTTP method")))
   }
 }

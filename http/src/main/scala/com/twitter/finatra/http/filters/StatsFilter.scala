@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.filters
 
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.httpx.{Method => HttpMethod, Request, Response, Status}
 import com.twitter.finagle.stats.{Counter, Stat, StatsReceiver}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.contexts.RouteInfo
@@ -9,7 +9,6 @@ import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.{Duration, Future, Memoize, Stopwatch, Return, Throw}
 import javax.inject.{Inject, Singleton}
-import org.jboss.netty.handler.codec.http.HttpMethod
 
 object StatsFilter {
   private object Stats {
@@ -75,7 +74,7 @@ class StatsFilter[R <: Request] @Inject()(
         statsReceiver.
           scope("route").
           scope(nameOrPath).
-          scope(method.getName)
+          scope(method.toString.toUpperCase)
       Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
 

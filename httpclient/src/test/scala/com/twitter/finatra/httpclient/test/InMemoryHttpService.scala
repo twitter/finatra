@@ -1,15 +1,14 @@
 package com.twitter.finatra.httpclient.test
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.httpx.{Method, Request, Response}
+import com.twitter.finagle.httpx.Method._
 import com.twitter.finatra.conversions.string._
 import com.twitter.finatra.utils.Resettable
 import com.twitter.inject.app.Banner
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.util.Future
 import java.lang.annotation.{Annotation => JavaAnnotation}
-import org.jboss.netty.handler.codec.http.HttpMethod
-import org.jboss.netty.handler.codec.http.HttpMethod._
 import scala.collection._
 import scala.collection.mutable.ArrayBuffer
 
@@ -41,18 +40,18 @@ class InMemoryHttpService
   /* Mock Support */
 
   def mockGet(path: String, andReturn: Response, sticky: Boolean = false) {
-    mock(GET, path, andReturn, sticky)
+    mock(Get, path, andReturn, sticky)
   }
 
   def mockPost(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
-    mock(POST, path, andReturn, sticky)
+    mock(Post, path, andReturn, sticky)
   }
 
   def mockPut(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
-    mock(PUT, path, andReturn, sticky)
+    mock(Put, path, andReturn, sticky)
   }
 
-  def mock(method: HttpMethod, path: String, andReturn: Response, sticky: Boolean): Unit = {
+  def mock(method: Method, path: String, andReturn: Response, sticky: Boolean): Unit = {
     val existing = responseMap(RequestKey(method, path))
     val newEntry = ResponseWithExpectedBody(andReturn, None, sticky = sticky)
     responseMap(
@@ -81,7 +80,7 @@ class InMemoryHttpService
       throw new Exception(key + " not mocked in\n" + responseMap.mkString("\n"))
     }
 
-    if (request.method != HttpMethod.GET && hasExpectedBodies(existing))
+    if (request.method != Method.Get && hasExpectedBodies(existing))
       lookupPostResponseWithBody(request, existing)
     else if (existing.head.sticky)
       existing.head.response
@@ -107,7 +106,7 @@ class InMemoryHttpService
 
 
   case class RequestKey(
-    method: HttpMethod,
+    method: Method,
     path: String)
 
   case class ResponseWithExpectedBody(

@@ -2,7 +2,7 @@ package com.twitter.finatra.http.internal.marshalling
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.httpx.Request
 import com.twitter.finatra.conversions.string._
 import com.twitter.finatra.http.exceptions.BadRequestException
 import com.twitter.finatra.http.marshalling.DefaultMessageBodyReader
