@@ -483,7 +483,7 @@ We provide a [TwitterModule](../inject/inject-core/src/main/scala/com/twitter/in
 
 ### Module Definition
 * Twitter Util Flags can be defined inside modules. This allows various reusable modules that require external configuration to be composed in a server.
-* Prefer using a `@Provider` method over using the *bind* dsl.
+* Prefer using a `@Provider` methods [over using the *toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
 * Usually modules are Scala *objects* since the modules contain no state and usage of the module is less verbose.
 * Always remember to add `@Singleton` to your provides method if desired.
 * Usually, modules are only required for creating classes that you don't control. Otherwise, you would simply add the JSR inject annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following Guice module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
