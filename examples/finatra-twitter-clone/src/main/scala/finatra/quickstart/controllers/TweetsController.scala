@@ -4,7 +4,7 @@ import com.twitter.concurrent.exp.AsyncStream
 import com.twitter.finatra.conversions.asyncStream._
 import com.twitter.finatra.http.Controller
 import finatra.quickstart.domain.TweetId
-import finatra.quickstart.domain.http.{GetTweetRequest, PostedTweet}
+import finatra.quickstart.domain.http.{TweetGetRequest, TweetPostRequest, TweetResponse}
 import finatra.quickstart.services.TweetsService
 import javax.inject.{Inject, Singleton}
 
@@ -13,15 +13,18 @@ class TweetsController @Inject()(
   tweetsService: TweetsService)
   extends Controller {
 
-  post("/tweet/") { postedTweet: PostedTweet =>
-    tweetsService.save(postedTweet) map { savedTweet =>
+  post("/tweet") { requestTweet: TweetPostRequest =>
+    for {
+      savedTweet <- tweetsService.save(requestTweet)
+      responseTweet = TweetResponse.fromDomain(savedTweet)
+    } yield {
       response
-        .created(savedTweet)
-        .location(savedTweet.id)
+        .created(responseTweet)
+        .location(responseTweet.id)
     }
   }
 
-  get("/tweet/:id") { request: GetTweetRequest =>
+  get("/tweet/:id") { request: TweetGetRequest =>
     tweetsService.getResponseTweet(request.id)
   }
 

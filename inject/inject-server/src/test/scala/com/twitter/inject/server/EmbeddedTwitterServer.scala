@@ -193,22 +193,26 @@ class EmbeddedTwitterServer(
     printResponseMetadata(response, suppress)
     printResponseBody(response, suppress)
     if (andExpect != null && response.status != andExpect) {
-      assert(response.status == andExpect, response.encodeString())
+      assert(response.status == andExpect, receivedResponseStr(response))
     }
 
     if (withBody != null) {
-      assert(response.contentString == withBody, response.encodeString())
+      assert(response.contentString == withBody, receivedResponseStr(response))
     }
 
     if (withLocation != null) {
       assert(response.location.get.endsWith(withLocation), "\nDiffering Location\n\nExpected Location is: "
         + withLocation
         + " \nActual Location is: "
-        + response.location.get + "\n"
-        + response.encodeString())
+        + response.location.get
+        + receivedResponseStr(response))
     }
 
     response
+  }
+
+  private def receivedResponseStr(response: Response) = {
+    "\n\nReceived Response:\n" + response.encodeString()
   }
 
   protected def createHttpClient(

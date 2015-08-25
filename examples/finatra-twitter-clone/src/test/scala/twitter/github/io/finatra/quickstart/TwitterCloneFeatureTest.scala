@@ -8,7 +8,7 @@ import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
 import finatra.quickstart.TwitterCloneServer
 import finatra.quickstart.domain.TweetId
-import finatra.quickstart.domain.http.{PostedLocation, ResponseTweet}
+import finatra.quickstart.domain.http.{TweetResponse, TweetLocation}
 import finatra.quickstart.firebase.FirebaseClient
 import finatra.quickstart.services.IdService
 
@@ -23,19 +23,19 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito with HttpTest {
   "tweet creation" in {
     idService.getId returns Future(TweetId("123"))
 
-    val savedStatus = ResponseTweet(
+    val savedStatus = TweetResponse(
       id = TweetId("123"),
       message = "Hello #FinagleCon",
-      location = Some(PostedLocation(37.7821120598956, -122.400612831116)),
+      location = Some(TweetLocation(37.7821120598956, -122.400612831116)),
       nsfw = false)
 
     firebaseClient.put("/tweets/123.json", savedStatus) returns Future.Unit
-    firebaseClient.get("/tweets/123.json")(manifest[ResponseTweet]) returns Future(Option(savedStatus))
-    firebaseClient.get("/tweets/124.json")(manifest[ResponseTweet]) returns Future(None)
-    firebaseClient.get("/tweets/125.json")(manifest[ResponseTweet]) returns Future(None)
+    firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(Option(savedStatus))
+    firebaseClient.get("/tweets/124.json")(manifest[TweetResponse]) returns Future(None)
+    firebaseClient.get("/tweets/125.json")(manifest[TweetResponse]) returns Future(None)
 
     val result = server.httpPost(
-      path = "/tweet/",
+      path = "/tweet",
       postBody = """
         {
           "message": "Hello #FinagleCon",
@@ -57,7 +57,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito with HttpTest {
           "nsfw": false
         }""")
 
-    server.httpGetJson[ResponseTweet](
+    server.httpGetJson[TweetResponse](
       path = result.location.get,
       andExpect = Ok,
       withJsonBody = result.contentString)
@@ -92,7 +92,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito with HttpTest {
 
   "Post bad tweet" in {
     server.httpPost(
-      path = "/tweet/",
+      path = "/tweet",
       postBody = """
         {
           "message": "",

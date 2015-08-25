@@ -3,7 +3,7 @@ package twitter.github.io.finatra.quickstart
 import com.twitter.finagle.httpx.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import finatra.quickstart.TwitterCloneServer
-import finatra.quickstart.domain.http.ResponseTweet
+import finatra.quickstart.domain.http.TweetResponse
 
 class TwitterCloneExternalTest extends HttpTest {
 
@@ -43,7 +43,7 @@ class TwitterCloneExternalTest extends HttpTest {
         """,
       withJsonBodyNormalizer = idNormalizer)
 
-    val tweet = server.httpGetJson[ResponseTweet](
+    val tweet = server.httpGetJson[TweetResponse](
       path = result.location.get,
       andExpect = Ok,
       withJsonBody = result.contentString)

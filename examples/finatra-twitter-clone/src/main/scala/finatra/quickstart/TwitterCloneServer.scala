@@ -4,8 +4,7 @@ import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import finatra.quickstart.controllers.TweetsController
-import finatra.quickstart.firebase.FirebaseHttpClientModule
-import finatra.quickstart.modules.TwitterCloneJacksonModule
+import finatra.quickstart.modules.{FirebaseHttpClientModule, TwitterCloneJacksonModule}
 import finatra.quickstart.warmup.TwitterCloneWarmup
 
 object TwitterCloneServerMain extends TwitterCloneServer

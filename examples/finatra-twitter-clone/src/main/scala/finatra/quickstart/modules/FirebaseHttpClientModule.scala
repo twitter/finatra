@@ -1,4 +1,4 @@
-package finatra.quickstart.firebase
+package finatra.quickstart.modules
 
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.httpclient.modules.HttpClientModule

@@ -2,22 +2,22 @@ package finatra.quickstart.domain.http
 
 import finatra.quickstart.domain.{Tweet, TweetId}
 
-object ResponseTweet {
+object TweetResponse {
   def fromDomain(tweet: Tweet) = {
-    ResponseTweet(
+    TweetResponse(
       id = tweet.id,
-      message = tweet.message,
+      message = tweet.text,
       location = tweet.location map { location =>
-        PostedLocation(location.lat, location.long)
+        TweetLocation(location.lat, location.long)
       },
       nsfw = tweet.nsfw)
   }
 }
 
-case class ResponseTweet(
+case class TweetResponse(
   id: TweetId,
   message: String,
-  location: Option[PostedLocation],
+  location: Option[TweetLocation],
   nsfw: Boolean) {
 
   def toDomain = {
