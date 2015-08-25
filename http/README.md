@@ -12,9 +12,9 @@ Controllers and Routing
 ======================================================
 Routes are defined inside a [Controller][controller] and are comprised of:
 
-- an [HTTP method](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
+- an [HTTP method](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) (Note: HTTP Connect is currently not supported due to lack of support in finagle-http)
 - a matching pattern
-- and a callback function.
+- and a callback function
 
 When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller.
 

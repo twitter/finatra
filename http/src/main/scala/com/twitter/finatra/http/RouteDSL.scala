@@ -33,6 +33,5 @@ private[http] trait RouteDSL { self =>
   def options[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = routeBuilders += new RouteBuilder(Options, route, name, callback, self)
   def patch[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = routeBuilders += new RouteBuilder(Patch, route, name, callback, self)
   def head[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = routeBuilders += new RouteBuilder(Head, route, name, callback, self)
-  def connect[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = routeBuilders += new RouteBuilder(Connect, route, name, callback, self)
   def trace[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "")(callback: RequestType => ResponseType): Unit = routeBuilders += new RouteBuilder(Trace, route, name, callback, self)
 }

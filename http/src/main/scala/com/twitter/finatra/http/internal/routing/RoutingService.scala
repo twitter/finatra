@@ -19,7 +19,6 @@ class RoutingService(
   private val options = Routes.createForMethod(routes, Options)
   private val patch = Routes.createForMethod(routes, Patch)
   private val head = Routes.createForMethod(routes, Head)
-  private val connect = Routes.createForMethod(routes, Connect)
   private val trace = Routes.createForMethod(routes, Trace)
 
   private val routesStr = routes map {_.summary} mkString ", "
@@ -35,7 +34,6 @@ class RoutingService(
       case Options => options.handle(request)
       case Patch => patch.handle(request)
       case Head => head.handle(request)
-      case Connect => connect.handle(request)
       case Trace => trace.handle(request)
       case _ => badRequest(request.method)
     }).getOrElse {
