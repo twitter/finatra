@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.internal.exceptions
 
+import com.twitter.finatra.conversions.map._
 import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionMapper}
 import com.twitter.inject.Injector
@@ -9,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}
 import net.codingwell.scalaguice.typeLiteral
 import scala.annotation.tailrec
-import scala.collection.JavaConversions.mapAsScalaConcurrentMap
+import scala.collection.JavaConverters._
 
 /**
  * A class to register ExceptionMappers and handle exceptions.
@@ -38,9 +39,7 @@ class ExceptionManager @Inject()(
   injector: Injector,
   defaultExceptionMapper: DefaultExceptionMapper) {
 
-  // TODO (AF-112): Investigate using com.twitter.util.Memoize.
-  private val mappers = mapAsScalaConcurrentMap(
-    new ConcurrentHashMap[Type, ExceptionMapper[_]]())
+  private val mappers = new ConcurrentHashMap[Type, ExceptionMapper[_]]().asScala
 
   /* Public */
 
@@ -72,7 +71,7 @@ class ExceptionManager @Inject()(
   // Assumes mappers are never explicitly registered after configuration
   // phase, otherwise we'd need to invalidate the cache.
   private def cachedGetMapper(cls: Class[_]): ExceptionMapper[_] = {
-    mappers.getOrElseUpdate(cls, getMapper(cls))
+    mappers.atomicGetOrElseUpdate(cls, getMapper(cls))
   }
 
   // Get mapper for this throwable class if it exists, otherwise

@@ -1,20 +1,20 @@
 package com.twitter.finatra.http.internal.marshalling.mustache
 
 import com.github.mustachejava.{Mustache, MustacheFactory}
+import com.twitter.finatra.conversions.map._
 import com.twitter.finatra.utils.AutoClosable.tryWith
 import com.twitter.io.Buf
 import java.io.{ByteArrayOutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}
-import scala.collection.convert.decorateAsScala._
+import scala.collection.JavaConverters._
 
 @Singleton
 class MustacheService @Inject()(
   mustacheFactory: MustacheFactory) {
 
-  private val templateToMustacheCache =
-    new ConcurrentHashMap[String, Mustache]().asScala
+  private val templateToMustacheCache = new ConcurrentHashMap[String, Mustache]().asScala
 
   /* Public */
 
@@ -32,7 +32,7 @@ class MustacheService @Inject()(
   /* Private */
 
   private def lookupMustache(templateName: String): Mustache = {
-    templateToMustacheCache.getOrElseUpdate(templateName, {
+    templateToMustacheCache.atomicGetOrElseUpdate(templateName, {
       mustacheFactory.compile(templateName)
     })
   }
