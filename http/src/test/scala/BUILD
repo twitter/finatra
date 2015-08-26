@@ -13,6 +13,7 @@ junit_tests(name='scala',
   ],
   sources=rglobs(
     'com/twitter/finatra/http/conversions/*.scala',
+    'com/twitter/finatra/http/filters/*.scala',
     'com/twitter/finatra/http/integration/*.scala',
     'com/twitter/finatra/http/internal/*.scala',
     'com/twitter/finatra/http/marshalling/*.scala',

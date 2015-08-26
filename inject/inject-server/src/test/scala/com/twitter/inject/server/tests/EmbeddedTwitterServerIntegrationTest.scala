@@ -1,21 +1,23 @@
 package com.twitter.inject.server.tests
 
 import com.twitter.finagle.httpx.Status
-import com.twitter.inject.Test
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
+import com.twitter.inject.{Test, TwitterModule}
 
 class EmbeddedTwitterServerIntegrationTest extends Test {
 
   "server" should {
     "start" in {
-      val server = new EmbeddedTwitterServer(new TwitterServer {})
+      val twitterServer = new TwitterServer {}
+      twitterServer.addFrameworkOverrideModules(new TwitterModule {})
+      val embeddedServer = new EmbeddedTwitterServer(twitterServer)
 
-      server.httpGetAdmin(
+      embeddedServer.httpGetAdmin(
         "/health",
         andExpect = Status.Ok,
         withBody = "OK\n")
 
-      server.close()
+      embeddedServer.close()
     }
     
     "fail if server is a singleton" in {

@@ -127,11 +127,6 @@ trait App extends TwitterUtilApp with Logging {
       stage = guiceStage)
   }
 
-  @deprecated("use loadModules().injector", "now")
-  protected[inject] def createInjector() = {
-    loadModules().injector
-  }
-
   /* Private */
 
   private def callAppMain() {

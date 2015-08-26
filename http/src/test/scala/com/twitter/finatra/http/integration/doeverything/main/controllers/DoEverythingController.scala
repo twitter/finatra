@@ -6,12 +6,13 @@ import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.integration.doeverything.main.domain._
-import com.twitter.finatra.http.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter}
 import com.twitter.finatra.http.integration.doeverything.main.exceptions._
+import com.twitter.finatra.http.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter}
 import com.twitter.finatra.http.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.request.{QueryParam, RequestInject, RouteParam}
 import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
@@ -32,8 +33,36 @@ class DoEverythingController @Inject()(
     response.ok.body("always response")
   }
 
+  get("/example/routing/always2") { request: Request =>
+    response.ok("always response")
+  }
+
   get("/useragent") { request: UserAgentRequest =>
     request.`user-agent`
+  }
+
+  get("/json") { request: Request =>
+    response.ok.json("{}".getBytes)
+  }
+
+  get("/json2") { request: Request =>
+    response.ok.json("{}")
+  }
+
+  get("/none") { request: Request =>
+    response.ok.body(None)
+  }
+
+  get("/bodyunit") { request: Request =>
+    response.ok.body(())
+  }
+
+  get("/bodynull") { request: Request =>
+    response.ok.body(null.asInstanceOf[Any])
+  }
+
+  get("/bodyEmptyString") { request: Request =>
+    response.ok.body("")
   }
 
   get("/example/routing/json/:id") { request: Request =>
@@ -42,6 +71,11 @@ class DoEverythingController @Inject()(
       name = "bob",
       magic = magicNum,
       moduleMagic = moduleMagicNum)
+  }
+
+  get("/routeParamGetAll/:id") { request: Request =>
+    assert(request.params.isValid)
+    request.params("id") +: request.params.getAll("id").toSeq
   }
 
   post("/foo") { request: Request =>
@@ -81,7 +115,8 @@ class DoEverythingController @Inject()(
   }
 
   post("/formPostViewFromBuilderHtml") { formPost: FormPostRequest =>
-    response.ok.html(TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
+    response.ok.html(
+      TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
   post("/formPostViewFromBuilderCreatedView") { formPost: FormPostRequest =>
@@ -101,6 +136,14 @@ class DoEverythingController @Inject()(
 
   post("/groups/:group_id/users") { user: TestUserWithGroupIdFromRoute =>
     response.created(user)
+  }
+
+  post("/multipleRouteParams") { r: MultipleInjectableValueParams =>
+    response.created(r)
+  }
+
+  post("/caseClassWithRequestField") { r: CaseClassWithRequestField =>
+    "hi"
   }
 
   get("/example/routing/flaky") { request: Request =>
@@ -125,6 +168,10 @@ class DoEverythingController @Inject()(
 
   get("/accepted") { request: Request =>
     response.accepted.body("accepted").location("/foo/123")
+  }
+
+  get("/accepted2") { request: Request =>
+    response.accepted("accepted").location("/foo/123")
   }
 
   get("/badrequest") { request: Request =>
@@ -165,6 +212,10 @@ class DoEverythingController @Inject()(
 
   get("/notfound") { request: Request =>
     response.notFound.body("notfound")
+  }
+
+  get("/notfound2") { request: Request =>
+    response.notFound("notfound")
   }
 
   get("/future") { request: Request =>
@@ -242,12 +293,20 @@ class DoEverythingController @Inject()(
     throw NotFoundException()
   }
 
+  get("/notfoundexception2") { request: Request =>
+    throw new NotFoundException("foo")
+  }
+
   get("/servererrorexception") { request: Request =>
     throw InternalServerErrorException()
   }
 
   get("/serviceunavailableexception") { request: Request =>
     throw ServiceUnavailableException()
+  }
+
+  get("/serviceunavailableexception2") { request: Request =>
+    throw ServiceUnavailableException.plainText("foo")
   }
 
   get("/responsebuilder_status_code") { request: Request =>
@@ -275,6 +334,10 @@ class DoEverythingController @Inject()(
       "hello"
     else
       throw BadRequestException()
+  }
+
+  get("/BadRequestException") { request: Request =>
+    throw BadRequestException.plainText("foo")
   }
 
   get("/slow") { request: Request =>
@@ -372,9 +435,9 @@ class DoEverythingController @Inject()(
   }
 
   get("/HttpResponseException") { r: Request =>
-    throw new HttpResponseException(
-      response.conflict("conflicted")
-    )
+    val exception = new HttpResponseException(response.conflict("conflicted"))
+    warn(exception.getMessage)
+    throw exception
   }
 
   get("/toFutureException") { r: Request =>
@@ -403,8 +466,28 @@ class DoEverythingController @Inject()(
     throw ConflictException("foo1")
   }
 
+  get("/ConflictException2") { r: Request =>
+    throw ConflictException.plainText("foo1")
+  }
+
+  get("/ConflictException3") { r: Request =>
+    throw new ConflictException("foo1")
+  }
+
+  get("/ForbiddenException") { r: Request =>
+    throw ForbiddenException.plainText("foo1")
+  }
+
+  get("/ForbiddenException2") { r: Request =>
+    throw ForbiddenException("foo1")
+  }
+
   get("/NotAcceptableException") { r: Request =>
     throw NotAcceptableException("foo1")
+  }
+
+  get("/NotAcceptableException2") { r: Request =>
+    throw NotAcceptableException.plainText("foo1")
   }
 
   get("/InternalServerErrorExceptionPlain") { r: Request =>
@@ -451,6 +534,11 @@ class DoEverythingController @Inject()(
     RequestUtils.multiParams(r).keys
   }
 
+  //needed to avoid colliding with Logging#trace :-/
+  trace[Request, String]("/trace") { r: Request =>
+    "trace 123"
+  }
+
   filter[ForbiddenFilter].get("/forbiddenByFilter") { r: Request =>
     "ok!"
   }
@@ -463,3 +551,10 @@ class DoEverythingController @Inject()(
     r.headerMap("test")
   }
 }
+
+case class MultipleInjectableValueParams(
+  @RouteParam @QueryParam id: String)
+
+case class CaseClassWithRequestField(
+  @RequestInject request: Request)
+

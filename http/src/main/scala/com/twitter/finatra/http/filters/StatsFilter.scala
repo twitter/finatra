@@ -52,7 +52,7 @@ object StatsFilter {
 }
 
 /**
- * A drop-in replacement for [[com.twitter.finagle.http.filter.StatsFilter]]
+ * A drop-in replacement for [[com.twitter.finagle.httpx.filter.StatsFilter]]
  * with per-route stats scoped under `route/<name>/<method>`.
  */
 @Singleton

@@ -5,6 +5,7 @@ import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.server.Ports
 
+@deprecated("Use com.twitter.finatra.http.test.EmbeddedHttpServer or com.twitter.inject.server.EmbeddedTwitterServer", "")
 object EmbeddedTwitterServer {
 
   @deprecated("Use com.twitter.finatra.http.test.EmbeddedHttpServer or com.twitter.inject.server.EmbeddedTwitterServer", "")

@@ -14,6 +14,7 @@ class EchoHttpServerFeatureTest extends HttpTest {
   val httpServer = new EmbeddedHttpServer(
     twitterServer = new EchoHttpServer,
     extraArgs = Seq(
+      "-thrift.clientId=echo-http-service",
       resolverMap("thrift-echo-service" -> thriftServer.thriftHostAndPort)))
 
   "EchoHttpServer" should {
@@ -36,6 +37,7 @@ class EchoHttpServerFeatureTest extends HttpTest {
         withBody = "BobBobBob")
 
       httpServer.printStats()
+
       httpServer.close()
       thriftServer.close()
     }

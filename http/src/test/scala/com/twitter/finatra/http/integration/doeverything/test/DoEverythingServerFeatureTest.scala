@@ -2,6 +2,7 @@ package com.twitter.finatra.http.integration.doeverything.test
 
 import com.google.common.net.MediaType.JSON_UTF_8
 import com.google.inject.{Key, TypeLiteral}
+import com.twitter.finagle.httpx.Method._
 import com.twitter.finagle.httpx.Status._
 import com.twitter.finagle.httpx.{Method, Request}
 import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
@@ -39,9 +40,13 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "response to /example" in {
-      val response = server.httpGet("/example/routing/always")
-      response.statusCode should equal(200)
-      response.contentString should equal("always response")
+      server.httpGet(
+        "/example/routing/always",
+        withBody = "always response")
+
+      server.httpGet(
+        "/example/routing/always2",
+        withBody = "always response")
     }
 
     "/useragent" in {
@@ -84,11 +89,69 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         "/accepted",
         andExpect = Accepted,
         withBody = "accepted")
+
+      server.httpGet(
+        "/accepted2",
+        andExpect = Accepted,
+        withBody = "accepted")
+    }
+
+    "json" in {
+      server.httpGet(
+        "/json",
+        withJsonBody = "{}")
+    }
+
+    "json2" in {
+      server.httpGet(
+        "/json2",
+        withJsonBody = "{}")
+    }
+
+    "none" in {
+      server.httpGet(
+        "/none",
+        withBody = "")
+    }
+
+    "bodyunit" in {
+      server.httpGet(
+        "/bodyunit",
+        withBody = "")
+    }
+
+    "bodynull" in {
+      server.httpGet(
+        "/bodynull",
+        withBody = "")
+    }
+
+    "bodyEmptyString" in {
+      server.httpGet(
+        "/bodyEmptyString",
+        withBody = "")
+    }
+
+    "/routeParamGetAll/:id" in {
+      server.httpGet(
+        "/routeParamGetAll/1",
+        withJsonBody = """
+        [
+          "1",
+          "1"
+        ]
+        """)
     }
 
     "notfound" in {
       server.httpGet(
         "/notfound",
+        andExpect = NotFound)
+    }
+
+    "notfound2" in {
+      server.httpGet(
+        "/notfound2",
         andExpect = NotFound)
     }
 
@@ -98,15 +161,39 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = NotFound)
     }
 
+    "notfound exc2" in {
+      server.httpGet(
+        "/notfoundexception2",
+        andExpect = NotFound)
+    }
+
     "badrequest" in {
       server.httpGet(
         "/badrequest",
         andExpect = BadRequest)
     }
 
+    "BadRequestException" in {
+      server.httpGet(
+        "/BadRequestException",
+        andExpect = BadRequest)
+    }
+
     "forbidden" in {
       server.httpGet(
         "/forbidden",
+        andExpect = Forbidden)
+    }
+
+    "ForbiddenException" in {
+      server.httpGet(
+        "/ForbiddenException",
+        andExpect = Forbidden)
+    }
+
+    "ForbiddenException2" in {
+      server.httpGet(
+        "/ForbiddenException2",
         andExpect = Forbidden)
     }
 
@@ -134,6 +221,24 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Conflict)
     }
 
+    "ConflictException" in {
+      server.httpGet(
+        "/ConflictException",
+        andExpect = Conflict)
+    }
+
+    "ConflictException2" in {
+      server.httpGet(
+        "/ConflictException2",
+        andExpect = Conflict)
+    }
+
+    "ConflictException3" in {
+      server.httpGet(
+        "/ConflictException3",
+        andExpect = Conflict)
+    }
+
     "servererror exc" in {
       server.httpGet(
         "/servererrorexception",
@@ -143,6 +248,12 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     "serviceunavailable exception" in {
       server.httpGet(
         "/serviceunavailableexception",
+        andExpect = ServiceUnavailable)
+    }
+
+    "serviceunavailable exception2" in {
+      server.httpGet(
+        "/serviceunavailableexception2",
         andExpect = ServiceUnavailable)
     }
 
@@ -284,6 +395,20 @@ class DoEverythingServerFeatureTest extends FeatureTest {
               "name":"Bob"
             }
           """)
+    }
+
+    "multipleRouteParams" in {
+      server.httpPost(
+        "/multipleRouteParams",
+        "",
+        andExpect = InternalServerError)
+    }
+
+    "caseClassWithRequestField" in {
+      server.httpPost(
+        "/caseClassWithRequestField",
+        "",
+        andExpect = Ok)
     }
 
     "null" in {
@@ -827,6 +952,12 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         """)
   }
 
+  "NotAcceptableException2" in {
+    server.httpGet(
+      "/NotAcceptableException2",
+      andExpect = NotAcceptable)
+  }
+
   "Unserializable class field" in {
     server.httpGet(
       "/UnserializableClassField",
@@ -915,6 +1046,21 @@ class DoEverythingServerFeatureTest extends FeatureTest {
                      """)
   }
 
+  "/trace" in {
+    val request = Request(Trace, "/trace")
+    server.httpRequest(
+      request,
+      andExpect = Ok,
+      withBody = "trace 123")
+  }
+
+  "bad method" in {
+    val request = Request(Method("foo"), "/trace")
+    server.httpRequest(
+      request,
+      andExpect = BadRequest)
+  }
+
   "per-route stats" in {
     server.httpGet(
       "/ok",
@@ -931,43 +1077,43 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = Ok)
 
     // global stats
-    // compatible with com.twitter.finagle.http.filter.StatsFilter
-    counter("status/200")              should be(3)
-    counter("status/2XX")              should be(3)
-       stat("response_size")           should be (List(2.0, 3.0, 3.0))
-       stat("time/200")                should have size(3)
-       stat("time/2XX")                should have size(3)
+    // compatible with com.twitter.finagle.httpx.filter.StatsFilter
+    counter("status/200") should be(3)
+    counter("status/2XX") should be(3)
+    stat("response_size") should be(List(2.0, 3.0, 3.0))
+    stat("time/200") should have size (3)
+    stat("time/2XX") should have size (3)
 
     // don't record stats that finagle already has
-    counter("requests")                should be(0)
-       stat("time")                    should be('empty)
-    counter("http/requests")           should be(3)
-       stat("http/request_latency_ms") should have size(3)
+    counter("requests") should be(0)
+    stat("time") should be('empty)
+    counter("http/requests") should be(3)
+    stat("http/request_latency_ms") should have size (3)
 
     // per-route stats
-    counter("route/ok/GET/requests")      should be(1)
-    counter("route/ok/GET/status/200")    should be(1)
-    counter("route/ok/GET/status/2XX")    should be(1)
-       stat("route/ok/GET/response_size") should contain(2.0)
-       stat("route/ok/GET/time")          should have size(1)
-       stat("route/ok/GET/time/200")      should have size(1)
-       stat("route/ok/GET/time/2XX")      should have size(1)
+    counter("route/ok/GET/requests") should be(1)
+    counter("route/ok/GET/status/200") should be(1)
+    counter("route/ok/GET/status/2XX") should be(1)
+    stat("route/ok/GET/response_size") should contain(2.0)
+    stat("route/ok/GET/time") should have size (1)
+    stat("route/ok/GET/time/200") should have size (1)
+    stat("route/ok/GET/time/2XX") should have size (1)
 
-    counter("route/longer_post_path_capture/POST/requests")      should be(1)
-    counter("route/longer_post_path_capture/POST/status/200")    should be(1)
-    counter("route/longer_post_path_capture/POST/status/2XX")    should be(1)
-       stat("route/longer_post_path_capture/POST/response_size") should contain(3.0)
-       stat("route/longer_post_path_capture/POST/time")          should have size(1)
-       stat("route/longer_post_path_capture/POST/time/200")      should have size(1)
-       stat("route/longer_post_path_capture/POST/time/2XX")      should have size(1)
+    counter("route/longer_post_path_capture/POST/requests") should be(1)
+    counter("route/longer_post_path_capture/POST/status/200") should be(1)
+    counter("route/longer_post_path_capture/POST/status/2XX") should be(1)
+    stat("route/longer_post_path_capture/POST/response_size") should contain(3.0)
+    stat("route/longer_post_path_capture/POST/time") should have size (1)
+    stat("route/longer_post_path_capture/POST/time/200") should have size (1)
+    stat("route/longer_post_path_capture/POST/time/2XX") should have size (1)
 
-    counter("route/my_cool_endpoint/POST/requests")      should be(1)
-    counter("route/my_cool_endpoint/POST/status/200")    should be(1)
-    counter("route/my_cool_endpoint/POST/status/2XX")    should be(1)
-       stat("route/my_cool_endpoint/POST/response_size") should contain(3.0)
-       stat("route/my_cool_endpoint/POST/time")          should have size(1)
-       stat("route/my_cool_endpoint/POST/time/200")      should have size(1)
-       stat("route/my_cool_endpoint/POST/time/2XX")      should have size(1)
+    counter("route/my_cool_endpoint/POST/requests") should be(1)
+    counter("route/my_cool_endpoint/POST/status/200") should be(1)
+    counter("route/my_cool_endpoint/POST/status/2XX") should be(1)
+    stat("route/my_cool_endpoint/POST/response_size") should contain(3.0)
+    stat("route/my_cool_endpoint/POST/time") should have size (1)
+    stat("route/my_cool_endpoint/POST/time/200") should have size (1)
+    stat("route/my_cool_endpoint/POST/time/2XX") should have size (1)
   }
 
   "ports" in {

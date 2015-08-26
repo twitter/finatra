@@ -1,9 +1,9 @@
 import UnidocKeys._
 import com.twitter.scrooge.ScroogeSBT
-import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedFiles
-import ScoverageSbtPlugin.ScoverageKeys.coverageExcludedPackages
+import scoverage.ScoverageKeys.coverageExcludedPackages
 import sbt.Keys._
 
+parallelExecution in ThisBuild := false
 
 lazy val buildSettings = Seq(
   version := "2.0.0.M3-SNAPSHOT",
@@ -237,7 +237,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
       "com.twitter" %% "scrooge-core" % versions.scrooge,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "com.twitter" %% "finagle-http" % versions.finagle % "test->compile")
+      "com.twitter" %% "finagle-httpx" % versions.finagle % "test->compile")
   ).
   dependsOn(
     injectCore,
@@ -274,7 +274,7 @@ lazy val jackson = project.
   settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    coverageExcludedPackages := "scala.tools.nsc.*",
+    coverageExcludedPackages := "scala.tools.nsc.*;.*CaseClassSigParser.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
@@ -417,6 +417,7 @@ lazy val twitterClone = (project in file("examples/finatra-twitter-clone")).
     moduleName := "finatra-twitter-clone",
     publishLocal := {},
     publish := {},
+    coverageExcludedPackages := "<empty>;.*finatra.*", //TODO: Temp exclude some examples
     assemblyMergeStrategy in assembly := {
       case "BUILD" => MergeStrategy.discard
       case other => MergeStrategy.defaultMergeStrategy(other)

@@ -33,7 +33,7 @@ abstract class ThriftClientModule[T: ClassTag]
    * Note: Both server and client must have mux enabled otherwise
    * a non-descript ChannelClosedException will be seen.
    */
-  val mux: Boolean = true
+  def mux: Boolean = true
 
   def requestTimeout: Duration = Duration.Top
 

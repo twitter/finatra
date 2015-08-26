@@ -2,8 +2,8 @@ package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
 import com.twitter.app.Flag
+import com.twitter.inject.Injector
 import com.twitter.inject.app.internal.InstalledModules
-import com.twitter.inject.{Injector, TwitterModule}
 
 object TestInjector {
 

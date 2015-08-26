@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.option._
 import com.twitter.inject.Test
-import com.twitter.util.Future
+import com.twitter.util.{Throw, Try, Future}
 
 class OptionsConversionsTest extends Test {
 
@@ -15,6 +15,12 @@ class OptionsConversionsTest extends Test {
     "#toFutureOrFail when None" in {
       assertFailedFuture[TestException](
         None.toFutureOrFail(TestException))
+    }
+    "#toTryOrFail when Some" in {
+      Some(1).toTryOrFail(TestException) should equal(Try(1))
+    }
+    "#toTryOrFail when None" in {
+      None.toTryOrFail(TestException) should equal(Throw(TestException))
     }
     "#toFutureOrElse when Some" in {
       assertFuture(
@@ -62,6 +68,18 @@ class OptionsConversionsTest extends Test {
     }
   }
 
+  "option map" should {
+    "map inner values when some" in {
+      Some(Map("a" -> 1)) mapInnerValues { _.toString } should equal(Some(Map("a" -> "1")))
+    }
+
+    "map inner values when none" in {
+      Option.empty[Map[String, Int]] mapInnerValues { _.toString } should equal(None)
+    }
+  }
+
   object TestException extends TestException
+
   class TestException extends Exception
+
 }

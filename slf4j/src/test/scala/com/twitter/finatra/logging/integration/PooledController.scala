@@ -1,7 +1,8 @@
 package com.twitter.finatra.logging.integration
 
 import com.twitter.finagle.httpx.Request
-import com.twitter.finatra.Controller
+import com.twitter.finatra.http.Controller
+
 import com.twitter.util.FuturePool
 
 

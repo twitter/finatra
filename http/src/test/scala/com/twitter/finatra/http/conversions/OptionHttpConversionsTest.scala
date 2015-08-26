@@ -3,11 +3,31 @@ package com.twitter.finatra.http.conversions
 import com.twitter.finatra.http.conversions.optionHttp._
 import com.twitter.finatra.http.exceptions._
 import com.twitter.inject.Test
-import com.twitter.util.Future
+import com.twitter.util.{Throw, Try, Future}
 
 class OptionHttpConversionsTest extends Test {
 
   "Option[T]" should {
+
+    "#valueOrNotFound when Some" in {
+      Some(1).valueOrNotFound("foo") should equal(1)
+    }
+
+    "#valueOrNotFound when None" in {
+      val e = intercept[NotFoundException] {
+        None.valueOrNotFound("foo")
+      }
+      e.errors should equal(Seq("foo"))
+    }
+
+    "#toTryOrServerError when Some" in {
+      Some(1).toTryOrServerError("foo") should equal(Try(1))
+    }
+
+    "#toTryOrServerError when None" in {
+      None.toTryOrServerError("foo") should equal(Throw(InternalServerErrorException("foo")))
+    }
+
     "#toFutureOrNotFound when Some" in {
       assertFuture(
         Some(1).toFutureOrNotFound(),

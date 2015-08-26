@@ -12,7 +12,12 @@ class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
 
   override val server = new EmbeddedHttpServer(
     new TweetsEndpointServer,
-    defaultRequestHeaders = Map("X-UserId" -> "123"))
+    defaultRequestHeaders = Map("X-UserId" -> "123"),
+    // Set client flags to also start on HTTPS port
+    clientFlags = Map(
+      "https.port" -> ":0",
+      "cert.path" -> "",
+      "key.path" -> ""))
 
   "get tweet 1" in {
     val tweet =

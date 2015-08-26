@@ -1,5 +1,6 @@
 package com.twitter.inject.server.tests
 
+import com.twitter.inject.app.{EmbeddedApp, App}
 import com.google.inject.AbstractModule
 import com.twitter.finagle.httpx.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, Ports, TwitterServer}
@@ -102,6 +103,26 @@ class StartupIntegrationTest extends Test {
           twitterServer = new ServerWithGuiceModuleInstall).start()
       }
     }
+
+    "appMain throws exception" in {
+      intercept[Exception] {
+        new EmbeddedApp(
+          new App {
+            override def appMain(): Unit = {
+              throw new RuntimeException("oops")
+            }
+          }).start()
+      }
+    }
+
+    "injector called before main" in {
+      val e = intercept[Exception] {
+        new App {
+          override val modules = Seq(new TwitterModule {})
+        }.injector
+      }
+      e.getMessage should include("injector is not available before main")
+    }
   }
 }
 
@@ -157,3 +178,4 @@ class RawTwitterServerWithPorts extends BaseTwitterServer with Ports {
       adminHttpServer)
   }
 }
+

@@ -4,7 +4,7 @@ import com.twitter.finagle.httpx.Status._
 import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.conversions.time._
-import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.filters.{ExceptionBarrierFilter, CommonFilters}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.http.{HttpServer, Controller}
@@ -17,8 +17,7 @@ import javax.inject.{Inject, Provider}
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 
-//TODO: Rename class and file
-class RequestScopeIntegrationTest extends HttpTest {
+class RequestScopeFeatureTest extends HttpTest {
 
   val server = new EmbeddedHttpServer(
     twitterServer = new PooledServer)
@@ -124,7 +123,7 @@ class PooledServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router.
-      filter[CommonFilters].
+      filter[ExceptionBarrierFilter].
       filter[FinagleRequestScopeFilter[Request, Response]].
       filter[TestUserRequestScopeFilter].
       add[FuturePooledController]

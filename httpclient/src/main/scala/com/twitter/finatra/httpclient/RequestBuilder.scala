@@ -35,7 +35,7 @@ object RequestBuilder {
 }
 
 /**
- * RequestBuilder is a finagle.http.Request with a builder API for common mutations
+ * RequestBuilder is a finagle.httpx.Request with a builder API for common mutations
  */
 class RequestBuilder(
   override val request: Request)

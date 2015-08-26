@@ -6,7 +6,7 @@ junit_tests(name='scala',
     'finatra/inject/inject-core',
     'finatra/inject/inject-core:test-deps',
   ],
-  sources=globs(
+  sources=rglobs(
     'com/twitter/inject/tests/*.scala',
   ),
   resources=[
