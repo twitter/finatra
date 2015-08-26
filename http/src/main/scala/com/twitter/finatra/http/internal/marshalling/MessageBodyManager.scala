@@ -1,14 +1,16 @@
 package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.finagle.httpx.Request
-import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter,
-  MessageBodyComponent, MessageBodyReader, MessageBodyWriter}
+import com.twitter.finatra.conversions.map._
+import com.twitter.finatra.http.marshalling._
+import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
-import com.twitter.inject.{Injector, Logging}
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}
 import net.codingwell.scalaguice._
+import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.reflect.ScalaSignature
 
@@ -16,18 +18,16 @@ import scala.reflect.ScalaSignature
 class MessageBodyManager @Inject()(
   injector: Injector,
   defaultMessageBodyReader: DefaultMessageBodyReader,
-  defaultMessageBodyWriter: DefaultMessageBodyWriter)
-  extends Logging {
+  defaultMessageBodyWriter: DefaultMessageBodyWriter) {
 
-  // TODO (AF-292): use java.util.concurrent.ConcurrentHashMap for caches
-  private val readers = mutable.Map[Type, MessageBodyReader[_]]()
-  private val writersByType = mutable.Map[Type, MessageBodyWriter[Any]]()
-  private val classToAnnotationWriter = mutable.Map[Type, Option[MessageBodyWriter[Any]]]()
-  private val writersByAnnotation = mutable.Map[Type, MessageBodyWriter[Any]]()
-  private val writersOrDefaultCache = mutable.Map[Type, MessageBodyWriter[Any]]()
-  private val manifestToTypeCache = mutable.Map[Manifest[_], Type]()
+  private val classTypeToReader = mutable.Map[Type, MessageBodyReader[Any]]()
+  private val classTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
+  private val annotationTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
 
-  /* Public */
+  private val readerCache = new ConcurrentHashMap[Manifest[_], Option[MessageBodyReader[Any]]]().asScala
+  private val writerCache = new ConcurrentHashMap[Any, MessageBodyWriter[Any]]().asScala
+
+  /* Public (Config methods called during server startup) */
 
   def add[MBC <: MessageBodyComponent : Manifest]() {
     val componentSupertypeClass =
@@ -45,7 +45,7 @@ class MessageBodyManager @Inject()(
   def addByAnnotation[Ann <: Annotation : Manifest, T <: MessageBodyWriter[_] : Manifest] {
     val messageBodyWriter = injector.instance[T]
     val annot = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
-    writersByAnnotation(annot) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
+    annotationTypeToWriter(annot) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
   }
 
   def addExplicit[MBC <: MessageBodyComponent : Manifest, TypeToReadOrWrite: Manifest]() {
@@ -53,22 +53,26 @@ class MessageBodyManager @Inject()(
       typeLiteral[TypeToReadOrWrite].getType)
   }
 
-  def parse[T: Manifest](request: Request): T = {
-    val objType = manifestToTypeCache.getOrElseUpdate(manifest[T], typeLiteral[T].getType)
-    readers.get(objType) map { reader =>
-      reader.parse(request).asInstanceOf[T]
-    } getOrElse {
-      defaultMessageBodyReader.parse[T](request)
+  /* Public (Per-request read and write methods) */
+
+  def read[T: Manifest](request: Request): T = {
+    val requestManifest = manifest[T]
+    readerCache.atomicGetOrElseUpdate(requestManifest, {
+      val objType = typeLiteral(requestManifest).getType
+      classTypeToReader.get(objType)
+    }) match {
+      case Some(reader) =>
+        reader.parse(request).asInstanceOf[T]
+      case _ =>
+        defaultMessageBodyReader.parse[T](request)
     }
   }
 
-  def writer(obj: Any): Option[MessageBodyWriter[Any]] = {
-    writersByType.get(obj.getClass) orElse lookupByAnnotation(obj.getClass)
-  }
-
-  def writerOrDefault(obj: Any): MessageBodyWriter[Any] = {
-    writersOrDefaultCache.getOrElseUpdate(obj.getClass, {
-      writer(obj) getOrElse defaultMessageBodyWriter
+  // Note: writerCache is bounded on the number of unique classes returned from controller routes */
+  def writer(obj: Any): MessageBodyWriter[Any] = {
+    val objClass = obj.getClass
+    writerCache.atomicGetOrElseUpdate(objClass, {
+      (classTypeToWriter.get(objClass) orElse classAnnotationToWriter(objClass)) getOrElse defaultMessageBodyWriter
     })
   }
 
@@ -78,21 +82,19 @@ class MessageBodyManager @Inject()(
     val messageBodyComponent = injector.instance[MessageBodyComponent]
 
     messageBodyComponent match {
-      case reader: MessageBodyReader[_] =>
-        readers(typeToReadOrWrite) = reader
-      case writer: MessageBodyWriter[_] =>
-        writersByType(typeToReadOrWrite) = writer.asInstanceOf[MessageBodyWriter[Any]]
+      case reader: MessageBodyReader[Any] =>
+        classTypeToReader(typeToReadOrWrite) = reader
+      case writer: MessageBodyWriter[Any] =>
+        classTypeToWriter(typeToReadOrWrite) = writer.asInstanceOf[MessageBodyWriter[Any]]
     }
   }
 
   //TODO: Support more than the first annotation (e.g. @Mustache could be combined w/ other annotations)
-  private def lookupByAnnotation[T](clazz: Class[_]): Option[MessageBodyWriter[Any]] = {
-    classToAnnotationWriter.getOrElseUpdate(clazz, {
-      val annotations = clazz.getAnnotations filterNot {_.annotationType == classOf[ScalaSignature]}
-      if (annotations.size >= 1)
-        writersByAnnotation.get(annotations.head.annotationType)
-      else
-        None
-    })
+  private def classAnnotationToWriter(clazz: Class[_]): Option[MessageBodyWriter[Any]] = {
+    val annotations = clazz.getAnnotations filterNot { _.annotationType == classOf[ScalaSignature] }
+    if (annotations.length >= 1)
+      annotationTypeToWriter.get(annotations.head.annotationType)
+    else
+      None
   }
 }

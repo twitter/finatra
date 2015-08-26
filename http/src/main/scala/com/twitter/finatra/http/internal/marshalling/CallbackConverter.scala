@@ -44,7 +44,7 @@ class CallbackConverter @Inject()(
       // Otherwise convert Request into the callback's input type
       case _ =>
         request: Request =>
-          val callbackInput = messageBodyManager.parse[RequestType](request)
+          val callbackInput = messageBodyManager.read[RequestType](request)
           callback(callbackInput)
     }
   }

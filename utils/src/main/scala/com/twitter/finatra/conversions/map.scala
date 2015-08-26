@@ -1,7 +1,7 @@
 package com.twitter.finatra.conversions
 
 import com.twitter.finatra.conversions.tuple._
-import scala.collection.{SortedMap, immutable, mutable}
+import scala.collection.{mutable, SortedMap, immutable}
 
 object map {
 
@@ -100,4 +100,19 @@ object map {
     }
   }
 
+  implicit class RichConcurrentMap[A, B](val map: scala.collection.concurrent.Map[A, B]) extends AnyVal {
+    // Since getOrElseUpdate is not atomic until 2.11.6, we include a simple implementation here, until we upgrade to 2.11
+    // See https://github.com/scala/scala/pull/4319
+    def atomicGetOrElseUpdate(key: A, op: => B): B = {
+      map.get(key) match {
+        case Some(existingValue) => existingValue
+        case None =>
+          val newValue = op
+          map.putIfAbsent(key, newValue) match {
+            case Some(existingValueAfterPut) => existingValueAfterPut
+            case None => newValue
+          }
+      }
+    }
+  }
 }

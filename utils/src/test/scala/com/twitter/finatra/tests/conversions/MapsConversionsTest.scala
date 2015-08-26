@@ -2,6 +2,7 @@ package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.map._
 import com.twitter.inject.Test
+import scala.collection.concurrent.TrieMap
 import scala.collection.SortedMap
 
 class MapsConversionsTest extends Test {
@@ -67,6 +68,16 @@ class MapsConversionsTest extends Test {
     "#filterNotKeys" in {
       Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotKeys {_ == 3} should
         equal(Map(1 -> "a", 2 -> "a"))
+    }
+  }
+
+  "RichConcurrentMap" should {
+    "#atomicGetOrElseUpdate" in {
+      val map = TrieMap[String, Int]()
+      map.atomicGetOrElseUpdate("1", 1) should equal(1)
+      map.get("1") should equal(Some(1))
+      map.atomicGetOrElseUpdate("1", 2 ) should equal(1)
+      map.get("1") should equal(Some(1))
     }
   }
 }

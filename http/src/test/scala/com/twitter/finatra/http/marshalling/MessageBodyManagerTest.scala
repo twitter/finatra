@@ -12,14 +12,16 @@ class MessageBodyManagerTest extends Test with Mockito {
 
   val request = mock[Request]
   val injector = TestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule)
+
   val messageBodyManager = injector.instance[MessageBodyManager]
+  messageBodyManager.add[DogMessageBodyReader]()
 
-  "parse objects from request" in {
+  "parse car" in {
     messageBodyManager.add[Car2MessageBodyReader]()
-    messageBodyManager.add[DogMessageBodyReader]()
+  }
 
-    messageBodyManager.parse[Car2](request) should equal(Car2("Car"))
-    messageBodyManager.parse[Dog](request) should equal(Dog("Dog"))
+  "parse dog" in {
+    messageBodyManager.read[Dog](request) should equal(Dog("Dog"))
   }
 }
 

@@ -160,7 +160,7 @@ class ResponseBuilder @Inject()(
         case str: String => body(str)
         case _file: File => file(_file)
         case _ =>
-          val writer = messageBodyManager.writerOrDefault(any)
+          val writer = messageBodyManager.writer(any)
           val writerResponse = writer.write(any)
           body(writerResponse.body)
           contentType(writerResponse.contentType)
