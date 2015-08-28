@@ -64,6 +64,10 @@ trait HttpTest
       }
   }
 
+  def resolverMap(name: String, httpServer: EmbeddedHttpServer): (String, String) = {
+    ("com.twitter.server.resolverMap", name + "=" + httpServer.externalHttpHostAndPort)
+  }
+
   def urlEncode(str: String) = {
     URLEncoder.encode(str, "UTF-8")
       .replaceAll("\\+", "%20")

@@ -36,17 +36,15 @@ class EmbeddedHttpServer(
     streamResponse) {
 
   protected lazy val httpClient = {
-    start()
     createHttpClient(
       "httpClient",
-      twitterServer.httpExternalPort.getOrElse(throw new Exception("External HTTP port not bound")))
+      httpExternalPort)
   }
 
   protected lazy val httpsClient = {
-    start()
     createHttpClient(
       "httpsClient",
-      twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound")),
+      httpsExternalPort,
       secure = true)
   }
 
@@ -78,8 +76,18 @@ class EmbeddedHttpServer(
     }
   }
 
-  lazy val httpExternalPort = twitterServer.httpExternalPort.get
+  lazy val httpExternalPort = {
+    start()
+    twitterServer.httpExternalPort.getOrElse(throw new Exception("External HTTP port not bound"))
+  }
+
+  lazy val httpsExternalPort = {
+    start()
+    twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound"))
+  }
+
   lazy val externalHttpHostAndPort = PortUtils.loopbackAddressForPort(httpExternalPort)
+  lazy val externalHttpsHostAndPort = PortUtils.loopbackAddressForPort(httpsExternalPort)
 
   override def close() {
     if (!closed) {

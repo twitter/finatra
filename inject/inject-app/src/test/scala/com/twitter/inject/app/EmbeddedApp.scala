@@ -162,8 +162,8 @@ class EmbeddedApp(
       }
 
       if ((isGuiceApp && guiceApp.appStarted) || (!isGuiceApp && nonGuiceAppStarted())) {
-        logAppStartup()
         started = true
+        logAppStartup()
         return
       }
 
