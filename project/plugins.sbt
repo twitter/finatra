@@ -2,9 +2,7 @@ resolvers ++= Seq(
   Classpaths.sbtPluginSnapshots,
   Classpaths.sbtPluginReleases,
   Resolver.sonatypeRepo("snapshots") ,
-  Resolver.url("scoverage-bintray",
-    url("https://dl.bintray.com/sksamuel/sbt-plugins/"))(Resolver.ivyStylePatterns)
-)
+  "finatra-maven-repo" at "https://twitter.github.io/finatra/")
 
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.2")
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.13.0")
