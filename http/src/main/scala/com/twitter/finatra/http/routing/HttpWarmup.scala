@@ -1,8 +1,7 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finagle.httpx.compat.NettyAdaptor
 import com.twitter.finagle.httpx.{Request, Response, Status}
-import com.twitter.finagle.{http, httpx}
+import com.twitter.finagle.httpx
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
@@ -71,7 +70,7 @@ class HttpWarmup @Inject()(
       router.services.externalService(request)
   }
 
-  private[this] val httpMuxer = NettyAdaptor.andThen(http.HttpMuxer)
+  private[this] val httpMuxer = httpx.HttpMuxer
 
   private def routeToAdminMuxers(request: Request): Future[Response] = {
     httpx.HttpMuxer(request) flatMap { response =>
