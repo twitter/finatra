@@ -7,7 +7,7 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.filters.StatsFilter.Stats
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
-import com.twitter.util.{Duration, Future, Memoize, Stopwatch, Return, Throw}
+import com.twitter.util.{Duration, Future, Memoize, Return, Stopwatch, Throw}
 import javax.inject.{Inject, Singleton}
 
 object StatsFilter {

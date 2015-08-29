@@ -1,8 +1,7 @@
 package com.twitter.finatra.http.response
 
 import com.google.common.net.MediaType
-import com.twitter.finagle.httpx.Status
-import com.twitter.finagle.httpx.{Cookie => FinagleCookie, Response}
+import com.twitter.finagle.httpx.{Cookie => FinagleCookie, Response, Status}
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.routing.FileResolver

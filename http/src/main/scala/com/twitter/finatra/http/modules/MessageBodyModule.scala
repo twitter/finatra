@@ -4,7 +4,7 @@ import com.twitter.finatra.http.internal.marshalling.mustache.MustacheMessageBod
 import com.twitter.finatra.http.internal.marshalling.{FinatraDefaultMessageBodyReader, FinatraDefaultMessageBodyWriter, MessageBodyManager}
 import com.twitter.finatra.http.marshalling._
 import com.twitter.finatra.response.Mustache
-import com.twitter.inject.{InjectorModule, Injector, TwitterModule}
+import com.twitter.inject.{Injector, InjectorModule, TwitterModule}
 
 object MessageBodyModule extends TwitterModule {
 

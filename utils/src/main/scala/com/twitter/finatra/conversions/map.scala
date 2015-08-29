@@ -1,7 +1,7 @@
 package com.twitter.finatra.conversions
 
 import com.twitter.finatra.conversions.tuple._
-import scala.collection.{mutable, SortedMap, immutable}
+import scala.collection.{SortedMap, immutable, mutable}
 
 object map {
 

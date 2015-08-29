@@ -1,11 +1,10 @@
 package com.twitter.finatra.http.exceptions
 
 import com.google.common.net.MediaType
-import com.twitter.finagle.httpx.{Response, Status}
-import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
+import com.twitter.finagle.httpx.Status
 
 /* HTTP Exceptions */
-// TODO: Redesign to avoid boilderplate below (@see ResponseBuilder) */
+// TODO: Redesign to avoid boilerplate below (@see ResponseBuilder) */
 
 /**
  * HttpException which will be rendered as an HTTP response.

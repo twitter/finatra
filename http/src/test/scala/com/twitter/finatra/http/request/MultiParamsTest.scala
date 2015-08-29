@@ -1,13 +1,12 @@
 package com.twitter.finatra.http.request
 
-import com.twitter.finagle.httpx.{Request, Method}
+import com.twitter.finagle.httpx.{Method, Request}
 import com.twitter.finagle.{httpx => finagle}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.inject.Test
 import org.apache.commons.fileupload.util.FileItemHeadersImpl
 import org.apache.commons.io.IOUtils
 import org.specs2.mock.Mockito
-
 import scala.collection.JavaConverters._
 
 class MultiParamsTest extends Test with Mockito {

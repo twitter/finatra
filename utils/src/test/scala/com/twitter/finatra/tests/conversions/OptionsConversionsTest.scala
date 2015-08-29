@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.option._
 import com.twitter.inject.Test
-import com.twitter.util.{Throw, Try, Future}
+import com.twitter.util.{Future, Throw, Try}
 
 class OptionsConversionsTest extends Test {
 

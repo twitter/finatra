@@ -1,14 +1,14 @@
-import UnidocKeys._
 import com.twitter.scrooge.ScroogeSBT
-import scoverage.ScoverageKeys.coverageExcludedPackages
 import sbt.Keys._
+import sbtunidoc.Plugin.UnidocKeys._
+import scoverage.ScoverageKeys.coverageExcludedPackages
 
 parallelExecution in ThisBuild := false
 
 lazy val buildSettings = Seq(
   version := "2.0.0.M3-SNAPSHOT",
-  scalaVersion := "2.11.6",
-  crossScalaVersions := Seq("2.10.5", "2.11.6")
+  scalaVersion := "2.11.7",
+  crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
 
 lazy val compilerOptions = scalacOptions ++= Seq(
@@ -37,7 +37,7 @@ val baseSettings = Seq(
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
-    "Twitter Maven" at "http://maven.twttr.com",
+    "Twitter Maven" at "https://maven.twttr.com",
     "Finatra Repo" at "http://twitter.github.com/finatra",
     Resolver.sonatypeRepo("snapshots")
   ),
@@ -92,7 +92,7 @@ lazy val versions = new {
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
-  val finagle = "6.27.0"
+  val finagle = "6.28.0"
   val grizzled = "1.0.2"
   val guava = "16.0.1"
   val guice = "3.0"
@@ -100,13 +100,13 @@ lazy val versions = new {
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val logback = "1.0.13"
-  val mustache = "0.8.12.1"
+  val mustache = "0.8.18"
   val nscalaTime = "1.6.0"
   val servletApi = "2.5"
-  val scrooge = "3.20.0"
+  val scrooge = "4.0.0"
   val slf4j = "1.7.7"
-  val twitterServer = "1.12.0"
-  val util = "6.26.0"
+  val twitterServer = "1.13.0"
+  val util = "6.27.0"
 }
 
 lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(

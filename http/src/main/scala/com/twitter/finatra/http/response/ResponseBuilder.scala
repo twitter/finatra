@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
-import com.twitter.finagle.httpx.{Cookie => FinagleCookie, Fields, ResponseProxy, Response, Status, Version}
+import com.twitter.finagle.httpx.{Cookie => FinagleCookie, Fields, Response, ResponseProxy, Status, Version}
 import com.twitter.finagle.netty3.ChannelBufferBuf
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager

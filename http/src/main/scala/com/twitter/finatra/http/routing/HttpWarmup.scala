@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finagle.httpx.{Request, Response, Status}
 import com.twitter.finagle.httpx.compat.NettyAdaptor
-import com.twitter.finagle.{httpx, http}
+import com.twitter.finagle.httpx.{Request, Response, Status}
+import com.twitter.finagle.{http, httpx}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging

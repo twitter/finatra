@@ -1,8 +1,7 @@
 package com.twitter.finatra.httpclient
 
-import com.twitter.finagle.{Service, Httpx}
 import com.twitter.finagle.httpx.{Request, Response}
-import org.jboss.netty.handler.codec.http.{HttpRequest, HttpResponse}
+import com.twitter.finagle.{Httpx, Service}
 
 object RichHttpClient {
 

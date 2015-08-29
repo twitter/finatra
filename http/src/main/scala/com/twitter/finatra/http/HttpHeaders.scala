@@ -1,10 +1,8 @@
 package com.twitter.finatra.http
 
 import com.twitter.finagle.httpx.Response
-import java.text.SimpleDateFormat
-import java.util.{Locale, Date, TimeZone}
-import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.format.DateTimeFormat
+import org.joda.time.{DateTime, DateTimeZone}
 
 object HttpHeaders {
 

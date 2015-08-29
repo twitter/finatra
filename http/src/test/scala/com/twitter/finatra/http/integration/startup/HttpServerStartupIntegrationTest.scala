@@ -2,15 +2,15 @@ package com.twitter.finatra.http.integration.startup
 
 import com.twitter.finagle.httpx.Request
 import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.inject.Test
-import com.twitter.inject.server.EmbeddedTwitterServer
 
 class HttpServerStartupIntegrationTest extends Test {
 
   "admin endpoints must be /admin/finatra" in {
     intercept[AssertionError] {
-      new EmbeddedTwitterServer(
+      new EmbeddedHttpServer(
         twitterServer = new HttpServer {
           override def configureHttp(router: HttpRouter): Unit = {
             router.add(new Controller {
@@ -24,7 +24,7 @@ class HttpServerStartupIntegrationTest extends Test {
 
   "finagle.http.Request no longer supported" in {
     val e = intercept[Exception] {
-      new EmbeddedTwitterServer(
+      new EmbeddedHttpServer(
         twitterServer = new HttpServer {
           override def configureHttp(router: HttpRouter): Unit = {
             router.add(new Controller {

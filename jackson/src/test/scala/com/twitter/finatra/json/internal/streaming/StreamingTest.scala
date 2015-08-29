@@ -1,12 +1,11 @@
 package com.twitter.finatra.json.internal.streaming
 
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.httpx.{Method, Request}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Test
 import com.twitter.io.Buf
 import com.twitter.util.Await
-import org.jboss.netty.handler.codec.http.HttpMethod
 
 class StreamingTest extends Test {
 
@@ -45,7 +44,7 @@ class StreamingTest extends Test {
 
   "parse request" in {
     val jsonStr = "[1,2]"
-    val request = Request(HttpMethod.POST, "/")
+    val request = Request(Method.Post, "/")
     request.setChunked(true)
 
     val parser = new JsonStreamParser(FinatraObjectMapper.create)

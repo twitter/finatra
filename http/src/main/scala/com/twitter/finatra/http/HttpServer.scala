@@ -4,7 +4,7 @@ import com.google.inject.Module
 import com.twitter.finagle._
 import com.twitter.finagle.httpx.{HttpMuxer, Request, Response}
 import com.twitter.finatra.http.internal.server.BaseHttpServer
-import com.twitter.finatra.http.modules.{AccessLogModule, ExceptionMapperModule, DocRootModule, MessageBodyModule, MustacheModule}
+import com.twitter.finatra.http.modules.{AccessLogModule, DocRootModule, ExceptionMapperModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.routing.Router

@@ -2,8 +2,8 @@ package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.map._
 import com.twitter.inject.Test
-import scala.collection.concurrent.TrieMap
 import scala.collection.SortedMap
+import scala.collection.concurrent.TrieMap
 
 class MapsConversionsTest extends Test {
 

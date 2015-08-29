@@ -1,17 +1,15 @@
 package com.twitter.finatra.http.marshalling
 
-import com.twitter.finatra.conversions.buf
-import buf._
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.httpx.Status._
 import com.twitter.finagle.httpx.{Method => HttpMethod, Request, Response, Status}
+import com.twitter.finatra.conversions.buf._
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Mockito, Test}
-import com.twitter.io.{Reader, Buf}
+import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Future}
 
 class CallbackConverterIntegrationTest extends Test with Mockito {

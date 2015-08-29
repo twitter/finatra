@@ -25,17 +25,17 @@ private[finatra] class JsonArrayChunker extends Logging {
     val result = ArrayBuffer[Buf]()
 
     while (byteBuffer.hasRemaining) {
-      ByteBufferUtils.debugBuffer(byteBuffer)
+      ByteBufferUtils.traceBuffer(byteBuffer)
       val currByte = byteBuffer.get
 
       if (!arrayFound && currByte == '[') {
-        debug("ArrayFound. Openbraces = 1")
+        trace("ArrayFound. Openbraces = 1")
         parsingState = InsideArray
         openBraces = 1
         byteBuffer = byteBuffer.slice()
       }
       else if (!arrayFound && Character.isWhitespace(currByte.toChar)) {
-        debug("Skip space")
+        trace("Skip space")
       }
       else {
         decodeByteAndUpdateState(currByte, byteBuffer)
@@ -43,7 +43,7 @@ private[finatra] class JsonArrayChunker extends Logging {
           result += extractBuf()
 
           if (currByte == ']') {
-            debug("Done")
+            trace("Done")
             done = true
           }
         }
@@ -56,25 +56,25 @@ private[finatra] class JsonArrayChunker extends Logging {
   /* Private */
 
   private def decodeByteAndUpdateState(c: Byte, in: ByteBuffer) {
-    debug("decode '" + c.toChar + "'")
+    trace("decode '" + c.toChar + "'")
     if ((c == '{' || c == '[') && !insideString) {
       openBraces += 1
-      debug("openBraces = " + openBraces)
+      trace("openBraces = " + openBraces)
     }
     else if ((c == '}' || c == ']') && !insideString) {
       openBraces -= 1
-      debug("openBraces = " + openBraces)
+      trace("openBraces = " + openBraces)
     }
     else if (c == '"') {
       // start of a new JSON string. It's necessary to detect strings as they may
       // also contain braces/brackets and that could lead to incorrect results.
       if (!insideString) {
-        debug("State = InsideString")
+        trace("State = InsideString")
         parsingState = InsideString
       }
       // If the double quote wasn't escaped then this is the end of a string.
       else if (in.get(in.position - 1) != '\\') {
-        debug("State = Parsing")
+        trace("State = Parsing")
         parsingState = Normal
       }
     }
@@ -88,12 +88,12 @@ private[finatra] class JsonArrayChunker extends Logging {
     val copyBuf = Buf.ByteBuffer.Shared(copy)
 
     byteBuffer = byteBuffer.slice()
-    debug("Extract result " + copyBuf.utf8str)
+    trace("Extract result " + copyBuf.utf8str)
     copyBuf
   }
 
   private def assertDecode(inputBuf: Buf): Unit = {
-    debug("Decode called with \"" + inputBuf.utf8str + "\"")
+    trace("Decode called with \"" + inputBuf.utf8str + "\"")
     if (done) {
       throw new scala.Exception("End array already found")
     }

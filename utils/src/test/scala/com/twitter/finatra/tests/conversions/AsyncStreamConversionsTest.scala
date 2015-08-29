@@ -3,7 +3,7 @@ package com.twitter.finatra.tests.conversions
 import com.twitter.concurrent.exp.AsyncStream
 import com.twitter.finatra.conversions.asyncStream._
 import com.twitter.inject.Test
-import com.twitter.util.{Throw, Await, Future, Try}
+import com.twitter.util.{Await, Future, Throw, Try}
 
 class AsyncStreamConversionsTest extends Test {
 

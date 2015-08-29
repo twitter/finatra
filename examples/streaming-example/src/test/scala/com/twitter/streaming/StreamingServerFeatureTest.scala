@@ -3,7 +3,6 @@ package com.twitter.streaming
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.Await
 
 class StreamingServerFeatureTest extends FeatureTest with HttpTest {
 

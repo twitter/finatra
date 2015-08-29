@@ -2,7 +2,7 @@ package finatra.quickstart.services
 
 import com.twitter.finatra.conversions.future._
 import com.twitter.util.Future
-import finatra.quickstart.domain.http.{TweetResponse, TweetPostRequest}
+import finatra.quickstart.domain.http.{TweetPostRequest, TweetResponse}
 import finatra.quickstart.domain.{Tweet, TweetId}
 import finatra.quickstart.firebase.FirebaseClient
 import javax.inject.{Inject, Singleton}

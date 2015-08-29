@@ -20,6 +20,9 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito with HttpTest {
 
   @Bind val idService = smartMock[IdService]
 
+  /* Mock GET Request performed in TwitterCloneWarmup */
+  firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(None)
+
   "tweet creation" in {
     idService.getId returns Future(TweetId("123"))
 

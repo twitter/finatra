@@ -1,7 +1,7 @@
 package com.twitter.finatra.http
 
 import com.twitter.finatra.http.response._
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.Logging
 import javax.inject.Inject
 
 abstract class Controller extends RouteDSL with Logging {
