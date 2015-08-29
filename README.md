@@ -5,7 +5,8 @@ Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) a
 ![finatra logo](finatra_logo.png)
 
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
-[![Coverage Status](https://coveralls.io/repos/twitter/finatra/badge.svg?branch=master)](https://coveralls.io/r/twitter/finatra?branch=master)
+
+[![Code Coverage](http://codecov.io/github/twitter/finatra/coverage.svg?branch=master)](http://codecov.io/github/twitter/finatra?branch=master)
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11)
 
