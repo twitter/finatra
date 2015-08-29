@@ -1,6 +1,7 @@
 package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.concurrent.exp.AsyncStream
+import com.twitter.finagle.http.{Request => LegacyRequest}
 import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
@@ -26,6 +27,9 @@ class CallbackConverter @Inject()(
   private def createRequestCallback[RequestType: Manifest, ResponseType: Manifest](callback: (RequestType) => ResponseType): (Request) => ResponseType = {
     if (manifest[RequestType] == manifest[Request]) {
       callback.asInstanceOf[(Request => ResponseType)]
+    }
+    else if (runtimeClassEq[RequestType, LegacyRequest]) {
+      throw new Exception(classOf[LegacyRequest].getName + " is not supported. Please use " + classOf[Request].getName)
     }
     else if (runtimeClassEq[RequestType, AsyncStream[_]]) {
       val asyncStreamTypeParam = manifest[RequestType].typeArguments.head

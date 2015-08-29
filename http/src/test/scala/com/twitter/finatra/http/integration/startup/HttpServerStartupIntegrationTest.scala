@@ -22,4 +22,18 @@ class HttpServerStartupIntegrationTest extends Test {
     }
   }
 
+  "finagle.http.Request no longer supported" in {
+    val e = intercept[Exception] {
+      new EmbeddedTwitterServer(
+        twitterServer = new HttpServer {
+          override def configureHttp(router: HttpRouter): Unit = {
+            router.add(new Controller {
+              get("/foo") { request: com.twitter.finagle.http.Request =>
+              }
+            })
+          }
+        }).start()
+    }
+    e.getMessage should be("com.twitter.finagle.http.Request is not supported. Please use com.twitter.finagle.httpx.Request")
+  }
 }
