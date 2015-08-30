@@ -10,7 +10,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - travis_retry sbt ++$TRAVIS_SCALA_VERSION clean coverage test && sbt coverageAggregate
+  - travis_retry sbt ++$TRAVIS_SCALA_VERSION clean coverage test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
