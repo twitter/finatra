@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.`type`.TypeFactory
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException
@@ -30,13 +31,15 @@ object CaseClassField {
       (constructorParam, idx) <- constructorParams.zipWithIndex
       annotations = allAnnotations(idx)
       name = jsonNameForField(annotations, namingStrategy, constructorParam.name)
+      deserializer = deserializerOrNone(annotations)
     } yield {
       CaseClassField(
         name = name,
         javaType = JacksonTypes.javaType(typeFactory, constructorParam.scalaType),
         parentClass = clazz,
         defaultFuncOpt = defaultFunction(clazz, idx),
-        annotations = annotations)
+        annotations = annotations,
+        deserializer = deserializer)
     }
   }
 
@@ -55,6 +58,12 @@ object CaseClassField {
           /* defaultName = */ decodedName)
     }
   }
+
+  private def deserializerOrNone(annotations: Array[Annotation]): Option[JsonDeserializer[Object]] = {
+    findAnnotation[JsonDeserialize](annotations) map { jsonDeserializer =>
+        ClassUtil.createInstance(jsonDeserializer.using, false).asInstanceOf[JsonDeserializer[Object]]
+    }
+  }
 }
 
 case class CaseClassField(
@@ -62,7 +71,8 @@ case class CaseClassField(
   javaType: JavaType,
   parentClass: Class[_],
   defaultFuncOpt: Option[() => Object],
-  annotations: Seq[Annotation])
+  annotations: Seq[Annotation],
+  deserializer: Option[JsonDeserializer[Object]])
   extends Logging {
 
   private val isOption = javaType.getRawClass == classOf[Option[_]]
@@ -103,11 +113,11 @@ case class CaseClassField(
       if (fieldJsonNode != null)
         if (isOption)
           Option(
-            parseFieldValue(codec, fieldJsonNode, firstTypeParam))
+            parseFieldValue(codec, fieldJsonNode, firstTypeParam, context))
         else
           assertNotNull(
             fieldJsonNode,
-            parseFieldValue(codec, fieldJsonNode, javaType))
+            parseFieldValue(codec, fieldJsonNode, javaType, context))
       else if (defaultFuncOpt.isDefined)
         defaultFuncOpt.get.apply()
       else if (isOption)
@@ -120,14 +130,19 @@ case class CaseClassField(
   /* Private */
 
   //optimized
-  private[this] def parseFieldValue(fieldCodec: ObjectCodec, field: JsonNode, fieldType: JavaType): Object = {
+  private[this] def parseFieldValue(fieldCodec: ObjectCodec, field: JsonNode, fieldType: JavaType, context: DeserializationContext): Object = {
     if (isString) {
       field.asText()
     }
     else {
-      fieldCodec.readValue[Object](
-        new TreeTraversingParser(field, fieldCodec),
-        fieldType)
+      val treeTraversingParser = new TreeTraversingParser(field, fieldCodec)
+      if (deserializer.isDefined) {
+        deserializer.get.deserialize(treeTraversingParser, context)
+      } else {
+        fieldCodec.readValue[Object](
+          treeTraversingParser,
+          fieldType)
+      }
     }
   }
 

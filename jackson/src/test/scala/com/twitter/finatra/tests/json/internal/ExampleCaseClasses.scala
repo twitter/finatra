@@ -1,13 +1,17 @@
 package com.twitter.finatra.tests.json.internal
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonProperty}
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind._
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.node.ValueNode
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.request._
 import com.twitter.finatra.validation.{NotEmpty, ValidationResult}
 import com.twitter.inject.Logging
 import org.joda.time.DateTime
 import scala.annotation.meta.param
+import scala.math.BigDecimal.RoundingMode
 
 case class CaseClass(id: Long, name: String)
 
@@ -257,3 +261,19 @@ case class CaseClassWithInvalidValidation(
 case class NoConstructorArgs()
 
 case class CaseClassWithBoolean(foo: Boolean)
+
+case class CaseClassWithCustomDecimalFormat(
+   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
+   myBigDecimal: BigDecimal,
+   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
+   optMyBigDecimal: Option[BigDecimal])
+
+
+class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
+  override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigDecimal = {
+    val jsonNode: ValueNode = jp.getCodec.readTree(jp)
+    BigDecimal(jsonNode.asText).setScale(2, RoundingMode.HALF_UP)
+  }
+
+  override def getEmptyValue: BigDecimal = BigDecimal(0)
+}
