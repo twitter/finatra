@@ -19,12 +19,12 @@ private[finatra] object ByteBufferUtils extends Logging {
     Buf.ByteBuffer.Shared.extract(combinedBufs)
   }
 
-  def traceBuffer(byteBuffer: ByteBuffer) = {
+  def debugBuffer(byteBuffer: ByteBuffer) = {
     val copy = byteBuffer.duplicate()
     copy.position(0)
     val buf = Buf.ByteBuffer.Shared(copy)
     val str = buf.utf8str
 
-    trace(s"byteBuffer: $str pos: ${byteBuffer.position }")
+    debug(s"byteBuffer: $str pos: ${byteBuffer.position }")
   }
 }

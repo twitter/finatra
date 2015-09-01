@@ -6,13 +6,13 @@ import java.util.concurrent.Executors
 
 object FuturePools {
 
-  def fixedPool(name: String, size: Int): FuturePool = {
+  def fixedPool(name: String, size: Int): ExecutorServiceFuturePool = {
     new ExecutorServiceFuturePool(
       Executors.newFixedThreadPool(size,
         new NamedPoolThreadFactory(name)))
   }
 
-  def unboundedPool(name: String): FuturePool = {
+  def unboundedPool(name: String): ExecutorServiceFuturePool = {
     new ExecutorServiceFuturePool(
       Executors.newCachedThreadPool(
         new NamedPoolThreadFactory(name)))

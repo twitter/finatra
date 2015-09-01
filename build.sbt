@@ -279,7 +279,8 @@ lazy val jackson = project.
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
-      "org.scala-lang" % "scalap" % scalaVersion.value
+      "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler"),
+      "com.twitter.finatra" %% "finatra-scalap-compiler-deps" % "2.0.0"
     )
   ).
   dependsOn(

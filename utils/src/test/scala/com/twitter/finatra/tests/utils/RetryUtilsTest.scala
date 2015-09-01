@@ -68,4 +68,18 @@ class RetryUtilsTest extends Test {
 
     Await.result(result).status should be(Status.NotFound)
   }
+
+  "retry non future" in {
+    var numRuns = 0
+
+    val result = RetryUtils.retry(nonFatalExponentialPolicy) {
+      numRuns += 1
+      if (numRuns == 3)
+        26
+      else
+        throw new RuntimeException("fake failure")
+    }
+
+    result.get should be(26)
+  }
 }

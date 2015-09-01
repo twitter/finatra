@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.future._
 import com.twitter.inject.Test
-import com.twitter.util.{Future, Return}
+import com.twitter.util.{Throw, Future, Return}
 
 class FutureConversionsTest extends Test {
 
@@ -94,7 +94,7 @@ class FutureConversionsTest extends Test {
     }
     "#filter" in {
       assertFuture(
-        Future(Seq(0, 1, 2, 3)) filterInner {_ > 1},
+        Future(Seq(0, 1, 2, 3)) filterInner { _ > 1 },
         Future(Seq(2, 3)))
     }
     "#headOption when seq of size 1" in {
@@ -114,12 +114,12 @@ class FutureConversionsTest extends Test {
     }
     "#collectInner" in {
       assertFuture(
-        Future(Seq("a", 1)).collectInner { case num: Int => num + 1},
+        Future(Seq("a", 1)).collectInner { case num: Int => num + 1 },
         Future(Seq(2)))
     }
     "#groupBySingleValue" in {
       assertFuture(
-        Future(Seq("a", "aa", "bb", "ccc")).groupBySingleValue {_.size},
+        Future(Seq("a", "aa", "bb", "ccc")).groupBySingleValue { _.size },
         Future(Map(
           1 -> "a",
           2 -> "bb",
@@ -174,6 +174,63 @@ class FutureConversionsTest extends Test {
         Future.exception(ExistingException).toOption,
         Future(None))
     }
+    "#chainedOnFailure succeeds when Return" in {
+      assertFuture(
+        Future("asdf").chainedOnFailure { throwable =>
+          fail("should not run when Return")
+          Future.Unit
+        },
+        Future("asdf"))
+    }
+    "#chainedOnFailure succeeds when Throw" in {
+      var chainedRan = false
+
+      assertFailedFuture[ExistingException](
+        Future.exception(ExistingException).chainedOnFailure { throwable =>
+          assert(throwable == ExistingException)
+          chainedRan = true
+          Future.Unit
+        })
+
+      assert(chainedRan)
+    }
+    "#chainedOnFailure returns failed future when Throw" in {
+      var chainedRan = false
+
+      assertFailedFuture[ExistingException](
+        Future.exception(ExistingException).chainedOnFailure { throwable =>
+          assert(throwable == ExistingException)
+          chainedRan = true
+          Future.exception(new Exception("another exception"))
+        })
+
+      assert(chainedRan)
+    }
+
+    "#chainedOnFailure throws Exception when Throw" in {
+      var chainedRan = false
+
+      assertFailedFuture[ExistingException](
+        Future.exception(ExistingException).chainedOnFailure { throwable =>
+          assert(throwable == ExistingException)
+          chainedRan = true
+          throw new Exception("another exception")
+        })
+
+      assert(chainedRan)
+    }
+  }
+
+  def chainedSuccessFunc(throwable: Throwable): Future[Unit] = {
+    Future.Unit
+  }
+
+  def chainedFailedFunc(throwable: Throwable): Future[Unit] = {
+    Future.exception(new Exception("oops"))
+  }
+
+  def chainedFailedThrowsFunc(throwable: Throwable): Future[Unit] = {
+    throw new Exception("oops")
   }
 
   "Future[Boolean]" should {
@@ -219,13 +276,13 @@ class FutureConversionsTest extends Test {
   "Future[T]" should {
     "chainedOnFailure when success" in {
       assertFuture(
-        Future(1).chainedOnFailure { e => Future(2).unit},
+        Future(1).chainedOnFailure { e => Future(2).unit },
         Future(1))
     }
 
     "chainedOnFailure when failure" in {
       assertFuture(
-        Future(1).chainedOnFailure { e => Future.exception(new RuntimeException("failure in chained"))},
+        Future(1).chainedOnFailure { e => Future.exception(new RuntimeException("failure in chained")) },
         Future(1))
     }
 
@@ -244,6 +301,14 @@ class FutureConversionsTest extends Test {
             Future.exception(new RuntimeException("bad"))
         },
         Future(2))
+    }
+
+    "partialTransform when failed" in {
+      assertFailedFuture[TestException](
+        Future.exception[String](ExistingException).partialTransform {
+          case Throw(e: ExistingException) =>
+            Future.exception(TestException)
+        })
     }
   }
 

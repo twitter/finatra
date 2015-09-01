@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
 import com.fasterxml.jackson.databind.{JsonNode, Module, ObjectMapper, ObjectReader}
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import com.google.inject.Injector
 import com.twitter.finagle.httpx.{Message, Request, Response}
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.serde.ArrayElementsOnNewLinesPrettyPrinter
@@ -15,13 +16,13 @@ import java.nio.ByteBuffer
 object FinatraObjectMapper {
 
   /**
-   * If Guice is not available, this factory method can be used, but be aware that the @JsonInject annotation will not work.
+   * When not using Guice, this factory method can be used, but be aware that the @JsonInject annotation will not work.
    * NOTE: The preferred way of obtaining a FinatraObjectMapper is through Guice injection using FinatraJacksonModule.
    */
-  def create() = {
+  def create(injector: Injector = null): FinatraObjectMapper = {
     val guiceJacksonModule = new FinatraJacksonModule()
     new FinatraObjectMapper(
-      guiceJacksonModule.provideScalaObjectMapper(injector = null))
+      guiceJacksonModule.provideScalaObjectMapper(injector))
   }
 
   def parseMessageBody[T: Manifest](message: Message, reader: ObjectReader): T = {

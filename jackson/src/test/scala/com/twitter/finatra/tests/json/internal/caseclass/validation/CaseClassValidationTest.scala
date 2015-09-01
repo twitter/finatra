@@ -112,6 +112,23 @@ class CaseClassValidationTest extends Test {
               PropertyPath.empty,
               Invalid("warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]")))))
     }
+
+    "no start with end" in {
+      intercept[CaseClassMappingException] {
+        parseCar(baseCar.copy(
+          warrantyStart = None,
+          warrantyEnd = baseCar.warrantyEnd))
+      } should equal(
+        CaseClassMappingException(
+          Seq(
+            CaseClassValidationException(
+              PropertyPath.empty,
+              Invalid("both warrantyStart and warrantyEnd are required for a valid range")))))
+    }
+
+    "start with end" in {
+      parseCar(baseCar)
+    }
   }
 
   private def parseCar(car: Car): Car = {

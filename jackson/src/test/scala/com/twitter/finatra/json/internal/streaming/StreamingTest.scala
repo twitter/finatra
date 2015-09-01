@@ -47,7 +47,7 @@ class StreamingTest extends Test {
     val request = Request(Method.Post, "/")
     request.setChunked(true)
 
-    val parser = new JsonStreamParser(FinatraObjectMapper.create)
+    val parser = new JsonStreamParser(FinatraObjectMapper.create())
 
     request.writer.write(Buf.Utf8(jsonStr)) ensure {
       request.writer.close()
@@ -72,7 +72,7 @@ class StreamingTest extends Test {
     expected: AsyncStream[Int]): Unit = {
 
     readString(bufs) should equal(expectedInputStr)
-    val parser = new JsonStreamParser(FinatraObjectMapper.create)
+    val parser = new JsonStreamParser(FinatraObjectMapper.create())
     Await.result(
       parser.parseArray[Int](bufs).toSeq) should equal(Await.result(expected.toSeq()))
   }

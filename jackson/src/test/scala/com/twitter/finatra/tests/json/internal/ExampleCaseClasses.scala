@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonP
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.request._
+import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.{NotEmpty, ValidationResult}
 import com.twitter.inject.Logging
+import javax.inject.{Named, Inject}
 import org.joda.time.DateTime
 import scala.annotation.meta.param
 
@@ -132,6 +134,10 @@ case class PersonWithDottedName(
 
 case class SimplePerson(name: String)
 
+@JsonCamelCase
+case class CamelCaseSimplePerson(
+  myName: String)
+
 case class CaseClassWithMap(map: Map[String, String])
 
 case class CaseClassWithSetOfLongs(set: Set[Long])
@@ -257,3 +263,24 @@ case class CaseClassWithInvalidValidation(
 case class NoConstructorArgs()
 
 case class CaseClassWithBoolean(foo: Boolean)
+
+case class CaseClassInjectString(
+  @Inject string: String)
+
+case class CaseClassInjectStringWithDefault(
+  @Inject string: String = "DefaultHello")
+
+case class CaseClassInjectInt(
+  @Inject age: Int)
+
+case class CaseClassInjectOptionInt(
+  @Inject age: Option[Int])
+
+case class CaseClassInjectOptionString(
+  @Inject string: Option[String])
+
+case class CaseClassTooManyInjectableAnnotations(
+  @Inject @QueryParam string: String)
+
+case class CaseClassTooManyBindingAnnotations(
+  @Inject @Named("foo") @Named("bar") string: String)

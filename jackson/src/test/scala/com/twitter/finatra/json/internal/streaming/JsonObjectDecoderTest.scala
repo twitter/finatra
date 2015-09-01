@@ -1,6 +1,8 @@
 package com.twitter.finatra.json.internal.streaming
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.conversions.buf._
+import com.twitter.finatra.json.{JsonDiff, FinatraObjectMapper}
 import com.twitter.finatra.json.internal.streaming.ParsingState._
 import com.twitter.inject.Test
 import com.twitter.io.Buf
@@ -43,6 +45,33 @@ class JsonObjectDecoderTest extends Test {
       done = true)
   }
 
+  val mapper = FinatraObjectMapper.create()
+
+  "decode with nested objects" in {
+    val jsonObj = """
+     {
+      "sub_object": {
+        "msg": "hi"
+      }
+     }
+     """
+
+    assertSingleJsonParse(jsonObj)
+  }
+
+  "decode json inside a string" in {
+    val jsonObj = """{"foo": "bar"}"""
+    assertSingleJsonParse(jsonObj)
+  }
+
+  "Caling decode when already finished" in {
+    val decoder = new JsonArrayChunker()
+    decoder.decode(Buf.Utf8("[]"))
+    intercept[Exception] {
+      decoder.decode(Buf.Utf8("{}"))
+    }
+  }
+
   private def assertDecode(
     decoder: JsonArrayChunker,
     input: String,
@@ -53,7 +82,8 @@ class JsonObjectDecoderTest extends Test {
     parsingState: ParsingState = InsideArray,
     done: Boolean = false): Unit = {
 
-    decoder.decode(Buf.Utf8(input)) map { _.utf8str } should equal(output)
+    val result = decoder.decode(Buf.Utf8(input))
+    result map { _.utf8str } should equal(output)
 
     val copiedByteBuffer = decoder.copiedByteBuffer.duplicate()
     copiedByteBuffer.position(0)
@@ -65,5 +95,13 @@ class JsonObjectDecoderTest extends Test {
     decoder.openBraces should equal(openBraces)
     decoder.parsingState should equal(parsingState)
     decoder.done should equal(done)
+  }
+
+  def assertSingleJsonParse(jsonObj: String): Unit = {
+    val decoder = new JsonArrayChunker()
+    val result = decoder.decode(Buf.Utf8("[" + jsonObj + "]"))
+    val nodes = result map mapper.parse[JsonNode]
+    nodes.size should be(1)
+    JsonDiff.jsonDiff(nodes.head, jsonObj)
   }
 }

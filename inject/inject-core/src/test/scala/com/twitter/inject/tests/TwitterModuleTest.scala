@@ -1,14 +1,33 @@
 package com.twitter.inject.tests
 
-import com.google.inject.Guice
-import com.twitter.inject.Test
+import com.google.inject.{Key, Guice}
+import com.twitter.finatra.tests.Prod
+import com.twitter.inject.{Injector, Test}
 import com.twitter.inject.tests.module.{ComplexServiceFactory, DoEverythingModule}
 
 class TwitterModuleTest extends Test {
 
+  val guiceInjector = Guice.createInjector(DoEverythingModule)
+  val injector = Injector(guiceInjector)
+
   "get assisted factory instance from injector" in {
-    val injector = Guice.createInjector(DoEverythingModule)
-    val complexServiceFactory = injector.getInstance(classOf[ComplexServiceFactory])
+    assertServiceFactory(
+      injector.instance[ComplexServiceFactory])
+
+    assertServiceFactory(
+      injector.instance(classOf[ComplexServiceFactory]))
+
+    assertServiceFactory(
+      injector.instance(Key.get(classOf[ComplexServiceFactory])))
+  }
+
+  "get additional instances from injector" in {
+    injector.instance[String](name = "str1") should be("string1")
+
+    injector.instance[String, Prod] should be("prod string")
+  }
+
+  def assertServiceFactory(complexServiceFactory: ComplexServiceFactory): Unit = {
     complexServiceFactory.create("foo").execute should equal("done foo")
   }
 }

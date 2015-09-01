@@ -1,18 +1,20 @@
 package com.twitter.finatra.tests.json
 
-import com.fasterxml.jackson.databind.node.IntNode
+import com.fasterxml.jackson.databind.node.{TreeTraversingParser, IntNode}
 import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
+import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.conversions.time._
-import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassValidationException, JsonInjectionNotSupportedException, CaseClassMappingException}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.tests.json.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.tests.json.internal._
 import com.twitter.inject.Logging
-import java.io.ByteArrayInputStream
+import com.twitter.io.Buf
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import org.joda.time.{DateTime, DateTimeZone}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import org.scalatest.{Matchers, FeatureSpec}
+import org.scalatest.{FeatureSpec, Matchers}
 
 @RunWith(classOf[JUnitRunner])
 class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
@@ -25,7 +27,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   feature("simple tests") {
 
     scenario("parse super simple") {
-      val foo = parse[SimplePerson]( """{"name": "Steve"}""")
+      val foo = parse[SimplePerson]("""{"name": "Steve"}""")
       foo should equal(SimplePerson("Steve"))
     }
 
@@ -47,8 +49,13 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       """
 
     scenario("parse simple") {
-      val foo = parse[SimplePerson]( """{"name": "Steve"}""")
+      val foo = parse[SimplePerson]("""{"name": "Steve"}""")
       foo should equal(SimplePerson("Steve"))
+    }
+
+    scenario("parse CamelCase simple person") {
+      val foo = parse[CamelCaseSimplePerson]("""{"myName": "Steve"}""")
+      foo should equal(CamelCaseSimplePerson("Steve"))
     }
 
     scenario("parse json") {
@@ -63,12 +70,12 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("parse json list of ints") {
-      val nums = parse[Seq[Int]]( """[1,2,3]""")
+      val nums = parse[Seq[Int]]("""[1,2,3]""")
       nums should equal(Seq(1, 2, 3))
     }
 
     scenario("parse json with extra field at end") {
-      val person = parse[Person]( """
+      val person = parse[Person]("""
       {
          "id" : 1,
          "name" : "Steve",
@@ -83,7 +90,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("parse json with extra field in middle") {
-      val person = parse[Person]( """
+      val person = parse[Person]("""
       {
          "id" : 1,
          "name" : "Steve",
@@ -98,7 +105,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("parse json with extra field name with dot") {
-      val person = parse[PersonWithDottedName]( """
+      val person = parse[PersonWithDottedName]("""
       {
         "id" : 1,
         "name.last" : "Cosenza"
@@ -144,7 +151,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("parse json with missing 'nickname' field that has a string default") {
-      val person = parse[Person]( """
+      val person = parse[Person]("""
       {
          "id" : 1,
          "name" : "Steve",
@@ -188,7 +195,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("Prevent overrwriting val in case class") {
-      parse[CaseClassWithVal]( """{
+      parse[CaseClassWithVal]("""{
           "name" : "Bob",
           "type" : "dog"
          }""") should equal(CaseClassWithVal("Bob"))
@@ -197,7 +204,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   feature("enums") {
     scenario("simple") {
-      parse[CaseClassWithEnum]( """{
+      parse[CaseClassWithEnum]("""{
           "name" : "Bob",
           "make" : "ford"
          }""") should equal(CaseClassWithEnum("Bob", CarMakeEnum.ford))
@@ -205,7 +212,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
     scenario("complex") {
       JsonDiff.jsonDiff(
-        parse[CaseClassWithComplexEnums]( """{
+        parse[CaseClassWithComplexEnums]("""{
           "name" : "Bob",
           "make" : "vw",
           "make_opt" : "ford",
@@ -222,17 +229,17 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
     scenario("invalid enum entry") {
       val e = intercept[CaseClassMappingException] {
-        parse[CaseClassWithEnum]( """{
+        parse[CaseClassWithEnum]("""{
           "name" : "Bob",
           "make" : "foo"
          }""")
       }
-      e.errors map {_.getMessage} should equal(Seq( """make: 'foo' is not a valid CarMakeEnum with valid values: ford, vw"""))
+      e.errors map { _.getMessage } should equal(Seq("""make: 'foo' is not a valid CarMakeEnum with valid values: ford, vw"""))
     }
 
     scenario("invalid validation") {
       val e = intercept[RuntimeException] {
-        parse[CaseClassWithInvalidValidation]( """{
+        parse[CaseClassWithInvalidValidation]("""{
           "name" : "Bob",
           "make" : "foo"
          }""")
@@ -245,13 +252,13 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   feature("Jodatime") {
     scenario("DateTime") {
       DateTime.now < DateTime.now //including so that import com.twitter.finatra.conversions.time._ is not removed (since there was a previous bug where _time included a DateTime type alias)
-      parse[CaseClassWithDateTime]( """{
+      parse[CaseClassWithDateTime]("""{
            "date_time" : "2014-05-30T03:57:59.302Z"
          }""") should equal(CaseClassWithDateTime(new DateTime("2014-05-30T03:57:59.302Z", DateTimeZone.UTC)))
     }
 
     scenario("invalid DateTime") {
-      assertJsonParse[CaseClassWithDateTime]( """{
+      assertJsonParse[CaseClassWithDateTime]("""{
            "date_time" : ""
          }""",
         withErrors = Seq(
@@ -259,7 +266,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("invalid DateTime's") {
-      assertJsonParse[CaseClassWithIntAndDateTime]( """{
+      assertJsonParse[CaseClassWithIntAndDateTime]("""{
            "name" : "Bob",
            "age" : "old",
            "age2" : "1",
@@ -280,13 +287,13 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   feature("escaped fields") {
     scenario("long") {
-      parse[CaseClassWithEscapedLong]( """{
+      parse[CaseClassWithEscapedLong]("""{
           "1-5" : 10
        }""") should equal(CaseClassWithEscapedLong(`1-5` = 10))
     }
 
     scenario("string") {
-      parse[CaseClassWithEscapedString]( """{
+      parse[CaseClassWithEscapedString]("""{
           "1-5" : "10"
        }""") should equal(CaseClassWithEscapedString(`1-5` = "10"))
     }
@@ -307,14 +314,14 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   feature("Injection when using FinatraObjectMapper.create") {
     scenario("Inject not found field") {
       val e = intercept[JsonInjectionNotSupportedException] {
-        parse[ClassWithFooClassInject]( """{}""")
+        parse[ClassWithFooClassInject]("""{}""")
       }
       println(e)
     }
 
     scenario("Inject request field") {
       intercept[JsonInjectionNotSupportedException] {
-        parse[ClassWithQueryParamDateTimeInject]( """{}""")
+        parse[ClassWithQueryParamDateTimeInject]("""{}""")
       }
     }
   }
@@ -335,7 +342,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     scenario("direct WrappedValue for String when asked to parse wrapped json object should throw exception") {
       val origObj = WrappedValueString("1")
       intercept[JsonMappingException] {
-        parse[WrappedValueString]( """{"value": "1"}""")
+        parse[WrappedValueString]("""{"value": "1"}""")
       }
     }
 
@@ -368,13 +375,13 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
     scenario("Seq[WrappedValue]") {
       generate(
-        Seq(WrappedValueLong(11111111))) should be( """[11111111]""")
+        Seq(WrappedValueLong(11111111))) should be("""[11111111]""")
     }
 
     scenario("Map[WrappedValueString, String]") {
       val obj = Map(WrappedValueString("11111111") -> "asdf")
       val json = generate(obj)
-      json should be( """{"11111111":"asdf"}""")
+      json should be("""{"11111111":"asdf"}""")
       parse[Map[WrappedValueString, String]](json) should be(obj)
     }
 
@@ -386,24 +393,24 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
     scenario("deser Map[Long, String]") {
       pending
-      val obj = parse[Map[Long, String]]( """{"11111111":"asdf"}""")
+      val obj = parse[Map[Long, String]]("""{"11111111":"asdf"}""")
       val expected = Map(11111111L -> "asdf")
       obj should equal(expected)
     }
 
     scenario("deser Map[String, String]") {
-      parse[Map[String, String]]( """{"11111111":"asdf"}""") should
+      parse[Map[String, String]]("""{"11111111":"asdf"}""") should
         be(Map("11111111" -> "asdf"))
     }
 
     scenario("Map[String, WrappedValueLong]") {
       generate(
-        Map("asdf" -> WrappedValueLong(11111111))) should be( """{"asdf":11111111}""")
+        Map("asdf" -> WrappedValueLong(11111111))) should be("""{"asdf":11111111}""")
     }
 
     scenario("Map[String, WrappedValueString]") {
       generate(
-        Map("asdf" -> WrappedValueString("11111111"))) should be( """{"asdf":"11111111"}""")
+        Map("asdf" -> WrappedValueString("11111111"))) should be("""{"asdf":"11111111"}""")
     }
 
     scenario("object with Map[WrappedValueString, String]") {
@@ -422,74 +429,74 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   // Jerkson Inspired/Copied Tests Below
   feature("A basic case class") {
     scenario("generates a JSON object with matching field values") {
-      generate(CaseClass(1, "Coda")) should be( """{"id":1,"name":"Coda"}""")
+      generate(CaseClass(1, "Coda")) should be("""{"id":1,"name":"Coda"}""")
     }
 
     scenario("is parsable from a JSON object with corresponding fields") {
-      parse[CaseClass]( """{"id":1,"name":"Coda"}""") should be(CaseClass(1, "Coda"))
+      parse[CaseClass]("""{"id":1,"name":"Coda"}""") should be(CaseClass(1, "Coda"))
     }
 
     scenario("is parsable from a JSON object with extra fields") {
-      parse[CaseClass]( """{"id":1,"name":"Coda","derp":100}""") should be(CaseClass(1, "Coda"))
+      parse[CaseClass]("""{"id":1,"name":"Coda","derp":100}""") should be(CaseClass(1, "Coda"))
     }
 
     scenario("is not parsable from an incomplete JSON object") {
       intercept[Exception] {
-        parse[CaseClass]( """{"id":1}""")
+        parse[CaseClass]("""{"id":1}""")
       }
     }
   }
 
   feature("A case class with lazy fields") {
     scenario("generates a JSON object with those fields evaluated") {
-      generate(CaseClassWithLazyVal(1)) should be( """{"id":1,"woo":"yeah"}""")
+      generate(CaseClassWithLazyVal(1)) should be("""{"id":1,"woo":"yeah"}""")
     }
 
     scenario("is parsable from a JSON object without those fields") {
-      parse[CaseClassWithLazyVal]( """{"id":1}""") should be(CaseClassWithLazyVal(1))
+      parse[CaseClassWithLazyVal]("""{"id":1}""") should be(CaseClassWithLazyVal(1))
     }
 
     scenario("is not parsable from an incomplete JSON object") {
       intercept[Exception] {
-        parse[CaseClassWithLazyVal]( """{}""")
+        parse[CaseClassWithLazyVal]("""{}""")
       }
     }
   }
 
   feature("A case class with ignored members") {
     scenario("generates a JSON object without those fields") {
-      generate(CaseClassWithIgnoredField(1)) should be( """{"id":1}""")
-      generate(CaseClassWithIgnoredFieldsExactMatch(1)) should be( """{"id":1}""")
-      generate(CaseClassWithIgnoredFieldsMatchAfterToSnakeCase(1)) should be( """{"id":1}""")
+      generate(CaseClassWithIgnoredField(1)) should be("""{"id":1}""")
+      generate(CaseClassWithIgnoredFieldsExactMatch(1)) should be("""{"id":1}""")
+      generate(CaseClassWithIgnoredFieldsMatchAfterToSnakeCase(1)) should be("""{"id":1}""")
     }
 
     scenario("is parsable from a JSON object without those fields") {
-      parse[CaseClassWithIgnoredField]( """{"id":1}""") should be(CaseClassWithIgnoredField(1))
-      parse[CaseClassWithIgnoredFieldsMatchAfterToSnakeCase]( """{"id":1}""") should be(CaseClassWithIgnoredFieldsMatchAfterToSnakeCase(1))
+      parse[CaseClassWithIgnoredField]("""{"id":1}""") should be(CaseClassWithIgnoredField(1))
+      parse[CaseClassWithIgnoredFieldsMatchAfterToSnakeCase]("""{"id":1}""") should be(CaseClassWithIgnoredFieldsMatchAfterToSnakeCase(1))
     }
 
     scenario("is not parsable from an incomplete JSON object") {
       intercept[Exception] {
-        parse[CaseClassWithIgnoredField]( """{}""")
+        parse[CaseClassWithIgnoredField]("""{}""")
       }
       intercept[Exception] {
-        parse[CaseClassWithIgnoredFieldsMatchAfterToSnakeCase]( """{}""")
+        parse[CaseClassWithIgnoredFieldsMatchAfterToSnakeCase]("""{}""")
       }
     }
   }
 
   feature("A case class with transient members") {
     scenario("generates a JSON object without those fields") {
-      generate(CaseClassWithTransientField(1)) should be( """{"id":1}""")
+      generate(CaseClassWithTransientField(1)) should be("""{"id":1}""")
     }
 
     scenario("is parsable from a JSON object without those fields") {
-      parse[CaseClassWithTransientField]( """{"id":1}""") should be(CaseClassWithTransientField(1))
+      parse[CaseClassWithTransientField]("""{"id":1}""") should be(CaseClassWithTransientField(1))
     }
 
     scenario("is not parsable from an incomplete JSON object") {
       intercept[Exception] {
-        parse[CaseClassWithTransientField]( """{}""")
+        parse[CaseClassWithTransientField]("""{}""")
       }
     }
   }
@@ -497,46 +504,46 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   feature("A case class with lazy vals") {
     scenario("generates a JSON object without those fields") {
       pending // would need to modify case class serializer to implement
-      generate(CaseClassWithLazyField(1)) should be( """{"id":1}""")
+      generate(CaseClassWithLazyField(1)) should be("""{"id":1}""")
     }
 
     scenario("is parsable from a JSON object without those fields") {
-      parse[CaseClassWithLazyField]( """{"id":1}""") should be(CaseClassWithLazyField(1))
+      parse[CaseClassWithLazyField]("""{"id":1}""") should be(CaseClassWithLazyField(1))
     }
   }
 
   feature("A case class with an overloaded field") {
     scenario("generates a JSON object with the nullary version of that field") {
       pending //fails on java 7. ok for now since we don't need this functionality
-      generate(CaseClassWithOverloadedField(1)) should be( """{"id":1}""")
+      generate(CaseClassWithOverloadedField(1)) should be("""{"id":1}""")
     }
   }
 
   feature("A case class with an Option[String] member") {
     scenario("generates a field if the member is Some") {
-      generate(CaseClassWithOption(Some("what"))) should be( """{"value":"what"}""")
+      generate(CaseClassWithOption(Some("what"))) should be("""{"value":"what"}""")
     }
 
     scenario("is parsable from a JSON object with that field") {
-      parse[CaseClassWithOption]( """{"value":"what"}""") should be(CaseClassWithOption(Some("what")))
+      parse[CaseClassWithOption]("""{"value":"what"}""") should be(CaseClassWithOption(Some("what")))
     }
 
     scenario("doesn't generate a field if the member is None") {
-      generate(CaseClassWithOption(None)) should be( """{}""")
+      generate(CaseClassWithOption(None)) should be("""{}""")
     }
 
     scenario("is parsable from a JSON object without that field") {
-      parse[CaseClassWithOption]( """{}""") should be(CaseClassWithOption(None))
+      parse[CaseClassWithOption]("""{}""") should be(CaseClassWithOption(None))
     }
 
     scenario("is parsable from a JSON object with a null value for that field") {
-      parse[CaseClassWithOption]( """{"value":null}""") should be(CaseClassWithOption(None))
+      parse[CaseClassWithOption]("""{"value":null}""") should be(CaseClassWithOption(None))
     }
   }
 
   feature("A case class with a JsonNode member") {
     scenario("generates a field of the given type") {
-      generate(CaseClassWithJsonNode(new IntNode(2))) should be( """{"value":2}""")
+      generate(CaseClassWithJsonNode(new IntNode(2))) should be("""{"value":2}""")
     }
   }
 
@@ -716,27 +723,27 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   feature("A case class that throws an exception") {
     scenario("is not parsable from a JSON object") {
       intercept[NullPointerException] {
-        parse[CaseClassWithException]( """{}""")
+        parse[CaseClassWithException]("""{}""")
       }
     }
   }
 
   feature("A case class nested inside of an object") {
     scenario("is parsable from a JSON object") {
-      parse[OuterObject.NestedCaseClass]( """{"id": 1}""") should be(OuterObject.NestedCaseClass(1))
+      parse[OuterObject.NestedCaseClass]("""{"id": 1}""") should be(OuterObject.NestedCaseClass(1))
     }
   }
 
   feature("A case class nested inside of an object nested inside of an object") {
     scenario("is parsable from a JSON object") {
-      parse[OuterObject.InnerObject.SuperNestedCaseClass]( """{"id": 1}""") should be(OuterObject.InnerObject.SuperNestedCaseClass(1))
+      parse[OuterObject.InnerObject.SuperNestedCaseClass]("""{"id": 1}""") should be(OuterObject.InnerObject.SuperNestedCaseClass(1))
     }
   }
 
   feature("A case class with array members") {
 
     scenario("is parsable from a JSON object") {
-      val c = parse[CaseClassWithArrays]( """{"one":"1","two":["a","b","c"],"three":[1,2,3], "four":[4, 5], "five":["x", "y"]}""")
+      val c = parse[CaseClassWithArrays]("""{"one":"1","two":["a","b","c"],"three":[1,2,3], "four":[4, 5], "five":["x", "y"]}""")
       c.one should be("1")
       c.two should be(Array("a", "b", "c"))
       c.three should be(Array(1, 2, 3))
@@ -753,18 +760,18 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   feature("A case class with collection of Longs") {
     scenario("array of longs") {
-      val c = parse[CaseClassWithArrayLong]( """{"array":[3,1,2]}""")
+      val c = parse[CaseClassWithArrayLong]("""{"array":[3,1,2]}""")
       c.array.sorted should equal(Array(1, 2, 3))
     }
     scenario("seq of longs") {
-      val c = parse[CaseClassWithSeqLong]( """{"seq":[3,1,2]}""")
+      val c = parse[CaseClassWithSeqLong]("""{"seq":[3,1,2]}""")
       c.seq.sorted should equal(Seq(1, 2, 3))
     }
   }
 
   feature("seq of longs") {
     scenario("seq of longs") {
-      val seq = parse[Seq[Long]]( """[3,1,2]""")
+      val seq = parse[Seq[Long]]("""[3,1,2]""")
       seq.sorted should equal(Seq(1L, 2L, 3L))
     }
   }
@@ -800,7 +807,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
     scenario("nulls will not render") {
       generate(
-        Person(1, null, null, null)) should equal( """{"id":1,"nickname":"unknown"}""")
+        Person(1, null, null, null)) should equal("""{"id":1,"nickname":"unknown"}""")
     }
 
     scenario("string wrapper deserialization") {
@@ -819,17 +826,17 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
 
     scenario("parse input stream") {
-      val is = new ByteArrayInputStream( """{"foo": "bar"}""".getBytes)
+      val is = new ByteArrayInputStream("""{"foo": "bar"}""".getBytes)
       mapper.parse[Blah](is) should equal(Blah("bar"))
     }
 
     scenario("Logging Trait fields should be ignored") {
-      generate(Group3("123")) should be( """{"id":"123"}""")
+      generate(Group3("123")) should be("""{"id":"123"}""")
     }
   }
 
   scenario("class with no constructor") {
-    parse[NoConstructorArgs]( """{}""")
+    parse[NoConstructorArgs]("""{}""")
   }
 
   //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
@@ -854,6 +861,91 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
           }""",
       withErrors = Seq(
         "foo: 'bar' is not a valid boolean"))
+  }
+
+  val msgHiJsonStr = """{"msg":"hi"}"""
+
+  scenario("parse jsonParser") {
+    val jsonNode = mapper.parse[JsonNode]("{}")
+    val jsonParser = new TreeTraversingParser(jsonNode)
+    mapper.parse[JsonNode](jsonParser) should equal(jsonNode)
+  }
+
+  scenario("parseRequest") {
+    val request = Request()
+    request.setContentString("""{"msg": "hi"}""")
+
+    val jsonNode = FinatraObjectMapper.parseRequestBody[JsonNode](
+      request,
+      mapper.objectMapper.reader[JsonNode])
+
+    jsonNode.get("msg").textValue() should equal("hi")
+  }
+
+  scenario("Parse message not supported when content length not set") {
+    val request = Request()
+    request.setContentString("""{ "foo": "true" }""")
+    intercept[RequestFieldInjectionNotSupportedException] {
+      mapper.parse[CaseClassWithBoolean](request)
+    }
+  }
+
+  scenario("Parse message") {
+    val request = Request()
+    val json = """{ "foo": "true" }"""
+    request.setContentString(json)
+    request.headerMap.add("Content-Length", json.size.toString)
+    val result = mapper.parse[CaseClassWithBoolean](request)
+    assert(result == CaseClassWithBoolean(true))
+  }
+
+    scenario("parse with Request") {
+    val request = Request()
+    request.setContentString("""{"msg": "hi"}""")
+
+    intercept[RequestFieldInjectionNotSupportedException] {
+      mapper.parse[JsonNode](request)
+    }
+  }
+
+  scenario("parse with Response") {
+    val response = Response()
+    response.setContentString("""{"msg": "hi"}""")
+
+    mapper.parse[JsonNode](response).get("msg").textValue() should equal("hi")
+  }
+
+  scenario("parseResponse") {
+    val response = Response()
+    response.setContentString("""{"msg": "hi"}""")
+
+    val jsonNode = FinatraObjectMapper.parseResponseBody[JsonNode](
+      response,
+      mapper.objectMapper.reader[JsonNode])
+
+    jsonNode.get("msg").textValue() should equal("hi")
+  }
+
+  scenario("writeValue") {
+    val os = new ByteArrayOutputStream()
+    mapper.writeValue(Map("msg" -> "hi"), os)
+    os.close()
+    new String(os.toByteArray) should equal(msgHiJsonStr)
+  }
+
+  scenario("writeValueAsBuf") {
+    val buf = mapper.writeValueAsBuf(Map("msg" -> "hi"))
+    val Buf.Utf8(str) = buf
+    str should equal(msgHiJsonStr)
+  }
+
+  scenario("writePrettyString") {
+    val jsonStr = mapper.writePrettyString("""{"msg": "hi"}""")
+    mapper.parse[JsonNode](jsonStr).get("msg").textValue() should equal("hi")
+  }
+
+  scenario("reader") {
+    assert(mapper.reader[JsonNode] != null)
   }
 
   private def assertJsonParse[T: Manifest](json: String, withErrors: Seq[String]) = {
@@ -882,12 +974,12 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     trace(e.errors.mkString("\n"))
     clearStackTrace(e.errors)
 
-    val actualMessages = e.errors map {_.getMessage}
+    val actualMessages = e.errors map { _.getMessage }
     JsonDiff.jsonDiff(actualMessages, withErrors)
   }
 
   private def clearStackTrace(exceptions: Seq[CaseClassValidationException]) = {
-    exceptions map {_.setStackTrace(Array())}
+    exceptions map { _.setStackTrace(Array()) }
     exceptions
   }
 

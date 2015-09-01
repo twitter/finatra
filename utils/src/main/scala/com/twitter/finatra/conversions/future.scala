@@ -164,7 +164,7 @@ object future {
     def chainedOnFailure(failureFunc: Throwable => Future[Unit]): Future[A] = {
       future rescue {
         case NonFatal(primaryThrowable) =>
-          failureFunc(primaryThrowable) transform {
+          Future(failureFunc(primaryThrowable)).flatten transform {
             case Throw(secondaryThrowable) =>
               log.error("Additional failure in chainedOnFailure", secondaryThrowable)
               future
