@@ -22,7 +22,7 @@ class FinatraDefaultMessageBodyReader @Inject()(
   /* Public */
 
   override def parse[T: Manifest](request: Request): T = {
-    val requestInjectableValues = new RequestInjectableValues(request, injector)
+    val requestInjectableValues = new RequestInjectableValues(objectMapper, request, injector)
     val requestAwareObjectReader = objectMapper.reader[T].`with`(requestInjectableValues)
 
     val length = request.contentLength.getOrElse(0L)

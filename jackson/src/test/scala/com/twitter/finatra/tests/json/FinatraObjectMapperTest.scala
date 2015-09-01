@@ -1,5 +1,6 @@
 package com.twitter.finatra.tests.json
 
+import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
 import com.fasterxml.jackson.databind.node.{TreeTraversingParser, IntNode}
 import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
 import com.twitter.finagle.httpx.{Request, Response}
@@ -840,11 +841,25 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   }
 
   //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
-  scenario("case class with boolean as number > 0") {
+  scenario("case class with boolean as number") {
     parse[CaseClassWithBoolean](
       """ {
             "foo": 100
           }""") should equal(CaseClassWithBoolean(true))
+  }
+
+  //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
+  scenario("case class with Seq[Boolean]") {
+    parse[CaseClassWithSeqBooleans](
+      """ {
+            "foos": [100, 5, 0, 9]
+          }""") should equal(CaseClassWithSeqBooleans(Seq(true, true, false, true)))
+  }
+
+  //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
+  scenario("Seq[Boolean]") {
+    parse[Seq[Boolean]](
+      """[100, 5, 0, 9]""") should equal(Seq(true, true, false, true))
   }
 
   scenario("case class with boolean as number 0") {
@@ -946,6 +961,15 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   scenario("reader") {
     assert(mapper.reader[JsonNode] != null)
+  }
+
+  scenario("case class with boolean number as string") {
+    assertJsonParse[CaseClassWithBoolean](
+      """ {
+            "foo": "1"
+          }""",
+      withErrors = Seq(
+        "foo: '1' is not a valid boolean"))
   }
 
   private def assertJsonParse[T: Manifest](json: String, withErrors: Seq[String]) = {

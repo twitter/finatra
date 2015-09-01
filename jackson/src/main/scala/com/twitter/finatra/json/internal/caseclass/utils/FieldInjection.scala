@@ -42,7 +42,7 @@ class FieldInjection(
       Key.get(javaType.getRawClass)
   }
 
-  private lazy val beanProperty = {
+  private lazy val beanProperty: ValueInjector = {
     new ValueInjector(
       new PropertyName(name),
       javaType,
@@ -58,9 +58,8 @@ class FieldInjection(
     codec: ObjectCodec): Option[Object] = {
 
     try {
-      for {
-        injectValue <- Option(context.findInjectableValue(guiceKey, beanProperty, /* beanInstance = */ null))
-      } yield convertInjectableValue(context, codec, injectValue, javaType)
+      Option(
+        context.findInjectableValue(guiceKey, beanProperty, /* beanInstance = */ null))
     }
     catch {
       case e: IllegalStateException =>
@@ -70,7 +69,7 @@ class FieldInjection(
     }
   }
 
-  val isInjectable = {
+  val isInjectable: Boolean = {
     val injectableAnnotations = filterAnnotations(InjectableAnnotations, annotations)
     assert(
       injectableAnnotations.size <= 1,
@@ -79,34 +78,4 @@ class FieldInjection(
 
     injectableAnnotations.nonEmpty
   }
-
-  /* Private */
-
-  private def convertInjectableValue(context: DeserializationContext, codec: ObjectCodec, injectableValue: AnyRef, injectableType: JavaType): Object = {
-    injectableValue match {
-      case _ if isOptionField(injectableType) =>
-        Option(
-          convertInjectableValue(context, codec, injectableValue, javaType.containedType(0)))
-      case injectableValueStr: String if !isStringField(injectableType) =>
-        context.findRootValueDeserializer(injectableType).deserialize(
-          singleStringJsonParser(codec, injectableValueStr),
-          context)
-      case _ =>
-        injectableValue
-    }
-  }
-
-  private def singleStringJsonParser(codec: ObjectCodec, injectableValueStr: String): JsonParser = {
-    val tokenBuffer = new TokenBuffer(codec, false)
-    tokenBuffer.writeString(injectableValueStr)
-    val parser = tokenBuffer.asParser
-    parser.nextToken() //advance to string we just wrote
-    parser
-  }
-
-  private def isStringField(typ: JavaType) =
-    typ.getRawClass == classOf[String]
-
-  private def isOptionField(typ: JavaType) =
-    typ.getRawClass == classOf[Option[_]]
 }

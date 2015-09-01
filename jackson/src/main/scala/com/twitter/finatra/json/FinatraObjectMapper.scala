@@ -2,7 +2,7 @@ package com.twitter.finatra.json
 
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.util.ByteBufferBackedInputStream
-import com.fasterxml.jackson.databind.{JsonNode, Module, ObjectMapper, ObjectReader}
+import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.google.inject.Injector
 import com.twitter.finagle.httpx.{Message, Request, Response}
@@ -107,7 +107,17 @@ case class FinatraObjectMapper(
     try {
       objectMapper.convertValue[T](any)
     } catch {
-      case e: IllegalArgumentException if e.getCause.isInstanceOf[CaseClassMappingException] =>
+      case e: IllegalArgumentException =>
+        throw e.getCause
+    }
+  }
+
+  /* See scaladoc from convert above */
+  def convert(from: Any, toValueType: JavaType): AnyRef = {
+    try {
+      objectMapper.convertValue(from, toValueType)
+    } catch {
+      case e: IllegalArgumentException =>
         throw e.getCause
     }
   }

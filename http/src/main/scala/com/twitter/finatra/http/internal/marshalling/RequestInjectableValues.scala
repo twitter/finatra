@@ -1,17 +1,24 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues}
+import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues, JavaType}
 import com.google.inject.{Injector, Key}
 import com.twitter.finagle.httpx.Request
+import com.twitter.finatra.http.internal.marshalling.RequestInjectableValues.SeqWithSingleEmptyString
+import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.annotations._
 import java.lang.annotation.Annotation
 
+object RequestInjectableValues {
+  val SeqWithSingleEmptyString = Seq("")
+}
+
 class RequestInjectableValues(
+  objectMapper: FinatraObjectMapper,
   request: Request,
   injector: Injector)
   extends InjectableValues {
 
-  private val paramsAnnotation = Seq(
+  private val requestParamsAnnotation = Seq(
     classOf[RouteParamInternal],
     classOf[QueryParamInternal],
     classOf[FormParamInternal])
@@ -27,18 +34,28 @@ class RequestInjectableValues(
    * @param beanInstance Bean instance
    * @return the injected value
    */
-  override def findInjectableValue(valueId: Object, ctxt: DeserializationContext, forProperty: BeanProperty, beanInstance: Object) = {
+  override def findInjectableValue(
+    valueId: Object,
+    ctxt: DeserializationContext,
+    forProperty: BeanProperty,
+    beanInstance: Object): Object = {
+
     val fieldName = forProperty.getName
 
-    if (hasAnnotation(forProperty, paramsAnnotation))
-      if (forProperty.getType.isCollectionLikeType)
-        request.params.getAll(fieldName) map {queryParamsResolveRawClass(forProperty, _)}
-      else
-        request.params.get(fieldName).orNull
-    else if (hasAnnotation[HeaderInternal](forProperty))
-      request.headerMap.get(fieldName).orNull
-    else if (isRequest(forProperty))
+    if (isRequest(forProperty))
       request
+    else if (hasAnnotation(forProperty, requestParamsAnnotation))
+      if (forProperty.getType.isCollectionLikeType) {
+        val paramsValue = request.params.getAll(fieldName)
+        if (paramsValue == SeqWithSingleEmptyString && hasStringTypeParam(forProperty))
+          convert(forProperty, Seq())
+        else
+          convert(forProperty, request.params.getAll(fieldName))
+      }
+      else
+        (request.params.get(fieldName) map { convert(forProperty, _) }).orNull
+    else if (hasAnnotation[HeaderInternal](forProperty))
+      (request.headerMap.get(fieldName) map { convert(forProperty, _) }).orNull
     else
       injector.getInstance(
         valueId.asInstanceOf[Key[_]]).asInstanceOf[Object]
@@ -46,12 +63,37 @@ class RequestInjectableValues(
 
   /* Private */
 
+  private def convert(forProperty: BeanProperty, propertyValue: Any): AnyRef = {
+    convert(
+      forProperty.getType,
+      propertyValue)
+  }
+
+  private def convert(forType: JavaType, propertyValue: Any): AnyRef = {
+    if (forType.getRawClass == classOf[Option[_]])
+      if (propertyValue == "")
+        None
+      else
+        Option(
+          convert(forType.containedType(0), propertyValue))
+    else
+      objectMapper.convert(
+        propertyValue,
+        forType)
+  }
+
+  private def hasStringTypeParam(forProperty: BeanProperty): Boolean = {
+    forProperty.getType.containedType(0).getRawClass != classOf[String]
+  }
+
   private def hasAnnotation[T <: Annotation : Manifest](beanProperty: BeanProperty): Boolean = {
     val annotClass = manifest[T].runtimeClass.asInstanceOf[Class[_ <: Annotation]]
     beanProperty.getContextAnnotation(annotClass) != null
   }
 
-  private def hasAnnotation(beanProperty: BeanProperty, annotationClasses: Seq[Class[_ <: Annotation]]): Boolean = {
+  private def hasAnnotation(
+    beanProperty: BeanProperty,
+    annotationClasses: Seq[Class[_ <: Annotation]]): Boolean = {
     annotationClasses exists { annotationClass =>
       beanProperty.getContextAnnotation(annotationClass) != null
     }
@@ -59,21 +101,5 @@ class RequestInjectableValues(
 
   private def isRequest(forProperty: BeanProperty): Boolean = {
     forProperty.getType.getRawClass == classOf[Request]
-  }
-
-  private def queryParamsResolveRawClass(forProperty: BeanProperty, value: String) = {
-    val clazz = forProperty.getType.getContentType.getRawClass
-    if (clazz == classOf[java.lang.Long])
-      value.toLong
-    else if (clazz == classOf[java.lang.Integer])
-      value.toInt
-    else if (clazz == classOf[java.lang.Short])
-      value.toShort
-    else if (clazz == classOf[java.lang.Boolean])
-      value.toBoolean
-    else if (clazz == classOf[java.lang.String])
-      value
-    else
-      null
   }
 }

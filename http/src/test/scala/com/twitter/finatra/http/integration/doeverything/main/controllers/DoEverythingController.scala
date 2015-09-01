@@ -534,6 +534,30 @@ class DoEverythingController @Inject()(
     RequestUtils.multiParams(r).keys
   }
 
+  get("/CaseClassWithIntQueryParam") { r: RequestWithIntQueryParams =>
+    r.param
+  }
+
+  get("/CaseClassWithShortQueryParam") { r: RequestWithShortQueryParams =>
+    r.param
+  }
+
+  get("/RequestWithBooleanQueryParams") { r: RequestWithBooleanQueryParams =>
+    r.param
+  }
+
+  get("/RequestWithBooleanQueryParam") { r: RequestWithBooleanQueryParam =>
+    r.param
+  }
+
+  get("/RequestWithOptionBooleanQueryParam") { r: RequestWithOptionBooleanQueryParam =>
+    "Hi " + r.param
+  }
+
+  get("/CaseClassWithCaseClassQueryParam") { r: RequestWithCaseClassQueryParams =>
+    r.param
+  }
+
   //needed to avoid colliding with Logging#trace :-/
   trace[Request, String]("/trace") { r: Request =>
     "trace 123"

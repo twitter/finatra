@@ -861,6 +861,17 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       )
     }
 
+    "GET with query parameters as empty long sequence" in {
+      server.httpGet(
+        "/RequestWithQueryParamSeqLong?foo=",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "foo": [] }
+          """
+      )
+    }
+
     "Apply route filter" in {
       server.httpGet(
         "/forbiddenByFilter",
@@ -1043,7 +1054,118 @@ class DoEverythingServerFeatureTest extends FeatureTest {
           "verbose: '5' is not a valid boolean"
         ]
       }
-                     """)
+      """)
+  }
+
+  "CaseClassWithIntQueryParam" in {
+    server.httpGet(
+      "/CaseClassWithIntQueryParam?param=123",
+      andExpect = Ok,
+      withJsonBody = "[123]")
+  }
+
+  "CaseClassWithShortQueryParam" in {
+    server.httpGet(
+      "/CaseClassWithShortQueryParam?param=123",
+      andExpect = Ok,
+      withJsonBody = "[123]")
+  }
+
+  "RequestWithBooleanQueryParams" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParams?param=true",
+      andExpect = Ok,
+      withJsonBody = "[true]")
+  }
+
+  "RequestWithBooleanQueryParams which is a true number" in {
+    pending // By default Jackson doesn't turn String numbers into booleans
+    server.httpGet(
+      "/RequestWithBooleanQueryParams?param=1",
+      andExpect = Ok,
+      withJsonBody = "[true]")
+  }
+
+  "RequestWithBooleanQueryParams which is a false number" in {
+    pending // By default Jackson doesn't turn String numbers into booleans
+    server.httpGet(
+      "/RequestWithBooleanQueryParams?param=0",
+      andExpect = Ok,
+      withJsonBody = "[false]")
+  }
+
+  "RequestWithBooleanQueryParam which is a true number" in {
+    pending // By default Jackson doesn't turn String numbers into booleans
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=1",
+      andExpect = Ok,
+      withJsonBody = "true")
+  }
+
+  "RequestWithBooleanQueryParam which is a false number" in {
+    pending // By default Jackson doesn't turn String numbers into booleans
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=0",
+      andExpect = Ok,
+      withJsonBody = "false")
+  }
+
+  "RequestWithBooleanQueryParam which is a true" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=true",
+      andExpect = Ok,
+      withJsonBody = "true")
+  }
+
+  "RequestWithBooleanQueryParam which is empty" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=",
+      andExpect = BadRequest,
+      withJsonBody = """{
+        "errors" : [
+          "param: field is required"
+        ]
+      }""")
+  }
+
+  "RequestWithOptionBooleanQueryParam which is a true" in {
+    server.httpGet(
+      "/RequestWithOptionBooleanQueryParam?param=true",
+      andExpect = Ok,
+      withJsonBody = "Hi Some(true)")
+  }
+
+  "RequestWithOptionBooleanQueryParam which is empty" in {
+    server.httpGet(
+      "/RequestWithOptionBooleanQueryParam?param=",
+      andExpect = Ok,
+      withJsonBody = "Hi None")
+  }
+
+  "RequestWithOptionBooleanQueryParam which is a false" in {
+    server.httpGet(
+      "/RequestWithOptionBooleanQueryParam?param=false",
+      andExpect = Ok,
+      withJsonBody = "Hi Some(false)")
+  }
+
+  "RequestWithBooleanQueryParam which is a false" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=false",
+      andExpect = Ok,
+      withJsonBody = "false")
+  }
+
+  "RequestWithBooleanQueryParams bad request" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParams?param=foo",
+      andExpect = BadRequest)
+  }
+
+  "CaseClassWithCaseClassQueryParam" in {
+    server.httpGet(
+      "/CaseClassWithCaseClassQueryParam?param=true",
+      andExpect = BadRequest)
   }
 
   "/trace" in {

@@ -267,6 +267,8 @@ case class CaseClassWithBoolean(foo: Boolean)
 case class CaseClassInjectString(
   @Inject string: String)
 
+case class CaseClassWithSeqBooleans(foos: Seq[Boolean])
+
 case class CaseClassInjectStringWithDefault(
   @Inject string: String = "DefaultHello")
 
