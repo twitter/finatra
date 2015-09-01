@@ -1,6 +1,5 @@
 # Finatra
-
-Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) and powered by [`twitter-server`][twitter-server].
+Fast, testable, Scala HTTP services built on Twitter-Server and Finagle
 
 ![finatra logo](finatra_logo.png)
 
@@ -11,21 +10,21 @@ Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) a
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
-Announcing the next milestone release of Finatra version 2!
------------------------------------------------------------
-[Finatra v2 slides](http://twitter.github.io/finatra/assets/FinatraSFScala.pdf) from SFScala meetup
-
-Documentation for prior versions can be found [here](https://github.com/twitter/finatra/tree/5d1d1cbb7640d8c4b1d11a85b53570d11a323e55).
-
 Features
 -----------------------------------------------------------
 * Production use as Twitter’s HTTP framework
 * ~50 times faster than v1.6 in several benchmarks
 * Powerful feature and integration test support
-* JSR-330 Dependency Injection using [Google Guice][guice]
+* Optional JSR-330 Dependency Injection using [Google Guice][guice]
 * [Jackson][jackson] based JSON parsing supporting required fields, default values, and custom validations
 * [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across futures
 * Guice request scope integration with Futures
+
+News
+-----------------------------------------------------------
+* [SFScala Introduction to Finatra Slides](http://twitter.github.io/finatra/assets/FinatraSFScala.pdf)
+* [SFScala Introduction to Finatra Presentation](https://www.youtube.com/watch?v=hkVp9W4c9bs&feature=youtu.be)
+* [FinagleCon Streaming HTTP with Finatra and AsyncStream Slides](http://schd.ws/hosted_files/finaglecon2015/d1/Streaming%20HTTP%20with%20Finatra%20and%20AsyncStream.pdf)
 
 <a name="quick-start">Quick Start</a>
 -----------------------------------------------------------
@@ -34,13 +33,13 @@ To get started we'll focus on building an HTTP API for posting and getting tweet
 ### Domain
 
 ```Scala
-case class PostedTweet(
+case class TweetPostRequest(
   @Size(min = 1, max = 140) message: String,
-  location: Option[Location],
-  sensitive: Boolean = false) {
+  location: Option[TweetLocation],
+  nsfw: Boolean = false)
   
-case class GetTweet(
-  @RouteParam id: StatusId)
+case class TweetGetRequest(
+  @RouteParam id: TweetId)
 ```
 
 Then, let's create a [`Controller`][Controller]:
@@ -53,16 +52,19 @@ class TweetsController @Inject()(
   tweetsService: TweetsService)
   extends Controller {
 
-  post("/tweet") { postedTweet: PostedTweet =>
-    tweetsService.save(postedTweet) map { savedTweet =>
+  post("/tweet") { requestTweet: TweetPostRequest =>
+    for {
+      savedTweet <- tweetsService.save(requestTweet)
+      responseTweet = TweetResponse.fromDomain(savedTweet)
+    } yield {
       response
-        .created(savedTweet)
-        .location(savedTweet.id)
+        .created(responseTweet)
+        .location(responseTweet.id)
     }
   }
 
-  get("/tweet/:id") { request: GetTweet =>
-    tweetsService.get(request.id)
+  get("/tweet/:id") { request: TweetGetRequest =>
+    tweetsService.getResponseTweet(request.id)
   }
 }
 ```
@@ -73,12 +75,10 @@ Next, let's create a server:
 
 ```Scala
 class TwitterCloneServer extends HttpServer {
-  
   override val modules = Seq(FirebaseHttpClientModule)
 
   override def configureHttp(router: HttpRouter): Unit = {
     router
-      .register[StatusMessageBodyWriter]
       .filter[CommonFilters]
       .add[TweetsController]
   }
@@ -92,10 +92,7 @@ And finally, we can write a Feature Test:
 ```Scala
 class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
-  override val server = new EmbeddedHttpServer(
-    twitterServer = new TwitterCloneServer {
-      override val overrideModules = Seq(integrationTestModule)
-    })
+  override val server = new EmbeddedHttpServer(new TwitterCloneServer)
 
   @Bind val firebaseClient = smartMock[FirebaseClient]
 
@@ -105,42 +102,35 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
     //Setup mocks
     idService.getId returns Future(StatusId("123"))
 
-    val mockStatus = Status(
-      id = StatusId("123"),
-      text = "Hello #SFScala",
-      lat = Some(37.7821120598956),
-      long = Some(-122.400612831116),
-      sensitive = false)
-
-    firebaseClient.put("/statuses/123.json", mockStatus) returns Future.Unit
-    firebaseClient.get("/statuses/123.json")(manifest[Status]) returns Future(Option(mockStatus))
+    val tweetResponse = TweetResponse(...)
+    firebaseClient.put("/tweets/123.json", tweetResponse) returns Future.Unit
+    firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(Option(tweetResponse))
 
     //Assert tweet post
     val result = server.httpPost(
       path = "/tweet",
       postBody = """
         {
-          "message": "Hello #SFScala",
+          "message": "Hello #FinagleCon",
           "location": {
             "lat": "37.7821120598956",
             "long": "-122.400612831116"
           },
-          "sensitive": false
+          "nsfw": false
         }""",
       andExpect = Created,
       withJsonBody = """
         {
           "id": "123",
-          "message": "Hello #SFScala",
+          "message": "Hello #FinagleCon",
           "location": {
             "lat": "37.7821120598956",
             "long": "-122.400612831116"
           },
-          "sensitive": false
+          "nsfw": false
         }""")
 
-    //Assert tweet get
-    server.httpGet(
+    server.httpGetJson[TweetResponse](
       path = result.location.get,
       andExpect = Ok,
       withJsonBody = result.contentString)
@@ -155,16 +145,16 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
           "location": {
             "lat": "9999"
           },
-          "sensitive": "abc"
+          "nsfw": "abc"
         }""",
       andExpect = BadRequest,
       withJsonBody = """
         {
           "errors" : [
-            "message size [0] is not between 1 and 140",
-            "location.lat [9999.0] is not between -85 and 85",
-            "location.long is a required field",
-            "sensitive's value 'abc' is not a valid boolean"
+            "message: size [0] is not between 1 and 140",
+            "location.lat: [9999.0] is not between -85 and 85",
+            "location.long: field is required",
+            "nsfw: 'abc' is not a valid boolean"
           ]
         }
         """)
@@ -172,7 +162,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 }
 ```
 
-Libraries
+Detailed Documentation
 -----------------------------------------------------------
 
 We are publishing Scala 2.10 and 2.11 compatible libraries to [Maven central][maven-central].
@@ -189,19 +179,7 @@ Finatra is a framework for easily building API services on top of Twitter’s Sc
 [Detailed documentation](http/README.md)
 
 ### Examples
-You can run the examples in [finatra/examples](examples) using sbt, e.g., to run the [finatra/examples/finatra-hello-world](examples/finatra-hello-world) example,
-
-```Shell
-$ sbt helloWorld/run
-```
-
-Or you can create an assembly and run the assembly,
-
-```Shell
-$ sbt helloWorld/assembly
-...
-$ java -jar examples/finatra-hello-world/target/scala-2.11/finatra-hello-world-assembly-2.0.0.M3-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
-```
+The [finatra/examples](examples) in this repo are meant to be used when building from source. If you'd like to see examples built against released libraries, please see our [finatra-examples](https://github.com/twitter/finatra-examples) repo.
 
 Authors
 -----------------------------------------------------------
@@ -209,6 +187,8 @@ Authors
 * Christopher Coco <https://github.com/cacoco>
 * Jason Carey <https://github.com/jcarey03>
 * Eugene Ma <https://github.com/edma2>
+* Nikolaj Nielsen <https://github.com/nhnFreespirit>
+* Alex Leong <https://github.com/adleong>
 
 A full list of [contributors](https://github.com/twitter/finatra/graphs/contributors?type=a) can be found on GitHub.
 
@@ -236,4 +216,3 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
 [twitter-clone-example]: examples/finatra-twitter-clone/
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
-
