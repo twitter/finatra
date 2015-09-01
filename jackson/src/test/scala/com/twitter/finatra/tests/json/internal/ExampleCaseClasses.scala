@@ -1,15 +1,19 @@
 package com.twitter.finatra.tests.json.internal
 
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonProperty}
-import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind._
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.node.ValueNode
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.request._
 import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.{NotEmpty, ValidationResult}
 import com.twitter.inject.Logging
-import javax.inject.{Named, Inject}
+import javax.inject.{Inject, Named}
 import org.joda.time.DateTime
 import scala.annotation.meta.param
+import scala.math.BigDecimal.RoundingMode
 
 case class CaseClass(id: Long, name: String)
 
@@ -264,9 +268,6 @@ case class NoConstructorArgs()
 
 case class CaseClassWithBoolean(foo: Boolean)
 
-case class CaseClassInjectString(
-  @Inject string: String)
-
 case class CaseClassWithSeqBooleans(foos: Seq[Boolean])
 
 case class CaseClassInjectStringWithDefault(
@@ -281,8 +282,34 @@ case class CaseClassInjectOptionInt(
 case class CaseClassInjectOptionString(
   @Inject string: Option[String])
 
+case class CaseClassInjectString(
+  @Inject string: String)
+
 case class CaseClassTooManyInjectableAnnotations(
   @Inject @QueryParam string: String)
 
 case class CaseClassTooManyBindingAnnotations(
   @Inject @Named("foo") @Named("bar") string: String)
+
+case class CaseClassWithCustomDecimalFormat(
+   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
+   myBigDecimal: BigDecimal,
+   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
+   optMyBigDecimal: Option[BigDecimal])
+
+case class CaseClassWithLongAndDeserializer(
+   @JsonDeserialize(contentAs=classOf[java.lang.Long])
+   long: Long)
+
+case class CaseClassWithOptionLongAndDeserializer(
+   @JsonDeserialize(contentAs=classOf[java.lang.Long])
+   optLong: Option[Long])
+
+class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
+  override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigDecimal = {
+    val jsonNode: ValueNode = jp.getCodec.readTree(jp)
+    BigDecimal(jsonNode.asText).setScale(2, RoundingMode.HALF_UP)
+  }
+
+  override def getEmptyValue: BigDecimal = BigDecimal(0)
+}

@@ -1,7 +1,6 @@
 package com.twitter.finatra.tests.json
 
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
-import com.fasterxml.jackson.databind.node.{TreeTraversingParser, IntNode}
 import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
 import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.conversions.time._
@@ -878,6 +877,15 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
         "foo: 'bar' is not a valid boolean"))
   }
 
+  scenario("case class with boolean number as string") {
+    assertJsonParse[CaseClassWithBoolean](
+      """ {
+            "foo": "1"
+          }""",
+      withErrors = Seq(
+        "foo: '1' is not a valid boolean"))
+  }
+
   val msgHiJsonStr = """{"msg":"hi"}"""
 
   scenario("parse jsonParser") {
@@ -963,13 +971,34 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     assert(mapper.reader[JsonNode] != null)
   }
 
-  scenario("case class with boolean number as string") {
-    assertJsonParse[CaseClassWithBoolean](
-      """ {
-            "foo": "1"
-          }""",
-      withErrors = Seq(
-        "foo: '1' is not a valid boolean"))
+  feature("jackson JsonDeserialize annotations") {
+    scenario("deserializes json to case class with 2 decimal places for mandatory field") {
+      parse[CaseClassWithCustomDecimalFormat](
+        """ {
+            "my_big_decimal": 23.1201
+          }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12), None))
+    }
+    scenario("long with JsonDeserialize") {
+      parse[CaseClassWithLongAndDeserializer](
+        """ {
+            "long": 12345
+          }""") should equal(CaseClassWithLongAndDeserializer(12345))
+    }
+    scenario("deserializes json to case class with 2 decimal places for option field") {
+      parse[CaseClassWithCustomDecimalFormat](
+        """ {
+            "my_big_decimal": 23.1201,
+            "opt_my_big_decimal": 23.1201
+          }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12), Some(BigDecimal(23.12))))
+    }
+    scenario("opt long with JsonDeserialize") {
+      parse[CaseClassWithOptionLongAndDeserializer](
+        """
+        {
+          "opt_long": 12345
+        }
+        """) should equal(CaseClassWithOptionLongAndDeserializer(Some(12345)))
+    }
   }
 
   private def assertJsonParse[T: Manifest](json: String, withErrors: Seq[String]) = {
