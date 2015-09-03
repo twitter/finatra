@@ -200,7 +200,7 @@ Notes:
      * `@Header`
      * `@Cookie`
  * Other
-     * `@RequestInject`: Injects the Finagle Http Request
+     * `@RequestInject`: Can be used to Inject the Finagle Http Request or any other Guice managed class.
 
 *Note: HTTP requests with a content-type of application/json, are similarly parsed (but "Request Field" annotations are ignored). See [JSON](#json) section below.*
 
