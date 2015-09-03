@@ -33,13 +33,15 @@ class FieldInjection(
   private lazy val guiceKey = {
     val bindingAnnotations = filterIfAnnotationPresent[BindingAnnotation](annotations)
 
-    //TODO: Convert JavaType into TypeLiteral instead of using javaType.getRawClass
     if (bindingAnnotations.size > 1)
       throw new Exception("Too many binding annotations on " + name)
     else if (bindingAnnotations.size == 1)
-      Key.get(javaType.getRawClass, bindingAnnotations.head)
-    else
-      Key.get(javaType.getRawClass)
+      Key.get(
+        JacksonToGuiceTypeConvertor.typeOf(javaType), bindingAnnotations.head)
+    else {
+      Key.get(
+        JacksonToGuiceTypeConvertor.typeOf(javaType))
+    }
   }
 
   private lazy val beanProperty: ValueInjector = {

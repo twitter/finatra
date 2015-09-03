@@ -19,7 +19,9 @@ object DoEverythingModule extends TwitterModule {
 
     bindSingleton[Int].toInstance(11)
     bind[String].toInstance("default string")
+    bind[Option[String]].toInstance(Some("default option string"))
     bind[String].annotatedWith[Prod].toInstance("prod string")
+    bind[Option[String]].annotatedWith[Prod].toInstance(Some("prod option string"))
 
     bindAssistedFactory[ComplexServiceFactory]
 
