@@ -36,4 +36,21 @@ class HttpServerStartupIntegrationTest extends Test {
     }
     e.getMessage should be("com.twitter.finagle.http.Request is not supported. Please use com.twitter.finagle.httpx.Request")
   }
+
+  "Duplicate route paths fails server startup" in {
+    val e = intercept[AssertionError] {
+      new EmbeddedHttpServer(
+        twitterServer = new HttpServer {
+          override def configureHttp(router: HttpRouter): Unit = {
+            router.add(new Controller {
+              get("/foo") { request: Request =>
+              }
+              get("/foo") { request: Request =>
+              }
+            })
+          }
+        }).start()
+    }
+    e.getMessage should be("assertion failed: Found non-unique routes GET     /foo")
+  }
 }
