@@ -1,9 +1,9 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.httpx.{Method, Request, Response}
+import com.twitter.finatra.conversions.iterable._
 import com.twitter.util.Future
 import java.util.{HashMap => JMap}
-
 
 object Routes {
 
@@ -15,6 +15,14 @@ object Routes {
 // optimized
 class Routes(
   routes: Array[Route]) {
+
+  //Assert unique paths
+  {
+    val distinctRoutes = routes.toSeq.distinctBy {_.path}
+    assert(
+      routes.length == distinctRoutes.length,
+      "Found non-unique routes " + routes.diff(distinctRoutes).map(_.summary).mkString(", "))
+  }
 
   private[this] val (constantRoutes, nonConstantRoutes) = {
     routes partition { _.constantRoute }

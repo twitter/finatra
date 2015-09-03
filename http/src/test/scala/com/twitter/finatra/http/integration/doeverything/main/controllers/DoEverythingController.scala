@@ -194,10 +194,6 @@ class DoEverythingController @Inject()(
     response.serviceUnavailable.body("unavail")
   }
 
-  get("/methodnotallowed") { request: Request =>
-    response.methodNotAllowed.body("not allowed")
-  }
-
   get("/conflict") { request: Request =>
     SimpleResponse(Status.Conflict, "conflict")
   }
@@ -413,10 +409,6 @@ class DoEverythingController @Inject()(
 
   get("/seq") { r: Request =>
     Seq("a", "b")
-  }
-
-  delete("/delete") { r: Request =>
-    "delete"
   }
 
   options("/options") { r: Request =>
