@@ -650,7 +650,7 @@ class Server extends HttpServer {
 
 Warmup
 ===============================
-Finatra server provides a *warmup* method that's called before the server's external HTTP port is bound and the /health port responds with OK. Often classes or routes will be called to warmup the JVM before traffic is routed to the server.
+Finatra server provides a *warmup* method that's called before the server's external HTTP port is bound and the /health port responds with OK. Often classes or routes will be called to warmup the JVM before traffic is routed to the server. Note: You'll need to add a dependency on finatra-httpclient for access to the RequestBuilder class.
 
 ```scala
 class DoEverythingServer extends HttpServer {
