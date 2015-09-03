@@ -606,9 +606,18 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
     "request injection" in {
       server.httpGet(
-        "/requestInjection?id=5&id2=6&id4=7",
+        "/requestInjection?id=5&id2=6&id3&id4=7",
         andExpect = Ok,
-        withBody = "18")
+        withJsonBody = """
+        {
+          "id" : 5,
+          "id2" : 6,
+          "id4" : 7,
+          "default_string" : "default string",
+          "default_prod_string" : "prod string",
+          "default_opt_string" : "default option string",
+          "default_opt_prod_string" : "prod option string"
+        }""")
     }
 
     "request injections not found" in {

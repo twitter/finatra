@@ -367,10 +367,7 @@ class DoEverythingController @Inject()(
   }
 
   get("/requestInjection") { request: RequestWithInjections =>
-    request.id.id +
-      request.id2.map(_.id).getOrElse(0L) +
-      request.id3.getOrElse(0) +
-      request.id4.getOrElse(0)
+    request
   }
 
   get("/requestInjectionsNotAvailable") { request: Request =>

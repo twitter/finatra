@@ -7,6 +7,7 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.JsonInjectExceptio
 import com.twitter.finatra.tests.json.internal._
 import com.twitter.inject.{Mockito, Test}
 import java.util
+import net.codingwell.scalaguice.typeLiteral
 
 class GuiceInjectableValuesFinatraObjectMapperTest
   extends Test
@@ -30,6 +31,16 @@ class GuiceInjectableValuesFinatraObjectMapperTest
       {
       }
       """) == CaseClassInjectString("Foo"))
+  }
+
+  "@Inject Guice Option[String] into case class Option[String]" in {
+    val key = Key.get(typeLiteral[Option[String]])
+    injector.getInstance(key) returns Some("Foo")
+    assert(parse[CaseClassInjectOptionString](
+      """
+      {
+      }
+      """) == CaseClassInjectOptionString(Some("Foo")))
   }
 
   "@Inject value should use default when field not sent in json" in {
