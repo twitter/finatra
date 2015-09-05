@@ -22,7 +22,12 @@ abstract class TwitterModule
   override protected def configure() {}
 
   override protected def install(module: Module) {
-    throw new Exception("Install not supported. Please use 'override val modules = Seq(module1, module2, ...)'")
+    module match {
+      case twitterModule: TwitterModule =>
+        throw new Exception("Install not supported for TwitterModules. Please use 'override val modules = Seq(module1, module2, ...)'")
+      case _ =>
+        super.install(module)
+    }
   }
 
   /* Protected */
