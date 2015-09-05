@@ -97,10 +97,15 @@ class StartupIntegrationTest extends Test {
       server.close()
     }
 
-    "calling GuiceModule.install throws exception" in {
+    "calling GuiceModule.install without a TwitterModule works" in {
+      new EmbeddedTwitterServer(
+        twitterServer = new ServerWithGuiceModuleInstall).start()
+    }
+
+    "calling GuiceModule.install with a TwitterModule throws exception" in {
       intercept[Exception] {
         new EmbeddedTwitterServer(
-          twitterServer = new ServerWithGuiceModuleInstall).start()
+          twitterServer = new ServerWithTwitterModuleInstall).start()
       }
     }
 
@@ -141,16 +146,22 @@ class SimpleGuiceTwitterServer extends TwitterServer {
 class SimpleGuiceHttpTwitterServer extends TwitterServer {
 }
 
-class ServerWithGuiceModuleInstall extends TwitterServer {
+class ServerWithTwitterModuleInstall extends TwitterServer {
   override val modules = Seq(new TwitterModule {
     override def configure() {
-      install(new FooModule)
+      install(new TwitterModule {})
     }
   })
 }
 
-class FooModule extends AbstractModule {
-  override def configure() {}
+class ServerWithGuiceModuleInstall extends TwitterServer {
+  override val modules = Seq(new TwitterModule {
+    override def configure() {
+      install(new AbstractModule {
+        override def configure(): Unit = {}
+      })
+    }
+  })
 }
 
 class PremainErrorBaseTwitterServer extends BaseTwitterServer with Ports with Warmup {
