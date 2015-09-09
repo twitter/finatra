@@ -18,7 +18,8 @@ class InternalAppIntegrationTest extends Test {
         }
       },
       waitForWarmup = true,
-      skipAppMain = true)
+      skipAppMain = true,
+      verbose = false)
 
     app.start()
     app.appMain()

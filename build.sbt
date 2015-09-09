@@ -6,7 +6,7 @@ import scoverage.ScoverageKeys.coverageExcludedPackages
 parallelExecution in ThisBuild := false
 
 lazy val buildSettings = Seq(
-  version := "2.0.0.M3-SNAPSHOT",
+  version := "2.0.0",
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
@@ -138,11 +138,18 @@ lazy val root = (project in file(".")).
     http,
     httpclient,
     slf4j,
-    benchmarks,
+    benchmarks
+
+    //Examples below
+
+    /* NOTE: We must remove examples from release branches,
+       since SBT will otherwise recursively read the build.sbt files in each example directory
+
     helloWorld,
     streamingExample,
     twitterClone,
     benchmarkServer
+    */
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -274,7 +281,7 @@ lazy val jackson = project.
   settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    coverageExcludedPackages := "scala.tools.nsc.*;.*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
+    coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
@@ -293,7 +300,7 @@ lazy val http = project.
   settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*",
+    coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpxReplyHandler.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -344,7 +351,6 @@ lazy val slf4j = project.
     injectCore % "test->test"
   )
 
-
 // Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
 lazy val benchmarks = project.
   settings((finatraBuildSettings ++ jmhSettings): _*).
@@ -366,6 +372,8 @@ lazy val benchmarks = project.
     injectCore % "test->test"
   )
 
+/* Examples Below */
+
 lazy val helloWorld = (project in file("examples/finatra-hello-world")).
   settings(finatraBuildSettings: _*).
   settings(
@@ -378,7 +386,8 @@ lazy val helloWorld = (project in file("examples/finatra-hello-world")).
       case other => MergeStrategy.defaultMergeStrategy(other)
     },
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "com.github.rlazoti" %% "finagle-metrics" % "0.0.2"
     )
   ).
   dependsOn(

@@ -1,14 +1,9 @@
 package com.twitter.finatra.http.integration.multiserver.test
 
 import com.twitter.finagle.httpx.Status
-import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.http.integration.multiserver.add1server.Add1Server
 import com.twitter.finatra.http.integration.multiserver.add2server.Add2Server
-import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
-import com.twitter.finatra.http.test.{HttpTest, EmbeddedHttpServer}
-import com.twitter.finatra.httpclient.RequestBuilder
-import com.twitter.inject.server.FeatureTest
-import com.twitter.util.{Await, Future, FuturePool}
+import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 
 class MultiServerFeatureTest extends HttpTest {
 

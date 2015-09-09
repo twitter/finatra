@@ -11,7 +11,6 @@ object TwitterCloneServerMain extends TwitterCloneServer
 
 class TwitterCloneServer extends HttpServer {
   override val modules = Seq(FirebaseHttpClientModule)
-  override val streamRequest = true
 
   override def jacksonModule = TwitterCloneJacksonModule
 

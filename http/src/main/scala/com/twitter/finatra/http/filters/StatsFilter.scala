@@ -42,11 +42,11 @@ object StatsFilter {
       statusClassCount.incr()
 
       val durationMs = duration.inMilliseconds
-      requestTime.foreach { _.add(durationMs) }
-      statusCodeTime.add(durationMs)
-      statusClassTime.add(durationMs)
+      requestTime.foreach { _.add(durationMs.toFloat) }
+      statusCodeTime.add(durationMs.toFloat)
+      statusClassTime.add(durationMs.toFloat)
 
-      responseSize.add(response.length)
+      responseSize.add(response.length.toFloat)
     }
   }
 }

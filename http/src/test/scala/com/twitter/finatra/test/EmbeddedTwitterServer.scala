@@ -22,9 +22,9 @@ object EmbeddedTwitterServer {
     defaultHttpSecure: Boolean = false,
     mapper: FinatraObjectMapper = FinatraObjectMapper.create()): EmbeddedHttpServer = {
     new EmbeddedHttpServer(
-      twitterServer,
-      clientFlags,
-      extraArgs,
+      twitterServer = twitterServer,
+      clientFlags = clientFlags,
+      extraArgs = extraArgs,
       waitForWarmup = waitForWarmup,
       stage = stage,
       useSocksProxy = useSocksProxy,
@@ -60,12 +60,12 @@ class EmbeddedTwitterServer(
   defaultHttpSecure: Boolean = false,
   mapper: FinatraObjectMapper = FinatraObjectMapper.create())
   extends EmbeddedHttpServer(
-    twitterServer,
-    clientFlags,
-    extraArgs ++ EmbeddedTwitterServer.resolverMapStr(resolverMap),
-    waitForWarmup,
-    stage,
-    useSocksProxy,
-    skipAppMain,
-    defaultRequestHeaders,
-    defaultHttpSecure)
+    twitterServer = twitterServer,
+    clientFlags = clientFlags,
+    extraArgs = extraArgs ++ EmbeddedTwitterServer.resolverMapStr(resolverMap),
+    waitForWarmup = waitForWarmup,
+    stage = stage,
+    useSocksProxy = useSocksProxy,
+    skipAppMain = skipAppMain,
+    defaultRequestHeaders = defaultRequestHeaders,
+    defaultHttpSecure = defaultHttpSecure)

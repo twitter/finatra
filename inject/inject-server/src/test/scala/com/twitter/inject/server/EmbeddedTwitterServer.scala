@@ -10,13 +10,13 @@ import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Service}
-import com.twitter.inject.app.Banner._
-import com.twitter.inject.app.{App, Banner, EmbeddedApp}
+import com.twitter.inject.app.{App, EmbeddedApp}
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
+import scala.collection.immutable.SortedMap
 
 object EmbeddedTwitterServer {
   private def resolveClientFlags(useSocksProxy: Boolean, clientFlags: Map[String, String]) = {
@@ -59,7 +59,9 @@ class EmbeddedTwitterServer(
   useSocksProxy: Boolean = false,
   skipAppMain: Boolean = false,
   defaultRequestHeaders: Map[String, String] = Map(),
-  streamResponse: Boolean = false)
+  streamResponse: Boolean = false,
+  verbose: Boolean = true,
+  maxStartupTimeSeconds: Int = 60)
   extends EmbeddedApp(
     app = twitterServer,
     clientFlags = resolveClientFlags(useSocksProxy, clientFlags),
@@ -67,7 +69,9 @@ class EmbeddedTwitterServer(
     extraArgs = extraArgs,
     waitForWarmup = waitForWarmup,
     skipAppMain = skipAppMain,
-    stage = stage) {
+    stage = stage,
+    verbose = verbose,
+    maxStartupTimeSeconds = maxStartupTimeSeconds) {
 
   /* Constructor */
 
@@ -88,6 +92,38 @@ class EmbeddedTwitterServer(
   lazy val statsReceiver = if (isGuiceApp) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
   lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(twitterServer.httpAdminPort)
+  lazy val isGuiceTwitterServer = twitterServer.isInstanceOf[App]
+
+  /* Overrides */
+
+  override protected def nonGuiceAppStarted(): Boolean = {
+    twitterServer.httpAdminPort != 0
+  }
+
+  override protected def logAppStartup() {
+    infoBanner("Server Started: " + appName)
+    info(s"AdminHttp    -> http://$adminHostAndPort/admin")
+  }
+
+  override protected def updateClientFlags(map: Map[String, String]) = {
+    if (!verbose)
+      map + ("log.level" -> "WARNING")
+    else
+      map
+  }
+
+  override def close() {
+    if (!closed) {
+      super.close()
+      closed = true
+    }
+  }
+
+  override protected def combineArgs(): Array[String] = {
+    ("-admin.port=" + PortUtils.ephemeralLoopback) +: super.combineArgs
+  }
+
+  /* Public */
 
   def thriftPort: Int = {
     start()
@@ -98,52 +134,35 @@ class EmbeddedTwitterServer(
     PortUtils.loopbackAddressForPort(thriftPort)
   }
 
-  /* Protected */
-
-  override protected def nonGuiceAppStarted(): Boolean = {
-    twitterServer.httpAdminPort != 0
-  }
-
-  override protected def logAppStartup() {
-    Banner.banner("Server Started: " + appName)
-    println(s"AdminHttp    -> http://$adminHostAndPort/admin")
-  }
-
-  /* Public */
-
-  lazy val isGuiceTwitterServer = twitterServer.isInstanceOf[App]
-
-  override def close() {
-    if (!closed) {
-      super.close()
-      closed = true
-    }
-  }
-
   def clearStats() = {
     inMemoryStatsReceiver.counters.clear()
     inMemoryStatsReceiver.stats.clear()
     inMemoryStatsReceiver.gauges.clear()
   }
 
-  def printStats() {
-    def prettyKeys(keys: Seq[String]): String = {
+  def printStats(includeGauges: Boolean = true) {
+
+    def keyStr(keys: Seq[String]): String = {
       keys.mkString("/")
     }
 
-    banner(appName + " Stats")
-
-    for ((keys, values) <- inMemoryStatsReceiver.stats.iterator.toSeq.sortBy {_._1.head}) {
+    infoBanner(appName + " Stats")
+    for ((key, values) <- inMemoryStatsReceiver.stats.iterator.toMap.mapKeys(keyStr).toSortedMap) {
       val avg = values.sum / values.size
-      println(prettyKeys(keys) + "\t = Avg " + avg + " with values " + values.mkString(", "))
+      val valuesStr = values.mkString("[", ", ", "]")
+      info(f"$key%-70s = $avg = $valuesStr")
     }
 
-    for ((keys, value) <- inMemoryStatsReceiver.counters.iterator.toSeq.sortBy {_._1.head}) {
-      println(prettyKeys(keys) + "\t = " + value)
+    info("\nCounters:")
+    for ((key, value) <- inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap) {
+      info(f"$key%-70s = $value")
     }
 
-    for ((keys, value) <- inMemoryStatsReceiver.gauges.iterator.toSeq.sortBy {_._1.head}) {
-      println(prettyKeys(keys) + "\t = " + value)
+    if (includeGauges) {
+      info("\nGauges:")
+      for ((key, value) <- inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap) {
+        info(f"$key%-70s = ${value()}")
+      }
     }
   }
 
@@ -170,9 +189,7 @@ class EmbeddedTwitterServer(
     httpExecute(httpAdminClient, request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody)
   }
 
-  override protected def combineArgs() = {
-    adminAndLogArgs ++ super.combineArgs
-  }
+  /* Protected */
 
   protected def httpExecute(
     client: Service[Request, Response],
@@ -211,10 +228,6 @@ class EmbeddedTwitterServer(
     response
   }
 
-  private def receivedResponseStr(response: Response) = {
-    "\n\nReceived Response:\n" + response.encodeString()
-  }
-
   protected def createHttpClient(
     name: String,
     port: Int,
@@ -243,10 +256,36 @@ class EmbeddedTwitterServer(
       builder.build()
   }
 
-  private def handleRequest(request: Request, client: Service[Request, Response], additionalHeaders: Map[String, String] = Map()): Response = {
+  protected def httpRetryPolicy: RetryPolicy[Try[Any]] = {
+    backoff(
+      constant(1.second) take 15) {
+      case Throw(e: ChannelClosedException) =>
+        println("Retrying ChannelClosedException")
+        true
+    }
+  }
+
+  protected def prettyRequestBody(request: Request): String = {
+    request.contentString
+  }
+
+  protected def printNonEmptyResponseBody(response: Response): Unit = {
+    info(response.contentString + "\n")
+  }
+
+  /* Private */
+
+  private def receivedResponseStr(response: Response) = {
+    "\n\nReceived Response:\n" + response.encodeString()
+  }
+
+  private def handleRequest(
+    request: Request,
+    client: Service[Request, Response],
+    additionalHeaders: Map[String, String] = Map()): Response = {
 
     // Don't overwrite request.headers set by RequestBuilder in httpFormPost.
-    val defaultNewHeaders = defaultRequestHeaders filterKeys {!request.headerMap.contains(_)}
+    val defaultNewHeaders = defaultRequestHeaders filterKeys { !request.headerMap.contains(_) }
     addOrRemoveHeaders(request, defaultNewHeaders)
     addOrRemoveHeaders(request, additionalHeaders) //additional headers get added second so they can overwrite defaults
 
@@ -261,17 +300,6 @@ class EmbeddedTwitterServer(
     }
   }
 
-  /* Private */
-
-  protected def httpRetryPolicy: RetryPolicy[Try[Any]] = {
-    backoff(
-      constant(1.second) take 15) {
-      case Throw(e: ChannelClosedException) =>
-        println("Retrying ChannelClosedException")
-        true
-    }
-  }
-
   private def printRequest(request: Request, suppress: Boolean) {
     if (!suppress) {
       val headers = request.headerMap.mkString(
@@ -282,21 +310,17 @@ class EmbeddedTwitterServer(
       val msg = "HTTP " + request.method + " " + request.uri + "\n" + headers
 
       if (request.contentString.isEmpty)
-        banner(msg)
+        infoBanner(msg)
       else
-        banner(msg + "\n" + prettyRequestBody(request))
+        infoBanner(msg + "\n" + prettyRequestBody(request))
     }
-  }
-
-  protected def prettyRequestBody(request: Request): String = {
-    request.contentString
   }
 
   private def printResponseMetadata(response: Response, suppress: Boolean) {
     if (!suppress) {
-      println("-" * 75)
-      println("[Status]\t" + response.status)
-      println(response.headerMap.mkString(
+      info("-" * 75)
+      info("[Status]\t" + response.status)
+      info(response.headerMap.mkString(
         "[Header]\t",
         "\n[Header]\t",
         ""))
@@ -309,22 +333,13 @@ class EmbeddedTwitterServer(
         //no-op
       }
       else if (response.contentString.isEmpty) {
-        println("*EmptyBody*")
+        info("*EmptyBody*")
       }
       else {
         printNonEmptyResponseBody(response)
       }
     }
   }
-
-  protected def printNonEmptyResponseBody(response: Response): Unit = {
-    println(response.contentString)
-    println()
-  }
-
-  private def adminAndLogArgs = Array(
-    "-admin.port=" + PortUtils.ephemeralLoopback,
-    "-log.level=INFO")
 
   // Deletes request headers with null-values in map.
   private def addOrRemoveHeaders(request: Request, headers: Map[String, String]): Unit = {
@@ -346,10 +361,25 @@ class EmbeddedTwitterServer(
     Request(method, pathToUse)
   }
 
-  private def addAcceptHeader(accept: MediaType, headers: Map[String, String]): Map[String, String] = {
+  private def addAcceptHeader(
+    accept: MediaType,
+    headers: Map[String, String]): Map[String, String] = {
     if (accept != null)
       headers + (HttpHeaders.ACCEPT -> accept.toString)
     else
       headers
+  }
+
+  //TODO: AF-567: Create inject-utils
+  implicit class RichMap[K, V](wrappedMap: Map[K, V]) {
+    def mapKeys[T](func: K => T): Map[T, V] = {
+      for ((k, v) <- wrappedMap) yield {
+        func(k) -> v
+      }
+    }
+
+    def toSortedMap(implicit ordering: Ordering[K]) = {
+      SortedMap[K, V]() ++ wrappedMap
+    }
   }
 }
