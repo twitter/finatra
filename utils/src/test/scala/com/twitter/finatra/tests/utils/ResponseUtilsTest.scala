@@ -48,6 +48,12 @@ class ResponseUtilsTest
       ResponseUtils.is5xxResponse(okResponse) should be(false)
     }
 
+    "correctly identify 2xx response" in {
+      ResponseUtils.is2xxResponse(okResponse) should be(true)
+      ResponseUtils.is2xxResponse(notFoundResponse) should be(false)
+      ResponseUtils.is2xxResponse(internalServerErrorResponse) should be(false)
+    }
+
     "correct identify 4xx or 5xx responses" in {
       ResponseUtils.is4xxOr5xxResponse(internalServerErrorResponse) should be(true)
       ResponseUtils.is4xxOr5xxResponse(notFoundResponse) should be(true)
