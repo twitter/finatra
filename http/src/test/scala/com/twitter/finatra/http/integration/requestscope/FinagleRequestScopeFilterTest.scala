@@ -4,18 +4,18 @@ import com.twitter.finagle.httpx.Status._
 import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.conversions.time._
-import com.twitter.finatra.http.filters.{ExceptionBarrierFilter, CommonFilters}
+import com.twitter.finatra.http.filters.ExceptionBarrierFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
-import com.twitter.finatra.http.{HttpServer, Controller}
+import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.utils.RetryPolicyUtils.constantRetry
 import com.twitter.finatra.utils.RetryUtils.retry
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
 import com.twitter.util.{Future, FuturePool, Return, Try}
+import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.{Inject, Provider}
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.JavaConversions._
 
 class RequestScopeFeatureTest extends HttpTest {
 
@@ -49,7 +49,7 @@ class RequestScopeFeatureTest extends HttpTest {
         numRetries = 200,
         shouldRetry = {case Return(expectedMatches) => !expectedMatches})) {
 
-        FuturePooledController.msgLog.sorted == expectedMsgs
+        FuturePooledController.msgLog.toSeq.sorted == expectedMsgs
       } should be(Try(true))
 
       FuturePooledController.msgLog.clear()
@@ -86,7 +86,7 @@ case class TestUser(name: String)
 /* ==================================================== */
 /* Controller Accessing Request Scope */
 object FuturePooledController {
-  val msgLog = new ArrayBuffer[String] with mutable.SynchronizedBuffer[String]
+  val msgLog = new ConcurrentLinkedQueue[String]
 }
 
 class FuturePooledController @Inject()(
@@ -98,17 +98,17 @@ class FuturePooledController @Inject()(
 
   get("/hi") { request: Request =>
     val msg = request.params("msg")
-    FuturePooledController.msgLog += ("User " + testUserProvider.get().name + " said " + msg)
+    FuturePooledController.msgLog.add("User " + testUserProvider.get().name + " said " + msg)
     info(msg)
 
     pool1 {
       val msg2 = "Pool1 User " + testUserProvider.get().name + " said " + msg
       info(msg2)
-      FuturePooledController.msgLog += msg2
+      FuturePooledController.msgLog.add(msg2)
       pool2 {
         val msg3 = "Pool2 User " + testUserProvider.get().name + " said " + msg
         info(msg3)
-        FuturePooledController.msgLog += msg3
+        FuturePooledController.msgLog.add(msg3)
       }
     }
 
@@ -123,7 +123,7 @@ class PooledServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router.
-      filter[ExceptionBarrierFilter].
+      filter[ExceptionBarrierFilter]. //Purposly use deprecated filter for test coverage
       filter[FinagleRequestScopeFilter[Request, Response]].
       filter[TestUserRequestScopeFilter].
       add[FuturePooledController]

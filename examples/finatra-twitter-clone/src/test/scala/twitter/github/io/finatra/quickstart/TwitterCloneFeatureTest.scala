@@ -8,7 +8,7 @@ import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
 import finatra.quickstart.TwitterCloneServer
 import finatra.quickstart.domain.TweetId
-import finatra.quickstart.domain.http.{TweetResponse, TweetLocation}
+import finatra.quickstart.domain.http.{TweetLocation, TweetResponse}
 import finatra.quickstart.firebase.FirebaseClient
 import finatra.quickstart.services.IdService
 
@@ -64,33 +64,6 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito with HttpTest {
       path = result.location.get,
       andExpect = Ok,
       withJsonBody = result.contentString)
-
-    server.httpPost(
-      path = "/tweet/lookup",
-      postBody = """[123,124,125,123]""",
-      andExpect = Ok,
-      withJsonBody = """
-      [
-        {
-          "id": "123",
-          "message": "Hello #FinagleCon",
-          "location": {
-            "lat": "37.7821120598956",
-            "long": "-122.400612831116"
-          },
-          "nsfw": false
-        },
-        {
-          "id": "123",
-          "message": "Hello #FinagleCon",
-          "location": {
-            "lat": "37.7821120598956",
-            "long": "-122.400612831116"
-          },
-          "nsfw": false
-        }
-      ]
-      """)
   }
 
   "Post bad tweet" in {

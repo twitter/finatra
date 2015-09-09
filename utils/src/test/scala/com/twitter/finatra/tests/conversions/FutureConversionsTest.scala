@@ -178,7 +178,6 @@ class FutureConversionsTest extends Test {
       assertFuture(
         Future("asdf").chainedOnFailure { throwable =>
           fail("should not run when Return")
-          Future.Unit
         },
         Future("asdf"))
     }

@@ -55,7 +55,7 @@ class SizeValidator(
     }
 
     ValidationResult(
-      isValid(size),
+      isValid(size.toLong),
       errorMessage(
         validationMessageResolver,
         value,

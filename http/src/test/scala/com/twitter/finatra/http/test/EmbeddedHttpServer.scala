@@ -21,47 +21,38 @@ class EmbeddedHttpServer(
   defaultHttpSecure: Boolean = false,
   mapperOverride: Option[FinatraObjectMapper] = None,
   httpPortFlag: String = "http.port",
-  streamResponse: Boolean = false)
+  streamResponse: Boolean = false,
+  verbose: Boolean = true,
+  maxStartupTimeSeconds: Int = 60)
   extends com.twitter.inject.server.EmbeddedTwitterServer(
-    twitterServer,
-    clientFlags + (httpPortFlag -> ephemeralLoopback),
-    extraArgs,
-    waitForWarmup,
-    stage,
-    useSocksProxy,
-    skipAppMain,
-    defaultRequestHeaders,
-    streamResponse) {
+    twitterServer = twitterServer,
+    clientFlags = clientFlags + (httpPortFlag -> ephemeralLoopback),
+    extraArgs = extraArgs,
+    waitForWarmup = waitForWarmup,
+    stage = stage,
+    useSocksProxy = useSocksProxy,
+    skipAppMain = skipAppMain,
+    defaultRequestHeaders = defaultRequestHeaders,
+    streamResponse = streamResponse,
+    verbose = verbose,
+    maxStartupTimeSeconds = maxStartupTimeSeconds) {
 
-  protected lazy val httpClient = {
-    createHttpClient(
-      "httpClient",
-      httpExternalPort)
-  }
-
-  protected lazy val httpsClient = {
-    createHttpClient(
-      "httpsClient",
-      httpsExternalPort,
-      secure = true)
-  }
-
-  protected lazy val mapper = mapperOverride getOrElse injector.instance[FinatraObjectMapper]
+  /* Overrides */
 
   override protected def logAppStartup() {
     super.logAppStartup()
-    println(s"ExternalHttp -> http://$externalHttpHostAndPort")
+    info(s"ExternalHttp -> http://$externalHttpHostAndPort")
   }
 
   override protected def printNonEmptyResponseBody(response: Response): Unit = {
     try {
-      println(mapper.writePrettyString(
+      info(mapper.writePrettyString(
         response.getContentString()))
     } catch {
       case e: Exception =>
-        println(response.contentString)
+        info(response.contentString)
     }
-    println()
+    info("")
   }
 
   override protected def prettyRequestBody(request: Request): String = {
@@ -73,19 +64,6 @@ class EmbeddedHttpServer(
       printableBody
     }
   }
-
-  lazy val httpExternalPort = {
-    start()
-    twitterServer.httpExternalPort.getOrElse(throw new Exception("External HTTP port not bound"))
-  }
-
-  lazy val httpsExternalPort = {
-    start()
-    twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound"))
-  }
-
-  lazy val externalHttpHostAndPort = PortUtils.loopbackAddressForPort(httpExternalPort)
-  lazy val externalHttpsHostAndPort = PortUtils.loopbackAddressForPort(httpsExternalPort)
 
   override def close() {
     if (!closed) {
@@ -101,6 +79,37 @@ class EmbeddedHttpServer(
       closed = true
     }
   }
+
+  /* Public */
+
+  lazy val httpClient = {
+    createHttpClient(
+      "httpClient",
+      httpExternalPort)
+  }
+
+  lazy val httpsClient = {
+    createHttpClient(
+      "httpsClient",
+      httpsExternalPort,
+      secure = true)
+  }
+
+  lazy val mapper = mapperOverride getOrElse injector.instance[FinatraObjectMapper]
+
+
+  lazy val httpExternalPort = {
+    start()
+    twitterServer.httpExternalPort.getOrElse(throw new Exception("External HTTP port not bound"))
+  }
+
+  lazy val httpsExternalPort = {
+    start()
+    twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound"))
+  }
+
+  lazy val externalHttpHostAndPort = PortUtils.loopbackAddressForPort(httpExternalPort)
+  lazy val externalHttpsHostAndPort = PortUtils.loopbackAddressForPort(httpsExternalPort)
 
   /* TODO: Extract HTTP methods into HttpClient */
   def httpGet(

@@ -50,7 +50,6 @@ trait BaseHttpServer extends TwitterServer {
 
   protected def httpCodec: Http = {
     Http()
-      .enableTracing(enable = true)
       .maxRequestSize(maxRequestSizeFlag())
       .enableTracing(tracingEnabledFlag())
       .streaming(streamRequest)

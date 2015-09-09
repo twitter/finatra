@@ -1,8 +1,6 @@
 package com.twitter.inject.app
 
 import com.google.inject.Stage
-import com.twitter.inject.Logging
-import com.twitter.inject.app.Banner.banner
 import com.twitter.util._
 import org.scalatest.Matchers
 
@@ -19,6 +17,8 @@ import org.scalatest.Matchers
  *              This makes it possible to only mock objects that are used in a given test, at the expense of not checking that the entire
  *              object graph is valid. As such, you should always have at lease one Stage.PRODUCTION test for your service (which eagerly
  *              creates all Guice classes at startup).
+ * @param verbose Enable informative logging during test runs
+ * @param maxStartupTimeSeconds Max seconds to wait for app startup
  */
 class EmbeddedApp(
   app: com.twitter.app.App,
@@ -27,9 +27,10 @@ class EmbeddedApp(
   extraArgs: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   skipAppMain: Boolean = false,
-  stage: Stage = Stage.DEVELOPMENT)
-  extends Matchers
-  with Logging {
+  stage: Stage = Stage.DEVELOPMENT,
+  verbose: Boolean = true,
+  maxStartupTimeSeconds: Int = 60)
+  extends Matchers {
 
   /* Constructor */
 
@@ -93,33 +94,59 @@ class EmbeddedApp(
   }
 
   def appMain() {
-    banner("Run AppMain for class " + appName)
+    infoBanner("Run AppMain for class " + appName)
     guiceApp.appMain()
   }
 
   def close() {
     if (!closed) {
-      banner("Closing EmbeddedApp for class " + appName)
+      infoBanner("Closing EmbeddedApp for class " + appName)
       app.close()
       closed = true
     }
   }
 
+  // Note: We avoid using slf4j info logging
+  // so that we can differentiate server logs
+  // vs test logs without requiring a test logging
+  // configuration to be loaded
+  def info(str: String): Unit = {
+    if (verbose) {
+      println(str)
+    }
+  }
+
+  def infoBanner(str: String) {
+    info("\n")
+    info("=" * 75)
+    info(str)
+    info("=" * 75)
+  }
+
   /* Protected */
 
   protected def combineArgs(): Array[String] = {
-    (extraArgs ++ flagsStr(clientFlags)).toArray
+    val clientFlagsStr = flagsStr(updateClientFlags(clientFlags))
+    (extraArgs ++ clientFlagsStr).toArray
+  }
+
+  protected def updateClientFlags(map: Map[String, String]): Map[String, String] = {
+    map
   }
 
   protected def logAppStartup() = {
-    banner("App warmup completed: " + appName)
+    infoBanner("App warmup completed: " + appName)
+  }
+
+  protected def nonGuiceAppStarted(): Boolean = {
+    true
   }
 
   /* Private */
 
   private def runTwitterUtilAppMain() {
     val allArgs = combineArgs()
-    println("Starting " + appName + " with args: " + allArgs.mkString(" "))
+    info("Starting " + appName + " with args: " + allArgs.mkString(" "))
 
     _mainResult = futurePool {
       try {
@@ -153,8 +180,8 @@ class EmbeddedApp(
   }
 
   private def waitForAppStarted() {
-    for (i <- 1 to 60) {
-      println("Waiting for warmup phases to complete...")
+    for (i <- 1 to maxStartupTimeSeconds) {
+      info("Waiting for warmup phases to complete...")
 
       if (startupFailedThrowable.isDefined) {
         println(s"\nEmbedded app $appName failed to startup")
@@ -170,9 +197,5 @@ class EmbeddedApp(
       Thread.sleep(1000)
     }
     throw new scala.Exception(s"App: $appName failed to startup within 60 seconds.")
-  }
-
-  protected def nonGuiceAppStarted(): Boolean = {
-    true
   }
 }

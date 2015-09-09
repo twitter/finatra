@@ -8,8 +8,6 @@ import com.twitter.finagle.httpx.{Request, Response, Status}
 import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.util.Future
 
-object FinagleBenchmarkServerMain extends FinagleBenchmarkServer
-
 class FinagleBenchmarkServer extends BaseHttpServer {
 
   private val objectMapper = new ObjectMapper()

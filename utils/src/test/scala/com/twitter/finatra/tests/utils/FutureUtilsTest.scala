@@ -4,13 +4,11 @@ import com.twitter.finatra.utils.FutureUtils
 import com.twitter.finatra.utils.FutureUtils._
 import com.twitter.inject.Test
 import com.twitter.util.{Await, Future, FuturePool}
-import java.util.concurrent.Executors
-import scala.collection.mutable
-import scala.collection.mutable.ArrayBuffer
-
+import java.util.concurrent.{ConcurrentLinkedQueue, Executors}
+import scala.collection.JavaConverters._
 
 class FutureUtilsTest extends Test {
-  val ActionLog = new ArrayBuffer[String] with mutable.SynchronizedBuffer[String]
+  val ActionLog = new ConcurrentLinkedQueue[String]
   val TestFuturePool = FuturePool(Executors.newFixedThreadPool(4))
 
   override def beforeEach {
@@ -23,7 +21,7 @@ class FutureUtilsTest extends Test {
         sequentialMap(Seq(1, 2, 3))(mockSvcCall),
         Future(Seq("1", "2", "3")))
 
-      ActionLog should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3"))
+      ActionLog.asScala.toSeq should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3"))
     }
   }
 
@@ -32,7 +30,7 @@ class FutureUtilsTest extends Test {
       collectMap(Seq(1, 2, 3))(mockSvcCall))
     result.sorted should equal(Seq("1", "2", "3"))
 
-    ActionLog.sorted should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3").sorted)
+    ActionLog.asScala.toSeq.sorted should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3").sorted)
   }
 
   "success future" in {
@@ -61,10 +59,10 @@ class FutureUtilsTest extends Test {
   }
 
   def mockSvcCall(num: Int): Future[String] = {
-    ActionLog += "S" + num
+    ActionLog add ("S" + num)
     TestFuturePool {
       Thread.sleep(250)
-      ActionLog += "E" + num
+      ActionLog add ("E" + num)
       num.toString
     }
   }

@@ -1,0 +1,1 @@
+web: target/universal/stage/bin/finatra-hello-world -- -admin.port=:0 -http.port=:$PORT
