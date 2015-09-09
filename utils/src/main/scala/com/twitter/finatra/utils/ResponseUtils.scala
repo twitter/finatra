@@ -5,6 +5,10 @@ import com.twitter.finagle.httpx.Status._
 
 object ResponseUtils {
 
+  def is2xxResponse(response: Response): Boolean = {
+    errorClass(response) == 2
+  }
+
   def is5xxResponse(response: Response) = {
     errorClass(response) == 5
   }
