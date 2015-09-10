@@ -11,7 +11,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - travis_retry sbt -J-Xss8M -J-Xms512M -J-Xmx2G ++$TRAVIS_SCALA_VERSION clean coverage test
+  - travis_retry sbt ++$TRAVIS_SCALA_VERSION clean coverage test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
