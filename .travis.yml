@@ -4,12 +4,6 @@ sudo: required
 
 language: scala
 
-# These directories are cached to S3 at the end of the build
-cache:
-  directories:
-   - $HOME/.ivy2/cache
-   - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
-
 scala:
   - 2.10.5
   - 2.11.7
