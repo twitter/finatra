@@ -6,7 +6,7 @@ import scoverage.ScoverageKeys.coverageExcludedPackages
 parallelExecution in ThisBuild := false
 
 lazy val buildSettings = Seq(
-  version := "2.0.0",
+  version := "2.0.1-SNAPSHOT",
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
@@ -138,18 +138,15 @@ lazy val root = (project in file(".")).
     http,
     httpclient,
     slf4j,
-    benchmarks
+    benchmarks,
 
     //Examples below
-
-    /* NOTE: We must remove examples from release branches,
-       since SBT will otherwise recursively read the build.sbt files in each example directory
-
     helloWorld,
+    //helloWorldHeroku, 2.11 only
+    tinyUrl,
     streamingExample,
     twitterClone,
     benchmarkServer
-    */
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -386,8 +383,7 @@ lazy val helloWorld = (project in file("examples/finatra-hello-world")).
       case other => MergeStrategy.defaultMergeStrategy(other)
     },
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback,
-      "com.github.rlazoti" %% "finagle-metrics" % "0.0.2"
+      "ch.qos.logback" % "logback-classic" % versions.logback
     )
   ).
   dependsOn(
@@ -396,6 +392,31 @@ lazy val helloWorld = (project in file("examples/finatra-hello-world")).
     slf4j,
     injectCore % "test->test"
   )
+
+/* 2.11 only due to rlazoti/finagle-metrics dependency
+lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "hello-world-heroku",
+    moduleName := "hello-world-heroku",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "com.github.rlazoti" % "finagle-metrics_2.11" % "0.0.2" //2.11 only
+    )
+  ).
+  dependsOn(
+    http,
+    http % "test->test",
+    slf4j,
+    injectCore % "test->test"
+  )
+  */
 
 lazy val streamingExample = (project in file("examples/streaming-example")).
   settings(finatraBuildSettings: _*).
@@ -457,6 +478,30 @@ lazy val benchmarkServer = (project in file("examples/finatra-benchmark-server")
     },
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % "1.7.7"
+    )
+  ).
+  dependsOn(
+    http,
+    http % "test->test",
+    httpclient,
+    slf4j,
+    injectCore % "test->test"
+  )
+
+lazy val tinyUrl = (project in file("examples/tiny-url")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "tiny-url",
+    moduleName := "tiny-url",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "redis.clients" % "jedis" % "2.7.2"
     )
   ).
   dependsOn(
