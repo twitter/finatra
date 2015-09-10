@@ -19,6 +19,11 @@ jdk:
   - oraclejdk7
   # Note: not currently testing on JDK 8 internally
   - oraclejdk8
+  
+before_script:
+  # default $SBT_OPTS is irrelevant to sbt launcher
+  - unset SBT_OPTS
+  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION update
 
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test && ./sbt coverageAggregate
