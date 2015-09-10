@@ -184,7 +184,7 @@ server.httpGet(
 
 Notes:
 
-* The `case class` field names should match the request parameters names. 
+* The `case class` field names should match the request parameters names.
   * A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`][finatra-jackson-module]).
   * Use backticks when special characters are involved (e.g. @Header `user-agent` : String)  
   * [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) can also be used to specify the JSON field name  
@@ -297,7 +297,7 @@ import com.twitter.finatra.utils.FuturePools
 class MyController extends Controller {
 
   private val futurePool = FuturePools.unboundedPool("CallbackConverter")
-  
+
   get("/") { request: Request =>
     futurePool {
       blockingCall()
@@ -780,7 +780,7 @@ Finatra's file server support is meant for internal apps only. Do not use the fi
 
 By default, files are served from the classpath. You can use the flag `-doc.root` to customize the classpath root.
 
-To serve files from the local file system, use the flag `-local.doc.root`. Note that setting Java System Property `-Denv=env` is no longer required nor supported. Setting the `-local.doc.root` flag will trigger the same `localFileMode` behavior. 
+To serve files from the local file system, use the flag `-local.doc.root`. Note that setting Java System Property `-Denv=env` is no longer required nor supported. Setting the `-local.doc.root` flag will trigger the same `localFileMode` behavior.
 
 Also note that it is **an error** to attempt to set both the `-doc.root` and the `-local.doc.root` flags. Either do nothing to load resources from the base of the classpath, configure a classpath "namespace" by setting the `-doc.root` **or** load files from a local filesystem location specified by the `-local.doc.root` flag.
 
@@ -895,7 +895,7 @@ import com.twitter.inject.server.FeatureTest
 class MyServiceStartupTests extends FeatureTest {
   val server = EmbeddedHttpServer(
     stage = Stage.PRODUCTION,
-    twitterServer = new SampleApiServer, 
+    twitterServer = new SampleApiServer,
     extraArgs = Seq(
       "-dtab.add=/srv => /$/nil",
       "-dtab.add=/srv# => /$/nil"))
@@ -957,7 +957,7 @@ class Server extends HttpServer {
 ```
 
 ### Configuration
-See [logback.xml](../examples/finatra-hello-world/src/main/resources/logback.xml) and [logback-test.xml](../examples/finatra-hello-world/src/test/resources/logback-test.xml) in [finatra-hello-world](../examples/finatra-hello-world) project.
+See [logback.xml](../examples/hello-world/src/main/resources/logback.xml) and [logback-test.xml](../examples/hello-world/src/test/resources/logback-test.xml) in the [hello-world](../examples/hello-world) example project.
 
 ### [MDC](http://logback.qos.ch/manual/mdc.html) Filters
 Place the [LoggingMDCFilter](../logback/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
@@ -994,7 +994,7 @@ See [SampleGuiceApp](../inject/inject-app/src/test/scala/com/twitter/inject/app/
 
 Service Samples
 ===============================
-* [finatra-hello-world](../examples/finatra-hello-world)
+* [finatra-hello-world](../examples/hello-world)
 
 
 

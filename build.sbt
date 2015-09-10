@@ -371,7 +371,7 @@ lazy val benchmarks = project.
 
 /* Examples Below */
 
-lazy val helloWorld = (project in file("examples/finatra-hello-world")).
+lazy val helloWorld = (project in file("examples/hello-world")).
   settings(finatraBuildSettings: _*).
   settings(
     name := "finatra-hello-world",
@@ -441,7 +441,7 @@ lazy val streamingExample = (project in file("examples/streaming-example")).
     injectCore % "test->test"
   )
 
-lazy val twitterClone = (project in file("examples/finatra-twitter-clone")).
+lazy val twitterClone = (project in file("examples/twitter-clone")).
   settings(finatraBuildSettings: _*).
   settings(
     name := "finatra-twitter-clone",
@@ -465,7 +465,7 @@ lazy val twitterClone = (project in file("examples/finatra-twitter-clone")).
     injectCore % "test->test"
   )
 
-lazy val benchmarkServer = (project in file("examples/finatra-benchmark-server")).
+lazy val benchmarkServer = (project in file("examples/benchmark-server")).
   settings(finatraBuildSettings: _*).
   settings(
     name := "finatra-benchmark-server",
