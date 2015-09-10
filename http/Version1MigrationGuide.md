@@ -152,7 +152,7 @@ Global flags are no longer used for standard server configuration. Instead:
 ## Testing
 - In v1, `SpecHelper` and `MockApp` are used.
 - In v2, we provide a common way to run blackbox and whitebox integration tests against a locally running server:
-	* [Simple Example](../examples/finatra-hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala)
+	* [Simple Example](../examples/hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala)
 	* More Powerful Example [TODO]
 
 ## Unsupported v1 Features
