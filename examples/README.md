@@ -4,7 +4,7 @@
 
 A collection of example [Finatra][finatra] applications.
 
-## Examples Projects
+## Example Projects
 For more detailed information see the README.md within each example project.
 
 ### [benchmark-server](finatra-benchmark-server/README.md)
