@@ -45,7 +45,7 @@ CMD="java -ea                          \
   -Xms1024M                       \
   -Xmx2048M                       \
   -server                         \
-  -jar $sbtjar \"${@:1}\""
+  -jar $sbtjar ${@:1}"
 
 echo ${CMD}
 eval $CMD
