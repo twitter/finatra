@@ -9,11 +9,9 @@ jdk:
   - oraclejdk7
   # Note: not currently testing on JDK 8 internally
   - oraclejdk8
-  
-sbt_args: -J-Xss8M -J-XX:MaxPermSize=1024M
 
 script:
-  - travis_retry sbt ++$TRAVIS_SCALA_VERSION clean coverage test
+  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
