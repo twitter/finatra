@@ -41,7 +41,7 @@ case class TweetPostRequest(
   @Size(min = 1, max = 140) message: String,
   location: Option[TweetLocation],
   nsfw: Boolean = false)
-  
+
 case class TweetGetRequest(
   @RouteParam id: TweetId)
 ```
@@ -169,15 +169,15 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 Detailed Documentation
 -----------------------------------------------------------
 
-The Finatra project is composed of several libraries (each with their own README). 
+The Finatra project is composed of several libraries (each with their own README).
 [Click here for detailed documentation on the main finatra-http library.](http/README.md)
 
 Example Projects
 -----------------------------------------------------------
 For more detailed information see the README.md within each example project.
 
-### [hello-world](./examples/finatra-hello-world/README.md)
-A barebones service.
+### [hello-world](./examples/hello-world/README.md)
+A barebones "Hello World" service.
 
 ### [hello-world-heroku](./examples/hello-world-heroku/README.md)
 A barebones service that is deployable to [Heroku](https://heroku.com).
@@ -186,13 +186,13 @@ A barebones service that is deployable to [Heroku](https://heroku.com).
 A url shortening example that is deployable to [Heroku](https://heroku.com).
 
 ### [twitter-clone](examples/twitter-clone/README.md)
-An example Twitter-like API for creating and gettings Tweets
+An example Twitter-like API for creating and retrieving Tweets.
 
-### [benchmark-server](examples/finatra-benchmark-server/README.md)
+### [benchmark-server](examples/benchmark-server/README.md)
 A server used for benchmarking performance compared to a raw finagle-httpx service.
 
 ### [streaming](examples/streaming-example/README.md)
-A proof-of-concept streaming JSON service
+A proof-of-concept streaming JSON service.
 
 Authors
 -----------------------------------------------------------
@@ -227,5 +227,5 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [mdc]: http://logback.qos.ch/manual/mdc.html
 [Controller]: http/src/main/scala/com/twitter/finatra/http/Controller.scala
 [HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
-[twitter-clone-example]: examples/finatra-twitter-clone/
+[twitter-clone-example]: examples/twitter-clone/
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
