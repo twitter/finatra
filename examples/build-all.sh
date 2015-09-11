@@ -12,4 +12,4 @@ for directory in $( ls -d */ ); do
 done
 
 # also run the example mvn build in hello-world
-cd finatra-hello-world && mvn clean install; cd -
+cd hello-world && mvn clean install; cd -
