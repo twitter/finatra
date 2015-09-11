@@ -19,12 +19,20 @@ else
   echo "[info] Skipping download of sbt-launch.jar."
 fi
 
+javaVersion=`java -version 2>&1 | grep "java version" | awk '{print $3}' | tr -d \"`
+
+ELIMINATE_AUTOBOX_JVM_ARG=""
+if [[ $javaVersion == *"8"* ]]; then
+  ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"
+fi
+
+echo $ELIMINATE_AUTOBOX_JVM_ARG
+
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
 java -ea                          \
   $SBT_OPTS                       \
   $JAVA_OPTS                      \
-  -Djava.net.preferIPv4Stack=true \
   -XX:+AggressiveOpts             \
   -XX:+UseParNewGC                \
   -XX:+UseConcMarkSweepGC         \
@@ -34,6 +42,7 @@ java -ea                          \
   -XX:MaxPermSize=1024m           \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
+  ${ELIMINATE_AUTOBOX_JVM_ARG}    \
   -Xss8M                          \
   -Xms512M                        \
   -Xmx2G                          \
