@@ -4,4 +4,3 @@
 -Xss10M
 -XX:MaxPermSize=1024M
 -XX:ReservedCodeCacheSize=256M
--XX:-EliminateAutoBox
