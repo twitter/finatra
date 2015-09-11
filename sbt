@@ -26,11 +26,9 @@ if [[ $javaVersion == *"8"* ]]; then
   ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"
 fi
 
-echo $ELIMINATE_AUTOBOX_JVM_ARG
-
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
-java -ea                          \
+CMD="java -ea                          \
   $SBT_OPTS                       \
   $JAVA_OPTS                      \
   -XX:+AggressiveOpts             \
@@ -38,8 +36,8 @@ java -ea                          \
   -XX:+UseConcMarkSweepGC         \
   -XX:+CMSParallelRemarkEnabled   \
   -XX:+CMSClassUnloadingEnabled   \
-  -XX:ReservedCodeCacheSize=128m  \
-  -XX:MaxPermSize=1024m           \
+  -XX:ReservedCodeCacheSize=256M  \
+  -XX:MaxPermSize=1024M           \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
   ${ELIMINATE_AUTOBOX_JVM_ARG}    \
@@ -47,4 +45,7 @@ java -ea                          \
   -Xms1024M                       \
   -Xmx2048M                       \
   -server                         \
-  -jar $sbtjar "${@:1}"
+  -jar $sbtjar \"${@:1}\""
+
+echo ${CMD}
+eval $CMD
