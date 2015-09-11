@@ -5,9 +5,9 @@ scala:
   - 2.11.7
   
 script:
-  - jdk_switcher use oraclejdk8; sbt ++$TRAVIS_SCALA_VERSION -Xss10M -J-XX:-EliminateAutoBox clean coverage test
-  - jdk_switcher use oraclejdk7; sbt ++$TRAVIS_SCALA_VERSION -Xss10M clean coverage test
-  - jdk_switcher use openjdk7; sbt ++$TRAVIS_SCALA_VERSION -Xss10M clean coverage test
+  - jdk_switcher use oraclejdk8; sbt ++$TRAVIS_SCALA_VERSION -jvm-opts jvmopts -J-XX:-EliminateAutoBox clean coverage test
+  - jdk_switcher use oraclejdk7; sbt ++$TRAVIS_SCALA_VERSION -jvm-opts jvmopts clean coverage test
+  - jdk_switcher use openjdk7; sbt ++$TRAVIS_SCALA_VERSION -jvm-opts jvmopts clean coverage test
   
 after_success:
   - bash <(curl -s https://codecov.io/bash)
