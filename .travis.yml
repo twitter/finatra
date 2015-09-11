@@ -14,10 +14,8 @@ before_script:
   # default $SBT_OPTS is irrelevant to sbt lancher
   - unset SBT_OPTS
 
-sbt_args: -J-XX:-EliminateAutoBox # Fix for JDK 8 Bug https://github.com/json4s/json4s/issues/216#issuecomment-77677606
-
 script:
-  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test
+  - sbt ++$TRAVIS_SCALA_VERSION -Xss10M -J-XX:-EliminateAutoBox clean coverage test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
