@@ -14,6 +14,10 @@ before_script:
   # default $SBT_OPTS is irrelevant to sbt lancher
   - unset SBT_OPTS
 
+before_script:
+  # default $SBT_OPTS is irrelevant to sbt lancher
+  - unset SBT_OPTS
+
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test
 

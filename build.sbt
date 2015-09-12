@@ -5,6 +5,8 @@ import scoverage.ScoverageKeys.coverageExcludedPackages
 
 parallelExecution in ThisBuild := false
 
+fork := true
+
 lazy val buildSettings = Seq(
   version := "2.0.1-SNAPSHOT",
   scalaVersion := "2.11.7",
