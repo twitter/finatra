@@ -1,7 +1,7 @@
 package com.twitter.inject
 
 import com.google.inject.name.Names
-import com.google.inject.{Injector => GuiceInjector, Key}
+import com.google.inject.{Injector => GuiceInjector, Guice, AbstractModule, Key}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import net.codingwell.scalaguice.KeyExtensions._
 import net.codingwell.scalaguice._
@@ -26,4 +26,12 @@ case class Injector(
   def instance[T](clazz: Class[T]): T = underlying.getInstance(clazz)
 
   def instance[T](key: Key[T]): T = underlying.getInstance(key)
+
+  def instances[T: Manifest]: Seq[T] = {
+    import collection.JavaConversions._
+    underlying.getBindings.flatMap {
+      case (k, v) if typeLiteral[T].getRawType.isAssignableFrom(k.getTypeLiteral.getRawType) => Some(underlying.getInstance(k).asInstanceOf[T])
+      case _ => None
+    }.toSeq
+  }
 }
