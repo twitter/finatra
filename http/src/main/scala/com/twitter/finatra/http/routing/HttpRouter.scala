@@ -16,19 +16,23 @@ object HttpRouter {
   val FinatraAdminPrefix = "/admin/finatra/"
 }
 
+trait RoutesProvider {
+  def routes: Seq[Route]
+}
+
 @Singleton
 class HttpRouter @Inject()(
   injector: Injector,
   callbackConverter: CallbackConverter,
   messageBodyManager: MessageBodyManager,
   exceptionManager: ExceptionManager)
-  extends Logging {
+  extends RoutesProvider with Logging {
 
   private type HttpFilter = Filter[Request, Response, Request, Response]
 
   /* Mutable State */
   private[finatra] val globalFilters = ArrayBuffer[HttpFilter](Filter.identity)
-  private[finatra] val routes = ArrayBuffer[Route]()
+  lazy val routes = ArrayBuffer[Route]() ++= injector.instances[RoutesProvider].flatMap(_.routes)
 
   private[finatra] lazy val services: Services = {
     val routesByType = partitionRoutesByType()
@@ -41,6 +45,8 @@ class HttpRouter @Inject()(
   }
 
   /* Public */
+
+  def createSubRouter = new HttpRouter(injector, callbackConverter, messageBodyManager, exceptionManager)
 
   def exceptionMapper[T <: ExceptionMapper[_]: Manifest] = {
     exceptionManager.add[T]
@@ -71,6 +77,11 @@ class HttpRouter @Inject()(
   /** Add global filter used for all requests */
   def filter(filter: HttpFilter) = {
     globalFilters += filter
+    this
+  }
+
+  def add(basePath: String, subRouter: HttpRouter) = {
+    routes ++= subRouter.routes.map(r => r.copy(path = basePath + r.path))
     this
   }
 
