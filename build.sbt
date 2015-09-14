@@ -80,7 +80,7 @@ lazy val publishSettings = Seq(
   pomPostProcess := { (node: scala.xml.Node) =>
     val rule = new scala.xml.transform.RewriteRule {
       override def transform(n: scala.xml.Node): scala.xml.NodeSeq =
-        n.nameToString(new StringBuilder()).toString match {
+        n.nameToString(new StringBuilder()).toString() match {
           case "dependency" if (n \ "groupId").text.trim == "org.scoverage" => Nil
           case _ => n
         }

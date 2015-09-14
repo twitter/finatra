@@ -21,6 +21,8 @@ fi
 
 javaVersion=`java -version 2>&1 | grep "java version" | awk '{print $3}' | tr -d \"`
 
+# Workaround for JDK issue: https://bugs.openjdk.java.net/browse/JDK-8058847
+# only add the option on version JDK8
 ELIMINATE_AUTOBOX_JVM_ARG=""
 if [[ $javaVersion == *"8"* ]]; then
   ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"
@@ -28,7 +30,7 @@ fi
 
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
-CMD="java -ea                          \
+CMD="java -ea                     \
   $SBT_OPTS                       \
   $JAVA_OPTS                      \
   -XX:+AggressiveOpts             \
