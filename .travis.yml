@@ -14,7 +14,7 @@ jdk:
 
 before_install:
  # See: https://github.com/travis-ci/travis-ci/issues/2496
- - ulimit -u 514029
+ - "ulimit -u 514029"
 
 before_script:
   # default $SBT_OPTS is irrelevant to sbt lancher
