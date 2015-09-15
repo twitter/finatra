@@ -1,5 +1,3 @@
-sudo: required
-
 language: scala
 
 scala:
@@ -11,10 +9,6 @@ jdk:
   - oraclejdk7
   # Note: not currently testing on JDK 8 internally
   - oraclejdk8
-
-before_install:
- # See: https://github.com/travis-ci/travis-ci/issues/2496
- - "ulimit -u 514029"
 
 before_script:
   # default $SBT_OPTS is irrelevant to sbt lancher
