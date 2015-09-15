@@ -44,7 +44,7 @@ CMD="java -ea                     \
   -XX:MaxTenuringThreshold=0      \
   ${ELIMINATE_AUTOBOX_JVM_ARG}    \
   -Xms1024M                       \
-  -Xmx2560M                       \
+  -Xmx3072M                       \
   -server                         \
   -jar $sbtjar ${@:1}"
 
