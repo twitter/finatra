@@ -43,9 +43,9 @@ CMD="java -ea                     \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
   ${ELIMINATE_AUTOBOX_JVM_ARG}    \
-  -Xss10M                          \
+  -Xss10M                         \
   -Xms512M                        \
-  -Xmx2G                          \
+  -Xmx3G                          \
   -server                         \
   -jar $sbtjar ${@:1}"
 
