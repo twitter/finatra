@@ -13,6 +13,7 @@ jdk:
 before_script:
   # default $SBT_OPTS is irrelevant to sbt lancher
   - unset SBT_OPTS
+  - ulimit -u 514029
 
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test
