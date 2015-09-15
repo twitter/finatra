@@ -2,6 +2,78 @@
 
 ## [Unreleased](https://github.com/twitter/finatra/tree/HEAD)
 
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0...HEAD)
+
+**Merged pull requests:**
+
+- Update Travis CI to build with java8 fix. [\#244](https://github.com/twitter/finatra/pull/244) ([cacoco](https://github.com/cacoco))
+
+## [v2.0.0](https://github.com/twitter/finatra/tree/v2.0.0) (2015-09-09)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0.M2...v2.0.0)
+
+**Closed issues:**
+
+- Singleton classes [\#236](https://github.com/twitter/finatra/issues/236)
+
+- com.twitter.finatra.utils.ResponseUtils for 2.0.0.M2 missing functions used in examples [\#235](https://github.com/twitter/finatra/issues/235)
+
+- Warmup example in README seems to be using non-existent features [\#234](https://github.com/twitter/finatra/issues/234)
+
+- Unable to resolve finatra-slf4j artifact [\#232](https://github.com/twitter/finatra/issues/232)
+
+- Unable to resolve some of the dependencies :\( [\#231](https://github.com/twitter/finatra/issues/231)
+
+- How to render static webpage in finatra2 [\#230](https://github.com/twitter/finatra/issues/230)
+
+- When running a FeatureTest a lot of data is dumped to stdout and stderr [\#226](https://github.com/twitter/finatra/issues/226)
+
+- Mapping a header by name to a case class requires additional metadata [\#225](https://github.com/twitter/finatra/issues/225)
+
+- Missing scaladoc documentation [\#221](https://github.com/twitter/finatra/issues/221)
+
+- finatra-hello-world does not compile [\#219](https://github.com/twitter/finatra/issues/219)
+
+- Add tags for Finatra 1.6.0 and 1.5.4 [\#216](https://github.com/twitter/finatra/issues/216)
+
+- FeatureTest withJsonBody not working [\#215](https://github.com/twitter/finatra/issues/215)
+
+- Disable admin [\#208](https://github.com/twitter/finatra/issues/208)
+
+- Regexes in paths for route definitions [\#197](https://github.com/twitter/finatra/issues/197)
+
+- AppService doesn't support POST of JSON containing % and then & [\#173](https://github.com/twitter/finatra/issues/173)
+
+- fatjar includes unexpected assets in the public directory [\#147](https://github.com/twitter/finatra/issues/147)
+
+- allow subclassing of request [\#116](https://github.com/twitter/finatra/issues/116)
+
+- Builtin Compressor for static files \(css/js\) [\#113](https://github.com/twitter/finatra/issues/113)
+
+- bring back controller prefixes [\#104](https://github.com/twitter/finatra/issues/104)
+
+- code coverage stats [\#98](https://github.com/twitter/finatra/issues/98)
+
+- Add Aurora/Mesos support [\#94](https://github.com/twitter/finatra/issues/94)
+
+- Simplify Cookie API with a CookieBuilder [\#93](https://github.com/twitter/finatra/issues/93)
+
+- implement a routes.txt in admin [\#80](https://github.com/twitter/finatra/issues/80)
+
+- support ETAGS and/or Cache-Control headers in file server [\#73](https://github.com/twitter/finatra/issues/73)
+
+- asset pipeline filter [\#62](https://github.com/twitter/finatra/issues/62)
+
+**Merged pull requests:**
+
+- Scosenza update readmes [\#242](https://github.com/twitter/finatra/pull/242) ([scosenza](https://github.com/scosenza))
+
+- Update warmup docs [\#238](https://github.com/twitter/finatra/pull/238) ([scosenza](https://github.com/scosenza))
+
+- Change Google Analytics tracking to use Twitter OSS account [\#217](https://github.com/twitter/finatra/pull/217) ([travisbrown](https://github.com/travisbrown))
+
+## [v2.0.0.M2](https://github.com/twitter/finatra/tree/v2.0.0.M2) (2015-06-12)
+
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0.M1...v2.0.0.M2)
 
 **Closed issues:**
@@ -84,13 +156,25 @@
 
 ## [v2.0.0.M1](https://github.com/twitter/finatra/tree/v2.0.0.M1) (2015-04-30)
 
-[Full Changelog](https://github.com/twitter/finatra/compare/1.5.3...v2.0.0.M1)
+[Full Changelog](https://github.com/twitter/finatra/compare/1.6.0...v2.0.0.M1)
 
 **Closed issues:**
 
 - UNRESOLVED DEPENDENCIES [\#199](https://github.com/twitter/finatra/issues/199)
 
 - Changing port breaks embedded static file server [\#192](https://github.com/twitter/finatra/issues/192)
+
+- Finatra cannot be built when Finagle's version \> 6.13.0 [\#153](https://github.com/twitter/finatra/issues/153)
+
+**Merged pull requests:**
+
+- 2.0.0.M1 [\#200](https://github.com/twitter/finatra/pull/200) ([cacoco](https://github.com/cacoco))
+
+## [1.6.0](https://github.com/twitter/finatra/tree/1.6.0) (2015-01-08)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/1.5.4...1.6.0)
+
+**Closed issues:**
 
 - Finatra 1.5.4 with finagle-stats 6.22.0 throws an exception [\#184](https://github.com/twitter/finatra/issues/184)
 
@@ -108,19 +192,7 @@
 
 - RequestAdapter fails to decode non-multipart POSTs [\#154](https://github.com/twitter/finatra/issues/154)
 
-- Finatra cannot be built when Finagle's version \> 6.13.0 [\#153](https://github.com/twitter/finatra/issues/153)
-
-- Could add support for Windows? [\#145](https://github.com/twitter/finatra/issues/145)
-
-- Sessions example [\#134](https://github.com/twitter/finatra/issues/134)
-
-- No main class detected. [\#133](https://github.com/twitter/finatra/issues/133)
-
-- Unresolved dependencies [\#132](https://github.com/twitter/finatra/issues/132)
-
 **Merged pull requests:**
-
-- 2.0.0.M1 [\#200](https://github.com/twitter/finatra/pull/200) ([cacoco](https://github.com/cacoco))
 
 - FIX: issue \#182, let controller's error handler handle its own errors. [\#188](https://github.com/twitter/finatra/pull/188) ([plaflamme](https://github.com/plaflamme))
 
@@ -154,25 +226,41 @@
 
 - Add code coverage support with coveralls [\#151](https://github.com/twitter/finatra/pull/151) ([caniszczyk](https://github.com/caniszczyk))
 
-- Bumped twitter-server to 1.6.1 [\#150](https://github.com/twitter/finatra/pull/150) ([pcalcado](https://github.com/pcalcado))
-
-- modify FileService handle conditional GETs for static assets [\#144](https://github.com/twitter/finatra/pull/144) ([tomcz](https://github.com/tomcz))
-
 - Use HttpServerDispatcher to fix remoteAddress property of Request. [\#142](https://github.com/twitter/finatra/pull/142) ([pixell](https://github.com/pixell))
-
-- remove duplicated `organization` config [\#140](https://github.com/twitter/finatra/pull/140) ([jalkoby](https://github.com/jalkoby))
-
-- More render shortcuts [\#139](https://github.com/twitter/finatra/pull/139) ([grandbora](https://github.com/grandbora))
 
 - Don't add .mustache extension to template file name if it already has an extension [\#138](https://github.com/twitter/finatra/pull/138) ([jliszka](https://github.com/jliszka))
 
 - Pass the filename of the template to the factory [\#136](https://github.com/twitter/finatra/pull/136) ([jliszka](https://github.com/jliszka))
 
-- mixing Router with Twitter App creates exitTimer thread per request [\#135](https://github.com/twitter/finatra/pull/135) ([manjuraj](https://github.com/manjuraj))
-
 - path definitions on routes [\#131](https://github.com/twitter/finatra/pull/131) ([grandbora](https://github.com/grandbora))
 
 - ObjectMapper reuse & config [\#126](https://github.com/twitter/finatra/pull/126) ([Xorlev](https://github.com/Xorlev))
+
+## [1.5.4](https://github.com/twitter/finatra/tree/1.5.4) (2014-07-07)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/1.5.3...1.5.4)
+
+**Closed issues:**
+
+- Could add support for Windows? [\#145](https://github.com/twitter/finatra/issues/145)
+
+- Sessions example [\#134](https://github.com/twitter/finatra/issues/134)
+
+- No main class detected. [\#133](https://github.com/twitter/finatra/issues/133)
+
+- Unresolved dependencies [\#132](https://github.com/twitter/finatra/issues/132)
+
+**Merged pull requests:**
+
+- Bumped twitter-server to 1.6.1 [\#150](https://github.com/twitter/finatra/pull/150) ([pcalcado](https://github.com/pcalcado))
+
+- modify FileService handle conditional GETs for static assets [\#144](https://github.com/twitter/finatra/pull/144) ([tomcz](https://github.com/tomcz))
+
+- remove duplicated `organization` config [\#140](https://github.com/twitter/finatra/pull/140) ([jalkoby](https://github.com/jalkoby))
+
+- More render shortcuts [\#139](https://github.com/twitter/finatra/pull/139) ([grandbora](https://github.com/grandbora))
+
+- mixing Router with Twitter App creates exitTimer thread per request [\#135](https://github.com/twitter/finatra/pull/135) ([manjuraj](https://github.com/manjuraj))
 
 ## [1.5.3](https://github.com/twitter/finatra/tree/1.5.3) (2014-04-16)
 
