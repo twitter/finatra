@@ -1,3 +1,5 @@
+sudo: required
+
 language: scala
 
 scala:
@@ -10,10 +12,13 @@ jdk:
   # Note: not currently testing on JDK 8 internally
   - oraclejdk8
 
+before_install:
+ # See: https://github.com/travis-ci/travis-ci/issues/2496
+ - ulimit -t 514029
+
 before_script:
   # default $SBT_OPTS is irrelevant to sbt lancher
   - unset SBT_OPTS
-  - ulimit -u 514029
 
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test
