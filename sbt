@@ -43,7 +43,7 @@ CMD="java -ea                     \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
   ${ELIMINATE_AUTOBOX_JVM_ARG}    \
-  -Xss8M                          \
+  -Xss10M                          \
   -Xms512M                        \
   -Xmx2G                          \
   -server                         \
