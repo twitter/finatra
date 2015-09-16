@@ -10,6 +10,9 @@ jdk:
   # Note: not currently testing on JDK 8 internally
   - oraclejdk8
 
+before_install:
+  - ulimit -n 10000
+
 before_script:
   # default $SBT_OPTS is irrelevant to sbt lancher
   - unset SBT_OPTS
