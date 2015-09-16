@@ -28,8 +28,6 @@ if [[ $javaVersion == *"8"* ]]; then
   ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"
 fi
 
-ulimit -a
-
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
 CMD="java -ea                     \
@@ -45,7 +43,6 @@ CMD="java -ea                     \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
   ${ELIMINATE_AUTOBOX_JVM_ARG}    \
-  -Xss8M                          \
   -Xms1024M                       \
   -Xmx3072M                       \
   -server                         \
