@@ -28,6 +28,8 @@ if [[ $javaVersion == *"8"* ]]; then
   ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"
 fi
 
+ulimit -a
+
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
 CMD="java -ea                     \
