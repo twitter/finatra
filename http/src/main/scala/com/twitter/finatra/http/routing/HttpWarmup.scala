@@ -61,23 +61,12 @@ class HttpWarmup @Inject()(
     request.headerMap.add("User-Agent", userAgent)
 
     if (forceRouteToHttpMuxer)
-      routeToAdminMuxers(request)
+      httpx.HttpMuxer(request)
     else if (request.uri.startsWith("/admin/finatra/"))
       router.services.adminService(request)
     else if (request.uri.startsWith("/admin"))
-      routeToAdminMuxers(request)
+      httpx.HttpMuxer(request)
     else
       router.services.externalService(request)
-  }
-
-  private[this] val httpMuxer = httpx.HttpMuxer
-
-  private def routeToAdminMuxers(request: Request): Future[Response] = {
-    httpx.HttpMuxer(request) flatMap { response =>
-      if (response.status == Status.NotFound)
-        httpMuxer(request)
-      else
-        Future(response)
-    }
   }
 }
