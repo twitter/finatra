@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/twitter/finatra.png?label=ready&title=Ready)](https://waffle.io/twitter/finatra)
 # Finatra
 Fast, testable, Scala HTTP services built on Twitter-Server and Finagle
 
