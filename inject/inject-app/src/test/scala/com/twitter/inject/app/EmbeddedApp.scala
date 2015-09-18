@@ -33,7 +33,12 @@ class EmbeddedApp(
   maxStartupTimeSeconds: Int = 60)
   extends Matchers {
 
-  /* Constructor */
+  /* Additional Constructors */
+  def this(app: com.twitter.app.App) = {
+    this(app, stage = Stage.PRODUCTION)
+  }
+
+  /* Main Constructor */
 
   require(!isSingletonObject(app),
     "app must be a new instance rather than a singleton (e.g. \"new " +

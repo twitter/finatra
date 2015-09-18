@@ -6,10 +6,14 @@ import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
 import com.twitter.inject.{Injector, InjectorModule, Logging}
 import scala.collection.mutable.ArrayBuffer
+import scala.collection.JavaConverters._
+
+/** AbstractApp for usage from Java */
+abstract class AbstractApp extends App
 
 trait App extends TwitterUtilApp with Logging {
 
-  private[inject] lazy val requiredModules = modules ++ frameworkModules
+  private[inject] lazy val requiredModules = modules ++ javaModules.asScala ++ frameworkModules
 
   /* Mutable State */
 
@@ -36,7 +40,8 @@ trait App extends TwitterUtilApp with Logging {
     info("Process started")
 
     /* Get all module flags */
-    val allModuleFlags = findModuleFlags(requiredModules ++ overrideModules ++ frameworkOverrideModules)
+    val allModules = requiredModules ++ overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules
+    val allModuleFlags = findModuleFlags(allModules)
 
     /* Parse all flags */
     allModuleFlags foreach flag.add
@@ -77,8 +82,14 @@ trait App extends TwitterUtilApp with Logging {
   /** Production Guice modules */
   protected def modules: Seq[Module] = Seq()
 
-  /** Override Guice modules which redefine production bindings (Note: Only override during testing) */
+  /** Production Guice modules from Java */
+  protected def javaModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
+
+  /** Override Guice modules which redefine production bindings (Note: Only use overrideModules during testing) */
   protected def overrideModules: Seq[Module] = Seq()
+
+  /** Override Guice modules from Java which redefine production bindings (Note: Only use overrideModules during testing) */
+  protected def javaOverrideModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
   /**
    * Default modules can be overridden in production by overriding methods in your App or Server
@@ -123,7 +134,7 @@ trait App extends TwitterUtilApp with Logging {
     InstalledModules.create(
       flags = flag.getAll(includeGlobal = false).toSeq,
       modules = requiredModules,
-      overrideModules = overrideModules ++ frameworkOverrideModules,
+      overrideModules = overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules,
       stage = guiceStage)
   }
 

@@ -148,7 +148,8 @@ lazy val root = (project in file(".")).
     tinyUrl,
     streamingExample,
     twitterClone,
-    benchmarkServer
+    benchmarkServer,
+    exampleInjectJavaServer
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -512,4 +513,29 @@ lazy val tinyUrl = (project in file("examples/tiny-url")).
     httpclient,
     slf4j,
     injectCore % "test->test"
+  )
+
+lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "java-server",
+    moduleName := "java-server",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "com.novocode" % "junit-interface" % "0.11" % Test
+
+    )
+  ).
+  dependsOn(
+    slf4j,
+    injectServer,
+    injectServer % "test->test",
+    injectCore % "test->test",
+    injectApp % "test->test"
   )

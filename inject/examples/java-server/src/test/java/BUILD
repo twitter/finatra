@@ -1,0 +1,13 @@
+junit_tests(
+  name='java',
+  dependencies=[
+    '3rdparty/jvm/junit',
+    'finatra/http:test-deps',
+    'finatra/inject/examples/java-server',
+    'finatra/inject/inject-server:test-deps'
+  ],
+  sources=rglobs('*.java'),
+  resources=[
+    'finatra/inject/examples/java-server/src/test/resources'
+  ]
+)

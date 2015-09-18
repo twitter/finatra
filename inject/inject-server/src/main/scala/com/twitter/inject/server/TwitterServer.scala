@@ -10,10 +10,13 @@ import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.{FinagleBuildRevision, PromoteToOldGenUtils}
 import com.twitter.util.Await
 
+/** AbstractTwitterServer for usage from Java */
+abstract class AbstractTwitterServer extends TwitterServer
+
 trait TwitterServer
-  extends com.twitter.server.TwitterServer
+  extends App
+  with com.twitter.server.TwitterServer
   with Ports
-  with App
   with Warmup
   with Logging {
 

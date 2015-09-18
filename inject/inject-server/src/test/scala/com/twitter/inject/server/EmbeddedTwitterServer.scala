@@ -73,7 +73,12 @@ class EmbeddedTwitterServer(
     verbose = verbose,
     maxStartupTimeSeconds = maxStartupTimeSeconds) {
 
-  /* Constructor */
+  /* Additional Constructors */
+  def this(twitterServer: Ports) = {
+    this(twitterServer, stage = Stage.PRODUCTION)
+  }
+
+  /* Main Constructor */
 
   // Add framework override modules
   if (isGuiceApp) {
