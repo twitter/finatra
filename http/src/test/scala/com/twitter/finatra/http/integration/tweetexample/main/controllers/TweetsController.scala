@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.integration.tweetexample.main.controllers
 
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.httpx.{Fields, Status, Request, Response}
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.integration.tweetexample.main.services.TweetsRepository
@@ -33,6 +33,17 @@ class TweetsController @Inject()(
 
   get("/tweets/streaming_custom_tobuf") { request: Request =>
     StreamingResponse(Buf.Utf8.apply) {
+      AsyncStream("A", "B", "C")
+    }
+  }
+
+  get("/tweets/streaming_custom_tobuf_with_custom_headers") { request: Request =>
+    val headers = Map(
+      Fields.ContentType -> "text/event-stream;charset=UTF-8",
+      Fields.CacheControl -> "no-cache, no-store, max-age=0, must-revalidate",
+      Fields.Pragma -> "no-cache")
+
+    StreamingResponse(Buf.Utf8.apply, Status.Created, headers) {
       AsyncStream("A", "B", "C")
     }
   }
