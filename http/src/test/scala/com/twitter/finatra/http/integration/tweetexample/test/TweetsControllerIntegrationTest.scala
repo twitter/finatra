@@ -1,12 +1,12 @@
 package com.twitter.finatra.http.integration.tweetexample.test
 
-import com.twitter.finagle.httpx.Status
 import com.fasterxml.jackson.databind.JsonNode
+import com.twitter.finagle.httpx.{Fields, Status}
 import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
-import com.twitter.finatra.http.test.{HttpTest, EmbeddedHttpServer}
+import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.{Await, Future, FuturePool}
+import com.twitter.util.{Await, Future}
 
 class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
 
@@ -136,6 +136,21 @@ class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
       "/tweets/streaming_custom_tobuf",
       andExpect = Status.Ok,
       withBody = "ABC")
+  }
+
+  "get streaming custom toBuf with custom headers" in {
+    val response = server.httpGet(
+      "/tweets/streaming_custom_tobuf_with_custom_headers",
+      andExpect = Status.Created,
+      withBody = "ABC")
+
+      response.headerMap.contains(Fields.ContentType) should equal(true)
+      response.headerMap.get(Fields.ContentType).get should equal("text/event-stream;charset=UTF-8")
+      response.headerMap.contains(Fields.Pragma) should equal(true)
+      response.headerMap.get(Fields.Pragma).get should equal("no-cache")
+      response.headerMap.contains(Fields.CacheControl) should equal(true)
+      response.headerMap.get(Fields.CacheControl).get should equal("no-cache, no-store, max-age=0, must-revalidate")
+
   }
 
   "get streaming manual writes" in {
