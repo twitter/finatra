@@ -26,6 +26,11 @@ trait HttpTest
     configFinagleLogging()
   }
 
+  override protected def afterAll() {
+    super.afterAll()
+    pool.executor.shutdown()
+  }
+
   def configFinagleLogging() {
     val finagleLog = Logger("finagle")
     finagleLog.setLevel(Level.WARNING)

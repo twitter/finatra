@@ -102,6 +102,7 @@ class EmbeddedApp(
     if (!closed) {
       infoBanner("Closing EmbeddedApp for class " + appName)
       app.close()
+      futurePool.executor.shutdown()
       closed = true
     }
   }
