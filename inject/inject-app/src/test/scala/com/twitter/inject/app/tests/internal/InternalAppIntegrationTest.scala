@@ -59,6 +59,16 @@ class InternalAppIntegrationTest extends Test {
     }
     e.getMessage should startWith("oops")
   }
+
+  "two apps starting" in {
+    val a = new EmbeddedApp(new com.twitter.inject.app.App {})
+    a.start()
+    a.close()
+
+    val b = new EmbeddedApp(new com.twitter.inject.app.App {})
+    b.start()
+    b.close()
+  }
 }
 
 object FooModule extends TwitterModule {

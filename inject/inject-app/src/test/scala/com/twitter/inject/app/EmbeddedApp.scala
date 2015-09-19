@@ -1,6 +1,7 @@
 package com.twitter.inject.app
 
 import com.google.inject.Stage
+import com.twitter.inject.InjectUtils
 import com.twitter.util._
 import org.scalatest.Matchers
 
@@ -49,7 +50,7 @@ class EmbeddedApp(
   /* Fields */
 
   val appName = app.name
-  private val futurePool = FuturePool.unboundedPool
+  private val mainRunnerFuturePool = InjectUtils.newFixedPool("Embedded " + appName)
 
   //Mutable state
   private var started = false
@@ -102,7 +103,7 @@ class EmbeddedApp(
     if (!closed) {
       infoBanner("Closing EmbeddedApp for class " + appName)
       app.close()
-      futurePool.executor.shutdown()
+      mainRunnerFuturePool.executor.shutdown()
       closed = true
     }
   }
@@ -149,7 +150,7 @@ class EmbeddedApp(
     val allArgs = combineArgs()
     info("Starting " + appName + " with args: " + allArgs.mkString(" "))
 
-    _mainResult = futurePool {
+    _mainResult = mainRunnerFuturePool {
       try {
         app.nonExitingMain(allArgs)
       } catch {

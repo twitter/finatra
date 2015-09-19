@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.twitter.finagle.httpx.{Request, Response}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.test.EmbeddedTwitterServer
+import com.twitter.inject.InjectUtils
 import com.twitter.inject.server.AsyncStreamUtils
 import com.twitter.io.Buf
 import com.twitter.logging.Logger
-import com.twitter.util.{Await, FuturePool}
+import com.twitter.util.Await
 import java.net.URLEncoder
 import java.util.logging.Level
 import org.apache.commons.io.IOUtils
@@ -19,7 +20,7 @@ trait HttpTest
 
   protected val testClientAppId = 12345L
   protected val mapper = FinatraObjectMapper.create()
-  protected val pool = FuturePool.unboundedPool
+  protected val pool = InjectUtils.newUnboundedPool("HttpTest " + getClass.getSimpleName)
 
   override protected def beforeAll() {
     super.beforeAll()
