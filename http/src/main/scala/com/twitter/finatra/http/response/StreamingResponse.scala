@@ -60,6 +60,7 @@ case class StreamingResponse[T](
   def toFutureFinagleResponse: Future[Response] = {
     val response = Response()
     response.setChunked(true)
+    response.setStatusCode(status.code)
     addHeaders(headers, response)
     val writer = response.writer
 
