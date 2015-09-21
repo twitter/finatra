@@ -186,7 +186,7 @@ Notes:
 
 * The `case class` field names should match the request parameters names.
   * A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`][finatra-jackson-module]).
-  * Use backticks when special characters are involved (e.g. @Header `user-agent` : String)  
+  * Use backticks when special characters are involved (e.g. @Header \`user-agent\` : String)  
   * [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) can also be used to specify the JSON field name  
 
 * Non optional fields without default values are required. If required fields are missing, a `CaseClassMappingException` is thrown. Normally, the default ExceptionMapper (included in `ExceptionMapperModule`) turns this exception into a HTTP 400 BadRequest with a JSON errors array (however this behavior can be customized).
