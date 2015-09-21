@@ -3,7 +3,7 @@ layout: post
 title: "Announcing the release of Finatra 2.0.0!"
 date: 2015-09-21 13:27:47 -0700
 comments: false
-categories: ["blog", "milestone", "releases"]
+categories: ["blog", "releases"]
 author: scosenza
 ---
 
