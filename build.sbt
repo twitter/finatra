@@ -8,7 +8,7 @@ parallelExecution in ThisBuild := false
 fork := true
 
 lazy val buildSettings = Seq(
-  version := "2.0.1-SNAPSHOT",
+  version := "2.0.1",
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
@@ -40,7 +40,6 @@ val baseSettings = Seq(
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     "Twitter Maven" at "https://maven.twttr.com",
-    "Finatra Repo" at "http://twitter.github.com/finatra",
     Resolver.sonatypeRepo("snapshots")
   ),
   compilerOptions
@@ -140,9 +139,10 @@ lazy val root = (project in file(".")).
     http,
     httpclient,
     slf4j,
-    benchmarks,
+    benchmarks
 
     //Examples below
+    /*
     helloWorld,
     //helloWorldHeroku, 2.11 only
     tinyUrl,
@@ -150,6 +150,7 @@ lazy val root = (project in file(".")).
     twitterClone,
     benchmarkServer,
     exampleInjectJavaServer
+    */
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -374,28 +375,6 @@ lazy val benchmarks = project.
 
 /* Examples Below */
 
-lazy val helloWorld = (project in file("examples/hello-world")).
-  settings(finatraBuildSettings: _*).
-  settings(
-    name := "finatra-hello-world",
-    moduleName := "finatra-hello-world",
-    publishLocal := {},
-    publish := {},
-    assemblyMergeStrategy in assembly := {
-      case "BUILD" => MergeStrategy.discard
-      case other => MergeStrategy.defaultMergeStrategy(other)
-    },
-    libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback
-    )
-  ).
-  dependsOn(
-    http,
-    http % "test->test",
-    slf4j,
-    injectCore % "test->test"
-  )
-
 /* 2.11 only due to rlazoti/finagle-metrics dependency
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
   settings(finatraBuildSettings: _*).
@@ -420,6 +399,29 @@ lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
     injectCore % "test->test"
   )
   */
+
+/*
+lazy val helloWorld = (project in file("examples/hello-world")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-hello-world",
+    moduleName := "finatra-hello-world",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % versions.logback
+    )
+  ).
+  dependsOn(
+    http,
+    http % "test->test",
+    slf4j,
+    injectCore % "test->test"
+  )
 
 lazy val streamingExample = (project in file("examples/streaming-example")).
   settings(finatraBuildSettings: _*).
@@ -539,3 +541,4 @@ lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server
     injectCore % "test->test",
     injectApp % "test->test"
   )
+*/
