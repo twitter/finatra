@@ -28,11 +28,11 @@
         </head>
         <body class="value">
       <div id="definition">
-        <img src="../../../lib/package_big.png" />
+        <img alt="Package" src="../../../lib/package_big.png" />
         <p id="owner"><a href="../../package.html" class="extype" name="net">net</a>.<a href="../package.html" class="extype" name="net.codingwell">codingwell</a></p>
         <h1>scalaguice</h1><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       </div>
@@ -49,7 +49,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -75,7 +75,6 @@
               <li class="hideall out"><span>Hide All</span></li>
               <li class="showall in"><span>Show all</span></li>
             </ol>
-            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
           </div>
         <div id="visbl">
             <span class="filtertype">Visibility</span>
@@ -102,7 +101,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@AnnotationClass[T&lt;:java.lang.annotation.Annotation]=Class[T]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -119,7 +118,7 @@
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaModuleextendsAbstractModule" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Allows binding via type parameters.</p><div class="fullcomment"><div class="comment cmt"><p>Allows binding via type parameters. Mix into <code>AbstractModule</code>
@@ -151,11 +150,11 @@ manifests for wildcard types don't provide access to type bounds.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ScalaMultibinder.html"><span class="name">ScalaMultibinder</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></span>
+        <a href="ScalaMultibinder.html"><span class="name">ScalaMultibinder</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaMultibinder[T]extendsAnyRef" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Analog to the Guice Multibinder
@@ -173,7 +172,7 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaPrivateModuleextendsPrivateModule" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -186,11 +185,11 @@ manifests for wildcard types don't provide access to type bounds.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="SetProvider.html"><span class="name">SetProvider</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="com.google.inject.spi.ProviderWithDependencies">ProviderWithDependencies</span>[<a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.collection.immutable.Set" class="extype" target="_top">Set</a>[<span class="extype" name="net.codingwell.scalaguice.SetProvider.T">T</span>]]</span>
+        <a href="SetProvider.html"><span class="name">SetProvider</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="com.google.inject.spi.ProviderWithDependencies">ProviderWithDependencies</span>[<span class="extype" name="scala.collection.immutable.Set">Set</span>[<span class="extype" name="net.codingwell.scalaguice.SetProvider.T">T</span>]]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@SetProvider[T]extendsProviderWithDependencies[scala.collection.immutable.Set[T]]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Provider for a Scala Immutable Set from a Java Set.</p><div class="fullcomment"><div class="comment cmt"><p>Provider for a Scala Immutable Set from a Java Set.</p><p>Example:</p><pre>.toProvider( <span class="kw">new</span> SetProvider[T]( Key.get( typeLiteral[JSet[T]] ) ) )</pre></div></div>
@@ -214,7 +213,7 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@InjectorExtensions" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -231,7 +230,7 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@KeyExtensions" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -248,7 +247,7 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaModule" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -265,7 +264,7 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@ScalaMultibinder" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Analog to the Guice Multibinder</p><div class="fullcomment"><div class="comment cmt"><p>Analog to the Guice Multibinder</p><p>Use <code>newSetBinder</code> to create a multibinder instance</p></div></div>
@@ -282,7 +281,7 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@annotation[T&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[T]):net.codingwell.scalaguice.package.AnnotationClass[T]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Get the class for a Java Annotation using a <span class="extype" name="scala.Manifest">scala.Manifest</span>.</p>
@@ -299,7 +298,7 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@binder" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
@@ -316,11 +315,11 @@ manifests for wildcard types don't provide access to type bounds.
       </span>
       </h4><span class="permalink">
       <a href="../../../index.html#net.codingwell.scalaguice.package@typeLiteral[T](implicitevidence$1:Manifest[T]):com.google.inject.TypeLiteral[T]" title="Permalink" target="_top">
-        <img src="../../../lib/permalink.png" />
+        <img src="../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Create a <span class="extype" name="com.google.inject.TypeLiteral">com.google.inject.TypeLiteral</span> from a <span class="extype" name="scala.Manifest">scala.Manifest</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <span class="extype" name="com.google.inject.TypeLiteral">com.google.inject.TypeLiteral</span> from a <span class="extype" name="scala.Manifest">scala.Manifest</span>.
-Subtypes of <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.AnyVal" class="extype" target="_top">scala.AnyVal</a> will be converted to their corresponding
+Subtypes of <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyVal" class="extype" target="_top">scala.AnyVal</a> will be converted to their corresponding
 Java wrapper classes.
 </p></div></div>
     </li></ol>
@@ -333,9 +332,9 @@ Java wrapper classes.
 
         <div id="inheritedMembers">
         <div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="../../../scala/package.html#AnyRef=Object" class="extmbr" name="scala.AnyRef">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>
