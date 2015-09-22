@@ -1,10 +1,20 @@
 # Change Log
 
-## [Unreleased](https://github.com/twitter/finatra/tree/HEAD)
+## [v2.0.1](https://github.com/twitter/finatra/tree/v2.0.1) (2015-09-21)
 
-[Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0...HEAD)
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0...v2.0.1)
+
+**Closed issues:**
+
+- Split code into packages/modules [\#254](https://github.com/twitter/finatra/issues/254)
+
+- Support for Scala Future's [\#249](https://github.com/twitter/finatra/issues/249)
+
+- Override TwitterModule in FeatureTest [\#233](https://github.com/twitter/finatra/issues/233)
 
 **Merged pull requests:**
+
+- Update TweetsControllerIntegrationTest.scala [\#251](https://github.com/twitter/finatra/pull/251) ([scosenza](https://github.com/scosenza))
 
 - Update Travis CI to build with java8 fix. [\#244](https://github.com/twitter/finatra/pull/244) ([cacoco](https://github.com/cacoco))
 

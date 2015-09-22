@@ -8,7 +8,7 @@ parallelExecution in ThisBuild := false
 fork := true
 
 lazy val buildSettings = Seq(
-  version := "2.0.1",
+  version := "2.0.2-SNAPSHOT",
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
@@ -139,10 +139,9 @@ lazy val root = (project in file(".")).
     http,
     httpclient,
     slf4j,
-    benchmarks
+    benchmarks,
 
     //Examples below
-    /*
     helloWorld,
     //helloWorldHeroku, 2.11 only
     tinyUrl,
@@ -150,7 +149,6 @@ lazy val root = (project in file(".")).
     twitterClone,
     benchmarkServer,
     exampleInjectJavaServer
-    */
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -400,7 +398,6 @@ lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
   )
   */
 
-/*
 lazy val helloWorld = (project in file("examples/hello-world")).
   settings(finatraBuildSettings: _*).
   settings(
@@ -541,4 +538,3 @@ lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server
     injectCore % "test->test",
     injectApp % "test->test"
   )
-*/

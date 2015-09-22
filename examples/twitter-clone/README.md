@@ -17,7 +17,7 @@ $ sbt twitterClone/assembly
 $ java -jar examples/benchmark-server/target/scala-2.11/finatra-benchmark-server-assembly-2.x.x-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
 ```
 
-If you're in a tagged release branch (e.g. [v2.0.0](https://github.com/twitter/finatra/tree/v2.0.0))
+If you're in a tagged release branch (e.g. [v2.0.1](https://github.com/twitter/finatra/tree/v2.0.1))
 ----------------------------------------------------------
 Run sbt from this project's directory, e.g.
 ```
