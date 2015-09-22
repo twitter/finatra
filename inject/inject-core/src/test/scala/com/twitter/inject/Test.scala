@@ -20,7 +20,16 @@ abstract class Test
 
   setUtcTimeZone()
 
+  /* Overrides */
+
+  override protected def afterAll() = {
+    super.afterAll()
+    pool.executor.shutdown()
+  }
+
   /* Protected */
+
+  protected lazy val pool = PoolUtils.newUnboundedPool("Test " + getClass.getSimpleName)
 
   protected def setUtcTimeZone() = {
     DateTimeZone.setDefault(DateTimeZone.UTC)

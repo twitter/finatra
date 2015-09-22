@@ -13,4 +13,9 @@ trait FeatureTest extends Test with IntegrationTest {
     app.guiceApp.addFrameworkOverrideModules(integrationTestModule)
     super.beforeAll()
   }
+
+  override protected def afterAll() = {
+    super.afterAll()
+    app.close()
+  }
 }

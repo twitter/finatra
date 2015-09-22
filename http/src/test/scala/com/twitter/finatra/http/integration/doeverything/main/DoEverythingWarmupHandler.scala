@@ -28,5 +28,7 @@ class DoEverythingWarmupHandler @Inject()(
     httpWarmup.send(
       get("/health"),
       forceRouteToAdminHttpMuxers = true)
+
+    httpWarmup.close()
   }
 }

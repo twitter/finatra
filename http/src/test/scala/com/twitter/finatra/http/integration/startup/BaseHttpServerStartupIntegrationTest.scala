@@ -8,9 +8,12 @@ import com.twitter.inject.Test
 class BaseHttpServerStartupIntegrationTest extends Test {
 
   "BaseHttpServer startup" in {
-    new EmbeddedHttpServer(
+    val server = new EmbeddedHttpServer(
       twitterServer = new BaseHttpServer {
         override val modules = Seq(ResponseBuilderModule)
-      }).start()
+      })
+
+    server.start()
+    server.close()
   }
 }

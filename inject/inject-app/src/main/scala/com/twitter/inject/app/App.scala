@@ -5,6 +5,7 @@ import com.twitter.app.{App => TwitterUtilApp}
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
 import com.twitter.inject.{Injector, InjectorModule, Logging}
+import com.twitter.util.{Future, Time}
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConverters._
 
@@ -24,15 +25,6 @@ trait App extends TwitterUtilApp with Logging {
   private[inject] var appStarted: Boolean = false
   private[inject] var guiceStage: Stage = Stage.PRODUCTION
   private var installedModules: InstalledModules = _
-
-  /* Public */
-
-  def injector: Injector = {
-    if (installedModules == null)
-      throw new Exception("injector is not available before main() is called")
-    else
-      installedModules.injector
-  }
 
   /* Lifecycle */
 
@@ -69,6 +61,13 @@ trait App extends TwitterUtilApp with Logging {
   }
 
   /* Public */
+
+  def injector: Injector = {
+    if (installedModules == null)
+      throw new Exception("injector is not available before main() is called")
+    else
+      installedModules.injector
+  }
 
   /**
    * Callback method executed after the Guice injector is created and warmup has fully completed.

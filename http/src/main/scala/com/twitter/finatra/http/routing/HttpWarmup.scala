@@ -16,7 +16,7 @@ class HttpWarmup @Inject()(
   private val userAgent = "http-warmup-client"
 
   /* Use a FuturePool to avoid getting a ConstFuture from Future.apply(...) */
-  private val pool = FuturePools.fixedPool("HTTP Warmup", 1).asInstanceOf[ExecutorServiceFuturePool]
+  private val pool = FuturePools.fixedPool("HTTP Warmup", 1)
 
   /* Public */
 

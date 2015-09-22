@@ -1,12 +1,12 @@
 package com.twitter.finatra.http.integration.tweetexample.test
 
-import com.twitter.finagle.httpx.Status
 import com.fasterxml.jackson.databind.JsonNode
+import com.twitter.finagle.httpx.Status
 import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
-import com.twitter.finatra.http.test.{HttpTest, EmbeddedHttpServer}
+import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.{Await, Future, FuturePool}
+import com.twitter.util.{Await, Future}
 
 class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
 
@@ -80,8 +80,6 @@ class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
   }
 
   "post streaming json" in {
-    server.start()
-
     val request = RequestBuilder
       .post("/tweets/streaming")
       .header("X-UserId", "123")

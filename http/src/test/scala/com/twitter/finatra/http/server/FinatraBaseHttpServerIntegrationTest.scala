@@ -16,6 +16,8 @@ class FinatraBaseHttpServerIntegrationTest extends Test {
         "/asdf",
         andExpect = Status.Ok,
         withBody = "hi")
+
+      server.close()
     }
   }
 }

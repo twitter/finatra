@@ -47,24 +47,27 @@ class StartupIntegrationTest extends Test {
     }
 
     "ensure server health check fails when guice config fails fast" in {
+      val server = new EmbeddedTwitterServer(new FailFastServer)
       intercept[Exception] {
-        new EmbeddedTwitterServer(
-          new FailFastServer).start()
+        server.start()
       }
+      server.close()
     }
 
     "ensure startup fails when base twitter server preMain throws exception" in {
+      val server = new EmbeddedTwitterServer(new PremainErrorBaseTwitterServer)
       intercept[Exception] {
-        new EmbeddedTwitterServer(
-          twitterServer = new PremainErrorBaseTwitterServer).start()
+        server.start()
       }
+      server.close()
     }
 
     "ensure startup fails when preMain throws exception" in {
+      val server = new EmbeddedTwitterServer(new ServerPremainException)
       intercept[Exception] {
-        new EmbeddedTwitterServer(
-          new ServerPremainException).start()
+        server.start()
       }
+      server.close()
     }
 
     "ensure http server starts after warmup" in {
@@ -98,34 +101,42 @@ class StartupIntegrationTest extends Test {
     }
 
     "calling GuiceModule.install without a TwitterModule works" in {
-      new EmbeddedTwitterServer(
-        twitterServer = new ServerWithGuiceModuleInstall).start()
+      val server = new EmbeddedTwitterServer(new ServerWithGuiceModuleInstall)
+      server.start()
+      server.close()
     }
 
     "calling GuiceModule.install with a TwitterModule throws exception" in {
+      val server = new EmbeddedTwitterServer(new ServerWithTwitterModuleInstall)
       intercept[Exception] {
-        new EmbeddedTwitterServer(
-          twitterServer = new ServerWithTwitterModuleInstall).start()
+        server.start()
       }
+      server.close()
     }
 
     "appMain throws exception" in {
-      intercept[Exception] {
-        new EmbeddedApp(
+      val server = new EmbeddedApp(
           new App {
             override def appMain(): Unit = {
               throw new RuntimeException("oops")
             }
-          }).start()
+          })
+
+      intercept[Exception] {
+        server.start()
       }
+
+      server.close()
     }
 
     "injector called before main" in {
-      val e = intercept[Exception] {
-        new App {
-          override val modules = Seq(new TwitterModule {})
-        }.injector
+      val app = new App {
+        override val modules = Seq(new TwitterModule {})
       }
+      val e = intercept[Exception] {
+        app.injector
+      }
+      app.close()
       e.getMessage should include("injector is not available before main")
     }
   }

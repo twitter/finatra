@@ -9,48 +9,60 @@ import com.twitter.inject.Test
 class HttpServerStartupIntegrationTest extends Test {
 
   "admin endpoints must be /admin/finatra" in {
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/admin/foo") { request: Request =>
+            }
+          })
+        }
+      })
+
     intercept[AssertionError] {
-      new EmbeddedHttpServer(
-        twitterServer = new HttpServer {
-          override def configureHttp(router: HttpRouter): Unit = {
-            router.add(new Controller {
-              get("/admin/foo") { request: Request =>
-              }
-            })
-          }
-        }).start()
+      server.start()
     }
+
+    server.close()
   }
 
   "finagle.http.Request no longer supported" in {
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/foo") { request: com.twitter.finagle.http.Request =>
+            }
+          })
+        }
+      })
+
     val e = intercept[Exception] {
-      new EmbeddedHttpServer(
-        twitterServer = new HttpServer {
-          override def configureHttp(router: HttpRouter): Unit = {
-            router.add(new Controller {
-              get("/foo") { request: com.twitter.finagle.http.Request =>
-              }
-            })
-          }
-        }).start()
+      server.start()
     }
+
+    server.close()
     e.getMessage should be("com.twitter.finagle.http.Request is not supported. Please use com.twitter.finagle.httpx.Request")
   }
 
   "Duplicate route paths fails server startup" in {
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/foo") { request: Request =>
+            }
+            get("/foo") { request: Request =>
+            }
+          })
+        }
+      })
+
     val e = intercept[AssertionError] {
-      new EmbeddedHttpServer(
-        twitterServer = new HttpServer {
-          override def configureHttp(router: HttpRouter): Unit = {
-            router.add(new Controller {
-              get("/foo") { request: Request =>
-              }
-              get("/foo") { request: Request =>
-              }
-            })
-          }
-        }).start()
+      server.start()
     }
+
+    server.close()
     e.getMessage should be("assertion failed: Found non-unique routes GET     /foo")
   }
 }

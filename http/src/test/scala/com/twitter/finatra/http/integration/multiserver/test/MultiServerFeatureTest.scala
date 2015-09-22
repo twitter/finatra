@@ -15,6 +15,11 @@ class MultiServerFeatureTest extends HttpTest {
     clientFlags = Map(
       resolverMap("add1-server", add1Server)))
 
+  override def afterAll() = {
+    add1Server.close()
+    add2Server.close()
+  }
+
   "add2" in {
     add2Server.httpGet(
       "/add2?num=5",

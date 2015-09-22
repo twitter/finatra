@@ -32,31 +32,27 @@ class InternalAppIntegrationTest extends Test {
 
   "call injector before main" in {
     val e = intercept[Exception] {
-      new EmbeddedApp(
-        new SampleGuiceApp {
-          addFrameworkModules(FooModule)
-          injector.instance[Foo]
-        },
-        waitForWarmup = true,
-        skipAppMain = false)
+      new SampleGuiceApp {
+        addFrameworkModules(FooModule)
+        injector.instance[Foo]
+      }
     }
     e.getMessage should startWith("injector is not available")
   }
 
   "error in appMain" in {
-    val app = new EmbeddedApp(
-      new SampleGuiceApp {
-        override def appMain(): Unit = {
-          super.appMain()
-          throw new Exception("oops")
-        }
-      },
-      waitForWarmup = true,
-      skipAppMain = false)
+    val app = new SampleGuiceApp {
+      override def appMain(): Unit = {
+        super.appMain()
+        throw new scala.Exception("oops")
+      }
+    }
 
     val e = intercept[Exception] {
-      app.start()
+      app.main()
     }
+
+    app.close()
     e.getMessage should startWith("oops")
   }
 

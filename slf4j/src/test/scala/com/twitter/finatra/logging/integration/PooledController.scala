@@ -2,13 +2,15 @@ package com.twitter.finatra.logging.integration
 
 import com.twitter.finagle.httpx.Request
 import com.twitter.finatra.http.Controller
-import com.twitter.util.FuturePool
+import com.twitter.finatra.logging.integration.PooledController._
+import com.twitter.finatra.utils.FuturePools
 
+object PooledController {
+  val pool1 = FuturePools.fixedPool("PooledController 1", 1)
+  val pool2 = FuturePools.fixedPool("PooledController 2", 1)
+}
 
 class PooledController extends Controller {
-
-  private val pool1 = FuturePool.unboundedPool
-  private val pool2 = FuturePool.unboundedPool
 
   get("/hi") { request: Request =>
     val id = request.params("id")
