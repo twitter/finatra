@@ -313,3 +313,10 @@ class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
 
   override def getEmptyValue: BigDecimal = BigDecimal(0)
 }
+
+package object internal {
+  case class SimplePersonInPackageObject(
+    name: String = "default-name")
+
+  case class SimplePersonInPackageObjectWithoutConstructorParams()
+}

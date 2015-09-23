@@ -2,12 +2,12 @@ package com.twitter.finatra.json.internal.caseclass.reflection
 
 object DefaultMethodUtils {
 
-  def defaultFunction(clazz: Class[_], idx: Int): Option[() => Object] = {
-    val argNum = idx + 1
-    clazz.getMethods.find { method =>
-      method.getName == "$lessinit$greater$default$" + argNum // Scala 2.10+
+  def defaultFunction(companionObjectClass: Class[_], companionObject: Any, constructorParamIdx: Int): Option[() => Object] = {
+    val defaultMethodArgNum = constructorParamIdx + 1
+    companionObjectClass.getMethods.find { method =>
+      method.getName == "$lessinit$greater$default$" + defaultMethodArgNum
     } map { method =>
-      () => method.invoke(null)
+      () => method.invoke(companionObject)
     }
   }
 }

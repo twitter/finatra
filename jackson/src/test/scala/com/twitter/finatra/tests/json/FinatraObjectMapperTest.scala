@@ -8,6 +8,7 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingE
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.tests.json.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.tests.json.internal._
+import com.twitter.finatra.tests.json.internal.internal.{SimplePersonInPackageObjectWithoutConstructorParams, SimplePersonInPackageObject}
 import com.twitter.inject.Logging
 import com.twitter.io.Buf
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
@@ -998,6 +999,24 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
           "opt_long": 12345
         }
         """) should equal(CaseClassWithOptionLongAndDeserializer(Some(12345)))
+    }
+  }
+
+  feature("Support package objects") {
+    scenario("case class in package object") {
+      parse[SimplePersonInPackageObject]("""{"name": "Steve"}""") should equal(SimplePersonInPackageObject("Steve"))
+    }
+
+    scenario("case class in package object uses default when name not specified") {
+      parse[SimplePersonInPackageObject]("""{}""") should equal(SimplePersonInPackageObject("default-name"))
+    }
+
+    scenario("case class in package object without constructor params and parsing an empty json object") {
+      parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{}""") should equal(SimplePersonInPackageObjectWithoutConstructorParams())
+    }
+
+    scenario("case class in package object without constructor params and parsing a json object with extra fields") {
+      parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{"name": "Steve"}""") should equal(SimplePersonInPackageObjectWithoutConstructorParams())
     }
   }
 

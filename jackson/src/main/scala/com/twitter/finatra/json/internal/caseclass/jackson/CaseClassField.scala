@@ -27,6 +27,9 @@ object CaseClassField {
     val constructorParams = CaseClassSigParser.parseConstructorParams(clazz)
     assert(allAnnotations.size == constructorParams.size, "Non-static inner 'case classes' not supported")
 
+    val companionObject = Class.forName(clazz.getName + "$").getField("MODULE$").get(null)
+    val companionObjectClass = companionObject.getClass
+
     for {
       (constructorParam, idx) <- constructorParams.zipWithIndex
       annotations = allAnnotations(idx)
@@ -37,7 +40,7 @@ object CaseClassField {
         name = name,
         javaType = JacksonTypes.javaType(typeFactory, constructorParam.scalaType),
         parentClass = clazz,
-        defaultFuncOpt = defaultFunction(clazz, idx),
+        defaultFuncOpt = defaultFunction(companionObjectClass, companionObject, idx),
         annotations = annotations,
         deserializer = deserializer)
     }
