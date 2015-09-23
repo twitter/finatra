@@ -5,11 +5,11 @@ title: Home
 {% assign post = site.posts.first %}
 {% assign content = post.content %}
 <h4>Latest news: <a href="/finatra{{ post.url }}">{{ post.title }}</a></h4>
-<div class="hero-unit">
-<h1>Finatra</h1>
-<h3>Fast, testable, Scala HTTP services built on <a href="http://twitter.github.io/twitter-server/">Twitter-Server</a> and <a href="https://github.com/twitter/finagle">Finagle</a>.</h3>
+<div class="jumbotron">
+  <h1><div style="font-family: 'Open Sans', sans-serif; font-weight: 800;"><img src="/finatra/images/finatra_transparent.gif" style="height:112px; width:112px"/>inatra</div></h1>
+  <h3>Fast, testable, Scala HTTP services built on <a href="http://twitter.github.io/twitter-server/">Twitter-Server</a> and <a href="https://github.com/twitter/finagle">Finagle</a>.</h3>
   <div class="row">
-    <div class="span3">
+    <div class="col-md-3">
       <br/>
       <h4>Features</h4>
       <ul>
@@ -23,8 +23,8 @@ title: Home
       </ul>
       <a href="https://github.com/twitter/finatra/blob/master/http/README.md" class="btn btn-primary btn-large">Get Started! »</a>
     </div>
-    <div class="span7">
-      <img src="/finatra/images/finatra_example.png"/>
+    <div class="col-md-7">
+      <img src="/finatra/images/finatra_example.png" height="394px" width="670px"/>
     </div>
   </div>
 </div>
