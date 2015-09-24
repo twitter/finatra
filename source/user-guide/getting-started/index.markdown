@@ -41,7 +41,7 @@ We provide a [TwitterModule](https://github.com/twitter/finatra/blob/master/inje
 
 #### Module Definition
 * [twitter/util](https://github.com/twitter/util) [Flags](#flags) can be defined inside modules. This allows for re-usable scoping of external configuration to be composed into a server via the module.
-* Prefer using a `@Provides` methods [over using the *toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
+* Prefer using a `@Provides` methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
 * Usually modules are Scala *objects* since they contain no state and usage of the module is less verbose.
 * Remember to add `@Singleton` to your `@Provides` method if you require only **one** instance per JVM process.
 * Generally, modules are only required for creating classes that you don't control. Otherwise, you would simply add the [JSR-330](https://github.com/google/guice/wiki/JSR330) annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following Guice module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
@@ -121,7 +121,7 @@ object MyModule1 extends TwitterModule {
 }
 ```
 
-#### <a name="setting-flags-from-code" href="#setting-flags-from-code">Setting flags from code</a>
+#### <a name="setting-flags-from-code" href="#setting-flags-from-code">Setting flags from code</a> ([HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/server/BaseHttpServer.scala), only)
 Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra's [HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala)'s core flags can be set from code.
 For example, instead of setting the `-maxRequestSize` flag, you can override the following method in your server.
 
