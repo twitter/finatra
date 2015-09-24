@@ -15,8 +15,21 @@ object StreamingResponse {
   private val JsonArraySeparator = Some(Buf.Utf8(","))
   private val JsonArraySuffix = Some(Buf.Utf8("]"))
 
+
   def apply[T](toBuf: T => Buf)(stream: => AsyncStream[T]) = {
-    new StreamingResponse[T](toBuf, asyncStream = stream)
+    new StreamingResponse[T](toBuf = toBuf, asyncStream = stream)
+  }
+
+  def apply[T](status: Status, toBuf: T => Buf)(stream: => AsyncStream[T]) = {
+    new StreamingResponse[T](toBuf = toBuf, status = status, asyncStream = stream)
+  }
+
+  def apply[T](toBuf: T => Buf, headers: Map[String, String])(stream: => AsyncStream[T]) = {
+    new StreamingResponse[T](toBuf = toBuf, headers = headers, asyncStream = stream)
+  }
+
+  def apply[T](toBuf: T => Buf, status: Status, headers: Map[String, String])(stream: => AsyncStream[T]) = {
+    new StreamingResponse[T](status = status, toBuf = toBuf, headers = headers, asyncStream = stream)
   }
 
   def jsonArray[T](
@@ -37,6 +50,7 @@ object StreamingResponse {
 case class StreamingResponse[T](
   toBuf: T => Buf,
   status: Status = Status.Ok,
+  headers: Map[String, String] = Map(),
   prefixOpt: Option[Buf] = None,
   separatorOpt: Option[Buf] = None,
   suffixOpt: Option[Buf] = None,
@@ -46,6 +60,8 @@ case class StreamingResponse[T](
   def toFutureFinagleResponse: Future[Response] = {
     val response = Response()
     response.setChunked(true)
+    response.setStatusCode(status.code)
+    addHeaders(headers, response)
     val writer = response.writer
 
     /* Orphan the future which writes to our response thread */
@@ -86,5 +102,11 @@ case class StreamingResponse[T](
     stream.take(1) ++ (stream.drop(1) map { buf =>
       separator.concat(buf)
     })
+  }
+
+  private def addHeaders(headersOpt: Map[String, String], response: Response) = {
+    for((k,v) <- headers) {
+      response.headerMap.add(k, v)
+    }
   }
 }
