@@ -2,7 +2,7 @@ package com.twitter.inject.server
 
 import com.google.inject.Module
 import com.twitter.finagle.client.ClientRegistry
-import com.twitter.finagle.{http, httpx}
+import com.twitter.finagle.httpx
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
@@ -70,12 +70,6 @@ trait TwitterServer
   override protected def afterPostWarmup() {
     super.afterPostWarmup()
     info("Enabling health endpoint on port " + httpAdminPort)
-
-    /* For our open-source release, we need to stay backwards compatible with Finagle 6.28.0 and Twitter-Server 1.13.0 */
-    // TODO: Remove usage of http.HttpMuxer after new twitter-server released
-    if (httpx.HttpMuxer.patterns.contains("/health"))
-      httpx.HttpMuxer.addHandler("/health", new HttpxReplyHandler("OK\n"))
-    else
-      http.HttpMuxer.addHandler("/health", new HttpReplyHandler("OK\n"))
+    httpx.HttpMuxer.addHandler("/health", new HttpxReplyHandler("OK\n"))
   }
 }

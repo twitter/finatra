@@ -26,25 +26,6 @@ class HttpServerStartupIntegrationTest extends Test {
     server.close()
   }
 
-  "finagle.http.Request no longer supported" in {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter): Unit = {
-          router.add(new Controller {
-            get("/foo") { request: com.twitter.finagle.http.Request =>
-            }
-          })
-        }
-      })
-
-    val e = intercept[Exception] {
-      server.start()
-    }
-
-    server.close()
-    e.getMessage should be("com.twitter.finagle.http.Request is not supported. Please use com.twitter.finagle.httpx.Request")
-  }
-
   "Duplicate route paths fails server startup" in {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {

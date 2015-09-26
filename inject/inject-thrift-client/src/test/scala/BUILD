@@ -2,7 +2,7 @@ junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     'finagle/finagle-thriftmux',
-    'finagle/finagle-http',
+    'finagle/finagle-httpx',
     'finagle/finagle-thrift',
     'finatra/http:test-deps',
     'finatra/inject/inject-server',
