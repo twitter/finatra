@@ -4,7 +4,7 @@ import com.twitter.concurrent.NamedPoolThreadFactory
 import com.twitter.util.ExecutorServiceFuturePool
 import java.util.concurrent.Executors
 
-object InjectUtils {
+object PoolUtils {
 
   def newUnboundedPool(name: String): ExecutorServiceFuturePool = {
     new ExecutorServiceFuturePool(
