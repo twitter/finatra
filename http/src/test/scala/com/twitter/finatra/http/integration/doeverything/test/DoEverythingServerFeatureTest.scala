@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.integration.doeverything.test
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType.JSON_UTF_8
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.httpx.Method._
@@ -11,6 +12,7 @@ import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
 import org.apache.commons.io.IOUtils
+import org.scalatest.exceptions.TestFailedException
 
 class DoEverythingServerFeatureTest extends FeatureTest {
 
@@ -496,12 +498,91 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
     }
 
+    "putJson" in {
+      server.httpPutJson[JsonNode](
+        "/putJson/123",
+        putBody = """{"name": "Steve"}""",
+        andExpect = Ok,
+        withJsonBody = """{"id": 123, "name": "Steve"}""")
+    }
+
+    "putJson without type param" in {
+      val e = intercept[TestFailedException] {
+        server.httpPutJson(
+          "/putJson/123",
+          putBody = """{"name": "Steve"}""",
+          andExpect = Ok,
+          withJsonBody = """{"id": 123, "name": "Steve"}""")
+      }
+      e.getMessage() should include("requires a type-param")
+    }
+
     "put to put" in {
       server.httpPut(
-        "/put",
+        "/put/123",
         putBody = "asdf",
         andExpect = Ok,
-        withBody = "asdf")
+        withBody = "123_asdf")
+    }
+
+    "put with RouteParam and non-json body" in {
+      server.httpPut(
+        "/put_route_param/123",
+        contentType = "plain/text",
+        putBody = "asdf",
+        andExpect = Ok,
+        withBody = "123_asdf")
+    }
+
+    "put with RouteParam and json body" in {
+      server.httpPut(
+        "/put_route_param/123",
+        putBody = "{}",
+        andExpect = Ok,
+        withBody = "123_")
+    }
+
+    "put with RouteParam and empty body" in {
+      server.httpPut(
+        "/put_route_param/123",
+        putBody = "",
+        andExpect = Ok,
+        withBody = "123_")
+    }
+
+    "put_route_param_and_name" in {
+      server.httpPut(
+        "/put_route_param_and_name/123",
+        putBody = """{"name": "bob"}""",
+        andExpect = Ok,
+        withBody = "123_bob")
+    }
+
+    "put_route_param_and_name with empty put body" in {
+      server.httpPut(
+        "/put_route_param_and_name/123",
+        putBody = "",
+        andExpect = BadRequest,
+        withJsonBody = """
+        {
+          "errors" : [
+            "name: field is required"
+          ]
+        }""")
+    }
+
+    "put_route_param_and_name with non json put body" in {
+      server.httpPut(
+        "/put_route_param_and_name/123",
+        putBody = "foo",
+        contentType = "plain/text",
+        andExpect = BadRequest,
+        withJsonBody = """
+        {
+          "errors" : [
+            "name: field is required"
+          ]
+        }""")
     }
 
     "post to putAndPost" in {

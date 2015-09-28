@@ -22,27 +22,19 @@ class FinatraDefaultMessageBodyReader @Inject()(
   /* Public */
 
   override def parse[T: Manifest](request: Request): T = {
-    val requestInjectableValues = new RequestInjectableValues(objectMapper, request, injector)
-    val requestAwareObjectReader = objectMapper.reader[T].`with`(requestInjectableValues)
+    val requestAwareObjectReader = {
+      val requestInjectableValues = new RequestInjectableValues(objectMapper, request, injector)
+      objectMapper.reader[T].`with`(requestInjectableValues)
+    }
 
     val length = request.contentLength.getOrElse(0L)
-    if (length == 0 ||
-      (length > 0 && isFormEncoded(request)))
-      requestAwareObjectReader.readValue(FinatraDefaultMessageBodyReader.EmptyObjectNode)
-    else if (isJsonEncoded(request))
+    if (length > 0 && isJsonEncoded(request))
       FinatraObjectMapper.parseRequestBody(request, requestAwareObjectReader)
     else
-      throw new BadRequestException("Can't parse request body with content-type: " + request.contentType.getOrElse("unknown") + " and body: " + request.contentString.ellipse(50))
+      requestAwareObjectReader.readValue(FinatraDefaultMessageBodyReader.EmptyObjectNode)
   }
 
   /* Private */
-
-  private def isFormEncoded(request: Request): Boolean = {
-    request.contentType.exists { contentType =>
-      contentType.startsWith("application/x-www-form-urlencoded") ||
-        contentType.startsWith("multipart/")
-    }
-  }
 
   private def isJsonEncoded(request: Request): Boolean = {
     request.contentType.exists { contentType =>

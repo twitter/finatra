@@ -145,6 +145,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): T = {
 
+    assert(manifest[T] != manifest[Nothing], "httpGetJson requires a type-param to parse the JSON response into, e.g. http<Method>Json[MyCaseClass] or http<Method>Json[JsonNode]")
     val response =
       httpGet(path, accept = MediaType.JSON_UTF_8, headers = headers, suppress = suppress,
         andExpect = andExpect, withLocation = withLocation,
@@ -192,6 +193,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): ResponseType = {
 
+    assert(manifest[ResponseType] != manifest[Nothing], "httpPostJson requires a type-param to parse the JSON response into, e.g. http<Method>Json[MyCaseClass] or http<Method>Json[JsonNode]")
     val response = httpPost(path, postBody, MediaType.JSON_UTF_8, suppress, Message.ContentTypeJson, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
     jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
@@ -201,6 +203,7 @@ class EmbeddedHttpServer(
     putBody: String,
     accept: MediaType = null,
     suppress: Boolean = false,
+    contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
     andExpect: Status = null,
     withLocation: String = null,
@@ -214,6 +217,7 @@ class EmbeddedHttpServer(
     val request = createApiRequest(path, Method.Put)
     request.setContentString(putBody)
     request.headerMap.add(HttpHeaders.CONTENT_LENGTH, putBody.length.toString)
+    request.headerMap.add(HttpHeaders.CONTENT_TYPE, contentType)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
@@ -233,7 +237,8 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): ResponseType = {
 
-    val response = httpPut(path, putBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    assert(manifest[ResponseType] != manifest[Nothing], "httpPutJson requires a type-param to parse the JSON response into, e.g. httpPutJson[MyCaseClass] or httpPutJson[JsonNode]")
+    val response = httpPut(path, putBody, MediaType.JSON_UTF_8, suppress, Message.ContentTypeJson, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
     jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
@@ -285,6 +290,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): ResponseType = {
 
+    assert(manifest[ResponseType] != manifest[Nothing], "httpDeleteJson requires a type-param to parse the JSON response into, e.g. http<Method>Json[MyCaseClass] or http<Method>Json[JsonNode]")
     val response = httpDelete(path, deleteBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
     jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
@@ -345,6 +351,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Option[Boolean] = None): ResponseType = {
 
+    assert(manifest[ResponseType] != manifest[Nothing], "httpPatchJson requires a type-param to parse the JSON response into, e.g. http<Method>Json[MyCaseClass] or http<Method>Json[JsonNode]")
     val response = httpPatch(path, patchBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
     jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }

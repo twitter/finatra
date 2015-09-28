@@ -230,6 +230,10 @@ class DoEverythingController @Inject()(
     "delete"
   }
 
+  put("/putJson/:id") { request: IdAndNameRequest =>
+    request
+  }
+
   put("/putAndPost") { request: Request =>
     "PUT" + request.contentString
   }
@@ -321,8 +325,16 @@ class DoEverythingController @Inject()(
     RequestUtils.pathUrl(request)
   }
 
-  put("/put") { request: Request =>
-    request.contentString
+  put("/put/:id") { request: Request =>
+    request.getParam("id") + "_" + request.contentString
+  }
+
+  put("/put_route_param/:id") { idRequest: IdRequest =>
+    idRequest.id + "_" + idRequest.request.contentString
+  }
+
+  put("/put_route_param_and_name/:id") { idRequest: IdAndNameRequest =>
+    idRequest.id + "_" + idRequest.name
   }
 
   get("/implicitOkAndException") { request: Request =>
