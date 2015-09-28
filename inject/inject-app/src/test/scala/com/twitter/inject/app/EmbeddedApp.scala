@@ -1,7 +1,7 @@
 package com.twitter.inject.app
 
 import com.google.inject.Stage
-import com.twitter.inject.InjectUtils
+import com.twitter.inject.PoolUtils
 import com.twitter.util._
 import org.scalatest.Matchers
 
@@ -55,7 +55,7 @@ class EmbeddedApp(
   /* Fields */
 
   val appName = app.name
-  private val mainRunnerFuturePool = InjectUtils.newFixedPool("Embedded " + appName)
+  private val mainRunnerFuturePool = PoolUtils.newFixedPool("Embedded " + appName)
 
   //Mutable state
   private var started = false
