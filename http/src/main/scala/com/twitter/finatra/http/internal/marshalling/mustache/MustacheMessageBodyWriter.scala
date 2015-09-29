@@ -2,6 +2,7 @@ package com.twitter.finatra.http.internal.marshalling.mustache
 
 import com.google.common.net.MediaType
 import com.twitter.finatra.conversions.map._
+import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
 import com.twitter.finatra.response.Mustache
 import java.util.concurrent.ConcurrentHashMap

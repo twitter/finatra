@@ -9,6 +9,7 @@ import com.twitter.finatra.http.integration.doeverything.main.domain._
 import com.twitter.finatra.http.integration.doeverything.main.exceptions._
 import com.twitter.finatra.http.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter}
 import com.twitter.finatra.http.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
+import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.json.FinatraObjectMapper
@@ -25,7 +26,8 @@ class DoEverythingController @Inject()(
   multiService: Set[MultiService],
   complexServiceFactory: ComplexServiceFactory,
   objectMapper: FinatraObjectMapper,
-  @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper)
+  @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
+  mustacheService: MustacheService)
   extends Controller {
 
   private val flakyCount = new AtomicInteger()
@@ -579,6 +581,18 @@ class DoEverythingController @Inject()(
     get("/multipleRouteFilters") { r: Request =>
 
     r.headerMap("test")
+  }
+
+  get("/testClassWithHtml") { r: Request =>
+    val testUser = TestUserView(
+      28,
+      "Bob Smith",
+      Seq("user1", "user2"))
+
+    TestCaseClassWithHtml(
+      address = "123 Main St. Anywhere, CA US 90210",
+      phone = "+12221234567",
+      renderedHtml = xml.Utility.escape(mustacheService.createString("testHtml.mustache", testUser)))
   }
 }
 

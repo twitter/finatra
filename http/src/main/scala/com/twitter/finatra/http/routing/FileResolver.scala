@@ -74,7 +74,12 @@ class FileResolver @Inject()(
   }
 
   private def getLocalFileInputStream(path: String): Option[InputStream] = {
-    val file = new File(localDocRoot, path)
+    // try absolute path first, then under local.doc.root
+    val file = if (new File(path).exists)
+      new File(path)
+    else
+      new File(localDocRoot, path)
+
     if (file.exists)
       Option(
         new BufferedInputStream(

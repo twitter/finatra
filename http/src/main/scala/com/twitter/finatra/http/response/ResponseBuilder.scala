@@ -5,7 +5,7 @@ import com.twitter.finagle.httpx.{Cookie => FinagleCookie, Fields, Response, Res
 import com.twitter.finagle.netty3.ChannelBufferBuf
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
-import com.twitter.finatra.http.internal.marshalling.mustache.MustacheService
+import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.io.Buf

@@ -2,7 +2,7 @@ package com.twitter.finatra.http.test
 
 import com.twitter.finagle.httpx.Status
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
-import com.twitter.finatra.http.internal.marshalling.mustache.MustacheService
+import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper

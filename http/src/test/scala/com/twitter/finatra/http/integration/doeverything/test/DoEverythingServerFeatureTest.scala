@@ -36,7 +36,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     server.inMemoryStatsReceiver.stat(key.split("/"): _*)()
   }
 
-  "ExampleServer" should {
+  "DoEverythingServer" should {
     "named string" in {
       namedExampleString should equal("named")
     }
@@ -1256,6 +1256,20 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     server.httpGet(
       "/CaseClassWithCaseClassQueryParam?param=true",
       andExpect = BadRequest)
+  }
+
+  "TestCaseClassWithHtml" in {
+    server.httpGet(
+      "/testClassWithHtml",
+      andExpect = Ok,
+      withJsonBody =
+        """
+          |{
+          |  "address" : "123 Main St. Anywhere, CA US 90210",
+          |  "phone" : "+12221234567",
+          |  "rendered_html" : "&lt;div class=&quot;nav&quot;&gt;\n  &lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;\n    &lt;tr&gt;\n        &lt;th&gt;Name&lt;/th&gt;\n        &lt;th&gt;Age&lt;/th&gt;\n        &lt;th&gt;Friends&lt;/th&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n        &lt;td&gt;age2:28&lt;/td&gt;\n        &lt;td&gt;name:Bob Smith&lt;/td&gt;\n        &lt;td&gt;\n            user1\n            user2\n        &lt;/td&gt;\n    &lt;/tr&gt;\n  &lt;/table&gt;\n&lt;/div&gt;"
+          |}
+        """.stripMargin)
   }
 
   "/trace" in {
