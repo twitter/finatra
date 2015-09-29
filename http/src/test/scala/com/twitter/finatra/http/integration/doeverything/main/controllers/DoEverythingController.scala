@@ -2,7 +2,7 @@ package com.twitter.finatra.http.integration.doeverything.main.controllers
 
 import com.twitter.finagle.httpx.{Request, Status}
 import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
-import com.twitter.finatra.annotations.Flag
+import com.twitter.finatra.annotations.{CamelCaseMapper, Flag}
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.integration.doeverything.main.domain._
@@ -24,7 +24,8 @@ class DoEverythingController @Inject()(
   exampleService: DoEverythingService,
   multiService: Set[MultiService],
   complexServiceFactory: ComplexServiceFactory,
-  objectMapper: FinatraObjectMapper)
+  objectMapper: FinatraObjectMapper,
+  @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper)
   extends Controller {
 
   private val flakyCount = new AtomicInteger()
@@ -557,6 +558,10 @@ class DoEverythingController @Inject()(
 
   get("/CaseClassWithCaseClassQueryParam") { r: RequestWithCaseClassQueryParams =>
     r.param
+  }
+
+  get("/camelCaseJson") { request: Request =>
+    camelCaseObjectMapper.writeValueAsString(Map("firstName" -> "Bob"))
   }
 
   //needed to avoid colliding with Logging#trace :-/

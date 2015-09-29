@@ -104,7 +104,11 @@ case class CaseClassWithArrays(
   two: Array[String],
   three: Array[Int],
   four: Array[Long],
-  five: Array[Char])
+  five: Array[Char],
+  bools: Array[Boolean],
+  bytes: Array[Byte],
+  doubles: Array[Double],
+  floats: Array[Float])
 
 case class CaseClassWithArrayLong(array: Array[Long])
 

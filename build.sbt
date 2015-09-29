@@ -4,7 +4,7 @@ import sbtunidoc.Plugin.UnidocKeys._
 import scoverage.ScoverageKeys.coverageExcludedPackages
 
 parallelExecution in ThisBuild := false
-fork in ThisBuild := true
+fork in ThisBuild := false
 
 lazy val buildSettings = Seq(
   version := "2.0.2-SNAPSHOT",
@@ -92,7 +92,7 @@ lazy val versions = new {
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
-  val finagle = "6.28.0"
+  val finagle = "6.29.0"
   val grizzled = "1.0.2"
   val guava = "16.0.1"
   val guice = "3.0"
@@ -105,8 +105,8 @@ lazy val versions = new {
   val servletApi = "2.5"
   val scrooge = "4.0.0"
   val slf4j = "1.7.7"
-  val twitterServer = "1.13.0"
-  val util = "6.27.0"
+  val twitterServer = "1.14.0"
+  val util = "6.28.0"
 }
 
 lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
@@ -140,7 +140,7 @@ lazy val root = (project in file(".")).
     slf4j,
     benchmarks,
 
-    //Examples below
+    // START EXAMPLES
     helloWorld,
     //helloWorldHeroku, 2.11 only
     tinyUrl,
@@ -148,6 +148,7 @@ lazy val root = (project in file(".")).
     twitterClone,
     benchmarkServer,
     exampleInjectJavaServer
+    // END EXAMPLES
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -228,6 +229,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
   ).
   dependsOn(
     injectCore,
+    injectApp % "test->test",
     injectCore % "test->test"
   )
 
@@ -370,32 +372,31 @@ lazy val benchmarks = project.
     injectCore % "test->test"
   )
 
-/* Examples Below */
+// START EXAMPLES
 
-/* 2.11 only due to rlazoti/finagle-metrics dependency
-lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
-  settings(finatraBuildSettings: _*).
-  settings(
-    name := "hello-world-heroku",
-    moduleName := "hello-world-heroku",
-    publishLocal := {},
-    publish := {},
-    assemblyMergeStrategy in assembly := {
-      case "BUILD" => MergeStrategy.discard
-      case other => MergeStrategy.defaultMergeStrategy(other)
-    },
-    libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback,
-      "com.github.rlazoti" % "finagle-metrics_2.11" % "0.0.2" //2.11 only
-    )
-  ).
-  dependsOn(
-    http,
-    http % "test->test",
-    slf4j,
-    injectCore % "test->test"
-  )
-  */
+// 2.11 only due to rlazoti/finagle-metrics dependency
+//lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
+//  settings(finatraBuildSettings: _*).
+//  settings(
+//    name := "hello-world-heroku",
+//    moduleName := "hello-world-heroku",
+//    publishLocal := {},
+//    publish := {},
+//    assemblyMergeStrategy in assembly := {
+//      case "BUILD" => MergeStrategy.discard
+//      case other => MergeStrategy.defaultMergeStrategy(other)
+//    },
+//    libraryDependencies ++= Seq(
+//      "ch.qos.logback" % "logback-classic" % versions.logback,
+//      "com.github.rlazoti" % "finagle-metrics_2.11" % "0.0.2" //2.11 only
+//    )
+//  ).
+//  dependsOn(
+//    http,
+//    http % "test->test",
+//    slf4j,
+//    injectCore % "test->test"
+//  )
 
 lazy val helloWorld = (project in file("examples/hello-world")).
   settings(finatraBuildSettings: _*).
@@ -537,3 +538,5 @@ lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server
     injectCore % "test->test",
     injectApp % "test->test"
   )
+
+// END EXAMPLES

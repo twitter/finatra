@@ -22,6 +22,12 @@ class LoggingTest extends Test with Logging {
     time("time %s ms") {
       1 + 2
     }
+
+    intercept[RuntimeException] {
+      time("error time %s ms") {
+        throw new RuntimeException("oops")
+      }
+    }
   }
 
   "Logger" in {

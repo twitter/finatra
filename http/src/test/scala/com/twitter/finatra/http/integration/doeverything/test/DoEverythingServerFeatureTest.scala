@@ -1273,6 +1273,16 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = BadRequest)
   }
 
+  "camelCaseJson" in {
+    server.httpGet(
+      "/camelCaseJson",
+      withJsonBody = """
+      {
+        "firstName": "Bob"
+      }
+      """)
+  }
+
   "per-route stats" in {
     server.httpGet(
       "/ok",

@@ -2,11 +2,12 @@ package com.twitter.inject.server
 
 import com.google.inject.Module
 import com.twitter.finagle.client.ClientRegistry
-import com.twitter.finagle.httpx
+import com.twitter.finagle.httpx.HttpMuxer
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.server.Lifecycle.Warmup
+import com.twitter.server.handler.ReplyHandler
 import com.twitter.server.internal.{FinagleBuildRevision, PromoteToOldGenUtils}
 import com.twitter.util.Await
 
@@ -70,6 +71,6 @@ trait TwitterServer
   override protected def afterPostWarmup() {
     super.afterPostWarmup()
     info("Enabling health endpoint on port " + httpAdminPort)
-    httpx.HttpMuxer.addHandler("/health", new HttpxReplyHandler("OK\n"))
+    HttpMuxer.addHandler("/health", new ReplyHandler("OK\n"))
   }
 }

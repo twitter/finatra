@@ -744,18 +744,28 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   feature("A case class with array members") {
 
     scenario("is parsable from a JSON object") {
-      val c = parse[CaseClassWithArrays]("""{"one":"1","two":["a","b","c"],"three":[1,2,3], "four":[4, 5], "five":["x", "y"]}""")
+      val jsonStr = """
+        {
+          "one":"1",
+          "two":["a","b","c"],
+          "three":[1,2,3],
+          "four":[4, 5],
+          "five":["x", "y"],
+          "bools":["true", false],
+          "bytes":[1,2],
+          "doubles":[1,5.0],
+          "floats":[1.1, 22]
+        }
+      """
+
+      val c = parse[CaseClassWithArrays](jsonStr)
       c.one should be("1")
       c.two should be(Array("a", "b", "c"))
       c.three should be(Array(1, 2, 3))
       c.four should be(Array(4L, 5L))
       c.five should be(Array('x', 'y'))
-    }
 
-    scenario("generates a JSON object") {
-      generate(CaseClassWithArrays("1", Array("a", "b", "c"), Array(1, 2, 3), Array(4L, 5L), Array('x', 'y'))) should be(
-        """{"one":"1","two":["a","b","c"],"three":[1,2,3],"four":[4,5],"five":"xy"}"""
-      )
+     JsonDiff.jsonDiff(generate(c), """{"bools":[true,false],"bytes":"AQI=","doubles":[1.0,5.0],"five":"xy","floats":[1.1,22.0],"four":[4,5],"one":"1","three":[1,2,3],"two":["a","b","c"]}""")
     }
   }
 
