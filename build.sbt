@@ -138,7 +138,7 @@ lazy val root = (project in file(".")).
     http,
     httpclient,
     slf4j,
-    benchmarks,
+    benchmarks, // LAST PROJECT
 
     // START EXAMPLES
     helloWorld,

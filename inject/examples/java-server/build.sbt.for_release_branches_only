@@ -3,7 +3,9 @@ organization := "com.twitter.example"
 version := "2.0.2-SNAPSHOT"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false
-
+publishMavenStyle := true
+crossPaths := false
+autoScalaLibrary := false
 
 lazy val versions = new {
   val finatra = "2.0.2-SNAPSHOT"
@@ -21,6 +23,7 @@ assemblyMergeStrategy in assembly := {
 
 libraryDependencies ++= Seq(
   "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
+  "com.twitter.inject" %% "inject-server" % versions.finatra,
   "com.twitter.inject" %% "inject-core" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % "1.0.13",
 
