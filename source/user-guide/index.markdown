@@ -9,6 +9,7 @@ footer: true
 ### Topics:
 
 - [Getting Started](/finatra/user-guide/getting-started)
+- [Build a new HTTP Server](/finatra/user-guide/build-new-http-server)
 - [Logging](/finatra/user-guide/logging)
 - [Testing](/finatra/user-guide/testing)
 

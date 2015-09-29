@@ -7,13 +7,13 @@ footer: true
 ---
 
 
-Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [com.twitter.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [twitter-server](https://github.com/twitter/twitter-server) and [Finagle](https://github.com/twitter/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller or across controllers.
+Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [com.twitter.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [TwitterServer](http://twitter.github.io/twitter-server/) and [Finagle](https://twitter.github.io/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller or across controllers.
 
 ## Basics
 
 Finatra internally uses the Google [Guice](https://github.com/google/guice) dependency injection library extensively which is also available for service writers if they choose to use dependency injection.
 
-**<font color="red">NOTE</font>**: You are **not** required to use Guice dependency injection when using Finatra. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra's testing features.
+**NOTE: You are not required to use Guice dependency injection when using Finatra**. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra's [testing](/finatra/user-guide/testing) features.
 
 An example of Finatra's Guice integration is adding controllers to Finatra's [HttpRouter](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) by type:
 ```scala
@@ -23,6 +23,7 @@ class Server extends HttpServer {
   }
 }
 ```
+<div></div>
 
 As mentioned, it is also possible to do this without using Guice, simply instantiate your controller and add the instance to the router:
 ```scala
@@ -33,6 +34,7 @@ class NonGuiceServer extends HttpServer {
   }
 }
 ```
+<div></div>
 
 ### <a name="modules" href="#modules">Modules</a>
 ===============================
@@ -57,6 +59,7 @@ object MyModule1 extends TwitterModule {
   }
 }
 ```
+<div></div>
 
 You would then be able to inject an instance of the type `ThirdPartyFoo` using the `@Inject` annotation:
 
@@ -67,6 +70,7 @@ class MyService @Inject() (
   ...
 }
 ```
+<div></div>
 
 #### Module Configuration
 A server is then started with a list of immutable Guice modules:
@@ -79,7 +83,6 @@ class Server extends HttpServer {
   ...
 }
 ```
-
 <div></div>
 
 ### <a name="flags" href="#flags">Flags</a>
@@ -106,9 +109,9 @@ class MyModule extends TwitterModule {
   }
 }
 ```
+<div></div>
 
-#### Best Practices
-* If a flag is defined in a module, you can dereference that flag directly within the module (instead of using the `@Flag` annotation), e.g.:
+**NOTE**: If a flag is defined in a module, you can dereference that flag directly within the module (instead of using the `@Flag` annotation), e.g.:
 ```scala
 object MyModule1 extends TwitterModule {
   val key = flag("key", "defaultkey", "The key to use.")
@@ -120,6 +123,7 @@ object MyModule1 extends TwitterModule {
   }
 }
 ```
+<div></div>
 
 #### <a name="setting-flags-from-code" href="#setting-flags-from-code">Setting flags from code</a> ([HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/server/BaseHttpServer.scala), only)
 Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra's [HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala)'s core flags can be set from code.
@@ -135,3 +139,17 @@ class TweetsEndpointServer extends HttpServer {
   }
 }
 ```
+<div></div>
+
+Use the ```-help``` flag to see usage for running a Finatra server, e.g.
+
+```bash
+$ java -jar finatra-hello-world-assembly-2.0.0.jar -help
+```
+
+<nav>
+  <ul class="pager">
+    <li></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-http-server">&nbsp;Building&nbsp;a&nbsp;new&nbsp;HTTP&nbsp;Server<span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav>
