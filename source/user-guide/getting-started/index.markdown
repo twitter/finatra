@@ -43,7 +43,7 @@ We provide a [TwitterModule](https://github.com/twitter/finatra/blob/master/inje
 
 #### Module Definition
 * [twitter/util](https://github.com/twitter/util) [Flags](#flags) can be defined inside modules. This allows for re-usable scoping of external configuration to be composed into a server via the module.
-* Prefer using a `@Provides` methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
+* Prefer using an `@Provides` methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
 * Usually modules are Scala *objects* since they contain no state and usage of the module is less verbose.
 * Remember to add `@Singleton` to your `@Provides` method if you require only **one** instance per JVM process.
 * Generally, modules are only required for creating classes that you don't control. Otherwise, you would simply add the [JSR-330](https://github.com/google/guice/wiki/JSR330) annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following Guice module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.

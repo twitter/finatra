@@ -106,7 +106,7 @@ get("/users/:id") { request: Request =>
 ```
 <div></div>
 
-Note: *Query params and path params are both stored in the `params` field of the request.* If a path parameter and a query parameter have the same name, the path parameter always wins. Therefore, you should ensure your path parameter names do not collide with a query parameter name that you plan to read.
+Note: *Query params and route params are both stored in the "params" field of the request.* If a route parameter and a query parameter have the same name, the route parameter always wins. Therefore, you should ensure your route parameter names do not collide with any query parameter name that you plan to read.
 
 ##### Wildcard Parameter
 
@@ -186,7 +186,7 @@ Notes:
      * [`@FormParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/FormPostRequest.scala)
      * `@Header`
  * Other
-     * `@RequestInject`: Injects the Finagle Httpx Request or any Guice managed class into your case class
+     * `@RequestInject`: Injects the Finagle `httpx` Request or any Guice managed class into your case class
 
 *Note: HTTP requests with a content-type of application/json are similarly parsed (but "Request Field" annotations are ignored). See the [JSON](/finatra/user-guide/json) section.*
 
