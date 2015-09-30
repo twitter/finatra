@@ -15,37 +15,55 @@ object StreamingResponse {
   private val JsonArraySeparator = Some(Buf.Utf8(","))
   private val JsonArraySuffix = Some(Buf.Utf8("]"))
 
-  def apply[T](toBuf: T => Buf)(stream: => AsyncStream[T]) = {
-    new StreamingResponse[T](toBuf, asyncStream = stream)
+  def apply[T](
+    toBuf: T => Buf,
+    status: Status = Status.Ok,
+    headers: Map[String, String] = Map(),
+    prefix: Option[Buf] = None,
+    separator: Option[Buf] = None,
+    suffix: Option[Buf] = None)(asyncStream: => AsyncStream[T]) = {
+    new StreamingResponse[T](
+      status = status,
+      toBuf = toBuf,
+      headers = headers,
+      prefix = prefix,
+      separator = separator,
+      suffix = suffix,
+      asyncStream = asyncStream)
   }
 
   def jsonArray[T](
     toBuf: T => Buf,
     status: Status = Status.Ok,
+    headers: Map[String, String] = Map(),
     asyncStream: AsyncStream[T]) = {
 
     new StreamingResponse[T](
       toBuf = toBuf ,
       status = status,
-      prefixOpt = JsonArrayPrefix,
-      separatorOpt = JsonArraySeparator,
-      suffixOpt = JsonArraySuffix,
+      headers = headers,
+      prefix = JsonArrayPrefix,
+      separator = JsonArraySeparator,
+      suffix = JsonArraySuffix,
       asyncStream = asyncStream)
   }
 }
 
 case class StreamingResponse[T](
   toBuf: T => Buf,
-  status: Status = Status.Ok,
-  prefixOpt: Option[Buf] = None,
-  separatorOpt: Option[Buf] = None,
-  suffixOpt: Option[Buf] = None,
+  status: Status,
+  headers: Map[String, String],
+  prefix: Option[Buf],
+  separator: Option[Buf],
+  suffix: Option[Buf],
   asyncStream: AsyncStream[T])
   extends Logging {
 
   def toFutureFinagleResponse: Future[Response] = {
     val response = Response()
     response.setChunked(true)
+    response.setStatusCode(status.code)
+    addHeaders(headers, response)
     val writer = response.writer
 
     /* Orphan the future which writes to our response thread */
@@ -67,15 +85,15 @@ case class StreamingResponse[T](
   }
 
   private def writePrefix(writer: Writer) = {
-    prefixOpt map writer.write getOrElse Future.Unit
+    prefix map writer.write getOrElse Future.Unit
   }
 
   private def writeSuffix(writer: Writer) = {
-    suffixOpt map writer.write getOrElse Future.Unit
+    suffix map writer.write getOrElse Future.Unit
   }
 
   private def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] = {
-    separatorOpt map { sep: Buf =>
+    separator map { sep: Buf =>
       addSeparator(stream, sep)
     } getOrElse {
       stream
@@ -86,5 +104,11 @@ case class StreamingResponse[T](
     stream.take(1) ++ (stream.drop(1) map { buf =>
       separator.concat(buf)
     })
+  }
+
+  private def addHeaders(headersOpt: Map[String, String], response: Response) = {
+    for((k,v) <- headers) {
+      response.headerMap.add(k, v)
+    }
   }
 }
