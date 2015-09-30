@@ -30,13 +30,17 @@ trait TwitterServer
   /** Resolve all Finagle clients before warmup method called */
   protected def resolveFinagleClientsOnStartup = true
 
+  protected def waitForServer() {
+    Await.ready(adminHttpServer)
+  }
+
   /* Overrides */
 
   override final def main() {
     super.main() // Call GuiceApp.main() to create injector
 
     info("Startup complete, server ready.")
-    Await.ready(adminHttpServer)
+    waitForServer()
   }
 
   /** Method to be called after injector creation */

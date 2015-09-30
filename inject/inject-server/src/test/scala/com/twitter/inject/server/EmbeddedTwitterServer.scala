@@ -180,6 +180,11 @@ class EmbeddedTwitterServer(
       withBody = expectedBody)
   }
 
+  def assertAppStarted(started: Boolean = true) {
+    assert(isGuiceApp)
+    guiceApp.appStarted should be(started)
+  }
+
   def httpGetAdmin(
     path: String,
     accept: MediaType = null,

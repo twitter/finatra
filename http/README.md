@@ -325,6 +325,17 @@ Use the ```-help``` flag to see usage for running a Finatra server
 $ java -jar finatra-hello-world-assembly-2.0.0.jar -help
 ```
 
+Disabling the Admin Server
+------------------------------------------------------
+Some deployment environments such as [Heroku](https://www.heroku.com/), [AppFog](https://www.appfog.com/), and [OpenShift](https://www.openshift.com) only allow a single port to be used. In these cases, you can disable the admin HTTP Server started by TwitterServer as such:
+```scala
+class MyServer extends HttpServer {
+  override val disableAdminHttpServer = true
+  ...
+}
+```
+Since the admin.port is currently required by TwitterServer, you'll need to set the -admin.port and -http.port to the same value in addition to specifying ```override val disableAdminHttpServer = true``` above.
+
 Message Body Readers and Writers
 ======================================================
 Documentation coming soon. See [example](src/test/scala/com/twitter/finatra/integration/tweetexample/main/TweetsEndpointServer.scala#L21).

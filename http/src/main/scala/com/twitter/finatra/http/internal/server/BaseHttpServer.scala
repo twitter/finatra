@@ -61,6 +61,12 @@ trait BaseHttpServer extends TwitterServer {
    */
   protected def streamRequest: Boolean = false
 
+  /**
+   * If true, the Twitter-Server admin server will be disabled.
+   * Note: Disabling the admin server allows Finatra to be deployed into environments where only a single port is allowed
+   */
+  protected def disableAdminHttpServer: Boolean = false
+
   type FinagleServerBuilder = ServerBuilder[Request, Response, Yes, Yes, Yes]
 
   protected def configureHttpServer(serverBuilder: FinagleServerBuilder) = {}
@@ -72,8 +78,21 @@ trait BaseHttpServer extends TwitterServer {
   override def postWarmup() {
     super.postWarmup()
 
+    if (disableAdminHttpServer) {
+      info("Disabling the Admin HTTP Server since disableAdminHttpServer=true")
+      adminHttpServer.close()
+    }
+
     startHttpServer()
     startHttpsServer()
+  }
+
+  override def waitForServer() {
+    if (httpServer != null) {
+      Await.ready(httpServer)
+    } else {
+      Await.ready(httpsServer)
+    }
   }
 
   onExit {

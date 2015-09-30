@@ -19,7 +19,7 @@ class HelloWorldStartupTest extends FeatureTest {
 
   "Server" should {
     "startup" in {
-      server.assertHealthy()
+      server.assertAppStarted()
     }
   }
 }

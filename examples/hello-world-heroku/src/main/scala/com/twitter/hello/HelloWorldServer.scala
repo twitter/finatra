@@ -10,6 +10,13 @@ import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 object HelloWorldServerMain extends HelloWorldServer
 
 class HelloWorldServer extends HttpServer {
+
+  /*
+   * Since Heroku only supports a single port per service,
+   * we disable the Admin HTTP Server
+   */
+  override val disableAdminHttpServer = true
+
   override def modules = Seq(Slf4jBridgeModule)
 
   override def configureHttp(router: HttpRouter) {
