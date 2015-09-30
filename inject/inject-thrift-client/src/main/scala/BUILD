@@ -14,7 +14,9 @@ scala_library(name='scala',
     'finatra/inject/inject-core',
     'scrooge/scrooge-core',
     'util/util-core',
-    'util/util-stats',
   ],
   sources=rglobs('*.scala'),
+  java_sources=[
+    'finatra/inject/inject-thrift-client/src/main/java'
+  ],
 )

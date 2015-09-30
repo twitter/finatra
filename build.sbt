@@ -103,7 +103,7 @@ lazy val versions = new {
   val mustache = "0.8.18"
   val nscalaTime = "1.6.0"
   val servletApi = "2.5"
-  val scrooge = "4.0.0"
+  val scrooge = "4.1.0"
   val slf4j = "1.7.7"
   val twitterServer = "1.14.0"
   val util = "6.28.0"
@@ -234,7 +234,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
   )
 
 lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
-  settings((ScroogeSBT.newSettings ++ injectBuildSettings): _*).
+  settings(injectBuildSettings).
   settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",

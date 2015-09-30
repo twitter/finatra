@@ -1,4 +1,4 @@
-package com.twitter.inject.thrift
+package com.twitter.inject.thrift.integration
 
 import com.twitter.finagle.httpx.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}

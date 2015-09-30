@@ -1,11 +1,10 @@
 package com.twitter.inject.thrift.integration.http_server
 
-import javax.inject.Inject
-
 import com.twitter.finagle.httpx.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
+import javax.inject.Inject
 
 class EchoHttpController @Inject()(
   echoThriftService: EchoService[Future])
