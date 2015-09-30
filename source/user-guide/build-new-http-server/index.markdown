@@ -139,10 +139,10 @@ Regular expressions are no longer allowed in string defined paths. Note: We are 
 
 Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types:
 
-- [Finagle `com.twitter.finagle.httpx.Request`](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.httpx.Request)
+- A Finagle `httpx` Request
 - A custom `case class` Request
 
-##### Finagle `com.twitter.finagle.httpx.Request`:
+##### Finagle `httpx` Request:
 This is a [com.twitter.finagle.httpx.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.httpx.Request) which contains common HTTP attributes.
 
 ##### Custom `case class` Request
@@ -180,9 +180,9 @@ Notes:
   * [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) can also be used to specify the JSON field name  
 * Non-optional fields without default values are required. If required fields are missing, a `CaseClassMappingException` is thrown.
 * The following field annotations specify where to parse the field out of the request
-  * Request Fields - 
+  * Request Fields -
      * [`@RouteParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/IdAndNameRequest.scala)
-     * [`@QueryParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*ensure that route param names do not collide with @QueryParam names. Otherwise, a @QueryParam could end up parsing a route param*)
+     * [`@QueryParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*Ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
      * [`@FormParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/FormPostRequest.scala)
      * `@Header`
  * Other
