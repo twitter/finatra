@@ -78,7 +78,7 @@ get("/users/:id") { request: Request =>
 }
 ```
 
-*Note: Query params and path params are both stored in the "params" field of the request. If a path parameter and a query param have the same name, the path param always wins. Therefore, ensure your path param names do not collide with a query param name that you plan to read.*
+*Note: Query params and route params are both stored in the "params" field of the request. If a route parameter and a query parameter have the same name, the route parameter always wins. Therefore, you should ensure your route parameter names do not collide with any query parameter name that you plan to read.*
 
 ### Wildcard Parameter
 
@@ -92,7 +92,7 @@ For a GET of `/files/abc/123/foo.txt` the endpoint will return `abc/123/foo.txt`
 
 ### Admin Paths
 
-Any path starting with `/admin/finatra/` will be exposed only on the Server's admin port. All TwitterServer based services get an [HTTP admin interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) for exposing internal endpoints such as stats. The admin endpoint should never be exposed outside your DMZ).
+Any path starting with `/admin/finatra/` will be exposed only on the Server's admin port. All TwitterServer based services get an [HTTP admin interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) for exposing internal endpoints such as stats. The admin endpoint should not be exposed outside your DMZ.
 
 ```scala
 get("/admin/finatra/users/") { request: Request =>
@@ -107,17 +107,18 @@ Regular expressions are no longer allowed in string defined paths. Note: We are 
 ## Requests
 Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types:
 
-- [Finagle HTTP Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request)
+- A Finagle `httpx` Request
 - A custom `case class` Request
 
-### Finagle `com.twitter.finagle.http.Request`
-This is a [com.twitter.finagle.http.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request) which contains common HTTP attributes.
+### Finagle `httpx` Request
+This is a [`com.twitter.finagle.httpx.Request`](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.httpx.Request) which contains common HTTP attributes.
 
 ### Custom `case class` Request
 Custom requests allow declarative request parsing with support for type conversions, default values, and validations.
 
-For example suppose you wanted to parse a GET request with three query params -- `max`, `startDate`, and `verbose`:
-```
+For example, suppose you wanted to parse a GET request with three query params: `max`, `startDate`, and `verbose`:
+
+```text
 http://foo.com/users?max=10&start_date=2014-05-30TZ&verbose=true
 ```
 
@@ -189,17 +190,16 @@ Notes:
   * Use backticks when special characters are involved (e.g. @Header \`user-agent\` : String)  
   * [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) can also be used to specify the JSON field name  
 
-* Non optional fields without default values are required. If required fields are missing, a `CaseClassMappingException` is thrown. Normally, the default ExceptionMapper (included in `ExceptionMapperModule`) turns this exception into a HTTP 400 BadRequest with a JSON errors array (however this behavior can be customized).
+* Non-optional fields without default values are required. If required fields are missing, a `CaseClassMappingException` is thrown. Normally, the default ExceptionMapper (included in `ExceptionMapperModule`) turns this exception into a HTTP 400 BadRequest with a JSON errors array (however this behavior can be customized).
 
 * The following field annotations specify where to parse the field out of the request
   * Request Fields
      * `@RouteParam`
-     * `@QueryParam`
-          * *Note: Ensure that route param names do not collide with QueryParam names. Otherwise, a QueryParam could end up parsing a route param*
+     * `@QueryParam` (*Ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam.*)
+     * `@FormParam`
      * `@Header`
-     * `@Cookie`
  * Other
-     * `@RequestInject`: Injects the Finagle Httpx Request or any Guice managed class into your case class
+     * `@RequestInject`: Injects the Finagle `httpx` Request or any Guice managed class into your case class
 
 *Note: HTTP requests with a content-type of application/json, are similarly parsed (but "Request Field" annotations are ignored). See [JSON](#json) section below.*
 
@@ -464,7 +464,7 @@ Use Java Enums for representing enumerations since they integrate well with Jack
 
 Guice
 ===============================
-The Finatra framework internally uses Guice extensively, and it's also availble for service writers if they choose to use it. For projects not wishing to use Guice, please see [FinatraWithoutGuice].
+The Finatra framework internally uses Guice extensively, and it's also availble for service writers if they choose to use it. For projects not wishing to use Guice, please see [Finatra Without Guice](#no-guice).
 
 Finatra's Guice integration usually starts with Controllers as the root objects in the object graph. As such, controllers are added to Finatra's router by type as such:
 ```scala
@@ -489,7 +489,7 @@ We provide a [TwitterModule](../inject/inject-core/src/main/scala/com/twitter/in
 
 ### Module Definition
 * Twitter Util Flags can be defined inside modules. This allows various reusable modules that require external configuration to be composed in a server.
-* Prefer using a `@Provider` methods [over using the *toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
+* Prefer using a `@Provides` methods [over using the *toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
 * Usually modules are Scala *objects* since the modules contain no state and usage of the module is less verbose.
 * Always remember to add `@Singleton` to your provides method if desired.
 * Usually, modules are only required for creating classes that you don't control. Otherwise, you would simply add the JSR inject annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following Guice module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
@@ -590,7 +590,7 @@ class MyController @Inject()(
 * The server's injector is available as a protected method in `HttpServer`, but it's use should be avoided except for calling *warmup* classes, and for extending the Finatra framework.
 * Avoid `@Named` annotations in favor of specific [Binding Annotations](https://github.com/google/guice/wiki/BindingAnnotations). If building with Maven, simply place your Java annotations in src/main/java for cross-compilation with your Scala code.
 
-Finatra Without Guice
+<a name="no-guice">Finatra Without Guice</a>
 ===============================
 
 ```scala
@@ -708,7 +708,7 @@ class MyService @Inject()(
 }
 
 class MyModule extends TwitterModule {
-  @Provider
+  @Provides
   @Singleton
   def providesFoo(@Flag("key") key: String) = {
     new Foo(key)
@@ -872,7 +872,35 @@ See the Cookie class for more details.
 
 File Uploads
 ===============================
-See [MultiParamsTest](../http/src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala).
+An example of a multi-part `POST` request:
+
+```scala
+post("/multipartParamsEcho") { r: Request =>
+  RequestUtils.multiParams(r).keys
+}
+```
+
+An example of testing this endpoint:
+
+```scala
+"post multipart" in {
+  val request = deserializeRequest("/multipart/request-POST-android.bytes")
+  request.uri = "/multipartParamsEcho"
+
+  server.httpRequest(
+    request = request,
+    suppress = true,
+    andExpect = Ok,
+    withJsonBody = """["banner"]""")
+}
+```
+
+See: 
+
+- [RequestUtils](../http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
+- [DoEverythingController](../https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/controllers/DoEverythingController.scala#L530)
+- [DoEverythingServerFeatureTest.scala](../http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L309)
+- [MultiParamsTest](../http/src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala)
 
 
 Testing
