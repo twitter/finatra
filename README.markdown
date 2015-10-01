@@ -7,8 +7,7 @@ Build
 -----------------------------------------------------------
 * Pull the latest updates from `gh-pages-source` branch.
 * Run `bundle install`.
-* Run `rake setup_github_pages`.
-* This always changes the _config.yml as it changes the `url` to the CNAME instead of leaving it as the github page. Make sure to not check in this change and revert the _config.yml.
+* Run `rake setup_github_pages`, input the SSH clone URL for the repo.
 
 Edit
 -----------------------------------------------------------
