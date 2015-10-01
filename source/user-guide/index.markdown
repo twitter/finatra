@@ -10,6 +10,7 @@ footer: true
 
 - [Getting Started](/finatra/user-guide/getting-started)
 - [Build a new HTTP Server](/finatra/user-guide/build-new-http-server)
+- [Working with JSON](/finatra/user-guide/json)
 - [Logging](/finatra/user-guide/logging)
 - [Testing](/finatra/user-guide/testing)
 

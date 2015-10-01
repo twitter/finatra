@@ -7,9 +7,10 @@ footer: true
 ---
 
 
-Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [com.twitter.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [TwitterServer](http://twitter.github.io/twitter-server/) and [Finagle](https://twitter.github.io/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller or across controllers.
+Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [com.twitter.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [TwitterServer](http://twitter.github.io/twitter-server/) and [Finagle](https://twitter.github.io/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller, per route in a controller, or across controllers.
 
 ## Basics
+===============================
 
 Finatra internally uses the Google [Guice](https://github.com/google/guice) dependency injection library extensively which is also available for service writers if they choose to use dependency injection.
 
@@ -42,7 +43,7 @@ class NonGuiceServer extends HttpServer {
 We provide a [TwitterModule](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala) base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by [codingwell/scala-guice](https://github.com/codingwell/scala-guice).
 
 #### Module Definition
-* [twitter/util](https://github.com/twitter/util) [Flags](#flags) can be defined inside modules. This allows for re-usable scoping of external configuration to be composed into a server via the module.
+* [twitter/util](https://github.com/twitter/util) [Flags](#flags) can be defined inside modules. This allows for re-usable scoping of external configuration that can be composed into a server via the module.
 * Prefer using an `@Provides` methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
 * Usually modules are Scala *objects* since they contain no state and usage of the module is less verbose.
 * Remember to add `@Singleton` to your `@Provides` method if you require only **one** instance per JVM process.
@@ -88,9 +89,9 @@ class Server extends HttpServer {
 ### <a name="flags" href="#flags">Flags</a>
 ===============================
 
-Finatra supports the use of [twitter/util](https://github.com/twitter/util) flags as supported within the [twitter-server](http://twitter.github.io/twitter-server/Features.html#flags) lifecycle. Flags by their definition, generally represent some external configuration that is passed to the system and thus are an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment, e.g., the hostname or URL is different in *production*, from *staging*, or *development*.
+Finatra supports the use of [twitter/util](https://github.com/twitter/util) flags as supported within the [twitter-server](http://twitter.github.io/twitter-server/Features.html#flags) lifecycle. Flags by their definition, generally represent some external configuration that is passed to the system and thus are an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment: *production*, from *staging*, or *development*.
 
-This type of configuration parameterization is generally preferred over hardcoding logic by a type of *env* key within code. As such, flags are generally defined within a [Module](#module) to allow for scoping of reusable external configuration. In this way, flags are typically used to aid in the construction of an instance to be provided to the object graph, e.g., a DatabaseConnection instance that use the database url flag as an input. The module is then able to tell Guice how to provide this object when injected by defining an `@Provides` annotated method.
+This type of configuration parameterization is generally preferred over hardcoding logic by a type of "*environment*" String within code. As such, flags are generally defined within a [Module](#module) to allow for scoping of reusable external configuration. In this way, flags can be used to aid in the construction of an instance to be provided to the object graph, e.g., a DatabaseConnection instance that use the database URL flag as an input. The module is then able to tell Guice how to provide this object when injected by defining an `@Provides` annotated method.
 
 In Finatra, we also provide a way to override the objects provided on the object graph through "override modules". See the "Override Modules" section in [testing](testing#override-modules).
 

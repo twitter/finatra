@@ -29,7 +29,7 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-In the code above, we are saying that our `ExampleServer` is a [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala). Simplistically, a server can be thought of as a collection of [modules](/finatra/user-guide/getting-started#modules) along with the ways controllers are routed to and filtered. The Finatra convention is to create a Scala object with a name ending in "Main". This allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM. `ExampleServerMain` is then the static object which contains the runnable *main method*.
+In the code above, our `ExampleServer` extends [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala). Simplistically, a server can be thought of as a collection of [modules](/finatra/user-guide/getting-started#modules) along with the ways controllers are routed to and filtered. The Finatra convention is to create a Scala [*object*](https://twitter.github.io/scala_school/basics2.html#object) with a name ending in "Main". This allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM. `ExampleServerMain` is then a static object which contains the runnable *main method* for the server.
 
 
 ### Add a Controller

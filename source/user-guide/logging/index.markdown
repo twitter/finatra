@@ -16,7 +16,7 @@ Adding [finatra/slf4j](https://github.com/twitter/finatra/tree/master/slf4j) as 
   * [Log4j](http://en.wikipedia.org/wiki/Log4j)
   * [commons-logging](http://commons.apache.org/proper/commons-logging/)
   * jdk14-logging
-  * [java.util.logging](http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html): There is a performance penalty for intercepting jul log messages, so make sure to also include the [Slf4jBridgeModule](../slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala) in your list of modules, as this will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty. e.g.,
+  * [java.util.logging](http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html): There is a performance penalty for intercepting jul log messages, so make sure to also include the [Slf4jBridgeModule](https://github.com/twitter/finatra/tree/master/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala) in your list of modules, as this will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty. e.g.,
 
   ```scala
   class Server extends HttpServer {
@@ -55,12 +55,12 @@ We highly recommend using [Logback](http://logback.qos.ch/) as an SLF4J binding 
 ### Configuration
 ===============================
 
-See [logback.xml](../examples/hello-world/src/main/resources/logback.xml) and [logback-test.xml](../examples/hello-world/src/test/resources/logback-test.xml) in the [hello-world](../examples/hello-world) example project.
+See [logback.xml](https://github.com/twitter/finatra/tree/master/examples/hello-world/src/main/resources/logback.xml) and [logback-test.xml](.https://github.com/twitter/finatra/tree/master/examples/hello-world/src/test/resources/logback-test.xml) in the [hello-world](https://github.com/twitter/finatra/tree/master/examples/hello-world) example project.
 
 ### [MDC](http://logback.qos.ch/manual/mdc.html) Filters
 ===============================
 
-Place the [LoggingMDCFilter](../logback/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
+Place the [LoggingMDCFilter](https://github.com/twitter/finatra/tree/master/slf4j/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
 
 <nav>
   <ul class="pager">
