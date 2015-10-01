@@ -585,6 +585,27 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         }""")
     }
 
+    "put_id_ignoring_body" in {
+      server.httpPut(
+        "/put_id_ignoring_body/42",
+        putBody = "invalid JSON",
+        andExpect = Ok,
+        withJsonBody = "42")
+    }
+
+    "put_id_not_ignoring_body" in {
+      server.httpPut(
+        "/put_id_not_ignoring_body/42",
+        putBody = "invalid JSON",
+        andExpect = BadRequest,
+        withJsonBody = """
+        {
+          "errors":[
+            "Unrecognized token 'invalid': was expecting ('true', 'false' or 'null')"
+          ]
+        }""")
+    }
+
     "post to putAndPost" in {
       server.httpPost(
         "/putAndPost",

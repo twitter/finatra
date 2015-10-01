@@ -340,6 +340,14 @@ class DoEverythingController @Inject()(
     idRequest.id + "_" + idRequest.name
   }
 
+  put("/put_id_ignoring_body/:id") { req: IdRequestIgnoringBody =>
+    req.id
+  }
+
+  put("/put_id_not_ignoring_body/:id") { req: IdRequestNotIgnoringBody =>
+    req.id
+  }
+
   get("/implicitOkAndException") { request: Request =>
     if (request.params.contains("hi"))
       "hello"

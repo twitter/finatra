@@ -1,13 +1,13 @@
 package com.twitter.finatra.http.internal.marshalling
 
+import javax.inject.{Inject, Singleton}
+
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
 import com.twitter.finagle.httpx.Request
-import com.twitter.finatra.conversions.string._
-import com.twitter.finatra.http.exceptions.BadRequestException
 import com.twitter.finatra.http.marshalling.DefaultMessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
-import javax.inject.{Inject, Singleton}
+import com.twitter.finatra.request.JsonIgnoreBody
 
 object FinatraDefaultMessageBodyReader {
   private val EmptyObjectNode = new ObjectNode(null)
@@ -28,13 +28,17 @@ class FinatraDefaultMessageBodyReader @Inject()(
     }
 
     val length = request.contentLength.getOrElse(0L)
-    if (length > 0 && isJsonEncoded(request))
+    if (length > 0 && isJsonEncoded(request) && !ignoresBody)
       FinatraObjectMapper.parseRequestBody(request, requestAwareObjectReader)
     else
       requestAwareObjectReader.readValue(FinatraDefaultMessageBodyReader.EmptyObjectNode)
   }
 
   /* Private */
+
+  private def ignoresBody[T: Manifest]: Boolean = {
+    manifest[T].runtimeClass.isAnnotationPresent(classOf[JsonIgnoreBody])
+  }
 
   private def isJsonEncoded(request: Request): Boolean = {
     request.contentType.exists { contentType =>

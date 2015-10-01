@@ -9,4 +9,5 @@ package object request {
   type Header = com.twitter.finatra.json.internal.caseclass.annotations.HeaderInternal@param
   type QueryParam = com.twitter.finatra.json.internal.caseclass.annotations.QueryParamInternal@param
   type RouteParam = com.twitter.finatra.json.internal.caseclass.annotations.RouteParamInternal@param
+  type JsonIgnoreBody = com.twitter.finatra.json.internal.caseclass.annotations.JsonIgnoreBody@param
 }

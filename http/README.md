@@ -201,7 +201,7 @@ Notes:
  * Other
      * `@RequestInject`: Injects the Finagle `httpx` Request or any Guice managed class into your case class
 
-*Note: HTTP requests with a content-type of application/json, are similarly parsed (but "Request Field" annotations are ignored). See [JSON](#json) section below.*
+*Note: HTTP requests with a content-type of application/json, are similarly parsed. This behavior can be disabled by annotating the `case class` with `@JsonIgnoreBody`, leaving the raw request body accessible through `@RequestInject`. See [JSON](#json) section below.*
 
 ## Responses
 
