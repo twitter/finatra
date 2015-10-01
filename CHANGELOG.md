@@ -1,5 +1,13 @@
 # Change Log
 
+## [v2.1.0](https://github.com/twitter/finatra/tree/v2.1.0) (2015-10-01)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.0.1...v2.1.0)
+
+**Merged pull requests:**
+
+- finatra/inject - Rename InjectUtils to more specific PoolUtils [\#258](https://github.com/twitter/finatra/pull/258) ([cacoco](https://github.com/cacoco))
+
 ## [v2.0.1](https://github.com/twitter/finatra/tree/v2.0.1) (2015-09-21)
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0...v2.0.1)
