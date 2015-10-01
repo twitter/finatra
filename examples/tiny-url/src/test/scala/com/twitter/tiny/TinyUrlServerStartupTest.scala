@@ -2,17 +2,17 @@ package com.twitter.tiny
 
 import com.google.inject.Stage
 import com.twitter.finatra.http.test.EmbeddedHttpServer
-import com.twitter.inject.Test
+import com.twitter.inject.server.FeatureTest
 
-class TinyUrlServerStartupTest extends Test {
+class TinyUrlServerStartupTest extends FeatureTest {
 
-  val server = new EmbeddedHttpServer(
+  override val server = new EmbeddedHttpServer(
     stage = Stage.PRODUCTION,
     twitterServer = new TinyUrlServer)
 
   "Server" should {
     "startup" in {
-      server.assertHealthy()
+      server.assertAppStarted()
     }
   }
 }

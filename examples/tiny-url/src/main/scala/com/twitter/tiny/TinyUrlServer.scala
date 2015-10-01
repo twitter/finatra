@@ -12,6 +12,12 @@ import com.twitter.tiny.modules.{ServicesModule, TinyUrlModule}
 object TinyUrlServerMain extends TinyUrlServer
 
 class TinyUrlServer extends HttpServer {
+  /*
+   * Since Heroku only supports a single port per service,
+   * we disable the Admin HTTP Server
+   */
+  override val disableAdminHttpServer = true
+
   override def modules = Seq(
     Slf4jBridgeModule,
     ServicesModule,

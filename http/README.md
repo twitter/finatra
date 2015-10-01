@@ -906,7 +906,7 @@ An example of testing this endpoint:
 }
 ```
 
-See: 
+See:
 
 - [RequestUtils](../http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
 - [DoEverythingController](../https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/controllers/DoEverythingController.scala#L530)
@@ -999,7 +999,7 @@ class Server extends HttpServer {
 See [logback.xml](../examples/hello-world/src/main/resources/logback.xml) and [logback-test.xml](../examples/hello-world/src/test/resources/logback-test.xml) in the [hello-world](../examples/hello-world) example project.
 
 ### [MDC](http://logback.qos.ch/manual/mdc.html) Filters
-Place the [LoggingMDCFilter](../logback/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
+Place the [LoggingMDCFilter](../slf4j/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala) filter before any other filters which will add entries or expect MDC entries to be present.
 
 
 <a name="finatra-best-practices">Finatra Best Practices</a>

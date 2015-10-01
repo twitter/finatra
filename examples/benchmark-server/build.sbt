@@ -1,14 +1,11 @@
-name := "java-server"
+name := "finatra-benchmark-server"
 organization := "com.twitter.example"
-version := "2.0.2-SNAPSHOT"
+version := "2.1.0"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false
-publishMavenStyle := true
-crossPaths := false
-autoScalaLibrary := false
 
 lazy val versions = new {
-  val finatra = "2.0.2-SNAPSHOT"
+  val finatra = "2.1.0"
 }
 
 resolvers ++= Seq(
@@ -22,8 +19,9 @@ assemblyMergeStrategy in assembly := {
 }
 
 libraryDependencies ++= Seq(
+  "com.twitter.finatra" %% "finatra-http" % versions.finatra,
+  "com.twitter.finatra" %% "finatra-httpclient" % versions.finatra,
   "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
-  "com.twitter.inject" %% "inject-server" % versions.finatra,
   "com.twitter.inject" %% "inject-core" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % "1.0.13",
 
@@ -42,5 +40,4 @@ libraryDependencies ++= Seq(
 
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-  "org.specs2" %% "specs2" % "2.3.12" % "test",
-  "com.novocode" % "junit-interface" % "0.11" % Test)
+  "org.specs2" %% "specs2" % "2.3.12" % "test")

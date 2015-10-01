@@ -182,6 +182,7 @@ class EmbeddedTwitterServer(
 
   def assertAppStarted(started: Boolean = true) {
     assert(isGuiceApp)
+    start()
     guiceApp.appStarted should be(started)
   }
 
@@ -194,7 +195,6 @@ class EmbeddedTwitterServer(
     withLocation: String = null,
     withBody: String = null): Response = {
 
-    start()
     val request = createApiRequest(path, Method.Get)
     httpExecute(httpAdminClient, request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody)
   }
@@ -209,6 +209,8 @@ class EmbeddedTwitterServer(
     andExpect: Status = Status.Ok,
     withLocation: String = null,
     withBody: String = null): Response = {
+
+    start()
 
     /* Pre - Execute */
     printRequest(request, suppress)

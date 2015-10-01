@@ -7,7 +7,7 @@ parallelExecution in ThisBuild := false
 fork in ThisBuild := false
 
 lazy val buildSettings = Seq(
-  version := "2.0.2-SNAPSHOT",
+  version := "2.1.0",
   scalaVersion := "2.11.7",
   crossScalaVersions := Seq("2.10.5", "2.11.7")
 )
@@ -138,9 +138,9 @@ lazy val root = (project in file(".")).
     http,
     httpclient,
     slf4j,
-    benchmarks, // LAST PROJECT
+    benchmarks // LAST PROJECT
 
-    // START EXAMPLES
+    /* // START EXAMPLES
     helloWorld,
     //helloWorldHeroku, 2.11 only
     tinyUrl,
@@ -148,7 +148,7 @@ lazy val root = (project in file(".")).
     twitterClone,
     benchmarkServer,
     exampleInjectJavaServer
-    // END EXAMPLES
+    */ // END EXAMPLES
   )
 
 lazy val injectCore = (project in file("inject/inject-core")).
@@ -372,7 +372,7 @@ lazy val benchmarks = project.
     injectCore % "test->test"
   )
 
-// START EXAMPLES
+/* // START EXAMPLES
 
 // 2.11 only due to rlazoti/finagle-metrics dependency
 //lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
@@ -539,4 +539,4 @@ lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server
     injectApp % "test->test"
   )
 
-// END EXAMPLES
+*/ // END EXAMPLES

@@ -2,12 +2,12 @@ package twitter.github.io.finatra.quickstart
 
 import com.google.inject.Stage
 import com.twitter.finatra.http.test.EmbeddedHttpServer
-import com.twitter.inject.Test
+import com.twitter.inject.server.FeatureTest
 import finatra.quickstart.TwitterCloneServer
 
-class TwitterCloneStartupTest extends Test {
+class TwitterCloneStartupTest extends FeatureTest {
 
-  val server = new EmbeddedHttpServer(
+  override val server = new EmbeddedHttpServer(
     stage = Stage.PRODUCTION,
     twitterServer = new TwitterCloneServer,
     clientFlags = Map(

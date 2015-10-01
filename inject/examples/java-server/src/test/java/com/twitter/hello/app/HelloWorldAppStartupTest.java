@@ -12,5 +12,6 @@ public class HelloWorldAppStartupTest {
     @Test
     public void testAppStartup() {
         app.start();
+        app.close();
     }
 }

@@ -3,13 +3,13 @@ import com.typesafe.sbt.SbtNativePackager._
 packageArchetype.java_application
 name := "hello-world-heroku"
 organization := "com.twitter.example"
-version := "2.0.2-SNAPSHOT"
+version := "2.1.0"
 scalaVersion := "2.11.7"
 fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.0.2-SNAPSHOT"
+  val finatra = "2.1.0"
 }
 
 resolvers ++= Seq(

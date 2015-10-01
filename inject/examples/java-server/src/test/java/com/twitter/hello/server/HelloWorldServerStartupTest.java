@@ -12,5 +12,6 @@ public class HelloWorldServerStartupTest {
     @Test
     public void testServerStartup() {
         server.assertHealthy(true);
+        server.close();
     }
 }
