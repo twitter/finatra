@@ -14,18 +14,18 @@ footer: true
 ## Basics
 ===============================
 
-Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala). JSON support is provided in the [finatra-jackson][finatra-jackson] library, which can be used outside of Finatra HTTP as a replacement for [jackson-scala-module](https://github.com/FasterXML/jackson-module-scala) or [jerkson](https://github.com/codahale/jerkson).
+Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala). JSON support is provided in the [finatra-jackson](https://github.com/FasterXML/jackson) library which can be used outside of Finatra as a replacement for the [jackson-scala-module](https://github.com/FasterXML/jackson-module-scala) or [jerkson](https://github.com/codahale/jerkson).
 
 ### Features
 * Usable outside of Finatra.
-* [`FinatraObjectMapper`](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala) which provides additional Scala friendly methods not found in `ScalaObjectMapper`.
-* Guice module for injecting `FinatraObjectMapper` (with support for customization e.g. snake_case vs camelCase).
-* Custom `case class` deserializer which overcomes limitations in jackson-scala-module.
-* Support for `case class` validations which accumulate errors (without failing fast) during json parsing.
+* [`FinatraObjectMapper`](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala) which provides additional Scala friendly methods not found in the `ScalaObjectMapper`.
+* [Guice module](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala) for injecting `FinatraObjectMapper` (with support for customization e.g. snake_case vs camelCase).
+* Custom [`case class` deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module.
+* Support for `case class` validations which accumulate errors (without failing fast) during JSON parsing.
 
-Integration with Finatra HTTP routing to support binding and validation of query params, route params, and headers.
-* Utils for comparing json in tests.
-* Experimental support for iterator based json stream parsing.
+Integration with Finatra [HTTP routing](/finatra/user-guide/routing-json) to support binding and validation of query params, route params, and headers.
+* Utils for comparing JSON in tests.
+* Experimental support for iterator based JSON stream parsing.
 
 ## Configuration
 ===============================
@@ -71,7 +71,7 @@ object CustomJacksonModule extends FinatraJacksonModule {
 ## <a name="case-class-deserializer">Improved `case class` deserializer</a>
 ===============================
 
-Finatra provides a custom `case class` deserializer which overcomes limitations in jackson-scala-module:
+Finatra provides a custom [`case class` deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module:
 * Throw a JsonException when 'non Option' fields are missing in the incoming json
 * Use default values when fields are missing in the incoming json
 * Properly deserialize a Seq\[Long\] (see https://github.com/FasterXML/jackson-module-scala/issues/62)
