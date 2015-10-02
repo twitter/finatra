@@ -616,55 +616,6 @@ class NonGuiceServer extends HttpServer {
 }
 ```
 
-<a name="filters">Filters</a>
-===============================
-Per controller filters are added as such:
-
-```scala
-class Server extends HttpServer {
-  override configureHttp(router: HttpRouter) {
-    router.
-      add[MyFilter, MyController]
-  }
-}
-```
-
-A common filter order is as follows:
-
-```scala
-class Server extends HttpServer {
-  override configureHttp(router: HttpRouter) {
-    router.
-      filter[AccessLoggingFilter[Request]].
-      filter[StatsFilter].
-      filter[ExceptionMappingFilter[Request]].
-      filter[LoggingMDCFilter].
-      filter[FinagleRequestScopeFilter].
-      filter[UserFilter].
-      filter[HttpResponseFilter[Request]].
-      add[MyController1].
-      add[MyController2]
-  }
-}
-```
-
-Finatra composes some commonly used filters into [`com.twitter.finatra.http.filters.CommonFilters`](../http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala). `CommonFilters` can be added in the same manner as any other filter, e.g.,
-
-```scala
-class Server extends HttpServer {
-  override configureHttp(router: HttpRouter) {
-    router.
-      filter[CommonFilters].
-      filter[LoggingMDCFilter].
-      filter[FinagleRequestScopeFilter].
-      filter[UserFilter].
-      add[MyController1].
-      add[MyController2]
-  }
-}
-```
-
-
 Warmup
 ===============================
 Finatra server provides a *warmup* method that's called before the server's external HTTP port is bound and the /health port responds with OK. Often classes or routes will be called to warmup the JVM before traffic is routed to the server. *Note: You'll need to add a dependency on finatra-httpclient for access to the RequestBuilder class.*
@@ -760,7 +711,7 @@ Mustache
 ===============================
 Mustache templates must be placed in `src/main/resources/templates`.
 
-## @View Annotation
+## @Mustache Annotation
 ```scala
 @Mustache("foo")
 case class FooView(
@@ -843,6 +794,52 @@ class MyServer extends HttpServer {
     router.
       filter[DurationLoggingFilter].
       add[MyController]
+  }
+}
+```
+
+Per controller filters are added as such:
+
+```scala
+class Server extends HttpServer {
+  override configureHttp(router: HttpRouter) {
+    router.
+      add[MyFilter, MyController]
+  }
+}
+```
+
+A common filter order is as follows:
+
+```scala
+class Server extends HttpServer {
+  override configureHttp(router: HttpRouter) {
+    router.
+      filter[AccessLoggingFilter[Request]].
+      filter[StatsFilter].
+      filter[ExceptionMappingFilter[Request]].
+      filter[LoggingMDCFilter].
+      filter[FinagleRequestScopeFilter].
+      filter[UserFilter].
+      filter[HttpResponseFilter[Request]].
+      add[MyController1].
+      add[MyController2]
+  }
+}
+```
+
+Finatra composes some commonly used filters into [`com.twitter.finatra.http.filters.CommonFilters`](../http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala). `CommonFilters` can be added in the same manner as any other filter, e.g.,
+
+```scala
+class Server extends HttpServer {
+  override configureHttp(router: HttpRouter) {
+    router.
+      filter[CommonFilters].
+      filter[LoggingMDCFilter].
+      filter[FinagleRequestScopeFilter].
+      filter[UserFilter].
+      add[MyController1].
+      add[MyController2]
   }
 }
 ```
@@ -1030,12 +1027,6 @@ Finatra's HTTP server is built on top of several reusable traits.
 One of these traits is [`com.twitter.inject.App`](../inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala) which provides the integration between Guice and `com.twitter.app.App`. `com.twitter.inject.App` can be used standalone to create command line apps which may also reuse your Guice modules defined in other libraries.
 
 See [SampleGuiceApp](../inject/inject-app/src/test/scala/com/twitter/inject/app/tests/SampleGuiceApp.scala) and [SampleAppIntegrationTest](../inject/inject-app/src/test/scala/com/twitter/inject/app/tests/SampleAppIntegrationTest.scala)
-
-Service Samples
-===============================
-* [finatra-hello-world](../examples/hello-world)
-
-
 
 
 [twitter-server]: https://github.com/twitter/twitter-server
