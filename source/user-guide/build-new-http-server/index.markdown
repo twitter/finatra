@@ -263,9 +263,9 @@ Finatra will convert your route callbacks return type into a `com.twitter.util.F
 
 * If you return a `com.twitter.util.Future[Response]`, then no conversion will be performed.
 * A non `com.twitter.util.Future` return value will be converted into a `com.twitter.util.Future` using a Finatra provided `FuturePool`.
-* `Some[T]` will be converted into a HTTP 200 OK.
-* `None` will be converted into a HTTP 404 NotFound.
-* Non-response classes will be converted into a HTTP 200 OK.
+* `Some[T]` will be converted into a HTTP `200 OK`.
+* `None` will be converted into a HTTP `404 NotFound`.
+* Non-response classes will be converted into a HTTP `200 OK`.
 
 Callbacks that do not return a [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) will have their return values wrapped in a [`com.twitter.util.ConstFuture`](https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture). If your non-future result calls a blocking method, you must [avoid blocking the Finagle request](https://twitter.github.io/scala_school/finagle.html#DontBlock) by wrapping your blocking operation in a FuturePool e.g.
 
