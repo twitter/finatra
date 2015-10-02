@@ -1,15 +1,24 @@
 ---
-layout: page
-title: "Building a new HTTP Server"
+layout: user_guide
+title: "Building a New HTTP Server"
 comments: false
 sharing: false
 footer: true
 ---
 
+<ol class="breadcrumb">
+  <li><a href="/finatra/user-guide">User Guide</a></li>
+  <li class="active">Building a New HTTP Server</li>
+</ol>
+
 Note: the most up-to-date examples are located in the [`finatra/examples`](https://github.com/twitter/finatra/tree/master/examples) project.
 
-### Create a Server definition
+## <a name="server-definition" href="#server-definition">Create a Server definition</a>
 ===============================
+
+To start, add a dependency on the `com.twitter.finatra:finatra-http_{scala-version}` library. We also highly recommend depending on `com.twitter.finatra:finatra-slf4j` and `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [SLF4J](http://www.slf4j.org/manual.html) implementation. For more information on logging with Finatra see: [Logging](/finatra/user-guide/logging).
+
+Create a new class that extends [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala):
 
 ```scala
 import DoEverythingModule
@@ -29,13 +38,27 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-In the code above, our `ExampleServer` extends [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala). Simplistically, a server can be thought of as a collection of [modules](/finatra/user-guide/getting-started#modules) along with the ways controllers are routed to and filtered. The Finatra convention is to create a Scala [*object*](https://twitter.github.io/scala_school/basics2.html#object) with a name ending in "Main". This allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM. `ExampleServerMain` is then a static object which contains the runnable *main method* for the server.
+Simplistically, a server can be thought of as a collection of [modules](/finatra/user-guide/getting-started#modules) along with the ways controllers are routed to and filtered. The Finatra convention is to create a Scala [*object*](https://twitter.github.io/scala_school/basics2.html#object) with a name ending in "Main". This allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM. `ExampleServerMain` is then a static object which contains the runnable *main method* for the server.
 
+### TwitterServer HTTP Admin Interface
 
-### Add a Controller
+All [TwitterServer](https://github.com/twitter/twitter-server) based services start an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) bound to a port configurable via the `-admin.port` flag. If you want to serve an external interface this will be bound to a separate port configurable via the `-http.port` flag.
+
+Some deployment environments such as [Heroku](https://www.heroku.com/), [AppFog](https://www.appfog.com/), and [OpenShift](https://www.openshift.com) only allow a single port to be used when deploying an application. In these cases, you can disable the [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) started by [TwitterServer](https://github.com/twitter/twitter-server) as such:
+```scala
+class ExampleServer extends HttpServer {
+  override val disableAdminHttpServer = true
+  ...
+}
+```
+Since the admin port is currently required by [TwitterServer](https://github.com/twitter/twitter-server) you will need to set the `-admin.port` and `-http.port` flags to the same value in addition to specifying ```override val disableAdminHttpServer = true``` above.
+
+For more information, see the [Heroku](https://www.heroku.com/) [hello-world example](https://github.com/twitter/finatra/tree/master/examples/hello-world-heroku).
+
+## <a name="add-controller" href="#add-controller">Add a Controller</a>
 ===============================
 
-We now want to add the following controller to our server:
+Suppose you want to add the following controller to your server:
 
 ```scala
 import ExampleService
@@ -63,7 +86,7 @@ class ExampleController @Inject()(
 ```
 <div></div>
 
-Our server now looks like this:
+The server now looks like this:
 
 ```scala
 import DoEverythingModule
@@ -88,15 +111,56 @@ class ExampleServer extends HttpServer {
 
 Here we are adding *by type* allowing the framework to handle class instantiation.
 
-#### <a name="controllers-and-routing" href="#controllers-and-routing">Controllers and Routing</a>:
+### <a name="controllers-and-routing" href="#controllers-and-routing">Controllers and Routing</a>:
 
-When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller.
+Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function that takes a generic `RequestType` and returns a generic `ResponseType`. See the [`com.twitter.finatra.http.RouteDSL`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/RouteDSL.scala).
 
-It is recommended to follow [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) conventions if possible. When deciding which routes to group into a particular controller, group routes related to a single resource into one controller.
+When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller invoking the route's associated callback function.
 
-#### Route Matching Patterns:
+It is recommended to follow [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) conventions if possible, e.g., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stating in the [`com.twitter.finatra.http.filters.StatsFilter`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala) works best when this convention is followed.
 
-##### Named Parameters
+```scala
+class GroupsController extends Controller {
+  get("/groups/:id") { ... }
+
+  post("/groups") { ... }
+
+  delete("/groups/:id") { ... }
+}
+```
+
+yields the following stats:
+
+```
+route/groups_id/GET/...
+route/groups/POST/...
+route/groups_id/DELETE/...
+```
+
+Alternatively, each route can be assigned a name which will then be used to create stat names.
+
+```scala
+class GroupsController extends Controller {
+  get("/groups/:id", name = "group_by_id") { ... }
+
+  post("/groups", name = "create_group") { ... }
+
+  delete("/groups/:id", name = "delete_group") { ... }
+}
+```
+
+which will yield the stats:
+
+```
+route/group_by_id/GET/...
+route/create_group/POST/...
+route/delete_group/DELETE/...
+```
+<div></div>
+
+### Route Matching Patterns:
+
+#### Named Parameters
 
 Route patterns may include named parameters:
 ```scala
@@ -108,7 +172,7 @@ get("/users/:id") { request: Request =>
 
 Note: *Query params and route params are both stored in the "params" field of the request.* If a route parameter and a query parameter have the same name, the route parameter always wins. Therefore, you should ensure your route parameter names do not collide with any query parameter name that you plan to read.
 
-##### Wildcard Parameter
+#### Wildcard Parameter
 
 Routes can also contain the wildcard pattern. The wildcard can only appear once at the end of a pattern and it will capture all text in its place. For example,
 ```scala
@@ -119,7 +183,7 @@ get("/files/:*") { request: Request =>
 <div></div>
 For a `GET` of `/files/abc/123/foo.txt` the endpoint will return `abc/123/foo.txt`
 
-##### Admin Paths
+#### Admin Paths
 
 Any path starting with `/admin/finatra/` will be exposed only on the server's admin port. All [TwitterServer](http://twitter.github.io/twitter-server/) based servers have an [HTTP admin interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) for exposing internal endpoints such as stats. The admin endpoint should not be exposed outside your DMZ.
 
@@ -131,21 +195,18 @@ get("/admin/finatra/users/") { request: Request =>
 ```
 <div></div>
 
-##### Regular Expressions
+#### Regular Expressions
 
 Regular expressions are no longer allowed in string defined paths. Note: We are planning to support regular expression based paths in a future release.
 
-#### Requests
+### Requests
 
-Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types:
+Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle `httpx` Request or a custom `case class` Request.
 
-- A Finagle `httpx` Request
-- A custom `case class` Request
-
-##### Finagle `httpx` Request:
+#### Finagle `httpx` Request:
 This is a [com.twitter.finagle.httpx.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.httpx.Request) which contains common HTTP attributes.
 
-##### Custom `case class` Request
+#### Custom `case class` Request
 Custom requests allow declarative request parsing with support for type conversions, default values, and validations.
 
 For example suppose you wanted to parse a `GET` request with three query params: `max`, `startDate`, and `verbose`, e.g.,
@@ -164,7 +225,7 @@ case class UsersRequest(
 ```
 <div></div>
 
-The custom `UsersRequest` is then used as the callback's input type:
+The custom `UsersRequest` can then be used as the callback's input type:
 ```scala
 get("/users") { request: UsersRequest =>
   request
@@ -172,36 +233,60 @@ get("/users") { request: UsersRequest =>
 ```
 <div></div>
 
-Notes:
+The `case class` field names should match the request parameters or use the [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) annotation to specify the JSON field name in the case class (see: [example](https://github.com/twitter/finatra/blob/master/jackson/src/test/scala/com/twitter/finatra/tests/json/internal/ExampleCaseClasses.scala#L141)). A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`](https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
 
-* The `case class` field names should match the request parameters.
-  * A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`](https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
-  * Use backticks when special characters are involved (e.g. @Header \`user-agent\` : String)  
-  * [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) can also be used to specify the JSON field name  
-* Non-optional fields without default values are required. If required fields are missing, a `CaseClassMappingException` is thrown.
-* The following field annotations specify where to parse the field out of the request
-  * Request Fields -
+Use a Scala ["back-quote" literal](http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html) for the field name when special characters are involved (e.g. @Header \`user-agent\` : String).
+
+Non-optional fields without default values are considered required. If a required field is missing, a `CaseClassMappingException` is thrown.
+
+The following field annotations specify where to parse a field out of the request
+
+  * Request Fields:
      * [`@RouteParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/IdAndNameRequest.scala)
-     * [`@QueryParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*Ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
+     * [`@QueryParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
      * [`@FormParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/FormPostRequest.scala)
      * `@Header`
- * Other
+ * Other:
      * `@RequestInject`: Injects the Finagle `httpx` Request or any Guice managed class into your case class
 
-*Note: HTTP requests with a content-type of application/json are similarly parsed (but "Request Field" annotations are ignored). See the [JSON](/finatra/user-guide/json) section.*
+*Note: HTTP requests with a content-type of `application/json` will always have their body. This behavior can be disabled by annotating the `case class` with `@JsonIgnoreBody` leaving the raw request body accessible through `@RequestInject`.*
 
-#### Responses
+For more specifics on how JSON parsing integrates with routing see: [Integration with Routing](/finatra/user-guide/json#routing-json) in the [JSON](/finatra/user-guide/json) documentation.
 
-Finatra will convert your route callbacks return type into a `Future[Response]` using the following rules:
+### Responses
 
-* If you return a `Future[Response]`, then no conversion will be performed
-* A non `Future` return value will be converted into a `Future` using a Finatra provided `FuturePool` (see [Future Conversion](#future-conversion) section for more details)
-* `Some[T]` will be converted into a HTTP 200 OK
-* `None` will be converted into a HTTP 404 NotFound
-* Non-response classes will be converted into a HTTP 200 OK
+#### <a name="future-conversion" href="#future-conversion">Future Conversion</a>:
 
-##### Response Builder:
-All Controllers have a protected "response" field they can use to build responses. For example:
+For the basics of Futures in Finatra, see: [Futures](/finatra/user-guide/getting-started#futures) in the [Getting Started](/finatra/user-guide/getting-started) documentation.
+
+Finatra will convert your route callbacks return type into a `com.twitter.util.Future[Response]` using the following rules:
+
+* If you return a `com.twitter.util.Future[Response]`, then no conversion will be performed.
+* A non `com.twitter.util.Future` return value will be converted into a `com.twitter.util.Future` using a Finatra provided `FuturePool`.
+* `Some[T]` will be converted into a HTTP 200 OK.
+* `None` will be converted into a HTTP 404 NotFound.
+* Non-response classes will be converted into a HTTP 200 OK.
+
+Callbacks that do not return a [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) will have their return values wrapped in a [`com.twitter.util.ConstFuture`](https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture). If your non-future result calls a blocking method, you must [avoid blocking the Finagle request](https://twitter.github.io/scala_school/finagle.html#DontBlock) by wrapping your blocking operation in a FuturePool e.g.
+
+```scala
+import com.twitter.finatra.utils.FuturePools
+
+class MyController extends Controller {
+
+  private val futurePool = FuturePools.unboundedPool("CallbackConverter")
+
+  get("/") { request: Request =>
+    futurePool {
+      blockingCall()
+    }
+  }
+}
+```
+<div></div>
+
+#### Response Builder:
+All Controllers have a protected `response` field they can use to build responses. For example:
 
 ```scala
 get("/foo") { request: Request =>
@@ -237,7 +322,7 @@ post("/users") { request: FormPostRequest =>
 ```
 <div></div>
 
-##### Response Exceptions:
+#### Response Exceptions:
 Responses can be embedded inside exceptions with `.toException`. You can throw the exception to terminate control flow, or wrap it inside a `Future.exception` to return a failed `Future`. However, instead of directly returning error responses in this manner, a better convention is to handle application-specific exceptions in an [`ExceptionMapper`](#exception-mapper).
 
 ```scala
@@ -256,7 +341,7 @@ get("/ServiceUnavailable") { request: Request =>
 ```
 <div></div>
 
-##### Setting Response Location Header:
+#### Setting the Response Location Header:
 ResponseBuilder has a "location" method.
 ```scala
 post("/users") { request: Request =>
@@ -280,29 +365,10 @@ RequestUtils.pathUrl(request)
 ```
 <div></div>
 
-##### <a name="future-conversion" href="#future-conversion">Future Conversion</a>:
-Callbacks that do not return a Future will have their return values wrapped in a [ConstFuture](https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture). If your non-future result calls a blocking method, you must [avoid blocking the Finagle request](https://twitter.github.io/scala_school/finagle.html#DontBlock) by wrapping your blocking operation in a FuturePool e.g.
-
-```scala
-import com.twitter.finatra.utils.FuturePools
-
-class MyController extends Controller {
-
-  private val futurePool = FuturePools.unboundedPool("CallbackConverter")
-
-  get("/") { request: Request =>
-    futurePool {
-      blockingCall()
-    }
-  }
-}
-```
-<div></div>
-
-### Add Filters
+## <a name="add-filters" href="#add-filters">Add Filters</a>
 ===============================
 
-If we want to apply a filter (or filters) to all added controllers we could do the following:
+If you want to apply a filter (or filters) to all added controllers you can do the following:
 
 ```scala
 import DoEverythingModule
@@ -355,12 +421,24 @@ class ExampleServer extends HttpServer {
 
 In both cases, we are again applying the filter *by type* allowing the framework to instantiate instances of the filters.
 
-### <a name="exception-mapper" href="#exception-mapper">Add an ExceptionMapper</a>
+Finatra composes some commonly used filters into [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala). `CommonFilters` can be added in the same manner as any other filter, e.g.,
+
+```scala
+override configureHttp(router: HttpRouter) {
+  router.
+    filter[CommonFilters].
+    filter[ExampleFilter].
+    add[MyController1].
+    add[MyController2]
+}
+```
+
+## <a name="exception-mapper" href="#exception-mapper">Add an ExceptionMapper</a>
 ===============================
 
 It is recommended that in your controller and services that you use exceptions for flow control and rely on the [`com.twitter.finatra.http.exceptions.ExceptionMapper`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionMapper.scala) to convert exceptions into proper HTTP responses. Finatra provides a [default ExceptionMapper](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FinatraDefaultExceptionMapper.scala) which provides high-level mapping for exceptions. However, you are free to register additional mappers (or to override the default mapper altogether).
 
-For instance, if we wanted to map `java.net.MalformedURLException` to a `400 - BadRequest` response,
+For instance, if you wanted to map `java.net.MalformedURLException` to a `400 - BadRequest` response,
 
 ```scala
 @Singleton
@@ -374,7 +452,7 @@ class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
 ```
 <div></div>
 
-We could then register this exception mapper in our server:
+You could then register this exception mapper in your server:
 
 ```scala
 import DoEverythingModule
@@ -405,7 +483,7 @@ class ExampleServer extends HttpServer {
 Again, you can see we register the exception mapper *by type* allowing the framework to instantiate the instance.
 
 
-### Implement a server "warmup" handler
+## <a name="server-warmup" href="#server-warmup">Implement a Server "Warmup" Handler</a>
 ===============================
 
 There may be occasions where we want to exercise a code path before accepting traffic to the server. In this case you can implement a [`com.twitter.finatra.utils.Handler`](https://github.com/twitter/finatra/blob/master/utils/src/main/scala/com/twitter/finatra/utils/Handler.scala). Your handler should be constructed with an [`com.twitter.finatra.http.routing.HttpWarmup`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala) instance.
@@ -428,9 +506,9 @@ class ExampleWarmupHandler @Inject()(
 ```
 <div></div>
 
-Our handle above simply tries to hit the `/ping` endpoint of the server.
+The handle above simply tries to hit the `/ping` endpoint of the server.
 
-We can the register the handler with our server:
+You can the register the handler with your server:
 
 ```scala
 import DoEverythingModule
@@ -465,15 +543,17 @@ class ExampleServer extends HttpServer {
 
 Once again, the warmup handler is added *by type* allowing the framework to construct the instance.
 
+The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) method is called before the server's external HTTP port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`.
 
-### More information
+
+## <a name="more-information" href="#more-information">More information</a>
 ===============================
 
-For more information, we encourage you to take a look at the [`finatra/examples`](https://github.com/twitter/finatra/tree/master/examples) in the [github](https://github.com/twitter/finatra) source.
+For more information, we encourage you to take a look at the full [`finatra/examples`](https://github.com/twitter/finatra/tree/master/examples) in the [github](https://github.com/twitter/finatra) source.
 
 <nav>
   <ul class="pager">
     <li class="previous"><a href="/finatra/user-guide/getting-started"><span aria-hidden="true">&larr;</span>&nbsp;Getting&nbsp;Started</a></li>
-    <li class="next"><a href="/finatra/user-guide/logging">Logging&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="next"><a href="/finatra/user-guide/json">Working&nbsp;with&nbsp;JSON&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

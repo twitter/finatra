@@ -9,10 +9,20 @@ footer: true
 ### Topics:
 
 - [Getting Started](/finatra/user-guide/getting-started)
-- [Build a new HTTP Server](/finatra/user-guide/build-new-http-server)
+- [Building a new HTTP Server](/finatra/user-guide/build-new-http-server)
+  - [Create a Server Definition](/finatra/user-guide/build-new-http-server#server-definition)
+  - [Add a Controller](/finatra/user-guide/build-new-http-server#add-controller)
+  - [Add Filters](/finatra/user-guide/build-new-http-server#add-filters)
+  - [Add an ExceptionMapper](/finatra/user-guide/build-new-http-server#exception-mapper)
+  - [Implement a Server "Warmup" Handler](/finatra/user-guide/build-new-http-server#server-warmup)
+  - [More information](/finatra/user-guide/build-new-http-server#more-information)
 - [Working with JSON](/finatra/user-guide/json)
+- [Working with Files](/finatra/user-guide/working-with-files)
 - [Logging](/finatra/user-guide/logging)
 - [Testing](/finatra/user-guide/testing)
+  - [Types of Tests](/finatra/user-guide/testing#testing-types)
+  - [Override Modules](/finatra/user-guide/testing#override-modules)
+  - [Test Helpers](/finatra/user-guide/testing#test-helpers)
 
 
 ### Getting Involved
