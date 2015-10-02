@@ -79,7 +79,7 @@ Finatra provides a custom [`case class` deserializer](https://github.com/twitter
 * Support for accumulating JSON parsing errors (instead of failing fast).
 * Support for field and method level validations which also accumulate errors.
 
-## <a name="routing-json" href="#routing-json>Integration with Routing</a>
+## <a name="routing-json" href="#routing-json">Integration with Routing</a>
 ===============================
 
 If a custom `case class` is used as a route callback's input type Finatra will parse the request body into the custom request class. Similar to declaratively parsing a `GET` request (described above), Finatra will perform validations and return a `400 BadRequest` with a list of any accumulated errors in JSON format.
@@ -121,7 +121,7 @@ case class Dates(
 ## Validation Framework
 ===============================
 
-We provide a simple validation framework inspired by [JSR-330](https://github.com/google/guice/wiki/JSR330). Our framework integrates with our custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validations are included, and additional validations can be provided:
+We provide a simple validation framework inspired by [JSR-330](https://github.com/google/guice/wiki/JSR330). The validations framework integrates with the custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validations are included (and additional validations can be easily provided):
 
 * CountryCode
 * FutureTime
@@ -140,7 +140,7 @@ We provide a simple validation framework inspired by [JSR-330](https://github.co
 
 Can be used for:
 
-* Non-generic validations -- a `MethodValidation` can be used instead of defining a reusable annotation and validator.
+* Non-generic validations. `MethodValidation` can be used instead of defining a reusable annotation and validator.
 * Cross-field validations (e.g. `startDate` before `endDate`)
 
 See the implementation of the `GroupRequest` [above](#group-request-example) for an example of using `MethodValidation`.
