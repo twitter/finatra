@@ -919,7 +919,7 @@ One common and simple test is to check that the service can start up and report 
 * Startup tests should mimic production as close as possible. As such:
     - avoid using `@Bind` and "override modules" in startup tests.
     - set the Guice `stage` to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `State.DEVELOPMENT` by default).
-    - prevent Finagle clients from making outbound connections during startup tests by setting Dtab entries to `nil!`.
+    - prevent Finagle clients from making outbound connections during startup tests by setting `com.twitter.server.resolverMap` entries to `nil!`.
 
 For example:
 
@@ -933,8 +933,7 @@ class MyServiceStartupTests extends FeatureTest {
     stage = Stage.PRODUCTION,
     twitterServer = new SampleApiServer,
     extraArgs = Seq(
-      "-dtab.add=/srv => /$/nil",
-      "-dtab.add=/srv# => /$/nil"))
+      "-com.twitter.server.resolverMap=myservice=nil!"))
 
   "SampleApiServer" should {
     "startup" in {
