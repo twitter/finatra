@@ -929,7 +929,7 @@ import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 
 class MyServiceStartupTests extends FeatureTest {
-  val server = EmbeddedHttpServer(
+  val server = new EmbeddedHttpServer(
     stage = Stage.PRODUCTION,
     twitterServer = new SampleApiServer,
     extraArgs = Seq(
