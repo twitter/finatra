@@ -14,7 +14,7 @@ footer: true
 ## Basics
 ===============================
 
-Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala). JSON support is provided in the [finatra-jackson](https://github.com/FasterXML/jackson) library which can be used outside of Finatra as a replacement for the [jackson-scala-module](https://github.com/FasterXML/jackson-module-scala) or [jerkson](https://github.com/codahale/jerkson).
+Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala) for JSON support. Note that the [finatra-jackson](https://github.com/FasterXML/jackson) library can be used outside of Finatra as a replacement for the [jackson-scala-module](https://github.com/FasterXML/jackson-module-scala) or [jerkson](https://github.com/codahale/jerkson).
 
 ### Features
 
