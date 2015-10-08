@@ -2,7 +2,7 @@ package com.twitter.inject.server
 
 import com.google.inject.Module
 import com.twitter.finagle.client.ClientRegistry
-import com.twitter.finagle.httpx.HttpMuxer
+import com.twitter.finagle.http.HttpMuxer
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule

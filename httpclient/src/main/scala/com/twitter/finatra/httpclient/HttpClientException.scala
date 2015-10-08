@@ -1,7 +1,7 @@
 package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.NoStacktrace
-import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.http.Status
 
 class HttpClientException(
   status: Status,

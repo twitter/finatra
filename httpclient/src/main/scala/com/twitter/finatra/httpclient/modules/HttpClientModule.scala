@@ -2,7 +2,7 @@ package com.twitter.finatra.httpclient.modules
 
 import com.google.inject.Provides
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.httpclient.{HttpClient, RichHttpClient}
 import com.twitter.finatra.json.FinatraObjectMapper

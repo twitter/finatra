@@ -1,6 +1,6 @@
 package com.twitter.finatra.tests.utils
 
-import com.twitter.finagle.httpx.{Response, Status, Version}
+import com.twitter.finagle.http.{Response, Status, Version}
 import com.twitter.finatra.utils.ResponseUtils
 import com.twitter.inject.Test
 

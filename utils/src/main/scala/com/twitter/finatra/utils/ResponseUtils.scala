@@ -1,7 +1,7 @@
 package com.twitter.finatra.utils
 
-import com.twitter.finagle.httpx.{Response, Status}
-import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.http.{Response, Status}
+import com.twitter.finagle.http.Status._
 
 object ResponseUtils {
 

@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.exceptions
 
 import com.google.common.net.MediaType
-import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.http.Status
 
 /* HTTP Exceptions */
 // TODO: Redesign to avoid boilerplate below (@see ResponseBuilder) */

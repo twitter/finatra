@@ -1,7 +1,7 @@
 package com.twitter.finatra.httpclient
 
-import com.twitter.finagle.httpx.Method
-import com.twitter.finagle.httpx.Method._
+import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.Method._
 import com.twitter.inject.Test
 
 class RequestBuilderTest extends Test {

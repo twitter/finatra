@@ -1,6 +1,6 @@
 package com.twitter.inject.thrift.integration
 
-import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.server.EmbeddedTwitterServer
 import com.twitter.inject.thrift.integration.http_server.EchoHttpServer

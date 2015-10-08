@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.multiserver.add1server
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 
 class Add1Controller extends Controller {

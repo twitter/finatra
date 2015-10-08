@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.request
 
-import com.twitter.finagle.httpx.MapParamMap
+import com.twitter.finagle.http.MapParamMap
 import com.twitter.finatra.http.internal.request.RouteParamMap
 import com.twitter.inject.Test
 

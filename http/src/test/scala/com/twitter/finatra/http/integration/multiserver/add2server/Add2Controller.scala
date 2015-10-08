@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.multiserver.add2server
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import javax.inject.Inject

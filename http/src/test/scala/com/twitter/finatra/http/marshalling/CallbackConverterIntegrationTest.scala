@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.marshalling
 
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.httpx.{Method => HttpMethod, Request, Response, Status}
+import com.twitter.finagle.http.{Method => HttpMethod, Request, Response, Status}
 import com.twitter.finatra.conversions.buf._
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}

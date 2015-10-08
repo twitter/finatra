@@ -1,6 +1,6 @@
 package com.twitter.finatra.http
 
-import com.twitter.finagle.httpx.{Method => HttpMethod}
+import com.twitter.finagle.http.{Method => HttpMethod}
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.inject.Injector

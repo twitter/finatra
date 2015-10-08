@@ -2,7 +2,7 @@ package com.twitter.finatra.http.conversions
 
 import com.twitter.conversions.time._
 import com.twitter.finagle._
-import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.conversions.futureHttp._
 import com.twitter.finatra.http.exceptions.{HttpException, NotFoundException}
 import com.twitter.inject.Test

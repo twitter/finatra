@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.test
 
-import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.response.ResponseBuilder

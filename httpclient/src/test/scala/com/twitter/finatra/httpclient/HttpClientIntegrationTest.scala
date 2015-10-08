@@ -3,7 +3,7 @@ package com.twitter.finatra.httpclient
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.{Request, Response, Status}
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.httpclient.modules.HttpClientModule
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
 import com.twitter.finatra.json.modules.FinatraJacksonModule

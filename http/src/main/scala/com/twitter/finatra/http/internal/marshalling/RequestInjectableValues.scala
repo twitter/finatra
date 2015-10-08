@@ -2,7 +2,7 @@ package com.twitter.finatra.http.internal.marshalling
 
 import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues, JavaType}
 import com.google.inject.{Injector, Key}
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.internal.marshalling.RequestInjectableValues.SeqWithSingleEmptyString
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.annotations._

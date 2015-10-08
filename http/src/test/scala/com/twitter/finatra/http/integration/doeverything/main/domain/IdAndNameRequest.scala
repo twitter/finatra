@@ -2,7 +2,7 @@ package com.twitter.finatra.http.integration.doeverything.main.domain
 
 import javax.inject.Inject
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.request.{JsonIgnoreBody, RouteParam}
 
 case class IdAndNameRequest(

@@ -107,11 +107,11 @@ Regular expressions are no longer allowed in string defined paths. Note: We are 
 ## Requests
 Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types:
 
-- A Finagle `httpx` Request
+- A Finagle `http` Request
 - A custom `case class` Request
 
-### Finagle `httpx` Request
-This is a [`com.twitter.finagle.httpx.Request`](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.httpx.Request) which contains common HTTP attributes.
+### Finagle `http` Request
+This is a [`com.twitter.finagle.http.Request`](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request) which contains common HTTP attributes.
 
 ### Custom `case class` Request
 Custom requests allow declarative request parsing with support for type conversions, default values, and validations.
@@ -199,7 +199,7 @@ Notes:
      * `@FormParam`
      * `@Header`
  * Other
-     * `@RequestInject`: Injects the Finagle `httpx` Request or any Guice managed class into your case class
+     * `@RequestInject`: Injects the Finagle `http` Request or any Guice managed class into your case class
 
 *Note: HTTP requests with a content-type of application/json, are similarly parsed. This behavior can be disabled by annotating the `case class` with `@JsonIgnoreBody`, leaving the raw request body accessible through `@RequestInject`. See [JSON](#json) section below.*
 

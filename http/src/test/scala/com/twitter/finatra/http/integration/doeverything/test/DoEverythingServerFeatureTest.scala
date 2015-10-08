@@ -3,9 +3,9 @@ package com.twitter.finatra.http.integration.doeverything.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType.JSON_UTF_8
 import com.google.inject.{Key, TypeLiteral}
-import com.twitter.finagle.httpx.Method._
-import com.twitter.finagle.httpx.Status._
-import com.twitter.finagle.httpx.{Method, Request}
+import com.twitter.finagle.http.Method._
+import com.twitter.finagle.http.Status._
+import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.http.test.EmbeddedHttpServer
@@ -1334,7 +1334,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = Ok)
 
     // global stats
-    // compatible with com.twitter.finagle.httpx.filter.StatsFilter
+    // compatible with com.twitter.finagle.http.filter.StatsFilter
     counter("status/200") should be(3)
     counter("status/2XX") should be(3)
     stat("response_size") should be(List(2.0, 3.0, 3.0))

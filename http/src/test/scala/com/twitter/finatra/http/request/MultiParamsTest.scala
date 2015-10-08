@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.request
 
-import com.twitter.finagle.httpx.{Method, Request}
-import com.twitter.finagle.{httpx => finagle}
+import com.twitter.finagle.http.{Method, Request}
+import com.twitter.finagle.{http => finagle}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.inject.Test
 import org.apache.commons.fileupload.util.FileItemHeadersImpl

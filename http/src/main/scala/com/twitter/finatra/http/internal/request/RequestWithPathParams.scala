@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.internal.request
 
-import com.twitter.finagle.httpx.{ParamMap, Request, RequestProxy}
+import com.twitter.finagle.http.{ParamMap, Request, RequestProxy}
 
 class RequestWithPathParams(
   wrapped: Request,
