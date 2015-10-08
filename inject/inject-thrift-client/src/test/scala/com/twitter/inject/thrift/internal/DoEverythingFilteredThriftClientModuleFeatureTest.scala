@@ -1,7 +1,7 @@
 package com.twitter.inject.thrift.internal
 
 import com.twitter.finagle.Thrift
-import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.http.Status._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters

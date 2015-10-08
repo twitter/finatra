@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.integration.doeverything.main
 
 import com.twitter.finagle.Filter
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.integration.doeverything.main.controllers.{DoEverythingController, DoNothingController, NonGuiceController}
 import com.twitter.finatra.http.integration.doeverything.main.domain.DomainTestUserReader

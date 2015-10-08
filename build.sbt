@@ -244,7 +244,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
       "com.twitter" %% "scrooge-core" % versions.scrooge,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "com.twitter" %% "finagle-httpx" % versions.finagle % "test->compile")
+      "com.twitter" %% "finagle-http" % versions.finagle % "test->compile")
   ).
   dependsOn(
     injectCore,
@@ -263,7 +263,7 @@ lazy val utils = project.
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.google.guava" % "guava" % versions.guava,
-      "com.twitter" %% "finagle-httpx" % versions.finagle,
+      "com.twitter" %% "finagle-http" % versions.finagle,
       "commons-io" % "commons-io" % versions.commonsIo,
       "joda-time" % "joda-time" % versions.jodaTime,
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
@@ -300,7 +300,7 @@ lazy val http = project.
   settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpxReplyHandler.*",
+    coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpReplyHandler.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -339,7 +339,7 @@ lazy val slf4j = project.
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-httpx" % versions.finagle,
+      "com.twitter" %% "finagle-http" % versions.finagle,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j

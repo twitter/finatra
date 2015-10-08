@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.integration.doeverything.main.domain
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import javax.inject.Inject

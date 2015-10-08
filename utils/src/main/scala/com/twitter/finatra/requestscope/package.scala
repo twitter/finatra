@@ -1,6 +1,6 @@
 package com.twitter.finatra
 
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 
 package object requestscope {
 

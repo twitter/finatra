@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.response
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 
 object ErrorsResponse {
   def apply(error: String): ErrorsResponse = {

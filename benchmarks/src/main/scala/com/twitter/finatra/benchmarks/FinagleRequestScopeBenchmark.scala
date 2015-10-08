@@ -1,6 +1,6 @@
 package com.twitter.finatra.benchmarks
 
-import com.twitter.finagle.httpx.{Method, Request, Response}
+import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.internal.routing.{Route, RoutingService}
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
 import com.twitter.util.Future

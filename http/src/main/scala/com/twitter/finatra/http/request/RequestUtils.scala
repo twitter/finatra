@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.request
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.exceptions.BadRequestException
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.internal.marshalling.FinatraFileUpload

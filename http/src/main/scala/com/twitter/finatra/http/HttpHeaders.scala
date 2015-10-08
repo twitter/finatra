@@ -1,6 +1,6 @@
 package com.twitter.finatra.http
 
-import com.twitter.finagle.httpx.Response
+import com.twitter.finagle.http.Response
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 

@@ -1,7 +1,7 @@
 package twitter.github.io.finatra.quickstart
 
 import com.google.inject.testing.fieldbinder.Bind
-import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest

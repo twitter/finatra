@@ -6,8 +6,8 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.Service
 import com.twitter.finagle.builder.ServerConfig.Yes
 import com.twitter.finagle.builder.{Server, ServerBuilder}
-import com.twitter.finagle.httpx.service.NullService
-import com.twitter.finagle.httpx.{Http, Request, Response}
+import com.twitter.finagle.http.service.NullService
+import com.twitter.finagle.http.{Http, Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}

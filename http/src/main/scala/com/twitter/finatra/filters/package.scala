@@ -1,6 +1,6 @@
 package com.twitter.finatra
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 
 package object filters {
   @deprecated("Use com.twitter.finatra.http.filters.AccessLoggingFilter", "")

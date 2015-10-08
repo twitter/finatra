@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.doeverything.main.exceptions
 
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ResponseBuilder
 import javax.inject.Inject

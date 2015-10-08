@@ -1,11 +1,11 @@
 package com.twitter.finatra.httpclient
 
 import com.google.common.net.HttpHeaders
-import com.twitter.finagle.httpx.{Message, Method, Request, RequestProxy}
+import com.twitter.finagle.http.{Message, Method, Request, RequestProxy}
 import org.apache.commons.io.IOUtils
 
 /**
- * Provides a class for building <code>finagle.httpx.Request</code> objects
+ * Provides a class for building <code>finagle.http.Request</code> objects
  */
 object RequestBuilder {
   def get(url: String): RequestBuilder = {
@@ -35,7 +35,7 @@ object RequestBuilder {
 }
 
 /**
- * RequestBuilder is a finagle.httpx.Request with a builder API for common mutations
+ * RequestBuilder is a finagle.http.Request with a builder API for common mutations
  */
 class RequestBuilder(
   override val request: Request)

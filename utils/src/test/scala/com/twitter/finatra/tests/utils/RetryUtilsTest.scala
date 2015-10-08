@@ -1,6 +1,6 @@
 package com.twitter.finatra.tests.utils
 
-import com.twitter.finagle.httpx.{Response, Status}
+import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.utils.{RetryPolicyUtils, RetryUtils}
 import com.twitter.inject.Test

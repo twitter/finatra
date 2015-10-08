@@ -1,6 +1,6 @@
 package com.twitter.inject.thrift.filtered_integration.http_server
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.util.Future

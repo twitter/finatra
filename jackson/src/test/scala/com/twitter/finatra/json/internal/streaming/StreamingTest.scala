@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.streaming
 
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.httpx.{Method, Request}
+import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Test
 import com.twitter.io.Buf

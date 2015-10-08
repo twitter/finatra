@@ -1,6 +1,6 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.http.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
 import com.twitter.inject.{Test, TwitterModule}
 

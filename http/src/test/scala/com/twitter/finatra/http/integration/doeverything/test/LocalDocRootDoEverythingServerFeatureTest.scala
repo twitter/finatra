@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.doeverything.test
 
-import com.twitter.finagle.httpx.Status._
+import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.integration.doeverything.main.domain.TestUserView
 import com.twitter.finatra.http.marshalling.mustache.MustacheService

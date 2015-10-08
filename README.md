@@ -28,7 +28,6 @@ Presentations
 News
 -----------------------------------------------------------
 * Finatra is now built against the latest Finagle v6.28.0 and Twitter Server v1.13.0 releases.
-* Starting with version 2.0.0.RC1, finagle-http is no longer supported and finagle-httpx should be exclusively used. As such, please upgrade from com.twitter.http to com.twitter.httpx for all your imports.**
 
 <a name="quick-start">Quick Start</a>
 -----------------------------------------------------------
@@ -189,7 +188,7 @@ A url shortening example that is deployable to [Heroku](https://heroku.com).
 An example Twitter-like API for creating and retrieving Tweets.
 
 ### [benchmark-server](examples/benchmark-server/README.md)
-A server used for benchmarking performance compared to a raw finagle-httpx service.
+A server used for benchmarking performance compared to a raw finagle-http service.
 
 ### [streaming](examples/streaming-example/README.md)
 A proof-of-concept streaming JSON service.

@@ -1,6 +1,6 @@
 package com.twitter.finatra.utils
 
-import com.twitter.finagle.httpx.Response
+import com.twitter.finagle.http.Response
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._

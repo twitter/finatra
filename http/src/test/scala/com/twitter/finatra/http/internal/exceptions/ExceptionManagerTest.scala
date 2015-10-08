@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.internal.exceptions
 
-import com.twitter.finagle.httpx.{Request, Response, Status}
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionMapper}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Test

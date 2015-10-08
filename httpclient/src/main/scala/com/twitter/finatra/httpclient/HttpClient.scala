@@ -1,7 +1,7 @@
 package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.{Request, Response, Status}
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.RetryUtils

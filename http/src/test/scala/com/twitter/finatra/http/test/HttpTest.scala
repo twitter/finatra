@@ -2,7 +2,7 @@ package com.twitter.finatra.http.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.test.EmbeddedTwitterServer
 import com.twitter.inject.server.AsyncStreamUtils

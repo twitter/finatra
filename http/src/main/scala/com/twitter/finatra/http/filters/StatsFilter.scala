@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.filters
 
-import com.twitter.finagle.httpx.{Method => HttpMethod, Request, Response, Status}
+import com.twitter.finagle.http.{Method => HttpMethod, Request, Response, Status}
 import com.twitter.finagle.stats.{Counter, Stat, StatsReceiver}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.contexts.RouteInfo
@@ -52,7 +52,7 @@ object StatsFilter {
 }
 
 /**
- * A drop-in replacement for [[com.twitter.finagle.httpx.filter.StatsFilter]]
+ * A drop-in replacement for [[com.twitter.finagle.http.filter.StatsFilter]]
  * with per-route stats scoped under `route/<name>/<method>`.
  */
 @Singleton

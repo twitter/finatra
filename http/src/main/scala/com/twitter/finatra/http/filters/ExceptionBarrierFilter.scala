@@ -1,14 +1,14 @@
 package com.twitter.finatra.http.filters
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.internal.exceptions.ExceptionManager
 import com.twitter.util.Memoize
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-@deprecated("Use ExceptionMapperFilter with com.twitter.finatra.httpx.filters.StatsFilter[Request]", "")
+@deprecated("Use ExceptionMapperFilter with com.twitter.finatra.http.filters.StatsFilter[Request]", "")
 class ExceptionBarrierFilter @Inject()(
   statsReceiver: StatsReceiver,
   exceptionManager: ExceptionManager)
