@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.integration.tweetexample.main.controllers
 
 import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.finagle.httpx.{Fields, Status, Request, Response}
+import com.twitter.finagle.http.{Fields, Status, Request, Response}
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.integration.tweetexample.main.domain.Tweet
 import com.twitter.finatra.http.integration.tweetexample.main.services.TweetsRepository

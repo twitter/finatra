@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.tweetexample.main.domain
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import javax.inject.Inject

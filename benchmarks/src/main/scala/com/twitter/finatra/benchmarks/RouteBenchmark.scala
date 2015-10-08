@@ -1,6 +1,6 @@
 package com.twitter.finatra.benchmarks
 
-import com.twitter.finagle.httpx.{Method, Request, Response}
+import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.util.Future
 import org.openjdk.jmh.annotations._

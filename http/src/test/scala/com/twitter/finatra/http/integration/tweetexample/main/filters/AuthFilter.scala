@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.tweetexample.main.filters
 
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.util.Future

@@ -4,7 +4,7 @@ import com.google.common.net.{HttpHeaders, MediaType}
 import com.google.inject.Stage
 import com.twitter.conversions.time._
 import com.twitter.finagle.builder.ClientBuilder
-import com.twitter.finagle.httpx._
+import com.twitter.finagle.http._
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._

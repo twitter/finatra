@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finagle.httpx
-import com.twitter.finagle.httpx.{Request, Response, Status}
+import com.twitter.finagle.http
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
@@ -61,11 +61,11 @@ class HttpWarmup @Inject()(
     request.headerMap.add("User-Agent", userAgent)
 
     if (forceRouteToHttpMuxer)
-      httpx.HttpMuxer(request)
+      http.HttpMuxer(request)
     else if (request.uri.startsWith("/admin/finatra/"))
       router.services.adminService(request)
     else if (request.uri.startsWith("/admin"))
-      httpx.HttpMuxer(request)
+      http.HttpMuxer(request)
     else
       router.services.externalService(request)
   }

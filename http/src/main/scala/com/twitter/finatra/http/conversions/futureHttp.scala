@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.conversions
 
-import com.twitter.finagle.httpx.Status
+import com.twitter.finagle.http.Status
 import com.twitter.finatra.conversions.future.RichFutureOption
 import com.twitter.finatra.http.exceptions.{HttpException, NotFoundException}
 import com.twitter.inject.Logging

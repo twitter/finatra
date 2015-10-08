@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.server
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.{Request, Response, Status}
+import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.inject.Test

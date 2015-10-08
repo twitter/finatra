@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.twitter.finagle.httpx.{Method, Request}
+import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import org.apache.commons.fileupload.{FileItemFactory, FileItemHeaders, FileItemIterator, FileUploadBase}
 import org.apache.commons.io.IOUtils

@@ -2,7 +2,7 @@ package com.twitter.finatra.tests.json
 
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
 import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}

@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.internal.request
 
-import com.twitter.finagle.httpx.ParamMap
+import com.twitter.finagle.http.ParamMap
 
 class RouteParamMap(
   paramMap: => ParamMap, //avoid constructing paramMap from Finagle request unless needed

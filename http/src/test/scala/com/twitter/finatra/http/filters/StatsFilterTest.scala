@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.filters
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.{Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.inject.Test
 import com.twitter.util.{Await, Future}

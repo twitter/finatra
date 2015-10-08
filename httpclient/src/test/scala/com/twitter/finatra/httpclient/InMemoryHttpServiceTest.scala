@@ -1,6 +1,6 @@
 package com.twitter.finatra.httpclient
 
-import com.twitter.finagle.httpx.{Method, Request, Response}
+import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
 import com.twitter.inject.Test
 import com.twitter.util.Await

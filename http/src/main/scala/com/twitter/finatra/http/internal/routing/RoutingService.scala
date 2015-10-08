@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.{Method, Request, Response, Status}
-import com.twitter.finagle.httpx.Method._
+import com.twitter.finagle.http.{Method, Request, Response, Status}
+import com.twitter.finagle.http.Method._
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.Future

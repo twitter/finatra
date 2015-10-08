@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.conversions.map._
 import com.twitter.finatra.http.marshalling._
 import com.twitter.inject.Injector

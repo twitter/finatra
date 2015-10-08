@@ -36,7 +36,7 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
-    'finagle/finagle-httpx',
+    'finagle/finagle-http',
     'finatra/jackson:test-deps',
     'finatra/utils:test-deps',
     'finatra/http',

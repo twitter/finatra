@@ -3,7 +3,7 @@ package com.twitter.finatra.http.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.google.inject.Stage
-import com.twitter.finagle.httpx.{Method, Status, _}
+import com.twitter.finagle.http.{Method, Status, _}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{PortUtils, Ports}

@@ -1,17 +1,17 @@
 package com.twitter.finatra.httpclient
 
-import com.twitter.finagle.httpx.{Request, Response}
-import com.twitter.finagle.{Httpx, Service}
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.{Http, Service}
 
 object RichHttpClient {
 
   /* Public */
 
   def newClientService(dest: String): Service[Request, Response] = {
-    Httpx.newClient(dest).toService
+    Http.newClient(dest).toService
   }
 
   def newSslClientService(sslHostname: String, dest: String): Service[Request, Response] = {
-    Httpx.client.withTls(sslHostname).newService(dest)
+    Http.client.withTls(sslHostname).newService(dest)
   }
 }

@@ -1,8 +1,8 @@
 package com.twitter.finatra.httpclient.test
 
 import com.twitter.finagle.Service
-import com.twitter.finagle.httpx.Method._
-import com.twitter.finagle.httpx.{Method, Request, Response}
+import com.twitter.finagle.http.Method._
+import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.utils.Resettable
 import com.twitter.inject.app.Banner
 import com.twitter.inject.{Injector, Logging}

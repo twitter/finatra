@@ -4,7 +4,7 @@ import javax.inject.{Inject, Singleton}
 
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.inject.Injector
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling.DefaultMessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.JsonIgnoreBody
