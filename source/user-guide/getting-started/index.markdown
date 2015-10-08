@@ -21,6 +21,7 @@ Finatra internally uses the Google [Guice](https://github.com/google/guice) depe
 **NOTE: You are not required to use Guice dependency injection when using Finatra**. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra's [testing](/finatra/user-guide/testing) features.
 
 An example of Finatra's Guice integration is adding controllers to Finatra's [HttpRouter](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) by type:
+
 ```scala
 class Server extends HttpServer {
   override def configureHttp(router: HttpRouter) {
@@ -31,6 +32,7 @@ class Server extends HttpServer {
 <div></div>
 
 As mentioned, it is also possible to do this without using Guice, simply instantiate your controller and add the instance to the router:
+
 ```scala
 class NonGuiceServer extends HttpServer {
   override def configureHttp(router: HttpRouter) {
@@ -41,7 +43,7 @@ class NonGuiceServer extends HttpServer {
 ```
 <div></div>
 
-### <a name="modules" href="#modules">Modules</a>
+### <a class="anchor" name="modules">Modules</a>
 ===============================
 
 Modules are used in conjunction with Guice dependency injection to specify *how* to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: [Flags](/finatra/user-guide/getting-started#flags)).
@@ -92,10 +94,10 @@ class Server extends HttpServer {
 ```
 <div></div>
 
-### <a name="flags" href="#flags">Flags</a>
+### <a class="anchor" name="flags">Flags</a>
 ===============================
 
-Finatra supports the use of [TwitterUtil](https://github.com/twitter/util) flags as supported within the [TwitterServer](http://twitter.github.io/twitter-server/Features.html#flags) lifecycle. Flags by their definition, generally represent some external configuration that is passed to the system and thus are an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment, *production*, *staging*, or *development*.
+Finatra supports the use of [twitter/util](https://github.com/twitter/util) [Flags](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala) as supported within the [TwitterServer](http://twitter.github.io/twitter-server/Features.html#flags) lifecycle. Flags by their definition represent some external configuration that is passed to the system and are thus an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment, *production*, *staging*, or *development*.
 
 This type of configuration parameterization is generally preferred over hardcoding logic by a type of "*environment*" String within code. As such, flags are generally defined within a [Module](#module) to allow for scoping of reusable external configuration. In this way, flags can be used to aid in the construction of an instance to be provided to the object graph, e.g., a DatabaseConnection instance that use the database URL flag as an input. The module is then able to tell Guice how to provide this object when injected by defining an `@Provides` annotated method.
 
@@ -103,6 +105,7 @@ In Finatra, we also provide a way to override the objects provided on the object
 
 #### `@Flag` annotation
 Flag values can be injected into classes (and provider methods), by using the `@Flag` annotation:
+
 ```scala
 class MyService @Inject()(
   @Flag("key") key: String) {
@@ -119,6 +122,7 @@ class MyModule extends TwitterModule {
 <div></div>
 
 **NOTE**: If a flag is defined in a module, you can dereference that flag directly within the module (instead of using the `@Flag` annotation), e.g.:
+
 ```scala
 object MyModule1 extends TwitterModule {
   val key = flag("key", "defaultkey", "The key to use.")
@@ -132,32 +136,17 @@ object MyModule1 extends TwitterModule {
 ```
 <div></div>
 
-#### <a name="setting-flags-from-code" href="#setting-flags-from-code">Setting flags from code</a> ([HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/server/BaseHttpServer.scala), only)
-Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra's [HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala)'s core flags can be set from code.
-For example, instead of setting the `-maxRequestSize` flag, you can override the following method in your server.
-
-```scala
-class TweetsEndpointServer extends HttpServer {
-
-  override val defaultMaxRequestSize = 10.megabytes
-
-  override def configureHttp(router: HttpRouter) {
-    ...
-  }
-}
-```
-<div></div>
-
-Use the ```-help``` flag to see usage for running a Finatra server, e.g.
+Use the `-help` flag to see usage for running a Finatra server, e.g.
 
 ```bash
 $ java -jar finatra-hello-world-assembly-2.0.0.jar -help
 ```
+<div></div>
 
-### <a name="futures" href="#futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
+### <a class="anchor" name="futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
 ===============================
 
-Finatra (like other frameworks based on [Finagle](https://twitter.github.io/finagle)) uses [TwitterUtil's](https://github.com/twitter/util) [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) class. Twitter's `com.twitter.util.Future` is similar to but predates [Scala's](http://docs.scala-lang.org/overviews/core/futures.html) [`scala.concurrent.Future`](http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future) (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is *not* compatible without using [bijections](https://github.com/twitter/bijection) to transform one into the other. It is important to remember that Finatra uses and expects [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala).
+Finatra, like other frameworks based on Twitter's [Finagle](https://twitter.github.io/finagle), uses the [twitter/util](https://github.com/twitter/util) [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) class. Twitter's `com.twitter.util.Future` is similar to, but predates, [Scala's](http://docs.scala-lang.org/overviews/core/futures.html) [`scala.concurrent.Future`](http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future) (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is *not* compatible without using [bijections](https://github.com/twitter/bijection) to transform one into the other. It is important to remember that Finatra uses and expects [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala).
 
 <nav>
   <ul class="pager">

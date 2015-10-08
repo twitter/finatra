@@ -11,7 +11,7 @@ footer: true
   <li class="active">Working with Files</li>
 </ol>
 
-## <a name="file-server" href="#file-server">File Server</a>
+## <a class="anchor" name="file-server">File Server</a>
 ===============================
 
 Finatra provides basic file server support which is not meant for high traffic file serving. Do not use the file server for production apps requiring a robust high performance file serving solution.
@@ -43,8 +43,9 @@ get("/:*") { request: Request =>
     "index.html")
 }
 ```
+<div></div>
 
-## <a name="mustache" href="#mustache">Mustache Templating</a>
+## <a class="anchor" name="mustache">Mustache Templating</a>
 ===============================
 
 Finatra supports the rendering of mustache templates. The framework provides a default [MustacheModule](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala) but this is configurable. To set your own module override the mustacheModule def in [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L63), e.g.,
@@ -55,6 +56,7 @@ class ExampleServer extends HttpServer {
   ...
 }
 ```
+<div></div>
 
 By default mustache templates are loaded from the classpath root. To configure a classpath "namespace" for loading mustache templates, set the `-mustache.templates.dir` flag.
 
@@ -120,6 +122,7 @@ get("/testClassWithHtml") { r: Request =>
     renderedHtml = xml.Utility.escape(mustacheService.createString("testHtml.mustache", testUser)))
 }
 ```
+<div></div>
 
 See the [test class](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L1282) for more examples.
 
