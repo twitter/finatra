@@ -1,6 +1,5 @@
 junit_tests(name='scala',
   dependencies=[
-    'finatra/utils',
     'finatra/utils:test-deps',
     'finatra/inject/inject-core:test-deps',
     'finatra/inject/inject-server:test-deps',
@@ -24,9 +23,11 @@ scala_library(name="test-deps",
     'finagle/finagle-stats',
     'finatra/inject/inject-core:test-deps',
     'finatra/inject/inject-server:test-deps',
+    'finatra/utils',
   ],
   sources=globs(
     'com/twitter/finatra/guice/*.scala',
+    'com/twitter/finatra/modules/*.scala',
     'com/twitter/finatra/test/*.scala'
   )
 )
