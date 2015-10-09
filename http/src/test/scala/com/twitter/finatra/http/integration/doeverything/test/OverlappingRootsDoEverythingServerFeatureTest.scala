@@ -3,19 +3,20 @@ package com.twitter.finatra.http.integration.doeverything.test
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.test.LocalFilesystemTestUtils._
 import com.twitter.inject.server.FeatureTest
 import java.io.File
 import org.apache.commons.io.FileUtils
 
 class OverlappingRootsDoEverythingServerFeatureTest
   extends FeatureTest
-  with LocalFilesystemTestUtility {
+  with DocRootLocalFilesystemTestUtility {
 
   override protected def beforeAll() = {
     super.beforeAll()
 
     // create src/main/webapp directory and add files
-    val webapp = createFile(s"${baseDirectory}src/main/webapp")
+    val webapp = createFile(s"${BaseDirectory}src/main/webapp")
     FileUtils.writeStringToFile(createFile(webapp, "testfile.txt"), testFileText)
     FileUtils.writeStringToFile(createFile(webapp, "testindex.html"), testIndexHtml)
 
@@ -28,13 +29,13 @@ class OverlappingRootsDoEverythingServerFeatureTest
 
   override protected def afterAll() = {
     // try to help clean up
-    new File(s"${baseDirectory}src").delete
+    new File(s"${BaseDirectory}src").delete
     super.afterAll()
   }
 
   override val server = new EmbeddedHttpServer(
     clientFlags = Map(
-      "local.doc.root" -> s"${baseDirectory}src/main/webapp",
+      "local.doc.root" -> s"${BaseDirectory}src/main/webapp",
       "mustache.templates.dir" -> s"/templates"),
     extraArgs = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer)

@@ -5,39 +5,40 @@ import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.integration.doeverything.main.domain.TestUserView
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.test.LocalFilesystemTestUtils._
 import com.twitter.inject.server.FeatureTest
 import java.io.{File, FileWriter}
 import org.apache.commons.io.FileUtils
 
 class LocalDocRootDoEverythingServerFeatureTest
   extends FeatureTest
-  with LocalFilesystemTestUtility {
+  with DocRootLocalFilesystemTestUtility {
 
   override protected def beforeAll() = {
     super.beforeAll()
 
     // create src/main/resources/templates directory and add files
-    val templates = createFile(s"${baseDirectory}src/main/resources/templates")
+    val templates = createFile(s"${BaseDirectory}src/main/resources/templates")
     FileUtils.writeStringToFile(createFile(templates, "testuser.mustache"), testUserMustacheString)
     FileUtils.writeStringToFile(createFile(templates, "testuser2.mustache"), testUser2MustacheString)
     FileUtils.writeStringToFile(createFile(templates, "testHtml.mustache"), testHtmlMustacheString)
 
     // create src/main/webapp directory and add files
-    val webapp = createFile(s"${baseDirectory}src/main/webapp")
+    val webapp = createFile(s"${BaseDirectory}src/main/webapp")
     FileUtils.writeStringToFile(createFile(webapp, "testfile.txt"), testFileText)
     FileUtils.writeStringToFile(createFile(webapp, "testindex.html"), testIndexHtml)
   }
 
   override protected def afterAll() = {
     // try to help clean up
-    new File(s"${baseDirectory}src").delete
+    new File(s"${BaseDirectory}src").delete
     super.afterAll()
   }
 
   override val server = new EmbeddedHttpServer(
     clientFlags = Map(
-      "local.doc.root" -> s"${baseDirectory}src/main/webapp",
-      "mustache.templates.dir" -> s"${baseDirectory}src/main/resources/templates"),
+      "local.doc.root" -> s"${BaseDirectory}src/main/webapp",
+      "mustache.templates.dir" -> s"${BaseDirectory}src/main/resources/templates"),
     extraArgs = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer)
 
@@ -146,7 +147,7 @@ class LocalDocRootDoEverythingServerFeatureTest
       firstResult should be("age:28\nname:Bob Smith\nuser1\nuser2\n")
 
       // alter the file
-      val testUserMustacheFile = new FileWriter(s"${baseDirectory}src/main/resources/templates/testuser.mustache")
+      val testUserMustacheFile = new FileWriter(s"${BaseDirectory}src/main/resources/templates/testuser.mustache")
       testUserMustacheFile.write("")
       testUserMustacheFile.append("another age:{{age}}\nanother name:{{name}}\n{{#friends}}\n{{.}}\n{{/friends}}")
       testUserMustacheFile.close()
