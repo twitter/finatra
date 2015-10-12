@@ -182,7 +182,7 @@ class FinatraCaseClassDeserializer(
 
   private def createAndValidate(constructorValues: Array[Object], fieldErrors: Seq[CaseClassValidationException]): Object = {
     if (fieldErrors.nonEmpty) {
-      throw new CaseClassMappingException(fieldErrors)
+      throw new CaseClassMappingException(fieldErrors.toSet)
     }
 
     val obj = create(constructorValues)
@@ -218,7 +218,7 @@ class FinatraCaseClassDeserializer(
     } yield CaseClassValidationException(PropertyPath.empty, invalid)
 
     if (methodValidationErrors.nonEmpty) {
-      throw new CaseClassMappingException(fieldErrors ++ methodValidationErrors)
+      throw new CaseClassMappingException(fieldErrors.toSet ++ methodValidationErrors.toSet)
     }
   }
 

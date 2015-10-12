@@ -129,9 +129,9 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
                "nickname" : "ace"
             }""",
         withErrors = Seq(
+          "age: 'foo' is not a valid int",
           "id: field is required",
-          "name: field is required",
-          "age: 'foo' is not a valid int"))
+          "name: field is required"))
     }
 
     scenario("parse nested json with missing fields") {
@@ -147,8 +147,8 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
         withErrors = Seq(
           "make: 'Foo' is not a valid CarMake with valid values: Ford, Honda",
           "model: field is required",
-          "passengers.name: field is required",
-          "passengers.age: 'blah' is not a valid int"))
+          "passengers.age: 'blah' is not a valid int",
+          "passengers.name: field is required"))
     }
 
     scenario("parse json with missing 'nickname' field that has a string default") {
@@ -278,11 +278,12 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
            "date_time4" : ""
          }""",
         withErrors = Seq(
-          "age: 'old' is not a valid int",
           "age3: error parsing ''",
-          """date_time: error parsing 'today' into an ISO 8601 datetime""",
+          "age: 'old' is not a valid int",
           """date_time3: field cannot be negative""",
-          """date_time4: field cannot be empty"""))
+          """date_time4: field cannot be empty""",
+          """date_time: error parsing 'today' into an ISO 8601 datetime"""
+          ))
     }
   }
 
