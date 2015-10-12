@@ -1,9 +1,8 @@
 package com.twitter.finatra.tests.json.internal.caseclass.validation
 
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassValidationException, CaseClassMappingException}
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
-import com.twitter.finatra.json.internal.caseclass.validation.validators.MinValidator
+import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException}
 import com.twitter.finatra.tests.json.internal.CarMake
 import com.twitter.finatra.tests.json.internal.caseclass.validation.domain.{Address, Car, Person}
 import com.twitter.finatra.validation.ErrorCode
@@ -40,7 +39,7 @@ class CaseClassValidationTest extends Test {
       }
 
       parseError should equal(CaseClassMappingException(
-        Seq(CaseClassValidationException(PropertyPath.leaf("year"), Invalid("[1910] is not greater than or equal to 2000", ErrorCode.ValueTooSmall(2000, 1910))))))
+        Set(CaseClassValidationException(PropertyPath.leaf("year"), Invalid("[1910] is not greater than or equal to 2000", ErrorCode.ValueTooSmall(2000, 1910))))))
     }
 
     "nested failed validations" in {
@@ -60,9 +59,10 @@ class CaseClassValidationTest extends Test {
       }
 
       parseError should equal(CaseClassMappingException(
-        Seq(
-          CaseClassValidationException(PropertyPath.leaf("street").withParent("address").withParent("owners"), Invalid("cannot be empty", ErrorCode.ValueCannotBeEmpty)),
-          CaseClassValidationException(PropertyPath.leaf("city").withParent("address").withParent("owners"), Invalid("cannot be empty", ErrorCode.ValueCannotBeEmpty)))))
+        Set(
+          CaseClassValidationException(PropertyPath.leaf("city").withParent("address").withParent("owners"), Invalid("cannot be empty", ErrorCode.ValueCannotBeEmpty)),
+          CaseClassValidationException(PropertyPath.leaf("street").withParent("address").withParent("owners"), Invalid("cannot be empty", ErrorCode.ValueCannotBeEmpty))
+        )))
     }
 
     "nested method validations" in {
@@ -72,7 +72,7 @@ class CaseClassValidationTest extends Test {
           dob = Some(DateTime.now),
           address = Some(Address(
             city = "pyongyang",
-            state = "KP" /* invalid */ )))
+            state = "KP" /* invalid */)))
       )
       val car = baseCar.copy(owners = owners)
 
@@ -81,7 +81,7 @@ class CaseClassValidationTest extends Test {
       }
 
       parseError should equal(CaseClassMappingException(
-        Seq(
+        Set(
           CaseClassValidationException(PropertyPath.leaf("address").withParent("owners"), Invalid("state must be one of [CA, MD, WI]")))))
 
       parseError.errors.map(_.getMessage) should equal(Seq("owners.address: state must be one of [CA, MD, WI]"))
@@ -94,7 +94,7 @@ class CaseClassValidationTest extends Test {
           ownershipEnd = baseCar.ownershipStart))
       } should equal(
         CaseClassMappingException(
-          Seq(
+          Set(
             CaseClassValidationException(
               PropertyPath.empty,
               Invalid("ownershipEnd [2015-04-09T05:17:15.000Z] must be after ownershipStart [2015-04-09T05:18:15.000Z]")))))
@@ -107,7 +107,7 @@ class CaseClassValidationTest extends Test {
           warrantyEnd = baseCar.warrantyStart))
       } should equal(
         CaseClassMappingException(
-          Seq(
+          Set(
             CaseClassValidationException(
               PropertyPath.empty,
               Invalid("warrantyEnd [2015-04-09T05:17:15.000Z] must be after warrantyStart [2015-04-09T06:17:15.000Z]")))))
@@ -120,7 +120,7 @@ class CaseClassValidationTest extends Test {
           warrantyEnd = baseCar.warrantyEnd))
       } should equal(
         CaseClassMappingException(
-          Seq(
+          Set(
             CaseClassValidationException(
               PropertyPath.empty,
               Invalid("both warrantyStart and warrantyEnd are required for a valid range")))))
@@ -128,6 +128,18 @@ class CaseClassValidationTest extends Test {
 
     "start with end" in {
       parseCar(baseCar)
+    }
+
+    "errors sorted by message" in {
+      val first = CaseClassValidationException(PropertyPath.empty, Invalid("123"))
+      val second = CaseClassValidationException(PropertyPath.empty, Invalid("aaa"))
+      val third = CaseClassValidationException(PropertyPath.leaf("bla"), Invalid("zzz"))
+      val fourth = CaseClassValidationException(PropertyPath.empty, Invalid("xxx"))
+
+      val unsorted = Set(third, second, fourth, first)
+      val expectedSorted = Seq(first, second, third, fourth)
+
+      CaseClassMappingException(unsorted).errors should equal(expectedSorted)
     }
   }
 
