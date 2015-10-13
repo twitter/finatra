@@ -1,5 +1,6 @@
 junit_tests(name='scala',
   dependencies=[
+    '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/specs2',
@@ -21,6 +22,7 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
+    '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/ch/qos/logback:logback-classic',
