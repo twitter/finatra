@@ -1,6 +1,6 @@
 package com.twitter.inject
 
-import com.google.inject.{PrivateModule => GuicePrivateModule, Provider}
+import com.google.inject.{PrivateModule => GuicePrivateModule}
 import net.codingwell.scalaguice._
 
 /*
@@ -15,10 +15,4 @@ abstract class TwitterPrivateModule
 
   // Provide default configure method so Module's using only @Provider don't need an empty configure method
   override protected def configure() {}
-
-  /* Public */
-
-  def getProvider[T: Manifest]: Provider[T] = {
-    getProvider(createKey[T])
-  }
 }
