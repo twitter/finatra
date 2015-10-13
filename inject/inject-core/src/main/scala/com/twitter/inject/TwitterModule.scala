@@ -6,7 +6,7 @@ import com.google.inject.spi.TypeConverter
 import com.google.inject.{Module, _}
 import java.lang.annotation.Annotation
 import net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder
-import net.codingwell.scalaguice.{ScalaMultibinder, annotation, typeLiteral}
+import net.codingwell.scalaguice.{ScalaMultibinder, typeLiteral}
 
 
 abstract class TwitterModule
@@ -90,7 +90,7 @@ abstract class TwitterModule
 
     /* Set as singleton */
     if (singleton) {
-      builder.in(annotation[Singleton])
+      builder.in(Scopes.SINGLETON)
     }
 
     /* Set annotation if specified */

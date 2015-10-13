@@ -1,1 +1,0 @@
-Copying files from scalaguice since scalaguice is only published for Scala 2.11 with Guice Beta4 (but we are still on Guice 3).
