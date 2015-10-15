@@ -1,0 +1,78 @@
+<configuration>
+
+  <!-- ===================================================== -->
+  <!-- Service Config -->
+  <!-- ===================================================== -->
+  <property name="SERVICE_LOG_PATTERN"
+            value="%-16X{traceId} %-12X{clientId:--} %-16X{method} %-25logger{0} %msg"/>
+
+  <property name="ACCESS_LOG_PATTERN"
+            value="%msg"/>
+
+  <logger name="com.twitter" level="info"/>
+  <logger name="com.twitter.logging.ScribeHandler" level="warn"/>
+  <logger name="com.twitter.zookeeper.client.internal" level="warn"/>
+
+  <!-- ===================================================== -->
+  <!-- Common Config -->
+  <!-- ===================================================== -->
+
+  <!-- JUL/JDK14 to Logback bridge -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
+
+  <!-- Service Log (Rollover daily/50MB) -->
+  <!-- See http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+  <appender name="SERVICE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>service.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log.service.output}-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>50MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%date %.-3level ${SERVICE_LOG_PATTERN}%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Access Log (Rollover daily/50MB) -->
+  <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>access.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log.access.output}-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>50MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${ACCESS_LOG_PATTERN}%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Async Appenders -->
+
+  <appender name="ASYNC-SERVICE" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="SERVICE"/>
+  </appender>
+
+  <appender name="ASYNC-ACCESS" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="ACCESS"/>
+  </appender>
+
+  <!-- Access Logging -->
+  <logger name="com.twitter.finatra.thrift.filters.AccessLoggingFilter" level="info" additivity="false">
+    <appender-ref ref="ASYNC-ACCESS"/>
+    <appender-ref ref="ASYNC-LOGLENS-ACCESS"/>
+  </logger>
+
+  <!-- ===================================================== -->
+  <!-- Root Config -->
+  <!-- ===================================================== -->
+
+  <root level="warn">
+    <appender-ref ref="ASYNC-SERVICE"/>
+  </root>
+
+</configuration>
