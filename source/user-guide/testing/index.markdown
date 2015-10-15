@@ -17,10 +17,10 @@ footer: true
 
 Finatra provides the following testing features:
 
-- the ability to start a locally running service and easily issue requests against it and assertion behavior on the responses.
-- the ability to easily replace or override class implementations throughout the object graph.
+- the ability to start a locally running server, issue requests, and assert responses.
+- the ability to easily replace class implementations throughout the object graph.
 - the ability to retrieve classes in the object graph to perform assertions on them.
-- the ability to write tests and deploy test instances without deploying test code to production.
+- the ability to write powerful tests without deploying test code to production.
 
 ## <a class="anchor" name="testing-types">Types of Tests</a>
 
