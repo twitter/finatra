@@ -92,10 +92,11 @@ lazy val versions = new {
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
-  val finagle = "6.29.0"
+  val finagle = "6.29.0-SNAPSHOT"
   val grizzled = "1.0.2"
   val guava = "16.0.1"
-  val guice = "3.0"
+  val guice = "4.0"
+  val scalaGuice = "4.0.0"
   val jackson = "2.4.4"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
@@ -105,8 +106,8 @@ lazy val versions = new {
   val servletApi = "2.5"
   val scrooge = "4.1.0"
   val slf4j = "1.7.7"
-  val twitterServer = "1.14.0"
-  val util = "6.28.0"
+  val twitterServer = "1.14.0-SNAPSHOT"
+  val util = "6.28.0-SNAPSHOT"
 }
 
 lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
@@ -138,6 +139,7 @@ lazy val root = (project in file(".")).
     http,
     httpclient,
     slf4j,
+    thrift,
     benchmarks, // LAST PROJECT
 
     // START EXAMPLES
@@ -147,7 +149,9 @@ lazy val root = (project in file(".")).
     streamingExample,
     twitterClone,
     benchmarkServer,
-    exampleInjectJavaServer
+    exampleInjectJavaServer,
+    thriftExampleIdl,
+    thriftExampleServer
     // END EXAMPLES
   )
 
@@ -156,7 +160,6 @@ lazy val injectCore = (project in file("inject/inject-core")).
   settings(
     name := "inject-core",
     moduleName := "inject-core",
-    coverageExcludedPackages := "net.codingwell.scalaguice.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.google.guava" % "guava" % versions.guava,
@@ -167,8 +170,11 @@ lazy val injectCore = (project in file("inject/inject-core")).
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
+      "net.codingwell" %% "scala-guice" % versions.scalaGuice,
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
-      "org.joda" % "joda-convert" % versions.jodaConvert
+      "org.joda" % "joda-convert" % versions.jodaConvert,
+      "com.google.inject" % "guice" % versions.guice % "test",
+      "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
     )
   )
 
@@ -315,6 +321,20 @@ lazy val http = project.
     jackson,
     httpclient % "test->test",
     jackson % "test->test",
+    injectServer % "test->test"
+  )
+
+lazy val thrift = project.
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "finatra-thrift",
+    moduleName := "finatra-thrift",
+    libraryDependencies ++= Seq(
+    ),
+    excludeFilter in Test in unmanagedResources := "BUILD"
+  ).
+  dependsOn(
+    injectServer,
     injectServer % "test->test"
   )
 
@@ -534,6 +554,41 @@ lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server
   dependsOn(
     slf4j,
     injectServer,
+    injectServer % "test->test",
+    injectCore % "test->test",
+    injectApp % "test->test"
+  )
+
+lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-example-idl")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "thrift-example-idl",
+    moduleName := "thrift-example-idl",
+    publishLocal := {},
+    publish := {}
+  ).
+  dependsOn(thrift)
+
+lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-example-server")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "thrift-example-server",
+    moduleName := "thrift-example-server",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % versions.logback
+    )
+  ).
+  dependsOn(
+    thriftExampleIdl,
+    slf4j,
+    thrift,
+    thrift % "test->test",
     injectServer % "test->test",
     injectCore % "test->test",
     injectApp % "test->test"

@@ -9,6 +9,11 @@ trait FeatureTest extends Test with IntegrationTest {
   override protected def injector: Injector = app.injector
 
   override protected def beforeAll() {
+    if (app.isStarted) {
+      warn("WARNING: App started before integrationTestModule added. " +
+        "@Bind will not work unless integrationTestModule was manually added as an override module")
+    }
+
     assert(app.isGuiceApp)
     app.guiceApp.addFrameworkOverrideModules(integrationTestModule)
     super.beforeAll()

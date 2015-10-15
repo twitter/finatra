@@ -3,8 +3,10 @@ target(name='examples',
     'finatra/examples/benchmark-server',
     'finatra/examples/hello-world',
     'finatra/examples/streaming-example',
-    'finatra/examples/twitter-clone',
+    'finatra/examples/thrift-server/thrift-example-idl',
+    'finatra/examples/thrift-server/thrift-example-server',
     'finatra/examples/tiny-url',
+    'finatra/examples/twitter-clone',
   ]
 )
 
@@ -13,7 +15,8 @@ target(name='tests',
     'finatra/examples/benchmark-server:tests',
     'finatra/examples/hello-world:tests',
     'finatra/examples/streaming-example:tests',
-    'finatra/examples/twitter-clone:tests',  
+    'finatra/examples/thrift-server/thrift-example-server:tests',
     'finatra/examples/tiny-url:tests',
+    'finatra/examples/twitter-clone:tests',
   ]
 )
