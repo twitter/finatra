@@ -1,0 +1,15 @@
+scala_library(name='scala',
+  dependencies=[
+    '3rdparty/jvm/javax/inject:javax.inject',
+    'finagle/finagle-core',
+    'finagle/finagle-thriftmux',
+    'finatra/thrift/src/main/thrift:thrift-scala',
+    'finatra/inject/inject-app',
+    'finatra/inject/inject-core',
+    'finatra/inject/inject-server',
+    'finatra/inject/inject-thrift-client',
+    'twitter-config/yaml',
+    'util/util-core'
+  ],
+  sources=rglobs('*.scala')
+)

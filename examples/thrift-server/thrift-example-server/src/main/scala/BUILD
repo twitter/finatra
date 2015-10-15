@@ -1,0 +1,17 @@
+scala_library(
+  name='scala',
+  dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
+    '3rdparty/jvm/javax/inject:javax.inject',
+    'finagle/finagle-core',
+    'finatra/slf4j',
+    'finatra/inject/inject-core',
+    'finatra/examples/thrift-server/thrift-example-idl/src/main/thrift:thrift-scala',
+    'finatra/thrift',
+    'util/util-core'
+  ],
+  sources=rglobs('*.scala'),
+  resources=[
+    'finatra/examples/thrift-server/thrift-example-server/src/main/resources'
+  ]
+)

@@ -82,6 +82,8 @@ class EmbeddedApp(
     }
   }
 
+  def isStarted = started
+
   //NOTE: Start is called in various places to "lazily start the server" as needed
   def start() {
     if (!started) {
