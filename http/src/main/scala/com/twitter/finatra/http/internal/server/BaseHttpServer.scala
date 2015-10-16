@@ -44,6 +44,8 @@ trait BaseHttpServer extends TwitterServer {
 
   /* Protected */
 
+  override protected def failfastOnFlagsNotParsed = true
+
   protected def httpService: Service[Request, Response] = {
     NullService
   }
