@@ -1,4 +1,3 @@
-import com.twitter.scrooge.ScroogeSBT
 import sbt.Keys._
 import sbtunidoc.Plugin.UnidocKeys._
 import scoverage.ScoverageKeys.coverageExcludedPackages
@@ -9,7 +8,7 @@ fork in ThisBuild := false
 lazy val buildSettings = Seq(
   version := "2.1.1-SNAPSHOT",
   scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.5", "2.11.7")
+  crossScalaVersions := Seq("2.10.6", "2.11.7")
 )
 
 lazy val compilerOptions = scalacOptions ++= Seq(
@@ -92,7 +91,7 @@ lazy val versions = new {
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
-  val finagle = "6.29.0-SNAPSHOT"
+  val finagle = "6.30.0"
   val grizzled = "1.0.2"
   val guava = "16.0.1"
   val guice = "4.0"
@@ -104,10 +103,11 @@ lazy val versions = new {
   val mustache = "0.8.18"
   val nscalaTime = "1.6.0"
   val servletApi = "2.5"
-  val scrooge = "4.1.0"
+  val scrooge = "4.2.0"
+  val snakeyaml = "1.12"
   val slf4j = "1.7.7"
-  val twitterServer = "1.14.0-SNAPSHOT"
-  val util = "6.28.0-SNAPSHOT"
+  val twitterServer = "1.15.0"
+  val util = "6.29.0"
 }
 
 lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
@@ -259,6 +259,27 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
     http % "test->test"
   )
 
+// Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
+lazy val benchmarks = project.
+  settings((finatraBuildSettings ++ jmhSettings): _*).
+  settings(
+    name := "finatra-benchmarks",
+    moduleName := "finatra-benchmarks",
+    publishLocal := {},
+    publish := {},
+    assemblyMergeStrategy in assembly := {
+      case "BUILD" => MergeStrategy.discard
+      case other => MergeStrategy.defaultMergeStrategy(other)
+    },
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-simple" % "1.7.7"
+    )
+  ).
+  dependsOn(
+    http,
+    injectCore % "test->test"
+  )
+
 lazy val utils = project.
   settings(finatraBuildSettings: _*).
   settings(
@@ -324,20 +345,6 @@ lazy val http = project.
     injectServer % "test->test"
   )
 
-lazy val thrift = project.
-  settings(finatraBuildSettings: _*).
-  settings(
-    name := "finatra-thrift",
-    moduleName := "finatra-thrift",
-    libraryDependencies ++= Seq(
-    ),
-    excludeFilter in Test in unmanagedResources := "BUILD"
-  ).
-  dependsOn(
-    injectServer,
-    injectServer % "test->test"
-  )
-
 lazy val httpclient = project.
   settings(finatraBuildSettings: _*).
   settings(
@@ -371,12 +378,33 @@ lazy val slf4j = project.
     injectCore % "test->test"
   )
 
-// Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
-lazy val benchmarks = project.
-  settings((finatraBuildSettings ++ jmhSettings): _*).
+lazy val thrift = project.
+  settings(finatraBuildSettings: _*).
   settings(
-    name := "finatra-benchmarks",
-    moduleName := "finatra-benchmarks",
+    name := "finatra-thrift",
+    moduleName := "finatra-thrift",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-thriftmux" % versions.finagle,
+      "org.yaml" % "snakeyaml" % versions.snakeyaml
+    ),
+    scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
+    excludeFilter in unmanagedResources := "BUILD"
+  ).
+  dependsOn(
+    injectServer,
+    injectServer % "test->test",
+    slf4j % "test->test"
+  )
+
+// START EXAMPLES
+
+// 2.11 only due to rlazoti/finagle-metrics dependency
+lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
+  settings(finatraBuildSettings: _*).
+  settings(
+    name := "hello-world-heroku",
+    moduleName := "hello-world-heroku",
+    crossScalaVersions := Seq(),
     publishLocal := {},
     publish := {},
     assemblyMergeStrategy in assembly := {
@@ -384,39 +412,16 @@ lazy val benchmarks = project.
       case other => MergeStrategy.defaultMergeStrategy(other)
     },
     libraryDependencies ++= Seq(
-      "org.slf4j" % "slf4j-simple" % "1.7.7"
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "com.github.rlazoti" % "finagle-metrics_2.11" % "0.0.2" //2.11 only
     )
   ).
   dependsOn(
     http,
+    http % "test->test",
+    slf4j,
     injectCore % "test->test"
   )
-
-// START EXAMPLES
-
-// 2.11 only due to rlazoti/finagle-metrics dependency
-//lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
-//  settings(finatraBuildSettings: _*).
-//  settings(
-//    name := "hello-world-heroku",
-//    moduleName := "hello-world-heroku",
-//    publishLocal := {},
-//    publish := {},
-//    assemblyMergeStrategy in assembly := {
-//      case "BUILD" => MergeStrategy.discard
-//      case other => MergeStrategy.defaultMergeStrategy(other)
-//    },
-//    libraryDependencies ++= Seq(
-//      "ch.qos.logback" % "logback-classic" % versions.logback,
-//      "com.github.rlazoti" % "finagle-metrics_2.11" % "0.0.2" //2.11 only
-//    )
-//  ).
-//  dependsOn(
-//    http,
-//    http % "test->test",
-//    slf4j,
-//    injectCore % "test->test"
-//  )
 
 lazy val helloWorld = (project in file("examples/hello-world")).
   settings(finatraBuildSettings: _*).
@@ -565,7 +570,8 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
     name := "thrift-example-idl",
     moduleName := "thrift-example-idl",
     publishLocal := {},
-    publish := {}
+    publish := {},
+    scroogeThriftIncludeFolders in Compile := Seq(file("thrift/src/main/thrift"))
   ).
   dependsOn(thrift)
 
@@ -582,7 +588,10 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
     },
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % versions.logback
-    )
+    ),
+    scroogeThriftIncludeFolders in Compile := Seq(
+      file("thrift/src/main/thrift"),
+      file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
   ).
   dependsOn(
     thriftExampleIdl,
