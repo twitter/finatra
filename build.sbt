@@ -383,6 +383,7 @@ lazy val thrift = project.
   settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
+    coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
       "org.yaml" % "snakeyaml" % versions.snakeyaml
@@ -569,6 +570,7 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
   settings(
     name := "thrift-example-idl",
     moduleName := "thrift-example-idl",
+    coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     publishLocal := {},
     publish := {},
     scroogeThriftIncludeFolders in Compile := Seq(file("thrift/src/main/thrift"))
