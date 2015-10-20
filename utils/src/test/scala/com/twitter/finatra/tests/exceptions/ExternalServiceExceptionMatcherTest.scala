@@ -4,6 +4,7 @@ import com.twitter.conversions.time._
 import com.twitter.finagle._
 import com.twitter.finatra.exceptions.ExternalServiceExceptionMatcher
 import com.twitter.inject.Test
+import com.twitter.util.Duration
 import java.io.IOException
 import java.net.ConnectException
 import org.apache.thrift.transport.TTransportException
@@ -11,7 +12,7 @@ import org.apache.thrift.transport.TTransportException
 class ExternalServiceExceptionMatcherTest extends Test {
 
   "match external exceptions" in {
-    val externalExceptions = Seq(
+    val externalExceptions: Seq[Exception] = Seq(
       new RequestException(),
       new ApiException(),
       new ChannelWriteException(new Exception),
@@ -20,9 +21,17 @@ class ExternalServiceExceptionMatcherTest extends Test {
       new ChannelClosedException(),
       new InterruptedException(),
       new TTransportException(),
-      new ConnectException())
+      new ConnectException(),
+      new TimeoutException() {
+        override protected val timeout: Duration = 5.seconds
+        override protected def explanation: String = "timeout!"
+      })
 
     externalExceptions forall ExternalServiceExceptionMatcher.apply should equal(true)
+
+    externalExceptions forall { e =>
+      ExternalServiceExceptionMatcher.unapply(e).isDefined
+    } should equal(true)
   }
 
   "not match non-external exceptions" in {
@@ -32,6 +41,9 @@ class ExternalServiceExceptionMatcherTest extends Test {
       new NullPointerException)
 
     nonExternalExceptions forall ExternalServiceExceptionMatcher.apply should equal(false)
-  }
 
+    nonExternalExceptions forall { e =>
+      ExternalServiceExceptionMatcher.unapply(e).isDefined
+    } should equal(false)
+  }
 }

@@ -3,7 +3,7 @@ package com.twitter.inject.tests
 import com.google.inject.{Key, Guice}
 import com.twitter.finatra.tests.Prod
 import com.twitter.inject.{Injector, Test}
-import com.twitter.inject.tests.module.{ComplexServiceFactory, DoEverythingModule}
+import com.twitter.inject.tests.module.{ClassToConvert, ComplexServiceFactory, DoEverythingModule}
 
 class TwitterModuleTest extends Test {
 
@@ -25,6 +25,10 @@ class TwitterModuleTest extends Test {
     injector.instance[String](name = "str1") should be("string1")
 
     injector.instance[String, Prod] should be("prod string")
+  }
+
+  "type conversion" in {
+    injector.instance[ClassToConvert](name = "name") should be(ClassToConvert("Steve"))
   }
 
   def assertServiceFactory(complexServiceFactory: ComplexServiceFactory): Unit = {

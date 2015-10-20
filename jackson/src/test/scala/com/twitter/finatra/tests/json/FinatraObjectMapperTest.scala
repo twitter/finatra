@@ -3,13 +3,16 @@ package com.twitter.finatra.tests.json
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
 import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
 import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
+import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.tests.json.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.tests.json.internal._
 import com.twitter.finatra.tests.json.internal.internal.{SimplePersonInPackageObjectWithoutConstructorParams, SimplePersonInPackageObject}
 import com.twitter.inject.Logging
+import com.twitter.inject.app.TestInjector
 import com.twitter.io.Buf
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import org.joda.time.{DateTime, DateTimeZone}
@@ -24,6 +27,9 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   /* Class under test */
   val mapper = FinatraObjectMapper.create()
+  /* Test Injector */
+  val injector = TestInjector(
+    FinatraJacksonModule)
 
   feature("simple tests") {
 
@@ -1028,6 +1034,14 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
     scenario("case class in package object without constructor params and parsing a json object with extra fields") {
       parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{"name": "Steve"}""") should equal(SimplePersonInPackageObjectWithoutConstructorParams())
+    }
+  }
+
+  feature("Support camel case mapper") {
+    scenario("camel case object") {
+      val camelCaseObjectMapper = injector.instance[FinatraObjectMapper, CamelCaseMapper]
+
+      camelCaseObjectMapper.parse[Map[String, String]]("""{"firstName": "Bob"}""") should equal(Map("firstName" -> "Bob"))
     }
   }
 
