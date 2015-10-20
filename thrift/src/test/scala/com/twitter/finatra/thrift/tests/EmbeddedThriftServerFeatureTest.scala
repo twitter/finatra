@@ -11,14 +11,14 @@ import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.RequestTimeout
 import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerError
 import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftRequest, ThriftRouter, ThriftServer}
+import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.{Logging, Test}
 import com.twitter.util.{Await, Future, NonFatal}
 
-class EmbeddedThriftServerIntegrationTest extends Test {
-  val server = new EmbeddedThriftServer(new ConverterServer)
+class EmbeddedThriftServerIntegrationTest extends FeatureTest {
+  override val server = new EmbeddedThriftServer(new ConverterServer)
 
   val client123 = server.thriftClient[Converter[Future]](clientId = "client123")
-  val notWhitelistClient = server.thriftClient[Converter[Future]](clientId = "not_on_whitelist")
 
   "success" in {
     Await.result(client123.uppercase("Hi")) should equal("HI")
@@ -32,8 +32,16 @@ class EmbeddedThriftServerIntegrationTest extends Test {
   }
 
   "blacklist" in {
+    val notWhitelistClient = server.thriftClient[Converter[Future]](clientId = "not_on_whitelist")
     assertFailedFuture[UnknownClientIdError] {
       notWhitelistClient.uppercase("Hi")
+    }
+  }
+
+  "no client id" in {
+    val noClientIdClient = server.thriftClient[Converter[Future]]()
+    assertFailedFuture[NoClientIdError] {
+      noClientIdClient.uppercase("Hi")
     }
   }
 }
