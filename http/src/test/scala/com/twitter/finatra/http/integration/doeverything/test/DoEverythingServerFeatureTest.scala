@@ -1385,4 +1385,23 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     // not a thrift server so, port should be None
     server.twitterServer.thriftPort shouldBe None
   }
+
+  "Bad request for missing header" in {
+    server.httpPost(
+      "/createUser",
+      postBody = """{"name":"bob", "age":50}""",
+      andExpect = BadRequest,
+      withBody = """{"errors":["request_id: header is required"]}"""
+    )
+  }
+
+  "accepts request with header and body" in {
+    server.httpPost(
+      "/createUser",
+      headers = Map("request_id" -> "732647326473"),
+      postBody = """{"name":"bob", "age":50}""",
+      andExpect = Created,
+      withLocation = "/users/732647326473"
+    )
+  }
 }

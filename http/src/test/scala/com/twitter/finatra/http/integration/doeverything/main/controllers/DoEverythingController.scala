@@ -574,6 +574,10 @@ class DoEverythingController @Inject()(
     camelCaseObjectMapper.writeValueAsString(Map("firstName" -> "Bob"))
   }
 
+  post("/createUser") {user: CreateUserRequest =>
+    response.created.location(s"/users/${user.requestId}")
+  }
+
   //needed to avoid colliding with Logging#trace :-/
   trace[Request, String]("/trace") { r: Request =>
     "trace 123"
