@@ -25,7 +25,7 @@ object SizeValidator {
       case traversableValue: Traversable[_] =>
         traversableValue.size
       case str: String =>
-        str.size
+        str.length
       case _ =>
         throw new IllegalArgumentException("Class [%s] is not supported" format value.getClass)
     }
@@ -49,7 +49,7 @@ class SizeValidator(
     val size = value match {
       case arrayValue: Array[_] => arrayValue.length
       case traversableValue: Traversable[_] => traversableValue.size
-      case str: String => str.size
+      case str: String => str.length
       case _ =>
         throw new IllegalArgumentException("Class [%s] is not supported" format value.getClass)
     }

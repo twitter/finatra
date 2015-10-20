@@ -4,6 +4,7 @@ junit_tests(name='scala',
     'finatra/jackson/src/main/scala',
     'finatra/jackson/src/main/java',
     'finatra/jackson/src/test/scala:test-deps',
+    'finatra/inject/inject-app:test-deps',
     'finatra/slf4j',
     'util/util-core'
   ],

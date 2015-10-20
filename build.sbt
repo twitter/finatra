@@ -318,7 +318,7 @@ lazy val jackson = project.
     )
   ).
   dependsOn(
-    injectServer % "test->test",
+    injectApp % "test->test",
     utils
   )
 

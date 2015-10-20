@@ -21,7 +21,7 @@ object FinagleBuildRevision extends Logging {
 
   /* Private */
 
-  private def convertBuildRevision(revision: String): Long = {
+  private[server] def convertBuildRevision(revision: String): Long = {
     try {
       revision.take(10).toU64Long
     } catch {

@@ -4,7 +4,9 @@ junit_tests(name='scala',
     'finatra/inject/inject-server',
     'finatra/inject/inject-server:test-deps'
   ],
-  sources=globs('com/twitter/inject/server/tests/*.scala'),
+  sources=globs(
+    'com/twitter/server/tests/*.scala',
+    'com/twitter/inject/server/tests/*.scala'),
   resources=[
     'finatra/inject/inject-server/src/test/resources'
   ]
