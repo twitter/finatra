@@ -53,8 +53,11 @@ class LocalFileServerFeatureTest extends Test {
       },
       clientFlags = clientFlags)
 
-    asserts(server)
-
-    server.close()
+    try {
+      asserts(server)
+    }
+    finally {
+      server.close()
+    }
   }
 }

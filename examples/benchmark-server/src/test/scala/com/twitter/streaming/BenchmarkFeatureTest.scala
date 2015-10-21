@@ -35,4 +35,10 @@ class BenchmarkFeatureTest extends Test {
       path = path,
       withBody = withBody)
   }
+
+  override protected def afterAll() = {
+    super.afterAll()
+    finagleServer.close()
+    finatraServer.close()
+  }
 }
