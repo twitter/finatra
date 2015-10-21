@@ -17,8 +17,13 @@ class StatsFilterTest extends Test {
       Future.exception(new Exception("oops"))
     }
 
-    Await.ready(statsFilter.apply(request, service))
-    statsReceiver.counters.get(List("status", "5XX")) should equal(Some(1))
-    statsReceiver.counters.get(List("status", "500")) should equal(Some(1))
+    try {
+      Await.ready(statsFilter.apply(request, service))
+      statsReceiver.counters.get(List("status", "5XX")) should equal(Some(1))
+      statsReceiver.counters.get(List("status", "500")) should equal(Some(1))
+    }
+    finally {
+      service.close()
+    }
   }
 }

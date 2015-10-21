@@ -18,11 +18,14 @@ class ThriftServerStartupFeatureTest extends Test {
       }
     })
 
-    intercept[AssertionError] {
-      server.start()
+    try {
+      intercept[AssertionError] {
+        server.start()
+      }
     }
-
-    server.close()
+    finally {
+      server.close()
+    }
   }
 
   "use default thrift port" in {
@@ -42,7 +45,8 @@ class ThriftServerStartupFeatureTest extends Test {
       case NonFatal(e) =>
       // no-op: Since it's ok if we can't start on the default port since it may be already in use
     }
-
-    server.close()
+    finally {
+      server.close()
+    }
   }
 }
