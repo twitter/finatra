@@ -574,7 +574,7 @@ class DoEverythingController @Inject()(
     camelCaseObjectMapper.writeValueAsString(Map("firstName" -> "Bob"))
   }
 
-  post("/createUser") {user: CreateUserRequest =>
+  post("/createUser") { user: CreateUserRequest =>
     response.created.location(s"/users/${user.requestId}")
   }
 
