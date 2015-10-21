@@ -12,7 +12,7 @@ import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerErr
 import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftRequest, ThriftRouter, ThriftServer}
 import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.{Logging, Test}
+import com.twitter.inject.Logging
 import com.twitter.util.{Await, Future, NonFatal}
 
 class EmbeddedThriftServerIntegrationTest extends FeatureTest {

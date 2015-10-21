@@ -39,11 +39,15 @@ class HttpServerStartupIntegrationTest extends Test {
         }
       })
 
-    val e = intercept[AssertionError] {
-      server.start()
-    }
+    try {
+      val e = intercept[AssertionError] {
+        server.start()
+      }
 
-    server.close()
-    e.getMessage should be("assertion failed: Found non-unique routes GET     /foo")
+      e.getMessage should be("assertion failed: Found non-unique routes GET     /foo")
+    }
+    finally {
+      server.close()
+    }
   }
 }

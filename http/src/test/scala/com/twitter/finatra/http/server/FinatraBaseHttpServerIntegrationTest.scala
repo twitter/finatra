@@ -12,12 +12,15 @@ class FinatraBaseHttpServerIntegrationTest extends Test {
   "HiServiceServer" should {
     "respond" in {
       val server = new EmbeddedHttpServer(new HiServer)
-      server.httpGet(
-        "/asdf",
-        andExpect = Status.Ok,
-        withBody = "hi")
-
-      server.close()
+      try {
+        server.httpGet(
+          "/asdf",
+          andExpect = Status.Ok,
+          withBody = "hi")
+      }
+      finally {
+        server.close()
+      }
     }
   }
 }
