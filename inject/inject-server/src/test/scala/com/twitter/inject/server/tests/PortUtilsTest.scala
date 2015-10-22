@@ -12,7 +12,7 @@ class PortUtilsTest extends Test {
   "PortUtils" should {
 
     "getPort for Server" in {
-      PortUtils.getPort(new Server {
+      val server = new Server {
         /**
          * The address to which this server is bound.
          */
@@ -39,7 +39,13 @@ class PortUtilsTest extends Test {
          * method.
          */
         override def ready(timeout: Duration)(implicit permit: CanAwait) = ???
-      }) should be(9999)
+      }
+      
+      try {
+        PortUtils.getPort(server) should be(9999)
+      } finally {
+        server.close()
+      }
     }
   }
 
