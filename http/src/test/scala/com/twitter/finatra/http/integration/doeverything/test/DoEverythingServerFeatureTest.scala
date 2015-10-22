@@ -1161,7 +1161,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       withJsonBody = """
       {
         "errors": [
-          "max: field is required",
+          "max: queryParam is required",
           "verbose: '5' is not a valid boolean"
         ]
       }
@@ -1234,7 +1234,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = BadRequest,
       withJsonBody = """{
         "errors" : [
-          "param: field is required"
+          "param: queryParam is required"
         ]
       }""")
   }
@@ -1393,6 +1393,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = BadRequest,
       withBody = """{"errors":["request_id: header is required"]}"""
     )
+  }
+
+  "Bad request for missing form param" in {
+    server.httpFormPost(
+      "/formPost",
+      params = Map("name" -> "bob"),
+      andExpect = BadRequest,
+      withBody = """{"errors":["age: formParam is required"]}""")
   }
 
   "accepts request with header and body" in {
