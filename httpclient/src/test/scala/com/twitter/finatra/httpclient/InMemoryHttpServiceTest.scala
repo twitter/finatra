@@ -56,4 +56,9 @@ class InMemoryHttpServiceTest extends Test with Mockito {
       fail(response + " does not equal expected " + expectedResponse)
     }
   }
+
+  override protected def afterAll() = {
+    super.afterAll()
+    inMemoryHttpService.close()
+  }
 }

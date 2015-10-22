@@ -68,7 +68,7 @@ class InternalAppIntegrationTest extends Test {
 }
 
 object FooModule extends TwitterModule {
-  override def configure: Unit = {
+  override def configure(): Unit = {
     bind[Foo].toInstance(new Foo("bar"))
   }
 }

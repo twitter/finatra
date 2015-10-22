@@ -184,8 +184,12 @@ class MultiParamsTest extends Test with Mockito {
   }
 
   private def resourceAsBytes(resource: String) = {
-    IOUtils.toByteArray(
-      getClass.getResourceAsStream(resource))
+    val is = getClass.getResourceAsStream(resource)
+    try {
+      IOUtils.toByteArray(is)
+    } finally {
+      is.close()
+    }
   }
 
   private def assertMultiParams(finagleRequest: Request, expectedMultiParams: Map[String, MultipartItem]) {
