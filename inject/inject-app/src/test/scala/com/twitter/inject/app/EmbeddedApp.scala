@@ -109,7 +109,7 @@ class EmbeddedApp(
   def close() {
     if (!closed) {
       infoBanner("Closing EmbeddedApp for class " + appName)
-      app.close()
+      Await.result(app.close())
       mainRunnerFuturePool.executor.shutdown()
       closed = true
     }
