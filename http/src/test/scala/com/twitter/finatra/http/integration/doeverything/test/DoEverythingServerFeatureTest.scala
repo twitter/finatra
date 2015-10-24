@@ -886,7 +886,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       server.injector.instance[String]("example") should equal("named")
 
       val exampleService = server.injector.instance[DoEverythingService]
-      exampleService should not equal (null)
+      exampleService should not equal null
       server.injector.instance(classOf[DoEverythingService]) should equal(exampleService)
 
       val key = Key.get(new TypeLiteral[DoEverythingService]() {})

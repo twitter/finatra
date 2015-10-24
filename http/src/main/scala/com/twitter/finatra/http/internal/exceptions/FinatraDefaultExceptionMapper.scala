@@ -5,7 +5,7 @@ import com.twitter.finagle.CancelledRequestException
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.exceptions.ExternalServiceExceptionMatcher
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, HttpException, HttpResponseException}
-import com.twitter.finatra.http.response.{ResponseBuilder, ErrorsResponse}
+import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
 import com.twitter.inject.Logging
 import javax.inject.{Inject, Singleton}
 

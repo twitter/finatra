@@ -5,7 +5,8 @@ java_library(name='java',
     repo = artifactory,
   ),
   dependencies=[
-    '3rdparty/jvm/com/google/inject:guice'
+    '3rdparty/jvm/com/google/inject:guice',
+    'finagle/finagle-http',
   ],
   sources=rglobs('*.java')
 )

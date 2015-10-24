@@ -1,9 +1,11 @@
 package com.twitter.finatra.http.request
 
+import com.google.common.net.{HttpHeaders, MediaType => CommonMediaTypes}
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.exceptions.BadRequestException
+import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.internal.marshalling.FinatraFileUpload
+import com.twitter.finatra.request.ContentType
 
 object RequestUtils {
 
@@ -26,5 +28,24 @@ object RequestUtils {
   /** Multipart parsed params */
   def multiParams(request: Request): Map[String, MultipartItem] = {
     new FinatraFileUpload().parseMultipartItems(request)
+  }
+
+  /**
+   * Content Negotiation
+   * Example Accept Header format :
+   * Accept: text/plain; q=0.5, text/html,
+   * text/html; q=0.8, application/json
+   */
+  def respondTo[T](request: Request)(callback: PartialFunction[ContentType, T]): T = {
+    val acceptHeader = request.headerMap.getOrElse(HttpHeaders.ACCEPT, "*/*")
+    val mediaRanges = MediaRange.parseAndSort(acceptHeader)
+
+    val contentTypes = mediaRanges map { mediaRange =>
+      ContentType.fromString(mediaRange.contentType)
+    }
+    contentTypes.collectFirst(callback).getOrElse(
+      throw new NotAcceptableException(
+        CommonMediaTypes.PLAIN_TEXT_UTF_8,
+        Seq("Not Acceptable Media Type")))
   }
 }
