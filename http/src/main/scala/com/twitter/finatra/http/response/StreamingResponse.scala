@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.response
 
-import com.twitter.concurrent.exp.AsyncStream
+import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.inject.Logging
 import com.twitter.io.{Buf, Writer}

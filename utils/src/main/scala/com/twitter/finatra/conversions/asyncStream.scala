@@ -1,7 +1,7 @@
 package com.twitter.finatra.conversions
 
-import com.twitter.concurrent.exp.AsyncStream
-import com.twitter.concurrent.exp.AsyncStream.{fromFuture, fromSeq}
+import com.twitter.concurrent.AsyncStream
+import com.twitter.concurrent.AsyncStream.{fromFuture, fromSeq}
 import com.twitter.util._
 
 object asyncStream {
