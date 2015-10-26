@@ -37,6 +37,18 @@ trait BaseHttpServer extends TwitterServer {
   protected def defaultShutdownTimeout: Duration = 1.minute
   private val shutdownTimeoutFlag = flag("shutdown.time", defaultShutdownTimeout, "Maximum amount of time to wait for pending requests to complete on shutdown")
 
+  private val httpAnnounceFlag = flag[String]("http.announce", "Address to announce HTTP server to")
+
+  private val httpsAnncounceFlag = flag[String]("https.announce", "Address to announce HTTPS server to")
+
+  private val adminAnnounceFlag = flag[String]("admin.announce", "Address to announce admin server to")
+
+  protected def defaultHttpServerName: String = "http"
+  private val httpServerNameFlag = flag("http.name", defaultHttpServerName, "Http server name")
+
+  protected def defaultHttpsServerName: String = "https"
+  private val httpsServerNameFlag = flag("https.name", defaultHttpsServerName, "Https server name")
+
   /* Private Mutable State */
 
   private var httpServer: Server = _
@@ -83,6 +95,8 @@ trait BaseHttpServer extends TwitterServer {
     if (disableAdminHttpServer) {
       info("Disabling the Admin HTTP Server since disableAdminHttpServer=true")
       adminHttpServer.close()
+    } else {
+      for (addr <- adminAnnounceFlag.get) adminHttpServer.announce(addr)
     }
 
     startHttpServer()
@@ -127,11 +141,12 @@ trait BaseHttpServer extends TwitterServer {
         .codec(httpCodec)
         .bindTo(port)
         .reportTo(injector.instance[StatsReceiver])
-        .name("http")
+        .name(httpServerNameFlag())
 
       configureHttpServer(serverBuilder)
 
       httpServer = serverBuilder.build(httpService)
+      for (addr <- httpAnnounceFlag.get) httpServer.announce(addr)
       info("http server started on port: " + httpExternalPort.get)
     }
   }
@@ -142,7 +157,7 @@ trait BaseHttpServer extends TwitterServer {
         .codec(httpCodec)
         .bindTo(port)
         .reportTo(injector.instance[StatsReceiver])
-        .name("https")
+        .name(httpsServerNameFlag())
         .tls(
           certificatePathFlag(),
           keyPathFlag())
@@ -150,6 +165,7 @@ trait BaseHttpServer extends TwitterServer {
       configureHttpsServer(serverBuilder)
 
       httpsServer = serverBuilder.build(httpService)
+      for (addr <- httpsAnncounceFlag.get) httpsServer.announce(addr)
       info("https server started on port: " + httpsExternalPort)
     }
   }
