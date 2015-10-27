@@ -10,6 +10,7 @@ junit_tests(name='scala',
   ],
   sources=globs(
     'com/twitter/inject/app/tests/*.scala',
+    'com/twitter/inject/app/tests/internal/*.scala'
   ),
   resources=[
     'finatra/inject/inject-app/src/test/resources'

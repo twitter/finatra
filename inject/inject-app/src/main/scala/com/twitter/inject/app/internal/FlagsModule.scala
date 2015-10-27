@@ -3,6 +3,7 @@ package com.twitter.inject.app.internal
 import com.google.inject.Key
 import com.twitter.finatra.annotations.FlagImpl
 import com.twitter.inject.{TwitterModule, Logging}
+import javax.inject.Provider
 
 object FlagsModule {
   def create(flags: Seq[com.twitter.app.Flag[_]]) = {
@@ -22,13 +23,16 @@ class FlagsModule(
 
   override def configure() {
     for ((flagName, valueOpt) <- flagsMap) {
+      val key = Key.get(classOf[java.lang.String], new FlagImpl(flagName))
       valueOpt match {
         case Some(value) =>
           debug("Binding flag: " + flagName + " = " + value)
-          val key = Key.get(classOf[java.lang.String], new FlagImpl(flagName))
           binder.bind(key).toInstance(value.toString)
         case None =>
-          warn("flag without default: " + flagName + " has an unspecified value and is not eligible for @Flag injection")
+          binder.bind(key).toProvider(new Provider[Nothing] {
+            override def get() =
+              throw new IllegalArgumentException("flag without default: " + flagName + " has an unspecified value and is not eligible for @Flag injection")
+          })
       }
     }
   }
