@@ -40,6 +40,12 @@ class ThriftRouter @Inject()(
         injector.instance[T]))
   }
 
+  @deprecated("Thrift services should be added with a filter factory.", "since Scrooge 4.x")
+  def addUnfiltered[T <: ThriftService : Manifest] = {
+    addFilteredService(injector.instance[T])
+    this
+  }
+
   /* Private */
 
   private[finatra] def serviceName(name: String) = {
