@@ -19,7 +19,7 @@ We now want to add the following controller to the [server definition]("/finatra
 
 ```scala
 import ExampleService
-import com.twitter.finagle.httpx.Request
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
 import javax.inject.Inject
 
@@ -71,7 +71,7 @@ Here we are adding *by type* allowing the framework to handle class instantiatio
 ## <a class="anchor" name="controllers-and-routing">Controllers and Routing</a>
 ===============================
 
-Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a [`com.twitter.finagle.httpx.Request`](https://github.com/twitter/finagle/blob/develop/finagle-httpx/src/main/scala/com/twitter/finagle/httpx/Request.scala) or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a [`com.twitter.finagle.httpx.Response`](https://github.com/twitter/finagle/blob/develop/finagle-httpx/src/main/scala/com/twitter/finagle/httpx/Response.scala).
+Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a [`com.twitter.finagle.http.Request`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala) or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a [`com.twitter.finagle.http.Response`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala).
 
 When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller invoking the route's associated callback function.
 
@@ -166,10 +166,10 @@ Regular expressions are no longer allowed in string defined paths. Note: We are 
 ## <a class="anchor" name="requests">Requests</a>
 ===============================
 
-Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle `httpx` Request or a custom `case class` Request.
+Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle `http` Request or a custom `case class` Request.
 
-### Finagle `httpx` Request:
-This is a [com.twitter.finagle.httpx.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.httpx.Request) which contains common HTTP attributes.
+### Finagle `http` Request:
+This is a [com.twitter.finagle.http.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request) which contains common HTTP attributes.
 
 ### Custom `case class` Request
 Custom requests allow declarative request parsing with support for type conversions, default values, and validations.
@@ -214,7 +214,7 @@ The following field annotations specify where to parse a field out of the reques
      * [`@FormParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/FormPostRequest.scala)
      * `@Header`
  * Other:
-     * `@RequestInject`: Injects the Finagle `httpx` Request or any Guice managed class into your case class
+     * `@RequestInject`: Injects the Finagle `http` Request or any Guice managed class into your case class
 
 *Note: HTTP requests with a content-type of `application/json` will always have their body. This behavior can be disabled by annotating the `case class` with `@JsonIgnoreBody` leaving the raw request body accessible through `@RequestInject`.*
 
@@ -256,7 +256,7 @@ For more information and examples, see:
 
 - [`com.twitter.finatra.http.request.RequestUtils`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
 - [`com.twitter.finatra.http.fileupload.MultipartItem`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala)
-- [`com.twitter.finagle.httpx.Request#decodeBytes`](https://github.com/twitter/finagle/blob/develop/finagle-httpx/src/main/scala/com/twitter/finagle/httpx/Request.scala#L192)
+- [`com.twitter.finagle.http.Request#decodeBytes`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192)
 - [DoEverythingController](https://github.com/twitter/finatra/blob/master/https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/controllers/DoEverythingController.scala#L530)
 - [DoEverythingServerFeatureTest](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L309)
 - [MultiParamsTest](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala)
@@ -351,7 +351,7 @@ get("/") { request =>
 ```
 <div></div>
 
-Advanced cookies are supported by creating and configuring [`com.twitter.finagle.httpx.Cookie`](https://github.com/twitter/finagle/blob/develop/finagle-httpx/src/main/scala/com/twitter/finagle/httpx/Cookie.scala) objects:
+Advanced cookies are supported by creating and configuring [`com.twitter.finagle.http.Cookie`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Cookie.scala) objects:
 
 ```scala
 get("/") { request =>

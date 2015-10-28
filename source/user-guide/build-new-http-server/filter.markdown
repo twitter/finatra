@@ -157,9 +157,9 @@ class MyController @Inject()(
 ```
 <div></div>
 
-### <a class="anchor" name="request-ctx">Using `com.twitter.finagle.httpx.Request#ctx`</a>
+### <a class="anchor" name="request-ctx">Using `com.twitter.finagle.http.Request#ctx`</a>
 
-However, recommend *not* seeding with a request-scope `Provider[T]` but instead using Finagle's [`com.twitter.finagle.httpx.Request#ctx`](https://github.com/twitter/finagle/blob/develop/finagle-httpx/src/main/scala/com/twitter/finagle/httpx/Request.scala#L33). Internally, we generally use the `Request#ctx` over `Provider[T]` even though we use Guice extensively.
+However, recommend *not* seeding with a request-scope `Provider[T]` but instead using Finagle's [`com.twitter.finagle.http.Request#ctx`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L33). Internally, we generally use the `Request#ctx` over `Provider[T]` even though we use Guice extensively.
 
 To use the `Request#ctx` technique,
 
