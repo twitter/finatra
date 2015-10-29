@@ -180,6 +180,9 @@ def aggregatedProjects = {
 }
 
 lazy val root = (project in file(".")).
+  settings(baseSettings).
+  settings(buildSettings).
+  settings(publishSettings).
   settings(unidocSettings).
   settings(
     organization := "com.twitter.finatra",
