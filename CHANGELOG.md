@@ -1,5 +1,25 @@
 # Change Log
 
+## [Unreleased](https://github.com/twitter/finatra/tree/HEAD)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.1.0...HEAD)
+
+**Closed issues:**
+
+- Update Startup Test on doc [\#261](https://github.com/twitter/finatra/issues/261)
+
+- Error with simple test using httpPutJson [\#257](https://github.com/twitter/finatra/issues/257)
+
+- appfrog problem with admin server, I only can use one port [\#252](https://github.com/twitter/finatra/issues/252)
+
+- Streaming content every X seconds [\#250](https://github.com/twitter/finatra/issues/250)
+
+- Mustache templates getting stripped  [\#112](https://github.com/twitter/finatra/issues/112)
+
+**Merged pull requests:**
+
+- Remove unnecessary files [\#265](https://github.com/twitter/finatra/pull/265) ([cacoco](https://github.com/cacoco))
+
 ## [v2.1.0](https://github.com/twitter/finatra/tree/v2.1.0) (2015-10-01)
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.0.1...v2.1.0)

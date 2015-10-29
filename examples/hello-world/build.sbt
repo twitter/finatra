@@ -1,11 +1,11 @@
 name := "hello-world"
 organization := "com.twitter.finatra.example"
-version := "2.1.1"
+version := "2.1.2-SNAPSHOT"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.1.1"
+  val finatra = "2.1.2-SNAPSHOT"
   val logback = "1.0.13"
 }
 
