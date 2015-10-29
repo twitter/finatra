@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "User Guide"
+title: "Finatra User Guide"
 comments: false
 sharing: false
 footer: true
