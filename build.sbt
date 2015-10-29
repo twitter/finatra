@@ -5,7 +5,7 @@ import scoverage.ScoverageKeys.coverageExcludedPackages
 parallelExecution in ThisBuild := false
 
 lazy val aggregated = taskKey[Unit]("Print currently aggregated tasks under the root.")
-lazy val projectVersion = "2.1.1-SNAPSHOT"
+lazy val projectVersion = "2.1.1"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -158,7 +158,7 @@ lazy val finatraModules = Seq(
   utils)
 
 lazy val finatraExamples =
-  // START EXAMPLES
+  /* // START EXAMPLES
   Seq(
     benchmarkServer,
     exampleInjectJavaServer,
@@ -169,7 +169,7 @@ lazy val finatraExamples =
     thriftExampleServer,
     tinyUrl,
     twitterClone) ++
-  // END EXAMPLES
+  */ // END EXAMPLES
   Seq.empty
 
 def aggregatedProjects = {
@@ -430,7 +430,7 @@ lazy val thrift = project.
     slf4j % "test->test"
   )
 
-// START EXAMPLES
+/* // START EXAMPLES
 
 // 2.11 only due to rlazoti/finagle-metrics dependency
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
@@ -579,4 +579,4 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
     injectServer % "test->test"
   )
 
-// END EXAMPLES
+*/ // END EXAMPLES
