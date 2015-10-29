@@ -21,11 +21,14 @@ fi
 
 javaVersion=`java -version 2>&1 | grep "java version" | awk '{print $3}' | tr -d \"`
 
-# Workaround for JDK issue: https://bugs.openjdk.java.net/browse/JDK-8058847
-# only add the option on version JDK8
+MAX_PERM_SIZE_JVM_ARG=""
 ELIMINATE_AUTOBOX_JVM_ARG=""
 if [[ $javaVersion == *"8"* ]]; then
+  # Workaround for JDK issue: https://bugs.openjdk.java.net/browse/JDK-8058847
+  # only add the option on version JDK8
   ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"
+else
+  MAX_PERM_SIZE_JVM_ARG="-XX:MaxPermSize=1024M"
 fi
 
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
@@ -38,13 +41,13 @@ CMD="java -ea                     \
   -XX:+UseConcMarkSweepGC         \
   -XX:+CMSParallelRemarkEnabled   \
   -XX:+CMSClassUnloadingEnabled   \
-  -XX:ReservedCodeCacheSize=256M  \
-  -XX:MaxPermSize=1024M           \
+  -XX:ReservedCodeCacheSize=128m  \
+  ${MAX_PERM_SIZE_JVM_ARG}        \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
   ${ELIMINATE_AUTOBOX_JVM_ARG}    \
-  -Xms1024M                       \
-  -Xmx3072M                       \
+  -Xms512M                        \
+  -Xmx768M                        \
   -server                         \
   -jar $sbtjar ${@:1}"
 

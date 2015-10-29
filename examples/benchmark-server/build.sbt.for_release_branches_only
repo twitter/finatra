@@ -1,5 +1,5 @@
-name := "finatra-benchmark-server"
-organization := "com.twitter.example"
+name := "benchmark-server"
+organization := "com.twitter.finatra.example"
 version := "2.1.1-SNAPSHOT"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false

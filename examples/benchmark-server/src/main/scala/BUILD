@@ -11,7 +11,4 @@ scala_library(
     exclude(org='org.slf4j', name='slf4j-jdk14')
   ],
   sources=rglobs('*.scala'),
-  resources=[
-    'finatra/examples/benchmark-server/src/main/resources'
-  ]
 )

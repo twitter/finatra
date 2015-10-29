@@ -13,3 +13,6 @@ done
 
 # also run the example mvn build in hello-world
 cd hello-world && mvn clean install; cd -
+
+# also run the inject/example
+cd ../inject/examples/java-server; sbt clean test; cd -

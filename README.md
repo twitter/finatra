@@ -1,5 +1,5 @@
 # Finatra
-Fast, testable, Scala HTTP services built on Twitter-Server and Finagle
+Fast, testable, Scala services built on Twitter-Server and Finagle
 
 ![finatra logo](finatra_logo.png)
 

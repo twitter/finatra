@@ -2,7 +2,7 @@ namespace java com.twitter.converter.thriftjava
 #@namespace scala com.twitter.converter.thriftscala
 namespace rb Converter
 
-include "finatra_thrift_exceptions.thrift"
+include "finatra-thrift/finatra_thrift_exceptions.thrift"
 
 service Converter {
 

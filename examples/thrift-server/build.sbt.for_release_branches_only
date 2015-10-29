@@ -1,0 +1,70 @@
+import sbt.Keys._
+
+parallelExecution in ThisBuild := false
+
+lazy val versions = new {
+  val finatra = "2.1.1-SNAPSHOT"
+  val logback = "1.0.13"
+}
+
+lazy val baseSettings = Seq(
+  version := "2.1.1-SNAPSHOT",
+  scalaVersion := "2.11.7",
+  ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
+  libraryDependencies ++= Seq(
+    "org.mockito" % "mockito-core" % "1.9.5" % "test",
+    "org.scalatest" %% "scalatest" % "2.2.3" % "test",
+    "org.specs2" %% "specs2" % "2.3.12" % "test"
+  ),
+  resolvers ++= Seq(
+    Resolver.sonatypeRepo("releases"),
+    "Twitter Maven" at "https://maven.twttr.com"
+  ),
+  assemblyMergeStrategy in assembly := {
+    case "BUILD" => MergeStrategy.discard
+    case other => MergeStrategy.defaultMergeStrategy(other)
+  }
+)
+
+lazy val root = (project in file(".")).
+  settings(
+    organization := "com.twitter.finatra.example",
+    moduleName := "thrift-example-root"
+  ).
+  aggregate(
+    thriftExampleIdl,
+    thriftExampleServer
+  )
+
+lazy val thriftExampleIdl = (project in file("thrift-example-idl")).
+  settings(baseSettings).
+  settings(
+    name := "thrift-example-idl",
+    moduleName := "thrift-example-idl",
+    scroogeThriftDependencies in Compile := Seq(
+      "finatra-thrift_2.11"
+    ),
+    libraryDependencies ++= Seq(
+      "com.twitter.finatra" %% "finatra-thrift" % versions.finatra
+    )
+  )
+
+lazy val thriftExampleServer = (project in file("thrift-example-server")).
+  settings(baseSettings).
+  settings(
+    name := "thrift-example-server",
+    moduleName := "thrift-example-server",
+    libraryDependencies ++= Seq(
+      "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
+      "com.twitter.finatra" %% "finatra-thrift" % versions.finatra,
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+
+      "com.twitter.finatra" %% "finatra-thrift" % versions.finatra % "test->test",
+      "com.twitter.inject" %% "inject-app" % versions.finatra % "test->test",
+      "com.twitter.inject" %% "inject-core" % versions.finatra % "test->test",
+      "com.twitter.inject" %% "inject-server" % versions.finatra % "test->test"
+    )
+  ).
+  dependsOn(
+    thriftExampleIdl
+  )

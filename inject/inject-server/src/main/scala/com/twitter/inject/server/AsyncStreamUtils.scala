@@ -1,6 +1,6 @@
 package com.twitter.inject.server
 
-import com.twitter.concurrent.AsyncStream
+import com.twitter.concurrent.exp.AsyncStream
 import com.twitter.io.{Buf, Reader}
 
 object AsyncStreamUtils {

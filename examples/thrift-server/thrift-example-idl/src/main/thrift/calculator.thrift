@@ -2,7 +2,7 @@ namespace java com.twitter.calculator.thriftjava
 #@namespace scala com.twitter.calculator.thriftscala
 namespace rb Calculator
 
-include "finatra_thrift_exceptions.thrift"
+include "finatra-thrift/finatra_thrift_exceptions.thrift"
 
 service Calculator {
 
