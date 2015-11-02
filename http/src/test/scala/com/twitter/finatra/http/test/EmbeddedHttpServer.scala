@@ -10,7 +10,7 @@ import com.twitter.inject.server.{PortUtils, Ports}
 import com.twitter.util.Try
 
 class EmbeddedHttpServer(
-  twitterServer: Ports,
+  val twitterServer: Ports,
   clientFlags: Map[String, String] = Map(),
   extraArgs: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
@@ -22,7 +22,8 @@ class EmbeddedHttpServer(
   mapperOverride: Option[FinatraObjectMapper] = None,
   httpPortFlag: String = "http.port",
   streamResponse: Boolean = false,
-  verbose: Boolean = true,
+  verbose: Boolean = false,
+  disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60)
   extends com.twitter.inject.server.EmbeddedTwitterServer(
     twitterServer = twitterServer,
@@ -106,6 +107,11 @@ class EmbeddedHttpServer(
   lazy val httpsExternalPort = {
     start()
     twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound"))
+  }
+
+  lazy val httpExternalSocketAddress = {
+    start()
+    twitterServer.httpExternalSocketAddress.getOrElse(throw new Exception("External HTTP Socket Address not bound"))
   }
 
   lazy val externalHttpHostAndPort = PortUtils.loopbackAddressForPort(httpExternalPort)
@@ -464,7 +470,7 @@ class EmbeddedHttpServer(
 
   private def chooseHttpClient(path: String, forceAdmin: Boolean, secure: Boolean) = {
     if (path.startsWith("/admin") || forceAdmin)
-      (httpAdminClient, twitterServer.httpAdminPort)
+      (httpAdminClient, httpAdminPort)
     else if (secure)
       (httpsClient, twitterServer.httpsExternalPort.get)
     else

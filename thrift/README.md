@@ -1,10 +1,10 @@
-HTTP
+Thrift
 ==========================================================
-finatra-http is a library for building HTTP services with Finatra.
+finatra-thrift is a library for building Thrift services with Finatra.
 
 Quick Start
 -----------------------------------------------------------
-* Depend on the `com.twitter.finatra:finatra-http` library.
+* Depend on the `com.twitter.finatra:finatra-thrift` library.
 * We recommend depending on `com.twitter.finatra:finatra-slf4j` and `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [slf4j](http://www.slf4j.org/manual.html) implementation.
 * Take a look at our [examples.](../examples/)
 

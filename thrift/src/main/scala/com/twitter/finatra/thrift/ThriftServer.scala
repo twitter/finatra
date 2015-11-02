@@ -3,7 +3,7 @@ package com.twitter.finatra.thrift
 import com.twitter.conversions.time._
 import com.twitter.finagle.{ListeningServer, ThriftMux}
 import com.twitter.inject.server.{PortUtils, TwitterServer}
-import com.twitter.util.Await
+import com.twitter.util.{Await, Future, Time}
 
 trait ThriftServer extends TwitterServer {
 
@@ -26,15 +26,23 @@ trait ThriftServer extends TwitterServer {
     router.serviceName(name)
     configureThrift(router)
     thriftServer = ThriftMux.serveIface(thriftPortFlag(), router.filteredService)
+    onExit {
+      Await.result(
+        close(thriftServer, thriftShutdownTimeout().fromNow))
+    }
     info("Thrift server started on port: " + thriftPort.get)
-  }
-
-  onExit {
-    Await.result(
-      thriftServer.close(thriftShutdownTimeout().fromNow))
   }
 
   /* Overrides */
 
   override def thriftPort = Option(thriftServer) map PortUtils.getPort
+
+  /* Private */
+
+  private def close(server: ListeningServer, deadline: Time) = {
+    if (server != null)
+      server.close(deadline)
+    else
+      Future.Unit
+  }
 }

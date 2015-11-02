@@ -2,7 +2,7 @@ package com.twitter.finatra.thrift
 
 import com.google.inject.Stage
 import com.twitter.inject.server.PortUtils._
-import com.twitter.inject.server.{EmbeddedTwitterServer, Ports}
+import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 
 /**
  * EmbeddedThriftServer allows a twitter-server serving thrift endpoints to be started
@@ -19,9 +19,12 @@ import com.twitter.inject.server.{EmbeddedTwitterServer, Ports}
  * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external integration tests that connect to external services)
  * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
  * @param thriftPortFlag Name of the flag that defines the external thrift port for the server.
+ * @param verbose Enable verbose logging during test runs
+ * @param disableTestLogging Disable all logging emitted from the test infrastructure
+ * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded an Exception is thrown.
  */
 class EmbeddedThriftServer(
-  twitterServer: Ports,
+  override val twitterServer: Ports,
   flags: Map[String, String] = Map(),
   args: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
@@ -29,7 +32,8 @@ class EmbeddedThriftServer(
   useSocksProxy: Boolean = false,
   skipAppMain: Boolean = false,
   thriftPortFlag: String = "thrift.port",
-  verbose: Boolean = true,
+  verbose: Boolean = false,
+  disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60)
   extends EmbeddedTwitterServer(
     twitterServer,
@@ -46,5 +50,18 @@ class EmbeddedThriftServer(
   protected def externalHostAndPort = {
     start()
     Some(loopbackAddressForPort(thriftExternalPort))
+  }
+
+  def thriftPort: Int = {
+    start()
+    twitterServer.thriftPort.get
+  }
+
+  def thriftHostAndPort: String = {
+    PortUtils.loopbackAddressForPort(thriftPort)
+  }
+
+  override protected def combineArgs(): Array[String] = {
+    ("-thrift.port=" + PortUtils.ephemeralLoopback) +: super.combineArgs
   }
 }

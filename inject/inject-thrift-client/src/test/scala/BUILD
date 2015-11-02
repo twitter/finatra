@@ -13,6 +13,7 @@ junit_tests(name='scala',
     'finatra/inject/inject-core:test-deps',
     'finatra/inject/inject-modules',
     'finatra/inject/inject-app:test-deps',
+    'finatra/thrift:test-deps',
   ],
   sources=rglobs('com/twitter/inject/thrift/*.scala'),
 )

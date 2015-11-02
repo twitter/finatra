@@ -18,6 +18,11 @@ object HttpHeaders {
    */
   val Server = "Server"
 
+  /**
+   * HTTP {@code Accept} header field name.
+   * @see <href="http://tools.ietf.org/html/rfc7231#section-5.3.2">Section 5.3.2</a>
+   */
+  val Accept = "Accept"
 
   val GMT = DateTimeZone.forID("GMT")
 

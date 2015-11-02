@@ -17,7 +17,7 @@ trait ThriftClient { self: EmbeddedApp =>
     ("-thrift.port=" + PortUtils.ephemeralLoopback) +: self.combineArgs
   }
 
-  def thriftExternalPort = {
+  def thriftExternalPort: Int = {
     self.start()
     twitterServer.thriftPort.get
   }

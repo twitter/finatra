@@ -30,9 +30,9 @@ class StartupIntegrationTest extends Test {
       server.close()
     }
 
-    "raw TwitterServerWithPorts starts up" in {
+    "embedded raw com.twitter.server.Twitter starts up" in {
       val server = new EmbeddedTwitterServer(
-        twitterServer = new RawTwitterServerWithPorts)
+        twitterServer = new ExtendedBaseTwitterServer)
 
       server.assertHealthy()
       server.close()
@@ -116,11 +116,11 @@ class StartupIntegrationTest extends Test {
 
     "appMain throws exception" in {
       val server = new EmbeddedApp(
-          new App {
-            override def appMain(): Unit = {
-              throw new RuntimeException("oops")
-            }
-          })
+        new App {
+          override def appMain(): Unit = {
+            throw new RuntimeException("oops")
+          }
+        })
 
       intercept[Exception] {
         server.start()
@@ -194,7 +194,7 @@ class ServerPremainException extends TwitterServer {
 
 class StartupTestException(msg: String) extends Exception(msg)
 
-class RawTwitterServerWithPorts extends BaseTwitterServer with Ports {
+class ExtendedBaseTwitterServer extends BaseTwitterServer {
   def main() {
     Await.ready(
       adminHttpServer)

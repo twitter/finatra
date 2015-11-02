@@ -1,14 +1,9 @@
 package com.twitter.inject.server
 
-import com.twitter.inject.server.PortUtils.getPort
-import com.twitter.server.AdminHttpServer
 import java.net.SocketAddress
 
 trait Ports
-  extends com.twitter.app.App
-  with AdminHttpServer {
-
-  def httpAdminPort: Int = getPort(adminHttpServer)
+  extends com.twitter.server.TwitterServer {
 
   def httpExternalPort: Option[Int] = None
 

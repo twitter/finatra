@@ -39,7 +39,7 @@ trait BaseHttpServer extends TwitterServer {
 
   private val httpAnnounceFlag = flag[String]("http.announce", "Address to announce HTTP server to")
 
-  private val httpsAnncounceFlag = flag[String]("https.announce", "Address to announce HTTPS server to")
+  private val httpsAnnounceFlag = flag[String]("https.announce", "Address to announce HTTPS server to")
 
   private val adminAnnounceFlag = flag[String]("admin.announce", "Address to announce admin server to")
 
@@ -111,14 +111,6 @@ trait BaseHttpServer extends TwitterServer {
     }
   }
 
-  onExit {
-    Await.result(
-      close(httpServer, shutdownTimeoutFlag().fromNow))
-
-    Await.result(
-      close(httpsServer, shutdownTimeoutFlag().fromNow))
-  }
-
   /* Overrides */
 
   override def httpExternalPort = Option(httpServer) map PortUtils.getPort
@@ -146,6 +138,10 @@ trait BaseHttpServer extends TwitterServer {
       configureHttpServer(serverBuilder)
 
       httpServer = serverBuilder.build(httpService)
+      onExit {
+        Await.result(
+          close(httpServer, shutdownTimeoutFlag().fromNow))
+      }
       for (addr <- httpAnnounceFlag.get) httpServer.announce(addr)
       info("http server started on port: " + httpExternalPort.get)
     }
@@ -165,7 +161,11 @@ trait BaseHttpServer extends TwitterServer {
       configureHttpsServer(serverBuilder)
 
       httpsServer = serverBuilder.build(httpService)
-      for (addr <- httpsAnncounceFlag.get) httpsServer.announce(addr)
+      onExit {
+        Await.result(
+          close(httpsServer, shutdownTimeoutFlag().fromNow))
+      }
+      for (addr <- httpsAnnounceFlag.get) httpsServer.announce(addr)
       info("https server started on port: " + httpsExternalPort)
     }
   }

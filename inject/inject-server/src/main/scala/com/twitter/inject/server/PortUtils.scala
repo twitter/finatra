@@ -20,7 +20,11 @@ object PortUtils {
   }
 
   def getPort(server: ListeningServer): Int = {
-    server.boundAddress.asInstanceOf[InetSocketAddress].getPort
+    getPort(server.boundAddress)
+  }
+
+  def getPort(socketAddress: SocketAddress): Int = {
+    socketAddress.asInstanceOf[InetSocketAddress].getPort
   }
 
   def getPort(server: BuilderServer): Int = {

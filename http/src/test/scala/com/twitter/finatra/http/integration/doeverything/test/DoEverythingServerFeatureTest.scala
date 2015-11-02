@@ -1374,15 +1374,12 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   }
 
   "ports" in {
-    server.twitterServer.httpExternalPort should not be None
-    server.twitterServer.httpExternalPort.get should be > 0
-
-    server.twitterServer.httpExternalSocketAddress should not be None
+    server.httpExternalPort should be > 0
+    server.httpExternalSocketAddress should not be null
 
     // no https server configured
-    server.twitterServer.httpsExternalPort shouldBe None
-
-    // not a thrift server so, port should be None
-    server.twitterServer.thriftPort shouldBe None
+    intercept[Exception] {
+      server.httpsExternalPort
+    }
   }
 }

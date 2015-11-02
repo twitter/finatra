@@ -1,7 +1,8 @@
 package com.twitter.finatra.http.request
 
-import com.google.common.net.{HttpHeaders, MediaType => CommonMediaTypes}
+import com.google.common.net.{MediaType => CommonMediaTypes}
 import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.internal.marshalling.FinatraFileUpload
@@ -37,7 +38,7 @@ object RequestUtils {
    * text/html; q=0.8, application/json
    */
   def respondTo[T](request: Request)(callback: PartialFunction[ContentType, T]): T = {
-    val acceptHeader = request.headerMap.getOrElse(HttpHeaders.ACCEPT, "*/*")
+    val acceptHeader = request.headerMap.getOrElse(HttpHeaders.Accept, "*/*")
     val mediaRanges = MediaRange.parseAndSort(acceptHeader)
 
     val contentTypes = mediaRanges map { mediaRange =>

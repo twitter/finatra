@@ -5,7 +5,7 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 ## Libraries
 
 * inject-core - provides scala-support for Google Guice [modules][module], support for [`util-app`][util-app] [`Flags`][flag], and `twitter-server` lifecycle integration.
- 	
+
 * inject-app - provides a specialized `App` trait extended from [`util-app`][util-app] [`com.twitter.app.App`](https://github.com/twitter/util/blob/master/util-app/src/main/scala/com/twitter/app/App.scala) along with an [`EmbeddedApp`][embedded-app] for testing.
 
 * inject-server - provides a specialized `TwitterServer` trait extending from [`com.twitter.server.TwitterServer`](https://github.com/twitter/twitter-server/blob/master/src/main/scala/com/twitter/server/TwitterServer.scala) along with an [`EmbeddedTwitterServer`][embedded-twitter-server] for testing.
@@ -15,7 +15,6 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 * inject-thrift-client - support for creating [Finagle][finagle] clients to [Thrift][apache-thrift] services.
 
 * inject-request-scope - provides utilities for working with Guice request [scopes][guice-scopes].
-
 
 
 [twitter-server]: https://github.com/twitter/twitter-server

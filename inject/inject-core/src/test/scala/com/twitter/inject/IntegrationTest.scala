@@ -36,6 +36,8 @@ trait IntegrationTest extends Test {
     }
   }
 
+  protected def hasBoundFields: Boolean = boundFields.nonEmpty
+
   /* Private */
 
   private lazy val mockObjects = {

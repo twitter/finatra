@@ -17,10 +17,6 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
         andExpect = Status.Ok,
         withBody = "OK\n")
 
-      embeddedServer.twitterServer.httpExternalPort should be(None)
-      embeddedServer.twitterServer.httpExternalSocketAddress should be(None)
-      embeddedServer.twitterServer.httpsExternalPort should be(None)
-
       embeddedServer.close()
     }
 

@@ -1,3 +1,6 @@
+Jackson
+==========================================================
+
 # Summary
 finatra-jackson is a library integrating jackson, scala, and guice.
 
@@ -128,4 +131,3 @@ Use Java Enums for representing enumerations since they integrate well with Jack
 
 * @JsonCreator: Useful on a custom fromString method
 * @JsonValue: Useful to place on an overridden toString method
-

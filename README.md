@@ -21,14 +21,13 @@ Features
 
 Presentations
 -----------------------------------------------------------
-* [SFScala Introduction to Finatra Slides](http://twitter.github.io/finatra/assets/FinatraSFScala.pdf)
-* [SFScala Introduction to Finatra Presentation](https://www.youtube.com/watch?v=hkVp9W4c9bs&feature=youtu.be)
-* [FinagleCon Streaming HTTP with Finatra and AsyncStream Slides](http://schd.ws/hosted_files/finaglecon2015/d1/Streaming%20HTTP%20with%20Finatra%20and%20AsyncStream.pdf)
+Check out our list of recent presentations: [Finatra Presentations](http://twitter.github.io/finatra/presentations/)
 
 News
 -----------------------------------------------------------
 * Finatra is now built against the latest Finagle v6.30.0 and Twitter Server v1.15.0 releases.
-* Please take a look at our new [User Guide](http://twitter.github.io/finatra/user-guide/)!
+* Please take a look at our new [User Guide][user-guide]!
+* Keep up with the latest news [here](http://twitter.github.io/finatra/blog/archives/) on our blog.
 
 <a name="quick-start">Quick Start</a>
 -----------------------------------------------------------
@@ -168,9 +167,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
 Detailed Documentation
 -----------------------------------------------------------
-
-The Finatra project is composed of several libraries (each with their own README).
-[Click here for detailed documentation on the main finatra-http library.](http/README.md)
+The Finatra project is composed of several libraries. You can find details in a project's README or see the [User Guide][user-guide] for detailed information on building applications with Finatra.
 
 Example Projects
 -----------------------------------------------------------
@@ -229,3 +226,4 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
 [twitter-clone-example]: examples/twitter-clone/
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
+[user-guide]: http://twitter.github.io/finatra/user-guide/

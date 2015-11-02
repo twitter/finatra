@@ -74,7 +74,7 @@ trait TwitterServer
    */
   override protected def afterPostWarmup() {
     super.afterPostWarmup()
-    info("Enabling health endpoint on port " + httpAdminPort)
+    info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
     HttpMuxer.addHandler("/health", new ReplyHandler("OK\n"))
   }
 }

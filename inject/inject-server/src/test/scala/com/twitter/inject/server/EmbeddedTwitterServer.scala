@@ -9,13 +9,16 @@ import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
-import com.twitter.finagle.{ChannelClosedException, Service}
+import com.twitter.finagle.{ListeningServer, ChannelClosedException, Service}
 import com.twitter.inject.app.{App, EmbeddedApp}
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
+import com.twitter.inject.server.PortUtils._
+import com.twitter.server.AdminHttpServer
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
+import org.apache.commons.lang.reflect.FieldUtils
 import scala.collection.immutable.SortedMap
 
 object EmbeddedTwitterServer {
@@ -49,9 +52,14 @@ object EmbeddedTwitterServer {
  *              creates all Guice classes at startup)
  * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external integration tests that connect to external services)
  * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
+ * @param defaultRequestHeaders Headers to always send to the embedded server.
+ * @param streamResponse Toggle to not unwrap response content body to allow caller to stream response.
+ * @param verbose Enable verbose logging during test runs
+ * @param disableTestLogging Disable all logging emitted from the test infrastructure
+ * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded an Exception is thrown.
  */
 class EmbeddedTwitterServer(
-  val twitterServer: Ports,
+  twitterServer: com.twitter.server.TwitterServer,
   clientFlags: Map[String, String] = Map(),
   extraArgs: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
@@ -60,7 +68,8 @@ class EmbeddedTwitterServer(
   skipAppMain: Boolean = false,
   defaultRequestHeaders: Map[String, String] = Map(),
   streamResponse: Boolean = false,
-  verbose: Boolean = true,
+  verbose: Boolean = false,
+  disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60)
   extends EmbeddedApp(
     app = twitterServer,
@@ -91,18 +100,18 @@ class EmbeddedTwitterServer(
     start()
     createHttpClient(
       "httpAdminClient",
-      twitterServer.httpAdminPort)
+      httpAdminPort)
   }
 
   lazy val statsReceiver = if (isGuiceApp) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
-  lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(twitterServer.httpAdminPort)
+  lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(httpAdminPort)
   lazy val isGuiceTwitterServer = twitterServer.isInstanceOf[App]
 
   /* Overrides */
 
   override protected def nonGuiceAppStarted(): Boolean = {
-    twitterServer.httpAdminPort != 0
+    isHealthy
   }
 
   override protected def logAppStartup() {
@@ -119,6 +128,7 @@ class EmbeddedTwitterServer(
 
   override def close() {
     if (!closed) {
+      twitterServer.log.clearHandlers()
       super.close()
       closed = true
     }
@@ -130,13 +140,23 @@ class EmbeddedTwitterServer(
 
   /* Public */
 
-  def thriftPort: Int = {
-    start()
-    twitterServer.thriftPort.get
+  def assertHealthy(healthy: Boolean = true) {
+    healthResponse(healthy).get()
   }
 
-  def thriftHostAndPort: String = {
-    PortUtils.loopbackAddressForPort(thriftPort)
+  def isHealthy: Boolean = {
+    httpAdminPort != 0 &&
+      healthResponse(shouldBeHealthy = true).isReturn
+  }
+
+  def httpAdminPort = {
+    // TODO: The following is the desired implementation but it requires a CSL release after we add the adminBoundAddress method:
+    // getPort(twitterServer.adminBoundAddress)
+
+    // HACK: Here's the temporary workaround
+    val adminHttpServerField = FieldUtils.getField(twitterServer.getClass, "adminHttpServer", true)
+    val listeningServer = adminHttpServerField.get(twitterServer).asInstanceOf[ListeningServer]
+    getPort(listeningServer)
   }
 
   def clearStats() = {
@@ -169,15 +189,6 @@ class EmbeddedTwitterServer(
         info(f"$key%-70s = ${value()}")
       }
     }
-  }
-
-  def assertHealthy(healthy: Boolean = true) {
-    val expectedBody = if (healthy) "OK\n" else ""
-
-    httpGetAdmin(
-      "/health",
-      andExpect = Status.Ok,
-      withBody = expectedBody)
   }
 
   def assertAppStarted(started: Boolean = true) {
@@ -285,6 +296,15 @@ class EmbeddedTwitterServer(
     info(response.contentString + "\n")
   }
 
+  protected def createApiRequest(path: String, method: Method = Method.Get) = {
+    val pathToUse = if (path.startsWith("http"))
+      URI.create(path).getPath
+    else
+      path
+
+    Request(method, pathToUse)
+  }
+
   /* Private */
 
   private def receivedResponseStr(response: Response) = {
@@ -364,15 +384,6 @@ class EmbeddedTwitterServer(
     }
   }
 
-  protected def createApiRequest(path: String, method: Method = Method.Get) = {
-    val pathToUse = if (path.startsWith("http"))
-      URI.create(path).getPath
-    else
-      path
-
-    Request(method, pathToUse)
-  }
-
   private def addAcceptHeader(
     accept: MediaType,
     headers: Map[String, String]): Map[String, String] = {
@@ -380,6 +391,18 @@ class EmbeddedTwitterServer(
       headers + (HttpHeaders.ACCEPT -> accept.toString)
     else
       headers
+  }
+
+  private def healthResponse(shouldBeHealthy: Boolean = true): Try[Response] = {
+    val expectedBody = if (shouldBeHealthy) "OK\n" else ""
+
+    Try {
+      httpGetAdmin(
+        "/health",
+        andExpect = Status.Ok,
+        withBody = expectedBody,
+        suppress = !verbose)
+    }
   }
 
   //TODO: AF-567: Create inject-utils

@@ -2,13 +2,13 @@ package com.twitter.inject.thrift.filtered_integration
 
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.server.EmbeddedTwitterServer
+import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.thrift.filtered_integration.http_server.GreeterHttpServer
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
 
 class GreeterHttpServerFeatureTest extends HttpTest {
 
-  val thriftServer = new EmbeddedTwitterServer(
+  val thriftServer = new EmbeddedThriftServer(
     twitterServer = new GreeterThriftServer)
 
   val httpServer = new EmbeddedHttpServer(

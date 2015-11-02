@@ -7,6 +7,7 @@ import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.greeter.thriftscala.{InvalidOperation, Greeter}
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.inject.server.EmbeddedTwitterServer
@@ -18,7 +19,7 @@ import com.twitter.util._
 
 class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
 
-  val thriftServer = new EmbeddedTwitterServer(
+  val thriftServer = new EmbeddedThriftServer(
     twitterServer = new GreeterThriftServer)
 
   val httpServer = new EmbeddedHttpServer(

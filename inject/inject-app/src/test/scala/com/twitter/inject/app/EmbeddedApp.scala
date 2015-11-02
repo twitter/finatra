@@ -18,7 +18,8 @@ import org.scalatest.Matchers
  *              This makes it possible to only mock objects that are used in a given test, at the expense of not checking that the entire
  *              object graph is valid. As such, you should always have at lease one Stage.PRODUCTION test for your service (which eagerly
  *              creates all Guice classes at startup).
- * @param verbose Enable informative logging during test runs
+ * @param verbose Enable verbose logging during test runs
+ * @param disableTestLogging Disable all logging emitted from the test infrastructure
  * @param maxStartupTimeSeconds Max seconds to wait for app startup
  */
 class EmbeddedApp(
@@ -29,7 +30,8 @@ class EmbeddedApp(
   waitForWarmup: Boolean = true,
   skipAppMain: Boolean = false,
   stage: Stage = Stage.DEVELOPMENT,
-  verbose: Boolean = true,
+  verbose: Boolean = false,
+  disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60)
   extends Matchers {
 
@@ -58,6 +60,7 @@ class EmbeddedApp(
   private val mainRunnerFuturePool = PoolUtils.newFixedPool("Embedded " + appName)
 
   //Mutable state
+  private var starting = false
   private var started = false
   private var startupFailedThrowable: Option[Throwable] = None
   protected[inject] var closed = false
@@ -86,7 +89,9 @@ class EmbeddedApp(
 
   //NOTE: Start is called in various places to "lazily start the server" as needed
   def start() {
-    if (!started) {
+    if (!starting && !started) {
+      starting = true //mutation
+
       if (isGuiceApp && skipAppMain) {
         guiceApp.runAppMain = false
       }
@@ -98,6 +103,7 @@ class EmbeddedApp(
       }
 
       started = true //mutation
+      starting = false //mutation
     }
   }
 
@@ -108,9 +114,14 @@ class EmbeddedApp(
 
   def close() {
     if (!closed) {
-      infoBanner("Closing EmbeddedApp for class " + appName)
-      app.close()
-      mainRunnerFuturePool.executor.shutdown()
+      infoBanner(s"Closing ${this.getClass.getSimpleName}: " + appName)
+      try {
+        Await.result(app.close())
+        mainRunnerFuturePool.executor.shutdown()
+      } catch {
+        case e: Throwable =>
+          info(s"Error while closing ${this.getClass.getSimpleName}: $e")
+      }
       closed = true
     }
   }
@@ -120,7 +131,7 @@ class EmbeddedApp(
   // vs test logs without requiring a test logging
   // configuration to be loaded
   def info(str: String): Unit = {
-    if (verbose) {
+    if (!disableTestLogging) {
       println(str)
     }
   }
@@ -197,7 +208,7 @@ class EmbeddedApp(
         throw startupFailedThrowable.get
       }
 
-      if ((isGuiceApp && guiceApp.appStarted) || (!isGuiceApp && nonGuiceAppStarted())) {
+      if ((isGuiceApp && guiceApp.appStarted) || (!isGuiceApp && nonGuiceAppStarted)) {
         started = true
         logAppStartup()
         return
@@ -205,6 +216,6 @@ class EmbeddedApp(
 
       Thread.sleep(1000)
     }
-    throw new scala.Exception(s"App: $appName failed to startup within 60 seconds.")
+    throw new Exception(s"App: $appName failed to startup within $maxStartupTimeSeconds seconds.")
   }
 }
