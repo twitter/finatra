@@ -47,6 +47,7 @@ footer: true
     - [Integration Tests](/finatra/user-guide/testing#integration-tests)
     - [Http Tests](/finatra/user-guide/testing#http-tests)
   - [Startup Tests](/finatra/user-guide/testing#startup-tests)
+- [V1 Migration FAQ](/finatra/user-guide/v1-migration)
 
 
 ### Getting Involved
