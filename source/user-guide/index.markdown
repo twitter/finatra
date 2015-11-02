@@ -25,6 +25,7 @@ footer: true
   - [Add an ExceptionMapper](/finatra/user-guide/build-new-http-server/exceptions.html)
   - [Implement a Server "Warmup" Handler](/finatra/user-guide/build-new-http-server/warmup.html)
   - [More information](/finatra/user-guide/build-new-http-server/warmup.html#more-information)
+- Building a new Thrift Server - *\*detailed-documentation coming soon\**
 - [Working with JSON](/finatra/user-guide/json)
   - [Configuration](/finatra/user-guide/json#configuration)
   - [Customization](/finatra/user-guide/json#jackson-customization)
