@@ -3,6 +3,8 @@ Finatra Documentation using [Github Pages](https://pages.github.com/)
 
 Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) and powered by [`twitter-server`][twitter-server].
 
+** FOLLOW ALL THE STEPS EVERY TIME **
+
 Build
 -----------------------------------------------------------
 * Pull the latest updates from `gh-pages-source` branch.
