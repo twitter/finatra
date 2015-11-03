@@ -23,4 +23,4 @@ April 2015
 ===========
 
 * [SFScala](http://www.meetup.com/SF-Scala/) - [Introduction to Finatra Presentation](https://www.youtube.com/watch?v=hkVp9W4c9bs&feature=youtu.be)&nbsp;(video)
-* [SFScala](http://www.meetup.com/SF-Scala/) - [Introduction to Finatra](/assets/FinatraSFScala.pdf)&nbsp;(slides)
+* [SFScala](http://www.meetup.com/SF-Scala/) - [Introduction to Finatra](/finatra/assets/FinatraSFScala.pdf)&nbsp;(slides)
