@@ -4,6 +4,8 @@ version := "2.1.2-SNAPSHOT"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false
 
+Revolver.settings
+
 lazy val versions = new {
   val finatra = "2.1.2-SNAPSHOT"
   val logback = "1.0.13"
