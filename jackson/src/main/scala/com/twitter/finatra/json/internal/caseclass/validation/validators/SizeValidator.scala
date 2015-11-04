@@ -27,7 +27,7 @@ object SizeValidator {
       case str: String =>
         str.length
       case _ =>
-        throw new IllegalArgumentException("Class [%s] is not supported" format value.getClass)
+        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
     }
   }
 }
@@ -51,10 +51,10 @@ class SizeValidator(
       case traversableValue: Traversable[_] => traversableValue.size
       case str: String => str.length
       case _ =>
-        throw new IllegalArgumentException("Class [%s] is not supported" format value.getClass)
+        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
     }
 
-    ValidationResult(
+    ValidationResult.validate(
       isValid(size.toLong),
       errorMessage(
         validationMessageResolver,

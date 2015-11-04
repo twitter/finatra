@@ -9,7 +9,7 @@ case class Address(
 
   @MethodValidation
   def validateState = {
-    ValidationResult(
+    ValidationResult.validate(
       state == "CA" || state == "MD" || state == "WI",
       "state must be one of [CA, MD, WI]")
   }

@@ -9,7 +9,7 @@ case class TweetRequest(
 
   @MethodValidation
   def fooCheck = {
-    ValidationResult(
+    ValidationResult.validate(
       username != "foo",
       "username cannot be foo")
   }

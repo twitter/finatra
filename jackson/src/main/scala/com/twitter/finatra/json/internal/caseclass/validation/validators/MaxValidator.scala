@@ -37,35 +37,35 @@ class MaxValidator(
       case numberValue: Number =>
         validationResult(numberValue)
       case _ =>
-        throw new IllegalArgumentException("Class [%s] is not supported" format value.getClass)
+        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
     }
   }
 
   /* Private */
 
   private def validationResult(value: Traversable[_]) = {
-    ValidationResult(
+    ValidationResult.validate(
       value.size <= maxValue,
       errorMessage(value.size),
       errorCode(value.size))
   }
 
   private def validationResult(value: BigDecimal) = {
-    ValidationResult(
+    ValidationResult.validate(
       value <= BigDecimal(maxValue),
       errorMessage(value),
       errorCode(value))
   }
 
   private def validationResult(value: BigInt) = {
-    ValidationResult(
+    ValidationResult.validate(
       value <= BigInt(maxValue),
       errorMessage(value),
       errorCode(value))
   }
 
   private def validationResult(value: Number) = {
-    ValidationResult(
+    ValidationResult.validate(
       value.longValue() <= maxValue,
       errorMessage(value),
       errorCode(value))
@@ -74,7 +74,7 @@ class MaxValidator(
   private def errorMessage(value: Number) = {
     MaxValidator.errorMessage(validationMessageResolver, value, maxValue)
   }
-  
+
   private def errorCode(value: Number) = {
     ErrorCode.ValueTooLarge(maxValue, value)
   }

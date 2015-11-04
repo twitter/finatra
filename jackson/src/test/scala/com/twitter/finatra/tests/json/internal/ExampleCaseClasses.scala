@@ -55,7 +55,8 @@ case class CaseClassWithOption(value: Option[String] = None)
 
 case class CaseClassWithJsonNode(value: JsonNode)
 
-case class CaseClassWithAllTypes(map: Map[String, String],
+case class CaseClassWithAllTypes(
+  map: Map[String, String],
   set: Set[Int],
   string: String,
   list: List[Int],
@@ -123,7 +124,7 @@ case class Car(
   passengers: Seq[Person]) {
 
   def validateId = {
-    ValidationResult(
+    ValidationResult.validate(
       id > 0,
       "id must be > 0")
   }
@@ -296,18 +297,18 @@ case class CaseClassTooManyBindingAnnotations(
   @Inject @Named("foo") @Named("bar") string: String)
 
 case class CaseClassWithCustomDecimalFormat(
-   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
-   myBigDecimal: BigDecimal,
-   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
-   optMyBigDecimal: Option[BigDecimal])
+  @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
+  myBigDecimal: BigDecimal,
+  @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
+  optMyBigDecimal: Option[BigDecimal])
 
 case class CaseClassWithLongAndDeserializer(
-   @JsonDeserialize(contentAs=classOf[java.lang.Long])
-   long: Long)
+  @JsonDeserialize(contentAs = classOf[java.lang.Long])
+  long: Long)
 
 case class CaseClassWithOptionLongAndDeserializer(
-   @JsonDeserialize(contentAs=classOf[java.lang.Long])
-   optLong: Option[Long])
+  @JsonDeserialize(contentAs = classOf[java.lang.Long])
+  optLong: Option[Long])
 
 class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
   override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigDecimal = {
@@ -319,8 +320,10 @@ class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
 }
 
 package object internal {
+
   case class SimplePersonInPackageObject(
     name: String = "default-name")
 
   case class SimplePersonInPackageObjectWithoutConstructorParams()
+
 }

@@ -62,7 +62,7 @@ class CountryCodeValidator(
 
   private def validationResult(value: Traversable[Any]) = {
     val invalidCountryCodes = findInvalidCountryCodes(value)
-    ValidationResult(
+    ValidationResult.validate(
       invalidCountryCodes.isEmpty,
       errorMessage(
         validationMessageResolver,

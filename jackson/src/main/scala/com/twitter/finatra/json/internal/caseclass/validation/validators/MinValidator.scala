@@ -37,35 +37,35 @@ class MinValidator(
       case numberValue: Number =>
         validationResult(numberValue)
       case _ =>
-        throw new IllegalArgumentException("Class [%s] is not supported" format value.getClass)
+        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
     }
   }
 
   /* Private */
 
   private def validationResult(value: Traversable[_]) = {
-    ValidationResult(
+    ValidationResult.validate(
       minValue <= value.size,
       errorMessage(value.size),
       errorCode(value.size))
   }
 
   private def validationResult(value: BigDecimal) = {
-    ValidationResult(
+    ValidationResult.validate(
       BigDecimal(minValue) <= value,
       errorMessage(value),
       errorCode(value))
   }
 
   private def validationResult(value: BigInt) = {
-    ValidationResult(
+    ValidationResult.validate(
       BigInt(minValue) <= value,
       errorMessage(value),
       errorCode(value))
   }
 
   private def validationResult(value: Number) = {
-    ValidationResult(
+    ValidationResult.validate(
       minValue <= value.longValue(),
       errorMessage(value),
       errorCode(value))
@@ -74,7 +74,7 @@ class MinValidator(
   private def errorMessage(value: Number) = {
     MinValidator.errorMessage(validationMessageResolver, value, minValue)
   }
-  
+
   private def errorCode(value: Number) = {
     ErrorCode.ValueTooSmall(minValue, value)
   }

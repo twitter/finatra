@@ -35,21 +35,21 @@ class RangeValidator(
       case numberValue: Number =>
         validationResult(numberValue)
       case _ =>
-        throw new IllegalArgumentException("Class [%s] is not supported" format value.getClass)
+        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
     }
   }
 
   /* Private */
 
   private def validationResult(value: BigDecimal) = {
-    ValidationResult(
+    ValidationResult.validate(
       BigDecimal(minValue) <= value && value <= BigDecimal(maxValue),
       errorMessage(value),
       errorCode(value))
   }
 
   private def validationResult(value: BigInt) = {
-    ValidationResult(
+    ValidationResult.validate(
       BigInt(minValue) <= value && value <= BigInt(maxValue),
       errorMessage(value),
       errorCode(value))
@@ -57,7 +57,7 @@ class RangeValidator(
 
   private def validationResult(value: Number) = {
     val longValue = value.longValue()
-    ValidationResult(
+    ValidationResult.validate(
       minValue <= longValue && longValue <= maxValue,
       errorMessage(value),
       errorCode(value))
@@ -70,7 +70,7 @@ class RangeValidator(
       minValue,
       maxValue)
   }
-  
+
   private def errorCode(value: Number) = {
     ErrorCode.ValueOutOfRange(value.longValue, minValue, maxValue)
   }

@@ -58,13 +58,13 @@ class OneOfValidator(
   /* Private */
 
   private def findInvalidValues(value: Traversable[_]) = {
-    val valueAsStrings = (value map {_.toString}).toSet
+    val valueAsStrings = value.map(_.toString).toSet
     valueAsStrings diff oneOfValues
   }
 
   private def validationResult(value: Traversable[_]) = {
     val invalidValues = findInvalidValues(value)
-    ValidationResult(
+    ValidationResult.validate(
       invalidValues.isEmpty,
       errorMessage(
         validationMessageResolver,

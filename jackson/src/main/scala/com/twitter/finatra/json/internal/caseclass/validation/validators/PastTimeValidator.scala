@@ -25,10 +25,9 @@ class PastTimeValidator(
     annotation) {
 
   override def isValid(value: DateTime) = {
-    ValidationResult(
+    ValidationResult.validate(
       value.isBeforeNow,
       errorMessage(validationMessageResolver, value),
       ErrorCode.TimeNotPast(value))
   }
 }
-

@@ -32,7 +32,7 @@ object CommonMethodValidations {
     startTimeProperty: String,
     endTimeProperty: String): ValidationResult = {
 
-    ValidationResult(startTime < endTime,
+    ValidationResult.validate(startTime < endTime,
       "%s [%s] must be after %s [%s]".format(
         endTimeProperty,
         endTime.utcIso8601,

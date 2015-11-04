@@ -40,7 +40,7 @@ class TimeGranularityValidator(
   /* Public */
 
   override def isValid(value: DateTime) = {
-    ValidationResult(
+    ValidationResult.validate(
       isGranularity(value),
       errorMessage(
         validationMessageResolver,

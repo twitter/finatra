@@ -27,7 +27,7 @@ class UUIDValidator(
     annotation) {
 
   override def isValid(value: String) = {
-    ValidationResult(
+    ValidationResult.validate(
       UUIDValidator.isValid(value),
       errorMessage(validationMessageResolver, value),
       ErrorCode.InvalidUUID(value))

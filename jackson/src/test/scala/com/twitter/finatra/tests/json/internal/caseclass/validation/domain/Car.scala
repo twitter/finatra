@@ -19,7 +19,7 @@ case class Car(
 
   @MethodValidation
   def validateId = {
-    ValidationResult(
+    ValidationResult.validate(
       id % 2 == 1,
       "id may not be even")
   }

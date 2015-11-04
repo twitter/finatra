@@ -7,7 +7,7 @@ case class TestUser(
 
   @MethodValidation
   def fooCheck = {
-    ValidationResult(
+    ValidationResult.validate(
       name != "foo",
       "name cannot be foo")
   }

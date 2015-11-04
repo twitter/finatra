@@ -25,7 +25,7 @@ class FutureTimeValidator(
     annotation) {
 
   override def isValid(value: DateTime) = {
-    ValidationResult(
+    ValidationResult.validate(
       value.isAfterNow,
       errorMessage(validationMessageResolver, value),
       ErrorCode.TimeNotFuture(value))
