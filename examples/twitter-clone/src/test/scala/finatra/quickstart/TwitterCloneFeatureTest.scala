@@ -1,4 +1,4 @@
-package twitter.github.io.finatra.quickstart
+package finatra.quickstart
 
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.Status._
@@ -6,7 +6,6 @@ import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
-import finatra.quickstart.TwitterCloneServer
 import finatra.quickstart.domain.TweetId
 import finatra.quickstart.domain.http.{TweetLocation, TweetResponse}
 import finatra.quickstart.firebase.FirebaseClient

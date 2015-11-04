@@ -1,8 +1,7 @@
-package twitter.github.io.finatra.quickstart
+package finatra.quickstart
 
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
-import finatra.quickstart.TwitterCloneServer
 import finatra.quickstart.domain.http.TweetResponse
 
 class TwitterCloneExternalTest extends HttpTest {

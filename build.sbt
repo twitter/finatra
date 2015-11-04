@@ -290,7 +290,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
   settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    coverageExcludedPackages := "com.twitter.test.thriftscala.*",
+    coverageExcludedPackages := "<empty>;com\\.twitter\\.test\\.thriftscala.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thrift" % versions.finagle,
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
@@ -500,6 +500,7 @@ lazy val twitterClone = (project in file("examples/twitter-clone")).
   settings(
     name := "twitter-clone",
     moduleName := "twitter-clone",
+    coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % versions.logback
     )
@@ -576,6 +577,7 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
   settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
+    coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
     scroogeThriftIncludeFolders in Compile := Seq(
       file("thrift/src/main/thrift"),
       file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
