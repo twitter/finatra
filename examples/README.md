@@ -13,6 +13,9 @@ A test server that provides benchmarking for key Finatra features.
 ### [hello-world](hello-world/README.md)
 An example [Finatra][finatra] application that highlights features of the [finatra-http](https://github.com/twitter/finatra/tree/master/http) framework.
 
+### [java-server](java-server/README.md)
+An example [Finatra][finatra] application written in Java.
+
 ### [twitter-clone](twitter-clone/README.md)
 An advanced example that creates a Twitter Clone application demonstrating many [Finatra][finatra] features.
 

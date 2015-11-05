@@ -9,6 +9,6 @@ java_library(
   ],
   sources=rglobs('*.java'),
   resources=[
-    'finatra/inject/examples/java-server/src/main/resources'
+    'finatra/examples/java-server/src/main/resources'
   ]
 )

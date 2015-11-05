@@ -1,6 +1,5 @@
 target(name='tests',
   dependencies=[
-    'finatra/inject/examples/java-server:tests',
     'finatra/inject/inject-app:tests',
     'finatra/inject/inject-core:tests',
     'finatra/inject/inject-modules:tests',

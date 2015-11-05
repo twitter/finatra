@@ -14,6 +14,7 @@ target(name='tests',
   dependencies=[
     'finatra/examples/benchmark-server:tests',
     'finatra/examples/hello-world:tests',
+    'finatra/examples/java-server:tests',
     'finatra/examples/streaming-example:tests',
     'finatra/examples/thrift-server/thrift-example-server:tests',
     'finatra/examples/tiny-url:tests',

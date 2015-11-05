@@ -2,13 +2,13 @@ maven_layout()
 
 target(name='java-server',
   dependencies=[
-    'finatra/inject/examples/java-server/src/main/java'
+    'finatra/examples/java-server/src/main/java'
   ]
 )
 
 target(name='tests',
   dependencies=[
-    'finatra/inject/examples/java-server/src/test/java'
+    'finatra/examples/java-server/src/test/java'
   ]
 )
 
