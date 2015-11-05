@@ -3,16 +3,15 @@ package com.twitter.finatra.thrift.tests
 import com.twitter.converter.thriftscala.Converter
 import com.twitter.converter.thriftscala.Converter.Uppercase
 import com.twitter.finagle.{Service, SimpleFilter, TimeoutException}
-import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.thrift.codegen.MethodFilters
-import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter, ThriftMDCFilter}
+import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.RequestTimeout
 import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerError
 import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftRequest, ThriftRouter, ThriftServer}
-import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.Logging
+import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future, NonFatal}
 
 class EmbeddedThriftServerIntegrationTest extends FeatureTest {
@@ -51,10 +50,7 @@ class ConverterServer extends ThriftServer {
 
   override def configureThrift(router: ThriftRouter): Unit = {
     router
-      .filter[LoggingMDCFilter[ThriftRequest, Any]]
-      .filter[TraceIdMDCFilter[ThriftRequest, Any]]
-      .filter(classOf[ThriftMDCFilter])
-      .filter[AccessLoggingFilter]
+      .filter(classOf[AccessLoggingFilter])
       .filter[StatsFilter]
       .filter[ExceptionTranslationFilter]
       .filter[ClientIdWhitelistFilter]

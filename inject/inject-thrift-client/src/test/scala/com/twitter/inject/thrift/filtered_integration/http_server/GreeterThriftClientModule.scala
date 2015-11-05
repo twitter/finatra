@@ -1,6 +1,5 @@
 package com.twitter.inject.thrift.filtered_integration.http_server
 
-import com.twitter.finagle.Thrift
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.thrift.{FilterBuilder, FilteredThriftClientModule}
@@ -13,11 +12,11 @@ object GreeterThriftClientModule
   override val dest = "flag!greeter-thrift-service"
   override val connectTimeout = 1.minute.toDuration
 
-  override def createFilteredClient(
+  override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
-    filterBuilder: FilterBuilder): Greeter[Future] = {
+    filterBuilder: FilterBuilder) = {
 
-    Thrift.newMethodIface(serviceIface.copy(
+    serviceIface.copy(
       hi = filterBuilder.method(Hi)
         .timeout(2.minutes)
         .constantRetry(
@@ -33,11 +32,11 @@ object GreeterThriftClientModule
         .andThen(serviceIface.hi),
       bye = filterBuilder.method(Bye)
         .exponentialRetry(
-          shouldRetryResponse = NonFatalExceptions,
+          shouldRetryResponse = NonCancelledExceptions,
           requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
-        .andThen(serviceIface.bye)))
+        .andThen(serviceIface.bye))
   }
 }

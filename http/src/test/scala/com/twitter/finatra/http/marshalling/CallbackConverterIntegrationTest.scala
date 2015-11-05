@@ -8,15 +8,19 @@ import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, Musta
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.modules.StatsReceiverModule
+import com.twitter.inject.{IntegrationTest, Mockito, Test}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Future}
 
-class CallbackConverterIntegrationTest extends Test with Mockito {
+class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
-  val injector = TestInjector(
-    MessageBodyModule, FinatraJacksonModule,
-    MustacheModule, DocRootModule)
+  override val injector = TestInjector(
+    MessageBodyModule,
+    FinatraJacksonModule,
+    MustacheModule,
+    DocRootModule,
+    StatsReceiverModule)
 
   val callbackConverter = injector.instance[CallbackConverter]
 
@@ -120,7 +124,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
     val response = Await.result(converted(request))
     assertOk(response, "List(1, 2)")
   }
-  
+
   "AsyncStream response" in {
     val converted = callbackConverter.convertToFutureResponse(asyncStreamResponse)
 
@@ -128,7 +132,7 @@ class CallbackConverterIntegrationTest extends Test with Mockito {
     response.status should equal(Status.Ok)
     Await.result(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
-  
+
   "AsyncStream request and response" in {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")

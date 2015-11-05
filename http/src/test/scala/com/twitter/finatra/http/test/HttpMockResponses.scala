@@ -1,6 +1,7 @@
 package com.twitter.finatra.http.test
 
 import com.twitter.finagle.http.Status
+import com.twitter.finagle.stats.LoadedStatsReceiver
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.response.ResponseBuilder
@@ -16,7 +17,8 @@ trait HttpMockResponses {
       localDocRoot = "src/main/webapp/",
       docRoot = ""),
     new MessageBodyManager(null, null, null),
-    new MustacheService(null))
+    new MustacheService(null),
+    LoadedStatsReceiver)
 
   def ok = testResponseBuilder.ok
 

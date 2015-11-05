@@ -1,13 +1,16 @@
 package com.twitter.finatra.http.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
-import com.twitter.finagle.http.{Cookie => FinagleCookie, Fields, Response, ResponseProxy, Status, Version}
+import com.twitter.finagle.http.{Cookie => FinagleCookie, _}
 import com.twitter.finagle.netty3.ChannelBufferBuf
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.inject.Logging
 import com.twitter.io.Buf
 import com.twitter.util.{Future, Memoize}
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
@@ -23,7 +26,9 @@ class ResponseBuilder @Inject()(
   objectMapper: FinatraObjectMapper,
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,
-  mustacheService: MustacheService) {
+  mustacheService: MustacheService,
+  statsReceiver: StatsReceiver)
+  extends Logging {
 
   /* Status Codes */
 
@@ -144,6 +149,11 @@ class ResponseBuilder @Inject()(
             objectMapper.writeValue(obj, os)
           }
       }
+      this
+    }
+
+    def jsonError = {
+      json(ErrorsResponse(status.reason.toLowerCase))
       this
     }
 
@@ -311,6 +321,18 @@ class ResponseBuilder @Inject()(
       html(mustacheService.createBuffer(template, obj))
     }
 
+    /* Exception Stats */
+
+    def handled(
+      request: Request,
+      e: Throwable,
+      details: String*) = {
+
+      incrementCounter("handled", statsReceiver, request, e, details: _*)
+    }
+
+    /* Public Conversions */
+
     def toFuture: Future[Response] = Future.value(response)
 
     def toException: HttpResponseException = new HttpResponseException(response)
@@ -318,6 +340,40 @@ class ResponseBuilder @Inject()(
     def toFutureException[T]: Future[T] = Future.exception(toException)
 
     /* Private */
+
+    // route/insights_engagement/POST/status/503/unhandled/NumberFormatException
+    private[finatra] def unhandled(
+      request: Request,
+      e: Throwable,
+      details: String*) = {
+
+      error("Unhandled Exception", e)
+      incrementCounter("unhandled", statsReceiver, request, e, details: _*)
+    }
+
+    private def incrementCounter(
+      handleType: String,
+      statsReceiver: StatsReceiver,
+      request: Request,
+      e: Throwable,
+      details: String*): ResponseBuilder#EnrichedResponse = {
+
+      val routeInfo = RouteInfo(request).getOrElse(throw new Exception("handled can only be used within a Finatra HTTP request callback"))
+
+      val counter = statsReceiver.counter(Seq(
+        "route",
+        routeInfo.sanitizedPath,
+        request.method.toString,
+        "status",
+        status.code.toString,
+        handleType,
+        e.getClass.getSimpleName) ++
+        details: _*)
+
+      counter.incr()
+
+      this
+    }
 
     private def isFile(requestPath: String) = {
       getExtension(requestPath).nonEmpty

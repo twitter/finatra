@@ -4,15 +4,16 @@ import com.github.nscala_time.time
 import com.google.inject.Provides
 import com.twitter.finagle._
 import com.twitter.finagle.factory.TimeoutFactory
-import com.twitter.finagle.param.{Label, Stats}
+import com.twitter.finagle.mux.ClientDiscardedRequestException
+import com.twitter.finagle.param.Stats
 import com.twitter.finagle.service.TimeoutFilter
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.{ClientId, ServiceIfaceBuilder}
+import com.twitter.finagle.thrift.{MethodIfaceBuilder, ClientId, ServiceIfaceBuilder}
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.thrift.FilteredThriftClientModule.MaxDuration
 import com.twitter.inject.thrift.conversions.DurationConversions
 import com.twitter.scrooge.{ThriftResponse, ThriftService}
-import com.twitter.util.{NonFatal, Return, Throw, Try}
+import com.twitter.util.{Return, Throw, Try}
 import javax.inject.Singleton
 import org.joda.time.Duration
 import scala.reflect.ClassTag
@@ -22,7 +23,7 @@ object FilteredThriftClientModule {
 }
 
 abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTag, ServiceIface: ClassTag](
-  implicit builder: ServiceIfaceBuilder[ServiceIface])
+  implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface], methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface])
   extends TwitterModule
   with DurationConversions
   with time.Implicits {
@@ -49,19 +50,12 @@ abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTa
 
   def connectTimeout: Duration = MaxDuration
 
-  def params = {
-    Stack.Params.empty +
-      TimeoutFilter.Param(requestTimeout.toTwitterDuration) +
-      TimeoutFactory.Param(connectTimeout.toTwitterDuration) +
-      Label(label)
-  }
-
   /**
    * Add filters to the ServiceIface based client
    */
-  def createFilteredClient(
+  def filterServiceIface(
     serviceIface: ServiceIface,
-    filters: FilterBuilder): FutureIface
+    filters: FilterBuilder): ServiceIface
 
   @Provides
   @Singleton
@@ -70,33 +64,51 @@ abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTa
     filter: FilterBuilder,
     statsReceiver: StatsReceiver): FutureIface = {
 
-    createFilteredClient(
-      serviceIface = serviceIface,
-      filters = filter)
+    Thrift.newMethodIface(
+      filterServiceIface(
+        serviceIface = serviceIface,
+        filters = filter))
   }
 
   @Provides
   @NonFiltered
   @Singleton
-  def providesUnfilteredServiceIface(clientId: ClientId, statsReceiver: StatsReceiver): ServiceIface = {
-    val updatedParams = params +
-      Stats(statsReceiver.scope("clnt")) +
-      Thrift.param.ClientId(Some(clientId))
-
+  def providesUnfilteredServiceIface(
+    clientId: ClientId,
+    statsReceiver: StatsReceiver): ServiceIface = {
     if (mux)
       ThriftMux.client.
-        withParams(updatedParams).
+        configured(TimeoutFilter.Param(requestTimeout.toTwitterDuration)).
+        configured(TimeoutFactory.Param(connectTimeout.toTwitterDuration)).
+        configured(Stats(statsReceiver.scope("clnt"))).
+        withClientId(clientId).
         newServiceIface[ServiceIface](dest)
     else
       Thrift.client.
-        withParams(updatedParams).
+        configured(TimeoutFilter.Param(requestTimeout.toTwitterDuration)).
+        configured(TimeoutFactory.Param(connectTimeout.toTwitterDuration)).
+        configured(Stats(statsReceiver.scope("clnt"))).
+        withClientId(clientId).
         newServiceIface[ServiceIface](dest)
   }
 
   /* Common Retry Functions */
 
-  lazy val NonFatalExceptions: PartialFunction[Try[ThriftResponse[_]], Boolean] = {
-    case Throw(NonFatal(_)) => true
-    case Return(result) => result.firstException exists NonFatal.isNonFatal
+  lazy val NonCancelledExceptions: PartialFunction[Try[ThriftResponse[_]], Boolean] = {
+    case Throw(t) => nonCancelled(t)
+    case Return(response) => response.firstException exists nonCancelled
+  }
+
+  def nonCancelled(t: Throwable): Boolean = {
+    !isCancellation(t)
+  }
+
+  def isCancellation(t: Throwable): Boolean = t match {
+    case _: CancelledRequestException => true
+    case _: CancelledConnectionException => true
+    case _: ClientDiscardedRequestException => true
+    case f: Failure if f.isFlagged(Failure.Interrupted) => true
+    case f: Failure if f.cause.isDefined => isCancellation(f.cause.get)
+    case _ => false
   }
 }

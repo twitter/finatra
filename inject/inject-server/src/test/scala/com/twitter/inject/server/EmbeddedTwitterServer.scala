@@ -165,21 +165,20 @@ class EmbeddedTwitterServer(
     inMemoryStatsReceiver.gauges.clear()
   }
 
+  def statsMap = inMemoryStatsReceiver.stats.iterator.toMap.mapKeys(keyStr).toSortedMap
+  def countersMap = inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap
+  def gaugeMap = inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap
+
   def printStats(includeGauges: Boolean = true) {
-
-    def keyStr(keys: Seq[String]): String = {
-      keys.mkString("/")
-    }
-
     infoBanner(appName + " Stats")
-    for ((key, values) <- inMemoryStatsReceiver.stats.iterator.toMap.mapKeys(keyStr).toSortedMap) {
+    for ((key, values) <- statsMap) {
       val avg = values.sum / values.size
       val valuesStr = values.mkString("[", ", ", "]")
       info(f"$key%-70s = $avg = $valuesStr")
     }
 
     info("\nCounters:")
-    for ((key, value) <- inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap) {
+    for ((key, value) <- countersMap) {
       info(f"$key%-70s = $value")
     }
 
@@ -190,11 +189,40 @@ class EmbeddedTwitterServer(
       }
     }
   }
-
+  
   def assertAppStarted(started: Boolean = true) {
     assert(isGuiceApp)
     start()
     guiceApp.appStarted should be(started)
+  }
+
+  private def keyStr(keys: Seq[String]): String = {
+    keys.mkString("/")
+  }
+
+  def getCounter(name: String): Int = {
+    countersMap.getOrElse(name, 0)
+  }
+
+  def assertCounter(name: String, expected: Int): Unit = {
+    getCounter(name) should equal(expected)
+  }
+
+  def getStat(name: String): Seq[Float] = {
+    statsMap.getOrElse(name, Seq())
+  }
+
+  def assertStat(name: String, expected: Seq[Float]): Unit = {
+    getStat(name) should equal(expected)
+  }
+
+  def getGauge(name: String): Float = {
+    gaugeMap.get(name) map { _.apply() } getOrElse 0f
+  }
+
+  def assertGauge(name: String, expected: Float): Unit = {
+    val value = getGauge(name)
+    value should equal(expected)
   }
 
   def httpGetAdmin(

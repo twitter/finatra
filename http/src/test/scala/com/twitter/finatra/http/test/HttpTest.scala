@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.test.EmbeddedTwitterServer
-import com.twitter.inject.server.AsyncStreamUtils
+import com.twitter.inject.server.{AsyncStreamUtils, EmbeddedTwitterServer}
 import com.twitter.io.Buf
 import com.twitter.logging.Logger
 import com.twitter.util.Await

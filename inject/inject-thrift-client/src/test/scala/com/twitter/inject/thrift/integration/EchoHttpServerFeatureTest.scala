@@ -37,7 +37,8 @@ class EchoHttpServerFeatureTest extends HttpTest {
         andExpect = Ok,
         withBody = "BobBobBob")
 
-      httpServer.printStats()
+      httpServer.assertStat("route/config/POST/response_size", Seq(1, 1))
+      httpServer.assertStat("route/echo/GET/response_size", Seq(9))
 
       httpServer.close()
       thriftServer.close()

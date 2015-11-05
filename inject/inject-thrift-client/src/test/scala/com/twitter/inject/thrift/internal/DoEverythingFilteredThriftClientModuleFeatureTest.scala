@@ -1,20 +1,16 @@
 package com.twitter.inject.thrift.internal
 
-import com.twitter.finagle.Thrift
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
-import com.twitter.greeter.thriftscala.{InvalidOperation, Greeter}
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
-import com.twitter.inject.server.EmbeddedTwitterServer
-import com.twitter.inject.thrift.filtered_integration.http_server.{HiLoggingThriftClientFilter, GreeterHttpController}
+import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
+import com.twitter.inject.thrift.filtered_integration.http_server.{GreeterHttpController, HiLoggingThriftClientFilter}
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
 import com.twitter.inject.thrift.{FilterBuilder, FilteredThriftClientModule, ThriftClientIdModule}
-import com.twitter.scrooge.ThriftResponse
 import com.twitter.util._
 
 class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
@@ -68,11 +64,11 @@ object GreeterThriftClientModule2
   override val dest = "flag!greeter-thrift-service"
   override val connectTimeout = 1.minute.toDuration
 
-  override def createFilteredClient(
+  override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
-    filterBuilder: FilterBuilder): Greeter[Future] = {
+    filterBuilder: FilterBuilder) = {
 
-    Thrift.newMethodIface(serviceIface.copy(
+    serviceIface.copy(
       hi = filterBuilder.method(Hi)
         .constantRetry(
           requestTimeout = 1.minute,
@@ -89,11 +85,11 @@ object GreeterThriftClientModule2
       bye = filterBuilder.method(Bye)
         .globalFilter[RequestLoggingThriftClientFilter]
         .exponentialRetry(
-          shouldRetryResponse = NonFatalExceptions,
+          shouldRetryResponse = NonCancelledExceptions,
           requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
-        .andThen(serviceIface.bye)))
+        .andThen(serviceIface.bye))
   }
 }

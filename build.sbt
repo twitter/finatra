@@ -160,6 +160,7 @@ lazy val finatraModules = Seq(
   injectRequestScope,
   injectServer,
   injectThriftClient,
+  injectThriftClientHttpMapper,
   jackson,
   slf4j,
   thrift,
@@ -439,6 +440,26 @@ lazy val thrift = project.
     injectServer,
     injectServer % "test->test",
     slf4j % "test->test"
+  )
+
+lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper")).
+  settings(finatraBuildSettings).
+  settings(
+    name := "inject-thrift-client-http-mapper",
+    moduleName := "inject-thrift-client-http-mapper",
+    scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
+    excludeFilter in Test in unmanagedResources := "BUILD"
+  ).
+  dependsOn(
+    http,
+    injectCore,
+    injectThriftClient,
+    slf4j % "test->test",
+    http % "test->test",
+    injectServer % "test->test",
+    injectThriftClient % "test->test",
+    thrift % "test->compile",
+    thrift % "test->test"
   )
 
 // START EXAMPLES

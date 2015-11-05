@@ -5,6 +5,7 @@ import java.net.ConnectException
 import org.apache.thrift.transport.TTransportException
 
 /** Exceptions caused by requests to external services */
+@deprecated("Use ThriftClientExceptionMapper with FilteredThriftClientModule", "now")
 object ExternalServiceExceptionMatcher {
   def apply(t: Throwable): Boolean = t match {
     case _: RequestException => true

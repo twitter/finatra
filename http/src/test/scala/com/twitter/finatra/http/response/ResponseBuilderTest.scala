@@ -2,6 +2,7 @@ package com.twitter.finatra.http.response
 
 import com.google.common.net.MediaType
 import com.twitter.finagle.http.{Cookie => FinagleCookie, Response, Status}
+import com.twitter.finagle.stats.{StatsReceiver, LoadedStatsReceiver}
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.routing.FileResolver
@@ -21,7 +22,8 @@ class ResponseBuilderTest extends HttpTest with Mockito {
       localDocRoot = "src/main/webapp/",
       docRoot = ""),
     mock[MessageBodyManager],
-    mock[MustacheService])
+    mock[MustacheService],
+    mock[StatsReceiver])
 
   "response builder" should {
 

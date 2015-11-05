@@ -1,6 +1,5 @@
 package com.twitter.inject.thrift.internal
 
-import com.twitter.finagle.Thrift
 import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.greeter.thriftscala.Greeter.ServiceIface
 import com.twitter.inject.app.TestInjector
@@ -28,11 +27,11 @@ class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
     override val dest = "flag!greeter-thrift-service"
     override val mux = false
 
-    override def createFilteredClient(
+    override def filterServiceIface(
       serviceIface: ServiceIface,
-      filters: FilterBuilder): Greeter[Future] = {
+      filters: FilterBuilder) = {
 
-      Thrift.newMethodIface(serviceIface)
+      serviceIface
     }
   }
 

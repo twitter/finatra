@@ -7,9 +7,10 @@ object ErrorsResponse {
     ErrorsResponse(Seq(error))
   }
 
+  @deprecated("Use apply(msg: String)", "now")
   def apply(request: Request, throwable: Throwable, msg: String): ErrorsResponse = {
     if (request.path.startsWith("/admin")) {
-      ErrorsResponse(throwable.getMessage)
+      ErrorsResponse(msg + ": " + throwable.getMessage)
      } else {
       ErrorsResponse(msg)
     }
