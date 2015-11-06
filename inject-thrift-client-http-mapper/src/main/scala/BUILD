@@ -1,7 +1,7 @@
 scala_library(name='scala',
   provides = scala_artifact(
     org = 'com.twitter.finatra',
-    name = 'http-thrift-integration',
+    name = 'inject-thrift-client-http-mapper',
     repo = artifactory,
   ),
   dependencies=[
