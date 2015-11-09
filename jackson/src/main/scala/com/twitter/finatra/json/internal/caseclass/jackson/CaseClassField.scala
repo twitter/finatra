@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
+import com.twitter.finatra.json.internal.caseclass.annotations.{FormParamInternal, QueryParamInternal, HeaderInternal}
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
@@ -17,6 +18,7 @@ import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.inject.Logging
 import java.lang.annotation.Annotation
+import scala.annotation.tailrec
 import scala.language.existentials
 import scala.reflect.NameTransformer
 
@@ -81,9 +83,10 @@ case class CaseClassField(
 
   private val isOption = javaType.getRawClass == classOf[Option[_]]
   private val isString = javaType.getRawClass == classOf[String]
+  private val attributeType = findAttributeType(annotations)
   private val fieldInjection = new FieldInjection(name, javaType, parentClass, annotations)
   private lazy val firstTypeParam = javaType.containedType(0)
-  private lazy val requiredFieldException = CaseClassValidationException(PropertyPath.leaf(name), Invalid("field is required", ErrorCode.RequiredFieldMissing))
+  private lazy val requiredFieldException = CaseClassValidationException(PropertyPath.leaf(name), Invalid(s"$attributeType is required", ErrorCode.RequiredFieldMissing))
 
   /* Public */
 
@@ -169,5 +172,28 @@ case class CaseClassField(
 
   private def throwRequiredFieldException() = {
     throw requiredFieldException
+  }
+
+  @tailrec
+  private def findAttributeType(annotations: Seq[Annotation]): String =  {
+    if (annotations.isEmpty) {
+      "field"
+    }
+    else {
+      val found = extractAttributeType(annotations.head)
+      if (found.isDefined)
+        found.get
+      else
+        findAttributeType(annotations.tail)
+    }
+  }
+
+  private def extractAttributeType(annotation: Annotation): Option[String] = {
+    annotation match {
+      case h : QueryParamInternal => Some("queryParam")
+      case f : FormParamInternal => Some("formParam")
+      case h : HeaderInternal => Some("header")
+      case _ => None
+    }
   }
 }
