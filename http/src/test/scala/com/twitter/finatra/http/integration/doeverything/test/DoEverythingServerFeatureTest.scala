@@ -1409,4 +1409,31 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       withLocation = "/users/732647326473"
     )
   }
+
+  "Bad request for missing header" in {
+    server.httpPost(
+      "/createUser",
+      postBody = """{"name":"bob", "age":50}""",
+      andExpect = BadRequest,
+      withBody = """{"errors":["request_id: header is required"]}"""
+    )
+  }
+
+  "Bad request for missing form param" in {
+    server.httpFormPost(
+      "/formPost",
+      params = Map("name" -> "bob"),
+      andExpect = BadRequest,
+      withBody = """{"errors":["age: formParam is required"]}""")
+  }
+
+  "accepts request with header and body" in {
+    server.httpPost(
+      "/createUser",
+      headers = Map("request_id" -> "732647326473"),
+      postBody = """{"name":"bob", "age":50}""",
+      andExpect = Created,
+      withLocation = "/users/732647326473"
+    )
+  }
 }
