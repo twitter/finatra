@@ -62,9 +62,13 @@ class EmbeddedApp(
   //Mutable state
   private var starting = false
   private var started = false
-  private var startupFailedThrowable: Option[Throwable] = None
   protected[inject] var closed = false
   private var _mainResult: Future[Unit] = _
+
+  // This needs to be volatile because it is set
+  // in mainRunnerFuturePool onFailure which is a
+  // different thread than waitForAppStarted, where it's read.
+  @volatile private var startupFailedThrowable: Option[Throwable] = None
 
   /* Public */
 
