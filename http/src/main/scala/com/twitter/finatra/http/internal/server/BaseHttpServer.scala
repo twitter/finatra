@@ -115,8 +115,6 @@ trait BaseHttpServer extends TwitterServer {
 
   override def httpExternalPort = Option(httpServer) map PortUtils.getPort
 
-  override def httpExternalSocketAddress = Option(httpServer) map PortUtils.getSocketAddress
-
   override def httpsExternalPort = Option(httpsServer) map PortUtils.getPort
 
   /* Private */

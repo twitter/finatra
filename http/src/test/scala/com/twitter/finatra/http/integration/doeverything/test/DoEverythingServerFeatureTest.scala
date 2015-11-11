@@ -1375,7 +1375,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
   "ports" in {
     server.httpExternalPort should be > 0
-    server.httpExternalSocketAddress should not be null
 
     // no https server configured
     intercept[Exception] {

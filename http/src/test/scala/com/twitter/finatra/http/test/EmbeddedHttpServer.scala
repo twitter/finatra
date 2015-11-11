@@ -109,10 +109,6 @@ class EmbeddedHttpServer(
     twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound"))
   }
 
-  lazy val httpExternalSocketAddress = {
-    start()
-    twitterServer.httpExternalSocketAddress.getOrElse(throw new Exception("External HTTP Socket Address not bound"))
-  }
 
   lazy val externalHttpHostAndPort = PortUtils.loopbackAddressForPort(httpExternalPort)
   lazy val externalHttpsHostAndPort = PortUtils.loopbackAddressForPort(httpsExternalPort)
