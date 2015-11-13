@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ValueNode
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.request._
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.validation.{NotEmpty, ValidationResult}
+import com.twitter.finatra.validation.{Min, NotEmpty, ValidationResult}
 import com.twitter.inject.Logging
 import javax.inject.{Inject, Named}
 import org.joda.time.DateTime
@@ -113,7 +113,27 @@ case class CaseClassWithArrays(
 
 case class CaseClassWithArrayLong(array: Array[Long])
 
+case class CaseClassWithArrayBoolean(array: Array[Boolean])
+
+case class CaseClassWithArrayWrappedValueLong(array: Array[WrappedValueLong])
+
 case class CaseClassWithSeqLong(seq: Seq[Long])
+
+case class CaseClassWithSeqWrappedValueLong(
+  seq: Seq[WrappedValueLong])
+
+case class CaseClassWithValidation(
+  @Min(1) value: Long)
+
+case class CaseClassWithSeqOfCaseClassWithValidation(
+  seq: Seq[CaseClassWithValidation])
+
+case class WrappedValueLongWithValidation(
+  @Min(1) value: Long)
+  extends WrappedValue[Long]
+
+case class CaseClassWithSeqWrappedValueLongWithValidation(
+  seq: Seq[WrappedValueLongWithValidation])
 
 case class Foo(name: String)
 
@@ -169,7 +189,6 @@ object Obj {
   case class NestedCaseClassInObject(id: String)
 
 }
-
 
 case class WrappedValueInt(value: Int)
   extends WrappedValue[Int]

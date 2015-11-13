@@ -809,6 +809,42 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withErrors = Seq("name: size [1] is not between 2 and 20"))
     }
 
+    "POST json user with null required field" in {
+      server.httpPost(
+        "/users",
+        """
+          {
+            "name": null
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("name: field is required"))
+    }
+
+    "POST json with failed array element validation" in {
+      server.httpPost(
+      "/arrayElementValidation",
+      """
+        {
+          "seq": [0]
+        }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("seq.value: [0] is not greater than or equal to 1"))
+    }
+
+    "POST json with null array element" in {
+      server.httpPost(
+      "/arrayElementValidation",
+      """
+        {
+          "seq": [null]
+        }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("seq: Literal null values are not allowed as json array elements."))
+    }
+
     "POST json user with failed method validation" in {
       server.httpPost(
         "/users",

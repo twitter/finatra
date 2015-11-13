@@ -578,6 +578,10 @@ class DoEverythingController @Inject()(
     response.created.location(s"/users/${user.requestId}")
   }
 
+  post("/arrayElementValidation") { request: TestCaseClassWithSeqOfValidatedWrappedLongs =>
+    s"Size of input array: ${request.seq.size}"
+  }
+
   //needed to avoid colliding with Logging#trace :-/
   trace[Request, String]("/trace") { r: Request =>
     "trace 123"

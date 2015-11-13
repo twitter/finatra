@@ -3,6 +3,7 @@ package com.twitter.finatra.json.internal.serde
 import com.fasterxml.jackson.core.{JsonParser, JsonToken}
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
+import com.twitter.finatra.json.internal.caseclass.exceptions.FinatraJsonMappingException
 import org.joda.time.DateTime
 
 /**
@@ -16,13 +17,13 @@ object FinatraDatetimeDeserializer extends StdDeserializer[DateTime](classOf[Dat
         case JsonToken.VALUE_NUMBER_INT =>
           val value = jp.getLongValue
           if (value < 0)
-            throw ctxt.mappingException("field cannot be negative")
+            throw new FinatraJsonMappingException("field cannot be negative")
           else
             new DateTime(jp.getLongValue)
         case JsonToken.VALUE_STRING =>
           val value = jp.getText.trim
           if (value.isEmpty)
-            throw ctxt.mappingException("field cannot be empty")
+            throw new FinatraJsonMappingException("field cannot be empty")
           else
             new DateTime(value)
         case _ =>
@@ -30,7 +31,7 @@ object FinatraDatetimeDeserializer extends StdDeserializer[DateTime](classOf[Dat
       }
     } catch {
       case e: IllegalArgumentException =>
-        throw ctxt.mappingException("error parsing '" + jp.getText + "' into an ISO 8601 datetime")
+        throw new FinatraJsonMappingException("error parsing '" + jp.getText + "' into an ISO 8601 datetime")
     }
   }
 }

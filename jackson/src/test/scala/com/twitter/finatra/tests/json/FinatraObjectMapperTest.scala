@@ -10,7 +10,7 @@ import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.tests.json.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.tests.json.internal._
-import com.twitter.finatra.tests.json.internal.internal.{SimplePersonInPackageObjectWithoutConstructorParams, SimplePersonInPackageObject}
+import com.twitter.finatra.tests.json.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
 import com.twitter.inject.Logging
 import com.twitter.inject.app.TestInjector
 import com.twitter.io.Buf
@@ -289,7 +289,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
           """date_time3: field cannot be negative""",
           """date_time4: field cannot be empty""",
           """date_time: error parsing 'today' into an ISO 8601 datetime"""
-          ))
+        ))
     }
   }
 
@@ -430,6 +430,80 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
                   "11111111":"asdf"
              }
            }""")
+    }
+  }
+
+  feature("Fail when null or invalid array elements") {
+
+    scenario("fail when CaseClassWithSeqLongs with null array element") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqOfLongs]("""{"seq": [null]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithSeqWrappedValueLong with null array element") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqWrappedValueLong]("""{"seq": [null]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithArrayWrappedValueLong with null array element") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithArrayWrappedValueLong]("""{"array": [null]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithSeqWrappedValueLongWithValidation with null array element") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqWrappedValueLongWithValidation]("""{"seq": [null]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithSeqWrappedValueLongWithValidation with invalid field") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqWrappedValueLongWithValidation]("""{"seq": [{"value": 0}]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithSeqOfCaseClassWithValidation with null array element") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqOfCaseClassWithValidation]("""{"seq": [null]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithSeqOfCaseClassWithValidation with invalid array element") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqOfCaseClassWithValidation]("""{"seq": [0]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithSeqOfCaseClassWithValidation with null field in object") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqOfCaseClassWithValidation]("""{"seq": [{"value": null}]}""")
+      }
+    }
+
+    scenario("fail when CaseClassWithSeqOfCaseClassWithValidation with invalid field in object") {
+      intercept[CaseClassMappingException] {
+        parse[CaseClassWithSeqOfCaseClassWithValidation]("""{"seq": [{"value": 0}]}""")
+      }
+    }
+  }
+
+  // Using Arrays of non-wrapped types that extend AnyVal (Integer, Long, Boolean, etc) in case
+  // classes is not recommended and bypasses both Jackson's and Finatra's null checking as
+  // demonstrated here:
+  feature("Arrays of types extending AnyVal (inconsistent corner case)") {
+    scenario("Deserialize null -> 0 when CaseClassWithArrayLong with null array element") {
+      val obj = parse[CaseClassWithArrayLong]("""{"array": [null]}""")
+      val expected = CaseClassWithArrayLong(array = Array(0L))
+      obj.array should equal(expected.array)
+    }
+
+    scenario("Deserialize null -> false when CaseClassWithArrayBoolean with null array element") {
+      val obj = parse[CaseClassWithArrayBoolean]("""{"array": [null]}""")
+      val expected = CaseClassWithArrayBoolean(array = Array(false))
+      obj.array should equal(expected.array)
     }
   }
 
@@ -772,7 +846,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       c.four should be(Array(4L, 5L))
       c.five should be(Array('x', 'y'))
 
-     JsonDiff.jsonDiff(generate(c), """{"bools":[true,false],"bytes":"AQI=","doubles":[1.0,5.0],"five":"xy","floats":[1.1,22.0],"four":[4,5],"one":"1","three":[1,2,3],"two":["a","b","c"]}""")
+      JsonDiff.jsonDiff(generate(c), """{"bools":[true,false],"bytes":"AQI=","doubles":[1.0,5.0],"five":"xy","floats":[1.1,22.0],"four":[4,5],"one":"1","three":[1,2,3],"two":["a","b","c"]}""")
     }
   }
 
@@ -940,7 +1014,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     assert(result == CaseClassWithBoolean(true))
   }
 
-    scenario("parse with Request") {
+  scenario("parse with Request") {
     val request = Request()
     request.setContentString("""{"msg": "hi"}""")
 
