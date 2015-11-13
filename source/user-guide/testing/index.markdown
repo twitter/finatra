@@ -45,7 +45,7 @@ This is a drop-in replacement for [`org.specs2.mock.Mockito`](http://etorreborre
 ## <a class="anchor" name="embedded-server">Embedded Servers/Apps</a>
 ===============================
 
-Finatra provides a way to run an embedded version of your service or app running locally on ephemeral ports. This allows you to run actual requests against an actual version of your server when testing.
+Finatra provides a way to run an embedded version of your service or app running locally on ephemeral ports. This allows you to run actual requests against an actual version of your server when testing. Embedding is an especially powerful way of running and testing your application through and IDE, e.g., like [IntelliJ](https://www.jetbrains.com/idea/).
 
 See:
 
