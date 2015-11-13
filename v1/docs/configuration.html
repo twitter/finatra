@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>
+    Configuration - Finatra
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link href="/finatra/v1/assets/css/bootstrap.css" rel="stylesheet">
+  <link href="/finatra/v1/assets/css/docs.css" rel="stylesheet">
+  <link href="/finatra/v1/assets/css/syntax.css" rel="stylesheet">
+  <link href="/finatra/v1/assets/css/tomorrow.css" rel="stylesheet">
+  <style type="text/css">
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+
+  .nav {
+    font-size: 16px;
+  }
+
+  section.page {
+    padding: 0px;
+  }
+  </style>
+  <link href="/finatra/v1/assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+
+
+
+  <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon">
+</head>
+
+<body onload="prettyPrint()" data-spy="scroll" data-target=".bs-docs-sidebar">
+
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div class="nav-collapse collapse">
+
+          <div id="nav">
+            <ul class="nav">
+
+              <li ><a class="brand" href="/finatra/v1/index.html">Finatra</a></li>
+
+             <li ><a href="/finatra/v1/blog">Blog</a></li>
+
+             <li ><a href="/finatra/v1/docs/tutorial.html">Tutorial</a></li>
+
+             <li ><a href="/finatra/v1/docs/index.html">Documentation</a></li>
+
+             <li ><a href="/finatra/v1/docs/configuration.html">Configuring</a></li>
+
+             <li ><a href="/finatra/v1/roadmap.html">Roadmap</a></li>
+
+             <li><a href="https://github.com/twitter/finatra/tree/1.5.3">Github</a></li>
+
+             <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+
+             <li><a href="/finatra/index.html">v2.x Documentation</a></li>
+           </ul>
+
+
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+
+ <div class="container">
+  <div id="main">
+    <section class="page">
+
+          <div class="page-header">
+     <h1>Flags</h1>
+   </div>
+   <p class="lead">Finatra uses <a href="http://twitter.github.io/twitter-server/Features.html#flags">Flags</a> for configuration, passed as arguments:</p>
+   <pre class="prettyprint">java -jar target/finatra_app.jar -com.twitter.finatra.config.port=&#39;:7070&#39;</pre>
+
+   <p class="lead">Here&#39;s a full list of Flags available: (this is <code>-help</code> output)</p>
+  <pre class="prettyprint">global flags:
+  -com.twitter.finatra.config.adminPort=&#39;:9990&#39;: Admin/Stats Port
+  -com.twitter.finatra.config.appName=&#39;finatra&#39;: Name of server
+  -com.twitter.finatra.config.assetPath=&#39;/public&#39;: path to assets
+  -com.twitter.finatra.config.certificatePath=&#39;&#39;: path to SSL certificate
+  -com.twitter.finatra.config.docRoot=&#39;src/main/resources&#39;: path to docroot
+  -com.twitter.finatra.config.env=&#39;development&#39;: Environment
+  -com.twitter.finatra.config.keyPath=&#39;&#39;: path to SSL key
+  -com.twitter.finatra.config.logLevel=&#39;INFO&#39;: log level
+  -com.twitter.finatra.config.logNode=&#39;finatra&#39;: Logging node
+  -com.twitter.finatra.config.logPath=&#39;logs/finatra.log&#39;: path to log
+  -com.twitter.finatra.config.maxRequestSize=&#39;5&#39;: maximum request size (in megabytes)
+  -com.twitter.finatra.config.pidEnabled=&#39;false&#39;: whether to write pid file
+  -com.twitter.finatra.config.pidPath=&#39;finatra.pid&#39;: path to pid file
+  -com.twitter.finatra.config.port=&#39;:7070&#39;: Http Port
+  -com.twitter.finatra.config.sslPort=&#39;:7443&#39;: Port for SSL
+  -com.twitter.finatra.config.templatePath=&#39;/&#39;: path to templates
+</pre>
+
+<p class="lead">To turn features off, like the admin server, just pass an empty string instead of a port number:</p>
+<pre class="prettyprint">java -jar target/finatra_app.jar -com.twitter.finatra.config.adminPort=''</pre>
+
+<p class="lead">You can define your own flags inside <code><a href="https://github.com/twitter/finatra/blob/1.5.3/src/main/scala/com/twitter/finatra/FinatraServer.scala">FinatraServer</a></code>  for any application specific configuration:</p>
+<pre class="prettyprint">class MyServer extends FinatraServer {
+  val thingFlag = flag(&#34;thingEnabled&#34;, true, &#34;Is the thing enabled&#34;)
+
+  if (thingFlag()) {
+    println(&#34;thing is enabled&#34;)
+  }
+}
+</pre>
+
+<p class="lead">Now if we run <code>-help</code>, we&#39;ll see:</p>
+
+<pre class="prettyprint">com.twitter.finatra_example.App:
+  -help=&#39;false&#39;: Show this help
+  -thingEnabled=&#39;true&#39;: Is the thing enabled
+
+global flags:
+  -com.twitter.finatra.config.adminPort=&#39;:9990&#39;: Admin/Stats Port
+  -com.twitter.finatra.config.assetPath=&#39;/public&#39;: path to assets
+  -com.twitter.finatra.config.certificatePath=&#39;&#39;: path to SSL certificate
+  -com.twitter.finatra.config.docRoot=&#39;src/main/resources&#39;: path to docroot
+  -com.twitter.finatra.config.env=&#39;development&#39;: Environment
+  -com.twitter.finatra.config.keyPath=&#39;&#39;: path to SSL key
+  ...
+</pre>
+
+<p class="lead">It&#39;s also possible to set flags via java <a href="http://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html">System Properties</a>:</p>
+<pre class="prettyprint">System.setProperty(&#34;com.twitter.finatra.config.pidEnabled&#34;, &#34;false&#34;)
+</pre>
+
+
+    </section>
+  </div>
+
+</div>
+
+
+<div id="footer">
+  <div class="container">
+    <div class="row">
+      <div class="span10"></div>
+      <div class="span1">
+        <p class="text-muted credit"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+          <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-39101739-9', 'finatra.info');
+  ga('send', 'pageview');
+
+
+  </script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="/finatra/v1/assets/js/bootstrap.min.js"></script>
+  <script src="/finatra/v1/assets/js/prettify.js"></script>
+</body>
+</html>

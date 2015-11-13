@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://finatra.info/finatra/sitemap.xml 
