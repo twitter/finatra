@@ -147,6 +147,8 @@
 
 <p>Finatra provides a way to run an embedded version of your service or app running locally on ephemeral ports. This allows you to run actual requests against an actual version of your server when testing. Embedding is an especially powerful way of running and testing your application through an IDE, e.g., like <a href="https://www.jetbrains.com/idea/">IntelliJ</a>.</p>
 
+<p>The embedded utilities are also useful for testing and debugging your code when prototyping. If your service or API makes calls to other services, instead of mocking out or overriding those dependencies with dummy implementations you can always write a test using an Embedded version of your server which talks to <em>real</em> downstream services (of course you&rsquo;d never want to commit a test like this to your source repository, especially if you run any type of <a href="https://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a> system). You&rsquo;ll be able to run this test normally through the test runner of an IDE which would allow you to easily set breakpoints and step-through code for debugging. As opposed to needing to build and run your service locally and attach a remote debugger.</p>
+
 <p>See:</p>
 
 <ul>
@@ -314,7 +316,7 @@
 <div></div>
 
 
-<p>Note that the <code>server</code> is specified as a <code>def</code> in <code>com.twitter.inject.server.FeatureTest</code>, if you only want to start <em>one</em> instance of your server per test file make sure to override this <code>def</code> with a <code>val</code>.</p>
+<p>Note that the <code>server</code> is specified as a <code>def</code> in <code>com.twitter.inject.server.FeatureTest</code>, if you only want to start <strong>one instance of your server per test file</strong> make sure to override this <code>def</code> with a <code>val</code>.</p>
 
 <p>There are plenty of example feature tests in Finatra, for an advanced example, see: <a href="https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala"><code>DoEverythingServerFeatureTest</code></a>.</p>
 
