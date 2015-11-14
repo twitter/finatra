@@ -47,6 +47,8 @@ This is a drop-in replacement for [`org.specs2.mock.Mockito`](http://etorreborre
 
 Finatra provides a way to run an embedded version of your service or app running locally on ephemeral ports. This allows you to run actual requests against an actual version of your server when testing. Embedding is an especially powerful way of running and testing your application through an IDE, e.g., like [IntelliJ](https://www.jetbrains.com/idea/).
 
+The embedded utilities are also useful for testing and debugging your code when prototyping. If your service or API makes calls to other services, instead of mocking out or overriding those dependencies with dummy implementations you can always write a test using an Embedded version of your server which talks to *real* downstream services (of course you'd never want to commit a test like this to your source repository, especially if you run any type of [continuous integration](https://en.wikipedia.org/wiki/Continuous_integration) system). You'll be able to run this test normally through the test runner of an IDE which would allow you to easily set breakpoints and step-through code for debugging. As opposed to needing to build and run your service locally and attach a remote debugger.
+
 See:
 
 - [`com.twitter.inject.app.EmbeddedApp`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala)
@@ -152,7 +154,7 @@ class ExampleServerFeatureTest extends FeatureTest {
 ```
 <div></div>
 
-Note that the `server` is specified as a `def` in `com.twitter.inject.server.FeatureTest`, if you only want to start *one* instance of your server per test file make sure to override this `def` with a `val`.
+Note that the `server` is specified as a `def` in `com.twitter.inject.server.FeatureTest`, if you only want to start **one instance of your server per test file** make sure to override this `def` with a `val`.
 
 There are plenty of example feature tests in Finatra, for an advanced example, see: [`DoEverythingServerFeatureTest`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala).
 
