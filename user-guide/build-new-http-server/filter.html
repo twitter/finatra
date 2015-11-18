@@ -130,6 +130,7 @@
 <span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">DoEverythingModule</span>
 </span><span class='line'><span class="k">import</span> <span class="nn">ExampleController</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
 </span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.filters.AccessLoggingFilter</span>
 </span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
 </span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">Controller</span><span class="o">,</span> <span class="nc">HttpServer</span><span class="o">}</span>
@@ -143,7 +144,7 @@
 </span><span class='line'>
 </span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
 </span><span class='line'>    <span class="n">router</span><span class="o">.</span>
-</span><span class='line'>      <span class="n">filter</span><span class="o">[</span><span class="kt">AccessLoggingFilter</span><span class="o">].</span>
+</span><span class='line'>      <span class="n">filter</span><span class="o">[</span><span class="kt">AccessLoggingFilter[Request]</span><span class="o">].</span>
 </span><span class='line'>      <span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
 </span><span class='line'>  <span class="o">}</span>
 </span><span class='line'><span class="o">}</span>
