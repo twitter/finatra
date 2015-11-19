@@ -18,7 +18,7 @@ $ java -jar examples/streaming-example/target/scala-2.11/finatra-benchmark-serve
 
 If you're in a tagged release branch (e.g. [v2.1.0](https://github.com/twitter/finatra/tree/v2.1.0))
 ----------------------------------------------------------
-Run sbt from this project's directory, e.g.
+Run sbt from **this** project's directory, e.g.
 ```
 $ sbt run
 ```

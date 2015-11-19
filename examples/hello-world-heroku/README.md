@@ -17,7 +17,7 @@ Copy the hello-world-heroku directory contents (minus the .git directory) to ano
 $ cp -R finatra-hello-world-heroku ~/finatra-hello-world
 ```
 
-Intialize a git repository in the new directory location:
+Initialize a git repository in the new directory location:
 
 ```
 $ cd ~/finatra-hello-world

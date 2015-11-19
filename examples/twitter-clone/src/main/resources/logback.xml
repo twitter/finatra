@@ -6,9 +6,9 @@
 
   <!-- Service Log (Rollover daily/50MB) -->
   <appender name="SERVICE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>service.log</file>
+    <file>${log.service.output:-service.log}</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>service-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <fileNamePattern>${log.service.output:-service.log}-%d{yyyy-MM-dd}.%i</fileNamePattern>
       <timeBasedFileNamingAndTriggeringPolicy
           class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>50MB</maxFileSize>
@@ -21,9 +21,9 @@
 
   <!-- Access Log (Rollover daily/50MB) -->
   <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>access.log</file>
+    <file>${log.access.output:-access.log}</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>access-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <fileNamePattern>${log.access.output:-access.log}-%d{yyyy-MM-dd}.%i</fileNamePattern>
       <timeBasedFileNamingAndTriggeringPolicy
           class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
         <maxFileSize>50MB</maxFileSize>

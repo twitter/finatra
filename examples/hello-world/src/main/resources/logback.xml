@@ -4,31 +4,33 @@
   <!-- Secondary Appenders -->
   <!-- ===================================================== -->
 
-  <!-- Service Log (Rollover daily/50MB) -->
+  <!-- Service Log (Rollover every 50MB, max 11 logs) -->
   <appender name="SERVICE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>service.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>service-%d{yyyy-MM-dd}.%i</fileNamePattern>
-      <timeBasedFileNamingAndTriggeringPolicy
-          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-        <maxFileSize>50MB</maxFileSize>
-      </timeBasedFileNamingAndTriggeringPolicy>
+    <file>${log.service.output:-service.log}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${log.service.output:-service.log}.%i</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>10</maxIndex>
     </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>50MB</maxFileSize>
+    </triggeringPolicy>
     <encoder>
       <pattern>%date %.-3level %-16X{traceId} %-25logger{0} %msg%n</pattern>
     </encoder>
   </appender>
 
-  <!-- Access Log (Rollover daily/50MB) -->
+  <!-- Access Log (Rollover every 50MB, max 11 logs) -->
   <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>access.log</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-      <fileNamePattern>access-%d{yyyy-MM-dd}.%i</fileNamePattern>
-      <timeBasedFileNamingAndTriggeringPolicy
-          class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-        <maxFileSize>50MB</maxFileSize>
-      </timeBasedFileNamingAndTriggeringPolicy>
+    <file>${log.access.output:-access.log}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${log.access.output:-access.log}.%i</fileNamePattern>
+      <<minIndex>1</minIndex>
+      <maxIndex>10</maxIndex>
     </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>50MB</maxFileSize>
+    </triggeringPolicy>
     <encoder>
       <pattern>%msg %X{traceId}%n</pattern>
     </encoder>
