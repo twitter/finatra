@@ -196,7 +196,13 @@ lazy val root = (project in file(".")).
   settings(
     organization := "com.twitter.finatra",
     moduleName := "finatra-root",
-    unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject -- inProjects(benchmarks),
+    unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
+      -- inProjects(benchmarks)
+      // exclude example projects
+      -- inProjects(benchmarkServer, exampleInjectJavaServer,
+         helloWorld, helloWorldHeroku, streamingExample,
+         thriftExampleIdl, thriftExampleServer,
+         tinyUrl, twitterClone),
     aggregated := {
       println(aggregatedProjects.map(_.id).mkString("\n"))
     }
