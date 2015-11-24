@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='java-server',
   dependencies=[
     'finatra/examples/java-server/src/main/java'

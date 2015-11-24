@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='benchmark-server',
   dependencies=[
     'finatra/examples/benchmark-server/src/main/scala'

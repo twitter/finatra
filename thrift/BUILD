@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='thrift',
   dependencies=[
     'finatra/thrift/src/main/scala'

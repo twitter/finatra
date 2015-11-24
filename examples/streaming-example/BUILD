@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='streaming-example',
   dependencies=[
     'finatra/examples/streaming-example/src/main/scala'

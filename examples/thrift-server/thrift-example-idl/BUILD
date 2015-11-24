@@ -1,5 +1,3 @@
-maven_layout()
-
 target(
   name='thrift-example-idl',
   dependencies=[

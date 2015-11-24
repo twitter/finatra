@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='tiny-url',
   dependencies=[
     'finatra/examples/tiny-url/src/main/scala'

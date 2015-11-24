@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='http',
   dependencies=[
     'finatra/http/src/main/scala'

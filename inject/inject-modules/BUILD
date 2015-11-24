@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='inject-modules',
   dependencies=[
     'finatra/inject/inject-modules/src/main/scala'

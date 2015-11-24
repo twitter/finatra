@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='twitter-clone',
   dependencies=[
     'finatra/examples/twitter-clone/src/main/scala'

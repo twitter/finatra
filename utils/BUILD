@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='utils',
   dependencies=[
     'finatra/utils/src/main/scala'

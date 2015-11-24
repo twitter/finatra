@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='slf4j',
   dependencies=[
     'finatra/slf4j/src/main/scala'

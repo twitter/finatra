@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='hello-world',
   dependencies=[
     'finatra/examples/hello-world/src/main/scala'

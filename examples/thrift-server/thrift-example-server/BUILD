@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='thrift-example-server',
   dependencies=[
     'finatra/examples/thrift-server/thrift-example-server/src/main/scala',

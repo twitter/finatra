@@ -1,5 +1,3 @@
-maven_layout()
-
 target(name='jackson',
   dependencies=[
     'finatra/jackson/src/main/scala'
