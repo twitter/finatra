@@ -20,6 +20,7 @@ If you want to apply a filter (or filters) to all added controllers you can do t
 ```scala
 import DoEverythingModule
 import ExampleController
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.filters.AccessLoggingFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
@@ -33,7 +34,7 @@ class ExampleServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router.
-      filter[AccessLoggingFilter].
+      filter[AccessLoggingFilter[Request]].
       add[ExampleController]
   }
 }
@@ -46,6 +47,7 @@ It is also possible to add a filter per controller,
 import DoEverythingModule
 import ExampleController
 import ExampleFilter
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.filters.AccessLoggingFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
@@ -59,7 +61,7 @@ class ExampleServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router.
-      filter[AccessLoggingFilter].
+      filter[AccessLoggingFilter[Request]].
       add[ExampleFilter, ExampleController]
   }
 }
