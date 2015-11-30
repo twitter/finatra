@@ -184,23 +184,6 @@
       </a>
     </span>
       
-    </li><li name="com.twitter.finatra.validation.ValidationResult#apply" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="apply(isValid:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult"></a>
-      <a id="apply(Boolean,⇒String,ErrorCode):ValidationResult"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="isValid">isValid: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="message">message: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>)</span><span class="result">: <a href="ValidationResult.html" class="extype" name="com.twitter.finatra.validation.ValidationResult">ValidationResult</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.validation.ValidationResult$@apply(isValid:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -434,6 +417,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.validation.ValidationResult#validate" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validate(condition:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult"></a>
+      <a id="validate(Boolean,⇒String,ErrorCode):ValidationResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validate</span><span class="params">(<span name="condition">condition: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="message">message: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>)</span><span class="result">: <a href="ValidationResult.html" class="extype" name="com.twitter.finatra.validation.ValidationResult">ValidationResult</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.validation.ValidationResult$@validate(condition:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.validation.ValidationResult#validateNot" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="validateNot(condition:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult"></a>
+      <a id="validateNot(Boolean,⇒String,ErrorCode):ValidationResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">validateNot</span><span class="params">(<span name="condition">condition: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="message">message: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>)</span><span class="result">: <a href="ValidationResult.html" class="extype" name="com.twitter.finatra.validation.ValidationResult">ValidationResult</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.validation.ValidationResult$@validateNot(condition:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -508,7 +525,30 @@
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.finatra.validation.ValidationResult#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply(isValid:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult"></a>
+      <a id="apply(Boolean,⇒String,ErrorCode):ValidationResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: Use ValidationResult.validate() to test a condition that must be true, validateNot() otherwise">apply</span><span class="params">(<span name="isValid">isValid: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="message">message: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>, <span name="code">code: <a href="ErrorCode.html" class="extype" name="com.twitter.finatra.validation.ErrorCode">ErrorCode</a> = <span class="symbol"><span class="name"><a href="ErrorCode$.html">ErrorCode.Unknown</a></span></span></span>)</span><span class="result">: <a href="ValidationResult.html" class="extype" name="com.twitter.finatra.validation.ValidationResult">ValidationResult</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.validation.ValidationResult$@apply(isValid:Boolean,message:=&gt;String,code:com.twitter.finatra.validation.ErrorCode):com.twitter.finatra.validation.ValidationResult" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p>Use ValidationResult.validate() to test a condition that must be true, validateNot() otherwise</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">
