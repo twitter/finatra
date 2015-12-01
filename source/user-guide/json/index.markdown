@@ -27,7 +27,7 @@ Finatra improves on the already excellent [jackson-module-scala](https://github.
 * Utils for comparing JSON in tests.
 * Experimental support for iterator-based JSON stream parsing.
 
-## <a class="anchor" name="configuration">Configuration</a>
+## <a class="anchor" name="configuration" href="#configuration">Configuration</a>
 ===============================
 
 The default configuration of Jackson is provided by the [`FinatraObjectMapper`](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala).
@@ -42,7 +42,7 @@ The following Jackson integrations are provided by default:
 * [Improved DateTime Deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala)
 * [Improved `case class` Deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala): See details [below](#case-class-deserializer).
 
-## <a class="anchor" name="jackson-customization">Customization</a>
+## <a class="anchor" name="jackson-customization" href="#jackson-customization">Customization</a>
 ===============================
 
 To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
@@ -82,7 +82,7 @@ Finatra provides a custom [`case class` deserializer](https://github.com/twitter
 * Support for accumulating JSON parsing errors (instead of failing fast).
 * Support for field and method level validations which also accumulate errors.
 
-## <a class="anchor" name="routing-json">Integration with Routing</a>
+## <a class="anchor" name="routing-json" href="#routing-json">Integration with Routing</a>
 ===============================
 
 If a custom `case class` is used as a route callback's input type, Finatra will parse the request body into the custom request class. Similar to declaratively parsing a `GET` request (described above), Finatra will perform validations and return a `400 BadRequest` with a list of any accumulated errors in JSON format.
@@ -125,7 +125,7 @@ case class Dates(
 ```
 <div></div>
 
-## <a class="anchor" name="validaton-framework">Validation Framework</a>
+## <a class="anchor" name="validation-framework" href="#validation-framework">Validation Framework</a>
 ===============================
 
 We provide a simple validation framework inspired by [JSR-330](https://github.com/google/guice/wiki/JSR330). The validations framework integrates with the custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validations are included (and additional validations can be easily provided):
@@ -154,7 +154,7 @@ See the implementation of the `GroupRequest` [above](#group-request-example) for
 
 See also: [CommonMethodValidations](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala)
 
-### <a class="anchor" name="json-best-practices">Best Practices</a>
+### <a class="anchor" name="json-best-practices" href="#json-best-practices">Best Practices</a>
 ===============================
 
 Use Java Enums for representing enumerations since they integrate well with Jackson's ObjectMapper and now have exhaustiveness checking as of Scala 2.10. The following Jackson annotations may be useful when working with Enums:

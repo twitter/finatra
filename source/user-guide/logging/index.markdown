@@ -32,7 +32,7 @@ class Server extends HttpServer {
 ```
 <div></div>
 
-## <a class="anchor" name="basics">Basics</a>
+## <a class="anchor" name="basics" href="#basics">Basics</a>
 ===============================
 
 Since [SLF4J](http://www.slf4j.org/manual.html) is an interface, it requires an actual logging implementation. However, you should ensure that you do not end-up with *multiple* logging implementations on your classpath, e.g., you should not have multiple SLF4J bindings (`slf4j-nop`, `slf4j-log4j12`, `slf4j-jdk14`, etc.) and/or a java.util.logging implementation, etc. on your classpath as these are all competing implementations and since classpath order is non-deterministic this will lead to unexpected logging behavior.
@@ -54,7 +54,7 @@ class MyClass extends Logging {
 ```
 <div></div>
 
-## <a class="anchor" name="logback">Logback</a>
+## <a class="anchor" name="logback" href="#logback">Logback</a>
 ===============================
 
 We highly recommend using [Logback](http://logback.qos.ch/) as an SLF4J binding (logging implementation). If you choose to use Logback, just include jar dependencies on `ch.qos.logback:logback-classic` in addition to `com.twitter.finatra:finatra-slf4j_{scala-version}`. This will provide a Logback SLF4J implementation (`logback-classic`) in addition to the logging bridges provided by the [`finatra/slf4j`](https://github.com/twitter/finatra/tree/master/slf4j) module.
@@ -65,7 +65,7 @@ See [logback.xml](https://github.com/twitter/finatra/tree/master/examples/hello-
 
 See the [Logback documentation on configuration](http://logback.qos.ch/manual/configuration.html) for more information.
 
-## <a class="anchor" name="mdc">Mapped Diagnostic Context Filter</a>
+## <a class="anchor" name="mdc" href="#mdc">Mapped Diagnostic Context Filter</a>
 ===============================
 
 Finatra offers an integration with Logback's [Mapped Diagnostic Context](http://logback.qos.ch/manual/mdc.html) for logging.

@@ -74,7 +74,7 @@ Once again, the warmup handler is added *by type* allowing the framework to cons
 
 The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) method is called before the server's external HTTP port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`.
 
-## <a class="anchor" name="more-information">More information</a>
+## <a class="anchor" name="more-information" href="#more-information">More information</a>
 ===============================
 
 For more information, we encourage you to take a look at the full [`finatra/examples`](https://github.com/twitter/finatra/tree/master/examples) in the [github](https://github.com/twitter/finatra) source.

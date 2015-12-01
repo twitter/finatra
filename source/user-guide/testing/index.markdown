@@ -22,7 +22,7 @@ Finatra provides the following testing features:
 - the ability to retrieve classes in the object graph to perform assertions on them.
 - the ability to write powerful tests without deploying test code to production.
 
-## <a class="anchor" name="testing-types">Types of Tests</a>
+## <a class="anchor" name="testing-types" href="#testing-types">Types of Tests</a>
 
 What are we talking about when we talk about *testing*? At a high-level the philosophy of testing in Finatra revolves around the following definitions:
 
@@ -42,7 +42,7 @@ The Finatra testing framework uses the [`WordSpec`](http://doc.scalatest.org/2.2
 
 This is a drop-in replacement for [`org.specs2.mock.Mockito`](http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html). We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures won't be propagated up as ScalaTest test failures.
 
-## <a class="anchor" name="embedded-server">Embedded Servers/Apps</a>
+## <a class="anchor" name="embedded-server" href="#embedded-server">Embedded Servers/Apps</a>
 ===============================
 
 Finatra provides a way to run an embedded version of your service or app running locally on ephemeral ports. This allows you to run actual requests against an actual version of your server when testing. Embedding is an especially powerful way of running and testing your application through an IDE, e.g., like [IntelliJ](https://www.jetbrains.com/idea/).
@@ -76,7 +76,7 @@ class MyFeatureTest extends FeatureTest {
 
 For a more thorough example of an HTTP server feature test see: [`DoEverythingServerFeatureTest`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala).
 
-## <a class="anchor" name="override-modules">Override Modules</a>
+## <a class="anchor" name="override-modules" href="#override-modules">Override Modules</a>
 ===============================
 
 For basic information on Modules in Finatra, see [Modules](/finatra/user-guide/getting-started#modules).
@@ -94,7 +94,7 @@ override val server = new EmbeddedHttpServer(
 
 Note, the modules use specifically for testing should generally be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: [`@Bind`](#at-bind) section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.
 
-## <a class="anchor" name="at-bind">Using `@Bind`</a>
+## <a class="anchor" name="at-bind" href="#at-bind">Using `@Bind`</a>
 ===============================
 
 In the case where we'd like to replace a bound instance with another instance local to our test (e.g., a mock), we do not need to create a specific test module to compose into our server. Instead we can use the [`@Bind`](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/test/java/com/google/inject/testing/fieldbinder/Bind.java) annotation in our test that extends [`FeatureTest`](#feature-tests).
@@ -122,12 +122,12 @@ class ExampleFeatureTest
 
 For a complete example, see the [`TwitterCloneFeatureTest`](https://github.com/twitter/finatra/blob/master/examples/twitter-clone/src/test/scala/twitter/github/io/finatra/quickstart/TwitterCloneFeatureTest.scala).
 
-## <a class="anchor" name="test-helpers">Test Helper Classes</a>
+## <a class="anchor" name="test-helpers" href="#test-helpers">Test Helper Classes</a>
 ===============================
 
 ![Finatra Test classes](/finatra/images/FinatraTesting.png)
 
-### <a class="anchor" name="feature-tests">Feature Tests</a>
+### <a class="anchor" name="feature-tests" href="#feature-tests">Feature Tests</a>
 
 If you are familiar with [Gherkin](http://docs.behat.org/en/v2.5/guides/1.gherkin.html) or [Cucumber](https://github.com/cucumber/cucumber/wiki/Feature-Introduction) or other similar testing languages and frameworks, then feature testing will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the traits: [app/FeatureTest](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/FeatureTest.scala) and [server/FeatureTest](https://github.com/twitter/finatra/blob/master/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala).
 
@@ -158,7 +158,7 @@ Note that the `server` is specified as a `def` in `com.twitter.inject.server.Fea
 
 There are plenty of example feature tests in Finatra, for an advanced example, see: [`DoEverythingServerFeatureTest`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala).
 
-### <a class="anchor" name="integration-tests">Integration Tests</a>
+### <a class="anchor" name="integration-tests" href="#integration-tests">Integration Tests</a>
 
 Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across a few interfaces in the system. In Finatra, we provide the [`com.twitter.inject.app.TestInjector`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala) which allows you to pass it a set of modules and flags to construct a minimal object graph.
 
@@ -185,11 +185,11 @@ class ExampleIntegrationTest extends IntegrationTest {
 ```
 <div></div>
 
-### <a class="anchor" name="http-tests">Http Tests</a>
+### <a class="anchor" name="http-tests" href="#http-tests">Http Tests</a>
 
 If you are writing a test that has an HTTP server under test, then you can optionally extend the [`com.twitter.finatra.http.test.HttpTest`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/test/HttpTest.scala) trait. The trait provides some common HTTP utilities for testing.
 
-## <a class="anchor" name="startup-tests">Startup Tests</a>
+## <a class="anchor" name="startup-tests" href="#startup-tests">Startup Tests</a>
 ===============================
 
 We recommend creating a simple test to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that can otherwise cause the service to fail to start.

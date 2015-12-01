@@ -62,7 +62,7 @@ class ExampleServer extends HttpServer {
 
 Again, you can see we register the exception mapper *by type* allowing the framework to instantiate an instance.
 
-## <a class="anchor" name="override-defaults">Override Default Behavior</a>
+## <a class="anchor" name="override-defaults" href="#override-defaults">Override Default Behavior</a>
 ===============================
 
 If you want to override the [`FinatraDefaultExceptionMapper`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FinatraDefaultExceptionMapper.scala) you can override the `exceptionMapperModule` in your [`HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L67) to provide a custom implementation, e.g.,

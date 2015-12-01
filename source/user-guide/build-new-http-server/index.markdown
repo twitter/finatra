@@ -13,7 +13,7 @@ footer: true
 
 Note: the most up-to-date examples are located in the [`finatra/examples`](https://github.com/twitter/finatra/tree/master/examples) project.
 
-## <a class="anchor" name="server-definition">Create a Server definition</a>
+## <a class="anchor" name="server-definition" href="#server-definition">Create a Server definition</a>
 ===============================
 
 To start, add a dependency on the `com.twitter.finatra:finatra-http_{scala-version}` library. We also highly recommend depending on `com.twitter.finatra:finatra-slf4j` and `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [SLF4J](http://www.slf4j.org/manual.html) implementation. For more information on logging with Finatra see: [Logging](/finatra/user-guide/logging).
@@ -58,9 +58,9 @@ Since the admin port is currently required by [TwitterServer](https://github.com
 
 For more information, see the [Heroku](https://www.heroku.com/) [hello-world example](https://github.com/twitter/finatra/tree/master/examples/hello-world-heroku).
 
-### <a class="anchor" name="override-defaults">Override Default Behavior</a>
+### <a class="anchor" name="override-defaults" href="#override-defaults">Override Default Behavior</a>
 
-#### <a class="anchor" name="setting-flags-from-code">Flags</a>
+#### <a class="anchor" name="setting-flags-from-code" href="#setting-flags-from-code">Flags</a>
 Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra's [HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala)'s core flags can be set from code.
 For example, instead of setting the `-maxRequestSize` flag, you can override the following method in your server.
 
@@ -76,7 +76,7 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-#### <a class="anchor" name="default-modules">Framework Modules</a>
+#### <a class="anchor" name="default-modules" href="#default-modules">Framework Modules</a>
 
 You can override some of the modules provided by default in [HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala). An example use-case would be to provide a custom Jackson module implementation in place of the default [`FinatraJacksonModule`](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala). To do so you would override the `protected def jacksonModule` in your server.
 

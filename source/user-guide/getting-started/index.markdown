@@ -43,7 +43,7 @@ class NonGuiceServer extends HttpServer {
 ```
 <div></div>
 
-### <a class="anchor" name="modules">Modules</a>
+### <a class="anchor" name="modules" href="#modules">Modules</a>
 ===============================
 
 Modules are used in conjunction with Guice dependency injection to specify *how* to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: [Flags](/finatra/user-guide/getting-started#flags)).
@@ -94,7 +94,7 @@ class Server extends HttpServer {
 ```
 <div></div>
 
-### <a class="anchor" name="flags">Flags</a>
+### <a class="anchor" name="flags" href="#flags">Flags</a>
 ===============================
 
 Finatra supports the use of [twitter/util](https://github.com/twitter/util) [Flags](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala) as supported within the [TwitterServer](http://twitter.github.io/twitter-server/Features.html#flags) lifecycle. Flags by their definition represent some external configuration that is passed to the system and are thus an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment, *production*, *staging*, or *development*.
@@ -143,7 +143,7 @@ $ java -jar finatra-hello-world-assembly-2.0.0.jar -help
 ```
 <div></div>
 
-### <a class="anchor" name="futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
+### <a class="anchor" name="futures" href="#futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
 ===============================
 
 Finatra, like other frameworks based on Twitter's [Finagle](https://twitter.github.io/finagle), uses the [twitter/util](https://github.com/twitter/util) [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) class. Twitter's `com.twitter.util.Future` is similar to, but predates, [Scala's](http://docs.scala-lang.org/overviews/core/futures.html) [`scala.concurrent.Future`](http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future) (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is *not* compatible without using [bijections](https://github.com/twitter/bijection) to transform one into the other. It is important to remember that Finatra uses and expects [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala).

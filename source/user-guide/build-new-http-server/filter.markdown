@@ -83,7 +83,7 @@ override configureHttp(router: HttpRouter) {
 ```
 <div></div>
 
-## <a class="anchor" name="request-scope">Request Scope</a>
+## <a class="anchor" name="request-scope" href="#request-scope">Request Scope</a>
 ===============================
 
 Guice supports [custom scopes](https://github.com/google/guice/wiki/CustomScopes) in addition to the most common [Singleton and *Unscoped*](https://github.com/google/guice/wiki/Scopes). Request scopes are often used to allow injecting classes that change depending on the incoming request (e.g. the authenticated User). Finatra provides an implementation of *RequestScoped* that works across Finagle non-blocking threads (Guice's included `@RequestScoped` implementation uses ThreadLocals which will not work with [twitter/util](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) `com.twitter.util.Future`).
@@ -159,7 +159,7 @@ class MyController @Inject()(
 ```
 <div></div>
 
-### <a class="anchor" name="request-ctx">Using `com.twitter.finagle.http.Request#ctx`</a>
+### <a class="anchor" name="request-ctx" href="#request-ctx">Using `com.twitter.finagle.http.Request#ctx`</a>
 
 However, recommend *not* seeding with a request-scope `Provider[T]` but instead using Finagle's [`com.twitter.finagle.http.Request#ctx`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L33). Internally, we generally use the `Request#ctx` over `Provider[T]` even though we use Guice extensively.
 
