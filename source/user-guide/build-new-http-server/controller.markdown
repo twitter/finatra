@@ -271,7 +271,6 @@ For the basics of Futures in Finatra, see: [Futures](/finatra/user-guide/getting
 Finatra will convert your route callbacks return type into a `com.twitter.util.Future[Response]` using the following rules:
 
 * If you return a `com.twitter.util.Future[Response]`, then no conversion will be performed.
-* A non `com.twitter.util.Future` return value will be converted into a `com.twitter.util.Future` using a Finatra provided `FuturePool`.
 * `Some[T]` will be converted into a HTTP `200 OK`.
 * `None` will be converted into a HTTP `404 NotFound`.
 * Non-response classes will be converted into a HTTP `200 OK`.
