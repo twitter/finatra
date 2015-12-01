@@ -15,7 +15,7 @@ footer: true
 ## Basics
 ===============================
 
-We now want to add the following controller to the [server definition]("/finatra/user-guide/build-new-http-server#server-definition):
+We now want to add the following controller to the [server definition](/finatra/user-guide/build-new-http-server#server-definition):
 
 ```scala
 import ExampleService
