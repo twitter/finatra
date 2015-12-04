@@ -111,6 +111,18 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       withBody = """asdf""")
   }
 
+  "Nothing" in {
+    intercept[Exception] {
+      callbackConverter.convertToFutureResponse(noParameterCallback)
+    }
+  }
+
+  "Int" in {
+    intercept[Exception] {
+      callbackConverter.convertToFutureResponse(intParameterCallback)
+    }
+  }
+
   "AsyncStream request" in {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")
@@ -169,6 +181,14 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
   def nullCallback(request: Request) = {
     null
+  }
+
+  def noParameterCallback = {
+    "hello world"
+  }
+
+  def intParameterCallback(i: Int) = {
+    "int"
   }
 
   def futureSomeString(request: Request): Future[Option[String]] = {

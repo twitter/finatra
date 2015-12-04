@@ -50,4 +50,42 @@ class HttpServerStartupIntegrationTest extends Test {
       server.close()
     }
   }
+
+  "Empty callbacks fails server startup" in {
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/nothing") {
+              "nothing"
+            }
+          })
+        }
+      })
+
+    intercept[Exception] {
+      server.start()
+    }
+
+    server.close()
+  }
+
+  "Callback with parameter of type Int fails server startup" in {
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter): Unit = {
+          router.add(new Controller {
+            get("/int") { r: Int =>
+              "int"
+            }
+          })
+        }
+      })
+
+    intercept[Exception] {
+      server.start()
+    }
+
+    server.close()
+  }
 }

@@ -16,6 +16,8 @@ class CallbackConverter @Inject()(
 
   /* Public */
 
+  // Note we use Manifest here as we support Scala 2.10 and reflection is not thread-safe in 2.10 (precluding the use
+  // of typeTag and/or classTag). See: http://docs.scala-lang.org/overviews/reflection/thread-safety.html
   def convertToFutureResponse[RequestType: Manifest, ResponseType: Manifest](callback: RequestType => ResponseType): Request => Future[Response] = {
     val requestConvertedCallback: (Request => ResponseType) = createRequestCallback[RequestType, ResponseType](callback)
     createResponseCallback[ResponseType](requestConvertedCallback)
@@ -23,7 +25,7 @@ class CallbackConverter @Inject()(
 
   /* Private */
 
-  private def createRequestCallback[RequestType: Manifest, ResponseType: Manifest](callback: (RequestType) => ResponseType): (Request) => ResponseType = {
+  private def createRequestCallback[RequestType: Manifest, ResponseType: Manifest](callback: RequestType => ResponseType): Request => ResponseType = {
     if (manifest[RequestType] == manifest[Request]) {
       callback.asInstanceOf[(Request => ResponseType)]
     }
@@ -32,7 +34,15 @@ class CallbackConverter @Inject()(
       request: Request =>
         val asyncStream = jsonStreamParser.parseArray(request.reader)(asyncStreamTypeParam)
         callback(asyncStream.asInstanceOf[RequestType])
-    } else {
+    }
+    else if (runtimeClassEq[RequestType, Int]) {
+      // NOTE: "empty" route callbacks that return a String are inferred as a RequestType of
+      // Int by Scala because StringOps.apply is a function of Int => Char.
+      throw new Exception(
+        "Routes with empty (with no parameter) route callbacks or route callbacks with a parameter of type Int are not allowed. " +
+          "Please specify a parameter in your route callback of the appropriate type.")
+    }
+    else {
       request: Request =>
         val callbackInput = messageBodyManager.read[RequestType](request)
         callback(callbackInput)
