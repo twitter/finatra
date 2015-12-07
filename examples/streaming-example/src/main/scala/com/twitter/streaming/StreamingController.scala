@@ -1,6 +1,6 @@
 package com.twitter.streaming
 
-import com.twitter.concurrent.exp.AsyncStream
+import com.twitter.concurrent.AsyncStream
 import com.twitter.finatra.http.Controller
 
 class StreamingController extends Controller {

@@ -25,7 +25,7 @@ Check out our list of recent presentations: [Finatra Presentations](http://twitt
 
 News
 -----------------------------------------------------------
-* Finatra is now built against the latest Finagle v6.30.0 and Twitter Server v1.15.0 releases.
+* Finatra is now built against the latest Finagle v6.31.0 and Twitter Server v1.16.0 releases.
 * Please take a look at our new [User Guide][user-guide]!
 * Keep up with the latest news [here](http://twitter.github.io/finatra/blog/archives/) on our blog.
 
