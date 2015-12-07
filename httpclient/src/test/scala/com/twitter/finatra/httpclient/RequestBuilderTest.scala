@@ -44,6 +44,17 @@ class RequestBuilderTest extends Test {
     assertRequestWithBody(Put, request)
   }
 
+  "patch" in {
+    val request = RequestBuilder.patch("/abc")
+      .body("testbody", "foo/bar")
+      .headers(Seq("c" -> "3"))
+      .headers(
+        "a" -> "1",
+        "b" -> "2")
+
+    assertRequestWithBody(Patch, request)
+  }
+
   "delete" in {
     val request = RequestBuilder.delete("/abc")
       .body("testbody", "foo/bar")

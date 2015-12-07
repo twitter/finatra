@@ -20,6 +20,10 @@ object RequestBuilder {
     method(Method.Put, url)
   }
 
+  def patch(url: String): RequestBuilder = {
+    method(Method.Patch, url)
+  }
+
   def delete(url: String): RequestBuilder = {
     method(Method.Delete, url)
   }
