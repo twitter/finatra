@@ -14,7 +14,7 @@ If you're in a tagged release branch (e.g. [v2.1.0](https://github.com/twitter/f
 Copy the hello-world-heroku directory contents (minus the .git directory) to another location locally.
 
 ```
-$ cp -R finatra-hello-world-heroku ~/finatra-hello-world
+$ cp -R hello-world-heroku ~/finatra-hello-world
 ```
 
 Initialize a git repository in the new directory location:
@@ -79,7 +79,7 @@ $ heroku open hi?name=foo
 ```
 
 
-### Run the example locally with Foreman ###
+### Run the example locally with the Heroku Toolbelt  ###
 
 See the [Heroku documentation](https://devcenter.heroku.com/articles/getting-started-with-scala#run-the-app-locally) on running an app locally with Foreman.
 
