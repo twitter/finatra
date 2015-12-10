@@ -9,7 +9,7 @@ author: cacoco
 
 ###  Finatra [Release 2.1.1](https://github.com/twitter/finatra/releases/tag/v2.1.1) is now available from [Maven Central][maven-central].
 
-There are lots of improvements in this release. Please checkout the [v2.1.1] (https://github.com/twitter/finatra/releases/tag/v2.1.1) release tag on github for more information.
+There are lots of improvements in this release. Please checkout the [v2.1.1](https://github.com/twitter/finatra/releases/tag/v2.1.1) release tag on github for more information.
 
 As always, you can download the release from [Maven Central][maven-central].
 
@@ -22,4 +22,4 @@ See the Finatra [github page](https://github.com/twitter/finatra) or checkout ou
 
 -- The [Finatra](https://groups.google.com/forum/#!forum/finatra-users) Team
 
-[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.0%22
+[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.1%22
