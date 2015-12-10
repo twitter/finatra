@@ -24,7 +24,7 @@ class RequestBuilderTest extends Test {
 
   "post" in {
     val request = RequestBuilder.post("/abc")
-      .body("testbody", "foo/bar")
+      .body("testbody．", "foo/bar")
       .headers(Seq("c" -> "3"))
       .headers(
         "a" -> "1",
@@ -35,7 +35,7 @@ class RequestBuilderTest extends Test {
 
   "put" in {
     val request = RequestBuilder.put("/abc")
-      .body("testbody", "foo/bar")
+      .body("testbody．", "foo/bar")
       .headers(Seq("c" -> "3"))
       .headers(
         "a" -> "1",
@@ -46,7 +46,7 @@ class RequestBuilderTest extends Test {
 
   "patch" in {
     val request = RequestBuilder.patch("/abc")
-      .body("testbody", "foo/bar")
+      .body("testbody．", "foo/bar")
       .headers(Seq("c" -> "3"))
       .headers(
         "a" -> "1",
@@ -57,7 +57,7 @@ class RequestBuilderTest extends Test {
 
   "delete" in {
     val request = RequestBuilder.delete("/abc")
-      .body("testbody", "foo/bar")
+      .body("testbody．", "foo/bar")
       .headers(Seq("c" -> "3"))
       .headers(
         "a" -> "1",
@@ -68,7 +68,7 @@ class RequestBuilderTest extends Test {
 
   "head" in {
     val request = RequestBuilder.head("/abc")
-      .body("testbody", "foo/bar")
+      .body("testbody．", "foo/bar")
       .headers(Seq("c" -> "3"))
       .headers(
         "a" -> "1",
@@ -93,9 +93,9 @@ class RequestBuilderTest extends Test {
       "a" -> "1",
       "b" -> "2",
       "c" -> "3",
-      "Content-Length" -> "8",
+      "Content-Length" -> "11",
       "Content-Type" -> "foo/bar"))
 
-    request.contentString should be("testbody")
+    request.contentString should be("testbody．")
   }
 }

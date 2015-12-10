@@ -3,6 +3,7 @@ package com.twitter.finatra.httpclient
 import com.google.common.net.HttpHeaders
 import com.twitter.finagle.http.{Message, Method, Request, RequestProxy}
 import org.apache.commons.io.IOUtils
+import com.twitter.io.Charsets
 
 /**
  * Provides a class for building <code>finagle.http.Request</code> objects
@@ -74,7 +75,7 @@ class RequestBuilder(
 
   def body(string: String, contentType: String = Message.ContentTypeJson): RequestBuilder = {
     request.setContentString(string)
-    request.headerMap.add(HttpHeaders.CONTENT_LENGTH, string.length.toString)
+    request.headerMap.add(HttpHeaders.CONTENT_LENGTH, string.getBytes(Charsets.Utf8).length.toString)
     request.headerMap.add(HttpHeaders.CONTENT_TYPE, contentType)
     this
   }
