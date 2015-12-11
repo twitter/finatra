@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/finatra-hello-world -- -admin.port=:$PORT -http.port=:$PORT
+web: target/universal/stage/bin/hello-world-heroku -- -admin.port=:$PORT -http.port=:$PORT

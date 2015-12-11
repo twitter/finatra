@@ -14,7 +14,7 @@ If you're in a tagged release branch (e.g. [v2.1.0](https://github.com/twitter/f
 Copy the hello-world-heroku directory contents (minus the .git directory) to another location locally.
 
 ```
-$ cp -R finatra-hello-world-heroku ~/finatra-hello-world
+$ cp -R hello-world-heroku ~/finatra-hello-world
 ```
 
 Initialize a git repository in the new directory location:
@@ -75,17 +75,17 @@ remote: Building source:
 You can then open the application in a browser with `heroku open`, e.g.:
 
 ```
-heroku open hi?name=foo
+$ heroku open hi?name=foo
 ```
 
 
-### Run the example locally with Foreman ###
+### Run the example locally with the Heroku Toolbelt  ###
 
 See the [Heroku documentation](https://devcenter.heroku.com/articles/getting-started-with-scala#run-the-app-locally) on running an app locally with Foreman.
 
 
 ```
-$ PORT=8000 foreman start web
+$ heroku local web
 19:47:56 web.1  | started with pid 77663
 19:47:59 web.1  | I 0528 02:47:59.058 THREAD1: HttpMuxer[/admin/metrics.json] = com.twitter.finagle.stats.MetricsExporter(<function1>)
 19:47:59 web.1  | I 0528 02:47:59.096 THREAD1: HttpMuxer[/admin/per_host_metrics.json] = com.twitter.finagle.stats.HostMetricsExporter(<function1>)
@@ -95,4 +95,4 @@ $ PORT=8000 foreman start web
 19:48:00 web.1  | GET     /hi
 ```
 
-The app will now be running at [http://localhost:8000/hi?name=foo](http://localhost:8000/hi?name=foo). `Ctrl-C` to exit.
+The app will now be running at [http://localhost:5000/hi?name=foo](http://localhost:5000/hi?name=foo). `Ctrl-C` to exit.
