@@ -2,8 +2,8 @@ package com.twitter.finatra.httpclient
 
 import com.google.common.net.HttpHeaders
 import com.twitter.finagle.http.{Message, Method, Request, RequestProxy}
-import org.apache.commons.io.IOUtils
 import com.twitter.io.Charsets
+import org.apache.commons.io.IOUtils
 
 /**
  * Provides a class for building <code>finagle.http.Request</code> objects
