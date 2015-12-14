@@ -85,6 +85,13 @@ class RequestBuilderTest extends Test {
     request.contentString should be("{}")
   }
 
+  "post utf8 content" in {
+    val request = RequestBuilder.post("/abc")
+      .body("ＴＥＳＴＢＯＤＹ")
+
+    request.headerMap("Content-Length") should be("24")
+  }
+
   def assertRequestWithBody(expectedMethod: Method, request: RequestBuilder): Unit = {
     request.uri should be("/abc")
     request.method should be(expectedMethod)
