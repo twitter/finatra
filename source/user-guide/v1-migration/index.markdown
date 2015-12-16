@@ -125,8 +125,8 @@ class Server extends HttpServer {
 ```
 
 ## <a name="v1-static-files">Static Files</a>
-* Web resources (html/js) go in `src/main/webapp`
-* Mustache templates now go in `src/main/resources/templates`
+* Web resources (html/js) typically go in `src/main/webapp`.
+* Mustache templates now typically go in `src/main/resources/templates`.
 
 To serve static files, you now need explicit routes:
 ```scala
