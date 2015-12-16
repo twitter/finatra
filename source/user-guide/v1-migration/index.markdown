@@ -144,7 +144,7 @@ get("/:*") { request: Request =>
     indexPath = "index.html")
 ```
 
-For more information on serving files in Finatra, see the [File Server](#file-server) section.
+For more information on serving files in Finatra, see the [File Server](http://twitter.github.io/finatra/user-guide/files/#file-server) section.
 
 
 ## Command Line Flags
