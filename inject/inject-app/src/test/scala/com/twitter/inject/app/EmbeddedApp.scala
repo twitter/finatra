@@ -220,6 +220,6 @@ class EmbeddedApp(
 
       Thread.sleep(1000)
     }
-    throw new Exception(s"App: $appName failed to startup within $maxStartupTimeSeconds seconds.")
+    throw new StartupTimeoutException(s"App: $appName failed to startup within $maxStartupTimeSeconds seconds.")
   }
 }
