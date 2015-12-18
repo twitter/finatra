@@ -1,6 +1,6 @@
 package com.twitter.finatra.logging.filter
 
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.{Filter, Service, SimpleFilter}
 import com.twitter.util.Future
 import org.slf4j.{FinagleMDCInitializer, MDC}
 
@@ -18,4 +18,8 @@ class LoggingMDCFilter[Req, Rep] extends SimpleFilter[Req, Rep] {
       MDC.clear()
     }
   }
+}
+
+class TypeAgnosticLoggingMDCFilter extends Filter.TypeAgnostic {
+  override def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new LoggingMDCFilter[Req, Rep]
 }

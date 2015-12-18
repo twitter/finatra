@@ -3,7 +3,7 @@ package com.twitter.finatra.thrift.filters
 import com.twitter.finagle.stats.{Counter, StatsReceiver}
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finatra.thrift.ThriftRequest
+import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
@@ -12,7 +12,7 @@ import javax.inject.{Inject, Singleton}
 class ClientIdWhitelistFilter @Inject()(
   whitelist: Set[ClientId],
   statsReceiver: StatsReceiver)
-  extends SimpleFilter[ThriftRequest, Any] {
+  extends ThriftFilter {
 
   private val clientRequestStats = statsReceiver.scope("client_id_whitelist")
 
@@ -26,7 +26,7 @@ class ClientIdWhitelistFilter @Inject()(
 
   /* Public */
 
-  override def apply(request: ThriftRequest, service: Service[ThriftRequest, Any]): Future[Any] = {
+  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
     request.clientId match {
       case None =>
         incrementStats(noClientIdStats, noClientIdCounter, request)
@@ -41,7 +41,7 @@ class ClientIdWhitelistFilter @Inject()(
 
   /* Private */
 
-  private def incrementStats(scopedStats: StatsReceiver, counter: Counter, request: ThriftRequest): Unit = {
+  private def incrementStats[T](scopedStats: StatsReceiver, counter: Counter, request: ThriftRequest[T]): Unit = {
     counter.incr()
 
     for (clientId <- request.clientId) {

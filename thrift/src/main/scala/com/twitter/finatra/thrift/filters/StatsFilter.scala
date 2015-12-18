@@ -3,20 +3,20 @@ package com.twitter.finatra.thrift.filters
 import com.twitter.finagle.stats.Stat.timeFuture
 import com.twitter.finagle.stats.{Counter, Stat, StatsReceiver}
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finatra.thrift.ThriftRequest
+import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.util.{Future, Memoize, Return, Throw}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
 class StatsFilter @Inject()(
   statsReceiver: StatsReceiver)
-  extends SimpleFilter[ThriftRequest, Any] {
+  extends ThriftFilter {
 
   private val requestStats = statsReceiver.scope("per_method_stats")
   private val exceptionCounter = statsReceiver.counter("exceptions")
   private val exceptionStatsReceiver = statsReceiver.scope("exceptions")
 
-  override def apply(request: ThriftRequest, service: Service[ThriftRequest, Any]): Future[Any] = {
+  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
     val methodStats = lookupThriftMethodStats(request.methodName)
 
     timeFuture(methodStats.latencyStat) {

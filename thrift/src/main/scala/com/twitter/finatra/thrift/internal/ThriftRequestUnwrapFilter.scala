@@ -5,10 +5,10 @@ import com.twitter.finatra.thrift.ThriftRequest
 import com.twitter.util.Future
 
 class ThriftRequestUnwrapFilter[T, U]
-  extends Filter[ThriftRequest, U, T, U] {
+  extends Filter[ThriftRequest[T], U, T, U] {
 
-  override def apply(request: ThriftRequest, service: Service[T, U]): Future[U] = {
+  override def apply(request: ThriftRequest[T], service: Service[T, U]): Future[U] = {
     service(
-      request.args.asInstanceOf[T])
+      request.args)
   }
 }

@@ -1,20 +1,20 @@
 package com.twitter.finatra.thrift.filters
 
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finatra.thrift.ThriftRequest
+import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.util.Future
 import javax.inject.Singleton
 import org.slf4j.MDC
 
 /**
- * Note: Any MDC filter must be used on conjunction with the LoggingMDCFilter
+ * Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
  * to ensure that diagnostic context is properly managed.
  */
 @Singleton
 class ThriftMDCFilter
-  extends SimpleFilter[ThriftRequest, Any] {
+  extends ThriftFilter {
 
-  override def apply(request: ThriftRequest, service: Service[ThriftRequest, Any]): Future[Any] = {
+  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
     MDC.put("method", request.methodName)
 
     for (id <- request.clientId) {

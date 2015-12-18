@@ -8,10 +8,10 @@ import com.twitter.util.Future
 
 class ThriftRequestWrapFilter[T, U](
   methodName: String)
-  extends Filter[T, U, ThriftRequest, U] {
+  extends Filter[T, U, ThriftRequest[T], U] {
 
-  override def apply(request: T, service: Service[ThriftRequest, U]): Future[U] = {
-    val thriftRequest = new ThriftRequest(
+  override def apply(request: T, service: Service[ThriftRequest[T], U]): Future[U] = {
+    val thriftRequest = new ThriftRequest[T](
       methodName,
       Trace.id,
       ClientId.current,

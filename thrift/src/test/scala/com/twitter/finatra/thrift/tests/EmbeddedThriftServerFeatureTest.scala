@@ -1,15 +1,15 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.converter.thriftscala.Converter
-import com.twitter.converter.thriftscala.Converter.Uppercase
-import com.twitter.finagle.{Service, SimpleFilter, TimeoutException}
+import com.twitter.converter.thriftscala.Converter.{MoreThanTwentyTwoArgs, Uppercase}
+import com.twitter.finagle.{Service, TimeoutException}
+import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.codegen.MethodFilters
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.RequestTimeout
 import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerError
 import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
-import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftRequest, ThriftRouter, ThriftServer}
 import com.twitter.inject.Logging
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future, NonFatal}
@@ -43,6 +43,16 @@ class EmbeddedThriftServerIntegrationTest extends FeatureTest {
       noClientIdClient.uppercase("Hi")
     }
   }
+
+  // Methods with more than 22 args are not supported
+  // Please use a com.twitter.finatra.thrift.Controller to implement methods with more than 22 args
+  /*
+  "more than 22 args" in {
+    Await.result(
+      client123.moreThanTwentyTwoArgs("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree")
+    ) should equal("foo")
+  }
+  */
 }
 
 class ConverterServer extends ThriftServer {
@@ -65,21 +75,28 @@ class ConverterImpl extends Converter[Future] {
     else
       Future.value(msg.toUpperCase)
   }
+
+  override def moreThanTwentyTwoArgs(one: String, two: String, three: String, four: String, five: String, six: String, seven: String, eight: String, nine: String, ten: String, eleven: String, twelve: String, thirteen: String, fourteen: String, fifteen: String, sixteen: String, seventeen: String, eighteen: String, nineteen: String, twenty: String, twentyone: String, twentytwo: String, twentythree: String): Future[String] =
+    Future.value("foo")
 }
 
 object FilteredConverter {
   def create(filters: MethodFilters, underlying: Converter[Future]) = {
     new Converter[Future] {
-      def uppercase(msg: String) = filters.create(Uppercase)(Service.mk(underlying.uppercase))(msg)
+      def uppercase(msg: String): Future[String] = filters.create(Uppercase)(Service.mk(underlying.uppercase))(msg)
+      def moreThanTwentyTwoArgs(one: String, two: String, three: String, four: String, five: String, six: String, seven: String, eight: String, nine: String, ten: String, eleven: String, twelve: String, thirteen: String, fourteen: String, fifteen: String, sixteen: String, seventeen: String, eighteen: String, nineteen: String, twenty: String, twentyone: String, twentytwo: String, twentythree: String): Future[String] =
+        // scala doesn't support functions with more than 22 args
+        //filters.create(MoreThanTwentyTwoArgs)(Service.mk(underlying.moreThanTwentyTwoArgs))(one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twentyone, twentytwo, twentythree)
+        ???
     }
   }
 }
 
 class ExceptionTranslationFilter
-  extends SimpleFilter[ThriftRequest, Any]
+  extends ThriftFilter
   with Logging {
 
-  override def apply(request: ThriftRequest, service: Service[ThriftRequest, Any]): Future[Any] = {
+  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
     service(request).rescue {
       case e: TimeoutException =>
         Future.exception(

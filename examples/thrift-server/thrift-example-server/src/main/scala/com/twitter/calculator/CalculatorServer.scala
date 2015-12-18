@@ -1,7 +1,7 @@
 package com.twitter.calculator
 
 import com.twitter.calculator.manual_codegen.FilteredCalculator
-import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
+import com.twitter.finatra.logging.filter.{TypeAgnosticLoggingMDCFilter, TypeAgnosticTraceIdMDCFilter}
 import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter, ThriftMDCFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
@@ -18,8 +18,8 @@ class CalculatorServer extends ThriftServer {
 
   override def configureThrift(router: ThriftRouter) {
     router
-      .filter[LoggingMDCFilter[ThriftRequest, Any]]
-      .filter[TraceIdMDCFilter[ThriftRequest, Any]]
+      .typeAgnosticFilter[TypeAgnosticLoggingMDCFilter]
+      .typeAgnosticFilter[TypeAgnosticTraceIdMDCFilter]
       .filter[ThriftMDCFilter]
       .filter[AccessLoggingFilter]
       .filter[StatsFilter]

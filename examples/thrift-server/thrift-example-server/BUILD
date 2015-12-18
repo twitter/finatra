@@ -13,7 +13,7 @@ target(name='tests',
 jvm_binary(
   name='bin',
   basename='thrift-example-server',
-  main='com.twitter.finatra.examples.thrift.EchoThriftServerMain',
+  main='com.twitter.calculator.CalculatorServerMain',
   dependencies=[
     ':thrift-example-server',
     '3rdparty/jvm/ch/qos/logback:logback-classic',
