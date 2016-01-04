@@ -2,6 +2,8 @@
 
 set -xe
 
+SCALA_VERSION=${TRAVIS_SCALA_VERSION:-2.11.7}
+
 function retry {
   local n=$1; shift
   local f=$@
@@ -19,7 +21,7 @@ function git_get_repo {
 }
 
 function sbt_run {
-  $PROJECT_SBT ++$TRAVIS_SCALA_VERSION $1
+  $PROJECT_SBT ++$SCALA_VERSION $1
 }
 
 function sbt_publish_local {
