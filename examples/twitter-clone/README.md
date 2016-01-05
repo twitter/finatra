@@ -18,16 +18,16 @@ $ java -jar -Dlog.service.output=twitter-clone.log -Dlog.access.output=access.lo
 ```
 *Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. When not set the [logback.xml](./src/main/resources/logback.xml) is parameterized with defaults of `service.log` and `access.log`, respectively.
 
-If you're in a tagged release branch (e.g. [v2.1.0](https://github.com/twitter/finatra/tree/v2.1.0))
+If you're in a tagged release branch (e.g. [v2.1.2](https://github.com/twitter/finatra/tree/v2.1.2))
 ----------------------------------------------------------
 Run sbt from **this** project's directory, e.g.
 ```
-$ sbt run
+$ sbt "run -firebase.host=finatra.firebaseio.com -com.twitter.server.resolverMap=firebase=finatra.firebaseio.com:443"
 ```
 * Then browse to: [http://127.0.0.1:8888/tweet/04fa10f9-8188-4bd2-b4e0-46fd09b77aa9](http://127.0.0.1:8888/tweet/04fa10f9-8188-4bd2-b4e0-46fd09b77aa9)
 * Or view the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 Or build and run a deployable jar:
 ```
 $ sbt assembly
-$ java -jar -Dlog.service.output=twitter-clone.log -Dlog.access.output=access.log target/scala-2.11/finatra-twitter-clone-assembly-2.1.0.jar -http.port=:8888 -admin.port=:9990 -firebase.host=finatra.firebaseio.com -com.twitter.server.resolverMap=firebase=finatra.firebaseio.com:443
+$ java -jar -Dlog.service.output=twitter-clone.log -Dlog.access.output=access.log target/scala-2.11/finatra-twitter-clone-assembly-2.1.2.jar -http.port=:8888 -admin.port=:9990 -firebase.host=finatra.firebaseio.com -com.twitter.server.resolverMap=firebase=finatra.firebaseio.com:443
 ```

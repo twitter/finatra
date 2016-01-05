@@ -19,7 +19,7 @@ $ java -jar -Dlog.service.output=hello-world.log -Dlog.access.output=access.log 
 ```
 *Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. When not set the [logback.xml](./src/main/resources/logback.xml) is parameterized with defaults of `service.log` and `access.log`, respectively.
 
-If you're in a tagged release branch (e.g. [v2.1.0](https://github.com/twitter/finatra/tree/v2.1.0))
+If you're in a tagged release branch (e.g. [v2.1.2](https://github.com/twitter/finatra/tree/v2.1.2))
 ----------------------------------------------------------
 ###SBT###
 Run sbt from **this** project's directory, e.g.
@@ -29,7 +29,7 @@ $ sbt run
 Or build and run a deployable jar:
 ```
 $ sbt assembly
-$ java -jar -Dlog.service.output=hello-world.log -Dlog.access.output=access.log target/scala-2.11/finatra-hello-world-assembly-2.1.0.jar -http.port=:8888 -admin.port=:9990
+$ java -jar -Dlog.service.output=hello-world.log -Dlog.access.output=access.log target/scala-2.11/finatra-hello-world-assembly-2.1.2.jar -http.port=:8888 -admin.port=:9990
 ```
 
 ###Maven###
