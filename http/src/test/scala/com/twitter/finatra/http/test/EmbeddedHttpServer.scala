@@ -36,6 +36,7 @@ class EmbeddedHttpServer(
     defaultRequestHeaders = defaultRequestHeaders,
     streamResponse = streamResponse,
     verbose = verbose,
+    disableTestLogging = disableTestLogging,
     maxStartupTimeSeconds = maxStartupTimeSeconds) {
 
   /* Overrides */
