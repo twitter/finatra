@@ -162,7 +162,7 @@ class ResponseBuilder @Inject()(
         case null => nothing
         case buf: Buf => body(buf)
         case bytes: Array[Byte] => body(bytes)
-        case cbos: ChannelBuffer => body(cbos)
+        case cbos: ChannelBuffer => body(ChannelBufferBuf.Owned(cbos))
         case "" => nothing
         case Unit => nothing
         case _: BoxedUnit => nothing
@@ -205,14 +205,16 @@ class ResponseBuilder @Inject()(
 
     def body(inputStream: InputStream): EnrichedResponse = {
       body(
-        ChannelBuffers.wrappedBuffer(
-          IOUtils.toByteArray(
-            inputStream)))
-
+        ChannelBufferBuf.Owned(
+          ChannelBuffers.wrappedBuffer(
+            IOUtils.toByteArray(inputStream)
+          )
+        )
+      )
       this
     }
 
-    @deprecated("use body(Buf)")
+    @deprecated("use body(Buf)", "2015-08-20")
     def body(channelBuffer: ChannelBuffer): EnrichedResponse = {
       response.content = ChannelBufferBuf.Owned(channelBuffer)
       this

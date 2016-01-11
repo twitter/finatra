@@ -9,7 +9,7 @@ class ByteBufferConversionsTest extends Test {
   "debug output" in {
     val buf = Buf.Utf8("hello")
     val bb = Buf.ByteBuffer.Shared.extract(buf)
-    bb.debugOutput
+    bb.debugOutput()
   }
 
 }

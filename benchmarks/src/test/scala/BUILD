@@ -5,5 +5,6 @@ junit_tests(
     'finatra/http:test-deps',
     'finatra/inject/inject-server:test-deps'
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
 )

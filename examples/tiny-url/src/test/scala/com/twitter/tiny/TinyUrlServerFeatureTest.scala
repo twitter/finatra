@@ -87,7 +87,7 @@ class TinyUrlServerFeatureTest
     "return NotFound for unknown tiny url" in {
       val id =
         java.lang.Long.toString(
-          Counter.InitialValue + new Random(Counter.InitialValue).nextLong().abs,
+          Counter.InitialValue + math.abs(new Random(Counter.InitialValue).nextLong()),
           EncodingRadix)
 
       mockJedisClient.get(anyObject[String]()) returns null

@@ -8,6 +8,7 @@ junit_tests(name='scala',
     'finatra/inject/inject-modules',
     'finatra/inject/inject-modules:test-deps',
   ],
+  fatal_warnings=True,
   sources=globs(
     'com/twitter/inject/modules/tests/*.scala',
   ),
@@ -27,6 +28,7 @@ scala_library(name="test-deps",
     'finatra/inject/inject-core',
     'util/util-stats',
   ],
+  fatal_warnings=True,
   sources=globs(
     'com/twitter/inject/modules/*.scala',
   )

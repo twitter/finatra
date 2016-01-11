@@ -23,6 +23,7 @@ scala_library(name='scala',
     'util/util-core',
     'util/util-stats',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
   resources=[
     'finatra/http/src/main/resources'

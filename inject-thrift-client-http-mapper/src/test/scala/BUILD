@@ -16,5 +16,6 @@ junit_tests(name='scala',
     'finatra/thrift:test-deps',
     'util/util-core',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala')
 )

@@ -31,8 +31,8 @@ class MaxValidatorTest extends ValidatorTest {
       val value = 1
       validate[MaxIntExample](value) should equal(
         Invalid(
-          errorMessage(value),
-          errorCode(value)))
+          errorMessage(Integer.valueOf(value)),
+          errorCode(Integer.valueOf(value))))
     }
 
     "pass validation for long type" in {
@@ -44,8 +44,8 @@ class MaxValidatorTest extends ValidatorTest {
       val value = 1L
       validate[MaxLongExample](value) should equal(
         Invalid(
-          errorMessage(value),
-          errorCode(value)))
+          errorMessage(java.lang.Long.valueOf(value)),
+          errorCode(java.lang.Long.valueOf(value))))
     }
 
     "pass validation for big int type" in {
@@ -133,8 +133,8 @@ class MaxValidatorTest extends ValidatorTest {
       val value = Seq(10)
       validate[MaxSeqExample](value) should equal(
         Invalid(
-          errorMessage(value = value.size),
-          errorCode(value.size)))
+          errorMessage(value = Integer.valueOf(value.size)),
+          errorCode(Integer.valueOf(value.size))))
     }
 
     "pass validation for array of integers" in {
@@ -146,8 +146,8 @@ class MaxValidatorTest extends ValidatorTest {
       val value = Array(10)
       validate[MaxArrayExample](value) should equal(
         Invalid(
-          errorMessage(value = value.length),
-          errorCode(value.length)))
+          errorMessage(value = Integer.valueOf(value.length)),
+          errorCode(Integer.valueOf(value.length))))
     }
 
     "fail for unsupported class type" in {

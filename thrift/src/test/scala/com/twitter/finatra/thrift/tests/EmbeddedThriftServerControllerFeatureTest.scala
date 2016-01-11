@@ -1,7 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.converter.thriftscala.Converter
-import com.twitter.converter.thriftscala.Converter.MethodIface
 import com.twitter.finagle.Service
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter}

@@ -101,7 +101,7 @@ object MediaRange extends Logging {
     val char = acceptIf(_ < 0x80)(_ => "Expected an ascii character")
     val text = not(ctl) ~> any
     val separators = {
-      acceptIf(c => separatorBitSet(c))(_ => "Expected one of " + separatorChars)
+      acceptIf(c => separatorBitSet(c.toInt))(_ => "Expected one of " + separatorChars)
     }
 
     val token = rep1(not(separators | ctl) ~> any) ^^ charSeqToString
@@ -171,7 +171,7 @@ object MediaRange extends Logging {
     }
 
     // Either it's a valid media range followed immediately by the end or a comma, or it's a bad media type
-    val tolerantMediaRange = tolerant(mediaRange <~ guard(end | ','), badMediaType)
+    val tolerantMediaRange = tolerant(mediaRange.<~[Any](guard(end | ',')), badMediaType)
 
     val mediaRanges = rep1sep(tolerantMediaRange, ',' ~ rep(' ')).map(_.flatten)
 

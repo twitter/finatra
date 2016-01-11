@@ -31,7 +31,7 @@ class RangeValidatorTest extends ValidatorTest {
     "fail validation for int type" in {
       val value = 0
       validate[RangeIntExample](value) should equal(
-        invalid(value))
+        invalid(Integer.valueOf(value)))
     }
 
     "pass validation for long type" in {
@@ -42,7 +42,7 @@ class RangeValidatorTest extends ValidatorTest {
     "fail validation for long type" in {
       val value = 0L
       validate[RangeLongExample](value) should equal(
-        invalid(value))
+        invalid(java.lang.Long.valueOf(value)))
     }
 
     "pass validation for big decimal type" in {
@@ -138,7 +138,7 @@ class RangeValidatorTest extends ValidatorTest {
     value: Number,
     minValue: Long = 1,
     maxValue: Long = 5) = {
-    ErrorCode.ValueOutOfRange(value.longValue, minValue, maxValue)
+    ErrorCode.ValueOutOfRange(java.lang.Long.valueOf(value.longValue), minValue, maxValue)
   }
   
   private def invalid(

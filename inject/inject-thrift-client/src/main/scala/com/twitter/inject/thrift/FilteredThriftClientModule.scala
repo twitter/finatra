@@ -82,14 +82,14 @@ abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTa
         configured(TimeoutFactory.Param(connectTimeout.toTwitterDuration)).
         configured(Stats(statsReceiver.scope("clnt"))).
         withClientId(clientId).
-        newServiceIface[ServiceIface](dest)
+        newServiceIface[ServiceIface](dest, "")
     else
       Thrift.client.
         configured(TimeoutFilter.Param(requestTimeout.toTwitterDuration)).
         configured(TimeoutFactory.Param(connectTimeout.toTwitterDuration)).
         configured(Stats(statsReceiver.scope("clnt"))).
         withClientId(clientId).
-        newServiceIface[ServiceIface](dest)
+        newServiceIface[ServiceIface](dest, "")
   }
 
   /* Common Retry Functions */

@@ -15,5 +15,6 @@ scala_library(name='scala',
     'twitter-server',
     'util/util-core',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
 )

@@ -7,6 +7,7 @@ java_library(
     'finatra/inject/inject-server',
     'finatra/slf4j'
   ],
+  fatal_warnings=False,
   sources=rglobs('*.java'),
   resources=[
     'finatra/examples/java-server/src/main/resources'

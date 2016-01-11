@@ -10,6 +10,7 @@ scala_library(
     'finatra/thrift',
     'util/util-core'
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
   resources=[
     'finatra/examples/thrift-server/thrift-example-server/src/main/resources'

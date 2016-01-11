@@ -25,6 +25,7 @@ scala_library(name="test-deps",
     'finatra/inject/inject-server:test-deps',
     'finatra/utils',
   ],
+  fatal_warnings=True,
   sources=globs(
     'com/twitter/finatra/guice/*.scala',
     'com/twitter/finatra/modules/*.scala',

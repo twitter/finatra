@@ -61,7 +61,7 @@ class SizeValidator(
         value,
         minValue,
         maxValue),
-      ErrorCode.SizeOutOfRange(size, minValue, maxValue))
+      ErrorCode.SizeOutOfRange(Integer.valueOf(size), minValue, maxValue))
   }
 
   /* Private */

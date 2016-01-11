@@ -12,6 +12,7 @@ scala_library(name='scala',
     'finatra/inject/inject-core',
     'util/util-app',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
   java_sources=[
     'finatra/inject/inject-app/src/main/java',

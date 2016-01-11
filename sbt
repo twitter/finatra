@@ -23,7 +23,7 @@ javaVersion=`java -version 2>&1 | grep "java version" | awk '{print $3}' | tr -d
 
 MAX_PERM_SIZE_JVM_ARG=""
 ELIMINATE_AUTOBOX_JVM_ARG=""
-if [[ $javaVersion == *"8"* ]]; then
+if [[ $javaVersion == *"1.8"* ]]; then
   # Workaround for JDK issue: https://bugs.openjdk.java.net/browse/JDK-8058847
   # only add the option on version JDK8
   ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"

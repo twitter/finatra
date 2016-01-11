@@ -46,8 +46,8 @@ class MinValidator(
   private def validationResult(value: Traversable[_]) = {
     ValidationResult.validate(
       minValue <= value.size,
-      errorMessage(value.size),
-      errorCode(value.size))
+      errorMessage(Integer.valueOf(value.size)),
+      errorCode(Integer.valueOf(value.size)))
   }
 
   private def validationResult(value: BigDecimal) = {

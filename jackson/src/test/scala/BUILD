@@ -28,6 +28,7 @@ scala_library(name="test-deps",
     'finatra/inject/inject-core:test-deps',
     'finatra/jackson/src/main/scala',
   ],
+  fatal_warnings=True,
   sources=globs(
     'com/twitter/finatra/json/*.scala',
     'com/twitter/finatra/validation/*.scala',

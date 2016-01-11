@@ -14,5 +14,6 @@ scala_library(name='scala',
     'loglens/loglens-logging',
     'util/util-core'
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala')
 )

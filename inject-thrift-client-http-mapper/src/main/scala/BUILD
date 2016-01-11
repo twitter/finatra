@@ -8,5 +8,6 @@ scala_library(name='scala',
     'finatra/http',
     'finatra/inject/inject-thrift-client',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
 )

@@ -6,6 +6,7 @@ junit_tests(
     'finatra/httpclient',
     'finatra/inject/inject-server:test-deps'
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
   resources=[
     'finatra/examples/streaming-example/src/test/resources'

@@ -4,6 +4,7 @@ junit_tests(name='scala',
     'finatra/inject/inject-server',
     'finatra/inject/inject-server:test-deps'
   ],
+  fatal_warnings=True,
   sources=globs(
     'com/twitter/server/tests/*.scala',
     'com/twitter/inject/server/tests/*.scala'),
@@ -24,5 +25,6 @@ scala_library(name="test-deps",
     'finatra/inject/inject-modules:test-deps',
     'finatra/inject/inject-server'
   ],
+  fatal_warnings=True,
   sources=globs('com/twitter/inject/server/*.scala'),
 )

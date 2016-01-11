@@ -31,8 +31,8 @@ class MinValidatorTest extends ValidatorTest {
       val value = 0
       validate[MinIntExample](value) should equal(
         Invalid(
-          errorMessage(value),
-          errorCode(value)))
+          errorMessage(Integer.valueOf(value)),
+          errorCode(Integer.valueOf(value))))
     }
 
     "pass validation for long type" in {
@@ -44,8 +44,8 @@ class MinValidatorTest extends ValidatorTest {
       val value = 0L
       validate[MinLongExample](value) should equal(
         Invalid(
-          errorMessage(value),
-          errorCode(value)))
+          errorMessage(java.lang.Long.valueOf(value)),
+          errorCode(java.lang.Long.valueOf(value))))
     }
 
     "pass validation for big int type" in {
@@ -133,8 +133,8 @@ class MinValidatorTest extends ValidatorTest {
       val value = Seq()
       validate[MinSeqExample](value) should equal(
         Invalid(
-          errorMessage(value = value.size),
-          errorCode(value = value.size)))
+          errorMessage(value = Integer.valueOf(value.size)),
+          errorCode(value = Integer.valueOf(value.size))))
     }
 
     "pass validation for array of integers" in {
@@ -146,8 +146,8 @@ class MinValidatorTest extends ValidatorTest {
       val value = Array()
       validate[MinArrayExample](value) should equal(
         Invalid(
-          errorMessage(value = value.length),
-          errorCode(value = value.length)))
+          errorMessage(value = Integer.valueOf(value.length)),
+          errorCode(value = Integer.valueOf(value.length))))
     }
 
     "fail for unsupported class type" in {

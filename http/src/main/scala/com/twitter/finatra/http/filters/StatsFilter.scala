@@ -100,7 +100,7 @@ class StatsFilter[R <: Request] @Inject()(
   private def record(request: Request, response: Response, duration: Duration): Unit = {
     globalStats(response.statusCode).count(duration, response)
     RouteInfo(request) foreach { routeInfo =>
-      perRouteStats(routeInfo, request.method, response.statusCode).count(duration, response)
+      perRouteStats((routeInfo, request.method, response.statusCode)).count(duration, response)
     }
   }
 }

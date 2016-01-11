@@ -5,6 +5,7 @@ junit_tests(name='scala',
     'finatra/inject/inject-core:test-deps',
     'finatra/inject/inject-request-scope'
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
   resources=[
     'finatra/inject/inject-request-scope/src/test/resources'

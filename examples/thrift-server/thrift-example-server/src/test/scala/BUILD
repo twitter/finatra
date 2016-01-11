@@ -8,6 +8,7 @@ junit_tests(
     'finatra/examples/thrift-server/thrift-example-idl',
     'finatra/examples/thrift-server/thrift-example-server',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
   resources=[
     'finatra/examples/thrift-server/thrift-example-server/src/test/resources',

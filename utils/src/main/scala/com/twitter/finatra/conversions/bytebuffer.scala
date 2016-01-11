@@ -9,7 +9,7 @@ object bytebuffer extends Logging {
 
   implicit class RichByteBuffer(val byteBuffer: ByteBuffer) extends AnyVal {
 
-    def debugOutput: Unit = {
+    def debugOutput(): Unit = {
       debug(new String(byteBuffer.array()) + " " + byteBuffer.position() + "/" + byteBuffer.capacity())
     }
 

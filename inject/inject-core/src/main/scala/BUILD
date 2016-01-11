@@ -18,5 +18,6 @@ scala_library(name='scala',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     'util/util-app',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
 )

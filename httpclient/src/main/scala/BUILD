@@ -13,5 +13,6 @@ scala_library(name='scala',
     'finatra/utils',
     'util/util-core',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala')
 )

@@ -46,8 +46,8 @@ class MaxValidator(
   private def validationResult(value: Traversable[_]) = {
     ValidationResult.validate(
       value.size <= maxValue,
-      errorMessage(value.size),
-      errorCode(value.size))
+      errorMessage(Integer.valueOf(value.size)),
+      errorCode(Integer.valueOf(value.size)))
   }
 
   private def validationResult(value: BigDecimal) = {

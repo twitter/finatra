@@ -15,5 +15,6 @@ junit_tests(name='scala',
     'finatra/inject/inject-app:test-deps',
     'finatra/thrift:test-deps',
   ],
+  fatal_warnings=True,
   sources=rglobs('com/twitter/inject/thrift/*.scala'),
 )

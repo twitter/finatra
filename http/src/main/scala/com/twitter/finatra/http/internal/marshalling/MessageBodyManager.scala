@@ -78,13 +78,13 @@ class MessageBodyManager @Inject()(
 
   /* Private */
 
-  private def add[MessageBodyComponent: Manifest](typeToReadOrWrite: Type) {
-    val messageBodyComponent = injector.instance[MessageBodyComponent]
+  private def add[MessageBodyComp: Manifest](typeToReadOrWrite: Type): Unit = {
+    val messageBodyComponent = injector.instance[MessageBodyComp]
 
     messageBodyComponent match {
-      case reader: MessageBodyReader[Any] =>
-        classTypeToReader(typeToReadOrWrite) = reader
-      case writer: MessageBodyWriter[Any] =>
+      case reader: MessageBodyReader[_] =>
+        classTypeToReader(typeToReadOrWrite) = reader.asInstanceOf[MessageBodyReader[Any]]
+      case writer: MessageBodyWriter[_] =>
         classTypeToWriter(typeToReadOrWrite) = writer.asInstanceOf[MessageBodyWriter[Any]]
     }
   }

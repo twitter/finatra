@@ -9,5 +9,6 @@ scala_library(name='scala',
     'finagle/finagle-core',
     'finatra/inject/inject-core',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
 )

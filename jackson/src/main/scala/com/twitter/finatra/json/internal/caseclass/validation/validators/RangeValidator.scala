@@ -72,6 +72,6 @@ class RangeValidator(
   }
 
   private def errorCode(value: Number) = {
-    ErrorCode.ValueOutOfRange(value.longValue, minValue, maxValue)
+    ErrorCode.ValueOutOfRange(java.lang.Long.valueOf(value.longValue), minValue, maxValue)
   }
 }

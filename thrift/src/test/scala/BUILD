@@ -4,6 +4,7 @@ junit_tests(name='scala',
     'finatra/thrift/src/test/thrift:echo-thrift-scala',
     'finatra/thrift:test-deps',
   ],
+  fatal_warnings=True,
   sources=globs('com/twitter/finatra/thrift/tests/*.scala'),
   resources=[
     'finatra/thrift/src/test/resources'
@@ -22,5 +23,6 @@ scala_library(name="test-deps",
     'finatra/inject/inject-core:test-deps',
     'finatra/inject/inject-server:test-deps',
   ],
+  fatal_warnings=True,
   sources=globs('com/twitter/finatra/thrift/*.scala')
 )

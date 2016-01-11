@@ -19,6 +19,7 @@ scala_library(name='scala',
     'util/util-core',
     'twitter-server',
   ],
+  fatal_warnings=True,
   sources=rglobs('*.scala'),
   java_sources=[
     'finatra/utils/src/main/java',

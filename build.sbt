@@ -1,5 +1,6 @@
 import sbt.Keys._
 import sbtunidoc.Plugin.UnidocKeys._
+import scala.language.reflectiveCalls
 import ScoverageSbtPlugin.ScoverageKeys._
 
 parallelExecution in ThisBuild := false
@@ -46,7 +47,7 @@ lazy val versions = new {
   val slf4j = "1.7.7"
 }
 
-lazy val compilerOptions = scalacOptions ++= Seq(
+lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
@@ -55,12 +56,19 @@ lazy val compilerOptions = scalacOptions ++= Seq(
   "-language:implicitConversions",
   "-unchecked",
   "-Ywarn-dead-code",
-  "-Ywarn-numeric-widen"
+  "-Ywarn-numeric-widen",
+  "-Xlint"
 ) ++ (
   CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 11)) => Seq("-Ywarn-unused-import")
+    case Some((2, x)) if x >= 11 => Seq("-Ywarn-unused-import")
     case _ => Seq.empty
   }
+)
+
+lazy val javaCompilerOptions = javacOptions ++= Seq(
+  "-source", "1.7",
+  "-target", "1.7",
+  "-Xlint:unchecked"
 )
 
 lazy val baseSettings = Seq(
@@ -74,7 +82,8 @@ lazy val baseSettings = Seq(
     "Twitter Maven" at "https://maven.twttr.com",
     Resolver.sonatypeRepo("snapshots")
   ),
-  compilerOptions
+  scalaCompilerOptions,
+  javaCompilerOptions
 )
 
 lazy val publishSettings = Seq(
@@ -95,7 +104,7 @@ lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
   apiURL := Some(url("https://twitter.github.io/finatra/docs/")),
-  pomExtra := (
+  pomExtra :=
     <scm>
       <url>git://github.com/twitter/finatra.git</url>
       <connection>scm:git://github.com/twitter/finatra.git</connection>
@@ -106,8 +115,7 @@ lazy val publishSettings = Seq(
         <name>Twitter Inc.</name>
         <url>https://www.twitter.com/</url>
       </developer>
-    </developers>
-  ),
+    </developers>,
   pomPostProcess := { (node: scala.xml.Node) =>
     val rule = new scala.xml.transform.RewriteRule {
       override def transform(n: scala.xml.Node): scala.xml.NodeSeq =
