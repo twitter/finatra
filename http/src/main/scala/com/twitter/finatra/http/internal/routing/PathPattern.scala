@@ -2,6 +2,7 @@ package com.twitter.finatra.http.internal.routing
 
 import com.twitter.inject.Logging
 import java.util.regex.Matcher
+import org.jboss.netty.handler.codec.http.QueryStringDecoder
 import scala.collection.immutable
 import scala.util.matching.Regex
 
@@ -58,7 +59,7 @@ case class PathPattern(
 
     for (captureName <- captureNames) {
       idx += 1
-      builder += captureName -> matcher.group(idx)
+      builder += captureName -> QueryStringDecoder.decodeComponent(matcher.group(idx))
     }
     builder.result()
   }
