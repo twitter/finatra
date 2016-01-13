@@ -9,6 +9,7 @@ trait ThriftServer extends TwitterServer {
 
   private val thriftPortFlag = flag("thrift.port", ":9999", "External Thrift server port")
   private val thriftShutdownTimeout = flag("thrift.shutdown.time", 1.minute, "Maximum amount of time to wait for pending requests to complete on shutdown")
+  private val thriftAnnounceFlag = flag[String]("thrift.announce", "Address to announce Thrift server to")
 
   /* Private Mutable State */
   private var thriftServer: ListeningServer = _
@@ -30,6 +31,7 @@ trait ThriftServer extends TwitterServer {
       Await.result(
         close(thriftServer, thriftShutdownTimeout().fromNow))
     }
+    for (addr <- thriftAnnounceFlag.get) thriftServer.announce(addr)
     info("Thrift server started on port: " + thriftPort.get)
   }
 
