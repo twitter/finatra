@@ -591,12 +591,11 @@ class DoEverythingController @Inject()(
     "ok!"
   }
 
-  filter(new AppendToHeaderFilter("test", "a")).
-    filter(new AppendToHeaderFilter("test", "b")).
-    filter(new AppendToHeaderFilter("test", "c")).
+  filter(new AppendToHeaderFilter("test", "2")).
+    filter(new AppendToHeaderFilter("test", "3")).
+    filter(new AppendToHeaderFilter("test", "4")).
     get("/multipleRouteFilters") { r: Request =>
-
-    r.headerMap("test")
+      r.headerMap("test")
   }
 
   get("/testClassWithHtml") { r: Request =>

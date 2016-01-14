@@ -1029,7 +1029,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       server.httpGet(
         "/multipleRouteFilters",
         andExpect = Ok,
-        withBody = "abc"
+        withBody = "01234"
       )
     }
   }

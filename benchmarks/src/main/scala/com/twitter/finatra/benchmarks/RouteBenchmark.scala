@@ -1,5 +1,6 @@
 package com.twitter.finatra.benchmarks
 
+import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.util.Future
@@ -19,7 +20,8 @@ class RouteBenchmark {
     callback = defaultCallback,
     annotations = Seq(),
     requestClass = classOf[Request],
-    responseClass = classOf[Response])
+    responseClass = classOf[Response],
+    filter = Filter.identity)
 
   val routeWithPathParams = Route(
     name = "groups",
@@ -28,7 +30,8 @@ class RouteBenchmark {
     callback = defaultCallback,
     annotations = Seq(),
     requestClass = classOf[Request],
-    responseClass = classOf[Response])
+    responseClass = classOf[Response],
+    filter = Filter.identity)
 
   val postGroupsPath = "/groups/"
   val postGroupsRequest = Request(Method.Post, postGroupsPath)

@@ -17,17 +17,13 @@ case class Route(
   annotations: Seq[Annotation] = Seq(),
   requestClass: Class[_],
   responseClass: Class[_],
-  filter: Filter[Request, Response, Request, Response] = null) {
+  filter: Filter[Request, Response, Request, Response]) {
 
   private[this] val pattern = PathPattern(path)
   private[this] val routeInfo = RouteInfo(name, path)
 
-  private[this] val filteredCallback: Request => Future[Response] = {
-    if (filter != null)
-      filter andThen Service.mk[Request, Response](callback)
-    else
-      callback
-  }
+  private[this] val filteredCallback: Request => Future[Response] =
+    filter andThen Service.mk[Request, Response](callback)
 
   /* Public */
 
@@ -38,7 +34,7 @@ case class Route(
   def summary: String = f"$method%-7s $path"
 
   def withFilter(filter: Filter[Request, Response, Request, Response]): Route = {
-    this.copy(filter = filter)
+    this.copy(filter = filter andThen this.filter)
   }
 
   // Note: incomingPath is an optimization to avoid calling incomingRequest.path for every potential route

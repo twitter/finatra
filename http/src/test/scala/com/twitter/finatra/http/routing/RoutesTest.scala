@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.routing
 
+import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.routing.{Route, Routes}
@@ -56,6 +57,7 @@ class RoutesTest extends Test with OptionValues {
       callback = defaultCallback,
       annotations = Seq(),
       requestClass = classOf[Request],
-      responseClass = classOf[Response])
+      responseClass = classOf[Response],
+      filter = Filter.identity)
   }
 }
