@@ -43,6 +43,37 @@ pull request, all changes will also be tested internally at Twitter before being
 
 We generally follow the [Scala Style Guide][scala-style-guide]. When in doubt, look around the codebase and see how it's done elsewhere.
 
+Comments should be formatted to a width no greater than 80 columns.
+
+Files should be exempt of trailing spaces.
+
+We adhere to a specific format for commit messages. Please write your commit
+messages along these guidelines:
+    One line description of your change (less than 72 characters)
+
+    Problem
+
+    Explain here the context, and why you're making that change.
+    What is the problem you're trying to solve?
+
+    Solution
+
+    Describe the modifications you've done.
+
+    Result
+
+    After your change, what will change?
+
+Note the truncated line width; consider using `fmt -80` to format your line length.
+Some important notes regarding the summary line:
+
+* Describe what was done; not the result
+* Use the active voice
+* Use the present tense
+* Capitalize properly
+* Do not end in a period — this is a title/subject
+* Prefix the subject with its scope (finatre-http, finatra-jackson, finatra-*)
+
 ## Code Review
 
 The Finatra repository on GitHub is kept in sync with an internal repository at
