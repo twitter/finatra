@@ -120,6 +120,11 @@ class StartupIntegrationTest extends Test {
           override def appMain(): Unit = {
             throw new RuntimeException("oops")
           }
+
+          override def setAppStarted(value: Boolean) {
+            // Do Nothing
+            // We're looking to see if the exception is raised
+          }
         })
 
       intercept[Exception] {

@@ -51,7 +51,7 @@ trait App extends TwitterUtilApp with Logging {
     afterPostWarmup()
 
     info("App started.")
-    appStarted = true
+    setAppStarted(true)
 
     onExit {
       installedModules.shutdown()
@@ -109,6 +109,10 @@ trait App extends TwitterUtilApp with Logging {
 
   protected[inject] def addFrameworkOverrideModules(modules: Module*) {
     frameworkOverrideModules ++= modules
+  }
+
+  protected[inject] def setAppStarted(value: Boolean) {
+    appStarted = value
   }
 
   /** Method to be called after injector creation */
