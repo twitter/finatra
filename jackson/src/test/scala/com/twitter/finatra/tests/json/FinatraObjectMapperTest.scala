@@ -15,6 +15,7 @@ import com.twitter.inject.Logging
 import com.twitter.inject.app.TestInjector
 import com.twitter.io.Buf
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import org.apache.commons.lang.RandomStringUtils
 import org.joda.time.{DateTime, DateTimeZone}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -1116,6 +1117,15 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       val camelCaseObjectMapper = injector.instance[FinatraObjectMapper, CamelCaseMapper]
 
       camelCaseObjectMapper.parse[Map[String, String]]("""{"firstName": "Bob"}""") should equal(Map("firstName" -> "Bob"))
+    }
+  }
+
+  feature("Support sealed traits and case objects") {
+    scenario("json serialization") {
+      val vin = RandomStringUtils.randomAlphanumeric(17)
+      val vehicle = Vehicle(vin, Audi)
+
+      mapper.writeValueAsString(vehicle) should equal(s"""{"vin":"$vin","type":"audi"}""")
     }
   }
 

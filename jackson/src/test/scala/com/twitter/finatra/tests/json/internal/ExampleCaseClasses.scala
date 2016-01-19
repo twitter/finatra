@@ -1,6 +1,6 @@
 package com.twitter.finatra.tests.json.internal
 
-import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonProperty}
+import com.fasterxml.jackson.annotation.{JsonValue, JsonIgnore, JsonIgnoreProperties, JsonProperty}
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
@@ -14,6 +14,24 @@ import javax.inject.{Inject, Named}
 import org.joda.time.DateTime
 import scala.annotation.meta.param
 import scala.math.BigDecimal.RoundingMode
+
+
+sealed trait CarType {
+  @JsonValue
+  def toJson: String
+}
+object Volvo extends CarType {
+  override def toJson: String = "volvo"
+}
+object Audi extends CarType {
+  override def toJson: String = "audi"
+}
+object Volkswagen extends CarType {
+  override def toJson: String = "vw"
+}
+
+case class Vehicle(vin: String, `type`: CarType)
+
 
 case class CaseClass(id: Long, name: String)
 

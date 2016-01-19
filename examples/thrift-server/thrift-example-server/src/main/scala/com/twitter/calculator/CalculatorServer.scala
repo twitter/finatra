@@ -1,11 +1,10 @@
 package com.twitter.calculator
 
-import com.twitter.calculator.manual_codegen.FilteredCalculator
 import com.twitter.finatra.logging.filter.{TypeAgnosticLoggingMDCFilter, TypeAgnosticTraceIdMDCFilter}
 import com.twitter.finatra.logging.modules.Slf4jBridgeModule
+import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter, ThriftMDCFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
-import com.twitter.finatra.thrift.{ThriftRequest, _}
 
 object CalculatorServerMain extends CalculatorServer
 
@@ -25,6 +24,6 @@ class CalculatorServer extends ThriftServer {
       .filter[StatsFilter]
       .filter[ExceptionTranslationFilter]
       .filter[ClientIdWhitelistFilter]
-      .add[CalculatorImpl](FilteredCalculator.create)
+      .add[CalculatorController]
   }
 }

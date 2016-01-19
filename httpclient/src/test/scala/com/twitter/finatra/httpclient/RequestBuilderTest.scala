@@ -1,6 +1,6 @@
 package com.twitter.finatra.httpclient
 
-import com.twitter.finagle.http.Method
+import com.twitter.finagle.http.{Message, Method}
 import com.twitter.finagle.http.Method._
 import com.twitter.inject.Test
 
@@ -42,6 +42,27 @@ class RequestBuilderTest extends Test {
         "b" -> "2")
 
     assertRequestWithBody(Put, request)
+  }
+
+  "put with form params" in {
+    val request = RequestBuilder.put("/abc")
+      .body("Pcode=9999&Locality=A%20New%20Location", Message.ContentTypeWwwFrom)
+      .headers(Seq("c" -> "3"))
+      .headers(
+        "a" -> "1",
+        "b" -> "2")
+
+      request.uri should be("/abc")
+      request.method should be(Put)
+
+      request.headerMap should be(Map(
+        "a" -> "1",
+        "b" -> "2",
+        "c" -> "3",
+        "Content-Length" -> "38",
+        "Content-Type" -> Message.ContentTypeWwwFrom))
+
+      request.contentString should be("Pcode=9999&Locality=A%20New%20Location")
   }
 
   "patch" in {
