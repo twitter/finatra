@@ -154,6 +154,19 @@ See the implementation of the `GroupRequest` [above](#group-request-example) for
 
 See also: [CommonMethodValidations](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala)
 
+By default validation errors are returned **alphabetically sorted** by validation error message (for determinism when testing). See: [CaseClassMappingException](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala). Eg.,
+
+```json
+{
+  "errors" : [
+    "location.lat: [9999.0] is not between -85 and 85",
+    "location.long: field is required",
+    "message: size [0] is not between 1 and 140",
+    "nsfw: 'abc' is not a valid boolean"
+  ]
+}
+```
+
 ### <a class="anchor" name="json-best-practices" href="#json-best-practices">Best Practices</a>
 ===============================
 

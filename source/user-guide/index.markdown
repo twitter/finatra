@@ -30,7 +30,7 @@ footer: true
   - [Configuration](/finatra/user-guide/json#configuration)
   - [Customization](/finatra/user-guide/json#jackson-customization)
   - [Integration with Routing](/finatra/user-guide/json#routing-json)
-  - [Validation Framework](/finatra/user-guide/json#validaton-framework)
+  - [Validation Framework](/finatra/user-guide/json#validation-framework)
 - [Working with Files](/finatra/user-guide/files)
   - [File Server](/finatra/user-guide/files#file-server)
   - [Mustache Templating](/finatra/user-guide/files#mustache)
