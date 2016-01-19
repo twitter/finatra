@@ -72,7 +72,7 @@ Some important notes regarding the summary line:
 * Use the present tense
 * Capitalize properly
 * Do not end in a period — this is a title/subject
-* Prefix the subject with its scope (finatre-http, finatra-jackson, finatra-*)
+* Prefix the subject with its scope (finatra-http, finatra-jackson, finatra-*)
 
 ## Code Review
 
