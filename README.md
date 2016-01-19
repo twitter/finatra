@@ -154,9 +154,9 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
       withJsonBody = """
         {
           "errors" : [
-            "message: size [0] is not between 1 and 140",
             "location.lat: [9999.0] is not between -85 and 85",
             "location.long: field is required",
+            "message: size [0] is not between 1 and 140",
             "nsfw: 'abc' is not a valid boolean"
           ]
         }
