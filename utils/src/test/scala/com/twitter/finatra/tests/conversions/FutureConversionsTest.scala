@@ -218,6 +218,22 @@ class FutureConversionsTest extends Test {
 
       assert(chainedRan)
     }
+
+    "#transformException transforms Exception" in {
+      assertFailedFuture[TestException](
+        Future.exception(ExistingException).transformException { throwable =>
+          new TestException
+        }
+      )
+    }
+
+    "#transformException returns successful future" in {
+      assertFuture(
+        Future(true).transformException { throwable =>
+          new TestException
+        },
+        Future(true))
+    }
   }
 
   def chainedSuccessFunc(throwable: Throwable): Future[Unit] = {

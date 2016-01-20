@@ -174,6 +174,15 @@ object future {
       }
     }
 
+    def transformException(f: Throwable => Throwable): Future[A] = {
+      future transform {
+        case Throw(t) =>
+          Future.exception(f(t))
+        case _ =>
+          future
+      }
+    }
+
     def toOption: Future[Option[A]] = {
       future map Some.apply handle {
         case NonFatal(e) =>

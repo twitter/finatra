@@ -55,6 +55,19 @@ class HttpClientIntegrationTest extends IntegrationTest {
     }
   }
 
+  "executeJson w/ expected response but unparsable body" in {
+    val mockResponse = Response(Status.Ok)
+    mockResponse.setContentString("{}")
+    inMemoryHttpService.mockGet("/foo", mockResponse)
+    val request = RequestBuilder.get("/foo")
+
+    val e = intercept[HttpClientException] {
+      Await.result(
+        httpClient.executeJson[Int](request))
+    }
+    assert(e.getMessage.contains("com.fasterxml.jackson.databind.JsonMappingException"))
+  }
+
   "get" in {
     val mockResponse = Response(Status.Ok)
     mockResponse.setContentString("{}")
