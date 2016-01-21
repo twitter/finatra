@@ -68,7 +68,7 @@ class ExampleServer extends HttpServer {
 
 Here we are adding *by type* allowing the framework to handle class instantiation.
 
-## <a class="anchor" name="controllers-and-routing" href="controllers-and-routing">Controllers and Routing</a>
+## <a class="anchor" name="controllers-and-routing" href="#controllers-and-routing">Controllers and Routing</a>
 ===============================
 
 Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a [`com.twitter.finagle.http.Request`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala) or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a [`com.twitter.finagle.http.Response`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala).
