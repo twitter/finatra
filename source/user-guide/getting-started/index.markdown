@@ -107,16 +107,19 @@ In Finatra, we also provide a way to override the objects provided on the object
 Flag values can be injected into classes (and provider methods), by using the `@Flag` annotation:
 
 ```scala
-class MyService @Inject()(
-  @Flag("key") key: String) {
-}
-
 class MyModule extends TwitterModule {
+  flag("key", "default", "The key to use")
+
   @Provides
   @Singleton
-  def providesFoo(@Flag("key") key: String) = {
+  def providesFoo(
+    @Flag("key") key: String) = {
     new Foo(key)
   }
+}
+
+class MyService @Inject()(
+  @Flag("key") key: String) {
 }
 ```
 <div></div>
@@ -125,7 +128,7 @@ class MyModule extends TwitterModule {
 
 ```scala
 object MyModule1 extends TwitterModule {
-  val key = flag("key", "defaultkey", "The key to use.")
+  val key = flag("key", "default", "The key to use")
 
   @Singleton
   @Provides
@@ -140,8 +143,22 @@ Use the `-help` flag to see usage for running a Finatra server, e.g.
 
 ```bash
 $ java -jar finatra-hello-world-assembly-2.0.0.jar -help
+HelloWorldServer
+  -alarm_durations='1.seconds,5.seconds': 2 alarm durations
+  -help='false': Show this help
+  -admin.port=':8080': Admin http server port
+  -bind=':0': Network interface to use
+  -log.level='INFO': Log level
+  -log.output='/dev/stderr': Output file
+  -key='default': The key to use
 ```
 <div></div>
+
+Flags are set by passing them as arguments to your java application &mdash; as seen above (`-help` is a flag), e.g.,
+
+```bash
+$ java -jar finatra-hello-world-assembly-2.0.0.jar -key=value
+```
 
 ### <a class="anchor" name="futures" href="#futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
 ===============================

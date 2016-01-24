@@ -30,6 +30,13 @@ Additionally, it is recommend to use local filesystem serving *only during testi
 
 For changes from Finatra v1.x static files behavior see the [Static Files](https://github.com/twitter/finatra/blob/master/http/Version1MigrationGuide.md#v1-static-files) section in the [Version 1 Migration Guide](https://github.com/twitter/finatra/blob/master/http/Version1MigrationGuide.md).
 
+
+To set a flag value, pass the flag and it's value as a argument to your server:
+
+```bash
+$ java -jar finatra-hello-world-assembly-2.0.0.jar -doc.root=/namespace
+```
+
 ### File Serving Examples
 
 ```scala
