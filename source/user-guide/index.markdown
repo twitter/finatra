@@ -6,6 +6,8 @@ sharing: false
 footer: true
 ---
 
+Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [TwitterServer](http://twitter.github.io/twitter-server/) and it is highly recommend that you familiarize yourself with those frameworks before getting started.
+
 ### Topics:
 
 - [Getting Started](/finatra/user-guide/getting-started)
