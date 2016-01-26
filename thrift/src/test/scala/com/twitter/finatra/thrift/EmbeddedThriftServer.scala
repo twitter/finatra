@@ -44,6 +44,7 @@ class EmbeddedThriftServer(
     useSocksProxy,
     skipAppMain,
     verbose = verbose,
+    disableTestLogging = disableTestLogging,
     maxStartupTimeSeconds = maxStartupTimeSeconds)
   with ThriftClient {
 

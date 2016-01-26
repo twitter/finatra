@@ -80,6 +80,7 @@ class EmbeddedTwitterServer(
     skipAppMain = skipAppMain,
     stage = stage,
     verbose = verbose,
+    disableTestLogging = disableTestLogging,
     maxStartupTimeSeconds = maxStartupTimeSeconds) {
 
   /* Additional Constructors */
