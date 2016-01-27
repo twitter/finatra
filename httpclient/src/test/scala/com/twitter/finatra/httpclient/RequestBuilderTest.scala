@@ -77,6 +77,39 @@ class RequestBuilderTest extends Test {
     assertRequestWithBody(Head, request)
   }
 
+  "trace" in {
+    val request = RequestBuilder.trace("/abc")
+      .body("testbody", "foo/bar")
+      .headers(Seq("c" -> "3"))
+      .headers(
+        "a" -> "1",
+        "b" -> "2")
+
+    assertRequestWithBody(Trace, request)
+  }
+
+  "connect" in {
+    val request = RequestBuilder.connect("/abc")
+      .body("testbody", "foo/bar")
+      .headers(Seq("c" -> "3"))
+      .headers(
+        "a" -> "1",
+        "b" -> "2")
+
+    assertRequestWithBody(Connect, request)
+  }
+
+  "options" in {
+    val request = RequestBuilder.options("/abc")
+      .body("testbody", "foo/bar")
+      .headers(Seq("c" -> "3"))
+      .headers(
+        "a" -> "1",
+        "b" -> "2")
+
+    assertRequestWithBody(Options, request)
+  }
+
   "post json" in {
     val request = RequestBuilder.post("/abc")
       .body("{}")
