@@ -1,18 +1,16 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.converter.thriftscala.Converter
-import com.twitter.converter.thriftscala.Converter.{MoreThanTwentyTwoArgs, Uppercase}
-import com.twitter.finagle.{Service, TimeoutException}
+import com.twitter.converter.thriftscala.Converter.Uppercase
+import com.twitter.finagle.Service
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.codegen.MethodFilters
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
-import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.RequestTimeout
-import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerError
-import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
-import com.twitter.inject.Logging
+import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
+import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
-import com.twitter.util.{Await, Future, NonFatal}
+import com.twitter.util.{Await, Future}
 
 class EmbeddedThriftServerIntegrationTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(new ConverterServer)
@@ -55,6 +53,7 @@ class EmbeddedThriftServerIntegrationTest extends FeatureTest {
   */
 }
 
+// @deprecated("Thrift services should be defined as a Thrift controller", "2016-01-26")
 class ConverterServer extends ThriftServer {
   override val modules = Seq(ClientIdWhitelistModule)
 
@@ -68,6 +67,7 @@ class ConverterServer extends ThriftServer {
   }
 }
 
+// @deprecated("Thrift services should be defined as a Thrift controller", "2016-01-26")
 class ConverterImpl extends Converter[Future] {
   override def uppercase(msg: String): Future[String] = {
     if (msg == "fail")
@@ -80,6 +80,7 @@ class ConverterImpl extends Converter[Future] {
     Future.value("foo")
 }
 
+// @deprecated("Thrift services should be filtered with ThriftRouter#filter or ThriftRouter#typeAgnosticFilter", "2016-01-26")
 object FilteredConverter {
   def create(filters: MethodFilters, underlying: Converter[Future]) = {
     new Converter[Future] {
@@ -88,29 +89,6 @@ object FilteredConverter {
         // scala doesn't support functions with more than 22 args
         //filters.create(MoreThanTwentyTwoArgs)(Service.mk(underlying.moreThanTwentyTwoArgs))(one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twentyone, twentytwo, twentythree)
         ???
-    }
-  }
-}
-
-class ExceptionTranslationFilter
-  extends ThriftFilter
-  with Logging {
-
-  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
-    service(request).rescue {
-      case e: TimeoutException =>
-        Future.exception(
-          ClientError(RequestTimeout, e.getMessage))
-      case e: ClientError =>
-        Future.exception(e)
-      case e: UnknownClientIdError =>
-        Future.exception(e)
-      case e: NoClientIdError =>
-        Future.exception(e)
-      case NonFatal(e) =>
-        error("Unhandled exception", e)
-        Future.exception(
-          ServerError(InternalServerError, e.getMessage))
     }
   }
 }

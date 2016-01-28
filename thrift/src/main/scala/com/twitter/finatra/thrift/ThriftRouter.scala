@@ -26,8 +26,15 @@ class ThriftRouter @Inject()(
     this
   }
 
+  /** Add global filter used for all requests */
   def filter(clazz: Class[_ <: ThriftFilter]) = {
     filterChain = filterChain andThen injector.instance(clazz)
+    this
+  }
+
+  /** Add global filter used for all requests */
+  def filter(filter: ThriftFilter) = {
+    filterChain = filterChain andThen filter
     this
   }
 
@@ -37,7 +44,7 @@ class ThriftRouter @Inject()(
     this
   }
 
-  // TODO: deprecate this
+  // @deprecated("Thrift services should be filtered with #filter or #typeAgnosticFilter.", "2016-01-26")
   def add[T <: ThriftService : Manifest](
     filterFactory: (MethodFilters, T) => ThriftService) {
 

@@ -2,6 +2,7 @@ package com.twitter.finatra.thrift
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.{ListeningServer, ThriftMux}
+import com.twitter.finatra.utils.Handler
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Future, Time}
 
@@ -38,6 +39,15 @@ trait ThriftServer extends TwitterServer {
   /* Overrides */
 
   override def thriftPort = Option(thriftServer) map PortUtils.getPort
+
+  /* Protected */
+
+  /* TODO: we want to move this into com.twitter.inject.TwitterServer
+     but that requires moving com.twitter.finatra.utils.Handler
+     trait to a not-yet-created inject/inject-utils.
+  protected def run[T <: Handler : Manifest]() {
+    injector.instance[T].handle()
+  }*/
 
   /* Private */
 

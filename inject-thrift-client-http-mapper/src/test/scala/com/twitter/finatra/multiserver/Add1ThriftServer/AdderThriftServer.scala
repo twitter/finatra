@@ -12,6 +12,6 @@ class AdderThriftServer extends ThriftServer {
       .filter[ThriftMDCFilter]
       .filter[AccessLoggingFilter]
       .filter[StatsFilter]
-      .add[AdderImpl](FilteredAdder.create)
+      .add[AdderController]
   }
 }

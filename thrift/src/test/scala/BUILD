@@ -5,7 +5,12 @@ junit_tests(name='scala',
     'finatra/thrift:test-deps',
   ],
   fatal_warnings=True,
-  sources=globs('com/twitter/finatra/thrift/tests/*.scala'),
+  sources=globs(
+    'com/twitter/finatra/thrift/tests/*.scala',
+    'com/twitter/finatra/thrift/tests/doeverything/*.scala',
+    'com/twitter/finatra/thrift/tests/doeverything/controllers/*.scala',
+    'com/twitter/finatra/thrift/tests/doeverything/filters/*.scala',
+  ),
   resources=[
     'finatra/thrift/src/test/resources'
   ]

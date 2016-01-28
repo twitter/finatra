@@ -1,10 +1,10 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.converter.thriftscala.Converter
-import com.twitter.finagle.Service
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
+import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
@@ -59,18 +59,19 @@ class ConverterControllerServer extends ThriftServer {
   }
 }
 
-class ConverterController extends Controller with Converter.BaseServiceIface {
+class ConverterController
+  extends Controller
+  with Converter.BaseServiceIface {
+  import com.twitter.converter.thriftscala.Converter._
 
-  val uppercase = handle(Converter.Uppercase) { (msg: String) =>
-    if (msg == "fail")
+  val uppercase = handle(Uppercase) { args: Uppercase.Args =>
+    if (args.msg == "fail")
       Future.exception(new Exception("oops"))
     else
-      Future.value(msg.toUpperCase)
+      Future.value(args.msg.toUpperCase)
   }
 
-  val moreThanTwentyTwoArgs = handleSvc(Converter.MoreThanTwentyTwoArgs) { new Service[Converter.MoreThanTwentyTwoArgs.Args, Converter.MoreThanTwentyTwoArgs.Result] {
-    def apply(args: Converter.MoreThanTwentyTwoArgs.Args): Future[Converter.MoreThanTwentyTwoArgs.Result] = {
-      Future.value(Converter.MoreThanTwentyTwoArgs.Result(Some("foo")))
-    }
-  }}
+  val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { args : MoreThanTwentyTwoArgs.Args =>
+    Future.value("foo")
+  }
 }
