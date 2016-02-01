@@ -2,9 +2,10 @@ package com.twitter.finatra.http.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
+import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.inject.server.{AsyncStreamUtils, EmbeddedTwitterServer}
+import com.twitter.inject.server.EmbeddedTwitterServer
 import com.twitter.io.Buf
 import com.twitter.logging.Logger
 import com.twitter.util.Await
@@ -135,7 +136,7 @@ trait HttpTest
 
   implicit class RichResponse(response: Response) {
     def asyncStrings = {
-      AsyncStreamUtils.readerToAsyncStream(response.reader) map { case Buf.Utf8(str) =>
+      AsyncStream.fromReader(response.reader) map { case Buf.Utf8(str) =>
         str
       }
     }
