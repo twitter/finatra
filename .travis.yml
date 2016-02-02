@@ -5,7 +5,8 @@ scala:
   - 2.11.7
 
 jdk:
-  - openjdk7
+  # Enable once https://github.com/travis-ci/travis-ci/issues/5227 is fixed.
+  #- openjdk7
   - oraclejdk7
   - oraclejdk8
 
