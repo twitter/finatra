@@ -387,11 +387,34 @@ class EmbeddedHttpServer(
     withJsonBody: String = null,
     secure: Option[Boolean] = None): Response = {
 
+    httpFormPostMultipart(
+      path,
+      paramsToElements(params),
+      multipart,
+      routeToAdminServer,
+      headers,
+      andExpect,
+      withBody,
+      withJsonBody,
+      secure)
+  }
+
+  def httpFormPostMultipart(
+    path: String,
+    params: Seq[FormElement],
+    multipart: Boolean = true,
+    routeToAdminServer: Boolean = false,
+    headers: Map[String, String] = Map.empty,
+    andExpect: Status = Status.Ok,
+    withBody: String = null,
+    withJsonBody: String = null,
+    secure: Option[Boolean] = None): Response = {
+
     val request = RequestBuilder().
       url(normalizeURL(path)).
       addHeaders(headers).
-      add(paramsToElements(params)).
-      buildFormPost(multipart = multipart)
+      add(params).
+      buildFormPost(multipart)
 
     jsonAwareHttpExecute(
       request,
