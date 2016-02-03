@@ -8,21 +8,27 @@ object HttpHeaders {
 
   /**
    * HTTP {@code Date} header field name.
-   * @see <a href="http://tools.ietf.org/html/rfc7231#section-7.1.1.2">Section 7.1.1.2</a>
+   * @see <a href="https://tools.ietf.org/html/rfc7231#section-7.1.1.2">Section 7.1.1.2</a>
    */
   val Date = "Date"
 
   /**
    * HTTP {@code Server} header field name.
-   * @see <a href="http://tools.ietf.org/html/rfc7231#section-7.4.2">Section 7.4.2</a>
+   * @see <a href="https://tools.ietf.org/html/rfc7231#section-7.4.2">Section 7.4.2</a>
    */
   val Server = "Server"
 
   /**
    * HTTP {@code Accept} header field name.
-   * @see <href="http://tools.ietf.org/html/rfc7231#section-5.3.2">Section 5.3.2</a>
+   * @see <a href="https://tools.ietf.org/html/rfc7231#section-5.3.2">Section 5.3.2</a>
    */
   val Accept = "Accept"
+
+  /**
+   * HTTP {@code Retry-After} header field name.
+   * @see <a href="https://tools.ietf.org/html/rfc7231#section-7.1.3">Section 7.1.3</a>
+   */
+  val RetryAfter = "Retry-After"
 
   val GMT = DateTimeZone.forID("GMT")
 
