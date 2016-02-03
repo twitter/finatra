@@ -137,6 +137,10 @@ class DoEverythingController @Inject()(
         TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
+  post("/formPostMultipart") { request: Request =>
+    RequestUtils.multiParams(request)("file").contentType
+  }
+
   post("/groups/:group_id/users") { user: TestUserWithGroupIdFromRoute =>
     response.created(user)
   }
