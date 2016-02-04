@@ -24,10 +24,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagle = "6.31.0" + suffix
-  val scrooge = "4.3.0" + suffix
-  val twitterServer = "1.16.0" + suffix
-  val util = "6.30.0" + suffix
+  val finagle = "6.33.0" + suffix
+  val scrooge = "4.5.0" + suffix
+  val twitterServer = "1.18.0" + suffix
+  val util = "6.32.0" + suffix
 
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
@@ -452,6 +452,7 @@ lazy val thrift = project.
   ).
   dependsOn(
     injectServer,
+    utils,
     injectServer % "test->test",
     slf4j % "test->test"
   )
