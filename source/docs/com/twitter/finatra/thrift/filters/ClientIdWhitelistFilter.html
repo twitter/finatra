@@ -45,7 +45,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ClientIdWhitelistFilter</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+        <span class="name">ClientIdWhitelistFilter</span><span class="result"> extends <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
       </span>
       </h4>
       
@@ -54,7 +54,7 @@
               
         </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>], <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>], (<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]) ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter"><span>ClientIdWhitelistFilter</span></li><li class="in" name="com.twitter.finagle.SimpleFilter"><span>SimpleFilter</span></li><li class="in" name="com.twitter.finagle.Filter"><span>Filter</span></li><li class="in" name="scala.Function2"><span>Function2</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter"><span>ClientIdWhitelistFilter</span></li><li class="in" name="com.twitter.finatra.thrift.ThriftFilter"><span>ThriftFilter</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -171,108 +171,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finagle.Filter#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen(factory:com.twitter.finagle.ServiceFactory[ReqOut,RepIn]):com.twitter.finagle.ServiceFactory[ReqIn,RepOut]"></a>
-      <a id="andThen(ServiceFactory[ThriftRequest,Any]):ServiceFactory[ThriftRequest,Any]"></a>
+    </li><li name="com.twitter.finatra.thrift.ThriftFilter#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen(next:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftFilter"></a>
+      <a id="andThen(ThriftFilter):ThriftFilter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="params">(<span name="factory">factory: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.ServiceFactory" class="extype" target="_top">ServiceFactory</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.ServiceFactory" class="extype" target="_top">ServiceFactory</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+        <span class="name">andThen</span><span class="params">(<span name="next">next: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>)</span><span class="result">: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@andThen(factory:com.twitter.finagle.ServiceFactory[ReqOut,RepIn]):com.twitter.finagle.ServiceFactory[ReqIn,RepOut]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@andThen(next:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftFilter" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Filter</dd></dl></div>
-    </li><li name="com.twitter.finagle.Filter#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen(f:ReqOut=&gt;com.twitter.util.Future[RepIn]):ReqIn=&gt;com.twitter.util.Future[RepOut]"></a>
-      <a id="andThen((ThriftRequest)⇒Future[Any]):(ThriftRequest)⇒Future[Any]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">andThen</span><span class="params">(<span name="f">f: (<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>) ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>)</span><span class="result">: (<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>) ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@andThen(f:ReqOut=&gt;com.twitter.util.Future[RepIn]):ReqIn=&gt;com.twitter.util.Future[RepOut]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Filter</dd></dl></div>
-    </li><li name="com.twitter.finagle.Filter#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen(service:com.twitter.finagle.Service[ReqOut,RepIn]):com.twitter.finagle.Service[ReqIn,RepOut]"></a>
-      <a id="andThen(Service[ThriftRequest,Any]):Service[ThriftRequest,Any]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">andThen</span><span class="params">(<span name="service">service: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@andThen(service:com.twitter.finagle.Service[ReqOut,RepIn]):com.twitter.finagle.Service[ReqIn,RepOut]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Filter</dd></dl></div>
-    </li><li name="com.twitter.finagle.Filter#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen[Req2,Rep2](next:com.twitter.finagle.Filter[ReqOut,RepIn,Req2,Rep2]):com.twitter.finagle.Filter[ReqIn,RepOut,Req2,Rep2]"></a>
-      <a id="andThen[Req2,Rep2](Filter[ThriftRequest,Any,Req2,Rep2]):Filter[ThriftRequest,Any,Req2,Rep2]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">andThen</span><span class="tparams">[<span name="Req2">Req2</span>, <span name="Rep2">Rep2</span>]</span><span class="params">(<span name="next">next: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="com.twitter.finagle.Filter.andThen.Req2">Req2</span>, <span class="extype" name="com.twitter.finagle.Filter.andThen.Rep2">Rep2</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="com.twitter.finagle.Filter.andThen.Req2">Req2</span>, <span class="extype" name="com.twitter.finagle.Filter.andThen.Rep2">Rep2</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@andThen[Req2,Rep2](next:com.twitter.finagle.Filter[ReqOut,RepIn,Req2,Rep2]):com.twitter.finagle.Filter[ReqIn,RepOut,Req2,Rep2]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Filter</dd></dl></div>
-    </li><li name="com.twitter.finagle.Filter#andThenIf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThenIf[Req2&gt;:ReqOut,Rep2&lt;:RepIn](condAndFilter:(Boolean,com.twitter.finagle.Filter[ReqOut,RepIn,Req2,Rep2])):com.twitter.finagle.Filter[ReqIn,RepOut,Req2,Rep2]"></a>
-      <a id="andThenIf[Req2&gt;:ThriftRequest,Rep2&lt;:Any]((Boolean,Filter[ThriftRequest,Any,Req2,Rep2])):Filter[ThriftRequest,Any,Req2,Rep2]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">andThenIf</span><span class="tparams">[<span name="Req2">Req2 &gt;: <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a></span>, <span name="Rep2">Rep2 &lt;: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>]</span><span class="params">(<span name="condAndFilter">condAndFilter: (<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="com.twitter.finagle.Filter.andThenIf.Req2">Req2</span>, <span class="extype" name="com.twitter.finagle.Filter.andThenIf.Rep2">Rep2</span>])</span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <span class="extype" name="com.twitter.finagle.Filter.andThenIf.Req2">Req2</span>, <span class="extype" name="com.twitter.finagle.Filter.andThenIf.Rep2">Rep2</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@andThenIf[Req2&gt;:ReqOut,Rep2&lt;:RepIn](condAndFilter:(Boolean,com.twitter.finagle.Filter[ReqOut,RepIn,Req2,Rep2])):com.twitter.finagle.Filter[ReqIn,RepOut,Req2,Rep2]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Filter</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply(request:com.twitter.finatra.thrift.ThriftRequest,service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest,Any]):com.twitter.util.Future[Any]"></a>
-      <a id="apply(ThriftRequest,Service[ThriftRequest,Any]):Future[Any]"></a>
+      <a id="apply[T,U](request:com.twitter.finatra.thrift.ThriftRequest[T],service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest[T],U]):com.twitter.util.Future[U]"></a>
+      <a id="apply[T,U](ThriftRequest[T],Service[ThriftRequest[T],U]):Future[U]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">(<span name="request">request: <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a></span>, <span name="service">service: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span name="request">request: <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter.apply.T">T</span>]</span>, <span name="service">service: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter.apply.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter.apply.U">U</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter.apply.U">U</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@apply(request:com.twitter.finatra.thrift.ThriftRequest,service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest,Any]):com.twitter.util.Future[Any]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@apply[T,U](request:com.twitter.finatra.thrift.ThriftRequest[T],service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest[T],U]):com.twitter.util.Future[U]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter">ClientIdWhitelistFilter</a> → Filter → Function2</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter">ClientIdWhitelistFilter</a> → <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -311,26 +243,6 @@
       
       <span class="defval" name="classOf[java.lang.CloneNotSupportedException]">...</span>
     </span>)</span>
-              
-        </dd></dl></div>
-    </li><li name="scala.Function2#curried" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="curried:T1=&gt;(T2=&gt;R)"></a>
-      <a id="curried:(ThriftRequest)⇒(Service[ThriftRequest,Any])⇒Future[Any]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">curried</span><span class="result">: (<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>) ⇒ (<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]) ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@curried:T1=&gt;(T2=&gt;R)" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2</dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
               
         </dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -509,7 +421,24 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Function2#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.ThriftFilter#toFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFilter[T,Rep]:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest[T],Rep,com.twitter.finatra.thrift.ThriftRequest[T],Rep]"></a>
+      <a id="toFilter[T,Rep]:Filter[ThriftRequest[T],Rep,ThriftRequest[T],Rep]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toFilter</span><span class="tparams">[<span name="T">T</span>, <span name="Rep">Rep</span>]</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.Rep">Rep</span>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.Rep">Rep</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@toFilter[T,Rep]:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest[T],Rep,com.twitter.finatra.thrift.ThriftRequest[T],Rep]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
+    </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
       <h4 class="signature">
@@ -525,27 +454,7 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2 → AnyRef → Any</dd></dl></div>
-    </li><li name="scala.Function2#tupled" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="tupled:((T1,T2))=&gt;R"></a>
-      <a id="tupled:((ThriftRequest,Service[ThriftRequest,Any]))⇒Future[Any]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">tupled</span><span class="result">: ((<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>])) ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter@tupled:((T1,T2))=&gt;R" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2</dd><dt>Annotations</dt><dd>
-                <span class="name">@unspecialized</span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -624,12 +533,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finagle.SimpleFilter">
-              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</h3>
-            </div><div class="parent" name="com.twitter.finagle.Filter">
-              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</h3>
-            </div><div class="parent" name="scala.Function2">
-              <h3>Inherited from (<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]) ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</h3>
+        <div class="parent" name="com.twitter.finatra.thrift.ThriftFilter">
+              <h3>Inherited from <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

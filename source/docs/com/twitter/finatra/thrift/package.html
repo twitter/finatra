@@ -66,7 +66,24 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.ThriftClientExceptionMapper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.thrift.Controller" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ControllerextendsLogging"></a>
+      <a id="Controller:Controller"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Controller.html"><span class="name">Controller</span></a><span class="result"> extends <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.package@ControllerextendsLogging" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.thrift.ThriftClientExceptionMapper" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ThriftClientExceptionMapperextendsExceptionMapper[com.twitter.inject.thrift.ThriftClientException]"></a>
       <a id="ThriftClientExceptionMapper:ThriftClientExceptionMapper"></a>
       <h4 class="signature">
@@ -86,25 +103,44 @@
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftFilter" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ThriftFilterextendsAnyRef"></a>
+      <a id="ThriftFilter:ThriftFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ThriftFilter.html"><span class="name">ThriftFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.package@ThriftFilterextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T.</p><div class="fullcomment"><div class="comment cmt"><p>A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T.  Such filters
+can operate on any ThriftRequest.
+</p></div></div>
     </li><li name="com.twitter.finatra.thrift.ThriftRequest" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ThriftRequestextendsProductwithSerializable"></a>
-      <a id="ThriftRequest:ThriftRequest"></a>
+      <a id="ThriftRequest[T]extendsProductwithSerializable"></a>
+      <a id="ThriftRequest[T]:ThriftRequest[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="ThriftRequest.html"><span class="name">ThriftRequest</span></a><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.tracing.TraceId" class="extype" target="_top">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.thrift.ClientId" class="extype" target="_top">ClientId</a>]</span>, <span name="args">args: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <a href="ThriftRequest.html"><span class="name">ThriftRequest</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.tracing.TraceId" class="extype" target="_top">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.thrift.ClientId" class="extype" target="_top">ClientId</a>]</span>, <span name="args">args: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.package@ThriftRequestextendsProductwithSerializable" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.package@ThriftRequest[T]extendsProductwithSerializable" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="com.twitter.finatra.thrift.ThriftRouter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ThriftRouterextendsAnyRef"></a>
+      <a id="ThriftRouterextendsLogging"></a>
       <a id="ThriftRouter:ThriftRouter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -112,10 +148,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ThriftRouter.html"><span class="name">ThriftRouter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="ThriftRouter.html"><span class="name">ThriftRouter</span></a><span class="result"> extends <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.package@ThriftRouterextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.package@ThriftRouterextendsLogging" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -147,7 +183,24 @@
 
         <div id="values" class="values members">
               <h3>Value Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.codegen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.thrift.ThriftFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ThriftFilter"></a>
+      <a id="ThriftFilter:ThriftFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ThriftFilter$.html"><span class="name">ThriftFilter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.package@ThriftFilter" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.thrift.codegen" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="codegen"></a>
       <a id="codegen:codegen"></a>
       <h4 class="signature">

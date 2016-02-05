@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftRequest</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.tracing.TraceId" class="extype" target="_top">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.thrift.ClientId" class="extype" target="_top">ClientId</a>]</span>, <span name="args">args: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">ThriftRequest</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.tracing.TraceId" class="extype" target="_top">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.thrift.ClientId" class="extype" target="_top">ClientId</a>]</span>, <span name="args">args: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,18 +89,18 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.thrift.ThriftRequest#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(methodName:String,traceId:com.twitter.finagle.tracing.TraceId,clientId:Option[com.twitter.finagle.thrift.ClientId],args:Any):com.twitter.finatra.thrift.ThriftRequest"></a>
-      <a id="&lt;init&gt;:ThriftRequest"></a>
+      <a id="&lt;init&gt;(methodName:String,traceId:com.twitter.finagle.tracing.TraceId,clientId:Option[com.twitter.finagle.thrift.ClientId],args:T):com.twitter.finatra.thrift.ThriftRequest[T]"></a>
+      <a id="&lt;init&gt;:ThriftRequest[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftRequest</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.tracing.TraceId" class="extype" target="_top">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.thrift.ClientId" class="extype" target="_top">ClientId</a>]</span>, <span name="args">args: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span>
+        <span class="name">ThriftRequest</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.tracing.TraceId" class="extype" target="_top">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.thrift.ClientId" class="extype" target="_top">ClientId</a>]</span>, <span name="args">args: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRequest@&lt;init&gt;(methodName:String,traceId:com.twitter.finagle.tracing.TraceId,clientId:Option[com.twitter.finagle.thrift.ClientId],args:Any):com.twitter.finatra.thrift.ThriftRequest" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRequest@&lt;init&gt;(methodName:String,traceId:com.twitter.finagle.tracing.TraceId,clientId:Option[com.twitter.finagle.thrift.ClientId],args:T):com.twitter.finatra.thrift.ThriftRequest[T]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -166,18 +166,18 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftRequest#args" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="args:Any"></a>
-      <a id="args:Any"></a>
+      <a id="args:T"></a>
+      <a id="args:T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">args</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>
+        <span class="name">args</span><span class="result">: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRequest@args:Any" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRequest@args:T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

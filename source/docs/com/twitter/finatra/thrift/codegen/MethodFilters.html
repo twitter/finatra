@@ -45,7 +45,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">MethodFilters</span><span class="params">(<span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="commonFilter">commonFilter: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">MethodFilters</span><span class="params">(<span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="commonFilter">commonFilter: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
       
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.thrift.codegen.MethodFilters#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,commonFilter:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest,Any,com.twitter.finatra.thrift.ThriftRequest,Any]):com.twitter.finatra.thrift.codegen.MethodFilters"></a>
+      <a id="&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,commonFilter:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.codegen.MethodFilters"></a>
       <a id="&lt;init&gt;:MethodFilters"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">MethodFilters</span><span class="params">(<span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="commonFilter">commonFilter: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>)</span>
+        <span class="name">MethodFilters</span><span class="params">(<span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="commonFilter">commonFilter: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.codegen.MethodFilters@&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,commonFilter:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest,Any,com.twitter.finatra.thrift.ThriftRequest,Any]):com.twitter.finatra.thrift.codegen.MethodFilters" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.codegen.MethodFilters@&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,commonFilter:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.codegen.MethodFilters" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -206,18 +206,18 @@
               
         </dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.codegen.MethodFilters#commonFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="commonFilter:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest,Any,com.twitter.finatra.thrift.ThriftRequest,Any]"></a>
-      <a id="commonFilter:Filter[ThriftRequest,Any,ThriftRequest,Any]"></a>
+      <a id="commonFilter:com.twitter.finatra.thrift.ThriftFilter"></a>
+      <a id="commonFilter:ThriftFilter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">commonFilter</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a>]</span>
+        <span class="name">commonFilter</span><span class="result">: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.codegen.MethodFilters@commonFilter:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest,Any,com.twitter.finatra.thrift.ThriftRequest,Any]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.codegen.MethodFilters@commonFilter:com.twitter.finatra.thrift.ThriftFilter" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

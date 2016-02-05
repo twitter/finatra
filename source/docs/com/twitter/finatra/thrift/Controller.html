@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ThriftRouter - com.twitter.finatra.thrift.ThriftRouter</title>
-          <meta name="description" content="ThriftRouter - com.twitter.finatra.thrift.ThriftRouter" />
-          <meta name="keywords" content="ThriftRouter com.twitter.finatra.thrift.ThriftRouter" />
+          <title>Controller - com.twitter.finatra.thrift.Controller</title>
+          <meta name="description" content="Controller - com.twitter.finatra.thrift.Controller" />
+          <meta name="keywords" content="Controller com.twitter.finatra.thrift.Controller" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../index.html';
-            var hash = 'com.twitter.finatra.thrift.ThriftRouter';
+            var hash = 'com.twitter.finatra.thrift.Controller';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -28,12 +28,12 @@
         </head>
         <body class="type">
       <div id="definition">
-        <img alt="Class" src="../../../../lib/class_big.png" />
+        <img alt="Trait" src="../../../../lib/trait_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="com">com</a>.<a href="../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="package.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></p>
-        <h1>ThriftRouter</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>Controller</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="com.twitter.finatra.thrift">package thrift</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -42,17 +42,14 @@
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">class</span>
+        <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftRouter</span><span class="result"> extends <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <span class="name">Controller</span><span class="result"> extends <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Singleton</span><span class="args">()</span>
-              
-        </dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <span class="extype" name="com.twitter.scrooge.ToThriftService">ToThriftService</span></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">Logging</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -72,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.twitter.finatra.thrift.ThriftRouter"><span>ThriftRouter</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="grizzled.slf4j.Logging"><span>Logging</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.twitter.finatra.thrift.Controller"><span>Controller</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="grizzled.slf4j.Logging"><span>Logging</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -89,30 +86,7 @@
 
       <div id="template">
         <div id="allMembers">
-        <div id="constructors" class="members">
-              <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.thrift.ThriftRouter#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,injector:com.twitter.inject.Injector):com.twitter.finatra.thrift.ThriftRouter"></a>
-      <a id="&lt;init&gt;:ThriftRouter"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">new</span>
-      </span>
-      <span class="symbol">
-        <span class="name">ThriftRouter</span><span class="params">(<span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="injector">injector: <a href="../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@&lt;init&gt;(statsReceiver:com.twitter.finagle.stats.StatsReceiver,injector:com.twitter.inject.Injector):com.twitter.finatra.thrift.ThriftRouter" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Inject</span><span class="args">()</span>
-              
-        </dd></dl></div>
-    </li></ol>
-            </div>
+        
 
         
 
@@ -132,7 +106,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -149,7 +123,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@##():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@##():Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -166,45 +140,11 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftRouter#add" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService](implicitevidence$4:Manifest[C]):Unit"></a>
-      <a id="add[C&lt;:ControllerwithToThriftService](Manifest[C]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="tparams">[<span name="C">C &lt;: <a href="Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <span class="extype" name="com.twitter.scrooge.ToThriftService">ToThriftService</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.ThriftRouter.add.C">C</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService](implicitevidence$4:Manifest[C]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li><li name="com.twitter.finatra.thrift.ThriftRouter#add" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="add[T&lt;:com.twitter.scrooge.ThriftService](filterFactory:(com.twitter.finatra.thrift.codegen.MethodFilters,T)=&gt;com.twitter.scrooge.ThriftService)(implicitevidence$3:Manifest[T]):Unit"></a>
-      <a id="add[T&lt;:ThriftService]((MethodFilters,T)⇒ThriftService)(Manifest[T]):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="com.twitter.scrooge.ThriftService">ThriftService</span></span>]</span><span class="params">(<span name="filterFactory">filterFactory: (<a href="codegen/MethodFilters.html" class="extype" name="com.twitter.finatra.thrift.codegen.MethodFilters">MethodFilters</a>, <span class="extype" name="com.twitter.finatra.thrift.ThriftRouter.add.T">T</span>) ⇒ <span class="extype" name="com.twitter.scrooge.ThriftService">ThriftService</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.ThriftRouter.add.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@add[T&lt;:com.twitter.scrooge.ThriftService](filterFactory:(com.twitter.finatra.thrift.codegen.MethodFilters,T)=&gt;com.twitter.scrooge.ThriftService)(implicitevidence$3:Manifest[T]):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -217,7 +157,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -234,7 +174,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@clone():Object" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -257,7 +197,7 @@
         <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -274,7 +214,7 @@
         <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -291,7 +231,7 @@
         <span class="name">debugFutureResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -309,7 +249,7 @@
         <span class="name">debugResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@debugResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@debugResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -327,7 +267,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -344,7 +284,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -361,7 +301,7 @@
         <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -378,7 +318,7 @@
         <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -395,63 +335,12 @@
         <span class="name">errorResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@errorResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@errorResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Log an error msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an error msg that contains the result of the passed in func.
 </p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftRouter#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="filter(filter:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftRouter"></a>
-      <a id="filter(ThriftFilter):ThriftRouter"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="filter">filter: <a href="ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.ThriftRouter">ThriftRouter</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@filter(filter:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftRouter" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Add global filter used for all requests</p>
-    </li><li name="com.twitter.finatra.thrift.ThriftRouter#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="filter(clazz:Class[_&lt;:com.twitter.finatra.thrift.ThriftFilter]):com.twitter.finatra.thrift.ThriftRouter"></a>
-      <a id="filter(Class[_&lt;:ThriftFilter]):ThriftRouter"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.ThriftRouter">ThriftRouter</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@filter(clazz:Class[_&lt;:com.twitter.finatra.thrift.ThriftFilter]):com.twitter.finatra.thrift.ThriftRouter" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Add global filter used for all requests</p>
-    </li><li name="com.twitter.finatra.thrift.ThriftRouter#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter](implicitevidence$1:Manifest[FilterType]):com.twitter.finatra.thrift.ThriftRouter"></a>
-      <a id="filter[FilterType&lt;:ThriftFilter](Manifest[FilterType]):ThriftRouter"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">filter</span><span class="tparams">[<span name="FilterType">FilterType &lt;: <a href="ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.ThriftRouter.filter.FilterType">FilterType</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.ThriftRouter">ThriftRouter</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter](implicitevidence$1:Manifest[FilterType]):com.twitter.finatra.thrift.ThriftRouter" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Add global filter used for all requests</p>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -464,7 +353,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -487,11 +376,28 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.Controller#handle" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handle[Args,Result](method:com.twitter.scrooge.ThriftMethod)(f:method.FunctionType)(implicitargsEv:=:=[Args,method.Args],implicitresultEv:=:=[Result,method.Result],implicitsvcEv:=:=[method.ServiceType,com.twitter.finagle.Service[Args,Result]]):com.twitter.finatra.thrift.internal.ThriftMethodService[Args,Result]"></a>
+      <a id="handle[Args,Result](ThriftMethod)(FunctionType)(=:=[Args,Args],=:=[Result,Result],=:=[ServiceType,Service[Args,Result]]):ThriftMethodService[Args,Result]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handle</span><span class="tparams">[<span name="Args">Args</span>, <span name="Result">Result</span>]</span><span class="params">(<span name="method">method: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>)</span><span class="params">(<span name="f">f: <span class="extype" name="com.twitter.scrooge.ThriftMethod.FunctionType">FunctionType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="argsEv">argsEv: <span class="extype" name="scala.Predef.=:=">=:=</span>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Args">Args</span>, <span class="extype" name="com.twitter.scrooge.ThriftMethod.Args">Args</span>]</span>, <span name="resultEv">resultEv: <span class="extype" name="scala.Predef.=:=">=:=</span>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Result">Result</span>, <span class="extype" name="com.twitter.scrooge.ThriftMethod.Result">Result</span>]</span>, <span name="svcEv">svcEv: <span class="extype" name="scala.Predef.=:=">=:=</span>[<span class="extype" name="com.twitter.scrooge.ThriftMethod.ServiceType">ServiceType</span>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Args">Args</span>, <span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Result">Result</span>]]</span>)</span><span class="result">: <a href="internal/ThriftMethodService.html" class="extype" name="com.twitter.finatra.thrift.internal.ThriftMethodService">ThriftMethodService</a>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Args">Args</span>, <span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Result">Result</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@handle[Args,Result](method:com.twitter.scrooge.ThriftMethod)(f:method.FunctionType)(implicitargsEv:=:=[Args,method.Args],implicitresultEv:=:=[Result,method.Result],implicitsvcEv:=:=[method.ServiceType,com.twitter.finagle.Service[Args,Result]]):com.twitter.finatra.thrift.internal.ThriftMethodService[Args,Result]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <a id="hashCode():Int"></a>
@@ -504,7 +410,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -521,7 +427,7 @@
         <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -538,7 +444,7 @@
         <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -555,7 +461,7 @@
         <span class="name">infoResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@infoResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@infoResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -573,7 +479,7 @@
         <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@isDebugEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@isDebugEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -590,7 +496,7 @@
         <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@isErrorEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@isErrorEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -607,7 +513,7 @@
         <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@isInfoEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@isInfoEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -624,7 +530,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -641,7 +547,7 @@
         <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@isTraceEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@isTraceEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -658,7 +564,7 @@
         <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@isWarnEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@isWarnEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -675,7 +581,7 @@
         <span class="name">logger</span><span class="result">: <span class="extype" name="grizzled.slf4j.Logger">Logger</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@logger:grizzled.slf4j.Logger" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@logger:grizzled.slf4j.Logger" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -692,7 +598,7 @@
         <span class="name">loggerName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@loggerName:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@loggerName:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -709,7 +615,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -726,7 +632,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -743,7 +649,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -760,7 +666,7 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -777,7 +683,7 @@
         <span class="name">time</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="formatStr">formatStr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@time[T](formatStr:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@time[T](formatStr:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -794,7 +700,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@toString():String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@toString():String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -811,7 +717,7 @@
         <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -828,28 +734,11 @@
         <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftRouter#typeAgnosticFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="typeAgnosticFilter[FilterType&lt;:com.twitter.finagle.Filter.TypeAgnostic](implicitevidence$2:Manifest[FilterType]):com.twitter.finatra.thrift.ThriftRouter"></a>
-      <a id="typeAgnosticFilter[FilterType&lt;:TypeAgnostic](Manifest[FilterType]):ThriftRouter"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">typeAgnosticFilter</span><span class="tparams">[<span name="FilterType">FilterType &lt;: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.ThriftRouter.typeAgnosticFilter.FilterType">FilterType</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.ThriftRouter">ThriftRouter</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@typeAgnosticFilter[FilterType&lt;:com.twitter.finagle.Filter.TypeAgnostic](implicitevidence$2:Manifest[FilterType]):com.twitter.finatra.thrift.ThriftRouter" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Add a global TypeAgnostic filter used for all requests</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -862,7 +751,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -885,7 +774,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -908,7 +797,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -931,7 +820,7 @@
         <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -948,7 +837,7 @@
         <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -965,7 +854,7 @@
         <span class="name">warnResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@warnResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.Controller@warnResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -976,30 +865,7 @@
 
         
 
-        <div id="values" class="values members">
-              <h3>Deprecated Value Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.ThriftRouter#addUnfiltered" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="addUnfiltered[T&lt;:com.twitter.scrooge.ThriftService](implicitevidence$5:Manifest[T]):com.twitter.finatra.thrift.ThriftRouter"></a>
-      <a id="addUnfiltered[T&lt;:ThriftService](Manifest[T]):ThriftRouter"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name deprecated" title="Deprecated: (Since version since Scrooge 4.x) Thrift services should be added with a filter factory.">addUnfiltered</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="com.twitter.scrooge.ThriftService">ThriftService</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.ThriftRouter.addUnfiltered.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.ThriftRouter">ThriftRouter</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftRouter@addUnfiltered[T&lt;:com.twitter.scrooge.ThriftService](implicitevidence$5:Manifest[T]):com.twitter.finatra.thrift.ThriftRouter" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@deprecated</span>
-              
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version since Scrooge 4.x)</i> Thrift services should be added with a filter factory.</p></dd></dl></div>
-    </li></ol>
-            </div>
+        
         </div>
 
         <div id="inheritedMembers">
