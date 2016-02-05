@@ -1,13 +1,18 @@
-name := "twitter-clone"
+import com.typesafe.sbt.SbtNativePackager._
+
+packageArchetype.java_application
+name := "hello-world-heroku"
 organization := "com.twitter.finatra.example"
-version := "2.1.3-SNAPSHOT"
+version := "2.1.3"
 scalaVersion := "2.11.7"
+fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.1.3-SNAPSHOT"
+  val finatra = "2.1.3"
   val guice = "4.0"
   val logback = "1.0.13"
+  val finagleMetrics = "0.0.2"
 }
 
 resolvers ++= Seq(
@@ -26,6 +31,7 @@ libraryDependencies ++= Seq(
   "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
   "com.twitter.inject" %% "inject-core" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
+  "com.github.rlazoti" %% "finagle-metrics" % versions.finagleMetrics,
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
   "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test",
@@ -41,7 +47,6 @@ libraryDependencies ++= Seq(
   "com.twitter.inject" %% "inject-core" % versions.finatra % "test" classifier "tests",
   "com.twitter.inject" %% "inject-modules" % versions.finatra % "test" classifier "tests",
   "com.twitter.inject" %% "inject-server" % versions.finatra % "test" classifier "tests",
-
 
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "org.scalatest" %% "scalatest" % "2.2.3" % "test",

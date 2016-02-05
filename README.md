@@ -195,10 +195,6 @@ Authors
 -----------------------------------------------------------
 * Steve Cosenza <https://github.com/scosenza>
 * Christopher Coco <https://github.com/cacoco>
-* Jason Carey <https://github.com/jcarey03>
-* Eugene Ma <https://github.com/edma2>
-* Nikolaj Nielsen <https://github.com/nhnFreespirit>
-* Alex Leong <https://github.com/adleong>
 
 A full list of [contributors](https://github.com/twitter/finatra/graphs/contributors?type=a) can be found on GitHub.
 
