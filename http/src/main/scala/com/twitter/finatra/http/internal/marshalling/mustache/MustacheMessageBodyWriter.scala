@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.internal.marshalling.mustache
 
 import com.google.common.net.MediaType
-import com.twitter.finatra.conversions.map._
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
 import com.twitter.finatra.response.Mustache
+import com.twitter.inject.conversions.map._
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}
 import scala.collection.JavaConverters._

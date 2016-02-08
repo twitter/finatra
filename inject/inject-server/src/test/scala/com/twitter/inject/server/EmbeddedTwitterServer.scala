@@ -11,15 +11,14 @@ import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ListeningServer, ChannelClosedException, Service}
 import com.twitter.inject.app.{App, EmbeddedApp}
+import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.inject.server.PortUtils._
-import com.twitter.server.AdminHttpServer
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang.reflect.FieldUtils
-import scala.collection.immutable.SortedMap
 
 object EmbeddedTwitterServer {
   private def resolveClientFlags(useSocksProxy: Boolean, clientFlags: Map[String, String]) = {
@@ -431,19 +430,6 @@ class EmbeddedTwitterServer(
         andExpect = Status.Ok,
         withBody = expectedBody,
         suppress = !verbose)
-    }
-  }
-
-  //TODO: AF-567: Create inject-utils
-  implicit class RichMap[K, V](wrappedMap: Map[K, V]) {
-    def mapKeys[T](func: K => T): Map[T, V] = {
-      for ((k, v) <- wrappedMap) yield {
-        func(k) -> v
-      }
-    }
-
-    def toSortedMap(implicit ordering: Ordering[K]) = {
-      SortedMap[K, V]() ++ wrappedMap
     }
   }
 }

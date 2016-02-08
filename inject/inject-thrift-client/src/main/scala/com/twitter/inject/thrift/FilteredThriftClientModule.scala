@@ -10,8 +10,8 @@ import com.twitter.finagle.service.TimeoutFilter
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.{MethodIfaceBuilder, ClientId, ServiceIfaceBuilder}
 import com.twitter.inject.TwitterModule
+import com.twitter.inject.conversions.DurationConversions
 import com.twitter.inject.thrift.FilteredThriftClientModule.MaxDuration
-import com.twitter.inject.thrift.conversions.DurationConversions
 import com.twitter.scrooge.{ThriftResponse, ThriftService}
 import com.twitter.util.{Return, Throw, Try}
 import javax.inject.Singleton

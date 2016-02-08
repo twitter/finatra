@@ -6,5 +6,6 @@ target(name='tests',
     'finatra/inject/inject-request-scope:tests',
     'finatra/inject/inject-server:tests',
     'finatra/inject/inject-thrift-client:tests',
+    'finatra/inject/inject-utils:tests',
   ]
 )

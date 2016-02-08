@@ -1,8 +1,7 @@
-package com.twitter.finatra.conversions
+package com.twitter.inject.conversions
 
 import scala.collection.{SortedMap, immutable, mutable}
 import scala.math.Ordering
-
 
 object tuple {
 

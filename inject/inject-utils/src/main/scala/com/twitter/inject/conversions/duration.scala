@@ -1,4 +1,4 @@
-package com.twitter.inject.thrift.conversions
+package com.twitter.inject.conversions
 
 import com.twitter.util.{Duration => TwitterDuration}
 import org.joda.time.Duration

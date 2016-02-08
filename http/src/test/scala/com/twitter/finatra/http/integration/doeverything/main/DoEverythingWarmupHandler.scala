@@ -2,7 +2,7 @@ package com.twitter.finatra.http.integration.doeverything.main
 
 import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder._
-import com.twitter.finatra.utils.Handler
+import com.twitter.inject.utils.Handler
 import javax.inject.Inject
 
 class DoEverythingWarmupHandler @Inject()(

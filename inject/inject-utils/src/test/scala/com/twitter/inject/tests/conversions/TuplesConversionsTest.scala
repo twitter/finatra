@@ -1,6 +1,6 @@
-package com.twitter.finatra.tests.conversions
+package com.twitter.inject.tests.conversions
 
-import com.twitter.finatra.conversions.tuple._
+import com.twitter.inject.conversions.tuple._
 import com.twitter.inject.Test
 
 class TuplesConversionsTest extends Test {

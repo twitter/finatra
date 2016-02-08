@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.internal.exceptions
 
-import com.twitter.finatra.conversions.map._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionMapper}
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
+import com.twitter.inject.conversions.map._
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}

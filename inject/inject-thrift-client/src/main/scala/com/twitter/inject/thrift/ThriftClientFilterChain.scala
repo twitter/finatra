@@ -7,12 +7,12 @@ import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.service.{RetryFilter, RetryPolicy, TimeoutFilter}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.util.DefaultTimer
-import com.twitter.inject.thrift.conversions.duration._
+import com.twitter.inject.conversions.duration._
 import com.twitter.inject.thrift.filters.ThriftClientExceptionFilter
 import com.twitter.inject.thrift.internal.IncrementCounterFilter
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftResponse, ThriftStruct}
-import com.twitter.util.{Return, Throw, Throwables, Try}
+import com.twitter.util.{Throwables, Try}
 import org.apache.commons.lang.StringUtils
 import org.joda.time.Duration
 

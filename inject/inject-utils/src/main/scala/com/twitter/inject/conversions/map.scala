@@ -1,6 +1,6 @@
-package com.twitter.finatra.conversions
+package com.twitter.inject.conversions
 
-import com.twitter.finatra.conversions.tuple._
+import com.twitter.inject.conversions.tuple._
 import scala.collection.{SortedMap, immutable, mutable}
 
 object map {

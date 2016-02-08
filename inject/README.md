@@ -16,6 +16,8 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 
 * inject-request-scope - provides utilities for working with Guice request [scopes][guice-scopes].
 
+* inject-utils - provides common utilities.
+
 
 [twitter-server]: https://github.com/twitter/twitter-server
 [embedded-app]: https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala

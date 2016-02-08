@@ -6,6 +6,7 @@ import com.twitter.finagle.http.HttpMuxer
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
+import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.handler.ReplyHandler
 import com.twitter.server.internal.{FinagleBuildRevision, PromoteToOldGenUtils}
@@ -32,6 +33,16 @@ trait TwitterServer
 
   protected def waitForServer() {
     Await.ready(adminHttpServer)
+  }
+
+  /**
+   * Utility to run a [[com.twitter.inject.utils.Handler]]. This is generally used for running
+   * a warmup handler in #warmup.
+   * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
+   * @see [[com.twitter.inject.utils.Handler]]
+   */
+  protected def run[T <: Handler : Manifest]() {
+    injector.instance[T].handle()
   }
 
   /* Overrides */

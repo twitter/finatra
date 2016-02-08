@@ -169,6 +169,7 @@ lazy val finatraModules = Seq(
   injectServer,
   injectThriftClient,
   injectThriftClientHttpMapper,
+  injectUtils,
   jackson,
   slf4j,
   thrift,
@@ -231,6 +232,7 @@ lazy val injectCore = (project in file("inject/inject-core")).
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
+      "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "net.codingwell" %% "scala-guice" % versions.scalaGuice,
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.joda" % "joda-convert" % versions.jodaConvert,
@@ -282,7 +284,8 @@ lazy val injectServer = (project in file("inject/inject-server")).
     injectApp,
     injectApp % "test->test",
     injectModules,
-    injectModules % "test->test"
+    injectModules % "test->test",
+    injectUtils
   )
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
@@ -315,10 +318,22 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
   ).
   dependsOn(
     injectCore,
+    injectUtils,
     injectCore % "test->test",
     injectApp % "test->test",
     http % "test->test",
     thrift % "test->test"
+  )
+
+lazy val injectUtils = (project in file("inject/inject-utils")).
+  settings(injectBuildSettings).
+  settings(
+    name := "inject-utils",
+    moduleName := "inject-utils"
+  ).
+  dependsOn(
+    injectCore,
+    injectCore % "test->test"
   )
 
 // Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
@@ -358,7 +373,8 @@ lazy val utils = project.
   dependsOn(
     injectRequestScope,
     injectServer,
-    injectServer % "test->test"
+    injectServer % "test->test",
+    injectUtils
   )
 
 lazy val jackson = project.

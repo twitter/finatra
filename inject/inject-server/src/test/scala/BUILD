@@ -2,7 +2,7 @@ junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     'finatra/inject/inject-server',
-    'finatra/inject/inject-server:test-deps'
+    'finatra/inject/inject-server:test-deps',
   ],
   fatal_warnings=True,
   sources=globs(
