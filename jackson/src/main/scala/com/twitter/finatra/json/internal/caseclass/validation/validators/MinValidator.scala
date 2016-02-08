@@ -66,7 +66,7 @@ class MinValidator(
 
   private def validationResult(value: Number) = {
     ValidationResult.validate(
-      minValue <= value.longValue(),
+      minValue <= value.doubleValue(),
       errorMessage(value),
       errorCode(value))
   }

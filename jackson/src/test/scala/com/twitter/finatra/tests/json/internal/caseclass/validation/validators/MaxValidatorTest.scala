@@ -2,9 +2,11 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.{ErrorCode, Max, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation._
 
 case class MaxIntExample(@Max(0) numberValue: Int)
+case class MaxDoubleExample(@Max(0) numberValue: Double)
+case class MaxFloatExample(@Max(0) numberValue: Float)
 case class MaxLongExample(@Max(0) numberValue: Long)
 case class MaxBigIntExample(@Max(0) numberValue: BigInt)
 case class MaxLargestLongBigIntExample(@Max(Long.MaxValue) numberValue: BigInt)
@@ -46,6 +48,32 @@ class MaxValidatorTest extends ValidatorTest {
         Invalid(
           errorMessage(java.lang.Long.valueOf(value)),
           errorCode(java.lang.Long.valueOf(value))))
+    }
+
+    "pass validation for double type" in {
+      val value = 0.0
+      validate[MaxDoubleExample](value) should equal(Valid)
+    }
+
+    "fail validation for double type" in {
+      val value = 0.5
+      validate[MaxDoubleExample](value) should equal(
+        Invalid(
+          errorMessage(java.lang.Double.valueOf(value)),
+          errorCode(java.lang.Double.valueOf(value))))
+    }
+
+    "pass validation for float type" in {
+      val value = 0.0F
+      validate[MaxFloatExample](value) should equal(Valid)
+    }
+
+    "fail validation for float type" in {
+      val value = 0.5F
+      validate[MaxFloatExample](value) should equal(
+        Invalid(
+          errorMessage(java.lang.Float.valueOf(value)),
+          errorCode(java.lang.Float.valueOf(value))))
     }
 
     "pass validation for big int type" in {

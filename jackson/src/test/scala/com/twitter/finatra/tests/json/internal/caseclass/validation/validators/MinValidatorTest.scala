@@ -6,6 +6,8 @@ import com.twitter.finatra.validation.{ErrorCode, Min, ValidationResult, Validat
 
 case class MinIntExample(@Min(1) numberValue: Int)
 case class MinLongExample(@Min(1) numberValue: Long)
+case class MinDoubleExample(@Min(1) numberValue: Double)
+case class MinFloatExample(@Min(1) numberValue: Float)
 case class MinBigIntExample(@Min(1) numberValue: BigInt)
 case class MinSmallestLongBigIntExample(@Min(Long.MinValue) numberValue: BigInt)
 //case class MinSecondSmallestLongBigIntExample(@Min(Long.MinValue + 1) numberValue: BigInt)
@@ -46,6 +48,32 @@ class MinValidatorTest extends ValidatorTest {
         Invalid(
           errorMessage(java.lang.Long.valueOf(value)),
           errorCode(java.lang.Long.valueOf(value))))
+    }
+
+    "pass validation for double type" in {
+      val value = 1.0
+      validate[MinDoubleExample](value) should equal(Valid)
+    }
+
+    "fail validation for double type" in {
+      val value = 0.5
+      validate[MinDoubleExample](value) should equal(
+        Invalid(
+          errorMessage(java.lang.Double.valueOf(value)),
+          errorCode(java.lang.Double.valueOf(value))))
+    }
+
+    "pass validation for float type" in {
+      val value = 1.0F
+      validate[MinFloatExample](value) should equal(Valid)
+    }
+
+    "fail validation for float type" in {
+      val value = 0.5F
+      validate[MinFloatExample](value) should equal(
+        Invalid(
+          errorMessage(java.lang.Float.valueOf(value)),
+          errorCode(java.lang.Float.valueOf(value))))
     }
 
     "pass validation for big int type" in {
