@@ -24,7 +24,18 @@ trait TwitterServer
 
   addFrameworkModule(statsModule)
 
+  private val adminAnnounceFlag = flag[String]("admin.announce", "Address for announcing admin server")
+
   /* Protected */
+
+  // TODO: Default to true
+  override protected def failfastOnFlagsNotParsed = false
+
+  /**
+   * If true, the Twitter-Server admin server will be disabled.
+   * Note: Disabling the admin server allows Finatra to be deployed into environments where only a single port is allowed
+   */
+  protected def disableAdminHttpServer: Boolean = false
 
   protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
 
@@ -77,6 +88,17 @@ trait TwitterServer
   override protected def beforePostWarmup() {
     super.beforePostWarmup()
     PromoteToOldGenUtils.beforeServing()
+  }
+
+  override protected def postWarmup() {
+    super.postWarmup()
+
+    if (disableAdminHttpServer) {
+      info("Disabling the Admin HTTP Server since disableAdminHttpServer=true")
+      adminHttpServer.close()
+    } else {
+      for (addr <- adminAnnounceFlag.get) adminHttpServer.announce(addr)
+    }
   }
 
   /**

@@ -20,10 +20,11 @@ trait HttpServer extends BaseHttpServer {
 
   /* Abstract */
 
-  protected def configureHttp(router: HttpRouter): Unit = {
-  }
+  protected def configureHttp(router: HttpRouter): Unit
 
   /* Overrides */
+
+  override protected def failfastOnFlagsNotParsed = true
 
   override protected def postStartup() {
     super.postStartup()

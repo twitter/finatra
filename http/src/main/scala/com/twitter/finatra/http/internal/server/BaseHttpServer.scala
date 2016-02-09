@@ -37,11 +37,9 @@ trait BaseHttpServer extends TwitterServer {
   protected def defaultShutdownTimeout: Duration = 1.minute
   private val shutdownTimeoutFlag = flag("shutdown.time", defaultShutdownTimeout, "Maximum amount of time to wait for pending requests to complete on shutdown")
 
-  private val httpAnnounceFlag = flag[String]("http.announce", "Address to announce HTTP server to")
+  private val httpAnnounceFlag = flag[String]("http.announce", "Address for announcing HTTP server")
 
-  private val httpsAnnounceFlag = flag[String]("https.announce", "Address to announce HTTPS server to")
-
-  private val adminAnnounceFlag = flag[String]("admin.announce", "Address to announce admin server to")
+  private val httpsAnnounceFlag = flag[String]("https.announce", "Address for announcing HTTPS server")
 
   protected def defaultHttpServerName: String = "http"
   private val httpServerNameFlag = flag("http.name", defaultHttpServerName, "Http server name")
@@ -56,7 +54,6 @@ trait BaseHttpServer extends TwitterServer {
 
   /* Protected */
 
-  override protected def failfastOnFlagsNotParsed = true
 
   protected def httpService: Service[Request, Response] = {
     NullService
@@ -75,12 +72,6 @@ trait BaseHttpServer extends TwitterServer {
    */
   protected def streamRequest: Boolean = false
 
-  /**
-   * If true, the Twitter-Server admin server will be disabled.
-   * Note: Disabling the admin server allows Finatra to be deployed into environments where only a single port is allowed
-   */
-  protected def disableAdminHttpServer: Boolean = false
-
   type FinagleServerBuilder = ServerBuilder[Request, Response, Yes, Yes, Yes]
 
   protected def configureHttpServer(serverBuilder: FinagleServerBuilder) = {}
@@ -91,13 +82,6 @@ trait BaseHttpServer extends TwitterServer {
 
   override def postWarmup() {
     super.postWarmup()
-
-    if (disableAdminHttpServer) {
-      info("Disabling the Admin HTTP Server since disableAdminHttpServer=true")
-      adminHttpServer.close()
-    } else {
-      for (addr <- adminAnnounceFlag.get) adminHttpServer.announce(addr)
-    }
 
     startHttpServer()
     startHttpsServer()
