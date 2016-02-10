@@ -33,6 +33,18 @@ object RequestBuilder {
     method(Method.Head, url)
   }
 
+  def trace(url: String): RequestBuilder = {
+    method(Method.Trace, url)
+  }
+
+  def connect(url: String): RequestBuilder = {
+    method(Method.Connect, url)
+  }
+
+  def options(url: String): RequestBuilder = {
+    method(Method.Options, url)
+  }
+
   def method(method: Method, url: String): RequestBuilder = {
     new RequestBuilder(
       Request(method, url))
