@@ -2,7 +2,6 @@ junit_tests(name='scala',
   dependencies=[
     'finatra/utils:test-deps',
     'finatra/inject/inject-core:test-deps',
-    'finatra/inject/inject-server:test-deps',
   ],
   sources=rglobs(
     'com/twitter/finatra/tests/*.scala',
@@ -27,7 +26,6 @@ scala_library(name="test-deps",
   ],
   fatal_warnings=True,
   sources=globs(
-    'com/twitter/finatra/guice/*.scala',
     'com/twitter/finatra/modules/*.scala',
     'com/twitter/finatra/test/*.scala'
   )

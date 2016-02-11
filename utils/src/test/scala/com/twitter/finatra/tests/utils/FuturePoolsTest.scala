@@ -1,5 +1,6 @@
-package com.twitter.finatra.utils
+package com.twitter.finatra.tests.utils
 
+import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Test
 import com.twitter.util.Await
 

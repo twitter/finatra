@@ -14,7 +14,7 @@ class StartupIntegrationTest extends Test {
 
   "startup" should {
     "ensure health check succeeds when guice config is good" in {
-      val server = new EmbeddedTwitterServer(new SimpleGuiceHttpTwitterServer)
+      val server = new EmbeddedTwitterServer(new SimpleHttpTwitterServer)
       server.assertHealthy()
 
       server.httpGetAdmin(
@@ -25,7 +25,7 @@ class StartupIntegrationTest extends Test {
     }
 
     "non HTTP twitter-server passes health check" in {
-      val server = new EmbeddedTwitterServer(new SimpleGuiceTwitterServer)
+      val server = new EmbeddedTwitterServer(new SimpleTwitterServer)
       server.assertHealthy()
       server.close()
     }
@@ -38,7 +38,7 @@ class StartupIntegrationTest extends Test {
       server.close()
     }
 
-    "GuiceTwitterServer starts up" in {
+    "TwitterServer starts up" in {
       val server = new EmbeddedTwitterServer(
         twitterServer = new TwitterServer {})
 
@@ -101,7 +101,7 @@ class StartupIntegrationTest extends Test {
     }
 
     "calling GuiceModule.install without a TwitterModule works" in {
-      val server = new EmbeddedTwitterServer(new ServerWithGuiceModuleInstall)
+      val server = new EmbeddedTwitterServer(new ServerWithModuleInstall)
       server.start()
       server.close()
     }
@@ -155,11 +155,11 @@ class FailFastServer extends TwitterServer {
   })
 }
 
-class SimpleGuiceTwitterServer extends TwitterServer {
+class SimpleTwitterServer extends TwitterServer {
   override val modules = Seq()
 }
 
-class SimpleGuiceHttpTwitterServer extends TwitterServer {
+class SimpleHttpTwitterServer extends TwitterServer {
 }
 
 class ServerWithTwitterModuleInstall extends TwitterServer {
@@ -170,7 +170,7 @@ class ServerWithTwitterModuleInstall extends TwitterServer {
   })
 }
 
-class ServerWithGuiceModuleInstall extends TwitterServer {
+class ServerWithModuleInstall extends TwitterServer {
   override val modules = Seq(new TwitterModule {
     override def configure() {
       install(new AbstractModule {

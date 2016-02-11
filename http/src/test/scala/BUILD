@@ -44,7 +44,6 @@ scala_library(name="test-deps",
   ],
   fatal_warnings=True,
   sources=globs(
-    'com/twitter/finatra/test/*.scala',
     'com/twitter/finatra/http/test/*.scala'
   ),
 )

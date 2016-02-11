@@ -45,6 +45,7 @@ lazy val versions = new {
   val servletApi = "2.5"
   val snakeyaml = "1.12"
   val slf4j = "1.7.7"
+  val libThrift = "0.5.0-1"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
@@ -350,6 +351,7 @@ lazy val benchmarks = project.
   ).
   dependsOn(
     http,
+    injectRequestScope,
     injectCore % "test->test"
   )
 
@@ -366,13 +368,14 @@ lazy val utils = project.
       "com.twitter" %% "finagle-http" % versions.finagle,
       "commons-io" % "commons-io" % versions.commonsIo,
       "joda-time" % "joda-time" % versions.jodaTime,
+      "org.apache.thrift" % "libthrift" % versions.libThrift,
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.joda" % "joda-convert" % versions.jodaConvert
     )
   ).
   dependsOn(
-    injectRequestScope,
-    injectServer,
+    injectApp % "test->test",
+    injectCore % "test->test",
     injectServer % "test->test",
     injectUtils
   )
@@ -414,6 +417,8 @@ lazy val http = project.
   ).
   dependsOn(
     jackson,
+    injectRequestScope,
+    injectServer,
     httpclient % "test->test",
     jackson % "test->test",
     injectServer % "test->test"
