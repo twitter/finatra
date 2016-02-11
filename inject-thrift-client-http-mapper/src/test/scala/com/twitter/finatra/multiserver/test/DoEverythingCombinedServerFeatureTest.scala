@@ -18,6 +18,10 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
 
   "server" should {
 
+    "bind thrift external port" in {
+      server.thriftExternalPort should not be 0
+    }
+
     "ping" in {
       server.httpGet(
         "/ping")

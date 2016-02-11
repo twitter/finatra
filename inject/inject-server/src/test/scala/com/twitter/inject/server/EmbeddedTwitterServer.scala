@@ -116,7 +116,7 @@ class EmbeddedTwitterServer(
 
   override protected def logAppStartup() {
     infoBanner("Server Started: " + appName)
-    info(s"AdminHttp    -> http://$adminHostAndPort/admin")
+    info(s"AdminHttp      -> http://$adminHostAndPort/admin")
   }
 
   override protected def updateClientFlags(map: Map[String, String]) = {

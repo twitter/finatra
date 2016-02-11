@@ -13,9 +13,22 @@ trait ThriftClient { self: EmbeddedApp =>
 
   def twitterServer: Ports
 
-  override protected def combineArgs(): Array[String] = {
-    ("-thrift.port=" + PortUtils.ephemeralLoopback) +: self.combineArgs
+  def thriftPortFlag: String = "thrift.port"
+
+  /* Overrides */
+
+  override protected def logAppStartup() {
+    self.logAppStartup()
+    info(s"ExternalThrift -> thrift://$externalThriftHostAndPort\n")
   }
+
+  override protected def combineArgs(): Array[String] = {
+    s"-$thriftPortFlag=${PortUtils.ephemeralLoopback}" +: self.combineArgs
+  }
+
+  /* Public */
+
+  lazy val externalThriftHostAndPort = PortUtils.loopbackAddressForPort(thriftExternalPort)
 
   def thriftExternalPort: Int = {
     self.start()

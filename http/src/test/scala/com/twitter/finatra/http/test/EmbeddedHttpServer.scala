@@ -43,7 +43,7 @@ class EmbeddedHttpServer(
 
   override protected def logAppStartup() {
     super.logAppStartup()
-    info(s"ExternalHttp -> http://$externalHttpHostAndPort")
+    info(s"ExternalHttp   -> http://$externalHttpHostAndPort")
   }
 
   override protected def printNonEmptyResponseBody(response: Response): Unit = {
