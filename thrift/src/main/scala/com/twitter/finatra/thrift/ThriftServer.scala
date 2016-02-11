@@ -13,7 +13,7 @@ trait ThriftServer extends TwitterServer {
   protected def defaultThriftShutdownTimeout = 1.minute
   private val thriftShutdownTimeoutFlag = flag("thrift.shutdown.time", defaultThriftShutdownTimeout, "Maximum amount of time to wait for pending requests to complete on shutdown")
 
-  protected def defaultThriftServerName: String = "thriftmux"
+  protected def defaultThriftServerName: String = "thrift"
   private val thriftServerNameFlag = flag("thrift.name", defaultThriftServerName, "Thrift server name")
 
   private val thriftAnnounceFlag = flag[String]("thrift.announce", "Address for announcing Thrift server")
