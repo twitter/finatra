@@ -38,25 +38,8 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-Simplistically, a server can be thought of as a collection of [controllers](#add-controller) composed with [filters](#add-filters). Additionally, a server can define what  [modules](/finatra/user-guide/getting-started#modules) to use and how to [map exceptions](#exception-mapper). The Finatra convention is to create a Scala [*object*](https://twitter.github.io/scala_school/basics2.html#object) with a name ending in "Main". This allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM. `ExampleServerMain` is then a static object which contains the runnable *main method* for the server.
+Simplistically, a server can be thought of as a collection of [controllers](#add-controller) composed with [filters](#add-filters). Additionally, a server can define what [modules](/finatra/user-guide/getting-started#modules) to use and how to [map exceptions](#exception-mapper). The Finatra convention is to create a Scala [*object*](https://twitter.github.io/scala_school/basics2.html#object) with a name ending in "Main". This allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM. `ExampleServerMain` is then a static object which contains the runnable *main method* for the server.
 
-### TwitterServer HTTP Admin Interface
-
-All [TwitterServer](https://github.com/twitter/twitter-server) based services start an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) bound to a port configurable via the `-admin.port` flag. If you want to serve an external interface this will be bound to a separate port configurable via the `-http.port` flag.
-
-Some deployment environments such as [Heroku](https://www.heroku.com/), [AppFog](https://www.appfog.com/), and [OpenShift](https://www.openshift.com) only allow a single port to be used when deploying an application. In these cases, you can disable the [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) started by [TwitterServer](https://github.com/twitter/twitter-server) as such:
-
-```scala
-class ExampleServer extends HttpServer {
-  override val disableAdminHttpServer = true
-  ...
-}
-```
-<div></div>
-
-Since the admin port is currently required by [TwitterServer](https://github.com/twitter/twitter-server) you will need to set the `-admin.port` and `-http.port` flags to the same value in addition to specifying `override val disableAdminHttpServer = true` above.
-
-For more information, see the [Heroku](https://www.heroku.com/) [hello-world example](https://github.com/twitter/finatra/tree/master/examples/hello-world-heroku).
 
 ### <a class="anchor" name="override-defaults" href="#override-defaults">Override Default Behavior</a>
 
@@ -94,11 +77,11 @@ class ExampleServer extends HttpServer {
 
 If your module is defined as a class, you would pass an instance of the class, e.g., `override def jacksonModule = new MyCustomJacksonModule`.
 
-Next section: [Add a Controller](/finatra/user-guide/build-new-http-server/controller.html).
+Next section: [Add an HTTP Controller](/finatra/user-guide/build-new-http-server/controller.html).
 
 <nav>
   <ul class="pager">
     <li class="previous"><a href="/finatra/user-guide/getting-started"><span aria-hidden="true">&larr;</span>&nbsp;Getting&nbsp;Started</a></li>
-    <li class="next"><a href="/finatra/user-guide/build-new-http-server/controller.html">Add&nbsp;a&nbsp;Controller&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-http-server/controller.html">Add&nbsp;an&nbsp;HTTP&nbsp;Controller&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

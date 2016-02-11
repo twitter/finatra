@@ -15,7 +15,20 @@ footer: true
 ## Basics
 ===============================
 
-If you want to apply a filter (or filters) to all added controllers you can do the following:
+#### `com.twitter.finatra.http.filters.CommonFilters`
+
+Finatra composes some commonly used filters into [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala). `CommonFilters` can be added in the same manner as any other filter.
+
+#### Global Filters
+
+Filters by default execute **after** route matching. Meaning, for a given
+request the URI path is matched in the routing table before executing any filter. If you
+need to be able to run a filter *before* route matching, you can add the filter via
+`router#filterBeforeRouting`, this is especially useful if the filter manually inspects to
+see if it should function on a given request URI path that may not exist in the routing table (e.g., is not
+defined by any controller added to the server).
+
+If you want to apply a filter (or filters) to **all** added controllers you can do the following:
 
 ```scala
 import DoEverythingModule
@@ -33,15 +46,18 @@ class ExampleServer extends HttpServer {
     DoEverythingModule)
 
   override def configureHttp(router: HttpRouter) {
-    router.
-      filter[AccessLoggingFilter[Request]].
-      add[ExampleController]
+    router
+      .filter[AccessLoggingFilter[Request]]
+      .filter[CommonFilters]
+      .add[ExampleController]
   }
 }
 ```
 <div></div>
 
-It is also possible to add a filter per controller,
+#### Per-controller Filters
+
+It is also possible to add filterd per controller, using `router#add[F1 <: HttpFilter, C <: Controller]`. These filters will apply to all routes in the Controller.
 
 ```scala
 import DoEverythingModule
@@ -60,28 +76,47 @@ class ExampleServer extends HttpServer {
     DoEverythingModule)
 
   override def configureHttp(router: HttpRouter) {
-    router.
-      filter[AccessLoggingFilter[Request]].
-      add[ExampleFilter, ExampleController]
+    router
+      .filterBeforeRouting[SpecialFilter]
+      .filter[AccessLoggingFilter[Request]].
+      .add[ExampleFilter, ExampleController]
   }
 }
 ```
 <div></div>
 
-In both cases, we are again applying the filter *by type* allowing the framework to instantiate instances of the filters.
+Currently, `router#add` supports inlining up to ten (10) filters before a controller. If you need to include more than ten filters please consider combining them with [com.twitter.finatra.filters.MergedFilter](https://github.com/twitter/finatra/blob/master/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala) (in [finatra/utils](https://github.com/twitter/finatra/tree/master/utils)) in the same manner as [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala) then using the combined filter in your call to `router#add`.
 
-Finatra composes some commonly used filters into [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala). `CommonFilters` can be added in the same manner as any other filter, e.g.,
+In all the above usages, we are applying the filter *by type* allowing the framework to instantiate instances of the filters. However all of these methods supporting passing instances.
+
+#### Per-route Filters
+
+Additionally, you can define filters *inside* of a Controller per-route, e.g.,
 
 ```scala
-override configureHttp(router: HttpRouter) {
-  router.
-    filter[CommonFilters].
-    filter[ExampleFilter].
-    add[MyController1].
-    add[MyController2]
+class ExampleController @Inject()(
+  exampleService: ExampleService
+) extends Controller {
+
+  filter[ExampleFilter].get("/ping") { request: Request =>
+    "pong"
+  }
+
+  filter[ExampleFilter]
+    .filter[AnotherExampleFilter]
+    .get("/name") { request: Request =>
+    response.ok.body("Bob")
+  }
+
+  filter(new OtherFilter).post("/foo") { request: Request =>
+    exampleService.do(request)
+    "bar"
+  }
 }
 ```
 <div></div>
+
+As you can see, you can choose to apply the filter either by type or provide an instance. You can also chain `controller#filter` calls arbitrarily deep.
 
 ## <a class="anchor" name="request-scope" href="#request-scope">Request Scope</a>
 ===============================

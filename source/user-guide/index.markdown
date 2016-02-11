@@ -10,8 +10,10 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
 
 ### Topics:
 
+- [TwitterServer Basics](/finatra/user-guide/twitter-server-basics)
 - [Getting Started](/finatra/user-guide/getting-started)
   - [Modules](/finatra/user-guide/getting-started#modules)
+  - [Binding Annotations](/finatra/user-guide/getting-started#binding-annotations)
   - [Flags](/finatra/user-guide/getting-started#flags)
   - [Futures](/finatra/user-guide/getting-started#futures)
 - [Building a new HTTP Server](/finatra/user-guide/build-new-http-server)

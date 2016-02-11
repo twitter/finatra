@@ -52,8 +52,8 @@ We provide a [TwitterModule](https://github.com/twitter/finatra/blob/master/inje
 
 #### Module Definition
 * [twitter/util](https://github.com/twitter/util) [Flags](#flags) can be defined inside modules. This allows for re-usable scoping of external configuration that can be composed into a server via the module.
-* Prefer using an `@Provides` methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
-* Usually modules are Scala *objects* since they contain no state and usage of the module is less verbose.
+* Prefer using `@Provides`-annotated methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
+* Usually modules are Scala *objects* since they contain no state and makes usage of the module less verbose.
 * Remember to add `@Singleton` to your `@Provides` method if you require only **one** instance per JVM process.
 * Generally, modules are only required for instantiating classes that you don't control. Otherwise, you would simply add the [JSR-330](https://github.com/google/guice/wiki/JSR330) annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following Guice module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
 
@@ -94,6 +94,77 @@ class Server extends HttpServer {
 ```
 <div></div>
 
+### <a class="anchor" name="binding-annotations" href="#binding-annotations">Binding Annotations</a>
+===============================
+
+Occasionally, you may want multiple bound instances of the same type. For instance you may want both a FooHttpClient and a BarHttpClient. To do this we recommend creating specific [binding annotations](https://github.com/google/guice/wiki/BindingAnnotations).
+
+#### Define an Annotation
+
+Defining a binding annotation is a few lines of java code plus imports. We recommend that you put this in it's own `.java` file.
+
+```scala
+package example.http.clients.annotations;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import com.google.inject.BindingAnnotation;
+
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@BindingAnnotation
+@Target(PARAMETER)
+@Retention(RUNTIME)
+public @interface FooClient {}
+```
+
+For more information on the meta-annotations see the Google Guice [documentation on Binding Annotations](https://github.com/google/guice/wiki/BindingAnnotations).
+
+#### Create a Binding with the Annotation
+
+In your Module, then annotate the `@Provides` method that is instantiating the specific instance with the Binding Annotation, e.g.,
+
+```scala
+object MyHttpClientsModule extends TwitterModule {
+  val fooClientDestination = flag("foo.client.dest", "Foo Client Destination")
+  val barClientDestination = flag("bar.client.dest", "Bar Client Destination")
+
+  @Singleton
+  @Provides
+  @FooClient
+  def providesFooHttpClient: HttpClient = {
+    new HttpClient(fooClientDestination())
+  }
+
+  @Singleton
+  @Provides
+  @BarClient
+  def providesBarHttpClient: HttpClient = {
+    new HttpClient(barClientDestination())
+  }
+}
+```
+<div></div>
+
+#### Depend on the Annotation
+
+Then to depend on the annotated binding, just apply the annotation to the injected parameter:
+
+```scala
+class MyService @Inject()(
+  @FooClient fooHttpClient: HttpClient,
+  @BarClient barHttpClient: HttpClient) {
+  ...
+}
+```
+<div></div>
+
+#### Benefits Over Using [`@Named`](https://github.com/google/guice/wiki/BindingAnnotations#named) Binding Annotation
+
+You could also achieve the same behavior using the [`@Named`](https://github.com/google/guice/wiki/BindingAnnotations#named) binding annotation. However we've found that creating specific binding annotations avoids potential naming collisions. Additionally, being able to find all usages of the annotation by type is beneficial over a text-search for the string used in `@Named`.
+
 ### <a class="anchor" name="flags" href="#flags">Flags</a>
 ===============================
 
@@ -104,7 +175,7 @@ This type of configuration parameterization is generally preferred over hardcodi
 In Finatra, we also provide a way to override the objects provided on the object graph through "override modules". See the "Override Modules" section in [testing](testing#override-modules).
 
 #### `@Flag` annotation
-Flag values can be injected into classes (and provider methods), by using the `@Flag` annotation:
+Flag is a [binding annotation](#binding-annotations). This annotation allows flag values to be injected into classes (and provider methods), by using the `@Flag` annotation:
 
 ```scala
 class MyModule extends TwitterModule {
@@ -160,6 +231,20 @@ Flags are set by passing them as arguments to your java application &mdash; as s
 $ java -jar finatra-hello-world-assembly-2.0.0.jar -key=value
 ```
 
+`TwitterModule#flag` is parameterized to return a Flag of type `T` where `T` is the type of the arguement passed as the default. If you do not specify a default value then you must explicitly parameterize your call to `TwitterModule#flag`, e.g,
+
+```scala
+object MyModule1 extends TwitterModule {
+  val key = flag[String]("key", "The key to use")
+
+  @Singleton
+  @Provides
+  def providesThirdPartyFoo: ThirdPartyFoo = {
+    new ThirdPartyFoo(key())
+  }
+}
+```
+
 ### <a class="anchor" name="futures" href="#futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
 ===============================
 
@@ -167,7 +252,7 @@ Finatra, like other frameworks based on Twitter's [Finagle](https://twitter.gith
 
 <nav>
   <ul class="pager">
-    <li></li>
+  <li class="previous"><a href="/finatra/user-guide/twitter-server-basics"><span aria-hidden="true">&larr;</span>&nbsp;TwitterServer&nbsp;Basics</a></li>
     <li class="next"><a href="/finatra/user-guide/build-new-http-server">&nbsp;Building&nbsp;a&nbsp;new&nbsp;HTTP&nbsp;Server&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

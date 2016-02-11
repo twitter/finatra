@@ -1,6 +1,6 @@
 ---
 layout: user_guide
-title: "Add a Controller"
+title: "Add an HTTP Controller"
 comments: false
 sharing: false
 footer: true
@@ -12,7 +12,7 @@ footer: true
   <li class="active">Add a Controller</li>
 </ol>
 
-## Basics
+## HTTP Controller Basics
 ===============================
 
 We now want to add the following controller to the [server definition](/finatra/user-guide/build-new-http-server#server-definition):
@@ -43,7 +43,7 @@ class ExampleController @Inject()(
 ```
 <div></div>
 
-The server would now be defined with the controller as follows:
+The server can now be defined with the controller as follows:
 
 ```scala
 import DoEverythingModule
