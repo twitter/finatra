@@ -1,8 +1,8 @@
 package com.twitter.tiny.domain.http
 
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.request.RequestInject
+import javax.inject.Inject
 
 case class PostUrlRequest(
-  @RequestInject request: Request,
+  @Inject request: Request,
   url: String)

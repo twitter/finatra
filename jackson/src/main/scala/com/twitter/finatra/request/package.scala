@@ -4,10 +4,6 @@ import javax.inject.Inject
 import scala.annotation.meta.param
 
 package object request {
-  type FormParam = com.twitter.finatra.json.internal.caseclass.annotations.FormParamInternal@param
+  @deprecated("Use javax.inject.Inject", "2016-02-10")
   type RequestInject = Inject@param
-  type Header = com.twitter.finatra.json.internal.caseclass.annotations.HeaderInternal@param
-  type QueryParam = com.twitter.finatra.json.internal.caseclass.annotations.QueryParamInternal@param
-  type RouteParam = com.twitter.finatra.json.internal.caseclass.annotations.RouteParamInternal@param
-  type JsonIgnoreBody = com.twitter.finatra.json.internal.caseclass.annotations.JsonIgnoreBody@param
 }

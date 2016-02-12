@@ -1,15 +1,14 @@
 package com.twitter.finatra.json.internal.caseclass.utils
 
-import com.fasterxml.jackson.core.{JsonParser, ObjectCodec}
+import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.deser.impl.ValueInjector
-import com.fasterxml.jackson.databind.util.TokenBuffer
 import com.fasterxml.jackson.databind.{DeserializationContext, JavaType, PropertyName}
 import com.google.inject.{BindingAnnotation, ConfigurationException, Key}
-import com.twitter.finatra.json.internal.caseclass.annotations._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.caseclass.jackson.ImmutableAnnotations
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection.InjectableAnnotations
+import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
 import java.lang.annotation.Annotation
 import javax.inject.Inject
 import scala.language.existentials
@@ -18,10 +17,10 @@ object FieldInjection {
   private val InjectableAnnotations: Set[Class[_ <: Annotation]] = Set(
     classOf[Inject],
     classOf[com.google.inject.Inject],
-    classOf[RouteParamInternal],
-    classOf[QueryParamInternal],
-    classOf[FormParamInternal],
-    classOf[HeaderInternal])
+    classOf[RouteParam],
+    classOf[QueryParam],
+    classOf[FormParam],
+    classOf[Header])
 }
 
 class FieldInjection(

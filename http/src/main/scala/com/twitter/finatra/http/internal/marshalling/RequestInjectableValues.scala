@@ -5,7 +5,7 @@ import com.google.inject.{Injector, Key}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.internal.marshalling.RequestInjectableValues.SeqWithSingleEmptyString
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.caseclass.annotations._
+import com.twitter.finatra.request.{FormParam, QueryParam, RouteParam, Header}
 import java.lang.annotation.Annotation
 
 object RequestInjectableValues {
@@ -19,9 +19,9 @@ class RequestInjectableValues(
   extends InjectableValues {
 
   private val requestParamsAnnotation = Seq(
-    classOf[RouteParamInternal],
-    classOf[QueryParamInternal],
-    classOf[FormParamInternal])
+    classOf[RouteParam],
+    classOf[QueryParam],
+    classOf[FormParam])
 
   /* Public */
 
@@ -54,7 +54,7 @@ class RequestInjectableValues(
       }
       else
         (request.params.get(fieldName) map { convert(forProperty, _) }).orNull
-    else if (hasAnnotation[HeaderInternal](forProperty))
+    else if (hasAnnotation[Header](forProperty))
       (request.headerMap.get(fieldName) map { convert(forProperty, _) }).orNull
     else
       injector.getInstance(

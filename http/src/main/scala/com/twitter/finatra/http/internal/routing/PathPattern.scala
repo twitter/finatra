@@ -22,8 +22,8 @@ object PathPattern extends Logging {
   /* Private */
 
   private def regex(uriPattern: String): Regex = {
-    val astericksReplaced = NamedAsteriskRegex.replaceAllIn(uriPattern, """\\E(.*)\\Q""") // The special token :* captures everything after the prefix string
-    val colonNameReplaced = NamedRouteParamRegex.replaceAllIn(astericksReplaced, """\\E([^/]+)\\Q""") // Replace "colon word (e.g. :id) with a capture group that stops at the next forward slash
+    val asterisksReplaced = NamedAsteriskRegex.replaceAllIn(uriPattern, """\\E(.*)\\Q""") // The special token :* captures everything after the prefix string
+    val colonNameReplaced = NamedRouteParamRegex.replaceAllIn(asterisksReplaced, """\\E([^/]+)\\Q""") // Replace "colon word (e.g. :id) with a capture group that stops at the next forward slash
     val regexStr = """^\Q""" + colonNameReplaced ++ """\E$"""
     new Regex(regexStr)
   }

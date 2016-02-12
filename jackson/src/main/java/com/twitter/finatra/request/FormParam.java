@@ -1,4 +1,4 @@
-package com.twitter.finatra.json.internal.caseclass.annotations;
+package com.twitter.finatra.request;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -8,5 +8,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ PARAMETER })
 @Retention(RUNTIME)
-public @interface FormParamInternal {
-}
+public @interface FormParam {}

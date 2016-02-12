@@ -3,7 +3,7 @@ package com.twitter.finatra.http.internal.routing
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.contexts.RouteInfo
-import com.twitter.finatra.http.internal.request.RequestWithPathParams
+import com.twitter.finatra.http.internal.request.RequestWithRouteParams
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import scala.language.existentials
@@ -39,15 +39,15 @@ case class Route(
 
   // Note: incomingPath is an optimization to avoid calling incomingRequest.path for every potential route
   def handle(incomingRequest: Request, incomingPath: String): Option[Future[Response]] = {
-    val pathParamsOpt = pattern.extract(incomingPath)
-    if (pathParamsOpt.isEmpty) {
+    val routeParamsOpt = pattern.extract(incomingPath)
+    if (routeParamsOpt.isEmpty) {
       None
     }
     else {
       handleMatch(
         createRequest(
           incomingRequest,
-          pathParamsOpt.get))
+          routeParamsOpt.get))
     }
   }
 
@@ -59,10 +59,10 @@ case class Route(
 
   /* Private */
 
-  private[this] def createRequest(request: Request, pathParams: Map[String, String]) = {
-    if (pathParams.isEmpty)
+  private[this] def createRequest(request: Request, routeParams: Map[String, String]) = {
+    if (routeParams.isEmpty)
       request
     else
-      new RequestWithPathParams(request, pathParams)
+      new RequestWithRouteParams(request, routeParams)
   }
 }

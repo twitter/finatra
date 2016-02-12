@@ -264,7 +264,7 @@ case class CaseClassWithIntAndDateTime(
   @NotEmpty dateTime5: Option[DateTime])
 
 case class ClassWithFooClassInject(
-  @RequestInject fooClass: FooClass)
+  @Inject fooClass: FooClass)
 
 case class ClassWithQueryParamDateTimeInject(
   @QueryParam dateTime: DateTime)

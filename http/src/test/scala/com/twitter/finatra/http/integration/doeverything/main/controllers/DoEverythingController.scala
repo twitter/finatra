@@ -7,13 +7,13 @@ import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.integration.doeverything.main.domain._
 import com.twitter.finatra.http.integration.doeverything.main.exceptions._
-import com.twitter.finatra.http.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter}
+import com.twitter.finatra.http.integration.doeverything.main.filters.ForbiddenFilter
 import com.twitter.finatra.http.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.request.{QueryParam, RequestInject, RouteParam}
+import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.util.Future
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
@@ -608,5 +608,5 @@ case class MultipleInjectableValueParams(
   @RouteParam @QueryParam id: String)
 
 case class CaseClassWithRequestField(
-  @RequestInject request: Request)
+  @Inject request: Request)
 
