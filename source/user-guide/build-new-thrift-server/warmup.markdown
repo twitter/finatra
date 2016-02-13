@@ -28,6 +28,6 @@ For more information, we encourage you to take a look at the full [`finatra/exam
 <nav>
   <ul class="pager">
     <li class="previous"><a href="/finatra/user-guide/build-new-thrift-server/exceptions.html"><span aria-hidden="true">&larr;</span>&nbsp;Thrift&nbsp;Exceptions</a></li>
-    <li class="next"><a href="/finatra/user-guide/json">Working&nbsp;with&nbsp;JSON&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="next"><a href="/finatra/user-guide/testing">Testing&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>
