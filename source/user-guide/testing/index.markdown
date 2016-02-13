@@ -97,9 +97,17 @@ Note, the modules use specifically for testing should generally be placed alongs
 ## <a class="anchor" name="at-bind" href="#at-bind">Using `@Bind`</a>
 ===============================
 
-In the case where we'd like to replace a bound instance with another instance local to our test (e.g., a mock), we do not need to create a specific test module to compose into our server. Instead we can use the [`@Bind`](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/test/java/com/google/inject/testing/fieldbinder/Bind.java) annotation in our test that extends [`FeatureTest`](#feature-tests).
+First, check out the [Google Guice](https://github.com/google/guice) documentation on Bound Fields [here](https://github.com/google/guice/wiki/BoundFields).
+
+In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like a mock or a stub version), we do not need to create a specific test module to compose into our server as an override module. Instead we can use the `@Bind` (`com.google.inject.testing.fieldbinder.Bind`) annotation.
 
 ```scala
+
+import com.google.inject.testing.fieldbinder.Bind
+import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.Mockito
+
 class ExampleFeatureTest
   extends FeatureTest
   with Mockito
@@ -121,9 +129,9 @@ class ExampleFeatureTest
 
 #### More information:
 
-* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using either `com.twitter.inject.app.FeatureTest` or `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [next section](#test-helpers).
+* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using either `com.twitter.inject.app.FeatureTest` or `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [next section](#feature-tests).
 * Prefer to define `@Bind` and `@Inject` variables before the server definition.
-* You should not need to, but you can optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
+* You should not need to but you can optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
 ```scala
 val server = new EmbeddedHttpServer(
   twitterServer = new ExampleServer {
