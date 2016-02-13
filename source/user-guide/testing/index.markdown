@@ -99,7 +99,7 @@ Note, the modules use specifically for testing should generally be placed alongs
 
 First, check out the [Google Guice](https://github.com/google/guice) documentation on Bound Fields [here](https://github.com/google/guice/wiki/BoundFields).
 
-In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like a mock or a stub version), we do not need to create a specific test module to compose into our server as an override module. Instead we can use the `@Bind` (`com.google.inject.testing.fieldbinder.Bind`) annotation.
+In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a stub implementation), we do not need to create a specific test module to compose into our server as an override module. Instead we can use the `com.google.inject.testing.fieldbinder.Bind` annotation.
 
 ```scala
 
