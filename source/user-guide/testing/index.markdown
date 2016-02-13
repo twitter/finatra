@@ -122,7 +122,8 @@ class ExampleFeatureTest
 #### More information:
 
 * You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using either `com.twitter.inject.app.FeatureTest` or `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [next section](#test-helpers).
-* Define `@Bind` variables before the server definition or optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
+* Prefer to define `@Bind` and `@Inject` variables before the server definition.
+* You should not need to, but you can optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
 ```scala
 val server = new EmbeddedHttpServer(
   twitterServer = new ExampleServer {
