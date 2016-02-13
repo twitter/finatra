@@ -15,12 +15,12 @@ footer: true
 ## Basics
 ===============================
 
-There may be occasions where we want to exercise specific code paths before accepting traffic to the server. In this case you can implement a [`com.twitter.finatra.utils.Handler`](https://github.com/twitter/finatra/blob/master/utils/src/main/scala/com/twitter/finatra/utils/Handler.scala). Your handler should be constructed with an [`com.twitter.finatra.http.routing.HttpWarmup`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala) instance.
+There may be occasions where we want to exercise specific code paths before accepting traffic to the server. In this case you can implement a [`com.twitter.finatra.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala). Your handler should be constructed with an [`com.twitter.finatra.http.routing.HttpWarmup`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala) instance.
 
 ```scala
 import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder._
-import com.twitter.finatra.utils.Handler
+import com.twitter.inject.utils.Handler
 import javax.inject.Inject
 
 class ExampleWarmupHandler @Inject()(
@@ -45,22 +45,27 @@ import ExampleController
 import ExampleFilter
 import ExampleWarmupHandler
 import MalformedURLExceptionMapper
-import com.twitter.finatra.http.filters.AccessLoggingFilter
+import com.twitter.finatra.http.HttpServer
+import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
+import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 
 object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
   override val modules = Seq(
-    DoEverythingModule)
+    DoEverythingModule,
+    Slf4jBridgeModule)
 
-  override def configureHttp(router: HttpRouter) {
-    router.
-      filter[AccessLoggingFilter].
-      add[ExampleFilter, ExampleController].
-      exceptionMapper[MalformedURLExceptionMapper]
+  override def configureHttp(router: HttpRouter): Unit = {
+    router
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[TraceIdMDCFilter[Request, Response]]
+      .filter[CommonFilters]
+      .add[ExampleFilter, ExampleController]
+      .exceptionMapper[MalformedURLExceptionMapper]
   }
 
   override def warmup() {

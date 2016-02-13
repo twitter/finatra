@@ -22,17 +22,27 @@ Create a new class that extends [`com.twitter.finatra.http.HttpServer`](https://
 
 ```scala
 import DoEverythingModule
-import com.twitter.finatra.http.routing.HttpRouter
+import ExampleController
 import com.twitter.finatra.http.HttpServer
+import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
+import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 
 object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
   override val modules = Seq(
-    DoEverythingModule)
+    DoEverythingModule,
+    Slf4jBridgeModule)
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
+    router
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[TraceIdMDCFilter[Request, Response]]
+      .filter[CommonFilters]
+      .add[ExampleController]
   }
 }
 ```
@@ -45,19 +55,21 @@ Simplistically, a server can be thought of as a collection of [controllers](#add
 
 #### <a class="anchor" name="setting-flags-from-code" href="#setting-flags-from-code">Flags</a>
 Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra's [HttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala)'s core flags can be set from code.
-For example, instead of setting the `-maxRequestSize` flag, you can override the following method in your server.
+For example, instead of setting the `-http.port` flag, you can override the following method in your server.
 
 ```scala
 class ExampleServer extends HttpServer {
 
-  override val defaultMaxRequestSize = 10.megabytes
+  override val defaultFinatraHttpPort: String = ":8080"
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     ...
   }
 }
 ```
 <div></div>
+
+For a list of what flags can be set programmatically, please see the [BaseHttpServer](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/server/BaseHttpServer.scala) class.
 
 #### <a class="anchor" name="default-modules" href="#default-modules">Framework Modules</a>
 
@@ -68,7 +80,7 @@ class ExampleServer extends HttpServer {
 
   override def jacksonModule = MyCustomJacksonModule
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     ...
   }
 }

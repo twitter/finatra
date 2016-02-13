@@ -20,7 +20,7 @@ We now want to add the following controller to the [server definition](/finatra/
 
 <nav>
   <ul class="pager">
-    <li class="previous"><a href="/finatra/user-guide/build-new-http-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;New&nbsp;HTTP&nbsp;Server</a></li>
-    <li class="next"><a href="/finatra/user-guide/build-new-http-server/filter.html">Add&nbsp;Filters&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="previous"><a href="/finatra/user-guide/build-new-thrift-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;New&nbsp;Thrift&nbsp;Server</a></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-thrift-server/filter.html">Add&nbsp;Filters&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

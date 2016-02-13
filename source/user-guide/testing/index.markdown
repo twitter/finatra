@@ -105,20 +105,36 @@ class ExampleFeatureTest
   with Mockito
   with HttpTest {
 
-  override val server = new EmbeddedHttpServer(new ExampleServer)
-
   @Bind val downstreamServiceClient = smartMock[DownstreamServiceClient]
 
   @Bind val idService = smartMock[IdService]
 
+  override val server = new EmbeddedHttpServer(new ExampleServer)  
+
   "test" in {
     /* Mock GET Request performed by DownstreamServiceClient */
     downstreamServiceClient.get("/tweets/123.json")(manifest[FooResponse]) returns Future(None)
-
     ...
   }
 ```
 <div></div>
+
+#### More information:
+
+* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using either `com.twitter.inject.app.FeatureTest` or `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [next section](#test-helpers).
+* Define `@Bind` variables **BEFORE** the server definition or optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
+```scala
+val server = new EmbeddedHttpServer(
+  twitterServer = new ExampleServer {
+    override val overrideModules = Seq(integrationTestModule)
+  })
+```
+* While we support the `com.google.inject.testing.fieldbinder.Bind` annotation, our integration does not currently support the `to` annotation field, e.g., `@Bind(to = classOf[T])`, therefore,
+* The type of the variable you annotate with `@Bind` must *exactly* match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,
+```scala
+@Bind val idService: IdService = new MockIdServiceImpl
+```
+* Because of lifecycle reasons, access to the embedded server should either be from a lazy variable or inside a test method.
 
 For a complete example, see the [`TwitterCloneFeatureTest`](https://github.com/twitter/finatra/blob/master/examples/twitter-clone/src/test/scala/twitter/github/io/finatra/quickstart/TwitterCloneFeatureTest.scala).
 

@@ -58,7 +58,7 @@ class ExampleServer extends HttpServer {
   override val modules = Seq(
     DoEverythingModule)
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router.
       add[ExampleController]
   }

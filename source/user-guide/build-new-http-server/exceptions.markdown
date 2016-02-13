@@ -38,23 +38,28 @@ import DoEverythingModule
 import ExampleController
 import ExampleFilter
 import MalformedURLExceptionMapper
-import com.twitter.finatra.http.filters.{AccessLoggingFilter, ExceptionMappingFilter}
+import com.twitter.finatra.http.HttpServer
+import com.twitter.finatra.http.filters.{CommonFilters, ExceptionMappingFilter}
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
+import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 
 object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
   override val modules = Seq(
-    DoEverythingModule)
+    DoEverythingModule,
+    Slf4jBridgeModule)
 
-  override def configureHttp(router: HttpRouter) {
-    router.
-      filter[AccessLoggingFilter].
-      filter[ExceptionMappingFilter].
-      add[ExampleFilter, ExampleController].
-      exceptionMapper[MalformedURLExceptionMapper]
+  override def configureHttp(router: HttpRouter): Unit = {
+    router
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[TraceIdMDCFilter[Request, Response]]
+      .filter[CommonFilters]
+      .filter[ExceptionMappingFilter]
+      .add[ExampleFilter, ExampleController]
+      .exceptionMapper[MalformedURLExceptionMapper]
   }
 }
 ```

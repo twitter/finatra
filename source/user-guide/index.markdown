@@ -16,6 +16,10 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
   - [Binding Annotations](/finatra/user-guide/getting-started#binding-annotations)
   - [Flags](/finatra/user-guide/getting-started#flags)
   - [Futures](/finatra/user-guide/getting-started#futures)
+- [Logging](/finatra/user-guide/logging)
+  - [Basics](/finatra/user-guide/logging#basics)
+  - [Logback](/finatra/user-guide/logging#logback)
+  - [Mapped Diagnostic Context Filter](/finatra/user-guide/logging#mdc)
 - [Building a new HTTP Server](/finatra/user-guide/build-new-http-server)
   - [Create a Server Definition](/finatra/user-guide/build-new-http-server#server-definition)
   - [Override Default Behavior](/finatra/user-guide/build-new-http-server#override-defaults)
@@ -29,7 +33,6 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
   - [Add an ExceptionMapper](/finatra/user-guide/build-new-http-server/exceptions.html)
   - [Implement a Server "Warmup" Handler](/finatra/user-guide/build-new-http-server/warmup.html)
   - [More information](/finatra/user-guide/build-new-http-server/warmup.html#more-information)
-- Building a new Thrift Server - *\*detailed-documentation coming soon\**
 - [Working with JSON](/finatra/user-guide/json)
   - [Configuration](/finatra/user-guide/json#configuration)
   - [Customization](/finatra/user-guide/json#jackson-customization)
@@ -38,10 +41,7 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
 - [Working with Files](/finatra/user-guide/files)
   - [File Server](/finatra/user-guide/files#file-server)
   - [Mustache Templating](/finatra/user-guide/files#mustache)
-- [Logging](/finatra/user-guide/logging)
-  - [Basics](/finatra/user-guide/logging#basics)
-  - [Logback](/finatra/user-guide/logging#logback)
-  - [Mapped Diagnostic Context Filter](/finatra/user-guide/logging#mdc)
+- [Building a new Thrift Server](#) - *\*COMING SOON\**
 - [Testing](/finatra/user-guide/testing)
   - [Types of Tests](/finatra/user-guide/testing#testing-types)
   - [Embedded Servers/Apps](/finatra/user-guide/testing#embedded-server)
@@ -53,7 +53,6 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
     - [Http Tests](/finatra/user-guide/testing#http-tests)
   - [Startup Tests](/finatra/user-guide/testing#startup-tests)
 - [V1 Migration FAQ](/finatra/user-guide/v1-migration)
-
 
 ### Getting Involved
 
