@@ -124,7 +124,7 @@ For more information on the meta-annotations see the Google Guice [documentation
 
 #### Create a Binding with the Annotation
 
-In your Module, then annotate the `@Provides` method that is instantiating the specific instance with the Binding Annotation, e.g.,
+In your Module annotate the `@Provides` method that is instantiating the specific instance with the Binding Annotation, e.g.,
 
 ```scala
 object MyHttpClientsModule extends TwitterModule {

@@ -13,6 +13,11 @@ footer: true
 
 Note: the most up-to-date examples are located in the [`finatra/examples`](https://github.com/twitter/finatra/tree/master/examples) project.
 
+## <a class="anchor" name="thrift-basics" href="#thrift-basics">Thrift Basics</a>
+===============================
+
+Finatra's thrift support is meant to be used in conjunction with [Finagle](http://twitter.github.io/finagle/) clients and is a [Finagle server](http://twitter.github.io/scrooge/Finagle.html#creating-a-server). Thus it is expected that you will be using [Scrooge](http://twitter.github.io/scrooge/) to generate [Finagle thrift bindings](http://twitter.github.io/scrooge/Finagle.html).
+
 ## <a class="anchor" name="server-definition" href="#server-definition">Create a Server definition</a>
 ===============================
 
