@@ -15,19 +15,19 @@ footer: true
 ## Thrift Controller Basics
 ===============================
 
-A *Thrift Controller* is an implementation of your thrift service. To create the controller, extend the `com.twitter.finatra.thrift.Controller` trait and mix-in the [Scrooge](http://twitter.github.io/scrooge/)-generated `BaseServiceIface` for your service. Scrooge generates a `ServiceIface` which is a case class containing a `Service` for each thrift method over the corresponding `Args` and `Result` structures for the method. The `BaseServiceIface` is an extension point to allow for subclassing. E.g,
+A *Thrift Controller* is an implementation of your thrift service. To create the controller, extend the `com.twitter.finatra.thrift.Controller` trait and mix-in the [Scrooge](http://twitter.github.io/scrooge/)-generated `BaseServiceIface` trait for your service. Scrooge generates a `ServiceIface` which is a case class containing a `Service` for each thrift method over the corresponding `Args` and `Result` structures for the method that extends from `BaseServiceIface`. E.g,
 
 ```scala
 case class ServiceIface(
   fetchBlob: Service[FetchBlob.Args, FetchBlob.Result]
-)
+) extends BaseServiceIface
 ```
 <div></div>
 
 
-The Finatra `com.twitter.finatra.thrift.Controller` gives you a DSL with which you can easily implement your service methods via a `handle(ThriftMethod)` function that takes a callback from `ThriftMethod.Args => Future[ThriftMethod.Result]`.
+The Finatra `com.twitter.finatra.thrift.Controller` provides a DSL with which you can easily implement your service methods via a `handle(ThriftMethod)` function that takes a callback from `ThriftMethod.Args => Future[ThriftMethod.Result]`.
 
-For example, let's say we had the following thrift IDL: `example_service.thrift`
+For example, given the following thrift IDL: `example_service.thrift`
 
 ```
 namespace java com.twitter.example.thriftjava
@@ -49,7 +49,7 @@ service ExampleService {
 <div></div>
 
 
-We can implement a Thrift Controller:
+We can implement the following Thrift Controller:
 
 ```scala
 import com.twitter.example.thriftscala.ExampleService
@@ -68,7 +68,7 @@ class ExampleThriftController
 <div></div>
 
 
-As previously shown, the server can be defined with the thrift controller as follows:
+As previously shown, the server can then be defined with the Thrift Controller as follows:
 
 ```scala
 class ExampleServer extends ThriftServer {
