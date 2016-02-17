@@ -66,9 +66,15 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   }
 )
 
-lazy val javaCompilerOptions = javacOptions ++= Seq(
+lazy val java7CompilerOptions = javacOptions ++= Seq(
   "-source", "1.7",
   "-target", "1.7",
+  "-Xlint:unchecked"
+)
+
+lazy val java8CompilerOptions = javacOptions ++= Seq(
+  "-source", "1.8",
+  "-target", "1.8",
   "-Xlint:unchecked"
 )
 
@@ -83,8 +89,7 @@ lazy val baseSettings = Seq(
     "Twitter Maven" at "https://maven.twttr.com",
     Resolver.sonatypeRepo("snapshots")
   ),
-  scalaCompilerOptions,
-  javaCompilerOptions
+  scalaCompilerOptions
 )
 
 lazy val publishSettings = Seq(
@@ -136,15 +141,15 @@ lazy val slf4jSimpleTestDependency = Seq(
   )
 )
 
-lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ slf4jSimpleTestDependency ++ Seq(
+lazy val injectBuildSettings = baseSettings ++ java7CompilerOptions ++ buildSettings ++ publishSettings ++ slf4jSimpleTestDependency ++ Seq(
   organization := "com.twitter.inject"
 )
 
-lazy val finatraBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ slf4jSimpleTestDependency ++ Seq(
+lazy val finatraBuildSettings = baseSettings ++ java7CompilerOptions ++ buildSettings ++ publishSettings ++ slf4jSimpleTestDependency ++ Seq(
   organization := "com.twitter.finatra"
 )
 
-lazy val baseServerBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
+lazy val baseServerBuildSettings = baseSettings ++ java7CompilerOptions ++ buildSettings ++ publishSettings ++ Seq(
   publishLocal := {},
   publish := {},
   assemblyMergeStrategy in assembly := {
@@ -181,6 +186,7 @@ lazy val finatraExamples =
   Seq(
     benchmarkServer,
     exampleInjectJavaServer,
+    exampleJavaHttpServer,
     helloWorld,
     //helloWorldHeroku, // 2.11 only
     streamingExample,
@@ -209,7 +215,7 @@ lazy val root = (project in file(".")).
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
       // exclude example projects
-      -- inProjects(benchmarkServer, exampleInjectJavaServer,
+      -- inProjects(benchmarkServer, exampleInjectJavaServer, exampleJavaHttpServer,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer,
          tinyUrl, twitterClone),
@@ -602,7 +608,7 @@ lazy val tinyUrl = (project in file("examples/tiny-url")).
     injectCore % "test->test"
   )
 
-lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server")).
+lazy val exampleInjectJavaServer = (project in file("examples/java-server")).
   settings(exampleServerBuildSettings).
   settings(
     name := "java-server",
@@ -613,6 +619,26 @@ lazy val exampleInjectJavaServer = (project in file("inject/examples/java-server
   ).
   dependsOn(
     slf4j,
+    injectServer,
+    injectServer % "test->test",
+    injectCore % "test->test",
+    injectApp % "test->test"
+  )
+
+lazy val exampleJavaHttpServer = (project in file("examples/java-http-server")).
+  settings(exampleServerBuildSettings).
+  settings(java8CompilerOptions).
+  settings(
+    name := "java-http-server",
+    moduleName := "java-finatra-server",
+    libraryDependencies ++= Seq(
+      "com.novocode" % "junit-interface" % "0.11" % Test
+    )
+  ).
+  dependsOn(
+    slf4j,
+    http,
+    http % "test->test",
     injectServer,
     injectServer % "test->test",
     injectCore % "test->test",

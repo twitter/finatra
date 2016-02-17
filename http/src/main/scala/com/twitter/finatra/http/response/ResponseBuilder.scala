@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.response
 
+import com.google.common.net.MediaType._
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.http.{Cookie => FinagleCookie, _}
 import com.twitter.finagle.netty3.ChannelBufferBuf
@@ -189,6 +190,7 @@ class ResponseBuilder @Inject()(
     }
 
     def body(b: Array[Byte]): EnrichedResponse = {
+      contentType(APPLICATION_BINARY)
       response.content = Buf.ByteArray.Owned(b)
       this
     }

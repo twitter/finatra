@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.integration.doeverything.test
 
+import com.google.common.net.MediaType._
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType.JSON_UTF_8
 import com.google.inject.{Key, TypeLiteral}
@@ -586,11 +587,13 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "put_id_ignoring_body" in {
-      server.httpPut(
+      val response = server.httpPut(
         "/put_id_ignoring_body/42",
         putBody = "invalid JSON",
         andExpect = Ok,
         withJsonBody = "42")
+
+      response.contentType should equal(Some(PLAIN_TEXT_UTF_8.toString))
     }
 
     "put_id_not_ignoring_body" in {
@@ -823,26 +826,26 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
     "POST json with failed array element validation" in {
       server.httpPost(
-      "/arrayElementValidation",
-      """
-        {
-          "seq": [0]
-        }
-      """,
-      andExpect = BadRequest,
-      withErrors = Seq("seq.value: [0] is not greater than or equal to 1"))
+        "/arrayElementValidation",
+        """
+          {
+            "seq": [0]
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("seq.value: [0] is not greater than or equal to 1"))
     }
 
     "POST json with null array element" in {
       server.httpPost(
-      "/arrayElementValidation",
-      """
-        {
-          "seq": [null]
-        }
-      """,
-      andExpect = BadRequest,
-      withErrors = Seq("seq: Literal null values are not allowed as json array elements."))
+        "/arrayElementValidation",
+        """
+          {
+            "seq": [null]
+          }
+        """,
+        andExpect = BadRequest,
+        withErrors = Seq("seq: Literal null values are not allowed as json array elements."))
     }
 
     "POST json user with failed method validation" in {
@@ -1441,7 +1444,25 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       headers = Map("request_id" -> "732647326473"),
       postBody = """{"name":"bob", "age":50}""",
       andExpect = Created,
-      withLocation = "/users/732647326473"
-    )
+      withLocation = "/users/732647326473")
+  }
+
+  "non case class returned" in {
+    server.httpGet(
+      "/non_case_class",
+      withJsonBody = """
+      {
+        "name" : "Bob",
+        "age" : 21
+      }
+      """)
+  }
+
+  "bytes returned" in {
+    val response = server.httpGet(
+      "/bytes",
+      withBody = "Steve")
+
+    response.contentType should equal(Some(APPLICATION_BINARY.toString))
   }
 }

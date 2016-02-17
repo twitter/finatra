@@ -15,6 +15,7 @@ import com.twitter.finatra.http.response._
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.util.Future
+import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import scala.collection.SortedSet
@@ -602,6 +603,14 @@ class DoEverythingController @Inject()(
       phone = "+12221234567",
       renderedHtml = xml.Utility.escape(mustacheService.createString("testHtml.mustache", testUser)))
   }
+
+  get("/non_case_class") { r: Request =>
+    new NonCaseClass
+  }
+
+  get("/bytes") { r: Request =>
+    "Steve".getBytes(StandardCharsets.UTF_8)
+  }
 }
 
 case class MultipleInjectableValueParams(
@@ -610,3 +619,7 @@ case class MultipleInjectableValueParams(
 case class CaseClassWithRequestField(
   @Inject request: Request)
 
+class NonCaseClass {
+  val name = "Bob"
+  val age = 21
+}

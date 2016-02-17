@@ -10,30 +10,30 @@ import org.apache.commons.io.IOUtils
  */
 object RequestBuilder {
   def get(url: String): RequestBuilder = {
-    method(Method.Get, url)
+    create(Method.Get, url)
   }
 
   def post(url: String): RequestBuilder = {
-    method(Method.Post, url)
+    create(Method.Post, url)
   }
 
   def put(url: String): RequestBuilder = {
-    method(Method.Put, url)
+    create(Method.Put, url)
   }
 
   def patch(url: String): RequestBuilder = {
-    method(Method.Patch, url)
+    create(Method.Patch, url)
   }
 
   def delete(url: String): RequestBuilder = {
-    method(Method.Delete, url)
+    create(Method.Delete, url)
   }
 
   def head(url: String): RequestBuilder = {
-    method(Method.Head, url)
+    create(Method.Head, url)
   }
 
-  def method(method: Method, url: String): RequestBuilder = {
+  def create(method: Method, url: String): RequestBuilder = {
     new RequestBuilder(
       Request(method, url))
   }

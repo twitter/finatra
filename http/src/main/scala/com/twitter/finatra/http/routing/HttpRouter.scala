@@ -2,7 +2,7 @@ package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.http.Controller
+import com.twitter.finatra.http.{JavaController, Controller}
 import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.internal.exceptions.ExceptionManager
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
@@ -76,6 +76,12 @@ class HttpRouter @Inject()(
   }
 
   /** Add global filter used for all requests, by default this is AFTER route matching */
+  def filter(clazz: Class[_ <: HttpFilter]) = {
+    globalFilter = globalFilter andThen injector.instance(clazz)
+    this
+  }
+
+  /** Add global filter used for all requests, by default this is AFTER route matching */
   def filter[FilterType <: HttpFilter : Manifest] = {
     assertCanFilter()
     globalFilter = globalFilter andThen injector.instance[FilterType]
@@ -102,6 +108,12 @@ class HttpRouter @Inject()(
 
   def add[C <: Controller : Manifest]: HttpRouter = {
     val controller = injector.instance[C]
+    addInjected(controller)
+  }
+
+  def add(clazz: Class[_ <: JavaController]): HttpRouter = {
+    val controller = injector.instance(clazz)
+    controller.configureRoutes()
     addInjected(controller)
   }
 
