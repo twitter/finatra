@@ -15,7 +15,7 @@ footer: true
 ## Basics
 ===============================
 
-There may be occasions where we want to exercise specific code paths before accepting traffic to the server. In this case you can implement a [`com.twitter.finatra.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala).
+There may be occasions where we want to exercise specific code paths before accepting traffic to the server. In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala).
 
 
 The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) method is called before the server's external Thrift port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`.
