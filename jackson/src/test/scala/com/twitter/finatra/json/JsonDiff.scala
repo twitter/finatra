@@ -21,18 +21,6 @@ object JsonDiff extends Logging {
       verbose = verbose)
   }
 
-  // extract json nodes, sort them, and assert that they are each the same
-  def jsonSetsDiff(receivedJsonSet: Set[Any], expectedJsonSet: Set[Any]) = {
-    val receivedJsonNodes = JsonDiffUtil.toSortedJsonNodes(receivedJsonSet)
-    val expectedJsonNodes = JsonDiffUtil.toSortedJsonNodes(receivedJsonSet)
-    val compares = receivedJsonNodes.zip(expectedJsonNodes)
-    compares.foreach { case (received, expected) =>
-      assertJsonNodesSame(
-        JsonDiffUtil.jsonDiff(received, expected),
-        verbose = true)
-    }
-  }
-
   /* Private */
 
   private def assertJsonNodesSame(

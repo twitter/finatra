@@ -69,19 +69,6 @@ object JsonDiffUtil extends Logging {
     }
   }
 
-  def toSortedJsonNodes(s: Set[Any]) = {
-    // parse json and back out to normalized strings for sorting
-    val normalizedStrings = for {
-      member <- s
-    } yield sortedString(
-        finatraMapper.parse[JsonNode](jsonString(member)))
-
-    // sort normalized strings and convert back to json nodes
-    normalizedStrings.toList.sorted.map { str =>
-      finatraMapper.parse[JsonNode](str)
-    }
-  }
-
   /* Private */
 
   private def tryJsonNodeParse(expectedJsonStr: String): JsonNode = {
