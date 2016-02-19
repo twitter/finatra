@@ -44,9 +44,22 @@ class ThriftRouter @Inject()(
     this
   }
 
+  def add[C <: Controller with ToThriftService : Manifest]: ThriftRouter = {
+    addThriftService {
+      val controller = injector.instance[C]
+      for (m <- controller.methods) {
+        m.setFilter(filterChain)
+      }
+      info("Adding methods\n" + (controller.methods.map(method => s"${controller.getClass.getSimpleName}.${method.name}") mkString "\n"))
+      if (controller.methods.isEmpty) error(s"${controller.getClass.getCanonicalName} contains no methods!")
+      filteredService = controller.toThriftService
+    }
+    this
+  }
+
   // @deprecated("Thrift services should be filtered with #filter or #typeAgnosticFilter.", "2016-01-26")
   def add[T <: ThriftService : Manifest](
-    filterFactory: (MethodFilters, T) => ThriftService) {
+    filterFactory: (MethodFilters, T) => ThriftService): Unit = {
 
     addFilteredService(
       filterFactory.apply(
@@ -54,20 +67,7 @@ class ThriftRouter @Inject()(
         injector.instance[T]))
   }
 
-  def add[C <: Controller with ToThriftService : Manifest] = {
-    val controller = injector.instance[C]
-    for (m <- controller.methods) {
-      m.setFilter(filterChain)
-      info(s"Added thrift method ${controller.getClass.getCanonicalName}.${m.method.name}")
-    }
-    if (controller.methods.isEmpty) error(s"${controller.getClass.getCanonicalName} contains no methods!")
-    filteredService = controller.toThriftService
-
-    assert(!done, "ThriftRouter#add cannot be called multiple times, as we don't currently support serving multiple thrift services.")
-    done = true
-  }
-
-  @deprecated("Thrift services should be added with a filter factory.", "since Scrooge 4.x")
+  @deprecated("Thrift services should be added with a filter factory.", "2015-10-28")
   def addUnfiltered[T <: ThriftService : Manifest] = {
     addFilteredService(injector.instance[T])
     this
@@ -83,10 +83,15 @@ class ThriftRouter @Inject()(
   private def addFilteredService[T <: ThriftService](
     thriftService: ThriftService): Unit = {
 
-    assert(!done, "ThriftRouter#add cannot be called multiple times, as we don't currently support serving multiple thrift services.")
-    done = true
+    addThriftService {
+      filteredService = thriftService
+    }
+  }
 
-    filteredService = thriftService
+  private def addThriftService(func: => Unit): Unit = {
+    assert(!done, "ThriftRouter#add cannot be called multiple times, as we don't currently support serving multiple thrift services.")
+    func
+    done = true
   }
 
   private def createMethodFilters: MethodFilters = {

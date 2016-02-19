@@ -12,6 +12,8 @@ class ThriftMethodService[Args, Result](
 
   private[this] var filter: Filter[Args, Result, Args, Result] = Filter.identity
 
+  def name = method.name
+
   override def apply(request: Args): Future[Result] = {
     filter.andThen(svc)(request)
   }

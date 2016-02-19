@@ -3,7 +3,7 @@ package com.twitter.inject.app.internal
 import com.google.inject.util.Modules
 import com.google.inject.{Module => GuiceModule, _}
 import com.twitter.app.Flag
-import com.twitter.inject.{TwitterBaseModule, TwitterModuleLifecycle, Injector, Logging, TwitterModule}
+import com.twitter.inject.{TwitterBaseModule, TwitterModuleLifecycle, Injector, Logging}
 import scala.collection.JavaConverters._
 
 object InstalledModules {
@@ -51,7 +51,9 @@ object InstalledModules {
   private[inject] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {
     (modules collect {
       case injectModule: TwitterBaseModule =>
-        injectModule.flags ++ findModuleFlags(injectModule.modules)
+        injectModule.flags ++
+          findModuleFlags(injectModule.modules) ++
+          findModuleFlags(injectModule.frameworkModules)
     }).flatten.distinct
   }
 
@@ -59,7 +61,9 @@ object InstalledModules {
   private def findInstalledModules(module: GuiceModule): Seq[GuiceModule] = module match {
     case injectModule: TwitterBaseModule =>
       injectModule.modules ++
-        (injectModule.modules flatMap findInstalledModules)
+        (injectModule.modules flatMap findInstalledModules) ++
+        injectModule.frameworkModules ++
+        (injectModule.frameworkModules flatMap findInstalledModules)
     case _ =>
       Seq()
   }

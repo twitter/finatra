@@ -19,4 +19,14 @@ class Add1Controller @Inject()(
     val num = request.getParam("num")
     adder.add1String(num)
   }
+
+  get("/slowAdd1") { request: Request =>
+    val num = request.getParam("num")
+    adder.add1Slowly(num)
+  }
+
+  get("/errorAdd1") { request: Request =>
+    val num = request.getParam("num")
+    adder.add1AlwaysError(num)
+  }
 }

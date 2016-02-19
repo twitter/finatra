@@ -1,4 +1,4 @@
-package com.twitter.inject.thrift
+package com.twitter.inject.thrift.modules
 
 import com.github.nscala_time.time
 import com.google.inject.Provides
@@ -31,7 +31,7 @@ abstract class ThriftClientModule[T: ClassTag]
    * Enable thrift mux for this connection.
    *
    * Note: Both server and client must have mux enabled otherwise
-   * a non-descript ChannelClosedException will be seen.
+   * a nondescript ChannelClosedException will be seen.
    */
   def mux: Boolean = true
 

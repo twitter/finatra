@@ -9,6 +9,7 @@
   <property name="ACCESS_LOG_PATTERN"
             value="%msg"/>
 
+  <!-- Per-Package Config -->
   <logger name="com.twitter" level="info"/>
   <logger name="com.twitter.logging.ScribeHandler" level="warn"/>
   <logger name="com.twitter.zookeeper.client.internal" level="warn"/>

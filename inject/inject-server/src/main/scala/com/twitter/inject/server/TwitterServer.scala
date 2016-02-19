@@ -51,6 +51,7 @@ trait TwitterServer
    * a warmup handler in #warmup.
    * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
    * @see [[com.twitter.inject.utils.Handler]]
+   * TODO: rename to handle[T <: Handler]()
    */
   protected def run[T <: Handler : Manifest]() {
     injector.instance[T].handle()
@@ -59,7 +60,7 @@ trait TwitterServer
   /* Overrides */
 
   override final def main() {
-    super.main() // Call GuiceApp.main() to create injector
+    super.main() // Call inject.App.main() to create injector
 
     info("Startup complete, server ready.")
     waitForServer()

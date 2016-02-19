@@ -3,9 +3,7 @@ package com.twitter.inject.conversions
 import com.twitter.util.{Duration => TwitterDuration}
 import org.joda.time.Duration
 
-object duration extends DurationConversions
-
-trait DurationConversions {
+object duration {
 
   implicit class RichDuration(duration: Duration) {
     def toTwitterDuration: TwitterDuration = {

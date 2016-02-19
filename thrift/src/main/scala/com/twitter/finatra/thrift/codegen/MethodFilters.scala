@@ -6,6 +6,7 @@ import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.finatra.thrift.internal.{ThriftRequestUnwrapFilter, ThriftRequestWrapFilter}
 import com.twitter.scrooge.ThriftMethod
 
+// @deprecated("Thrift services should be filtered with ThriftRouter#filter or ThriftRouter#typeAgnosticFilter", "2016-01-26")
 case class MethodFilters(
   statsReceiver: StatsReceiver,
   commonFilter: ThriftFilter) {

@@ -6,7 +6,7 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.thrift.ThriftClientExceptionMapper
 
 class Add1Server extends HttpServer {
-  override val modules = Seq(Adder1ThriftClientModule)
+  override val modules = Seq(AdderThriftClientModule)
 
   override def configureHttp(router: HttpRouter) {
     router

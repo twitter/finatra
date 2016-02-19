@@ -25,6 +25,13 @@ trait ThriftServer extends TwitterServer {
 
   protected def configureThrift(router: ThriftRouter): Unit
 
+  // TODO: move upstream to inject.App; requires inject.TwitterServer#run to be
+  // renamed (to handle[T]) and then this should replace inject.App#appMain().
+  /**
+   * Application logic to run after the server has warmed up and bound to its port(s).
+   */
+  protected def run(): Unit = {}
+
   /* Lifecycle */
 
   override def postWarmup() {
@@ -49,6 +56,8 @@ trait ThriftServer extends TwitterServer {
   override protected def failfastOnFlagsNotParsed = true
 
   override def thriftPort = Option(thriftServer) map PortUtils.getPort
+
+  override final def appMain(): Unit = { run() }
 
   /* Protected */
 

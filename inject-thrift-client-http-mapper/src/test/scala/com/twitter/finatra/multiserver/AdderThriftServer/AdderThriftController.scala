@@ -1,4 +1,4 @@
-package com.twitter.finatra.multiserver.Add1ThriftServer
+package com.twitter.finatra.multiserver.AdderThriftServer
 
 import com.twitter.adder.thriftscala.Adder
 import com.twitter.adder.thriftscala.Adder._
@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 
 @Singleton
-class AdderController
+class AdderThriftController
   extends Controller
   with Adder.BaseServiceIface {
 
@@ -40,6 +40,15 @@ class AdderController
     else if (numCalled < 6)
       Future.exception(new ServerError(ServerErrorCause.InternalServerError, "oops " + numCalled))
     else
-      Future.value((args.num.toInt + 1).toString)
+      Future((args.num.toInt + 1).toString)
+  }
+
+  override val add1Slowly = handle(Add1Slowly) { args: Add1Slowly.Args =>
+    Thread.sleep(5000)
+    Future((args.num.toInt + 1).toString)
+  }
+
+  override val add1AlwaysError = handle(Add1AlwaysError) { args: Add1AlwaysError.Args =>
+    Future.exception(new RuntimeException("oops"))
   }
 }

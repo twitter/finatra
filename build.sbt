@@ -32,6 +32,7 @@ lazy val versions = new {
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
+  val commonsLang = "2.6"
   val grizzled = "1.0.2"
   val guava = "16.0.1"
   val guice = "4.0"
@@ -330,7 +331,10 @@ lazy val injectUtils = (project in file("inject/inject-utils")).
   settings(injectBuildSettings).
   settings(
     name := "inject-utils",
-    moduleName := "inject-utils"
+    moduleName := "inject-utils",
+    libraryDependencies ++= Seq(
+      "commons-lang" % "commons-lang" % versions.commonsLang
+    )
   ).
   dependsOn(
     injectCore,

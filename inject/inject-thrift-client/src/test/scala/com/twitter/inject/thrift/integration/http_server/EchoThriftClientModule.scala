@@ -1,6 +1,6 @@
 package com.twitter.inject.thrift.integration.http_server
 
-import com.twitter.inject.thrift.ThriftClientModule
+import com.twitter.inject.thrift.modules.ThriftClientModule
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
 

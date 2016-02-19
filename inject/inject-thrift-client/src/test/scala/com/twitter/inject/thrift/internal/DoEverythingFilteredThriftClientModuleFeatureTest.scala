@@ -10,7 +10,8 @@ import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.thrift.filtered_integration.http_server.{GreeterHttpController, HiLoggingThriftClientFilter}
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
-import com.twitter.inject.thrift.{FilterBuilder, FilteredThriftClientModule, ThriftClientIdModule}
+import com.twitter.inject.thrift.filters.FilterBuilder
+import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftClientModule}
 import com.twitter.util._
 
 class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
@@ -62,14 +63,14 @@ object GreeterThriftClientModule2
 
   override val label = "greeter-thrift-client"
   override val dest = "flag!greeter-thrift-service"
-  override val connectTimeout = 1.minute.toDuration
+  override val sessionAcquisitionTimeout = 1.minute.toDuration
 
   override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
-    filterBuilder: FilterBuilder) = {
+    filter: FilterBuilder) = {
 
     serviceIface.copy(
-      hi = filterBuilder.method(Hi)
+      hi = filter.method(Hi)
         .constantRetry(
           requestTimeout = 1.minute,
           shouldRetry = {
@@ -82,10 +83,10 @@ object GreeterThriftClientModule2
         .globalFilter(new RequestLoggingThriftClientFilter)
         .filter(new HiLoggingThriftClientFilter)
         .andThen(serviceIface.hi),
-      bye = filterBuilder.method(Bye)
+      bye = filter.method(Bye)
         .globalFilter[RequestLoggingThriftClientFilter]
         .exponentialRetry(
-          shouldRetryResponse = NonCancelledExceptions,
+          shouldRetryResponse = PossiblyRetryableExceptions,
           requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,

@@ -5,6 +5,7 @@ scala_library(name='scala',
     repo = artifactory,
   ),
   dependencies=[
+    '3rdparty/jvm/commons-lang',
     'finatra/inject/inject-core',
   ],
   fatal_warnings=True,

@@ -4,6 +4,8 @@ import com.twitter.finagle.mux.ClientDiscardedRequestException
 import com.twitter.finagle.{CancelledRequestException, Failure, CancelledConnectionException}
 import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.inject.Test
+import com.twitter.inject.thrift.filters.FilterBuilder
+import com.twitter.inject.thrift.modules.FilteredThriftClientModule
 import com.twitter.util.Future
 
 class FilteredThriftClientModuleTest extends Test {

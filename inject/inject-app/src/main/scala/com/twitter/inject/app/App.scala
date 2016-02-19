@@ -70,7 +70,7 @@ trait App extends TwitterUtilApp with Logging {
   }
 
   /**
-   * Callback method executed after the Guice injector is created and warmup has fully completed.
+   * Callback method executed after the injector is created and warmup has fully completed.
    * Note: Not intended for use when using HttpServer or ThriftServer
    */
   def appMain() {

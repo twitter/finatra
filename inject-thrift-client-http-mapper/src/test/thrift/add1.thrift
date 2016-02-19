@@ -21,4 +21,16 @@ service Adder {
     2: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
     3: finatra_thrift_exceptions.NoClientIdError noClientIdError
   )
+
+  string add1Slowly(
+    1: string num
+  ) throws (
+    1: finatra_thrift_exceptions.ServerError serverError,
+    2: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
+    3: finatra_thrift_exceptions.NoClientIdError noClientIdError
+  )
+
+  string add1AlwaysError(
+    1: string num
+  )
 }

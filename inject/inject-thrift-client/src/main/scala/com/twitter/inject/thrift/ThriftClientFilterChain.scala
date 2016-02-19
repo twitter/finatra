@@ -2,28 +2,31 @@ package com.twitter.inject.thrift
 
 import com.twitter
 import com.twitter.finagle._
+import com.twitter.finagle.param.HighResTimer
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.service.{RetryFilter, RetryPolicy, TimeoutFilter}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.util.DefaultTimer
 import com.twitter.inject.conversions.duration._
-import com.twitter.inject.thrift.filters.ThriftClientExceptionFilter
 import com.twitter.inject.thrift.internal.IncrementCounterFilter
+import com.twitter.inject.thrift.conversions.method._
+import com.twitter.inject.thrift.internal.filters.ThriftClientExceptionFilter
+import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftResponse, ThriftStruct}
 import com.twitter.util.{Throwables, Try}
-import org.apache.commons.lang.StringUtils
 import org.joda.time.Duration
 
 class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
   injector: Injector,
   statsReceiver: StatsReceiver,
+  label: String,
   method: ThriftMethod)
   extends Logging {
 
-  // clnt/thrift/Adder/add1String
-  private val methodStats = statsReceiver.scope("clnt").scope("thrift").scope(method.serviceName).scope(method.name)
+  // clnt/adder-thrift/Adder/add1String
+  private val methodStats = statsReceiver.scope("clnt").scope(label).scope(method.serviceName).scope(method.name)
   private val failuresCounter = methodStats.counter("failures")
   private val invocationsCounter = methodStats.counter("invocations")
   private val failuresScoped = methodStats.scope("failures")
@@ -120,16 +123,15 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
     filter(new IncrementCounterFilter[Req, Rep](invocationsCounter))
 
     filter(new RetryFilter[Req, Rep](
-      addRetryLogging(retryPolicy, retryMsg),
-      DefaultTimer.twitter,
+      addRetryLoggingAndStats(retryPolicy, retryMsg),
+      HighResTimer.Default,
       methodStats))
   }
 
   def defaultRetryMsg(requestAndResponse: (Req, Try[Rep]), duration: Duration) = {
-    val (request, response) = requestAndResponse
-    val requestStr = StringUtils.abbreviate(request.toString, 10)
-    val responseStr = StringUtils.abbreviate(response.toString, 10)
-    s"Retrying ${method.serviceName }.${method.name }($requestStr) = $responseStr in ${duration.getMillis } ms"
+    val (_, response) = requestAndResponse
+    val responseStr = stripNewlines(response.toString)
+    "Retrying " + method.toPrettyString + s" = $responseStr in ${duration.getMillis} ms"
   }
 
   def andThen(service: Service[Req, Rep]): Service[Req, Rep] = {
@@ -137,15 +139,22 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
     exceptionFilterImpl andThen filterChain andThen service
   }
 
-  /* Private */
+  /**
+   * @see scala.PartialFunction#applyOrElse
+   */
+  private val AlwaysFalse = Function.const(false) _
 
   /*
-   * Note: If shouldRetryResponse is set, convert it into a partial function which also accepts the request
+   * Note: If shouldRetryResponse is set, convert it into a partial function which accepts
+   * both a request and a response. Since we are manually calling the partial function, we
+   * call PartialFunction#applyOrElse to see if shouldRetryResponse matches the incoming
+   * response else the result is a Function that always returns false (we are defensive and
+   * return of false indicates we do not want to retry).
    */
   private def chooseShouldRetryFunction(
-    shouldRetry: PartialFunction[(Req, Try[Rep]), Boolean],
-    shouldRetryResponse: PartialFunction[Try[Rep], Boolean]): PartialFunction[(Req, Try[Rep]), Boolean] = {
-
+    shouldRetry:         PartialFunction[(Req, Try[Rep]), Boolean],
+    shouldRetryResponse: PartialFunction[Try[Rep], Boolean]
+  ): PartialFunction[(Req, Try[Rep]), Boolean] = {
     assert(shouldRetryResponse != null | shouldRetry != null)
 
     if (shouldRetry != null) {
@@ -153,24 +162,26 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
     }
     else {
       case (request, responseTry) =>
-        shouldRetryResponse(responseTry)
+        shouldRetryResponse.applyOrElse(responseTry, AlwaysFalse)
     }
   }
 
-  private def addRetryLogging(
+  private def addRetryLoggingAndStats(
     retryPolicy: RetryPolicy[(Req, Try[Rep])],
     retryMsg: ((Req, Try[Rep]), Duration) => String): RetryPolicy[(Req, Try[Rep])] = {
 
     new RetryPolicy[(Req, Try[Rep])] {
       override def apply(result: (Req, Try[Rep])): Option[(twitter.util.Duration, RetryPolicy[(Req, Try[Rep])])] = {
+        incrRetryStats(result)
+
         retryPolicy(result) match {
           case Some((duration, policy)) =>
-            incrRetryStats(result)
+
             val msg = retryMsg(result, duration.toJodaDuration)
             if (msg.nonEmpty) {
               warn(msg)
             }
-            Some((duration, addRetryLogging(policy, retryMsg)))
+            Some((duration, addRetryLoggingAndStats(policy, retryMsg)))
           case _ =>
             None
         }
@@ -179,8 +190,8 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
   }
 
   private def incrRetryStats(result: (Req, Try[Rep])): Unit = {
-    val (req, rep) = result
-    rep.onFailure { e =>
+    val (req, tryRep) = result
+    tryRep.onFailure { e =>
       failuresCounter.incr()
       incrScopedFailureCounter(e)
     }

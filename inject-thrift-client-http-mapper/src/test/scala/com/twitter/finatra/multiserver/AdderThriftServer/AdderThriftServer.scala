@@ -1,10 +1,12 @@
-package com.twitter.finatra.multiserver.Add1ThriftServer
+package com.twitter.finatra.multiserver.AdderThriftServer
 
 import com.twitter.finatra.logging.filter.{TypeAgnosticTraceIdMDCFilter, TypeAgnosticLoggingMDCFilter}
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, StatsFilter, ThriftMDCFilter}
 import com.twitter.finatra.thrift.{ThriftRequest, ThriftRouter, ThriftServer}
 
 class AdderThriftServer extends ThriftServer {
+  override val name = "adder-thrift-server"
+
   override def configureThrift(router: ThriftRouter) {
     router
       .typeAgnosticFilter[TypeAgnosticLoggingMDCFilter]
@@ -12,6 +14,6 @@ class AdderThriftServer extends ThriftServer {
       .filter[ThriftMDCFilter]
       .filter[AccessLoggingFilter]
       .filter[StatsFilter]
-      .add[AdderController]
+      .add[AdderThriftController]
   }
 }
