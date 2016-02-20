@@ -248,7 +248,24 @@ object MyModule1 extends TwitterModule {
 ### <a class="anchor" name="futures" href="#futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
 ===============================
 
-Finatra, like other frameworks based on Twitter's [Finagle](https://twitter.github.io/finagle), uses the [twitter/util](https://github.com/twitter/util) [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) class. Twitter's `com.twitter.util.Future` is similar to, but predates, [Scala's](http://docs.scala-lang.org/overviews/core/futures.html) [`scala.concurrent.Future`](http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future) (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is *not* compatible without using [bijections](https://github.com/twitter/bijection) to transform one into the other. It is important to remember that Finatra uses and expects [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala).
+Finatra, like other frameworks based on Twitter's [Finagle](https://twitter.github.io/finagle), uses the [twitter/util](https://github.com/twitter/util) [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) class. Twitter's `com.twitter.util.Future` is similar to, but predates, [Scala's](http://docs.scala-lang.org/overviews/core/futures.html) [`scala.concurrent.Future`](http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future) (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is *not* compatible without using a [bijection](https://github.com/twitter/bijection) to transform one into the other. It is important to remember that **Finatra uses and expects** [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala).
+
+For more information on [twitter/bijection](https://github.com/twitter/bijection) it is highly recommended that you read the [bijection README](https://github.com/twitter/bijection/blob/develop/README.md). For more information on converting between a `com.twitter.util.Future` and a `scala.concurrent.Future` see this [thread](https://groups.google.com/forum/#!searchin/finaglers/UtilBijections/finaglers/DjCqv1Vyw0Q/IWwh9y43CAAJ).
+
+A simple example,
+
+```scala
+import com.twitter.bijection.Conversion._
+import com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaFuture
+import com.twitter.util.{Future => TwitterFuture}
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{Future => ScalaFuture}
+
+val scalaFuture: ScalaFuture[T] = {...} // some call that returns scala.concurrent.Future[T]
+scalaFuture.as[TwitterFuture[T]]        // this converts the scala.concurrent.Future[T] to a com.twitter.util.Future[T]
+```
+<div></div>
 
 <nav>
   <ul class="pager">
