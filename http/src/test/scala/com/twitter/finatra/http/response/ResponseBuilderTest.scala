@@ -1,10 +1,9 @@
 package com.twitter.finatra.http.response
 
 import com.google.common.net.MediaType
-import com.twitter.finagle.http.{Cookie => FinagleCookie, Response, Status}
+import com.twitter.finagle.http.{Cookie => FinagleCookie, Request, Response, Status}
 import com.twitter.finagle.stats.{StatsReceiver, LoadedStatsReceiver}
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
-import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.http.test.HttpTest
 import com.twitter.inject.Mockito
@@ -22,10 +21,24 @@ class ResponseBuilderTest extends HttpTest with Mockito {
       localDocRoot = "src/main/webapp/",
       docRoot = ""),
     mock[MessageBodyManager],
-    mock[MustacheService],
     mock[StatsReceiver])
 
   "response builder" should {
+
+    "handle simple response body" in {
+      val content = "test body"
+      val response = responseBuilder.ok(content)
+
+      response.getContentString() should equal(content)
+    }
+
+    "handle simple response body with request" in {
+      val content = "test body"
+      val request = Request()
+      val response = responseBuilder.ok(request, content)
+
+      response.getContentString() should equal(content)
+    }
 
     "handle file type as response body" in {
       val expectedContent = """{"id": "foo"}"""

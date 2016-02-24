@@ -55,7 +55,7 @@ class CallbackConverter @Inject()(
     }
     else if (isFutureOption[ResponseType]) {
       request: Request =>
-        requestCallback(request).asInstanceOf[Future[Option[_]]] map optionToHttpResponse
+        requestCallback(request).asInstanceOf[Future[Option[_]]] map optionToHttpResponse(request)
     }
     else if (runtimeClassEq[ResponseType, AsyncStream[_]]) {
       request: Request =>
@@ -69,7 +69,7 @@ class CallbackConverter @Inject()(
     }
     else if (runtimeClassEq[ResponseType, Future[_]]) {
       request: Request =>
-        requestCallback(request).asInstanceOf[Future[_]] map createHttpResponse
+        requestCallback(request).asInstanceOf[Future[_]] map createHttpResponse(request)
     }
     else if (runtimeClassEq[ResponseType, StreamingResponse[_]]) {
       request: Request =>
@@ -83,25 +83,25 @@ class CallbackConverter @Inject()(
     else if (runtimeClassEq[ResponseType, Option[_]]) {
       request: Request =>
         Future(
-          optionToHttpResponse(requestCallback(request).asInstanceOf[Option[_]]))
+          optionToHttpResponse(request)(requestCallback(request).asInstanceOf[Option[_]]))
     }
     else {
       request: Request =>
         Future(
-          createHttpResponse(requestCallback(request)))
+          createHttpResponse(request)(requestCallback(request)))
     }
   }
 
-  private def optionToHttpResponse(response: Option[_]): Response = {
-    response map createHttpResponse getOrElse {
+  private def optionToHttpResponse(request: Request)(response: Option[_]): Response = {
+    response map createHttpResponse(request) getOrElse {
       responseBuilder.notFound("")
     }
   }
 
-  private def createHttpResponse(any: Any): Response = {
+  private def createHttpResponse(request: Request)(any: Any): Response = {
     any match {
       case response: Response => response
-      case _ => responseBuilder.ok(any)
+      case _ => responseBuilder.ok(request, any)
     }
   }
 

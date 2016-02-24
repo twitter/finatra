@@ -29,7 +29,7 @@ class MessageBodyManager @Inject()(
 
   /* Public (Config methods called during server startup) */
 
-  def add[MBC <: MessageBodyComponent : Manifest]() {
+  def add[MBC <: MessageBodyComponent : Manifest](): Unit = {
     val componentSupertypeClass =
       if (classOf[MessageBodyReader[_]].isAssignableFrom(manifest[MBC].runtimeClass))
         classOf[MessageBodyReader[_]]
@@ -42,13 +42,19 @@ class MessageBodyManager @Inject()(
       singleTypeParam(componentSupertypeType))
   }
 
-  def addByAnnotation[Ann <: Annotation : Manifest, T <: MessageBodyWriter[_] : Manifest] {
+  def addByAnnotation[Ann <: Annotation : Manifest, T <: MessageBodyWriter[_] : Manifest](): Unit = {
     val messageBodyWriter = injector.instance[T]
     val annot = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
     annotationTypeToWriter(annot) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
   }
 
-  def addExplicit[MBC <: MessageBodyComponent : Manifest, TypeToReadOrWrite: Manifest]() {
+  def addByComponentType[M <: MessageBodyComponent : Manifest, T <: MessageBodyWriter[_] : Manifest](): Unit = {
+    val messageBodyWriter = injector.instance[T]
+    val componentType = manifest[M].runtimeClass.asInstanceOf[Class[M]]
+    writerCache.putIfAbsent(componentType, messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]])
+  }
+
+  def addExplicit[MBC <: MessageBodyComponent : Manifest, TypeToReadOrWrite: Manifest](): Unit = {
     add[MBC](
       typeLiteral[TypeToReadOrWrite].getType)
   }

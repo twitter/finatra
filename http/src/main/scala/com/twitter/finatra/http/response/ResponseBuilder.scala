@@ -8,7 +8,7 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
-import com.twitter.finatra.http.marshalling.mustache.MustacheService
+import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
@@ -27,7 +27,6 @@ class ResponseBuilder @Inject()(
   objectMapper: FinatraObjectMapper,
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,
-  mustacheService: MustacheService,
   statsReceiver: StatsReceiver)
   extends Logging {
 
@@ -40,6 +39,19 @@ class ResponseBuilder @Inject()(
   def ok: EnrichedResponse = EnrichedResponse(Status.Ok)
 
   def ok(body: Any): EnrichedResponse = EnrichedResponse(Status.Ok).body(body)
+
+  /**
+   * Returns an `Ok` response with a written body, potentially based on values
+   * contained within the `Request`.
+   *
+   * @note This version is useful when the `body` parameter requires custom
+   * message body rendering and values in the `Request` are required for
+   * decision making.
+   *
+   * @param request the HTTP Request associated with this response
+   * @param body the response body, or the information needed to render the body
+   */
+  def ok(request: Request, body: Any): EnrichedResponse = EnrichedResponse(Status.Ok).body(request, body)
 
   def ok(body: String): EnrichedResponse = EnrichedResponse(Status.Ok).body(body)
 
@@ -158,27 +170,20 @@ class ResponseBuilder @Inject()(
       this
     }
 
-    def body(any: Any): EnrichedResponse = {
-      any match {
-        case null => nothing
-        case buf: Buf => body(buf)
-        case bytes: Array[Byte] => body(bytes)
-        case cbos: ChannelBuffer => body(ChannelBufferBuf.Owned(cbos))
-        case "" => nothing
-        case Unit => nothing
-        case _: BoxedUnit => nothing
-        case opt if opt == None => nothing
-        case str: String => body(str)
-        case _file: File => file(_file)
-        case _ =>
-          val writer = messageBodyManager.writer(any)
-          val writerResponse = writer.write(any)
-          body(writerResponse.body)
-          contentType(writerResponse.contentType)
-          headers(writerResponse.headers)
-      }
-      this
-    }
+    def body(any: Any): EnrichedResponse = body(None, any)
+
+    /**
+     * Returns a response with a written body, potentially based on values
+     * contained within the `Request`.
+     *
+     * @note This version is useful when the `any` parameter requires custom
+     * message body rendering and values in the `Request` are required for
+     * decision making.
+     *
+     * @param request the HTTP Request associated with this response
+     * @param any the body, or the information needed to render the body
+     */
+    def body(request: Request, any: Any): EnrichedResponse = body(Some(request), any)
 
     def file(file: File): EnrichedResponse = {
       body(
@@ -322,7 +327,7 @@ class ResponseBuilder @Inject()(
     }
 
     def view(template: String, obj: Any) = {
-      html(mustacheService.createBuffer(template, obj))
+      html(MustacheBodyComponent(obj, template))
     }
 
     /* Exception Stats */
@@ -381,6 +386,31 @@ class ResponseBuilder @Inject()(
 
     private def isFile(requestPath: String) = {
       getExtension(requestPath).nonEmpty
+    }
+
+    private def body(request: Option[Request], any: Any): EnrichedResponse = {
+      any match {
+        case null => nothing
+        case buf: Buf => body(buf)
+        case bytes: Array[Byte] => body(bytes)
+        case cbos: ChannelBuffer => body(ChannelBufferBuf.Owned(cbos))
+        case "" => nothing
+        case Unit => nothing
+        case _: BoxedUnit => nothing
+        case opt if opt == None => nothing
+        case str: String => body(str)
+        case _file: File => file(_file)
+        case _ =>
+          val writer = messageBodyManager.writer(any)
+          val writerResponse = request match {
+            case Some(req) => writer.write(req, any)
+            case None      => writer.write(any)
+          }
+          body(writerResponse.body)
+          contentType(writerResponse.contentType)
+          headers(writerResponse.headers)
+      }
+      this
     }
 
     //optimized: MediaType.toString is a hotspot when profiling
