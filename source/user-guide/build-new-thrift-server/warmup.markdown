@@ -75,7 +75,7 @@ class ExampleServer extends ThriftServer {
 <div></div>
 
 
-The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external Thrift port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`.
+The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external Thrift port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`. See [here](/finatra/user-guide/getting-started#lifecycle) for more information on the lifecycle of a Finatra server.
 
 ## <a class="anchor" name="more-information" href="#more-information">More information</a>
 ===============================

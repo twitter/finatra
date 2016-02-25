@@ -15,7 +15,7 @@ footer: true
 ## Basics
 ===============================
 
-There may be occasions where we want to exercise specific code paths before accepting traffic to the server (e.g., for triggering JIT in the JVM). In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala). Your handler should be constructed with an [`com.twitter.finatra.http.routing.HttpWarmup`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala) instance.
+There may be occasions where we want to exercise specific code paths before accepting traffic to the server (e.g.w, for triggering JIT in the JVM). In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala). Your handler should be constructed with an [`com.twitter.finatra.http.routing.HttpWarmup`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpWarmup.scala) instance.
 
 ```scala
 import com.twitter.finatra.http.routing.HttpWarmup
@@ -46,18 +46,15 @@ import ExampleFilter
 import ExampleWarmupHandler
 import MalformedURLExceptionMapper
 import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 
 object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
   override val modules = Seq(
-    DoEverythingModule,
-    Slf4jBridgeModule)
+    DoEverythingModule)
 
   override def configureHttp(router: HttpRouter): Unit = {
     router
@@ -77,7 +74,7 @@ class ExampleServer extends HttpServer {
 
 Once again, the warmup handler is added *by type* allowing the framework to construct the instance.
 
-The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external HTTP port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`.
+The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external HTTP port(s) are bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`. See [here](/finatra/user-guide/getting-started#lifecycle) for more information on the lifecycle of a Finatra server.
 
 ## <a class="anchor" name="more-information" href="#more-information">More information</a>
 ===============================

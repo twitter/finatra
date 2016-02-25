@@ -20,7 +20,7 @@ Finatra internally uses the Google [Guice](https://github.com/google/guice) depe
 
 **NOTE: You are not required to use Guice dependency injection when using Finatra**. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra's [testing](/finatra/user-guide/testing) features.
 
-An example of Finatra's Guice integration is adding controllers to Finatra's [HttpRouter](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) by type:
+An example of Finatra's dependency-injection integration is adding controllers to Finatra's [HttpRouter](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) *by type*:
 
 ```scala
 class Server extends HttpServer {
@@ -34,7 +34,7 @@ class Server extends HttpServer {
 As mentioned, it is also possible to do this without using Guice, simply instantiate your controller and add the instance to the router:
 
 ```scala
-class NonGuiceServer extends HttpServer {
+class NonDIServer extends HttpServer {
   override def configureHttp(router: HttpRouter) {
     val controller = new MyController(...)
     router.add(controller)
@@ -43,19 +43,29 @@ class NonGuiceServer extends HttpServer {
 ```
 <div></div>
 
+### <a class="anchor" name="lifecycle" href="#lifecycle">Server Lifecycle</a>
+===============================
+
+At a high-level, the start-up lifecycle of a Finatra server looks like:
+
+![Server Lifecycle](/finatra/images/FinatraLifecycle.png)
+
+Upon *graceful* shutdown, all registered `onExit {...}` blocks are executed (see [`com.twitter.util.App#exits`](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala#L69)). This includes closing the external interface(s), the admin interface, and firing the [`TwitterModule#singletonShutdown`](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L25) on all installed modules. See the next section for more information on [Modules](#modules).
+
+
 ### <a class="anchor" name="modules" href="#modules">Modules</a>
 ===============================
 
-Modules are used in conjunction with Guice dependency injection to specify *how* to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: [Flags](/finatra/user-guide/getting-started#flags)).
+Modules are used in conjunction with dependency injection to specify *how* to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: [Flags](/finatra/user-guide/getting-started#flags)).
 
-We provide a [TwitterModule](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala) base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by [codingwell/scala-guice](https://github.com/codingwell/scala-guice). Modules also have a hook into the Server lifecycle through the [TwitterModuleLifecycle](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) which allows for a Module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module. For example, the framework uses the `singletonStartup` lifecycle method in the [`Slf4jBridgeModule`](https://github.com/twitter/finatra/blob/master/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala#L7) to install the [`SLF4JBridgeHandler`](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) (see: [Logging](/finatra/user-guide/logging)).
+We provide a [TwitterModule](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala) base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by [codingwell/scala-guice](https://github.com/codingwell/scala-guice).
 
 #### Module Definition
 * [twitter/util](https://github.com/twitter/util) [Flags](#flags) can be defined inside modules. This allows for re-usable scoping of external configuration that can be composed into a server via the module.
 * Prefer using `@Provides`-annotated methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
 * Usually modules are Scala *objects* since they contain no state and makes usage of the module less verbose.
 * Remember to add `@Singleton` to your `@Provides` method if you require only **one** instance per JVM process.
-* Generally, modules are only required for instantiating classes that you don't control. Otherwise, you would simply add the [JSR-330](https://github.com/google/guice/wiki/JSR330) annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following Guice module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
+* Generally, modules are only required for instantiating classes that you don't control. Otherwise, you would simply add the [JSR-330](https://github.com/google/guice/wiki/JSR330) annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
 
 ```scala
 object MyModule1 extends TwitterModule {
@@ -82,7 +92,7 @@ class MyService @Inject() (
 <div></div>
 
 #### Module Configuration
-A server is then started with a list of immutable Guice modules:
+A server is then started with a list of immutable modules:
 ```scala
 class Server extends HttpServer {
   override val modules = Seq(
@@ -93,6 +103,12 @@ class Server extends HttpServer {
 }
 ```
 <div></div>
+
+#### Module Lifecycle
+
+Modules also have a hook into the Server lifecycle through the [TwitterModuleLifecycle](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module. For example, the framework uses the `singletonStartup` lifecycle method in the [`Slf4jBridgeModule`](https://github.com/twitter/finatra/blob/master/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala#L7) to install the [`SLF4JBridgeHandler`](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) (see: [Logging](/finatra/user-guide/logging)).
+
+The [`com.twitter.inject.TwitterModule`](https://github.com/twitter/finatra/blob/master/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) exposes two lifecycle methods: `TwitterModule#singletonStartup` and `TwitterModule#singletonShutdown`. If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the `singletonStartup` method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the `singletonShutdown` method of your TwitterModule to close or shutdown any resources provided by the module.
 
 ### <a class="anchor" name="binding-annotations" href="#binding-annotations">Binding Annotations</a>
 ===============================
@@ -266,13 +282,6 @@ val scalaFuture: ScalaFuture[T] = {...} // some call that returns scala.concurre
 scalaFuture.as[TwitterFuture[T]]        // this converts the scala.concurrent.Future[T] to a com.twitter.util.Future[T]
 ```
 <div></div>
-
-### <a class="no-pad-anchor" name="lifecycle" href="#lifecycl">Server Lifecycle</a>
-===============================
-
-At a high-level, the start-up lifecycle of a Finatra server looks like this:
-
-![Server Lifecycle](/finatra/images/FinatraServerLifecycle.png)
 
 <nav>
   <ul class="pager">

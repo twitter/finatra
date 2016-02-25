@@ -21,16 +21,7 @@ Finatra uses the [SLF4J](http://www.slf4j.org/manual.html) api for framework log
   * [Log4j](http://en.wikipedia.org/wiki/Log4j)
   * [commons-logging](http://commons.apache.org/proper/commons-logging/)
   * jdk14-logging
-  * [java.util.logging](http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html): There is a performance penalty for intercepting jul log messages, so make sure to also include the [Slf4jBridgeModule](https://github.com/twitter/finatra/tree/master/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala) in your list of modules, as this will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty. e.g.,
-
-```scala
-class Server extends HttpServer {
-  override val modules = Seq(
-    Slf4jBridgeModule)
-  ...
-}
-```
-<div></div>
+  * [java.util.logging](http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html): There is a performance penalty for intercepting jul log messages, so make sure the framework includes the [Slf4jBridgeModule](https://github.com/twitter/finatra/tree/master/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala) as a framework module. This will install the [SLF4JBridgeHandler](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) which mitigates most of the performance penalty.
 
 ## <a class="anchor" name="basics" href="#basics">Basics</a>
 ===============================

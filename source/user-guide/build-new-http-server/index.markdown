@@ -16,7 +16,7 @@ Note: the most up-to-date examples are located in the [`finatra/examples`](https
 ## <a class="anchor" name="server-definition" href="#server-definition">Create a Server definition</a>
 ===============================
 
-To start, add a dependency on the `com.twitter.finatra:finatra-http_{scala-version}` library. We also highly recommend depending on `com.twitter.finatra:finatra-slf4j` and `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [SLF4J](http://www.slf4j.org/manual.html) implementation. For more information on logging with Finatra see: [Logging](/finatra/user-guide/logging).
+To start, add a dependency on the `com.twitter.finatra:finatra-http_{scala-version}` library. We also highly recommend depending on `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [SLF4J](http://www.slf4j.org/manual.html) implementation. For more information on logging with Finatra see: [Logging](/finatra/user-guide/logging).
 
 Create a new class that extends [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala):
 
@@ -24,18 +24,15 @@ Create a new class that extends [`com.twitter.finatra.http.HttpServer`](https://
 import DoEverythingModule
 import ExampleController
 import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 
 object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
   override val modules = Seq(
-    DoEverythingModule,
-    Slf4jBridgeModule)
+    DoEverythingModule)
 
   override def configureHttp(router: HttpRouter): Unit = {
     router

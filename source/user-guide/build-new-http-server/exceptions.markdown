@@ -39,18 +39,15 @@ import ExampleController
 import ExampleFilter
 import MalformedURLExceptionMapper
 import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, ExceptionMappingFilter}
+import com.twitter.finatra.http.filters.{CommonFilters, ExceptionMappingFilter, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.logging.filter.{LoggingMDCFilter, TraceIdMDCFilter}
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 
 object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends HttpServer {
 
   override val modules = Seq(
-    DoEverythingModule,
-    Slf4jBridgeModule)
+    DoEverythingModule)
 
   override def configureHttp(router: HttpRouter): Unit = {
     router

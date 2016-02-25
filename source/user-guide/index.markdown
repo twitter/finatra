@@ -12,11 +12,11 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
 
 - [TwitterServer Basics](/finatra/user-guide/twitter-server-basics)
 - [Getting Started](/finatra/user-guide/getting-started)
+  - [Server Lifecycle](/finatra/user-guide/getting-started#lifecycle)
   - [Modules](/finatra/user-guide/getting-started#modules)
   - [Binding Annotations](/finatra/user-guide/getting-started#binding-annotations)
   - [Flags](/finatra/user-guide/getting-started#flags)
   - [Futures](/finatra/user-guide/getting-started#futures)
-  - [Server Lifecycle](/finatra/user-guide/getting-started#lifecycle)
 - [Logging](/finatra/user-guide/logging)
   - [Basics](/finatra/user-guide/logging#basics)
   - [Logback](/finatra/user-guide/logging#logback)
@@ -42,7 +42,7 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
 - [Working with Files](/finatra/user-guide/files)
   - [File Server](/finatra/user-guide/files#file-server)
   - [Mustache Templating](/finatra/user-guide/files#mustache)
-- [Building a new Thrift Server](#) - *\*COMING SOON\**
+- [Building a new Thrift Server](/finatra/user-guide/build-new-thrift-server)
 - [Testing](/finatra/user-guide/testing)
   - [Types of Tests](/finatra/user-guide/testing#testing-types)
   - [Embedded Servers/Apps](/finatra/user-guide/testing#embedded-server)
