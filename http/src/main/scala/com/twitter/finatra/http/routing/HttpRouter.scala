@@ -41,58 +41,72 @@ class HttpRouter @Inject()(
 
   /* Public */
 
-  def exceptionMapper[T <: ExceptionMapper[_]: Manifest] = {
+  def exceptionMapper[T <: ExceptionMapper[_]: Manifest]: HttpRouter = {
     exceptionManager.add[T]
     this
   }
 
-  def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T]) = {
+  def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T]): HttpRouter = {
     exceptionManager.add[T](mapper)
     this
   }
 
-  def register[MBR <: MessageBodyComponent : Manifest] = {
+  def register[MBR <: MessageBodyComponent : Manifest]: HttpRouter = {
     messageBodyManager.add[MBR]()
     this
   }
 
-  def register[MBR <: MessageBodyComponent : Manifest, ObjTypeToReadWrite: Manifest] = {
+  def register[MBR <: MessageBodyComponent : Manifest, ObjTypeToReadWrite: Manifest]: HttpRouter = {
     messageBodyManager.addExplicit[MBR, ObjTypeToReadWrite]()
     this
   }
 
-  /** Add global filter used for all requests, this is BEFORE route matching */
-  def filterBeforeRouting[FilterType <: HttpFilter : Manifest] = {
-    assertCanFilterBeforeRouting()
-    globalBeforeRouteMatchingFilter = globalBeforeRouteMatchingFilter andThen injector.instance[FilterType]
-    this
+  /** Add global filter used for all requests, by default applied AFTER route matching */
+  def filter(clazz: Class[_ <: HttpFilter]): HttpRouter = {
+    filter(injector.instance(clazz))
   }
 
-  /** Add global filter used for all requests, this is BEFORE route matching */
-  def filterBeforeRouting(filter: HttpFilter) = {
-    assertCanFilterBeforeRouting()
-    globalBeforeRouteMatchingFilter = globalBeforeRouteMatchingFilter andThen filter
-    this
+  /** Add global filter used for all requests, optionally BEFORE route matching */
+  def filter(clazz: Class[_ <: HttpFilter], beforeRouting: Boolean): HttpRouter = {
+    if (beforeRouting) {
+      filter(injector.instance(clazz), beforeRouting = true)
+    } else {
+      filter(injector.instance(clazz))
+    }
   }
 
-  /** Add global filter used for all requests, by default this is AFTER route matching */
-  def filter(clazz: Class[_ <: HttpFilter]) = {
-    globalFilter = globalFilter andThen injector.instance(clazz)
-    this
+  /** Add global filter used for all requests, by default applied AFTER route matching */
+  def filter[FilterType <: HttpFilter : Manifest]: HttpRouter = {
+    filter(injector.instance[FilterType])
   }
 
-  /** Add global filter used for all requests, by default this is AFTER route matching */
-  def filter[FilterType <: HttpFilter : Manifest] = {
-    assertCanFilter()
-    globalFilter = globalFilter andThen injector.instance[FilterType]
-    this
+  /** Add global filter used for all requests, optionally BEFORE route matching */
+  def filter[FilterType <: HttpFilter : Manifest](beforeRouting: Boolean): HttpRouter = {
+    if (beforeRouting) {
+      filter(injector.instance[FilterType], beforeRouting = true)
+      this
+    } else {
+      filter(injector.instance[FilterType])
+    }
   }
 
-  /** Add global filter used for all requests, by default these are AFTER route matching */
-  def filter(filter: HttpFilter) = {
-    assertCanFilter()
+  /** Add global filter used for all requests, by default applied AFTER route matching */
+  def filter(filter: HttpFilter): HttpRouter = {
+    assert(routes.isEmpty, "'filter' must be called before 'add'.")
     globalFilter = globalFilter andThen filter
     this
+  }
+
+  /** Add global filter used for all requests, optionally BEFORE route matching */
+  def filter(filter: HttpFilter, beforeRouting: Boolean): HttpRouter = {
+    if (beforeRouting) {
+      assert(routes.isEmpty && globalFilter == Filter.identity,
+        "'filter[T](beforeRouting = true)' must be called before 'filter' or 'add'.")
+      globalBeforeRouteMatchingFilter = globalBeforeRouteMatchingFilter andThen filter
+      this
+    } else {
+      this.filter(filter)
+    }
   }
 
   def add(controller: Controller): HttpRouter = {
@@ -151,27 +165,18 @@ class HttpRouter @Inject()(
 
   /* Private */
 
-  private def assertCanFilter(): Unit = {
-    assert(routes.isEmpty, "'filter' must be called before 'add'.")
-  }
-
-  private def assertCanFilterBeforeRouting(): Unit = {
-    assert(routes.isEmpty && globalFilter == Filter.identity,
-      "'filterBeforeRouting' must be called before 'filter' or 'add'.")
-  }
-
-  private def add[C <: Controller : Manifest](filter: HttpFilter) = {
+  private def add[C <: Controller : Manifest](filter: HttpFilter): HttpRouter = {
     addInjected(
       filter,
       injector.instance[C])
   }
 
-  private def addInjected(controller: Controller) = {
+  private def addInjected(controller: Controller): HttpRouter = {
     routes ++= buildRoutes(controller) map { _.withFilter(globalFilter) }
     this
   }
 
-  private def addInjected(filter: HttpFilter, controller: Controller) = {
+  private def addInjected(filter: HttpFilter, controller: Controller): HttpRouter = {
     val routesWithFilter = buildRoutes(controller) map { _.withFilter(globalFilter andThen filter) }
     routes ++= routesWithFilter
     this
@@ -190,7 +195,7 @@ class HttpRouter @Inject()(
       admin = adminRoutes.toSeq)
   }
 
-  private def assertAdminRoutes(routes: ArrayBuffer[Route]) = {
+  private def assertAdminRoutes(routes: ArrayBuffer[Route]): Unit = {
     for (route <- routes) {
       if (!(route.path startsWith HttpRouter.FinatraAdminPrefix)) {
         throw new java.lang.AssertionError(

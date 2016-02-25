@@ -2,7 +2,7 @@ package com.twitter.finatra.thrift.filters
 
 import com.twitter.finagle.stats.Stat.timeFuture
 import com.twitter.finagle.stats.{Counter, Stat, StatsReceiver}
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.Service
 import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.util.{Future, Memoize, Return, Throw}
 import javax.inject.{Inject, Singleton}

@@ -11,8 +11,7 @@ import org.slf4j.MDC
  * to ensure that diagnostic context is properly managed.
  */
 @Singleton
-class ThriftMDCFilter
-  extends ThriftFilter {
+class ThriftMDCFilter extends ThriftFilter {
 
   override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
     MDC.put("method", request.methodName)

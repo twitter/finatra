@@ -1,8 +1,9 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
+import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoNothingController
-import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftRouter, ThriftServer}
+import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftServer}
 import com.twitter.inject.Test
 import com.twitter.inject.server.EmbeddedTwitterServer
 import com.twitter.util.NonFatal

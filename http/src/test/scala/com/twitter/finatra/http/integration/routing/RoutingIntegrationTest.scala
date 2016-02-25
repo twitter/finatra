@@ -31,13 +31,34 @@ class RoutingIntegrationTest extends Test {
     }
   }
 
-  "Support global beforeRoutingFilter" in {
+  "Support global filter beforeRouting true" in {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter) {
           router
-            .filterBeforeRouting[NoRouteInfoFilter]
+            .filter[NoRouteInfoFilter](beforeRouting = true)
             .filter[CheckRouteInfoFilter]
+            .add[NullController]
+        }
+      })
+
+    try {
+      server.httpGet(
+        "/foo",
+        andExpect = Status.Ok)
+    } finally {
+      server.close()
+    }
+  }
+
+  "Support global filter beforeRouting false" in {
+    // NOTE: you SHOULD NOT need to do this, just
+    // call the no-argument version of router#filter
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter) {
+          router
+            .filter[CheckRouteInfoFilter](beforeRouting = false)
             .add[NullController]
         }
       })

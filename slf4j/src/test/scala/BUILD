@@ -2,13 +2,8 @@ junit_tests(name='scala',
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     'finatra/slf4j',
-    'finatra/utils:test-deps',
-    'finatra/http:test-deps',
     'finatra/inject/inject-server:test-deps',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  resources=[
-    'finatra/slf4j/src/test/resources'
-  ]
 )

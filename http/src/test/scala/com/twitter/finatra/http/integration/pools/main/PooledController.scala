@@ -1,8 +1,8 @@
-package com.twitter.finatra.logging.integration
+package com.twitter.finatra.http.integration.pools.main
 
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.logging.integration.PooledController._
+import com.twitter.finatra.http.integration.pools.main.PooledController._
 import com.twitter.finatra.utils.FuturePools
 
 object PooledController {

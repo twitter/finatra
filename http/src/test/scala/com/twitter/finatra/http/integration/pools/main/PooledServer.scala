@@ -1,10 +1,9 @@
-package com.twitter.finatra.logging.integration
+package com.twitter.finatra.http.integration.pools.main
 
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.filters.{CommonFilters, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.logging.filter.{TraceIdMDCFilter, LoggingMDCFilter}
 
 class PooledServer extends HttpServer {
 

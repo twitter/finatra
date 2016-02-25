@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.filters
 
-import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.finagle.Service
 import com.twitter.inject.Logging
 import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.util.{Future, Return, Throw, Time}

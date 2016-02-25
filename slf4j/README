@@ -5,53 +5,11 @@ README
 # -------------------------------
 
 The finatra framework uses SLF4J for logging.  By coupling the framework to only SLF4J, application developers
-can choose the logging implementation.  Adding finatra-slf4j as a dependency adds an SLF4J bridge for the following logging providers:
+can choose the logging implementation. finatra-slf4j adds an SLF4J bridge for the following logging providers:
 
   * log4j
   * java-util-logging,
   * commons-logging,
   * jdk14
 
-# -------------------------------
-# Logback Configuration
-# -------------------------------
-
-A sample Logback configuration is provided here:
-
-finatra/slf4j/src/test/resources/Logback-sample.xml.
-
-This configuration file makes use of log.access.output and log.service.output variables for configuring two appenders.
-A variable's value is specified at runtime as a Java system property (e.g., -Dlog.service.output=myservice.log).
-Additional variables may be used throughout the file, but each one must be specified using a Java system property.
-More information about Logback variable substitution may be found here:
-
-http://Logback.qos.ch/manual/configuration.html
-
-The sample configuration also makes use of Logback's Mapped Diagnostic Context (MDC) for consistently logging useful
-information.  For example, the configuration file references the contextual key "transactionId", which will be
-logged with every log statement sent to the service log.  It is the responsibility of the application to populate the
-MDC with contextual information.  In order to use Logback's MDC, the application must first initialize an MDC finagle
-adapter provided by finatra.  An example of initialization can be found here:
-
-finatra/slf4j/src/main/scala/com/twitter/finatra/logging/filter/LoggingMDCFilter.scala
-
-More information on Logback's MDC can be found here:
-
-http://Logback.qos.ch/manual/mdc.html
-
-# -------------------------------
-# Rerouting java.util.logging
-# -------------------------------
-
-Additional configuration is necessary to reroute java.util.logging logs.  The reason is that the jul-to-slf4j bridge
-cannot replace classes in the java.util.logging package to do the redirection statically as it does for the other bridge
-implementations. Instead it has to register a handler on the root logger and listen for logging statements like any
-other handler. It will then redirect those logging statements.  This redirection is accomplished via SLF4J's
-SLF4JBridgeHandler.  finatra-slf4j provides a Guice module for initializing this handler here:
-
-finatra-slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala
-
-To use this module, simply include it with the application's other Guice modules.  Alternatively, an application can
-initialize the handler directly as described here:
-
-http://www.SLF4J.org/api/org/SLF4J/bridge/SLF4JBridgeHandler.html
+See http://twitter.github.io/finatra/user-guide/logging/ for more information.

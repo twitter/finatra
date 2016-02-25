@@ -425,7 +425,8 @@ lazy val http = project.
     injectServer,
     httpclient % "test->test",
     jackson % "test->test",
-    injectServer % "test->test"
+    injectServer % "test->test",
+    slf4j
   )
 
 lazy val httpclient = project.
@@ -456,7 +457,6 @@ lazy val slf4j = project.
     )
   ).
   dependsOn(
-    http % "test->test",
     injectCore,
     injectCore % "test->test"
   )
@@ -479,7 +479,7 @@ lazy val thrift = project.
     injectServer,
     utils,
     injectServer % "test->test",
-    slf4j % "test->test"
+    slf4j
   )
 
 lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper")).

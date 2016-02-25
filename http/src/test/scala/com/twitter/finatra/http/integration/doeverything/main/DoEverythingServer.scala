@@ -26,7 +26,7 @@ class DoEverythingServer extends HttpServer {
   override def configureHttp(router: HttpRouter) {
     router
       .register[DomainTestUserReader]
-      .filterBeforeRouting(new AppendToHeaderFilter("test", "0"))
+      .filter(new AppendToHeaderFilter("test", "0"), beforeRouting = true)
       .filter[CommonFilters]
       .filter(Filter.identity[Request, Response])
       .filter(new AppendToHeaderFilter("test", "1"))

@@ -14,6 +14,7 @@ scala_library(name='scala',
     'finatra/inject/inject-core',
     'finatra/inject/inject-server',
     'finatra/inject/inject-thrift-client',
+    'finatra/slf4j',
     'finatra/utils',
     'util/util-core'
   ],

@@ -252,10 +252,17 @@ class EmbeddedTwitterServer(
     start()
 
     /* Pre - Execute */
+
+    /* Don't overwrite request.headers potentially in given request */
+    val defaultHeaders = defaultRequestHeaders filterKeys { !request.headerMap.contains(_) }
+    addOrRemoveHeaders(request, defaultHeaders)
+    // headers added last so they can overwrite "defaults"
+    addOrRemoveHeaders(request, headers)
+
     printRequest(request, suppress)
 
     /* Execute */
-    val response = handleRequest(request, client = client, additionalHeaders = headers)
+    val response = handleRequest(request, client = client)
 
     /* Post - Execute */
     printResponseMetadata(response, suppress)
@@ -341,13 +348,7 @@ class EmbeddedTwitterServer(
 
   private def handleRequest(
     request: Request,
-    client: Service[Request, Response],
-    additionalHeaders: Map[String, String] = Map()): Response = {
-
-    // Don't overwrite request.headers set by RequestBuilder in httpFormPost.
-    val defaultNewHeaders = defaultRequestHeaders filterKeys { !request.headerMap.contains(_) }
-    addOrRemoveHeaders(request, defaultNewHeaders)
-    addOrRemoveHeaders(request, additionalHeaders) //additional headers get added second so they can overwrite defaults
+    client: Service[Request, Response]): Response = {
 
     val futureResponse = client(request)
     val elapsed = Stopwatch.start()

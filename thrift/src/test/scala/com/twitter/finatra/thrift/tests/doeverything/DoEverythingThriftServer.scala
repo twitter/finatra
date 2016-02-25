@@ -1,12 +1,11 @@
 package com.twitter.finatra.thrift.tests.doeverything
 
-import com.twitter.finatra.logging.filter.{TypeAgnosticLoggingMDCFilter, TypeAgnosticTraceIdMDCFilter}
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
-import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter, ThriftMDCFilter}
+import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
+import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
 import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
-import com.twitter.finatra.thrift.{ThriftFilter, ThriftRouter, ThriftServer}
+import com.twitter.finatra.thrift.{ThriftFilter, ThriftServer}
 import com.twitter.inject.Logging
 import com.twitter.inject.utils.Handler
 
@@ -18,13 +17,12 @@ class DoEverythingThriftServer extends ThriftServer {
   flag("magicNum", "26", "Magic number")
 
   override val modules = Seq(
-    Slf4jBridgeModule,
     ClientIdWhitelistModule)
 
   override def configureThrift(router: ThriftRouter): Unit = {
     router
-      .typeAgnosticFilter[TypeAgnosticLoggingMDCFilter]
-      .typeAgnosticFilter[TypeAgnosticTraceIdMDCFilter]
+      .filter[LoggingMDCFilter]
+      .filter[TraceIdMDCFilter]
       .filter[ThriftMDCFilter]
       .filter(classOf[AccessLoggingFilter])
       .filter[StatsFilter]
