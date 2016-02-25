@@ -137,6 +137,6 @@ See the [test class](https://github.com/twitter/finatra/blob/master/http/src/tes
 <nav>
   <ul class="pager">
     <li class="previous"><a href="/finatra/user-guide/json"><span aria-hidden="true">&larr;</span>&nbsp;Working&nbsp;with&nbsp;JSON</a></li>
-    <li class="next"><a href="/finatra/user-guide/logging">Logging&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-thrift-server">Building&nbsp;a&nbsp;new&nbsp;Thrift&nbsp;Server&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

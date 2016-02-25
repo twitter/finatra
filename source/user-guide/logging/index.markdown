@@ -82,7 +82,7 @@ See [Logback's documentation](http://logback.qos.ch/manual/mdc.html) for more in
 
 <nav>
   <ul class="pager">
-    <li class="previous"><a href="/finatra/user-guide/files"><span aria-hidden="true">&larr;</span>&nbsp;Working&nbsp;with&nbsp;Files</a></li>
-    <li class="next"><a href="/finatra/user-guide/testing">Testing&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="previous"><a href="/finatra/user-guide/getting-started"><span aria-hidden="true">&larr;</span>&nbsp;Getting&nbsp;Started</a></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-http-server">Building&nbsp;a&nbsp;new&nbsp;Http&nbsp;Server&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

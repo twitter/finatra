@@ -286,6 +286,6 @@ scalaFuture.as[TwitterFuture[T]]        // this converts the scala.concurrent.Fu
 <nav>
   <ul class="pager">
   <li class="previous"><a href="/finatra/user-guide/twitter-server-basics"><span aria-hidden="true">&larr;</span>&nbsp;TwitterServer&nbsp;Basics</a></li>
-    <li class="next"><a href="/finatra/user-guide/build-new-http-server">&nbsp;Building&nbsp;a&nbsp;new&nbsp;HTTP&nbsp;Server&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="next"><a href="/finatra/user-guide/logging">&nbsp;Logging&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

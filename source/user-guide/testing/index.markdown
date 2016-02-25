@@ -250,7 +250,7 @@ class MyServiceStartupTests extends FeatureTest {
 
 <nav>
   <ul class="pager">
-    <li class="previous"><a href="/finatra/user-guide/logging"><span aria-hidden="true">&larr;</span>&nbsp;Logging</a></li>
+    <li class="previous"><a href="/finatra/user-guide/build-new-thrift-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;new&nbsp;Thrift&nbsp;Server</a></li>
     <li></li>
   </ul>
 </nav>

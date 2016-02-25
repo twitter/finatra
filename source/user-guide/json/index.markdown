@@ -177,7 +177,7 @@ Use Java Enums for representing enumerations since they integrate well with Jack
 
 <nav>
   <ul class="pager">
-    <li class="previous"><a href="/finatra/user-guide/build-new-http-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;new&nbsp;HTTP&nbsp;Server</a></li>
+    <li class="previous"><a href="/finatra/user-guide/build-new-http-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;new&nbsp;Http&nbsp;Server</a></li>
     <li class="next"><a href="/finatra/user-guide/files">Working&nbsp;with&nbsp;Files&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>
