@@ -1,5 +1,21 @@
 # Change Log
 
+## [v2.1.4](https://github.com/twitter/finatra/tree/v2.1.4) (2016-02-25)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.1.3...2.1.4)
+
+**Fixed bugs:**
+
+- Some Scaladoc links are broken on twitter.github.io/finatra [\#298](https://github.com/twitter/finatra/issues/298)
+
+**Closed issues:**
+
+- LoggingMDCFilter lacks documentation [\#303](https://github.com/twitter/finatra/issues/303)
+
+- bug in finatra/examples/hello-world/src/main/resources/logback.xml [\#289](https://github.com/twitter/finatra/issues/289)
+
+- Improve error message when @Header field is missing [\#263](https://github.com/twitter/finatra/issues/263)
+
 ## [v2.1.3](https://github.com/twitter/finatra/tree/v2.1.3) (2016-02-05)
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.1.2...v2.1.3)
