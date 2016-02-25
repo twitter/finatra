@@ -93,7 +93,7 @@
         <div id="values" class="values members">
               <h3>Abstract Value Members</h3>
               <ol><li name="com.twitter.finatra.thrift.ThriftServer#configureThrift" visbl="prt" data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="configureThrift(router:com.twitter.finatra.thrift.ThriftRouter):Unit"></a>
+      <a id="configureThrift(router:com.twitter.finatra.thrift.routing.ThriftRouter):Unit"></a>
       <a id="configureThrift(ThriftRouter):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -101,10 +101,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">configureThrift</span><span class="params">(<span name="router">router: <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.ThriftRouter">ThriftRouter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">configureThrift</span><span class="params">(<span name="router">router: <a href="routing/ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@configureThrift(router:com.twitter.finatra.thrift.ThriftRouter):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@configureThrift(router:com.twitter.finatra.thrift.routing.ThriftRouter):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -345,12 +345,12 @@ enable our health endpoint
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.inject.app.App#appMain" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.ThriftServer#appMain" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appMain():Unit"></a>
       <a id="appMain():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -361,9 +361,9 @@ enable our health endpoint
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Callback method executed after the Guice injector is created and warmup has fully completed.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method executed after the Guice injector is created and warmup has fully completed.
+      <p class="shortcomment cmt">Callback method executed after the injector is created and warmup has fully completed.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method executed after the injector is created and warmup has fully completed.
 Note: Not intended for use when using HttpServer or ThriftServer
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#appendFlag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendFlag:com.twitter.app.Flag[Boolean]"></a>
       <a id="appendFlag:Flag[Boolean]"></a>
@@ -648,6 +648,23 @@ that we're healthy since we haven't successfully started our servers yet
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftServer#defaultFinatraThriftPort" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultFinatraThriftPort:String"></a>
+      <a id="defaultFinatraThriftPort:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultFinatraThriftPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@defaultFinatraThriftPort:String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.logging.Logging#defaultFormatter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultFormatter:com.twitter.logging.Formatter"></a>
       <a id="defaultFormatter:Formatter"></a>
@@ -750,6 +767,59 @@ that we're healthy since we haven't successfully started our servers yet
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftServer#defaultThriftServerName" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultThriftServerName:String"></a>
+      <a id="defaultThriftServerName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultThriftServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@defaultThriftServerName:String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftServer#defaultThriftShutdownTimeout" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultThriftShutdownTimeout:com.twitter.util.Duration"></a>
+      <a id="defaultThriftShutdownTimeout:Duration"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultThriftShutdownTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@defaultThriftShutdownTimeout:com.twitter.util.Duration" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#disableAdminHttpServer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="disableAdminHttpServer:Boolean"></a>
+      <a id="disableAdminHttpServer:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">disableAdminHttpServer</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@disableAdminHttpServer:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">If true, the Twitter-Server admin server will be disabled.</p><div class="fullcomment"><div class="comment cmt"><p>If true, the Twitter-Server admin server will be disabled.
+Note: Disabling the admin server allows Finatra to be deployed into environments where only a single port is allowed
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -853,7 +923,7 @@ that we're healthy since we haven't successfully started our servers yet
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.app.App#failfastOnFlagsNotParsed" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.ThriftServer#failfastOnFlagsNotParsed" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="failfastOnFlagsNotParsed:Boolean"></a>
       <a id="failfastOnFlagsNotParsed:Boolean"></a>
       <h4 class="signature">
@@ -869,7 +939,7 @@ that we're healthy since we haven't successfully started our servers yet
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → App</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -1573,7 +1643,7 @@ that we're healthy since we haven't successfully started our servers yet
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Method to be called after successful warmup</p><div class="fullcomment"><div class="comment cmt"><p>Method to be called after successful warmup</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Method to be called after successful warmup</p><div class="fullcomment"><div class="comment cmt"><p>Method to be called after successful warmup</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.app.App#postmain" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postmain(f:=&gt;Unit):Unit"></a>
       <a id="postmain(⇒Unit):Unit"></a>
@@ -1710,6 +1780,43 @@ that we're healthy since we haven't successfully started our servers yet
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Admin</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.ThriftServer#run" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="run():Unit"></a>
+      <a id="run():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@run():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Application logic to run after the server has warmed up and bound to its port(s).</p><div class="fullcomment"><div class="comment cmt"><p>Application logic to run after the server has warmed up and bound to its port(s).
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#run" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="run[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit"></a>
+      <a id="run[T&lt;:Handler]()(Manifest[T]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="tparams">[<span name="T">T &lt;: <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">Handler</a></span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.server.TwitterServer.run.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftServer@run[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility to run a <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Utility to run a <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>. This is generally used for running
+a warmup handler in #warmup.</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type parameter with upper-bound of <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>
+TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.app.App#setAppStarted" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setAppStarted(value:Boolean):Unit"></a>
       <a id="setAppStarted(Boolean):Unit"></a>

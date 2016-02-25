@@ -45,7 +45,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftClientExceptionMapper</span><span class="result"> extends <a href="../http/exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<a href="../../inject/thrift/ThriftClientException.html" class="extype" name="com.twitter.inject.thrift.ThriftClientException">ThriftClientException</a>]</span>
+        <span class="name">ThriftClientExceptionMapper</span><span class="result"> extends <a href="../http/exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<a href="../../inject/thrift/ThriftClientException.html" class="extype" name="com.twitter.inject.thrift.ThriftClientException">ThriftClientException</a>] with <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       </h4>
       
@@ -54,7 +54,7 @@
               
         </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../http/exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<a href="../../inject/thrift/ThriftClientException.html" class="extype" name="com.twitter.inject.thrift.ThriftClientException">ThriftClientException</a>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">Logging</span>, <a href="../http/exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<a href="../../inject/thrift/ThriftClientException.html" class="extype" name="com.twitter.inject.thrift.ThriftClientException">ThriftClientException</a>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -72,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.twitter.finatra.thrift.ThriftClientExceptionMapper"><span>ThriftClientExceptionMapper</span></li><li class="in" name="com.twitter.finatra.http.exceptions.ExceptionMapper"><span>ExceptionMapper</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.twitter.finatra.thrift.ThriftClientExceptionMapper"><span>ThriftClientExceptionMapper</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="grizzled.slf4j.Logging"><span>Logging</span></li><li class="in" name="com.twitter.finatra.http.exceptions.ExceptionMapper"><span>ExceptionMapper</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -211,6 +211,76 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#debug" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="debug(msg:=&gt;Any,t:=&gt;Throwable):Unit"></a>
+      <a id="debug(⇒Any,⇒Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#debug" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="debug(msg:=&gt;Any):Unit"></a>
+      <a id="debug(⇒Any):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.Logging#debugFutureResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]"></a>
+      <a id="debugFutureResult[T](String)(⇒Future[T]):Future[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">debugFutureResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Log an debug msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an debug msg that contains the result of the passed in func.
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function returning a future whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+    </li><li name="com.twitter.inject.Logging#debugResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="debugResult[T](msg:String)(func:=&gt;T):T"></a>
+      <a id="debugResult[T](String)(⇒T):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">debugResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@debugResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Log an debug msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an debug msg that contains the result of the passed in func.
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -245,6 +315,58 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#error" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="error(msg:=&gt;Any,t:=&gt;Throwable):Unit"></a>
+      <a id="error(⇒Any,⇒Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#error" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="error(msg:=&gt;Any):Unit"></a>
+      <a id="error(⇒Any):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.Logging#errorResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="errorResult[T](msg:String)(func:=&gt;T):T"></a>
+      <a id="errorResult[T](String)(⇒T):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">errorResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@errorResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Log an error msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an error msg that contains the result of the passed in func.
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -302,6 +424,109 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#info" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="info(msg:=&gt;Any,t:=&gt;Throwable):Unit"></a>
+      <a id="info(⇒Any,⇒Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#info" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="info(msg:=&gt;Any):Unit"></a>
+      <a id="info(⇒Any):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.Logging#infoResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="infoResult[T](msg:String)(func:=&gt;T):T"></a>
+      <a id="infoResult[T](String)(⇒T):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">infoResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@infoResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Log an info msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an info msg that contains the result of the passed in func.
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#isDebugEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isDebugEnabled:Boolean"></a>
+      <a id="isDebugEnabled:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@isDebugEnabled:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#isErrorEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isErrorEnabled:Boolean"></a>
+      <a id="isErrorEnabled:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@isErrorEnabled:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#isInfoEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isInfoEnabled:Boolean"></a>
+      <a id="isInfoEnabled:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@isInfoEnabled:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <a id="isInstanceOf[T0]:Boolean"></a>
@@ -319,6 +544,74 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#isTraceEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isTraceEnabled:Boolean"></a>
+      <a id="isTraceEnabled:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@isTraceEnabled:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#isWarnEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isWarnEnabled:Boolean"></a>
+      <a id="isWarnEnabled:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@isWarnEnabled:Boolean" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.Logging#logger" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="logger:grizzled.slf4j.Logger"></a>
+      <a id="logger:Logger"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">logger</span><span class="result">: <span class="extype" name="grizzled.slf4j.Logger">Logger</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@logger:grizzled.slf4j.Logger" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> → Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#loggerName" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loggerName:String"></a>
+      <a id="loggerName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loggerName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@loggerName:String" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -387,6 +680,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.twitter.inject.Logging#time" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="time[T](formatStr:String)(func:=&gt;T):T"></a>
+      <a id="time[T](String)(⇒T):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">time</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="formatStr">formatStr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@time[T](formatStr:String)(func:=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftClientExceptionMapper#toResponse" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toResponse(request:com.twitter.finagle.http.Request,exception:com.twitter.inject.thrift.ThriftClientException):com.twitter.finagle.http.Response"></a>
       <a id="toResponse(Request,ThriftClientException):Response"></a>
@@ -421,6 +731,40 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#trace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trace(msg:=&gt;Any,t:=&gt;Throwable):Unit"></a>
+      <a id="trace(⇒Any,⇒Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#trace" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="trace(msg:=&gt;Any):Unit"></a>
+      <a id="trace(⇒Any):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>
@@ -490,6 +834,58 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#warn" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="warn(msg:=&gt;Any,t:=&gt;Throwable):Unit"></a>
+      <a id="warn(⇒Any,⇒Throwable):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="grizzled.slf4j.Logging#warn" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="warn(msg:=&gt;Any):Unit"></a>
+      <a id="warn(⇒Any):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.inject.Logging#warnResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="warnResult[T](msg:String)(func:=&gt;T):T"></a>
+      <a id="warnResult[T](String)(⇒T):T"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">warnResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.finatra.thrift.ThriftClientExceptionMapper@warnResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Log an warn msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an warn msg that contains the result of the passed in func.
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -499,7 +895,11 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finatra.http.exceptions.ExceptionMapper">
+        <div class="parent" name="com.twitter.inject.Logging">
+              <h3>Inherited from <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
+            </div><div class="parent" name="grizzled.slf4j.Logging">
+              <h3>Inherited from <span class="extype" name="grizzled.slf4j.Logging">Logging</span></h3>
+            </div><div class="parent" name="com.twitter.finatra.http.exceptions.ExceptionMapper">
               <h3>Inherited from <a href="../http/exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<a href="../../inject/thrift/ThriftClientException.html" class="extype" name="com.twitter.inject.thrift.ThriftClientException">ThriftClientException</a>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>

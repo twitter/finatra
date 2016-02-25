@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>TypeAgnosticTraceIdMDCFilter - com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter</title>
-          <meta name="description" content="TypeAgnosticTraceIdMDCFilter - com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter" />
-          <meta name="keywords" content="TypeAgnosticTraceIdMDCFilter com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter" />
+          <title>LoggingMDCFilter - com.twitter.finatra.thrift.filters.LoggingMDCFilter</title>
+          <meta name="description" content="LoggingMDCFilter - com.twitter.finatra.thrift.filters.LoggingMDCFilter" />
+          <meta name="keywords" content="LoggingMDCFilter com.twitter.finatra.thrift.filters.LoggingMDCFilter" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter';
+            var hash = 'com.twitter.finatra.thrift.filters.LoggingMDCFilter';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,11 +29,11 @@
         <body class="type">
       <div id="definition">
         <img alt="Class" src="../../../../../lib/class_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../package.html" class="extype" name="com.twitter.finatra.logging">logging</a>.<a href="package.html" class="extype" name="com.twitter.finatra.logging.filter">filter</a></p>
-        <h1>TypeAgnosticTraceIdMDCFilter</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="com.twitter.finatra.logging.filter">package filter</a>
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../package.html" class="extype" name="com.twitter.finatra.thrift">thrift</a>.<a href="package.html" class="extype" name="com.twitter.finatra.thrift.filters">filters</a></p>
+        <h1>LoggingMDCFilter</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="com.twitter.finatra.thrift.filters">package filters</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,13 +45,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">TypeAgnosticTraceIdMDCFilter</span><span class="result"> extends <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
+        <span class="name">LoggingMDCFilter</span><span class="result"> extends <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +72,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter"><span>TypeAgnosticTraceIdMDCFilter</span></li><li class="in" name="com.twitter.finagle.Filter.TypeAgnostic"><span>TypeAgnostic</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.twitter.finatra.thrift.filters.LoggingMDCFilter"><span>LoggingMDCFilter</span></li><li class="in" name="com.twitter.finatra.thrift.ThriftFilter"><span>ThriftFilter</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,19 +91,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter"></a>
-      <a id="&lt;init&gt;:TypeAgnosticTraceIdMDCFilter"></a>
+              <ol><li name="com.twitter.finatra.thrift.filters.LoggingMDCFilter#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;():com.twitter.finatra.thrift.filters.LoggingMDCFilter"></a>
+      <a id="&lt;init&gt;:LoggingMDCFilter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">TypeAgnosticTraceIdMDCFilter</span><span class="params">()</span>
+        <span class="name">LoggingMDCFilter</span><span class="params">()</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@&lt;init&gt;():com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@&lt;init&gt;():com.twitter.finatra.thrift.filters.LoggingMDCFilter" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -126,7 +129,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -143,7 +146,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -160,28 +163,45 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finagle.Filter.TypeAgnostic#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen(next:&lt;?&gt;):com.twitter.finagle.Filter.TypeAgnostic"></a>
-      <a id="andThen(TypeAgnostic):TypeAgnostic"></a>
+    </li><li name="com.twitter.finatra.thrift.ThriftFilter#andThen" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen(next:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftFilter"></a>
+      <a id="andThen(ThriftFilter):ThriftFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="params">(<span name="next">next: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>)</span><span class="result">: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@andThen(next:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftFilter" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.filters.LoggingMDCFilter#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply[T,Rep](request:com.twitter.finatra.thrift.ThriftRequest[T],service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest[T],Rep]):com.twitter.util.Future[Rep]"></a>
+      <a id="apply[T,Rep](ThriftRequest[T],Service[ThriftRequest[T],Rep]):Future[Rep]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="params">(<span name="next">next: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
+        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>, <span name="Rep">Rep</span>]</span><span class="params">(<span name="request">request: <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.LoggingMDCFilter.apply.T">T</span>]</span>, <span name="service">service: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.LoggingMDCFilter.apply.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.filters.LoggingMDCFilter.apply.Rep">Rep</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.LoggingMDCFilter.apply.Rep">Rep</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@andThen(next:com.twitter.finagle.Filter.TypeAgnostic):com.twitter.finagle.Filter.TypeAgnostic" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@apply[T,Rep](request:com.twitter.finatra.thrift.ThriftRequest[T],service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest[T],Rep]):com.twitter.util.Future[Rep]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeAgnostic</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.filters.LoggingMDCFilter">LoggingMDCFilter</a> → <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -194,7 +214,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -211,7 +231,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -234,7 +254,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -251,7 +271,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -268,7 +288,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -291,7 +311,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -308,7 +328,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -325,7 +345,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -342,7 +362,7 @@
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -359,7 +379,7 @@
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -376,7 +396,7 @@
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -393,28 +413,28 @@
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter#toFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toFilter[Req,Rep]:com.twitter.finagle.Filter[Req,Rep,Req,Rep]"></a>
-      <a id="toFilter[Req,Rep]:Filter[Req,Rep,Req,Rep]"></a>
+    </li><li name="com.twitter.finatra.thrift.ThriftFilter#toFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFilter[T,Rep]:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest[T],Rep,com.twitter.finatra.thrift.ThriftRequest[T],Rep]"></a>
+      <a id="toFilter[T,Rep]:Filter[ThriftRequest[T],Rep,ThriftRequest[T],Rep]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFilter</span><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<span class="extype" name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter.toFilter.Req">Req</span>, <span class="extype" name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter.toFilter.Rep">Rep</span>, <span class="extype" name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter.toFilter.Req">Req</span>, <span class="extype" name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter.toFilter.Rep">Rep</span>]</span>
+        <span class="name">toFilter</span><span class="tparams">[<span name="T">T</span>, <span name="Rep">Rep</span>]</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.Rep">Rep</span>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.Rep">Rep</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@toFilter[Req,Rep]:com.twitter.finagle.Filter[Req,Rep,Req,Rep]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@toFilter[T,Rep]:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest[T],Rep,com.twitter.finatra.thrift.ThriftRequest[T],Rep]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter">TypeAgnosticTraceIdMDCFilter</a> → TypeAgnostic</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -427,7 +447,7 @@
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@toString():String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -444,7 +464,7 @@
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -467,7 +487,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -490,7 +510,7 @@
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.logging.filter.TypeAgnosticTraceIdMDCFilter@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.LoggingMDCFilter@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -510,8 +530,8 @@
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finagle.Filter.TypeAgnostic">
-              <h3>Inherited from <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></h3>
+        <div class="parent" name="com.twitter.finatra.thrift.ThriftFilter">
+              <h3>Inherited from <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

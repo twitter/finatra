@@ -823,6 +823,25 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterBaseModule#frameworkModules" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="frameworkModules:Seq[com.google.inject.Module]"></a>
+      <a id="frameworkModules:Seq[Module]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">frameworkModules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.modules.ClientIdWhitelistModule$@frameworkModules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Additional framework modules to be composed into this module
+</p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -1164,9 +1183,9 @@
       </a>
     </span>
       <p class="shortcomment cmt">Additional modules to be composed into this module</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module</p><p>NOTE: This Seq of modules is generally used instead of the standard Guice 'install' method so that
-TwitterModules with flag definitions can be supported.
-However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
-due to install being deferred until after flag parsing occurs.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+TwitterModules with flag definitions can be supported.</p><p>However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
+due to install being deferred until after flag parsing occurs.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
