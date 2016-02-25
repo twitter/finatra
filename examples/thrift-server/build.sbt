@@ -3,13 +3,13 @@ import sbt.Keys._
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.1.4-SNAPSHOT"
+  val finatra = "2.1.4"
   val guice = "4.0"
   val logback = "1.0.13"
 }
 
 lazy val baseSettings = Seq(
-  version := "2.1.4-SNAPSHOT",
+  version := "2.1.4",
   scalaVersion := "2.11.7",
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   libraryDependencies ++= Seq(
