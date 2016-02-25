@@ -267,6 +267,13 @@ scalaFuture.as[TwitterFuture[T]]        // this converts the scala.concurrent.Fu
 ```
 <div></div>
 
+### <a class="no-pad-anchor" name="lifecycle" href="#lifecycl">Server Lifecycle</a>
+===============================
+
+At a high-level, the start-up lifecycle of a Finatra server looks like this:
+
+![Server Lifecycle](/finatra/images/FinatraServerLifecycle.png)
+
 <nav>
   <ul class="pager">
   <li class="previous"><a href="/finatra/user-guide/twitter-server-basics"><span aria-hidden="true">&larr;</span>&nbsp;TwitterServer&nbsp;Basics</a></li>

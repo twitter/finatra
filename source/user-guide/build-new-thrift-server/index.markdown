@@ -27,26 +27,18 @@ Create a new class that extends [`com.twitter.finatra.thrift.ThriftServer`](http
 
 ```scala
 import DoEverythingModule
-import com.twitter.finatra.logging.filter.{TypeAgnosticLoggingMDCFilter, TypeAgnosticTraceIdMDCFilter}
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
-import com.twitter.finatra.thrift.{ThriftRouter, ThriftServer}
-import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, StatsFilter, ThriftMDCFilter}
+import com.twitter.finatra.thrift.ThriftServer
+import com.twitter.finatra.thrift.routing.ThriftRouter
 
 object ExampleServerMain extends ExampleServer
 
 class ExampleServer extends ThriftServer {
 
   override val modules = Seq(
-    DoEverythingModule,
-    Slf4jBridgeModule)
+    DoEverythingModule)
 
   override def configureThrift(router: ThriftRouter): Unit = {
     router
-      .typeAgnosticFilter[TypeAgnosticLoggingMDCFilter]
-      .typeAgnosticFilter[TypeAgnosticTraceIdMDCFilter]
-      .filter[ThriftMDCFilter]
-      .filter[AccessLoggingFilter]
-      .filter[StatsFilter]
       .add[ExampleThriftController]
   }
 }

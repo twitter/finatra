@@ -16,6 +16,7 @@ Finatra is based on [Finagle](http://twitter.github.io/finagle/guide/) and [Twit
   - [Binding Annotations](/finatra/user-guide/getting-started#binding-annotations)
   - [Flags](/finatra/user-guide/getting-started#flags)
   - [Futures](/finatra/user-guide/getting-started#futures)
+  - [Server Lifecycle](/finatra/user-guide/getting-started#lifecycle)
 - [Logging](/finatra/user-guide/logging)
   - [Basics](/finatra/user-guide/logging#basics)
   - [Logback](/finatra/user-guide/logging#logback)

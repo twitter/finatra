@@ -24,7 +24,7 @@ Finatra composes some commonly used filters into [`com.twitter.finatra.http.filt
 Filters by default execute **after** route matching. Meaning, for a given
 request the URI path is matched in the routing table before executing any filter. If you
 need to be able to run a filter *before* route matching, you can add the filter via
-`router#filterBeforeRouting`, this is especially useful if the filter manually inspects to
+`router#filter[T](beforeRouting = true)`, this is especially useful if the filter manually inspects to
 see if it should function on a given request URI path that may not exist in the routing table (e.g., is not
 defined by any controller added to the server).
 
@@ -77,7 +77,7 @@ class ExampleServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router
-      .filterBeforeRouting[SpecialFilter]
+      .filter[SpecialFilter](beforeRouting = true)
       .filter[AccessLoggingFilter[Request]].
       .add[ExampleFilter, ExampleController]
   }

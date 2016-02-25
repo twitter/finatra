@@ -15,10 +15,67 @@ footer: true
 ## Basics
 ===============================
 
-There may be occasions where we want to exercise specific code paths before accepting traffic to the server. In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala).
+There may be occasions where we want to exercise specific code paths before accepting traffic to the server (say for triggering JIT in the JVM). In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala).
+
+For example if we wanted to run an initial call through our Thrift Controller, we could create the following handler:
+
+```scala
+import ExampleThriftController
+import com.twitter.example.thriftscala.ExampleService.Add1
+import com.twitter.inject.Logging
+import com.twitter.inject.utils.Handler
+import com.twitter.util.Await
+import javax.inject.Inject
+
+class ExampleThriftWarmupHandler @Inject()(
+  exampleThriftController: ExampleThriftController)
+  extends Handler {
+
+  override def handle() = {
+    val result = Await.result {
+      exampleThriftController.add1(Add1.Args(5))
+    }
+    assert(result.success.isDefined, "Warmup request failed.")
+    info("Warm-up done.")
+  }
+}
+```
+<div></div>
+
+You can then run this handler in the `warmup` lifecycle method:
+
+```scala
+import DoEverythingModule
+import com.twitter.finatra.thrift.ThriftServer
+import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.finatra.thrift.filters._
+
+object ExampleServerMain extends ExampleServer
+
+class ExampleServer extends ThriftServer {
+
+  override val modules = Seq(
+    DoEverythingModule)
+
+  override def configureThrift(router: ThriftRouter): Unit = {
+    router
+      .filter[LoggingMDCFilter]
+      .filter[TraceIdMDCFilter]
+      .filter[ThriftMDCFilter]
+      .filter[AccessLoggingFilter]
+      .filter[StatsFilter]
+      .add[ExampleThriftController]
+  }
+
+  override def warmup() {
+    run[ExampleThriftWarmupHandler]()
+  }
+}
+```
+<div></div>
 
 
-The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) method is called before the server's external Thrift port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`.
+The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external Thrift port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`.
 
 ## <a class="anchor" name="more-information" href="#more-information">More information</a>
 ===============================
@@ -27,7 +84,7 @@ For more information, we encourage you to take a look at the full [`finatra/exam
 
 <nav>
   <ul class="pager">
-    <li class="previous"><a href="/finatra/user-guide/build-new-thrift-server/exceptions.html"><span aria-hidden="true">&larr;</span>&nbsp;Thrift&nbsp;Exceptions</a></li>
+    <li class="previous"><a href="/finatra/user-guide/build-new-thrift-server/filter.html"><span aria-hidden="true">&larr;</span>&nbsp;Add&nbsp;Filters</a></li>
     <li class="next"><a href="/finatra/user-guide/testing">Testing&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>
