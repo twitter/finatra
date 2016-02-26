@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Finatra 2.1.5 is now available and thrift support now documented!"
+title: "Finatra 2.1.4 is now available and thrift support now documented!"
 date: 2016-02-25 13:57:15 -0800
 comments: false
 categories: ["blog", "releases"]
