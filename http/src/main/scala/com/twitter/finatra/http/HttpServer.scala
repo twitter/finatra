@@ -7,7 +7,6 @@ import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.modules.{AccessLogModule, DocRootModule, ExceptionMapperModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 
 trait HttpServer extends BaseHttpServer {
 
@@ -17,8 +16,7 @@ trait HttpServer extends BaseHttpServer {
     exceptionMapperModule,
     jacksonModule,
     DocRootModule,
-    accessLogModule,
-    Slf4jBridgeModule)
+    accessLogModule)
 
   /* Abstract */
 

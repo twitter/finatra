@@ -3,6 +3,7 @@ package com.twitter.inject.server
 import com.google.inject.Module
 import com.twitter.finagle.client.ClientRegistry
 import com.twitter.finagle.http.HttpMuxer
+import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
@@ -22,7 +23,9 @@ trait TwitterServer
   with Warmup
   with Logging {
 
-  addFrameworkModule(statsModule)
+  addFrameworkModules(
+    statsModule,
+    Slf4jBridgeModule)
 
   private val adminAnnounceFlag = flag[String]("admin.announce", "Address for announcing admin server")
 
@@ -38,6 +41,8 @@ trait TwitterServer
   protected def disableAdminHttpServer: Boolean = false
 
   protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
+
+  protected def slf4jBridgeModule: Module = Slf4jBridgeModule // TODO: Use Guice v4 OptionalBinder
 
   /** Resolve all Finagle clients before warmup method called */
   protected def resolveFinagleClientsOnStartup = true
