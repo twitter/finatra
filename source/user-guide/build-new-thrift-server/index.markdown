@@ -54,7 +54,7 @@ Some deployment environments may make it difficult to set command line flags. If
 For example, instead of setting the `-thrift.port` flag, you can override the following method in your server.
 
 ```scala
-class ExampleServer extends HttpServer {
+class ExampleServer extends ThriftServer {
 
   override val defaultFinatraThriftPort: String = ":9090"
 
