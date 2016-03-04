@@ -1,7 +1,7 @@
 import sbt.Keys._
 import sbtunidoc.Plugin.UnidocKeys._
 import scala.language.reflectiveCalls
-import ScoverageSbtPlugin.ScoverageKeys._
+import scoverage.ScoverageKeys.coverageExcludedPackages
 
 parallelExecution in ThisBuild := false
 
