@@ -8,24 +8,6 @@ import com.twitter.inject.Test
 
 class HttpServerStartupIntegrationTest extends Test {
 
-  "admin endpoints must be /admin/finatra" in {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter): Unit = {
-          router.add(new Controller {
-            get("/admin/foo") { request: Request =>
-            }
-          })
-        }
-      })
-
-    intercept[AssertionError] {
-      server.start()
-    }
-
-    server.close()
-  }
-
   "Duplicate route paths fails server startup" in {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {

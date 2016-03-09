@@ -54,6 +54,8 @@ class RoutesTest extends Test with OptionValues {
       name = "my_endpoint",
       method = method,
       path = path,
+      admin = false,
+      adminIndexInfo = None,
       callback = defaultCallback,
       annotations = Seq(),
       requestClass = classOf[Request],

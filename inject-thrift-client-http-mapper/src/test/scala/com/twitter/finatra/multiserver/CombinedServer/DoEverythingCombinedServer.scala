@@ -5,8 +5,8 @@ import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.thrift.filters._
-import com.twitter.finatra.thrift.{ThriftFilter, ThriftServer}
 import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.finatra.thrift.{ThriftFilter, ThriftServer}
 
 object DoEverythingCombinedServerMain extends DoEverythingCombinedServer
 
@@ -17,8 +17,6 @@ class DoEverythingCombinedServer
   flag("magicNum", "26", "Magic number")
 
   override val name = "do-everything-combined-server"
-
-  override val disableAdminHttpServer = true
 
   override val failfastOnFlagsNotParsed = false
 

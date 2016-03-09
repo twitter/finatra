@@ -9,12 +9,13 @@ import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
-import com.twitter.finagle.{ListeningServer, ChannelClosedException, Service}
+import com.twitter.finagle.{ChannelClosedException, ListeningServer, Service}
 import com.twitter.inject.app.{App, EmbeddedApp}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.inject.server.PortUtils._
+import com.twitter.server.AdminHttpServer
 import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
@@ -157,6 +158,11 @@ class EmbeddedTwitterServer(
     val adminHttpServerField = FieldUtils.getField(twitterServer.getClass, "adminHttpServer", true)
     val listeningServer = adminHttpServerField.get(twitterServer).asInstanceOf[ListeningServer]
     getPort(listeningServer)
+  }
+
+  def adminHttpServerRoutes: Seq[AdminHttpServer.Route] = {
+    val allRoutesField = FieldUtils.getField(twitterServer.getClass, "com$twitter$server$AdminHttpServer$$allRoutes", true)
+    allRoutesField.get(twitterServer).asInstanceOf[Seq[AdminHttpServer.Route]]
   }
 
   def clearStats() = {

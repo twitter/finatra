@@ -67,6 +67,10 @@ class DoEverythingController @Inject()(
     response.ok.json("{}".getBytes)
   }
 
+  get("/admin/foo") { request: Request =>
+    response.ok("Hanging out on the externl interface")
+  }
+
   get("/json2") { request: Request =>
     response.ok.json("{}")
   }
