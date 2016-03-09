@@ -48,13 +48,19 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
   }
 
   /**
-   * Sets the HTTP Date and Server header values.
-   * @see Date: <a href="http://tools.ietf.org/html/rfc7231#section-7.1.1.2">Section 7.1.1.2 of RFC 7231</a>
-   * @see Server <a href="http://tools.ietf.org/html/rfc7231#section-7.4.2">Section 7.4.2 of RFC 7231</a>
-   * @param response- the response on which to set the header values.
+   * Sets the HTTP Date and Server header values. If there is no Content-type header in the response, but a non-zero
+   * content length, we also set to the generic: application/octet-stream content type on the response.
+   * @see Date: <a href="https://tools.ietf.org/html/rfc7231#section-7.1.1.2">Section 7.1.1.2 of RFC 7231</a>
+   * @see Server: <a href="https://tools.ietf.org/html/rfc7231#section-7.4.2">Section 7.4.2 of RFC 7231</a>
+   * @see Content-Type: <a href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Section 3.1.1.5 of RFC 7231</a>
+   * @param response - the response on which to set the header values.
    */
   private def setResponseHeaders(response: Response) {
     HttpHeaders.set(response, HttpHeaders.Server, "Finatra")
     HttpHeaders.setDate(response, HttpHeaders.Date, DateTime.now)
+    if (response.contentType.isEmpty && response.content.length != 0) {
+      // see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7.2.1
+      HttpHeaders.set(response, HttpHeaders.ContentType, "application/octet-stream")
+    }
   }
 }

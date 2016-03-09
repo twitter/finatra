@@ -15,7 +15,9 @@ import com.twitter.finatra.http.response._
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.util.Future
+import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets
+import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 import scala.collection.SortedSet
@@ -39,6 +41,22 @@ class DoEverythingController @Inject()(
 
   get("/example/routing/always2") { request: Request =>
     response.ok("always response")
+  }
+
+  get("/plaintext") { request: Request =>
+    "Hello, World!"
+  }
+
+  get("/bytearray") { request: Request =>
+    val b = new Array[Byte](20)
+    ThreadLocalRandom.current().nextBytes(b)
+    b
+  }
+
+  get("/inputstream") { request: Request =>
+    val b = new Array[Byte](20)
+    ThreadLocalRandom.current().nextBytes(b)
+    response.ok.body(new ByteArrayInputStream(b))
   }
 
   get("/useragent") { request: UserAgentRequest =>

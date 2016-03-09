@@ -2,7 +2,7 @@ package com.twitter.finatra.http.response
 
 import com.google.common.net.MediaType
 import com.twitter.finagle.http.{Cookie => FinagleCookie, Request, Response, Status}
-import com.twitter.finagle.stats.{StatsReceiver, LoadedStatsReceiver}
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.http.test.HttpTest
@@ -52,7 +52,7 @@ class ResponseBuilderTest extends HttpTest with Mockito {
       val response = responseBuilder.ok(tempFile)
 
       response.getContentString() should equal(expectedContent)
-      response.headerMap("Content-Type") should equal("application/json;charset=utf-8")
+      response.headerMap("Content-Type") should equal("application/json; charset=utf-8")
     }
 
     "convert to an exception" in {

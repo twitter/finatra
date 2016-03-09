@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.concurrent.AsyncStream
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http._
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
@@ -84,6 +84,14 @@ class CallbackConverter @Inject()(
       request: Request =>
         Future(
           optionToHttpResponse(request)(requestCallback(request).asInstanceOf[Option[_]]))
+    }
+    else if (runtimeClassEq[ResponseType, String]) {
+      // optimized
+      request: Request =>
+        val response = Response(Version.Http11, Status.Ok)
+        response.setContentString(requestCallback(request).asInstanceOf[String])
+        response.headerMap.add(Fields.ContentType, ResponseBuilder.PlainTextContentType)
+        Future.value(response)
     }
     else {
       request: Request =>

@@ -1,8 +1,7 @@
 package com.twitter.finatra.http.integration.doeverything.test
 
-import com.google.common.net.MediaType._
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.common.net.MediaType.JSON_UTF_8
+import com.google.common.net.MediaType
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
@@ -50,6 +49,28 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       server.httpGet(
         "/example/routing/always2",
         withBody = "always response")
+    }
+
+    "/plaintext" in {
+      val response = server.httpGet(
+        "/plaintext",
+        withBody = "Hello, World!")
+
+      response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    }
+
+    "/bytearray" in {
+      val response = server.httpGet(
+        "/bytearray")
+
+      response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+    }
+
+    "/inputstream" in {
+      val response = server.httpGet(
+        "/inputstream")
+
+      response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
     }
 
     "/useragent" in {
@@ -430,10 +451,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "unit" in {
-      server.httpGet(
+      val response = server.httpGet(
         "/unit",
         andExpect = Ok,
         withBody = "")
+
+      response.contentLength should equal(Some(0))
+      // no content-type as there is no content-body
+      response.contentType should equal(None)
     }
 
     "not found path" in {
@@ -593,7 +618,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withJsonBody = "42")
 
-      response.contentType should equal(Some(PLAIN_TEXT_UTF_8.toString))
+      response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
     }
 
     "put_id_not_ignoring_body" in {
@@ -774,7 +799,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withJsonBody = """{ "name" : "mary" }""")
 
-      response.headerMap("content-type") should equal(JSON_UTF_8.toString)
+      response.headerMap("content-type") should equal(MediaType.JSON_UTF_8.toString)
     }
 
     "POST json user" in {
@@ -1463,6 +1488,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       "/bytes",
       withBody = "Steve")
 
-    response.contentType should equal(Some(APPLICATION_BINARY.toString))
+    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
   }
 }

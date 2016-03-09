@@ -1,6 +1,5 @@
 package com.twitter.finatra.http.response
 
-import com.google.common.net.MediaType._
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.http.{Cookie => FinagleCookie, _}
 import com.twitter.finagle.netty3.ChannelBufferBuf
@@ -21,6 +20,11 @@ import org.apache.commons.io.IOUtils
 import org.jboss.netty.buffer.{ChannelBuffer, ChannelBuffers}
 import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie, DefaultCookie}
 import scala.runtime.BoxedUnit
+
+object ResponseBuilder {
+  val DefaultCharset = "charset=utf-8"
+  val PlainTextContentType = "text/plain; " + DefaultCharset
+}
 
 //TODO: Generate more response permutations
 class ResponseBuilder @Inject()(
@@ -195,19 +199,13 @@ class ResponseBuilder @Inject()(
     }
 
     def body(b: Array[Byte]): EnrichedResponse = {
-      contentType(APPLICATION_BINARY)
       response.content = Buf.ByteArray.Owned(b)
       this
     }
 
     def body(bodyStr: String): EnrichedResponse = {
-      if (bodyStr == "") {
-        nothing
-      }
-      else {
-        response.setContentString(bodyStr)
-        this
-      }
+      response.setContentString(bodyStr)
+      this
     }
 
     def body(inputStream: InputStream): EnrichedResponse = {
@@ -238,7 +236,6 @@ class ResponseBuilder @Inject()(
     }
 
     def nothing = {
-      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.PLAIN_TEXT_UTF_8))
       this
     }
 
@@ -247,15 +244,15 @@ class ResponseBuilder @Inject()(
       body(any)
     }
 
-    def html(body: String) = {
+    def html(html: String) = {
       response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.HTML_UTF_8))
-      response.setContentString(body)
+      body(html)
       this
     }
 
-    def html(obj: Any) = {
-      httpResponse.headers().set("Content-Type", "text/html")
-      body(obj)
+    def html(any: Any) = {
+      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.HTML_UTF_8))
+      body(any)
       this
     }
 
@@ -293,7 +290,9 @@ class ResponseBuilder @Inject()(
     }
 
     def contentType(mimeType: String) = {
-      response.headerMap.set(Fields.ContentType, mimeType + ";charset=utf-8")
+      response.headerMap.set(
+        Fields.ContentType,
+        mimeType + "; " + ResponseBuilder.DefaultCharset)
       this
     }
 
