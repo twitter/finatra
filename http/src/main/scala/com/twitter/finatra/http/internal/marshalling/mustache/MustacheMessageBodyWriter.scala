@@ -3,7 +3,6 @@ package com.twitter.finatra.http.internal.marshalling.mustache
 import com.google.common.net.MediaType
 import com.twitter.finatra.http.marshalling.mustache.{MustacheBodyComponent, MustacheService}
 import com.twitter.finatra.http.marshalling.{MessageBodyWriter, WriterResponse}
-import com.twitter.io.Buf
 import javax.inject.{Inject, Singleton}
 
 @Singleton
