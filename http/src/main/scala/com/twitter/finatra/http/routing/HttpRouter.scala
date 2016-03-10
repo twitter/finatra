@@ -194,6 +194,7 @@ class HttpRouter @Inject()(
       admin = adminRoutes.toSeq)
   }
 
+  // constant routes CAN start with /admin/, all others MUST start with /admin/finatra
   private def assertAdminRoutes(routes: ArrayBuffer[Route]): Unit = {
     val message = "Error adding route: %s. %s"
 
@@ -201,7 +202,7 @@ class HttpRouter @Inject()(
       if (route.constantRoute) {
         // constant routes MUST start with at least /admin/
         if (!(route.path startsWith "/admin/")) {
-          val msg = message.format(route.path, "Admin interface routes must start with prefix: /admin/")
+          val msg = message.format(route.path, "Constant admin interface routes must start with prefix: /admin/")
           error(msg)
           throw new java.lang.AssertionError(msg)
         }

@@ -83,6 +83,10 @@ class HttpServerAdminRouteTest extends Test {
                 response.ok.json("bar")
               }
 
+              post("/admin/resource", admin = true) { request: Request =>
+                response.ok("affirmative")
+              }
+
               get("/admin/thisisacustompath",
                 admin = true,
                 adminIndexInfo = Some(
@@ -104,23 +108,26 @@ class HttpServerAdminRouteTest extends Test {
       try {
         server.start()
 
-        // can't add non-constant routes to the admin routes
+        // GET /admin/finatra/stuff/:id non-constant route should not be added
         server.adminHttpServerRoutes.map(_.path).contains("/admin/finatra/stuff/:id") should be(false)
 
-        // can't add POST route even if it's a constant route
+        // POST /admin/finatra/ok/computer constant route should not be added
         server.adminHttpServerRoutes.map(_.path).contains("/admin/finatra/ok/computer") should be(false)
 
-        // /admin/thisisacustompath constant route should be added
+        // GET /admin/finatra/foo constant route should not be added
+        server.adminHttpServerRoutes.map(_.path).contains("/admin/finatra/foo") should be(false)
+
+        // GET /admin/thisisacustompath constant route should be added
         val adminCustomRoute = server.adminHttpServerRoutes.find(_.path == "/admin/thisisacustompath")
         adminCustomRoute.isDefined should be(true)
+        adminCustomRoute.get.includeInIndex should be(true)
         adminCustomRoute.get.group should be(Some("My Service"))
         adminCustomRoute.get.alias should be("Custom")
 
-        // /admin/finatra/foo constant route should be added
-        val adminFinatraRoute = server.adminHttpServerRoutes.find(_.path == "/admin/finatra/foo")
-        adminFinatraRoute.isDefined should be(true)
-        adminFinatraRoute.get.group should be(Some("Finatra")) // default
-        adminFinatraRoute.get.alias should be(adminFinatraRoute.get.path) // default is path
+        // POST /admin/resource constant route should be added
+        val adminResourceRoute = server.adminHttpServerRoutes.find(_.path == "/admin/resource")
+        adminResourceRoute.isDefined should be(true)
+        adminResourceRoute.get.includeInIndex should be(false)
 
         // A handler should show up on the HttpMuxer
         HttpMuxer.patterns.contains("/admin/finatra/") should be(true)
@@ -129,7 +136,7 @@ class HttpServerAdminRouteTest extends Test {
       }
     }
 
-    "Add HttpMuxer handler for non-constant routes" in {
+    "Add HttpMuxer handler for /admin/finatra and non-constant or non-GET routes" in {
       // if we only add non-constant routes to the admin there should still be a handler
       // registered on the HttpMuxer
       val server =  new EmbeddedHttpServer(
