@@ -2,10 +2,12 @@ package com.twitter.finatra.tests.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.RangeValidator
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
-import com.twitter.finatra.validation.{ErrorCode, Range, ValidationResult, ValidatorTest}
+import com.twitter.finatra.validation._
 
 case class RangeIntExample(@Range(min = 1, max = 5) pointValue: Int)
 case class RangeLongExample(@Range(min = 1, max = 5) pointValue: Long)
+case class RangeDoubleExample(@Range(min = 1, max = 5) pointValue: Double)
+case class RangeFloatExample(@Range(min = 1, max = 5) pointValue: Float)
 case class RangeBigDecimalExample(@Range(min = 1, max = 5) pointValue: BigDecimal)
 case class RangeBigIntExample(@Range(min = 1, max = 5) pointValue: BigInt)
 case class RangeLargestLongBigDecimalExample(@Range(min = 1, max = Long.MaxValue) pointValue: BigDecimal)
@@ -43,6 +45,28 @@ class RangeValidatorTest extends ValidatorTest {
       val value = 0L
       validate[RangeLongExample](value) should equal(
         invalid(java.lang.Long.valueOf(value)))
+    }
+
+    "pass validation for double type" in {
+      val value = 1.0
+      validate[RangeDoubleExample](value) should equal(Valid)
+    }
+
+    "fail validation for double type" in {
+      val value = 0.5
+      validate[RangeDoubleExample](value) should equal(
+        invalid(java.lang.Double.valueOf(value)))
+    }
+
+    "pass validation for float type" in {
+      val value = 1.0F
+      validate[RangeFloatExample](value) should equal(Valid)
+    }
+
+    "fail validation for float type" in {
+      val value = 0.5F
+      validate[RangeFloatExample](value) should equal(
+        invalid(java.lang.Float.valueOf(value)))
     }
 
     "pass validation for big decimal type" in {
