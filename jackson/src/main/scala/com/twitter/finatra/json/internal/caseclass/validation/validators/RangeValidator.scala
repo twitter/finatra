@@ -56,9 +56,9 @@ class RangeValidator(
   }
 
   private def validationResult(value: Number) = {
-    val longValue = value.longValue()
+    val doubleValue = value.doubleValue()
     ValidationResult.validate(
-      minValue <= longValue && longValue <= maxValue,
+      minValue <= doubleValue && doubleValue <= maxValue,
       errorMessage(value),
       errorCode(value))
   }

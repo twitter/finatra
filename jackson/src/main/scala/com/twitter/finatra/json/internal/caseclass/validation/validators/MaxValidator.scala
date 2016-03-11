@@ -66,7 +66,7 @@ class MaxValidator(
 
   private def validationResult(value: Number) = {
     ValidationResult.validate(
-      value.longValue() <= maxValue,
+      value.doubleValue() <= maxValue,
       errorMessage(value),
       errorCode(value))
   }
