@@ -24,10 +24,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagle = "6.33.0" + suffix
-  val scrooge = "4.5.0" + suffix
-  val twitterServer = "1.18.0" + suffix
-  val util = "6.32.0" + suffix
+  val finagle = "6.34.0" + suffix
+  val scrooge = "4.6.0" + suffix
+  val twitterServer = "1.19.0" + suffix
+  val util = "6.33.0" + suffix
 
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
@@ -67,12 +67,6 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   }
 )
 
-lazy val javaCompilerOptions = javacOptions ++= Seq(
-  "-source", "1.7",
-  "-target", "1.7",
-  "-Xlint:unchecked"
-)
-
 lazy val baseSettings = Seq(
   libraryDependencies ++= Seq(
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
@@ -85,15 +79,14 @@ lazy val baseSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   scalaCompilerOptions,
-  javaCompilerOptions
+  javacOptions in (Compile, compile) ++= Seq("-source", "1.7", "-target", "1.7", "-Xlint:unchecked"),
+  javacOptions in doc ++= Seq("-source", "1.7")
 )
 
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact := true,
-  publishArtifact in Test := true,
   publishArtifact in (Compile, packageDoc) := true,
-  publishArtifact in (Test, packageDoc) := true,
   pomIncludeRepository := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -199,6 +192,10 @@ def aggregatedProjects = {
     finatraModules
 }
 
+def mappingContainsAnyPath(mapping: (File, String), paths: Seq[String]): Boolean = {
+   paths.foldLeft(false)(_ || mapping._1.getPath.contains(_))
+}
+
 lazy val root = (project in file(".")).
   settings(baseSettings).
   settings(buildSettings).
@@ -209,11 +206,12 @@ lazy val root = (project in file(".")).
     moduleName := "finatra-root",
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
-      // exclude example projects
+      // START EXAMPLES
       -- inProjects(benchmarkServer, exampleInjectJavaServer,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer,
          tinyUrl, twitterClone),
+      // END EXAMPLES
     aggregated := {
       println(aggregatedProjects.map(_.id).mkString("\n"))
     }
@@ -240,7 +238,18 @@ lazy val injectCore = (project in file("inject/inject-core")).
       "org.joda" % "joda-convert" % versions.jodaConvert,
       "com.google.inject" % "guice" % versions.guice % "test",
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
-    )
+    ),
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/inject/IntegrationTest",
+              "com/twitter/inject/Mockito",
+              "com/twitter/inject/PoolUtils",
+              "com/twitter/inject/Resettable",
+              "com/twitter/inject/Test",
+              "com/twitter/inject/TwitterTestModule",
+              "org/specs2/matcher/ScalaTestExpectations")))
+    }
   )
 
 lazy val injectModules = (project in file("inject/inject-modules")).
@@ -251,11 +260,17 @@ lazy val injectModules = (project in file("inject/inject-modules")).
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagle,
       "com.twitter" %% "util-stats" % versions.util
-    )
+    ),
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")))
+    }
   ).
   dependsOn(
-    injectCore,
-    injectCore % "test->test"
+    injectCore % "test->test;compile->compile"
   )
 
 lazy val injectApp = (project in file("inject/inject-app")).
@@ -265,11 +280,21 @@ lazy val injectApp = (project in file("inject/inject-app")).
     moduleName := "inject-app",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.util
-    )
+    ),
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/inject/app/Banner",
+              "com/twitter/inject/app/EmbeddedApp",
+              "com/twitter/inject/app/FeatureTest",
+              "com/twitter/inject/app/StartupTimeoutException",
+              "com/twitter/inject/app/TestInjector")))
+    }
   ).
   dependsOn(
-    injectCore,
-    injectCore % "test->test"
+    injectCore % "test->test;compile->compile"
   )
 
 lazy val injectServer = (project in file("inject/inject-server")).
@@ -280,13 +305,19 @@ lazy val injectServer = (project in file("inject/inject-server")).
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-stats" % versions.finagle,
       "com.twitter" %% "twitter-server" % versions.twitterServer
-    )
+    ),
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/inject/server/EmbeddedTwitterServer",
+              "com/twitter/inject/server/FeatureTest")))
+    }
   ).
   dependsOn(
-    injectApp,
-    injectApp % "test->test",
-    injectModules,
-    injectModules % "test->test",
+    injectApp % "test->test;compile->compile",
+    injectModules % "test->test;compile->compile",
     injectUtils
   )
 
@@ -300,9 +331,8 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
     )
   ).
   dependsOn(
-    injectCore,
-    injectApp % "test->test",
-    injectCore % "test->test"
+    injectCore % "test->test;compile->compile",
+    injectApp % "test->test"
   )
 
 lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
@@ -319,9 +349,8 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
       "com.twitter" %% "finagle-http" % versions.finagle % "test->compile")
   ).
   dependsOn(
-    injectCore,
+    injectCore % "test->test;compile->compile",
     injectUtils,
-    injectCore % "test->test",
     injectApp % "test->test",
     http % "test->test",
     thrift % "test->test"
@@ -337,8 +366,7 @@ lazy val injectUtils = (project in file("inject/inject-utils")).
     )
   ).
   dependsOn(
-    injectCore,
-    injectCore % "test->test"
+    injectCore % "test->test;compile->compile"
   )
 
 // Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
@@ -375,7 +403,15 @@ lazy val utils = project.
       "org.apache.thrift" % "libthrift" % versions.libThrift,
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.joda" % "joda-convert" % versions.jodaConvert
-    )
+    ),
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/finatra/modules/",
+              "com/twitter/finatra/test/")))
+    }
   ).
   dependsOn(
     injectApp % "test->test",
@@ -396,7 +432,16 @@ lazy val jackson = project.
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler"),
       "com.twitter.finatra" %% "finatra-scalap-compiler-deps" % "2.0.0"
-    )
+    ),
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/finatra/json/JsonDiff",
+              "com/twitter/finatra/validation/InvalidValidator",
+              "com/twitter/finatra/tests/json/internal/InvalidValidationInternal")))
+    }
   ).
   dependsOn(
     injectApp % "test->test",
@@ -417,15 +462,20 @@ lazy val http = project.
     unmanagedResourceDirectories in Test <+= baseDirectory(
       _ / "src" / "test" / "webapp"
     ),
-    excludeFilter in Test in unmanagedResources := "BUILD"
+    excludeFilter in Test in unmanagedResources := "BUILD",
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/finatra/http/test/")))
+    }
   ).
   dependsOn(
-    jackson,
+    jackson % "test->test;compile->compile",
     injectRequestScope,
-    injectServer,
+    injectServer % "test->test;compile->compile",
     httpclient % "test->test",
-    jackson % "test->test",
-    injectServer % "test->test",
     slf4j
   )
 
@@ -436,7 +486,14 @@ lazy val httpclient = project.
     moduleName := "finatra-httpclient",
     libraryDependencies ++= Seq(
       "commons-codec" % "commons-codec" % versions.commonsCodec
-    )
+    ),
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/finatra/httpclient/test/")))
+    }
   ).
   dependsOn(
     jackson,
@@ -457,8 +514,7 @@ lazy val slf4j = project.
     )
   ).
   dependsOn(
-    injectCore,
-    injectCore % "test->test"
+    injectCore % "test->test;compile->compile"
   )
 
 lazy val thrift = project.
@@ -473,12 +529,20 @@ lazy val thrift = project.
     ),
     scroogePublishThrift in Compile := true,
     scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
-    excludeFilter in unmanagedResources := "BUILD"
+    excludeFilter in unmanagedResources := "BUILD",
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
+      fileMappings.filter(
+        mappingContainsAnyPath(_,
+          Seq("com/twitter/finatra/thrift/EmbeddedThriftServer",
+              "com/twitter/finatra/thrift/ThriftClient",
+              "com/twitter/finatra/thrift/ThriftTest")))
+    }
   ).
   dependsOn(
-    injectServer,
+    injectServer % "test->test;compile->compile",
     utils,
-    injectServer % "test->test",
     slf4j
   )
 
@@ -491,15 +555,12 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     excludeFilter in Test in unmanagedResources := "BUILD"
   ).
   dependsOn(
-    http,
+    http % "test->test;compile->compile",
     injectCore,
-    injectThriftClient,
+    injectThriftClient % "test->test;compile->compile",
     slf4j % "test->test",
-    http % "test->test",
     injectServer % "test->test",
-    injectThriftClient % "test->test",
-    thrift % "test->compile",
-    thrift % "test->test"
+    thrift % "test->test;test->compile"
   )
 
 // START EXAMPLES
@@ -517,8 +578,7 @@ lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
     )
   ).
   dependsOn(
-    http,
-    http % "test->test",
+    http % "test->test;compile->compile",
     slf4j,
     injectCore % "test->test"
   )
@@ -533,8 +593,7 @@ lazy val helloWorld = (project in file("examples/hello-world")).
     )
   ).
   dependsOn(
-    http,
-    http % "test->test",
+    http % "test->test;compile->compile",
     slf4j,
     injectCore % "test->test"
   )
@@ -550,8 +609,7 @@ lazy val streamingExample = (project in file("examples/streaming-example")).
     )
   ).
   dependsOn(
-    http,
-    http % "test->test",
+    http % "test->test;compile->compile",
     slf4j,
     injectCore % "test->test"
   )
@@ -567,8 +625,7 @@ lazy val twitterClone = (project in file("examples/twitter-clone")).
     )
   ).
   dependsOn(
-    http,
-    http % "test->test",
+    http % "test->test;compile->compile",
     httpclient,
     slf4j,
     injectCore % "test->test"
@@ -582,8 +639,7 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server")).
     organization := "com.twitter.finatra.example"
   ).
   dependsOn(
-    http,
-    http % "test->test",
+    http % "test->test;compile->compile",
     httpclient,
     slf4j,
     injectCore % "test->test"
@@ -599,8 +655,7 @@ lazy val tinyUrl = (project in file("examples/tiny-url")).
     )
   ).
   dependsOn(
-    http,
-    http % "test->test",
+    http % "test->test;compile->compile",
     httpclient,
     slf4j,
     injectCore % "test->test"
@@ -617,8 +672,7 @@ lazy val exampleInjectJavaServer = (project in file("examples/java-server")).
   ).
   dependsOn(
     slf4j,
-    injectServer,
-    injectServer % "test->test",
+    injectServer % "test->test;compile->compile",
     injectCore % "test->test",
     injectApp % "test->test"
   )
@@ -646,8 +700,7 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
   dependsOn(
     thriftExampleIdl,
     slf4j,
-    thrift,
-    thrift % "test->test",
+    thrift % "test->test;compile->compile",
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test"

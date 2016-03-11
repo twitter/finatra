@@ -56,7 +56,6 @@ lazy val thriftExampleServer = (project in file("thrift-example-server")).
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
     libraryDependencies ++= Seq(
-      "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
       "com.twitter.finatra" %% "finatra-thrift" % versions.finatra,
       "ch.qos.logback" % "logback-classic" % versions.logback,
 
