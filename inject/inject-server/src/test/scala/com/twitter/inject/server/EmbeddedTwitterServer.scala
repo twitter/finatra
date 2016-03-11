@@ -151,13 +151,7 @@ class EmbeddedTwitterServer(
   }
 
   def httpAdminPort = {
-    // TODO: The following is the desired implementation but it requires a CSL release after we add the adminBoundAddress method:
-    // getPort(twitterServer.adminBoundAddress)
-
-    // HACK: Here's the temporary workaround
-    val adminHttpServerField = FieldUtils.getField(twitterServer.getClass, "adminHttpServer", true)
-    val listeningServer = adminHttpServerField.get(twitterServer).asInstanceOf[ListeningServer]
-    getPort(listeningServer)
+    getPort(twitterServer.adminBoundAddress)
   }
 
   def adminHttpServerRoutes: Seq[AdminHttpServer.Route] = {
