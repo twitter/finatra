@@ -9,9 +9,3 @@ target(name='tests',
     'finatra/inject/inject-utils/src/test/scala'
   ]
 )
-
-target(name='test-deps',
-  dependencies=[
-    'finatra/inject/inject-utils/src/test/scala:test-deps'
-  ]
-)

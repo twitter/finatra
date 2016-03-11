@@ -32,11 +32,6 @@
       <artifactId>finatra-http_2.11</artifactId>
       <version>${finatra.version}</version>
     </dependency>
-    <dependency>
-      <groupId>com.twitter.finatra</groupId>
-      <artifactId>finatra-slf4j_2.11</artifactId>
-      <version>${finatra.version}</version>
-    </dependency>
 
     <!-- Logback -->
     <dependency>
