@@ -11,6 +11,7 @@ import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.handler.ReplyHandler
 import com.twitter.server.internal.{FinagleBuildRevision, PromoteToOldGenUtils}
 import com.twitter.util.Await
+import com.twitter.util.registry.Library
 
 /** AbstractTwitterServer for usage from Java */
 abstract class AbstractTwitterServer extends TwitterServer
@@ -33,11 +34,21 @@ trait TwitterServer
   override protected def failfastOnFlagsNotParsed = false
 
   /**
+   * Name used for registration in the [[com.twitter.util.registry.Library]]
+   * @return library name to register in the Library registry.
+   */
+  private[twitter] def libraryName = "finatra"
+
+  /**
    * If true, the Twitter-Server admin server will be disabled.
-   * Note: Disabling the admin server allows Finatra to be deployed into environments where only a single port is allowed
+   * Note: Disabling the admin server allows services to be deployed into environments where only a single port is allowed
    */
   protected def disableAdminHttpServer: Boolean = false
 
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finagle.stats.StatsReceiver]].
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finagle.stats.StatsReceiver]] implementation.
+   */
   protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
 
   /** Resolve all Finagle clients before warmup method called */
@@ -81,6 +92,7 @@ trait TwitterServer
     }
 
     FinagleBuildRevision.register(injector)
+    Library.register(libraryName, Map[String, String]())
   }
 
   /**

@@ -8,6 +8,7 @@ import com.twitter.inject.{Test, TwitterModule}
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.{TwitterServer => BaseTwitterServer}
 import com.twitter.util.Await
+import scala.util.parsing.json.JSON
 
 
 class StartupIntegrationTest extends Test {
@@ -143,6 +144,24 @@ class StartupIntegrationTest extends Test {
       }
       app.close()
       e.getMessage should include("injector is not available before main")
+    }
+
+    "register framework library" in {
+      val server = new EmbeddedTwitterServer(new ServerWithModuleInstall)
+      try {
+        server.start()
+
+        val response = server.httpGetAdmin(
+          "/admin/registry.json",
+          andExpect = Status.Ok)
+
+        val json: Map[String, Any] = JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+        val registry = json("registry").asInstanceOf[Map[String, Any]]
+        assert(registry.contains("library"))
+        registry("library").asInstanceOf[Map[String, String]].keySet.headOption should be(Some("finatra"))
+      } finally {
+        server.close()
+      }
     }
   }
 }
