@@ -1,22 +1,11 @@
-name := "java-http-server"
-organization := "com.twitter.example"
-version := "2.1.5-SNAPSHOT"
+name := "twitter-clone"
+organization := "com.twitter.finatra.example"
+version := "2.1.5"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false
-publishMavenStyle := true
-crossPaths := false
-autoScalaLibrary := false
-
-javacOptions ++= Seq(
-  "-source", "1.8",
-  "-target", "1.8",
-  "-Xlint:unchecked"
-)
-
-mainClass in (Compile, packageBin) := Some("com.twitter.hello.server.HelloWorldServerMain")
 
 lazy val versions = new {
-  val finatra = "2.1.5-SNAPSHOT"
+  val finatra = "2.1.5"
   val guice = "4.0"
   val logback = "1.0.13"
 }
@@ -53,5 +42,4 @@ libraryDependencies ++= Seq(
 
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-  "org.specs2" %% "specs2" % "2.3.12" % "test",
-  "com.novocode" % "junit-interface" % "0.11" % Test)
+  "org.specs2" %% "specs2" % "2.3.12" % "test")

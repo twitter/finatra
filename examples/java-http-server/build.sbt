@@ -1,16 +1,22 @@
-name := "java-server"
+name := "java-http-server"
 organization := "com.twitter.example"
-version := "2.1.5-SNAPSHOT"
+version := "2.1.5"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false
 publishMavenStyle := true
 crossPaths := false
 autoScalaLibrary := false
 
+javacOptions ++= Seq(
+  "-source", "1.8",
+  "-target", "1.8",
+  "-Xlint:unchecked"
+)
+
 mainClass in (Compile, packageBin) := Some("com.twitter.hello.server.HelloWorldServerMain")
 
 lazy val versions = new {
-  val finatra = "2.1.5-SNAPSHOT"
+  val finatra = "2.1.5"
   val guice = "4.0"
   val logback = "1.0.13"
 }
@@ -26,9 +32,8 @@ assemblyMergeStrategy in assembly := {
 }
 
 libraryDependencies ++= Seq(
-  "com.twitter.finatra" %% "finatra-slf4j" % versions.finatra,
-  "com.twitter.inject" %% "inject-server" % versions.finatra,
-  "com.twitter.inject" %% "inject-core" % versions.finatra,
+  "com.twitter.finatra" %% "finatra-http" % versions.finatra,
+  "com.twitter.finatra" %% "finatra-httpclient" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
