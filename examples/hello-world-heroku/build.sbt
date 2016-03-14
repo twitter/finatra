@@ -1,11 +1,18 @@
-name := "benchmark-server"
+import com.typesafe.sbt.SbtNativePackager._
+
+packageArchetype.java_application
+name := "hello-world-heroku"
 organization := "com.twitter.finatra.example"
-version := "2.1.5-SNAPSHOT"
+version := "2.1.5"
 scalaVersion := "2.11.7"
+fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.1.5-SNAPSHOT"
+  val finatra = "2.1.5"
+  val guice = "4.0"
+  val logback = "1.0.13"
+  val finagleMetrics = "0.0.2"
 }
 
 resolvers ++= Seq(
@@ -21,7 +28,8 @@ assemblyMergeStrategy in assembly := {
 libraryDependencies ++= Seq(
   "com.twitter.finatra" %% "finatra-http" % versions.finatra,
   "com.twitter.finatra" %% "finatra-httpclient" % versions.finatra,
-  "ch.qos.logback" % "logback-classic" % "1.0.13",
+  "ch.qos.logback" % "logback-classic" % versions.logback,
+  "com.github.rlazoti" %% "finagle-metrics" % versions.finagleMetrics,
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
   "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test",
@@ -29,6 +37,7 @@ libraryDependencies ++= Seq(
   "com.twitter.inject" %% "inject-app" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-core" % versions.finatra % "test",
   "com.twitter.inject" %% "inject-modules" % versions.finatra % "test",
+  "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test",
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test" classifier "tests",
   "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",
