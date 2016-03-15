@@ -1,14 +1,54 @@
+
 # Change Log
+All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` corresponds to associated messages in commits.
+
+## [Unreleased]
+
+### Added
+
+### Changed
+
+### Fixed
+
+### Closed
+
+## [v2.1.5](https://github.com/twitter/finatra/tree/v2.1.5) (2016-03-15)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.1.4...v2.1.5)
+
+### Added
+
+* finatra-http: Ability to access the finagle request in the ResponseBuilder
+  for templating. ``RB_ID=805317``
+* finatra-http: Added ability to register routes into the TwitterServer
+  admin UI. ``RB_ID=808272``
+* finatra: Added PULL_REQUEST_TEMPLATE ``RB_ID=808946``
+
+### Changed
+
+* finatra: Move to `develop` branch as default branch for Github. ``RB_ID=810088``
+* finatra: Updated test jars to **only** contain test utility
+  code. ``RB_ID=809803``
+  
+### Fixed
+
+* finatra-http; finatra-thrift: Slf4JBridgeModule is added by default and no
+  longer breaks services which use the slf4k-jdk14 logging
+  implementation. ``RB_ID=807171``
+* finatra-http: Fixed incorrect (or missing) content-type on some http
+  responses. ``RB_ID=807773``
+* finatra-jackson: Fix to support doubles/floats in the jackson Min/Max/Range
+  validations. ``RB_ID=809821``
 
 ## [v2.1.4](https://github.com/twitter/finatra/tree/v2.1.4) (2016-02-25)
 
-[Full Changelog](https://github.com/twitter/finatra/compare/v2.1.3...2.1.4)
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.1.3...v2.1.4)
 
-**Fixed bugs:**
+## Fixed
 
 - Some Scaladoc links are broken on twitter.github.io/finatra [\#298](https://github.com/twitter/finatra/issues/298)
 
-**Closed issues:**
+## Closed
 
 - LoggingMDCFilter lacks documentation [\#303](https://github.com/twitter/finatra/issues/303)
 
@@ -20,7 +60,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.1.2...v2.1.3)
 
-**Closed issues:**
+## Closed
 
 - Is it possible to have different modules listen in different ports? [\#295](https://github.com/twitter/finatra/issues/295)
 
@@ -40,11 +80,11 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.1.1...v2.1.2)
 
-**Fixed bugs:**
+## Fixed
 
 - Missing Scaladoc [\#279](https://github.com/twitter/finatra/issues/279)
 
-**Closed issues:**
+## Closed
 
 - Finatra + Protobuf [\#277](https://github.com/twitter/finatra/issues/277)
 
@@ -60,7 +100,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.1.0...v2.1.1)
 
-**Closed issues:**
+## Closed
 
 - Update Startup Test on doc [\#261](https://github.com/twitter/finatra/issues/261)
 
@@ -88,7 +128,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0...v2.0.1)
 
-**Closed issues:**
+## Closed
 
 - Split code into packages/modules [\#254](https://github.com/twitter/finatra/issues/254)
 
@@ -106,7 +146,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0.M2...v2.0.0)
 
-**Closed issues:**
+## Closed
 
 - Singleton classes [\#236](https://github.com/twitter/finatra/issues/236)
 
@@ -170,7 +210,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/v2.0.0.M1...v2.0.0.M2)
 
-**Closed issues:**
+## Closed
 
 - Issue with POST request [\#214](https://github.com/twitter/finatra/issues/214)
 
@@ -252,7 +292,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.6.0...v2.0.0.M1)
 
-**Closed issues:**
+## Closed
 
 - UNRESOLVED DEPENDENCIES [\#199](https://github.com/twitter/finatra/issues/199)
 
@@ -268,7 +308,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.5.4...1.6.0)
 
-**Closed issues:**
+## Closed
 
 - Finatra 1.5.4 with finagle-stats 6.22.0 throws an exception [\#184](https://github.com/twitter/finatra/issues/184)
 
@@ -334,7 +374,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.5.3...1.5.4)
 
-**Closed issues:**
+## Closed
 
 - Could add support for Windows? [\#145](https://github.com/twitter/finatra/issues/145)
 
@@ -360,7 +400,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.5.2...1.5.3)
 
-**Closed issues:**
+## Closed
 
 - Response body truncated [\#120](https://github.com/twitter/finatra/issues/120)
 
@@ -384,7 +424,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.5.1...1.5.2)
 
-**Closed issues:**
+## Closed
 
 - multipart/form-data regression [\#101](https://github.com/twitter/finatra/issues/101)
 
@@ -402,7 +442,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.5.0a...1.5.1)
 
-**Closed issues:**
+## Closed
 
 - 1.7.x [\#96](https://github.com/twitter/finatra/issues/96)
 
@@ -432,7 +472,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.5.0...1.5.0a)
 
-**Closed issues:**
+## Closed
 
 - 0 deprecation/warnings [\#17](https://github.com/twitter/finatra/issues/17)
 
@@ -440,7 +480,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.4.1...1.5.0)
 
-**Closed issues:**
+## Closed
 
 - filters for select routes only [\#85](https://github.com/twitter/finatra/issues/85)
 
@@ -462,7 +502,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.4.0...finatra-1.4.1)
 
-**Closed issues:**
+## Closed
 
 - 1.4.1 [\#72](https://github.com/twitter/finatra/issues/72)
 
@@ -482,7 +522,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.4.0...1.4.0)
 
-**Closed issues:**
+## Closed
 
 - port back apache's multiupload handler [\#43](https://github.com/twitter/finatra/issues/43)
 
@@ -512,7 +552,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/1.3.7...finatra-1.3.8)
 
-**Closed issues:**
+## Closed
 
 - Make mustache factory use baseTemplatePath local\_docroot and template\_path [\#56](https://github.com/twitter/finatra/issues/56)
 
@@ -532,7 +572,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.3.3...finatra-1.3.4)
 
-**Closed issues:**
+## Closed
 
 - handle param routing for static file handling [\#55](https://github.com/twitter/finatra/issues/55)
 
@@ -574,7 +614,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.3.0...finatra-1.3.1)
 
-**Closed issues:**
+## Closed
 
 - ./finatra update-readme no longer works [\#34](https://github.com/twitter/finatra/issues/34)
 
@@ -586,7 +626,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.2.0...finatra-1.2.2)
 
-**Closed issues:**
+## Closed
 
 - ./finatra generator doesnt work on linux [\#24](https://github.com/twitter/finatra/issues/24)
 
@@ -606,7 +646,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.1.0...finatra-1.1.1)
 
-**Closed issues:**
+## Closed
 
 - Custom error handlers [\#29](https://github.com/twitter/finatra/issues/29)
 
@@ -618,7 +658,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.0.3...finatra-1.1.0)
 
-**Closed issues:**
+## Closed
 
 - Publish to Maven Central [\#23](https://github.com/twitter/finatra/issues/23)
 
@@ -630,7 +670,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.0.1...finatra-1.0.2)
 
-**Closed issues:**
+## Closed
 
 - Serve static files [\#28](https://github.com/twitter/finatra/issues/28)
 
@@ -638,7 +678,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-1.0.0...finatra-1.0.1)
 
-**Closed issues:**
+## Closed
 
 - Unable to retrieve post parameters [\#26](https://github.com/twitter/finatra/issues/26)
 
@@ -652,7 +692,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.3.4...finatra-1.0.0)
 
-**Closed issues:**
+## Closed
 
 - an config [\#12](https://github.com/twitter/finatra/issues/12)
 
@@ -660,7 +700,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.3.3...finatra-0.3.4)
 
-**Closed issues:**
+## Closed
 
 - do a perf review [\#13](https://github.com/twitter/finatra/issues/13)
 
@@ -674,7 +714,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.2.4...finatra-0.3.2)
 
-**Closed issues:**
+## Closed
 
 - allow insertion of userland filters into the finagle stack [\#15](https://github.com/twitter/finatra/issues/15)
 
@@ -708,7 +748,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.1.10...finatra-0.2.0)
 
-**Closed issues:**
+## Closed
 
 - regexed routes [\#11](https://github.com/twitter/finatra/issues/11)
 
@@ -730,7 +770,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.1.7...finatra-0.1.8)
 
-**Closed issues:**
+## Closed
 
 - mvn package doesnt fully package [\#16](https://github.com/twitter/finatra/issues/16)
 
@@ -746,7 +786,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.1.5...finatra-0.1.6)
 
-**Closed issues:**
+## Closed
 
 - unbreak file upload/form support [\#10](https://github.com/twitter/finatra/issues/10)
 
@@ -754,7 +794,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.1.3...finatra-0.1.5)
 
-**Closed issues:**
+## Closed
 
 - add logging [\#4](https://github.com/twitter/finatra/issues/4)
 
@@ -766,7 +806,7 @@
 
 [Full Changelog](https://github.com/twitter/finatra/compare/finatra-0.1.1...finatra-0.1.2)
 
-**Closed issues:**
+## Closed
 
 - unbreak cookie support [\#9](https://github.com/twitter/finatra/issues/9)
 
@@ -787,7 +827,3 @@
 - Fix HTTP response code for routes not found [\#2](https://github.com/twitter/finatra/pull/2) ([franklinhu](https://github.com/franklinhu))
 
 - Fix template file resolving for packaged jarfiles [\#1](https://github.com/twitter/finatra/pull/1) ([franklinhu](https://github.com/franklinhu))
-
-
-
-\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
