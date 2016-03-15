@@ -5,12 +5,13 @@ import com.google.common.net.MediaType
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{Method, Request}
+import com.twitter.finagle.http.{FileElement, Method, Request}
 import com.twitter.finatra.http.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
+import com.twitter.io.Buf
 import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
 
@@ -326,6 +327,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         params = Map("name" -> "bob", "age" -> "18"),
         andExpect = Ok,
         withBody = "bob")
+    }
+
+    "post multipart form" in {
+      server.httpFormPostMultipart(
+        "/formPostMultipart",
+        params = List(FileElement("file", Buf.ByteArray.Owned("hi".getBytes()), Some("text/plain"), Some("hi.txt"))),
+        andExpect = Ok,
+        withBody = "text/plain")
     }
 
     "post multipart" in {
