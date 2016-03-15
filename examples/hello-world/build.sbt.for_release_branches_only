@@ -1,18 +1,13 @@
-import com.typesafe.sbt.SbtNativePackager._
-
-packageArchetype.java_application
-name := "hello-world-heroku"
+name := "hello-world"
 organization := "com.twitter.finatra.example"
-version := "2.1.5"
+version := "2.1.6-SNAPSHOT"
 scalaVersion := "2.11.7"
-fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.1.5"
+  val finatra = "2.1.6-SNAPSHOT"
   val guice = "4.0"
   val logback = "1.0.13"
-  val finagleMetrics = "0.0.2"
 }
 
 resolvers ++= Seq(
@@ -29,7 +24,6 @@ libraryDependencies ++= Seq(
   "com.twitter.finatra" %% "finatra-http" % versions.finatra,
   "com.twitter.finatra" %% "finatra-httpclient" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
-  "com.github.rlazoti" %% "finagle-metrics" % versions.finagleMetrics,
 
   "com.twitter.finatra" %% "finatra-http" % versions.finatra % "test",
   "com.twitter.finatra" %% "finatra-jackson" % versions.finatra % "test",
