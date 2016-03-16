@@ -45,9 +45,14 @@ trait ThriftServer extends TwitterServer {
     val router = injector.instance[ThriftRouter]
     router.serviceName(name)
     configureThrift(router)
-    thriftServer = ThriftMux.server
-      .withLabel(thriftServerNameFlag())
-      .serveIface(thriftPortFlag(), router.filteredService)
+
+    val thriftServerBuilder =
+      configureThriftServer(
+        ThriftMux.server
+          .withLabel(thriftServerNameFlag()))
+
+    thriftServer =
+      thriftServerBuilder.serveIface(thriftPortFlag(), router.filteredService)
     onExit {
       Await.result(
         close(thriftServer, thriftShutdownTimeoutFlag().fromNow))
@@ -65,6 +70,10 @@ trait ThriftServer extends TwitterServer {
   override final def appMain(): Unit = { run() }
 
   /* Protected */
+
+  protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
+    server
+  }
 
   /* Private */
 
