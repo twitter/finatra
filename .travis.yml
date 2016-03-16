@@ -18,6 +18,7 @@ before_script:
 
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean ++$TRAVIS_SCALA_VERSION coverage ++$TRAVIS_SCALA_VERSION test
+  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverageReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
