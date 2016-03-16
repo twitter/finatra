@@ -68,7 +68,7 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
     add1HttpServer.assertCounter("route/errorAdd1/GET/status/503", numHttpRequests)
   }
 
-  "slow add resulting in request timeouts" in {
+  "slow add resulting in request timeouts" ignore {
     val numHttpRequests = 1
     val maxThriftRequestsPerHttpRequest = 4
     val expectedFailedThriftRequests = numHttpRequests * maxThriftRequestsPerHttpRequest
