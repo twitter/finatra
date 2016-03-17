@@ -1,7 +1,7 @@
 import sbt.Keys._
 import sbtunidoc.Plugin.UnidocKeys._
 import scala.language.reflectiveCalls
-import scoverage.ScoverageKeys.coverageExcludedPackages
+import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
@@ -349,7 +349,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
   settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    coverageExcludedPackages := "<empty>;com\\.twitter\\.test\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.test\\.thriftscala.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thrift" % versions.finagle,
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
@@ -401,7 +401,7 @@ lazy val utils = project.
   settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
-    coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
@@ -434,7 +434,7 @@ lazy val jackson = project.
   settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
+    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
@@ -462,7 +462,7 @@ lazy val http = project.
   settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpReplyHandler.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpReplyHandler.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -531,7 +531,7 @@ lazy val thrift = project.
   settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
-    coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thriftmux" % versions.finagle,
       "org.yaml" % "snakeyaml" % versions.snakeyaml
@@ -628,7 +628,7 @@ lazy val twitterClone = (project in file("examples/twitter-clone")).
   settings(
     name := "twitter-clone",
     moduleName := "twitter-clone",
-    coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % versions.logback
     )
@@ -691,7 +691,7 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
   settings(
     name := "thrift-example-idl",
     moduleName := "thrift-example-idl",
-    coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     scroogeThriftIncludeFolders in Compile := Seq(file("thrift/src/main/thrift"))
   ).
   dependsOn(thrift)
@@ -701,7 +701,7 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
   settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
-    coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
     scroogeThriftIncludeFolders in Compile := Seq(
       file("thrift/src/main/thrift"),
       file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
