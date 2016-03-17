@@ -35,6 +35,8 @@ class DoEverythingThriftServer extends ThriftServer {
   override def warmup() {
     run[DoEverythingThriftWarmupHandler]()
   }
+
+  override def tlsEngine = Some(() => TLSConfigurator.serverTLSEngine)
 }
 
 class DoEverythingThriftWarmupHandler

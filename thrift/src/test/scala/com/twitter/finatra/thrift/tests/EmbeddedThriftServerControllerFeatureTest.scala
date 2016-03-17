@@ -5,6 +5,7 @@ import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.finatra.thrift.tests.doeverything.TLSConfigurator
 import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
@@ -58,6 +59,8 @@ class ConverterControllerServer extends ThriftServer {
       .filter[ClientIdWhitelistFilter]
       .add[ConverterController]
   }
+
+  override def tlsEngine = Some(() => TLSConfigurator.serverTLSEngine)
 }
 
 class ConverterController

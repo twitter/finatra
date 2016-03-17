@@ -1,6 +1,8 @@
 package com.twitter.finatra.thrift
 
 import com.twitter.conversions.time._
+import com.twitter.finagle.ssl.Engine
+import com.twitter.finagle.transport.Transport
 import com.twitter.finagle.{ListeningServer, ThriftMux}
 import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
@@ -45,8 +47,13 @@ trait ThriftServer extends TwitterServer {
     val router = injector.instance[ThriftRouter]
     router.serviceName(name)
     configureThrift(router)
-    thriftServer = ThriftMux.server
+    var server = ThriftMux.server
       .withLabel(thriftServerNameFlag())
+    tlsEngine match {
+      case Some(x) => server = server.configured(Transport.TLSServerEngine(Some(x)))
+      case _ =>
+    }
+    thriftServer = server
       .serveIface(thriftPortFlag(), router.filteredService)
     onExit {
       Await.result(
@@ -65,6 +72,8 @@ trait ThriftServer extends TwitterServer {
   override final def appMain(): Unit = { run() }
 
   /* Protected */
+
+  protected def tlsEngine: Option[() => Engine] = None
 
   /* Private */
 

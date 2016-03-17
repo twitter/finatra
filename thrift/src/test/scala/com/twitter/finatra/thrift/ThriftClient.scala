@@ -4,6 +4,8 @@ import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.param.Stats
 import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finagle.thrift.ClientId
+import com.twitter.finagle.transport.Transport
+import com.twitter.finatra.thrift.tests.doeverything.TLSConfigurator
 import com.twitter.inject.app.EmbeddedApp
 import com.twitter.inject.server.PortUtils._
 import com.twitter.inject.server.{PortUtils, Ports}
@@ -37,8 +39,13 @@ trait ThriftClient { self: EmbeddedApp =>
 
   def thriftClient[T: ClassTag](clientId: String = null): T = {
     val baseThriftClient =
-      ThriftMux.Client().
-        configured(Stats(NullStatsReceiver))
+      ThriftMux.Client()
+        .configured(Stats(NullStatsReceiver))
+        .configured(
+          Transport.TLSClientEngine(
+            Some(_ => TLSConfigurator.clientTLSEngine)
+          )
+        )
 
     val client = {
       if (clientId != null) {
