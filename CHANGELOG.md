@@ -1,6 +1,6 @@
 
 # Change Log
-All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` corresponds to associated messages in commits.
+All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` corresponds to associated message in commits.
 
 ## [Unreleased]
 
