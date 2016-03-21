@@ -6,9 +6,15 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-inject/inject-server: Register framework in Library registry. ``RB_ID=809458``
+* finatra-http: Support for trace, connect & options in RequestBuilder. ``RB_ID=811102``
+* finatra-thrift: Allow for thrift server configuration. ``RB_ID=811126``
+
 ### Changed
 
 ### Fixed
+
+* finatra: Revert sbt-scoverage plugin to 1.2.0. ``RB_ID=812098``
 
 ### Closed
 
