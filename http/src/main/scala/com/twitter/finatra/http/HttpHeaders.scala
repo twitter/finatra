@@ -4,6 +4,8 @@ import com.twitter.finagle.http.Response
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.{DateTime, DateTimeZone}
 
+import java.util.Locale
+
 object HttpHeaders {
 
   /**
@@ -48,7 +50,7 @@ object HttpHeaders {
    * RFC 7231 Date Format
    * @see <a href="http://tools.ietf.org/html/rfc7231#section-7.1.1.1">RFC 7231 Section 7.1.1.1</a>
    */
-  val RFC7231DateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+  val RFC7231DateFormat = "EEE, dd MMM yyyy HH:mm:ss 'GMT'"
 
   /**
    * Set the given date under the given header name after formatting it as a string
@@ -59,6 +61,7 @@ object HttpHeaders {
    */
   def setDate(response: Response, header: String, date: DateTime) {
     val dateFormat = DateTimeFormat.forPattern(RFC7231DateFormat).withZone(GMT)
+      .withLocale(Locale.US)
     set(response, header, dateFormat.print(date))
   }
 
