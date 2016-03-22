@@ -3,11 +3,9 @@ package com.twitter.finatra.http.internal.server
 import com.twitter.app.Flag
 import com.twitter.conversions.storage._
 import com.twitter.conversions.time._
-import com.twitter.finagle.Service
-import com.twitter.finagle.builder.ServerConfig.Yes
-import com.twitter.finagle.builder.{Server, ServerBuilder}
+import com.twitter.finagle.{ListeningServer, Http, Service}
 import com.twitter.finagle.http.service.NullService
-import com.twitter.finagle.http.{Http, Request, Response}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}
@@ -21,9 +19,6 @@ trait BaseHttpServer extends TwitterServer {
 
   protected def defaultMaxRequestSize: StorageUnit = 5.megabytes
   private val maxRequestSizeFlag = flag("maxRequestSize", defaultMaxRequestSize, "HTTP(s) Max Request Size")
-
-  protected def defaultTracingEnabled: Boolean = true
-  private val tracingEnabledFlag = flag("tracingEnabled", defaultTracingEnabled, "Tracing enabled")
 
   protected def defaultHttpsPort: String = ""
   private val httpsPortFlag = flag("https.port", defaultHttpsPort, "HTTPs Port")
@@ -49,21 +44,19 @@ trait BaseHttpServer extends TwitterServer {
 
   /* Private Mutable State */
 
-  private var httpServer: Server = _
-  private var httpsServer: Server = _
+  private var httpServer: ListeningServer = _
+  private var httpsServer: ListeningServer = _
+
+  private lazy val baseHttpServer: Http.Server = {
+    Http.server
+      .withMaxRequestSize(maxRequestSizeFlag())
+      .withStreaming(streamRequest)
+  }
 
   /* Protected */
 
-
   protected def httpService: Service[Request, Response] = {
     NullService
-  }
-
-  protected def httpCodec: Http = {
-    Http()
-      .maxRequestSize(maxRequestSizeFlag())
-      .enableTracing(tracingEnabledFlag())
-      .streaming(streamRequest)
   }
 
   /**
@@ -72,11 +65,13 @@ trait BaseHttpServer extends TwitterServer {
    */
   protected def streamRequest: Boolean = false
 
-  type FinagleServerBuilder = ServerBuilder[Request, Response, Yes, Yes, Yes]
+  protected def configureHttpServer(server: Http.Server): Http.Server = {
+    server
+  }
 
-  protected def configureHttpServer(serverBuilder: FinagleServerBuilder) = {}
-
-  protected def configureHttpsServer(serverBuilder: FinagleServerBuilder) = {}
+  protected def configureHttpsServer(server: Http.Server): Http.Server = {
+    server
+  }
 
   /* Lifecycle */
 
@@ -111,15 +106,13 @@ trait BaseHttpServer extends TwitterServer {
 
   private def startHttpServer() {
     for (port <- parsePort(httpPortFlag)) {
-      val serverBuilder = ServerBuilder()
-        .codec(httpCodec)
-        .bindTo(port)
-        .reportTo(injector.instance[StatsReceiver])
-        .name(httpServerNameFlag())
+      val serverBuilder =
+        configureHttpServer(
+          baseHttpServer
+            .withLabel(httpServerNameFlag())
+            .withStatsReceiver(injector.instance[StatsReceiver]))
 
-      configureHttpServer(serverBuilder)
-
-      httpServer = serverBuilder.build(httpService)
+      httpServer = serverBuilder.serve(port, httpService)
       onExit {
         Await.result(
           close(httpServer, shutdownTimeoutFlag().fromNow))
@@ -131,18 +124,17 @@ trait BaseHttpServer extends TwitterServer {
 
   private def startHttpsServer() {
     for (port <- parsePort(httpsPortFlag)) {
-      val serverBuilder = ServerBuilder()
-        .codec(httpCodec)
-        .bindTo(port)
-        .reportTo(injector.instance[StatsReceiver])
-        .name(httpsServerNameFlag())
-        .tls(
-          certificatePathFlag(),
-          keyPathFlag())
+      val serverBuilder =
+        configureHttpsServer(
+          baseHttpServer
+            .withLabel(httpsServerNameFlag())
+            .withStatsReceiver(injector.instance[StatsReceiver])
+            .withTransport.tls(
+              certificatePathFlag(),
+              keyPathFlag(),
+              None, None, None))
 
-      configureHttpsServer(serverBuilder)
-
-      httpsServer = serverBuilder.build(httpService)
+      httpsServer = serverBuilder.serve(port, httpService)
       onExit {
         Await.result(
           close(httpsServer, shutdownTimeoutFlag().fromNow))
@@ -152,7 +144,7 @@ trait BaseHttpServer extends TwitterServer {
     }
   }
 
-  private def close(server: Server, deadline: Time) = {
+  private def close(server: ListeningServer, deadline: Time) = {
     if (server != null)
       server.close(deadline)
     else

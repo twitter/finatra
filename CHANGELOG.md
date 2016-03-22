@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Move HttpServer to new Http stack API. ``RB_ID=812718``
+
 ### Fixed
 
 * finatra: Revert sbt-scoverage plugin to 1.2.0. ``RB_ID=812098``
