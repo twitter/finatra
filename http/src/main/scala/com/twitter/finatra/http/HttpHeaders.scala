@@ -60,8 +60,8 @@ object HttpHeaders {
    * @param date - the value to format and set as the header value
    */
   def setDate(response: Response, header: String, date: DateTime) {
-    val dateFormat = DateTimeFormat.forPattern(RFC7231DateFormat).withZone(GMT)
-      .withLocale(Locale.US)
+    val dateFormat = DateTimeFormat.forPattern(RFC7231DateFormat)
+      .withZone(GMT).withLocale(Locale.US)
     set(response, header, dateFormat.print(date))
   }
 
