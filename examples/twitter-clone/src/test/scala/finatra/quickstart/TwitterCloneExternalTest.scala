@@ -1,10 +1,23 @@
 package finatra.quickstart
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.inject.Test
 import finatra.quickstart.domain.http.TweetResponse
 
-class TwitterCloneExternalTest extends HttpTest {
+class TwitterCloneExternalTest extends Test {
+
+  val NormalizedId = "0"
+
+  def idNormalizer(jsonNode: JsonNode): JsonNode = {
+    val objNode = jsonNode.asInstanceOf[ObjectNode]
+    if (objNode.has("id")) {
+      objNode.put("id", NormalizedId)
+    }
+    objNode
+  }
 
   val server = new EmbeddedHttpServer(
     new TwitterCloneServer,

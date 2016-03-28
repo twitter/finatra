@@ -2,7 +2,7 @@ package com.twitter.finatra.conversions
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.concurrent.AsyncStream.{fromFuture, fromSeq}
-import com.twitter.util._
+import com.twitter.util.{Future, Try}
 
 object asyncStream {
 
@@ -35,5 +35,4 @@ object asyncStream {
       AsyncStream.fromFuture(Future.const(trie))
     }
   }
-
 }

@@ -5,23 +5,24 @@ import com.twitter.finagle.http.{Cookie => FinagleCookie, Request, Response, Sta
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.routing.FileResolver
-import com.twitter.finatra.http.test.HttpTest
-import com.twitter.inject.Mockito
+import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.inject.{Test, Mockito}
 import com.twitter.util.Await
 import java.io.{File, FileWriter}
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.DefaultCookie
 
-
-class ResponseBuilderTest extends HttpTest with Mockito {
+class ResponseBuilderTest
+  extends Test
+  with Mockito {
 
   protected lazy val responseBuilder = new ResponseBuilder(
-    mapper,
-    new FileResolver(
+    objectMapper = FinatraObjectMapper.create(),
+    fileResolver = new FileResolver(
       localDocRoot = "src/main/webapp/",
       docRoot = ""),
-    mock[MessageBodyManager],
-    mock[StatsReceiver])
+    messageBodyManager = mock[MessageBodyManager],
+    statsReceiver = mock[StatsReceiver])
 
   "response builder" should {
 

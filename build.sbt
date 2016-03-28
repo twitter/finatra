@@ -403,15 +403,13 @@ lazy val utils = project.
     moduleName := "finatra-utils",
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
-      "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "com.google.guava" % "guava" % versions.guava,
-      "com.twitter" %% "finagle-http" % versions.finagle,
-      "commons-io" % "commons-io" % versions.commonsIo,
+      "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
+      "commons-io" % "commons-io" % versions.commonsIo,
+      "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "org.apache.thrift" % "libthrift" % versions.libThrift,
-      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
-      "org.joda" % "joda-convert" % versions.jodaConvert
+      "com.twitter" %% "finagle-http" % versions.finagle,
+      "com.twitter" %% "util-core" % versions.util
     ),
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
@@ -447,9 +445,7 @@ lazy val jackson = project.
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
       fileMappings.filter(
         mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/json/JsonDiff",
-              "com/twitter/finatra/validation/InvalidValidator",
-              "com/twitter/finatra/tests/json/internal/InvalidValidationInternal")))
+          Seq("com/twitter/finatra/json/JsonDiff")))
     }
   ).
   dependsOn(

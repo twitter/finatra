@@ -3,10 +3,10 @@ package com.twitter.finatra.http.integration.messagebody.test
 import com.google.common.net.MediaType
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.integration.messagebody.main.GreetingServer
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 
-class GreetingControllerIntegrationTest extends FeatureTest with HttpTest {
+class GreetingControllerIntegrationTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(
     new GreetingServer,
