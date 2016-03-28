@@ -238,8 +238,8 @@ class EmbeddedHttpServer(
 
     val request = createApiRequest(path, Method.Post)
     request.setContentString(postBody)
-    request.headerMap.add(HttpHeaders.CONTENT_LENGTH, postBody.length.toString)
-    request.headerMap.add(HttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.set(HttpHeaders.CONTENT_LENGTH, postBody.length.toString)
+    request.headerMap.set(HttpHeaders.CONTENT_TYPE, contentType)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
@@ -324,8 +324,8 @@ class EmbeddedHttpServer(
 
     val request = createApiRequest(path, Method.Put)
     request.setContentString(putBody)
-    request.headerMap.add(HttpHeaders.CONTENT_LENGTH, putBody.length.toString)
-    request.headerMap.add(HttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.set(HttpHeaders.CONTENT_LENGTH, putBody.length.toString)
+    request.headerMap.set(HttpHeaders.CONTENT_TYPE, contentType)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }

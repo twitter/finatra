@@ -57,8 +57,8 @@ class HttpWarmup @Inject()(
 
   private def routeRequest(request: Request, forceRouteToHttpMuxer: Boolean): Future[Response] = {
     /* Mutation */
-    request.headerMap.add("Host", "127.0.0.1")
-    request.headerMap.add("User-Agent", userAgent)
+    request.headerMap.set("Host", "127.0.0.1")
+    request.headerMap.set("User-Agent", userAgent)
 
     if (forceRouteToHttpMuxer)
       http.HttpMuxer(request)

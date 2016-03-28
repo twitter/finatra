@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file. Note that `
 ### Fixed
 
 * finatra: Revert sbt-scoverage plugin to 1.2.0. ``RB_ID=812098``
+* finatra-http: Ensure headers are set correctly in requests and responses. ``RB_ID=813969``
 
 ### Closed
 

@@ -62,7 +62,7 @@ class RequestBuilder(
     for {
       (key, value) <- headers
     } {
-      request.headerMap.add(key, value)
+      request.headerMap.set(key, value)
     }
     this
   }
@@ -76,7 +76,7 @@ class RequestBuilder(
   }
 
   def header(key: String, value: AnyRef): RequestBuilder = {
-    request.headerMap.add(key, value.toString)
+    request.headerMap.set(key, value.toString)
     this
   }
 
@@ -87,8 +87,8 @@ class RequestBuilder(
 
   def body(string: String, contentType: String = Message.ContentTypeJson): RequestBuilder = {
     request.setContentString(string)
-    request.headerMap.add(HttpHeaders.CONTENT_LENGTH, string.getBytes(Charsets.Utf8).length.toString)
-    request.headerMap.add(HttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.set(HttpHeaders.CONTENT_LENGTH, string.getBytes(Charsets.Utf8).length.toString)
+    request.headerMap.set(HttpHeaders.CONTENT_TYPE, contentType)
     this
   }
 
