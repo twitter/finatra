@@ -1,7 +1,7 @@
 package com.twitter.finatra.utils
 
 import com.twitter.concurrent.NamedPoolThreadFactory
-import com.twitter.util.{ExecutorServiceFuturePool, FuturePool}
+import com.twitter.util.ExecutorServiceFuturePool
 import java.util.concurrent.Executors
 
 object FuturePools {

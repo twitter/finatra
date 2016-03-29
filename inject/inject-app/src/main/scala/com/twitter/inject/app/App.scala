@@ -5,7 +5,6 @@ import com.twitter.app.{App => TwitterUtilApp}
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
 import com.twitter.inject.{Injector, InjectorModule, Logging}
-import com.twitter.util.{Future, Time}
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConverters._
 

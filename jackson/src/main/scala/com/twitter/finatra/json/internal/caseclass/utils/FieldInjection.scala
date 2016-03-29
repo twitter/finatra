@@ -11,7 +11,6 @@ import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection.Injectab
 import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
 import java.lang.annotation.Annotation
 import javax.inject.Inject
-import scala.language.existentials
 
 object FieldInjection {
   private val InjectableAnnotations: Set[Class[_ <: Annotation]] = Set(

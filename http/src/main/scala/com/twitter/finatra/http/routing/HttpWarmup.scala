@@ -1,11 +1,11 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.http
-import com.twitter.finagle.http.{Request, Response, Status}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
-import com.twitter.util.{Await, ExecutorServiceFuturePool, Future}
+import com.twitter.util.{Await, Future}
 import javax.inject.Inject
 
 class HttpWarmup @Inject()(

@@ -9,7 +9,7 @@ import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
-import com.twitter.finagle.{ChannelClosedException, ListeningServer, Service}
+import com.twitter.finagle.{ChannelClosedException, Service}
 import com.twitter.inject.app.{App, EmbeddedApp}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
@@ -189,7 +189,7 @@ class EmbeddedTwitterServer(
       }
     }
   }
-  
+
   def assertAppStarted(started: Boolean = true) {
     assert(isGuiceApp)
     start()

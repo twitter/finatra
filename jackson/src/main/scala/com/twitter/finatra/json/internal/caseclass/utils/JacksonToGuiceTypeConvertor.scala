@@ -2,7 +2,6 @@ package com.twitter.finatra.json.internal.caseclass.utils
 
 import com.fasterxml.jackson.databind.JavaType
 import com.google.inject.util.Types
-import scala.language.existentials
 import java.lang.reflect.Type
 
 private[internal] object JacksonToGuiceTypeConvertor {
