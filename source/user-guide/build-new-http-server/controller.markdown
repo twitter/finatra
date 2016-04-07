@@ -147,21 +147,45 @@ get("/files/:*") { request: Request =>
 
 For a `GET` of `/files/abc/123/foo.txt` the endpoint will return `abc/123/foo.txt`
 
-#### Admin Paths
+#### Regular Expressions
 
-Any path starting with `/admin/finatra/` will be exposed only on the server's admin port. All [TwitterServer](http://twitter.github.io/twitter-server/) based servers have an [HTTP admin interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) for exposing internal endpoints such as stats. The admin endpoint should not be exposed outside your DMZ.
+Regular expressions are no longer allowed in string defined paths. Note: We are planning to support regular expression based paths in a future release.
+
+#### <a class="anchor" name="admin-paths" href="#admin-index">Admin Paths</a>
+
+All [TwitterServer](http://twitter.github.io/twitter-server/)-based servers have an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) which includes a variety of tools for diagnostics, profiling, and more. This admin interface should not be exposed outside your DMZ. Any route path starting with `/admin/` or `/admin/finatra/` will be included on the server's admin interface (accessible via the server's admin port). 
 
 ```scala
-get("/admin/finatra/users/") { request: Request =>
+get("/admin/finatra/users/",
+  admin = true) { request: Request =>
   userDatabase.getAllUsers(
     request.params("cursor"))
 }
 ```
 <div></div>
 
-#### Regular Expressions
+Constant (no named parameters), HTTP method `GET` routes can also be added to the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) user interface. 
 
-Regular expressions are no longer allowed in string defined paths. Note: We are planning to support regular expression based paths in a future release.
+To expose your route to the admin user interface index, the route path:
+
+- **MUST** be a constant path 
+- **MUST** start with `/admin/` (**SHOULD NOT** begin with `/admin/finatra/`) 
+- **MUST** be HTTP method `GET`. 
+
+Set `admin = true` and optionally provide an [`AdminIndexInfo`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/AdminIndexInfo.scala), e.g.,
+
+```scala
+get("/admin/client_id.json",
+  admin = true,
+  adminIndexInfo = Some(AdminIndexInfo()) ) { request: Request =>
+  Map("client_id" -> "clientId.1234"))
+}
+```
+<div></div>
+
+By default if you do not provide any customization to the `AdminIndexInfo` the route will show up in the left-rail under the `Finatra` heading indexed by the route path. If you do not provide an `AdminIndexInfo`, the route will not be visible in the admin user interface index.
+
+**Note**: all routes that start with *only* `/admin/` (and not `/admin/finatra/`) will be routed to by TwitterServer's [AdminHttpServer](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108) and not by the Finatra HttpRouter. Thus any filter chain defined by your server's [HttpRouter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) will **not** be applied to the routes. To maintain filtering as defined in the HttpRouter, the routes MUST be under `/admin/finatra/` and are thus not eligible to be included in the admin user interface index.
 
 ## <a class="anchor" name="requests" href="#requests">Requests</a>
 ===============================
