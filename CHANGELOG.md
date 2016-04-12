@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-inject/inject-server: Deprecate PromoteToOldGenUtils in favor of twitter-server's prebindWarmup event. ``RB_ID=819411``
 * finatra-http: Move HttpServer to new Http stack API. ``RB_ID=812718``
 
 ### Fixed
