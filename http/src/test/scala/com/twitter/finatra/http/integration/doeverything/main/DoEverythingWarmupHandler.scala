@@ -2,33 +2,42 @@ package com.twitter.finatra.http.integration.doeverything.main
 
 import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder._
+import com.twitter.inject.Logging
 import com.twitter.inject.utils.Handler
 import javax.inject.Inject
 
 class DoEverythingWarmupHandler @Inject()(
-  httpWarmup: HttpWarmup)
-  extends Handler {
+  warmup: HttpWarmup)
+  extends Handler
+  with Logging {
 
   override def handle() = {
-    httpWarmup.send(
-      get("/ok"))
+    try {
+      warmup.send(
+        get("/ok"))
 
-    httpWarmup.send(
-      post("/post"))
+      warmup.send(
+        post("/post"))
 
-    httpWarmup.send(
-      put("/put"))
+      warmup.send(
+        put("/put"))
 
-    httpWarmup.send(
-      delete("/delete"))
+      warmup.send(
+        delete("/delete"))
 
-    httpWarmup.send(
-      get("/admin/finatra/foo"))
+      warmup.send(
+        get("/admin/finatra/foo"))
 
-    httpWarmup.send(
-      get("/health"),
-      forceRouteToAdminHttpMuxers = true)
-
-    httpWarmup.close()
+      warmup.send(
+        get("/health"),
+        forceRouteToAdminHttpMuxers = true)
+    } catch {
+      case e: Throwable =>
+        // we don't want failed warmup to prevent the server from starting
+        error(e.getMessage, e)
+    } finally {
+      warmup.close()
+    }
+    info("Warm up done.")
   }
 }

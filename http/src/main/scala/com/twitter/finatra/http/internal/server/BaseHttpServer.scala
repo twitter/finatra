@@ -75,7 +75,7 @@ trait BaseHttpServer extends TwitterServer {
 
   /* Lifecycle */
 
-  override def postWarmup() {
+  override protected def postWarmup() {
     super.postWarmup()
 
     startHttpServer()

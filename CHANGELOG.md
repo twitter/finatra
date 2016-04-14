@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-thrift: Add ThriftWarmup for thrift servers. ``RB_ID=820771``
 * finatra-inject/inject-server: Register framework in Library registry. ``RB_ID=809458``
 * finatra-http: Support for trace, connect & options in RequestBuilder. ``RB_ID=811102``
 * finatra-thrift: Allow for thrift server configuration. ``RB_ID=811126``
