@@ -1,7 +1,7 @@
-Finatra Documentation using [Github Pages](https://pages.github.com/)
+# Finatra Documentation using [Github Pages](https://pages.github.com/)
 ==========================================================
 
-Fast, testable Scala services inspired by [Sinatra](http://www.sinatrarb.com/) and powered by [`twitter-server`][twitter-server].
+Fast, testable, Scala services built on [TwitterServer][twitter-server] and [Finagle][finagle].
 
 ** FOLLOW ALL THE STEPS EVERY TIME **
 
@@ -37,3 +37,4 @@ Deploy
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
 
 [twitter-server]: https://github.com/twitter/twitter-server
+[finagle]: https://github.com/twitter/finagle

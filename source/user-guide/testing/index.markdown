@@ -217,11 +217,15 @@ If you are writing a test that has an HTTP server under test, then you can optio
 ## <a class="anchor" name="startup-tests" href="#startup-tests">Startup Tests</a>
 ===============================
 
-We recommend creating a simple test to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that can otherwise cause the service to fail to start.
+Dy default the Finatra embedded testing infrastructure sets the [Guice `com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `DEVELOPMENT`. For testing we choose the trade-off of a fast start-up time for the embedded server at the expense of some runtime performance as classes are lazily loaded when accessed by the test features.
 
-* Startup tests should mimic production as close as possible. As such:
+However, this also means that if you have misconfigured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.
+
+As such, we recommend creating a simple test to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that could otherwise cause the server to fail to start.
+
+* Startup tests should mimic production as closely as possible. Thus:
     - avoid using `@Bind` and "override modules" in startup tests.
-    - set the Guice `stage` to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `State.DEVELOPMENT` by default).
+    - set the [Guice `com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `Stage.DEVELOPMENT` by default).
     - prevent Finagle clients from making outbound connections during startup tests by setting `com.twitter.server.resolverMap` entries to `nil!`.
 
 For example:
