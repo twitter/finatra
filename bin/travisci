@@ -79,7 +79,7 @@ function run {
 
     dependency util
     dependency ostrich
-    project_dependency scrooge scrooge-core
+    project_dependency scrooge scrooge-publish-local; cd $PROJECT_TMP_DIR/scrooge; ./sbt scrooge-sbt-plugin/publish-local
     dependency finagle
     dependency twitter-server
 
