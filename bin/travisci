@@ -79,7 +79,10 @@ function run {
 
     dependency util
     dependency ostrich
-    project_dependency scrooge scrooge-publish-local; cd $PROJECT_TMP_DIR/scrooge; ./sbt scrooge-sbt-plugin/publish-local
+    project_dependency scrooge scrooge-publish-local
+    # See notes in Scrooge's Build.scala's scrooge-publish-local project.
+    # sbt plugins can currently only be built using Scala 2.10.
+    cd $PROJECT_TMP_DIR/scrooge; ./sbt ++2.10.6 scrooge-sbt-plugin/publishLocal
     dependency finagle
     dependency twitter-server
 
