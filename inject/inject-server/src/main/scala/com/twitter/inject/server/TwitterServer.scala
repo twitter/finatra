@@ -9,7 +9,6 @@ import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision
 import com.twitter.util.Await
-import com.twitter.util.registry.Library
 
 /** AbstractTwitterServer for usage from Java */
 abstract class AbstractTwitterServer extends TwitterServer
@@ -29,13 +28,13 @@ trait TwitterServer
   /* Protected */
 
   // TODO: Default to true
-  override protected def failfastOnFlagsNotParsed = false
+  override protected def failfastOnFlagsNotParsed: Boolean = false
 
   /**
    * Name used for registration in the [[com.twitter.util.registry.Library]]
    * @return library name to register in the Library registry.
    */
-  private[twitter] def libraryName = "finatra"
+  override protected val libraryName: String = "finatra"
 
   /**
    * If true, the Twitter-Server admin server will be disabled.
@@ -50,7 +49,7 @@ trait TwitterServer
   protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
 
   /** Resolve all Finagle clients before warmup method called */
-  protected def resolveFinagleClientsOnStartup = true
+  protected def resolveFinagleClientsOnStartup: Boolean = true
 
   protected def waitForServer() {
     Await.ready(adminHttpServer)
@@ -90,7 +89,6 @@ trait TwitterServer
     }
 
     FinagleBuildRevision.register(injector)
-    Library.register(libraryName, Map[String, String]())
   }
 
   override protected def beforePostWarmup() {

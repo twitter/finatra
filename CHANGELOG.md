@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra/twitter-server: Update to register TwitterServer as library in /admin/registry.json. ``RB_ID=825129``
 * finatra-inject/inject-server: Deprecate PromoteToOldGenUtils in favor of twitter-server's prebindWarmup event. ``RB_ID=819411``
 * finatra-http: Move HttpServer to new Http stack API. ``RB_ID=812718``
 
