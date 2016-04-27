@@ -87,29 +87,6 @@
       </a>
     </span>
       
-    </li><li name="com.twitter.server.internal.PromoteToOldGenUtils" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="PromoteToOldGenUtils"></a>
-      <a id="PromoteToOldGenUtils:PromoteToOldGenUtils"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="PromoteToOldGenUtils$.html"><span class="name">PromoteToOldGenUtils</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.server.internal.package@PromoteToOldGenUtils" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">This util is needed to gain access to the private PromoteToOldGen.</p><div class="fullcomment"><div class="comment cmt"><p>This util is needed to gain access to the private PromoteToOldGen.
-We can't access this functionality through warmupComplete since our desired startup order is:
-- Run app specific warmup
-- PromoteToOldGen
-- Start external HTTP or Thrift server
-- Enable /health endpoint</p><p>TODO: Remove need for this util
-</p></div></div>
     </li></ol>
             </div>
 

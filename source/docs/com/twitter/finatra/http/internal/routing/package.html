@@ -1,0 +1,240 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>routing - com.twitter.finatra.http.internal.routing</title>
+          <meta name="description" content="routing - com.twitter.finatra.http.internal.routing" />
+          <meta name="keywords" content="routing com.twitter.finatra.http.internal.routing" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'com.twitter.finatra.http.internal.routing.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../../package.html" class="extype" name="com.twitter.finatra.http">http</a>.<a href="../package.html" class="extype" name="com.twitter.finatra.http.internal">internal</a></p>
+        <h1>routing</h1><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">routing</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.twitter.finatra.http.internal.routing.PathPattern" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PathPatternextendsProductwithSerializable"></a>
+      <a id="PathPattern:PathPattern"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PathPattern.html"><span class="name">PathPattern</span></a><span class="params">(<span name="regex">regex: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.util.matching.Regex" class="extype" target="_top">Regex</a></span>, <span name="captureNames">captureNames: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>] = <span class="symbol">Seq()</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@PathPatternextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.http.internal.routing.Route" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RouteextendsProductwithSerializable"></a>
+      <a id="Route:Route"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Route.html"><span class="name">Route</span></a><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="method">method: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Method" class="extype" target="_top">Method</a></span>, <span name="path">path: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="admin">admin: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="adminIndexInfo">adminIndexInfo: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="../../routing/AdminIndexInfo.html" class="extype" name="com.twitter.finatra.http.routing.AdminIndexInfo">AdminIndexInfo</a>]</span>, <span name="callback">callback: (<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>) ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>, <span name="annotations">annotations: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="java.lang.annotation.Annotation">Annotation</span>] = <span class="symbol">Seq()</span></span>, <span name="requestClass">requestClass: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="responseClass">responseClass: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="filter">filter: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Filter" class="extype" target="_top">Filter</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@RouteextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.http.internal.routing.Routes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RoutesextendsAnyRef"></a>
+      <a id="Routes:Routes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Routes.html"><span class="name">Routes</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@RoutesextendsAnyRef" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.http.internal.routing.RoutesByType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RoutesByTypeextendsProductwithSerializable"></a>
+      <a id="RoutesByType:RoutesByType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="RoutesByType.html"><span class="name">RoutesByType</span></a><span class="params">(<span name="external">external: <span class="extype" name="scala.Seq">Seq</span>[<a href="Route.html" class="extype" name="com.twitter.finatra.http.internal.routing.Route">Route</a>]</span>, <span name="admin">admin: <span class="extype" name="scala.Seq">Seq</span>[<a href="Route.html" class="extype" name="com.twitter.finatra.http.internal.routing.Route">Route</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@RoutesByTypeextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.http.internal.routing.RoutingService" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RoutingServiceextendsService[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]withLogging"></a>
+      <a id="RoutingService:RoutingService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RoutingService.html"><span class="name">RoutingService</span></a><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>] with <a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@RoutingServiceextendsService[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]withLogging" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.http.internal.routing.Services" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ServicesextendsProductwithSerializable"></a>
+      <a id="Services:Services"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Services.html"><span class="name">Services</span></a><span class="params">(<span name="routesByType">routesByType: <a href="RoutesByType.html" class="extype" name="com.twitter.finatra.http.internal.routing.RoutesByType">RoutesByType</a></span>, <span name="adminService">adminService: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>, <span name="externalService">externalService: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@ServicesextendsProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.twitter.finatra.http.internal.routing.PathPattern" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PathPattern"></a>
+      <a id="PathPattern:PathPattern"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PathPattern$.html"><span class="name">PathPattern</span></a><span class="result"> extends <a href="../../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> with <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@PathPattern" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.http.internal.routing.Routes" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Routes"></a>
+      <a id="Routes:Routes"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Routes$.html"><span class="name">Routes</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../index.html#com.twitter.finatra.http.internal.routing.package@Routes" title="Permalink" target="_top">
+        <img src="../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
