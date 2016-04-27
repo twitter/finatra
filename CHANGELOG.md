@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6) (2016-04-26)
+
+### Added
+
 * finatra-thrift: Add ThriftWarmup for thrift servers. ``RB_ID=820771``
 * finatra-inject/inject-server: Register framework in Library registry. ``RB_ID=809458``
 * finatra-http: Support for trace, connect & options in RequestBuilder. ``RB_ID=811102``

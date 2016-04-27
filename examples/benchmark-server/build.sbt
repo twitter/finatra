@@ -1,11 +1,11 @@
 name := "benchmark-server"
 organization := "com.twitter.finatra.example"
-version := "2.1.6-SNAPSHOT"
+version := "2.1.6"
 scalaVersion := "2.11.7"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.1.6-SNAPSHOT"
+  val finatra = "2.1.6"
 }
 
 resolvers ++= Seq(
