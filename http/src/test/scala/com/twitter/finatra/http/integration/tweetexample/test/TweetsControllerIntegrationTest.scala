@@ -3,12 +3,12 @@ package com.twitter.finatra.http.integration.tweetexample.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finagle.http.{Fields, Status}
 import com.twitter.finatra.http.integration.tweetexample.main.TweetsEndpointServer
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.test.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
 
-class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
+class TweetsControllerIntegrationTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(
     new TweetsEndpointServer,
@@ -18,6 +18,9 @@ class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
       "https.port" -> ":0",
       "cert.path" -> "",
       "key.path" -> ""))
+
+  lazy val streamingJsonHelper =
+    new StreamingJsonTestHelper(server.mapper)
 
   "get tweet 1" in {
     val tweet =
@@ -89,7 +92,7 @@ class TweetsControllerIntegrationTest extends FeatureTest with HttpTest {
 
     // Write to request in separate thread
     pool {
-      writeJsonArray(request, ids, delayMs = 10)
+      streamingJsonHelper.writeJsonArray(request, ids, delayMs = 10)
     }
 
     server.httpRequest(request)

@@ -2,16 +2,13 @@ package com.twitter.inject.server
 
 import com.google.inject.Module
 import com.twitter.finagle.client.ClientRegistry
-import com.twitter.finagle.http.HttpMuxer
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
-import com.twitter.server.handler.ReplyHandler
-import com.twitter.server.internal.{FinagleBuildRevision, PromoteToOldGenUtils}
+import com.twitter.server.internal.FinagleBuildRevision
 import com.twitter.util.Await
-import com.twitter.util.registry.Library
 
 /** AbstractTwitterServer for usage from Java */
 abstract class AbstractTwitterServer extends TwitterServer
@@ -31,13 +28,13 @@ trait TwitterServer
   /* Protected */
 
   // TODO: Default to true
-  override protected def failfastOnFlagsNotParsed = false
+  override protected def failfastOnFlagsNotParsed: Boolean = false
 
   /**
    * Name used for registration in the [[com.twitter.util.registry.Library]]
    * @return library name to register in the Library registry.
    */
-  private[twitter] def libraryName = "finatra"
+  override protected val libraryName: String = "finatra"
 
   /**
    * If true, the Twitter-Server admin server will be disabled.
@@ -52,7 +49,7 @@ trait TwitterServer
   protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
 
   /** Resolve all Finagle clients before warmup method called */
-  protected def resolveFinagleClientsOnStartup = true
+  protected def resolveFinagleClientsOnStartup: Boolean = true
 
   protected def waitForServer() {
     Await.ready(adminHttpServer)
@@ -92,16 +89,13 @@ trait TwitterServer
     }
 
     FinagleBuildRevision.register(injector)
-    Library.register(libraryName, Map[String, String]())
   }
 
-  /**
-   * After warmup completes, we want to run PromoteToOldGen without also signaling
-   * that we're healthy since we haven't successfully started our servers yet
-   */
   override protected def beforePostWarmup() {
     super.beforePostWarmup()
-    PromoteToOldGenUtils.beforeServing()
+
+    // trigger gc before accepting traffic
+    prebindWarmup()
   }
 
   override protected def postWarmup() {
@@ -122,6 +116,6 @@ trait TwitterServer
   override protected def afterPostWarmup() {
     super.afterPostWarmup()
     info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
-    HttpMuxer.addHandler("/health", new ReplyHandler("OK\n"))
+    warmupComplete()
   }
 }

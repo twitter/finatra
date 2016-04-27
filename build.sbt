@@ -1,12 +1,12 @@
 import sbt.Keys._
 import sbtunidoc.Plugin.UnidocKeys._
 import scala.language.reflectiveCalls
-import scoverage.ScoverageKeys.coverageExcludedPackages
+import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
 lazy val aggregated = taskKey[Unit]("Print currently aggregated tasks under the root.")
-lazy val projectVersion = "2.1.6-SNAPSHOT"
+lazy val projectVersion = "2.1.6"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -24,10 +24,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagle = "6.34.0" + suffix
-  val scrooge = "4.6.0" + suffix
-  val twitterServer = "1.19.0" + suffix
-  val util = "6.33.0" + suffix
+  val finagleVersion = "6.35.0" + suffix
+  val scroogeVersion = "4.7.0" + suffix
+  val twitterserverVersion = "1.20.0" + suffix
+  val utilVersion = "6.34.0" + suffix
 
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
@@ -180,7 +180,7 @@ lazy val finatraModules = Seq(
   utils)
 
 lazy val finatraExamples =
-  // START EXAMPLES
+  /* // START EXAMPLES
   Seq(
     benchmarkServer,
     exampleInjectJavaServer,
@@ -191,7 +191,7 @@ lazy val finatraExamples =
     thriftExampleServer,
     tinyUrl,
     twitterClone) ++
-  // END EXAMPLES
+  */ // END EXAMPLES
   Seq.empty
 
 def aggregatedProjects = {
@@ -214,13 +214,13 @@ lazy val root = (project in file(".")).
     organization := "com.twitter.finatra",
     moduleName := "finatra-root",
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
-      -- inProjects(benchmarks)
-      // START EXAMPLES
+      -- inProjects(benchmarks),
+      /* // START EXAMPLES
       -- inProjects(benchmarkServer, exampleInjectJavaServer,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer,
          tinyUrl, twitterClone),
-      // END EXAMPLES
+      */ // END EXAMPLES
     aggregated := {
       println(aggregatedProjects.map(_.id).mkString("\n"))
     }
@@ -237,7 +237,7 @@ lazy val injectCore = (project in file("inject/inject-core")).
       "com.google.inject" % "guice" % versions.guice,
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
-      "com.twitter" %% "util-app" % versions.util,
+      "com.twitter" %% "util-app" % versions.utilVersion,
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -267,8 +267,8 @@ lazy val injectModules = (project in file("inject/inject-modules")).
     name := "inject-modules",
     moduleName := "inject-modules",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-core" % versions.finagle,
-      "com.twitter" %% "util-stats" % versions.util
+      "com.twitter" %% "finagle-core" % versions.finagleVersion,
+      "com.twitter" %% "util-stats" % versions.utilVersion
     ),
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
@@ -288,7 +288,7 @@ lazy val injectApp = (project in file("inject/inject-app")).
     name := "inject-app",
     moduleName := "inject-app",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "util-core" % versions.util
+      "com.twitter" %% "util-core" % versions.utilVersion
     ),
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
@@ -312,8 +312,8 @@ lazy val injectServer = (project in file("inject/inject-server")).
     name := "inject-server",
     moduleName := "inject-server",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-stats" % versions.finagle,
-      "com.twitter" %% "twitter-server" % versions.twitterServer
+      "com.twitter" %% "finagle-stats" % versions.finagleVersion,
+      "com.twitter" %% "twitter-server" % versions.twitterserverVersion
     ),
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
@@ -336,7 +336,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
     name := "inject-request-scope",
     moduleName := "inject-request-scope",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-core" % versions.finagle
+      "com.twitter" %% "finagle-core" % versions.finagleVersion
     )
   ).
   dependsOn(
@@ -349,13 +349,13 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
   settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    coverageExcludedPackages := "<empty>;com\\.twitter\\.test\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.test\\.thriftscala.*",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-thrift" % versions.finagle,
-      "com.twitter" %% "finagle-thriftmux" % versions.finagle,
-      "com.twitter" %% "scrooge-core" % versions.scrooge,
+      "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
+      "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
+      "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "com.twitter" %% "finagle-http" % versions.finagle % "test->compile")
+      "com.twitter" %% "finagle-http" % versions.finagleVersion % "test->compile")
   ).
   dependsOn(
     injectCore % "test->test;compile->compile",
@@ -401,17 +401,15 @@ lazy val utils = project.
   settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
-    coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
-      "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "com.google.guava" % "guava" % versions.guava,
-      "com.twitter" %% "finagle-http" % versions.finagle,
-      "commons-io" % "commons-io" % versions.commonsIo,
+      "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,
+      "commons-io" % "commons-io" % versions.commonsIo,
+      "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "org.apache.thrift" % "libthrift" % versions.libThrift,
-      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
-      "org.joda" % "joda-convert" % versions.jodaConvert
+      "com.twitter" %% "finagle-http" % versions.finagleVersion,
+      "com.twitter" %% "util-core" % versions.utilVersion
     ),
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
@@ -434,7 +432,7 @@ lazy val jackson = project.
   settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
+    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
@@ -447,9 +445,7 @@ lazy val jackson = project.
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
       fileMappings.filter(
         mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/json/JsonDiff",
-              "com/twitter/finatra/validation/InvalidValidator",
-              "com/twitter/finatra/tests/json/internal/InvalidValidationInternal")))
+          Seq("com/twitter/finatra/json/JsonDiff")))
     }
   ).
   dependsOn(
@@ -462,7 +458,7 @@ lazy val http = project.
   settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpReplyHandler.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpReplyHandler.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -516,7 +512,7 @@ lazy val slf4j = project.
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-http" % versions.finagle,
+      "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
@@ -531,9 +527,9 @@ lazy val thrift = project.
   settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
-    coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-thriftmux" % versions.finagle,
+      "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
       "org.yaml" % "snakeyaml" % versions.snakeyaml
     ),
     scroogePublishThrift in Compile := true,
@@ -572,7 +568,7 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     thrift % "test->test;test->compile"
   )
 
-// START EXAMPLES
+/* // START EXAMPLES
 
 // 2.11 only due to rlazoti/finagle-metrics dependency
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
@@ -628,7 +624,7 @@ lazy val twitterClone = (project in file("examples/twitter-clone")).
   settings(
     name := "twitter-clone",
     moduleName := "twitter-clone",
-    coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % versions.logback
     )
@@ -691,7 +687,7 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
   settings(
     name := "thrift-example-idl",
     moduleName := "thrift-example-idl",
-    coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     scroogeThriftIncludeFolders in Compile := Seq(file("thrift/src/main/thrift"))
   ).
   dependsOn(thrift)
@@ -701,7 +697,7 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
   settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
-    coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
     scroogeThriftIncludeFolders in Compile := Seq(
       file("thrift/src/main/thrift"),
       file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
@@ -715,4 +711,4 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
     injectServer % "test->test"
   )
 
-// END EXAMPLES
+*/ // END EXAMPLES

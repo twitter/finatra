@@ -26,15 +26,17 @@ trait HttpServer extends BaseHttpServer {
 
   protected def configureHttp(router: HttpRouter): Unit
 
-  /* Overrides */
-
-  override protected def failfastOnFlagsNotParsed = true
+  /* Lifecycle */
 
   override protected def postStartup() {
     super.postStartup()
     val httpRouter = injector.instance[HttpRouter]
     configureHttp(httpRouter)
   }
+
+  /* Overrides */
+
+  override protected def failfastOnFlagsNotParsed = true
 
   override def httpService: Service[Request, Response] = {
     val router = injector.instance[HttpRouter]

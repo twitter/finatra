@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.google.inject.Injector
 import com.twitter.finagle.http.{Message, Request, Response}
-import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, RequestFieldInjectionNotSupportedException}
+import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException
 import com.twitter.finatra.json.internal.serde.ArrayElementsOnNewLinesPrettyPrinter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.io.Buf

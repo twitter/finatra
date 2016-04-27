@@ -1,6 +1,6 @@
 
 # Change Log
-All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` corresponds to associated messages in commits.
+All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` corresponds to associated message in commits.
 
 ## [Unreleased]
 
@@ -9,6 +9,28 @@ All notable changes to this project will be documented in this file. Note that `
 ### Changed
 
 ### Fixed
+
+### Closed
+
+## [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6) (2016-04-26)
+
+### Added
+
+* finatra-thrift: Add ThriftWarmup for thrift servers. ``RB_ID=820771``
+* finatra-inject/inject-server: Register framework in Library registry. ``RB_ID=809458``
+* finatra-http: Support for trace, connect & options in RequestBuilder. ``RB_ID=811102``
+* finatra-thrift: Allow for thrift server configuration. ``RB_ID=811126``
+
+### Changed
+
+* finatra/twitter-server: Update to register TwitterServer as library in /admin/registry.json. ``RB_ID=825129``
+* finatra-inject/inject-server: Deprecate PromoteToOldGenUtils in favor of twitter-server's prebindWarmup event. ``RB_ID=819411``
+* finatra-http: Move HttpServer to new Http stack API. ``RB_ID=812718``
+
+### Fixed
+
+* finatra: Revert sbt-scoverage plugin to 1.2.0. ``RB_ID=812098``
+* finatra-http: Ensure headers are set correctly in requests and responses. ``RB_ID=813969``
 
 ### Closed
 
