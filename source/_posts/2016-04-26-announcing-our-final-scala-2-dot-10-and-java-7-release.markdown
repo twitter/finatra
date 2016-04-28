@@ -7,7 +7,7 @@ categories: ["blog", "releases"]
 author: cacoco
 ---
 
-Our upcoming release: v2.1.6 will be our final release to support Scala 2.10 and Java 7.
+Our upcoming release: `v2.1.6` will be our final release to support Scala 2.10 and Java 7.
 
 Java 7 reached its [end-of-life in April 2015](https://java.com/en/download/faq/java_7.xml) and we would like to begin using the Java 8 libraries in earnest. Once Scala 2.12 is released, we plan to add support for cross-compiling Scala 2.11 and 2.12. Until 2.12 is released we will only be supporting Scala 2.11.
 

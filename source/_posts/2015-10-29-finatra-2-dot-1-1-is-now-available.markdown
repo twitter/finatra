@@ -18,7 +18,7 @@ As always, you can download the release from [Maven Central][maven-central].
 We've been working hard to improve documentation and we're also happy to announce that our new [user guide](/finatra/user-guide) is out and available.
 
 
-See the Finatra [github page](https://github.com/twitter/finatra) or checkout our new [User Guide](/finatra/user-guide) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our new [User Guide](/finatra/user-guide) for more information on getting started.
 
 -- The [Finatra](https://groups.google.com/forum/#!forum/finatra-users) Team
 

@@ -13,7 +13,7 @@ You can download the release from [Maven Central][maven-central].
 
 For a full list of changes and updates see the diff [here](https://github.com/twitter/finatra/compare/v2.0.0.M2...v2.0.0).
 
-See the Finatra [github page](https://github.com/twitter/finatra) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) for more information on getting started.
 
 -- The [Finatra](https://groups.google.com/forum/#!forum/finatra-users) Team
 

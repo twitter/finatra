@@ -21,7 +21,7 @@ For a full list of changes and updates see the diff [here](https://github.com/tw
   * An example [Maven](http://maven.apache.org/) pom.xml in [finatra-hello-world](https://github.com/twitter/finatra/blob/master/examples/finatra-hello-world/pom.xml) for building a Finatra application with Maven.
 
 
-See the Finatra [github page](https://github.com/twitter/finatra) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) for more information on getting started.
 
 -- The [Finatra](https://groups.google.com/forum/#!forum/finatra-users) Team
 

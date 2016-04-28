@@ -15,7 +15,7 @@ We've now also documented building thrift servers with Finatra: http://twitter.g
 
 As always, you can download the release from [Maven Central][maven-central].
 
-See the Finatra [github page](https://github.com/twitter/finatra) or checkout our [User Guide](/finatra/user-guide) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User Guide](/finatra/user-guide) for more information on getting started.
 
 -- The [Finatra](https://groups.google.com/forum/#!forum/finatra-users) Team
 
