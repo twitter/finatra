@@ -3,8 +3,7 @@ package com.twitter.finatra.http.test
 import java.net.URLEncoder
 
 trait HttpTest
-  extends com.twitter.inject.Test
-  with HttpMockResponses {
+  extends com.twitter.inject.Test {
 
   def resolverMap(resolverMap: (String, String)*): String = {
     if (resolverMap.isEmpty)

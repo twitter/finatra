@@ -1,42 +1,36 @@
 package com.twitter.finatra.http.test
 
-import com.twitter.finagle.http.Status
-import com.twitter.finagle.stats.LoadedStatsReceiver
-import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
-import com.twitter.finatra.http.response.ResponseBuilder
-import com.twitter.finatra.http.routing.FileResolver
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finagle.http.{Response, Status, Version}
 
 trait HttpMockResponses {
 
-  //NOTE: TestResponses may not be able to use all features provided by normally injected dependencies
-  protected lazy val testResponseBuilder = new ResponseBuilder(
-    FinatraObjectMapper.create(),
-    new FileResolver(
-      localDocRoot = "src/main/webapp/",
-      docRoot = ""),
-    new MessageBodyManager(null, null, null),
-    LoadedStatsReceiver)
+  def ok: Response = response(Status.Ok)
 
-  def ok = testResponseBuilder.ok
+  def ok(body: String): Response = {
+    val resp = response(Status.Ok)
+    resp.setContentString(body)
+    resp
+  }
 
-  def ok(body: Any) = testResponseBuilder.ok.body(body)
+  def created: Response = response(Status.Created)
 
-  def created = testResponseBuilder.created
+  def accepted: Response = response(Status.Accepted)
 
-  def accepted = testResponseBuilder.accepted
+  def forbidden: Response = response(Status.Forbidden)
 
-  def forbidden = testResponseBuilder.forbidden
+  def notFound: Response = response(Status.NotFound)
 
-  def notFound = testResponseBuilder.notFound
+  def internalServerError: Response = response(Status.InternalServerError)
 
-  def internalServerError = testResponseBuilder.internalServerError
+  def internalServerError(body: String): Response = {
+    val resp = response(Status.InternalServerError)
+    resp.setContentString(body)
+    resp
+  }
 
-  def internalServerError(body: Any) = testResponseBuilder.internalServerError.body(body)
+  def clientClosed: Response = response(Status.ClientClosedRequest)
 
-  def clientClosed = testResponseBuilder.clientClosed
+  def response(statusCode: Int): Response = response(Status(statusCode))
 
-  def response(statusCode: Int) = testResponseBuilder.status(statusCode)
-
-  def response(status: Status) = testResponseBuilder.status(status)
+  def response(status: Status): Response = Response(Version.Http11, status)
 }
