@@ -37,6 +37,11 @@ class PathPatternTest extends Test {
       PathPattern("/cars/:make/:model/:*").extract("/cars/ford/explorer/foo/bar") should equal(Some(Map("make" -> "ford", "model" -> "explorer", "*" -> "foo/bar")))
     }
 
+    "decode route params" in {
+      PathPattern("/:foo").extract("/hello%3Aworld") should equal(Some(Map("foo" -> "hello:world")))
+      PathPattern("/:foo").extract("/hello:world") should equal(Some(Map("foo" -> "hello:world")))
+    }
+
     "non capture group syntax" in {
       PathPattern("/(?:cars|boats)/:id").extract("/cars/123") should equal(None)
       PathPattern("/(?:cars|boats)/:id").extract("/boats/123") should equal(None)
