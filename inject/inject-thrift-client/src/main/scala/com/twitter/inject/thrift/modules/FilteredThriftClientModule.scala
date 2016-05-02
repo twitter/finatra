@@ -77,7 +77,7 @@ abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTa
       statsReceiver,
       label)
 
-    Thrift.newMethodIface(
+    Thrift.client.newMethodIface(
       filterServiceIface(
         serviceIface = serviceIface,
         filter = filterBuilder))
