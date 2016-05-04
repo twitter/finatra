@@ -217,7 +217,7 @@ If you are writing a test that has an HTTP server under test, then you can optio
 ## <a class="anchor" name="startup-tests" href="#startup-tests">Startup Tests</a>
 ===============================
 
-Dy default the Finatra embedded testing infrastructure sets the [Guice `com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `DEVELOPMENT`. For testing we choose the trade-off of a fast start-up time for the embedded server at the expense of some runtime performance as classes are lazily loaded when accessed by the test features.
+By default the Finatra embedded testing infrastructure sets the [Guice `com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `DEVELOPMENT`. For testing we choose the trade-off of a fast start-up time for the embedded server at the expense of some runtime performance as classes are lazily loaded when accessed by the test features.
 
 However, this also means that if you have misconfigured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.
 
