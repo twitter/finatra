@@ -224,7 +224,7 @@ However, this also means that if you have misconfigured dependencies (e.g., you 
 As such, we recommend creating a simple test -- a `StartupTest` to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that could otherwise cause the server to fail to start.
 
 * a `StartupTest` should mimic production as closely as possible. Thus:
-    - avoid using `@Bind` and "override modules".
+    - avoid using `@Bind` and [override modules](#override-modules).
     - set the [Guice `com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `Stage.DEVELOPMENT` by default).
     - prevent Finagle clients from making outbound connections during startup tests by setting any `com.twitter.server.resolverMap` entries to `nil!`.
 
