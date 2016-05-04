@@ -15,9 +15,9 @@ footer: true
 ## Basics
 ===============================
 
-There may be occasions where we want to exercise specific code paths before accepting traffic to the server (say for triggering JIT in the JVM). In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala). Your handler should be constructed with an `com.twitter.finatra.thrift.routing.ThriftWarmup` instance.
+There may be occasions where we want to exercise specific code paths before accepting traffic to the server (say for triggering JIT in the JVM). In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala). Your handler should be constructed with a `com.twitter.finatra.thrift.routing.ThriftWarmup` instance.
 
-For example if we wanted to run an initial call through our Thrift Controller, we could create the following handler:
+For example if we wanted to run an initial call through our Thrift service, we could create the following handler:
 
 ```scala
 import ExampleThriftController
@@ -29,7 +29,8 @@ import javax.inject.Inject
 
 class ExampleThriftWarmupHandler @Inject()(
  warmup: ThriftWarmup)
- extends Handler {
+ extends Handler
+ with Logging {
 
   /* Should be a ClientId that is white-listed to your service. */
   private val clientId = ClientId("client123")
@@ -38,7 +39,7 @@ class ExampleThriftWarmupHandler @Inject()(
     try {
         clientId.asCurrent {
           warmup.send(
-            method = add1,
+            method = Add1,
             args = Add1.Args(5)) { result: Add1.Result =>
               assert(result.success.isDefined, "Warmup request failed.")
               assert(result.success.get == 6, "Warmup request failed.")
@@ -46,7 +47,7 @@ class ExampleThriftWarmupHandler @Inject()(
         }
     } catch {
       case e: Throwable =>
-        // Here we don't want a warmup failure to prevent server start-up
+        // Here we don't want a warmup failure to prevent server start-up --
         // this is important if your service will call downstream services
         // during warmup that could be temporarily down or unavailable.
         // We don't want that unavailability to cause our server to fail
