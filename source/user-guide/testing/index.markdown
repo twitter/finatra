@@ -221,7 +221,7 @@ By default the Finatra embedded testing infrastructure sets the [Guice `com.goog
 
 However, this also means that if you have misconfigured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.
 
-As such, we recommend creating a simple test to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that could otherwise cause the server to fail to start.
+As such, we recommend creating a simple test -- a `StartupTest` to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that could otherwise cause the server to fail to start.
 
 * Startup tests should mimic production as closely as possible. Thus:
     - avoid using `@Bind` and "override modules" in startup tests.
