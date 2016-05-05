@@ -1,7 +1,7 @@
 name := "java-http-server"
 organization := "com.twitter.example"
 version := "2.2.0-SNAPSHOT"
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 publishMavenStyle := true
 crossPaths := false

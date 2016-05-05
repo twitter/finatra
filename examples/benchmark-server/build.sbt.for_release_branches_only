@@ -1,7 +1,7 @@
 name := "benchmark-server"
 organization := "com.twitter.finatra.example"
 version := "2.2.0-SNAPSHOT"
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {

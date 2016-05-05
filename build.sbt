@@ -10,8 +10,7 @@ lazy val projectVersion = "2.2.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
-  scalaVersion := "2.11.7",
-  crossScalaVersions := Seq("2.10.6", "2.11.7"),
+  scalaVersion := "2.11.8",
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   fork in Test := true
 )
@@ -59,12 +58,8 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
   "-unchecked",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Xlint"
-) ++ (
-  CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, x)) if x >= 11 => Seq("-Ywarn-unused-import")
-    case _ => Seq.empty
-  }
+  "-Xlint",
+  "-Ywarn-unused-import"
 )
 
 lazy val baseSettings = Seq(
@@ -79,8 +74,8 @@ lazy val baseSettings = Seq(
     Resolver.sonatypeRepo("snapshots")
   ),
   scalaCompilerOptions,
-  javacOptions in (Compile, compile) ++= Seq("-source", "1.7", "-target", "1.7", "-Xlint:unchecked"),
-  javacOptions in doc ++= Seq("-source", "1.7")
+  javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
+  javacOptions in doc ++= Seq("-source", "1.8")
 )
 
 lazy val publishSettings = Seq(
@@ -570,16 +565,13 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
 
 // START EXAMPLES
 
-// 2.11 only due to rlazoti/finagle-metrics dependency
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
   settings(exampleServerBuildSettings).
   settings(
     name := "hello-world-heroku",
     moduleName := "hello-world-heroku",
-    scalaVersion := "2.11.7",
-    crossScalaVersions := Seq(),
     libraryDependencies ++= Seq(
-      "com.github.rlazoti" % "finagle-metrics_2.11" % "0.0.2" //2.11 only
+      "com.github.rlazoti" %% "finagle-metrics" % "0.0.2"
     )
   ).
   dependsOn(

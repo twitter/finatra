@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* Builds are now only for Java 8 and Scala 2.11. See the
+  `blog post <https://finagle.github.io/blog/2016/04/20/scala-210-and-java7/>`_
+  for details. ``RB_ID=828898``
+
 ### Fixed
 
 ### Closed

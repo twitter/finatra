@@ -21,16 +21,6 @@ fi
 
 javaVersion=`java -version 2>&1 | grep "java version" | awk '{print $3}' | tr -d \"`
 
-MAX_PERM_SIZE_JVM_ARG=""
-ELIMINATE_AUTOBOX_JVM_ARG=""
-if [[ $javaVersion == *"1.8"* ]]; then
-  # Workaround for JDK issue: https://bugs.openjdk.java.net/browse/JDK-8058847
-  # only add the option on version JDK8
-  ELIMINATE_AUTOBOX_JVM_ARG="-XX:-EliminateAutoBox"
-else
-  MAX_PERM_SIZE_JVM_ARG="-XX:MaxPermSize=1024M"
-fi
-
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
 CMD="java -ea                     \
@@ -42,10 +32,9 @@ CMD="java -ea                     \
   -XX:+CMSParallelRemarkEnabled   \
   -XX:+CMSClassUnloadingEnabled   \
   -XX:ReservedCodeCacheSize=128m  \
-  ${MAX_PERM_SIZE_JVM_ARG}        \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
-  ${ELIMINATE_AUTOBOX_JVM_ARG}    \
+  -XX:-EliminateAutoBox           \
   -Xms512M                        \
   -Xmx768M                        \
   -server                         \

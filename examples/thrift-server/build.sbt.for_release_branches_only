@@ -10,7 +10,7 @@ lazy val versions = new {
 
 lazy val baseSettings = Seq(
   version := "2.2.0-SNAPSHOT",
-  scalaVersion := "2.11.7",
+  scalaVersion := "2.11.8",
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   libraryDependencies ++= Seq(
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
