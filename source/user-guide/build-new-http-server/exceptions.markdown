@@ -15,7 +15,7 @@ footer: true
 ## Basics
 ===============================
 
-It is recommended that you use exceptions for flow control in your controller and services and rely on the [`com.twitter.finatra.http.exceptions.ExceptionMapper`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionMapper.scala) to convert exceptions into proper HTTP responses. Finatra provides a default [FinatraDefaultExceptionMapper](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FinatraDefaultExceptionMapper.scala) which provides high-level mapping for exceptions. However, you are free to register additional mappers or to [override the default mapper](#override-defaults) altogether.
+It is recommended that you use exceptions for flow control in your controller and services and rely on the [`com.twitter.finatra.http.exceptions.ExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionMapper.scala) to convert exceptions into proper HTTP responses. Finatra provides a default [FinatraDefaultExceptionMapper](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FinatraDefaultExceptionMapper.scala) which provides high-level mapping for exceptions. However, you are free to register additional mappers or to [override the default mapper](#override-defaults) altogether.
 
 For instance, if you wanted to map a `java.net.MalformedURLException` to a `400 - BadRequest` response you could create the following ExceptionMapper:
 
@@ -31,7 +31,7 @@ class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
 ```
 <div></div>
 
-Then register this exception mapper in your server. **Note**: using ExceptionMappers also require you to have the [`ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) defined in your filter chain.
+Then register this exception mapper in your server. **Note**: using ExceptionMappers also require you to have the [`ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) defined in your filter chain.
 
 ```scala
 import DoEverythingModule
@@ -67,7 +67,7 @@ Again, you can see we register the exception mapper *by type* allowing the frame
 ## <a class="anchor" name="override-defaults" href="#override-defaults">Override Default Behavior</a>
 ===============================
 
-If you want to override the [`FinatraDefaultExceptionMapper`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FinatraDefaultExceptionMapper.scala) you can override the `exceptionMapperModule` in your [`HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L67) to provide a custom implementation, e.g.,
+If you want to override the [`FinatraDefaultExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FinatraDefaultExceptionMapper.scala) you can override the `exceptionMapperModule` in your [`HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L67) to provide a custom implementation, e.g.,
 
 ```scala
 ...

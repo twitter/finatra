@@ -15,7 +15,7 @@ footer: true
 ## Basics
 ===============================
 
-There may be occasions where we want to exercise specific code paths before accepting traffic to the server (say for triggering JIT in the JVM). In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/master/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala). Your handler should be constructed with a `com.twitter.finatra.thrift.routing.ThriftWarmup` instance.
+There may be occasions where we want to exercise specific code paths before accepting traffic to the server (say for triggering JIT in the JVM). In this case you can implement a [`com.twitter.inject.utils.Handler`](https://github.com/twitter/finatra/blob/develop/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala). Your handler should be constructed with a `com.twitter.finatra.thrift.routing.ThriftWarmup` instance.
 
 For example if we wanted to run an initial call through our Thrift service, we could create the following handler:
 
@@ -96,7 +96,7 @@ class ExampleServer extends ThriftServer {
 <div></div>
 
 
-The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/master/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external Thrift port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`. See [here](/finatra/user-guide/getting-started#lifecycle) for more information on the lifecycle of a Finatra server.
+The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external Thrift port is bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`. See [here](/finatra/user-guide/getting-started#lifecycle) for more information on the lifecycle of a Finatra server.
 
 ## <a class="anchor" name="more-information" href="#more-information">More information</a>
 ===============================

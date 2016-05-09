@@ -17,7 +17,7 @@ footer: true
 
 #### `com.twitter.finatra.http.filters.CommonFilters`
 
-Finatra composes some commonly used filters into [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala). `CommonFilters` can be added in the same manner as any other filter.
+Finatra composes some commonly used filters into [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala). `CommonFilters` can be added in the same manner as any other filter.
 
 #### Global Filters
 
@@ -85,7 +85,7 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-Currently, `router#add` supports inlining up to ten (10) filters before a controller. If you need to include more than ten filters please consider combining them with [com.twitter.finatra.filters.MergedFilter](https://github.com/twitter/finatra/blob/master/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala) (in [finatra/utils](https://github.com/twitter/finatra/tree/master/utils)) in the same manner as [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala) then using the combined filter in your call to `router#add`.
+Currently, `router#add` supports inlining up to ten (10) filters before a controller. If you need to include more than ten filters please consider combining them with [com.twitter.finatra.filters.MergedFilter](https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/filters/MergedFilter.scala) (in [finatra/utils](https://github.com/twitter/finatra/tree/master/utils)) in the same manner as [`com.twitter.finatra.http.filters.CommonFilters`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala) then using the combined filter in your call to `router#add`.
 
 In all the above usages, we are applying the filter *by type* allowing the framework to instantiate instances of the filters. However all of these methods supporting passing instances.
 
@@ -123,7 +123,7 @@ As you can see, you can choose to apply the filter either by type or provide an 
 
 Guice supports [custom scopes](https://github.com/google/guice/wiki/CustomScopes) in addition to the most common [Singleton and *Unscoped*](https://github.com/google/guice/wiki/Scopes). Request scopes are often used to allow injecting classes that change depending on the incoming request (e.g. the authenticated User). Finatra provides an implementation of *RequestScoped* that works across Finagle non-blocking threads (Guice's included `@RequestScoped` implementation uses ThreadLocals which will not work with [twitter/util](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) `com.twitter.util.Future`).
 
-Note: Fields added to the Finagle request scope will remain present in threads launched from a Finagle [FuturePool](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/FuturePool.scala).
+Note: Fields added to the Finagle request scope will remain present in threads launched from a Finagle [FuturePool](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala).
 
 ### Adding Classes into the Finatra Request Scope
 

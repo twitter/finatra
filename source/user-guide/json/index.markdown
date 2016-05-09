@@ -19,9 +19,9 @@ Finatra improves on the already excellent [jackson-module-scala](https://github.
 ### Features
 
 * Usable outside of Finatra.
-* [`FinatraObjectMapper`](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala) which provides additional Scala friendly methods not found in the `ScalaObjectMapper`.
-* [Guice module](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala) for injecting `FinatraObjectMapper` (with support for customization e.g. snake_case vs camelCase).
-* Custom [`case class` deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module.
+* [`FinatraObjectMapper`](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala) which provides additional Scala friendly methods not found in the `ScalaObjectMapper`.
+* [Guice module](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala) for injecting `FinatraObjectMapper` (with support for customization e.g. snake_case vs camelCase).
+* Custom [`case class` deserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module.
 * Support for `case class` validations which accumulate errors (without failing fast) during JSON parsing.
 * Integration with Finatra [HTTP routing](/finatra/user-guide/routing-json) to support binding and validation of query params, route params, and headers.
 * Utils for comparing JSON in tests.
@@ -30,22 +30,22 @@ Finatra improves on the already excellent [jackson-module-scala](https://github.
 ## <a class="anchor" name="configuration" href="#configuration">Configuration</a>
 ===============================
 
-The default configuration of Jackson is provided by the [`FinatraObjectMapper`](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala).
+The default configuration of Jackson is provided by the [`FinatraObjectMapper`](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala).
 
 The following Jackson integrations are provided by default:
 
-* [Joda Module](https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java)
-* [Scala Module](https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java)
-* [LongKeyDeserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala): Allow deserializing maps with long keys.
-* [Wrapped Value Serializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala)
-* [Duration Millis Serializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/DurationMillisSerializer.scala)
-* [Improved DateTime Deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala)
-* [Improved `case class` Deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala): See details [below](#case-class-deserializer).
+* [Joda Module](https://github.com/FasterXML/jackson-datatype-joda/blob/develop/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java)
+* [Scala Module](https://github.com/FasterXML/jackson-module-scala/blob/develop/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java)
+* [LongKeyDeserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala): Allow deserializing maps with long keys.
+* [Wrapped Value Serializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala)
+* [Duration Millis Serializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/DurationMillisSerializer.scala)
+* [Improved DateTime Deserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala)
+* [Improved `case class` Deserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala): See details [below](#case-class-deserializer).
 
 ## <a class="anchor" name="jackson-customization" href="#jackson-customization">Customization</a>
 ===============================
 
-To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
+To override defaults or provide other config options, specify your own module (usually extending [FinatraJacksonModule](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
 
 ```scala
 class Server extends HttpServer {
@@ -73,7 +73,7 @@ object CustomJacksonModule extends FinatraJacksonModule {
 ## Improved `case class` deserializer
 ===============================
 
-Finatra provides a custom [`case class` deserializer](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module:
+Finatra provides a custom [`case class` deserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module:
 
 * Throws a `JsonException` when non-optional fields are missing from the parsed JSON.
 * Use default values when fields are missing in the incoming JSON.
@@ -152,9 +152,9 @@ Can be used for:
 
 See the implementation of the `GroupRequest` [above](#group-request-example) for an example of using `MethodValidation`.
 
-See also: [CommonMethodValidations](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala)
+See also: [CommonMethodValidations](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala)
 
-By default validation errors are returned **alphabetically sorted** by validation error message (for determinism when testing). See: [CaseClassMappingException](https://github.com/twitter/finatra/blob/master/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala). Eg.,
+By default validation errors are returned **alphabetically sorted** by validation error message (for determinism when testing). See: [CaseClassMappingException](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala). Eg.,
 
 ```json
 {

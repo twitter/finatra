@@ -75,7 +75,7 @@ Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which 
 
 When Finatra receives an HTTP request, it will scan all registered controllers (in the order they are added) and dispatch the request to the first matching route starting from the top of each controller invoking the route's associated callback function.
 
-It is recommended to follow [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) conventions if possible, e.g., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stating provided by Finatra in the [`com.twitter.finatra.http.filters.StatsFilter`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala) works best when this convention is followed.
+It is recommended to follow [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) conventions if possible, e.g., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stating provided by Finatra in the [`com.twitter.finatra.http.filters.StatsFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala) works best when this convention is followed.
 
 ```scala
 class GroupsController extends Controller {
@@ -153,7 +153,7 @@ Regular expressions are no longer allowed in string defined paths. Note: We are 
 
 #### <a class="anchor" name="admin-paths" href="#admin-index">Admin Paths</a>
 
-All [TwitterServer](http://twitter.github.io/twitter-server/)-based servers have an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) which includes a variety of tools for diagnostics, profiling, and more. This admin interface should not be exposed outside your DMZ. Any route path starting with `/admin/` or `/admin/finatra/` will be included on the server's admin interface (accessible via the server's admin port). 
+All [TwitterServer](http://twitter.github.io/twitter-server/)-based servers have an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) which includes a variety of tools for diagnostics, profiling, and more. This admin interface should not be exposed outside your DMZ. Any route path starting with `/admin/` or `/admin/finatra/` will be included on the server's admin interface (accessible via the server's admin port).
 
 ```scala
 get("/admin/finatra/users/",
@@ -164,13 +164,13 @@ get("/admin/finatra/users/",
 ```
 <div></div>
 
-Constant (no named parameters), HTTP method `GET` routes can also be added to the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) user interface. 
+Constant (no named parameters), HTTP method `GET` routes can also be added to the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) user interface.
 
 To expose your route to the admin user interface index, the route path:
 
-- **MUST** be a constant path 
-- **MUST** start with `/admin/` (**SHOULD NOT** begin with `/admin/finatra/`) 
-- **MUST** be HTTP method `GET`. 
+- **MUST** be a constant path
+- **MUST** start with `/admin/` (**SHOULD NOT** begin with `/admin/finatra/`)
+- **MUST** be HTTP method `GET`.
 
 Set `admin = true` and optionally provide an [`AdminIndexInfo`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/AdminIndexInfo.scala), e.g.,
 
@@ -224,7 +224,7 @@ get("/users") { request: UsersRequest =>
 ```
 <div></div>
 
-The `case class` field names should match the request parameters or use the [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) annotation to specify the JSON field name in the case class (see: [example](https://github.com/twitter/finatra/blob/master/jackson/src/test/scala/com/twitter/finatra/tests/json/internal/ExampleCaseClasses.scala#L141)). A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`](https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
+The `case class` field names should match the request parameters or use the [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) annotation to specify the JSON field name in the case class (see: [example](https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/tests/json/internal/ExampleCaseClasses.scala#L141)). A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`](https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
 
 Use a Scala ["back-quote" literal](http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html) for the field name when special characters are involved (e.g. @Header \`user-agent\` : String).
 
@@ -233,9 +233,9 @@ Non-optional fields without default values are considered required. If a require
 The following field annotations specify where to parse a field out of the request
 
   * Request Fields:
-     * [`@RouteParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/IdAndNameRequest.scala)
-     * [`@QueryParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
-     * [`@FormParam`](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/FormPostRequest.scala)
+     * [`@RouteParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/IdAndNameRequest.scala)
+     * [`@QueryParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
+     * [`@FormParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/FormPostRequest.scala)
      * `@Header`
  * Other:
      * `@RequestInject`: Injects the Finagle `http` Request or any Guice managed class into your case class
@@ -278,12 +278,12 @@ def deserializeRequest(name: String) = {
 
 For more information and examples, see:
 
-- [`com.twitter.finatra.http.request.RequestUtils`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
-- [`com.twitter.finatra.http.fileupload.MultipartItem`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala)
+- [`com.twitter.finatra.http.request.RequestUtils`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
+- [`com.twitter.finatra.http.fileupload.MultipartItem`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala)
 - [`com.twitter.finagle.http.Request#decodeBytes`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192)
-- [DoEverythingController](https://github.com/twitter/finatra/blob/master/https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/controllers/DoEverythingController.scala#L530)
-- [DoEverythingServerFeatureTest](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L309)
-- [MultiParamsTest](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala)
+- [DoEverythingController](https://github.com/twitter/finatra/blob/develop/https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/controllers/DoEverythingController.scala#L530)
+- [DoEverythingServerFeatureTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L309)
+- [MultiParamsTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala)
 
 ## <a class="anchor" name="responses" href="#responses">Responses</a>
 ===============================
@@ -422,7 +422,7 @@ post("/users") { request: Request =>
 which can be used:
 
    * if the URI starts with "http" or "/" then the URI is placed in the Location header unchanged.
-   * `response.location("123")` will get turned into the correct full URL in the [HttpResponseFilter](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala) (e.g. `http://host.com/users/123`)
+   * `response.location("123")` will get turned into the correct full URL in the [HttpResponseFilter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala) (e.g. `http://host.com/users/123`)
 
 Or to obtain the request full path URL as follows:
 

@@ -55,7 +55,7 @@ get("/:*") { request: Request =>
 ## <a class="anchor" name="mustache" href="#mustache">Mustache Templating</a>
 ===============================
 
-Finatra supports the rendering of mustache templates. The framework provides a default [MustacheModule](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala) but this is configurable. To set your own module override the mustacheModule def in [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L63), e.g.,
+Finatra supports the rendering of mustache templates. The framework provides a default [MustacheModule](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala) but this is configurable. To set your own module override the mustacheModule def in [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L63), e.g.,
 
 ```scala
 class ExampleServer extends HttpServer {
@@ -77,7 +77,7 @@ When you set the `-local.doc.root` flag, the MustacheModule will instead load te
 
 ### Rendering
 
-The framework will use mustache to render callback return types that are annotated with the [`@Mustache`](https://github.com/twitter/finatra/blob/master/http/src/main/java/com/twitter/finatra/response/Mustache.java) annotation.
+The framework will use mustache to render callback return types that are annotated with the [`@Mustache`](https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/response/Mustache.java) annotation.
 
 ```scala
 @Mustache("foo")
@@ -90,7 +90,7 @@ get("/foo") { request: Request =>
 ```
 <div></div>
 
-The value of the `@Mustache` annotation is assumed by the [MustacheMessageBodyWriter](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala) to be the template filename without the suffix (which is [assumed to be `.mustache`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala#L32)).
+The value of the `@Mustache` annotation is assumed by the [MustacheMessageBodyWriter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala) to be the template filename without the suffix (which is [assumed to be `.mustache`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala#L32)).
 
 Or you can manually create a response that explicitly references a template, e.g.,
 
@@ -131,7 +131,7 @@ get("/testClassWithHtml") { r: Request =>
 ```
 <div></div>
 
-See the [test class](https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L1282) for more examples.
+See the [test class](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L1282) for more examples.
 
 
 <nav>

@@ -23,7 +23,7 @@ Finatra's thrift support is meant to be used in conjunction with [Finagle](http:
 
 To start, add a dependency on the `com.twitter.finatra:finatra-thrift_{scala-version}` library. We also highly recommend depending on `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [SLF4J](http://www.slf4j.org/manual.html) implementation. For more information on logging with Finatra see: [Logging](/finatra/user-guide/logging).
 
-Create a new class that extends [`com.twitter.finatra.thrift.ThriftServer`](https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala):
+Create a new class that extends [`com.twitter.finatra.thrift.ThriftServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala):
 
 ```scala
 import DoEverythingModule
@@ -50,7 +50,7 @@ This should look familiar as the structure is similar to creating an [HttpServer
 ### <a class="anchor" name="override-defaults" href="#override-defaults">Override Default Behavior</a>
 
 #### <a class="anchor" name="setting-flags-from-code" href="#setting-flags-from-code">Flags</a>
-Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra's [ThriftServer](https://github.com/twitter/finatra/blob/master/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala)'s core flags can be set from code.
+Some deployment environments may make it difficult to set command line flags. If this is the case, Finatra's [ThriftServer](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala)'s core flags can be set from code.
 For example, instead of setting the `-thrift.port` flag, you can override the following method in your server.
 
 ```scala
@@ -65,7 +65,7 @@ class ExampleServer extends ThriftServer {
 ```
 <div></div>
 
-For a list of what flags can be set programmatically, please see the [ThriftServer](https://github.com/twitter/finatra/blob/master/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala) class.
+For a list of what flags can be set programmatically, please see the [ThriftServer](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala) class.
 
 Next section: [Add a Thrift Controller](/finatra/user-guide/build-new-thrift-server/controller.html).
 
