@@ -35,13 +35,6 @@ What are we talking about when we talk about *testing*? At a high-level the phil
 
 The Finatra testing framework uses the [`WordSpec`](http://doc.scalatest.org/2.2.4/#org.scalatest.WordSpec) ScalaTest [testing style](http://www.scalatest.org/user_guide/selecting_a_style) testing style for framework testing and to facilitate the types of testing outlined above we have several testing traits to aid in creating simple and powerful tests. For more information on [ScalaTest](http://www.scalatest.org/), see the [ScalaTest User Guide](http://www.scalatest.org/user_guide).
 
-## Working with Mocks
-===============================
-
-[`com.twitter.inject.Mockito`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala) provides [Specs2](https://etorreborre.github.io/specs2/) Mockito syntax sugar for [ScalaTest](http://www.scalatest.org/).
-
-This is a drop-in replacement for [`org.specs2.mock.Mockito`](http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html). We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures won't be propagated up as ScalaTest test failures.
-
 ## <a class="anchor" name="embedded-server" href="#embedded-server">Embedded Servers and Apps</a>
 ===============================
 
@@ -62,77 +55,6 @@ See:
 
 You'll notice that this hierarchy generally follows the server class hierarchy as [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala) and [`com.twitter.finatra.thrift.ThriftServer`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala) extend from [`com.twitter.server.TwitterServer`](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala) which extends from [`com.twitter.app.App`](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala).
 
-## <a class="anchor" name="override-modules" href="#override-modules">Override Modules</a>
-===============================
-
-For basic information on Modules in Finatra, see [Modules](/finatra/user-guide/getting-started#modules).
-
-Defining a module is generally used to tell Guice *how* to instantiate an object to be provided to the object graph. When testing, however, we may want to provide an alternative instance of a type to the object graph. For instance, instead of making network calls to an external service through a real client we want to instead use a mock version of the client. Or load an in-memory implementation to which we can keep a reference in order to make assertions on it's internal state. In these cases we can compose a server with a collection of override modules that selectively replace bound instances.
-
-```scala
-override val server = new EmbeddedHttpServer(
-  twitterServer = new ExampleServer {
-    override def overrideModules = Seq(OverrideSomeBehaviorModule)
-  },
-  ...
-```
-<div></div>
-
-Note, the modules use specifically for testing should generally be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: [`@Bind`](#at-bind) section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.
-
-## <a class="anchor" name="at-bind" href="#at-bind">Using `@Bind`</a>
-===============================
-
-First, check out the [Google Guice](https://github.com/google/guice) documentation on Bound Fields [here](https://github.com/google/guice/wiki/BoundFields).
-
-In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a stub implementation), we do not need to create a specific test module to compose into our server as an override module. Instead we can use the `com.google.inject.testing.fieldbinder.Bind` annotation.
-
-```scala
-
-import com.google.inject.testing.fieldbinder.Bind
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.Mockito
-
-class ExampleFeatureTest
-  extends FeatureTest
-  with Mockito
-  with HttpTest {
-
-  @Bind val downstreamServiceClient = smartMock[DownstreamServiceClient]
-
-  @Bind val idService = smartMock[IdService]
-
-  override val server = new EmbeddedHttpServer(new ExampleServer)  
-
-  "test" in {
-    /* Mock GET Request performed by DownstreamServiceClient */
-    downstreamServiceClient.get("/tweets/123.json")(manifest[FooResponse]) returns Future(None)
-    ...
-  }
-```
-<div></div>
-
-#### More information:
-
-* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using either `com.twitter.inject.app.FeatureTest` or `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [next section](#feature-tests).
-* Prefer to define `@Bind` and `@Inject` variables before the server definition.
-* You should not need to but you can optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
-```scala
-val server = new EmbeddedHttpServer(
-  twitterServer = new ExampleServer {
-    override val overrideModules = Seq(integrationTestModule)
-  })
-```
-* While we support the `com.google.inject.testing.fieldbinder.Bind` annotation, our integration does not currently support the `to` annotation field, e.g., `@Bind(to = classOf[T])`, therefore,
-* The type of the variable you annotate with `@Bind` must *exactly* match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,
-```scala
-@Bind val idService: IdService = new MockIdServiceImpl
-```
-* Because of lifecycle reasons, access to the embedded server should either be from a lazy variable or inside a test method.
-
-For a complete example, see the [`TwitterCloneFeatureTest`](https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/twitter/github/io/finatra/quickstart/TwitterCloneFeatureTest.scala).
-
 ## <a class="anchor" name="test-helpers" href="#test-helpers">Test Helper Classes</a>
 ===============================
 
@@ -147,6 +69,7 @@ We highly recommend writing feature tests for your services as they provide a ve
 For example, to write a feature test for an HTTP server, extend the `com.twitter.inject.server.FeatureTest` trait. Then override the `server` with an instance of your [`EmbeddedHttpServer`](#embedded-server).
 
 ```scala
+import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 
 class ExampleServerFeatureTest extends FeatureTest {
@@ -168,6 +91,7 @@ class ExampleServerFeatureTest extends FeatureTest {
 Similarly, to write a feature test for a Thrift server and create a [client](#thrift-tests) to it,
 
 ```scala
+import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.server.FeatureTest
 
 class ExampleThriftServerFeatureTest extends FeatureTest {
@@ -188,7 +112,6 @@ class ExampleThriftServerFeatureTest extends FeatureTest {
 The `server` is specified as a `def` in `com.twitter.inject.server.FeatureTest` trait. If you only want to start **one instance of your server per test file** make sure to override this `def` with a `val`.
 
 For more advanced examples see the [`DoEverythingServerFeatureTest`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala) for HTTP and the [`DoEverythingThriftServerFeatureTest`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/DoEverythingThriftServerFeatureTest.scala) for Thrift.
-
 
 ### <a class="anchor" name="integration-tests" href="#integration-tests">Integration Tests</a>
 
@@ -264,6 +187,85 @@ class MyServiceStartupTest extends FeatureTest {
 <div></div>
 
 **Note:** this works for either `EmbeddedHttpServer` or `EmbeddedThriftServer` as `assertHealthy()` is defined on the super class [`EmbeddedTwitterServer`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L144).
+
+## <a class="anchor" name="mocks" href="#mocks">Working with Mocks</a>
+===============================
+
+[`com.twitter.inject.Mockito`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala) provides [Specs2](https://etorreborre.github.io/specs2/) Mockito syntax sugar for [ScalaTest](http://www.scalatest.org/).
+
+This is a drop-in replacement for [`org.specs2.mock.Mockito`](http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html). We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures won't be propagated up as ScalaTest test failures.
+
+## <a class="anchor" name="override-modules" href="#override-modules">Override Modules</a>
+===============================
+
+For basic information on Modules in Finatra, see [Modules](/finatra/user-guide/getting-started#modules).
+
+Defining a module is generally used to tell Guice *how* to instantiate an object to be provided to the object graph. When testing, however, we may want to provide an alternative instance of a type to the object graph. For instance, instead of making network calls to an external service through a real client we want to instead use a mock version of the client. Or load an in-memory implementation to which we can keep a reference in order to make assertions on it's internal state. In these cases we can compose a server with a collection of override modules that selectively replace bound instances.
+
+```scala
+override val server = new EmbeddedHttpServer(
+  twitterServer = new ExampleServer {
+    override def overrideModules = Seq(OverrideSomeBehaviorModule)
+  },
+  ...
+```
+<div></div>
+
+Note, the modules use specifically for testing should generally be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: [`@Bind`](#at-bind) section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.
+
+## <a class="anchor" name="at-bind" href="#at-bind">Using `@Bind`</a>
+===============================
+
+First, check out the [Google Guice](https://github.com/google/guice) documentation on Bound Fields [here](https://github.com/google/guice/wiki/BoundFields).
+
+In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a stub implementation), we do not need to create a specific test module to compose into our server as an override module. Instead we can use the `com.google.inject.testing.fieldbinder.Bind` annotation.
+
+```scala
+
+import com.google.inject.testing.fieldbinder.Bind
+import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.Mockito
+
+class ExampleFeatureTest
+  extends FeatureTest
+  with Mockito
+  with HttpTest {
+
+  @Bind val downstreamServiceClient = smartMock[DownstreamServiceClient]
+
+  @Bind val idService = smartMock[IdService]
+
+  override val server = new EmbeddedHttpServer(new ExampleServer)  
+
+  "test" in {
+    /* Mock GET Request performed by DownstreamServiceClient */
+    downstreamServiceClient.get("/tweets/123.json")(manifest[FooResponse]) returns Future(None)
+    ...
+  }
+```
+<div></div>
+
+#### More information:
+
+* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using either `com.twitter.inject.app.FeatureTest` or `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [next section](#feature-tests).
+* Prefer to define `@Bind` and `@Inject` variables before the server definition.
+* You should not need to but you can optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
+```scala
+val server = new EmbeddedHttpServer(
+  twitterServer = new ExampleServer {
+    override val overrideModules = Seq(integrationTestModule)
+  })
+```
+* While we support the `com.google.inject.testing.fieldbinder.Bind` annotation, our integration does not currently support the `to` annotation field, e.g., `@Bind(to = classOf[T])`, therefore,
+* The type of the variable you annotate with `@Bind` must *exactly* match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,
+```scala
+@Bind val idService: IdService = new MockIdServiceImpl
+```
+* Because of lifecycle reasons, access to the embedded server should either be from a lazy variable or inside a test method.
+
+For a complete example, see the [`TwitterCloneFeatureTest`](https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/twitter/github/io/finatra/quickstart/TwitterCloneFeatureTest.scala).
+
 
 <nav>
   <ul class="pager">
