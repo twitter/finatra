@@ -39,12 +39,12 @@ lazy val versions = new {
   val jackson = "2.4.4"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
-  val logback = "1.0.13"
+  val logback = "1.1.7"
   val mustache = "0.8.18"
   val nscalaTime = "1.6.0"
   val servletApi = "2.5"
   val snakeyaml = "1.12"
-  val slf4j = "1.7.7"
+  val slf4j = "1.7.21"
   val libThrift = "0.5.0-1"
 }
 
