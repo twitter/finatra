@@ -468,7 +468,10 @@ lazy val http = project.
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
       fileMappings.filter(
         mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/http/test/")))
+          Seq("com/twitter/finatra/http/EmbeddedHttpServer",
+              "com/twitter/finatra/http/HttpMockResponses",
+              "com/twitter/finatra/http/HttpTest",
+              "com/twitter/finatra/http/StreaminJsonTestHelper")))
     }
   ).
   dependsOn(

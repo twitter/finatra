@@ -2,7 +2,7 @@ package com.twitter.finatra.multiserver.test
 
 import com.twitter.adder.thriftscala.Adder
 import com.twitter.finagle.http.Status
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.multiserver.CombinedServer.{AdminAdd1Request, DoEverythingCombinedServer}
 import com.twitter.finatra.thrift.ThriftClient
 import com.twitter.inject.server.FeatureTest

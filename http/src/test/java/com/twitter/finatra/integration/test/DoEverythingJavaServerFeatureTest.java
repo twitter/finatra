@@ -8,7 +8,7 @@ import com.twitter.finagle.http.Methods;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
-import com.twitter.finatra.http.test.EmbeddedHttpServer;
+import com.twitter.finatra.http.EmbeddedHttpServer;
 import com.twitter.finatra.httpclient.RequestBuilder;
 
 import com.twitter.finatra.integration.main.DoEverythingJavaServer;

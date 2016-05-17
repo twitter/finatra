@@ -2,7 +2,7 @@ package finatra.quickstart
 
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future

@@ -3,7 +3,7 @@ package com.twitter.finatra.multiserver.test
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.adder.thriftscala.Adder
 import com.twitter.finagle.http.Status
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest

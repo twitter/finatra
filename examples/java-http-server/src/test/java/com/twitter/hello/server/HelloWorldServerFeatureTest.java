@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
-import com.twitter.finatra.http.test.EmbeddedHttpServer;
+import com.twitter.finatra.http.EmbeddedHttpServer;
 import static com.twitter.finatra.httpclient.RequestBuilder.*;
 
 public class HelloWorldServerFeatureTest extends Assert {

@@ -1,7 +1,7 @@
 package com.twitter.hello
 
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 
 class HelloWorldFeatureTest extends FeatureTest {

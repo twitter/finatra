@@ -2,7 +2,7 @@ package com.twitter.finatra.multiserver.test
 
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.{Request, Status}
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpMockResponses}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpMockResponses}
 import com.twitter.finatra.httpclient.HttpClient
 import com.twitter.finatra.multiserver.Add2HttpServer.Add2Server
 import com.twitter.inject.Mockito

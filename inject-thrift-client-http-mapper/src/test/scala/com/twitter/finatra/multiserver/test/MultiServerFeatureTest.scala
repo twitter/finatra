@@ -1,7 +1,7 @@
 package com.twitter.finatra.multiserver.test
 
 import com.twitter.finagle.http.Status
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
 import com.twitter.finatra.multiserver.AdderThriftServer.AdderThriftServer
 import com.twitter.finatra.multiserver.Add2HttpServer.Add2Server

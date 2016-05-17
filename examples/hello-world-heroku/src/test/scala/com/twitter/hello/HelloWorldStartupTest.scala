@@ -3,7 +3,7 @@ package com.twitter.hello
 import com.codahale.metrics.MetricFilter
 import com.google.inject.Stage
 import com.twitter.finagle.metrics.MetricsStatsReceiver
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTest
 
 class HelloWorldStartupTest extends FeatureTest {

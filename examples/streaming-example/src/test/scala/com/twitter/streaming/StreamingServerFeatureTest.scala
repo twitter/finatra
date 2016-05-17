@@ -2,7 +2,7 @@ package com.twitter.streaming
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.Response
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, StreamingJsonTestHelper}
+import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
