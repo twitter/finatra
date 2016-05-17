@@ -1,7 +1,8 @@
 package com.twitter.finatra.http.integration.routing
 
+import com.twitter.finagle.http.Method.Trace
+import com.twitter.finagle.http._
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finagle.http.{Response, Request, Status}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.test.EmbeddedHttpServer
@@ -109,6 +110,56 @@ class RoutingIntegrationTest extends Test {
       server.close()
     }
   }
+
+  "Support any route for matching" in {
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter): Unit = {
+          router.add[AmazingController]
+        }
+      }
+    )
+
+    try {
+      server.httpGet(
+        "/foo",
+        andExpect = Status.Ok)
+
+      server.httpGet(
+        "/proxy/tweet/2838282683",
+        andExpect = Status.Ok)
+
+      server.httpGet(
+        "/proxy/user/11221111222",
+        andExpect = Status.Ok)
+
+      server.httpPost(
+        "/proxy/user/48483021",
+        postBody = "",
+        andExpect = Status.Ok)
+
+      server.httpPost(
+        "/proxy/tweet/48483021",
+        postBody = "",
+        andExpect = Status.Ok)
+
+      server.httpPut(
+        "/proxy/thingamagic/99898936",
+        putBody = "",
+        andExpect = Status.Ok)
+
+      server.httpPost(
+        "/foo",
+        postBody = "",
+        andExpect = Status.NotFound)
+
+      server.httpRequest(
+        Request(Trace, "/proxy/thingamagic/99898936"),
+        andExpect = Status.MethodNotAllowed)
+    } finally {
+      server.close()
+    }
+  }
 }
 
 class NoRouteInfoFilter extends SimpleFilter[Request, Response] with Matchers {
@@ -131,5 +182,23 @@ class CheckRouteInfoFilter extends SimpleFilter[Request, Response] with Matchers
 class NullController extends Controller {
   get("/foo", name = "my_foo") { request: Request =>
     response.ok
+  }
+}
+
+class AmazingController extends Controller {
+  get("/foo", name = "my_foo") { request: Request =>
+    response.ok
+  }
+
+  any("/proxy/:base/:*") { request: Request =>
+    // This can be useful for proxying. We manually handle what methods
+    // are supported; for the purpose of this example we *don't* support trace
+    request.method match {
+      case Method.Trace =>
+        response.methodNotAllowed
+      case _ =>
+        response.ok(s"Sent proxy request for ${request.params("base")}")
+    }
+
   }
 }

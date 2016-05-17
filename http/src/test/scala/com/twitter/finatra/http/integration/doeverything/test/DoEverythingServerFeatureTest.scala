@@ -1071,8 +1071,46 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       server.httpGet(
         "/multipleRouteFilters",
         andExpect = Ok,
-        withBody = "012345"
-      )
+        withBody = "012345")
+    }
+
+    "anyMethod GET" in {
+      server.httpGet(
+        "/anyMethod",
+        andExpect = Ok)
+    }
+
+    "anyMethod TRACE" in {
+      server.httpRequest(
+        Request(Method.Trace, "/anyMethod"),
+        andExpect = Ok)
+    }
+
+    "anyMethod HEAD" in {
+      server.httpHead(
+        "/anyMethod",
+        andExpect = Ok)
+    }
+
+    "anyMethod POST" in {
+      server.httpPost(
+        "/anyMethod",
+        postBody = "",
+        andExpect = MethodNotAllowed)
+    }
+
+    "anyMethod PUT" in {
+      server.httpPut(
+        "/anyMethod",
+        putBody = "",
+        andExpect = MethodNotAllowed)
+    }
+
+    "anyMethod DELETE" in {
+      server.httpDelete(
+        "/anyMethod",
+        deleteBody = "",
+        andExpect = MethodNotAllowed)
     }
   }
 

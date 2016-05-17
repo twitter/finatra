@@ -3,7 +3,6 @@ package com.twitter.finatra.integration.main;
 import javax.inject.Inject;
 
 import com.twitter.finagle.http.Request;
-import com.twitter.finatra.http.JavaCallback;
 import com.twitter.finatra.http.JavaController;
 
 /**
@@ -16,52 +15,22 @@ public class DoEverythingJavaController extends JavaController {
 
     /** Define routes */
     public void configureRoutes() {
-        get("/hello", new JavaCallback() {
-            public Object handle(Request request) {
-                return helloService.hi(request.getParam("name"));
-            }
-        });
+        get("/hello", (Request request) -> helloService.hi(request.getParam("name")));
 
-        get("/goodbye", new JavaCallback() {
-            public Object handle(Request request) {
-                return new GoodbyeResponse("guest", "cya", 123);
-            }
-        });
+        get("/goodbye", (Request request) -> new GoodbyeResponse("guest", "cya", 123));
 
-        post("/post", new JavaCallback() {
-            public Object handle(Request request) {
-                return "post";
-            }
-        });
+        post("/post",  (Request request) -> "post");
 
-        put("/put", new JavaCallback() {
-            public Object handle(Request request) {
-                return "put";
-            }
-        });
+        put("/put",  (Request request) -> "put");
 
-        delete("/delete", new JavaCallback() {
-            public Object handle(Request request) {
-                return "delete";
-            }
-        });
+        delete("/delete",  (Request request) -> "delete");
 
-        options("/options", new JavaCallback() {
-            public Object handle(Request request) {
-                return "options";
-            }
-        });
+        options("/options",  (Request request) -> "options");
 
-        patch("/patch", new JavaCallback() {
-            public Object handle(Request request) {
-                return "patch";
-            }
-        });
+        patch("/patch",  (Request request) -> "patch");
 
-        head("/head", new JavaCallback() {
-            public Object handle(Request request) {
-                return "head";
-            }
-        });
+        head("/head",  (Request request) -> "head");
+
+        any("/any",  (Request request) -> "any");
     }
 }

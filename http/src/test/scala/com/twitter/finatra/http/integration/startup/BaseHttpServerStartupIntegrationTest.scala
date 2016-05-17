@@ -4,7 +4,6 @@ import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.modules.ResponseBuilderModule
 import com.twitter.finatra.http.test.EmbeddedHttpServer
 import com.twitter.inject.Test
-import com.twitter.util.Await
 
 class BaseHttpServerStartupIntegrationTest extends Test {
 

@@ -27,6 +27,25 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
     }
 
     @Test
+    public void testAnyEndpoint() {
+        Request request1 = RequestBuilder.get("/any");
+        Response response1 = server.httpRequest(request1);
+        assertEquals(Status.Ok(), response1.status());
+
+        Request request2 = RequestBuilder.post("/any");
+        Response response2 = server.httpRequest(request2);
+        assertEquals(Status.Ok(), response2.status());
+
+        Request request3 = RequestBuilder.head("/any");
+        Response response3 = server.httpRequest(request3);
+        assertEquals(Status.Ok(), response3.status());
+
+        Request request4 = RequestBuilder.put("/any");
+        Response response4 = server.httpRequest(request4);
+        assertEquals(Status.Ok(), response4.status());
+    }
+
+    @Test
     public void testGoodbyeEndpoint() {
         Request request = RequestBuilder.get("/goodbye");
         Response response = server.httpRequest(request);

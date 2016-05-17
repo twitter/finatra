@@ -74,7 +74,7 @@ class HttpClientIntegrationTest extends IntegrationTest {
     inMemoryHttpService.mockGet("/foo", mockResponse)
 
     Await.result(
-      httpClient.get("/foo")) should be(mockResponse)
+      httpClient.get("/foo")) should be(mockResponse) //Purposely using deprecated method for test coverage
   }
 
   object MyHttpClientModule extends HttpClientModule {

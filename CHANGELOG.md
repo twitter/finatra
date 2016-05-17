@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Support ANY method in HTTP Controllers. Adds support for defining routes which will answer 
+  to "any" HTTP method. ``RB_ID=830429``
+
 ### Changed
 
 * finatra: Update SLF4J to version 1.7.21 and Logback to 1.1.7. Also update example

@@ -1,7 +1,5 @@
 package com.twitter.finatra.http.integration.doeverything.test
 
-import java.io.File
-
 trait DocRootLocalFilesystemTestUtility {
   val testUserMustacheString =
     "age:{{age}}\nname:{{name}}\n{{#friends}}\n{{.}}\n{{/friends}}"

@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.integration.doeverything.main.controllers
 
-import com.twitter.finagle.http.{Request, Status}
+import com.twitter.finagle.http.{Method, Request, Status}
 import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
 import com.twitter.finatra.annotations.{CamelCaseMapper, Flag}
 import com.twitter.finatra.http.Controller
@@ -636,6 +636,16 @@ class DoEverythingController @Inject()(
 
   get("/bytes") { r: Request =>
     "Steve".getBytes(StandardCharsets.UTF_8)
+  }
+
+  any("/anyMethod") { request: Request =>
+    // only support GET, HEAD or TRACE here
+    request.method match {
+      case m @ (Method.Get | Method.Head | Method.Trace) =>
+        response.ok
+      case _ =>
+        response.methodNotAllowed
+    }
   }
 }
 

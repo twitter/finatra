@@ -9,7 +9,7 @@ import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{IntegrationTest, Mockito, Test}
+import com.twitter.inject.{IntegrationTest, Mockito}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Future}
 
