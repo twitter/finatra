@@ -77,7 +77,9 @@ class ExampleServer extends ThriftServer {
   override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
       .withMaxRequestSize(...)
-      .withTracer(...)
+      .withAdmissionControl.concurrencyLimit(
+        maxConcurrentRequests = ...,
+        maxWaiters = ...)
   }
 }
 ```

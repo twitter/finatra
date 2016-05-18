@@ -97,7 +97,9 @@ class ExampleServer extends HttpServer {
   override def configureHttpServer(server: Http.Server): Http.Server = {
     server
       .withMaxRequestSize(...)
-      .withTracer(...)
+      .withAdmissionControl.concurrencyLimit(
+        maxConcurrentRequests = ...,
+        maxWaiters = ...)
   }
 }
 ```
