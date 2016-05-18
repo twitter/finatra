@@ -67,6 +67,25 @@ class ExampleServer extends ThriftServer {
 
 For a list of what flags can be set programmatically, please see the [ThriftServer](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala) class.
 
+#### <a class="anchor" name="server-configuration" href="#default-modules">Server Configuration</a>
+
+If you want to further configure the underlying [Finagle](https://github.com/twitter/finagle) server you can override `configureThriftServer` in your Server and set additional configuration on or override the default configuration of your server. For example:
+
+```scala
+class ExampleServer extends ThriftServer {
+
+  override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
+    server
+      .withMaxRequestSize(...)
+      .withTracer(...)
+  }
+}
+```
+<div></div>
+
+For more information on [Finagle](https://github.com/twitter/finagle) server configuration see the documentation [here](http://twitter.github.io/finagle/guide/Configuration.html); specifically the server documentation [here](http://twitter.github.io/finagle/guide/Servers.html).
+
+
 Next section: [Add a Thrift Controller](/finatra/user-guide/build-new-thrift-server/controller.html).
 
 <nav>

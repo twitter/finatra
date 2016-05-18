@@ -87,6 +87,24 @@ class ExampleServer extends HttpServer {
 
 If your module is defined as a class, you would pass an instance of the class, e.g., `override def jacksonModule = new MyCustomJacksonModule`.
 
+#### <a class="anchor" name="server-configuration" href="#default-modules">Server Configuration</a>
+
+If you want to further configure the underlying [Finagle](https://github.com/twitter/finagle) server you can override `configureHttpServer` (or `configureHttpsServer`) in your Server and set additional configuration on or override the default configuration of your server. For example:
+
+```scala
+class ExampleServer extends HttpServer {
+
+  override def configureHttpServer(server: Http.Server): Http.Server = {
+    server
+      .withMaxRequestSize(...)
+      .withTracer(...)
+  }
+}
+```
+<div></div>
+
+For more information on [Finagle](https://github.com/twitter/finagle) server configuration see the documentation [here](http://twitter.github.io/finagle/guide/Configuration.html); specifically the server documentation [here](http://twitter.github.io/finagle/guide/Servers.html).
+
 Next section: [Add an HTTP Controller](/finatra/user-guide/build-new-http-server/controller.html).
 
 <nav>
