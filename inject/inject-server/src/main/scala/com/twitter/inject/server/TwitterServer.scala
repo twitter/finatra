@@ -60,15 +60,14 @@ trait TwitterServer
    * a warmup handler in #warmup.
    * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
    * @see [[com.twitter.inject.utils.Handler]]
-   * TODO: rename to handle[T <: Handler]()
    */
-  protected def run[T <: Handler : Manifest]() {
+  protected def handle[T <: Handler : Manifest](): Unit = {
     injector.instance[T].handle()
   }
 
   /* Overrides */
 
-  override final def main() {
+  override final def main(): Unit = {
     super.main() // Call inject.App.main() to create injector
 
     info("Startup complete, server ready.")
@@ -76,7 +75,7 @@ trait TwitterServer
   }
 
   /** Method to be called after injector creation */
-  override protected def postStartup() {
+  override protected def postStartup(): Unit = {
     super.postStartup()
 
     if (resolveFinagleClientsOnStartup) {
@@ -91,14 +90,14 @@ trait TwitterServer
     FinagleBuildRevision.register(injector)
   }
 
-  override protected def beforePostWarmup() {
+  override protected def beforePostWarmup(): Unit = {
     super.beforePostWarmup()
 
     // trigger gc before accepting traffic
     prebindWarmup()
   }
 
-  override protected def postWarmup() {
+  override protected def postWarmup(): Unit = {
     super.postWarmup()
 
     if (disableAdminHttpServer) {
@@ -113,7 +112,7 @@ trait TwitterServer
    * After postWarmup, all external servers have been started, and we can now
    * enable our health endpoint
    */
-  override protected def afterPostWarmup() {
+  override protected def afterPostWarmup(): Unit = {
     super.afterPostWarmup()
     info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
     warmupComplete()

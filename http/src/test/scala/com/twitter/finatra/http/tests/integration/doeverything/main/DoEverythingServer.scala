@@ -48,6 +48,6 @@ class DoEverythingServer extends HttpServer {
   }
 
   override def warmup() {
-    run[DoEverythingWarmupHandler]()
+    handle[DoEverythingWarmupHandler]()
   }
 }

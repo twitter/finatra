@@ -4,14 +4,15 @@ import com.twitter.finatra.http.routing.HttpWarmup
 import com.twitter.finatra.httpclient.RequestBuilder._
 import com.twitter.inject.Logging
 import com.twitter.inject.utils.Handler
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
+@Singleton
 class DoEverythingWarmupHandler @Inject()(
   warmup: HttpWarmup)
   extends Handler
   with Logging {
 
-  override def handle() = {
+  override def handle(): Unit = {
     try {
       warmup.send(
         get("/ok"))

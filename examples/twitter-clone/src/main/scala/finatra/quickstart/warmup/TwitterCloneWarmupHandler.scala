@@ -6,7 +6,7 @@ import com.twitter.inject.utils.Handler
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TwitterCloneWarmup @Inject()(
+class TwitterCloneWarmupHandler @Inject()(
   httpWarmup: HttpWarmup)
   extends Handler {
 
