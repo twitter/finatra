@@ -180,7 +180,7 @@ lazy val finatraExamples =
     benchmarkServer,
     exampleInjectJavaServer,
     helloWorld,
-    //helloWorldHeroku, // 2.11 only
+    helloWorldHeroku,
     streamingExample,
     thriftExampleIdl,
     thriftExampleServer,

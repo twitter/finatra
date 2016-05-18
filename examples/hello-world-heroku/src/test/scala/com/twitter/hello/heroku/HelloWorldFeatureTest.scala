@@ -1,4 +1,4 @@
-package com.twitter.hello
+package com.twitter.hello.heroku
 
 import com.codahale.metrics.MetricFilter
 import com.twitter.finagle.http.Status._
