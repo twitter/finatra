@@ -38,6 +38,7 @@ import DoEverythingModule
 import ExampleController
 import ExampleFilter
 import MalformedURLExceptionMapper
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.{CommonFilters, ExceptionMappingFilter, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
@@ -54,7 +55,7 @@ class ExampleServer extends HttpServer {
       .filter[LoggingMDCFilter[Request, Response]]
       .filter[TraceIdMDCFilter[Request, Response]]
       .filter[CommonFilters]
-      .filter[ExceptionMappingFilter]
+      .filter[ExceptionMappingFilter[Request]]
       .add[ExampleFilter, ExampleController]
       .exceptionMapper[MalformedURLExceptionMapper]
   }
@@ -78,8 +79,8 @@ class ExampleServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router.
-      filter[AccessLoggingFilter].
-      filter[ExceptionMappingFilter].
+      filter[AccessLoggingFilter[Request]].
+      filter[ExceptionMappingFilter[Request]].
       add[ExampleFilter, ExampleController].
       exceptionMapper[MalformedURLExceptionMapper]
   }
