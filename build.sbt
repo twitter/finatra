@@ -5,7 +5,6 @@ import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
-lazy val aggregated = taskKey[Unit]("Print currently aggregated tasks under the root.")
 lazy val projectVersion = "2.2.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
@@ -134,15 +133,12 @@ lazy val slf4jSimpleTestDependency = Seq(
   )
 )
 
-lazy val injectBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ slf4jSimpleTestDependency ++ Seq(
-  organization := "com.twitter.inject"
+lazy val projectSettings = baseSettings ++ buildSettings ++ publishSettings ++ slf4jSimpleTestDependency ++ Seq(
+  organization := "com.twitter"
 )
 
-lazy val finatraBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ slf4jSimpleTestDependency ++ Seq(
-  organization := "com.twitter.finatra"
-)
-
-lazy val baseServerBuildSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
+lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
+  organization := "com.twitter",
   publishLocal := {},
   publish := {},
   assemblyMergeStrategy in assembly := {
@@ -151,13 +147,12 @@ lazy val baseServerBuildSettings = baseSettings ++ buildSettings ++ publishSetti
   }
 )
 
-lazy val exampleServerBuildSettings = baseServerBuildSettings ++ Seq(
-  organization := "com.twitter.finatra.example",
+lazy val exampleServerSettings = baseServerSettings ++ Seq(
   libraryDependencies ++= Seq(
     "ch.qos.logback" % "logback-classic" % versions.logback)
 )
 
-lazy val finatraModules = Seq(
+lazy val finatraModules = Seq[sbt.ProjectReference](
   benchmarks,
   http,
   httpclient,
@@ -176,7 +171,7 @@ lazy val finatraModules = Seq(
 
 lazy val finatraExamples =
   // START EXAMPLES
-  Seq(
+  Seq[sbt.ProjectReference](
     benchmarkServer,
     exampleInjectJavaServer,
     helloWorld,
@@ -206,7 +201,7 @@ lazy val root = (project in file(".")).
   settings(publishSettings).
   settings(unidocSettings).
   settings(
-    organization := "com.twitter.finatra",
+    organization := "com.twitter",
     moduleName := "finatra-root",
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
@@ -214,15 +209,12 @@ lazy val root = (project in file(".")).
       -- inProjects(benchmarkServer, exampleInjectJavaServer,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer,
-         tinyUrl, twitterClone),
+         tinyUrl, twitterClone)
       // END EXAMPLES
-    aggregated := {
-      println(aggregatedProjects.map(_.id).mkString("\n"))
-    }
-  ).aggregate(aggregatedProjects.map(x => x: ProjectReference): _*)
+  ).aggregate(aggregatedProjects: _*)
 
 lazy val injectCore = (project in file("inject/inject-core")).
-  settings(injectBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-core",
     moduleName := "inject-core",
@@ -257,7 +249,7 @@ lazy val injectCore = (project in file("inject/inject-core")).
   )
 
 lazy val injectModules = (project in file("inject/inject-modules")).
-  settings(injectBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-modules",
     moduleName := "inject-modules",
@@ -272,13 +264,12 @@ lazy val injectModules = (project in file("inject/inject-modules")).
         mappingContainsAnyPath(_,
           Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     injectCore % "test->test;compile->compile"
   )
 
 lazy val injectApp = (project in file("inject/inject-app")).
-  settings(injectBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-app",
     moduleName := "inject-app",
@@ -296,13 +287,12 @@ lazy val injectApp = (project in file("inject/inject-app")).
               "com/twitter/inject/app/StartupTimeoutException",
               "com/twitter/inject/app/TestInjector")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     injectCore % "test->test;compile->compile"
   )
 
 lazy val injectServer = (project in file("inject/inject-server")).
-  settings(injectBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-server",
     moduleName := "inject-server",
@@ -318,29 +308,27 @@ lazy val injectServer = (project in file("inject/inject-server")).
           Seq("com/twitter/inject/server/EmbeddedTwitterServer",
               "com/twitter/inject/server/FeatureTest")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
     injectUtils
   )
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
-  settings(injectBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-request-scope",
     moduleName := "inject-request-scope",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     injectCore % "test->test;compile->compile",
     injectApp % "test->test"
   )
 
 lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
-  settings(injectBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
@@ -351,8 +339,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
       "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.finagleVersion % "test->compile")
-  ).
-  dependsOn(
+  ).dependsOn(
     injectCore % "test->test;compile->compile",
     injectUtils,
     injectApp % "test->test",
@@ -361,38 +348,35 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
   )
 
 lazy val injectUtils = (project in file("inject/inject-utils")).
-  settings(injectBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-utils",
     moduleName := "inject-utils",
     libraryDependencies ++= Seq(
       "commons-lang" % "commons-lang" % versions.commonsLang
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     injectCore % "test->test;compile->compile"
   )
 
 // Can run in the SBT console in this project with `> run -wi 20 -i 10 -f 1 .*`.
 lazy val benchmarks = project.
-  settings(baseServerBuildSettings).
+  settings(baseServerSettings).
   settings(jmhSettings).
   settings(
     name := "finatra-benchmarks",
     moduleName := "finatra-benchmarks",
-    organization := "com.twitter.finatra",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % versions.slf4j
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     http,
     injectRequestScope,
     injectCore % "test->test"
   )
 
 lazy val utils = project.
-  settings(finatraBuildSettings).
+  settings(projectSettings).
   settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
@@ -414,8 +398,7 @@ lazy val utils = project.
           Seq("com/twitter/finatra/modules/",
               "com/twitter/finatra/test/")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test",
@@ -423,7 +406,7 @@ lazy val utils = project.
   )
 
 lazy val jackson = project.
-  settings(finatraBuildSettings).
+  settings(projectSettings).
   settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
@@ -442,14 +425,13 @@ lazy val jackson = project.
         mappingContainsAnyPath(_,
           Seq("com/twitter/finatra/json/JsonDiff")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     injectApp % "test->test",
     utils
   )
 
 lazy val http = project.
-  settings(finatraBuildSettings).
+  settings(projectSettings).
   settings(
     name := "finatra-http",
     moduleName := "finatra-http",
@@ -473,8 +455,7 @@ lazy val http = project.
               "com/twitter/finatra/http/HttpTest",
               "com/twitter/finatra/http/StreaminJsonTestHelper")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     jackson % "test->test;compile->compile",
     injectRequestScope,
     injectServer % "test->test;compile->compile",
@@ -483,7 +464,7 @@ lazy val http = project.
   )
 
 lazy val httpclient = project.
-  settings(finatraBuildSettings).
+  settings(projectSettings).
   settings(
     name := "finatra-httpclient",
     moduleName := "finatra-httpclient",
@@ -497,15 +478,14 @@ lazy val httpclient = project.
         mappingContainsAnyPath(_,
           Seq("com/twitter/finatra/httpclient/test/")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     jackson,
     utils % "test->test",
     injectApp % "test->test"
   )
 
 lazy val slf4j = project.
-  settings(finatraBuildSettings).
+  settings(projectSettings).
   settings(
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
@@ -515,13 +495,12 @@ lazy val slf4j = project.
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     injectCore % "test->test;compile->compile"
   )
 
 lazy val thrift = project.
-  settings(finatraBuildSettings).
+  settings(projectSettings).
   settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
@@ -542,22 +521,20 @@ lazy val thrift = project.
               "com/twitter/finatra/thrift/ThriftClient",
               "com/twitter/finatra/thrift/ThriftTest")))
     }
-  ).
-  dependsOn(
+  ).dependsOn(
     injectServer % "test->test;compile->compile",
     utils,
     slf4j
   )
 
 lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper")).
-  settings(finatraBuildSettings).
+  settings(projectSettings).
   settings(
     name := "inject-thrift-client-http-mapper",
     moduleName := "inject-thrift-client-http-mapper",
     scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
     excludeFilter in Test in unmanagedResources := "BUILD"
-  ).
-  dependsOn(
+  ).dependsOn(
     http % "test->test;compile->compile",
     injectCore,
     injectThriftClient % "test->test;compile->compile",
@@ -569,62 +546,51 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
 // START EXAMPLES
 
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "hello-world-heroku",
     moduleName := "hello-world-heroku",
     libraryDependencies ++= Seq(
       "com.github.rlazoti" %% "finagle-metrics" % "0.0.2"
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     http % "test->test;compile->compile",
     slf4j,
     injectCore % "test->test"
   )
 
 lazy val helloWorld = (project in file("examples/hello-world")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "hello-world",
-    moduleName := "hello-world",
-    libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback
-    )
-  ).
-  dependsOn(
+    moduleName := "hello-world"
+  ).dependsOn(
     http % "test->test;compile->compile",
     slf4j,
     injectCore % "test->test"
   )
 
 lazy val streamingExample = (project in file("examples/streaming-example")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "streaming-example",
     moduleName := "streaming-example",
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback,
       "com.twitter" % "joauth" % "6.0.2"
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     http % "test->test;compile->compile",
     slf4j,
     injectCore % "test->test"
   )
 
 lazy val twitterClone = (project in file("examples/twitter-clone")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "twitter-clone",
     moduleName := "twitter-clone",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*",
-    libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % versions.logback
-    )
-  ).
-  dependsOn(
+    ScoverageKeys.coverageExcludedPackages := "<empty>;finatra\\.quickstart\\..*"
+  ).dependsOn(
     http % "test->test;compile->compile",
     httpclient,
     slf4j,
@@ -632,13 +598,11 @@ lazy val twitterClone = (project in file("examples/twitter-clone")).
   )
 
 lazy val benchmarkServer = (project in file("examples/benchmark-server")).
-  settings(baseServerBuildSettings).
+  settings(baseServerSettings).
   settings(
     name := "benchmark-server",
-    moduleName := "benchmark-server",
-    organization := "com.twitter.finatra.example"
-  ).
-  dependsOn(
+    moduleName := "benchmark-server"
+  ).dependsOn(
     http % "test->test;compile->compile",
     httpclient,
     slf4j,
@@ -646,15 +610,14 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server")).
   )
 
 lazy val tinyUrl = (project in file("examples/tiny-url")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "tiny-url",
     moduleName := "tiny-url",
     libraryDependencies ++= Seq(
       "redis.clients" % "jedis" % "2.7.2"
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     http % "test->test;compile->compile",
     httpclient,
     slf4j,
@@ -662,15 +625,14 @@ lazy val tinyUrl = (project in file("examples/tiny-url")).
   )
 
 lazy val exampleInjectJavaServer = (project in file("examples/java-server")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "java-server",
     moduleName := "java-server",
     libraryDependencies ++= Seq(
       "com.novocode" % "junit-interface" % "0.11" % Test
     )
-  ).
-  dependsOn(
+  ).dependsOn(
     slf4j,
     injectServer % "test->test;compile->compile",
     injectCore % "test->test",
@@ -678,17 +640,16 @@ lazy val exampleInjectJavaServer = (project in file("examples/java-server")).
   )
 
 lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-example-idl")).
-  settings(baseServerBuildSettings).
+  settings(baseServerSettings).
   settings(
     name := "thrift-example-idl",
     moduleName := "thrift-example-idl",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
     scroogeThriftIncludeFolders in Compile := Seq(file("thrift/src/main/thrift"))
-  ).
-  dependsOn(thrift)
+  ).dependsOn(thrift)
 
 lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-example-server")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
@@ -696,8 +657,7 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
     scroogeThriftIncludeFolders in Compile := Seq(
       file("thrift/src/main/thrift"),
       file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
-  ).
-  dependsOn(
+  ).dependsOn(
     thriftExampleIdl,
     slf4j,
     thrift % "test->test;compile->compile",

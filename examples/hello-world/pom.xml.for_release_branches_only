@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.twitter.finatra.example</groupId>
+  <groupId>com.twitter</groupId>
   <artifactId>hello-world</artifactId>
   <version>2.2.0-SNAPSHOT</version>
 
@@ -28,7 +28,7 @@
 
     <!-- Finatra -->
     <dependency>
-      <groupId>com.twitter.finatra</groupId>
+      <groupId>com.twitter</groupId>
       <artifactId>finatra-http_2.11</artifactId>
       <version>${finatra.version}</version>
     </dependency>
@@ -37,7 +37,7 @@
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
-      <version>1.0.13</version>
+      <version>1.1.7</version>
     </dependency>
 
     <!-- Test Deps -->
@@ -48,35 +48,35 @@
       <version>4.0</version>
     </dependency>
     <dependency>
-      <groupId>com.twitter.finatra</groupId>
+      <groupId>com.twitter</groupId>
       <artifactId>finatra-http_2.11</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>${finatra.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.twitter.inject</groupId>
+      <groupId>com.twitter</groupId>
       <artifactId>inject-core_2.11</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>${finatra.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.twitter.inject</groupId>
+      <groupId>com.twitter</groupId>
       <artifactId>inject-modules_2.11</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>${finatra.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.twitter.inject</groupId>
+      <groupId>com.twitter</groupId>
       <artifactId>inject-app_2.11</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>${finatra.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.twitter.inject</groupId>
+      <groupId>com.twitter</groupId>
       <artifactId>inject-server_2.11</artifactId>
       <scope>test</scope>
       <type>test-jar</type>

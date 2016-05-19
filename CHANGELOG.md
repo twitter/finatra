@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Publish all artifacts under com.twitter organization. ``RB_ID=834484``
 * finatra: Update sbt memory settings. ``RB_ID=834571``
 * inject-server: Rename com.twitter.inject.server.TwitterServer#run to com.twitter.inject.server.TwitterServer#handle. ``RB_ID=833965``
 * finatra-http: Move test utilities in `com.twitter.finatra.http.test.*` to `com.twitter.finatra.http.*`. ``RB_ID=833170``
