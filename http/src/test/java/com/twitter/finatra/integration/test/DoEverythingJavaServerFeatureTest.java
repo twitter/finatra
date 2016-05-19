@@ -71,6 +71,21 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
         assertMethod(Methods.OPTIONS);
     }
 
+    @Test
+    public void testQueryEndpoint() {
+        Request request = RequestBuilder.get("/query?q=FooBar");
+        Response response = server.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals(
+                "{\"query\":\"FooBar\","
+                    + "\"numResults\":\"5\","
+                    + "\"results\":"
+                    +     "{\"a\":\"1\",\"b\":\"2\",\"c\":\"3\",\"d\":\"4\",\"e\":\"5\"},"
+                    + "\"user\":\"Bob\","
+                    + "\"timestamp\":\"Thu, 19 May 2016 00:00:00 +00:00\"}",
+                response.contentString());
+    }
+
     private void assertMethod(Method httpMethod) {
         String methodName = httpMethod.toString().toLowerCase();
         Request request = RequestBuilder.create(httpMethod, "/" + methodName);

@@ -19,6 +19,9 @@ public class DoEverythingJavaController extends JavaController {
 
         get("/goodbye", (Request request) -> new GoodbyeResponse("guest", "cya", 123));
 
+        get("/query", request ->
+            helloService.computeQueryResult(request.getParam("q")));
+
         post("/post",  (Request request) -> "post");
 
         put("/put",  (Request request) -> "put");

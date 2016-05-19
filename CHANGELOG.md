@@ -23,6 +23,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra: Fix to properly support Java controllers that return Futures in their route callbacks. ``RB_ID=834467``
+
 ### Closed
 
 ## [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6) (2016-04-26)

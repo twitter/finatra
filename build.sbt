@@ -173,6 +173,7 @@ lazy val finatraExamples =
   // START EXAMPLES
   Seq[sbt.ProjectReference](
     benchmarkServer,
+    exampleHttpJavaServer,
     exampleInjectJavaServer,
     helloWorld,
     helloWorldHeroku,
@@ -206,7 +207,7 @@ lazy val root = (project in file(".")).
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
       // START EXAMPLES
-      -- inProjects(benchmarkServer, exampleInjectJavaServer,
+      -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer,
          tinyUrl, twitterClone)
@@ -616,6 +617,21 @@ lazy val tinyUrl = (project in file("examples/tiny-url")).
     moduleName := "tiny-url",
     libraryDependencies ++= Seq(
       "redis.clients" % "jedis" % "2.7.2"
+    )
+  ).dependsOn(
+    http % "test->test;compile->compile",
+    httpclient,
+    slf4j,
+    injectCore % "test->test"
+  )
+
+lazy val exampleHttpJavaServer = (project in file("examples/java-http-server")).
+  settings(exampleServerBuildSettings).
+  settings(
+    name := "java-http-server",
+    moduleName := "java-http-server",
+    libraryDependencies ++= Seq(
+      "com.novocode" % "junit-interface" % "0.11" % Test
     )
   ).dependsOn(
     http % "test->test;compile->compile",
