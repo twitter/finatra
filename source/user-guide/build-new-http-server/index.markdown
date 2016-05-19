@@ -87,7 +87,7 @@ class ExampleServer extends HttpServer {
 
 If your module is defined as a class, you would pass an instance of the class, e.g., `override def jacksonModule = new MyCustomJacksonModule`.
 
-#### <a class="anchor" name="server-configuration" href="#default-modules">Server Configuration</a>
+#### <a class="anchor" name="server-configuration" href="#server-configuration">Server Configuration</a>
 
 If you want to further configure the underlying [Finagle](https://github.com/twitter/finagle) server you can override `configureHttpServer` (or `configureHttpsServer`) in your Server and set additional configuration on or override the default configuration of your server. For example:
 

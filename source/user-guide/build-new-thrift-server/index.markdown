@@ -67,7 +67,7 @@ class ExampleServer extends ThriftServer {
 
 For a list of what flags can be set programmatically, please see the [ThriftServer](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala) class.
 
-#### <a class="anchor" name="server-configuration" href="#default-modules">Server Configuration</a>
+#### <a class="anchor" name="server-configuration" href="#server-configuration">Server Configuration</a>
 
 If you want to further configure the underlying [Finagle](https://github.com/twitter/finagle) server you can override `configureThriftServer` in your Server and set additional configuration on or override the default configuration of your server. For example:
 
