@@ -36,7 +36,7 @@ CMD="java -ea                     \
   -XX:MaxTenuringThreshold=0      \
   -XX:-EliminateAutoBox           \
   -Xms512M                        \
-  -Xmx768M                        \
+  -Xmx1280M                       \
   -server                         \
   -jar $sbtjar ${@:1}"
 
