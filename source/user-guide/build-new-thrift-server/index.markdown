@@ -74,6 +74,10 @@ If you want to further configure the underlying [Finagle](https://github.com/twi
 ```scala
 class ExampleServer extends ThriftServer {
 
+  override def configureThrift(router: ThriftRouter): Unit = {
+    ...
+  }
+
   override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
       .withMaxRequestSize(...)

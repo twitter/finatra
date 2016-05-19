@@ -94,6 +94,10 @@ If you want to further configure the underlying [Finagle](https://github.com/twi
 ```scala
 class ExampleServer extends HttpServer {
 
+  override def configureHttp(router: HttpRouter): Unit = {
+    ...
+  }
+
   override def configureHttpServer(server: Http.Server): Http.Server = {
     server
       .withMaxRequestSize(...)
