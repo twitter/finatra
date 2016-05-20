@@ -15,6 +15,8 @@ resolvers ++= Seq(
   "Twitter Maven" at "https://maven.twttr.com"
 )
 
+Revolver.settings
+
 assemblyMergeStrategy in assembly := {
   case "BUILD" => MergeStrategy.discard
   case other => MergeStrategy.defaultMergeStrategy(other)
