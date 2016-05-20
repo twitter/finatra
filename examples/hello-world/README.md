@@ -26,6 +26,10 @@ Run sbt from **this** project's directory, e.g.
 ```
 $ sbt run
 ```
+Or with [sbt-revolver](https://github.com/spray/sbt-revolver):
+```
+$ sbt "~re-start"
+```
 Or build and run a deployable jar:
 ```
 $ sbt assembly
