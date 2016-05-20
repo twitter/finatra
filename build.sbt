@@ -626,7 +626,7 @@ lazy val tinyUrl = (project in file("examples/tiny-url")).
   )
 
 lazy val exampleHttpJavaServer = (project in file("examples/java-http-server")).
-  settings(exampleServerBuildSettings).
+  settings(exampleServerSettings).
   settings(
     name := "java-http-server",
     moduleName := "java-http-server",
