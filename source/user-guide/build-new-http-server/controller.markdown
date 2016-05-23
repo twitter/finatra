@@ -233,12 +233,12 @@ Non-optional fields without default values are considered required. If a require
 The following field annotations specify where to parse a field out of the request
 
   * Request Fields:
-     * [`@RouteParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/IdAndNameRequest.scala)
-     * [`@QueryParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
-     * [`@FormParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/domain/FormPostRequest.scala)
-     * `@Header`
+     * [`@RouteParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala)
+     * [`@QueryParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
+     * [`@FormParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala)
+     * [`@Header`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala)
  * Other:
-     * `@RequestInject`: Injects the Finagle `http` Request or any Guice managed class into your case class
+     * [`@Inject`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala): Can be used to inject the underlying Finagle `http` Request or any Guice managed class into your case class.
 
 *Note: HTTP requests with a content-type of `application/json` will always have their body. This behavior can be disabled by annotating the `case class` with `@JsonIgnoreBody` leaving the raw request body accessible through `@RequestInject`.*
 
@@ -281,9 +281,9 @@ For more information and examples, see:
 - [`com.twitter.finatra.http.request.RequestUtils`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
 - [`com.twitter.finatra.http.fileupload.MultipartItem`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala)
 - [`com.twitter.finagle.http.Request#decodeBytes`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192)
-- [DoEverythingController](https://github.com/twitter/finatra/blob/develop/https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/main/controllers/DoEverythingController.scala#L530)
-- [DoEverythingServerFeatureTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L309)
-- [MultiParamsTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/request/MultiParamsTest.scala)
+- [DoEverythingController](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala#L568)
+- [DoEverythingServerFeatureTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L332)
+- [MultiParamsTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala)
 
 ## <a class="anchor" name="responses" href="#responses">Responses</a>
 ===============================
@@ -388,7 +388,7 @@ get("/") { request =>
 <div></div>
 
 ### Response Exceptions:
-Responses can be embedded inside exceptions with `.toException`. You can throw the exception to terminate control flow, or wrap it inside a `Future.exception` to return a failed `Future`. However, instead of directly returning error responses in this manner, a better convention is to handle application-specific exceptions in an [`ExceptionMapper`](#exception-mapper).
+Responses can be embedded inside exceptions with `.toException`. You can throw the exception to terminate control flow, or wrap it inside a `Future.exception` to return a failed `Future`. However, instead of directly returning error responses in this manner, a better convention is to handle application-specific exceptions in an [`ExceptionMapper`](/finatra/user-guide/build-new-http-server/exceptions.html).
 
 ```scala
 get("/NotFound") { request: Request =>

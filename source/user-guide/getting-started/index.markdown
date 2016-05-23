@@ -188,7 +188,7 @@ Finatra supports the use of [twitter/util](https://github.com/twitter/util) [Fla
 
 This type of configuration parameterization is generally preferred over hardcoding logic by a type of "*environment*" String within code. As such, flags are generally defined within a [Module](#module) to allow for scoping of reusable external configuration. In this way, flags can be used to aid in the construction of an instance to be provided to the object graph, e.g., a DatabaseConnection instance that use the database URL flag as an input. The module is then able to tell Guice how to provide this object when injected by defining an `@Provides` annotated method.
 
-In Finatra, we also provide a way to override the objects provided on the object graph through "override modules". See the "Override Modules" section in [testing](testing#override-modules).
+In Finatra, we also provide a way to override the objects provided on the object graph through "override modules". See the "Override Modules" section in [testing](/finatra/testing#override-modules).
 
 #### `@Flag` annotation
 Flag is a [binding annotation](#binding-annotations). This annotation allows flag values to be injected into classes (and provider methods), by using the `@Flag` annotation:

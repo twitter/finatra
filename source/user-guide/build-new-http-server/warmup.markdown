@@ -74,7 +74,7 @@ class ExampleServer extends HttpServer {
 
 Once again, the warmup handler is added *by type* allowing the framework to construct the instance.
 
-The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L119) lifecycle method is called before the server's external HTTP port(s) are bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`. See [here](/finatra/user-guide/getting-started#lifecycle) for more information on the lifecycle of a Finatra server.
+The [`com.twitter.inject.app.App#warmup`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L122) lifecycle method is called before the server's external HTTP port(s) are bound and thus before the TwitterServer [Lifecycle Management](http://twitter.github.io/twitter-server/Features.html#lifecycle-management) `/health` endpoint responds with `OK`. See [here](/finatra/user-guide/getting-started#lifecycle) for more information on the lifecycle of a Finatra server.
 
 ## <a class="anchor" name="more-information" href="#more-information">More information</a>
 ===============================

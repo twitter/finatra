@@ -45,7 +45,7 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-Simplistically, a server can be thought of as a collection of [controllers](#add-controller) composed with [filters](#add-filters). Additionally, a server can define what [modules](/finatra/user-guide/getting-started#modules) to use and how to [map exceptions](#exception-mapper).
+Simplistically, a server can be thought of as a collection of [controllers](/finatra/user-guide/build-new-http-server/controller.html) composed with [filters](/finatra/user-guide/build-new-http-server/filter.html). Additionally, a server can define what [modules](/finatra/user-guide/getting-started#modules) to use and how to [map exceptions](/finatra/user-guide/build-new-http-server/exceptions.html).
 
 The Finatra convention is to create a Scala [*object*](https://twitter.github.io/scala_school/basics2.html#object) with a name ending in "Main" that extends your server class. The server class can be used in testing as this allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM. The static object, e.g., `ExampleServerMain` would then be used when running the server in all other cases (i.e., in production or staging).
 
