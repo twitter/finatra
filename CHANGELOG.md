@@ -11,6 +11,29 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Removed deprecated ExceptionBarrierFilter. NOTE: The ExceptionBarrierFilter produced stats in the form:
+  "server/response/status/RESPONSE_CODE". Using the replacement StatsFilter (in combination with the
+  ExceptionMappingFilter) will produce more granular per-route stats. The comparable stats from the StatsFilter will be
+  in the form: "route/ROUTE_URI/HTTP_METHOD/status/RESPONSE_CODE" with an additional aggregated total
+  stat. ``RB_ID=836073`` E.g,
+  server/response/status/200: 5,
+  server/response/status/201: 5,
+  server/response/status/202: 5,
+  server/response/status/403: 5,
+
+  will now be:
+  route/bar_uri/GET/status/200: 5,
+  route/bar_uri/GET/status/2XX: 5,
+  route/bar_uri/GET/status/400: 5,
+  route/bar_uri/GET/status/401: 5,
+  route/bar_uri/GET/status/403: 5,
+  route/bar_uri/GET/status/4XX: 15,
+  route/foo_uri/POST/status/200: 5,
+  route/foo_uri/POST/status/2XX: 5,
+  route/foo_uri/POST/status/400: 5,
+  route/foo_uri/POST/status/401: 5,
+  route/foo_uri/POST/status/403: 5,
+  route/foo_uri/POST/status/4XX: 15,
 * finatra: Made implicit classes extend AnyVal for less runtime overhead. ``RB_ID=835972``
 * finatra: Publish all artifacts under com.twitter organization. ``RB_ID=834484``
 * finatra: Update sbt memory settings. ``RB_ID=834571``

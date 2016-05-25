@@ -10,8 +10,6 @@ import javax.inject.{Inject, Singleton}
  * Filter which converts exceptions into HTTP responses.
  *
  * NOTE: Should be as close to the start of the filter chain as possible.
- *
- * TODO (AF-302): Are we handling Fatal errors properly?
  */
 @Singleton
 class ExceptionMappingFilter[R <: Request] @Inject()(
@@ -21,9 +19,7 @@ class ExceptionMappingFilter[R <: Request] @Inject()(
   override def apply(request: R, service: Service[R, Response]) = {
     (try service(request) catch {
       case e: NoSuchMethodException =>
-        // Catch this instead of propagating it to the RootMonitor and then
-        // closing the connection.
-        // TODO (AF-302): for more comprehensive solution.
+        // Catch here instead of propagating it.
         Future.exception(e)
     }) handle { case e =>
       exceptionManager.toResponse(request, e)

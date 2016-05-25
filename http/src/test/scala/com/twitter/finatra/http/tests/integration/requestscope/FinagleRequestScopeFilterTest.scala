@@ -4,10 +4,9 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.conversions.time._
-import com.twitter.finatra.http.filters.ExceptionBarrierFilter
+import com.twitter.finatra.http.filters.ExceptionMappingFilter
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.finatra.utils.RetryPolicyUtils.constantRetry
 import com.twitter.finatra.utils.RetryUtils.retry
@@ -125,10 +124,10 @@ class PooledServer extends HttpServer {
   override def modules = Seq(TestUserRequestScopeFilterModule)
 
   override def configureHttp(router: HttpRouter) {
-    router.
-      filter[ExceptionBarrierFilter]. //Purposely using deprecated filter for test coverage
-      filter[FinagleRequestScopeFilter[Request, Response]].
-      filter[TestUserRequestScopeFilter].
-      add[FuturePooledController]
+    router
+      .filter[ExceptionMappingFilter[Request]]
+      .filter[FinagleRequestScopeFilter[Request, Response]]
+      .filter[TestUserRequestScopeFilter]
+      .add[FuturePooledController]
   }
 }

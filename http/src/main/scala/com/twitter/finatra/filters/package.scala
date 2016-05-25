@@ -9,9 +9,6 @@ package object filters {
   @deprecated("Use com.twitter.finatra.http.filters.CommonFilters", "")
   type CommonFilters = com.twitter.finatra.http.filters.CommonFilters
 
-  @deprecated("Use com.twitter.finatra.http.filters.ExceptionBarrierFilter", "")
-  type ExceptionBarrierFilter = com.twitter.finatra.http.filters.ExceptionBarrierFilter
-
   @deprecated("Use com.twitter.finatra.http.filters.ExceptionMappingFilter", "")
   type ExceptionMappingFilter = com.twitter.finatra.http.filters.ExceptionMappingFilter[Request]
 
