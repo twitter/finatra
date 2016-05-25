@@ -36,16 +36,16 @@ class StreamingServerFeatureTest extends FeatureTest {
 
   /* Response Implicit Utils */
 
-  implicit class RichResponse(response: Response) {
+  implicit class RichResponse(val self: Response) {
     def asyncStrings = {
-      AsyncStream.fromReader(response.reader) map { case Buf.Utf8(str) =>
+      AsyncStream.fromReader(self.reader) map { case Buf.Utf8(str) =>
         str
       }
     }
 
     def printAsyncStrings() = {
       Await.result(
-        response.asyncStrings map { "Read:\t" + _ } foreach println)
+        self.asyncStrings map { "Read:\t" + _ } foreach println)
     }
   }
 }

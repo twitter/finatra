@@ -5,16 +5,16 @@ import org.joda.time.Duration
 
 object duration {
 
-  implicit class RichDuration(duration: Duration) {
+  implicit class RichDuration(val self: Duration) extends AnyVal {
     def toTwitterDuration: TwitterDuration = {
       TwitterDuration.fromMilliseconds(
-        duration.getMillis)
+        self.getMillis)
     }
   }
 
-  implicit class RichTwitterDuration(duration: TwitterDuration) {
+  implicit class RichTwitterDuration(val self: TwitterDuration) extends AnyVal {
     def toJodaDuration: Duration = {
-      new Duration(duration.inMillis)
+      new Duration(self.inMillis)
     }
   }
 
