@@ -27,7 +27,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
-## [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6) (2016-04-26)
+## [v2.1.6](https://github.com/twitter/finatra/tree/finatra-2.1.6) (2016-04-26)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.1.5...finatra-2.1.6)
 
 ### Added
 
