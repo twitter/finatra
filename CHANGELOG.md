@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Remove deprecated package objects in com.twitter.finatra. Callers should be using code in
+  the com.twitter.finatra.http package. ``RB_ID=836194``
 * finatra-http: Removed deprecated ExceptionBarrierFilter. NOTE: The ExceptionBarrierFilter produced stats in the form:
   "server/response/status/RESPONSE_CODE". Using the replacement StatsFilter (in combination with the
   ExceptionMappingFilter) will produce more granular per-route stats. The comparable stats from the StatsFilter will be
@@ -35,6 +37,8 @@ All notable changes to this project will be documented in this file. Note that `
   route/foo_uri/POST/status/403: 5,
   route/foo_uri/POST/status/4XX: 15,
 * finatra: Made implicit classes extend AnyVal for less runtime overhead. ``RB_ID=835972``
+* finatra-http: Remove deprecated package objects in com.twitter.finatra. Callers should be using code in
+  the com.twitter.finatra.http package. ``RB_ID=836194``
 * finatra: Publish all artifacts under com.twitter organization. ``RB_ID=834484``
 * finatra: Update sbt memory settings. ``RB_ID=834571``
 * inject-server: Rename com.twitter.inject.server.TwitterServer#run to com.twitter.inject.server.TwitterServer#handle. ``RB_ID=833965``
