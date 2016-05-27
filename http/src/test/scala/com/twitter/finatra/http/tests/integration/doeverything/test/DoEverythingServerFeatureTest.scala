@@ -557,6 +557,15 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       e.getMessage() should include("requires a type-param")
     }
 
+    "put body with multi-byte characters" in {
+      val musicalNote = "\uD83C\uDFB5"
+      val body = s"${musicalNote} ${musicalNote}"
+      server.httpPut("/echo", body,
+        andExpect = Ok,
+        withBody = body
+      )
+    }
+
     "put to put" in {
       server.httpPut(
         "/put/123",
@@ -839,6 +848,15 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withErrors = Seq("name: field is required"))
     }
 
+    "POST body with multi-byte characters" in {
+      val musicalNote = "\uD83C\uDFB5"
+      val body = s"${musicalNote} ${musicalNote}"
+      server.httpPost("/echo", body,
+        andExpect = Ok,
+        withBody = body
+      )
+    }
+
     "POST json user with failed field validation" in {
       server.httpPost(
         "/users",
@@ -1019,6 +1037,15 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         patchBody = "asdf",
         andExpect = Ok,
         withBody = "patch")
+    }
+
+    "PATCH body with multi-byte characters" in {
+      val musicalNote = "\uD83C\uDFB5"
+      val body = s"${musicalNote} ${musicalNote}"
+      server.httpPatch("/echo", body,
+        andExpect = Ok,
+        withBody = body
+      )
     }
 
     "non guice controller" in {
