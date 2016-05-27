@@ -28,7 +28,7 @@ Also note that it is **an error** to attempt to set both the `-doc.root` and the
 
 Additionally, it is recommend to use local filesystem serving *only during testing* and **not in production**. It is recommended that you include files to be served as classpath resources in production.
 
-For changes from Finatra v1.x static files behavior see the [Static Files](https://github.com/twitter/finatra/blob/master/http/Version1MigrationGuide.md#v1-static-files) section in the [Version 1 Migration Guide](https://github.com/twitter/finatra/blob/master/http/Version1MigrationGuide.md).
+For changes from Finatra v1.x static files behavior see the [Static Files](/finatra/user-guide/v1-migration#v1-static-files) section in the [Version 1 Migration Guide](/finatra/user-guide/v1-migration).
 
 
 To set a flag value, pass the flag and it's value as a argument to your server:
@@ -55,7 +55,7 @@ get("/:*") { request: Request =>
 ## <a class="anchor" name="mustache" href="#mustache">Mustache Templating</a>
 ===============================
 
-Finatra supports the rendering of mustache templates. The framework provides a default [MustacheModule](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala) but this is configurable. To set your own module override the mustacheModule def in [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L63), e.g.,
+Finatra supports the rendering of mustache templates. The framework provides a default [MustacheModule](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala) but this is configurable. To set your own module override the mustacheModule def in [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L91), e.g.,
 
 ```scala
 class ExampleServer extends HttpServer {
@@ -90,7 +90,7 @@ get("/foo") { request: Request =>
 ```
 <div></div>
 
-The value of the `@Mustache` annotation is assumed by the [MustacheMessageBodyWriter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala) to be the template filename without the suffix (which is [assumed to be `.mustache`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala#L32)).
+The value of the `@Mustache` annotation is assumed by the [MustacheMessageBodyWriter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala) to be the template filename without the suffix (which the framework **always assumes** to be `.mustache`).
 
 Or you can manually create a response that explicitly references a template, e.g.,
 

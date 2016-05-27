@@ -11,7 +11,7 @@ footer: true
 ## Controllers
 You no longer need to return a `Future` from controller routes (however, always return a `Future` if you already have one).
 
-###Add Request type to controller callbacks
+### Add Request type to controller callbacks
 ```scala
 //v1
 get("/foo") { request =>
@@ -124,7 +124,7 @@ class Server extends HttpServer {
 }
 ```
 
-## <a name="v1-static-files">Static Files</a>
+## <a class="anchor" name="v1-static-files" href="#v1-static-files">Static Files</a>
 * Web resources (html/js) typically go in `src/main/webapp`.
 * Mustache templates now typically go in `src/main/resources/templates`.
 

@@ -14,7 +14,7 @@ footer: true
 ## Basics
 ===============================
 
-Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala) for JSON support. Note that the [finatra-jackson](https://github.com/FasterXML/jackson) library can be used outside of Finatra as a replacement for the [jackson-scala-module](https://github.com/FasterXML/jackson-module-scala) or [jerkson](https://github.com/codahale/jerkson).
+Finatra improves on the already excellent [jackson-module-scala](https://github.com/FasterXML/jackson-module-scala) for JSON support. Note that the [finatra-jackson](https://github.com/twitter/finatra/tree/develop/jackson) library can be used outside of Finatra as a replacement for the [jackson-scala-module](https://github.com/FasterXML/jackson-module-scala) or [jerkson](https://github.com/codahale/jerkson).
 
 ### Features
 
@@ -23,7 +23,7 @@ Finatra improves on the already excellent [jackson-module-scala](https://github.
 * [Guice module](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala) for injecting `FinatraObjectMapper` (with support for customization e.g. snake_case vs camelCase).
 * Custom [`case class` deserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module.
 * Support for `case class` validations which accumulate errors (without failing fast) during JSON parsing.
-* Integration with Finatra [HTTP routing](/finatra/user-guide/routing-json) to support binding and validation of query params, route params, and headers.
+* Integration with Finatra [HTTP routing](#routing-json) to support binding and validation of query params, route params, and headers.
 * Utils for comparing JSON in tests.
 * Experimental support for iterator-based JSON stream parsing.
 
@@ -34,8 +34,8 @@ The default configuration of Jackson is provided by the [`FinatraObjectMapper`](
 
 The following Jackson integrations are provided by default:
 
-* [Joda Module](https://github.com/FasterXML/jackson-datatype-joda/blob/develop/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java)
-* [Scala Module](https://github.com/FasterXML/jackson-module-scala/blob/develop/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java)
+* [Joda Module](https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java)
+* [Scala Module](https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java)
 * [LongKeyDeserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala): Allow deserializing maps with long keys.
 * [Wrapped Value Serializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala)
 * [Duration Millis Serializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/DurationMillisSerializer.scala)
@@ -70,7 +70,7 @@ object CustomJacksonModule extends FinatraJacksonModule {
 ```
 <div></div>
 
-## Improved `case class` deserializer
+## <a class="anchor" name="case-class-deserializer" href="#case-class-deserializer">Improved `case class` deserializer</a>
 ===============================
 
 Finatra provides a custom [`case class` deserializer](https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala) which overcomes limitations in jackson-scala-module:
@@ -128,20 +128,20 @@ case class Dates(
 ## <a class="anchor" name="validation-framework" href="#validation-framework">Validation Framework</a>
 ===============================
 
-We provide a simple validation framework inspired by [JSR-330](https://github.com/google/guice/wiki/JSR330). The validations framework integrates with the custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validations are included (and additional validations can be easily provided):
+We provide a simple validation framework inspired by [JSR-330](https://github.com/google/guice/wiki/JSR330). The validations framework integrates with the custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily provided):
 
-* CountryCode
-* FutureTime
-* PastTime
-* Max
-* Min
-* NotEmpty
-* OneOf
-* Range
-* Size
-* TimeGranularity
-* UUID
-* MethodValidation
+* `@CountryCode`
+* `@FutureTime`
+* `@PastTime`
+* `@Max`
+* `@Min`
+* `@NotEmpty`
+* `@OneOf`
+* `@Range`
+* `@Size`
+* `@TimeGranularity`
+* `@UUID`
+* `@MethodValidation`
 
 #### Method Validation
 
