@@ -134,6 +134,10 @@ class DoEverythingController @Inject()(
       Seq("user1", "user2"))
   }
 
+  post("/echo") { request: Request =>
+    response.ok(request.contentString)
+  }
+
   post("/formPostViewFromBuilderView") { formPost: FormPostRequest =>
     response.ok.view(
       "testuser2.mustache",
@@ -278,6 +282,10 @@ class DoEverythingController @Inject()(
 
   put("/postAndPut") { request: Request =>
     "PUT" + request.contentString
+  }
+
+  put("/echo") { request: Request =>
+    response.ok(request.contentString)
   }
 
   get("/testfile") { request: Request =>
@@ -471,6 +479,10 @@ class DoEverythingController @Inject()(
 
   patch("/patch") { r: Request =>
     "patch"
+  }
+
+  patch("/echo") { request: Request =>
+    response.ok(request.contentString)
   }
 
   get("/HttpResponseException") { r: Request =>

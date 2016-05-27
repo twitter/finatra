@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Set Content-Length correctly in EmbeddedHttpServer, to support multi-byte characters
+  in the request body. ``RB_ID=837438``
 * finatra-http: No longer special-case NoSuchMethodException in the ExceptionMappingFilter. ``RB_ID=837369``
 * finatra-http: Remove deprecated package objects in com.twitter.finatra. Callers should be using code in
   the com.twitter.finatra.http package. ``RB_ID=836194``
