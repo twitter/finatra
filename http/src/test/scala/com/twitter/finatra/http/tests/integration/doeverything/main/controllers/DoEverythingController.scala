@@ -5,13 +5,13 @@ import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
 import com.twitter.finatra.annotations.{CamelCaseMapper, Flag}
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
+import com.twitter.finatra.http.marshalling.mustache.MustacheService
+import com.twitter.finatra.http.request.RequestUtils
+import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.ForbiddenFilter
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
-import com.twitter.finatra.http.marshalling.mustache.MustacheService
-import com.twitter.finatra.http.request.RequestUtils
-import com.twitter.finatra.http.response._
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.util.Future
@@ -102,6 +102,10 @@ class DoEverythingController @Inject()(
   get("/routeParamGetAll/:id") { request: Request =>
     assert(request.params.isValid)
     request.params("id") +: request.params.getAll("id").toSeq
+  }
+
+  get("/column/:key//:*") { request: Request =>
+    s"${request.params("key")}/${request.params("*")}"
   }
 
   post("/foo") { request: Request =>

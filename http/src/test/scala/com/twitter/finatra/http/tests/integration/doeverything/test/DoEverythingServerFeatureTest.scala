@@ -6,9 +6,9 @@ import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{FileElement, Method, Request}
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
-import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
@@ -1138,6 +1138,13 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         "/anyMethod",
         deleteBody = "",
         andExpect = MethodNotAllowed)
+    }
+
+    "GET /column/:key//:*" in {
+      server.httpGet(
+        "/column/foo//bar?baz=quux",
+        andExpect = Ok,
+        withBody = "foo/bar")
     }
   }
 
