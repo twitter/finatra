@@ -89,7 +89,7 @@ class ExampleServer extends ThriftServer {
   }
 
   override def warmup() {
-    run[ExampleThriftWarmupHandler]()
+    handle[ExampleThriftWarmupHandler]()
   }
 }
 ```

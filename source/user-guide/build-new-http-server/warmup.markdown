@@ -66,7 +66,7 @@ class ExampleServer extends HttpServer {
   }
 
   override def warmup() {
-    run[ExampleWarmupHandler]()
+    handle[ExampleWarmupHandler]()
   }
 }
 ```
