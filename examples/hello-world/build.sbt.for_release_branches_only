@@ -20,6 +20,8 @@ assemblyMergeStrategy in assembly := {
   case other => MergeStrategy.defaultMergeStrategy(other)
 }
 
+Revolver.settings
+
 libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,
   "com.twitter" %% "finatra-httpclient" % versions.finatra,
