@@ -11,7 +11,7 @@ For more detailed information see the README.md within each example project.
 A test server that provides benchmarking for key Finatra features.
 
 ### [hello-world](hello-world/README.md)
-An example [Finatra][finatra] application that highlights features of the [finatra-http](https://github.com/twitter/finatra/tree/master/http) framework.
+An example [Finatra][finatra] application that highlights features of the [finatra-http](https://github.com/twitter/finatra/tree/develop/http) framework.
 
 ### [java-server](java-server/README.md)
 An example [Finatra][finatra] application written in Java.
@@ -20,7 +20,7 @@ An example [Finatra][finatra] application written in Java.
 An advanced example that creates a Twitter Clone application demonstrating many [Finatra][finatra] features.
 
 ### [hello-world-heroku](hello-world-heroku/README.md)
-An example [Finatra][finatra] application that highlights features of the [finatra-http](https://github.com/twitter/finatra/tree/master/http) framework that is deployable to [Heroku](https://heroku.com).
+An example [Finatra][finatra] application that highlights features of the [finatra-http](https://github.com/twitter/finatra/tree/develop/http) framework that is deployable to [Heroku](https://heroku.com).
 
 ### [streaming-example](streaming-example/README.md)
 A proof-of-concept streaming JSON service.

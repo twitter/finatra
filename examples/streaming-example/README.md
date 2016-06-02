@@ -9,20 +9,20 @@ Run sbt from the top-level Finatra directory, e.g.
 $ cd ../../
 $ sbt streamingExample/run
 ```
-* Then browse the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
+* Then browse the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
 $ sbt streamingExample/assembly
 $ java -jar examples/streaming-example/target/scala-2.11/finatra-benchmark-server-assembly-2.x.x-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
 ```
 
-If you're in a tagged release branch (e.g. [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6))
+If you're in a tagged release branch (e.g. [v2.1.6](https://github.com/twitter/finatra/tree/finatra-2.1.6))
 ----------------------------------------------------------
 Run sbt from **this** project's directory, e.g.
 ```
 $ sbt run
 ```
-* Then browse to the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
+* Then browse to the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 Or build and run a deployable jar:
 ```
 $ sbt assembly
