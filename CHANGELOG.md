@@ -54,9 +54,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-examples: Add sbt-revolver to the hello-world example. Fixes [GH-209](https://github.com/twitter/finatra/issues/209). ``RB_ID=838215``
 * finatra: Fix to properly support Java controllers that return Futures in their route callbacks. ``RB_ID=834467``
 
 ### Closed
+
+* [PR-273](https://github.com/twitter/finatra/pull/273). ``RB_ID=838215``
+* [PR-324](https://github.com/twitter/finatra/pull/324). ``RB_ID=838215``
 
 ## [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6) (2016-04-26)
 

@@ -26,6 +26,15 @@ Run sbt from **this** project's directory, e.g.
 ```
 $ sbt run
 ```
+Or with [sbt-revolver](https://github.com/spray/sbt-revolver):
+```
+$ sbt "~re-start"
+```
+Which is "triggered restart" mode via the sbt-revolver plugin. Your application starts up and sbt watches for changes in your source (or resource) files.
+If a change is detected sbt re-compiles the required classes and the sbt-revolver plugin automatically restarts your application.
+When you press <ENTER> sbt leaves "triggered restart" mode and returns to the normal prompt keeping your application running.
+For more information on "triggered restart" mode see the sbt-revolver documentation [here](https://github.com/spray/sbt-revolver/blob/master/README.md#triggered-restart).
+
 Or build and run a deployable jar:
 ```
 $ sbt assembly
