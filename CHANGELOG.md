@@ -62,7 +62,9 @@ All notable changes to this project will be documented in this file. Note that `
 * [PR-273](https://github.com/twitter/finatra/pull/273). ``RB_ID=838215``
 * [PR-324](https://github.com/twitter/finatra/pull/324). ``RB_ID=838215``
 
-## [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6) (2016-04-26)
+## [finatra-2.1.6](https://github.com/twitter/finatra/tree/finatra-2.1.6) (2016-04-26)
+
+[Full Changelog](https://github.com/twitter/finatra/compare/v2.1.5...finatra-2.1.6)
 
 ### Added
 
