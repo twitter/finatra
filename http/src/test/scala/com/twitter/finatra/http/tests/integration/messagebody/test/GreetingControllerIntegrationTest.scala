@@ -11,7 +11,7 @@ class GreetingControllerIntegrationTest extends FeatureTest {
   override val server = new EmbeddedHttpServer(
     new GreetingServer,
     defaultRequestHeaders = Map(),
-    clientFlags = Map())
+    flags = Map())
 
   val requestPath = "/greet?name=Bob"
 

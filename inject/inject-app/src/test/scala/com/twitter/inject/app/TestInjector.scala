@@ -14,15 +14,15 @@ object TestInjector {
   }
 
   def apply(
-    clientFlags: Map[String, String] = Map(),
+    flags: Map[String, String] = Map(),
     modules: Seq[Module],
     overrideModules: Seq[Module] = Seq(),
     stage: Stage = Stage.DEVELOPMENT): Injector = {
 
     val moduleFlags = InstalledModules.findModuleFlags(modules ++ overrideModules)
 
-    parseClientFlags(
-      clientFlags,
+    parseFlags(
+      flags,
       moduleFlags)
 
     InstalledModules.create(
@@ -35,29 +35,29 @@ object TestInjector {
   /* Private */
 
   /*
-   * First we try to parse module flags with client provided flags. If a
+   * First we try to parse module flags with the provided set flags. If a
    * module flag isn't found, we set a system property which allows us to
    * set GlobalFlags (e.g. resolverMap) that aren't found in modules.
    * Note: We originally tried classpath scanning for the GlobalFlags using the Flags class,
    * but this added many seconds to each test and also regularly ran out of perm gen...
    */
-  private def parseClientFlags(clientFlags: Map[String, String], moduleFlags: Seq[Flag[_]]) {
+  private def parseFlags(flags: Map[String, String], moduleFlags: Seq[Flag[_]]) {
     val moduleFlagsMap = moduleFlags groupBy {_.name} mapValues {_.head}
 
-    /* Parse module flags with client supplied flag values */
+    /* Parse module flags with incoming supplied flag values */
     for (moduleFlag <- moduleFlags) {
-      clientFlags.get(moduleFlag.name) match {
-        case Some(clientFlagValue) => moduleFlag.parse(clientFlagValue)
+      flags.get(moduleFlag.name) match {
+        case Some(setFlagValue) => moduleFlag.parse(setFlagValue)
         case _ => moduleFlag.parse()
       }
     }
 
-    /* Set system property for clientFlags not found in moduleFlags */
+    /* Set system property for flags not found in moduleFlags */
     for {
-      (clientFlagName, clientFlagValue) <- clientFlags
-      if !moduleFlagsMap.contains(clientFlagName)
+      (setFlagName, setFlagValue) <- flags
+      if !moduleFlagsMap.contains(setFlagName)
     } {
-      System.setProperty(clientFlagName, clientFlagValue)
+      System.setProperty(setFlagName, setFlagValue)
     }
   }
 }

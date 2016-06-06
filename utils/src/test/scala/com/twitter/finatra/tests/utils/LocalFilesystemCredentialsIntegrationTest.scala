@@ -36,7 +36,7 @@ class LocalFilesystemCredentialsIntegrationTest extends IntegrationTest {
 
   override def injector =
     TestInjector(
-      clientFlags = Map("credentials.file.path" -> s"${BaseDirectory}keys/finatra/credentials.yml"),
+      flags = Map("credentials.file.path" -> s"${BaseDirectory}keys/finatra/credentials.yml"),
       modules = Seq(CredentialsModule))
 
   "Credentials Module" should {

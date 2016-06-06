@@ -21,7 +21,7 @@ class TwitterCloneExternalTest extends Test {
 
   val server = new EmbeddedHttpServer(
     new TwitterCloneServer,
-    clientFlags = Map(
+    flags = Map(
       "firebase.host" -> "finatra.firebaseio.com",
       "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"))
 

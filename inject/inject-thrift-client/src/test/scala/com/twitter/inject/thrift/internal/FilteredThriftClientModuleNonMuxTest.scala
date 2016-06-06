@@ -14,7 +14,7 @@ class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
 
   override val injector = TestInjector(
     modules = Seq(FilteredThriftClientModuleNonMux, ThriftClientIdModule, StatsReceiverModule, InjectorModule),
-    clientFlags = Map("com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!"))
+    flags = Map("com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!"))
 
   @Inject
   var greeter: Greeter[Future] = _

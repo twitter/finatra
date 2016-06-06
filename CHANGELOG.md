@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Renamed Embedded testing utilities constructor args, clientFlags --> flags and extraArgs --> args. ``RB_ID=839537``
 * finatra-http: Set Content-Length correctly in EmbeddedHttpServer, to support multi-byte characters
   in the request body. ``RB_ID=837438``
 * finatra-http: No longer special-case NoSuchMethodException in the ExceptionMappingFilter. ``RB_ID=837369``

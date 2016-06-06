@@ -16,8 +16,8 @@ trait FeatureTest extends Test with IntegrationTest {
         "an override module.")
     }
 
-    assert(app.isGuiceApp)
-    app.guiceApp.addFrameworkOverrideModules(integrationTestModule)
+    assert(app.isInjectableApp)
+    app.injectableApp.addFrameworkOverrideModules(integrationTestModule)
     super.beforeAll()
   }
 

@@ -10,8 +10,8 @@ import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftTest}
 class MultiServerFeatureTest extends HttpTest with ThriftTest {
 
   val add1ThriftServer = new EmbeddedThriftServer(new AdderThriftServer)
-  val add1HttpServer = new EmbeddedHttpServer(new Add1Server, clientFlags = Map(resolverMap("adder-thrift-server", add1ThriftServer)))
-  val add2Server = new EmbeddedHttpServer(new Add2Server, clientFlags = Map(resolverMap("add1-http-server", add1HttpServer)))
+  val add1HttpServer = new EmbeddedHttpServer(new Add1Server, flags = Map(resolverMap("adder-thrift-server", add1ThriftServer)))
+  val add2Server = new EmbeddedHttpServer(new Add2Server, flags = Map(resolverMap("add1-http-server", add1HttpServer)))
 
   "add2" in {
     add2Server.httpGet(

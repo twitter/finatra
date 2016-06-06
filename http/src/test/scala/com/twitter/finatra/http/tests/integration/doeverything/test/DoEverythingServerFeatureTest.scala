@@ -19,7 +19,7 @@ import org.scalatest.exceptions.TestFailedException
 class DoEverythingServerFeatureTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(
-    extraArgs = Array("-magicNum=1", "-moduleMagicNum=2"),
+    args = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer)
 
   val doEverythingService = server.injector.instance[DoEverythingService]

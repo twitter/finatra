@@ -22,46 +22,47 @@ import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang.reflect.FieldUtils
 
 object EmbeddedTwitterServer {
-  private def resolveClientFlags(useSocksProxy: Boolean, clientFlags: Map[String, String]) = {
+  private def resolveFlags(useSocksProxy: Boolean, flags: Map[String, String]) = {
     if (useSocksProxy) {
-      clientFlags ++ Map(
+      flags ++ Map(
         "com.twitter.server.resolverZkHosts" -> PortUtils.loopbackAddressForPort(2181),
         "com.twitter.finagle.socks.socksProxyHost" -> PortUtils.loopbackAddress,
         "com.twitter.finagle.socks.socksProxyPort" -> "50001")
     }
     else {
-      clientFlags
+      flags
     }
   }
 }
 
 /**
- * EmbeddedTwitterServer allows a twitter-server serving http or thrift endpoints to be started
- * locally (on ephemeral ports), and tested through it's http/thrift interfaces.
+ * EmbeddedTwitterServer allows a [[com.twitter.server.TwitterServer]] serving http or thrift endpoints to be started
+ * locally (on ephemeral ports) and tested through it's http/thrift interfaces.
  *
- * Note: All initialization fields are lazy to aid running multiple tests inside Intellij at the same time
- * since Intellij "pre-constructs" ALL the tests before running each one.
+ * Note: All initialization fields are lazy to aid running multiple tests inside an IDE at the same time
+ * since IDEs typically "pre-construct" ALL the tests before running each one.
  *
- * @param twitterServer The twitter server to be started locally for integration testing
- * @param clientFlags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar)
- * @param extraArgs Extra command line arguments
- * @param waitForWarmup Once the app is started, wait for App warmup to be completed
- * @param stage Guice Stage used to create the server's injector. Since EmbeddedTwitterServer is used for testing, we default to Stage.DEVELOPMENT.
- *              This makes it possible to only mock objects that are used in a given test, at the expense of not checking that the entire
- *              object graph is valid. As such, you should always have at lease one Stage.PRODUCTION test for your service (which eagerly
- *              creates all Guice classes at startup)
- * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external integration tests that connect to external services)
- * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
+ * @param twitterServer The [[com.twitter.server.TwitterServer]] to be started for testing.
+ * @param flags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar). See: [[com.twitter.app.Flag]].
+ * @param args Extra command line arguments.
+ * @param waitForWarmup Once the server is started, wait for server warmup to be completed
+ * @param stage [[com.google.inject.Stage]] used to create the server's injector. Since EmbeddedTwitterServer is used for testing,
+ *              we default to Stage.DEVELOPMENT. This makes it possible to only mock objects that are used in a given test,
+ *              at the expense of not checking that the entire object graph is valid. As such, you should always have at
+ *              least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup)
+ * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external
+ *                      integration tests that connect to external services).
  * @param defaultRequestHeaders Headers to always send to the embedded server.
  * @param streamResponse Toggle to not unwrap response content body to allow caller to stream response.
- * @param verbose Enable verbose logging during test runs
- * @param disableTestLogging Disable all logging emitted from the test infrastructure
- * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded an Exception is thrown.
+ * @param verbose Enable verbose logging during test runs.
+ * @param disableTestLogging Disable all logging emitted from the test infrastructure.
+ * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded a
+ *                              [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
-  clientFlags: Map[String, String] = Map(),
-  extraArgs: Seq[String] = Seq(),
+  flags: Map[String, String] = Map(),
+  args: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,
@@ -73,9 +74,9 @@ class EmbeddedTwitterServer(
   maxStartupTimeSeconds: Int = 60)
   extends EmbeddedApp(
     app = twitterServer,
-    clientFlags = resolveClientFlags(useSocksProxy, clientFlags),
+    flags = resolveFlags(useSocksProxy, flags),
     resolverMap = Map(),
-    extraArgs = extraArgs,
+    args = args,
     waitForWarmup = waitForWarmup,
     skipAppMain = skipAppMain,
     stage = stage,
@@ -84,6 +85,7 @@ class EmbeddedTwitterServer(
     maxStartupTimeSeconds = maxStartupTimeSeconds) {
 
   /* Additional Constructors */
+
   def this(twitterServer: Ports) = {
     this(twitterServer, stage = Stage.PRODUCTION)
   }
@@ -91,8 +93,8 @@ class EmbeddedTwitterServer(
   /* Main Constructor */
 
   // Add framework override modules
-  if (isGuiceApp) {
-    guiceApp.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
+  if (isInjectableApp) {
+    injectableApp.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
   }
 
   /* Lazy Fields */
@@ -104,23 +106,23 @@ class EmbeddedTwitterServer(
       httpAdminPort)
   }
 
-  lazy val statsReceiver = if (isGuiceApp) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
+  lazy val statsReceiver = if (isInjectableApp) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
   lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(httpAdminPort)
-  lazy val isGuiceTwitterServer = twitterServer.isInstanceOf[App]
+  lazy val isInjectableTwitterServer = twitterServer.isInstanceOf[App]
 
   /* Overrides */
 
-  override protected def nonGuiceAppStarted(): Boolean = {
+  override protected def nonInjectableAppStarted(): Boolean = {
     isHealthy
   }
 
   override protected def logAppStartup() {
-    infoBanner("Server Started: " + appName)
+    infoBanner("Server Started: " + name)
     info(s"AdminHttp      -> http://$adminHostAndPort/admin")
   }
 
-  override protected def updateClientFlags(map: Map[String, String]) = {
+  override protected def updateFlags(map: Map[String, String]) = {
     if (!verbose)
       map + ("log.level" -> "WARNING")
     else
@@ -141,7 +143,7 @@ class EmbeddedTwitterServer(
 
   /* Public */
 
-  def assertHealthy(healthy: Boolean = true) {
+  def assertHealthy(healthy: Boolean = true): Unit = {
     healthResponse(healthy).get()
   }
 
@@ -150,7 +152,7 @@ class EmbeddedTwitterServer(
       healthResponse(shouldBeHealthy = true).isReturn
   }
 
-  def httpAdminPort = {
+  def httpAdminPort: Int = {
     getPort(twitterServer.adminBoundAddress)
   }
 
@@ -159,7 +161,7 @@ class EmbeddedTwitterServer(
     allRoutesField.get(twitterServer).asInstanceOf[Seq[AdminHttpServer.Route]]
   }
 
-  def clearStats() = {
+  def clearStats(): Unit = {
     inMemoryStatsReceiver.counters.clear()
     inMemoryStatsReceiver.stats.clear()
     inMemoryStatsReceiver.gauges.clear()
@@ -169,8 +171,8 @@ class EmbeddedTwitterServer(
   def countersMap = inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap
   def gaugeMap = inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap
 
-  def printStats(includeGauges: Boolean = true) {
-    infoBanner(appName + " Stats")
+  def printStats(includeGauges: Boolean = true): Unit = {
+    infoBanner(name + " Stats")
     for ((key, values) <- statsMap) {
       val avg = values.sum / values.size
       val valuesStr = values.mkString("[", ", ", "]")
@@ -190,10 +192,10 @@ class EmbeddedTwitterServer(
     }
   }
 
-  def assertAppStarted(started: Boolean = true) {
-    assert(isGuiceApp)
+  def assertAppStarted(started: Boolean = true): Unit = {
+    assert(isInjectableApp)
     start()
-    guiceApp.appStarted should be(started)
+    injectableApp.started should be(started)
   }
 
   private def keyStr(keys: Seq[String]): String = {
@@ -331,7 +333,7 @@ class EmbeddedTwitterServer(
     info(response.contentString + "\n")
   }
 
-  protected def createApiRequest(path: String, method: Method = Method.Get) = {
+  protected def createApiRequest(path: String, method: Method = Method.Get): Request = {
     val pathToUse = if (path.startsWith("http"))
       URI.create(path).getPath
     else
@@ -342,7 +344,7 @@ class EmbeddedTwitterServer(
 
   /* Private */
 
-  private def receivedResponseStr(response: Response) = {
+  private def receivedResponseStr(response: Response): String = {
     "\n\nReceived Response:\n" + response.encodeString()
   }
 
@@ -361,7 +363,7 @@ class EmbeddedTwitterServer(
     }
   }
 
-  private def printRequest(request: Request, suppress: Boolean) {
+  private def printRequest(request: Request, suppress: Boolean): Unit = {
     if (!suppress) {
       val headers = request.headerMap.mkString(
         "[Header]\t",
@@ -377,7 +379,7 @@ class EmbeddedTwitterServer(
     }
   }
 
-  private def printResponseMetadata(response: Response, suppress: Boolean) {
+  private def printResponseMetadata(response: Response, suppress: Boolean): Unit = {
     if (!suppress) {
       info("-" * 75)
       info("[Status]\t" + response.status)
@@ -388,7 +390,7 @@ class EmbeddedTwitterServer(
     }
   }
 
-  private def printResponseBody(response: Response, suppress: Boolean) {
+  private def printResponseBody(response: Response, suppress: Boolean): Unit = {
     if (!suppress) {
       if (response.isChunked) {
         //no-op

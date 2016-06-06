@@ -6,13 +6,41 @@ import com.google.inject.Stage
 import com.twitter.finagle.http.{Method, Status, _}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
-import com.twitter.inject.server.{PortUtils, Ports}
+import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import com.twitter.util.Try
 
+/**
+ *
+ * EmbeddedHttpServer allows a [[com.twitter.server.TwitterServer]] serving http endpoints to be started
+ * locally (on ephemeral ports), and tested through it's http interfaces.
+ *
+ * @param twitterServer The [[com.twitter.server.TwitterServer]] to be started for testing.
+ * @param flags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar). See: [[com.twitter.app.Flag]].
+ * @param args Extra command line arguments.
+ * @param waitForWarmup Once the server is started, wait for server warmup to be completed
+ * @param stage [[com.google.inject.Stage]] used to create the server's injector. Since EmbeddedHttpServer is used for testing,
+ *              we default to Stage.DEVELOPMENT. This makes it possible to only mock objects that are used in a given test,
+ *              at the expense of not checking that the entire object graph is valid. As such, you should always have at
+ *              least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup)
+ * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external
+ *                      integration tests that connect to external services).
+ * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later
+ *                    in your test. Generally only useful for testing cmd line applications.
+ * @param defaultRequestHeaders Headers to always send to the embedded server.
+ * @param defaultHttpSecure Default all requests to the server to be HTTPS.
+ * @param mapperOverride [[com.twitter.finatra.json.FinatraObjectMapper]] to use instead of the mapper configuered by
+ *                      the embedded server.
+ * @param httpPortFlag Name of the flag that defines the external http port for the server.
+ * @param streamResponse Toggle to not unwrap response content body to allow caller to stream response.
+ * @param verbose Enable verbose logging during test runs.
+ * @param disableTestLogging Disable all logging emitted from the test infrastructure.
+ * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded a
+ *                              [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
+  */
 class EmbeddedHttpServer(
   val twitterServer: Ports,
-  clientFlags: Map[String, String] = Map(),
-  extraArgs: Seq[String] = Seq(),
+  flags: Map[String, String] = Map(),
+  args: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,
@@ -25,22 +53,23 @@ class EmbeddedHttpServer(
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60)
-  extends com.twitter.inject.server.EmbeddedTwitterServer(
+  extends EmbeddedTwitterServer(
     twitterServer = twitterServer,
-    clientFlags = clientFlags + (httpPortFlag -> ephemeralLoopback),
-    extraArgs = extraArgs,
+    flags = flags + (httpPortFlag -> ephemeralLoopback),
+    args = args,
     waitForWarmup = waitForWarmup,
     stage = stage,
     useSocksProxy = useSocksProxy,
-    skipAppMain = skipAppMain,
     defaultRequestHeaders = defaultRequestHeaders,
     streamResponse = streamResponse,
     verbose = verbose,
     disableTestLogging = disableTestLogging,
     maxStartupTimeSeconds = maxStartupTimeSeconds) {
 
+  /* Additional Constructors */
+
   def this(twitterServer: Ports) = {
-    this(twitterServer, clientFlags = Map())
+    this(twitterServer, flags = Map())
   }
 
   /* Overrides */

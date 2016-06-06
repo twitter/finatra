@@ -9,7 +9,7 @@ trait FeatureTest extends com.twitter.inject.app.FeatureTest {
 
   override protected def afterEach() {
     super.afterEach()
-    if (server.isGuiceApp) {
+    if (server.isInjectableApp) {
       if (printStats) {
         server.printStats()
       }

@@ -13,7 +13,7 @@ class GreeterHttpServerFeatureTest extends HttpTest {
 
   val httpServer = new EmbeddedHttpServer(
     twitterServer = new GreeterHttpServer,
-    extraArgs = Seq(
+    args = Seq(
       "-thrift.clientId=greeter-http-service",
       resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)))
 

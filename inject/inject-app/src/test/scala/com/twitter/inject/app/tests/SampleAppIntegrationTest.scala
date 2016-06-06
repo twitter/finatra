@@ -7,7 +7,7 @@ class SampleAppIntegrationTest extends FeatureTest {
 
   override val app =
     new EmbeddedApp(
-      new SampleGuiceApp,
+      new SampleApp,
       waitForWarmup = true,
       skipAppMain = true)
 
@@ -20,13 +20,13 @@ class SampleAppIntegrationTest extends FeatureTest {
   }
 
   "throws `StartupTimeoutException` when app fails to start within `maxStartupTimeSeconds`" in {
-    val guiceApp = new SampleGuiceApp {
+    val app = new SampleApp {
       override protected def postWarmup(): Unit = {
         Thread.sleep(2000)
       }
     }
     val subject = new EmbeddedApp(
-      guiceApp,
+      app,
       waitForWarmup = true,
       skipAppMain = true,
       maxStartupTimeSeconds = 1)

@@ -1,7 +1,6 @@
 package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
-import com.twitter.app.{App => TwitterUtilApp}
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
 import com.twitter.inject.{Injector, InjectorModule, Logging}
@@ -11,7 +10,9 @@ import scala.collection.JavaConverters._
 /** AbstractApp for usage from Java */
 abstract class AbstractApp extends App
 
-trait App extends TwitterUtilApp with Logging {
+trait App
+  extends com.twitter.app.App
+  with Logging {
 
   private[inject] lazy val requiredModules = modules ++ javaModules.asScala ++ frameworkModules
 
@@ -21,8 +22,8 @@ trait App extends TwitterUtilApp with Logging {
   private val frameworkOverrideModules: ArrayBuffer[Module] = ArrayBuffer()
 
   private[inject] var runAppMain: Boolean = true
-  private[inject] var appStarted: Boolean = false
-  private[inject] var guiceStage: Stage = Stage.PRODUCTION
+  private[inject] var started: Boolean = false
+  private[inject] var stage: Stage = Stage.PRODUCTION
   private var installedModules: InstalledModules = _
 
   /* Lifecycle */
@@ -111,7 +112,7 @@ trait App extends TwitterUtilApp with Logging {
   }
 
   protected[inject] def setAppStarted(value: Boolean) {
-    appStarted = value
+    started = value
   }
 
   /** Method to be called after injector creation */
@@ -137,7 +138,7 @@ trait App extends TwitterUtilApp with Logging {
       flags = flag.getAll(includeGlobal = false).toSeq,
       modules = requiredModules,
       overrideModules = overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules,
-      stage = guiceStage)
+      stage = stage)
   }
 
   /* Private */

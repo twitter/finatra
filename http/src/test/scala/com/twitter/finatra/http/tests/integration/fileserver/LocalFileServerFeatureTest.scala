@@ -16,7 +16,7 @@ class LocalFileServerFeatureTest extends Test {
           response.ok.file("/abcd1234")
         }
       },
-      clientFlags = Map(
+      flags = Map(
         "local.doc.root" -> "/tmp")) { server =>
       server.httpGet(
         "/foo",
@@ -31,7 +31,7 @@ class LocalFileServerFeatureTest extends Test {
           response.ok.file("/")
         }
       },
-      clientFlags = Map(
+      flags = Map(
         "local.doc.root" -> "/asdfjkasdfjasdfj")) { server =>
       server.httpGet(
         "/foo",
@@ -41,7 +41,7 @@ class LocalFileServerFeatureTest extends Test {
 
   private def assertServer(
     controller: Controller,
-    clientFlags: Map[String, String])(asserts: EmbeddedHttpServer => Unit) = {
+    flags: Map[String, String])(asserts: EmbeddedHttpServer => Unit) = {
 
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
@@ -51,7 +51,7 @@ class LocalFileServerFeatureTest extends Test {
             .add(controller)
         }
       },
-      clientFlags = clientFlags)
+      flags = flags)
 
     try {
       asserts(server)

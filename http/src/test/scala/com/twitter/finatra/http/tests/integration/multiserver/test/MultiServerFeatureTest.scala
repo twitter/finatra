@@ -12,7 +12,7 @@ class MultiServerFeatureTest extends HttpTest {
 
   val add2Server = new EmbeddedHttpServer(
     new Add2Server,
-    clientFlags = Map(
+    flags = Map(
       resolverMap("add1-server", add1Server)))
 
   override def afterAll() = {

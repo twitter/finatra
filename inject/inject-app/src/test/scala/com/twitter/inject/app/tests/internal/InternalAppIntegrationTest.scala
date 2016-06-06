@@ -1,7 +1,7 @@
 package com.twitter.inject.app.tests.internal
 
 import com.twitter.inject.app.EmbeddedApp
-import com.twitter.inject.app.tests.SampleGuiceApp
+import com.twitter.inject.app.tests.SampleApp
 import com.twitter.inject.{Test, TwitterModule}
 import com.twitter.util.Await
 
@@ -9,7 +9,7 @@ class InternalAppIntegrationTest extends Test {
 
   "start app" in {
     val app = new EmbeddedApp(
-      new SampleGuiceApp {
+      new SampleApp {
         addFrameworkModule(FooModule)
 
         override def appMain(): Unit = {
@@ -32,7 +32,7 @@ class InternalAppIntegrationTest extends Test {
 
   "call injector before main" in {
     val e = intercept[Exception] {
-      new SampleGuiceApp {
+      new SampleApp {
         addFrameworkModules(FooModule)
         injector.instance[Foo]
       }
@@ -41,7 +41,7 @@ class InternalAppIntegrationTest extends Test {
   }
 
   "error in appMain" in {
-    val app = new SampleGuiceApp {
+    val app = new SampleApp {
       override def appMain(): Unit = {
         super.appMain()
         throw new scala.Exception("oops")

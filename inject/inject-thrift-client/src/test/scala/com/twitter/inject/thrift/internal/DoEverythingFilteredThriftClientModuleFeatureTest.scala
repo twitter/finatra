@@ -31,7 +31,7 @@ class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
           add[GreeterHttpController]
       }
     },
-    extraArgs = Seq(
+    args = Seq(
       "-thrift.clientId=greeter-http-service",
       resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)))
 

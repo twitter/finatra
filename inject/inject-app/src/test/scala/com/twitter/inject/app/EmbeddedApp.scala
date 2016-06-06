@@ -9,24 +9,24 @@ import org.scalatest.Matchers
  * EmbeddedApp allow's an App to be started locally for integration and feature testing.
  *
  * @param app The app to be started for testing
- * @param clientFlags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar)
+ * @param flags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar)
  * @param resolverMap Resolver map entries (helper for creating the resolverMap clientFlag)
- * @param extraArgs Extra command line arguments
+ * @param args Extra command line arguments
  * @param waitForWarmup Once the app is started, wait for App warmup to be completed.
  * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
- * @param stage Guice Stage used to create the server's injector. Since EmbeddedApp is used for testing, we default to Stage.DEVELOPMENT.
+ * @param stage [[com.google.inject.Stage]] used to create the server's injector. Since EmbeddedApp is used for testing, we default to Stage.DEVELOPMENT.
  *              This makes it possible to only mock objects that are used in a given test, at the expense of not checking that the entire
  *              object graph is valid. As such, you should always have at lease one Stage.PRODUCTION test for your service (which eagerly
- *              creates all Guice classes at startup).
+ *              creates all classes at startup).
  * @param verbose Enable verbose logging during test runs
  * @param disableTestLogging Disable all logging emitted from the test infrastructure
  * @param maxStartupTimeSeconds Max seconds to wait for app startup
  */
 class EmbeddedApp(
   app: com.twitter.app.App,
-  clientFlags: Map[String, String] = Map(),
+  flags: Map[String, String] = Map(),
   resolverMap: Map[String, String] = Map(),
-  extraArgs: Seq[String] = Seq(),
+  args: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   skipAppMain: Boolean = false,
   stage: Stage = Stage.DEVELOPMENT,
@@ -47,17 +47,16 @@ class EmbeddedApp(
       "FooServer\" instead of \"FooServerMain\" where FooServerMain is " +
       "defined as \"object FooServerMain extends FooServer\"")
 
-  /*
-   * Overwrite Guice stage if app is a GuiceApp.
-   */
-  if (isGuiceApp) {
-    guiceApp.guiceStage = stage
+  // overwrite com.google.inject.Stage if the underlying
+  // embedded app is a com.twitter.inject.app.App.
+  if (isInjectableApp) {
+    injectableApp.stage = stage
   }
 
   /* Fields */
 
-  val appName = app.name
-  private val mainRunnerFuturePool = PoolUtils.newFixedPool("Embedded " + appName)
+  val name = app.name
+  private val mainRunnerFuturePool = PoolUtils.newFixedPool("Embedded " + name)
 
   //Mutable state
   private var starting = false
@@ -72,11 +71,11 @@ class EmbeddedApp(
 
   /* Public */
 
-  lazy val isGuiceApp = app.isInstanceOf[App]
-  lazy val guiceApp = app.asInstanceOf[App]
+  lazy val isInjectableApp = app.isInstanceOf[App]
+  lazy val injectableApp = app.asInstanceOf[App]
   lazy val injector = {
     start()
-    guiceApp.injector
+    injectableApp.injector
   }
 
   def mainResult: Future[Unit] = {
@@ -96,8 +95,8 @@ class EmbeddedApp(
     if (!starting && !started) {
       starting = true //mutation
 
-      if (isGuiceApp && skipAppMain) {
-        guiceApp.runAppMain = false
+      if (isInjectableApp && skipAppMain) {
+        injectableApp.runAppMain = false
       }
 
       runTwitterUtilAppMain()
@@ -112,13 +111,13 @@ class EmbeddedApp(
   }
 
   def appMain() {
-    infoBanner("Run AppMain for class " + appName)
-    guiceApp.appMain()
+    infoBanner("Run AppMain for class " + name)
+    injectableApp.appMain()
   }
 
   def close() {
     if (!closed) {
-      infoBanner(s"Closing ${this.getClass.getSimpleName}: " + appName)
+      infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
       try {
         Await.result(app.close())
         mainRunnerFuturePool.executor.shutdown()
@@ -150,19 +149,19 @@ class EmbeddedApp(
   /* Protected */
 
   protected def combineArgs(): Array[String] = {
-    val clientFlagsStr = flagsStr(updateClientFlags(clientFlags))
-    (extraArgs ++ clientFlagsStr).toArray
+    val clientFlagsStr = flagsAsArgs(updateFlags(flags))
+    (args ++ clientFlagsStr).toArray
   }
 
-  protected def updateClientFlags(map: Map[String, String]): Map[String, String] = {
+  protected def updateFlags(map: Map[String, String]): Map[String, String] = {
     map
   }
 
   protected def logAppStartup() = {
-    infoBanner("App warmup completed: " + appName)
+    infoBanner("App warmup completed: " + name)
   }
 
-  protected def nonGuiceAppStarted(): Boolean = {
+  protected def nonInjectableAppStarted(): Boolean = {
     true
   }
 
@@ -171,7 +170,7 @@ class EmbeddedApp(
   private def runTwitterUtilAppMain() {
     // we call distinct here b/c port flag args can potentially be added multiple times
     val allArgs = combineArgs().distinct
-    info("Starting " + appName + " with args: " + allArgs.mkString(" "))
+    info("Starting " + name + " with args: " + allArgs.mkString(" "))
 
     _mainResult = mainRunnerFuturePool {
       try {
@@ -193,15 +192,15 @@ class EmbeddedApp(
     }
   }
 
-  private def flagsStr(flagsMap: Map[String, String]) = {
+  private def flagsAsArgs(flagsMap: Map[String, String]) = {
     for ((key, value) <- flagsMap) yield {
       "-" + key + "=" + value
     }
   }
 
-  // hack
   private def isSingletonObject(app: com.twitter.app.App) = {
-    app.getClass.getSimpleName.endsWith("$")
+    import scala.reflect.runtime.currentMirror
+    currentMirror.reflect(app).symbol.isModuleClass
   }
 
   private def waitForAppStarted() {
@@ -209,11 +208,11 @@ class EmbeddedApp(
       info("Waiting for warmup phases to complete...")
 
       if (startupFailedThrowable.isDefined) {
-        println(s"\nEmbedded app $appName failed to startup")
+        println(s"\nEmbedded app $name failed to startup")
         throw startupFailedThrowable.get
       }
 
-      if ((isGuiceApp && guiceApp.appStarted) || (!isGuiceApp && nonGuiceAppStarted)) {
+      if ((isInjectableApp && injectableApp.started) || (!isInjectableApp && nonInjectableAppStarted)) {
         started = true
         logAppStartup()
         return
@@ -221,6 +220,6 @@ class EmbeddedApp(
 
       Thread.sleep(1000)
     }
-    throw new StartupTimeoutException(s"App: $appName failed to startup within $maxStartupTimeSeconds seconds.")
+    throw new StartupTimeoutException(s"App: $name failed to startup within $maxStartupTimeSeconds seconds.")
   }
 }
