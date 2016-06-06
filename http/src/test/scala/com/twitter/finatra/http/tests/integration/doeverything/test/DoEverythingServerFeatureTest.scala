@@ -8,6 +8,7 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{FileElement, Method, Request}
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
+import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
@@ -1145,6 +1146,24 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         "/column/foo//bar?baz=quux",
         andExpect = Ok,
         withBody = "foo/bar")
+    }
+
+    "POST SomethingStreamedRequest" in {
+      server.httpPost(
+        "/SomethingStreamedRequest.json?something_id=FOO&field1=BAR&field2=3",
+        postBody = "",
+        andExpect = Ok,
+        withBody = "FOO/BAR/3")
+    }
+
+    "POST SomethingStreamedRequestAsJsonResponse" in {
+      val response = server.httpPostJson[SomethingStreamedResponse](
+        "/SomethingStreamedRequestAsJsonResponse.json?something_id=FOO&field1=BAR&field2=3",
+        postBody = "",
+        andExpect = Ok)
+      assert(response.somethingId == "FOO")
+      assert(response.field1.get == "BAR")
+      assert(response.field2.get == 3)
     }
   }
 

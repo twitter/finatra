@@ -613,6 +613,14 @@ class DoEverythingController @Inject()(
     r.param
   }
 
+  post("/SomethingStreamedRequest.json") { r: SomethingStreamedRequest =>
+    s"${r.somethingId}/${r.field1.get}/${r.field2.get}"
+  }
+
+  post("/SomethingStreamedRequestAsJsonResponse.json") { r: SomethingStreamedRequest =>
+    SomethingStreamedResponse(r.somethingId, r.field1, r.field2)
+  }
+
   get("/camelCaseJson") { request: Request =>
     camelCaseObjectMapper.writeValueAsString(Map("firstName" -> "Bob"))
   }
