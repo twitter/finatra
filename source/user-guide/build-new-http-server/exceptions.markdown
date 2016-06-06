@@ -62,7 +62,7 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-Again, you can see we register the exception mapper *by type* allowing the framework to instantiate an instance. Also note that the [`com.twitter.finatra.http.filters.ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) is included in the [`com.twitter.finatra.http.filter.CommonFilters`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala)
+Again, you can see we register the exception mapper *by type* allowing the framework to instantiate an instance. Also note that the [`com.twitter.finatra.http.filters.ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) is included in the MergedFilter [`com.twitter.finatra.http.filter.CommonFilters`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala).
 
 ## <a class="anchor" name="override-defaults" href="#override-defaults">Override Default Behavior</a>
 ===============================
