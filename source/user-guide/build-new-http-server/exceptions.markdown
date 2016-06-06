@@ -31,7 +31,7 @@ class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
 ```
 <div></div>
 
-Then register this exception mapper in your server. **Note**: using ExceptionMappers also require you to have the [`ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) defined in your filter chain.
+Then register this exception mapper in your server. **Note**: using ExceptionMappers also require you to have the [`com.twitter.finatra.http.filters.ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) defined in your filter chain.
 
 ```scala
 import DoEverythingModule
@@ -40,7 +40,7 @@ import ExampleFilter
 import MalformedURLExceptionMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.HttpServer
-import com.twitter.finatra.http.filters.{CommonFilters, ExceptionMappingFilter, LoggingMDCFilter, TraceIdMDCFilter}
+import com.twitter.finatra.http.filters.{ExceptionMappingFilter, LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
 
 object ExampleServerMain extends ExampleServer
@@ -54,7 +54,6 @@ class ExampleServer extends HttpServer {
     router
       .filter[LoggingMDCFilter[Request, Response]]
       .filter[TraceIdMDCFilter[Request, Response]]
-      .filter[CommonFilters]
       .filter[ExceptionMappingFilter[Request]]
       .add[ExampleFilter, ExampleController]
       .exceptionMapper[MalformedURLExceptionMapper]
@@ -63,7 +62,7 @@ class ExampleServer extends HttpServer {
 ```
 <div></div>
 
-Again, you can see we register the exception mapper *by type* allowing the framework to instantiate an instance.
+Again, you can see we register the exception mapper *by type* allowing the framework to instantiate an instance. Also note that the [`com.twitter.finatra.http.filters.ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) is included in the [`com.twitter.finatra.http.filter.CommonFilters`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/CommonFilters.scala)
 
 ## <a class="anchor" name="override-defaults" href="#override-defaults">Override Default Behavior</a>
 ===============================
