@@ -85,6 +85,8 @@ class ResponseBuilder @Inject()(
 
   def methodNotAllowed = EnrichedResponse(Status.MethodNotAllowed)
 
+  def badGateway = EnrichedResponse(Status.BadGateway)
+
   def badRequest = EnrichedResponse(Status.BadRequest)
 
   def badRequest(body: Any) = EnrichedResponse(Status.BadRequest).body(body)

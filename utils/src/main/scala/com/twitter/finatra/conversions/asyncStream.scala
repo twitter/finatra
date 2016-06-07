@@ -2,38 +2,37 @@ package com.twitter.finatra.conversions
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.concurrent.AsyncStream.{fromFuture, fromSeq}
-import com.twitter.util._
+import com.twitter.util.{Future, Try}
 
 object asyncStream {
 
-  implicit class RichFutureSeq[T](val futureSeq: Future[Seq[T]]) extends AnyVal {
+  implicit class RichFutureSeq[T](val self: Future[Seq[T]]) extends AnyVal {
     def toAsyncStream: AsyncStream[T] = {
-      (fromFuture(futureSeq) map fromSeq).flatten
+      (fromFuture(self) map fromSeq).flatten
     }
   }
 
-  implicit class RichFutureOption[T](val futureOption: Future[Option[T]]) extends AnyVal {
+  implicit class RichFutureOption[T](val self: Future[Option[T]]) extends AnyVal {
     def toAsyncStream: AsyncStream[T] = {
-      (futureOption map {_.toSeq}).toAsyncStream
+      (self map {_.toSeq}).toAsyncStream
     }
   }
 
-  implicit class RichFuture[T](val future: Future[T]) extends AnyVal {
+  implicit class RichFuture[T](val self: Future[T]) extends AnyVal {
     def toAsyncStream: AsyncStream[T] = {
-      AsyncStream.fromFuture(future)
+      AsyncStream.fromFuture(self)
     }
   }
 
-  implicit class RichOption[T](val option: Option[T]) extends AnyVal {
+  implicit class RichOption[T](val self: Option[T]) extends AnyVal {
     def toAsyncStream: AsyncStream[T] = {
-      AsyncStream.fromOption(option)
+      AsyncStream.fromOption(self)
     }
   }
 
-  implicit class RichTry[T](val trie: Try[T]) extends AnyVal {
+  implicit class RichTry[T](val self: Try[T]) extends AnyVal {
     def toAsyncStream: AsyncStream[T] = {
-      AsyncStream.fromFuture(Future.const(trie))
+      AsyncStream.fromFuture(Future.const(self))
     }
   }
-
 }

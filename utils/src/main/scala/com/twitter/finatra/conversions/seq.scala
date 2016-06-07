@@ -5,29 +5,29 @@ import scala.collection.breakOut
 
 object seq {
 
-  implicit class RichSeq[A](seq: Seq[A]) {
+  implicit class RichSeq[A](val self: Seq[A]) extends AnyVal {
 
     def createMap[K, V](
       keys: A => K,
       values: A => V): Map[K, V] = {
 
-      (seq map { elem =>
+      self.map { elem =>
         keys(elem) -> values(elem)
-      })(breakOut)
+      }(breakOut)
     }
 
     def createMap[K, V](
       values: A => V): Map[A, V] = {
 
-      (seq map { elem =>
+      self.map { elem =>
         elem -> values(elem)
-      })(breakOut)
+      }(breakOut)
     }
 
     def foreachPartial(
       pf: PartialFunction[A, Unit]): Unit = {
 
-      seq map { elem =>
+      self.foreach { elem =>
         if (pf.isDefinedAt(elem)) {
           pf(elem)
         }
@@ -50,7 +50,7 @@ object seq {
         case Seq(x, xs@_*) => recurse(itemToFind, xs)
         case Seq() => None
       }
-      recurse(itemToFind, seq)
+      recurse(itemToFind, self)
     }
   }
 }

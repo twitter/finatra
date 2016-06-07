@@ -5,6 +5,10 @@ import com.twitter.finatra.http.filters.CommonFilters;
 import com.twitter.finatra.http.routing.HttpRouter;
 
 public class DoEverythingJavaServer extends JavaHttpServer {
+    @Override
+    public String name() {
+        return this.getClass().getSimpleName();
+    }
 
     @Override
     public void configureHttp(HttpRouter httpRouter) {

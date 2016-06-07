@@ -2,9 +2,11 @@ package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.thrift._
+import com.twitter.finatra.thrift.internal.ThriftMethodService
 import com.twitter.inject.{Injector, Logging}
-import com.twitter.scrooge.{ThriftService, ToThriftService}
+import com.twitter.scrooge.{ThriftMethod, ThriftService, ToThriftService}
 import javax.inject.{Inject, Singleton}
+import scala.collection.mutable.{Map => MutableMap}
 
 @Singleton
 class ThriftRouter @Inject()(
@@ -16,6 +18,7 @@ class ThriftRouter @Inject()(
   private var done = false
   private[finatra] var name: String = ""
   private[finatra] var filteredService: ThriftService = _
+  private[finatra] val methods = MutableMap[ThriftMethod, ThriftMethodService[_, _]]()
 
   /* Public */
 
@@ -40,6 +43,7 @@ class ThriftRouter @Inject()(
     val controller = injector.instance[C]
     for (m <- controller.methods) {
       m.setFilter(filterChain)
+      methods += (m.method -> m)
     }
     info("Adding methods\n" + (controller.methods.map(method => s"${controller.getClass.getSimpleName}.${method.name}") mkString "\n"))
     if (controller.methods.isEmpty) error(s"${controller.getClass.getCanonicalName} contains no methods!")

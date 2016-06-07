@@ -39,13 +39,17 @@ trait ThriftServer extends TwitterServer {
 
   /* Lifecycle */
 
-  override def postWarmup() {
-    super.postWarmup()
-
+  override protected def postStartup(): Unit = {
+    super.postStartup()
     val router = injector.instance[ThriftRouter]
     router.serviceName(name)
     configureThrift(router)
+  }
 
+  override protected def postWarmup() {
+    super.postWarmup()
+
+    val router = injector.instance[ThriftRouter]
     val thriftServerBuilder =
       configureThriftServer(
         ThriftMux.server
@@ -59,6 +63,10 @@ trait ThriftServer extends TwitterServer {
     }
     for (addr <- thriftAnnounceFlag.get) thriftServer.announce(addr)
     info("Thrift server started on port: " + thriftPort.get)
+  }
+
+  override def waitForServer() {
+    Await.ready(thriftServer)
   }
 
   /* Overrides */

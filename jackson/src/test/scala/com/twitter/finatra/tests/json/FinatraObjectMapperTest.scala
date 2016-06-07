@@ -1010,7 +1010,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     val request = Request()
     val json = """{ "foo": "true" }"""
     request.setContentString(json)
-    request.headerMap.add("Content-Length", json.size.toString)
+    request.headerMap.set("Content-Length", json.size.toString)
     val result = mapper.parse[CaseClassWithBoolean](request)
     assert(result == CaseClassWithBoolean(true))
   }

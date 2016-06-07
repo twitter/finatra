@@ -1,8 +1,14 @@
 <configuration>
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
   <!-- ===================================================== -->
-  <!-- Secondary Appenders -->
+  <!-- Common Config -->
   <!-- ===================================================== -->
+
+  <!-- JUL/JDK14 to Logback bridge -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
 
   <!-- Service Log (Rollover daily/50MB) -->
   <appender name="SERVICE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -24,6 +30,8 @@
   <!-- ===================================================== -->
 
   <appender name="ASYNC-SERVICE" class="ch.qos.logback.classic.AsyncAppender">
+    <queueSize>${queue.size:-1024}</queueSize>
+    <maxFlushTime>${max.flush.time:-0}</maxFlushTime>
     <appender-ref ref="SERVICE"/>
   </appender>
 
@@ -31,12 +39,12 @@
   <!-- Package Config -->
   <!-- ===================================================== -->
 
-  <!-- Root Config -->
-  <root level="warn">
-    <appender-ref ref="ASYNC-SERVICE"/>
-  </root>
-
   <!-- Per-Package Config -->
   <logger name="com.twitter" level="info"/>
+
+  <!-- Root Config -->
+  <root level="${log_level:-INFO}">
+    <appender-ref ref="ASYNC-SERVICE"/>
+  </root>
 
 </configuration>

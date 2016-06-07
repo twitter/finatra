@@ -8,10 +8,19 @@ import com.twitter.inject.{Test, TwitterModule}
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.{TwitterServer => BaseTwitterServer}
 import com.twitter.util.Await
+import com.twitter.util.registry.GlobalRegistry
 import scala.util.parsing.json.JSON
 
 
 class StartupIntegrationTest extends Test {
+
+  override protected def afterEach(): Unit = {
+    // "clear" GlobalRegistry
+    GlobalRegistry.get.iterator foreach { entry =>
+      GlobalRegistry.get.remove(entry.key)
+    }
+    super.afterEach()
+  }
 
   "startup" should {
     "ensure health check succeeds when guice config is good" in {
@@ -147,7 +156,9 @@ class StartupIntegrationTest extends Test {
     }
 
     "register framework library" in {
-      val server = new EmbeddedTwitterServer(new ServerWithModuleInstall)
+      val server = new EmbeddedTwitterServer(
+        new ServerWithModuleInstall,
+        disableTestLogging = true)
       try {
         server.start()
 
@@ -158,7 +169,7 @@ class StartupIntegrationTest extends Test {
         val json: Map[String, Any] = JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
         val registry = json("registry").asInstanceOf[Map[String, Any]]
         assert(registry.contains("library"))
-        registry("library").asInstanceOf[Map[String, String]].keySet.headOption should be(Some("finatra"))
+        assert(registry("library").asInstanceOf[Map[String, String]].contains("finatra"))
       } finally {
         server.close()
       }

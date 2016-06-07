@@ -1,4 +1,15 @@
 <configuration>
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+  <!-- ===================================================== -->
+  <!-- Common Config -->
+  <!-- ===================================================== -->
+
+  <!-- JUL/JDK14 to Logback bridge -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
+
   <!-- Console Appender -->
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
@@ -10,7 +21,8 @@
   <logger name="com.twitter" level="info"/>
 
   <!-- Root Logger -->
-  <root level="info">
+  <root level="${log_level:-INFO}">
     <appender-ref ref="STDOUT"/>
   </root>
+
 </configuration>

@@ -13,15 +13,7 @@ junit_tests(name='scala',
     'util/util-core',
   ],
   sources=rglobs(
-    'com/twitter/finatra/http/conversions/*.scala',
-    'com/twitter/finatra/http/filters/*.scala',
-    'com/twitter/finatra/http/integration/*.scala',
-    'com/twitter/finatra/http/internal/*.scala',
-    'com/twitter/finatra/http/marshalling/*.scala',
-    'com/twitter/finatra/http/request/*.scala',
-    'com/twitter/finatra/http/response/*.scala',
-    'com/twitter/finatra/http/routing/*.scala',
-    'com/twitter/finatra/http/server/*.scala',
+    'com/twitter/finatra/http/tests/*.scala',
   ),
   resources=[
     'finatra/http/src/test/resources',
@@ -44,6 +36,6 @@ scala_library(name="test-deps",
   ],
   fatal_warnings=True,
   sources=globs(
-    'com/twitter/finatra/http/test/*.scala'
+    'com/twitter/finatra/http/*.scala'
   ),
 )

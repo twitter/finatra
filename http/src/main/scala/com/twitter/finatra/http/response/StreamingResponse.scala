@@ -63,7 +63,7 @@ case class StreamingResponse[T](
     val response = Response()
     response.setChunked(true)
     response.setStatusCode(status.code)
-    addHeaders(headers, response)
+    setHeaders(headers, response)
     val writer = response.writer
 
     /* Orphan the future which writes to our response thread */
@@ -106,9 +106,9 @@ case class StreamingResponse[T](
     })
   }
 
-  private def addHeaders(headersOpt: Map[String, String], response: Response) = {
+  private def setHeaders(headersOpt: Map[String, String], response: Response) = {
     for((k,v) <- headers) {
-      response.headerMap.add(k, v)
+      response.headerMap.set(k, v)
     }
   }
 }

@@ -66,14 +66,14 @@ class HttpClient(
 
   private def setHostname(request: Request) = {
     if (hostname.nonEmpty) {
-      request.headerMap.add("Host", hostname)
+      request.headerMap.set("Host", hostname)
     }
   }
 
   private def setHeaders(request: Request): Unit = {
     if (defaultHeaders.nonEmpty) {
       for ((key, value) <- defaultHeaders) {
-        request.headerMap.add(key, value)
+        request.headerMap.set(key, value)
       }
     }
   }

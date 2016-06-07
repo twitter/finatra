@@ -4,9 +4,9 @@ import scala.util.matching.Regex
 
 object pattern {
 
-  implicit class RichRegex(underlying: Regex) {
+  implicit class RichRegex(val self: Regex) extends AnyVal {
     def matches(s: String) = {
-      underlying.pattern.matcher(s).matches
+      self.pattern.matcher(s).matches
     }
   }
 

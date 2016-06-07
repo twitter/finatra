@@ -1,7 +1,7 @@
 package com.twitter.streaming
 
 import com.twitter.benchmark.{FinagleBenchmarkServer, FinatraBenchmarkServer}
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Test
 
 class BenchmarkFeatureTest extends Test {

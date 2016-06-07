@@ -5,9 +5,9 @@ import scala.math.Ordering
 
 object tuple {
 
-  implicit class RichTuples[A, B](tuples: Iterable[(A, B)]) {
+  implicit class RichTuples[A, B](val self: Iterable[(A, B)]) extends AnyVal {
     def toKeys: Seq[A] = {
-      tuples.toSeq map { case (key, value) => key}
+      self.toSeq map { case (key, value) => key}
     }
 
     def toKeySet: Set[A] = {
@@ -15,18 +15,18 @@ object tuple {
     }
 
     def toValues: Seq[B] = {
-      tuples.toSeq map { case (key, value) => value}
+      self.toSeq map { case (key, value) => value}
     }
 
     def mapValues[C](func: B => C): Seq[(A, C)] = {
-      tuples.toSeq map { case (key, value) =>
+      self.toSeq map { case (key, value) =>
         key -> func(value)
       }
     }
 
     def groupByKey: Map[A, Seq[B]] = {
       val mutableMapBuilder = mutable.Map.empty[A, mutable.Builder[B, Seq[B]]]
-      for ((a, b) <- tuples) {
+      for ((a, b) <- self) {
         val seqBuilder = mutableMapBuilder.getOrElseUpdate(a, immutable.Seq.newBuilder[B])
         seqBuilder += b
       }
@@ -46,11 +46,11 @@ object tuple {
     }
 
     def sortByKey(implicit ord: Ordering[A]): Seq[(A, B)] = {
-      tuples.toSeq sortBy { case (key, value) => key}
+      self.toSeq sortBy { case (key, value) => key}
     }
 
     def toSortedMap(implicit ord: Ordering[A]): SortedMap[A, B] = {
-      SortedMap(tuples.toSeq: _*)
+      SortedMap(self.toSeq: _*)
     }
   }
 }

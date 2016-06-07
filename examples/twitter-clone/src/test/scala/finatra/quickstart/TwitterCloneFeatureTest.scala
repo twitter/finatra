@@ -2,7 +2,7 @@ package finatra.quickstart
 
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
@@ -11,7 +11,7 @@ import finatra.quickstart.domain.http.{TweetLocation, TweetResponse}
 import finatra.quickstart.firebase.FirebaseClient
 import finatra.quickstart.services.IdService
 
-class TwitterCloneFeatureTest extends FeatureTest with Mockito with HttpTest {
+class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
   override val server = new EmbeddedHttpServer(new TwitterCloneServer)
 

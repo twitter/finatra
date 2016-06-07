@@ -6,7 +6,7 @@ import scala.language.higherKinds
 
 object iterable {
 
-  implicit class RichIterable[Elem, From[Elem] <: Iterable[Elem]](iterable: From[Elem]) {
+  implicit class RichIterable[Elem, From[Elem] <: Iterable[Elem]](val self: From[Elem]) extends AnyVal {
 
     /**
      * Distinct 'iterable' elements using the passed in 'hash' function
@@ -17,7 +17,7 @@ object iterable {
       val builder = cbf()
       val seen = MutableHashSet[HashCodeType]()
 
-      for (elem <- iterable) {
+      for (elem <- self) {
         if (!seen(hash(elem))) {
           seen += hash(elem)
           builder += elem

@@ -4,9 +4,9 @@ import com.twitter.scrooge.ThriftMethod
 
 object method {
 
-  implicit class RichThriftMethod(val wrapped: ThriftMethod) {
+  implicit class RichThriftMethod(val self: ThriftMethod) extends AnyVal {
     def toPrettyString: String = {
-      wrapped.serviceName + "." + wrapped.name
+      self.serviceName + "." + self.name
     }
   }
 }

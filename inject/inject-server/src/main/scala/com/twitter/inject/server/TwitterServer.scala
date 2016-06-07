@@ -2,16 +2,13 @@ package com.twitter.inject.server
 
 import com.google.inject.Module
 import com.twitter.finagle.client.ClientRegistry
-import com.twitter.finagle.http.HttpMuxer
 import com.twitter.inject.Logging
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
-import com.twitter.server.handler.ReplyHandler
-import com.twitter.server.internal.{FinagleBuildRevision, PromoteToOldGenUtils}
+import com.twitter.server.internal.FinagleBuildRevision
 import com.twitter.util.Await
-import com.twitter.util.registry.Library
 
 /** AbstractTwitterServer for usage from Java */
 abstract class AbstractTwitterServer extends TwitterServer
@@ -31,13 +28,13 @@ trait TwitterServer
   /* Protected */
 
   // TODO: Default to true
-  override protected def failfastOnFlagsNotParsed = false
+  override protected def failfastOnFlagsNotParsed: Boolean = false
 
   /**
    * Name used for registration in the [[com.twitter.util.registry.Library]]
    * @return library name to register in the Library registry.
    */
-  private[twitter] def libraryName = "finatra"
+  override protected val libraryName: String = "finatra"
 
   /**
    * If true, the Twitter-Server admin server will be disabled.
@@ -52,7 +49,7 @@ trait TwitterServer
   protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
 
   /** Resolve all Finagle clients before warmup method called */
-  protected def resolveFinagleClientsOnStartup = true
+  protected def resolveFinagleClientsOnStartup: Boolean = true
 
   protected def waitForServer() {
     Await.ready(adminHttpServer)
@@ -63,15 +60,14 @@ trait TwitterServer
    * a warmup handler in #warmup.
    * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
    * @see [[com.twitter.inject.utils.Handler]]
-   * TODO: rename to handle[T <: Handler]()
    */
-  protected def run[T <: Handler : Manifest]() {
+  protected def handle[T <: Handler : Manifest](): Unit = {
     injector.instance[T].handle()
   }
 
   /* Overrides */
 
-  override final def main() {
+  override final def main(): Unit = {
     super.main() // Call inject.App.main() to create injector
 
     info("Startup complete, server ready.")
@@ -79,7 +75,7 @@ trait TwitterServer
   }
 
   /** Method to be called after injector creation */
-  override protected def postStartup() {
+  override protected def postStartup(): Unit = {
     super.postStartup()
 
     if (resolveFinagleClientsOnStartup) {
@@ -92,19 +88,16 @@ trait TwitterServer
     }
 
     FinagleBuildRevision.register(injector)
-    Library.register(libraryName, Map[String, String]())
   }
 
-  /**
-   * After warmup completes, we want to run PromoteToOldGen without also signaling
-   * that we're healthy since we haven't successfully started our servers yet
-   */
-  override protected def beforePostWarmup() {
+  override protected def beforePostWarmup(): Unit = {
     super.beforePostWarmup()
-    PromoteToOldGenUtils.beforeServing()
+
+    // trigger gc before accepting traffic
+    prebindWarmup()
   }
 
-  override protected def postWarmup() {
+  override protected def postWarmup(): Unit = {
     super.postWarmup()
 
     if (disableAdminHttpServer) {
@@ -119,9 +112,9 @@ trait TwitterServer
    * After postWarmup, all external servers have been started, and we can now
    * enable our health endpoint
    */
-  override protected def afterPostWarmup() {
+  override protected def afterPostWarmup(): Unit = {
     super.afterPostWarmup()
     info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
-    HttpMuxer.addHandler("/health", new ReplyHandler("OK\n"))
+    warmupComplete()
   }
 }
