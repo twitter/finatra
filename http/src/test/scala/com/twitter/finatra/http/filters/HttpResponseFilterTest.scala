@@ -35,10 +35,9 @@ class HttpResponseFilterTest extends Test {
       response.contentType should equal(Some("application/octet-stream"))
       response.date.getOrElse("") should fullyMatch regex rfc7231Regex
     } finally {
+      // reset JVM's locale to the original one
+      Locale.setDefault(originalLocale)
       service.close()
     }
-
-    // reset JVM's locale to the original one
-    Locale.setDefault(originalLocale)
   }
 }
