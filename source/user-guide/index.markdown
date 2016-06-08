@@ -8,6 +8,8 @@ footer: true
 
 Finatra is uses [Finagle](http://twitter.github.io/finagle/guide/) and [TwitterServer](http://twitter.github.io/twitter-server/) and it is *highly recommended* that you familiarize yourself with those frameworks before getting started.
 
+The version of Finatra documented here is v2.x. Version 2 is a *complete re-write* over v1.x and as such many things are different. If you are still using a version 1.x release you can find that documentation [here](/finatra/v1/docs/index.html).
+
 ### Topics:
 
 - [TwitterServer Basics](/finatra/user-guide/twitter-server-basics)
