@@ -57,7 +57,7 @@ class ExampleServer extends HttpServer {
 
 #### Per-controller Filters
 
-It is also possible to add filterd per controller, using `router#add[F1 <: HttpFilter, C <: Controller]`. These filters will apply to all routes in the Controller.
+It is also possible to add filters per controller, using `router#add[F1 <: HttpFilter, C <: Controller]`. These filters will apply to all routes in the Controller.
 
 ```scala
 import DoEverythingModule
