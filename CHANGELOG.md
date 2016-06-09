@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject: Introduce inject/inject-thrift module to undo cyclic dependency introduced in RB 839427. ``RB_ID=841128``
 * inject-thrift-client: Improvements to FilteredThriftClientModule to provide finer-grain insight on ThriftClientExceptions.
   NOTE: previously per-route failure stats were in the form:
   route/add1String/GET/status/503/handled/ThriftClientException/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError

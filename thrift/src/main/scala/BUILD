@@ -13,7 +13,7 @@ scala_library(name='scala',
     'finatra/inject/inject-app',
     'finatra/inject/inject-core',
     'finatra/inject/inject-server',
-    'finatra/inject/inject-thrift-client',
+    'finatra/inject/inject-thrift',
     'finatra/slf4j',
     'finatra/utils',
     'util/util-core'

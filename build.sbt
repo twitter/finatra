@@ -328,6 +328,20 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope")).
     injectApp % "test->test"
   )
 
+lazy val injectThrift = (project in file("inject/inject-thrift")).
+  settings(projectSettings).
+  settings(
+    name := "inject-thrift",
+    moduleName := "inject-thrift",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.finagleVersion,
+      "com.twitter" %% "finagle-mux" % versions.finagleVersion,
+      "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
+      "com.twitter" %% "util-core" % versions.utilVersion)
+  ).dependsOn(
+    injectUtils
+  )
+
 lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
   settings(projectSettings).
   settings(
@@ -335,15 +349,16 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
     moduleName := "inject-thrift-client",
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.test\\.thriftscala.*",
     libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
-      "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.finagleVersion % "test->compile")
   ).dependsOn(
     injectCore % "test->test;compile->compile",
     injectUtils,
-    injectApp % "test->test",
+    injectApp % "test->test;compile->compile",
+    injectThrift,
     http % "test->test",
     thrift % "test->test"
   )
@@ -354,6 +369,9 @@ lazy val injectUtils = (project in file("inject/inject-utils")).
     name := "inject-utils",
     moduleName := "inject-utils",
     libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.finagleVersion,
+      "com.twitter" %% "finagle-mux" % versions.finagleVersion,
+      "com.twitter" %% "util-core" % versions.utilVersion,
       "commons-lang" % "commons-lang" % versions.commonsLang
     )
   ).dependsOn(
@@ -524,6 +542,7 @@ lazy val thrift = project.
     }
   ).dependsOn(
     injectServer % "test->test;compile->compile",
+    injectThrift,
     utils,
     slf4j
   )
