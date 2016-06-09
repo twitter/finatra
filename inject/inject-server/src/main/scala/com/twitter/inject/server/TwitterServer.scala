@@ -21,7 +21,7 @@ trait TwitterServer
   with Logging {
 
   addFrameworkModules(
-    statsModule)
+    statsReceiverModule)
 
   private val adminAnnounceFlag = flag[String]("admin.announce", "Address for announcing admin server")
 
@@ -32,6 +32,7 @@ trait TwitterServer
 
   /**
    * Name used for registration in the [[com.twitter.util.registry.Library]]
+   *
    * @return library name to register in the Library registry.
    */
   override protected val libraryName: String = "finatra"
@@ -44,9 +45,10 @@ trait TwitterServer
 
   /**
    * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finagle.stats.StatsReceiver]].
+   *
    * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finagle.stats.StatsReceiver]] implementation.
    */
-  protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
+  protected def statsReceiverModule: Module = StatsReceiverModule
 
   /** Resolve all Finagle clients before warmup method called */
   protected def resolveFinagleClientsOnStartup: Boolean = true
@@ -58,6 +60,7 @@ trait TwitterServer
   /**
    * Utility to run a [[com.twitter.inject.utils.Handler]]. This is generally used for running
    * a warmup handler in #warmup.
+   *
    * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
    * @see [[com.twitter.inject.utils.Handler]]
    */

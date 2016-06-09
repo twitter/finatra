@@ -65,10 +65,36 @@ trait BaseHttpServer extends TwitterServer {
    */
   protected def streamRequest: Boolean = false
 
+  /**
+   * This method allows for further configuration of the http server for parameters not exposed by
+   * this trait or for overriding defaults provided herein, e.g.,
+   *
+   * override def configureHttpServer(server: Http.Server): Http.Server = {
+   *   server
+   *     .withResponseClassifier(...)
+   *     .withMaxInitialLineSize(2048)
+   * }
+   *
+   * @param server - the [[com.twitter.finagle.Http.Server]] to configure.
+   * @return a configured Http.Server.
+   */
   protected def configureHttpServer(server: Http.Server): Http.Server = {
     server
   }
 
+  /**
+   * This method allows for further configuration of the https server for parameters not exposed by
+   * this trait or for overriding defaults provided herein, e.g.,
+   *
+   * override def configureHttpsServer(server: Http.Server): Http.Server = {
+   *   server
+   *     .withResponseClassifier(...)
+   *     .withMaxInitialLineSize(2048)
+   * }
+   *
+   * @param server - the [[com.twitter.finagle.Http.Server]] to configure.
+   * @return a configured Http.Server.
+   */
   protected def configureHttpsServer(server: Http.Server): Http.Server = {
     server
   }

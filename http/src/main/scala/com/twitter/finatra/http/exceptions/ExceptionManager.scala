@@ -1,13 +1,16 @@
-package com.twitter.finatra.http.internal.exceptions
+package com.twitter.finatra.http.exceptions
 
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionMapper}
+import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finatra.http.contexts.RouteInfo
+import com.twitter.finatra.utils.ClassUtils
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
 import com.twitter.inject.conversions.map._
+import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 import net.codingwell.scalaguice.typeLiteral
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
@@ -35,9 +38,10 @@ import scala.collection.JavaConverters._
  * [2] http://docs.scala-lang.org/overviews/reflection/thread-safety.html
  */
 @Singleton
-class ExceptionManager @Inject()(
+class ExceptionManager(
   injector: Injector,
-  defaultExceptionMapper: DefaultExceptionMapper) {
+  defaultExceptionMapper: DefaultExceptionMapper,
+  statsReceiver: StatsReceiver) {
 
   private val mappers = new ConcurrentHashMap[Type, ExceptionMapper[_]]().asScala
 
@@ -55,10 +59,38 @@ class ExceptionManager @Inject()(
 
   def toResponse(request: Request, throwable: Throwable): Response = {
     val mapper = cachedGetMapper(throwable.getClass)
-    mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
+    val response = mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
+    RouteInfo(request).foreach { info =>
+      statException(info, request, throwable, response)
+    }
+    response
   }
 
   /* Private */
+
+  private def statException(
+    routeInfo: RouteInfo,
+    request: Request,
+    throwable: Throwable,
+    response: Response): Unit = {
+    statsReceiver.counter(
+      "route",
+      routeInfo.sanitizedPath,
+      request.method.toString,
+      "status",
+      response.status.code.toString,
+      "mapped",
+      exceptionDetails(throwable))
+      .incr()
+  }
+
+  private def exceptionDetails(throwable: Throwable): String = {
+    val className = ClassUtils.simpleName(throwable.getClass)
+    throwable match {
+      case sourceDetails: DetailedNonRetryableSourcedException => className + "/" + sourceDetails.toDetailsString
+      case _ => className
+    }
+  }
 
   private def add(throwableType: Type, mapper: ExceptionMapper[_]) {
     if (mappers.contains(throwableType)) {

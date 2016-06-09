@@ -11,6 +11,7 @@ import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
+import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
 import com.twitter.io.Buf
 import com.twitter.util.{Future, Memoize}
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
@@ -26,13 +27,17 @@ object ResponseBuilder {
   val PlainTextContentType = "text/plain; " + DefaultCharset
 }
 
-//TODO: Generate more response permutations
 class ResponseBuilder @Inject()(
   objectMapper: FinatraObjectMapper,
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,
   statsReceiver: StatsReceiver)
   extends Logging {
+
+  // generates stats in the form: service/failure/[source]/[details]
+  private val serviceFailureNamespace = Seq("service", "failure")
+  private val serviceFailureScoped = statsReceiver.scope(serviceFailureNamespace: _*)
+  private val serviceFailureCounter = statsReceiver.counter(serviceFailureNamespace: _*)
 
   /* Status Codes */
 
@@ -49,11 +54,10 @@ class ResponseBuilder @Inject()(
    * contained within the `Request`.
    *
    * @note This version is useful when the `body` parameter requires custom
-   * message body rendering and values in the `Request` are required for
-   * decision making.
-   *
+   *       message body rendering and values in the `Request` are required for
+   *       decision making.
    * @param request the HTTP Request associated with this response
-   * @param body the response body, or the information needed to render the body
+   * @param body    the response body, or the information needed to render the body
    */
   def ok(request: Request, body: Any): EnrichedResponse = EnrichedResponse(Status.Ok).body(request, body)
 
@@ -131,11 +135,13 @@ class ResponseBuilder @Inject()(
 
   def clientClosed = EnrichedResponse(Status.ClientClosedRequest)
 
+  def create(response: Response) = new EnrichedResponse(response)
+
   object EnrichedResponse {
     def apply(s: Status): EnrichedResponse = EnrichedResponse(Response(Version.Http11, s))
   }
 
-  /* Wrapper around Finagle Response which exposes a builder like API */
+  /* Wrapper around Finagle Response which exposes a builder-like API */
   case class EnrichedResponse(resp: Response)
     extends ResponseProxy {
     override val response = resp
@@ -171,8 +177,13 @@ class ResponseBuilder @Inject()(
       this
     }
 
-    def jsonError = {
-      json(ErrorsResponse(status.reason.toLowerCase))
+    def jsonError: EnrichedResponse = {
+      jsonError(status.reason.toLowerCase)
+      this
+    }
+
+    def jsonError(message: String): EnrichedResponse = {
+      json(ErrorsResponse(message))
       this
     }
 
@@ -183,11 +194,10 @@ class ResponseBuilder @Inject()(
      * contained within the `Request`.
      *
      * @note This version is useful when the `any` parameter requires custom
-     * message body rendering and values in the `Request` are required for
-     * decision making.
-     *
+     *       message body rendering and values in the `Request` are required for
+     *       decision making.
      * @param request the HTTP Request associated with this response
-     * @param any the body, or the information needed to render the body
+     * @param any     the body, or the information needed to render the body
      */
     def body(request: Request, any: Any): EnrichedResponse = body(Some(request), any)
 
@@ -333,12 +343,96 @@ class ResponseBuilder @Inject()(
 
     /* Exception Stats */
 
-    def handled(
+    /**
+     * Helper method for returning responses that are the result of a "service-level" failure. This is most commonly
+     * useful in an [[com.twitter.finatra.http.exceptions.ExceptionMapper]] implementation. E.g.,
+     *
+     * @\Singleton
+     * class AuthenticationExceptionMapper @Inject()(
+     *   response: ResponseBuilder)
+     * extends ExceptionMapper[AuthenticationException] {
+     *
+     *   override def toResponse(
+     *     request: Request,
+     *     exception: AuthenticationException
+     *   ): Response = {
+     *     response
+     *       .status(exception.status)
+     *       .failureClassifier(
+     *         is5xxStatus(exception.status),
+     *         request,
+     *         exception)
+     *       .jsonError( s"Your account could not be authenticated. Reason: ${exception.resultCode}")
+     *   }
+     * }
+     * @param request - the [[com.twitter.finagle.http.Request]] that triggered the failure
+     * @param source - The named component responsible for causing this failure.
+     * @param details - Details about this exception suitable for stats. Each element will be converted into a string.
+     *                Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
+     *                as "protected" or "unprotected", but you can't include the actual tweet id "696081566032723968").
+     * @param message - Details about this exception to be logged when this exception occurs. Typically logDetails
+     *                contains the unbounded details of the exception that you are not able to stat such as an
+     *                actual tweet ID (see above)
+     *
+     * @see [[EnrichedResponse#failureClassifier]]
+     * @return this [[EnrichedResponse]]
+     */
+    def failure(
       request: Request,
-      e: Throwable,
-      details: String*) = {
+      source: String,
+      details: Seq[Any],
+      message: String = ""
+    ): ResponseBuilder#EnrichedResponse = {
+      failureClassifier(classifier = true, request, source, details, message)
+    }
 
-      incrementCounter("handled", statsReceiver, request, e, details: _*)
+    def failure(
+      request: Request,
+      exception: DetailedNonRetryableSourcedException
+    ): ResponseBuilder#EnrichedResponse = {
+      failureClassifier(classifier = true, request, exception.source, exception.details, exception.message)
+    }
+
+    def failureClassifier(
+      classifier: => Boolean,
+      request: Request,
+      exception: DetailedNonRetryableSourcedException
+    ): ResponseBuilder#EnrichedResponse = {
+      failureClassifier(classifier, request, exception.source, exception.details)
+    }
+
+    /**
+     * Helper method for returning responses that are the result of a "service-level" failure. This is most commonly
+     * useful in an [[com.twitter.finatra.http.exceptions.ExceptionMapper]] implementation.
+     *
+     * @param classifier - if the failure should be "classified", e.g. logged and stat'd accordingly
+     * @param request - the [[com.twitter.finagle.http.Request]] that triggered the failure
+     * @param source - The named component responsible for causing this failure.
+     * @param details - Details about this exception suitable for stats. Each element will be converted into a string.
+     *                Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
+     *                as "protected" or "unprotected", but you can't include the actual tweet id "696081566032723968").
+     * @param message - Details about this exception to be logged when this exception occurs. Typically logDetails
+     *                   contains the unbounded details of the exception that you are not able to stat such as an
+     *                   actual tweet ID (see above)
+     * @return this [[EnrichedResponse]]
+     */
+    def failureClassifier(
+      classifier: => Boolean,
+      request: Request,
+      source: String,
+      details: Seq[Any] = Seq(),
+      message: String = ""
+    ): ResponseBuilder#EnrichedResponse = {
+      if (classifier) {
+        val detailStrings = details.map(_.toString)
+        warn(s"Request Failure: $source/" + detailStrings.mkString("/") + " " + message)
+        serviceFailureCounter.incr() // service/failure
+        serviceFailureScoped.counter(source).incr() // service/failure/AuthService
+        serviceFailureScoped.scope(source).counter(detailStrings: _*).incr() // service/failure/AuthService/3040/Bad_signature
+        routeScopedFailure(request).scope(source).counter(detailStrings: _*).incr() // route/hello/POST/failure/AuthService/3040/Bad_signature
+      }
+
+      this
     }
 
     /* Public Conversions */
@@ -351,42 +445,18 @@ class ResponseBuilder @Inject()(
 
     /* Private */
 
-    // route/insights_engagement/POST/status/503/unhandled/NumberFormatException
-    private[finatra] def unhandled(
-      request: Request,
-      e: Throwable,
-      details: String*) = {
-
-      error("Unhandled Exception", e)
-      incrementCounter("unhandled", statsReceiver, request, e, details: _*)
-    }
-
-    private def incrementCounter(
-      handleType: String,
-      statsReceiver: StatsReceiver,
-      request: Request,
-      e: Throwable,
-      details: String*): ResponseBuilder#EnrichedResponse = {
-
-      val routeInfo = RouteInfo(request).getOrElse(throw new Exception("handled can only be used within a Finatra HTTP request callback"))
-
-      val counter = statsReceiver.counter(Seq(
-        "route",
-        routeInfo.sanitizedPath,
-        request.method.toString,
-        "status",
-        status.code.toString,
-        handleType,
-        e.getClass.getSimpleName) ++
-        details: _*)
-
-      counter.incr()
-
-      this
-    }
-
     private def isFile(requestPath: String) = {
       getExtension(requestPath).nonEmpty
+    }
+
+    //optimized: MediaType.toString is a hotspot when profiling
+    private val mediaToString = Memoize { mediaType: MediaType =>
+      mediaType.toString
+    }
+
+    private def routeScopedFailure(request: Request): StatsReceiver = {
+      val routeInfo = RouteInfo(request).getOrElse(throw new Exception("routeScopedFailure can only be used within a HTTP request callback"))
+      statsReceiver.scope("route", routeInfo.sanitizedPath, request.method.toString(), "failure")
     }
 
     private def body(request: Option[Request], any: Any): EnrichedResponse = {
@@ -405,7 +475,7 @@ class ResponseBuilder @Inject()(
           val writer = messageBodyManager.writer(any)
           val writerResponse = request match {
             case Some(req) => writer.write(req, any)
-            case None      => writer.write(any)
+            case None => writer.write(any)
           }
           body(writerResponse.body)
           contentType(writerResponse.contentType)
@@ -413,11 +483,5 @@ class ResponseBuilder @Inject()(
       }
       this
     }
-
-    //optimized: MediaType.toString is a hotspot when profiling
-    private val mediaToString = Memoize { mediaType: MediaType =>
-      mediaType.toString
-    }
   }
-
 }

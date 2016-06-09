@@ -8,15 +8,14 @@ import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.modules.StatsReceiverModule
+import com.twitter.inject.modules.InMemoryStatsReceiverModule
 
 class FinatraDefaultExceptionMapperIntegrationTest extends IntegrationTest {
-
   override val injector = TestInjector(
     MessageBodyModule,
     FinatraJacksonModule,
     MustacheModule,
-    StatsReceiverModule)
+    InMemoryStatsReceiverModule)
 
   val exceptionMapper = injector.instance[FinatraDefaultExceptionMapper]
 

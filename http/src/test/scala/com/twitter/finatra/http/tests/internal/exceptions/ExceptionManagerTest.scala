@@ -1,17 +1,29 @@
 package com.twitter.finatra.http.tests.internal.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionMapper}
-import com.twitter.finatra.http.internal.exceptions.ExceptionManager
+import com.twitter.finagle.stats.InMemoryStatsReceiver
+import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.response.SimpleResponse
+import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.Test
 import com.twitter.inject.app.TestInjector
+import org.apache.commons.lang.RandomStringUtils
 import org.specs2.mock.Mockito
 
 class ExceptionManagerTest extends Test with Mockito {
 
   def newExceptionManager =
-    new ExceptionManager(TestInjector(), TestDefaultExceptionMapper)
+    new ExceptionManager(
+      TestInjector(),
+      TestDefaultExceptionMapper,
+      new InMemoryStatsReceiver)
+
+  def randomUri = {
+    val version = s"${RandomStringUtils.randomNumeric(1)}.${RandomStringUtils.randomNumeric(1)}"
+    val pathPart1 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
+    val pathPart2 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
+    s"/$version/$pathPart1/resource/$pathPart2"
+  }
 
   val exceptionManager = newExceptionManager
   exceptionManager.add[ForbiddenExceptionMapper]
@@ -19,12 +31,12 @@ class ExceptionManagerTest extends Test with Mockito {
   exceptionManager.add[UnauthorizedException1Mapper]
 
   def testException(e: Throwable, status: Status) {
-    val request = mock[Request]
+    val request = RequestBuilder.get(randomUri)
     val response = exceptionManager.toResponse(request, e)
     response.status should equal(status)
   }
 
-  "map exceptions to mappers installed with Guice" in {
+  "map exceptions to mappers installed by type" in {
     testException(new ForbiddenException, Status.Forbidden)
   }
 

@@ -2,7 +2,7 @@ package com.twitter.inject.thrift.filtered_integration.http_server
 
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
-import com.twitter.inject.thrift.filters.FilterBuilder
+import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule
 import com.twitter.util._
 
@@ -15,7 +15,7 @@ object GreeterThriftClientModule
 
   override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
-    filter: FilterBuilder) = {
+    filter: ThriftClientFilterBuilder) = {
 
     serviceIface.copy(
       hi = filter.method(Hi)

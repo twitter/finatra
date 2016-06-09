@@ -11,6 +11,20 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-thrift-client: Improvements to FilteredThriftClientModule to provide finer-grain insight on ThriftClientExceptions.
+  NOTE: previously per-route failure stats were in the form:
+  route/add1String/GET/status/503/handled/ThriftClientException/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError
+
+  These will now split across per-route and detailed "service component" failure stats, e.g.,
+
+  // per-route
+  route/add1String/GET/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError
+  route/add1String/GET/status/503/mapped/ThriftClientException
+  // service component
+  service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError
+
+  Where the latter is in the form "service/failure/SOURCE/THRIFT_SERVICE_NAME/THRIFT_METHOD/NAME/details".
+  "SOURCE" is by default the thrift client label, however, users are able to map this to something else.``RB_ID=839427``
 * finatra: Renamed Embedded testing utilities constructor args, clientFlags --> flags and extraArgs --> args. ``RB_ID=839537``
 * finatra-http: Set Content-Length correctly in EmbeddedHttpServer, to support multi-byte characters
   in the request body. ``RB_ID=837438``

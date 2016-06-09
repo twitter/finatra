@@ -3,12 +3,12 @@ package com.twitter.finatra.http.tests.integration.doeverything.main
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.CommonFilters
-import com.twitter.finatra.http.tests.integration.doeverything.main.controllers.{ReadHeadersController, DoEverythingController, DoNothingController, NonGuiceController}
+import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.tests.integration.doeverything.main.controllers.{DoEverythingController, DoNothingController, NonGuiceController, ReadHeadersController}
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{BarExceptionMapper, FooExceptionMapper}
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
-import com.twitter.finatra.http.tests.integration.doeverything.main.modules.DoEverythingModule
-import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
 import com.twitter.finatra.http.{Controller, HttpServer}
 
 object DoEverythingServerMain extends DoEverythingServer
@@ -16,6 +16,8 @@ object DoEverythingServerMain extends DoEverythingServer
 class DoEverythingServer extends HttpServer {
 
   override val name = "example-server"
+
+  override def statsReceiverModule = DoEverythingStatsReceiverModule
 
   flag("magicNum", "26", "Magic number")
 

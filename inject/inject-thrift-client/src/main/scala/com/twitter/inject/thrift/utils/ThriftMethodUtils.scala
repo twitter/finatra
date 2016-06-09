@@ -1,4 +1,4 @@
-package com.twitter.finatra.thrift.utils
+package com.twitter.inject.thrift.utils
 
 import com.twitter.scrooge.ThriftMethod
 import com.twitter.util.Memoize

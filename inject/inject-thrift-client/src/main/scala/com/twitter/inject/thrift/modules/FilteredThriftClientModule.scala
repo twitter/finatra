@@ -1,21 +1,24 @@
 package com.twitter.inject.thrift.modules
 
 import com.github.nscala_time.time
+import com.github.nscala_time.time.DurationBuilder
 import com.google.inject.Provides
 import com.twitter.finagle._
-import com.twitter.finagle.loadbalancer.{LoadBalancerFactory, DefaultBalancerFactory}
-import com.twitter.finagle.mux.ClientDiscardedRequestException
+import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.{ClientId, MethodIfaceBuilder, ServiceIfaceBuilder}
-import com.twitter.inject.{Injector, TwitterModule}
+import com.twitter.finatra.annotations.Flag
 import com.twitter.inject.conversions.duration._
-import com.twitter.inject.thrift.NonFiltered
-import com.twitter.inject.thrift.filters.FilterBuilder
+import com.twitter.inject.exceptions.PossiblyRetryable
+import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule.MaxDuration
+import com.twitter.inject.thrift.{AndThenService, NonFiltered}
+import com.twitter.inject.{Injector, RootMonitor, TwitterModule}
 import com.twitter.scrooge.{ThriftResponse, ThriftService}
-import com.twitter.util.{Return, Throw, Try}
+import com.twitter.util.{Duration => TwitterDuration, Monitor, Try}
 import javax.inject.Singleton
 import org.joda.time.Duration
+import scala.language.implicitConversions
 import scala.reflect.ClassTag
 
 object FilteredThriftClientModule {
@@ -28,109 +31,159 @@ abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTa
   extends TwitterModule
   with time.Implicits {
 
+  override val frameworkModules = Seq(
+    AndThenServiceModule,
+    FilteredThriftClientFlagsModule)
+
   /**
    * Name of client for use in metrics
    */
   val label: String
 
   /**
-   * Destination of client (usually a wily path)
+   * Destination of client
    */
   val dest: String
 
   /**
-    * Enable thrift mux for this connection.
-    *
-    * Note: Both server and client must have mux enabled otherwise
-    * a nondescript ChannelClosedException will be seen.
-    */
+   * Enable thrift mux for this connection.
+   *
+   * Note: Both server and client must have mux enabled otherwise
+   * a nondescript ChannelClosedException will be seen.
+   *
+   * What is ThriftMux?
+   * http://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
+   */
   protected val mux: Boolean = true
+
+  protected val useHighResTimerForRetries = false
 
   protected def sessionAcquisitionTimeout: Duration = MaxDuration
 
-  protected def loadBalancer: LoadBalancerFactory = DefaultBalancerFactory
+  protected def budget: Budget = Budget.default
 
-  protected def configureThriftMuxClient(thriftMuxClient: ThriftMux.Client): ThriftMux.Client = {
-    thriftMuxClient
-  }
+  protected def monitor: Monitor = RootMonitor
 
-  protected def configureNonThriftMuxClient(thriftClient: Thrift.Client): Thrift.Client = {
-    thriftClient
+  /**
+   * This method allows for further configuration of the client for parameters not exposed by
+   * this module or for overriding defaults provided herein, e.g.,
+   *
+   * override def configureThriftMuxClient(client: ThriftMux.Client): ThriftMux.Client = {
+   *   client
+   *     .withProtocolFactory(myCustomProtocolFactory))
+   *     .withStatsReceiver(someOtherScopedStatsReceiver)
+   *     .withMonitor(myAwesomeMonitor)
+   *     .withTracer(notTheDefaultTracer)
+   *     .withResponseClassifier(ThriftResponseClassifier.ThriftExceptionsAsFailures)
+   * }
+   *
+   * @param client - the [[com.twitter.finagle.ThriftMux.Client]] to configure.
+   * @return a configured ThriftMux.Client.
+   */
+  protected def configureThriftMuxClient(client: ThriftMux.Client): ThriftMux.Client = {
+    client
   }
 
   /**
-   * Add filters to the ServiceIface based client
+   * This method allows for further configuration of the client for parameters not exposed by
+   * this module or for overriding defaults provided herein, e.g.,
+   *
+   * override def configureNonThriftMuxClient(client: Thrift.Client): Thrift.Client = {
+   *   client
+   *     .withProtocolFactory(myCustomProtocolFactory))
+   *     .withStatsReceiver(someOtherScopedStatsReceiver)
+   *     .withMonitor(myAwesomeMonitor)
+   *     .withTracer(notTheDefaultTracer)
+   *     .withResponseClassifier(ThriftResponseClassifier.ThriftExceptionsAsFailures)
+   * }
+   *
+   * In general it is recommended that users prefer to use ThriftMux if the server-side supports
+   * mux connections.
+   *
+   * @param client - the [[com.twitter.finagle.Thrift.Client]] to configure.
+   * @return a configured Thrift.Client.
+   */
+  protected def configureNonThriftMuxClient(client: Thrift.Client): Thrift.Client = {
+    client
+  }
+
+  /**
+   * Add filters to the ServiceIface based client.
    */
   def filterServiceIface(
     serviceIface: ServiceIface,
-    filter: FilterBuilder): ServiceIface
+    filters: ThriftClientFilterBuilder): ServiceIface
 
   @Provides
   @Singleton
   final def providesClient(
+    @Flag("timeout.multiplier") timeoutMultiplier: Int,
+    @Flag("retry.multiplier") retryMultiplier: Int,
     @NonFiltered serviceIface: ServiceIface,
     injector: Injector,
-    statsReceiver: StatsReceiver): FutureIface = {
-
-    val filterBuilder = new FilterBuilder(
+    statsReceiver: StatsReceiver,
+    andThenService: AndThenService
+  ): FutureIface = {
+    val filterBuilder = new ThriftClientFilterBuilder(
+      timeoutMultiplier,
+      retryMultiplier,
       injector,
       statsReceiver,
-      label)
+      label,
+      budget,
+      useHighResTimerForRetries,
+      andThenService)
 
     Thrift.client.newMethodIface(
       filterServiceIface(
         serviceIface = serviceIface,
-        filter = filterBuilder))
+        filters = filterBuilder))
   }
 
   @Provides
   @NonFiltered
   @Singleton
   final def providesUnfilteredServiceIface(
+    @Flag("timeout.multiplier") timeoutMultiplier: Int,
     clientId: ClientId,
     statsReceiver: StatsReceiver): ServiceIface = {
-    val acquisitionTimeout = sessionAcquisitionTimeout.toTwitterDuration
+    val acquisitionTimeout = sessionAcquisitionTimeout.toTwitterDuration * timeoutMultiplier
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
-    if (mux) {
-      val thriftMuxClient = ThriftMux.client
-        .withSession.acquisitionTimeout(acquisitionTimeout)
-        .withStatsReceiver(clientStatsReceiver)
-        .withLoadBalancer(loadBalancer)
-        .withClientId(clientId)
+    val thriftClient =
+      if (mux) {
+        configureThriftMuxClient(
+          ThriftMux.client
+            .withSession.acquisitionTimeout(acquisitionTimeout)
+            .withStatsReceiver(clientStatsReceiver)
+            .withClientId(clientId)
+            .withMonitor(monitor)
+            .withRetryBudget(budget.retryBudget)
+            .withRetryBackoff(budget.requeueBackoffs))
+      }
+      else {
+        configureNonThriftMuxClient(
+          Thrift.client
+            .withSession.acquisitionTimeout(acquisitionTimeout)
+            .withStatsReceiver(clientStatsReceiver)
+            .withClientId(clientId)
+            .withMonitor(monitor)
+            .withRetryBudget(budget.retryBudget)
+            .withRetryBackoff(budget.requeueBackoffs))
+      }
 
-      configureThriftMuxClient(thriftMuxClient)
-        .newServiceIface[ServiceIface](dest = dest, label = label)
-    }
-    else {
-      val thriftClient = Thrift.client
-        .withSession.acquisitionTimeout(acquisitionTimeout)
-        .withStatsReceiver(clientStatsReceiver)
-        .withLoadBalancer(loadBalancer)
-        .withClientId(clientId)
-
-      configureNonThriftMuxClient(thriftClient)
-        .newServiceIface[ServiceIface](dest = dest, label = label)
-    }
+    thriftClient
+      .newServiceIface[ServiceIface](dest, label)
   }
 
   /* Common Retry Functions */
 
-  lazy val PossiblyRetryableExceptions: PartialFunction[Try[ThriftResponse[_]], Boolean] = {
-    case Throw(t) => possiblyRetryable(t)
-    case Return(response) => response.firstException exists possiblyRetryable
-  }
+  protected val PossiblyRetryableExceptions: PartialFunction[Try[ThriftResponse[_]], Boolean] =
+    PossiblyRetryable.PossiblyRetryableExceptions
 
-  def possiblyRetryable(t: Throwable): Boolean = {
-    !isCancellation(t)
-  }
+  /* Common Implicits */
 
-  def isCancellation(t: Throwable): Boolean = t match {
-    case _: CancelledRequestException => true
-    case _: CancelledConnectionException => true
-    case _: ClientDiscardedRequestException => true
-    case f: Failure if f.isFlagged(Failure.Interrupted) => true
-    case f: Failure if f.cause.isDefined => isCancellation(f.cause.get)
-    case _ => false
+  implicit def toTwitterDuration(duration: DurationBuilder): TwitterDuration = {
+    TwitterDuration.fromMilliseconds(duration.toDuration.getMillis)
   }
 }

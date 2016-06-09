@@ -19,8 +19,10 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
       andExpect = Status.Ok,
       withBody = "7")
 
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/requests", 4)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/success", 2)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/requests", 8)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/success", 6)
+    // invocations --> incremented every time we call/invoke the method.
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/invocations", 2)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/failures", 2)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/failures/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/failures/org.apache.thrift.TApplicationException", 1)
@@ -37,14 +39,29 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
       andExpect = Status.Ok,
       withBody = "11")
 
+    // client stats
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/requests", 8)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/success", 3)
+    // invocations --> incremented every time we call/invoke the method.
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/invocations", 2)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/requests", 6)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/success", 1)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/failures", 5)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/failures/com.twitter.finatra.thrift.thriftscala.ServerError", 2)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/failures/org.apache.thrift.TApplicationException", 3)
-    add1HttpServer.assertCounter("route/add1String/GET/status/503/handled/ThriftClientException/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
+
+    // per-route stats
+    // two total requests to the route
+    add1HttpServer.assertCounter("route/add1String/GET/requests", 2)
+    // the first resulted failed request
+    add1HttpServer.assertCounter("route/add1String/GET/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
+    add1HttpServer.assertCounter("route/add1String/GET/status/503", 1)
+    add1HttpServer.assertCounter("route/add1String/GET/status/503/mapped/ThriftClientException", 1)
+    // the second an eventual 200 OK
     add1HttpServer.assertCounter("route/add1String/GET/status/200", 1)
+
+    // service failure stats
+    add1HttpServer.assertCounter("service/failure", 1)
+    add1HttpServer.assertCounter("service/failure/adder-thrift", 1)
+    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
   }
 
   "add1 always error" in {
@@ -59,16 +76,28 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
         suppress = true)
     }
 
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1AlwaysError/invocations", numHttpRequests)
+    // client stats
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1AlwaysError/requests", expectedFailedThriftRequests)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1AlwaysError/success", 0)
+    // invocations --> incremented every time we call/invoke the method.
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1AlwaysError/invocations", numHttpRequests)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1AlwaysError/failures", expectedFailedThriftRequests)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1AlwaysError/failures/org.apache.thrift.TApplicationException", expectedFailedThriftRequests)
-    add1HttpServer.assertCounter("route/errorAdd1/GET/status/503/handled/ThriftClientException/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", numHttpRequests)
+
+    // per-route stats
+    add1HttpServer.assertCounter("route/add1String/GET/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
+    add1HttpServer.assertCounter("route/errorAdd1/GET/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", numHttpRequests)
     add1HttpServer.assertCounter("route/errorAdd1/GET/status/503", numHttpRequests)
+    add1HttpServer.assertCounter("route/errorAdd1/GET/status/503/mapped/ThriftClientException", numHttpRequests)
+
+    // service failure stats
+    add1HttpServer.assertCounter("service/failure", numHttpRequests + 1)
+    add1HttpServer.assertCounter("service/failure/adder-thrift", numHttpRequests + 1)
+    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", numHttpRequests)
+    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
   }
 
-  "slow add resulting in request timeouts" ignore {
+  "slow add resulting in request timeouts" in {
     val numHttpRequests = 1
     val maxThriftRequestsPerHttpRequest = 4
     val expectedFailedThriftRequests = numHttpRequests * maxThriftRequestsPerHttpRequest
@@ -80,13 +109,29 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
         suppress = true)
     }
 
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/invocations", numHttpRequests)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/requests", expectedFailedThriftRequests)
+    // client stats
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/requests") { value =>
+      value <= expectedFailedThriftRequests  // our requests should total at most the expected but may be less.
+    }
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/success", 0)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/failures", expectedFailedThriftRequests)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/failures/com.twitter.finagle.IndividualRequestTimeoutException", expectedFailedThriftRequests)
-    add1HttpServer.assertCounter("route/slowAdd1/GET/status/503/handled/ThriftClientException/Adder/add1Slowly/com.twitter.finagle.IndividualRequestTimeoutException", numHttpRequests)
+    // invocations --> incremented every time we call/invoke the method.
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/invocations", numHttpRequests)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/failures") { value =>
+      value <= expectedFailedThriftRequests // our failures should total at most the expected but may be less.
+    }
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1Slowly/failures/com.twitter.finagle.IndividualRequestTimeoutException") { value =>
+      value <= expectedFailedThriftRequests // our failures should total at most the expected but may be less.
+    }
+
+    // per-route stats
+    add1HttpServer.assertCounter("route/slowAdd1/GET/failure/adder-thrift/Adder/add1Slowly/com.twitter.finagle.IndividualRequestTimeoutException", numHttpRequests)
     add1HttpServer.assertCounter("route/slowAdd1/GET/status/503", numHttpRequests)
+
+    // service failure stats
+    add1HttpServer.assertCounter("service/failure/adder-thrift", 12)
+    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", 10)
+    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1Slowly/com.twitter.finagle.IndividualRequestTimeoutException", 1)
+    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
   }
 
   override def afterAll() = {

@@ -210,6 +210,10 @@ class EmbeddedTwitterServer(
     getCounter(name) should equal(expected)
   }
 
+  def assertCounter(name: String)(callback: Int => Boolean): Unit = {
+    callback(getCounter(name)) should be(true)
+  }
+
   def getStat(name: String): Seq[Float] = {
     statsMap.getOrElse(name, Seq())
   }

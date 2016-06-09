@@ -1,9 +1,9 @@
 package com.twitter.finatra.thrift.routing
 
 import com.twitter.finatra.thrift.internal.ThriftMethodService
-import com.twitter.finatra.thrift.utils.ThriftMethodUtils._
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
+import com.twitter.inject.thrift.utils.ThriftMethodUtils._
 import com.twitter.scrooge.ThriftMethod
 import com.twitter.util.Await
 import javax.inject.Inject
@@ -63,6 +63,7 @@ class ThriftWarmup @Inject()(
 
   /**
     * Function curried as the default arg for the responseCallback: M#Result => Unit parameter.
+ *
     * @param a - [[AnyRef]]
     * @return Unit
     */
