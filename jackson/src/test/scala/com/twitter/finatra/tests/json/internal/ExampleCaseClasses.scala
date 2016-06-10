@@ -131,6 +131,8 @@ case class CaseClassWithArrays(
 
 case class CaseClassWithArrayLong(array: Array[Long])
 
+case class CaseClassWithArrayListOfIntegers(arraylist: java.util.ArrayList[java.lang.Integer])
+
 case class CaseClassWithArrayBoolean(array: Array[Boolean])
 
 case class CaseClassWithArrayWrappedValueLong(array: Array[WrappedValueLong])

@@ -136,7 +136,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
                "nickname" : "ace"
             }""",
         withErrors = Seq(
-          "age: 'foo' is not a valid int",
+          "age: 'foo' is not a valid Integer",
           "id: field is required",
           "name: field is required"))
     }
@@ -154,7 +154,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
         withErrors = Seq(
           "make: 'Foo' is not a valid CarMake with valid values: Ford, Honda",
           "model: field is required",
-          "passengers.age: 'blah' is not a valid int",
+          "passengers.age: 'blah' is not a valid Integer",
           "passengers.name: field is required"))
     }
 
@@ -286,7 +286,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
          }""",
         withErrors = Seq(
           "age3: error parsing ''",
-          "age: 'old' is not a valid int",
+          "age: 'old' is not a valid Integer",
           """date_time3: field cannot be negative""",
           """date_time4: field cannot be empty""",
           """date_time: error parsing 'today' into an ISO 8601 datetime"""
@@ -862,6 +862,17 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     }
   }
 
+  feature("a case class with an ArrayList of Integers") {
+    scenario("ArrayList of Integers") {
+      val c = parse[CaseClassWithArrayListOfIntegers]("""{"arraylist":[3,1,2]}""")
+      val l = new java.util.ArrayList[Integer](3)
+      l.add(3)
+      l.add(1)
+      l.add(2)
+      c.arraylist should equal(l)
+    }
+  }
+
   feature("seq of longs") {
     scenario("seq of longs") {
       val seq = parse[Seq[Long]]("""[3,1,2]""")
@@ -967,7 +978,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
             "foo": "bar"
           }""",
       withErrors = Seq(
-        "foo: 'bar' is not a valid boolean"))
+        "foo: 'bar' is not a valid Boolean"))
   }
 
   scenario("case class with boolean number as string") {
@@ -976,7 +987,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
             "foo": "1"
           }""",
       withErrors = Seq(
-        "foo: '1' is not a valid boolean"))
+        "foo: '1' is not a valid Boolean"))
   }
 
   val msgHiJsonStr = """{"msg":"hi"}"""

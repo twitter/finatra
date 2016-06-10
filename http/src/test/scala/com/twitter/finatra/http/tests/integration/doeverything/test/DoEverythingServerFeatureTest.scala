@@ -1331,7 +1331,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       {
         "errors": [
           "max: queryParam is required",
-          "verbose: '5' is not a valid boolean"
+          "verbose: '5' is not a valid Boolean"
         ]
       }
       """)
