@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Upgrade to Jackson 2.6.5. ``RB_ID=836819``
 * inject: Introduce inject/inject-thrift module to undo cyclic dependency introduced in RB 839427. ``RB_ID=841128``
 * inject-thrift-client: Improvements to FilteredThriftClientModule to provide finer-grain insight on ThriftClientExceptions.
   NOTE: previously per-route failure stats were in the form:
@@ -75,6 +76,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+* [GH-276](https://github.com/twitter/finatra/issues/276). ``RB_ID=836819``
 * [PR-273](https://github.com/twitter/finatra/pull/273). ``RB_ID=838215``
 * [PR-324](https://github.com/twitter/finatra/pull/324). ``RB_ID=838215``
 
