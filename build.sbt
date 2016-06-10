@@ -142,7 +142,7 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
   publishLocal := {},
   publish := {},
   assemblyMergeStrategy in assembly := {
-    case "BUILD" => MergeStrategy.discard
+    case PathList("BUILD") => MergeStrategy.discard
     case other => MergeStrategy.defaultMergeStrategy(other)
   }
 )
@@ -472,7 +472,7 @@ lazy val http = project.
           Seq("com/twitter/finatra/http/EmbeddedHttpServer",
               "com/twitter/finatra/http/HttpMockResponses",
               "com/twitter/finatra/http/HttpTest",
-              "com/twitter/finatra/http/StreaminJsonTestHelper")))
+              "com/twitter/finatra/http/StreamingJsonTestHelper")))
     }
   ).dependsOn(
     jackson % "test->test;compile->compile",
