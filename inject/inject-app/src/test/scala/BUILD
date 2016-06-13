@@ -20,7 +20,7 @@ junit_tests(name='scala',
 
 scala_library(name="test-deps",
   provides = scala_artifact(
-    org = 'com.twitter.inject',
+    org = 'com.twitter',
     name = 'inject-app-test-jar',
     repo = artifactory,
   ),
