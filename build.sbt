@@ -571,7 +571,7 @@ lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku")).
     name := "hello-world-heroku",
     moduleName := "hello-world-heroku",
     libraryDependencies ++= Seq(
-      "com.github.rlazoti" %% "finagle-metrics" % "0.0.2"
+      "com.github.rlazoti" %% "finagle-metrics" % "0.0.3"
     )
   ).dependsOn(
     http % "test->test;compile->compile",
