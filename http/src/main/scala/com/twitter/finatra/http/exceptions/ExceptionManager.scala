@@ -6,7 +6,6 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.utils.ClassUtils
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
-import com.twitter.inject.conversions.map._
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -103,7 +102,7 @@ class ExceptionManager(
   // Assumes mappers are never explicitly registered after configuration
   // phase, otherwise we'd need to invalidate the cache.
   private def cachedGetMapper(cls: Class[_]): ExceptionMapper[_] = {
-    mappers.atomicGetOrElseUpdate(cls, getMapper(cls))
+    mappers.getOrElseUpdate(cls, getMapper(cls))
   }
 
   // Get mapper for this throwable class if it exists, otherwise

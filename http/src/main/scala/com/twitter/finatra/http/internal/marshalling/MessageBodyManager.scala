@@ -4,7 +4,6 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling._
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
-import com.twitter.inject.conversions.map._
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
@@ -63,7 +62,7 @@ class MessageBodyManager @Inject()(
 
   def read[T: Manifest](request: Request): T = {
     val requestManifest = manifest[T]
-    readerCache.atomicGetOrElseUpdate(requestManifest, {
+    readerCache.getOrElseUpdate(requestManifest, {
       val objType = typeLiteral(requestManifest).getType
       classTypeToReader.get(objType)
     }) match {
@@ -77,7 +76,7 @@ class MessageBodyManager @Inject()(
   // Note: writerCache is bounded on the number of unique classes returned from controller routes */
   def writer(obj: Any): MessageBodyWriter[Any] = {
     val objClass = obj.getClass
-    writerCache.atomicGetOrElseUpdate(objClass, {
+    writerCache.getOrElseUpdate(objClass, {
       (classTypeToWriter.get(objClass) orElse classAnnotationToWriter(objClass)) getOrElse defaultMessageBodyWriter
     })
   }

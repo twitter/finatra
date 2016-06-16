@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Remove com.twitter.inject.conversions.map#atomicGetOrElseUpdate. This was necessary for Scala 2.10 support
+  since #getOrElseUpdate was not atomic until Scala 2.11.6. See: https://github.com/scala/scala/pull/4319. ``RB_ID=842684``
 * finatra: Upgrade to Jackson 2.6.5. ``RB_ID=836819``
 * inject: Introduce inject/inject-thrift module to undo cyclic dependency introduced in RB 839427. ``RB_ID=841128``
 * inject-thrift-client: Improvements to FilteredThriftClientModule to provide finer-grain insight on ThriftClientExceptions.

@@ -2,7 +2,6 @@ package com.twitter.finatra.http.internal.marshalling.mustache
 
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.response.Mustache
-import com.twitter.inject.conversions.map._
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Singleton
 import scala.collection.JavaConverters._
@@ -25,7 +24,7 @@ class MustacheTemplateNameLookup {
   /* Private */
 
   private def lookupViaAnnotation(viewObj: Any): String = {
-    classToTemplateNameCache.atomicGetOrElseUpdate(viewObj.getClass, {
+    classToTemplateNameCache.getOrElseUpdate(viewObj.getClass, {
       val mustacheAnnotation = viewObj.getClass.getAnnotation(classOf[Mustache])
       mustacheAnnotation.value + ".mustache"
     })
