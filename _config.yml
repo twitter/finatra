@@ -2,7 +2,7 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://finatra.info/finatra
+url: http://twitter.github.io/finatra
 title: Finatra
 subtitle: Fast, testable Scala services.
 author: Twitter
