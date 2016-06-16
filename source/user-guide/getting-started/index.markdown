@@ -184,14 +184,18 @@ You could also achieve the same behavior using the [`@Named`](https://github.com
 ### <a class="anchor" name="flags" href="#flags">Flags</a>
 ===============================
 
-Finatra supports the use of [twitter/util](https://github.com/twitter/util) [Flags](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala) as supported within the [TwitterServer](http://twitter.github.io/twitter-server/Features.html#flags) lifecycle. Flags by their definition represent some external configuration that is passed to the system and are thus an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment, *production*, *staging*, or *development*.
+Finatra supports the use of [twitter/util](https://github.com/twitter/util) [Flags](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala) as supported within the [TwitterServer](http://twitter.github.io/twitter-server/Features.html#flags) lifecycle. Flags by their definition represent some external configuration that is passed to the server and are thus an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment, *production*, *staging*, *development*, or *jills-staging*. This allows you to work with the same application code in different environments.
 
-This type of configuration parameterization is generally preferred over hardcoding logic by a type of "*environment*" String within code. As such, flags are generally defined within a [Module](#module) to allow for scoping of reusable external configuration. In this way, flags can be used to aid in the construction of an instance to be provided to the object graph, e.g., a DatabaseConnection instance that use the database URL flag as an input. The module is then able to tell Guice how to provide this object when injected by defining an `@Provides` annotated method.
+This type of configuration parameterization is generally preferred over hardcoding logic by a type of "*environment*" string within code (e.g. `if (env == "production") { ... }`). It is generally good practice to make flags granular controls that are fully orthogonal to one another. They can then be independently managed for each deploy and this scales consistently as the number of supported "environments" scales.
+
+Flags are generally [defined](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/modules/DoEverythingModule.scala#L13) within a [Module](#module) to allow for scoping of reusable external configuration, though you can also choose to define a flag [directly in a server](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/DoEverythingServer.scala#L22). When defined in a [Module](#module), flags can be used to aid in the construction of an instance to be *provided* to the object graph, e.g., a DatabaseConnection instance that use the database URL flag as an input. The module is then able to tell Guice how to provide this object when injected by defining an `@Provides` annotated method.
 
 In Finatra, we also provide a way to override the objects provided on the object graph through "override modules". See the "Override Modules" section in [testing](/finatra/testing#override-modules).
 
 #### `@Flag` annotation
 Flag is a [binding annotation](#binding-annotations). This annotation allows flag values to be injected into classes (and provider methods), by using the `@Flag` annotation:
+
+Define a flag (in this case within a `TwitterModule`)
 
 ```scala
 class MyModule extends TwitterModule {
@@ -204,14 +208,19 @@ class MyModule extends TwitterModule {
     new Foo(key)
   }
 }
+```
+<div></div>
 
+The flag can then be injected as a constructor-arg to a class. When the class is obtained from the injector the correctly parse flag value will be injected. Note, you can also always instantiate this class manually. When doing so, you obviously will need to pass all the constructor args manually including a value for the flag argument.
+
+```scala
 class MyService @Inject()(
   @Flag("key") key: String) {
 }
 ```
 <div></div>
 
-**NOTE**: If a flag is defined in a module, you can dereference that flag directly within the module (instead of using the `@Flag` annotation), e.g.:
+**NOTE**: when defining a flag, you can dereference that flag directly within the module or server (instead of using the `@Flag` annotation), e.g.:
 
 ```scala
 object MyModule1 extends TwitterModule {
@@ -247,7 +256,9 @@ Flags are set by passing them as arguments to your java application &mdash; as s
 $ java -jar finatra-hello-world-assembly-2.0.0.jar -key=value
 ```
 
-`TwitterModule#flag` is parameterized to return a Flag of type `T` where `T` is the type of the arguement passed as the default. If you do not specify a default value then you must explicitly parameterize your call to `TwitterModule#flag`, e.g,
+When testing
+
+`TwitterModule#flag` is parameterized to return a Flag of type `T` where `T` is the type of the argument passed as the default. If you do not specify a default value then you must explicitly parameterize your call to `TwitterModule#flag`, e.g,
 
 ```scala
 object MyModule1 extends TwitterModule {
