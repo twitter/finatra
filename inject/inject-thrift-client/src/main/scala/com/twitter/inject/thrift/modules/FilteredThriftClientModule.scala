@@ -7,7 +7,7 @@ import com.twitter.finagle._
 import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.{ClientId, MethodIfaceBuilder, ServiceIfaceBuilder}
-import com.twitter.finatra.annotations.Flag
+import com.twitter.inject.annotations.Flag
 import com.twitter.inject.conversions.duration._
 import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder

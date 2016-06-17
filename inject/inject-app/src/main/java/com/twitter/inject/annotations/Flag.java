@@ -1,4 +1,4 @@
-package com.twitter.finatra.annotations;
+package com.twitter.inject.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

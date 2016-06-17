@@ -1,8 +1,8 @@
 package com.twitter.inject.app.internal
 
 import com.google.inject.Key
-import com.twitter.finatra.annotations.FlagImpl
-import com.twitter.inject.{TwitterModule, Logging}
+import com.twitter.inject.annotations.FlagImpl
+import com.twitter.inject.{Logging, TwitterModule}
 import javax.inject.Provider
 
 object FlagsModule {

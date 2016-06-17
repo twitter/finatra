@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.controllers
 
 import com.twitter.finagle.http.{Method, Request, Status}
 import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
-import com.twitter.finatra.annotations.{CamelCaseMapper, Flag}
+import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
@@ -14,6 +14,7 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.filters.Forb
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.{QueryParam, RouteParam}
+import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
 import java.io.ByteArrayInputStream
 import java.nio.charset.StandardCharsets

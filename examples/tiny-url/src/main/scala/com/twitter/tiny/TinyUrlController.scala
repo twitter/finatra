@@ -3,10 +3,10 @@ package com.twitter.tiny
 import java.net.URL
 import javax.inject.Inject
 
-import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.inject.Logging
+import com.twitter.inject.annotations.Flag
 import com.twitter.tiny.domain.http.{PostUrlRequest, PostUrlResponse, TinyUrlRedirect}
 import com.twitter.tiny.services.UrlShortenerService
 

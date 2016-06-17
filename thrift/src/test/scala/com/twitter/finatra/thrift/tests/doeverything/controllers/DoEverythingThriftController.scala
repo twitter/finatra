@@ -2,8 +2,8 @@ package com.twitter.finatra.thrift.tests.doeverything.controllers
 
 import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.doeverything.thriftscala.DoEverything.{Echo, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
-import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.thrift.Controller
+import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
 import javax.inject.Inject
 

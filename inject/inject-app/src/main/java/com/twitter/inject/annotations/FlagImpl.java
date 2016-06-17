@@ -1,4 +1,4 @@
-package com.twitter.finatra.annotations;
+package com.twitter.inject.annotations;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;

@@ -1,8 +1,8 @@
 package com.twitter.finatra.http.routing
 
-import com.twitter.finatra.annotations.Flag
 import com.twitter.finatra.conversions.boolean._
 import com.twitter.inject.Logging
+import com.twitter.inject.annotations.Flag
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
 import javax.activation.MimetypesFileTypeMap
 import javax.inject.{Inject, Singleton}
