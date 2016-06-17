@@ -1,6 +1,7 @@
 package com.twitter.finatra.multiserver.test
 
 import com.twitter.finagle.http.Status
+import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
 import com.twitter.finatra.multiserver.AdderThriftServer.AdderThriftServer
@@ -19,8 +20,8 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
       andExpect = Status.Ok,
       withBody = "7")
 
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/requests", 8)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/success", 6)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/requests", 4)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/success", 2)
     // invocations --> incremented every time we call/invoke the method.
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/invocations", 2)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1/failures", 2)
@@ -40,8 +41,8 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
       withBody = "11")
 
     // client stats
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/requests", 8)
-    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/success", 3)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/requests", 6)
+    add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/success", 1)
     // invocations --> incremented every time we call/invoke the method.
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/invocations", 2)
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1String/failures", 5)
@@ -85,16 +86,14 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
     add1HttpServer.assertCounter("clnt/adder-thrift/Adder/add1AlwaysError/failures/org.apache.thrift.TApplicationException", expectedFailedThriftRequests)
 
     // per-route stats
-    add1HttpServer.assertCounter("route/add1String/GET/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
     add1HttpServer.assertCounter("route/errorAdd1/GET/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", numHttpRequests)
     add1HttpServer.assertCounter("route/errorAdd1/GET/status/503", numHttpRequests)
     add1HttpServer.assertCounter("route/errorAdd1/GET/status/503/mapped/ThriftClientException", numHttpRequests)
 
     // service failure stats
-    add1HttpServer.assertCounter("service/failure", numHttpRequests + 1)
-    add1HttpServer.assertCounter("service/failure/adder-thrift", numHttpRequests + 1)
+    add1HttpServer.assertCounter("service/failure", numHttpRequests)
+    add1HttpServer.assertCounter("service/failure/adder-thrift", numHttpRequests)
     add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", numHttpRequests)
-    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
   }
 
   "slow add resulting in request timeouts" in {
@@ -128,13 +127,16 @@ class MultiServerFeatureTest extends HttpTest with ThriftTest {
     add1HttpServer.assertCounter("route/slowAdd1/GET/status/503", numHttpRequests)
 
     // service failure stats
-    add1HttpServer.assertCounter("service/failure/adder-thrift", 12)
-    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", 10)
+    add1HttpServer.assertCounter("service/failure", 1)
+    add1HttpServer.assertCounter("service/failure/adder-thrift", 1)
     add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1Slowly/com.twitter.finagle.IndividualRequestTimeoutException", 1)
-    add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
   }
 
-  override def afterAll() = {
+  override protected def afterEach(): Unit = {
+    add1HttpServer.statsReceiver.asInstanceOf[InMemoryStatsReceiver].clear()
+  }
+
+  override def afterAll(): Unit = {
     add1ThriftServer.close()
     add1HttpServer.close()
     add2Server.close()

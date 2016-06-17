@@ -11,6 +11,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-thrift: Address issues with com.twitter.inject.exceptions.PossiblyRetryable. PossiblyRetryable does not correctly
+  determine what is retryable. Updated to correct the logic for better default retry utility. ``RB_ID=843428``
 * finatra: finatra: Move com.twitter.finatra.annotations.Flag|FlagImpl to com.twitter.inject.annotations.Flag|FlagImpl. ``RB_ID=843383``
 * finatra: Remove com.twitter.inject.conversions.map#atomicGetOrElseUpdate. This was necessary for Scala 2.10 support
   since #getOrElseUpdate was not atomic until Scala 2.11.6. See: https://github.com/scala/scala/pull/4319. ``RB_ID=842684``

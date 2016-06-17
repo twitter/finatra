@@ -4,5 +4,7 @@ junit_tests(name='scala',
     'finatra/inject/inject-thrift',
   ],
   fatal_warnings=True,
-  sources=rglobs('com/twitter/inject/tests/exceptions/*.scala'),
+  sources=globs(
+    'com/twitter/inject/tests/exceptions/*.scala',
+    'com/twitter/inject/tests/thrift/utils/*.scala'),
 )
