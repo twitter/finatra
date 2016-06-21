@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file. Note that `
 ## [Unreleased]
 
 ### Added
-
+* finatra-thrift: Add python namespace to finatra_thrift_exceptions.thrift. ``RB_ID=844668``
 * finatra-http: Support ANY method in HTTP Controllers. Adds support for defining routes which will answer 
   to "any" HTTP method. ``RB_ID=830429``
 
