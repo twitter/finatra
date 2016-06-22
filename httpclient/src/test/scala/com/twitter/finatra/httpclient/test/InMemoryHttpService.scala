@@ -43,16 +43,16 @@ class InMemoryHttpService
   }
 
   def mockPost(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
-    mock(Post, path, andReturn, sticky)
+    mock(Post, path, andReturn, sticky, Option(withBody))
   }
 
   def mockPut(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
     mock(Put, path, andReturn, sticky)
   }
 
-  def mock(method: Method, path: String, andReturn: Response, sticky: Boolean): Unit = {
+  def mock(method: Method, path: String, andReturn: Response, sticky: Boolean, withBody: Option[String] = None): Unit = {
     val existing = responseMap(RequestKey(method, path))
-    val newEntry = ResponseWithExpectedBody(andReturn, None, sticky = sticky)
+    val newEntry = ResponseWithExpectedBody(andReturn, withBody, sticky = sticky)
     responseMap(
       RequestKey(method, path)) = existing :+ newEntry
   }
@@ -93,7 +93,7 @@ class InMemoryHttpService
 
   private def lookupPostResponseWithBody(request: Request, existing: ArrayBuffer[ResponseWithExpectedBody]): Response = {
     val found = existing find {_.expectedBody == Some(request.contentString)} getOrElse {
-      throw new Exception(request + " with expected body not mocked")
+      throw new PostRequestWithIncorrectBodyException(request + " with expected body not mocked")
     }
 
     if (!found.sticky) {
