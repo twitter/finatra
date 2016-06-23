@@ -97,9 +97,37 @@ import com.twitter.inject.server.FeatureTest
 class ExampleThriftServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(new ExampleThriftServer)
 
-  val client = server.thriftClient[ExampleThrift[Future]](clientId = "client123")
+  lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = "client123")
 
   "MyTest" should {
+    "return data accordingly" in {
+      Await.result(client.doExample("input")) should equal("output")
+    }
+  }
+}
+```
+<div></div>
+
+If you are extending both `com.twitter.finatra.http.HttpServer` **and** `com.twitter.finatra.thrift.ThriftServer` then you can feature test by constructing an `EmbeddedHttpServer with ThriftClient`, e.g.,
+
+```scala
+import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.inject.server.FeatureTest
+
+class ExampleCombinedServerFeatureTest extends FeatureTest {
+  override val server =
+    new EmbeddedHttpServer(new ExampleCombinedServer) with ThriftClient
+
+  lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = "client123")
+
+  "MyTest" should {
+    "perform feature" in {
+      server.httpGet(
+        path = "/",
+        andExpect = Status.Ok)
+        ...
+    }
+
     "return data accordingly" in {
       Await.result(client.doExample("input")) should equal("output")
     }
@@ -111,7 +139,11 @@ class ExampleThriftServerFeatureTest extends FeatureTest {
 #### Note:
 The `server` is specified as a `def` in `com.twitter.inject.server.FeatureTest` trait. If you only want to start **one instance of your server per test file** make sure to override this `def` with a `val`.
 
-For more advanced examples see the [`DoEverythingServerFeatureTest`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala) for HTTP and the [`DoEverythingThriftServerFeatureTest`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/DoEverythingThriftServerFeatureTest.scala) for Thrift.
+For more advanced examples see:
+
+- the [`DoEverythingServerFeatureTest`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala) for an HTTP server.
+- the [`DoEverythingThriftServerFeatureTest`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/DoEverythingThriftServerFeatureTest.scala) for a Thrift server.
+- the [`DoEverythingCombinedServerFeatureTest`](https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/DoEverythingCombinedServerFeatureTest.scala) for "combined" HTTP and Thrift server.
 
 ### <a class="anchor" name="integration-tests" href="#integration-tests">Integration Tests</a>
 
