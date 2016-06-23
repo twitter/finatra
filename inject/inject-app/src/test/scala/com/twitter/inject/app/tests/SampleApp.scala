@@ -9,7 +9,7 @@ class SampleApp extends App {
 
   override val modules = Seq()
 
-  override def appMain(): Unit = {
+  override protected def run(): Unit = {
     injector.instance[SampleManager].start()
   }
 }

@@ -18,7 +18,7 @@ public class HelloWorldApp extends AbstractApp {
     }
 
     @Override
-    public void appMain() {
+    public void run() {
         HelloService helloService = injector().instance(HelloService.class);
         System.out.println(helloService.hi("Bob"));
     }

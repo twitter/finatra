@@ -12,7 +12,8 @@ class TinyUrlServerStartupTest extends FeatureTest {
 
   "Server" should {
     "startup" in {
-      server.assertAppStarted()
+      // Because we disabled the adminHttpServer we instead check the started flag.
+      server.assertStarted()
     }
   }
 }

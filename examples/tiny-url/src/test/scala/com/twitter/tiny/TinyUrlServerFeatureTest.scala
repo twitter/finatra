@@ -1,6 +1,5 @@
 package com.twitter.tiny
 
-import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Mockito
@@ -15,10 +14,10 @@ class TinyUrlServerFeatureTest
   extends FeatureTest
   with Mockito {
 
-  override val server = new EmbeddedHttpServer(new TinyUrlServer)
-
-  @Bind
   val mockJedisClient = smartMock[JedisClient]
+  override val server =
+    new EmbeddedHttpServer(new TinyUrlServer)
+        .bind[JedisClient](mockJedisClient)
 
   "Server" should {
     "return shortened url" in {

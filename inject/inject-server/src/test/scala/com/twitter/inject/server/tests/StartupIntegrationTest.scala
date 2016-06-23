@@ -1,8 +1,8 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.inject.app.{EmbeddedApp, App}
 import com.google.inject.AbstractModule
 import com.twitter.finagle.http.Status
+import com.twitter.inject.app.App
 import com.twitter.inject.server.{EmbeddedTwitterServer, Ports, TwitterServer}
 import com.twitter.inject.{Test, TwitterModule}
 import com.twitter.server.Lifecycle.Warmup
@@ -82,65 +82,33 @@ class StartupIntegrationTest extends Test {
 
     "ensure http server starts after warmup" in {
       pending //only manually run since uses sleeps
-      var continueWarmup = true
-
       class WarmupServer extends TwitterServer {
 
-        override def warmup {
+        override def warmup(): Unit = {
           println("Warmup begin")
-          while (continueWarmup) {
-            Thread.sleep(1000)
-          }
+          Thread.sleep(1000)
           println("Warmup end")
         }
       }
 
       val server = new EmbeddedTwitterServer(
-        twitterServer = new WarmupServer,
-        waitForWarmup = false)
-
-      server.assertHealthy(healthy = false)
-      Thread.sleep(3000)
-
-      server.assertHealthy(healthy = false)
-      continueWarmup = false
-      Thread.sleep(3000)
+        twitterServer = new WarmupServer)
 
       server.assertHealthy(healthy = true)
       server.close()
     }
 
-    "calling GuiceModule.install without a TwitterModule works" in {
+    "calling install without a TwitterModule works" in {
       val server = new EmbeddedTwitterServer(new ServerWithModuleInstall)
       server.start()
       server.close()
     }
 
-    "calling GuiceModule.install with a TwitterModule throws exception" in {
+    "calling install with a TwitterModule throws exception" in {
       val server = new EmbeddedTwitterServer(new ServerWithTwitterModuleInstall)
       intercept[Exception] {
         server.start()
       }
-      server.close()
-    }
-
-    "appMain throws exception" in {
-      val server = new EmbeddedApp(
-        new App {
-          override def appMain(): Unit = {
-            throw new RuntimeException("oops")
-          }
-
-          override def setAppStarted(value: Boolean) {
-            // Do Nothing
-            // We're looking to see if the exception is raised
-          }
-        })
-
-      intercept[Exception] {
-        server.start()
-      }
-
       server.close()
     }
 

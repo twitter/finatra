@@ -1,38 +1,26 @@
 package com.twitter.inject.app.tests
 
-import com.twitter.inject.app.{EmbeddedApp, FeatureTest, StartupTimeoutException}
-import com.twitter.util.Await
+import com.twitter.inject.Test
+import com.twitter.inject.app.EmbeddedApp
 
-class SampleAppIntegrationTest extends FeatureTest {
-
-  override val app =
-    new EmbeddedApp(
-      new SampleApp,
-      waitForWarmup = true,
-      skipAppMain = true)
+class SampleAppIntegrationTest extends Test {
 
   "start app" in {
-    app.start()
-    app.appMain()
+    val app =
+      new EmbeddedApp(new SampleApp)
 
-    Await.result(
-      app.mainResult)
+    app.main()
   }
 
-  "throws `StartupTimeoutException` when app fails to start within `maxStartupTimeSeconds`" in {
-    val app = new SampleApp {
-      override protected def postWarmup(): Unit = {
-        Thread.sleep(2000)
-      }
-    }
-    val subject = new EmbeddedApp(
-      app,
-      waitForWarmup = true,
-      skipAppMain = true,
-      maxStartupTimeSeconds = 1)
+  "exception in App#run() throws" in {
+    val app = new EmbeddedApp(
+      new SampleApp {
+        override protected def run(): Unit = {
+          throw new RuntimeException("FORCED EXCEPTION")
+        }})
 
-    intercept[StartupTimeoutException] {
-      subject.start()
+    intercept[Exception] {
+      app.main()
     }
   }
 }

@@ -26,6 +26,8 @@ class BaseHttpServerStartupIntegrationTest extends Test {
       })
 
     server.start()
+    // Because we disabled the adminHttpServer we instead check the started flag.
+    server.assertStarted()
     server.close()
   }
 }

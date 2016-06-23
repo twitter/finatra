@@ -2,7 +2,7 @@ package com.twitter.inject.server.tests
 
 import com.twitter.finagle.http.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
-import com.twitter.inject.{Test, TwitterModule}
+import com.twitter.inject.{Logging, Test, TwitterModule}
 
 class EmbeddedTwitterServerIntegrationTest extends Test {
 
@@ -25,6 +25,31 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
         new EmbeddedTwitterServer(SingletonServer)
       }
     }
+
+    "fail if bind on a non-injectable server" in {
+      intercept[IllegalStateException] {
+        new EmbeddedTwitterServer(
+          new NonInjectableServer)
+          .bind[String]("hello!")
+      }
+    }
+
+    "support bind in server" in {
+      val server = new EmbeddedTwitterServer(
+        new TwitterServer {})
+        .bind[String]("helloworld")
+
+      server.injector.instance[String] should be("helloworld")
+      server.close()
+    }
+  }
+}
+
+class NonInjectableServer
+  extends com.twitter.server.TwitterServer
+  with Logging {
+  def main(): Unit = {
+    info("Hello World")
   }
 }
 

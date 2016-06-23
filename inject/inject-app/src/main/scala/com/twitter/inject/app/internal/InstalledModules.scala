@@ -74,7 +74,7 @@ private[app] case class InstalledModules(
   modules: Seq[GuiceModule])
   extends Logging {
 
-  def postStartup() {
+  def postInjectorStartup() {
     modules foreach {
       case injectModule: TwitterModuleLifecycle =>
         try {
@@ -88,7 +88,21 @@ private[app] case class InstalledModules(
     }
   }
 
-  // Note: We don't rethrow so that all modules have a change to shutdown
+  def postWarmupComplete(): Unit = {
+    modules foreach {
+      case injectModule: TwitterModuleLifecycle =>
+        try {
+          injectModule.singletonPostWarmupComplete(injector)
+        } catch {
+          case e: Throwable =>
+            error("Post warmup complete method error in " + injectModule, e)
+            throw e
+        }
+      case _ =>
+    }
+  }
+
+  // Note: We don't rethrow so that all modules have a chance to shutdown
   def shutdown() {
     modules foreach {
       case injectModule: TwitterModuleLifecycle =>

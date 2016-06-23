@@ -8,6 +8,7 @@ import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.conversions.string._
+import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util._
 import java.net.InetSocketAddress
@@ -101,19 +102,12 @@ private[http] trait BaseHttpServer extends TwitterServer {
 
   /* Lifecycle */
 
+  @Lifecycle
   override protected def postWarmup() {
     super.postWarmup()
 
     startHttpServer()
     startHttpsServer()
-  }
-
-  override def waitForServer() {
-    if (httpServer != null) {
-      Await.ready(httpServer)
-    } else {
-      Await.ready(httpsServer)
-    }
   }
 
   /* Overrides */
@@ -141,8 +135,9 @@ private[http] trait BaseHttpServer extends TwitterServer {
       httpServer = serverBuilder.serve(port, httpService)
       onExit {
         Await.result(
-          close(httpServer, shutdownTimeoutFlag().fromNow))
+          httpServer.close(shutdownTimeoutFlag().fromNow))
       }
+      await(httpServer)
       for (addr <- httpAnnounceFlag.get) httpServer.announce(addr)
       info("http server started on port: " + httpExternalPort.get)
     }
@@ -163,17 +158,11 @@ private[http] trait BaseHttpServer extends TwitterServer {
       httpsServer = serverBuilder.serve(port, httpService)
       onExit {
         Await.result(
-          close(httpsServer, shutdownTimeoutFlag().fromNow))
+          httpsServer.close(shutdownTimeoutFlag().fromNow))
       }
+      await(httpsServer)
       for (addr <- httpsAnnounceFlag.get) httpsServer.announce(addr)
       info("https server started on port: " + httpsExternalPort)
     }
-  }
-
-  private def close(server: ListeningServer, deadline: Time) = {
-    if (server != null)
-      server.close(deadline)
-    else
-      Future.Unit
   }
 }

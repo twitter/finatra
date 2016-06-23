@@ -1,6 +1,5 @@
 package com.twitter.finatra.multiserver.test
 
-import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpMockResponses}
 import com.twitter.finatra.httpclient.HttpClient
@@ -11,13 +10,14 @@ import com.twitter.util.Future
 
 class Add2ServerFeatureTest extends FeatureTest with Mockito with HttpMockResponses {
 
-  @Bind
-  val httpClient = smartMock[HttpClient]
+  val mockHttpClient = smartMock[HttpClient]
 
-  override val server = new EmbeddedHttpServer(new Add2Server)
+  override val server =
+    new EmbeddedHttpServer(new Add2Server)
+        .bind[HttpClient](mockHttpClient)
 
   "add2" in {
-    httpClient.execute(any[Request]) returns(
+    mockHttpClient.execute(any[Request]) returns(
       Future(ok("6")),
       Future(ok("7")))
 

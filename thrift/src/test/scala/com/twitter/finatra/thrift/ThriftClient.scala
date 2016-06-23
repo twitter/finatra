@@ -4,12 +4,11 @@ import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.param.Stats
 import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finagle.thrift.ClientId
-import com.twitter.inject.app.EmbeddedApp
 import com.twitter.inject.server.PortUtils._
-import com.twitter.inject.server.{PortUtils, Ports}
+import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import scala.reflect.ClassTag
 
-trait ThriftClient { self: EmbeddedApp =>
+trait ThriftClient { self: EmbeddedTwitterServer =>
 
   def twitterServer: Ports
 
@@ -17,8 +16,8 @@ trait ThriftClient { self: EmbeddedApp =>
 
   /* Overrides */
 
-  override protected def logAppStartup() {
-    self.logAppStartup()
+  override protected def logStartup() {
+    self.logStartup()
     info(s"ExternalThrift -> thrift://$externalThriftHostAndPort\n")
   }
 

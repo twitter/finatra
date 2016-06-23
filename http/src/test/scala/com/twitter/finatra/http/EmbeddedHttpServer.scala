@@ -24,8 +24,6 @@ import com.twitter.util.Try
  *              least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup)
  * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external
  *                      integration tests that connect to external services).
- * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later
- *                    in your test. Generally only useful for testing cmd line applications.
  * @param defaultRequestHeaders Headers to always send to the embedded server.
  * @param defaultHttpSecure Default all requests to the server to be HTTPS.
  * @param mapperOverride [[com.twitter.finatra.json.FinatraObjectMapper]] to use instead of the mapper configuered by
@@ -44,7 +42,6 @@ class EmbeddedHttpServer(
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,
-  skipAppMain: Boolean = false,
   defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
   mapperOverride: Option[FinatraObjectMapper] = None,
@@ -74,8 +71,8 @@ class EmbeddedHttpServer(
 
   /* Overrides */
 
-  override protected def logAppStartup() {
-    super.logAppStartup()
+  override protected def logStartup() {
+    super.logStartup()
     info(s"ExternalHttp   -> http://$externalHttpHostAndPort")
   }
 
@@ -113,6 +110,11 @@ class EmbeddedHttpServer(
 
       closed = true
     }
+  }
+
+  override def bind[T : Manifest](instance: T): EmbeddedHttpServer = {
+    bindInstance[T](instance)
+    this
   }
 
   /* Public */

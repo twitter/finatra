@@ -18,8 +18,6 @@ import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
  *              least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup).
  * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external
  *                      integration tests that connect to external services).
- * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later
- *                    in your test.  Generally only useful for testing cmd line applications.
  * @param thriftPortFlag Name of the flag that defines the external thrift port for the server.
  * @param verbose Enable verbose logging during test runs.
  * @param disableTestLogging Disable all logging emitted from the test infrastructure.
@@ -32,7 +30,6 @@ class EmbeddedThriftServer(
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,
-  skipAppMain: Boolean = false,
   override val thriftPortFlag: String = "thrift.port",
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
@@ -44,11 +41,17 @@ class EmbeddedThriftServer(
     waitForWarmup,
     stage,
     useSocksProxy,
-    skipAppMain,
     verbose = verbose,
     disableTestLogging = disableTestLogging,
     maxStartupTimeSeconds = maxStartupTimeSeconds)
   with ThriftClient {
+
+  /* Overrides */
+
+  override def bind[T : Manifest](instance: T): EmbeddedThriftServer = {
+    bindInstance[T](instance)
+    this
+  }
 
   /* Public */
 

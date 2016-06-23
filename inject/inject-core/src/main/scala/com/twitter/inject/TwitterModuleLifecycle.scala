@@ -1,26 +1,30 @@
 package com.twitter.inject
 
 /**
- * Guice/twitter.App lifecycle integrations
+ * [[com.twitter.inject.TwitterModule]] to com.twitter.inject.app.App lifecycle integration
  */
 trait TwitterModuleLifecycle {
 
   /* Protected */
 
-  /*
-   * Protected Lifecycle
-   * TODO: Consider eliminating the following lifecycle methods by more generally supporting @PostConstruct, @PreDestroy, and @Warmup (see Onami-Lifecycle or Governator for examples)
+  /**
+   * Invoke after the injector is started
+   *
+   * This method should only get singleton instances from the injector.
    */
+  protected[inject] def singletonStartup(injector: Injector): Unit = {}
 
   /**
-   * Invoke after Guice injector is started
-   * NOTE: This method should only get singleton instances from the injector.
-   */
-  protected[inject] def singletonStartup(injector: Injector) {}
+  * Invoke after external ports are bound and any clients are resolved
+  *
+  * This method should only get singleton instances from the injector.
+  */
+  protected[inject] def singletonPostWarmupComplete(injector: Injector): Unit = {}
 
   /**
    * Invoke as JVM shuts down.
-   * NOTE: This method should only get singleton instances from the injector.
+   *
+   * This method should only get singleton instances from the injector.
    */
-  protected[inject] def singletonShutdown(injector: Injector) {}
+  protected[inject] def singletonShutdown(injector: Injector): Unit = {}
 }

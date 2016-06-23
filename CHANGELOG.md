@@ -12,6 +12,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Address lifecycle around com.twitter.inject.app.App#appMain.
+  - (BREAKING CHANGE) EmbeddedApp has been completely re-written to be a better utility for testing command-line applications,
+    as a result there are transparent changes to EmbeddedTwitterServer.
+  - com.twitter.inject.app.App#appMain is now com.twitter.inject.app.App#run and com.twitter.inject.server.TwitterServer#start.
+    #run() is used for "running" applications and #start() is used for "starting" servers. In the lifecycle TwitterServer implements
+    App#run() as final and simply delegates to the start() method.
+  - Server await callback for adding server Awaitables to a list so that the server will now Await.all on all collected
+    Awaitables.
+  - Added a new TwitterModuleLifecycle method: singletonPostWarmupComplete.
+  - More documentation around server and app Lifecycle methods, their intended usages, and usages of callback functions.``RB_ID=844303``
 * finatra: Narrow visibility on classes/objects in internal packages. Classes/objects in internal packages are not
   intended for use outside of the framework. ``RB_ID=845278``
 * finatra-http: fix HttpHeaders's Date locale problem. ``RB_ID=843966``
