@@ -10,3 +10,10 @@ Quick Start
 
 
 We highly recommend taking a look at our [User Guide](http://twitter.github.io/finatra/user-guide/) for more information on getting started building services with Finatra.
+
+Note:
+-----------------------------------------------------------
+Classes/objects in internal packages, e.g. `com.twitter.finatra.thrift.internal.*` are Finatra framework internal implementation details.
+These are meant to be private to the framework and not intended as publicly accessible as they are details specific to the framework and
+are thus more subject to breaking changes. You should not depend on their implementations remaining constant since they are not intended
+for use outside of the framework itself.

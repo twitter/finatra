@@ -8,7 +8,7 @@ import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class CallbackConverter @Inject()(
+private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
   mapper: FinatraObjectMapper,

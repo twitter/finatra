@@ -3,7 +3,7 @@ package com.twitter.finatra.json.internal.caseclass.jackson
 import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.{BeanDescription, DeserializationConfig, JavaType}
 
-class FinatraCaseClassDeserializers extends Deserializers.Base {
+private[finatra] class FinatraCaseClassDeserializers extends Deserializers.Base {
   val PRODUCT = classOf[Product]
   val OPTION = classOf[Option[_]]
   val LIST = classOf[List[_]]

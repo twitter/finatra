@@ -12,7 +12,7 @@ import com.twitter.inject.utils.ExceptionUtils._
 import javax.inject.{Inject, Singleton}
 import org.apache.thrift.TException
 
-object FinatraDefaultExceptionMapper {
+private[http] object FinatraDefaultExceptionMapper {
   private val MaxDepth = 5
   private val DefaultExceptionSource = "Internal"
 
@@ -29,7 +29,7 @@ object FinatraDefaultExceptionMapper {
 }
 
 @Singleton
-class FinatraDefaultExceptionMapper @Inject()(
+private[http] class FinatraDefaultExceptionMapper @Inject()(
   response: ResponseBuilder)
   extends DefaultExceptionMapper
   with Logging {

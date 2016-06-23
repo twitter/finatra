@@ -31,7 +31,7 @@ import scala.collection.mutable.ArrayBuffer
  * https://github.com/codahale/jerkson/blob/master/src/main/scala/com/codahale/jerkson/deser/CaseClassDeserializer.scala
  */
 @ThreadSafe
-class FinatraCaseClassDeserializer(
+private[finatra] class FinatraCaseClassDeserializer(
   javaType: JavaType,
   config: DeserializationConfig,
   beanDesc: BeanDescription)

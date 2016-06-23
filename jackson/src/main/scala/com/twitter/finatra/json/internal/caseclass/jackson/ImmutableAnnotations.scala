@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.util.Annotations
 import com.twitter.finatra.conversions.seq._
 import java.lang.annotation.Annotation
 
-case class ImmutableAnnotations(
+private[json] case class ImmutableAnnotations(
   annotations: Seq[Annotation])
   extends Annotations {
 

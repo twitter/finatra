@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JavaType
 import com.fasterxml.jackson.databind.`type`.{ArrayType, TypeFactory}
 import com.twitter.finatra.json.internal.caseclass.reflection._
 
-object JacksonTypes {
+private[json] object JacksonTypes {
 
   /* Public */
 

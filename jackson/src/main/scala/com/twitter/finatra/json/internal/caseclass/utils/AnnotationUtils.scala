@@ -2,7 +2,7 @@ package com.twitter.finatra.json.internal.caseclass.utils
 
 import java.lang.annotation.Annotation
 
-object AnnotationUtils {
+private[finatra] object AnnotationUtils {
 
   def filterIfAnnotationPresent[A <: Annotation : Manifest](annotations: Seq[Annotation]): Seq[Annotation] = {
     annotations filter { annot =>

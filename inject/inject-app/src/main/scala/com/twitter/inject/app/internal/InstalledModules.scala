@@ -6,7 +6,7 @@ import com.twitter.app.Flag
 import com.twitter.inject.{TwitterBaseModule, TwitterModuleLifecycle, Injector, Logging}
 import scala.collection.JavaConverters._
 
-object InstalledModules {
+private[app] object InstalledModules {
 
   /* Public */
 
@@ -44,11 +44,11 @@ object InstalledModules {
   /* Private */
 
   /**
-   * Recursively capture all flags in the GuiceModule object hierarchy.
+   * Recursively capture all flags in the [[com.google.inject.Module]] object hierarchy.
    *
-   * Note: We will not (cannot?) traverse through a normal Guice AbstractModule, to find 'installed' GuiceModules
+   * Note: We will not (cannot?) traverse through a normal Guice AbstractModule, to find 'installed' [[com.google.inject.Module]]s
    */
-  private[inject] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {
+  private[app] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {
     (modules collect {
       case injectModule: TwitterBaseModule =>
         injectModule.flags ++
@@ -69,7 +69,7 @@ object InstalledModules {
   }
 }
 
-case class InstalledModules(
+private[app] case class InstalledModules(
   injector: Injector,
   modules: Seq[GuiceModule])
   extends Logging {

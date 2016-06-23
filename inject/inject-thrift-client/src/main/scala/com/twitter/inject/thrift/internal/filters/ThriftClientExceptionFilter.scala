@@ -6,7 +6,7 @@ import com.twitter.inject.thrift.ThriftClientException
 import com.twitter.scrooge.{ThriftMethod, ThriftResponse, ThriftStruct}
 import com.twitter.util._
 
-class ThriftClientExceptionFilter[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
+private[thrift] class ThriftClientExceptionFilter[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
   clientLabel: String,
   method: ThriftMethod)
   extends SimpleFilter[Req, Rep] {

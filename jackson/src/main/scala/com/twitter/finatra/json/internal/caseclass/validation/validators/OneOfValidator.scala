@@ -3,7 +3,7 @@ package com.twitter.finatra.json.internal.caseclass.validation.validators
 import com.twitter.finatra.json.internal.caseclass.validation.validators.OneOfValidator._
 import com.twitter.finatra.validation.{ErrorCode, OneOf, ValidationMessageResolver, ValidationResult, Validator}
 
-object OneOfValidator {
+private[finatra] object OneOfValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -32,7 +32,7 @@ object OneOfValidator {
  * Validates if one or more values exist in a given set of values.  The check for existence is case-sensitive
  * by default.
  */
-class OneOfValidator(
+private[finatra] class OneOfValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: OneOf)
   extends Validator[OneOf, Any](

@@ -2,7 +2,7 @@ package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.validation.{ErrorCode, Min, ValidationMessageResolver, ValidationResult, Validator}
 
-object MinValidator {
+private[finatra] object MinValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -13,7 +13,7 @@ object MinValidator {
   }
 }
 
-class MinValidator(
+private[finatra] class MinValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: Min)
   extends Validator[Min, Any](

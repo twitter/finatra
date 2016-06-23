@@ -29,3 +29,12 @@ Inject provides libraries for integrating [`twitter-server`][twitter-server] and
 [flag]: https://github.com/twitter/util/blob/master/util-app/src/main/scala/com/twitter/app/Flag.scala
 [apache-thrift]: https://thrift.apache.org/
 [guice-scopes]: https://github.com/google/guice/wiki/Scopes
+
+
+Note:
+-----------------------------------------------------------
+Classes/objects in internal packages, e.g. `com.twitter.inject.app.internal.*` are Finatra framework internal implementation details.
+These are meant to be private to the framework and not intended as publicly accessible as they are details specific to the framework and
+are thus more subject to breaking changes. You should not depend on their implementations remaining constant since they are not intended
+for use outside of the framework itself.
+

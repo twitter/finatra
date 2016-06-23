@@ -6,7 +6,7 @@ import com.fasterxml.jackson.module.scala.JacksonModule
 import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 
-class LongKeyDeserializer(clazz: Class[_]) extends KeyDeserializer {
+private[finatra] class LongKeyDeserializer(clazz: Class[_]) extends KeyDeserializer {
   private val constructor = clazz.getConstructor(classOf[Long])
 
   override def deserializeKey(key: String, ctxt: DeserializationContext): Object = {
@@ -15,7 +15,7 @@ class LongKeyDeserializer(clazz: Class[_]) extends KeyDeserializer {
   }
 }
 
-object LongKeyDeserializers extends JacksonModule {
+private[finatra] object LongKeyDeserializers extends JacksonModule {
   override def getModuleName = "LongKeyDeserializers"
 
   private val keyDeserializers = new KeyDeserializers {

@@ -5,12 +5,15 @@ All notable changes to this project will be documented in this file. Note that `
 ## [Unreleased]
 
 ### Added
+
 * finatra-thrift: Add python namespace to finatra_thrift_exceptions.thrift. ``RB_ID=844668``
 * finatra-http: Support ANY method in HTTP Controllers. Adds support for defining routes which will answer 
   to "any" HTTP method. ``RB_ID=830429``
 
 ### Changed
 
+* finatra: Narrow visibility on classes/objects in internal packages. Classes/objects in internal packages are not
+  intended for use outside of the framework. ``RB_ID=845278``
 * finatra-http: fix HttpHeaders's Date locale problem. ``RB_ID=843966``
 * inject-thrift: Address issues with com.twitter.inject.exceptions.PossiblyRetryable. PossiblyRetryable does not correctly
   determine what is retryable. Updated to correct the logic for better default retry utility. ``RB_ID=843428``

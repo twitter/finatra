@@ -1,5 +1,5 @@
 package com.twitter.finatra.http.internal.routing
 
-case class RoutesByType(
+private[http] case class RoutesByType(
   external: Seq[Route],
   admin: Seq[Route])

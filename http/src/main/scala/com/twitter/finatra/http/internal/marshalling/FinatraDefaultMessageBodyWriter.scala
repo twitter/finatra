@@ -6,7 +6,7 @@ import com.twitter.finatra.json.FinatraObjectMapper
 import javax.inject.Inject
 import org.apache.commons.lang.ClassUtils
 
-class FinatraDefaultMessageBodyWriter @Inject()(
+private[finatra] class FinatraDefaultMessageBodyWriter @Inject()(
   mapper: FinatraObjectMapper)
   extends DefaultMessageBodyWriter {
 

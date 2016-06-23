@@ -8,7 +8,7 @@ import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.Future
 
-class RoutingService(
+private[http] class RoutingService(
   routes: Seq[Route])
   extends Service[Request, Response]
   with Logging {

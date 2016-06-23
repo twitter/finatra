@@ -4,7 +4,7 @@ import com.twitter.finatra.json.internal.caseclass.validation.validators.PastTim
 import com.twitter.finatra.validation.{ErrorCode, PastTime, ValidationMessageResolver, ValidationResult, Validator}
 import org.joda.time.DateTime
 
-object PastTimeValidator {
+private[finatra] object PastTimeValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -17,7 +17,7 @@ object PastTimeValidator {
 /**
  * Validates if a datetime is in the past.
  */
-class PastTimeValidator(
+private[finatra] class PastTimeValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: PastTime)
   extends Validator[PastTime, DateTime](

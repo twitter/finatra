@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.reflection
 
-object DefaultMethodUtils {
+private[json] object DefaultMethodUtils {
 
   def defaultFunction(companionObjectClass: Class[_], companionObject: Any, constructorParamIdx: Int): Option[() => Object] = {
     val defaultMethodArgNum = constructorParamIdx + 1

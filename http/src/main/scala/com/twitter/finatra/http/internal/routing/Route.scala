@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation
 import scala.language.existentials
 
 //optimized
-case class Route(
+private[finatra] case class Route(
   name: String,
   method: Method,
   path: String,

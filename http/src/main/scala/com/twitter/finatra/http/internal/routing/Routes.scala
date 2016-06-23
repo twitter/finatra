@@ -5,7 +5,7 @@ import com.twitter.finatra.conversions.iterable._
 import com.twitter.util.Future
 import java.util.{HashMap => JMap}
 
-object Routes {
+private[http] object Routes {
 
   def createForMethod(routes: Seq[Route], method: Method) = {
     new Routes((routes filter { _.method == method }).toArray)
@@ -13,7 +13,7 @@ object Routes {
 }
 
 // optimized
-class Routes(
+private[http] class Routes(
   routes: Array[Route]) {
 
   //Assert unique paths

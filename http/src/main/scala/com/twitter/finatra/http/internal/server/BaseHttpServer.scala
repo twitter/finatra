@@ -12,7 +12,7 @@ import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util._
 import java.net.InetSocketAddress
 
-trait BaseHttpServer extends TwitterServer {
+private[http] trait BaseHttpServer extends TwitterServer {
 
   protected def defaultFinatraHttpPort: String = ":8888"
   private val httpPortFlag = flag("http.port", defaultFinatraHttpPort, "External HTTP server port")

@@ -2,7 +2,7 @@ package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.validation.{ErrorCode, Range, ValidationMessageResolver, ValidationResult, Validator}
 
-object RangeValidator {
+private[finatra] object RangeValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -14,7 +14,7 @@ object RangeValidator {
   }
 }
 
-class RangeValidator(
+private[finatra] class RangeValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: Range)
   extends Validator[Range, Any](

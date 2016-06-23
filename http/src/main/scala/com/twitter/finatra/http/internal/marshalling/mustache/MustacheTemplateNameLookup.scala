@@ -7,7 +7,7 @@ import javax.inject.Singleton
 import scala.collection.JavaConverters._
 
 @Singleton
-class MustacheTemplateNameLookup {
+private[finatra] class MustacheTemplateNameLookup {
 
   private val classToTemplateNameCache = new ConcurrentHashMap[Class[_], String]().asScala
 

@@ -3,7 +3,7 @@ package com.twitter.finatra.json.internal.caseclass.validation.validators
 import com.twitter.finatra.json.internal.caseclass.validation.validators.NotEmptyValidator._
 import com.twitter.finatra.validation.{ErrorCode, NotEmpty, ValidationMessageResolver, ValidationResult, Validator}
 
-object NotEmptyValidator {
+private[finatra] object NotEmptyValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver) = {
@@ -12,7 +12,7 @@ object NotEmptyValidator {
   }
 }
 
-class NotEmptyValidator(
+private[finatra] class NotEmptyValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: NotEmpty)
   extends Validator[NotEmpty, Any](

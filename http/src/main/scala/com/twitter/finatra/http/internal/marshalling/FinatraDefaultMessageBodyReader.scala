@@ -9,12 +9,12 @@ import com.twitter.finatra.http.marshalling.DefaultMessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.JsonIgnoreBody
 
-object FinatraDefaultMessageBodyReader {
+private[finatra] object FinatraDefaultMessageBodyReader {
   private val EmptyObjectNode = new ObjectNode(null)
 }
 
 @Singleton
-class FinatraDefaultMessageBodyReader @Inject()(
+private[finatra] class FinatraDefaultMessageBodyReader @Inject()(
   injector: Injector,
   objectMapper: FinatraObjectMapper)
   extends DefaultMessageBodyReader {

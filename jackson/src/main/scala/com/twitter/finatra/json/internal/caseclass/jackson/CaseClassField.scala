@@ -22,7 +22,7 @@ import scala.annotation.tailrec
 import scala.language.existentials
 import scala.reflect.NameTransformer
 
-object CaseClassField {
+private[finatra] object CaseClassField {
 
   def createFields(clazz: Class[_], namingStrategy: PropertyNamingStrategy, typeFactory: TypeFactory): Seq[CaseClassField] = {
     val allAnnotations = constructorAnnotations(clazz)
@@ -72,7 +72,7 @@ object CaseClassField {
   }
 }
 
-case class CaseClassField(
+private[finatra] case class CaseClassField(
   name: String,
   javaType: JavaType,
   parentClass: Class[_],

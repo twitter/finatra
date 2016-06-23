@@ -4,7 +4,7 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.inject.thrift.AndThenService
 import com.twitter.scrooge.{ThriftMethod, ThriftResponse, ThriftStruct}
 
-class DefaultAndThenServiceImpl extends AndThenService {
+private[thrift] class DefaultAndThenServiceImpl extends AndThenService {
 
   override def andThen[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
     method: ThriftMethod,
