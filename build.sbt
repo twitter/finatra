@@ -93,6 +93,10 @@ lazy val publishSettings = Seq(
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
   apiURL := Some(url("https://twitter.github.io/finatra/docs/")),
+  excludeFilter in (Compile, managedSources) := HiddenFileFilter || "BUILD",
+  excludeFilter in (Compile, unmanagedSources) := HiddenFileFilter || "BUILD",
+  excludeFilter in (Compile, managedResources) := HiddenFileFilter || "BUILD",
+  excludeFilter in (Compile, unmanagedResources) := HiddenFileFilter || "BUILD",
   pomExtra :=
     <scm>
       <url>git://github.com/twitter/finatra.git</url>
@@ -140,11 +144,7 @@ lazy val projectSettings = baseSettings ++ buildSettings ++ publishSettings ++ s
 lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
   organization := "com.twitter",
   publishLocal := {},
-  publish := {},
-  assemblyMergeStrategy in assembly := {
-    case PathList("BUILD") => MergeStrategy.discard
-    case other => MergeStrategy.defaultMergeStrategy(other)
-  }
+  publish := {}
 )
 
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
@@ -236,6 +236,8 @@ lazy val injectCore = (project in file("inject/inject-core")).
       "com.google.inject" % "guice" % versions.guice % "test",
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
     ),
+    publishArtifact in (Test, packageBin) := true,
+    publishArtifact in (Test, packageDoc) := true,
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
       fileMappings.filter(
         mappingContainsAnyPath(_,
