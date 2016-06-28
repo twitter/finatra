@@ -61,16 +61,20 @@ class ExampleThriftController
   extends Controller
   with ExampleService.BaseServiceIface {
 
-  override def add1 = handle(Add1) { args: Add1.Args =>
+  override val add1 = handle(Add1) { args: Add1.Args =>
     Future(args.num + 1)
   }
 }
 ```
 <div></div>
 
-The `handle(ThriftMethod)` function may seem magical but it serves a very important function. By implementing your service method via this function, it allows the framework to  apply the configured filter chain defined in your [server definition](/finatra/user-guide/build-new-thrift-server#server-definition) to the method implementation. That is to say, the `handle(ThriftMethod)` function captures your method implementation then exposes it for the [`ThriftRouter`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala) to combine with the configured filter chain when building the [Finagle Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html) that represents your server. See the next [section](/finatra/user-guide/build-new-thrift-server/filter.html) for more information on adding filters to your server definition.
+The `handle(ThriftMethod)` function may seem magical but it serves an important purpose. By implementing your service method via this function, it allows the framework to  apply the configured filter chain defined in your [server definition](/finatra/user-guide/build-new-thrift-server#server-definition) to your method implementation (passed as the callback to `handle(ThriftMethod)`).
 
-In the example above, we implement the `ExampleService.BaseServiceIface#add1` method with a `override val` simply to satisfy the `ExampleService.BaseServiceIface` interface. The framework will not call this function in this manner but it can be useful if you choose to unit test the controller.
+That is to say, the `handle(ThriftMethod)` function captures your method implementation then exposes it for the [`ThriftRouter`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala) to combine with the configured filter chain to build the [Finagle Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html) that represents your server. See the next [section](/finatra/user-guide/build-new-thrift-server/filter.html) for more information on adding filters to your server definition.
+
+Note, in the example above we implement the `ExampleService.BaseServiceIface#add1` method to satisfy the `ExampleService.BaseServiceIface` interface -- however, the framework will not call the `add1` method in this way as it uses the implementation of the thrift method captured by the `handle(ThriftMethod)` function (as mentioned above this in order to apply the configured filter chain to requests). Thus if you were to directly call `ExampleThriftController.add1(request)` this would by-pass any configured [filters](/finatra/user-guide/build-new-thrift-server/filter.html) from the server definition.
+
+We use `override val` since the computed [`ThriftMethodService`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala) returned [is a val](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L19).
 
 As previously shown, the server can then be defined with this Thrift Controller:
 
