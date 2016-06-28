@@ -74,7 +74,7 @@ That is to say, the `handle(ThriftMethod)` function captures your method impleme
 
 Note, in the example above we implement the `ExampleService.BaseServiceIface#add1` method to satisfy the `ExampleService.BaseServiceIface` interface -- however, the framework will not call the `add1` method in this way as it uses the implementation of the thrift method captured by the `handle(ThriftMethod)` function (as mentioned above this in order to apply the configured filter chain to requests). Thus if you were to directly call `ExampleThriftController.add1(request)` this would by-pass any configured [filters](/finatra/user-guide/build-new-thrift-server/filter.html) from the server definition.
 
-We use `override val` since the computed [`ThriftMethodService`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala) returned [is a val](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L19).
+We use `override val` since the computed [`ThriftMethodService`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala) instance returned [is effectively constant](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L19).
 
 As previously shown, the server can then be defined with this Thrift Controller:
 
