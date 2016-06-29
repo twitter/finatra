@@ -42,6 +42,18 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       server.injector.instance[String] should be("helloworld")
       server.close()
     }
+
+    "fail because of unknown flag" in {
+      val server = new EmbeddedTwitterServer(
+        new TwitterServer {},
+        flags = Map("foo.bar" -> "true"))
+
+      val e = intercept[Exception] {
+        server.assertHealthy()
+      }
+      e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
+      server.close()
+    }
   }
 }
 

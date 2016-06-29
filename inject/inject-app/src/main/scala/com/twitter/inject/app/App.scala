@@ -98,7 +98,7 @@ trait App
    *
    * Any exceptions thrown in this method will result in the app exiting.
    */
-  protected def   run(): Unit = {
+  protected def run(): Unit = {
   }
 
   /** Production modules */

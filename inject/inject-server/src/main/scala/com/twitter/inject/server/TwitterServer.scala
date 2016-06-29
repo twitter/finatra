@@ -165,7 +165,7 @@ trait TwitterServer
    * If you override this method to create and bind any external interface or to
    * instantiate any awaitable it is expected that you add the Awaitable (or
    * [[com.twitter.finagle.ListeningServer]]) to the list of Awaitables using the
-   * [[com.twitter.inject.server.TwitterServer#await]] function.
+   * [[await[T <: Awaitable[_]](awaitable: T): Unit]] function.
    *
    * It is NOT expected that you block in this method as you will prevent completion
    * of the server lifecycle.

@@ -33,7 +33,7 @@ class ThriftMethodUtilsTest extends Test {
       }
 
       val prettyString = ThriftMethodUtils.prettyStr(method)
-      assert(prettyString == "FooService.Foo")
+      prettyString should be("FooService.Foo")
     }
   }
 }

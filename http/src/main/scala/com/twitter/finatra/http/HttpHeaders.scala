@@ -52,7 +52,7 @@ object HttpHeaders {
    */
   val RFC7231DateFormat = "EEE, dd MMM yyyy HH:mm:ss 'GMT'"
 
-  val DateFormat = DateTimeFormat
+  private val DateFormat = DateTimeFormat
     .forPattern(RFC7231DateFormat)
     .withZone(GMT)
     .withLocale(Locale.US)

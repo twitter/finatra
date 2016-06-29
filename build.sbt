@@ -161,6 +161,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectModules,
   injectRequestScope,
   injectServer,
+  injectThrift,
   injectThriftClient,
   injectThriftClientHttpMapper,
   injectUtils,
@@ -336,12 +337,15 @@ lazy val injectThrift = (project in file("inject/inject-thrift")).
   settings(
     name := "inject-thrift",
     moduleName := "inject-thrift",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
+      "org.apache.thrift" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
       "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
       "com.twitter" %% "util-core" % versions.utilVersion)
   ).dependsOn(
+    injectCore % "test->test",
     injectUtils
   )
 
@@ -350,7 +354,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client")).
   settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.test\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
@@ -526,7 +530,7 @@ lazy val thrift = project.
   settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
       "org.yaml" % "snakeyaml" % versions.snakeyaml
