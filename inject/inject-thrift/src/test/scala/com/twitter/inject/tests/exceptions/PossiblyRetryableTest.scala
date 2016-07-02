@@ -38,7 +38,7 @@ class PossiblyRetryableTest extends Test {
     }
 
     PossiblyRetryableException match {
-      case PossiblyRetryable(e) => true
+      case PossiblyRetryable(e) => // nothing
       case _ => fail("PossiblyRetryableException should be PossiblyRetryable")
     }
   }
