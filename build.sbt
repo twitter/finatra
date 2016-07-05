@@ -280,6 +280,7 @@ lazy val injectApp = (project in file("inject/inject-app")).
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConvertor.*",
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
@@ -406,7 +407,7 @@ lazy val utils = project.
   settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*FinatraInstalledModules.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ClassUtils.*;.*WrappedValue.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
       "joda-time" % "joda-time" % versions.jodaTime,

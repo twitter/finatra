@@ -30,7 +30,7 @@ object ExceptionUtils {
     case e: FailedFastException =>
       e.getClass.getName
     case e: SourcedException =>
-      replace(e.toString, "\n\twith NoSources", "")
+      stripNewlines(e)
     case e =>
       val msg = e.getMessage
       if (msg == null || msg.isEmpty)

@@ -7,6 +7,7 @@ junit_tests(name='scala',
   ],
   fatal_warnings=True,
   sources=globs(
+    'com/twitter/inject/tests/*.scala',
     'com/twitter/inject/tests/conversions/*.scala',
     'com/twitter/inject/tests/exceptions/*.scala'),
   resources=[
