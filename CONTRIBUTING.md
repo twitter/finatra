@@ -4,15 +4,17 @@ We'd love to get patches from you!
 
 ## Building dependencies
 
-We are not currently publishing snapshots for Finatra's dependencies, which
-means that it may be necessary to build and publish the `develop` branches of dependencies locally 
-in order to work on Finatra's `master` branch. To do this you should clone [TwitterServer][twitter-server-repo], 
-[Finagle][finagle-repo], and [Util][util-repo], check out their `develop` branches, and run `./sbt +publishLocal` 
-for each project.
+We are not currently publishing snapshots for Finatra's Twitter OSS dependencies, which
+means that it may be necessary to build and publish the `develop` branches of those dependencies locally 
+in order to work on Finatra's [`develop`][develop-branch] branch. 
 
-We are planning to begin publishing snapshots soon, which will make these steps
-unnecessary. If you have any questions or run into any problems, please create
-an issue here, tweet at us at [@finatra](https://twitter.com/finatra), or email
+To do this you can run the [`bin/travisci`](https://github.com/twitter/finatra/blob/develop/bin/travisci) script
+locally which will clone all the necessary repositories and publish their artifacts locally.
+
+Finatra's [`master`][master-branch] branch is built against released versions of Twitter OSS dependencies and is itself frozen to the last released version of Finatra.
+
+If you have any questions or run into any problems, please create
+an issue here, tweet at us [@finatra](https://twitter.com/finatra), or email
 the [finatra-users](https://groups.google.com/forum/#!forum/finatra-users) mailing list.
 
 ## Workflow
@@ -42,6 +44,26 @@ pull request, all changes will also be tested internally at Twitter before being
 ## Style
 
 We generally follow the [Scala Style Guide][scala-style-guide]. When in doubt, look around the codebase and see how it's done elsewhere.
+
+## Issues
+
+When creating an issue please try to ahere to the following format:
+
+    One line summary of the issue (less than 72 characters)
+
+    ### Expected behavior
+
+    As concisely as possible, describe the expected behavior.
+
+    ### Actual behavior
+
+    As concisely as possible, describe the observed behavior.
+
+    ### Steps to reproduce the behavior
+
+    List all relevant steps to reproduce the observed behavior.
+
+## Pull Requests
 
 Comments should be formatted to a width no greater than 80 columns.
 
@@ -102,6 +124,8 @@ metadata will be preserved.
 
 We also welcome improvements to the Finatra documentation or to the existing ScalaDocs.
 
+[master-branch]: https://github.com/twitter/finatra/tree/master
+[develop-branch]: https://github.com/twitter/finatra/tree/develop
 [pull-example]: https://github.com/twitter/finagle/pull/267
 [twitter-server-repo]: https://github.com/twitter/twitter-server
 [finagle-repo]: https://github.com/twitter/finagle
@@ -111,7 +135,7 @@ We also welcome improvements to the Finatra documentation or to the existing Sca
 [scalatest]: http://www.scalatest.org/
 [scala-style-guide]: http://docs.scala-lang.org/style/scaladoc.html
 [travis-ci]: https://travis-ci.org/twitter/finatra
-[test-trait]: https://github.com/twitter/finatra/blob/master/finatra/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
+[test-trait]: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
 
 ### License
 By contributing your code, you agree to license your contribution under the terms of the APLv2:
