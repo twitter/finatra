@@ -4,14 +4,25 @@ We'd love to get patches from you!
 
 ## Building dependencies
 
-We are not currently publishing snapshots for Finatra's Twitter OSS dependencies, which
-means that it may be necessary to build and publish the `develop` branches of those dependencies locally 
-in order to work on Finatra's [`develop`][develop-branch] branch. 
+We are not currently publishing snapshots for Finatra's Twitter OSS dependencies, 
+which means that it may be necessary to build and publish the `develop` branches
+of those dependencies locally in order to work on Finatra's [`develop`][develop-branch] branch. 
 
 To do this you can run the [`bin/travisci`](https://github.com/twitter/finatra/blob/develop/bin/travisci) script
-locally which will clone all the necessary repositories and publish their artifacts locally.
+locally which will clone all the necessary repositories and publish their 
+artifacts locally.
 
-Finatra's [`master`][master-branch] branch is built against released versions of Twitter OSS dependencies and is itself frozen to the last released version of Finatra.
+Finatra's [`master`][master-branch] branch is built against released versions of 
+Twitter OSS dependencies and is itself frozen to the last released version of Finatra.
+
+## Building Finatra
+
+Finatra is built using [sbt][sbt]. When building please use the included [`./sbt`](https://github.com/twitter/finatra/blob/develop/sbt) 
+script which provides a thin wrapper over [sbt][sbt] and correctly sets memory and 
+other settings. This is true for building all of Finatra *except* when in master and 
+building the `finatra/examples`. In [master][master-branch], the examples are defined 
+such that they are able to be built with your locally installed [sbt][sbt] since they 
+are defined with their own `build.sbt` files and use released Twitter OSS dependencies.
 
 If you have any questions or run into any problems, please create
 an issue here, tweet at us [@finatra](https://twitter.com/finatra), or email
@@ -25,9 +36,9 @@ We follow the [GitHub Flow Workflow](https://guides.github.com/introduction/flow
 2.  Check out the `master` branch
 3.  Create a feature branch
 4.  Write code and tests for your change
-6.  From your branch, make a pull request against `twitter/finatra/master`
+6.  From your branch, make a pull request against `twitter/finatra/develop`
 7.  Work with repo maintainers to get your change reviewed
-8.  Wait for your change to be pulled into `twitter/finatra/master`
+8.  Wait for your change to be pulled into `twitter/finatra/develop`
 9.  Delete your feature branch
 
 ## Testing
@@ -43,7 +54,8 @@ pull request, all changes will also be tested internally at Twitter before being
 
 ## Style
 
-We generally follow the [Scala Style Guide][scala-style-guide]. When in doubt, look around the codebase and see how it's done elsewhere.
+We generally follow the [Scala Style Guide][scala-style-guide]. When in doubt, look around 
+the codebase and see how it's done elsewhere.
 
 ## Issues
 
@@ -116,8 +128,8 @@ GitHub with the next sync.
 This process means that the pull request will not be merged in the usual way.
 Instead a member of the Finatra team will post a message in the pull request
 thread when your changes have made their way back to GitHub, and the pull
-request will be closed (see [this pull request][pull-example] for an example). The changes
-in the pull request will be collapsed into a single commit, but the authorship
+request will be closed (see [this pull request][pull-example] for an example). The 
+changes in the pull request will be collapsed into a single commit, but the authorship
 metadata will be preserved.
 
 ## Documentation
@@ -134,6 +146,7 @@ We also welcome improvements to the Finatra documentation or to the existing Sca
 [wordspec]: http://doc.scalatest.org/2.2.1/#org.scalatest.WordSpec
 [scalatest]: http://www.scalatest.org/
 [scala-style-guide]: http://docs.scala-lang.org/style/scaladoc.html
+[sbt]: http://www.scala-sbt.org/
 [travis-ci]: https://travis-ci.org/twitter/finatra
 [test-trait]: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
 
