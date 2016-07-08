@@ -31,9 +31,9 @@ case class Car2(name: String)
 case class Dog(name: String)
 
 class Car2MessageBodyReader extends MessageBodyReader[Car2] {
-  def parse(request: Request): Car2 = Car2("Car")
+  def parse[U: Manifest](request: Request): Car2 = Car2("Car")
 }
 
 class DogMessageBodyReader extends MessageBodyReader[Dog] {
-  def parse(request: Request): Dog = Dog("Dog")
+  def parse[U: Manifest](request: Request): Dog = Dog("Dog")
 }
