@@ -5,9 +5,10 @@ import com.twitter.finagle.thrift.ClientId
 import com.twitter.finatra.thrift.routing.ThriftWarmup
 import com.twitter.inject.Logging
 import com.twitter.inject.utils.Handler
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import scala.reflect.ClassTag
 
+@Singleton
 class DoEverythingThriftWarmupHandler @Inject()(
   warmup: ThriftWarmup)
   extends Handler
@@ -15,7 +16,7 @@ class DoEverythingThriftWarmupHandler @Inject()(
 
   private val clientId = ClientId("client123")
 
-  override def handle() = {
+  override def handle(): Unit = {
     try {
       clientId.asCurrent {
         // warm up thrift service(s) here

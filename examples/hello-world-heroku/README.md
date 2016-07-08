@@ -7,7 +7,7 @@ If you're in master or a feature branch
 ----------------------------------------------------------
 * Development from master or feature branches is not currently supported for this example. Please switch to a release branch and see the instructions below.
 
-If you're in a tagged release branch (e.g. [v2.1.6](https://github.com/twitter/finatra/tree/v2.1.6))
+If you're in a tagged release branch (e.g. [finatra-2.2.0](https://github.com/twitter/finatra/tree/finatra-2.2.0))
 ----------------------------------------------------------
 
 ### Run the server on Heroku ###

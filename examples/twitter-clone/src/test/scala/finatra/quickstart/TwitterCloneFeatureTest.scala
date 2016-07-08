@@ -2,7 +2,7 @@ package finatra.quickstart
 
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
@@ -83,7 +83,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
             "location.lat: [9999.0] is not between -85 and 85",
             "location.long: field is required",
             "message: size [0] is not between 1 and 140",
-            "nsfw: 'abc' is not a valid boolean"
+            "nsfw: 'abc' is not a valid Boolean"
           ]
         }
         """)

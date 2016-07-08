@@ -1,0 +1,13 @@
+junit_tests(
+  name='scala',
+  dependencies=[
+    'finatra/examples/hello-world-heroku',
+    'finatra/http:test-deps',
+    'finatra/inject/inject-server:test-deps'
+  ],
+  fatal_warnings=True,
+  sources=rglobs('*.scala'),
+  resources=[
+    'finatra/examples/hello-world-heroku/src/test/resources'
+  ]
+)

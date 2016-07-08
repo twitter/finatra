@@ -46,6 +46,10 @@ object DoEverythingModule extends TwitterModule {
     assert(injector.instance[String, Prod] == "prod string")
   }
 
+  override def singletonPostWarmupComplete(injector: Injector) {
+    info("module post warmup complete")
+  }
+
   override def singletonShutdown(injector: Injector) {
     info("shutdown")
   }

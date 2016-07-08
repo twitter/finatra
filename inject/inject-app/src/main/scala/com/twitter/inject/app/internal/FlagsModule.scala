@@ -1,11 +1,11 @@
 package com.twitter.inject.app.internal
 
 import com.google.inject.Key
-import com.twitter.finatra.annotations.FlagImpl
-import com.twitter.inject.{TwitterModule, Logging}
+import com.twitter.inject.annotations.FlagImpl
+import com.twitter.inject.{Logging, TwitterModule}
 import javax.inject.Provider
 
-object FlagsModule {
+private[app] object FlagsModule {
   def create(flags: Seq[com.twitter.app.Flag[_]]) = {
     val flagsMap = (for (flag <- flags) yield {
       flag.name -> flag.getWithDefault
@@ -16,7 +16,7 @@ object FlagsModule {
 }
 
 //TODO: Use type information in Flag instead of hardcoding java.lang.String
-class FlagsModule(
+private[app] class FlagsModule(
   flagsMap: Map[String, Option[Any]])
   extends TwitterModule
   with Logging {

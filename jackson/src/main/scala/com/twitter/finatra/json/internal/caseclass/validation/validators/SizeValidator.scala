@@ -3,7 +3,7 @@ package com.twitter.finatra.json.internal.caseclass.validation.validators
 import com.twitter.finatra.json.internal.caseclass.validation.validators.SizeValidator._
 import com.twitter.finatra.validation.{ErrorCode, Size, ValidationMessageResolver, ValidationResult, Validator}
 
-object SizeValidator {
+private[finatra] object SizeValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -32,7 +32,7 @@ object SizeValidator {
   }
 }
 
-class SizeValidator(
+private[finatra] class SizeValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: Size)
   extends Validator[Size, Any](

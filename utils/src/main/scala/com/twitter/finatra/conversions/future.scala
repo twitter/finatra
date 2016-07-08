@@ -14,8 +14,8 @@ object future {
   object RichFutureOption {
 
     //static since reused in httpfuture.scala
-    def getInnerOrElseFail[A](futureOption: Future[Option[A]], throwable: => Throwable): Future[A] = {
-      futureOption.transform {
+    def getInnerOrElseFail[A](self: Future[Option[A]], throwable: => Throwable): Future[A] = {
+      self.transform {
         case Return(Some(value)) => Future.value(value)
         case Return(None) => Future.exception(throwable)
         case Throw(origThrowable) =>
@@ -25,35 +25,35 @@ object future {
     }
   }
 
-  implicit class RichFutureOption[A](futureOption: Future[Option[A]]) {
+  implicit class RichFutureOption[A](val self: Future[Option[A]]) extends AnyVal {
 
     def getInnerOrElseFail(throwable: => Throwable): Future[A] = {
-      RichFutureOption.getInnerOrElseFail(futureOption, throwable)
+      RichFutureOption.getInnerOrElseFail(self, throwable)
     }
 
     def mapInner[B](func: A => B): Future[Option[B]] = {
-      for (option <- futureOption) yield {
+      for (option <- self) yield {
         option map func
       }
     }
 
     def mapInnerOpt[B](func: A => Option[B]): Future[Option[B]] = {
-      for (option <- futureOption) yield {
+      for (option <- self) yield {
         option flatMap func
       }
     }
 
     def flatMapInner[B](func: A => Future[B]): Future[Option[B]] = {
-      futureOption mapInner func flatMap {_.toFutureOption}
+      self mapInner func flatMap {_.toFutureOption}
     }
 
     def flatMapInnerOpt[B](func: A => Future[Option[B]]): Future[Option[B]] = {
-      futureOption flatMapInner func map {_.getOrElse(None)}
+      self flatMapInner func map {_.getOrElse(None)}
     }
 
     def flatMapIfUndefined(func: Unit => Future[Option[A]]): Future[Option[A]] = {
-      futureOption flatMap {
-        case Some(_) => futureOption
+      self flatMap {
+        case Some(_) => self
         case _ => func(())
       }
     }
@@ -62,9 +62,9 @@ object future {
   /* ---------------------------------------------------------- */
   /* Future[Option[Seq[A]]] */
 
-  implicit class RichFutureOptionSeq[A](futureOptionSeq: Future[Option[Seq[A]]]) {
+  implicit class RichFutureOptionSeq[A](val self: Future[Option[Seq[A]]]) extends AnyVal {
     def flattenInner: Future[Seq[A]] = {
-      for (optionSeq <- futureOptionSeq) yield {
+      for (optionSeq <- self) yield {
         optionSeq getOrElse Seq()
       }
     }
@@ -73,9 +73,9 @@ object future {
   /* ---------------------------------------------------------- */
   /* Future[Seq[Seq[A]]] */
 
-  implicit class RichFutureSeqSeq[A](futureSeqSeq: Future[Seq[Seq[A]]]) {
+  implicit class RichFutureSeqSeq[A](val self: Future[Seq[Seq[A]]]) extends AnyVal {
     def flattenInnerSeq: Future[Seq[A]] = {
-      for (seqSeq <- futureSeqSeq) yield {
+      for (seqSeq <- self) yield {
         seqSeq.flatten
       }
     }
@@ -84,22 +84,22 @@ object future {
   /* ---------------------------------------------------------- */
   /* Future[Seq[A]] */
 
-  implicit class RichFutureSeq[A](futureSeq: Future[Seq[A]]) {
+  implicit class RichFutureSeq[A](val self: Future[Seq[A]]) extends AnyVal {
 
     def mapInner[B](func: A => B): Future[Seq[B]] = {
-      for (seq <- futureSeq) yield {
+      for (seq <- self) yield {
         seq map func
       }
     }
 
     def mapInnerOpt[B](func: A => Option[B]): Future[Seq[B]] = {
-      for (seq <- futureSeq) yield {
+      for (seq <- self) yield {
         seq map func flatMap {_.toIterable}
       }
     }
 
     def collectInner[B](pf: PartialFunction[A, B]): Future[Seq[B]] = {
-      for (seq <- futureSeq) yield {
+      for (seq <- self) yield {
         seq collect pf
       }
     }
@@ -113,19 +113,19 @@ object future {
     }
 
     def groupBySingleValue[B](func: A => B): Future[Map[B, A]] = {
-      for (seq <- futureSeq) yield {
+      for (seq <- self) yield {
         seq groupBySingleValue func
       }
     }
 
     def filterInner(func: A => Boolean): Future[Seq[A]] = {
-      for (seq <- futureSeq) yield {
+      for (seq <- self) yield {
         seq filter func
       }
     }
 
     def headOption: Future[Option[A]] = {
-      for (seq <- futureSeq) yield {
+      for (seq <- self) yield {
         seq.headOption
       }
     }
@@ -134,20 +134,20 @@ object future {
   /* ---------------------------------------------------------- */
   /* Future[Seq[Future[A]] */
 
-  implicit class RichFutureSeqFutures[A](futureSeqFutures: Future[Seq[Future[A]]]) {
+  implicit class RichFutureSeqFutures[A](val self: Future[Seq[Future[A]]]) extends AnyVal {
 
     def flattenInner: Future[Seq[A]] = {
-      futureSeqFutures flatMap {Future.collect(_)}
+      self flatMap {Future.collect(_)}
     }
   }
 
   /* ---------------------------------------------------------- */
   /* Future[Boolean] */
 
-  implicit class RichFutureBoolean(futureBoolean: Future[Boolean]) {
+  implicit class RichFutureBoolean(val self: Future[Boolean]) extends AnyVal {
 
     def flatMapIfTrue(func: => Future[Unit]): Future[Unit] = {
-      futureBoolean flatMap { boolean =>
+      self flatMap { boolean =>
         if (boolean)
           func
         else
@@ -159,32 +159,32 @@ object future {
   /* ---------------------------------------------------------- */
   /* Future[T] */
 
-  implicit class RichFuture[A](future: Future[A]) {
+  implicit class RichFuture[A](val self: Future[A]) extends AnyVal {
 
     def chainedOnFailure(failureFunc: Throwable => Future[Unit]): Future[A] = {
-      future rescue {
+      self rescue {
         case NonFatal(primaryThrowable) =>
           Future(failureFunc(primaryThrowable)).flatten transform {
             case Throw(secondaryThrowable) =>
               log.error("Additional failure in chainedOnFailure", secondaryThrowable)
-              future
+              self
             case _ =>
-              future
+              self
           }
       }
     }
 
     def transformException(f: Throwable => Throwable): Future[A] = {
-      future transform {
+      self transform {
         case Throw(t) =>
           Future.exception(f(t))
         case _ =>
-          future
+          self
       }
     }
 
     def toOption: Future[Option[A]] = {
-      future map Some.apply handle {
+      self map Some.apply handle {
         case NonFatal(e) =>
           log.warn(e)
           None
@@ -192,7 +192,7 @@ object future {
     }
 
     def toBoolean: Future[Boolean] = {
-      future map { _ => true } handle {
+      self map { _ => true } handle {
         case NonFatal(e) =>
           log.warn(e)
           false
@@ -200,13 +200,13 @@ object future {
     }
 
     def partialTransform(pf: PartialFunction[Try[A], Future[A]]): Future[A] = {
-      future.transform {
+      self.transform {
         case ret@Return(r) if pf.isDefinedAt(ret) =>
           pf(ret)
         case thr@Throw(t) if pf.isDefinedAt(thr) =>
           pf(thr)
         case _ =>
-          future
+          self
       }
     }
   }

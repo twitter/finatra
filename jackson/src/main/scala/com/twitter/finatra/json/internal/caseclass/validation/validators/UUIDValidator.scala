@@ -5,7 +5,7 @@ import com.twitter.finatra.validation.{ErrorCode, UUID, ValidationMessageResolve
 import com.twitter.util.Try
 import java.util.{UUID => JUUID}
 
-object UUIDValidator {
+private[finatra] object UUIDValidator {
 
   def errorMessage(
     resolver: ValidationMessageResolver,
@@ -19,7 +19,7 @@ object UUIDValidator {
   }
 }
 
-class UUIDValidator(
+private[finatra] class UUIDValidator(
   validationMessageResolver: ValidationMessageResolver,
   annotation: UUID)
   extends Validator[UUID, String](

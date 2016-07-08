@@ -1,10 +1,5 @@
 package com.twitter.hello.server;
 
-import java.util.Collection;
-
-import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
-
 import com.twitter.finatra.http.JavaHttpServer;
 import com.twitter.finatra.http.filters.CommonFilters;
 import com.twitter.finatra.http.routing.HttpRouter;

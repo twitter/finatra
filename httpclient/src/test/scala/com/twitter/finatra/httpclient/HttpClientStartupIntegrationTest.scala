@@ -12,7 +12,7 @@ class HttpClientStartupIntegrationTest extends Test {
       modules = Seq(FinatraJacksonModule, new HttpClientModule {
         override val dest = "flag!myservice"
       }),
-      clientFlags = Map(
+      flags = Map(
         "com.twitter.server.resolverMap" -> "myservice=nil!"))
 
     injector.instance[HttpClient]
@@ -24,7 +24,7 @@ class HttpClientStartupIntegrationTest extends Test {
         override val dest = "flag!myservice"
         override val sslHostname = Some("foo")
       }),
-      clientFlags = Map(
+      flags = Map(
         "com.twitter.server.resolverMap" -> "myservice=nil!"))
 
     injector.instance[HttpClient]

@@ -131,3 +131,10 @@ Use Java Enums for representing enumerations since they integrate well with Jack
 
 * @JsonCreator: Useful on a custom fromString method
 * @JsonValue: Useful to place on an overridden toString method
+
+Note:
+-----------------------------------------------------------
+Classes/objects in internal packages, e.g. `com.twitter.finatra.json.internal.*` are Finatra framework internal implementation details.
+These are meant to be private to the framework and not intended as publicly accessible as they are details specific to the framework and
+are thus more subject to breaking changes. You should not depend on their implementations remaining constant since they are not intended
+for use outside of the framework itself.

@@ -2,7 +2,7 @@ package com.twitter.finatra.json.internal.caseclass.reflection
 
 import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
 
-case class ScalaType(
+private[json] case class ScalaType(
   typeRefType: TypeRefType) {
 
   private val path = typeRefType.symbol.path

@@ -3,11 +3,12 @@ package com.twitter.finatra.http.internal.routing
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Method, Request, Response, Status}
 import com.twitter.finagle.http.Method._
+import com.twitter.finatra.http.AnyMethod
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.Future
 
-class RoutingService(
+private[http] class RoutingService(
   routes: Seq[Route])
   extends Service[Request, Response]
   with Logging {
@@ -20,6 +21,7 @@ class RoutingService(
   private val patch = Routes.createForMethod(routes, Patch)
   private val head = Routes.createForMethod(routes, Head)
   private val trace = Routes.createForMethod(routes, Trace)
+  private val any = Routes.createForMethod(routes, AnyMethod)
 
   private val routesStr = routes map {_.summary} mkString ", "
 
@@ -37,7 +39,8 @@ class RoutingService(
       case Trace => trace.handle(request)
       case _ => badRequest(request.method)
     }).getOrElse {
-      notFound(request)
+      any.handle(request)
+        .getOrElse(notFound(request))
     }
   }
 

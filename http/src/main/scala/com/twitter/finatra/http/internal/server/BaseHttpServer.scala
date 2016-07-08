@@ -8,11 +8,12 @@ import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.conversions.string._
+import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util._
 import java.net.InetSocketAddress
 
-trait BaseHttpServer extends TwitterServer {
+private[http] trait BaseHttpServer extends TwitterServer {
 
   protected def defaultFinatraHttpPort: String = ":8888"
   private val httpPortFlag = flag("http.port", defaultFinatraHttpPort, "External HTTP server port")
@@ -65,29 +66,48 @@ trait BaseHttpServer extends TwitterServer {
    */
   protected def streamRequest: Boolean = false
 
+  /**
+   * This method allows for further configuration of the http server for parameters not exposed by
+   * this trait or for overriding defaults provided herein, e.g.,
+   *
+   * override def configureHttpServer(server: Http.Server): Http.Server = {
+   *   server
+   *     .withResponseClassifier(...)
+   *     .withMaxInitialLineSize(2048)
+   * }
+   *
+   * @param server - the [[com.twitter.finagle.Http.Server]] to configure.
+   * @return a configured Http.Server.
+   */
   protected def configureHttpServer(server: Http.Server): Http.Server = {
     server
   }
 
+  /**
+   * This method allows for further configuration of the https server for parameters not exposed by
+   * this trait or for overriding defaults provided herein, e.g.,
+   *
+   * override def configureHttpsServer(server: Http.Server): Http.Server = {
+   *   server
+   *     .withResponseClassifier(...)
+   *     .withMaxInitialLineSize(2048)
+   * }
+   *
+   * @param server - the [[com.twitter.finagle.Http.Server]] to configure.
+   * @return a configured Http.Server.
+   */
   protected def configureHttpsServer(server: Http.Server): Http.Server = {
     server
   }
 
   /* Lifecycle */
 
+  @Lifecycle
   override protected def postWarmup() {
     super.postWarmup()
 
     startHttpServer()
     startHttpsServer()
-  }
-
-  override def waitForServer() {
-    if (httpServer != null) {
-      Await.ready(httpServer)
-    } else {
-      Await.ready(httpsServer)
-    }
   }
 
   /* Overrides */
@@ -115,8 +135,9 @@ trait BaseHttpServer extends TwitterServer {
       httpServer = serverBuilder.serve(port, httpService)
       onExit {
         Await.result(
-          close(httpServer, shutdownTimeoutFlag().fromNow))
+          httpServer.close(shutdownTimeoutFlag().fromNow))
       }
+      await(httpServer)
       for (addr <- httpAnnounceFlag.get) httpServer.announce(addr)
       info("http server started on port: " + httpExternalPort.get)
     }
@@ -137,17 +158,11 @@ trait BaseHttpServer extends TwitterServer {
       httpsServer = serverBuilder.serve(port, httpService)
       onExit {
         Await.result(
-          close(httpsServer, shutdownTimeoutFlag().fromNow))
+          httpsServer.close(shutdownTimeoutFlag().fromNow))
       }
+      await(httpsServer)
       for (addr <- httpsAnnounceFlag.get) httpsServer.announce(addr)
       info("https server started on port: " + httpsExternalPort)
     }
-  }
-
-  private def close(server: ListeningServer, deadline: Time) = {
-    if (server != null)
-      server.close(deadline)
-    else
-      Future.Unit
   }
 }

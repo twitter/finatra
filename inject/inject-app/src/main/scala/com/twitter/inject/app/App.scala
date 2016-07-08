@@ -1,17 +1,29 @@
 package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
-import com.twitter.app.{App => TwitterUtilApp}
+import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.internal.InstalledModules
 import com.twitter.inject.app.internal.InstalledModules.findModuleFlags
 import com.twitter.inject.{Injector, InjectorModule, Logging}
-import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConverters._
+import scala.collection.mutable.ArrayBuffer
 
 /** AbstractApp for usage from Java */
 abstract class AbstractApp extends App
 
-trait App extends TwitterUtilApp with Logging {
+/**
+ * A [[com.twitter.app.App]] that supports injection and [[com.twitter.inject.TwitterModule]] modules.
+ *
+ * It is not expected that you override @Lifecycle methods. If you do, take care to ensure that you
+ * call the super implementation, otherwise critical lifecycle set-up may not occur causing your application
+ * to either function improperly or outright fail.
+ *
+ * Typically, you will only need to interact with the following methods:
+ *   run -- callback executed after the injector is created and all @Lifecycle methods have completed.
+ */
+trait App
+  extends com.twitter.app.App
+  with Logging {
 
   private[inject] lazy val requiredModules = modules ++ javaModules.asScala ++ frameworkModules
 
@@ -20,9 +32,8 @@ trait App extends TwitterUtilApp with Logging {
   private val frameworkModules: ArrayBuffer[Module] = ArrayBuffer(InjectorModule)
   private val frameworkOverrideModules: ArrayBuffer[Module] = ArrayBuffer()
 
-  private[inject] var runAppMain: Boolean = true
-  private[inject] var appStarted: Boolean = false
-  private[inject] var guiceStage: Stage = Stage.PRODUCTION
+  private[inject] var started: Boolean = false
+  private[inject] var stage: Stage = Stage.PRODUCTION
   private var installedModules: InstalledModules = _
 
   /* Lifecycle */
@@ -38,25 +49,29 @@ trait App extends TwitterUtilApp with Logging {
     allModuleFlags foreach flag.add
   }
 
-  def main() {
+  /** DO NOT BLOCK */
+  def main(): Unit = {
     installedModules = loadModules()
-    installedModules.postStartup()
-    postStartup()
+
+    postInjectorStartup()
+    installedModules.postInjectorStartup()
 
     info("Warming up.")
     warmup()
     beforePostWarmup()
     postWarmup()
     afterPostWarmup()
-
-    info("App started.")
-    setAppStarted(true)
+    installedModules.postWarmupComplete()
 
     onExit {
       installedModules.shutdown()
     }
 
-    callAppMain()
+    /* Lifecycle is complete, mark the server as started. */
+    setAppStarted(true)
+    info(s"$name started.")
+    /* Execute callback for further configuration or to start long-running background processes */
+    startApplication()
   }
 
   /* Public */
@@ -68,33 +83,45 @@ trait App extends TwitterUtilApp with Logging {
       installedModules.injector
   }
 
-  /**
-   * Callback method executed after the injector is created and warmup has fully completed.
-   * Note: Not intended for use when using HttpServer or ThriftServer
-   */
-  def appMain() {
-  }
-
   /* Protected */
 
-  /** Production Guice modules */
+  /**
+   * Callback method executed after the injector is created and all
+   * lifecycle methods have fully completed.
+   *
+   * The app is signaled as STARTED prior to the execution of this
+   * callback as all lifecycle methods have successfully completed.
+   *
+   * This method can be used to start long-lived processes that run in
+   * separate threads from the main() thread. It is expected that you manage
+   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
+   *
+   * Any exceptions thrown in this method will result in the app exiting.
+   */
+  protected def run(): Unit = {
+  }
+
+  /** Production modules */
   protected def modules: Seq[Module] = Seq()
 
-  /** Production Guice modules from Java */
+  /** Production modules from Java */
   protected def javaModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
-  /** Override Guice modules which redefine production bindings (Note: Only use overrideModules during testing) */
+  /** Override modules which redefine production bindings (only use overrideModules during testing) */
   protected def overrideModules: Seq[Module] = Seq()
 
-  /** Override Guice modules from Java which redefine production bindings (Note: Only use overrideModules during testing) */
+  /** Override modules from Java which redefine production bindings (only use overrideModules during testing) */
   protected def javaOverrideModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
   /**
-   * Default modules can be overridden in production by overriding methods in your App or Server
+   * ONLY INTENDED FOR USE BY THE FRAMEWORK.
+   *
+   * Default modules can be overridden in production by overriding methods in your App or Server.
+   *
    * We take special care to make sure the module is not null, since a common bug
    * is overriding the default methods using a val instead of a def
    */
-  protected def addFrameworkModule(module: Module) {
+  protected def addFrameworkModule(module: Module): Unit = {
     assert(
       module != null,
       "Module cannot be null. If you are overriding a default module, " +
@@ -102,55 +129,64 @@ trait App extends TwitterUtilApp with Logging {
     frameworkModules += module
   }
 
-  protected def addFrameworkModules(modules: Module*) {
+  /** Only intended for use by the framework */
+  protected def addFrameworkModules(modules: Module*): Unit = {
     modules foreach addFrameworkModule
   }
 
-  protected[inject] def addFrameworkOverrideModules(modules: Module*) {
+  /** Only intended for use by the framework */
+  protected[inject] def addFrameworkOverrideModules(modules: Module*): Unit = {
     frameworkOverrideModules ++= modules
   }
 
-  protected[inject] def setAppStarted(value: Boolean) {
-    appStarted = value
-  }
-
-  /** Method to be called after injector creation */
-  protected def postStartup() {
-  }
-
-  /** Warmup method to be called before postWarmup */
-  protected def warmup() {
-  }
-
-  /** Method to be called after successful warmup */
-  protected def postWarmup() {
-  }
-
-  protected def beforePostWarmup() {
-  }
-
-  protected def afterPostWarmup() {
-  }
-
+  /** Only intended for use by the framework */
   protected[inject] def loadModules() = {
     InstalledModules.create(
       flags = flag.getAll(includeGlobal = false).toSeq,
       modules = requiredModules,
       overrideModules = overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules,
-      stage = guiceStage)
+      stage = stage)
+  }
+
+  /** Method to be called after injector creation */
+  @Lifecycle
+  protected def postInjectorStartup(): Unit = {
+  }
+
+  /** Warmup method to be called before postWarmup */
+  @Lifecycle
+  protected def warmup(): Unit = {
+  }
+
+  /** Method to be called after successful warmup but before application initialization */
+  @Lifecycle
+  protected def beforePostWarmup(): Unit = {
+  }
+
+  /** Method to be called after successful warmup */
+  @Lifecycle
+  protected def postWarmup(): Unit = {
+  }
+
+  /** Method to be be called after port warmup */
+  @Lifecycle
+  protected def afterPostWarmup(): Unit = {
   }
 
   /* Private */
 
-  private def callAppMain() {
-    if (runAppMain) {
-      try {
-        appMain()
-      } catch {
-        case e: Throwable =>
-          error("Error in appMain", e)
-          throw e
-      }
+  private def setAppStarted(value: Boolean): Unit = {
+    started = value
+  }
+
+  private def startApplication(): Unit = {
+    try {
+      run()
+    } catch {
+      case t: Throwable =>
+        // we make sure to log a useful error message when an exception is thrown
+        error(s"Error in ${this.getClass.getName}#run. ${t.getMessage}", t)
+        throw t
     }
   }
 }

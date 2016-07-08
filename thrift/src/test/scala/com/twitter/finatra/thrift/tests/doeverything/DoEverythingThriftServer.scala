@@ -40,7 +40,7 @@ class DoEverythingThriftServer extends ThriftServer {
   }
 
   override def warmup() {
-    run[DoEverythingThriftWarmupHandler]()
+    handle[DoEverythingThriftWarmupHandler]()
   }
 }
 

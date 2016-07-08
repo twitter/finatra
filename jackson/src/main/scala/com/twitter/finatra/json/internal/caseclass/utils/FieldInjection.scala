@@ -12,7 +12,7 @@ import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
 import java.lang.annotation.Annotation
 import javax.inject.Inject
 
-object FieldInjection {
+private[json] object FieldInjection {
   private val InjectableAnnotations: Set[Class[_ <: Annotation]] = Set(
     classOf[Inject],
     classOf[com.google.inject.Inject],
@@ -22,7 +22,7 @@ object FieldInjection {
     classOf[Header])
 }
 
-class FieldInjection(
+private[json] class FieldInjection(
   name: String,
   javaType: JavaType,
   parentClass: Class[_],

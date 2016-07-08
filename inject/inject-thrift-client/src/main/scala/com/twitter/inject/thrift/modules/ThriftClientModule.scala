@@ -13,6 +13,7 @@ import com.twitter.util.Duration
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
+@deprecated("Use the com.twitter.inject.thrift.modules.FilteredThriftClientModule", "2016-06-23")
 abstract class ThriftClientModule[T: ClassTag]
   extends TwitterModule
   with time.Implicits {
@@ -23,7 +24,7 @@ abstract class ThriftClientModule[T: ClassTag]
   val label: String
 
   /**
-   * Destination of client (usually a wily path)
+   * Destination of client
    */
   val dest: String
 
@@ -32,6 +33,9 @@ abstract class ThriftClientModule[T: ClassTag]
    *
    * Note: Both server and client must have mux enabled otherwise
    * a nondescript ChannelClosedException will be seen.
+   *
+   * What is ThriftMux?
+   * http://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
    */
   def mux: Boolean = true
 

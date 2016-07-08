@@ -6,10 +6,15 @@ import com.twitter.finagle.{CancelledRequestException, Failure}
 import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, HttpException, HttpResponseException}
 import com.twitter.finatra.http.internal.exceptions.FinatraDefaultExceptionMapper._
 import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
+import com.twitter.finatra.utils.DeadlineValues
+import com.twitter.inject.Logging
+import com.twitter.inject.utils.ExceptionUtils._
 import javax.inject.{Inject, Singleton}
+import org.apache.thrift.TException
 
-object FinatraDefaultExceptionMapper {
+private[http] object FinatraDefaultExceptionMapper {
   private val MaxDepth = 5
+  private val DefaultExceptionSource = "Internal"
 
   private def unwrapFailure(failure: Failure, depth: Int): Throwable = {
     if (depth == 0)
@@ -24,40 +29,61 @@ object FinatraDefaultExceptionMapper {
 }
 
 @Singleton
-class FinatraDefaultExceptionMapper @Inject()(
+private[http] class FinatraDefaultExceptionMapper @Inject()(
   response: ResponseBuilder)
-  extends DefaultExceptionMapper {
+  extends DefaultExceptionMapper
+  with Logging {
 
   override def toResponse(request: Request, throwable: Throwable): Response = {
     throwable match {
-      case e: HttpException => //TODO: Optionally pass handled exception
+      case e: HttpException =>
         val builder = response.status(e.statusCode)
         if (e.mediaType.is(MediaType.JSON_UTF_8))
           builder.json(ErrorsResponse(e.errors))
         else
           builder.plain(e.errors.mkString(", "))
-      case e: HttpResponseException => //TODO: Optionally pass handled exception
-        e.response
+      case e: HttpResponseException =>
+        response.create(e.response)
       case e: CancelledRequestException =>
+        val deadlineValues = DeadlineValues.current()
         response
           .clientClosed
-          .handled(request, e)
+          .failureClassifier(
+            deadlineValues.exists(_.expired),
+            request,
+            source = DefaultExceptionSource,
+            details = Seq("CancelledRequestException"),
+            message = deadlineValues.map(_.elapsed).getOrElse("unknown") + " ms")
       case e: Failure =>
         unwrapFailure(e, MaxDepth) match {
           case cause: Failure =>
-            response
-              .internalServerError
-              .unhandled(request, e)
-              .jsonError
+            unhandledResponse(request, e)
           case cause =>
             toResponse(request, cause)
         }
-      case e =>
-        // ExceptionMappingFilter protects us against fatal exceptions.
-        response
-          .internalServerError
-          .unhandled(request, e)
-          .jsonError
+      case e: TException =>
+        unhandledResponse(request, e, logStackTrace = false)
+      case e => // Note: We don't use NonFatal(e) since ExceptionMappingFilter is protecting us
+        unhandledResponse(request, e)
     }
+  }
+
+  private def unhandledResponse(request: Request, e: Throwable, logStackTrace: Boolean = true): Response = {
+    if (logStackTrace) {
+      error("Unhandled Exception", e)
+    }
+    else {
+      error("Unhandled Exception: " + e)
+    }
+
+    response
+      .internalServerError
+      .failure(
+        request,
+        source = DefaultExceptionSource,
+        details = Seq(
+          "Unhandled",
+          toExceptionDetails(e)))
+      .jsonError
   }
 }

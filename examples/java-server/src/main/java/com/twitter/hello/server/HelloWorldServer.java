@@ -18,7 +18,7 @@ public class HelloWorldServer extends AbstractTwitterServer {
     }
 
     @Override
-    public void appMain() {
+    public void start() {
         HelloService helloService = injector().instance(HelloService.class);
         System.out.println(helloService.hi("Bob"));
     }

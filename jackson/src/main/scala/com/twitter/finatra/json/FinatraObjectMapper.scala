@@ -50,7 +50,7 @@ case class FinatraObjectMapper(
   }
 
   def reader[T: Manifest] = {
-    objectMapper.reader[T]
+    objectMapper.readerFor[T]
   }
 
   def parse[T: Manifest](message: Message): T = {
@@ -60,7 +60,7 @@ case class FinatraObjectMapper(
         throw new RequestFieldInjectionNotSupportedException()
       }
     }
-    FinatraObjectMapper.parseMessageBody(message, objectMapper.reader[T])
+    FinatraObjectMapper.parseMessageBody(message, objectMapper.readerFor[T])
   }
 
   def parse[T: Manifest](byteBuffer: ByteBuffer): T = {

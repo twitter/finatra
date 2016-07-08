@@ -4,8 +4,9 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.{ListeningServer, ThriftMux}
 import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.server.{PortUtils, TwitterServer}
-import com.twitter.util.{Await, Future, Time}
+import com.twitter.util.Await
 
 trait ThriftServer extends TwitterServer {
 
@@ -30,23 +31,19 @@ trait ThriftServer extends TwitterServer {
 
   protected def configureThrift(router: ThriftRouter): Unit
 
-  // TODO: move upstream to inject.App; requires inject.TwitterServer#run to be
-  // renamed (to handle[T]) and then this should replace inject.App#appMain().
-  /**
-   * Application logic to run after the server has warmed up and bound to its port(s).
-   */
-  protected def run(): Unit = {}
-
   /* Lifecycle */
 
-  override protected def postStartup(): Unit = {
-    super.postStartup()
+  @Lifecycle
+  override protected def postInjectorStartup(): Unit = {
+    super.postInjectorStartup()
+
     val router = injector.instance[ThriftRouter]
     router.serviceName(name)
     configureThrift(router)
   }
 
-  override protected def postWarmup() {
+  @Lifecycle
+  override protected def postWarmup(): Unit = {
     super.postWarmup()
 
     val router = injector.instance[ThriftRouter]
@@ -59,36 +56,20 @@ trait ThriftServer extends TwitterServer {
       thriftServerBuilder.serveIface(thriftPortFlag(), router.filteredService)
     onExit {
       Await.result(
-        close(thriftServer, thriftShutdownTimeoutFlag().fromNow))
+        thriftServer.close(thriftShutdownTimeoutFlag().fromNow))
     }
+    await(thriftServer)
     for (addr <- thriftAnnounceFlag.get) thriftServer.announce(addr)
-    info("Thrift server started on port: " + thriftPort.get)
-  }
-
-  override def waitForServer() {
-    Await.ready(thriftServer)
+    info("thrift server started on port: " + thriftPort.get)
   }
 
   /* Overrides */
 
-  override protected def failfastOnFlagsNotParsed = true
-
-  override def thriftPort = Option(thriftServer) map PortUtils.getPort
-
-  override final def appMain(): Unit = { run() }
+  override def thriftPort: Option[Int] = Option(thriftServer) map PortUtils.getPort
 
   /* Protected */
 
   protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
-  }
-
-  /* Private */
-
-  private def close(server: ListeningServer, deadline: Time) = {
-    if (server != null)
-      server.close(deadline)
-    else
-      Future.Unit
   }
 }

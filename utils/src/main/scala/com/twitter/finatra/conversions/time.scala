@@ -10,52 +10,52 @@ import org.joda.time.{DateTime, DateTimeZone, Duration}
  */
 object time extends Implicits {
 
+  private[time] val LongTimeFromNowMillis = new DateTime(9999, 1, 1, 0, 0, 0, 0).getMillis
+
+  // defined here to avoid https://issues.scala-lang.org/browse/SI-8847
+  private[time] def utcIso8601(dateTime: DateTime): String = {
+    dateTime.withZone(DateTimeZone.UTC).toString
+  }
+
   /* ------------------------------------------------ */
-  implicit class FinatraRichDateTime(dateTime: org.joda.time.DateTime) {
-
-    private val LongTimeFromNowMillis = new DateTime(9999, 1, 1, 0, 0, 0, 0).getMillis
-
-    def utcIso8601: String =
-      utcIso8601(dateTime)
+  implicit class RichDateTime(val self: org.joda.time.DateTime) extends AnyVal {
+    def utcIso8601: String = time.utcIso8601(self)
 
     def reverseUtcIso8601 = {
-      utcIso8601(
-        new DateTime(LongTimeFromNowMillis - dateTime.getMillis))
-    }
-
-    private def utcIso8601(dateTime: DateTime): String = {
-      dateTime.withZone(DateTimeZone.UTC).toString
+      time.utcIso8601(
+        new DateTime(LongTimeFromNowMillis - self.getMillis))
     }
 
     def toTwitterTime: Time = {
-      Time.fromMilliseconds(dateTime.getMillis)
+      Time.fromMilliseconds(self.getMillis)
     }
 
     def epochSeconds: Int = {
-      (dateTime.getMillis / 1000).toInt
+      (self.getMillis / 1000).toInt
     }
   }
 
   /* ------------------------------------------------ */
-  implicit class FinatraRichDuration(duration: Duration) {
+  implicit class RichDuration(val self: Duration) extends AnyVal {
     def toTwitterDuration: TwitterDuration = {
       TwitterDuration.fromMilliseconds(
-        duration.getMillis)
+        self.getMillis)
     }
   }
 
   /* ------------------------------------------------ */
-  implicit class FinatraRichDurationBuilder(duration: DurationBuilder) {
+  // com.github.nscala_time.time.DurationBuilder already extends AnyVal
+  implicit class RichDurationBuilder(val self: DurationBuilder) {
     def toTwitterDuration: TwitterDuration = {
       TwitterDuration.fromMilliseconds(
-        duration.toDuration.getMillis)
+        self.toDuration.getMillis)
     }
   }
 
   /* ------------------------------------------------ */
-  implicit class RichStringTime(string: String) {
+  implicit class RichStringTime(val self: String) extends AnyVal {
     def toDateTime: DateTime = {
-      DateTime.parse(string)
+      DateTime.parse(self)
     }
   }
 }

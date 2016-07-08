@@ -21,11 +21,11 @@ class TinyUrlServer extends HttpServer {
     TinyUrlModule)
 
   override def configureHttp(router: HttpRouter) {
-    router.
-      filter[LoggingMDCFilter[Request, Response]].
-      filter[TraceIdMDCFilter[Request, Response]].
-      filter[CommonFilters].
-      add[TinyUrlController].
-      exceptionMapper[MalformedURLExceptionMapper]
+    router
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[TraceIdMDCFilter[Request, Response]]
+      .filter[CommonFilters]
+      .exceptionMapper[MalformedURLExceptionMapper]
+      .add[TinyUrlController]
   }
 }

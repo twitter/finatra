@@ -21,7 +21,7 @@ import scala.tools.scalap.scalax.rules.scalasig._
    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-object CaseClassSigParser {
+private[finatra] object CaseClassSigParser {
   private val classLoader = getClass.getClassLoader
 
   /* Public */
@@ -130,9 +130,9 @@ object CaseClassSigParser {
   }
 }
 
-class MissingPickledSig(clazz: Class[_]) extends Error("Failed to parse pickled Scala signature from: %s".format(clazz))
+private[finatra] class MissingPickledSig(clazz: Class[_]) extends Error("Failed to parse pickled Scala signature from: %s".format(clazz))
 
-class MissingExpectedType(clazz: Class[_]) extends Error(
+private[finatra] class MissingExpectedType(clazz: Class[_]) extends Error(
   "Parsed pickled Scala signature, but no expected type found: %s"
     .format(clazz)
 )

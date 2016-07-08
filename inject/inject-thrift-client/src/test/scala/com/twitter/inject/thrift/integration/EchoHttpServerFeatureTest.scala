@@ -1,7 +1,7 @@
 package com.twitter.inject.thrift.integration
 
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.thrift.integration.http_server.EchoHttpServer
 import com.twitter.inject.thrift.integration.thrift_server.EchoThriftServer
@@ -13,7 +13,7 @@ class EchoHttpServerFeatureTest extends HttpTest {
 
   val httpServer = new EmbeddedHttpServer(
     twitterServer = new EchoHttpServer,
-    extraArgs = Seq(
+    args = Seq(
       "-thrift.clientId=echo-http-service",
       resolverMap("thrift-echo-service" -> thriftServer.thriftHostAndPort)))
 

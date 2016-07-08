@@ -3,16 +3,31 @@ package com.twitter.inject.server
 import com.google.inject.Module
 import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
+import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.App
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision
-import com.twitter.util.Await
+import com.twitter.util.{Awaitable, Await}
+import java.util.concurrent.ConcurrentLinkedQueue
+import scala.collection.JavaConverters._
 
 /** AbstractTwitterServer for usage from Java */
 abstract class AbstractTwitterServer extends TwitterServer
 
+/**
+ * A [[com.twitter.server.TwitterServer]] that supports injection and [[com.twitter.inject.TwitterModule]] modules.
+ *
+ * To use, override the appropriate @Lifecycle and callback method(s). Make sure when overriding @Lifecycle methods
+ * to call the super implementation, otherwise critical lifecycle set-up  may not occur causing your server to either
+ * function improperly or outright fail.
+ *
+ * Typically, you will only need to interact with the following methods:
+ *
+ *  postWarmup -- create and bind any external interface(s). See [[com.twitter.inject.app.App#postWarmup]]
+ *  start -- callback executed after the injector is created and all @Lifecycle methods have completed.
+ */
 trait TwitterServer
   extends App
   with com.twitter.server.TwitterServer
@@ -21,17 +36,25 @@ trait TwitterServer
   with Logging {
 
   addFrameworkModules(
-    statsModule)
+    statsReceiverModule)
 
   private val adminAnnounceFlag = flag[String]("admin.announce", "Address for announcing admin server")
 
+  /* Mutable State */
+
+  private[inject] val awaitables: ConcurrentLinkedQueue[Awaitable[_]] = new ConcurrentLinkedQueue()
+
+  premain {
+    awaitables.add(adminHttpServer)
+  }
+
   /* Protected */
 
-  // TODO: Default to true
-  override protected def failfastOnFlagsNotParsed: Boolean = false
+  override protected def failfastOnFlagsNotParsed: Boolean = true
 
   /**
    * Name used for registration in the [[com.twitter.util.registry.Library]]
+   *
    * @return library name to register in the Library registry.
    */
   override protected val libraryName: String = "finatra"
@@ -44,40 +67,72 @@ trait TwitterServer
 
   /**
    * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finagle.stats.StatsReceiver]].
+   *
    * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finagle.stats.StatsReceiver]] implementation.
    */
-  protected def statsModule: Module = StatsReceiverModule // TODO: Use Guice v4 OptionalBinder
+  protected def statsReceiverModule: Module = StatsReceiverModule
 
   /** Resolve all Finagle clients before warmup method called */
   protected def resolveFinagleClientsOnStartup: Boolean = true
 
-  protected def waitForServer() {
-    Await.ready(adminHttpServer)
+  protected def await[T <: Awaitable[_]](awaitable: T): Unit = {
+    assert(awaitable != null, "Cannot call #await() on null Awaitable.")
+    this.awaitables.add(awaitable)
+  }
+
+  protected def await(awaitables: Awaitable[_]*): Unit = {
+    awaitables foreach await
   }
 
   /**
    * Utility to run a [[com.twitter.inject.utils.Handler]]. This is generally used for running
    * a warmup handler in #warmup.
+   *
    * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
    * @see [[com.twitter.inject.utils.Handler]]
-   * TODO: rename to handle[T <: Handler]()
    */
-  protected def run[T <: Handler : Manifest]() {
+  protected def handle[T <: Handler : Manifest](): Unit = {
     injector.instance[T].handle()
+  }
+
+  /**
+   * Callback method executed after the injector is created and all
+   * lifecycle methods have fully completed. It is NOT expected that
+   * you block in this method as you will prevent completion
+   * of the server lifecycle.
+   *
+   * The server is signaled as STARTED prior to the execution of this
+   * callback as all lifecycle methods have successfully completed and the
+   * admin and any external interfaces have started.
+   *
+   * This method can be used to start long-lived processes that run in
+   * separate threads from the main() thread. It is expected that you manage
+   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
+   *
+   * Any exceptions thrown in this method will result in the server exiting.
+   */
+  protected def start(): Unit = {
   }
 
   /* Overrides */
 
-  override final def main() {
+  override final def main(): Unit = {
     super.main() // Call inject.App.main() to create injector
 
     info("Startup complete, server ready.")
-    waitForServer()
+    Await.all(awaitables.asScala.toSeq: _*)
   }
 
-  /** Method to be called after injector creation */
-  override protected def postStartup() {
-    super.postStartup()
+  /**
+   * @see [[com.twitter.inject.server.TwitterServer#start]]
+   */
+  override final protected def run(): Unit = {
+    start()
+  }
+
+  @Lifecycle
+  override protected def postInjectorStartup(): Unit = {
+    super.postInjectorStartup()
 
     if (resolveFinagleClientsOnStartup) {
       info("Resolving Finagle clients before warmup")
@@ -91,14 +146,32 @@ trait TwitterServer
     FinagleBuildRevision.register(injector)
   }
 
-  override protected def beforePostWarmup() {
+  /**
+   * After warmup but before accepting traffic promote to old gen
+   * (which triggers gc).
+   *
+   * @see [[com.twitter.server.Lifecycle.Warmup#prebindWarmup]]
+   * @see [[com.twitter.inject.app.App#beforePostWarmup]]
+   */
+  @Lifecycle
+  override protected def beforePostWarmup(): Unit = {
     super.beforePostWarmup()
 
     // trigger gc before accepting traffic
     prebindWarmup()
   }
 
-  override protected def postWarmup() {
+  /**
+   * If you override this method to create and bind any external interface or to
+   * instantiate any awaitable it is expected that you add the Awaitable (or
+   * [[com.twitter.finagle.ListeningServer]]) to the list of Awaitables using the
+   * [[await[T <: Awaitable[_]](awaitable: T): Unit]] function.
+   *
+   * It is NOT expected that you block in this method as you will prevent completion
+   * of the server lifecycle.
+   */
+  @Lifecycle
+  override protected def postWarmup(): Unit = {
     super.postWarmup()
 
     if (disableAdminHttpServer) {
@@ -111,11 +184,18 @@ trait TwitterServer
 
   /**
    * After postWarmup, all external servers have been started, and we can now
-   * enable our health endpoint
+   * enable our health endpoint.
+   *
+   * @see [[com.twitter.server.Lifecycle.Warmup#warmupComplete]]
+   * @see [[com.twitter.inject.app.App#afterPostwarmup]]
    */
-  override protected def afterPostWarmup() {
+  @Lifecycle
+  override protected def afterPostWarmup(): Unit = {
     super.afterPostWarmup()
-    info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
+
+    if (!disableAdminHttpServer) {
+      info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
+    }
     warmupComplete()
   }
 }

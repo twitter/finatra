@@ -1,7 +1,7 @@
 scala_library(name='scala',
   provides = scala_artifact(
-    org = 'com.twitter.finatra',
-    name = 'thrift',
+    org = 'com.twitter',
+    name = 'finatra-thrift',
     repo = artifactory,
   ),
   dependencies=[
@@ -13,7 +13,7 @@ scala_library(name='scala',
     'finatra/inject/inject-app',
     'finatra/inject/inject-core',
     'finatra/inject/inject-server',
-    'finatra/inject/inject-thrift-client',
+    'finatra/inject/inject-thrift',
     'finatra/slf4j',
     'finatra/utils',
     'util/util-core'

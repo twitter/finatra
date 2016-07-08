@@ -9,7 +9,8 @@ junit_tests(name='scala',
     'util/util-core'
   ],
   sources=rglobs(
-    'com/twitter/finatra/tests/*.scala',
+    'com/twitter/finatra/json/tests/*.scala',
+    'com/twitter/finatra/json/tests/*.java',
   ),
   resources=[
     'finatra/jackson/src/test/resources'
@@ -18,8 +19,8 @@ junit_tests(name='scala',
 
 scala_library(name="test-deps",
   provides = scala_artifact(
-    org = 'com.twitter.finatra',
-    name = 'jackson-test-jar',
+    org = 'com.twitter',
+    name = 'finatra-jackson-test-jar',
     repo = artifactory,
   ),
   dependencies=[
@@ -32,8 +33,6 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/json/*.scala',
     'com/twitter/finatra/validation/*.scala',
+    'com/twitter/finatra/validation/*.java',
   ),
-  java_sources=[
-    'finatra/jackson/src/test/java'
-  ],
 )

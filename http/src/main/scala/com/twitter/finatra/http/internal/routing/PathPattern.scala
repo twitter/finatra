@@ -5,7 +5,7 @@ import java.util.regex.Matcher
 import scala.collection.immutable
 import scala.util.matching.Regex
 
-object PathPattern extends Logging {
+private[http] object PathPattern extends Logging {
 
   /* Matches and captures route param names */
   private val NamedRouteParamRegex = """:\w+""".r
@@ -39,7 +39,7 @@ object PathPattern extends Logging {
   }
 }
 
-case class PathPattern(
+private[http] case class PathPattern(
   regex: Regex,
   captureNames: Seq[String] = Seq()) {
 

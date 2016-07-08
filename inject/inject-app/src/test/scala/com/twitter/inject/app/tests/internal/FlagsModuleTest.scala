@@ -2,8 +2,8 @@ package com.twitter.inject.app.tests.internal
 
 import com.google.inject.ProvisionException
 import com.twitter.app.Flags
-import com.twitter.finatra.annotations.Flag
 import com.twitter.inject.Test
+import com.twitter.inject.annotations.Flag
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.app.internal.FlagsModule
 import javax.inject.Inject

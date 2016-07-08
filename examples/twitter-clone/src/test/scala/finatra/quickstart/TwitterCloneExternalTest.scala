@@ -3,7 +3,7 @@ package finatra.quickstart
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.EmbeddedHttpServer
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Test
 import finatra.quickstart.domain.http.TweetResponse
 
@@ -21,7 +21,7 @@ class TwitterCloneExternalTest extends Test {
 
   val server = new EmbeddedHttpServer(
     new TwitterCloneServer,
-    clientFlags = Map(
+    flags = Map(
       "firebase.host" -> "finatra.firebaseio.com",
       "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"))
 

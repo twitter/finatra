@@ -23,36 +23,42 @@ object option {
     }
   }
 
-  implicit class RichOption[A](wrapped: Option[A]) {
+  implicit class RichOption[A](val self: Option[A]) extends AnyVal {
     def toFutureOrFail(throwable: Throwable) = {
-      RichOption.toFutureOrFail(wrapped, throwable)
+      RichOption.toFutureOrFail(self, throwable)
     }
 
     def toTryOrFail(throwable: Throwable): Try[A] = {
-      RichOption.toTryOrFail(wrapped, throwable)
+      RichOption.toTryOrFail(self, throwable)
     }
 
-    def toFutureOrElse(orElse: A): Future[A] = wrapped match {
+    def toFutureOrElse(orElse: A): Future[A] = self match {
       case Some(returnVal) => Future.value(returnVal)
       case None => Future.value(orElse)
     }
     
-    def toFutureOrElse(orElse: Future[A]): Future[A] = wrapped match {
+    def toFutureOrElse(orElse: Future[A]): Future[A] = self match {
       case Some(returnVal) => Future.value(returnVal)
       case None => orElse
     }
 
-    /* Creates a string using the passed in "format string" and the defined Option as its argument (or empty string if None) */
-    def format(fmtStr: String) = wrapped match {
+    /**
+     * Creates a string using the passed in "format string" and the
+     * defined Option as its argument (or empty string if None).
+     * @param fmtStr the string to format
+     * @return a formatted string using the Option value if defined,
+     *         otherwise an empty-string.
+     */
+    def format(fmtStr: String) = self match {
       case Some(value) => fmtStr.format(value)
       case None => ""
     }
   }
 
   /* ---------------------------------- */
-  implicit class RichOptionFuture[A](optionFuture: Option[Future[A]]) {
+  implicit class RichOptionFuture[A](val self: Option[Future[A]]) extends AnyVal {
     def toFutureOption: Future[Option[A]] = {
-      optionFuture match {
+      self match {
         case Some(future) => future map {Some(_)}
         case None => Future.None
       }
@@ -60,9 +66,9 @@ object option {
   }
 
   /* ---------------------------------- */
-  implicit class RichOptionMap[A, B](mapOpt: Option[Map[A, B]]) {
+  implicit class RichOptionMap[A, B](val self: Option[Map[A, B]]) extends AnyVal {
     def mapInnerValues[C](func: B => C): Option[Map[A, C]] = {
-      for (map <- mapOpt) yield {
+      for (map <- self) yield {
         map.mapValues(func)
       }
     }

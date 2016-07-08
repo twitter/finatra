@@ -9,6 +9,8 @@ import com.twitter.finatra.http.modules._
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.logging.modules.Slf4jBridgeModule
+import com.twitter.inject.TwitterModule
+import com.twitter.inject.annotations.Lifecycle
 import com.twitter.server.AdminHttpServer
 
 trait HttpServer extends BaseHttpServer {
@@ -17,6 +19,7 @@ trait HttpServer extends BaseHttpServer {
     mustacheModule,
     messageBodyModule,
     exceptionMapperModule,
+    exceptionManagerModule,
     jacksonModule,
     DocRootModule,
     accessLogModule,
@@ -28,17 +31,16 @@ trait HttpServer extends BaseHttpServer {
 
   /* Lifecycle */
 
-  override protected def postStartup() {
-    super.postStartup()
+  @Lifecycle
+  override protected def postInjectorStartup(): Unit = {
+    super.postInjectorStartup()
     val httpRouter = injector.instance[HttpRouter]
     configureHttp(httpRouter)
   }
 
   /* Overrides */
 
-  override protected def failfastOnFlagsNotParsed = true
-
-  override def httpService: Service[Request, Response] = {
+  override final def httpService: Service[Request, Response] = {
     val router = injector.instance[HttpRouter]
     addAdminRoutes(router)
     router.services.externalService
@@ -46,7 +48,58 @@ trait HttpServer extends BaseHttpServer {
 
   /* Protected */
 
-  protected def addAdminRoutes(router: HttpRouter) {
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finagle.filter.LogFormatter]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finagle.filter.LogFormatter]] implementation.
+   */
+  protected def accessLogModule: Module = AccessLogModule
+
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.github.mustachejava.MustacheFactory]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.github.mustachejava.MustacheFactory]] implementation.
+   */
+  protected def mustacheModule: Module = MustacheModule
+
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing implementations for a
+   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]] and a
+   * [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides implementations for
+   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyReader]] and
+   *         [[com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter]].
+   */
+  protected def messageBodyModule: Module = MessageBodyModule
+
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing an implementation for a
+   * [[com.twitter.finatra.http.exceptions.DefaultExceptionMapper]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a
+   *         [[com.twitter.finatra.http.exceptions.DefaultExceptionMapper]] implementation.
+   */
+  protected def exceptionMapperModule: Module = ExceptionMapperModule
+
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.http.exceptions.ExceptionManager]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a
+   *         [[com.twitter.finatra.http.exceptions.ExceptionManager]] implementation.
+   */
+  protected def exceptionManagerModule: TwitterModule = ExceptionManagerModule
+
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.json.FinatraObjectMapper]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.json.FinatraObjectMapper]] implementation.
+   */
+  protected def jacksonModule: Module = FinatraJacksonModule
+
+  /* Private */
+
+  private def addAdminRoutes(router: HttpRouter): Unit = {
     val allTwitterServerAdminRoutes = this.routes.map(_.path).union(HttpMuxer.patterns)
     val conflicts = allTwitterServerAdminRoutes.intersect(router.routesByType.admin.map(_.path))
     if (conflicts.nonEmpty) {
@@ -83,21 +136,6 @@ trait HttpServer extends BaseHttpServer {
         router.services.adminService)
     }
   }
-
-  //Note: After upgrading to Guice v4, replace the need for these protected methods with OptionalBinder
-  //http://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/multibindings/OptionalBinder.html
-  protected def accessLogModule: Module = AccessLogModule
-
-  protected def mustacheModule: Module = MustacheModule
-
-  protected def messageBodyModule: Module = MessageBodyModule
-
-  protected def exceptionMapperModule: Module = ExceptionMapperModule
-
-  protected def jacksonModule: Module = FinatraJacksonModule
-
-
-  /* Private */
 
   private def warnIfRoutesDefineAdminIndexInfo(routes: Seq[Route])(predicate: Route => Boolean): Unit = {
     for {

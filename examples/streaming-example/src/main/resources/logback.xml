@@ -1,4 +1,6 @@
 <configuration>
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>%date %.-3level %-25logger{0} %msg%n</pattern>

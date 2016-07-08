@@ -1,7 +1,7 @@
 scala_library(name='scala',
   provides = scala_artifact(
-    org = 'com.twitter.finatra',
-    name = 'jackson',
+    org = 'com.twitter',
+    name = 'finatra-jackson',
     repo = artifactory,
   ),
   dependencies=[

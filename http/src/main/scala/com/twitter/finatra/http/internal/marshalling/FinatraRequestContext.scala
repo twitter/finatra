@@ -6,7 +6,7 @@ import com.twitter.io.BufInputStream
 import java.io.InputStream
 import org.apache.commons.fileupload.RequestContext
 
-class FinatraRequestContext(request: Request) extends RequestContext {
+private[http] class FinatraRequestContext(request: Request) extends RequestContext {
 
   override def getCharacterEncoding: String = {
     request.charset.orNull

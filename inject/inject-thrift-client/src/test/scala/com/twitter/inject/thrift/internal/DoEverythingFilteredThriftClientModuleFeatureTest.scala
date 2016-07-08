@@ -4,13 +4,13 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.thrift.filtered_integration.http_server.{GreeterHttpController, HiLoggingThriftClientFilter}
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
-import com.twitter.inject.thrift.filters.FilterBuilder
+import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftClientModule}
 import com.twitter.util._
 
@@ -31,7 +31,7 @@ class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
           add[GreeterHttpController]
       }
     },
-    extraArgs = Seq(
+    args = Seq(
       "-thrift.clientId=greeter-http-service",
       resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)))
 
@@ -67,7 +67,7 @@ object GreeterThriftClientModule2
 
   override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
-    filter: FilterBuilder) = {
+    filter: ThriftClientFilterBuilder) = {
 
     serviceIface.copy(
       hi = filter.method(Hi)

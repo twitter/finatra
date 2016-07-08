@@ -1,3 +1,3 @@
 resources(name='resources',
-  sources=globs('META-INF/*')
+  sources=globs('META-INF/*', '*.xml')
 )

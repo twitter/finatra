@@ -5,7 +5,7 @@ import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.scrooge.{ThriftResponse, ThriftStruct}
 import com.twitter.util._
 
-class IncrementCounterFilter[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
+private[thrift] class IncrementCounterFilter[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
   counter: Counter)
   extends SimpleFilter[Req, Rep] {
 

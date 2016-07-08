@@ -1,10 +1,10 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
 import com.fasterxml.jackson.databind.JavaType
-import com.fasterxml.jackson.databind.`type`.{ArrayType, CollectionLikeType, MapLikeType, TypeFactory}
+import com.fasterxml.jackson.databind.`type`.{ArrayType, TypeFactory}
 import com.twitter.finatra.json.internal.caseclass.reflection._
 
-object JacksonTypes {
+private[json] object JacksonTypes {
 
   /* Public */
 
@@ -14,13 +14,13 @@ object JacksonTypes {
       typeFactory.constructType(scalaType.runtimeClass)
 
     else if (scalaType.isMap)
-      MapLikeType.construct(
+      typeFactory.constructMapLikeType(
         scalaType.runtimeClass,
         javaType(typeFactory, scalaType.typeArguments(0)),
         javaType(typeFactory, scalaType.typeArguments(1)))
 
     else if (scalaType.isCollection)
-      CollectionLikeType.construct(
+      typeFactory.constructCollectionLikeType(
         scalaType.runtimeClass,
         javaType(typeFactory, scalaType.typeArguments.head))
 
@@ -30,7 +30,8 @@ object JacksonTypes {
         null, null)
 
     else
-      typeFactory.constructParametricType(
+      typeFactory.constructParametrizedType(
+        scalaType.runtimeClass,
         scalaType.runtimeClass,
         javaTypes(typeFactory, scalaType.typeArguments): _*)
   }

@@ -9,18 +9,19 @@ import com.twitter.util.Future
 object futureHttp {
 
   /* -------------------------------------------------------- */
-  implicit class RichHttpFutureOption[A](futureOption: Future[Option[A]]) {
+  implicit class RichHttpFutureOption[A](val self: Future[Option[A]]) extends AnyVal {
 
     def valueOrNotFound(msg: String = ""): Future[A] = {
-      RichFutureOption.getInnerOrElseFail(futureOption, NotFoundException.plainText(msg))
+      RichFutureOption.getInnerOrElseFail(self, NotFoundException.plainText(msg))
     }
   }
 
   /* -------------------------------------------------------- */
-  implicit class RichHttpFuture[A](future: Future[A]) extends Logging {
+  // We specifically log here (which allocates) so we do not extend AnyVal
+  implicit class RichHttpFuture[A](self: Future[A]) extends Logging {
 
     def httpRescue[ExceptionToRescue: Manifest](status: Status, errors: Seq[String] = Seq(), log: String = ""): Future[A] = {
-      future.rescue {
+      self.rescue {
         case t if manifest[ExceptionToRescue].runtimeClass.isAssignableFrom(t.getClass) =>
           if (log.nonEmpty) {
             warn(log)

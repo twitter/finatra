@@ -1,7 +1,7 @@
 package com.twitter.inject.thrift.filtered_integration
 
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.http.test.{EmbeddedHttpServer, HttpTest}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.inject.thrift.filtered_integration.http_server.GreeterHttpServer
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
@@ -13,7 +13,7 @@ class GreeterHttpServerFeatureTest extends HttpTest {
 
   val httpServer = new EmbeddedHttpServer(
     twitterServer = new GreeterHttpServer,
-    extraArgs = Seq(
+    args = Seq(
       "-thrift.clientId=greeter-http-service",
       resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)))
 

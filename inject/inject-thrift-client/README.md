@@ -1,11 +1,32 @@
 # Summary
 inject-thrift-client is a library for configuring injectable thrift clients. The examples below demonstrate creating a thrift-client for the following thrift defined service:
 ```thrift
+exception InvalidOperation {
+  1: i32 what,
+  2: string why
+}
+
+exception ByeOperation {
+  1: i32 code
+}
+
+struct ByeResponse {
+  1: double code;
+  2: string msg;
+}
+
 service Greeter {
+
+  /**
+   * Say hi
+   */
   string hi(
     1: string name
   ) throws (1:InvalidOperation invalidOperation)
 
+  /**
+   * Say bye
+   */
   ByeResponse bye(
     1: string name
     2: i32 age
@@ -22,14 +43,14 @@ object GreeterThriftClientModule
 
   override val label = "greeter-thrift-client"
   override val dest = "flag!greeter-thrift-service"
-  override val connectTimeout = 1.minute.toDuration
+  override val sessionAcquisitionTimeout = 1.minute.toDuration
 
-  override def createFilteredClient(
+  override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
-    filterBuilder: FilterBuilder): Greeter[Future] = {
+    filter: ThriftClientFilterBuilder) = {
 
-    Thrift.newMethodIface(serviceIface.copy(
-      hi = filterBuilder.method(Hi)
+    serviceIface.copy(
+      hi = filter.method(Hi)
         .timeout(2.minutes)
         .constantRetry(
           requestTimeout = 1.minute,
@@ -42,16 +63,15 @@ object GreeterThriftClientModule
           retries = 3)
         .filter[HiLoggingThriftClientFilter]
         .andThen(serviceIface.hi),
-      bye = filterBuilder.method(Bye)
+      bye = filter.method(Bye)
         .exponentialRetry(
-          shouldRetryResponse = NonFatalExceptions,
+          shouldRetryResponse = PossiblyRetryableExceptions,
           requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
-        .andThen(serviceIface.bye)))
+        .andThen(serviceIface.bye))
   }
-}
 ```
 
 Then add GreeterThriftClientModule to your list of server modules, and inject the "Greeter" thrift-client as such:
@@ -60,7 +80,7 @@ class MyClass @Inject()(
   greeter: Greeter[Future])
 ```
 
-## ThriftClientModule Usage
+## ThriftClientModule Usage (deprecated)
 If you don't need client retries or other client filters, ThriftClientModule can be used to simply create an injectable thrift client as such:
 ```scala
 object GreeterThriftClientModule extends ThriftClientModule[Greeter[Future]] {

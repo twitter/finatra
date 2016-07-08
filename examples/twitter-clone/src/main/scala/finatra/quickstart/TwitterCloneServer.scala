@@ -5,7 +5,7 @@ import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import finatra.quickstart.controllers.TweetsController
 import finatra.quickstart.modules.{FirebaseHttpClientModule, TwitterCloneJacksonModule}
-import finatra.quickstart.warmup.TwitterCloneWarmup
+import finatra.quickstart.warmup.TwitterCloneWarmupHandler
 
 object TwitterCloneServerMain extends TwitterCloneServer
 
@@ -21,6 +21,6 @@ class TwitterCloneServer extends HttpServer {
   }
 
   override def warmup() {
-    run[TwitterCloneWarmup]()
+    handle[TwitterCloneWarmupHandler]()
   }
 }

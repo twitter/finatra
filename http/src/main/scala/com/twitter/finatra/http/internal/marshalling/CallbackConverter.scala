@@ -8,7 +8,7 @@ import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class CallbackConverter @Inject()(
+private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
   mapper: FinatraObjectMapper,
@@ -55,7 +55,7 @@ class CallbackConverter @Inject()(
     }
     else if (isFutureOption[ResponseType]) {
       request: Request =>
-        requestCallback(request).asInstanceOf[Future[Option[_]]] map optionToHttpResponse(request)
+        requestCallback(request).asInstanceOf[Future[Option[_]]].map(optionToHttpResponse(request))
     }
     else if (runtimeClassEq[ResponseType, AsyncStream[_]]) {
       request: Request =>
@@ -69,7 +69,7 @@ class CallbackConverter @Inject()(
     }
     else if (runtimeClassEq[ResponseType, Future[_]]) {
       request: Request =>
-        requestCallback(request).asInstanceOf[Future[_]] map createHttpResponse(request)
+        requestCallback(request).asInstanceOf[Future[_]].map(createHttpResponse(request))
     }
     else if (runtimeClassEq[ResponseType, StreamingResponse[_]]) {
       request: Request =>
@@ -95,13 +95,15 @@ class CallbackConverter @Inject()(
     }
     else {
       request: Request =>
-        Future(
-          createHttpResponse(request)(requestCallback(request)))
+        requestCallback(request) match {
+          case futureResult: Future[_] => futureResult.map(createHttpResponse(request))
+          case result => Future(createHttpResponse(request)(result))
+        }
     }
   }
 
   private def optionToHttpResponse(request: Request)(response: Option[_]): Response = {
-    response map createHttpResponse(request) getOrElse {
+    response.map(createHttpResponse(request)).getOrElse {
       responseBuilder.notFound("")
     }
   }

@@ -10,7 +10,8 @@ import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Service}
-import com.twitter.inject.app.{App, EmbeddedApp}
+import com.twitter.inject.PoolUtils
+import com.twitter.inject.app.{InjectionServiceModule, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
@@ -20,80 +21,95 @@ import com.twitter.util._
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang.reflect.FieldUtils
+import org.scalatest.Matchers
 
 object EmbeddedTwitterServer {
-  private def resolveClientFlags(useSocksProxy: Boolean, clientFlags: Map[String, String]) = {
+  private def resolveFlags(useSocksProxy: Boolean, flags: Map[String, String]) = {
     if (useSocksProxy) {
-      clientFlags ++ Map(
+      flags ++ Map(
         "com.twitter.server.resolverZkHosts" -> PortUtils.loopbackAddressForPort(2181),
         "com.twitter.finagle.socks.socksProxyHost" -> PortUtils.loopbackAddress,
         "com.twitter.finagle.socks.socksProxyPort" -> "50001")
     }
     else {
-      clientFlags
+      flags
     }
   }
 }
 
 /**
- * EmbeddedTwitterServer allows a twitter-server serving http or thrift endpoints to be started
- * locally (on ephemeral ports), and tested through it's http/thrift interfaces.
+ * EmbeddedTwitterServer allows a [[com.twitter.server.TwitterServer]] serving http or thrift endpoints to be started
+ * locally (on ephemeral ports) and tested through it's http/thrift interfaces.
  *
- * Note: All initialization fields are lazy to aid running multiple tests inside Intellij at the same time
- * since Intellij "pre-constructs" ALL the tests before running each one.
+ * Note: All initialization fields are lazy to aid running multiple tests inside an IDE at the same time
+ * since IDEs typically "pre-construct" ALL the tests before running each one.
  *
- * @param twitterServer The twitter server to be started locally for integration testing
- * @param clientFlags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar)
- * @param extraArgs Extra command line arguments
- * @param waitForWarmup Once the app is started, wait for App warmup to be completed
- * @param stage Guice Stage used to create the server's injector. Since EmbeddedTwitterServer is used for testing, we default to Stage.DEVELOPMENT.
- *              This makes it possible to only mock objects that are used in a given test, at the expense of not checking that the entire
- *              object graph is valid. As such, you should always have at lease one Stage.PRODUCTION test for your service (which eagerly
- *              creates all Guice classes at startup)
- * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external integration tests that connect to external services)
- * @param skipAppMain Skip the running of appMain when the app starts. You will need to manually call app.appMain() later in your test.
+ * @param twitterServer The [[com.twitter.server.TwitterServer]] to be started for testing.
+ * @param flags Command line flags (e.g. "foo"->"bar" is translated into -foo=bar). See: [[com.twitter.app.Flag]].
+ * @param args Extra command line arguments.
+ * @param waitForWarmup Once the server is started, wait for server warmup to be completed
+ * @param stage [[com.google.inject.Stage]] used to create the server's injector. Since EmbeddedTwitterServer is used for testing,
+ *              we default to Stage.DEVELOPMENT. This makes it possible to only mock objects that are used in a given test,
+ *              at the expense of not checking that the entire object graph is valid. As such, you should always have at
+ *              least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup)
+ * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external
+ *                      integration tests that connect to external services).
  * @param defaultRequestHeaders Headers to always send to the embedded server.
  * @param streamResponse Toggle to not unwrap response content body to allow caller to stream response.
- * @param verbose Enable verbose logging during test runs
- * @param disableTestLogging Disable all logging emitted from the test infrastructure
- * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded an Exception is thrown.
+ * @param verbose Enable verbose logging during test runs.
+ * @param disableTestLogging Disable all logging emitted from the test infrastructure.
+ * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded a
+ *                              [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
-  clientFlags: Map[String, String] = Map(),
-  extraArgs: Seq[String] = Seq(),
+  flags: Map[String, String] = Map(),
+  args: Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,
-  skipAppMain: Boolean = false,
   defaultRequestHeaders: Map[String, String] = Map(),
   streamResponse: Boolean = false,
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60)
-  extends EmbeddedApp(
-    app = twitterServer,
-    clientFlags = resolveClientFlags(useSocksProxy, clientFlags),
-    resolverMap = Map(),
-    extraArgs = extraArgs,
-    waitForWarmup = waitForWarmup,
-    skipAppMain = skipAppMain,
-    stage = stage,
-    verbose = verbose,
-    disableTestLogging = disableTestLogging,
-    maxStartupTimeSeconds = maxStartupTimeSeconds) {
+  extends Matchers {
 
   /* Additional Constructors */
+
   def this(twitterServer: Ports) = {
     this(twitterServer, stage = Stage.PRODUCTION)
   }
 
   /* Main Constructor */
 
-  // Add framework override modules
-  if (isGuiceApp) {
-    guiceApp.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
+  require(!isSingletonObject(twitterServer),
+    "server must be a new instance rather than a singleton (e.g. \"new " +
+      "FooServer\" instead of \"FooServerMain\" where FooServerMain is " +
+      "defined as \"object FooServerMain extends FooServer\"")
+
+  if (isInjectable) {
+    // overwrite com.google.inject.Stage if the underlying
+    // embedded server is a com.twitter.inject.server.TwitterServer.
+    injectableServer.stage = stage
+    // Add framework override modules
+    injectableServer.addFrameworkOverrideModules(InMemoryStatsReceiverModule)
   }
+
+  /* Fields */
+
+  val name = twitterServer.name
+  private val mainRunnerFuturePool = PoolUtils.newFixedPool("Embedded " + name)
+
+  //Mutable state
+  private var starting = false
+  private var started = false
+  protected[inject] var closed = false
+  private var _mainResult: Future[Unit] = _
+
+  // This needs to be volatile because it is set in mainRunnerFuturePool onFailure
+  // which is a different thread than waitForServerStarted, where it's read.
+  @volatile private var startupFailedThrowable: Option[Throwable] = None
 
   /* Lazy Fields */
 
@@ -104,44 +120,93 @@ class EmbeddedTwitterServer(
       httpAdminPort)
   }
 
-  lazy val statsReceiver = if (isGuiceApp) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
+  lazy val isInjectable = twitterServer.isInstanceOf[TwitterServer]
+  lazy val injectableServer = twitterServer.asInstanceOf[TwitterServer]
+  lazy val injector = {
+    start()
+    injectableServer.injector
+  }
+
+  lazy val statsReceiver = if (isInjectable) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
   lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(httpAdminPort)
-  lazy val isGuiceTwitterServer = twitterServer.isInstanceOf[App]
 
-  /* Overrides */
+  /* Public */
 
-  override protected def nonGuiceAppStarted(): Boolean = {
-    isHealthy
+  def bind[T : Manifest](instance: T): EmbeddedTwitterServer = {
+    bindInstance[T](instance)
+    this
   }
 
-  override protected def logAppStartup() {
-    infoBanner("Server Started: " + appName)
-    info(s"AdminHttp      -> http://$adminHostAndPort/admin")
+  def mainResult: Future[Unit] = {
+    start()
+    if (_mainResult == null) {
+      throw new Exception("Server needs to be started by calling EmbeddedTwitterServer#start()")
+    }
+    else {
+      _mainResult
+    }
   }
 
-  override protected def updateClientFlags(map: Map[String, String]) = {
-    if (!verbose)
-      map + ("log.level" -> "WARNING")
-    else
-      map
+  def isStarted = started
+
+  // NOTE: Start is called in various places to "lazily start the server" as needed
+  def start(): Unit = {
+    if (!starting && !started) {
+      starting = true //mutation
+
+      runNonExitingMain()
+
+      if (waitForWarmup) {
+        waitForServerStarted()
+      }
+
+      started = true //mutation
+      starting = false //mutation
+    }
   }
 
-  override def close() {
+  def close(): Unit = {
     if (!closed) {
       twitterServer.log.clearHandlers()
-      super.close()
+      infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
+      try {
+        Await.result(twitterServer.close())
+        mainRunnerFuturePool.executor.shutdown()
+      } catch {
+        case e: Throwable =>
+          info(s"Error while closing ${this.getClass.getSimpleName}: $e")
+      }
       closed = true
     }
   }
 
-  override protected def combineArgs(): Array[String] = {
-    ("-admin.port=" + PortUtils.ephemeralLoopback) +: super.combineArgs
+  /**
+   * NOTE: We avoid using slf4j-api info logging so that we can differentiate the
+   * underlying server logs from the testing framework logging without requiring a
+   * test logging configuration to be loaded.
+   * @param str - the string message to log
+   */
+  def info(str: String): Unit = {
+    if (!disableTestLogging) {
+      println(str)
+    }
   }
 
-  /* Public */
+  def infoBanner(str: String): Unit = {
+    info("\n")
+    info("=" * 75)
+    info(str)
+    info("=" * 75)
+  }
 
-  def assertHealthy(healthy: Boolean = true) {
+  def assertStarted(started: Boolean = true): Unit = {
+    assert(isInjectable)
+    start()
+    injectableServer.started should be(started)
+  }
+
+  def assertHealthy(healthy: Boolean = true): Unit = {
     healthResponse(healthy).get()
   }
 
@@ -150,7 +215,7 @@ class EmbeddedTwitterServer(
       healthResponse(shouldBeHealthy = true).isReturn
   }
 
-  def httpAdminPort = {
+  def httpAdminPort: Int = {
     getPort(twitterServer.adminBoundAddress)
   }
 
@@ -159,7 +224,7 @@ class EmbeddedTwitterServer(
     allRoutesField.get(twitterServer).asInstanceOf[Seq[AdminHttpServer.Route]]
   }
 
-  def clearStats() = {
+  def clearStats(): Unit = {
     inMemoryStatsReceiver.counters.clear()
     inMemoryStatsReceiver.stats.clear()
     inMemoryStatsReceiver.gauges.clear()
@@ -169,8 +234,8 @@ class EmbeddedTwitterServer(
   def countersMap = inMemoryStatsReceiver.counters.iterator.toMap.mapKeys(keyStr).toSortedMap
   def gaugeMap = inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap
 
-  def printStats(includeGauges: Boolean = true) {
-    infoBanner(appName + " Stats")
+  def printStats(includeGauges: Boolean = true): Unit = {
+    infoBanner(name + " Stats")
     for ((key, values) <- statsMap) {
       val avg = values.sum / values.size
       val valuesStr = values.mkString("[", ", ", "]")
@@ -190,22 +255,16 @@ class EmbeddedTwitterServer(
     }
   }
 
-  def assertAppStarted(started: Boolean = true) {
-    assert(isGuiceApp)
-    start()
-    guiceApp.appStarted should be(started)
-  }
-
-  private def keyStr(keys: Seq[String]): String = {
-    keys.mkString("/")
-  }
-
   def getCounter(name: String): Int = {
     countersMap.getOrElse(name, 0)
   }
 
   def assertCounter(name: String, expected: Int): Unit = {
     getCounter(name) should equal(expected)
+  }
+
+  def assertCounter(name: String)(callback: Int => Boolean): Unit = {
+    callback(getCounter(name)) should be(true)
   }
 
   def getStat(name: String): Seq[Float] = {
@@ -331,7 +390,7 @@ class EmbeddedTwitterServer(
     info(response.contentString + "\n")
   }
 
-  protected def createApiRequest(path: String, method: Method = Method.Get) = {
+  protected def createApiRequest(path: String, method: Method = Method.Get): Request = {
     val pathToUse = if (path.startsWith("http"))
       URI.create(path).getPath
     else
@@ -340,9 +399,44 @@ class EmbeddedTwitterServer(
     Request(method, pathToUse)
   }
 
+  protected def nonInjectableServerStarted(): Boolean = {
+    isHealthy
+  }
+
+  protected def logStartup(): Unit = {
+    infoBanner("Server Started: " + name)
+    info(s"AdminHttp      -> http://$adminHostAndPort/admin")
+  }
+
+  protected def updateFlags(map: Map[String, String]) = {
+    if (!verbose)
+      map + ("log.level" -> "WARNING")
+    else
+      map
+  }
+
+  protected def combineArgs(): Array[String] = {
+    val flagsStr =
+      flagsAsArgs(
+        updateFlags(
+          resolveFlags(useSocksProxy, flags)))
+    ("-admin.port=" + PortUtils.ephemeralLoopback) +: (args ++ flagsStr).toArray
+  }
+
+  protected def bindInstance[T: Manifest](instance: T): Unit = {
+    if (!isInjectable) {
+      throw new IllegalStateException("Cannot call bind() with a non-injectable underlying server." )
+    }
+    injectableServer.addFrameworkOverrideModules(new InjectionServiceModule(instance))
+  }
+
   /* Private */
 
-  private def receivedResponseStr(response: Response) = {
+  private def keyStr(keys: Seq[String]): String = {
+    keys.mkString("/")
+  }
+
+  private def receivedResponseStr(response: Response): String = {
     "\n\nReceived Response:\n" + response.encodeString()
   }
 
@@ -361,7 +455,7 @@ class EmbeddedTwitterServer(
     }
   }
 
-  private def printRequest(request: Request, suppress: Boolean) {
+  private def printRequest(request: Request, suppress: Boolean): Unit = {
     if (!suppress) {
       val headers = request.headerMap.mkString(
         "[Header]\t",
@@ -377,7 +471,7 @@ class EmbeddedTwitterServer(
     }
   }
 
-  private def printResponseMetadata(response: Response, suppress: Boolean) {
+  private def printResponseMetadata(response: Response, suppress: Boolean): Unit = {
     if (!suppress) {
       info("-" * 75)
       info("[Status]\t" + response.status)
@@ -388,7 +482,7 @@ class EmbeddedTwitterServer(
     }
   }
 
-  private def printResponseBody(response: Response, suppress: Boolean) {
+  private def printResponseBody(response: Response, suppress: Boolean): Unit = {
     if (!suppress) {
       if (response.isChunked) {
         //no-op
@@ -432,5 +526,59 @@ class EmbeddedTwitterServer(
         withBody = expectedBody,
         suppress = !verbose)
     }
+  }
+
+  private def flagsAsArgs(flags: Map[String, String]): Iterable[String] = {
+    flags.map { case (k, v) => "-" + k + "=" + v }
+  }
+
+  private def isSingletonObject(server: com.twitter.server.TwitterServer) = {
+    import scala.reflect.runtime.currentMirror
+    currentMirror.reflect(server).symbol.isModuleClass
+  }
+
+  private def runNonExitingMain(): Unit = {
+    // we call distinct here b/c port flag args can potentially be added multiple times
+    val allArgs = combineArgs().distinct
+    info("Starting " + name + " with args: " + allArgs.mkString(" "))
+
+    _mainResult = mainRunnerFuturePool {
+      try {
+        twitterServer.nonExitingMain(allArgs)
+      } catch {
+        case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
+          println("OutOfMemoryError(PermGen) in server startup. " +
+            "This is most likely due to the incorrect setting of a client " +
+            "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)")
+          e.printStackTrace()
+          System.exit(-1)
+        case e if !NonFatal.isNonFatal(e) =>
+          println("Fatal exception in server startup.")
+          throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
+      }
+    } onFailure { e =>
+      //If we rethrow, the exception will be suppressed by the Future Pool's monitor. Instead we save off the exception and rethrow outside the pool
+      startupFailedThrowable = Some(e)
+    }
+  }
+
+  private def waitForServerStarted(): Unit = {
+    for (i <- 1 to maxStartupTimeSeconds) {
+      info("Waiting for warmup phases to complete...")
+
+      if (startupFailedThrowable.isDefined) {
+        println(s"\nEmbedded server $name failed to startup")
+        throw startupFailedThrowable.get
+      }
+
+      if ((isInjectable && injectableServer.started) || (!isInjectable && nonInjectableServerStarted)) {
+        started = true
+        logStartup()
+        return
+      }
+
+      Thread.sleep(1000)
+    }
+    throw new StartupTimeoutException(s"App: $name failed to startup within $maxStartupTimeSeconds seconds.")
   }
 }

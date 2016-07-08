@@ -9,7 +9,7 @@ import org.joda.time.DateTime
 /**
  * A Datetime deserializer with improved exception handling (compared to jackson-datatype-joda)
  */
-object FinatraDatetimeDeserializer extends StdDeserializer[DateTime](classOf[DateTime]) {
+private[finatra] object FinatraDatetimeDeserializer extends StdDeserializer[DateTime](classOf[DateTime]) {
 
   def deserialize(jp: JsonParser, ctxt: DeserializationContext): DateTime = {
     try {
