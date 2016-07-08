@@ -206,7 +206,7 @@ lazy val root = (project in file(".")).
     organization := "com.twitter",
     moduleName := "finatra-root",
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
-      -- inProjects(benchmarks),
+      -- inProjects(benchmarks)
       /* // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
          helloWorld, helloWorldHeroku, streamingExample,
