@@ -51,7 +51,7 @@
       
           <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">grizzled.slf4j.Logging</span>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">grizzled.slf4j.Logging</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -62,7 +62,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -75,7 +75,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -89,7 +89,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.inject.thrift.ThriftClientFilterChain#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver,label:String,method:com.twitter.scrooge.ThriftMethod):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
+      <a id="&lt;init&gt;(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver,clientLabel:String,budget:com.twitter.finagle.service.Retries.Budget,method:com.twitter.scrooge.ThriftMethod,timeoutMultiplier:Int,retryMultiplier:Int,useHighResTimerForRetries:Boolean,andThenService:com.twitter.inject.thrift.AndThenService):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
       <a id="&lt;init&gt;:ThriftClientFilterChain[Req,Rep]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -97,10 +97,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftClientFilterChain</span><span class="params">(<span name="injector">injector: <a href="../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="label">label: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="method">method: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>)</span>
+        <span class="name">ThriftClientFilterChain</span><span class="params">(<span name="injector">injector: <a href="../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="clientLabel">clientLabel: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="budget">budget: <span class="extype" name="com.twitter.finagle.service.Retries.Budget">Budget</span></span>, <span name="method">method: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>, <span name="timeoutMultiplier">timeoutMultiplier: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="retryMultiplier">retryMultiplier: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="useHighResTimerForRetries">useHighResTimerForRetries: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>, <span name="andThenService">andThenService: <a href="AndThenService.html" class="extype" name="com.twitter.inject.thrift.AndThenService">AndThenService</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@&lt;init&gt;(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver,label:String,method:com.twitter.scrooge.ThriftMethod):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@&lt;init&gt;(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver,clientLabel:String,budget:com.twitter.finagle.service.Retries.Budget,method:com.twitter.scrooge.ThriftMethod,timeoutMultiplier:Int,retryMultiplier:Int,useHighResTimerForRetries:Boolean,andThenService:com.twitter.inject.thrift.AndThenService):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -123,7 +123,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -140,7 +140,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@##():Int" title="Permalink" target="_top">
@@ -157,7 +157,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -199,6 +199,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.ThriftClientFilterChain#backupRequestFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="backupRequestFilter(quantile:Int,clipDuration:org.joda.time.Duration,history:org.joda.time.Duration,timer:com.twitter.util.Timer):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
+      <a id="backupRequestFilter(Int,Duration,Duration,Timer):ThriftClientFilterChain[Req,Rep]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">backupRequestFilter</span><span class="params">(<span name="quantile">quantile: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="clipDuration">clipDuration: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="history">history: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="timer">timer: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Timer" class="extype" target="_top">Timer</a> = <span class="symbol"><span class="name"><a href="../../../package.html">HashedWheelTimer.Default</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@backupRequestFilter(quantile:Int,clipDuration:org.joda.time.Duration,history:org.joda.time.Duration,timer:com.twitter.util.Timer):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -208,7 +225,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@clone():Object" title="Permalink" target="_top">
@@ -222,19 +239,36 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.thrift.ThriftClientFilterChain#constantRetry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="constantRetry(requestTimeout:org.joda.time.Duration,shouldRetry:PartialFunction[(Req,com.twitter.util.Try[Rep]),Boolean],shouldRetryResponse:PartialFunction[com.twitter.util.Try[Rep],Boolean],start:org.joda.time.Duration,retries:Int):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
-      <a id="constantRetry(Duration,PartialFunction[(Req,Try[Rep]),Boolean],PartialFunction[Try[Rep],Boolean],Duration,Int):ThriftClientFilterChain[Req,Rep]"></a>
+    </li><li name="com.twitter.inject.thrift.ThriftClientFilterChain#concurrencyLimit" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="concurrencyLimit(initialPermits:Int,maxWaiters:Int):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
+      <a id="concurrencyLimit(Int,Int):ThriftClientFilterChain[Req,Rep]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">constantRetry</span><span class="params">(<span name="requestTimeout">requestTimeout: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="shouldRetry">shouldRetry: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[(<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]), <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="shouldRetryResponse">shouldRetryResponse: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="start">start: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="retries">retries: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
+        <span class="name">concurrencyLimit</span><span class="params">(<span name="initialPermits">initialPermits: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="maxWaiters">maxWaiters: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@constantRetry(requestTimeout:org.joda.time.Duration,shouldRetry:PartialFunction[(Req,com.twitter.util.Try[Rep]),Boolean],shouldRetryResponse:PartialFunction[com.twitter.util.Try[Rep],Boolean],start:org.joda.time.Duration,retries:Int):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@concurrencyLimit(initialPermits:Int,maxWaiters:Int):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.inject.thrift.ThriftClientFilterChain#constantRetry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="constantRetry(requestTimeout:org.joda.time.Duration,shouldRetry:PartialFunction[(Req,com.twitter.util.Try[Rep]),Boolean],shouldRetryResponse:PartialFunction[com.twitter.util.Try[Rep],Boolean],start:org.joda.time.Duration,retries:Int,retryBudget:com.twitter.finagle.service.RetryBudget):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
+      <a id="constantRetry(Duration,PartialFunction[(Req,Try[Rep]),Boolean],PartialFunction[Try[Rep],Boolean],Duration,Int,RetryBudget):ThriftClientFilterChain[Req,Rep]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">constantRetry</span><span class="params">(<span name="requestTimeout">requestTimeout: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="shouldRetry">shouldRetry: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[(<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]), <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="shouldRetryResponse">shouldRetryResponse: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="start">start: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="retries">retries: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="retryBudget">retryBudget: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.service.RetryBudget" class="extype" target="_top">RetryBudget</a> = <span class="symbol">budget.retryBudget</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@constantRetry(requestTimeout:org.joda.time.Duration,shouldRetry:PartialFunction[(Req,com.twitter.util.Try[Rep]),Boolean],shouldRetryResponse:PartialFunction[com.twitter.util.Try[Rep],Boolean],start:org.joda.time.Duration,retries:Int,retryBudget:com.twitter.finagle.service.RetryBudget):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -248,7 +282,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -265,7 +299,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -310,7 +344,7 @@
       <p class="shortcomment cmt">Log an debug msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an debug msg that contains the result of the passed in func.
 </p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.ThriftClientFilterChain#defaultRetryMsg" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="defaultRetryMsg(requestAndResponse:(Req,com.twitter.util.Try[Rep]),duration:org.joda.time.Duration):String"></a>
+      <a id="defaultRetryMsg(requestAndResponse:(Req,com.twitter.util.Try[Rep]),duration:com.twitter.util.Duration):String"></a>
       <a id="defaultRetryMsg((Req,Try[Rep]),Duration):String"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -318,10 +352,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">defaultRetryMsg</span><span class="params">(<span name="requestAndResponse">requestAndResponse: (<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>])</span>, <span name="duration">duration: <span class="extype" name="org.joda.time.Duration">Duration</span></span>)</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">defaultRetryMsg</span><span class="params">(<span name="requestAndResponse">requestAndResponse: (<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>])</span>, <span name="duration">duration: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@defaultRetryMsg(requestAndResponse:(Req,com.twitter.util.Try[Rep]),duration:org.joda.time.Duration):String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@defaultRetryMsg(requestAndResponse:(Req,com.twitter.util.Try[Rep]),duration:com.twitter.util.Duration):String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -335,7 +369,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -352,7 +386,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@equals(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -369,7 +403,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -386,7 +420,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -455,7 +489,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exponentialRetry</span><span class="params">(<span name="requestTimeout">requestTimeout: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="shouldRetry">shouldRetry: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[(<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]), <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="shouldRetryResponse">shouldRetryResponse: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>], <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="start">start: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="multiplier">multiplier: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="retries">retries: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
+        <span class="name">exponentialRetry</span><span class="params">(<span name="requestTimeout">requestTimeout: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="shouldRetry">shouldRetry: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[(<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]), <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="shouldRetryResponse">shouldRetryResponse: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.PartialFunction" class="extype" target="_top">PartialFunction</a>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>] = <span class="symbol">null</span></span>, <span name="start">start: <span class="extype" name="org.joda.time.Duration">Duration</span></span>, <span name="multiplier">multiplier: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>, <span name="retries">retries: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@exponentialRetry(requestTimeout:org.joda.time.Duration,shouldRetry:PartialFunction[(Req,com.twitter.util.Try[Rep]),Boolean],shouldRetryResponse:PartialFunction[com.twitter.util.Try[Rep],Boolean],start:org.joda.time.Duration,multiplier:Int,retries:Int):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
@@ -506,7 +540,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@finalize():Unit" title="Permalink" target="_top">
@@ -580,7 +614,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@hashCode():Int" title="Permalink" target="_top">
@@ -597,7 +631,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -614,7 +648,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -649,7 +683,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@isDebugEnabled:Boolean" title="Permalink" target="_top">
@@ -666,7 +700,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@isErrorEnabled:Boolean" title="Permalink" target="_top">
@@ -683,7 +717,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@isInfoEnabled:Boolean" title="Permalink" target="_top">
@@ -700,7 +734,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
@@ -717,7 +751,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@isTraceEnabled:Boolean" title="Permalink" target="_top">
@@ -734,7 +768,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@isWarnEnabled:Boolean" title="Permalink" target="_top">
@@ -785,7 +819,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -802,7 +836,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@notify():Unit" title="Permalink" target="_top">
@@ -819,7 +853,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@notifyAll():Unit" title="Permalink" target="_top">
@@ -845,7 +879,7 @@
     </span>
       
     </li><li name="com.twitter.inject.thrift.ThriftClientFilterChain#retry" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="retry(retryPolicy:com.twitter.finagle.service.RetryPolicy[(Req,com.twitter.util.Try[Rep])],retryMsg:((Req,com.twitter.util.Try[Rep]),org.joda.time.Duration)=&gt;String):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
+      <a id="retry(retryPolicy:com.twitter.finagle.service.RetryPolicy[(Req,com.twitter.util.Try[Rep])],retryMsg:((Req,com.twitter.util.Try[Rep]),com.twitter.util.Duration)=&gt;String):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]"></a>
       <a id="retry(RetryPolicy[(Req,Try[Rep])],((Req,Try[Rep]),Duration)⇒String):ThriftClientFilterChain[Req,Rep]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -853,10 +887,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">retry</span><span class="params">(<span name="retryPolicy">retryPolicy: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.service.RetryPolicy" class="extype" target="_top">RetryPolicy</a>[(<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>])]</span>, <span name="retryMsg">retryMsg: ((<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]), <span class="extype" name="org.joda.time.Duration">Duration</span>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="#defaultRetryMsg(requestAndResponse:(Req,com.twitter.util.Try[Rep]),duration:org.joda.time.Duration):String">defaultRetryMsg</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
+        <span class="name">retry</span><span class="params">(<span name="retryPolicy">retryPolicy: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.service.RetryPolicy" class="extype" target="_top">RetryPolicy</a>[(<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>])]</span>, <span name="retryMsg">retryMsg: ((<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Try" class="extype" target="_top">Try</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]), <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a>) ⇒ <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol"><span class="name"><a href="#defaultRetryMsg(requestAndResponse:(Req,com.twitter.util.Try[Rep]),duration:com.twitter.util.Duration):String">defaultRetryMsg</a></span></span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain">ThriftClientFilterChain</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Req">Req</span>, <span class="extype" name="com.twitter.inject.thrift.ThriftClientFilterChain.Rep">Rep</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@retry(retryPolicy:com.twitter.finagle.service.RetryPolicy[(Req,com.twitter.util.Try[Rep])],retryMsg:((Req,com.twitter.util.Try[Rep]),org.joda.time.Duration)=&gt;String):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@retry(retryPolicy:com.twitter.finagle.service.RetryPolicy[(Req,com.twitter.util.Try[Rep])],retryMsg:((Req,com.twitter.util.Try[Rep]),com.twitter.util.Duration)=&gt;String):com.twitter.inject.thrift.ThriftClientFilterChain[Req,Rep]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -938,7 +972,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -955,7 +989,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -972,7 +1006,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@wait():Unit" title="Permalink" target="_top">
@@ -995,7 +1029,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
@@ -1018,7 +1052,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@wait(x$1:Long):Unit" title="Permalink" target="_top">
@@ -1041,7 +1075,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -1058,7 +1092,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.thrift.ThriftClientFilterChain@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -1098,9 +1132,9 @@
             </div><div class="parent" name="grizzled.slf4j.Logging">
               <h3>Inherited from <span class="extype" name="grizzled.slf4j.Logging">grizzled.slf4j.Logging</span></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>

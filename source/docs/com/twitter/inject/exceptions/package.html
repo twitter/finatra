@@ -66,19 +66,36 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.inject.exceptions.NotRetryableException" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="NotRetryableExceptionextendsAnyRef"></a>
-      <a id="NotRetryableException:NotRetryableException"></a>
+              <ol><li name="com.twitter.inject.exceptions.DetailedNonRetryableSourcedException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="DetailedNonRetryableSourcedExceptionextendsExceptionwithNoStackTracewithNonRetryableException"></a>
+      <a id="DetailedNonRetryableSourcedException:DetailedNonRetryableSourcedException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DetailedNonRetryableSourcedException.html"><span class="name">DetailedNonRetryableSourcedException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.control.NoStackTrace" class="extype" target="_top">NoStackTrace</a> with <a href="NonRetryableException.html" class="extype" name="com.twitter.inject.exceptions.NonRetryableException">NonRetryableException</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.exceptions.package@DetailedNonRetryableSourcedExceptionextendsExceptionwithNoStackTracewithNonRetryableException" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.inject.exceptions.NonRetryableException" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="NonRetryableExceptionextendsAnyRef"></a>
+      <a id="NonRetryableException:NonRetryableException"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a href="NotRetryableException.html"><span class="name">NotRetryableException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <a href="NonRetryableException.html"><span class="name">NonRetryableException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.exceptions.package@NotRetryableExceptionextendsAnyRef" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.inject.exceptions.package@NonRetryableExceptionextendsAnyRef" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -88,7 +105,37 @@
 
         
 
-        
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.twitter.inject.exceptions.PossiblyRetryable" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="PossiblyRetryable"></a>
+      <a id="PossiblyRetryable:PossiblyRetryable"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PossiblyRetryable$.html"><span class="name">PossiblyRetryable</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.exceptions.package@PossiblyRetryable" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">PossiblyRetryable attempts to determine if a request is possibly retryable based on the
+returned <span class="extype" name="com.twitter.scrooge.ThriftResponse">com.twitter.scrooge.ThriftResponse</span>.</p><div class="fullcomment"><div class="comment cmt"><p>PossiblyRetryable attempts to determine if a request is possibly retryable based on the
+returned <span class="extype" name="com.twitter.scrooge.ThriftResponse">com.twitter.scrooge.ThriftResponse</span>.</p><p>The <span class="extype" name="com.twitter.scrooge.ThriftResponse#successField">com.twitter.scrooge.ThriftResponse#successField</span> = None is a possibility on successful
+void methods. We only want to mark a request as &quot;possibly retryable&quot; if the successField is empty
+and there exists a &quot;possibly retryable&quot; exception in the first position in the returned Seq of
+exceptions in <span class="extype" name="com.twitter.scrooge.ThriftResponse#errorFields">com.twitter.scrooge.ThriftResponse#errorFields</span>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.scrooge.ThriftResponse#firstException">com.twitter.scrooge.ThriftResponse#firstException</span>
+The request is &quot;possibly retryable&quot; because while the framework can say the request is retryable
+due to the type of <span class="extype" name="com.twitter.scrooge.ThriftException">com.twitter.scrooge.ThriftException</span> returned it is ultimately up to the
+application to decide if the returned <span class="extype" name="com.twitter.scrooge.ThriftException">com.twitter.scrooge.ThriftException</span> actually makes sense
+to be retried.</p></span></dd></dl></div>
+    </li></ol>
+            </div>
 
         
 

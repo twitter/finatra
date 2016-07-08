@@ -49,12 +49,16 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.TwitterServer" class="extype" target="_top">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> modules.</p><p>To use, override the appropriate @Lifecycle and callback method(s). Make sure when overriding @Lifecycle methods
+to call the super implementation, otherwise critical lifecycle set-up  may not occur causing your server to either
+function improperly or outright fail.</p><p>Typically, you will only need to interact with the following methods:</p><p> postWarmup -- create and bind any external interface(s). See <a href="../app/App.html#postWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#postWarmup">com.twitter.inject.app.App#postWarmup</a>
+ start -- callback executed after the injector is created and all @Lifecycle methods have completed.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.TwitterServer" class="extype" target="_top">server.TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Stats" class="extype" target="_top">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Admin" class="extype" target="_top">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.AdminHttpServer" class="extype" target="_top">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Hooks" class="extype" target="_top">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.LogFormat" class="extype" target="_top">LogFormat</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.EventSink" class="extype" target="_top">EventSink</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Logging" class="extype" target="_top">logging.Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Linters" class="extype" target="_top">Linters</a>, <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">grizzled.slf4j.Logging</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.App" class="extype" target="_top">App</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably" class="extype" target="_top">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably0" class="extype" target="_top">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>], <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>], <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Closable" class="extype" target="_top">Closable</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.TwitterServer" class="extype" target="_top">server.TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Stats" class="extype" target="_top">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Admin" class="extype" target="_top">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.AdminHttpServer" class="extype" target="_top">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Hooks" class="extype" target="_top">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.LogFormat" class="extype" target="_top">LogFormat</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.EventSink" class="extype" target="_top">EventSink</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Logging" class="extype" target="_top">logging.Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Linters" class="extype" target="_top">Linters</a>, <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">grizzled.slf4j.Logging</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.App" class="extype" target="_top">App</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably" class="extype" target="_top">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably0" class="extype" target="_top">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>], <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>], <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Closable" class="extype" target="_top">Closable</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div><div class="toggleContainer block">
             <span class="toggle">Known Subclasses</span>
-            <div class="subClasses hiddenContent"><a href="AbstractTwitterServer.html" class="extype" name="com.twitter.inject.server.AbstractTwitterServer">AbstractTwitterServer</a>, <a href="../../finatra/http/internal/server/BaseHttpServer.html" class="extype" name="com.twitter.finatra.http.internal.server.BaseHttpServer">BaseHttpServer</a>, <a href="../../finatra/http/HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a>, <a href="../../finatra/http/JavaHttpServer.html" class="extype" name="com.twitter.finatra.http.JavaHttpServer">JavaHttpServer</a>, <a href="../../finatra/thrift/ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a></div>
+            <div class="subClasses hiddenContent"><a href="AbstractTwitterServer.html" class="extype" name="com.twitter.inject.server.AbstractTwitterServer">AbstractTwitterServer</a>, <a href="../../finatra/thrift/ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a></div>
           </div></div>
         
 
@@ -65,7 +69,7 @@
               <ol>
                 
                 <li class="alpha in"><span>Alphabetic</span></li>
-                <li class="inherit out"><span>By inheritance</span></li>
+                <li class="inherit out"><span>By Inheritance</span></li>
               </ol>
             </div>
         <div id="ancestors">
@@ -78,7 +82,7 @@
             <span class="filtertype"></span>
             <ol>
               <li class="hideall out"><span>Hide All</span></li>
-              <li class="showall in"><span>Show all</span></li>
+              <li class="showall in"><span>Show All</span></li>
             </ol>
           </div>
         <div id="visbl">
@@ -106,7 +110,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@!=(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -123,7 +127,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@##():Int" title="Permalink" target="_top">
@@ -140,7 +144,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@==(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -174,7 +178,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addAdminRoute</span><span class="params">(<span name="route">route: <span class="extype" name="com.twitter.server.AdminHttpServer.Route">Route</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">addAdminRoute</span><span class="params">(<span name="route">route: <span class="extype" name="com.twitter.server.AdminHttpServer.Route">Route</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit" title="Permalink" target="_top">
@@ -191,7 +195,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addAdminRoutes</span><span class="params">(<span name="newRoutes">newRoutes: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.server.AdminHttpServer.Route">Route</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">addAdminRoutes</span><span class="params">(<span name="newRoutes">newRoutes: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.server.AdminHttpServer.Route">Route</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit" title="Permalink" target="_top">
@@ -208,18 +212,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addFrameworkModule</span><span class="params">(<span name="module">module: <span class="extype" name="com.google.inject.Module">Module</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">addFrameworkModule</span><span class="params">(<span name="module">module: <span class="extype" name="com.google.inject.Module">Module</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@addFrameworkModule(module:com.google.inject.Module):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Default modules can be overridden in production by overriding methods in your App or Server
-We take special care to make sure the module is not null, since a common bug
-is overriding the default methods using a val instead of a def
-</p><div class="fullcomment"><div class="comment cmt"><p>Default modules can be overridden in production by overriding methods in your App or Server
-We take special care to make sure the module is not null, since a common bug
+      <p class="shortcomment cmt">ONLY INTENDED FOR USE BY THE FRAMEWORK.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE BY THE FRAMEWORK.</p><p>Default modules can be overridden in production by overriding methods in your App or Server.</p><p>We take special care to make sure the module is not null, since a common bug
 is overriding the default methods using a val instead of a def
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.inject.app.App#addFrameworkModules" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -231,14 +231,14 @@ is overriding the default methods using a val instead of a def
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addFrameworkModules</span><span class="params">(<span name="modules">modules: <span class="extype" name="com.google.inject.Module">Module</span>*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">addFrameworkModules</span><span class="params">(<span name="modules">modules: <span class="extype" name="com.google.inject.Module">Module</span>*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@addFrameworkModules(modules:com.google.inject.Module*):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Only intended for use by the framework</p><div class="fullcomment"><div class="comment cmt"><p>Only intended for use by the framework</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.inject.app.App#addFrameworkOverrideModules" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit"></a>
       <a id="addFrameworkOverrideModules(Module*):Unit"></a>
@@ -248,14 +248,14 @@ is overriding the default methods using a val instead of a def
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addFrameworkOverrideModules</span><span class="params">(<span name="modules">modules: <span class="extype" name="com.google.inject.Module">Module</span>*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">addFrameworkOverrideModules</span><span class="params">(<span name="modules">modules: <span class="extype" name="com.google.inject.Module">Module</span>*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Only intended for use by the framework</p><div class="fullcomment"><div class="comment cmt"><p>Only intended for use by the framework</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.server.AdminHttpServer#adminBoundAddress" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminBoundAddress:java.net.InetSocketAddress"></a>
       <a id="adminBoundAddress:InetSocketAddress"></a>
@@ -316,7 +316,7 @@ is overriding the default methods using a val instead of a def
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">afterPostWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">afterPostWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@afterPostWarmup():Unit" title="Permalink" target="_top">
@@ -324,10 +324,12 @@ is overriding the default methods using a val instead of a def
       </a>
     </span>
       <p class="shortcomment cmt">After postWarmup, all external servers have been started, and we can now
-enable our health endpoint
-</p><div class="fullcomment"><div class="comment cmt"><p>After postWarmup, all external servers have been started, and we can now
-enable our health endpoint
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+enable our health endpoint.</p><div class="fullcomment"><div class="comment cmt"><p>After postWarmup, all external servers have been started, and we can now
+enable our health endpoint.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@<a href="../annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
+              
+        </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.inject.app.App#afterPostwarmup">com.twitter.inject.app.App#afterPostwarmup</span></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Lifecycle$.Warmup@warmupComplete():Unit" class="extype" target="_top">com.twitter.server.Lifecycle.Warmup#warmupComplete</a></p></span></dd></dl></div>
     </li><li name="com.twitter.app.App#allowUndefinedFlags" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="allowUndefinedFlags:Boolean"></a>
       <a id="allowUndefinedFlags:Boolean"></a>
@@ -337,7 +339,7 @@ enable our health endpoint
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">allowUndefinedFlags</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">allowUndefinedFlags</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@allowUndefinedFlags:Boolean" title="Permalink" target="_top">
@@ -345,25 +347,6 @@ enable our health endpoint
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.inject.app.App#appMain" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="appMain():Unit"></a>
-      <a id="appMain():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">appMain</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@appMain():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Callback method executed after the injector is created and warmup has fully completed.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method executed after the injector is created and warmup has fully completed.
-Note: Not intended for use when using HttpServer or ThriftServer
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#appendFlag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendFlag:com.twitter.app.Flag[Boolean]"></a>
       <a id="appendFlag:Flag[Boolean]"></a>
@@ -373,7 +356,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">appendFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+        <span class="name">appendFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@appendFlag:com.twitter.app.Flag[Boolean]" title="Permalink" target="_top">
@@ -390,7 +373,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">args</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+        <span class="name">args</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@args:Array[String]" title="Permalink" target="_top">
@@ -415,6 +398,40 @@ Note: Not intended for use when using HttpServer or ThriftServer
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#await" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="await(awaitables:com.twitter.util.Awaitable[_]*):Unit"></a>
+      <a id="await(Awaitable[_]*):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">await</span><span class="params">(<span name="awaitables">awaitables: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[_]*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@await(awaitables:com.twitter.util.Awaitable[_]*):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#await" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit"></a>
+      <a id="await[T&lt;:Awaitable[_]](T):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">await</span><span class="tparams">[<span name="T">T &lt;: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[_]</span>]</span><span class="params">(<span name="awaitable">awaitable: <span class="extype" name="com.twitter.inject.server.TwitterServer.await.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#beforePostWarmup" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="beforePostWarmup():Unit"></a>
       <a id="beforePostWarmup():Unit"></a>
@@ -424,14 +441,20 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">beforePostWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">beforePostWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@beforePostWarmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">After warmup but before accepting traffic promote to old gen
+(which triggers gc).</p><div class="fullcomment"><div class="comment cmt"><p>After warmup but before accepting traffic promote to old gen
+(which triggers gc).
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@<a href="../annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
+              
+        </dd><dt>See also</dt><dd><span class="cmt"><p><a href="../app/App.html#beforePostWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#beforePostWarmup">com.twitter.inject.app.App#beforePostWarmup</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Lifecycle$.Warmup@prebindWarmup():Unit" class="extype" target="_top">com.twitter.server.Lifecycle.Warmup#prebindWarmup</a></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -441,7 +464,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
+        <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@clone():Object" title="Permalink" target="_top">
@@ -464,7 +487,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">close</span><span class="params">(<span name="deadline">deadline: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Time" class="extype" target="_top">Time</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">close</span><span class="params">(<span name="deadline">deadline: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Time" class="extype" target="_top">Time</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]" title="Permalink" target="_top">
@@ -481,7 +504,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">close</span><span class="params">(<span name="after">after: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">close</span><span class="params">(<span name="after">after: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]" title="Permalink" target="_top">
@@ -498,7 +521,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">close</span><span class="params">()</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">close</span><span class="params">()</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@close():com.twitter.util.Future[Unit]" title="Permalink" target="_top">
@@ -515,7 +538,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">closeAwaitably</span><span class="params">(<span name="f">f: ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
+        <span class="name">closeAwaitably</span><span class="params">(<span name="f">f: ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]" title="Permalink" target="_top">
@@ -532,7 +555,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">closeOnExit</span><span class="params">(<span name="closable">closable: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Closable" class="extype" target="_top">Closable</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">closeOnExit</span><span class="params">(<span name="closable">closable: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Closable" class="extype" target="_top">Closable</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@closeOnExit(closable:com.twitter.util.Closable):Unit" title="Permalink" target="_top">
@@ -549,7 +572,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -566,7 +589,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -619,7 +642,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">defaultAppend</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">defaultAppend</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@defaultAppend:Boolean" title="Permalink" target="_top">
@@ -670,7 +693,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">defaultHttpPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">defaultHttpPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@defaultHttpPort:Int" title="Permalink" target="_top">
@@ -738,7 +761,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">defaultRotateCount</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">defaultRotateCount</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@defaultRotateCount:Int" title="Permalink" target="_top">
@@ -755,7 +778,7 @@ Note: Not intended for use when using HttpServer or ThriftServer
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">disableAdminHttpServer</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">disableAdminHttpServer</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@disableAdminHttpServer:Boolean" title="Permalink" target="_top">
@@ -774,7 +797,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -791,7 +814,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@equals(x$1:Any):Boolean" title="Permalink" target="_top">
@@ -808,7 +831,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -825,7 +848,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -860,7 +883,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exitOnError</span><span class="params">(<span name="reason">reason: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">exitOnError</span><span class="params">(<span name="reason">reason: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@exitOnError(reason:String):Unit" title="Permalink" target="_top">
@@ -877,7 +900,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">failfastOnFlagsNotParsed</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">failfastOnFlagsNotParsed</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@failfastOnFlagsNotParsed:Boolean" title="Permalink" target="_top">
@@ -894,7 +917,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@finalize():Unit" title="Permalink" target="_top">
@@ -942,6 +965,25 @@ Note: Disabling the admin server allows services to be deployed into environment
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#handle" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit"></a>
+      <a id="handle[T&lt;:Handler]()(Manifest[T]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handle</span><span class="tparams">[<span name="T">T &lt;: <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">Handler</a></span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.server.TwitterServer.handle.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Utility to run a <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Utility to run a <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>. This is generally used for running
+a warmup handler in #warmup.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type parameter with upper-bound of <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a></p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#handlers" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handlers:List[()=&gt;com.twitter.logging.Handler]"></a>
       <a id="handlers:List[()⇒Handler]"></a>
@@ -968,7 +1010,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@hashCode():Int" title="Permalink" target="_top">
@@ -985,7 +1027,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">httpExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">httpExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@httpExternalPort:Option[Int]" title="Permalink" target="_top">
@@ -1002,7 +1044,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">httpsExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">httpsExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@httpsExternalPort:Option[Int]" title="Permalink" target="_top">
@@ -1019,7 +1061,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">inferClassNamesFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
+        <span class="name">inferClassNamesFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@inferClassNamesFlag:com.twitter.app.Flag[Boolean]" title="Permalink" target="_top">
@@ -1036,7 +1078,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -1053,7 +1095,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -1088,7 +1130,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">init</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">init</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@init(f:=&gt;Unit):Unit" title="Permalink" target="_top">
@@ -1122,7 +1164,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@isDebugEnabled:Boolean" title="Permalink" target="_top">
@@ -1139,7 +1181,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@isErrorEnabled:Boolean" title="Permalink" target="_top">
@@ -1156,7 +1198,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@isInfoEnabled:Boolean" title="Permalink" target="_top">
@@ -1173,7 +1215,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
@@ -1190,7 +1232,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isReady</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isReady</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean" title="Permalink" target="_top">
@@ -1207,7 +1249,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@isTraceEnabled:Boolean" title="Permalink" target="_top">
@@ -1224,7 +1266,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@isWarnEnabled:Boolean" title="Permalink" target="_top">
@@ -1248,7 +1290,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Production Guice modules from Java</p><div class="fullcomment"><div class="comment cmt"><p>Production Guice modules from Java</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Production modules from Java</p><div class="fullcomment"><div class="comment cmt"><p>Production modules from Java</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.inject.app.App#javaOverrideModules" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="javaOverrideModules:java.util.Collection[com.google.inject.Module]"></a>
       <a id="javaOverrideModules:Collection[Module]"></a>
@@ -1265,7 +1307,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Override Guice modules from Java which redefine production bindings (Note: Only use overrideModules during testing)</p><div class="fullcomment"><div class="comment cmt"><p>Override Guice modules from Java which redefine production bindings (Note: Only use overrideModules during testing)</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Override modules from Java which redefine production bindings (only use overrideModules during testing)</p><div class="fullcomment"><div class="comment cmt"><p>Override modules from Java which redefine production bindings (only use overrideModules during testing)</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#levelFlag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]"></a>
       <a id="levelFlag:Flag[Level]"></a>
@@ -1299,7 +1341,26 @@ Note: Disabling the admin server allows services to be deployed into environment
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Name used for registration in the <span class="extype" name="com.twitter.util.registry.Library">com.twitter.util.registry.Library</span></p><div class="fullcomment"><div class="comment cmt"><p>Name used for registration in the <span class="extype" name="com.twitter.util.registry.Library">com.twitter.util.registry.Library</span></p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>library name to register in the Library registry.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → AdminHttpServer</dd></dl></div>
+      <p class="shortcomment cmt">Name used for registration in the <span class="extype" name="com.twitter.util.registry.Library">com.twitter.util.registry.Library</span>
+</p><div class="fullcomment"><div class="comment cmt"><p>Name used for registration in the <span class="extype" name="com.twitter.util.registry.Library">com.twitter.util.registry.Library</span>
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>library name to register in the Library registry.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → AdminHttpServer</dd></dl></div>
+    </li><li name="com.twitter.server.Linters#linterRules" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="linterRules:Seq[com.twitter.util.lint.Rule]"></a>
+      <a id="linterRules:Seq[Rule]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">linterRules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.lint.Rule" class="extype" target="_top">Rule</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@linterRules:Seq[com.twitter.util.lint.Rule]" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Linters</dd></dl></div>
     </li><li name="com.twitter.inject.app.App#loadModules" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadModules():com.twitter.inject.app.internal.InstalledModules"></a>
       <a id="loadModules():InstalledModules"></a>
@@ -1309,14 +1370,14 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loadModules</span><span class="params">()</span><span class="result">: <a href="../app/internal/InstalledModules.html" class="extype" name="com.twitter.inject.app.internal.InstalledModules">InstalledModules</a></span>
+        <span class="name">loadModules</span><span class="params">()</span><span class="result">: <span class="extype" name="com.twitter.inject.app.internal.InstalledModules">InstalledModules</span></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@loadModules():com.twitter.inject.app.internal.InstalledModules" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Only intended for use by the framework</p><div class="fullcomment"><div class="comment cmt"><p>Only intended for use by the framework</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="log:com.twitter.logging.Logger"></a>
       <a id="log:logging.Logger"></a>
@@ -1394,14 +1455,14 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">main</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">main</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@main():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">DO NOT BLOCK</p><div class="fullcomment"><div class="comment cmt"><p>DO NOT BLOCK</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.app.App#main" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="main(args:Array[String]):Unit"></a>
       <a id="main(Array[String]):Unit"></a>
@@ -1411,7 +1472,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">main</span><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">main</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@main(args:Array[String]):Unit" title="Permalink" target="_top">
@@ -1435,7 +1496,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Production Guice modules</p><div class="fullcomment"><div class="comment cmt"><p>Production Guice modules</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Production modules</p><div class="fullcomment"><div class="comment cmt"><p>Production modules</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.app.App#name" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <a id="name:String"></a>
@@ -1462,7 +1523,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
@@ -1479,7 +1540,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">nonExitingMain</span><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">nonExitingMain</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@nonExitingMain(args:Array[String]):Unit" title="Permalink" target="_top">
@@ -1496,7 +1557,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@notify():Unit" title="Permalink" target="_top">
@@ -1513,7 +1574,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@notifyAll():Unit" title="Permalink" target="_top">
@@ -1530,7 +1591,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">onExit</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">onExit</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@onExit(f:=&gt;Unit):Unit" title="Permalink" target="_top">
@@ -1571,24 +1632,27 @@ Note: Disabling the admin server allows services to be deployed into environment
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Override Guice modules which redefine production bindings (Note: Only use overrideModules during testing)</p><div class="fullcomment"><div class="comment cmt"><p>Override Guice modules which redefine production bindings (Note: Only use overrideModules during testing)</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
-    </li><li name="com.twitter.inject.server.TwitterServer#postStartup" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="postStartup():Unit"></a>
-      <a id="postStartup():Unit"></a>
+      <p class="shortcomment cmt">Override modules which redefine production bindings (only use overrideModules during testing)</p><div class="fullcomment"><div class="comment cmt"><p>Override modules which redefine production bindings (only use overrideModules during testing)</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#postInjectorStartup" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="postInjectorStartup():Unit"></a>
+      <a id="postInjectorStartup():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">postStartup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">postInjectorStartup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@postStartup():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@postInjectorStartup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Method to be called after injector creation</p><div class="fullcomment"><div class="comment cmt"><p>Method to be called after injector creation</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Method to be called after injector creation</p><div class="fullcomment"><div class="comment cmt"><p>Method to be called after injector creation</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@<a href="../annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#postWarmup" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postWarmup():Unit"></a>
       <a id="postWarmup():Unit"></a>
@@ -1598,14 +1662,25 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">postWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">postWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@postWarmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Method to be called after successful warmup</p><div class="fullcomment"><div class="comment cmt"><p>Method to be called after successful warmup</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">If you override this method to create and bind any external interface or to
+instantiate any awaitable it is expected that you add the Awaitable (or
+<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.ListeningServer" class="extype" target="_top">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
+<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.</p><div class="fullcomment"><div class="comment cmt"><p>If you override this method to create and bind any external interface or to
+instantiate any awaitable it is expected that you add the Awaitable (or
+<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.ListeningServer" class="extype" target="_top">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
+<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.</p><p>It is NOT expected that you block in this method as you will prevent completion
+of the server lifecycle.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@<a href="../annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.app.App#postmain" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postmain(f:=&gt;Unit):Unit"></a>
       <a id="postmain(⇒Unit):Unit"></a>
@@ -1615,7 +1690,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">postmain</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">postmain</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@postmain(f:=&gt;Unit):Unit" title="Permalink" target="_top">
@@ -1632,7 +1707,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">prebindWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">prebindWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@prebindWarmup():Unit" title="Permalink" target="_top">
@@ -1649,7 +1724,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">premain</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">premain</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@premain(f:=&gt;Unit):Unit" title="Permalink" target="_top">
@@ -1683,7 +1758,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">resolveFinagleClientsOnStartup</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
+        <span class="name">resolveFinagleClientsOnStartup</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@resolveFinagleClientsOnStartup:Boolean" title="Permalink" target="_top">
@@ -1700,7 +1775,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">result</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">result</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U" title="Permalink" target="_top">
@@ -1734,7 +1809,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">rotateCountFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">rotateCountFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@rotateCountFlag:com.twitter.app.Flag[Int]" title="Permalink" target="_top">
@@ -1760,58 +1835,48 @@ Note: Disabling the admin server allows services to be deployed into environment
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Admin</dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#run" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="run[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit"></a>
-      <a id="run[T&lt;:Handler]()(Manifest[T]):Unit"></a>
+      <a id="run():Unit"></a>
+      <a id="run():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">run</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@run():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="#start():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#start">com.twitter.inject.server.TwitterServer#start</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#start" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="start():Unit"></a>
+      <a id="start():Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">run</span><span class="tparams">[<span name="T">T &lt;: <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">Handler</a></span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.server.TwitterServer.run.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">start</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@run[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@start():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Utility to run a <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Utility to run a <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>. This is generally used for running
-a warmup handler in #warmup.</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type parameter with upper-bound of <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>
-TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
-    </li><li name="com.twitter.inject.app.App#setAppStarted" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="setAppStarted(value:Boolean):Unit"></a>
-      <a id="setAppStarted(Boolean):Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">setAppStarted</span><span class="params">(<span name="value">value: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@setAppStarted(value:Boolean):Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
-    </li><li name="com.twitter.inject.server.TwitterServer#statsModule" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="statsModule:com.google.inject.Module"></a>
-      <a id="statsModule:Module"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">statsModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@statsModule:com.google.inject.Module" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <p class="shortcomment cmt">Default <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">com.twitter.finagle.stats.StatsReceiver</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">com.twitter.finagle.stats.StatsReceiver</a>.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">com.twitter.finagle.stats.StatsReceiver</a> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Callback method executed after the injector is created and all
+lifecycle methods have fully completed.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method executed after the injector is created and all
+lifecycle methods have fully completed. It is NOT expected that
+you block in this method as you will prevent completion
+of the server lifecycle.</p><p>The server is signaled as STARTED prior to the execution of this
+callback as all lifecycle methods have successfully completed and the
+admin and any external interfaces have started.</p><p>This method can be used to start long-lived processes that run in
+separate threads from the main() thread. It is expected that you manage
+these threads manually, e.g., by using a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.FuturePool" class="extype" target="_top">com.twitter.util.FuturePool</a>.</p><p>Any exceptions thrown in this method will result in the server exiting.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.server.Stats#statsReceiver" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="statsReceiver:com.twitter.finagle.stats.StatsReceiver"></a>
       <a id="statsReceiver:StatsReceiver"></a>
@@ -1829,6 +1894,24 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Stats</dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#statsReceiverModule" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="statsReceiverModule:com.google.inject.Module"></a>
+      <a id="statsReceiverModule:Module"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">statsReceiverModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@statsReceiverModule:com.google.inject.Module" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Default <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">com.twitter.finagle.stats.StatsReceiver</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">com.twitter.finagle.stats.StatsReceiver</a>.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">com.twitter.finagle.stats.StatsReceiver</a> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -1855,7 +1938,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">thriftPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
+        <span class="name">thriftPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@thriftPort:Option[Int]" title="Permalink" target="_top">
@@ -1906,7 +1989,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -1923,7 +2006,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -1940,7 +2023,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@wait():Unit" title="Permalink" target="_top">
@@ -1963,7 +2046,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
@@ -1986,7 +2069,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@wait(x$1:Long):Unit" title="Permalink" target="_top">
@@ -2000,23 +2083,6 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.server.TwitterServer#waitForServer" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="waitForServer():Unit"></a>
-      <a id="waitForServer():Unit"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">waitForServer</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@waitForServer():Unit" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.inject.app.App#warmup" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmup():Unit"></a>
       <a id="warmup():Unit"></a>
@@ -2026,14 +2092,17 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">warmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@warmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Warmup method to be called before postWarmup</p><div class="fullcomment"><div class="comment cmt"><p>Warmup method to be called before postWarmup</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">Warmup method to be called before postWarmup</p><div class="fullcomment"><div class="comment cmt"><p>Warmup method to be called before postWarmup</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+                <span class="name">@<a href="../annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.server.Lifecycle.Warmup#warmupComplete" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmupComplete():Unit"></a>
       <a id="warmupComplete():Unit"></a>
@@ -2043,7 +2112,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warmupComplete</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">warmupComplete</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@warmupComplete():Unit" title="Permalink" target="_top">
@@ -2060,7 +2129,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
@@ -2077,7 +2146,7 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
@@ -2147,15 +2216,15 @@ TODO: rename to handle[T &lt;: Handler]()</p></span></dd></dl></div>
             </div><div class="parent" name="com.twitter.util.CloseAwaitably">
               <h3>Inherited from <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably" class="extype" target="_top">CloseAwaitably</a></h3>
             </div><div class="parent" name="com.twitter.util.CloseAwaitably0">
-              <h3>Inherited from <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably0" class="extype" target="_top">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</h3>
+              <h3>Inherited from <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably0" class="extype" target="_top">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</h3>
             </div><div class="parent" name="com.twitter.util.Awaitable">
-              <h3>Inherited from <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</h3>
+              <h3>Inherited from <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</h3>
             </div><div class="parent" name="com.twitter.util.Closable">
               <h3>Inherited from <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Closable" class="extype" target="_top">Closable</a></h3>
             </div><div class="parent" name="scala.AnyRef">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
-              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.7/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
             </div>
         
         </div>

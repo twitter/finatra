@@ -83,7 +83,7 @@
       </a>
     </span>
       <p class="shortcomment cmt">AbstractApp for usage from Java</p>
-    </li><li name="com.twitter.inject.app.App" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.app.App" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="AppextendsAppwithLogging"></a>
       <a id="App:App"></a>
       <h4 class="signature">
@@ -99,33 +99,17 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.App" class="extype" target="_top">com.twitter.app.App</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> modules.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.App" class="extype" target="_top">com.twitter.app.App</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> modules.</p><p>It is not expected that you override @Lifecycle methods. If you do, take care to ensure that you
+call the super implementation, otherwise critical lifecycle set-up may not occur causing your application
+to either function improperly or outright fail.</p><p>Typically, you will only need to interact with the following methods:
+  run -- callback executed after the injector is created and all @Lifecycle methods have completed.
+</p></div></div>
     </li></ol>
             </div>
 
         
 
-        <div id="values" class="values members">
-              <h3>Value Members</h3>
-              <ol><li name="com.twitter.inject.app.internal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="internal"></a>
-      <a id="internal:internal"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a href="internal/package.html"><span class="name">internal</span></a>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.inject.app.package@internal" title="Permalink" target="_top">
-        <img src="../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
-    </li></ol>
-            </div>
+        
 
         
 

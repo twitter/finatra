@@ -100,7 +100,7 @@
       </a>
     </span>
       
-    </li><li name="com.twitter.inject.server.TwitterServer" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.TwitterServer" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="TwitterServerextendsAppwithTwitterServerwithPortswithLifecycle.WarmupwithLogging"></a>
       <a id="TwitterServer:TwitterServer"></a>
       <h4 class="signature">
@@ -116,7 +116,11 @@
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">A <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.TwitterServer" class="extype" target="_top">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> modules.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.TwitterServer" class="extype" target="_top">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> modules.</p><p>To use, override the appropriate @Lifecycle and callback method(s). Make sure when overriding @Lifecycle methods
+to call the super implementation, otherwise critical lifecycle set-up  may not occur causing your server to either
+function improperly or outright fail.</p><p>Typically, you will only need to interact with the following methods:</p><p> postWarmup -- create and bind any external interface(s). See <a href="../app/App.html#postWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#postWarmup">com.twitter.inject.app.App#postWarmup</a>
+ start -- callback executed after the injector is created and all @Lifecycle methods have completed.
+</p></div></div>
     </li></ol>
             </div>
 
