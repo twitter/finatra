@@ -10,7 +10,7 @@ class DomainTestUserReader @Inject()(
   mapper: FinatraObjectMapper)
   extends MessageBodyReader[DomainTestUser] {
 
-  override def parse(request: Request): DomainTestUser = {
+  override def parse[U: Manifest](request: Request): DomainTestUser = {
     val jsonNode = mapper.parse[JsonNode](request)
     val testUser = mapper.parse[TestUser](jsonNode)
     DomainTestUser(testUser.name)
