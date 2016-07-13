@@ -16,13 +16,19 @@ class MessageBodyManagerTest extends Test with Mockito {
 
   val messageBodyManager = injector.instance[MessageBodyManager]
   messageBodyManager.add[DogMessageBodyReader]()
+  messageBodyManager.add[FatherMessageBodyReader]
+  messageBodyManager.add(new Car2MessageBodyReader)
 
   "parse car" in {
-    messageBodyManager.add[Car2MessageBodyReader]()
+    messageBodyManager.read[Car2](request) should equal(Car2("Car"))
   }
 
   "parse dog" in {
     messageBodyManager.read[Dog](request) should equal(Dog("Dog"))
+  }
+
+  "parse father" in {
+    messageBodyManager.read[Son](request) should equal(Son("Nykolas"))
   }
 }
 
@@ -30,10 +36,20 @@ case class Car2(name: String)
 
 case class Dog(name: String)
 
+trait Father
+
+case class Son(name: String) extends Father
+
 class Car2MessageBodyReader extends MessageBodyReader[Car2] {
-  def parse(request: Request): Car2 = Car2("Car")
+  def parse[M: Manifest](request: Request): Car2 = Car2("Car")
 }
 
 class DogMessageBodyReader extends MessageBodyReader[Dog] {
-  def parse(request: Request): Dog = Dog("Dog")
+  def parse[M: Manifest](request: Request): Dog = Dog("Dog")
+}
+
+class FatherMessageBodyReader extends MessageBodyReader[Father] {
+  override def parse[M <: Father : Manifest](request: Request): Father = {
+    if(manifest[M].runtimeClass == classOf[Son]) Son("Nykolas").asInstanceOf[Father] else throw new RuntimeException("test should fail if got here")
+  }
 }
