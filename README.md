@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=develop)](http://travis-ci.org/twitter/finatra?branch=develop)
 [![Test Coverage](http://codecov.io/github/twitter/finatra/coverage.svg?branch=develop)](http://codecov.io/github/twitter/finatra?branch=develop)
 [![Project status](https://img.shields.io/badge/status-active-brightgreen.svg)](#status)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
 ## Status
