@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-thrift: Add support for a "dark" traffic filter in thrift routing. Add a Finatra implementation
+  of the Finagle AbstractDarkTrafficFilter which sub-classes ThriftFilter and will work in the Finatra 
+  filter chain. This will allow users to play incoming requests to a configured "dark" service. ``RB_ID=852338``
+
 ### Changed
 
 ### Fixed

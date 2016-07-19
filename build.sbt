@@ -533,7 +533,12 @@ lazy val thrift = project.
     moduleName := "finatra-thrift",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.finagleVersion,
+      "com.twitter" %% "finagle-exp" % versions.finagleVersion,
+      "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
+      "com.twitter" %% "util-core" % versions.finagleVersion,
+      "javax.inject" % "javax.inject" % "1",
       "org.yaml" % "snakeyaml" % versions.snakeyaml
     ),
     scroogePublishThrift in Compile := true,
