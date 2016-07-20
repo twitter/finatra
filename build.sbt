@@ -537,7 +537,7 @@ lazy val thrift = project.
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
-      "com.twitter" %% "util-core" % versions.finagleVersion,
+      "com.twitter" %% "util-core" % versions.utilVersion,
       "javax.inject" % "javax.inject" % "1",
       "org.yaml" % "snakeyaml" % versions.snakeyaml
     ),
