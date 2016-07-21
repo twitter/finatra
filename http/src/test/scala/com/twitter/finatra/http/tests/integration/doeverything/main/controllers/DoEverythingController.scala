@@ -10,7 +10,7 @@ import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.ForbiddenFilter
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter, ForbiddenFilter}
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.request.{QueryParam, RouteParam}
@@ -640,6 +640,21 @@ class DoEverythingController @Inject()(
   }
 
   filter[ForbiddenFilter].get("/forbiddenByFilter") { r: Request =>
+    "ok!"
+  }
+
+  filter[IdentityFilter]
+    .filter[IdentityFilter]
+    .filter(new AppendToHeaderFilter("test", "4"))
+    .filter[IdentityFilter]
+    .get("/multiFilterAppend") { request: Request =>
+    request.headerMap("test")
+  }
+
+  filter[IdentityFilter]
+    .filter[IdentityFilter]
+    .filter[IdentityFilter]
+    .get("/multiIdentityFilterAppend") { request: Request =>
     "ok!"
   }
 

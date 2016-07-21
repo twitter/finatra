@@ -1095,6 +1095,20 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Forbidden)
     }
 
+    "Apply multiple route filters added by type and instance" in {
+      server.httpGet(
+        "/multiFilterAppend",
+        andExpect = Ok,
+        withBody = "014")
+    }
+
+    "Apply multiple route filters added by type" in {
+      server.httpGet(
+        "/multiIdentityFilterAppend",
+        andExpect = Ok,
+        withBody = "ok!")
+    }
+
     "Apply multiple route filters" in {
       server.httpGet(
         "/multipleRouteFilters",
