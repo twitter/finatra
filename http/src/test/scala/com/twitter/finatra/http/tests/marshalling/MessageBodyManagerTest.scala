@@ -16,13 +16,23 @@ class MessageBodyManagerTest extends Test with Mockito {
 
   val messageBodyManager = injector.instance[MessageBodyManager]
   messageBodyManager.add[DogMessageBodyReader]()
+  messageBodyManager.add[FatherMessageBodyReader]()
+  messageBodyManager.add(new Car2MessageBodyReader)
 
-  "parse car" in {
-    messageBodyManager.add[Car2MessageBodyReader]()
+  "parse car2" in {
+    messageBodyManager.read[Car2](request) should equal(Car2("Car"))
   }
 
   "parse dog" in {
     messageBodyManager.read[Dog](request) should equal(Dog("Dog"))
+  }
+
+  "parse son with father MBR" in {
+    messageBodyManager.read[Son](request) should equal(Son("Son"))
+  }
+
+  "parse father impl with father MBR" in {
+    messageBodyManager.read[Son](request) should equal(Son("Son"))
   }
 }
 
@@ -30,10 +40,28 @@ case class Car2(name: String)
 
 case class Dog(name: String)
 
+trait Father
+
+case class Son(name: String) extends Father
+
+case class FatherImpl(name: String) extends Father
+
 class Car2MessageBodyReader extends MessageBodyReader[Car2] {
-  def parse(request: Request): Car2 = Car2("Car")
+  def parse[M: Manifest](request: Request): Car2 = Car2("Car")
 }
 
 class DogMessageBodyReader extends MessageBodyReader[Dog] {
-  def parse(request: Request): Dog = Dog("Dog")
+  def parse[M: Manifest](request: Request): Dog = Dog("Dog")
+}
+
+class FatherMessageBodyReader extends MessageBodyReader[Father] {
+  override def parse[M <: Father : Manifest](request: Request): Father = {
+    if (manifest[M].runtimeClass == classOf[Son]) {
+      Son("Son").asInstanceOf[Father]
+    } else if (manifest[M].runtimeClass == classOf[FatherImpl]) {
+      FatherImpl("Father").asInstanceOf[Father]
+    } else {
+      throw new RuntimeException("FAIL")
+    }
+  }
 }

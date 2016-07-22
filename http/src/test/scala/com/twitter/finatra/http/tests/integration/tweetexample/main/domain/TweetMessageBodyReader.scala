@@ -9,7 +9,7 @@ class TweetMessageBodyReader @Inject()(
   mapper: FinatraObjectMapper)
   extends MessageBodyReader[Tweet] {
 
-  override def parse(request: Request): Tweet = {
+  override def parse[M: Manifest](request: Request): Tweet = {
     val tweetRequest = mapper.parse[TweetRequest](request)
     Tweet(
       tweetRequest.customId,
