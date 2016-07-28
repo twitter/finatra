@@ -34,7 +34,6 @@ If you want to apply a filter (or filters) to **all** added controllers you can 
 import DoEverythingModule
 import ExampleController
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.filters.AccessLoggingFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
 
@@ -47,7 +46,6 @@ class ExampleServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router
-      .filter[AccessLoggingFilter[Request]]
       .filter[CommonFilters]
       .add[ExampleController]
   }
