@@ -10,7 +10,7 @@ class ThriftClientFilterBuilder(
   timeoutMultiplier: Int,
   retryMultiplier: Int,
   injector: Injector,
-  statsReceiver: StatsReceiver,
+  val statsReceiver: StatsReceiver,
   label: String,
   budget: Budget,
   useHighResTimerForRetries: Boolean,

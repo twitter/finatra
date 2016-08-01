@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Provide access to statsReceiver argument in ThriftClientFilterBuilder. ``RB_ID=857286``
+
 ### Fixed
 
 ### Closed
