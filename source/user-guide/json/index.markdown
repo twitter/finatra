@@ -113,7 +113,7 @@ case class GroupRequest(
 
   @MethodValidation
   def validateName = {
-    ValidationResult(
+    ValidationResult.validate(
       name.startsWith("grp-"),
       "name must start with 'grp-'")
   }
