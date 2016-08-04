@@ -89,7 +89,7 @@ class ExampleServer extends ThriftServer {
 ```
 <div></div>
 
-Please note that Finatra only currently supports adding a **single** Thrift controller to the `ThriftRouter`. The expectation is that you are implementing a *single thrift service* and thus a single `BaseServiceIface` which is implementable in a single controller. If you want to break down your code, you can always marshal calls from the single controller to any number of other classes. In this way, the controller would just be a thin wrapper which proxies to other classes.
+Please note that Finatra only currently supports adding a **single** Thrift controller to the `ThriftRouter`. The expectation is that you are implementing a single Thrift *service* and thus a single `BaseServiceIface` which is implementable in a single controller. If you want to break down your code, you can always marshal calls from the single controller to any number of other classes. In this way, the controller would just be a thin wrapper which proxies to other classes.
 
 ## <a class="anchor" name="more-information" href="#more-information">More information</a>
 ===============================
