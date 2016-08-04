@@ -3,6 +3,7 @@ title: Roadmap - Finatra
 layout: finatrav1
 ---
 <div class="page-header">
+<h5><font color="red">Note:</font>&nbsp;this version is deprecated, please see the documentation for version <a href="/finatra">2.x</a>.</h5>
 <h1>Roadmap</h1>
 </div>
 ## 1.5.2

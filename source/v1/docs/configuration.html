@@ -2,14 +2,15 @@
 title: "Configuration"
 layout: finatrav1
 ---
-    <div class="page-header">
-     <h1>Flags</h1>
-   </div>
-   <p class="lead">Finatra uses <a href="http://twitter.github.io/twitter-server/Features.html#flags">Flags</a> for configuration, passed as arguments:</p>
-   <pre class="prettyprint">java -jar target/finatra_app.jar -com.twitter.finatra.config.port=&#39;:7070&#39;</pre>
+<div class="page-header">
+<h5><font color="red">Note:</font>&nbsp;this version is deprecated, please see the documentation for version <a href="/finatra">2.x</a>.</h5>
+<h1>Flags</h1>
+</div>
+<p class="lead">Finatra uses <a href="http://twitter.github.io/twitter-server/Features.html#flags">Flags</a> for configuration, passed as arguments:</p>
+<pre class="prettyprint">java -jar target/finatra_app.jar -com.twitter.finatra.config.port=&#39;:7070&#39;</pre>
 
-   <p class="lead">Here&#39;s a full list of Flags available: (this is <code>-help</code> output)</p>
-  <pre class="prettyprint">global flags:
+<p class="lead">Here&#39;s a full list of Flags available: (this is <code>-help</code> output)</p>
+<pre class="prettyprint">global flags:
   -com.twitter.finatra.config.adminPort=&#39;:9990&#39;: Admin/Stats Port
   -com.twitter.finatra.config.appName=&#39;finatra&#39;: Name of server
   -com.twitter.finatra.config.assetPath=&#39;/public&#39;: path to assets
