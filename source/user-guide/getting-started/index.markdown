@@ -13,7 +13,93 @@ footer: true
 
 Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [com.twitter.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [TwitterServer](http://twitter.github.io/twitter-server/) and [Finagle](https://twitter.github.io/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller, per route in a controller, or across controllers.
 
-## Basics
+## <a class="anchor" name="dependencies" href="#dependencies">Basics</a>
+===============================
+
+To get started, add a dependency on either [finatra-http](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.11%22) or [finatra-thrift](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.11%22) (depending on if you are building an HTTP or Thrift server), e.g., with [sbt](http://www.scala-sbt.org/):
+
+```
+"com.twitter" %% "finatra-http" % VERSION
+```
+
+or 
+
+```
+"com.twitter" %% "finatra-thrift" % VERSION
+```
+
+Where, `VERSION` is the [released version](https://github.com/twitter/finatra/releases) you want to use of the Finatra framework. Similarily, with [Maven](http://maven.apache.org/):
+
+```xml
+<dependency>
+  <groupId>com.twitter</groupId>
+  <artifactId>finatra-http_2.11</artifactId>
+  <version>VERSION</version>
+</dependency>
+```
+
+or 
+
+```xml
+<dependency>
+  <groupId>com.twitter</groupId>
+  <artifactId>finatra-thrift_2.11</artifactId>
+  <version>VERSION</version>
+</dependency>
+```
+
+*Note*: with Maven, you **must** append the appropriate scala version to the artifact name (in this example, `_2.11`). See the Finatra [hello-world](https://github.com/twitter/finatra/tree/finatra-2.2.0/examples/hello-world) example for a more in-depth example.
+
+#### Test dependencies
+
+Finatra currently publishes [test-jars](https://maven.apache.org/guides/mini/guide-attached-tests.html) for most modules. The `test-jars` include re-usable utilities for use in testing (e.g., the [EmbeddedTwitterServer](https://github.com/twitter/finatra/blob/finatra-2.2.0/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)). To add a `test-jar` dependency, depend on the appropriate module with the `tests` classifier. Additionally, these dependencies are typically only needed in the `test` scope for your project. E.g., with [sbt](http://www.scala-sbt.org/):
+
+```
+"com.twitter" %% "finatra-http" % VERSION % "test" classifier "tests"
+```
+
+or 
+
+```
+"com.twitter" %% "finatra-thrift" % VERSION % "test" classifier "tests"
+```
+
+See the sbt documentation for more information on using [ivy configurations and classifiers](http://www.scala-sbt.org/0.13/docs/Library-Management.html). And with [Maven](http://maven.apache.org/):
+
+```xml
+<dependency>
+  <groupId>com.twitter</groupId>
+  <artifactId>finatra-http_2.11</artifactId>
+  <scope>test</scope>
+  <type>test-jar</type>
+  <version>VERSION</version>
+</dependency>
+```
+
+or
+
+```xml
+<dependency>
+  <groupId>com.twitter</groupId>
+  <artifactId>finatra-thrift_2.11</artifactId>
+  <scope>test</scope>
+  <type>test-jar</type>
+  <version>VERSION</version>
+</dependency>
+```
+
+*Note*: There is a [downside](https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html) to the current way Finatra `test-jars` are published: you don't get the transitive test-scoped dependencies automatically. Sbt and Maven only resolve the compile-time dependencies, so you'll have to add all the other required test-scoped dependencies by hand. We hope to address this limitation to the published `test-jars` in a future release.
+
+#### Lightbend Activator
+
+Finatra also has [Lightbend Activator](https://www.lightbend.com/activator/download) templates for generating project scaffolds:
+
+* HTTP [template](https://github.com/twitter/finatra-activator-http-seed)
+* Thrift [template](https://github.com/twitter/finatra-activator-thrift-seed)
+
+See the Lightbend Activator [documentation](https://www.lightbend.com/activator/docs) for information how to use these templates with the activator application.
+
+## <a class="anchor" name="concepts" href="#concepts">Concepts</a>
 ===============================
 
 Finatra internally uses the Google [Guice](https://github.com/google/guice) dependency injection library extensively which is also available for service writers if they choose to use dependency injection.
