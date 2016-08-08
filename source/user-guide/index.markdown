@@ -14,6 +14,9 @@ The version of Finatra documented here is v2.x. Version 2 is a *complete re-writ
 
 - [TwitterServer Basics](/finatra/user-guide/twitter-server-basics)
 - [Getting Started](/finatra/user-guide/getting-started)
+  - [Basics](/finatra/user-guide/getting-started#dependencies)
+  - [Examples](/finatra/user-guide/getting-started#examples)
+  - [Concepts](/finatra/user-guide/getting-started#concepts)
   - [Server Lifecycle](/finatra/user-guide/getting-started#lifecycle)
   - [Modules](/finatra/user-guide/getting-started#modules)
   - [Binding Annotations](/finatra/user-guide/getting-started#binding-annotations)

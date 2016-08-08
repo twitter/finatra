@@ -88,16 +88,23 @@ or
 </dependency>
 ```
 
-*Note*: There is a [downside](https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html) to the current way Finatra `test-jars` are published: you don't get the transitive test-scoped dependencies automatically. Sbt and Maven only resolve the compile-time dependencies, so you'll have to add all the other required test-scoped dependencies by hand. We hope to address this limitation to the published `test-jars` in a future release.
+*Note*: There is a [downside](https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html) to the current way Finatra `test-jars` are published: you don't get the transitive test-scoped dependencies automatically. Maven and sbt only resolve the compile-time dependencies, so you'll have to add all the other required test-scoped dependencies by hand. We hope to address this limitation to the published `test-jars` in a future release.
 
 #### Lightbend Activator
 
-Finatra also has [Lightbend Activator](https://www.lightbend.com/activator/download) templates for generating project scaffolds:
+Finatra also has [Lightbend](https://www.lightbend.com/activator/download) Activator [templates](https://www.lightbend.com/activator/templates#filter:finatra v2.x) for generating project scaffolds:
 
-* HTTP [template](https://github.com/twitter/finatra-activator-http-seed)
-* Thrift [template](https://github.com/twitter/finatra-activator-thrift-seed)
+* HTTP [template](https://github.com/twitter/finatra-activator-http-seed). [Activator](https://www.lightbend.com/activator/download) instructions [here](https://www.lightbend.com/activator/template/finatra-http-seed).
+* Thrift [template](https://github.com/twitter/finatra-activator-thrift-seed). [Activator](https://www.lightbend.com/activator/download) instructions [here](https://www.lightbend.com/activator/template/finatra-thrift-seed).
 
 See the Lightbend Activator [documentation](https://www.lightbend.com/activator/docs) for information how to use these templates with the activator application.
+
+## <a class="anchor" name="examples" href="#examples">Examples</a>
+===============================
+
+Finatra includes a few working examples which highlight various features of the framework and include tests. In the [develop branch](https://github.com/twitter/finatra/tree/develop/examples) these examples are included in the root [sbt](http://www.scala-sbt.org/) build and are thus buildable as part of the entire project. In the [master branch](https://github.com/twitter/finatra/tree/master/examples) (or a [release branch](https://github.com/twitter/finatra/tree/finatra-2.2.0/examples)) these examples can be built using their invididual [sbt](http://www.scala-sbt.org/) (or [Maven](http://maven.apache.org/)) build files.
+
+Please take a look through the examples for more detailed information on features, testing, and building with sbt (or Maven).
 
 ## <a class="anchor" name="concepts" href="#concepts">Concepts</a>
 ===============================
