@@ -16,6 +16,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Add content headers for EmbeddedHttpServer #httpDelete and #httpPatch methods. ``RB_ID=862200``
+
 ### Closed
 
 ## [finatra-2.2.0](https://github.com/twitter/finatra/tree/finatra-2.2.0) (2016-07-07)
