@@ -106,6 +106,6 @@ For more information, we encourage you to take a look at the full [`finatra/exam
 <nav>
   <ul class="pager">
     <li class="previous"><a href="/finatra/user-guide/build-new-thrift-server/filter.html"><span aria-hidden="true">&larr;</span>&nbsp;Add&nbsp;Filters</a></li>
-    <li class="next"><a href="/finatra/user-guide/testing">Testing&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+    <li class="next"><a href="/finatra/user-guide/admin-http-interface">HTTP&nbsp;Admin&nbsp;Interface<span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>

@@ -8,11 +8,10 @@ footer: true
 
 Finatra is uses [Finagle](http://twitter.github.io/finagle/guide/) and [TwitterServer](http://twitter.github.io/twitter-server/) and it is *highly recommended* that you familiarize yourself with those frameworks before getting started.
 
-The version of Finatra documented here is v2.x. Version 2 is a *complete re-write* over v1.x and as such many things are different. If you are still using a version 1.x release you can find that documentation [here](/finatra/v1/docs/index.html).
+The version of Finatra documented here is v2.x. Version 2.x is a *complete re-write* over v1.x and as such many things are different. If you are still using a v1.x release you can find the v1.x documentation [here](/finatra/v1/docs/index.html).
 
 ### Topics:
 
-- [TwitterServer Basics](/finatra/user-guide/twitter-server-basics)
 - [Getting Started](/finatra/user-guide/getting-started)
   - [Basics](/finatra/user-guide/getting-started#dependencies)
   - [Examples](/finatra/user-guide/getting-started#examples)
@@ -55,6 +54,7 @@ The version of Finatra documented here is v2.x. Version 2 is a *complete re-writ
   - [Add Filters](/finatra/user-guide/build-new-thrift-server/filter.html)
   - [Implement a Server "Warmup" Handler](/finatra/user-guide/build-new-thrift-server/warmup.html)
   - [More information](/finatra/user-guide/build-new-thrift-server/warmup.html#more-information)
+- [HTTP Admin Interface](/finatra/user-guide/admin-http-interface)
 - [Testing](/finatra/user-guide/testing)
   - [Types of Tests](/finatra/user-guide/testing#testing-types)
   - [Embedded Servers and Apps](/finatra/user-guide/testing#embedded-server)
