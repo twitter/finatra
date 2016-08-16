@@ -15,7 +15,7 @@ All Finatra servers are [TwitterServer](https://github.com/twitter/twitter-serve
 
 ### HTTP Admin Interface
 
-[TwitterServer](https://github.com/twitter/twitter-server)-based server have the option to start an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) bound to a port configurable via the `-admin.port` flag. If you want to serve an external interface this will be bound to a separate port configurable via either the `-http.port`, `-https.port` or `-thrift.port` flags, depending.
+[TwitterServer](https://github.com/twitter/twitter-server)-based servers have the option to start an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) bound to a port configurable via the `-admin.port` flag. If you want to serve an external interface this will be bound to a separate port configurable via either the `-http.port`, `-https.port` or `-thrift.port` flags, depending.
 
 Some deployment environments such as [Heroku](https://www.heroku.com/), [AppFog](https://www.appfog.com/), and [OpenShift](https://www.openshift.com) only allow a single port to be used when deploying an application. In these cases, you can programmatically disable the TwitterServer [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) as such:
 
