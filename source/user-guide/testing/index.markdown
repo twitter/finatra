@@ -62,7 +62,7 @@ You'll notice that this hierarchy generally follows the server class hierarchy a
 
 ### <a class="anchor" name="feature-tests" href="#feature-tests">Feature Tests</a>
 
-If you are familiar with [Gherkin](http://docs.behat.org/en/v2.5/guides/1.gherkin.html) or [Cucumber](https://github.com/cucumber/cucumber/wiki/Feature-Introduction) or other similar testing languages and frameworks, then feature testing will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the [server/FeatureTest](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala) trait.
+If you are familiar with [Gherkin](http://docs.behat.org/en/v2.5/guides/1.gherkin.html) or [Cucumber](https://github.com/cucumber/cucumber/wiki/Feature-Introduction) or other similar testing languages and frameworks, then [feature testing](https://wiki.documentfoundation.org/QA/Testing/Feature_Tests) will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the [server/FeatureTest](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala) trait.
 
 We highly recommend writing feature tests for your services as they provide a very good signal of whether you have correctly implemented the features of your service. If you haven't implemented the feature correctly, it almost doesn't matter that you have lots of unit tests.
 
