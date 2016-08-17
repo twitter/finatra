@@ -114,7 +114,7 @@ For more information on providing contributions, please see our [CONTRIBUTING.md
 
 ## Presentations
 
-Check out our list of presentations: [Finatra Presentations](http://twitter.github.io/finatra/presentations/) on our website.
+Check out our list of presentations: [Finatra Presentations](http://twitter.github.io/finatra/presentations/).
 
 ## Authors
 
