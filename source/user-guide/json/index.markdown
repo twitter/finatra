@@ -128,7 +128,7 @@ case class Dates(
 ## <a class="anchor" name="validation-framework" href="#validation-framework">Validation Framework</a>
 ===============================
 
-We provide a simple validation framework inspired by [JSR-330](https://github.com/google/guice/wiki/JSR330). The validations framework integrates with the custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily provided):
+We provide a simple validation framework inspired by [JSR-303](http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html). The validations framework integrates with the custom `case class` deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily provided):
 
 * `@CountryCode`
 * `@FutureTime`
