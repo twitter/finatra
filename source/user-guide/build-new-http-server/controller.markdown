@@ -359,7 +359,7 @@ class MyController extends Controller {
 <div></div>
 
 ### <a class="anchor" name="response-builder" href="#response-builder">Response Builder</a>
-All HTTP Controllers have a protected `response` field of type [`com.twitter.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala) which can use to build responses. For example:
+All HTTP Controllers have a protected `response` field of type [`com.twitter.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala) which can be used to build callback responses. For example:
 
 ```scala
 get("/foo") { request: Request =>
