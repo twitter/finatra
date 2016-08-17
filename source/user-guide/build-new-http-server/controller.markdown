@@ -288,6 +288,47 @@ For more information and examples, see:
 ## <a class="anchor" name="responses" href="#responses">Responses</a>
 ===============================
 
+### JSON responses
+
+The simplest way to return a JSON response is to return a `case class` in your route callback. The default framework behavior is to render the `case class` as a JSON response E.g.,
+
+```scala
+case class ExampleCaseClass(
+  id: String,
+  description: String,
+  longValue: Long,
+  boolValue: Boolean)
+
+get("/foo") { request: Request => 
+  ExampleCaseClass(
+    id = "123",
+    description = "This is a JSON response body",
+    longValue = 1L,
+    boolValue = true)
+}
+```
+<div></div>
+
+will produce a response:
+
+```
+[Status]  Status(200)
+[Header]  Content-Type -> application/json; charset=utf-8
+[Header]  Server -> Finatra
+[Header]  Date -> Wed, 17 Aug 2015 21:54:25 GMT
+[Header]  Content-Length -> 90
+{
+  "id" : "123",
+  "description" : "This is a JSON response body",
+  "long_value" : 1,
+  "bool_value" : true
+}
+
+```
+<div></div>
+
+Note: If you change the default [MessageBodyWriter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/FinatraDefaultMessageBodyWriter.scala) implementation (used by the [MessageBodyManager](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala)) this will no longer be the default behavior, depending. You can also always use the [ResponseBuilder](#response-builder) to explicitly render a JSON response.
+
 ### <a class="anchor" name="future-conversion" href="#future-conversion">Future Conversion</a>
 
 For the basics of Futures in Finatra, see: [Futures](/finatra/user-guide/getting-started#futures) in the [Getting Started](/finatra/user-guide/getting-started) documentation.
@@ -317,8 +358,8 @@ class MyController extends Controller {
 ```
 <div></div>
 
-### Response Builder:
-All Controllers have a protected `response` field of type `com.twitter.finatra.http.response.ResponseBuilder` they can use to build responses. For example:
+### <a class="anchor" name="response-builder" href="#response-builder">Response Builder</a>
+All HTTP Controllers have a protected `response` field of type [`com.twitter.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala) which can use to build responses. For example:
 
 ```scala
 get("/foo") { request: Request =>
@@ -354,8 +395,10 @@ post("/users") { request: FormPostRequest =>
 ```
 <div></div>
 
+For more examples, see the [ResponseBuilderTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala).
+
 ### Cookies:
-Cookies, like Headers, are read from request and can set via the `com.twitter.finatra.http.response.ResponseBuilder`:
+Cookies, like Headers, are read from request and can set via the [`com.twitter.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala#L151):
 
 ```scala
 get("/") { request =>

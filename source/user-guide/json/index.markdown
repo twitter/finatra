@@ -125,6 +125,8 @@ case class Dates(
 ```
 <div></div>
 
+To return a JSON response you can simply return a `case class` as the return of your route callback. The default behavior will be to render this `case class` as a JSON response. See the HTTP Controller [Responses](/finatra/user-guide/build-new-http-server/controller.html#responses) section for an example.
+
 ## <a class="anchor" name="validation-framework" href="#validation-framework">Validation Framework</a>
 ===============================
 
