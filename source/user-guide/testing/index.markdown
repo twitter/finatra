@@ -227,6 +227,8 @@ class MyServiceStartupTest extends FeatureTest {
 
 This is a drop-in replacement for [`org.specs2.mock.Mockito`](http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html). We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures won't be propagated up as ScalaTest test failures.
 
+See the next few sections on how you can use mocks in testing with either [Override Modules](#override-modules) or using [`@Bind`](#at-bind).
+
 ## <a class="anchor" name="override-modules" href="#override-modules">Override Modules</a>
 ===============================
 
@@ -243,14 +245,65 @@ override val server = new EmbeddedHttpServer(
 ```
 <div></div>
 
-Note, the modules use specifically for testing should generally be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: [`@Bind`](#at-bind) section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.
+For instance if you have a controller which takes in a type of `ServiceA`:
+
+```scala
+class MyController(serviceA: ServiceA) extends Controller {
+  get("/:id") { request: Request => 
+    serviceA.lookupInformation(request.params("id"))
+  }
+}
+```
+<div></div>
+
+With a [Module](/finatra/user-guide/getting-started/#modules) that provides the implementation of `ServiceA` to the injector:
+
+```scala
+object MyServiceAModule extends TwitterModule {
+  val key = flag("key", "defaultkey", "The key to use.")
+
+  @Singleton
+  @Provides
+  def providesServiceA: ServiceA = {
+    new ServiceA(key())
+  }
+}
+```
+<div></div>
+
+To test you may want to use a mock or stub version of `ServiceA` in your controller instead of the real version. You could do this by writing a re-usable module for testing and compose it into the server when testing as an override module.
+
+```scala
+object StubServiceAModule extends TwitterModule {
+  @Singleton
+  @Provides
+  def providesServiceA: ServiceA = {
+    new StubServiceA("fake")
+  }
+}
+```
+
+And in your test, add this stub module as a override module:
+
+```scala
+override val server = new EmbeddedHttpServer(
+  twitterServer = new MyGreatServer {
+    override def overrideModules = Seq(StubServiceAModule)
+  },
+  ...
+```
+<div></div>
+
+Note, modules used specifically for testing should be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: [`@Bind`](#at-bind) section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase. 
+
+Also note, that you can always create an override module over a mock, however it is generally preferable to want control over the expected mock behavior per-test and as such it's more common to keep a reference to a mock and use it with the [`@Bind`](#at-bind) functionality in a test.
 
 ## <a class="anchor" name="at-bind" href="#at-bind">Using `@Bind`</a>
 ===============================
 
 First, check out the [Google Guice](https://github.com/google/guice) documentation on Bound Fields [here](https://github.com/google/guice/wiki/BoundFields).
 
-In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a stub implementation), we do not need to create a specific test module to compose into our server as an override module. Instead we can use the `com.google.inject.testing.fieldbinder.Bind` annotation.
+In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a simple stub implementation), we do not need to create a specific module for testing to compose into our server as an override module. Instead we can use the `com.google.inject.testing.fieldbinder.Bind` annotation.
 
 ```scala
 
@@ -264,40 +317,44 @@ class ExampleFeatureTest
   with Mockito
   with HttpTest {
 
-  @Bind val downstreamServiceClient = smartMock[DownstreamServiceClient]
+  @Bind val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
 
-  @Bind val idService = smartMock[IdService]
+  @Bind val mockIdService = smartMock[IdService]
 
   override val server = new EmbeddedHttpServer(new ExampleServer)  
 
   "test" in {
     /* Mock GET Request performed by DownstreamServiceClient */
-    downstreamServiceClient.get("/tweets/123.json")(manifest[FooResponse]) returns Future(None)
+    mockDownstreamServiceClient.get("/tweets/123.json")(manifest[FooResponse]) returns Future(None)
     ...
   }
 ```
 <div></div>
 
-#### More information:
+#### N.B.:
 
-* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using either `com.twitter.inject.app.FeatureTest` or `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [next section](#feature-tests).
+* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [Feature Tests](#feature-tests) section.
 * Prefer to define `@Bind` and `@Inject` variables before the server definition.
-* You should not need to but you can optionally include the `integrationTestModule` as an **override module** in your server, i.e.,
-```scala
-val server = new EmbeddedHttpServer(
-  twitterServer = new ExampleServer {
-    override val overrideModules = Seq(integrationTestModule)
-  })
-```
 * While we support the `com.google.inject.testing.fieldbinder.Bind` annotation, our integration does not currently support the `to` annotation field, e.g., `@Bind(to = classOf[T])`, therefore,
 * The type of the variable you annotate with `@Bind` must *exactly* match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,
 ```scala
 @Bind val idService: IdService = new MockIdServiceImpl
 ```
-* Because of lifecycle reasons, access to the embedded server should either be from a lazy variable or inside a test method.
+* Because of lifecycle reasons, access to the embedded server **MUST** either be from a lazy variable or inside a test method.
 
 For a complete example, see the [`TwitterCloneFeatureTest`](https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala).
 
+There is also another way to user this type of binding in tests (which will eventually become the preferred way) that does not have the above caveats (but instead comes with a different caveat). You can also achieve the above `@Bind` behavior by using [`EmbeddedTwitterServer#bind`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L136). Unfortunately, we have not yet migrated from using Scala Manifests and thus this method suffers from not being able to fully support [higher-kinded](http://blogs.atlassian.com/2013/09/scala-types-of-a-higher-kind/) types. 
+
+To use, you can do:
+
+```scala
+val mockIdService = smartMock[IdService]
+
+override val server = 
+  new EmbeddedHttpServer(new ExampleServer)
+    .bind[IdService](mockIdService)
+```
 
 <nav>
   <ul class="pager">
