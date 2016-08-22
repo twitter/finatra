@@ -1,7 +1,6 @@
 package com.twitter.finatra.utils
 
-import com.twitter.finagle.Deadline
-import com.twitter.finagle.context.Contexts
+import com.twitter.finagle.context.{Contexts, Deadline}
 import com.twitter.inject.Logging
 import org.joda.time.DateTime
 
