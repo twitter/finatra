@@ -184,24 +184,104 @@ class MyService @Inject() (
 ```
 <div></div>
 
-#### Module Configuration
-A server is then started with a list of immutable modules:
+#### Modules Depending on Other Modules
+
+There may be times where you would like to reuse state defined in a given module inside another module. For
+instance, we have a module which defines a configuration flag that is useful in other context. As an
+example, let's assume we have a module which defines a flag for a *client id* String that is necessary for constructing
+different clients:
+
+```scala
+object ClientIdModule extends TwitterModule {
+  flag[String]("client.id", "System-wide client id for identifying this server as a client to other services.")
+}
+```
+<div></div>
+
+You could choose to build and provide every client which needs this *client id* in the same module or you could decide to break up the client
+creation into separate modules. If you do the latter, how do you get access to the set *client id* value from the `ClientIdModule`? 
+Typically, you would inject this value where you need it annotated with the [`@Flag` binding annotation](#at-flag). And you can do the same within 
+a module; however instead of the injection point being a constructor annotated with `@Inject`, it is the argument list to a method annotated with `@Provides`:
+
+```scala
+object ClientAModule extends TwitterModule {
+  override val modules = Seq(ClientIdModule)
+
+  @Singleton
+  @Provides
+  def provideClientA(
+    @Flag("client.id") clientId): ClientA = {
+    new ClientA(clientId)
+  }
+}
+```
+<div></div>
+
+What's happening here? 
+
+Firstly, we define a `ClientAModule` and override the `modules` val to be a `Seq` of modules that
+includes the `ClientIdModule`. This guarantees that if the `ClientIdModule` is not mixed into the list of modules for a server (see
+the next section "Module Configuration in Servers"), the `ClientAModule` ensures it will be installed since it's declared as a dependency. 
+This ensures that there will be a bound value for the `client.id` flag. Finatra will de-dupe all modules before installing, so it's OK if a module 
+appears twice in the server configuration (though you should strive to make this the exception). 
+
+Secondly, we then define a method which provides a `ClientA`. Since injection is by type (and the argument list to an `@Provides` annotated method in a module is an injection point) and `String` is not specific enough we use the [`@Flag` binding annotation](#at-flag). See the next sections for more information on [flags](#flags) and [binding annotations](#binding-annotations).
+
+We could continue this through another module. For example, if we wanted to provide a `ClientB` which needs both the `clientId` and a
+`ClientA` we could define a `ClientBModule`:
+
+```scala
+object ClientBModule extends TwitterModule {
+  override val modules = Seq(
+    ClientIdModule,
+    ClientAModule)
+
+  @Singleton
+  @Provides
+  def provideClientB(
+    @Flag("client.id") clientId,
+    clientA: ClientA): ClientB = {
+    new ClientB(clientId, clientA)
+  }
+}
+```
+<div></div>
+
+Notice that we choose to list both the `ClientIdModule` and `ClientAModule` in the modules for the `ClientBModule`. Yet, since we
+know that the `ClientAModule` includes the `ClientIdModule` we could have choosen to leave it out. The "provides" method in the module
+above takes in both a `clientId` String and a `ClientA`. Since it declares the two modules we're assured that these types will be available
+from the injector for our "provides" method to use.
+
+#### Module Configuration in Servers
+
+A server is then configured with a list of modules:
+
 ```scala
 class Server extends HttpServer {
   override val modules = Seq(
     MyModule1,
-    MyModule2)
+    MyModule2,
+    ClientIdModule,
+    ClientAModule,
+    ClientBModule)
 
   ...
 }
 ```
 <div></div>
 
+How explicit to be in listing the modules for your server is up to you. If you include a module that is all ready included by another module, Finatra
+will de-dupe the module list so there is no penalty but you may want to prefer to define your list of modules as [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) as possible. For more information on server configuration see the sections on building either [HTTP](/finatra/user-guide/build-new-http-server) or [Thrift](/finatra/user-guide/build-new-thrift-server) servers.
+
 #### Module Lifecycle
 
 Modules also have a hook into the Server lifecycle through the [TwitterModuleLifecycle](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module. For example, the framework uses the `singletonStartup` lifecycle method in the [`Slf4jBridgeModule`](https://github.com/twitter/finatra/blob/develop/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala#L7) to install the [`SLF4JBridgeHandler`](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) (see: [Logging](/finatra/user-guide/logging)).
 
-The [`com.twitter.inject.TwitterModule`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) exposes two lifecycle methods: `TwitterModule#singletonStartup` and `TwitterModule#singletonShutdown`. If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the `singletonStartup` method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the `singletonShutdown` method of your TwitterModule to close or shutdown any resources provided by the module.
+The [`com.twitter.inject.TwitterModule`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) exposes the lifecycle methods: `TwitterModule#singletonStartup` and `TwitterModule#singletonShutdown`. If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the `singletonStartup` method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the `singletonShutdown` method of your TwitterModule to close or shutdown any resources provided by the module.
+
+Additionally, there is also the `TwitterModule#singletonPostWarmupComplete` method which allows modules to hook into the server lifecycle after external ports have been bound, clients have been resolved, and the server is ready to accept traffic but before the `App#run` or `Server#start` callbacks are invoked.
+
+See the [Server Lifecycle](#lifecycle) diagram for a more visual depiction of the server lifecycle.
 
 ### <a class="anchor" name="binding-annotations" href="#binding-annotations">Binding Annotations</a>
 ===============================
@@ -285,7 +365,7 @@ Flags can be [defined](https://github.com/twitter/finatra/blob/develop/http/src/
 
 In Finatra, we also provide a way to override the objects provided on the object graph through "override modules". See the "Override Modules" section in [testing](/finatra/testing#override-modules).
 
-#### `@Flag` annotation
+#### <a class="anchor" name="at-flag" href="#at-flag">`@Flag` annotation</a>
 Flag is a [binding annotation](#binding-annotations). This annotation allows flag values to be injected into classes (and provider methods), by using the `@Flag` annotation:
 
 Define a flag (in this case within a `TwitterModule`)
