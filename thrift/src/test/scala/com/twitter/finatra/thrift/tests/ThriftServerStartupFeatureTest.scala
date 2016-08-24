@@ -51,4 +51,27 @@ class ThriftServerStartupFeatureTest extends Test {
       server.close()
     }
   }
+
+  "start with directly instantiated controller" in {
+    val server = new EmbeddedTwitterServer(new ThriftServer {
+      override val modules = Seq(ClientIdWhitelistModule)
+
+      override def configureThrift(router: ThriftRouter): Unit = {
+        router
+          // directly instantiate controller and add it to the router
+          .add(new DoNothingController())
+      }
+    })
+
+    try {
+      server.start()
+    }
+    catch {
+      case NonFatal(e) =>
+      // no-op: Since it's ok if we can't start on the default port since it may be already in use
+    }
+    finally {
+      server.close()
+    }
+  }
 }

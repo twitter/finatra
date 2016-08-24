@@ -45,8 +45,14 @@ class ThriftRouter @Inject()(
     this
   }
 
+  /** Instantiate and add thrift controller used for all requests **/
   def add[C <: Controller with ToThriftService : Manifest]: ThriftRouter = {
     val controller = injector.instance[C]
+    add(controller)
+  }
+
+  /** Add controller used for all requests **/
+  def add(controller: Controller with ToThriftService): ThriftRouter = {
     for (m <- controller.methods) {
       m.setFilter(filterChain)
       methods += (m.method -> m)
