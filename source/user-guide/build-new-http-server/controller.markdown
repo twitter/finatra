@@ -381,16 +381,15 @@ get("/foo") { request: Request =>
 }
 
 get("/redirect") { request: Request =>
-  response.
-    temporaryRedirect.
-    location("/foo/123")
+  response
+    .temporaryRedirect
+    .location("/foo/123")
 }
 
 post("/users") { request: FormPostRequest =>
-  response.created.
-    location("123").
-    html(
-      TestUserView(request.age, request.name))
+  response
+    .created
+    .location("/users/123")
 }
 ```
 <div></div>
@@ -454,10 +453,9 @@ ResponseBuilder has a "location" method.
 
 ```scala
 post("/users") { request: Request =>
-  response.created.
-    location("http").
-    html(
-      TestUserView(request.age, request.name))
+  response
+    .created
+    .location("/users/123")
 }
 ```
 <div></div>
