@@ -1,6 +1,16 @@
 junit_tests(
   name='scala',
   dependencies=[
+    '3rdparty/jvm/org/openjdk/jmh:jmh-core',
+    '3rdparty/jvm/com/google/inject:guice',
+    '3rdparty/jvm/javax/inject:javax.inject',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
+    'finagle/finagle-stats',
+    'finatra/benchmarks/src/main/java',
+    'finatra/http',
+    'finatra/inject/inject-request-scope',
+    'twitter-server',
+    'util/util-core',
     'finatra/benchmarks',
     'finatra/http:test-deps',
     'finatra/inject/inject-server:test-deps'

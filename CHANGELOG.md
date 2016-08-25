@@ -13,7 +13,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
-* finatra: Provide access to statsReceiver argument in ThriftClientFilterBuilder. ``RB_ID=857286``
+* finatra-http: Performance improvements from latest micro-benchmarking run.
+  - BREAKING API CHANGE: Removed `HttpHeaders#setDate`, `HttpHeaders#set` and `HttpHeaders#GMT`. ``RB_ID=865247``
+* finatra-thrift: Provide access to statsReceiver argument in ThriftClientFilterBuilder. ``RB_ID=857286``
 
 ### Fixed
 

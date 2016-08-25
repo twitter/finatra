@@ -1,6 +1,6 @@
 target(name='benchmarks',
   dependencies=[
-    'finatra/benchmarks/src/main/scala'
+    'finatra/benchmarks/src/main/java'
   ]
 )
 

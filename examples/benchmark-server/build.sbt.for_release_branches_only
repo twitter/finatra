@@ -8,6 +8,8 @@ lazy val versions = new {
   val finatra = "2.3.0-SNAPSHOT"
 }
 
+mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain")
+
 resolvers ++= Seq(
   Resolver.sonatypeRepo("releases"),
   "Twitter Maven" at "https://maven.twttr.com"
@@ -15,6 +17,7 @@ resolvers ++= Seq(
 
 assemblyMergeStrategy in assembly := {
   case "BUILD" => MergeStrategy.discard
+  case "META-INF/io.netty.versions.properties" => MergeStrategy.last
   case other => MergeStrategy.defaultMergeStrategy(other)
 }
 

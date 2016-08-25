@@ -1,22 +1,35 @@
 package com.twitter.finatra.http.internal.marshalling
 
+import com.google.common.net.MediaType
 import com.google.common.net.MediaType._
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyWriter, WriterResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.inject.annotations.Flag
 import javax.inject.Inject
 import org.apache.commons.lang.ClassUtils
 
 private[finatra] class FinatraDefaultMessageBodyWriter @Inject()(
+  @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean,
   mapper: FinatraObjectMapper)
   extends DefaultMessageBodyWriter {
+
+  private val jsonCharset = {
+    if (includeContentTypeCharset) JSON_UTF_8
+    else MediaType.create("application", "json")
+  }
+
+  private val plainText = {
+    if (includeContentTypeCharset) PLAIN_TEXT_UTF_8
+    else MediaType.create("plain", "text")
+  }
 
   /* Public */
 
   override def write(obj: Any): WriterResponse = {
     if (isPrimitiveOrWrapper(obj.getClass))
-      WriterResponse(PLAIN_TEXT_UTF_8, obj.toString)
+      WriterResponse(plainText, obj.toString)
     else
-      WriterResponse(JSON_UTF_8, mapper.writeValueAsBytes(obj))
+      WriterResponse(jsonCharset, mapper.writeValueAsBytes(obj))
   }
 
   /* Private */

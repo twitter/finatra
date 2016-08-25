@@ -9,6 +9,8 @@ import com.twitter.inject.{Injector, InjectorModule, TwitterModule}
 
 object MessageBodyModule extends TwitterModule {
 
+  flag("http.response.charset.enabled", true, "Return HTTP Response Content-Type UTF-8 Charset")
+
   override val modules = Seq(InjectorModule)
 
   override def configure() {
@@ -19,7 +21,7 @@ object MessageBodyModule extends TwitterModule {
   override def singletonStartup(injector: Injector) {
     debug("Configuring MessageBodyManager")
     val manager = injector.instance[MessageBodyManager]
-    manager.addByAnnotation[Mustache, MustacheMessageBodyWriter]
-    manager.addByComponentType[MustacheBodyComponent, MustacheMessageBodyWriter]
+    manager.addByAnnotation[Mustache, MustacheMessageBodyWriter]()
+    manager.addByComponentType[MustacheBodyComponent, MustacheMessageBodyWriter]()
   }
 }

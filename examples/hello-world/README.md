@@ -8,13 +8,13 @@ If you're in master or a feature branch
 Run sbt from the top-level Finatra directory, e.g.
 ```
 $ cd ../../
-$ sbt helloWorld/run
+$ ./sbt helloWorld/run
 ```
 * Then browse to: [http://localhost:8888/hi?name=foo](http://localhost:8888/hi?name=foo)
 * Or view the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
-$ sbt helloWorld/assembly
+$ ./sbt helloWorld/assembly
 $ java -jar -Dlog.service.output=hello-world.log -Dlog.access.output=access.log examples/hello-world/target/scala-2.11/finatra-hello-world-assembly-2.x.x-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
 ```
 *Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. When not set the [logback.xml](./src/main/resources/logback.xml) is parameterized with defaults of `service.log` and `access.log`, respectively.
