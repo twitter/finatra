@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Getting Started - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/docs/index.html">Scaladoc</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+            <li><a href="/finatra/v1/docs/index.html" alt="Deprecated" title="Deprecated"><strike>v1.x Documentation&nbsp;</strike></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div>
+<article role="article">
+  <ol class="breadcrumb">
+  <li><a href="/finatra/user-guide">User Guide</a></li>
+  <li class="active">Getting Started</li>
+</ol>
+
+
+<p>Finatra at it&rsquo;s core is agnostic to the <em>type</em> of service being created. It can be used for anything based on <a href="https://github.com/twitter/util">twitter/util</a>: <a href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala" title="">com.twitter.app.App</a>. Finatra builds on top of the <a href="http://twitter.github.io/twitter-server/Features.html">features</a> of <a href="http://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle">Finagle</a> by allowing you to easily define a <a href="http://twitter.github.io/finagle/guide/Servers.html">Server</a> and controllers (a <a href="http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services">Service</a>-like abstraction) which define and handle endpoints of the Server. You can also compose <a href="http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a> either per controller, per route in a controller, or across controllers.</p>
+
+<h2><a class="anchor" name="dependencies" href="#dependencies">Basics</a></h2>
+
+<hr />
+
+<p>To get started, add a dependency on either <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.11%22">finatra-http</a> or <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.11%22">finatra-thrift</a> (depending on if you are building an HTTP or Thrift server), e.g., with <a href="http://www.scala-sbt.org/">sbt</a>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"com.twitter" %% "finatra-http" % VERSION</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"com.twitter" %% "finatra-thrift" % VERSION</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Where, <code>VERSION</code> is the <a href="https://github.com/twitter/finatra/releases">released version</a> you want to use of the Finatra framework. Similarily, with <a href="http://maven.apache.org/">Maven</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra-http_2.11<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>VERSION<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra-thrift_2.11<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>VERSION<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note</em>: with Maven, you <strong>must</strong> append the appropriate scala version to the artifact name (in this example, <code>_2.11</code>). See the Finatra <a href="https://github.com/twitter/finatra/tree/finatra-2.2.0/examples/hello-world">hello-world</a> example for a more in-depth example.</p>
+
+<h4>Test dependencies</h4>
+
+<p>Finatra currently publishes <a href="https://maven.apache.org/guides/mini/guide-attached-tests.html">test-jars</a> for most modules. The <code>test-jars</code> include re-usable utilities for use in testing (e.g., the <a href="https://github.com/twitter/finatra/blob/finatra-2.2.0/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">EmbeddedTwitterServer</a>). To add a <code>test-jar</code> dependency, depend on the appropriate module with the <code>tests</code> classifier. Additionally, these dependencies are typically only needed in the <code>test</code> scope for your project. E.g., with <a href="http://www.scala-sbt.org/">sbt</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>&quot;com.twitter&quot; %% &quot;finatra-http&quot; % VERSION % &quot;test&quot; classifier &quot;tests&quot;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % VERSION % &quot;test&quot; classifier &quot;tests&quot;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>See the sbt documentation for more information on using <a href="http://www.scala-sbt.org/0.13/docs/Library-Management.html">ivy configurations and classifiers</a>. And with <a href="http://maven.apache.org/">Maven</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra-http_2.11<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;type&gt;</span>test-jar<span class="nt">&lt;/type&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>VERSION<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra-thrift_2.11<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;type&gt;</span>test-jar<span class="nt">&lt;/type&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>VERSION<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>Note</em>: There is a <a href="https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html">downside</a> to the current way Finatra <code>test-jars</code> are published: you don&rsquo;t get the transitive test-scoped dependencies automatically. Maven and sbt only resolve the compile-time dependencies, so you&rsquo;ll have to add all the other required test-scoped dependencies by hand. We hope to address this limitation to the published <code>test-jars</code> in a future release.</p>
+
+<h4>Lightbend Activator</h4>
+
+<p>Finatra also has <a href="https://www.lightbend.com/activator/download">Lightbend</a> Activator <a href="https://www.lightbend.com/activator/templates#filter:finatra%20v2.x">templates</a> for generating project scaffolds:</p>
+
+<ul>
+<li>HTTP <a href="https://github.com/twitter/finatra-activator-http-seed">template</a>. <a href="https://www.lightbend.com/activator/download">Activator</a> instructions <a href="https://www.lightbend.com/activator/template/finatra-http-seed">here</a>.</li>
+<li>Thrift <a href="https://github.com/twitter/finatra-activator-thrift-seed">template</a>. <a href="https://www.lightbend.com/activator/download">Activator</a> instructions <a href="https://www.lightbend.com/activator/template/finatra-thrift-seed">here</a>.</li>
+</ul>
+
+
+<p>See the Lightbend Activator <a href="https://www.lightbend.com/activator/docs">documentation</a> for information how to use these templates with the activator application.</p>
+
+<h2><a class="anchor" name="examples" href="#examples">Examples</a></h2>
+
+<hr />
+
+<p>Finatra includes a few working examples which highlight various features of the framework and include tests. In the <a href="https://github.com/twitter/finatra/tree/develop/examples">develop branch</a> these examples are included in the root <a href="http://www.scala-sbt.org/">sbt</a> build and are thus buildable as part of the entire project. In the <a href="https://github.com/twitter/finatra/tree/master/examples">master branch</a> (or a <a href="https://github.com/twitter/finatra/tree/finatra-2.2.0/examples">release branch</a>) these examples can be built using their invididual <a href="http://www.scala-sbt.org/">sbt</a> (or <a href="http://maven.apache.org/">Maven</a>) build files.</p>
+
+<p>Please take a look through the examples for more detailed information on features, testing, and building with sbt (or Maven).</p>
+
+<h2><a class="anchor" name="concepts" href="#concepts">Concepts</a></h2>
+
+<hr />
+
+<p>Finatra internally uses the Google <a href="https://github.com/google/guice">Guice</a> dependency injection library extensively which is also available for service writers if they choose to use dependency injection.</p>
+
+<p><strong>NOTE: You are not required to use Guice dependency injection when using Finatra</strong>. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra&rsquo;s <a href="/finatra/user-guide/testing">testing</a> features.</p>
+
+<p>An example of Finatra&rsquo;s dependency-injection integration is adding controllers to Finatra&rsquo;s <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a> <em>by type</em>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Server</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="o">[</span><span class="kt">MyController</span><span class="o">]</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>As mentioned, it is also possible to do this without using Guice, simply instantiate your controller and add the instance to the router:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">NonDIServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">controller</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyController</span><span class="o">(...)</span>
+</span><span class='line'>    <span class="n">router</span><span class="o">.</span><span class="n">add</span><span class="o">(</span><span class="n">controller</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h3><a class="anchor" name="lifecycle" href="#lifecycle">Server Lifecycle</a></h3>
+
+<hr />
+
+<p>At a high-level, the start-up lifecycle of a Finatra server looks like:</p>
+
+<p><img src="/finatra/images/FinatraLifecycle.png" alt="Server Lifecycle" /></p>
+
+<p>Upon <em>graceful</em> shutdown, all registered <code>onExit {...}</code> blocks are executed (see <a href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala#L69"><code>com.twitter.util.App#exits</code></a>). This includes closing the external interface(s), the admin interface, and firing the <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L25"><code>TwitterModule#singletonShutdown</code></a> on all installed modules. See the next section for more information on <a href="#modules">Modules</a>.</p>
+
+<h3><a class="anchor" name="modules" href="#modules">Modules</a></h3>
+
+<hr />
+
+<p>Modules are used in conjunction with dependency injection to specify <em>how</em> to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: <a href="/finatra/user-guide/getting-started#flags">Flags</a>).</p>
+
+<p>We provide a <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala">TwitterModule</a> base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by <a href="https://github.com/codingwell/scala-guice">codingwell/scala-guice</a>.</p>
+
+<h4>Module Definition</h4>
+
+<ul>
+<li><a href="https://github.com/twitter/util">twitter/util</a> <a href="#flags">Flags</a> can be defined inside modules. This allows for re-usable scoping of external configuration that can be composed into a server via the module.</li>
+<li>Prefer using <code>@Provides</code>-annotated methods over using the <a href="https://github.com/google/guice/wiki/InstanceBindings"><em>toInstance</em> bind DSL</a>.</li>
+<li>Usually modules are Scala <em>objects</em> since they contain no state and makes usage of the module less verbose.</li>
+<li>Remember to add <code>@Singleton</code> to your <code>@Provides</code> method if you require only <strong>one</strong> instance per JVM process.</li>
+<li>Generally, modules are only required for instantiating classes that you don&rsquo;t control. Otherwise, you would simply add the <a href="https://github.com/google/guice/wiki/JSR330">JSR-330</a> annotations directly to the class. For example, suppose you need to create an <code>ThirdPartyFoo</code> class which comes from a thirdparty jar. You could create the following module to construct a singleton <code>ThirdPartyFoo</code> class which is created with a key provided through a command line flag.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">MyModule1</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">key</span> <span class="k">=</span> <span class="n">flag</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;defaultkey&quot;</span><span class="o">,</span> <span class="s">&quot;The key to use.&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesThirdPartyFoo</span><span class="k">:</span> <span class="kt">ThirdPartyFoo</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">ThirdPartyFoo</span><span class="o">(</span><span class="n">key</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>You would then be able to inject an instance of the type <code>ThirdPartyFoo</code> using the <code>@Inject</code> annotation:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">MyService</span> <span class="nd">@Inject</span><span class="o">()</span> <span class="o">(</span>
+</span><span class='line'>  <span class="n">thirdPartyFoo</span><span class="k">:</span> <span class="kt">ThirdPartyFoo</span>
+</span><span class='line'><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h4>Modules Depending on Other Modules</h4>
+
+<p>There may be times where you would like to reuse state defined in a given module inside another module. For
+instance, we have a module which defines a configuration flag that is useful in other context. As an
+example, let&rsquo;s assume we have a module which defines a flag for a <em>client id</em> String that is necessary for constructing
+different clients:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">ClientIdModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">flag</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">&quot;client.id&quot;</span><span class="o">,</span> <span class="s">&quot;System-wide client id for identifying this server as a client to other services.&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>You could choose to build and provide every client which needs this <em>client id</em> in the same module or you could decide to break up the client
+creation into separate modules. If you do the latter, how do you get access to the set <em>client id</em> value from the <code>ClientIdModule</code>?
+Typically, you would inject this value where you need it annotated with the <a href="#at-flag"><code>@Flag</code> binding annotation</a>. And you can do the same within
+a module; however instead of the injection point being a constructor annotated with <code>@Inject</code>, it is the argument list to a method annotated with <code>@Provides</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">ClientAModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">ClientIdModule</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">provideClientA</span><span class="o">(</span>
+</span><span class='line'>    <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;client.id&quot;</span><span class="o">)</span> <span class="n">clientId</span><span class="o">)</span><span class="k">:</span> <span class="kt">ClientA</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">ClientA</span><span class="o">(</span><span class="n">clientId</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>What&rsquo;s happening here?</p>
+
+<p>Firstly, we define a <code>ClientAModule</code> and override the <code>modules</code> val to be a <code>Seq</code> of modules that
+includes the <code>ClientIdModule</code>. This guarantees that if the <code>ClientIdModule</code> is not mixed into the list of modules for a server (see
+the next section &ldquo;Module Configuration in Servers&rdquo;), the <code>ClientAModule</code> ensures it will be installed since it&rsquo;s declared as a dependency.
+This ensures that there will be a bound value for the <code>client.id</code> flag. Finatra will de-dupe all modules before installing, so it&rsquo;s OK if a module
+appears twice in the server configuration (though you should strive to make this the exception).</p>
+
+<p>Secondly, we then define a method which provides a <code>ClientA</code>. Since injection is by type (and the argument list to an <code>@Provides</code> annotated method in a module is an injection point) and <code>String</code> is not specific enough we use the <a href="#at-flag"><code>@Flag</code> binding annotation</a>. See the next sections for more information on <a href="#flags">flags</a> and <a href="#binding-annotations">binding annotations</a>.</p>
+
+<p>We could continue this through another module. For example, if we wanted to provide a <code>ClientB</code> which needs both the <code>clientId</code> and a
+<code>ClientA</code> we could define a <code>ClientBModule</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">ClientBModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+</span><span class='line'>    <span class="nc">ClientIdModule</span><span class="o">,</span>
+</span><span class='line'>    <span class="nc">ClientAModule</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">provideClientB</span><span class="o">(</span>
+</span><span class='line'>    <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;client.id&quot;</span><span class="o">)</span> <span class="n">clientId</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">clientA</span><span class="k">:</span> <span class="kt">ClientA</span><span class="o">)</span><span class="k">:</span> <span class="kt">ClientB</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">ClientB</span><span class="o">(</span><span class="n">clientId</span><span class="o">,</span> <span class="n">clientA</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Notice that we choose to list both the <code>ClientIdModule</code> and <code>ClientAModule</code> in the modules for the <code>ClientBModule</code>. Yet, since we
+know that the <code>ClientAModule</code> includes the <code>ClientIdModule</code> we could have choosen to leave it out. The &ldquo;provides&rdquo; method in the module
+above takes in both a <code>clientId</code> String and a <code>ClientA</code>. Since it declares the two modules we&rsquo;re assured that these types will be available
+from the injector for our &ldquo;provides&rdquo; method to use.</p>
+
+<h4>Module Configuration in Servers</h4>
+
+<p>A server is then configured with a list of modules:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Server</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+</span><span class='line'>    <span class="nc">MyModule1</span><span class="o">,</span>
+</span><span class='line'>    <span class="nc">MyModule2</span><span class="o">,</span>
+</span><span class='line'>    <span class="nc">ClientIdModule</span><span class="o">,</span>
+</span><span class='line'>    <span class="nc">ClientAModule</span><span class="o">,</span>
+</span><span class='line'>    <span class="nc">ClientBModule</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>How explicit to be in listing the modules for your server is up to you. If you include a module that is all ready included by another module, Finatra
+will de-dupe the module list so there is no penalty but you may want to prefer to define your list of modules as <a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a> as possible. For more information on server configuration see the sections on building either <a href="/finatra/user-guide/build-new-http-server">HTTP</a> or <a href="/finatra/user-guide/build-new-thrift-server">Thrift</a> servers.</p>
+
+<h4>Module Lifecycle</h4>
+
+<p>Modules also have a hook into the Server lifecycle through the <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala">TwitterModuleLifecycle</a> which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module. For example, the framework uses the <code>singletonStartup</code> lifecycle method in the <a href="https://github.com/twitter/finatra/blob/develop/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala#L7"><code>Slf4jBridgeModule</code></a> to install the <a href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html"><code>SLF4JBridgeHandler</code></a> (see: <a href="/finatra/user-guide/logging">Logging</a>).</p>
+
+<p>The <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala"><code>com.twitter.inject.TwitterModule</code></a> exposes the lifecycle methods: <code>TwitterModule#singletonStartup</code> and <code>TwitterModule#singletonShutdown</code>. If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the <code>singletonStartup</code> method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the <code>singletonShutdown</code> method of your TwitterModule to close or shutdown any resources provided by the module.</p>
+
+<p>Additionally, there is also the <code>TwitterModule#singletonPostWarmupComplete</code> method which allows modules to hook into the server lifecycle after external ports have been bound, clients have been resolved, and the server is ready to accept traffic but before the <code>App#run</code> or <code>Server#start</code> callbacks are invoked.</p>
+
+<p>See the <a href="#lifecycle">Server Lifecycle</a> diagram for a more visual depiction of the server lifecycle.</p>
+
+<h3><a class="anchor" name="binding-annotations" href="#binding-annotations">Binding Annotations</a></h3>
+
+<hr />
+
+<p>Occasionally, you may want multiple bound instances of the same type. For instance you may want both a FooHttpClient and a BarHttpClient. To do this we recommend creating specific <a href="https://github.com/google/guice/wiki/BindingAnnotations">binding annotations</a>.</p>
+
+<h4>Define an Annotation</h4>
+
+<p>Defining a binding annotation is a few lines of java code plus imports. We recommend that you put this in it&rsquo;s own <code>.java</code> file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">package</span> <span class="nn">example.http.clients.annotations</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">import</span> <span class="nn">java.lang.annotation.Retention</span><span class="o">;</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">java.lang.annotation.Target</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.google.inject.BindingAnnotation</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">import</span> <span class="nn">static</span> <span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="nc">ElementType</span><span class="o">.</span><span class="nc">PARAMETER</span><span class="o">;</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">static</span> <span class="n">java</span><span class="o">.</span><span class="n">lang</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="nc">RetentionPolicy</span><span class="o">.</span><span class="nc">RUNTIME</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@BindingAnnotation</span>
+</span><span class='line'><span class="nd">@Target</span><span class="o">(</span><span class="nc">PARAMETER</span><span class="o">)</span>
+</span><span class='line'><span class="nd">@Retention</span><span class="o">(</span><span class="nc">RUNTIME</span><span class="o">)</span>
+</span><span class='line'><span class="n">public</span> <span class="nd">@interface</span> <span class="nc">FooClient</span> <span class="o">{}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For more information on the meta-annotations see the Google Guice <a href="https://github.com/google/guice/wiki/BindingAnnotations">documentation on Binding Annotations</a>.</p>
+
+<h4>Create a Binding with the Annotation</h4>
+
+<p>In your Module annotate the <code>@Provides</code> method that is instantiating the specific instance with the Binding Annotation, e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">MyHttpClientsModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">fooClientDestination</span> <span class="k">=</span> <span class="n">flag</span><span class="o">(</span><span class="s">&quot;foo.client.dest&quot;</span><span class="o">,</span> <span class="s">&quot;Foo Client Destination&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">barClientDestination</span> <span class="k">=</span> <span class="n">flag</span><span class="o">(</span><span class="s">&quot;bar.client.dest&quot;</span><span class="o">,</span> <span class="s">&quot;Bar Client Destination&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="nd">@FooClient</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesFooHttpClient</span><span class="k">:</span> <span class="kt">HttpClient</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">HttpClient</span><span class="o">(</span><span class="n">fooClientDestination</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="nd">@BarClient</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesBarHttpClient</span><span class="k">:</span> <span class="kt">HttpClient</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">HttpClient</span><span class="o">(</span><span class="n">barClientDestination</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h4>Depend on the Annotation</h4>
+
+<p>Then to depend on the annotated binding, just apply the annotation to the injected parameter:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">MyService</span> <span class="nd">@Inject</span><span class="o">()(</span>
+</span><span class='line'>  <span class="nd">@FooClient</span> <span class="n">fooHttpClient</span><span class="k">:</span> <span class="kt">HttpClient</span><span class="o">,</span>
+</span><span class='line'>  <span class="nd">@BarClient</span> <span class="n">barHttpClient</span><span class="k">:</span> <span class="kt">HttpClient</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h4>Benefits Over Using <a href="https://github.com/google/guice/wiki/BindingAnnotations#named"><code>@Named</code></a> Binding Annotation</h4>
+
+<p>You could also achieve the same behavior using the <a href="https://github.com/google/guice/wiki/BindingAnnotations#named"><code>@Named</code></a> binding annotation. However we&rsquo;ve found that creating specific binding annotations avoids potential naming collisions. Additionally, being able to find all usages of the annotation by type is beneficial over a text-search for the string used in <code>@Named</code>.</p>
+
+<h3><a class="anchor" name="flags" href="#flags">Flags</a></h3>
+
+<hr />
+
+<p>Finatra supports the use of <a href="https://github.com/twitter/util">twitter/util</a> <a href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala">Flags</a> as supported within the <a href="http://twitter.github.io/twitter-server/Features.html#flags">TwitterServer</a> lifecycle. Flags by their definition represent some external configuration that is passed to the server and are thus an excellent way to parameterize external configuration that may be environment specific, e.g., a database host or URL that is different per environment, <em>production</em>, <em>staging</em>, <em>development</em>, or <em>jills-staging</em>. This allows you to work with the same application code in different environments.</p>
+
+<p>This type of configuration parameterization is generally preferred over hardcoding logic by a type of &ldquo;<em>environment</em>&rdquo; string within code (e.g. <code>if (env == "production") { ... }</code>). It is generally good practice to make flags granular controls that are fully orthogonal to one another. They can then be independently managed for each deploy and this scales consistently as the number of supported &ldquo;environments&rdquo; scales.</p>
+
+<p>Flags can be <a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/modules/DoEverythingModule.scala#L13">defined</a> within a <a href="#module">Module</a> to allow for scoping of reusable external configuration. Though, you can also choose to define a flag <a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/DoEverythingServer.scala#L22">directly in a server</a>. When defined within a <a href="#module">Module</a>, flags can be used to aid in the construction of an instance to be <em>provided</em> to the object graph, e.g., a DatabaseConnection instance that use the database URL flag as an input. The module is then able to tell Guice how to provide this object when injected by defining an <code>@Provides</code> annotated method.</p>
+
+<p>In Finatra, we also provide a way to override the objects provided on the object graph through &ldquo;override modules&rdquo;. See the &ldquo;Override Modules&rdquo; section in <a href="/finatra/testing#override-modules">testing</a>.</p>
+
+<h4><a class="anchor" name="at-flag" href="#at-flag"><code>@Flag</code> annotation</a></h4>
+
+<p>Flag is a <a href="#binding-annotations">binding annotation</a>. This annotation allows flag values to be injected into classes (and provider methods), by using the <code>@Flag</code> annotation:</p>
+
+<p>Define a flag (in this case within a <code>TwitterModule</code>)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">MyModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">flag</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;default&quot;</span><span class="o">,</span> <span class="s">&quot;The key to use&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesFoo</span><span class="o">(</span>
+</span><span class='line'>    <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">)</span> <span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">Foo</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>The flag can then be injected as a constructor-arg to a class. When the class is obtained from the injector the correctly parse flag value will be injected. Note, you can also always instantiate this class manually. When doing so, you obviously will need to pass all the constructor args manually including a value for the flag argument.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">MyService</span> <span class="nd">@Inject</span><span class="o">()(</span>
+</span><span class='line'>  <span class="nd">@Flag</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">)</span> <span class="n">key</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p><strong>NOTE</strong>: when defining a flag, you can dereference that flag directly within the module or server (instead of using the <code>@Flag</code> annotation), e.g.:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">MyModule1</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">key</span> <span class="k">=</span> <span class="n">flag</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;default&quot;</span><span class="o">,</span> <span class="s">&quot;The key to use&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesThirdPartyFoo</span><span class="k">:</span> <span class="kt">ThirdPartyFoo</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">ThirdPartyFoo</span><span class="o">(</span><span class="n">key</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Use the <code>-help</code> flag to see usage for running a Finatra server, e.g.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -jar finatra-hello-world-assembly-2.0.0.jar -help
+</span><span class='line'>HelloWorldServer
+</span><span class='line'>  -alarm_durations<span class="o">=</span><span class="s1">&#39;1.seconds,5.seconds&#39;</span>: <span class="m">2</span> alarm durations
+</span><span class='line'>  -help<span class="o">=</span><span class="s1">&#39;false&#39;</span>: Show this <span class="nb">help</span>
+</span><span class='line'>  -admin.port<span class="o">=</span><span class="s1">&#39;:8080&#39;</span>: Admin http server port
+</span><span class='line'>  -bind<span class="o">=</span><span class="s1">&#39;:0&#39;</span>: Network interface to use
+</span><span class='line'>  -log.level<span class="o">=</span><span class="s1">&#39;INFO&#39;</span>: Log level
+</span><span class='line'>  -log.output<span class="o">=</span><span class="s1">&#39;/dev/stderr&#39;</span>: Output file
+</span><span class='line'>  -key<span class="o">=</span><span class="s1">&#39;default&#39;</span>: The key to use
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Flags are set by passing them as arguments to your java application &mdash; as seen above (<code>-help</code> is a flag), e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -jar finatra-hello-world-assembly-2.0.0.jar -key<span class="o">=</span>value
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>When testing</p>
+
+<p><code>TwitterModule#flag</code> is parameterized to return a Flag of type <code>T</code> where <code>T</code> is the type of the argument passed as the default. If you do not specify a default value then you must explicitly parameterize your call to <code>TwitterModule#flag</code>, e.g,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">MyModule1</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">key</span> <span class="k">=</span> <span class="n">flag</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;The key to use&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesThirdPartyFoo</span><span class="k">:</span> <span class="kt">ThirdPartyFoo</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">ThirdPartyFoo</span><span class="o">(</span><span class="n">key</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3><a class="anchor" name="futures" href="#futures">Futures</a> (<code>com.twitter.util.Future</code> vs. <code>scala.concurrent.Future</code>)</h3>
+
+<hr />
+
+<p>Finatra, like other frameworks based on Twitter&rsquo;s <a href="https://twitter.github.io/finagle">Finagle</a>, uses the <a href="https://github.com/twitter/util">twitter/util</a> <a href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala"><code>com.twitter.util.Future</code></a> class. Twitter&rsquo;s <code>com.twitter.util.Future</code> is similar to, but predates, <a href="http://docs.scala-lang.org/overviews/core/futures.html">Scala&rsquo;s</a> <a href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future"><code>scala.concurrent.Future</code></a> (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is <em>not</em> compatible without using a <a href="https://github.com/twitter/bijection">bijection</a> to transform one into the other. It is important to remember that <strong>Finatra uses and expects</strong> <a href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala"><code>com.twitter.util.Future</code></a>.</p>
+
+<p>For more information on <a href="https://github.com/twitter/bijection">twitter/bijection</a> it is highly recommended that you read the <a href="https://github.com/twitter/bijection/blob/develop/README.md">bijection README</a>. For more information on converting between a <code>com.twitter.util.Future</code> and a <code>scala.concurrent.Future</code> see this <a href="https://groups.google.com/forum/#!searchin/finaglers/UtilBijections/finaglers/DjCqv1Vyw0Q/IWwh9y43CAAJ">thread</a>.</p>
+
+<p>A simple example,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.bijection.Conversion._</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaFuture</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.util.</span><span class="o">{</span><span class="nc">Future</span> <span class="k">=&gt;</span> <span class="nc">TwitterFuture</span><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">scala.concurrent.</span><span class="o">{</span><span class="nc">Future</span> <span class="k">=&gt;</span> <span class="nc">ScalaFuture</span><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">val</span> <span class="n">scalaFuture</span><span class="k">:</span> <span class="kt">ScalaFuture</span><span class="o">[</span><span class="kt">T</span><span class="o">]</span> <span class="k">=</span> <span class="o">{...}</span> <span class="c1">// some call that returns scala.concurrent.Future[T]</span>
+</span><span class='line'><span class="n">scalaFuture</span><span class="o">.</span><span class="n">as</span><span class="o">[</span><span class="kt">TwitterFuture</span><span class="o">[</span><span class="kt">T</span><span class="o">]]</span>        <span class="c1">// this converts the scala.concurrent.Future[T] to a com.twitter.util.Future[T]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p><nav>
+  <ul class="pager">
+  <li class="previous"><a href="/finatra/user-guide/twitter-server-basics"><span aria-hidden="true">&larr;</span>&nbsp;TwitterServer&nbsp;Basics</a></li>
+    <li class="next"><a href="/finatra/user-guide/logging">&nbsp;Logging&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav></p>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2016&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

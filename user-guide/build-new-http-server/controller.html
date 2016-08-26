@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Add an HTTP Controller - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/docs/index.html">Scaladoc</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+            <li><a href="/finatra/v1/docs/index.html" alt="Deprecated" title="Deprecated"><strike>v1.x Documentation&nbsp;</strike></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div>
+<article role="article">
+  <ol class="breadcrumb">
+  <li><a href="/finatra/user-guide">User Guide</a></li>
+  <li><a href="/finatra/user-guide/build-new-http-server">Building a New HTTP Server</a></li>
+  <li class="active">Add a Controller</li>
+</ol>
+
+
+<h2>HTTP Controller Basics</h2>
+
+<hr />
+
+<p>We now want to add the following controller to the <a href="/finatra/user-guide/build-new-http-server#server-definition">server definition</a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">ExampleService</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.Controller</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">javax.inject.Inject</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExampleController</span> <span class="nd">@Inject</span><span class="o">()(</span>
+</span><span class='line'>  <span class="n">exampleService</span><span class="k">:</span> <span class="kt">ExampleService</span>
+</span><span class='line'><span class="o">)</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/ping&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>    <span class="s">&quot;pong&quot;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/name&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>    <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">body</span><span class="o">(</span><span class="s">&quot;Bob&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>    <span class="n">exampleService</span><span class="o">.</span><span class="k">do</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+</span><span class='line'>    <span class="s">&quot;bar&quot;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>The server can now be defined with the controller as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">DoEverythingModule</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">ExampleController</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.routing.HttpRouter</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">Controller</span><span class="o">,</span> <span class="nc">HttpServer</span><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">object</span> <span class="nc">ExampleServerMain</span> <span class="k">extends</span> <span class="nc">ExampleServer</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+</span><span class='line'>    <span class="nc">DoEverythingModule</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">router</span><span class="o">.</span>
+</span><span class='line'>      <span class="n">add</span><span class="o">[</span><span class="kt">ExampleController</span><span class="o">]</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Here we are adding <em>by type</em> allowing the framework to handle class instantiation.</p>
+
+<h2><a class="anchor" name="controllers-and-routing" href="#controllers-and-routing">Controllers and Routing</a></h2>
+
+<hr />
+
+<p>Routes are defined in a <a href="http://www.sinatrarb.com/">Sinatra</a>-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a <a href="https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala"><code>com.twitter.finagle.http.Request</code></a> or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a <a href="https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala"><code>com.twitter.finagle.http.Response</code></a>.</p>
+
+<p>When Finatra receives an HTTP request, it will scan all registered controllers <strong>in the order they are added</strong> and dispatch the request to the <strong>first matching</strong> route starting from the top of each controller then invoking the matching route&rsquo;s associated callback function. That is, routes are matched in the order they are added to the HttpRouter. Thus if you are creating routes overlapping URIs it is recommended to list the routes in order starting with the &ldquo;most specific&rdquo; to the least specific.</p>
+
+<p>In general, however, it is recommended to that you follow <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a> conventions if possible, e.g., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stating provided by Finatra in the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala"><code>com.twitter.finatra.http.filters.StatsFilter</code></a> works best when this convention is followed.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">GroupsController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/groups&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">delete</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>yields the following stats:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">route</span><span class="o">/</span><span class="n">groups_id</span><span class="o">/</span><span class="nc">GET</span><span class="o">/...</span>
+</span><span class='line'><span class="n">route</span><span class="o">/</span><span class="n">groups</span><span class="o">/</span><span class="nc">POST</span><span class="o">/...</span>
+</span><span class='line'><span class="n">route</span><span class="o">/</span><span class="n">groups_id</span><span class="o">/</span><span class="nc">DELETE</span><span class="o">/...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Alternatively, each route can be assigned a name which will then be used to create stat names.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">GroupsController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;group_by_id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">post</span><span class="o">(</span><span class="s">&quot;/groups&quot;</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;create_group&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">delete</span><span class="o">(</span><span class="s">&quot;/groups/:id&quot;</span><span class="o">,</span> <span class="n">name</span> <span class="k">=</span> <span class="s">&quot;delete_group&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>which will yield the stats:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">route</span><span class="o">/</span><span class="n">group_by_id</span><span class="o">/</span><span class="nc">GET</span><span class="o">/...</span>
+</span><span class='line'><span class="n">route</span><span class="o">/</span><span class="n">create_group</span><span class="o">/</span><span class="nc">POST</span><span class="o">/...</span>
+</span><span class='line'><span class="n">route</span><span class="o">/</span><span class="n">delete_group</span><span class="o">/</span><span class="nc">DELETE</span><span class="o">/...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h3>Route Matching Patterns:</h3>
+
+<h4>Named Parameters</h4>
+
+<p>Route patterns may include named parameters:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/users/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="s">&quot;You looked up &quot;</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Note: <em>Query params and route params are both stored in the &ldquo;params&rdquo; field of the request.</em> If a route parameter and a query parameter have the same name, the route parameter always wins. Therefore, you should ensure your route parameter names do not collide with any query parameter name that you plan to read.</p>
+
+<h4>Wildcard Parameter</h4>
+
+<p>Routes can also contain the wildcard pattern. The wildcard can only appear once at the end of a pattern and it will capture all text in its place. For example,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/files/:*&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;*&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>For a <code>GET</code> of <code>/files/abc/123/foo.txt</code> the endpoint will return <code>abc/123/foo.txt</code></p>
+
+<h4>Regular Expressions</h4>
+
+<p>Regular expressions are no longer allowed in string defined paths. Note: We are planning to support regular expression based paths in a future release.</p>
+
+<h4><a class="anchor" name="admin-paths" href="#admin-index">Admin Paths</a></h4>
+
+<p>All <a href="http://twitter.github.io/twitter-server/">TwitterServer</a>-based servers have an <a href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a> which includes a variety of tools for diagnostics, profiling, and more. This admin interface should not be exposed outside your DMZ. Any route path starting with <code>/admin/</code> or <code>/admin/finatra/</code> will be included on the server&rsquo;s admin interface (accessible via the server&rsquo;s admin port).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/admin/finatra/users/&quot;</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">admin</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">userDatabase</span><span class="o">.</span><span class="n">getAllUsers</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;cursor&quot;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Constant (no named parameters), HTTP method <code>GET</code> routes can also be added to the <a href="http://twitter.github.io/twitter-server/">TwitterServer</a> <a href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface</a> user interface.</p>
+
+<p>To expose your route to the admin user interface index, the route path:</p>
+
+<ul>
+<li><strong>MUST</strong> be a constant path</li>
+<li><strong>MUST</strong> start with <code>/admin/</code> (<strong>SHOULD NOT</strong> begin with <code>/admin/finatra/</code>)</li>
+<li><strong>MUST</strong> be HTTP method <code>GET</code>.</li>
+</ul>
+
+
+<p>Set <code>admin = true</code> and optionally provide an <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/AdminIndexInfo.scala"><code>AdminIndexInfo</code></a>, e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/admin/client_id.json&quot;</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">admin</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">adminIndexInfo</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="nc">AdminIndexInfo</span><span class="o">())</span> <span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;client_id&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;clientId.1234&quot;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>By default if you do not provide any customization to the <code>AdminIndexInfo</code> the route will show up in the left-rail under the <code>Finatra</code> heading indexed by the route path. If you do not provide an <code>AdminIndexInfo</code>, the route will not be visible in the admin user interface index.</p>
+
+<p><strong>Note</strong>: all routes that start with <em>only</em> <code>/admin/</code> (and not <code>/admin/finatra/</code>) will be routed to by TwitterServer&rsquo;s <a href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108">AdminHttpServer</a> and not by the Finatra HttpRouter. Thus any filter chain defined by your server&rsquo;s <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a> will <strong>not</strong> be applied to the routes. To maintain filtering as defined in the HttpRouter, the routes MUST be under <code>/admin/finatra/</code> and are thus not eligible to be included in the admin user interface index.</p>
+
+<h2><a class="anchor" name="requests" href="#requests">Requests</a></h2>
+
+<hr />
+
+<p>Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle <code>http</code> Request or a custom <code>case class</code> Request.</p>
+
+<h3>Finagle <code>http</code> Request:</h3>
+
+<p>This is a <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> which contains common HTTP attributes.</p>
+
+<h3>Custom <code>case class</code> Request</h3>
+
+<p>Custom requests allow declarative request parsing with support for type conversions, default values, and validations.</p>
+
+<p>For example suppose you wanted to parse a <code>GET</code> request with three query params: <code>max</code>, <code>startDate</code>, and <code>verbose</code>, e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>http://foo.com/users?max=10&amp;start_date=2014-05-30TZ&amp;verbose=true
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>This can be parsed with the following <code>case class</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">UsersRequest</span><span class="o">(</span>
+</span><span class='line'>  <span class="nd">@Max</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span> <span class="nd">@QueryParam</span> <span class="n">max</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span>
+</span><span class='line'>  <span class="nd">@PastDate</span> <span class="nd">@QueryParam</span> <span class="n">startDate</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">DateTime</span><span class="o">],</span>
+</span><span class='line'>  <span class="nd">@QueryParam</span> <span class="n">verbose</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>The custom <code>UsersRequest</code> can then be used as the callback&rsquo;s input type:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/users&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">UsersRequest</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">request</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>The <code>case class</code> field names should match the request parameters or use the <a href="https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties">@JsonProperty</a> annotation to specify the JSON field name in the case class (see: <a href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/tests/json/internal/ExampleCaseClasses.scala#L141">example</a>). A <a href="http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html">PropertyNamingStrategy</a> can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in <a href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala"><code>FinatraJacksonModule</code></a>).</p>
+
+<p>Use a Scala <a href="http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">&ldquo;back-quote&rdquo; literal</a> for the field name when special characters are involved (e.g. @Header `user-agent` : String).</p>
+
+<p>Non-optional fields without default values are considered required. If a required field is missing, a <code>CaseClassMappingException</code> is thrown.</p>
+
+<p>The following field annotations specify where to parse a field out of the request</p>
+
+<ul>
+<li>Request Fields:
+
+<ul>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala"><code>@RouteParam</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala"><code>@QueryParam</code></a> (<em>ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam</em>)</li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala"><code>@FormParam</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala"><code>@Header</code></a></li>
+</ul>
+</li>
+<li>Other:
+
+<ul>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala"><code>@Inject</code></a>: Can be used to inject the underlying Finagle <code>http</code> Request or any Guice managed class into your case class.</li>
+</ul>
+</li>
+</ul>
+
+
+<p><em>Note: HTTP requests with a content-type of <code>application/json</code> will always have their body. This behavior can be disabled by annotating the <code>case class</code> with <code>@JsonIgnoreBody</code> leaving the raw request body accessible through <code>@Inject</code>.</em></p>
+
+<p>For more specifics on how JSON parsing integrates with routing see: <a href="/finatra/user-guide/json#routing-json">Integration with Routing</a> in the <a href="/finatra/user-guide/json">JSON</a> documentation.</p>
+
+<h3>Multipart Requests</h3>
+
+<p>Finatra has support for multi-part requests. Here&rsquo;s an example of a multi-part <code>POST</code> controller route definition that simply returns all of the keys in the multi-part request:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">post</span><span class="o">(</span><span class="s">&quot;/multipartParamsEcho&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="nc">RequestUtils</span><span class="o">.</span><span class="n">multiParams</span><span class="o">(</span><span class="n">request</span><span class="o">).</span><span class="n">keys</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>An example of testing this endpoint:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">def</span> <span class="n">deserializeRequest</span><span class="o">(</span><span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">requestBytes</span> <span class="k">=</span> <span class="nc">IOUtils</span><span class="o">.</span><span class="n">toByteArray</span><span class="o">(</span><span class="n">getClass</span><span class="o">.</span><span class="n">getResourceAsStream</span><span class="o">(</span><span class="n">name</span><span class="o">))</span>
+</span><span class='line'>  <span class="nc">Request</span><span class="o">.</span><span class="n">decodeBytes</span><span class="o">(</span><span class="n">requestBytes</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="s">&quot;post multipart&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">request</span> <span class="k">=</span> <span class="n">deserializeRequest</span><span class="o">(</span><span class="s">&quot;/multipart/request-POST-android.bytes&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">request</span><span class="o">.</span><span class="n">uri</span> <span class="k">=</span> <span class="s">&quot;/multipartParamsEcho&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">server</span><span class="o">.</span><span class="n">httpRequest</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">request</span> <span class="k">=</span> <span class="n">request</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">suppress</span> <span class="k">=</span> <span class="kc">true</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">andExpect</span> <span class="k">=</span> <span class="nc">Ok</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">withJsonBody</span> <span class="k">=</span> <span class="s">&quot;&quot;&quot;[&quot;banner&quot;]&quot;&quot;&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>For more information and examples, see:</p>
+
+<ul>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala"><code>com.twitter.finatra.http.request.RequestUtils</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala"><code>com.twitter.finatra.http.fileupload.MultipartItem</code></a></li>
+<li><a href="https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192"><code>com.twitter.finagle.http.Request#decodeBytes</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala#L568">DoEverythingController</a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L332">DoEverythingServerFeatureTest</a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala">MultiParamsTest</a></li>
+</ul>
+
+
+<h2><a class="anchor" name="responses" href="#responses">Responses</a></h2>
+
+<hr />
+
+<h3>JSON responses</h3>
+
+<p>The simplest way to return a JSON response is to return a <code>case class</code> in your route callback. The default framework behavior is to render the <code>case class</code> as a JSON response E.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">ExampleCaseClass</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">id</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">description</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">longValue</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">boolValue</span><span class="k">:</span> <span class="kt">Boolean</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="nc">ExampleCaseClass</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">id</span> <span class="k">=</span> <span class="s">&quot;123&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">description</span> <span class="k">=</span> <span class="s">&quot;This is a JSON response body&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">longValue</span> <span class="k">=</span> <span class="mi">1L</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">boolValue</span> <span class="k">=</span> <span class="kc">true</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>will produce a response:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="o">[</span><span class="kt">Status</span><span class="o">]</span>  <span class="nc">Status</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
+</span><span class='line'><span class="o">[</span><span class="kt">Header</span><span class="o">]</span>  <span class="nc">Content</span><span class="o">-</span><span class="nc">Type</span> <span class="o">-&gt;</span> <span class="n">application</span><span class="o">/</span><span class="n">json</span><span class="o">;</span> <span class="n">charset</span><span class="k">=</span><span class="n">utf</span><span class="o">-</span><span class="mi">8</span>
+</span><span class='line'><span class="o">[</span><span class="kt">Header</span><span class="o">]</span>  <span class="nc">Server</span> <span class="o">-&gt;</span> <span class="nc">Finatra</span>
+</span><span class='line'><span class="o">[</span><span class="kt">Header</span><span class="o">]</span>  <span class="nc">Date</span> <span class="o">-&gt;</span> <span class="nc">Wed</span><span class="o">,</span> <span class="mi">17</span> <span class="nc">Aug</span> <span class="mi">2015</span> <span class="mi">21</span><span class="k">:</span><span class="err">54</span><span class="kt">:</span><span class="err">25</span> <span class="kt">GMT</span>
+</span><span class='line'><span class="o">[</span><span class="kt">Header</span><span class="o">]</span>  <span class="nc">Content</span><span class="o">-</span><span class="nc">Length</span> <span class="o">-&gt;</span> <span class="mi">90</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>  <span class="s">&quot;id&quot;</span> <span class="k">:</span> <span class="err">&quot;123&quot;</span><span class="o">,</span>
+</span><span class='line'>  <span class="s">&quot;description&quot;</span> <span class="k">:</span> <span class="err">&quot;</span><span class="kt">This</span> <span class="kt">is</span> <span class="kt">a</span> <span class="kt">JSON</span> <span class="kt">response</span> <span class="kt">body</span><span class="err">&quot;</span><span class="o">,</span>
+</span><span class='line'>  <span class="s">&quot;long_value&quot;</span> <span class="k">:</span> <span class="err">1</span><span class="o">,</span>
+</span><span class='line'>  <span class="s">&quot;bool_value&quot;</span> <span class="k">:</span> <span class="kt">true</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Note: If you change the default <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/FinatraDefaultMessageBodyWriter.scala">MessageBodyWriter</a> implementation (used by the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala">MessageBodyManager</a>) this will no longer be the default behavior, depending. You can also always use the <a href="#response-builder">ResponseBuilder</a> to explicitly render a JSON response.</p>
+
+<h3><a class="anchor" name="future-conversion" href="#future-conversion">Future Conversion</a></h3>
+
+<p>For the basics of Futures in Finatra, see: <a href="/finatra/user-guide/getting-started#futures">Futures</a> in the <a href="/finatra/user-guide/getting-started">Getting Started</a> documentation.</p>
+
+<p>Finatra will convert your route callbacks return type into a <code>com.twitter.util.Future[Response]</code> using the following rules:</p>
+
+<ul>
+<li>If you return a <code>com.twitter.util.Future[Response]</code>, then no conversion will be performed.</li>
+<li><code>Some[T]</code> will be converted into a HTTP <code>200 OK</code>.</li>
+<li><code>None</code> will be converted into a HTTP <code>404 NotFound</code>.</li>
+<li>Non-response classes will be converted into a HTTP <code>200 OK</code>.</li>
+</ul>
+
+
+<p>Callbacks that do not return a <a href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala"><code>com.twitter.util.Future</code></a> will have their return values wrapped in a <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture"><code>com.twitter.util.ConstFuture</code></a>. If your non-future result calls a blocking method, you must <a href="https://twitter.github.io/scala_school/finagle.html#DontBlock">avoid blocking the Finagle request</a> by wrapping your blocking operation in a FuturePool e.g.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.utils.FuturePools</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">private</span> <span class="k">val</span> <span class="n">futurePool</span> <span class="k">=</span> <span class="nc">FuturePools</span><span class="o">.</span><span class="n">unboundedPool</span><span class="o">(</span><span class="s">&quot;CallbackConverter&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>    <span class="n">futurePool</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">blockingCall</span><span class="o">()</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h3><a class="anchor" name="response-builder" href="#response-builder">Response Builder</a></h3>
+
+<p>All HTTP Controllers have a protected <code>response</code> field of type <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala"><code>com.twitter.finatra.http.response.ResponseBuilder</code></a> which can be used to build callback responses. For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">ok</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">header</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span> <span class="s">&quot;b&quot;</span><span class="o">).</span>
+</span><span class='line'>    <span class="n">json</span><span class="o">(</span><span class="s">&quot;&quot;&quot;</span>
+</span><span class='line'><span class="s">    {</span>
+</span><span class='line'><span class="s">      &quot;name&quot;: &quot;Bob&quot;,</span>
+</span><span class='line'><span class="s">      &quot;age&quot;: 19</span>
+</span><span class='line'><span class="s">    }</span>
+</span><span class='line'><span class="s">    &quot;&quot;&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">status</span><span class="o">(</span><span class="mi">999</span><span class="o">).</span>
+</span><span class='line'>    <span class="n">body</span><span class="o">(</span><span class="n">bytes</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/redirect&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">temporaryRedirect</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">location</span><span class="o">(</span><span class="s">&quot;/foo/123&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">post</span><span class="o">(</span><span class="s">&quot;/users&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">FormPostRequest</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">created</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">location</span><span class="o">(</span><span class="s">&quot;/users/123&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>For more examples, see the <a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala">ResponseBuilderTest</a>.</p>
+
+<h3>Cookies:</h3>
+
+<p>Cookies, like Headers, are read from request and can set via the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala#L151"><code>com.twitter.finatra.http.response.ResponseBuilder</code></a>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">loggedIn</span> <span class="k">=</span> <span class="n">request</span><span class="o">.</span><span class="n">cookie</span><span class="o">(</span><span class="s">&quot;loggedIn&quot;</span><span class="o">).</span><span class="n">getOrElse</span><span class="o">(</span><span class="s">&quot;false&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">plain</span><span class="o">(</span><span class="s">&quot;logged in?:&quot;</span> <span class="o">+</span> <span class="n">loggedIn</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">plain</span><span class="o">(</span><span class="s">&quot;hi&quot;</span><span class="o">).</span>
+</span><span class='line'>    <span class="n">cookie</span><span class="o">(</span><span class="s">&quot;loggedIn&quot;</span><span class="o">,</span> <span class="s">&quot;true&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Advanced cookies are supported by creating and configuring <a href="https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Cookie.scala"><code>com.twitter.finagle.http.Cookie</code></a> objects:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">c</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Cookie</span><span class="o">(</span><span class="n">name</span> <span class="k">=</span> <span class="s">&quot;Biz&quot;</span><span class="o">,</span> <span class="n">value</span> <span class="k">=</span> <span class="s">&quot;Baz&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">c</span><span class="o">.</span><span class="n">setSecure</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span>
+</span><span class='line'>    <span class="n">plain</span><span class="o">(</span><span class="s">&quot;get:path&quot;</span><span class="o">).</span>
+</span><span class='line'>    <span class="n">cookie</span><span class="o">(</span><span class="n">c</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h3>Response Exceptions:</h3>
+
+<p>Responses can be embedded inside exceptions with <code>.toException</code>. You can throw the exception to terminate control flow, or wrap it inside a <code>Future.exception</code> to return a failed <code>Future</code>. However, instead of directly returning error responses in this manner, a better convention is to handle application-specific exceptions in an <a href="/finatra/user-guide/build-new-http-server/exceptions.html"><code>ExceptionMapper</code></a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/NotFound&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">notFound</span><span class="o">(</span><span class="s">&quot;abc not found&quot;</span><span class="o">).</span><span class="n">toFutureException</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/ServerError&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">internalServerError</span><span class="o">.</span><span class="n">toFutureException</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/ServiceUnavailable&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="c1">// can throw a raw exception too</span>
+</span><span class='line'>  <span class="k">throw</span> <span class="n">response</span><span class="o">.</span><span class="n">serviceUnavailable</span><span class="o">.</span><span class="n">toException</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h3>Setting the Response Location Header:</h3>
+
+<p>ResponseBuilder has a &ldquo;location&rdquo; method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">post</span><span class="o">(</span><span class="s">&quot;/users&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">created</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">location</span><span class="o">(</span><span class="s">&quot;/users/123&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>which can be used:</p>
+
+<ul>
+<li> if the URI starts with &ldquo;http&rdquo; or &ldquo;/&rdquo; then the URI is placed in the Location header unchanged.</li>
+<li> <code>response.location("123")</code> will get turned into the correct full URL in the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">HttpResponseFilter</a> (e.g. <code>http://host.com/users/123</code>)</li>
+</ul>
+
+
+<p>Or to obtain the request full path URL as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="nc">RequestUtils</span><span class="o">.</span><span class="n">pathUrl</span><span class="o">(</span><span class="n">request</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Next section: <a href="/finatra/user-guide/build-new-http-server/filter.html">Add Filters</a>.</p>
+
+<p><nav>
+  <ul class="pager">
+    <li class="previous"><a href="/finatra/user-guide/build-new-http-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;New&nbsp;HTTP&nbsp;Server</a></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-http-server/filter.html">Add&nbsp;Filters&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav></p>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2016&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

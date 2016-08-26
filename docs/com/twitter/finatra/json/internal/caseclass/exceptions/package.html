@@ -1,0 +1,226 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>exceptions - com.twitter.finatra.json.internal.caseclass.exceptions</title>
+          <meta name="description" content="exceptions - com.twitter.finatra.json.internal.caseclass.exceptions" />
+          <meta name="keywords" content="exceptions com.twitter.finatra.json.internal.caseclass.exceptions" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../../index.html';
+            var hash = 'com.twitter.finatra.json.internal.caseclass.exceptions.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../../package.html" class="extype" name="com">com</a>.<a href="../../../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../../../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../../../package.html" class="extype" name="com.twitter.finatra.json">json</a>.<a href="../../package.html" class="extype" name="com.twitter.finatra.json.internal">internal</a>.<a href="../package.html" class="extype" name="com.twitter.finatra.json.internal.caseclass">caseclass</a></p>
+        <h1>exceptions</h1><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exceptions</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassMappingException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseClassMappingExceptionextendsJsonMappingExceptionwithProductwithSerializable"></a>
+      <a id="CaseClassMappingException:CaseClassMappingException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseClassMappingException.html"><span class="name">CaseClassMappingException</span></a><span class="params">(<span name="validationExceptions">validationExceptions: <span class="extype" name="scala.Predef.Set">Set</span>[<a href="CaseClassValidationException.html" class="extype" name="com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException">CaseClassValidationException</a>] = <span class="symbol">Set()</span></span>)</span><span class="result"> extends <span class="extype" name="com.fasterxml.jackson.databind.JsonMappingException">JsonMappingException</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package@CaseClassMappingExceptionextendsJsonMappingExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CaseClassValidationExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="CaseClassValidationException:CaseClassValidationException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseClassValidationException.html"><span class="name">CaseClassValidationException</span></a><span class="params">(<span name="path">path: <a href="CaseClassValidationException$$PropertyPath.html" class="extype" name="com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath">PropertyPath</a></span>, <span name="reason">reason: <a href="../../../../validation/ValidationResult$$Invalid.html" class="extype" name="com.twitter.finatra.validation.ValidationResult.Invalid">Invalid</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package@CaseClassValidationExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An exception that bundles together a failed validation with the
+associated field that failed the validation.</p><div class="fullcomment"><div class="comment cmt"><p>An exception that bundles together a failed validation with the
+associated field that failed the validation.</p></div><dl class="paramcmts block"><dt class="param">reason</dt><dd class="cmt"><p>- the validation failure</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.json.internal.caseclass.exceptions.FinatraJsonMappingException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FinatraJsonMappingExceptionextendsJsonMappingException"></a>
+      <a id="FinatraJsonMappingException:FinatraJsonMappingException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="FinatraJsonMappingException.html"><span class="name">FinatraJsonMappingException</span></a><span class="result"> extends <span class="extype" name="com.fasterxml.jackson.databind.JsonMappingException">JsonMappingException</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package@FinatraJsonMappingExceptionextendsJsonMappingException" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Exception for handling Finatra-specific errors that may otherwise be valid
+in the eyes of Jackson.</p>
+    </li><li name="com.twitter.finatra.json.internal.caseclass.exceptions.JsonInjectException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JsonInjectExceptionextendsExceptionwithNoStackTracewithProductwithSerializable"></a>
+      <a id="JsonInjectException:JsonInjectException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="JsonInjectException.html"><span class="name">JsonInjectException</span></a><span class="params">(<span name="parentClass">parentClass: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="fieldName">fieldName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="key">key: <span class="extype" name="com.google.inject.Key">Key</span>[_]</span>, <span name="cause">cause: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.util.control.NoStackTrace" class="extype" target="_top">NoStackTrace</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package@JsonInjectExceptionextendsExceptionwithNoStackTracewithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.json.internal.caseclass.exceptions.JsonInjectionNotSupportedException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="JsonInjectionNotSupportedExceptionextendsExceptionwithProductwithSerializable"></a>
+      <a id="JsonInjectionNotSupportedException:JsonInjectionNotSupportedException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="JsonInjectionNotSupportedException.html"><span class="name">JsonInjectionNotSupportedException</span></a><span class="params">(<span name="parentClass">parentClass: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="fieldName">fieldName: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package@JsonInjectionNotSupportedExceptionextendsExceptionwithProductwithSerializable" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInjectionNotSupportedException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="RequestFieldInjectionNotSupportedExceptionextendsException"></a>
+      <a id="RequestFieldInjectionNotSupportedException:RequestFieldInjectionNotSupportedException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="RequestFieldInjectionNotSupportedException.html"><span class="name">RequestFieldInjectionNotSupportedException</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package@RequestFieldInjectionNotSupportedExceptionextendsException" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CaseClassValidationException"></a>
+      <a id="CaseClassValidationException:CaseClassValidationException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="CaseClassValidationException$.html"><span class="name">CaseClassValidationException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../../../index.html#com.twitter.finatra.json.internal.caseclass.exceptions.package@CaseClassValidationException" title="Permalink" target="_top">
+        <img src="../../../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

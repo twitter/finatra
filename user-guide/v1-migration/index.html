@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Finatra V1 Migration FAQ - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/docs/index.html">Scaladoc</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+            <li><a href="/finatra/v1/docs/index.html" alt="Deprecated" title="Deprecated"><strike>v1.x Documentation&nbsp;</strike></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div>
+<article role="article">
+  <h2>FAQ for upgrading from Finatra v1.x to v2.x:</h2>
+
+<h2>Controllers</h2>
+
+<p>You no longer need to return a <code>Future</code> from controller routes (however, always return a <code>Future</code> if you already have one).</p>
+
+<h3>Add Request type to controller callbacks</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//v1</span>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="k">_</span> <span class="k">=&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//v2</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finagle.http.Request</span>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Change &ldquo;render&rdquo; to &ldquo;response&rdquo; and specify the HTTP status as the first method after <em>response</em> (e.g. ok, created, notFound, etc)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//v1</span>
+</span><span class='line'><span class="n">render</span><span class="o">.</span><span class="n">json</span><span class="o">(</span><span class="n">ret</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//v2</span>
+</span><span class='line'><span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">json</span><span class="o">(</span><span class="n">ret</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Route params are now stored in request.params (which allows us to reuse <code>finagle.http.Request</code> without defining our own).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//v1</span>
+</span><span class='line'><span class="n">request</span><span class="o">.</span><span class="n">routeParams</span><span class="o">(</span><span class="s">&quot;q&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//v2</span>
+</span><span class='line'><span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;q&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Logging</h2>
+
+<p>To continue using &ldquo;Java Util Logging&rdquo;, add a jar dependency on <a href="http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.slf4j%22%20AND%20a%3A%22slf4j-jdk14%22"><code>slf4j-jdk14</code></a>. Otherwise, we recommend using <a href="http://logback.qos.ch/">Logback</a> by adding jar dependencies on <code>ch.qos.logback:logback-classic</code> and <code>com.twitter.finatra:finatra-slf4j</code>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//v1</span>
+</span><span class='line'><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//v2</span>
+</span><span class='line'><span class="n">info</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Exception Mappers</h2>
+
+<p>ExceptionMappers map exceptions to responses. It needs to implement the following trait:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">trait</span> <span class="nc">ExceptionMapper</span><span class="o">[</span><span class="kt">T</span> <span class="k">&lt;:</span> <span class="kt">Throwable</span><span class="o">]</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">toResponse</span><span class="o">(</span><span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">,</span> <span class="n">throwable</span><span class="k">:</span> <span class="kt">T</span><span class="o">)</span><span class="k">:</span> <span class="kt">Response</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>which says it will handle <code>T</code>-typed exceptions. The request that triggered the exception is also provided as an argument. You can make use of exception mapping by adding the <a href="../http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala"><code>ExceptionMappingFilter</code></a> to your <code>com.twitter.finatra.routing.HttpRouter</code>, e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">router</span><span class="o">.</span><span class="n">filter</span><span class="o">[</span><span class="kt">ExceptionMappingFilter</span><span class="o">[</span><span class="kt">Request</span><span class="o">]]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>ExceptionMappingFilter</code> takes an <a href="../http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ExceptionManager.scala"><code>ExceptionManager</code></a> which is provided by default in the <a href="../http/src/main/scala/com/twitter/finatra/http/modules/ExceptionMapperModule.scala"><code>ExceptionMapperModule</code></a>. You can override the default module if necessary by overriding the value in the <a href="../http/src/main/scala/com/twitter/finatra/http/HttpServer.scala"><code>HttpServer</code></a>.</p>
+
+<p>To replicate v1 functionality around <code>notFound</code> and <code>error</code>, you could do the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//v1</span>
+</span><span class='line'><span class="n">notFound</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'><span class="n">error</span> <span class="o">{</span> <span class="n">request</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//v2 notFound: Create a filter and add it before your controller:</span>
+</span><span class='line'><span class="nd">@Singleton</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">NotFoundFilter</span> <span class="nd">@Inject</span><span class="o">()(</span>
+</span><span class='line'> <span class="n">response</span><span class="k">:</span> <span class="kt">ResponseBuilder</span><span class="o">)</span>
+</span><span class='line'> <span class="k">extends</span> <span class="nc">SimpleFilter</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">]</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'> <span class="k">def</span> <span class="n">apply</span><span class="o">(</span><span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">,</span> <span class="n">service</span><span class="k">:</span> <span class="kt">Service</span><span class="o">[</span><span class="kt">Request</span>, <span class="kt">Response</span><span class="o">])</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Response</span><span class="o">]</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>   <span class="n">service</span><span class="o">(</span><span class="n">request</span><span class="o">)</span> <span class="n">map</span> <span class="o">{</span> <span class="n">origResponse</span> <span class="k">=&gt;</span>
+</span><span class='line'>     <span class="k">if</span> <span class="o">(</span><span class="n">origResponse</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="nc">Status</span><span class="o">.</span><span class="nc">NotFound</span><span class="o">)</span>
+</span><span class='line'>       <span class="n">response</span><span class="o">.</span><span class="n">notFound</span><span class="o">(</span><span class="s">&quot;bar&quot;</span><span class="o">)</span>
+</span><span class='line'>     <span class="k">else</span>
+</span><span class='line'>       <span class="n">origResponse</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//v2 error: Write an exception mapper and register it with HttpRouter</span>
+</span><span class='line'><span class="nd">@Singleton</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">ArithmeticExceptionMapper</span> <span class="nd">@Inject</span><span class="o">()(</span>
+</span><span class='line'>  <span class="n">response</span><span class="k">:</span> <span class="kt">ResponseBuilder</span><span class="o">)</span>
+</span><span class='line'>  <span class="k">extends</span> <span class="nc">ExceptionMapper</span><span class="o">[</span><span class="kt">ArithmeticException</span><span class="o">]</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">toResponse</span><span class="o">(</span><span class="n">request</span><span class="k">:</span> <span class="kt">Request</span><span class="o">,</span> <span class="n">e</span><span class="k">:</span> <span class="kt">ArithmeticException</span><span class="o">)</span><span class="k">:</span> <span class="kt">Response</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">response</span><span class="o">.</span><span class="n">internalServerError</span><span class="o">(</span><span class="s">&quot;whoops, divide by zero!&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">router</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">filter</span><span class="o">[</span><span class="kt">NotFoundFilter</span><span class="o">].</span>
+</span><span class='line'>  <span class="n">filter</span><span class="o">[</span><span class="kt">ExceptionMappingFilter</span><span class="o">[</span><span class="kt">Request</span><span class="o">]].</span>
+</span><span class='line'>  <span class="n">exceptionMapper</span><span class="o">[</span><span class="kt">ArithmeticExceptionMapper</span><span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>App</h2>
+
+<p>Override the configure method and add your controllers there.</p>
+
+<p>Note: Flag parsing that used to be in App&rsquo;s constructor should be moved into the <code>configureHttp</code> method.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//v2</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Server</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">configureHttp</span><span class="o">(</span><span class="n">router</span><span class="k">:</span> <span class="kt">HttpRouter</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">controller1</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Controller1</span><span class="o">(...)</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">controller2</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Controller2</span><span class="o">(...)</span>
+</span><span class='line'>    <span class="n">router</span><span class="o">.</span>
+</span><span class='line'>      <span class="n">commonFilter</span><span class="o">[</span><span class="kt">CommonFilters</span><span class="o">].</span>
+</span><span class='line'>      <span class="n">commonFilter</span><span class="o">[</span><span class="kt">NotFoundFilter</span><span class="o">].</span> <span class="c1">// if needed (see above section on Error Handling)</span>
+</span><span class='line'>      <span class="n">add</span><span class="o">(</span><span class="n">controller1</span><span class="o">).</span>
+</span><span class='line'>      <span class="n">add</span><span class="o">(</span><span class="n">controller2</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2><a class="anchor" name="v1-static-files" href="#v1-static-files">Static Files</a></h2>
+
+<ul>
+<li>Web resources (html/js) typically go in <code>src/main/webapp</code>.</li>
+<li>Mustache templates now typically go in <code>src/main/resources/templates</code>.</li>
+</ul>
+
+
+<p>To serve static files, you now need explicit routes:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/:*&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'> <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">file</span><span class="o">(</span>
+</span><span class='line'>   <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;*&quot;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you have an &ldquo;index&rdquo; page (e.g. index.html) add the following route.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/:*&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">fileOrIndex</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">filePath</span> <span class="k">=</span> <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;*&quot;</span><span class="o">),</span>
+</span><span class='line'>    <span class="n">indexPath</span> <span class="k">=</span> <span class="s">&quot;index.html&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>For more information on serving files in Finatra, see the <a href="http://twitter.github.io/finatra/user-guide/files/#file-server">File Server</a> section.</p>
+
+<h2>Command Line Flags</h2>
+
+<p>Global flags are no longer used for standard server configuration. Instead:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="c1">//v2</span>
+</span><span class='line'><span class="o">-</span><span class="n">log</span><span class="o">.</span><span class="n">output</span><span class="k">=</span><span class="n">twitter</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="n">log</span>
+</span><span class='line'><span class="o">-</span><span class="n">http</span><span class="o">.</span><span class="n">port</span><span class="o">=:</span><span class="mi">8080</span>
+</span><span class='line'><span class="o">-</span><span class="n">admin</span><span class="o">.</span><span class="n">port</span><span class="o">=:</span><span class="mi">8081</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Testing</h2>
+
+<ul>
+<li>In v1, <code>SpecHelper</code> and <code>MockApp</code> are used.</li>
+<li>In v2, we provide a common way to run blackbox and whitebox integration tests against a locally running server:
+
+<ul>
+<li><a href="https://github.com/twitter/finatra/blob/master/examples/hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala">Simple Example</a></li>
+<li>More Powerful Example [TODO]</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Unsupported v1 Features</h2>
+
+<ul>
+<li>Render a route from another route.</li>
+<li>Controller <em>notFound</em> and <em>error</em> handler methods.</li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2016&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

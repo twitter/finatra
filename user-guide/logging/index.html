@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Logging - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/docs/index.html">Scaladoc</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+            <li><a href="/finatra/v1/docs/index.html" alt="Deprecated" title="Deprecated"><strike>v1.x Documentation&nbsp;</strike></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div>
+<article role="article">
+  <ol class="breadcrumb">
+  <li><a href="/finatra/user-guide">User Guide</a></li>
+  <li class="active">Logging</li>
+</ol>
+
+
+<p>Finatra uses the <a href="http://www.slf4j.org/manual.html">SLF4J</a> api for framework logging. By coupling the framework to only the <a href="http://www.slf4j.org/manual.html">SLF4J</a> api, application developers are free to choose their logging implementation.</p>
+
+<h5>From the SLF4J documentation:</h5>
+
+<blockquote><p>&ldquo;The Simple Logging Facade for Java serves as a simple facade or abstraction for various logging frameworks, such as java.util.logging, Logback and log4j. SLF4J allows the end-user to plug in the desired logging framework at deployment time.&rdquo;</p></blockquote>
+
+<p><a href="https://github.com/twitter/finatra/tree/develop/slf4j"><code>finatra-slf4j</code></a> provides transitively SLF4J bridges for the following logging providers:</p>
+
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Log4j">Log4j</a></li>
+<li><a href="http://commons.apache.org/proper/commons-logging/">commons-logging</a></li>
+<li>jdk14-logging</li>
+<li><a href="http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a>: There is a performance penalty for intercepting jul log messages, so make sure the framework includes the <a href="https://github.com/twitter/finatra/blob/develop/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala">Slf4jBridgeModule</a> as a framework module. This will install the <a href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a> which mitigates most of the performance penalty.</li>
+</ul>
+
+
+<h2><a class="anchor" name="basics" href="#basics">Basics</a></h2>
+
+<hr />
+
+<p>Since <a href="http://www.slf4j.org/manual.html">SLF4J</a> is an interface, it requires an actual logging implementation. However, you should ensure that you do not end-up with <em>multiple</em> logging implementations on your classpath, e.g., you should not have multiple SLF4J bindings (<code>slf4j-nop</code>, <code>slf4j-log4j12</code>, <code>slf4j-jdk14</code>, etc.) and/or a <code>java.util.logging</code> implementation, etc. on your classpath as these are all competing implementations and since classpath order is non-deterministic this will lead to unexpected logging behavior.</p>
+
+<p>While there are several scala-wrappers for SLF4J, Finatra uses and exposes some additional features on top of the excellent <a href="http://software.clapper.org/grizzled-slf4j/">grizzled-slf4j</a> project.</p>
+
+<p>The main logging utility is the <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Logging.scala">com.twitter.inject.Logging</a> trait which can be mixed into any object or class:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.Logging</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyClass</span> <span class="k">extends</span> <span class="nc">Logging</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">foo</span><span class="o">()</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">info</span><span class="o">(</span><span class="s">&quot;Calculating...&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="s">&quot;bar&quot;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>This trait is a wrapper over the <code>grizzled.slf4j.Logger</code>[<a href="http://software.clapper.org/grizzled-slf4j/api/#grizzled.slf4j.Logger">documentation</a>] and adds some utility methods on top of the <code>grizzled.slf4j.Logger</code>. For more information see the <a href="/finatra/docs/index.html#com.twitter.inject.Logging">scaladoc</a> for <code>com.twitter.inject.Logging</code>.</p>
+
+<h2><a class="anchor" name="logback" href="#logback">Logback</a></h2>
+
+<hr />
+
+<p>We highly recommend using <a href="http://logback.qos.ch/">Logback</a> as an SLF4J binding (logging implementation). If you choose to use Logback, just include a jar dependency on <code>ch.qos.logback:logback-classic</code>. This will provide a Logback SLF4J implementation (<code>logback-classic</code>) in addition to the logging bridges provided transitively through the <a href="https://github.com/twitter/finatra/tree/develop/slf4j"><code>finatra/slf4j</code></a> module.</p>
+
+<h3>Configuration</h3>
+
+<p>See the <a href="https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/main/resources/logback.xml">logback.xml</a> and <a href="https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/test/resources/logback-test.xml">logback-test.xml</a> configuration files in the <a href="https://github.com/twitter/finatra/tree/develop/examples/hello-world">hello-world</a> example project for example Logback configurations.</p>
+
+<p>See the <a href="http://logback.qos.ch/manual/configuration.html">Logback documentation on configuration</a> for more information.</p>
+
+<p>The example <a href="https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/main/resources/logback.xml">logback.xml</a> configuration file makes use of <code>${log.access.output:-access.log}</code> and <code>${log.service.output:-service.log}</code> variables for configuring the <code>&lt;file/&gt;</code> output of two appenders. A variable&rsquo;s value is specified at runtime as a Java system property (e.g., <code>-Dlog.service.output=myservice.log</code>). If a value is not provided the inlined default will be used, i.e., what is on the other side of the <code>:-</code>, e.g., <code>service.log</code>.</p>
+
+<p>More information about Logback&rsquo;s variable substitution may be found here:&nbsp;&nbsp;<a href="http://logback.qos.ch/manual/configuration.html#variableSubstitution">http://logback.qos.ch/manual/configuration.html#variableSubstitution</a></p>
+
+<h3>Rerouting <code>java.util.logging</code></h3>
+
+<p>Additional configuration is necessary to reroute the <code>java.util.logging</code> system. The reason is that the <code>jul-to-slf4j</code> bridge cannot replace classes in the <code>java.util.logging</code> package to do the redirection statically as it does for the other bridge implementations. Instead, it has to register a handler on the root logger and listen for logging statements like any other handler. It will then redirect those logging statements appropriately. This redirection is accomplished via SLF4J&rsquo;s <code>SLF4JBridgeHandler</code> [<a href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">documentation</a>]. <a href="https://github.com/twitter/finatra/tree/develop/slf4j"><code>finatra/slf4j</code></a> provides a module for initializing this bridge handler via the <a href="https://github.com/twitter/finatra/blob/develop/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala">Slf4jBridgeModule</a>. This module is added by the framework to Http and Thrift servers by default.</p>
+
+<h2><a class="no-pad-anchor" name="mdc" href="#mdc">Mapped Diagnostic Context Filter</a></h2>
+
+<hr />
+
+<p>Finatra offers an integration with Logback&rsquo;s <a href="http://logback.qos.ch/manual/mdc.html">Mapped Diagnostic Context</a> (MDC) for consistent logging of useful information. For example, the <a href="https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/main/resources/logback.xml#L25">hello-world configuration</a> references the contextual key &ldquo;traceId&rdquo; which will be logged with every statement sent to the appender. It is the responsibility of the application to populate the MDC with this contextual information. In this case, the &ldquo;traceId&rdquo; is added by including either the http  <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a> or thrift <a href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a>.</p>
+
+<p>In order to use the Mapped Diagnostic Context, an application must first initialize the MDC <a href="http://twitter.github.io/finagle/">Finagle</a> adapter provided by Finatra. This initialization is provided by including either the http <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala#L14">LoggingMDCFilter</a> or thrift <a href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/LoggingMDCFilter.scala#L14">LoggingMDCFilter</a> in your filter chain.</p>
+
+<p>More information on Logback&rsquo;s MDC can be found here:&nbsp;&nbsp;<a href="http://Logback.qos.ch/manual/mdc.html">http://Logback.qos.ch/manual/mdc.html</a></p>
+
+<p>Place the <code>LoggingMDCFilter</code> before any other filters which will add MDC entries or expect MDC entries to be present.</p>
+
+<p>See <a href="http://logback.qos.ch/manual/mdc.html">Logback&rsquo;s documentation</a> for more information the Mapped Diagnostic Context (MDC) functionality.</p>
+
+<p><nav>
+  <ul class="pager">
+    <li class="previous"><a href="/finatra/user-guide/getting-started"><span aria-hidden="true">&larr;</span>&nbsp;Getting&nbsp;Started</a></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-http-server">Building&nbsp;a&nbsp;new&nbsp;Http&nbsp;Server&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav></p>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2016&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

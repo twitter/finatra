@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Releases | Finatra]]></title>
+  <link href="http://twitter.github.io/finatra/blog/categories/releases/atom.xml" rel="self"/>
+  <link href="http://twitter.github.io/finatra/"/>
+  <updated>2016-08-25T21:11:22-07:00</updated>
+  <id>http://twitter.github.io/finatra/</id>
+  <author>
+    <name><![CDATA[Twitter]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Announcing Finatra Release 2.2.0!]]></title>
+    <link href="http://twitter.github.io/finatra/blog/2016/06/30/announcing-finatra-v2-dot-2-0/"/>
+    <updated>2016-06-30T08:58:38-07:00</updated>
+    <id>http://twitter.github.io/finatra/blog/2016/06/30/announcing-finatra-v2-dot-2-0</id>
+    <content type="html"><![CDATA[<h3>Finatra <a href="https://github.com/twitter/finatra/releases/tag/finatra-2.2.0">release 2.2.0</a> is now available from <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20v%3A%222.2.0%22">Maven Central</a>.</h3>
+
+<p>This is our first release to support JDK 8 and Scala 2.11 <strong>only</strong>. We&rsquo;ve also added a lot of useful <a href="finatra/docs/index.html">scaladocs</a> throughout the codebase, so take a look!</p>
+
+<p>Please note that the published  <a href="https://maven.apache.org/guides/mini/guide-naming-conventions.html">groupId</a> <font color='red'><strong>for all Finatra artifacts has changed</strong></font> from <code>com.twitter.finatra</code> and <code>com.twitter.inject</code> to <strong>just</strong> <code>com.twitter</code>. You can find the published v2.2.0 artifacts <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20v%3A%222.2.0%22">here</a>.</p>
+
+<p>Here&rsquo;s a list of some of the major changes, updates, and fixes:</p>
+
+<ul>
+<li>The <a href="https://maven.apache.org/guides/mini/guide-naming-conventions.html">groupId</a> of both finatra and finatra/inject published artifacts has changed from <code>com.twitter.finatra</code> and <code>com.twitter.inject</code> respectively to <a href="https://github.com/twitter/finatra/commit/7f25e3c51c368f901538e38959656fbf1cf45e76">just <code>com.twitter</code></a>.</li>
+<li><a href="http://www.slf4j.org/">SLF4J</a> api has been <a href="https://github.com/twitter/finatra/commit/a174f36638919887ef052bbdd3443b1c58869b43">updated to 1.7.21</a> and examples and tests using <a href="http://logback.qos.ch/">Logback</a> have been updated to 1.1.7. It is recommended that you also update your version if you are using the <a href="http://logback.qos.ch/">Logback</a> logging implementation.</li>
+<li>The <a href="https://github.com/FasterXML/jackson-module-scala">Jackson</a> Module Scala has been updated to <a href="https://github.com/twitter/finatra/commit/bb1288a84f8fc4d98919ceb35aab35f69200167c">version 2.6.5</a>.</li>
+<li>Support for <a href="https://github.com/twitter/finatra/commit/7123ba1122cbb60c8be509205a95d2b587942360"><code>any</code> HTTP method</a> in HTTP Controllers.</li>
+<li>HTTP test utilities have been <a href="https://github.com/twitter/finatra/commit/e61e6e309c2cc892306d0f93f9d4bc4b5605b020">moved to a consistent package naming</a>. Thus utilities formerly in <code>com.twitter.finatra.http.test</code> <strong>are now packaged</strong> <code>com.twitter.finatra.http</code>. As always these test utilities are available in the <a href="https://oss.sonatype.org/#nexus-search;gav~com.twitter~finatra-http_2.11~2.2.0~~tests">finatra-http test jar</a>.</li>
+<li>The utility method for running a &ldquo;Warmup Handler&rdquo; has been <a href="https://github.com/twitter/finatra/commit/01f20ee9145b369220f0926ecafb3de523aebec6">renamed from</a> <code>com.twitter.inject.server.TwitterServer#run</code> to <code>com.twitter.inject.server.TwitterServer#handle</code>.</li>
+<li><a href="https://github.com/twitter/finatra/commit/b6e65310997c4ea3c6d24ac24cbf3f1c6395ce1d">Fixed a bug</a> in the handling of java callbacks which return a Future hidden as a <code>java.lang.Object</code> in the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala"><code>com.twitter.finatra.http.internal.marshalling.CallbackConverter</code></a>.</li>
+<li>Removal of deprecated <a href="https://github.com/twitter/finatra/commit/f4334a0dc265e4b0b5cbd35ccf225f1dae109888">packages</a> and <a href="https://github.com/twitter/finatra/commit/e143bb075a1954eef605d332af7994cdbbbc38c7">code</a>.</li>
+<li>Simplified and brought consistency to the Embedded testing utilities <a href="https://github.com/twitter/finatra/commit/5915a9818851386f0416f27943766255f80d2912">constructor arguments</a>.</li>
+<li><a href="https://github.com/twitter/finatra/commit/a7650fefe3787fad7dc45af50a48bcd376ebc56f"><code>FilteredThriftClientModule</code></a> and <a href="https://github.com/twitter/finatra/commit/d0ae1d9a0e17f6b9b11edfc9765ed1f659805dc8">general thrift improvements</a> to better capture and stat exceptions.</li>
+<li><a href="https://github.com/twitter/finatra/commit/a3275378ae96b1a4d3af5f6ab81115eba247a0eb">Narrowed visibility</a> on classes and objects in <strong>internal</strong> <a href="https://github.com/twitter/finatra/tree/develop/http/src/main/scala/com/twitter/finatra/http/internal">packages</a> which are not necessarily meant to be publicly exposed. It is expected that users depend only on the &ldquo;public&rdquo; framework APIs and not internal framework implementations.</li>
+<li><a href="https://github.com/twitter/finatra/commit/b8f9b609f595ba7e6f996fd1f4c31d6933e6eb04">Re-worked</a> the server lifecycle to address confusion around naming and intent. Added scaladocs around the lifecycle to better aid in understanding of what the framework is providing on top of TwitterServer and addressed lot of testing utility issues including re-writing EmbeddedApp to make it simpler/easier to test cmd line applications (which is the central purpose of <code>com.twitter.inject.app.App</code>).</li>
+</ul>
+
+
+<p>See the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or checkout our <a href="/finatra/user-guide">User Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The Finatra Team | <a href="https://groups.google.com/forum/#!forum/finatra-users">forum</a> | <a href="https://twitter.com/finatra">@finatra</a> | <a href="https://gitter.im/twitter/finatra">chat</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finatra Release 2.1.6 Is Now Available!]]></title>
+    <link href="http://twitter.github.io/finatra/blog/2016/04/28/announcing-the-release-of-finatra-v2-dot-1-6/"/>
+    <updated>2016-04-28T06:28:55-07:00</updated>
+    <id>http://twitter.github.io/finatra/blog/2016/04/28/announcing-the-release-of-finatra-v2-dot-1-6</id>
+    <content type="html"><![CDATA[<h3>Finatra <a href="https://github.com/twitter/finatra/releases/tag/finatra-2.1.6">Release 2.1.6</a> is now available from <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.6%22">Maven Central</a>.</h3>
+
+<p>As <a href="/finatra/blog/2016/04/26/announcing-our-final-scala-2-dot-10-and-java-7-release/">previously noted</a>, <code>Finatra 2.1.6</code> will be our <strong>final release to support Scala 2.10 and Java 7</strong>. Future releases will be Scala 2.11 and Java 8 <em>only</em> until Scala 2.12 support is added for <a href="https://github.com/twitter/finagle">Finagle</a> at which time we&rsquo;ll cross-compile for Scala 2.11 and 2.12.</p>
+
+<p>Please checkout the <a href="https://github.com/twitter/finatra/releases/tag/finatra-2.1.6">v2.1.6</a> release notes on github for more information. As always, you can download the release from <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.6%22">Maven Central</a>.</p>
+
+<p>See the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or checkout our <a href="/finatra/user-guide">User Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The Finatra Team | <a href="https://groups.google.com/forum/#!forum/finatra-users">forum</a> | <a href="https://twitter.com/finatra">@finatra</a> | <a href="https://gitter.im/twitter/finatra">chat</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Announcing the Final Scala 2.10 and Java 7 Release]]></title>
+    <link href="http://twitter.github.io/finatra/blog/2016/04/26/announcing-our-final-scala-2-dot-10-and-java-7-release/"/>
+    <updated>2016-04-26T09:18:33-07:00</updated>
+    <id>http://twitter.github.io/finatra/blog/2016/04/26/announcing-our-final-scala-2-dot-10-and-java-7-release</id>
+    <content type="html"><![CDATA[<p>Our upcoming release: <code>v2.1.6</code> will be our final release to support Scala 2.10 and Java 7.</p>
+
+<p>Java 7 reached its <a href="https://java.com/en/download/faq/java_7.xml">end-of-life in April 2015</a> and we would like to begin using the Java 8 libraries in earnest. Once Scala 2.12 is released, we plan to add support for cross-compiling Scala 2.11 and 2.12. Until 2.12 is released we will only be supporting Scala 2.11.</p>
+
+<p>For more information see the Finagle blog post: <a href="http://finagle.github.io/blog/2016/04/20/scala-210-and-java7/">http://finagle.github.io/blog/2016/04/20/scala-210-and-java7/</a></p>
+
+<p>As always, you can check out the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or our <a href="/finatra/user-guide">User Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The Finatra Team | <a href="https://groups.google.com/forum/#!forum/finatra-users">forum</a> | <a href="https://twitter.com/finatra">@finatra</a> | <a href="https://gitter.im/twitter/finatra">chat</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finatra Release v2.1.5 Is Now Available!]]></title>
+    <link href="http://twitter.github.io/finatra/blog/2016/03/15/finatra-v2-dot-1-5-is-now-available/"/>
+    <updated>2016-03-15T09:41:02-07:00</updated>
+    <id>http://twitter.github.io/finatra/blog/2016/03/15/finatra-v2-dot-1-5-is-now-available</id>
+    <content type="html"><![CDATA[<h3>Finatra <a href="https://github.com/twitter/finatra/releases/tag/v2.1.5">Release 2.1.5</a> is now available from <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.5%22">Maven Central</a>.</h3>
+
+<p>Please check out the <a href="https://github.com/twitter/finatra/releases/tag/v2.1.5">v2.1.5</a> release tag on Github for more information.</p>
+
+<p>In addition to lots of code improvements, we&rsquo;ve addressed an issue in building our <code>tests</code> jars with sbt that should result in smaller (and better) tests jars that <em>only</em> include <em>actual</em> test utilities (and not all of our tests). Also, we&rsquo;ve switched our default branch in Github to a <a href="https://github.com/twitter/finatra/tree/develop/"><code>develop</code> branch</a> to bring us in-line with the other Twitter OSS libraries (e.g., <a href="https://github.com/twitter/scrooge">scrooge</a>, <a href="https://github.com/twitter/finagle">finagle</a>, <a href="https://github.com/twitter/twitter-server">twitter-server</a>). And lastly, if you want to contribute we&rsquo;ve added a <a href="https://github.com/twitter/finatra/blob/develop/.github/PULL_REQUEST_TEMPLATE.md">pull request template</a> that should make it easy to craft a good pull request. See the <a href="https://github.com/blog/2111-issue-and-pull-request-templates">Github documentation</a> for more information on pull request templates.</p>
+
+<p>As always, you can download the release from <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.5%22">Maven Central</a>.</p>
+
+<p>See the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or check out our <a href="/finatra/user-guide">User Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The <a href="https://groups.google.com/forum/#!forum/finatra-users">Finatra</a> Team</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finatra 2.1.4 Is Now Available and Thrift Support Now Documented!]]></title>
+    <link href="http://twitter.github.io/finatra/blog/2016/02/25/finatra-2-dot-1-4-is-now-available/"/>
+    <updated>2016-02-25T13:57:15-08:00</updated>
+    <id>http://twitter.github.io/finatra/blog/2016/02/25/finatra-2-dot-1-4-is-now-available</id>
+    <content type="html"><![CDATA[<h3>Finatra <a href="https://github.com/twitter/finatra/releases/tag/v2.1.4">Release 2.1.4</a> is now available from <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.4%22">Maven Central</a>.</h3>
+
+<p>There are lots of improvements in this release as we focused on making bringing thrift server support to parity with http server support. Please checkout the <a href="https://github.com/twitter/finatra/releases/tag/v2.1.4">v2.1.4</a> release tag on github for more information.</p>
+
+<p>We&rsquo;ve now also documented building thrift servers with Finatra: <a href="http://twitter.github.io/finatra/user-guide/build-new-thrift-server/.">http://twitter.github.io/finatra/user-guide/build-new-thrift-server/.</a></p>
+
+<p>As always, you can download the release from <a href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.4%22">Maven Central</a>.</p>
+
+<p>See the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or checkout our <a href="/finatra/user-guide">User Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The <a href="https://groups.google.com/forum/#!forum/finatra-users">Finatra</a> Team</p>
+]]></content>
+  </entry>
+  
+</feed>

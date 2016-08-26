@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Working with Files - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/docs/index.html">Scaladoc</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+            <li><a href="/finatra/v1/docs/index.html" alt="Deprecated" title="Deprecated"><strike>v1.x Documentation&nbsp;</strike></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div>
+<article role="article">
+  <ol class="breadcrumb">
+  <li><a href="/finatra/user-guide">User Guide</a></li>
+  <li class="active">Working with Files</li>
+</ol>
+
+
+<h2><a class="anchor" name="file-server" href="#file-server">File Server</a></h2>
+
+<hr />
+
+<p>Finatra provides basic file server support which is not meant for high traffic file serving. Do not use the file server for production apps requiring a robust high performance file serving solution.</p>
+
+<p>By default, files are served from the root of the classpath. You can use the flag <code>-doc.root</code> to customize the classpath root for finding files.</p>
+
+<p>To serve files from the local filesystem, set the flag <code>-local.doc.root</code> to the location of the file serving directory. Note that setting Java System Property <code>-Denv=env</code> is no longer required nor supported. Setting the <code>-local.doc.root</code> flag will trigger the same <code>localFileMode</code> behavior from Finatra v1.x.</p>
+
+<p>Also note that it is <strong>an error</strong> to attempt to set both the <code>-doc.root</code> and the <code>-local.doc.root</code> flags. Either</p>
+
+<ul>
+<li>do nothing to load resources from the classpath root <strong>or</strong></li>
+<li>configure a classpath &ldquo;namespace&rdquo; by setting the <code>-doc.root</code> <strong>or</strong></li>
+<li>load files from a local filesystem directory location specified by the <code>-local.doc.root</code> flag.</li>
+</ul>
+
+
+<p>Additionally, it is recommend to use local filesystem serving <em>only during testing</em> and <strong>not in production</strong>. It is recommended that you include files to be served as classpath resources in production.</p>
+
+<p>For changes from Finatra v1.x static files behavior see the <a href="/finatra/user-guide/v1-migration#v1-static-files">Static Files</a> section in the <a href="/finatra/user-guide/v1-migration">Version 1 Migration Guide</a>.</p>
+
+<p>To set a flag value, pass the flag and it&rsquo;s value as a argument to your server:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>java -jar finatra-hello-world-assembly-2.0.0.jar -doc.root<span class="o">=</span>/namespace
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>File Serving Examples</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/file&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">file</span><span class="o">(</span><span class="s">&quot;/file123.txt&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/:*&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">fileOrIndex</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;*&quot;</span><span class="o">),</span>
+</span><span class='line'>    <span class="s">&quot;index.html&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h2><a class="anchor" name="mustache" href="#mustache">Mustache Templating</a></h2>
+
+<hr />
+
+<p>Finatra supports the rendering of mustache templates. The framework provides a default <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala">MustacheModule</a> but this is configurable. To set your own module override the mustacheModule def in <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L91"><code>com.twitter.finatra.http.HttpServer</code></a>, e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">ExampleServer</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">mustacheModule</span> <span class="k">=</span> <span class="nc">MyCustomizedMustacheModule</span>
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>By default mustache templates are loaded from the classpath root. To configure a classpath &ldquo;namespace&rdquo; for loading mustache templates, set the <code>-mustache.templates.dir</code> flag.</p>
+
+<h3>Local filesystem</h3>
+
+<p>When you set the <code>-local.doc.root</code> flag, the MustacheModule will instead load templates from the local filesystem and templates will be reloaded on every render. This is to aid in local development. Note, that the interplay between the <code>mustache.temaplates.dir</code> and the <code>local.doc.root</code> flag is as follows:</p>
+
+<ul>
+<li>in &ldquo;local file mode&rdquo; (e.g., when <code>local.doc.root</code> is set to a <strong>non-empty</strong> value) the framework will try to load a template first from the absolute path under <code>mustache.templates.dir</code>,</li>
+<li>if the template is not found it will then be loaded from a location of <code>mustache.templates.dir</code> relative to the specified <code>local.doc.root</code>, e.g, /<code>local.doc.root</code>/<code>mustache.templates.dir</code>/<code>template.mustache</code>.</li>
+</ul>
+
+
+<h3>Rendering</h3>
+
+<p>The framework will use mustache to render callback return types that are annotated with the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/response/Mustache.java"><code>@Mustache</code></a> annotation.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="nd">@Mustache</span><span class="o">(</span><span class="s">&quot;foo&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">FooView</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="nc">FooView</span><span class="o">(</span><span class="s">&quot;abc&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>The value of the <code>@Mustache</code> annotation is assumed by the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala">MustacheMessageBodyWriter</a> to be the template filename without the suffix (which the framework <strong>always assumes</strong> to be <code>.mustache</code>).</p>
+
+<p>Or you can manually create a response that explicitly references a template, e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/foo&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="n">response</span><span class="o">.</span><span class="n">ok</span><span class="o">.</span><span class="n">view</span><span class="o">(</span>
+</span><span class='line'>    <span class="s">&quot;foo.mustache&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="nc">FooClass</span><span class="o">(</span><span class="s">&quot;abc&quot;</span><span class="o">))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Or you can programmatically render a template into a string using <code>com.twitter.finatra.http.marshalling.mustache.MustacheService#createString</code> method. This is useful for embedding the resultant content inside a field in a response.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">TestUserView</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">age</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">friends</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">TestCaseClassWithHtml</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">address</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">phone</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">renderedHtml</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">get</span><span class="o">(</span><span class="s">&quot;/testClassWithHtml&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">r</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">testUser</span> <span class="k">=</span> <span class="nc">TestUserView</span><span class="o">(</span>
+</span><span class='line'>    <span class="mi">28</span><span class="o">,</span>
+</span><span class='line'>    <span class="s">&quot;Bob Smith&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="nc">Seq</span><span class="o">(</span><span class="s">&quot;user1&quot;</span><span class="o">,</span> <span class="s">&quot;user2&quot;</span><span class="o">))</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nc">TestCaseClassWithHtml</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">address</span> <span class="k">=</span> <span class="s">&quot;123 Main St. Anywhere, CA US 90210&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">phone</span> <span class="k">=</span> <span class="s">&quot;+12221234567&quot;</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">renderedHtml</span> <span class="k">=</span> <span class="n">xml</span><span class="o">.</span><span class="nc">Utility</span><span class="o">.</span><span class="n">escape</span><span class="o">(</span><span class="n">mustacheService</span><span class="o">.</span><span class="n">createString</span><span class="o">(</span><span class="s">&quot;testHtml.mustache&quot;</span><span class="o">,</span> <span class="n">testUser</span><span class="o">)))</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>See the <a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L1282">test class</a> for more examples.</p>
+
+<p><nav>
+  <ul class="pager">
+    <li class="previous"><a href="/finatra/user-guide/json"><span aria-hidden="true">&larr;</span>&nbsp;Working&nbsp;with&nbsp;JSON</a></li>
+    <li class="next"><a href="/finatra/user-guide/build-new-thrift-server">Building&nbsp;a&nbsp;new&nbsp;Thrift&nbsp;Server&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav></p>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2016&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

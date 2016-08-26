@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Working with JSON - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/docs/index.html">Scaladoc</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+            <li><a href="/finatra/v1/docs/index.html" alt="Deprecated" title="Deprecated"><strike>v1.x Documentation&nbsp;</strike></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div>
+<article role="article">
+  <ol class="breadcrumb">
+  <li><a href="/finatra/user-guide">User Guide</a></li>
+  <li class="active">Working with JSON</li>
+</ol>
+
+
+<h2>Basics</h2>
+
+<hr />
+
+<p>Finatra improves on the already excellent <a href="https://github.com/FasterXML/jackson-module-scala">jackson-module-scala</a> for JSON support. Note that the <a href="https://github.com/twitter/finatra/tree/develop/jackson">finatra-jackson</a> library can be used outside of Finatra as a replacement for the <a href="https://github.com/FasterXML/jackson-module-scala">jackson-scala-module</a> or <a href="https://github.com/codahale/jerkson">jerkson</a>.</p>
+
+<h3>Features</h3>
+
+<ul>
+<li>Usable outside of Finatra.</li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala"><code>FinatraObjectMapper</code></a> which provides additional Scala friendly methods not found in the <code>ScalaObjectMapper</code>.</li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">Guice module</a> for injecting <code>FinatraObjectMapper</code> (with support for customization e.g. snake_case vs camelCase).</li>
+<li>Custom <a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala"><code>case class</code> deserializer</a> which overcomes limitations in jackson-scala-module.</li>
+<li>Support for <code>case class</code> validations which accumulate errors (without failing fast) during JSON parsing.</li>
+<li>Integration with Finatra <a href="#routing-json">HTTP routing</a> to support binding and validation of query params, route params, and headers.</li>
+<li>Utils for comparing JSON in tests.</li>
+<li>Experimental support for iterator-based JSON stream parsing.</li>
+</ul>
+
+
+<h2><a class="anchor" name="configuration" href="#configuration">Configuration</a></h2>
+
+<hr />
+
+<p>The default configuration of Jackson is provided by the <a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala"><code>FinatraObjectMapper</code></a>.</p>
+
+<p>The following Jackson integrations are provided by default:</p>
+
+<ul>
+<li><a href="https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java">Joda Module</a></li>
+<li><a href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java">Scala Module</a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala">LongKeyDeserializer</a>: Allow deserializing maps with long keys.</li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala">Wrapped Value Serializer</a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/DurationMillisSerializer.scala">Duration Millis Serializer</a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala">Improved DateTime Deserializer</a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala">Improved <code>case class</code> Deserializer</a>: See details <a href="#case-class-deserializer">below</a>.</li>
+</ul>
+
+
+<h2><a class="anchor" name="jackson-customization" href="#jackson-customization">Customization</a></h2>
+
+<hr />
+
+<p>To override defaults or provide other config options, specify your own module (usually extending <a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">FinatraJacksonModule</a>).</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">Server</span> <span class="k">extends</span> <span class="nc">HttpServer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">jacksonModule</span> <span class="k">=</span> <span class="nc">CustomJacksonModule</span>
+</span><span class='line'>  <span class="o">...</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">object</span> <span class="nc">CustomJacksonModule</span> <span class="k">extends</span> <span class="nc">FinatraJacksonModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">additionalJacksonModules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">SimpleModule</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">addSerializer</span><span class="o">(</span><span class="nc">LocalDateParser</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">})</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">serializationInclusion</span> <span class="k">=</span> <span class="nc">Include</span><span class="o">.</span><span class="nc">NON_EMPTY</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">propertyNamingStrategy</span> <span class="k">=</span> <span class="nc">CamelCasePropertyNamingStrategy</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">override</span> <span class="k">def</span> <span class="n">additionalMapperConfiguration</span><span class="o">(</span><span class="n">mapper</span><span class="k">:</span> <span class="kt">ObjectMapper</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">mapper</span><span class="o">.</span><span class="n">configure</span><span class="o">(</span><span class="nc">Feature</span><span class="o">.</span><span class="nc">WRITE_NUMBERS_AS_STRINGS</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h2><a class="anchor" name="case-class-deserializer" href="#case-class-deserializer">Improved <code>case class</code> deserializer</a></h2>
+
+<hr />
+
+<p>Finatra provides a custom <a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala"><code>case class</code> deserializer</a> which overcomes limitations in jackson-scala-module:</p>
+
+<ul>
+<li>Throws a <code>JsonException</code> when non-optional fields are missing from the parsed JSON.</li>
+<li>Use default values when fields are missing in the incoming JSON.</li>
+<li>Properly deserialize a <code>Seq[Long]</code> (see <a href="https://github.com/FasterXML/jackson-module-scala/issues/62">https://github.com/FasterXML/jackson-module-scala/issues/62</a>).</li>
+<li>Support &ldquo;wrapped values&rdquo; using <code>WrappedValue</code> (this is needed since jackson-scala-module does not support <code>@JsonCreator</code>).</li>
+<li>Support for accumulating JSON parsing errors (instead of failing fast).</li>
+<li>Support for field and method level validations which also accumulate errors.</li>
+</ul>
+
+
+<h2><a class="anchor" name="routing-json" href="#routing-json">Integration with Routing</a></h2>
+
+<hr />
+
+<p>If a custom <code>case class</code> is used as a route callback&rsquo;s input type, Finatra will parse the request body into the custom request class. Similar to declaratively parsing a <code>GET</code> request (described above), Finatra will perform validations and return a <code>400 BadRequest</code> with a list of any accumulated errors in JSON format.</p>
+
+<p>Suppose you wanted to handle POST&rsquo;s of the following JSON (representing a group of tweet ids):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;EarlyTweets&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Some of the earliest tweets on Twitter.&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="nt">&quot;tweetIds&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">24</span><span class="p">],</span>
+</span><span class='line'>  <span class="nt">&quot;dates&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="s2">&quot;2&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>You would create and use the following <a name="group-request-example"><code>case classes</code></a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">GroupRequest</span><span class="o">(</span>
+</span><span class='line'>  <span class="nd">@NotEmpty</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span>
+</span><span class='line'>  <span class="n">description</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">],</span>
+</span><span class='line'>  <span class="n">tweetIds</span><span class="k">:</span> <span class="kt">Set</span><span class="o">[</span><span class="kt">Long</span><span class="o">],</span>
+</span><span class='line'>  <span class="n">dates</span><span class="k">:</span> <span class="kt">Dates</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@MethodValidation</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">validateName</span> <span class="k">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nc">ValidationResult</span><span class="o">.</span><span class="n">validate</span><span class="o">(</span>
+</span><span class='line'>      <span class="n">name</span><span class="o">.</span><span class="n">startsWith</span><span class="o">(</span><span class="s">&quot;grp-&quot;</span><span class="o">),</span>
+</span><span class='line'>      <span class="s">&quot;name must start with &#39;grp-&#39;&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">case</span> <span class="k">class</span> <span class="nc">Dates</span><span class="o">(</span>
+</span><span class='line'>  <span class="nd">@PastTime</span> <span class="n">start</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">,</span>
+</span><span class='line'>  <span class="nd">@PastTime</span> <span class="n">end</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>To return a JSON response you can simply return a <code>case class</code> as the return of your route callback. The default behavior will be to render this <code>case class</code> as a JSON response. See the HTTP Controller <a href="/finatra/user-guide/build-new-http-server/controller.html#responses">Responses</a> section for an example.</p>
+
+<h2><a class="anchor" name="validation-framework" href="#validation-framework">Validation Framework</a></h2>
+
+<hr />
+
+<p>We provide a simple validation framework inspired by <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gircz.html">JSR-303</a>. The validations framework integrates with the custom <code>case class</code> deserializer to efficiently apply per field validations as request parsing is performed. The following validation annotations are available (and additional validations can be easily provided):</p>
+
+<ul>
+<li><code>@CountryCode</code></li>
+<li><code>@FutureTime</code></li>
+<li><code>@PastTime</code></li>
+<li><code>@Max</code></li>
+<li><code>@Min</code></li>
+<li><code>@NotEmpty</code></li>
+<li><code>@OneOf</code></li>
+<li><code>@Range</code></li>
+<li><code>@Size</code></li>
+<li><code>@TimeGranularity</code></li>
+<li><code>@UUID</code></li>
+<li><code>@MethodValidation</code></li>
+</ul>
+
+
+<h4>Method Validation</h4>
+
+<p>Can be used for:</p>
+
+<ul>
+<li>Non-generic validations. <code>MethodValidation</code> can be used instead of defining a reusable annotation and validator.</li>
+<li>Cross-field validations (e.g. <code>startDate</code> before <code>endDate</code>)</li>
+</ul>
+
+
+<p>See the implementation of the <code>GroupRequest</code> <a href="#group-request-example">above</a> for an example of using <code>MethodValidation</code>.</p>
+
+<p>See also: <a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala">CommonMethodValidations</a></p>
+
+<p>By default validation errors are returned <strong>alphabetically sorted</strong> by validation error message (for determinism when testing). See: <a href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/exceptions/CaseClassMappingException.scala">CaseClassMappingException</a>. Eg.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="nt">&quot;errors&quot;</span> <span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;location.lat: [9999.0] is not between -85 and 85&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;location.long: field is required&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;message: size [0] is not between 1 and 140&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;nsfw: &#39;abc&#39; is not a valid boolean&quot;</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3><a class="anchor" name="json-best-practices" href="#json-best-practices">Best Practices</a></h3>
+
+<hr />
+
+<p>Use Java Enums for representing enumerations since they integrate well with Jackson&rsquo;s ObjectMapper and now have exhaustiveness checking as of Scala 2.10. The following Jackson annotations may be useful when working with Enums:</p>
+
+<ul>
+<li><code>@JsonCreator</code> - Useful on a custom fromString method</li>
+<li><code>@JsonValue</code> - Useful to place on an overridden toString method</li>
+</ul>
+
+
+<p><nav>
+  <ul class="pager">
+    <li class="previous"><a href="/finatra/user-guide/build-new-http-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;new&nbsp;Http&nbsp;Server</a></li>
+    <li class="next"><a href="/finatra/user-guide/files">Working&nbsp;with&nbsp;Files&nbsp;<span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav></p>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2016&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

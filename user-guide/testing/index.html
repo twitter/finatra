@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Testing - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/docs/index.html">Scaladoc</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+            <li><a href="/finatra/v1/docs/index.html" alt="Deprecated" title="Deprecated"><strike>v1.x Documentation&nbsp;</strike></a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div>
+<article role="article">
+  <ol class="breadcrumb">
+  <li><a href="/finatra/user-guide">User Guide</a></li>
+  <li class="active">Testing</li>
+</ol>
+
+
+<p><img src="http://imgs.xkcd.com/comics/exploits_of_a_mom.png" alt="Testing" /></p>
+
+<h2>Basics</h2>
+
+<p>Finatra provides the following testing features:</p>
+
+<ul>
+<li>the ability to start a locally running server, issue requests, and assert responses.</li>
+<li>the ability to easily replace class implementations throughout the object graph.</li>
+<li>the ability to retrieve classes in the object graph to perform assertions on them.</li>
+<li>the ability to write powerful tests without deploying test code to production.</li>
+</ul>
+
+
+<h2><a class="anchor" name="testing-types" href="#testing-types">Types of Tests</a></h2>
+
+<p>What are we talking about when we talk about <em>testing</em>? At a high-level the philosophy of testing in Finatra revolves around the following definitions:</p>
+
+<ul>
+<li><a href="#feature-tests">Feature Tests</a> -  the most powerful tests enabled by Finatra. These tests allow you to verify feature requirements of the service by exercising its external interface. Finatra supports both “black-box testing” and “white-box testing” against a locally running version of your server. You can selectively swap out certain classes, insert mocks, and perform assertions on internal state. It’s worth noting that we sometimes re-use these tests for regression testing in larger “System Tests” that run post-release on live services. Take a look at an example feature test <a href="https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala">here</a>.</li>
+<li><a href="#integration-tests">Integration Tests</a> - similar to feature tests, but the entire service is not started. Instead, a list of <a href="/finatra/user-guide/getting-started#modules">modules</a> are loaded and then method calls and assertions are performed at the class-level. You can see an example integration test <a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/marshalling/CallbackConverterIntegrationTest.scala">here</a>.</li>
+<li>Unit Tests - these are tests of a single class and since constructor injection is used throughout the framework, Finatra stays out of your way.</li>
+</ul>
+
+
+<h2><a href="http://www.scalatest.org/">ScalaTest</a></h2>
+
+<hr />
+
+<p>The Finatra testing framework uses the <a href="http://doc.scalatest.org/2.2.4/#org.scalatest.WordSpec"><code>WordSpec</code></a> ScalaTest <a href="http://www.scalatest.org/user_guide/selecting_a_style">testing style</a> testing style for framework testing and to facilitate the types of testing outlined above we have several testing traits to aid in creating simple and powerful tests. For more information on <a href="http://www.scalatest.org/">ScalaTest</a>, see the <a href="http://www.scalatest.org/user_guide">ScalaTest User Guide</a>.</p>
+
+<h2><a class="anchor" name="embedded-server" href="#embedded-server">Embedded Servers and Apps</a></h2>
+
+<hr />
+
+<p>Finatra provides a way to run an embedded version of your service or app running locally on ephemeral ports. This allows you to run <em>actual</em> requests against an <em>actual</em> version of your server when testing. Embedding is an especially powerful way of running and testing your application through an IDE, e.g., like <a href="https://www.jetbrains.com/idea/">IntelliJ</a>.</p>
+
+<p>The embedded utilities are also useful for testing and debugging your code when prototyping. If your service or API makes calls to other services, instead of mocking out or overriding those dependencies with dummy implementations you can always write a test using an Embedded version of your server which talks to <em>real</em> downstream services (of course you&rsquo;d never want to commit a test like this to your source repository, especially if you run any type of <a href="https://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a> system). You&rsquo;ll be able to run this test normally through the test runner of an IDE which would allow you to easily set breakpoints and step-through code for debugging. As opposed to needing to build and run your service locally and attach a remote debugger.</p>
+
+<p>See:</p>
+
+<ul>
+<li><a href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala"><code>com.twitter.inject.app.EmbeddedApp</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala"><code>com.twitter.inject.server.EmbeddedTwitterServer</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><code>com.twitter.finatra.http.EmbeddedHttpServer</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><code>com.twitter.finatra.thrift.EmbeddedThriftServer</code></a></li>
+</ul>
+
+
+<div></div>
+
+
+<p><img src="/finatra/images/embedded.png" alt="Embedded Classes" /></p>
+
+<p>You&rsquo;ll notice that this hierarchy generally follows the server class hierarchy as <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala"><code>com.twitter.finatra.http.HttpServer</code></a> and <a href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala"><code>com.twitter.finatra.thrift.ThriftServer</code></a> extend from <a href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala"><code>com.twitter.server.TwitterServer</code></a> which extends from <a href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"><code>com.twitter.app.App</code></a>.</p>
+
+<h2><a class="anchor" name="test-helpers" href="#test-helpers">Test Helper Classes</a></h2>
+
+<hr />
+
+<p><img src="/finatra/images/test-classes.png" alt="Finatra Test classes" /></p>
+
+<h3><a class="anchor" name="feature-tests" href="#feature-tests">Feature Tests</a></h3>
+
+<p>If you are familiar with <a href="http://docs.behat.org/en/v2.5/guides/1.gherkin.html">Gherkin</a> or <a href="https://github.com/cucumber/cucumber/wiki/Feature-Introduction">Cucumber</a> or other similar testing languages and frameworks, then <a href="https://wiki.documentfoundation.org/QA/Testing/Feature_Tests">feature testing</a> will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala">server/FeatureTest</a> trait.</p>
+
+<p>We highly recommend writing feature tests for your services as they provide a very good signal of whether you have correctly implemented the features of your service. If you haven&rsquo;t implemented the feature correctly, it almost doesn&rsquo;t matter that you have lots of unit tests.</p>
+
+<p>For example, to write a feature test for an HTTP server, extend the <code>com.twitter.inject.server.FeatureTest</code> trait. Then override the <code>server</code> with an instance of your <a href="#embedded-server"><code>EmbeddedHttpServer</code></a>.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExampleServerFeatureTest</span> <span class="k">extends</span> <span class="nc">FeatureTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleServer</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;MyTest&quot;</span> <span class="n">should</span>  <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="s">&quot;perform feature&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">server</span><span class="o">.</span><span class="n">httpGet</span><span class="o">(</span>
+</span><span class='line'>        <span class="n">path</span> <span class="k">=</span> <span class="s">&quot;/&quot;</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">andExpect</span> <span class="k">=</span> <span class="nc">Status</span><span class="o">.</span><span class="nc">Ok</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">...</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Similarly, to write a feature test for a Thrift server and create a <a href="#thrift-tests">client</a> to it,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.thrift.EmbeddedThriftServer</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExampleThriftServerFeatureTest</span> <span class="k">extends</span> <span class="nc">FeatureTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedThriftServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleThriftServer</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">lazy</span> <span class="k">val</span> <span class="n">client</span> <span class="k">=</span> <span class="n">server</span><span class="o">.</span><span class="n">thriftClient</span><span class="o">[</span><span class="kt">ExampleThrift</span><span class="o">[</span><span class="kt">Future</span><span class="o">]](</span><span class="n">clientId</span> <span class="k">=</span> <span class="s">&quot;client123&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;MyTest&quot;</span> <span class="n">should</span> <span class="o">{</span>
+</span><span class='line'>    <span class="s">&quot;return data accordingly&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="n">doExample</span><span class="o">(</span><span class="s">&quot;input&quot;</span><span class="o">))</span> <span class="n">should</span> <span class="n">equal</span><span class="o">(</span><span class="s">&quot;output&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>If you are extending both <code>com.twitter.finatra.http.HttpServer</code> <strong>and</strong> <code>com.twitter.finatra.thrift.ThriftServer</code> then you can feature test by constructing an <code>EmbeddedHttpServer with ThriftClient</code>, e.g.,</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExampleCombinedServerFeatureTest</span> <span class="k">extends</span> <span class="nc">FeatureTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleCombinedServer</span><span class="o">)</span> <span class="k">with</span> <span class="nc">ThriftClient</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">lazy</span> <span class="k">val</span> <span class="n">client</span> <span class="k">=</span> <span class="n">server</span><span class="o">.</span><span class="n">thriftClient</span><span class="o">[</span><span class="kt">ExampleThrift</span><span class="o">[</span><span class="kt">Future</span><span class="o">]](</span><span class="n">clientId</span> <span class="k">=</span> <span class="s">&quot;client123&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;MyTest&quot;</span> <span class="n">should</span> <span class="o">{</span>
+</span><span class='line'>    <span class="s">&quot;perform feature&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">server</span><span class="o">.</span><span class="n">httpGet</span><span class="o">(</span>
+</span><span class='line'>        <span class="n">path</span> <span class="k">=</span> <span class="s">&quot;/&quot;</span><span class="o">,</span>
+</span><span class='line'>        <span class="n">andExpect</span> <span class="k">=</span> <span class="nc">Status</span><span class="o">.</span><span class="nc">Ok</span><span class="o">)</span>
+</span><span class='line'>        <span class="o">...</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="s">&quot;return data accordingly&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>      <span class="nc">Await</span><span class="o">.</span><span class="n">result</span><span class="o">(</span><span class="n">client</span><span class="o">.</span><span class="n">doExample</span><span class="o">(</span><span class="s">&quot;input&quot;</span><span class="o">))</span> <span class="n">should</span> <span class="n">equal</span><span class="o">(</span><span class="s">&quot;output&quot;</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h4>Note:</h4>
+
+<p>The <code>server</code> is specified as a <code>def</code> in <code>com.twitter.inject.server.FeatureTest</code> trait. If you only want to start <strong>one instance of your server per test file</strong> make sure to override this <code>def</code> with a <code>val</code>.</p>
+
+<p>For more advanced examples see:</p>
+
+<ul>
+<li>the <a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala"><code>DoEverythingServerFeatureTest</code></a> for an HTTP server.</li>
+<li>the <a href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/DoEverythingThriftServerFeatureTest.scala"><code>DoEverythingThriftServerFeatureTest</code></a> for a Thrift server.</li>
+<li>the <a href="https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/DoEverythingCombinedServerFeatureTest.scala"><code>DoEverythingCombinedServerFeatureTest</code></a> for &ldquo;combined&rdquo; HTTP and Thrift server.</li>
+</ul>
+
+
+<h3><a class="anchor" name="integration-tests" href="#integration-tests">Integration Tests</a></h3>
+
+<p>Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across a few interfaces in the system. In Finatra, we provide the <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala"><code>com.twitter.inject.app.TestInjector</code></a> which allows you to pass it a set of modules and flags to construct a minimal object graph.</p>
+
+<p>To write an integration test, extend the <code>com.twitter.inject.IntegrationTest</code> trait. Then override the <code>injector</code> val with your constructed instance of <code>com.twitter.inject.app.TestInjector</code>. You&rsquo;ll then be able to access instances of necessary classes to execute tests.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.IntegrationTest</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExampleIntegrationTest</span> <span class="k">extends</span> <span class="nc">IntegrationTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">injector</span> <span class="k">=</span>
+</span><span class='line'>    <span class="nc">TestInjector</span><span class="o">(</span>
+</span><span class='line'>      <span class="n">clientFlags</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">&quot;foo.flag&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;meaningfulValue&quot;</span><span class="o">),</span>
+</span><span class='line'>      <span class="n">modules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">ExampleModule</span><span class="o">))</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;MyTest&quot;</span> <span class="n">should</span>  <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="s">&quot;perform feature&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">val</span> <span class="n">exampleThingy</span> <span class="k">=</span> <span class="n">injector</span><span class="o">.</span><span class="n">instance</span><span class="o">[</span><span class="kt">ExampleThingy</span><span class="o">]</span>
+</span><span class='line'>        <span class="o">...</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h3><a class="anchor" name="http-tests" href="#http-tests">Http Tests</a></h3>
+
+<p>If you are writing a test that has an HTTP server under test, you can optionally extend the <a href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala"><code>com.twitter.finatra.http.HttpTest</code></a> trait. This trait provides some common utilities for HTTP testing.</p>
+
+<h3><a class="anchor" name="thrift-tests" href="#thrift-tests">Thrift Tests</a></h3>
+
+<p>As shown above, thrift servers can be tested through a <a href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala"><code>ThriftClient</code></a>. The Finatra test framework provides an easy way get access to a real <a href="http://twitter.github.io/finagle/guide/Clients.html">Finagle client</a> for making calls to your running server in a test. In the case here, creating a <a href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala"><code>ThriftClient</code></a> requires the thrift service type <code>T</code>. This type is expected to be the trait subclass of <code>com.twitter.scrooge.ThriftService</code> in the form of <code>YourService[+MM[_]]</code>.</p>
+
+<h2><a class="anchor" name="startup-tests" href="#startup-tests">Startup Tests</a></h2>
+
+<hr />
+
+<p>By default the Finatra embedded testing infrastructure sets the <a href="https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html">Guice <code>com.google.inject.Stage</code></a> to <code>DEVELOPMENT</code>. For testing we choose the trade-off of a fast start-up time for the embedded server at the expense of some runtime performance as classes are lazily loaded when accessed by the test features.</p>
+
+<p>However, this also means that if you have misconfigured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.</p>
+
+<p>As such, we recommend creating a simple test &ndash; a <code>StartupTest</code> to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that could otherwise cause the server to fail to start.</p>
+
+<ul>
+<li>a <code>StartupTest</code> should mimic production as closely as possible. Thus:
+
+<ul>
+<li>avoid using <code>@Bind</code> and <a href="#override-modules">override modules</a>.</li>
+<li>set the <a href="https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html">Guice <code>com.google.inject.Stage</code></a> to <code>PRODUCTION</code> so that all singletons will be eagerly created at startup (integration/feature tests run in <code>Stage.DEVELOPMENT</code> by default).</li>
+<li>prevent Finagle clients from making outbound connections during startup tests by setting any <code>com.twitter.server.resolverMap</code> entries to <code>nil!</code>.</li>
+</ul>
+</li>
+</ul>
+
+
+<p>For example:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.google.inject.Stage</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.EmbeddedHttpServer</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">MyServiceStartupTest</span> <span class="k">extends</span> <span class="nc">FeatureTest</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+</span><span class='line'>    <span class="n">stage</span> <span class="k">=</span> <span class="nc">Stage</span><span class="o">.</span><span class="nc">PRODUCTION</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SampleApiServer</span><span class="o">,</span>
+</span><span class='line'>    <span class="n">clientFlags</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span>
+</span><span class='line'>      <span class="s">&quot;com.twitter.server.resolverMap&quot;</span> <span class="o">-&gt;</span> <span class="s">&quot;some-thrift-service=nil!&quot;</span>
+</span><span class='line'>    <span class="o">))</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;SampleApiServer&quot;</span> <span class="n">should</span> <span class="o">{</span>
+</span><span class='line'>    <span class="s">&quot;startup&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">server</span><span class="o">.</span><span class="n">assertHealthy</span><span class="o">()</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p><strong>Note:</strong> this works for either <code>EmbeddedHttpServer</code> or <code>EmbeddedThriftServer</code> as <code>assertHealthy()</code> is defined on the super class <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L144"><code>EmbeddedTwitterServer</code></a>.</p>
+
+<h2><a class="anchor" name="mocks" href="#mocks">Working with Mocks</a></h2>
+
+<hr />
+
+<p><a href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala"><code>com.twitter.inject.Mockito</code></a> provides <a href="https://etorreborre.github.io/specs2/">Specs2</a> Mockito syntax sugar for <a href="http://www.scalatest.org/">ScalaTest</a>.</p>
+
+<p>This is a drop-in replacement for <a href="http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html"><code>org.specs2.mock.Mockito</code></a>. We encourage you to not use <code>org.specs2.mock.Mockito</code> directly. Otherwise, match failures won&rsquo;t be propagated up as ScalaTest test failures.</p>
+
+<p>See the next few sections on how you can use mocks in testing with either <a href="#override-modules">Override Modules</a> or using <a href="#at-bind"><code>@Bind</code></a>.</p>
+
+<h2><a class="anchor" name="override-modules" href="#override-modules">Override Modules</a></h2>
+
+<hr />
+
+<p>For basic information on Modules in Finatra, see <a href="/finatra/user-guide/getting-started#modules">Modules</a>.</p>
+
+<p>Defining a module is generally used to tell Guice <em>how</em> to instantiate an object to be provided to the object graph. When testing, however, we may want to provide an alternative instance of a type to the object graph. For instance, instead of making network calls to an external service through a real client we want to instead use a mock version of the client. Or load an in-memory implementation to which we can keep a reference in order to make assertions on it&rsquo;s internal state. In these cases we can compose a server with a collection of override modules that selectively replace bound instances.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">ExampleServer</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">overrideModules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">OverrideSomeBehaviorModule</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">},</span>
+</span><span class='line'>  <span class="o">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>For instance if you have a controller which takes in a type of <code>ServiceA</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">class</span> <span class="nc">MyController</span><span class="o">(</span><span class="n">serviceA</span><span class="k">:</span> <span class="kt">ServiceA</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+</span><span class='line'>  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/:id&quot;</span><span class="o">)</span> <span class="o">{</span> <span class="n">request</span><span class="k">:</span> <span class="kt">Request</span> <span class="o">=&gt;</span>
+</span><span class='line'>    <span class="n">serviceA</span><span class="o">.</span><span class="n">lookupInformation</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="n">params</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">))</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>With a <a href="/finatra/user-guide/getting-started/#modules">Module</a> that provides the implementation of <code>ServiceA</code> to the injector:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">MyServiceAModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">val</span> <span class="n">key</span> <span class="k">=</span> <span class="n">flag</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;defaultkey&quot;</span><span class="o">,</span> <span class="s">&quot;The key to use.&quot;</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesServiceA</span><span class="k">:</span> <span class="kt">ServiceA</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">ServiceA</span><span class="o">(</span><span class="n">key</span><span class="o">())</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>To test you may want to use a mock or stub version of <code>ServiceA</code> in your controller instead of the real version. You could do this by writing a re-usable module for testing and compose it into the server when testing as an override module.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">StubServiceAModule</span> <span class="k">extends</span> <span class="nc">TwitterModule</span> <span class="o">{</span>
+</span><span class='line'>  <span class="nd">@Singleton</span>
+</span><span class='line'>  <span class="nd">@Provides</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">providesServiceA</span><span class="k">:</span> <span class="kt">ServiceA</span> <span class="o">=</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nc">StubServiceA</span><span class="o">(</span><span class="s">&quot;fake&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And in your test, add this stub module as a override module:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span>
+</span><span class='line'>  <span class="n">twitterServer</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyGreatServer</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">override</span> <span class="k">def</span> <span class="n">overrideModules</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">StubServiceAModule</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">},</span>
+</span><span class='line'>  <span class="o">...</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<p>Note, modules used specifically for testing should be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: <a href="#at-bind"><code>@Bind</code></a> section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.</p>
+
+<p>Also note, that you can always create an override module over a mock, however it is generally preferable to want control over the expected mock behavior per-test and as such it&rsquo;s more common to keep a reference to a mock and use it with the <a href="#at-bind"><code>@Bind</code></a> functionality in a test.</p>
+
+<h2><a class="anchor" name="at-bind" href="#at-bind">Using <code>@Bind</code></a></h2>
+
+<hr />
+
+<p>First, check out the <a href="https://github.com/google/guice">Google Guice</a> documentation on Bound Fields <a href="https://github.com/google/guice/wiki/BoundFields">here</a>.</p>
+
+<p>In the cases where we&rsquo;d like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a simple stub implementation), we do not need to create a specific module for testing to compose into our server as an override module. Instead we can use the <code>com.google.inject.testing.fieldbinder.Bind</code> annotation.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">com.google.inject.testing.fieldbinder.Bind</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.finatra.http.</span><span class="o">{</span><span class="nc">EmbeddedHttpServer</span><span class="o">,</span> <span class="nc">HttpTest</span><span class="o">}</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.server.FeatureTest</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">com.twitter.inject.Mockito</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">ExampleFeatureTest</span>
+</span><span class='line'>  <span class="k">extends</span> <span class="nc">FeatureTest</span>
+</span><span class='line'>  <span class="k">with</span> <span class="nc">Mockito</span>
+</span><span class='line'>  <span class="k">with</span> <span class="nc">HttpTest</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Bind</span> <span class="k">val</span> <span class="n">mockDownstreamServiceClient</span> <span class="k">=</span> <span class="n">smartMock</span><span class="o">[</span><span class="kt">DownstreamServiceClient</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nd">@Bind</span> <span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">smartMock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleServer</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="s">&quot;test&quot;</span> <span class="n">in</span> <span class="o">{</span>
+</span><span class='line'>    <span class="cm">/* Mock GET Request performed by DownstreamServiceClient */</span>
+</span><span class='line'>    <span class="n">mockDownstreamServiceClient</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/tweets/123.json&quot;</span><span class="o">)(</span><span class="n">manifest</span><span class="o">[</span><span class="kt">FooResponse</span><span class="o">])</span> <span class="n">returns</span> <span class="nc">Future</span><span class="o">(</span><span class="nc">None</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">...</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<div></div>
+
+
+<h4>N.B.:</h4>
+
+<ul>
+<li>You <strong>MUST</strong> extend from either <code>com.twitter.inject.IntegrationTest</code> directly or from a sub-class. We recommend using <code>com.twitter.inject.server.FeatureTest</code>. See more information on these test traits in the <a href="#feature-tests">Feature Tests</a> section.</li>
+<li>Prefer to define <code>@Bind</code> and <code>@Inject</code> variables before the server definition.</li>
+<li>While we support the <code>com.google.inject.testing.fieldbinder.Bind</code> annotation, our integration does not currently support the <code>to</code> annotation field, e.g., <code>@Bind(to = classOf[T])</code>, therefore,</li>
+<li>The type of the variable you annotate with <code>@Bind</code> must <em>exactly</em> match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="nd">@Bind</span> <span class="k">val</span> <span class="n">idService</span><span class="k">:</span> <span class="kt">IdService</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">MockIdServiceImpl</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Because of lifecycle reasons, access to the embedded server <strong>MUST</strong> either be from a lazy variable or inside a test method.</li>
+</ul>
+
+
+<p>For a complete example, see the <a href="https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala"><code>TwitterCloneFeatureTest</code></a>.</p>
+
+<p>There is also another way to user this type of binding in tests (which will eventually become the preferred way) that does not have the above caveats (but instead comes with a different caveat). You can also achieve the above <code>@Bind</code> behavior by using <a href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L136"><code>EmbeddedTwitterServer#bind</code></a>. Unfortunately, we have not yet migrated from using Scala Manifests and thus this method suffers from not being able to fully support <a href="http://blogs.atlassian.com/2013/09/scala-types-of-a-higher-kind/">higher-kinded</a> types.</p>
+
+<p>To use, you can do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">val</span> <span class="n">mockIdService</span> <span class="k">=</span> <span class="n">smartMock</span><span class="o">[</span><span class="kt">IdService</span><span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">override</span> <span class="k">val</span> <span class="n">server</span> <span class="k">=</span>
+</span><span class='line'>  <span class="k">new</span> <span class="nc">EmbeddedHttpServer</span><span class="o">(</span><span class="k">new</span> <span class="nc">ExampleServer</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">.</span><span class="n">bind</span><span class="o">[</span><span class="kt">IdService</span><span class="o">](</span><span class="n">mockIdService</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><nav>
+  <ul class="pager">
+    <li class="previous"><a href="/finatra/user-guide/build-new-thrift-server"><span aria-hidden="true">&larr;</span>&nbsp;Building&nbsp;a&nbsp;new&nbsp;Thrift&nbsp;Server</a></li>
+    <li></li>
+  </ul>
+</nav></p>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+  
+</aside>
+
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2016&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>
