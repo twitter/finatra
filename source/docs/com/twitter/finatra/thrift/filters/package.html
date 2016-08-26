@@ -106,6 +106,33 @@
                 <span class="name">@Singleton</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.filters.DarkTrafficFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="DarkTrafficFilter[ServiceIface]extendsThriftFilterwithAbstractDarkTrafficFilterwithLogging"></a>
+      <a id="DarkTrafficFilter[ServiceIface]:DarkTrafficFilter[ServiceIface]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="DarkTrafficFilter.html"><span class="name">DarkTrafficFilter</span></a><span class="tparams">[<span name="ServiceIface">ServiceIface</span>]</span><span class="result"> extends <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.exp.AbstractDarkTrafficFilter" class="extype" target="_top">AbstractDarkTrafficFilter</a> with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.filters.package@DarkTrafficFilter[ServiceIface]extendsThriftFilterwithAbstractDarkTrafficFilterwithLogging" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">An implementation of <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.exp.AbstractDarkTrafficFilter" class="extype" target="_top">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends
+<a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">com.twitter.finatra.thrift.ThriftFilter</a> and thus works in a Finatra ThriftRouter
+filter chain.</p><div class="fullcomment"><div class="comment cmt"><p>An implementation of <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.exp.AbstractDarkTrafficFilter" class="extype" target="_top">com.twitter.finagle.exp.AbstractDarkTrafficFilter</a> which extends
+<a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">com.twitter.finatra.thrift.ThriftFilter</a> and thus works in a Finatra ThriftRouter
+filter chain. This differs from the <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.exp.DarkTrafficFilter" class="extype" target="_top">com.twitter.finagle.exp.DarkTrafficFilter</a> in that
+this class is typed to work like other ThriftFilters as agnostic to types until apply() is
+invoked.
+</p></div><dl class="paramcmts block"><dt class="tparam">ServiceIface</dt><dd class="cmt"><p>- the type of the Service to take dark traffic</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@<a href="../../annotations/Experimental.html" class="extype" name="com.twitter.finatra.annotations.Experimental">Experimental</a></span><span class="args">()</span>
+              
+        </dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.exp.DarkTrafficFilter" class="extype" target="_top">com.twitter.finagle.exp.DarkTrafficFilter</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.filters.LoggingMDCFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="LoggingMDCFilterextendsThriftFilter"></a>
       <a id="LoggingMDCFilter:LoggingMDCFilter"></a>

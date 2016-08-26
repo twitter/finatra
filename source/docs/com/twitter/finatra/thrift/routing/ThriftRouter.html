@@ -172,7 +172,24 @@
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService](implicitevidence$2:Manifest[C]):com.twitter.finatra.thrift.routing.ThriftRouter"></a>
+      <a id="add(controller:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService):com.twitter.finatra.thrift.routing.ThriftRouter"></a>
+      <a id="add(ControllerwithToThriftService):ThriftRouter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">add</span><span class="params">(<span name="controller">controller: <a href="../Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <span class="extype" name="com.twitter.scrooge.ToThriftService">ToThriftService</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.routing.ThriftRouter@add(controller:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Add controller used for all requests *</p>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService](implicitevidence$4:Manifest[C]):com.twitter.finatra.thrift.routing.ThriftRouter"></a>
       <a id="add[C&lt;:ControllerwithToThriftService](Manifest[C]):ThriftRouter"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -183,11 +200,11 @@
         <span class="name">add</span><span class="tparams">[<span name="C">C &lt;: <a href="../Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <span class="extype" name="com.twitter.scrooge.ToThriftService">ToThriftService</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.add.C">C</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.routing.ThriftRouter@add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService](implicitevidence$2:Manifest[C]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.routing.ThriftRouter@add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.scrooge.ToThriftService](implicitevidence$4:Manifest[C]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      
+      <p class="shortcomment cmt">Instantiate and add thrift controller used for all requests *</p>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -418,6 +435,23 @@
       </a>
     </span>
       <p class="shortcomment cmt">Add global filter used for all requests</p>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[FilterType],implicitevidence$3:Manifest[Ann]):com.twitter.finatra.thrift.routing.ThriftRouter"></a>
+      <a id="filter[FilterType&lt;:ThriftFilter,Ann&lt;:Annotation](Manifest[FilterType],Manifest[Ann]):ThriftRouter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filter</span><span class="tparams">[<span name="FilterType">FilterType &lt;: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>, <span name="Ann">Ann &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.FilterType">FilterType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.Ann">Ann</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.routing.ThriftRouter@filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[FilterType],implicitevidence$3:Manifest[Ann]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Add global filter used for all requests annotated with Annotation Type</p>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#filter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter](implicitevidence$1:Manifest[FilterType]):com.twitter.finatra.thrift.routing.ThriftRouter"></a>
       <a id="filter[FilterType&lt;:ThriftFilter](Manifest[FilterType]):ThriftRouter"></a>

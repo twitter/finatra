@@ -414,7 +414,7 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">body</span><span class="params">(<span name="b">b: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">body</span><span class="params">(<span name="b">b: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.twitter.finatra.http.response.ResponseBuilder$EnrichedResponse@body(b:Array[Byte]):ResponseBuilder.this.EnrichedResponse" title="Permalink" target="_top">
@@ -1070,8 +1070,8 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
       <p class="shortcomment cmt">Helper method for returning responses that are the result of a &quot;service-level&quot; failure.</p><div class="fullcomment"><div class="comment cmt"><p>Helper method for returning responses that are the result of a &quot;service-level&quot; failure. This is most commonly
 useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> implementation.
 </p></div><dl class="paramcmts block"><dt class="param">classifier</dt><dd class="cmt"><p>- if the failure should be &quot;classified&quot;, e.g. logged and stat'd accordingly</p></dd><dt class="param">request</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>- The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>- Details about this exception suitable for stats. Each element will be converted into a string.
-               Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
-               as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>- Details about this exception to be logged when this exception occurs. Typically logDetails
+                  Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
+                  as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>- Details about this exception to be logged when this exception occurs. Typically logDetails
                   contains the unbounded details of the exception that you are not able to stat such as an
                   actual tweet ID (see above)</p></dd><dt>returns</dt><dd class="cmt"><p>this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#failureClassifier" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
@@ -1933,7 +1933,7 @@ that perform client side routing.
       </a>
     </span>
       
-    </li><li name="com.twitter.finagle.http.Message#reader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finagle.http.ResponseProxy#reader" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reader:com.twitter.io.Reader"></a>
       <a id="reader:Reader"></a>
       <h4 class="signature">
@@ -1949,7 +1949,7 @@ that perform client side routing.
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>ResponseProxy → Message</dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#referer" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="referer:Option[String]"></a>
       <a id="referer:Option[String]"></a>
@@ -2651,7 +2651,7 @@ that perform client side routing.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">write</span><span class="params">(<span name="bytes">bytes: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">write</span><span class="params">(<span name="bytes">bytes: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.twitter.finatra.http.response.ResponseBuilder$EnrichedResponse@write(bytes:Array[Byte]):Unit" title="Permalink" target="_top">

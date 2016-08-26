@@ -91,7 +91,7 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.http.response.ResponseBuilder#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(objectMapper:com.twitter.finatra.json.FinatraObjectMapper,fileResolver:com.twitter.finatra.http.routing.FileResolver,messageBodyManager:com.twitter.finatra.http.internal.marshalling.MessageBodyManager,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.http.response.ResponseBuilder"></a>
+      <a id="&lt;init&gt;(objectMapper:com.twitter.finatra.json.FinatraObjectMapper,fileResolver:com.twitter.finatra.http.routing.FileResolver,messageBodyManager:com.twitter.finatra.http.internal.marshalling.MessageBodyManager,statsReceiver:com.twitter.finagle.stats.StatsReceiver,includeContentTypeCharset:Boolean):com.twitter.finatra.http.response.ResponseBuilder"></a>
       <a id="&lt;init&gt;:ResponseBuilder"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -99,10 +99,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ResponseBuilder</span><span class="params">(<span name="objectMapper">objectMapper: <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>, <span name="fileResolver">fileResolver: <a href="../routing/FileResolver.html" class="extype" name="com.twitter.finatra.http.routing.FileResolver">FileResolver</a></span>, <span name="messageBodyManager">messageBodyManager: <a href="../internal/marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.internal.marshalling.MessageBodyManager">MessageBodyManager</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>)</span>
+        <span class="name">ResponseBuilder</span><span class="params">(<span name="objectMapper">objectMapper: <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">FinatraObjectMapper</a></span>, <span name="fileResolver">fileResolver: <a href="../routing/FileResolver.html" class="extype" name="com.twitter.finatra.http.routing.FileResolver">FileResolver</a></span>, <span name="messageBodyManager">messageBodyManager: <a href="../internal/marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.internal.marshalling.MessageBodyManager">MessageBodyManager</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>, <span name="includeContentTypeCharset">includeContentTypeCharset: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>)</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.response.ResponseBuilder@&lt;init&gt;(objectMapper:com.twitter.finatra.json.FinatraObjectMapper,fileResolver:com.twitter.finatra.http.routing.FileResolver,messageBodyManager:com.twitter.finatra.http.internal.marshalling.MessageBodyManager,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.http.response.ResponseBuilder" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.http.response.ResponseBuilder@&lt;init&gt;(objectMapper:com.twitter.finatra.json.FinatraObjectMapper,fileResolver:com.twitter.finatra.http.routing.FileResolver,messageBodyManager:com.twitter.finatra.http.internal.marshalling.MessageBodyManager,statsReceiver:com.twitter.finagle.stats.StatsReceiver,includeContentTypeCharset:Boolean):com.twitter.finatra.http.response.ResponseBuilder" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -920,6 +920,23 @@
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder#jsonContentType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="jsonContentType:String"></a>
+      <a id="jsonContentType:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">jsonContentType</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.response.ResponseBuilder@jsonContentType:String" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
     </li><li name="com.twitter.inject.Logging#logger" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:grizzled.slf4j.Logger"></a>
       <a id="logger:Logger"></a>
@@ -1261,6 +1278,23 @@ contained within the <code>Request</code>.
       </span>
       </h4><span class="permalink">
       <a href="../../../../../index.html#com.twitter.finatra.http.response.ResponseBuilder@ok:ResponseBuilder.this.EnrichedResponse" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder#plainTextContentType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="plainTextContentType:String"></a>
+      <a id="plainTextContentType:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">plainTextContentType</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.response.ResponseBuilder@plainTextContentType:String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
