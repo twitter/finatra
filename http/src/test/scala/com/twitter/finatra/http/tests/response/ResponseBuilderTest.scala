@@ -23,7 +23,8 @@ class ResponseBuilderTest
       localDocRoot = "src/main/webapp/",
       docRoot = ""),
     messageBodyManager = mock[MessageBodyManager],
-    statsReceiver = mock[StatsReceiver])
+    statsReceiver = mock[StatsReceiver],
+    includeContentTypeCharset = true)
 
   "response builder" should {
 

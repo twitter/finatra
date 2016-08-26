@@ -123,6 +123,18 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     }
   }
 
+  "Map[String, String]" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(stringMapCallback),
+      withBody = """{"message":"Hello, World!"}""")
+  }
+
+  "String" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(stringCallback),
+      withBody = "Hello, World!")
+  }
+
   "AsyncStream request" in {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")
@@ -165,6 +177,14 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     assertOk(
       callbackConverter.convertToFutureResponse(nullCallback),
       withBody = "")
+  }
+
+  def stringMapCallback(request: Request): Map[String, String] = {
+    Map("message" -> "Hello, World!")
+  }
+
+  def stringCallback(request: Request): String = {
+    "Hello, World!"
   }
 
   def objectCallback(request: Request): Object = {

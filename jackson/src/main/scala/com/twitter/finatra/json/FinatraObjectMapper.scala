@@ -10,7 +10,7 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.RequestFieldInject
 import com.twitter.finatra.json.internal.serde.ArrayElementsOnNewLinesPrettyPrinter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.io.Buf
-import java.io.{InputStream, OutputStream}
+import java.io.{ByteArrayOutputStream, InputStream, OutputStream}
 import java.nio.ByteBuffer
 
 object FinatraObjectMapper {
@@ -143,8 +143,27 @@ case class FinatraObjectMapper(
   }
 
   def writeValueAsBuf(any: Any): Buf = {
-    Buf.ByteArray.Shared(
+    Buf.ByteArray.Owned(
       objectMapper.writeValueAsBytes(any))
+  }
+
+  // optimized
+  def writeStringMapAsBuf(stringMap: Map[String, String]): Buf = {
+    val os = new ByteArrayOutputStream()
+
+    val jsonGenerator = objectMapper.getFactory.createGenerator(os)
+    try {
+      jsonGenerator.writeStartObject()
+      for ((key, value) <- stringMap) {
+        jsonGenerator.writeStringField(key, value)
+      }
+      jsonGenerator.writeEndObject()
+      jsonGenerator.flush()
+
+      Buf.ByteArray.Owned(os.toByteArray)
+    } finally {
+      jsonGenerator.close()
+    }
   }
 
   def registerModule(module: Module) = {

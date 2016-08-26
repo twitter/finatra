@@ -11,10 +11,13 @@ import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
+import com.twitter.inject.annotations.Flag
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
 import com.twitter.io.Buf
-import com.twitter.util.{Future, Memoize}
+import com.twitter.util.Future
 import java.io.{BufferedInputStream, File, FileInputStream, InputStream}
+import java.util.concurrent.ConcurrentHashMap
+import java.util.function.{Function => JFunction}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
@@ -24,20 +27,41 @@ import scala.runtime.BoxedUnit
 
 object ResponseBuilder {
   val DefaultCharset = "charset=utf-8"
-  val PlainTextContentType = "text/plain; " + DefaultCharset
 }
 
 class ResponseBuilder @Inject()(
   objectMapper: FinatraObjectMapper,
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,
-  statsReceiver: StatsReceiver)
+  statsReceiver: StatsReceiver,
+  @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean)
   extends Logging {
 
   // generates stats in the form: service/failure/[source]/[details]
   private val serviceFailureNamespace = Seq("service", "failure")
   private val serviceFailureScoped = statsReceiver.scope(serviceFailureNamespace: _*)
   private val serviceFailureCounter = statsReceiver.counter(serviceFailureNamespace: _*)
+
+  // optimized
+  private[this] val mimeTypeCache = new ConcurrentHashMap[String, String]()
+  private[this] val whenMimeTypeAbsent = new JFunction[String, String] {
+    override def apply(mimeType: String): String = {
+      if (includeContentTypeCharset)
+        mimeType + "; " + ResponseBuilder.DefaultCharset
+      else
+        mimeType
+    }
+  }
+  // optimized: MediaType.toString is a hotspot when profiling
+  private[this] val mediaTypeCache = new ConcurrentHashMap[MediaType, String]()
+  private[this] val whenMediaTypeAbsent = new JFunction[MediaType, String] {
+    override def apply(mediaType: MediaType): String = {
+      mediaType.toString
+    }
+  }
+
+  val plainTextContentType = fullMimeTypeValue("text/plain")
+  val jsonContentType = fullMimeTypeValue("application/json")
 
   /* Status Codes */
 
@@ -136,6 +160,10 @@ class ResponseBuilder @Inject()(
   def clientClosed = EnrichedResponse(Status.ClientClosedRequest)
 
   def create(response: Response) = new EnrichedResponse(response)
+
+  private def fullMimeTypeValue(mimeType: String): String = {
+    mimeTypeCache.computeIfAbsent(mimeType, whenMimeTypeAbsent)
+  }
 
   object EnrichedResponse {
     def apply(s: Status): EnrichedResponse = EnrichedResponse(Response(Version.Http11, s))
@@ -243,7 +271,9 @@ class ResponseBuilder @Inject()(
     }
 
     def contentTypeJson() = {
-      contentType("application/json")
+      response.headerMap.set(
+        Fields.ContentType,
+        jsonContentType)
       this
     }
 
@@ -304,7 +334,7 @@ class ResponseBuilder @Inject()(
     def contentType(mimeType: String) = {
       response.headerMap.set(
         Fields.ContentType,
-        mimeType + "; " + ResponseBuilder.DefaultCharset)
+        fullMimeTypeValue(mimeType))
       this
     }
 
@@ -349,31 +379,31 @@ class ResponseBuilder @Inject()(
      *
      * @\Singleton
      * class AuthenticationExceptionMapper @Inject()(
-     *   response: ResponseBuilder)
+     *  response: ResponseBuilder)
      * extends ExceptionMapper[AuthenticationException] {
      *
-     *   override def toResponse(
-     *     request: Request,
-     *     exception: AuthenticationException
-     *   ): Response = {
-     *     response
-     *       .status(exception.status)
-     *       .failureClassifier(
-     *         is5xxStatus(exception.status),
-     *         request,
-     *         exception)
-     *       .jsonError( s"Your account could not be authenticated. Reason: ${exception.resultCode}")
-     *   }
+     *  override def toResponse(
+     *    request: Request,
+     *    exception: AuthenticationException
+     *  ): Response = {
+     *    response
+     *      .status(exception.status)
+     *      .failureClassifier(
+     *        is5xxStatus(exception.status),
+     *        request,
+     *        exception)
+     *    .jsonError(s"Your account could not be authenticated. Reason: ${exception.resultCode}")
+     *  }
      * }
+     *
      * @param request - the [[com.twitter.finagle.http.Request]] that triggered the failure
-     * @param source - The named component responsible for causing this failure.
+     * @param source  - The named component responsible for causing this failure.
      * @param details - Details about this exception suitable for stats. Each element will be converted into a string.
      *                Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
      *                as "protected" or "unprotected", but you can't include the actual tweet id "696081566032723968").
      * @param message - Details about this exception to be logged when this exception occurs. Typically logDetails
      *                contains the unbounded details of the exception that you are not able to stat such as an
      *                actual tweet ID (see above)
-     *
      * @see [[EnrichedResponse#failureClassifier]]
      * @return this [[EnrichedResponse]]
      */
@@ -406,12 +436,12 @@ class ResponseBuilder @Inject()(
      * useful in an [[com.twitter.finatra.http.exceptions.ExceptionMapper]] implementation.
      *
      * @param classifier - if the failure should be "classified", e.g. logged and stat'd accordingly
-     * @param request - the [[com.twitter.finagle.http.Request]] that triggered the failure
-     * @param source - The named component responsible for causing this failure.
-     * @param details - Details about this exception suitable for stats. Each element will be converted into a string.
-     *                Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
-     *                as "protected" or "unprotected", but you can't include the actual tweet id "696081566032723968").
-     * @param message - Details about this exception to be logged when this exception occurs. Typically logDetails
+     * @param request    - the [[com.twitter.finagle.http.Request]] that triggered the failure
+     * @param source     - The named component responsible for causing this failure.
+     * @param details    - Details about this exception suitable for stats. Each element will be converted into a string.
+     *                   Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
+     *                   as "protected" or "unprotected", but you can't include the actual tweet id "696081566032723968").
+     * @param message    - Details about this exception to be logged when this exception occurs. Typically logDetails
      *                   contains the unbounded details of the exception that you are not able to stat such as an
      *                   actual tweet ID (see above)
      * @return this [[EnrichedResponse]]
@@ -449,9 +479,8 @@ class ResponseBuilder @Inject()(
       getExtension(requestPath).nonEmpty
     }
 
-    //optimized: MediaType.toString is a hotspot when profiling
-    private val mediaToString = Memoize { mediaType: MediaType =>
-      mediaType.toString
+    private def mediaToString(mediaType: MediaType): String = {
+      mediaTypeCache.computeIfAbsent(mediaType, whenMediaTypeAbsent)
     }
 
     private def routeScopedFailure(request: Request): StatsReceiver = {
@@ -484,4 +513,5 @@ class ResponseBuilder @Inject()(
       this
     }
   }
+
 }

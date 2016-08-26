@@ -5,6 +5,7 @@ import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.internal.ThriftMethodService
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftService, ToThriftService}
+import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.{Inject, Singleton}
 import scala.collection.mutable.{Map => MutableMap}
 
@@ -27,6 +28,11 @@ class ThriftRouter @Inject()(
     filter(injector.instance[FilterType])
   }
 
+  /** Add global filter used for all requests annotated with Annotation Type */
+  def filter[FilterType <: ThriftFilter : Manifest, Ann <: JavaAnnotation : Manifest]: ThriftRouter = {
+    filter(injector.instance[FilterType, Ann])
+  }
+
   /** Add global filter used for all requests */
   def filter(clazz: Class[_ <: ThriftFilter]): ThriftRouter = {
     filter(injector.instance(clazz))
@@ -39,8 +45,14 @@ class ThriftRouter @Inject()(
     this
   }
 
+  /** Instantiate and add thrift controller used for all requests **/
   def add[C <: Controller with ToThriftService : Manifest]: ThriftRouter = {
     val controller = injector.instance[C]
+    add(controller)
+  }
+
+  /** Add controller used for all requests **/
+  def add(controller: Controller with ToThriftService): ThriftRouter = {
     for (m <- controller.methods) {
       m.setFilter(filterChain)
       methods += (m.method -> m)

@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.twitter</groupId>
   <artifactId>hello-world</artifactId>
-  <version>2.2.0</version>
+  <version>2.3.0</version>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <encoding>UTF-8</encoding>
     <scala.version>2.11.7</scala.version>
-    <finatra.version>2.2.0</finatra.version>
+    <finatra.version>2.3.0</finatra.version>
 
     <mainClass>com.twitter.hello.HelloWorldServerMain</mainClass>
     <buildPropertiesPackage>com.twitter.hello</buildPropertiesPackage>

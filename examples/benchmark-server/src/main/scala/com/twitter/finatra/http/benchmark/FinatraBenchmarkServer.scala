@@ -1,27 +1,38 @@
 package com.twitter.finatra.http.benchmark
 
+import com.twitter.finagle.Http
 import com.twitter.finagle.http.Request
+import com.twitter.finagle.stats.NullStatsReceiver
+import com.twitter.finagle.tracing.NullTracer
+import com.twitter.finatra.http.filters.HttpResponseFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, HttpServer}
 
 object FinatraBenchmarkServerMain extends FinatraBenchmarkServer
 
 class FinatraBenchmarkServer extends HttpServer {
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttpServer(server: Http.Server) = {
+    server
+      .withCompressionLevel(0)
+      .withStatsReceiver(NullStatsReceiver)
+      .withTracer(NullTracer)
+  }
+
+  override def configureHttp(router: HttpRouter): Unit = {
     router
-      .add(
-        new Controller {
-          get("/json") { request: Request =>
-            Map("message" -> "Hello, World!")
-          }
+      .filter[HttpResponseFilter[Request]]
+      .add[FinatraBenchmarkController]
+  }
+}
 
-          get("/json/:id") { request: Request =>
-            Map("message" -> ("Hello " + request.params("id")))
-          }
+class FinatraBenchmarkController extends Controller {
+  private[this] val helloWorldResponseText = "Hello, World!"
 
-          get("/hi") { request: Request =>
-            "Hello " + request.params.getOrElse("name", "unnamed")
-          }
-        })
+  get("/json") { request: Request =>
+    Map("message" -> "Hello, World!")
+  }
+
+  get("/plaintext") { request: Request =>
+    helloWorldResponseText
   }
 }

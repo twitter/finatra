@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](http://travis-ci.org/twitter/finatra?branch=master)
 [![Test Coverage](http://codecov.io/github/twitter/finatra/coverage.svg?branch=master)](http://codecov.io/github/twitter/finatra?branch=master)
 [![Project status](https://img.shields.io/badge/status-active-brightgreen.svg)](#status)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.twitter.finatra/finatra-http_2.11)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)][maven-central]
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
 ## Status
@@ -11,197 +11,110 @@
 This project is used in production at Twitter (and many other organizations),
 and is being actively developed and maintained.
 
-![finatra logo](finatra_logo.png)
+<img src="./finatra_logo_text.png" title="Finatra Logo" alt="Finatra Logo" height=394 width=679/>
 
-#### Fast, testable, Scala services built on Twitter-Server and Finagle.
+Finatra is a lightweight framework for building fast, testable, scala applications on top of [TwitterServer][twitter-server] and [Finagle][finagle]. Finatra provides an easy-to-use API for creating and [testing](http://twitter.github.io/finatra/user-guide/testing/) [Finagle servers](http://twitter.github.io/finagle/guide/Servers.html) and [apps](http://twitter.github.io/util/docs/#com.twitter.app.App) as well as powerful JSON support, modern logging via [SLF4J][slf4j], [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) utilities, and more.
+
 
 ## Getting involved
 
-* Website: https://twitter.github.io/finatra/
-* Source: https://github.com/twitter/finatra/
-* Mailing List: [finatra@googlegroups.com](https://groups.google.com/forum/#!forum/finatra)
+* Website: [https://twitter.github.io/finatra/](https://twitter.github.io/finatra/)
+* Latest news: [Blog](http://twitter.github.io/finatra/blog/archives/)
+* Github Source: [https://github.com/twitter/finatra/](https://github.com/twitter/finatra/)
+* Gitter: [https://gitter.im/twitter/finatra](https://gitter.im/twitter/finatra)
+* Mailing List: [finatra-users@googlegroups.com](https://groups.google.com/forum/#!forum/finatra-users)
 
 
 ## Features
 
-* Production use as Twitter’s HTTP framework
-* ~50 times faster than v1.6 in several benchmarks
-* Powerful feature and integration test support
-* Optional JSR-330 Dependency Injection using [Google Guice][guice]
-* [Jackson][jackson] based JSON parsing supporting required fields, default values, and custom validations
-* [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across futures
+* Production use [@Twitter](https://twitter.com/).
+* ~50 times faster than v1.6 in several benchmarks.
+* Powerful Feature and Integration test support.
+* Optional JSR-330 Dependency Injection using [Google Guice][guice].
+* [Jackson][jackson]-based JSON parsing supporting required fields, default values, and [validations](http://twitter.github.io/finatra/user-guide/json/#validation-framework).
+* [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across [futures](http://twitter.github.io/util/guide/util-cookbook/futures.html).
 
-## Presentations
+## Documentation
 
-Check out our list of recent presentations: [Finatra Presentations](http://twitter.github.io/finatra/presentations/)
+To get started, see the [Getting Started](http://twitter.github.io/finatra/user-guide/getting-started) section of our [User Guide](http://twitter.github.io/finatra/user-guide/) to get up and running. Or check out the sections for building [HTTP](http://twitter.github.io/finatra/user-guide/build-new-http-server/) or [Thrift](http://twitter.github.io/finatra/user-guide/build-new-thrift-server/) servers.
 
-## News
+## Examples
 
-* Finatra is now built against the latest Finagle v6.33.0 and Twitter Server v1.18.0 releases.
-* Please take a look at our new [User Guide][user-guide]!
-* Keep up with the latest news [here](http://twitter.github.io/finatra/blog/archives/) on our blog.
+An HTTP controller and server:
 
-## <a name="quick-start">Quick Start</a>
+```scala
+import com.twitter.finatra.http._
 
-To get started we'll focus on building an HTTP API for posting and getting tweets:
-
-### Domain
-
-```Scala
-case class TweetPostRequest(
-  @Size(min = 1, max = 140) message: String,
-  location: Option[TweetLocation],
-  nsfw: Boolean = false)
-
-case class TweetGetRequest(
-  @RouteParam id: TweetId)
-```
-
-Then, let's create a [`Controller`][Controller]:
-
-### Controller
-
-```Scala
 @Singleton
-class TweetsController @Inject()(
-  tweetsService: TweetsService)
-  extends Controller {
-
-  post("/tweet") { requestTweet: TweetPostRequest =>
-    for {
-      savedTweet <- tweetsService.save(requestTweet)
-      responseTweet = TweetResponse.fromDomain(savedTweet)
-    } yield {
-      response
-        .created(responseTweet)
-        .location(responseTweet.id)
-    }
-  }
-
-  get("/tweet/:id") { request: TweetGetRequest =>
-    tweetsService.getResponseTweet(request.id)
+class ExampleController extends Controller {
+  get("/") { request: Request =>
+    "<h1>Hello, world!</h1>"
   }
 }
 ```
 
-Next, let's create a server:
+```scala
+import com.twitter.finatra.http._
 
-### Server
-
-```Scala
-class TwitterCloneServer extends HttpServer {
-  override val modules = Seq(FirebaseHttpClientModule)
-
+class ExampleServer extends HttpServer {
   override def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[CommonFilters]
-      .add[TweetsController]
+      .add[ExampleController]
   }
 }
 ```
 
-And finally, we can write a Feature Test:
+A Thrift controller and server:
 
-### Feature Test
+```scala
+import com.twitter.finatra.thrift._
 
-```Scala
-class TwitterCloneFeatureTest extends FeatureTest with Mockito {
-
-  override val server = new EmbeddedHttpServer(new TwitterCloneServer)
-
-  @Bind val firebaseClient = smartMock[FirebaseClient]
-
-  @Bind val idService = smartMock[IdService]
-
-  "tweet creation" in {
-    //Setup mocks
-    idService.getId returns Future(StatusId("123"))
-
-    val tweetResponse = TweetResponse(...)
-    firebaseClient.put("/tweets/123.json", tweetResponse) returns Future.Unit
-    firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(Option(tweetResponse))
-
-    //Assert tweet post
-    val result = server.httpPost(
-      path = "/tweet",
-      postBody = """
-        {
-          "message": "Hello #FinagleCon",
-          "location": {
-            "lat": "37.7821120598956",
-            "long": "-122.400612831116"
-          },
-          "nsfw": false
-        }""",
-      andExpect = Created,
-      withJsonBody = """
-        {
-          "id": "123",
-          "message": "Hello #FinagleCon",
-          "location": {
-            "lat": "37.7821120598956",
-            "long": "-122.400612831116"
-          },
-          "nsfw": false
-        }""")
-
-    server.httpGetJson[TweetResponse](
-      path = result.location.get,
-      andExpect = Ok,
-      withJsonBody = result.contentString)
-  }
-
-  "Post bad tweet" in {
-    server.httpPost(
-      path = "/tweet",
-      postBody = """
-        {
-          "message": "",
-          "location": {
-            "lat": "9999"
-          },
-          "nsfw": "abc"
-        }""",
-      andExpect = BadRequest,
-      withJsonBody = """
-        {
-          "errors" : [
-            "location.lat: [9999.0] is not between -85 and 85",
-            "location.long: field is required",
-            "message: size [0] is not between 1 and 140",
-            "nsfw: 'abc' is not a valid boolean"
-          ]
-        }
-        """)
+@Singleton
+class ExampleThriftController 
+  extends Controller
+  with MyThriftService.BaseServiceIface {
+  
+  override val myFunction = handle(MyFunction) { args: MyFunction.Args =>
+    ...
   }
 }
 ```
 
-## Detailed Documentation
+```scala
+import com.twitter.finatra.thrift._
 
-The Finatra project is composed of several libraries. You can find details in a project's README or see the [User Guide][user-guide] for detailed information on building applications with Finatra.
+class ExampleServer extends ThriftServer {
+  override def configureThrift(router: ThriftRouter): Unit = {
+    router
+      .add[ExampleThriftController]
+  }
+}
+```
 
 ## Example Projects
 
-For more detailed information see the README.md within each example project.
+Finatra includes working examples which highlight various features of the framework and include tests. In the [develop branch](https://github.com/twitter/finatra/tree/develop/examples) these examples are included in the root [sbt](http://www.scala-sbt.org/) build and are thus buildable as part of the entire project. In the [master branch](https://github.com/twitter/finatra/tree/master/examples) (or a [release branch](https://github.com/twitter/finatra/tree/finatra-2.3.0/examples)) these examples can be built using their invididual [sbt](http://www.scala-sbt.org/) (or [Maven](http://maven.apache.org/)) build files.
 
-### [hello-world](./examples/hello-world/README.md)
-A barebones "Hello World" service.
+Please take a look through the [examples](/examples) for more detailed information on features, testing, and building with sbt (or Maven).
 
-### [hello-world-heroku](./examples/hello-world-heroku/README.md)
-A barebones service that is deployable to [Heroku](https://heroku.com).
+## Latest version
 
-### [tiny-url](examples/tiny-url/README.md)
-A url shortening example that is deployable to [Heroku](https://heroku.com).
+The [master branch](https://github.com/twitter/finatra/tree/master) in Github tracks the latest stable [release](https://github.com/twitter/finatra/releases), which is currently:
 
-### [twitter-clone](examples/twitter-clone/README.md)
-An example Twitter-like API for creating and retrieving Tweets.
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)][maven-central]
 
-### [benchmark-server](examples/benchmark-server/README.md)
-A server used for benchmarking performance compared to a raw finagle-http service.
+available on Maven Central. See the [basics](http://twitter.github.io/finatra/user-guide/getting-started/#dependencies) section in the [User Guide][user-guide] for how to add dependencies.
 
-### [streaming](examples/streaming-example/README.md)
-A proof-of-concept streaming JSON service.
+## Development version
+
+The [develop branch](https://github.com/twitter/finatra/tree/develop) in Github tracks the latest code which is updated every week. If you want to contribute a patch or fix, please use this branch as the basis of your [Pull Request](https://help.github.com/articles/creating-a-pull-request/). 
+
+For more information on providing contributions, please see our [CONTRIBUTING.md](/CONTRIBUTING.md) documentation.
+
+## Presentations
+
+Check out our list of presentations: [Finatra Presentations](http://twitter.github.io/finatra/presentations/).
 
 ## Authors
 
@@ -212,7 +125,6 @@ A full list of [contributors](https://github.com/twitter/finatra/graphs/contribu
 
 Follow [@finatra](http://twitter.com/finatra) on Twitter for updates.
 
-
 ## License
 
 Copyright 2013-2016 Twitter, Inc.
@@ -222,16 +134,11 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [twitter-server]: https://github.com/twitter/twitter-server
 [finagle]: https://github.com/twitter/finagle
 [util-app]: https://github.com/twitter/util/tree/master/util-app
-[util-core]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala#L90
 [guice]: https://github.com/google/guice
 [jackson]: https://github.com/FasterXML/jackson
 [logback]: http://logback.qos.ch/
 [slf4j]: http://www.slf4j.org/manual.html
-[grizzled-slf4j]: http://software.clapper.org/grizzled-slf4j/
 [local]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala
 [mdc]: http://logback.qos.ch/manual/mdc.html
-[Controller]: http/src/main/scala/com/twitter/finatra/http/Controller.scala
-[HttpServer]: http/src/main/scala/com/twitter/finatra/http/HttpServer.scala
-[twitter-clone-example]: examples/twitter-clone/
-[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22
+[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20%28a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22%29
 [user-guide]: http://twitter.github.io/finatra/user-guide/

@@ -5,8 +5,10 @@ import com.twitter.finagle.http._
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
+import com.twitter.io.Buf
 import com.twitter.util.Future
 import javax.inject.Inject
+import org.jboss.netty.handler.codec.http.HttpResponseStatus
 
 private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
@@ -88,9 +90,27 @@ private[http] class CallbackConverter @Inject()(
     else if (runtimeClassEq[ResponseType, String]) {
       // optimized
       request: Request =>
+        Future.value(
+          new NonValidatingHttpHeadersResponse(
+            status = HttpResponseStatus.OK,
+            content = Buf.Utf8(requestCallback(request).asInstanceOf[String]),
+            contentType = responseBuilder.plainTextContentType))
+    }
+    else if (isStringMap[ResponseType]) {
+      // optimized
+      request: Request =>
+        Future.value(
+          new NonValidatingHttpHeadersResponse(
+            status = HttpResponseStatus.OK,
+            content = mapper.writeStringMapAsBuf(requestCallback(request).asInstanceOf[Map[String, String]]),
+            contentType = responseBuilder.jsonContentType))
+    }
+    else if (runtimeClassEq[ResponseType, Map[_, _]]) {
+      // optimized
+      request: Request =>
         val response = Response(Version.Http11, Status.Ok)
-        response.setContentString(requestCallback(request).asInstanceOf[String])
-        response.headerMap.add(Fields.ContentType, ResponseBuilder.PlainTextContentType)
+        response.content = mapper.writeValueAsBuf(requestCallback(request))
+        response.headerMap.add(Fields.ContentType, responseBuilder.jsonContentType)
         Future.value(response)
     }
     else {
@@ -117,6 +137,14 @@ private[http] class CallbackConverter @Inject()(
 
   private def runtimeClassEq[T: Manifest, U: Manifest]: Boolean = {
     manifest[T].runtimeClass == manifest[U].runtimeClass
+  }
+
+  private def isStringMap[T: Manifest]: Boolean = {
+    val typeArgs = manifest[T].typeArguments
+    runtimeClassEq[T, Map[_, _]] &&
+      typeArgs.size == 2 &&
+      typeArgs.head.runtimeClass == classOf[String] &&
+      typeArgs.tail.head.runtimeClass == classOf[String]
   }
 
   private def isFutureOption[T: Manifest]: Boolean = {

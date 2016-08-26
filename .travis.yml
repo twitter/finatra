@@ -9,8 +9,7 @@ jdk:
 before_script:
   # default $SBT_OPTS is irrelevant to sbt launcher
   - unset SBT_OPTS
-  - chmod +x ./bin/travisci
-  - ./bin/travisci
+  - curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
 
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport

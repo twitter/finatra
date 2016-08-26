@@ -1,6 +1,6 @@
 name := "java-server"
 organization := "com.twitter"
-version := "2.2.0"
+version := "2.3.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 publishMavenStyle := true
@@ -10,7 +10,7 @@ autoScalaLibrary := false
 mainClass in (Compile, packageBin) := Some("com.twitter.hello.server.HelloWorldServerMain")
 
 lazy val versions = new {
-  val finatra = "2.2.0"
+  val finatra = "2.3.0"
   val guice = "4.0"
   val logback = "1.1.7"
 }
@@ -22,6 +22,7 @@ resolvers ++= Seq(
 
 assemblyMergeStrategy in assembly := {
   case "BUILD" => MergeStrategy.discard
+  case "META-INF/io.netty.versions.properties" => MergeStrategy.last
   case other => MergeStrategy.defaultMergeStrategy(other)
 }
 

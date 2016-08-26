@@ -314,7 +314,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "future")
     }
 
-    "post" in {
+    "POST" in {
       server.httpPost(
         "/foo",
         postBody = "",
@@ -322,7 +322,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "bar")
     }
 
-    "post form" in {
+    "POST form" in {
       server.httpFormPost(
         "/formPost",
         params = Map("name" -> "bob", "age" -> "18"),
@@ -330,7 +330,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "bob")
     }
 
-    "post multipart" in {
+    "POST multipart" in {
       val request = deserializeRequest("/multipart/request-POST-android.bytes")
       request.uri = "/multipartParamsEcho"
 
@@ -341,7 +341,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withJsonBody = """["banner"]""")
     }
 
-    "post multipart form" in {
+    "POST multipart form" in {
       server.httpMultipartFormPost(
         "/formPostMultipart",
         params = Seq(
@@ -354,7 +354,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "text/plain")
     }
 
-    "put multipart" in {
+    "PUT multipart" in {
       val request = deserializeRequest("/multipart/request-POST-android.bytes")
       request.uri = "/multipartParamsPutEcho"
       request.method = Method.Put
@@ -417,7 +417,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.location should equal(Some("/foo/1"))
     }
 
-    "post user with injected group_id from route param" in {
+    "POST user with injected group_id from route param" in {
       server.httpPost(
         "/groups/123/users",
         postBody =
@@ -533,7 +533,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       request.contentString should endWith("/path/")
     }
 
-    "get to put" in {
+    "GET to PUT" in {
       server.httpGet(
         "/put",
         andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
@@ -558,16 +558,19 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       e.getMessage() should include("requires a type-param")
     }
 
-    "put body with multi-byte characters" in {
+    "PUT body with multi-byte characters" in {
       val musicalNote = "\uD83C\uDFB5"
       val body = s"${musicalNote} ${musicalNote}"
-      server.httpPut("/echo", body,
+      server.httpPut(
+        "/echo",
+        putBody = body,
+        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
         andExpect = Ok,
         withBody = body
       )
     }
 
-    "put to put" in {
+    "PUT to PUT" in {
       server.httpPut(
         "/put/123",
         putBody = "asdf",
@@ -575,7 +578,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "123_asdf")
     }
 
-    "put with RouteParam and non-json body" in {
+    "PUT with RouteParam and non-json body" in {
       server.httpPut(
         "/put_route_param/123",
         contentType = "plain/text",
@@ -584,7 +587,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "123_asdf")
     }
 
-    "put with RouteParam and json body" in {
+    "PUT with RouteParam and json body" in {
       server.httpPut(
         "/put_route_param/123",
         putBody = "{}",
@@ -592,7 +595,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "123_")
     }
 
-    "put with RouteParam and empty body" in {
+    "PUT with RouteParam and empty body" in {
       server.httpPut(
         "/put_route_param/123",
         putBody = "",
@@ -608,7 +611,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "123_bob")
     }
 
-    "put_route_param_and_name with empty put body" in {
+    "put_route_param_and_name with empty PUT body" in {
       server.httpPut(
         "/put_route_param_and_name/123",
         putBody = "",
@@ -621,7 +624,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         }""")
     }
 
-    "put_route_param_and_name with non json put body" in {
+    "put_route_param_and_name with non json PUT body" in {
       server.httpPut(
         "/put_route_param_and_name/123",
         putBody = "foo",
@@ -658,7 +661,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         }""")
     }
 
-    "post to putAndPost" in {
+    "POST to putAndPost" in {
       server.httpPost(
         "/putAndPost",
         postBody = "1",
@@ -666,7 +669,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "POST1")
     }
 
-    "put to putAndPost" in {
+    "PUT to putAndPost" in {
       server.httpPut(
         "/putAndPost",
         putBody = "2",
@@ -674,13 +677,13 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "PUT2")
     }
 
-    "get to putAndPost" in {
+    "GET to putAndPost" in {
       server.httpGet(
         "/putAndPost",
         andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
     }
 
-    "post to postAndPut" in {
+    "POST to postAndPut" in {
       server.httpPost(
         "/postAndPut",
         postBody = "1",
@@ -688,7 +691,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "POST1")
     }
 
-    "put to postAndPut" in {
+    "PUT to postAndPut" in {
       server.httpPut(
         "/postAndPut",
         putBody = "2",
@@ -696,7 +699,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "PUT2")
     }
 
-    "get to postAndPut" in {
+    "GET to postAndPut" in {
       server.httpGet(
         "/postAndPut",
         andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
@@ -852,7 +855,10 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     "POST body with multi-byte characters" in {
       val musicalNote = "\uD83C\uDFB5"
       val body = s"${musicalNote} ${musicalNote}"
-      server.httpPost("/echo", body,
+      server.httpPost(
+        "/echo",
+        postBody = body,
+        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
         andExpect = Ok,
         withBody = body
       )
@@ -1011,31 +1017,57 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withJsonBody = """["a", "b"]""")
     }
 
-    "delete" in {
+    "DELETE" in {
       server.httpDelete(
         "/delete",
         andExpect = Ok,
         withBody = "delete")
     }
 
-    "options" in {
+    "DELETE with body" in {
+      server.httpDelete(
+        "/delete",
+        deleteBody = "DELETE BODY",
+        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+        andExpect = Ok,
+        withBody = "delete")
+    }
+
+    "DELETE with JSON body" in {
+      server.httpDelete(
+        "/delete",
+        deleteBody = "{\"id\": \"11211\"}",
+        andExpect = Ok,
+        withBody = "delete")
+    }
+
+    "OPTIONS" in {
       server.httpOptions(
         "/options",
         andExpect = Ok,
         withBody = "options")
     }
 
-    "head" in {
+    "HEAD" in {
       server.httpHead(
         "/head",
         andExpect = Conflict,
-        withBody = "") //HEAD requests cannot have bodies
+        withBody = "") //HEAD responses cannot have bodies
     }
 
-    "patch" in {
+    "PATCH" in {
       server.httpPatch(
         "/patch",
+        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
         patchBody = "asdf",
+        andExpect = Ok,
+        withBody = "patch")
+    }
+
+    "PATCH with JSON body" in {
+      server.httpPatch(
+        "/patch",
+        patchBody = "{\"id\": \"11211\"}", // note: this is not json-patch (RFC6902), just PATCH with a JSON content-type.
         andExpect = Ok,
         withBody = "patch")
     }
@@ -1043,10 +1075,12 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     "PATCH body with multi-byte characters" in {
       val musicalNote = "\uD83C\uDFB5"
       val body = s"${musicalNote} ${musicalNote}"
-      server.httpPatch("/echo", body,
+      server.httpPatch(
+        "/echo",
+        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+        patchBody = body,
         andExpect = Ok,
-        withBody = body
-      )
+        withBody = body)
     }
 
     "non guice controller" in {
@@ -1093,6 +1127,20 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       server.httpGet(
         "/forbiddenByFilter",
         andExpect = Forbidden)
+    }
+
+    "Apply multiple route filters added by type and instance" in {
+      server.httpGet(
+        "/multiFilterAppend",
+        andExpect = Ok,
+        withBody = "014")
+    }
+
+    "Apply multiple route filters added by type" in {
+      server.httpGet(
+        "/multiIdentityFilterAppend",
+        andExpect = Ok,
+        withBody = "ok!")
     }
 
     "Apply multiple route filters" in {
@@ -1462,7 +1510,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         """.stripMargin)
   }
 
-  "/trace" in {
+  "TRACE" in {
     val request = Request(Trace, "/trace")
     server.httpRequest(
       request,

@@ -188,7 +188,7 @@ class EmbeddedHttpServer(
   /**
     * Performs a GET request against the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
- *
+    *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
     * @param path - URI of the request
     * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
@@ -278,7 +278,7 @@ class EmbeddedHttpServer(
   /**
     * Performs a POST request against the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
- *
+    *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
     * @param path - URI of the request
     * @param postBody - body of the POST request
@@ -364,7 +364,7 @@ class EmbeddedHttpServer(
   /**
     * Performs a PUT request against the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
- *
+    *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
     * @param path - URI of the request
     * @param putBody - the body of the PUT request
@@ -410,6 +410,7 @@ class EmbeddedHttpServer(
     * @param deleteBody - the body of the DELETE request
     * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
     * @param suppress - suppress http client logging
+    * @param contentType - request Content-Type header value, application/json by default
     * @param headers - additional headers that should be passed with the request
     * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
     * @param withLocation - expected response Location header value
@@ -427,6 +428,7 @@ class EmbeddedHttpServer(
     deleteBody: String = null,
     accept: MediaType = null,
     suppress: Boolean = false,
+    contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
     andExpect: Status = null,
     withLocation: String = null,
@@ -440,7 +442,10 @@ class EmbeddedHttpServer(
     val request = createApiRequest(path, Method.Delete)
     if (deleteBody != null) {
       request.setContentString(deleteBody)
+      request.headerMap.set(CommonHttpHeaders.CONTENT_LENGTH, request.content.length.toString)
+      request.headerMap.set(CommonHttpHeaders.CONTENT_TYPE, contentType)
     }
+
     jsonAwareHttpExecute(
       request,
       addAcceptHeader(accept, headers),
@@ -458,7 +463,7 @@ class EmbeddedHttpServer(
   /**
     * Performs a DELETE request against the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
- *
+    *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
     * @param path - URI of the request
     * @param deleteBody - the body of the DELETE request
@@ -493,7 +498,7 @@ class EmbeddedHttpServer(
     secure: Option[Boolean] = None): ResponseType = {
 
     assert(manifest[ResponseType] != manifest[Nothing], "httpDeleteJson requires a type-param to parse the JSON response into, e.g. http<Method>Json[MyCaseClass] or http<Method>Json[JsonNode]")
-    val response = httpDelete(path, deleteBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    val response = httpDelete(path, deleteBody, MediaType.JSON_UTF_8, suppress, Message.ContentTypeJson, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
     jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
@@ -540,6 +545,7 @@ class EmbeddedHttpServer(
     * @param patchBody - the body of the PATCH request
     * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
     * @param suppress - suppress http client logging
+    * @param contentType - request Content-Type header value, application/json by default
     * @param headers - additional headers that should be passed with the request
     * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
     * @param withLocation - expected response Location header value
@@ -557,6 +563,7 @@ class EmbeddedHttpServer(
     patchBody: String,
     accept: MediaType = null,
     suppress: Boolean = false,
+    contentType: String = Message.ContentTypeJson,
     headers: Map[String, String] = Map(),
     andExpect: Status = Status.Ok,
     withLocation: String = null,
@@ -570,6 +577,7 @@ class EmbeddedHttpServer(
     val request = createApiRequest(path, Method.Patch)
     request.setContentString(patchBody)
     request.headerMap.set(CommonHttpHeaders.CONTENT_LENGTH, request.content.length.toString)
+    request.headerMap.set(CommonHttpHeaders.CONTENT_TYPE, contentType)
 
     jsonAwareHttpExecute(request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure = secure.getOrElse(defaultHttpSecure))
   }
@@ -577,7 +585,7 @@ class EmbeddedHttpServer(
   /**
     * Performs a PATCH request against the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
- *
+    *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
     * @param path - URI of the request
     * @param patchBody - the body of the PATCH request
@@ -612,7 +620,7 @@ class EmbeddedHttpServer(
     secure: Option[Boolean] = None): ResponseType = {
 
     assert(manifest[ResponseType] != manifest[Nothing], "httpPatchJson requires a type-param to parse the JSON response into, e.g. http<Method>Json[MyCaseClass] or http<Method>Json[JsonNode]")
-    val response = httpPatch(path, patchBody, MediaType.JSON_UTF_8, suppress, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    val response = httpPatch(path, patchBody, MediaType.JSON_UTF_8, suppress, Message.ContentTypeJson, headers, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
     jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 

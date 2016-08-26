@@ -12,12 +12,33 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.3.0](https://github.com/twitter/finatra/tree/finatra-2.3.0) (2016-08-25)
+
+### Added
+
+* finatra-thrift: Add non-guice method to add controller to ThriftRouter ``RB_ID=863977``
+* finatra-thrift: Add support for a "dark" traffic filter in thrift routing. Add a Finatra implementation
+  of the Finagle AbstractDarkTrafficFilter which sub-classes ThriftFilter and will work in the Finatra
+  filter chain. This will allow users to play incoming requests to a configured "dark" service. ``RB_ID=852338``
+
+### Changed
+
+* finatra-http: Performance improvements from latest micro-benchmarking run.
+  - BREAKING API CHANGE: Removed `HttpHeaders#setDate`, `HttpHeaders#set` and `HttpHeaders#GMT`. ``RB_ID=865247``
+* finatra-thrift: Provide access to statsReceiver argument in ThriftClientFilterBuilder. ``RB_ID=857286``
+
+### Fixed
+
+* finatra-http: Add content headers for EmbeddedHttpServer #httpDelete and #httpPatch methods. ``RB_ID=862200``
+
+### Closed
+
 ## [finatra-2.2.0](https://github.com/twitter/finatra/tree/finatra-2.2.0) (2016-07-07)
 
 ### Added
 
 * finatra-thrift: Add python namespace to finatra_thrift_exceptions.thrift. ``RB_ID=844668``
-* finatra-http: Support ANY method in HTTP Controllers. Adds support for defining routes which will answer 
+* finatra-http: Support ANY method in HTTP Controllers. Adds support for defining routes which will answer
   to "any" HTTP method. ``RB_ID=830429``
 
 ### Changed
@@ -150,7 +171,7 @@ All notable changes to this project will be documented in this file. Note that `
 * finatra: Move to `develop` branch as default branch for Github. ``RB_ID=810088``
 * finatra: Updated test jars to **only** contain test utility
   code. ``RB_ID=809803``
-  
+
 ### Fixed
 
 * finatra-http; finatra-thrift: Slf4JBridgeModule is added by default and no

@@ -41,6 +41,11 @@ class MessageBodyManager @Inject()(
       singleTypeParam(componentSupertypeType))
   }
 
+  def add[MBC <: MessageBodyComponent : Manifest](reader: MBC) = {
+    val componentSupertypeType = typeLiteral[MBC].getSupertype(classOf[MessageBodyReader[_]]).getType
+    addComponent(reader, singleTypeParam(componentSupertypeType))
+  }
+
   def addByAnnotation[Ann <: Annotation : Manifest, T <: MessageBodyWriter[_] : Manifest](): Unit = {
     val messageBodyWriter = injector.instance[T]
     val annot = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
@@ -64,13 +69,22 @@ class MessageBodyManager @Inject()(
     val requestManifest = manifest[T]
     readerCache.getOrElseUpdate(requestManifest, {
       val objType = typeLiteral(requestManifest).getType
-      classTypeToReader.get(objType)
+      classTypeToReader.get(objType) orElse findReaderBySuperType(objType)
     }) match {
       case Some(reader) =>
         reader.parse(request).asInstanceOf[T]
       case _ =>
         defaultMessageBodyReader.parse[T](request)
     }
+  }
+
+  private def findReaderBySuperType(t: Type): Option[MessageBodyReader[Any]] = {
+    classTypeToReader
+      .filterKeys(_.asInstanceOf[Class[_]].isAssignableFrom(t.asInstanceOf[Class[_]]))
+      .headOption
+      .map { case (classType, messageBodyReader) =>
+        messageBodyReader
+      }
   }
 
   // Note: writerCache is bounded on the number of unique classes returned from controller routes */
@@ -85,7 +99,10 @@ class MessageBodyManager @Inject()(
 
   private def add[MessageBodyComp: Manifest](typeToReadOrWrite: Type): Unit = {
     val messageBodyComponent = injector.instance[MessageBodyComp]
+    addComponent(messageBodyComponent, typeToReadOrWrite)
+  }
 
+  private def addComponent(messageBodyComponent: Any, typeToReadOrWrite: Type): Unit = {
     messageBodyComponent match {
       case reader: MessageBodyReader[_] =>
         classTypeToReader(typeToReadOrWrite) = reader.asInstanceOf[MessageBodyReader[Any]]

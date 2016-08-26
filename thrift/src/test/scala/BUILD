@@ -10,6 +10,8 @@ junit_tests(name='scala',
     'com/twitter/finatra/thrift/tests/doeverything/*.scala',
     'com/twitter/finatra/thrift/tests/doeverything/controllers/*.scala',
     'com/twitter/finatra/thrift/tests/doeverything/filters/*.scala',
+    'com/twitter/finatra/thrift/tests/doeverything/modules/*.scala',
+    'com/twitter/finatra/thrift/tests/noninjection/*.scala',
   ),
   resources=[
     'finatra/thrift/src/test/resources'
