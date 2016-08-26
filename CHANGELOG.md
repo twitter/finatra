@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-2.3.0](https://github.com/twitter/finatra/tree/finatra-2.3.0) (2016-08-25)
+
+### Added
+
 * finatra-thrift: Add non-guice method to add controller to ThriftRouter ``RB_ID=863977``
 * finatra-thrift: Add support for a "dark" traffic filter in thrift routing. Add a Finatra implementation
   of the Finagle AbstractDarkTrafficFilter which sub-classes ThriftFilter and will work in the Finatra

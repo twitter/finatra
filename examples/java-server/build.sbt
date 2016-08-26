@@ -1,11 +1,16 @@
-name := "streaming-example"
+name := "java-server"
 organization := "com.twitter"
-version := "2.3.0-SNAPSHOT"
+version := "2.3.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
+publishMavenStyle := true
+crossPaths := false
+autoScalaLibrary := false
+
+mainClass in (Compile, packageBin) := Some("com.twitter.hello.server.HelloWorldServerMain")
 
 lazy val versions = new {
-  val finatra = "2.3.0-SNAPSHOT"
+  val finatra = "2.3.0"
   val guice = "4.0"
   val logback = "1.1.7"
 }
@@ -22,8 +27,9 @@ assemblyMergeStrategy in assembly := {
 }
 
 libraryDependencies ++= Seq(
-  "com.twitter" %% "finatra-http" % versions.finatra,
-  "com.twitter" %% "finatra-httpclient" % versions.finatra,
+  "com.twitter" %% "finatra-slf4j" % versions.finatra,
+  "com.twitter" %% "inject-server" % versions.finatra,
+  "com.twitter" %% "inject-core" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test",
@@ -43,4 +49,5 @@ libraryDependencies ++= Seq(
 
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-  "org.specs2" %% "specs2" % "2.3.12" % "test")
+  "org.specs2" %% "specs2" % "2.3.12" % "test",
+  "com.novocode" % "junit-interface" % "0.11" % Test)
