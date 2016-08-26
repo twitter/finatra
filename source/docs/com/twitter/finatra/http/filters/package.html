@@ -1,0 +1,275 @@
+<!DOCTYPE html >
+<html>
+        <head>
+          <title>filters - com.twitter.finatra.http.filters</title>
+          <meta name="description" content="filters - com.twitter.finatra.http.filters" />
+          <meta name="keywords" content="filters com.twitter.finatra.http.filters" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript" src="../../../../../lib/jquery.js" id="jquery-js"></script>
+      <script type="text/javascript" src="../../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../../lib/tools.tooltip.js"></script>
+      
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../index.html';
+            var hash = 'com.twitter.finatra.http.filters.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img alt="Package" src="../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../package.html" class="extype" name="com.twitter.finatra.http">http</a></p>
+        <h1>filters</h1><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filters</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.twitter.finatra.http.filters.AccessLoggingFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="AccessLoggingFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]withLogging"></a>
+      <a id="AccessLoggingFilter[R&lt;:Request]:AccessLoggingFilter[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AccessLoggingFilter.html"><span class="name">AccessLoggingFilter</span></a><span class="tparams">[<span name="R">R &lt;: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a></span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.AccessLoggingFilter.R">R</span>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>] with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@AccessLoggingFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]withLogging" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.filters.CommonFilters" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="CommonFiltersextendsMergedFilter[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]"></a>
+      <a id="CommonFilters:CommonFilters"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="CommonFilters.html"><span class="name">CommonFilters</span></a><span class="result"> extends <a href="../../filters/MergedFilter.html" class="extype" name="com.twitter.finatra.filters.MergedFilter">MergedFilter</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@CommonFiltersextendsMergedFilter[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.filters.ExceptionMappingFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ExceptionMappingFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]"></a>
+      <a id="ExceptionMappingFilter[R&lt;:Request]:ExceptionMappingFilter[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExceptionMappingFilter.html"><span class="name">ExceptionMappingFilter</span></a><span class="tparams">[<span name="R">R &lt;: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a></span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.ExceptionMappingFilter.R">R</span>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@ExceptionMappingFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Filter which converts exceptions into HTTP responses.</p><div class="fullcomment"><div class="comment cmt"><p>Filter which converts exceptions into HTTP responses.
+NOTE: Should be as close to the start of the filter chain as possible.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.filters.HttpResponseFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HttpResponseFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]"></a>
+      <a id="HttpResponseFilter[R&lt;:Request]:HttpResponseFilter[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="HttpResponseFilter.html"><span class="name">HttpResponseFilter</span></a><span class="tparams">[<span name="R">R &lt;: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a></span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.HttpResponseFilter.R">R</span>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@HttpResponseFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">HttpResponseFilter does the following:
+- sets the 'Server' and 'Date' response headers
+- turns a 'partial' Location header into a full URL
+</p><div class="fullcomment"><div class="comment cmt"><p>HttpResponseFilter does the following:
+- sets the 'Server' and 'Date' response headers
+- turns a 'partial' Location header into a full URL
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.filters.LoggingMDCFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="LoggingMDCFilter[Req,Rep]extendsSimpleFilter[Req,Rep]"></a>
+      <a id="LoggingMDCFilter[Req,Rep]:LoggingMDCFilter[Req,Rep]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LoggingMDCFilter.html"><span class="name">LoggingMDCFilter</span></a><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.LoggingMDCFilter.Req">Req</span>, <span class="extype" name="com.twitter.finatra.http.filters.LoggingMDCFilter.Rep">Rep</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@LoggingMDCFilter[Req,Rep]extendsSimpleFilter[Req,Rep]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.filters.StatsFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="StatsFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]withLogging"></a>
+      <a id="StatsFilter[R&lt;:Request]:StatsFilter[R]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="StatsFilter.html"><span class="name">StatsFilter</span></a><span class="tparams">[<span name="R">R &lt;: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a></span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.StatsFilter.R">R</span>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>] with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@StatsFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]withLogging" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">A drop-in replacement for <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.filter.StatsFilter" class="extype" target="_top">com.twitter.finagle.http.filter.StatsFilter</a>
+with per-route stats scoped under <code>route/&lt;name&gt;/&lt;method&gt;</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A drop-in replacement for <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.filter.StatsFilter" class="extype" target="_top">com.twitter.finagle.http.filter.StatsFilter</a>
+with per-route stats scoped under <code>route/&lt;name&gt;/&lt;method&gt;</code>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.filters.TraceIdMDCFilter" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="TraceIdMDCFilter[Req,Rep]extendsSimpleFilter[Req,Rep]"></a>
+      <a id="TraceIdMDCFilter[Req,Rep]:TraceIdMDCFilter[Req,Rep]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TraceIdMDCFilter.html"><span class="name">TraceIdMDCFilter</span></a><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SimpleFilter" class="extype" target="_top">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.TraceIdMDCFilter.Req">Req</span>, <span class="extype" name="com.twitter.finatra.http.filters.TraceIdMDCFilter.Rep">Rep</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@TraceIdMDCFilter[Req,Rep]extendsSimpleFilter[Req,Rep]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
+to ensure that diagnostic context is properly managed.</p><div class="fullcomment"><div class="comment cmt"><p>Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter
+to ensure that diagnostic context is properly managed.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="com.twitter.finatra.http.filters.StatsFilter" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatsFilter"></a>
+      <a id="StatsFilter:StatsFilter"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="StatsFilter$.html"><span class="name">StatsFilter</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.filters.package@StatsFilter" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
