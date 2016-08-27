@@ -386,7 +386,7 @@ get("/redirect") { request: Request =>
     .location("/foo/123")
 }
 
-post("/users") { request: FormPostRequest =>
+post("/users") { request: MyPostRequest =>
   response
     .created
     .location("/users/123")
@@ -401,7 +401,7 @@ Cookies, like Headers, are read from request and can set via the [`com.twitter.f
 
 ```scala
 get("/") { request =>
-  val loggedIn = request.cookie("loggedIn").getOrElse("false")
+  val loggedIn = request.cookies.getValue("loggedIn").getOrElse("false")
   response.ok.
     plain("logged in?:" + loggedIn)
 }

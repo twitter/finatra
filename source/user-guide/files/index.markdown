@@ -131,7 +131,7 @@ get("/testClassWithHtml") { r: Request =>
 ```
 <div></div>
 
-See the [test class](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L1282) for more examples.
+See the [test class](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala) for more examples.
 
 
 <nav>
