@@ -158,7 +158,9 @@ We provide a [TwitterModule](https://github.com/twitter/finatra/blob/develop/inj
 * Prefer using `@Provides`-annotated methods over using the [*toInstance* bind DSL](https://github.com/google/guice/wiki/InstanceBindings).
 * Usually modules are Scala *objects* since they contain no state and makes usage of the module less verbose.
 * Remember to add `@Singleton` to your `@Provides` method if you require only **one** instance per JVM process.
-* Generally, modules are only required for instantiating classes that you don't control. Otherwise, you would simply add the [JSR-330](https://github.com/google/guice/wiki/JSR330) annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty jar. You could create the following module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
+* Generally, modules are only required for instantiating classes that you don't control. Otherwise, you would simply add the [JSR-330](https://github.com/google/guice/wiki/JSR330) annotations directly to the class. For example, suppose you need to create an `ThirdPartyFoo` class which comes from a thirdparty library. E.g., you want to instantiate a new [Finagle Client](http://twitter.github.io/finagle/guide/Clients.html) (and perhaps externalize the `dest` or `label` parameters to be settable via a command line [flag](#flags)). 
+
+You could create the following module to construct a singleton `ThirdPartyFoo` class which is created with a key provided through a command line flag.
 
 ```scala
 object MyModule1 extends TwitterModule {
@@ -173,16 +175,17 @@ object MyModule1 extends TwitterModule {
 ```
 <div></div>
 
-You would then be able to inject an instance of the type `ThirdPartyFoo` using the `@Inject` annotation:
+You would then be able to inject an instance of type `ThirdPartyFoo` into a class by anotating the constructor of said class with the `@Inject` annotation:
 
 ```scala
 class MyService @Inject() (
-  thirdPartyFoo: ThirdPartyFoo
-) {
+  thirdPartyFoo: ThirdPartyFoo) {
   ...
 }
 ```
 <div></div>
+
+Note that the `@Inject` annotation can be considered "metadata" in this usage. Nothing prevents you from instantiating `MyService` directly (and passing it a `thirdPartyFoo` instance). But when an instance of `MyService` is asked for from the injector the `@Inject` annotation tells the injector it should attempt to provide the constructor arguments -- instantiating any classes as necessary. Because we created a module with an `@Provides` annotated method for constructing a `ThirdPartyFoo`, the injector is thus able to satisfy construction of `MyService` when asked. For more information on constructor injection see the Guide [documentation](https://github.com/google/guice/wiki/Injections#constructor-injection).
 
 #### Modules Depending on Other Modules
 
