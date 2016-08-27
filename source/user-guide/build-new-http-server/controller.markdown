@@ -363,6 +363,8 @@ All HTTP Controllers have a protected `response` field of type [`com.twitter.fin
 
 ```scala
 get("/foo") { request: Request =>
+  ...
+  
   response.
     ok.
     header("a", "b").
@@ -375,18 +377,24 @@ get("/foo") { request: Request =>
 }
 
 get("/foo") { request: Request =>
+  ...
+
   response.
     status(999).
     body(bytes)
 }
 
 get("/redirect") { request: Request =>
+  ...
+
   response
     .temporaryRedirect
     .location("/foo/123")
 }
 
 post("/users") { request: MyPostRequest =>
+  ...
+
   response
     .created
     .location("/users/123")
