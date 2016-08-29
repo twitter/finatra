@@ -5,7 +5,17 @@ junit_tests(
     '3rdparty/jvm/junit',
     'finatra/http:test-deps',
     'finatra/httpclient',
-    'finatra/inject/inject-server:test-deps'
+    '3rdparty/jvm/org/clapper:grizzled-slf4j',
+    'finagle/finagle-http/src/main/java:java',
+    'finagle/finagle-http/src/main/scala:scala',
+    'finatra/http/src/main/scala:scala',
+    'finatra/inject/inject-app/src/main/scala:scala',
+    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-server/src/main/scala:scala',
+    'twitter-server/src/main/scala:scala',
+    'util/util-app/src/main/scala:scala',
+    'util/util-core/src/main/scala:scala',
+    'util/util-logging/src/main/scala:scala',
   ],
   fatal_warnings=False,
   sources=rglobs(

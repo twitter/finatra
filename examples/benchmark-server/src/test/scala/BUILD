@@ -3,7 +3,11 @@ junit_tests(
   dependencies=[
     'finatra/examples/benchmark-server',
     'finatra/http:test-deps',
-    'finatra/inject/inject-server:test-deps'
+    '3rdparty/jvm/org/clapper:grizzled-slf4j',
+    '3rdparty/jvm/org/scalatest:scalatest',
+    'finagle/finagle-http/src/main/scala:scala',
+    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-core/src/test/scala:test-deps',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),

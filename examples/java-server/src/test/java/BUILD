@@ -2,9 +2,9 @@ junit_tests(
   name='java',
   dependencies=[
     '3rdparty/jvm/junit',
-    'finatra/http:test-deps',
     'finatra/examples/java-server',
-    'finatra/inject/inject-server:test-deps'
+    'finatra/inject/inject-server:test-deps',
+    'finatra/inject/inject-app/src/test/scala:test-deps',
   ],
   fatal_warnings=False,
   sources=rglobs('*.java'),
