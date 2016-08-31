@@ -8,9 +8,12 @@ We are not currently publishing snapshots for Finatra's Twitter OSS dependencies
 which means that it may be necessary to build and publish the `develop` branches
 of those dependencies locally in order to work on Finatra's [`develop`][develop-branch] branch. 
 
-To do this you can run the [`bin/travisci`](https://github.com/twitter/finatra/blob/develop/bin/travisci) script
-locally which will clone all the necessary repositories and publish their 
-artifacts locally.
+To do this you can run the same command used in the [`.travis.yml`](/.travis.yml#L12) script which will clone all the necessary repositories and publish their 
+artifacts locally. I.e.,
+
+```
+curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
+```
 
 Finatra's [`master`][master-branch] branch is built against released versions of 
 Twitter OSS dependencies and is itself frozen to the last released version of Finatra.

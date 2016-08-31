@@ -1,4 +1,4 @@
-package com.twitter.finatra.integration.main;
+package com.twitter.finatra.http.tests.integration.main;
 
 import com.twitter.finatra.http.JavaHttpServer;
 import com.twitter.finatra.http.filters.CommonFilters;

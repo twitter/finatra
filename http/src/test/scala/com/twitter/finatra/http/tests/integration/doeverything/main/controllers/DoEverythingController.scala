@@ -35,6 +35,7 @@ class DoEverythingController @Inject()(
   extends Controller {
 
   private val flakyCount = new AtomicInteger()
+  private val helloWorldText = "Hello, World!"
 
   get("/example/routing/always") { request: Request =>
     response.ok.body("always response")
@@ -415,6 +416,10 @@ class DoEverythingController @Inject()(
 
   get("/requestInjectionsNotFound") { request: RequestWithNotFoundInjections =>
     request.fooClass
+  }
+
+  get("/stringMap") { request: Request =>
+    Map("message" -> helloWorldText)
   }
 
   post("/requestInjectionsNotAvailable") { request: Request =>

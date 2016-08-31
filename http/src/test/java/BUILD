@@ -19,7 +19,7 @@ junit_tests(
   ],
   fatal_warnings=False,
   sources=rglobs(
-    'com/twitter/finatra/integration/*.java',
+    'com/twitter/finatra/http/*.java',
     'com/twitter/finatra/test/*.java',
   ),
   resources=[

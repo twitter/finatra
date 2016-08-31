@@ -1,3 +1,3 @@
 resources(name='resources',
-  sources=globs('*.xml')
+  sources=globs('*.json')
 )

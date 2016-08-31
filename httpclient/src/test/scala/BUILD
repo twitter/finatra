@@ -23,7 +23,11 @@ junit_tests(name='scala',
     'util/util-core/src/main/scala:scala',
   ],
   sources=globs(
-    'com/twitter/finatra/httpclient/*.scala')
+    'com/twitter/finatra/httpclient/*.scala'
+  ),
+  resources=[
+    'finatra/httpclient/src/test/resources',
+  ]
 )
 
 

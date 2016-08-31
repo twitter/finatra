@@ -308,6 +308,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   .settings(
     name := "inject-server",
     moduleName := "inject-server",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-stats" % versions.finagleVersion,
       "com.twitter" %% "twitter-server" % versions.twitterserverVersion
@@ -473,7 +474,7 @@ lazy val http = project
   .settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;com\\.twitter\\.finatra\\..*package.*;.*HttpReplyHandler.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -527,6 +528,7 @@ lazy val slf4j = project
   .settings(
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*Slf4jBridgeModule.*;org\\.slf4j\\..*package.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,

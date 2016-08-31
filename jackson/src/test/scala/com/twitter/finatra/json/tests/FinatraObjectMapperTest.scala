@@ -1066,6 +1066,12 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     str should equal(msgHiJsonStr)
   }
 
+  scenario("writeStringMapAsBuf") {
+    val buf = mapper.writeStringMapAsBuf(Map("msg" -> "hi"))
+    val Buf.Utf8(str) = buf
+    str should equal(msgHiJsonStr)
+  }
+
   scenario("writePrettyString") {
     val jsonStr = mapper.writePrettyString("""{"msg": "hi"}""")
     mapper.parse[JsonNode](jsonStr).get("msg").textValue() should equal("hi")

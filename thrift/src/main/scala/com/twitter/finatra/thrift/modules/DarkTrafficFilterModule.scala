@@ -10,12 +10,7 @@ import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.inject.{RootMonitor, TwitterModule}
 import com.twitter.util.Monitor
 import javax.inject.Singleton
-import org.joda.time.Duration
 import scala.reflect.ClassTag
-
-object DarkTrafficFilterModule {
-  val MaxDuration = Duration.millis(Long.MaxValue)
-}
 
 abstract class DarkTrafficFilterModule[ServiceIface: ClassTag](
   implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface])
@@ -59,8 +54,7 @@ abstract class DarkTrafficFilterModule[ServiceIface: ClassTag](
   @Singleton
   @DarkTrafficFilterType
   final def providesDarkTrafficFilter(
-   statsReceiver: StatsReceiver
-  ): ThriftFilter = {
+   statsReceiver: StatsReceiver): ThriftFilter = {
     destFlag.get match {
       case Some(dest) =>
         val clientStatsReceiver = statsReceiver.scope("clnt", "dark_traffic_filter")

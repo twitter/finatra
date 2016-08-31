@@ -1,4 +1,4 @@
-package com.twitter.finatra.integration.main;
+package com.twitter.finatra.http.tests.integration.main;
 
 public final class DoEverythingJavaServerMain {
     private DoEverythingJavaServerMain() {
