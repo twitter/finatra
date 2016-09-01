@@ -11,9 +11,17 @@ lazy val buildSettings = Seq(
   version := projectVersion,
   scalaVersion := "2.11.8",
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
-  parallelExecution in Test := false,
-  concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
+  fork in Test := true,
+  javaOptions in Test ++= travisTestJavaOptions
 )
+
+def travisTestJavaOptions: Seq[String] = {
+  // When building on travis-ci, we want to suppress logging to error level only.
+  val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
+  if (travisBuild) {
+    Seq("-Dorg.slf4j.simpleLogger.defaultLogLevel=error", "-Dcom.twitter.inject.test.logging.disabled")
+  } else Seq.empty
+}
 
 lazy val versions = new {
   // When building on travis-ci, querying for the branch name via git commands
