@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+inject-server: Allow for the ability to disable test logging via System property. ``RB_ID=867344``
+
 ### Changed
 
 * finatra-http: Move integration tests to a package under `com.twitter.finatra.http`. ``RB_ID=866487``

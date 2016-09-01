@@ -11,7 +11,8 @@ lazy val buildSettings = Seq(
   version := projectVersion,
   scalaVersion := "2.11.8",
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
-  fork in Test := true
+  parallelExecution in Test := false,
+  concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 )
 
 lazy val versions = new {

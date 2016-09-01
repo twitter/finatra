@@ -3,6 +3,9 @@ language: scala
 scala:
   - 2.11.8
 
+env:
+  - JAVA_OPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=error -Dcom.twitter.inject.test.logging.disabled"
+
 jdk:
   - oraclejdk8
 
@@ -12,7 +15,7 @@ before_script:
   - curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
 
 script:
-  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
+  - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
   - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 
 after_success:

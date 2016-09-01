@@ -188,7 +188,7 @@ class EmbeddedTwitterServer(
    * @param str - the string message to log
    */
   def info(str: String): Unit = {
-    if (!disableTestLogging) {
+    if (!disableLogging) {
       println(str)
     }
   }
@@ -431,6 +431,10 @@ class EmbeddedTwitterServer(
   }
 
   /* Private */
+
+  private def disableLogging = {
+    disableTestLogging || System.getProperties.keySet().contains("com.twitter.inject.test.logging.disabled")
+  }
 
   private def keyStr(keys: Seq[String]): String = {
     keys.mkString("/")

@@ -36,5 +36,8 @@ junit_tests(name='scala',
     'util/util-stats/src/main/scala:scala',
   ],
   fatal_warnings=True,
-  sources=rglobs('*.scala')
+  sources=rglobs('*.scala'),
+  resources=[
+    'finatra/inject-thrift-client-http-mapper/src/test/resources'
+  ]
 )

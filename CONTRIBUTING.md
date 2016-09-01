@@ -36,7 +36,7 @@ the [finatra-users](https://groups.google.com/forum/#!forum/finatra-users) maili
 We follow the [GitHub Flow Workflow](https://guides.github.com/introduction/flow/)
 
 1.  Fork finatra
-2.  Check out the `master` branch
+2.  Check out the `develop` branch
 3.  Create a feature branch
 4.  Write code and tests for your change
 6.  From your branch, make a pull request against `twitter/finatra/develop`
