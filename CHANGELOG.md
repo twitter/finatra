@@ -34,6 +34,7 @@ inject-server: Allow for the ability to disable test logging via System property
 
 ### Fixed
 
+* finatra-http: Fix issue with unimplemented methods in NonValidatingHttpHeadersResponse. ``RB_ID=868480``
 * finatra-http: Add content headers for EmbeddedHttpServer #httpDelete and #httpPatch methods. ``RB_ID=862200``
 
 ### Closed
