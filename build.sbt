@@ -191,6 +191,7 @@ lazy val finatraExamples =
     benchmarkServer,
     exampleHttpJavaServer,
     exampleInjectJavaServer,
+    exampleWebDashboard,
     helloWorld,
     helloWorldHeroku,
     streamingExample,
@@ -223,7 +224,7 @@ lazy val root = (project in file("."))
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
       // START EXAMPLES
-      -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
+      -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer,
          tinyUrl, twitterClone)
@@ -736,6 +737,19 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test"
+  )
+
+lazy val exampleWebDashboard = (project in file("examples/web-dashboard")).
+  settings(exampleServerSettings).
+  settings(
+    name := "web-dashboard",
+    moduleName := "web-dashboard",
+    unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
+  ).dependsOn(
+    http % "test->test;compile->compile",
+    httpclient,
+    slf4j,
+    injectCore % "test->test"
   )
 
 // END EXAMPLES
