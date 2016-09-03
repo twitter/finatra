@@ -3,6 +3,7 @@ package com.twitter.finatra.thrift
 import com.google.inject.Stage
 import com.twitter.inject.server.PortUtils._
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
+import scala.collection.JavaConverters._
 
 /**
  * EmbeddedThriftServer allows a [[com.twitter.server.TwitterServer]] serving thrift endpoints to be started
@@ -45,6 +46,12 @@ class EmbeddedThriftServer(
     disableTestLogging = disableTestLogging,
     maxStartupTimeSeconds = maxStartupTimeSeconds)
   with ThriftClient {
+
+  /* Additional Constructors */
+
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) = {
+    this(twitterServer, flags = flags.asScala.toMap, stage = stage)
+  }
 
   /* Overrides */
 

@@ -1,12 +1,12 @@
 target(name='thrift-example-server',
   dependencies=[
-    'finatra/examples/thrift-server/thrift-example-server/src/main/scala',
+    'finatra/examples/java-thrift-server/thrift-example-server/src/main/java',
   ]
 )
 
 target(name='tests',
   dependencies=[
-    'finatra/examples/thrift-server/thrift-example-server/src/test/scala'
+    'finatra/examples/java-thrift-server/thrift-example-server/src/test/java'
   ]
 )
 

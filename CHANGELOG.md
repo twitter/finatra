@@ -6,7 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
-inject-server: Allow for the ability to disable test logging via System property. ``RB_ID=867344``
+* finatra-thrift: Enhanced support for Java Thrift services. ``RB_ID=868254``
+* finatra-examples: Add web/UI application example. ``RB_ID=868027``
+* inject-server: Allow for the ability to disable test logging via System property. ``RB_ID=867344``
 
 ### Changed
 
@@ -22,7 +24,6 @@ inject-server: Allow for the ability to disable test logging via System property
 
 ### Added
 
-* finatra-examples: Add web/UI application example. ``RB_ID=868027``
 * finatra-thrift: Add non-guice method to add controller to ThriftRouter ``RB_ID=863977``
 * finatra-thrift: Add support for a "dark" traffic filter in thrift routing. Add a Finatra implementation
   of the Finagle AbstractDarkTrafficFilter which sub-classes ThriftFilter and will work in the Finatra

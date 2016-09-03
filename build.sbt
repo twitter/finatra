@@ -195,8 +195,8 @@ lazy val finatraExamples =
     helloWorld,
     helloWorldHeroku,
     streamingExample,
-    thriftExampleIdl,
     thriftExampleServer,
+    thriftJavaExampleServer,
     tinyUrl,
     twitterClone) ++
   // END EXAMPLES
@@ -226,7 +226,7 @@ lazy val root = (project in file("."))
       // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
          helloWorld, helloWorldHeroku, streamingExample,
-         thriftExampleIdl, thriftExampleServer,
+         thriftExampleIdl, thriftExampleServer, thriftJavaExampleIdl, thriftJavaExampleServer,
          tinyUrl, twitterClone)
       // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
@@ -285,8 +285,7 @@ lazy val injectModules = (project in file("inject/inject-modules"))
           Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")))
     }
   ).dependsOn(
-    injectCore % "test->test;compile->compile"
-  )
+    injectCore % "test->test;compile->compile")
 
 lazy val injectApp = (project in file("inject/inject-app"))
   .settings(projectSettings)
@@ -310,8 +309,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
               "com/twitter/inject/app/TestInjector")))
     }
   ).dependsOn(
-    injectCore % "test->test;compile->compile"
-  )
+    injectCore % "test->test;compile->compile")
 
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
@@ -334,8 +332,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
-    injectUtils
-  )
+    injectUtils)
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   .settings(projectSettings)
@@ -347,8 +344,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
     )
   ).dependsOn(
     injectCore % "test->test;compile->compile",
-    injectApp % "test->test"
-  )
+    injectApp % "test->test")
 
 lazy val injectThrift = (project in file("inject/inject-thrift"))
   .settings(projectSettings)
@@ -364,8 +360,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
       "com.twitter" %% "util-core" % versions.utilVersion)
   ).dependsOn(
     injectCore % "test->test",
-    injectUtils
-  )
+    injectUtils)
 
 lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(projectSettings)
@@ -385,8 +380,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
     injectApp % "test->test;compile->compile",
     injectThrift,
     http % "test->test",
-    thrift % "test->test"
-  )
+    thrift % "test->test")
 
 lazy val injectUtils = (project in file("inject/inject-utils"))
   .settings(projectSettings)
@@ -400,8 +394,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
       "commons-lang" % "commons-lang" % versions.commonsLang
     )
   ).dependsOn(
-    injectCore % "test->test;compile->compile"
-  )
+    injectCore % "test->test;compile->compile")
 
 /**
  * This project relies on other projects test dependencies and as such
@@ -451,8 +444,7 @@ lazy val utils = project
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test",
-    injectUtils
-  )
+    injectUtils)
 
 lazy val jackson = project
   .settings(projectSettings)
@@ -476,8 +468,7 @@ lazy val jackson = project
     }
   ).dependsOn(
     injectApp % "test->test",
-    utils
-  )
+    utils)
 
 lazy val http = project
   .settings(projectSettings)
@@ -509,8 +500,7 @@ lazy val http = project
     injectRequestScope,
     injectServer % "test->test;compile->compile",
     httpclient % "test->test",
-    slf4j
-  )
+    slf4j)
 
 lazy val httpclient = project
   .settings(projectSettings)
@@ -530,8 +520,7 @@ lazy val httpclient = project
   ).dependsOn(
     jackson,
     utils % "test->test",
-    injectApp % "test->test"
-  )
+    injectApp % "test->test")
 
 lazy val slf4j = project
   .settings(projectSettings)
@@ -546,8 +535,7 @@ lazy val slf4j = project
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
     )
   ).dependsOn(
-    injectCore % "test->test;compile->compile"
-  )
+    injectCore % "test->test;compile->compile")
 
 lazy val thrift = project
   .settings(projectSettings)
@@ -566,6 +554,7 @@ lazy val thrift = project
     ),
     scroogePublishThrift in Compile := true,
     scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
+    scroogeLanguages in Compile := Seq("java", "scala"),
     excludeFilter in unmanagedResources := "BUILD",
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
@@ -580,8 +569,7 @@ lazy val thrift = project
     injectServer % "test->test;compile->compile",
     injectThrift,
     utils,
-    slf4j
-  )
+    slf4j)
 
 lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-http-mapper"))
   .settings(projectSettings)
@@ -596,8 +584,7 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     injectThriftClient % "test->test;compile->compile",
     slf4j % "test->test",
     injectServer % "test->test",
-    thrift % "test->test;test->compile"
-  )
+    thrift % "test->test;test->compile")
 
 // START EXAMPLES
 
@@ -612,8 +599,7 @@ lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
   ).dependsOn(
     http % "test->test;compile->compile",
     slf4j,
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 lazy val helloWorld = (project in file("examples/hello-world"))
   .settings(exampleServerSettings)
@@ -623,8 +609,7 @@ lazy val helloWorld = (project in file("examples/hello-world"))
   ).dependsOn(
     http % "test->test;compile->compile",
     slf4j,
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 lazy val streamingExample = (project in file("examples/streaming-example"))
   .settings(exampleServerSettings)
@@ -637,8 +622,7 @@ lazy val streamingExample = (project in file("examples/streaming-example"))
   ).dependsOn(
     http % "test->test;compile->compile",
     slf4j,
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 lazy val twitterClone = (project in file("examples/twitter-clone"))
   .settings(exampleServerSettings)
@@ -650,8 +634,7 @@ lazy val twitterClone = (project in file("examples/twitter-clone"))
     http % "test->test;compile->compile",
     httpclient,
     slf4j,
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 lazy val benchmarkServer = (project in file("examples/benchmark-server"))
   .settings(baseServerSettings)
@@ -664,8 +647,7 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server"))
     )
   ).dependsOn(
     http % "test->test;compile->compile",
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 lazy val tinyUrl = (project in file("examples/tiny-url"))
   .settings(exampleServerSettings)
@@ -679,8 +661,7 @@ lazy val tinyUrl = (project in file("examples/tiny-url"))
     http % "test->test;compile->compile",
     httpclient,
     slf4j,
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
   .settings(exampleServerSettings)
@@ -694,8 +675,7 @@ lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
     http % "test->test;compile->compile",
     httpclient,
     slf4j,
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 lazy val exampleInjectJavaServer = (project in file("examples/java-server"))
   .settings(exampleServerSettings)
@@ -709,8 +689,7 @@ lazy val exampleInjectJavaServer = (project in file("examples/java-server"))
     slf4j,
     injectServer % "test->test;compile->compile",
     injectCore % "test->test",
-    injectApp % "test->test"
-  )
+    injectApp % "test->test")
 
 lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-example-idl"))
   .settings(baseServerSettings)
@@ -718,7 +697,9 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
     name := "thrift-example-idl",
     moduleName := "thrift-example-idl",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*",
-    scroogeThriftIncludeFolders in Compile := Seq(file("thrift/src/main/thrift"))
+    scroogeThriftIncludeFolders in Compile := Seq(
+      file("thrift/src/main/thrift"),
+      file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
   ).dependsOn(thrift)
 
 lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-example-server"))
@@ -726,18 +707,39 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
   .settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*",
-    scroogeThriftIncludeFolders in Compile := Seq(
-      file("thrift/src/main/thrift"),
-      file("examples/thrift-server/thrift-example-idl/src/main/thrift"))
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ExceptionTranslationFilter.*"
   ).dependsOn(
     thriftExampleIdl,
     slf4j,
     thrift % "test->test;compile->compile",
     injectApp % "test->test",
     injectCore % "test->test",
-    injectServer % "test->test"
-  )
+    injectServer % "test->test")
+
+lazy val thriftJavaExampleIdl = (project in file("examples/java-thrift-server/thrift-example-idl"))
+  .settings(baseServerSettings)
+  .settings(
+    name := "java-thrift-example-idl",
+    moduleName := "java-thrift-example-idl",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftjava.*",
+    scroogeLanguages in Compile := Seq("java"),
+    scroogeThriftIncludeFolders in Compile := Seq(
+      file("thrift/src/main/thrift"),
+      file("examples/java-thrift-server/thrift-example-idl/src/main/thrift"))
+  ).dependsOn(thrift)
+
+lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server/thrift-example-server"))
+  .settings(exampleServerSettings)
+  .settings(
+    name := "java-thrift-example-server",
+    moduleName := "java-thrift-example-server"//,
+  ).dependsOn(
+    thriftJavaExampleIdl,
+    slf4j,
+    thrift % "test->test;compile->compile",
+    injectApp % "test->test",
+    injectCore % "test->test",
+    injectServer % "test->test")
 
 lazy val exampleWebDashboard = (project in file("examples/web-dashboard")).
   settings(exampleServerSettings).
@@ -749,7 +751,6 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard")).
     http % "test->test;compile->compile",
     httpclient,
     slf4j,
-    injectCore % "test->test"
-  )
+    injectCore % "test->test")
 
 // END EXAMPLES
