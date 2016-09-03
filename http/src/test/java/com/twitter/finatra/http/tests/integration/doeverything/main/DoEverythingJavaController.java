@@ -3,15 +3,18 @@ package com.twitter.finatra.http.tests.integration.main;
 import javax.inject.Inject;
 
 import com.twitter.finagle.http.Request;
-import com.twitter.finatra.http.JavaController;
+import com.twitter.finatra.http.AbstractController;
 
 /**
  * Test all HTTP methods
  */
-public class DoEverythingJavaController extends JavaController {
+public class DoEverythingJavaController extends AbstractController {
+    private final HelloService helloService;
 
     @Inject
-    private HelloService helloService;
+    public DoEverythingJavaController(HelloService helloService) {
+        this.helloService = helloService;
+    }
 
     /** Define routes */
     public void configureRoutes() {

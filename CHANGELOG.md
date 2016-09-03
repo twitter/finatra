@@ -10,6 +10,7 @@ inject-server: Allow for the ability to disable test logging via System property
 
 ### Changed
 
+* finatra-http: Specify HTTP Java API consistently. ``RB_ID=868264``
 * inject-core: Clean up inject.Logging trait. Remove dead code from Logging. ``RB_ID=868261``
 * finatra-http: Move integration tests to a package under `com.twitter.finatra.http`. ``RB_ID=866487``
 

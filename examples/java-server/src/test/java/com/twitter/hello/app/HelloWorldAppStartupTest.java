@@ -7,7 +7,7 @@ import com.twitter.inject.app.EmbeddedApp;
 public class HelloWorldAppStartupTest {
 
     private EmbeddedApp app =
-            new EmbeddedApp(new HelloWorldApp());
+        new EmbeddedApp(new HelloWorldApp());
 
     @Test
     public void testAppStartup() {

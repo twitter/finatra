@@ -2,10 +2,10 @@ package com.twitter.hello.server;
 
 import javax.inject.Inject;
 
-import com.twitter.finatra.http.JavaController;
+import com.twitter.finatra.http.AbstractController;
 import com.twitter.util.Future;
 
-public class HelloWorldController extends JavaController {
+public class HelloWorldController extends AbstractController {
 
     @Inject
     private HelloService helloService;

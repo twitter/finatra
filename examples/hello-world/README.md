@@ -1,6 +1,6 @@
-# Finatra Hello World Example Application
+# Finatra Hello World HttpServer Example Application
 
-* A simple "hello world" example.
+* A simple "hello world" HTTP example.
 * Note: Finatra examples are built in different ways depending on the branch you are in:
 
 If you're in master or a feature branch

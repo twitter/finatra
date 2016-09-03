@@ -1,5 +1,8 @@
 package com.twitter.hello.server;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.Stage;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +15,10 @@ import com.twitter.finatra.httpclient.RequestBuilder;
 public class HelloWorldServerFeatureTest extends Assert {
 
     private EmbeddedHttpServer server =
-            new EmbeddedHttpServer(new HelloWorldServer());
+        new EmbeddedHttpServer(
+            new HelloWorldServer(),
+            ImmutableMap.of(),
+            Stage.DEVELOPMENT);
 
     /** test hello endpoint */
     @Test
@@ -30,8 +36,8 @@ public class HelloWorldServerFeatureTest extends Assert {
         Response response = server.httpRequest(request);
         assertEquals(Status.Ok(), response.status());
         assertEquals(
-                "{\"name\":\"guest\",\"message\":\"cya\",\"code\":123}",
-                response.contentString());
+            "{\"name\":\"guest\",\"message\":\"cya\",\"code\":123}",
+            response.contentString());
     }
 
     /** test ping endpoint */

@@ -5,12 +5,12 @@ import com.google.inject.Stage;
 
 import org.junit.Test;
 
-import com.twitter.inject.server.EmbeddedTwitterServer;
+import com.twitter.finatra.http.EmbeddedHttpServer;
 
 public class HelloWorldServerStartupTest {
 
-    private EmbeddedTwitterServer server =
-        new EmbeddedTwitterServer(
+    private EmbeddedHttpServer server =
+        new EmbeddedHttpServer(
             new HelloWorldServer(),
             ImmutableMap.of(),
             Stage.PRODUCTION);

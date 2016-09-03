@@ -1,5 +1,8 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.inject.Stage;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,7 +18,10 @@ import com.twitter.finatra.httpclient.RequestBuilder;
 public class DoEverythingJavaServerFeatureTest extends Assert {
 
     private EmbeddedHttpServer server =
-            new EmbeddedHttpServer(new DoEverythingJavaServer());
+        new EmbeddedHttpServer(
+            new DoEverythingJavaServer(),
+            ImmutableMap.of(),
+            Stage.DEVELOPMENT);
 
     @Test
     public void testHelloEndpoint() {

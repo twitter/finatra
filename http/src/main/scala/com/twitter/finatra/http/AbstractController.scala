@@ -2,7 +2,7 @@ package com.twitter.finatra.http
 
 import com.twitter.finagle.http.Request
 
-abstract class JavaController extends Controller {
+abstract class AbstractController extends Controller {
 
   def configureRoutes(): Unit
 

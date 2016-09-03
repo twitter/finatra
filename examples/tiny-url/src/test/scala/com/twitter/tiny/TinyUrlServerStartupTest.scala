@@ -7,8 +7,8 @@ import com.twitter.inject.server.FeatureTest
 class TinyUrlServerStartupTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(
-    stage = Stage.PRODUCTION,
-    twitterServer = new TinyUrlServer)
+    twitterServer = new TinyUrlServer,
+    stage = Stage.PRODUCTION)
 
   "Server" should {
     "startup" in {

@@ -3,7 +3,7 @@ package com.twitter.finatra.http.internal.server
 import com.twitter.app.Flag
 import com.twitter.conversions.storage._
 import com.twitter.conversions.time._
-import com.twitter.finagle.{ListeningServer, Http, Service}
+import com.twitter.finagle.{NullServer, ListeningServer, Http, Service}
 import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
@@ -45,8 +45,8 @@ private[http] trait BaseHttpServer extends TwitterServer {
 
   /* Private Mutable State */
 
-  private var httpServer: ListeningServer = _
-  private var httpsServer: ListeningServer = _
+  private var httpServer: ListeningServer = NullServer
+  private var httpsServer: ListeningServer = NullServer
 
   private lazy val baseHttpServer: Http.Server = {
     Http.server
@@ -112,9 +112,15 @@ private[http] trait BaseHttpServer extends TwitterServer {
 
   /* Overrides */
 
-  override def httpExternalPort = Option(httpServer) map PortUtils.getPort
+  override def httpExternalPort = httpServer match {
+    case NullServer => None
+    case _ => Option(httpServer) map PortUtils.getPort
+  }
 
-  override def httpsExternalPort = Option(httpsServer) map PortUtils.getPort
+  override def httpsExternalPort = httpsServer match {
+    case NullServer => None
+    case _ => Option(httpsServer) map PortUtils.getPort
+  }
 
   /* Private */
 
