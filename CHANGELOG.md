@@ -18,6 +18,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Fix issue with unimplemented methods in NonValidatingHttpHeadersResponse. ``RB_ID=868480``
+
 ### Closed
 
 ## [finatra-2.3.0](https://github.com/twitter/finatra/tree/finatra-2.3.0) (2016-08-25)
@@ -37,7 +39,6 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
-* finatra-http: Fix issue with unimplemented methods in NonValidatingHttpHeadersResponse. ``RB_ID=868480``
 * finatra-http: Add content headers for EmbeddedHttpServer #httpDelete and #httpPatch methods. ``RB_ID=862200``
 
 ### Closed
