@@ -33,18 +33,18 @@ public class CalculatorServerFeatureTest extends Assert {
     /** test increment endpoint */
     @Test
     public void testIncrementEndpoint() throws Exception {
-        Assert.assertEquals(4, Await.<Integer>result(THRIFT_CLIENT.increment(3)).intValue());
+        assertEquals(4, Await.<Integer>result(THRIFT_CLIENT.increment(3)).intValue());
     }
 
     /** test add numbers endpoint */
     @Test
     public void testAddNumbersEndpoint() throws Exception {
-        Assert.assertEquals(10, Await.<Integer>result(THRIFT_CLIENT.addNumbers(3, 7)).intValue());
+        assertEquals(10, Await.<Integer>result(THRIFT_CLIENT.addNumbers(3, 7)).intValue());
     }
 
     /** test add strings endpoint */
     @Test
     public void testAddStringsEndpoint() throws Exception {
-        Assert.assertEquals("10", Await.result(THRIFT_CLIENT.addStrings("3", "7")));
+        assertEquals("10", Await.result(THRIFT_CLIENT.addStrings("3", "7")));
     }
 }

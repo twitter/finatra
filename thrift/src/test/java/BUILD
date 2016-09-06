@@ -1,6 +1,6 @@
-junit_tests(name='scala',
+junit_tests(name='java',
   dependencies=[
-    'finatra/thrift/src/test/thrift:doeverything-thrift-scala',
+    'finatra/thrift/src/test/thrift:doeverything-thrift-java',
     'finatra/thrift:test-deps',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
@@ -19,7 +19,7 @@ junit_tests(name='scala',
     'finatra/inject/inject-server/src/test/scala:test-deps',
     'finatra/inject/inject-utils/src/main/scala:scala',
     'finatra/thrift/src/main/scala:scala',
-    'finatra/thrift/src/main/thrift:thrift-scala',
+    'finatra/thrift/src/main/thrift:thrift-java',
     'finatra/utils/src/main/java:java',
     'finatra/utils/src/main/scala:scala',
     'scrooge/scrooge-core/src/main/scala:scala',
@@ -31,37 +31,10 @@ junit_tests(name='scala',
   ],
   fatal_warnings=True,
   sources=globs(
-    'com/twitter/finatra/thrift/tests/*.scala',
-    'com/twitter/finatra/thrift/tests/doeverything/*.scala',
-    'com/twitter/finatra/thrift/tests/doeverything/controllers/*.scala',
-    'com/twitter/finatra/thrift/tests/doeverything/filters/*.scala',
-    'com/twitter/finatra/thrift/tests/doeverything/modules/*.scala',
-    'com/twitter/finatra/thrift/tests/noninjection/*.scala',
+    'com/twitter/finatra/thrift/tests/*.java',
+    'com/twitter/finatra/thrift/tests/doeverything/*.java',
   ),
   resources=[
     'finatra/thrift/src/test/resources'
   ]
-)
-
-scala_library(name="test-deps",
-  provides = scala_artifact(
-    org = 'com.twitter',
-    name = 'finatra-thrift-test-jar',
-    repo = artifactory,
-  ),
-  dependencies=[
-    'finatra/inject/inject-server:test-deps',
-    '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
-    '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
-    '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
-    '3rdparty/jvm/com/google/inject:guice',
-    '3rdparty/jvm/net/codingwell:scala-guice',
-    '3rdparty/jvm/org/scalatest:scalatest',
-    'finagle/finagle-core/src/main/scala:scala',
-    'finagle/finagle-thriftmux/src/main/scala:scala',
-    'finatra/inject/inject-server/src/main/scala:scala',
-    'util/util-stats/src/main/scala:scala',
-  ],
-  fatal_warnings=True,
-  sources=globs('com/twitter/finatra/thrift/*.scala')
 )
