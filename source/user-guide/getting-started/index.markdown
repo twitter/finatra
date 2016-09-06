@@ -13,7 +13,7 @@ footer: true
 
 Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [com.twitter.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [TwitterServer](http://twitter.github.io/twitter-server/) and [Finagle](https://twitter.github.io/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller, per route in a controller, or across controllers.
 
-## <a class="anchor" name="dependencies" href="#dependencies">Basics</a>
+## <a class="no-pad-anchor" name="dependencies" href="#dependencies">Basics</a>
 ===============================
 
 To get started, add a dependency on either [finatra-http](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.11%22) or [finatra-thrift](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.11%22) (depending on if you are building an HTTP or Thrift server), e.g., with [sbt](http://www.scala-sbt.org/):
@@ -286,7 +286,7 @@ Additionally, there is also the `TwitterModule#singletonPostWarmupComplete` meth
 
 See the [Server Lifecycle](#lifecycle) diagram for a more visual depiction of the server lifecycle.
 
-### <a class="anchor" name="binding-annotations" href="#binding-annotations">Binding Annotations</a>
+### <a class="no-pad-anchor" name="binding-annotations" href="#binding-annotations">Binding Annotations</a>
 ===============================
 
 Occasionally, you may want multiple bound instances of the same type. For instance you may want both a FooHttpClient and a BarHttpClient. To do this we recommend creating specific [binding annotations](https://github.com/google/guice/wiki/BindingAnnotations).
