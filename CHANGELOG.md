@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-2.4.0](https://github.com/twitter/finatra/tree/finatra-2.4.0) (2016-09-07)
+
+### Added
+
 * finatra-thrift: Enhanced support for Java Thrift services. ``RB_ID=868254``
 * finatra-examples: Add web/UI application example. ``RB_ID=868027``
 * inject-server: Allow for the ability to disable test logging via System property. ``RB_ID=867344``

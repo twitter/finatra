@@ -1,20 +1,14 @@
-import sbt.Keys._
-
+name := "benchmark-server"
+organization := "com.twitter"
+version := "2.4.0"
+scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
-name := "web-dashboard"
-organization := "com.twitter"
-version := "2.4.0-SNAPSHOT"
-scalaVersion := "2.11.8"
-
 lazy val versions = new {
-  val finatra = "2.4.0-SNAPSHOT"
-  val guice = "4.0"
-  val logback = "1.1.7"
-  val mockito = "1.9.5"
-  val scalatest = "2.2.6"
-  val specs2 = "2.3.12"
+  val finatra = "2.4.0"
 }
+
+mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain")
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("releases"),
@@ -27,17 +21,10 @@ assemblyMergeStrategy in assembly := {
   case other => MergeStrategy.defaultMergeStrategy(other)
 }
 
-excludeFilter in (Compile, unmanagedSources) := HiddenFileFilter || "BUILD"
-excludeFilter in (Compile, unmanagedResources) := HiddenFileFilter || "BUILD"
-
-unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
-
-Revolver.settings
-
 libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,
   "com.twitter" %% "finatra-httpclient" % versions.finatra,
-  "ch.qos.logback" % "logback-classic" % versions.logback,
+  "ch.qos.logback" % "logback-classic" % "1.1.7",
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test",
@@ -45,7 +32,6 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "inject-app" % versions.finatra % "test",
   "com.twitter" %% "inject-core" % versions.finatra % "test",
   "com.twitter" %% "inject-modules" % versions.finatra % "test",
-  "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test",
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test" classifier "tests",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",
@@ -54,6 +40,6 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "inject-core" % versions.finatra % "test" classifier "tests",
   "com.twitter" %% "inject-modules" % versions.finatra % "test" classifier "tests",
 
-  "org.mockito" % "mockito-core" % versions.mockito % "test",
-  "org.scalatest" %% "scalatest" % versions.scalatest % "test",
-  "org.specs2" %% "specs2" % versions.specs2 % "test")
+  "org.mockito" % "mockito-core" % "1.9.5" % "test",
+  "org.scalatest" %% "scalatest" % "2.2.3" % "test",
+  "org.specs2" %% "specs2" % "2.3.12" % "test")

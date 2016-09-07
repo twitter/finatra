@@ -16,7 +16,7 @@ $ ./sbt streamingExample/assembly
 $ java -jar examples/streaming-example/target/scala-2.11/finatra-benchmark-server-assembly-2.4.0-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
 ```
 
-If you're in a tagged release branch (e.g. [finatra-2.3.0](https://github.com/twitter/finatra/tree/finatra-2.3.0))
+If you're in a tagged release branch (e.g. [finatra-2.4.0](https://github.com/twitter/finatra/tree/finatra-2.4.0))
 ----------------------------------------------------------
 Run sbt from **this** project's directory, e.g.
 ```
