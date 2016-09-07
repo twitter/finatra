@@ -62,6 +62,31 @@ Note that while you will see a [Travis CI][travis-ci] status message in your
 pull request, all changes will also be tested internally at Twitter before being
 merged.
 
+## Compatibility
+
+We try to keep public APIs stable for the obvious reasons. Often,
+compatibility can be kept by adding a forwarding method. Note that we
+avoid adding default arguments because this is not a compatible change
+for our Java users.  However, when the benefits outweigh the costs, we
+are willing to break APIs. The break should be noted in the Breaking
+API Changes section of the [changelog](CHANGELOG.md). Note that changes to
+non-public APIs will not be called out in the [changelog](CHANGELOG.md).
+
+## Java
+
+While the project is written in Scala, its public APIs should be usable from
+Java. This occasionally works out naturally from the Scala interop, but more
+often than not, if care is not taken Java users will have rough corners
+(e.g. `SomeCompanion$.MODULE$.someMethod()` or a symbolic operator).
+We take a variety of approaches to minimize this.
+
+1. Add a "compilation" unit test, written in Java, that verifies the APIs are
+   usable from Java.
+2. If there is anything gnarly, we add Java adapters either by adding
+   a non-symbolic method name or by adding a class that does forwarding.
+3. Prefer `abstract` classes over `traits` as they are easier for Java
+   developers to extend.
+
 ## Style
 
 We generally follow the [Scala Style Guide][scala-style-guide]. When in doubt,
@@ -144,7 +169,7 @@ authorship metadata will be preserved.
 ## Documentation
 
 We also welcome improvements to the Finatra documentation or to the existing
-ScalaDocs. Please file an [issue](https://github.com/twitter/finatra/issues).
+Scaladocs. Please file an [issue](https://github.com/twitter/finatra/issues).
 
 [master-branch]: https://github.com/twitter/finatra/tree/master
 [develop-branch]: https://github.com/twitter/finatra/tree/develop

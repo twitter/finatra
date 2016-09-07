@@ -106,6 +106,11 @@ The [master branch](https://github.com/twitter/finatra/tree/master) in Github tr
 
 available on Maven Central. See the [basics](http://twitter.github.io/finatra/user-guide/getting-started/#dependencies) section in the [User Guide][user-guide] for how to add dependencies.
 
+Releases are done on an approximately monthly schedule. While
+[semver](http://semver.org/) is not followed, the
+[changelogs](CHANGELOG.md) are detailed and include sections on public API
+breaks and changes in runtime behavior.
+
 ## Development version
 
 The [develop branch](https://github.com/twitter/finatra/tree/develop) in Github tracks the latest code which is updated every week. If you want to contribute a patch or fix, please use this branch as the basis of your [Pull Request](https://help.github.com/articles/creating-a-pull-request/). 
