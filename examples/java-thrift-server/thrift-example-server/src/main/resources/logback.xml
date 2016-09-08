@@ -1,0 +1,88 @@
+<configuration>
+  <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+  <!-- ===================================================== -->
+  <!-- Service Config -->
+  <!-- ===================================================== -->
+  <property name="SERVICE_LOG_PATTERN"
+            value="%-16X{traceId} %-12X{clientId:--} %-16X{method} %-25logger{0} %msg"/>
+
+  <property name="ACCESS_LOG_PATTERN"
+            value="%msg"/>
+
+  <!-- ===================================================== -->
+  <!-- Common Config -->
+  <!-- ===================================================== -->
+
+  <!-- JUL/JDK14 to Logback bridge -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
+
+  <!-- Service Log (Rollover daily/50MB) -->
+  <!-- See http://logback.qos.ch/manual/appenders.html#RollingFileAppender -->
+  <appender name="SERVICE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${log.service.output:-service.log}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log.service.output:-service.log}-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>50MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%date %.-3level ${SERVICE_LOG_PATTERN}%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Access Log (Rollover daily/50MB) -->
+  <appender name="ACCESS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${log.access.output:-access.log}</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${log.access.output:-access.log}-%d{yyyy-MM-dd}.%i</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>50MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${ACCESS_LOG_PATTERN}%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- ===================================================== -->
+  <!-- Primary Async Appenders -->
+  <!-- ===================================================== -->
+
+  <property name="async_queue_size" value="${queue.size:-1024}"/>
+  <property name="async_max_flush_time" value="${max.flush.time:-0}"/>
+
+  <appender name="ASYNC-SERVICE" class="ch.qos.logback.classic.AsyncAppender">
+    <queueSize>${async_queue_size}</queueSize>
+    <maxFlushTime>${async_max_flush_time}</maxFlushTime>
+    <appender-ref ref="SERVICE"/>
+  </appender>
+
+  <appender name="ASYNC-ACCESS" class="ch.qos.logback.classic.AsyncAppender">
+    <queueSize>${async_queue_size}</queueSize>
+    <maxFlushTime>${async_max_flush_time}</maxFlushTime>
+    <appender-ref ref="ACCESS"/>
+  </appender>
+
+  <!-- ===================================================== -->
+  <!-- Package Config -->
+  <!-- ===================================================== -->
+
+  <!-- Per-Package Config -->
+  <logger name="com.twitter" level="info"/>
+  <logger name="com.twitter.logging.ScribeHandler" level="warn"/>
+  <logger name="com.twitter.zookeeper.client.internal" level="warn"/>
+
+  <root level="${log_level:-INFO}">
+    <appender-ref ref="ASYNC-SERVICE"/>
+  </root>
+
+  <!-- Access Logging -->
+  <logger name="com.twitter.finatra.thrift.filters.AccessLoggingFilter" level="info" additivity="false">
+    <appender-ref ref="ASYNC-ACCESS"/>
+  </logger>
+
+</configuration>

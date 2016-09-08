@@ -166,7 +166,7 @@ case class FinatraObjectMapper(
     }
   }
 
-  def registerModule(module: Module) = {
+  def registerModule(module: Module): ObjectMapper = {
     objectMapper.registerModule(module)
   }
 }

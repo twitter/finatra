@@ -3,7 +3,17 @@ junit_tests(
   dependencies=[
     'finatra/examples/hello-world',
     'finatra/http:test-deps',
-    'finatra/inject/inject-server:test-deps'
+    'finatra/inject/inject-server:test-deps',
+    '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
+    '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
+    '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
+    '3rdparty/jvm/com/google/inject:guice',
+    '3rdparty/jvm/net/codingwell:scala-guice',
+    '3rdparty/jvm/org/clapper:grizzled-slf4j',
+    '3rdparty/jvm/org/scalatest:scalatest',
+    'finagle/finagle-http/src/main/scala:scala',
+    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-core/src/test/scala:test-deps',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),

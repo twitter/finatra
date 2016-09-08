@@ -16,8 +16,6 @@ jvm_binary(
   main='com.twitter.calculator.CalculatorServerMain',
   dependencies=[
     ':thrift-example-server',
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
-    'finatra/slf4j'
   ],
   deploy_excludes=[
     exclude('org.slf4j', 'slf4j-jdk14'),

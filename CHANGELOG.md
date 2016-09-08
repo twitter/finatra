@@ -12,6 +12,26 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.4.0](https://github.com/twitter/finatra/tree/finatra-2.4.0) (2016-09-07)
+
+### Added
+
+* finatra-thrift: Enhanced support for Java Thrift services. ``RB_ID=868254``
+* finatra-examples: Add web/UI application example. ``RB_ID=868027``
+* inject-server: Allow for the ability to disable test logging via System property. ``RB_ID=867344``
+
+### Changed
+
+* finatra-http: Specify HTTP Java API consistently. ``RB_ID=868264``
+* inject-core: Clean up inject.Logging trait. Remove dead code from Logging. ``RB_ID=868261``
+* finatra-http: Move integration tests to a package under `com.twitter.finatra.http`. ``RB_ID=866487``
+
+### Fixed
+
+* finatra-http: Fix issue with unimplemented methods in NonValidatingHttpHeadersResponse. ``RB_ID=868480``
+
+### Closed
+
 ## [finatra-2.3.0](https://github.com/twitter/finatra/tree/finatra-2.3.0) (2016-08-25)
 
 ### Added

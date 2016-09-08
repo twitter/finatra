@@ -94,8 +94,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     "json response to /example" in {
       val response = server.httpGet("/example/routing/json/1")
       response.statusCode should equal(200)
-      println(response.contentString)
       jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
+    }
+
+    "stringMap" in {
+      server.httpGet(
+        "/stringMap",
+        andExpect = Ok,
+        withJsonBody = """{"message":"Hello, World!"}""")
     }
 
     "ok" in {

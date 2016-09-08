@@ -48,3 +48,13 @@ exception ServerError {
   1: ServerErrorCause errorCause
   2: string message
 }
+
+/**
+ * To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+ * to thrift libraries which do not define services (structs-only definitions generally
+ * do not need finagle). Therefore, we define an empty service to cause the finagle-core
+ * dep to be introduced.
+ *
+ * see DPB-7778
+ */
+service EmptyExceptionsService { }

@@ -5,12 +5,29 @@ junit_tests(name='scala',
     '3rdparty/jvm/org/specs2',
     'finatra/httpclient',
     'finatra/httpclient/src/test/scala:test-deps',
-    'finatra/utils:tests',
-    'finatra/http',
     'finatra/inject/inject-app:test-deps',
+    '3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind',
+    '3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda',
+    '3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala',
+    '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
+    '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
+    '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
+    '3rdparty/jvm/com/google/inject:guice',
+    '3rdparty/jvm/net/codingwell:scala-guice',
+    '3rdparty/jvm/org/clapper:grizzled-slf4j',
+    'finagle/finagle-core/src/main/scala:scala',
+    'finagle/finagle-http/src/main/scala:scala',
+    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/jackson/src/main/scala:scala',
+    'util/util-core/src/main/scala:scala',
   ],
   sources=globs(
-    'com/twitter/finatra/httpclient/*.scala')
+    'com/twitter/finatra/httpclient/*.scala'
+  ),
+  resources=[
+    'finatra/httpclient/src/test/resources',
+  ]
 )
 
 
@@ -21,8 +38,13 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
-    'finatra/httpclient',
-    'finatra/utils:test-deps'
+    '3rdparty/jvm/org/clapper:grizzled-slf4j',
+    'finagle/finagle-core/src/main/scala:scala',
+    'finagle/finagle-http/src/main/scala:scala',
+    'finatra/inject/inject-app/src/test/scala:test-deps',
+    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/utils/src/main/scala:scala',
+    'util/util-core/src/main/scala:scala',
   ],
   fatal_warnings=True,
   sources=globs(

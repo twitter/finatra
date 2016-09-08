@@ -22,6 +22,7 @@ import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang.reflect.FieldUtils
 import org.scalatest.Matchers
+import scala.collection.JavaConverters._
 
 object EmbeddedTwitterServer {
   private def resolveFlags(useSocksProxy: Boolean, flags: Map[String, String]) = {
@@ -77,8 +78,8 @@ class EmbeddedTwitterServer(
 
   /* Additional Constructors */
 
-  def this(twitterServer: Ports) = {
-    this(twitterServer, stage = Stage.PRODUCTION)
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) = {
+    this(twitterServer, flags = flags.asScala.toMap, stage = stage)
   }
 
   /* Main Constructor */
@@ -188,7 +189,7 @@ class EmbeddedTwitterServer(
    * @param str - the string message to log
    */
   def info(str: String): Unit = {
-    if (!disableTestLogging) {
+    if (!disableLogging) {
       println(str)
     }
   }
@@ -431,6 +432,10 @@ class EmbeddedTwitterServer(
   }
 
   /* Private */
+
+  private def disableLogging = {
+    disableTestLogging || System.getProperties.keySet().contains("com.twitter.inject.test.logging.disabled")
+  }
 
   private def keyStr(keys: Seq[String]): String = {
     keys.mkString("/")

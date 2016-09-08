@@ -5,7 +5,7 @@ junit_tests(
     'finatra/httpclient',
     'finatra/http:test-deps',
     'finatra/examples/java-http-server',
-    'finatra/inject/inject-server:test-deps'
+    'finagle/finagle-http/src/main/scala:scala',
   ],
   sources=globs('com/twitter/hello/server/*.java'),
   resources=[

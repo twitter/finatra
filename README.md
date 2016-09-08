@@ -94,7 +94,7 @@ class ExampleServer extends ThriftServer {
 
 ## Example Projects
 
-Finatra includes working examples which highlight various features of the framework and include tests. In the [develop branch](https://github.com/twitter/finatra/tree/develop/examples) these examples are included in the root [sbt](http://www.scala-sbt.org/) build and are thus buildable as part of the entire project. In the [master branch](https://github.com/twitter/finatra/tree/master/examples) (or a [release branch](https://github.com/twitter/finatra/tree/finatra-2.3.0/examples)) these examples can be built using their invididual [sbt](http://www.scala-sbt.org/) (or [Maven](http://maven.apache.org/)) build files.
+Finatra includes working examples which highlight various features of the framework and include tests. In the [develop branch](https://github.com/twitter/finatra/tree/develop/examples) these examples are included in the root [sbt](http://www.scala-sbt.org/) build and are thus buildable as part of the entire project. In the [master branch](https://github.com/twitter/finatra/tree/master/examples) (or a [release branch](https://github.com/twitter/finatra/tree/finatra-2.4.0/examples)) these examples can be built using their invididual [sbt](http://www.scala-sbt.org/) (or [Maven](http://maven.apache.org/)) build files.
 
 Please take a look through the [examples](/examples) for more detailed information on features, testing, and building with sbt (or Maven).
 
@@ -105,6 +105,11 @@ The [master branch](https://github.com/twitter/finatra/tree/master) in Github tr
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)][maven-central]
 
 available on Maven Central. See the [basics](http://twitter.github.io/finatra/user-guide/getting-started/#dependencies) section in the [User Guide][user-guide] for how to add dependencies.
+
+Releases are done on an approximately monthly schedule. While
+[semver](http://semver.org/) is not followed, the
+[changelogs](CHANGELOG.md) are detailed and include sections on public API
+breaks and changes in runtime behavior.
 
 ## Development version
 

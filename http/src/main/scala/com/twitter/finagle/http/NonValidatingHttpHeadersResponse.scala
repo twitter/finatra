@@ -30,12 +30,15 @@ private[twitter] class NonValidatingHttpHeadersResponse(
   extends Response {
 
   override protected[finagle] val httpResponse: HttpResponse = new HttpResponse {
+    private[this] var _content: ChannelBuffer = BufChannelBuffer(content)
+    private[this] var _status: HttpResponseStatus = status
+
     private val httpHeaders = new DefaultHttpHeaders(false)
     httpHeaders.add(Fields.ContentType, contentType)
 
-    override def getStatus: HttpResponseStatus = status
+    override def getStatus: HttpResponseStatus = _status
 
-    override val getContent: ChannelBuffer = BufChannelBuffer(content)
+    override def getContent: ChannelBuffer = _content
 
     override def isChunked: Boolean = false
 
@@ -43,12 +46,13 @@ private[twitter] class NonValidatingHttpHeadersResponse(
 
     override def headers(): HttpHeaders = httpHeaders
 
-    override def setContent(content: ChannelBuffer): Unit = ???
+    override def setContent(content: ChannelBuffer): Unit = _content = content
 
-    override def setProtocolVersion(version: HttpVersion): Unit = ???
+    // Note: this is an issue for HTTP/2
+    override def setProtocolVersion(version: HttpVersion): Unit = {}
 
-    override def setChunked(chunked: Boolean): Unit = ???
+    override def setChunked(chunked: Boolean): Unit = assert(!chunked)
 
-    override def setStatus(status: HttpResponseStatus): Unit = ???
+    override def setStatus(status: HttpResponseStatus): Unit = _status = status
   }
 }

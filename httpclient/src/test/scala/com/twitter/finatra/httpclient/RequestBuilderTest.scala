@@ -139,6 +139,15 @@ class RequestBuilderTest extends Test {
     request.contentString should be("{}")
   }
 
+  "post json with resource" in {
+    val request = RequestBuilder.post("/abc")
+      .bodyFromResource("/test_resource.json")
+
+    request.headerMap("Content-Type") should be("application/json;charset=utf-8")
+    println(request.contentString)
+    request.contentString should be("""{"a": "1", "b": "2"}""")
+  }
+
   "post utf8 content" in {
     val request = RequestBuilder.post("/abc")
       .body("ＴＥＳＴＢＯＤＹ")

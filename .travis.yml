@@ -3,6 +3,9 @@ language: scala
 scala:
   - 2.11.8
 
+env:
+  - JAVA_OPTS="-Dsbt.log.noformat=true"
+
 jdk:
   - oraclejdk8
 
@@ -10,9 +13,10 @@ before_script:
   # default $SBT_OPTS is irrelevant to sbt launcher
   - unset SBT_OPTS
   - curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
+  - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
 
 script:
-  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
+  - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
   - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 
 after_success:

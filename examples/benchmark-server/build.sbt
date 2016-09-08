@@ -1,11 +1,11 @@
 name := "benchmark-server"
 organization := "com.twitter"
-version := "2.3.0"
+version := "2.4.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.3.0"
+  val finatra = "2.4.0"
 }
 
 mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain")

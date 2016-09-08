@@ -2,6 +2,7 @@ package com.twitter.finatra.json.tests.internal
 
 import com.fasterxml.jackson.databind.{ObjectMapper, SerializationFeature}
 import com.fasterxml.jackson.datatype.joda.JodaModule
+import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
 import com.twitter.inject.Test
 import org.joda.time.{DateTime, DateTimeZone}
@@ -28,6 +29,12 @@ class FinatraJodaTimeModuleTest extends Test {
     val mapper = new ObjectMapper()
     mapper.registerModule(FinatraSerDeSimpleModule)
     mapper.readValue(quote(nowUtc.toString()), classOf[DateTime]) should equal(nowUtc)
+  }
+
+  "deserialize text with FinatraObjectMapper" in {
+    val mapper = FinatraObjectMapper.create()
+    mapper.registerModule(FinatraSerDeSimpleModule)
+    mapper.parse[DateTime](quote(nowUtc.toString())) should equal(nowUtc)
   }
 
   "deserialize long" in {

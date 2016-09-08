@@ -8,6 +8,7 @@ import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import com.twitter.util.Try
+import scala.collection.JavaConverters._
 
 /**
  *
@@ -65,8 +66,8 @@ class EmbeddedHttpServer(
 
   /* Additional Constructors */
 
-  def this(twitterServer: Ports) = {
-    this(twitterServer, flags = Map())
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) = {
+    this(twitterServer, flags = flags.asScala.toMap, stage = stage)
   }
 
   /* Overrides */

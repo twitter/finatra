@@ -4,28 +4,34 @@
 
 A collection of example [Finatra][finatra] applications.
 
-## Example Projects
-For more detailed information see the README.md within each example project.
+## Details
+For detailed information see the README.md within each
+example project. Every project builds with [sbt](http://www.scala-sbt.org/) and
+at least one example which also uses [Maven](http://maven.apache.org).
 
-### [benchmark-server](benchmark-server/README.md)
-A test server that provides benchmarking for key Finatra features.
 
-### [hello-world](hello-world/README.md)
-An example [Finatra][finatra] application that highlights features of the [finatra-http](https://github.com/twitter/finatra/tree/develop/http) framework.
+## Building and Running
 
-### [java-server](java-server/README.md)
-An example [Finatra][finatra] application written in Java.
+### `develop` branch
+If you want to build/run the examples from the `develop` branch you will need to
+make sure to follow the instructions in the
+[CONTRIBUTING.md](../CONTRIBUTING.md) documentation for building SNAPSHOT
+versions of Finatra Twitter OSS dependencies along with building Finatra itself. 
 
-### [twitter-clone](twitter-clone/README.md)
-An advanced example that creates a Twitter Clone application demonstrating many [Finatra][finatra] features.
+To accomplish this easily:
 
-### [hello-world-heroku](hello-world-heroku/README.md)
-An example [Finatra][finatra] application that highlights features of the [finatra-http](https://github.com/twitter/finatra/tree/develop/http) framework that is deployable to [Heroku](https://heroku.com).
+``` curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build |
+bash -s -- --no-test --include finatra ```
 
-### [streaming-example](streaming-example/README.md)
-A proof-of-concept streaming JSON service.
+This commands differs from the [CONTRIBUTING.md](../CONTRIBUTING.md) documentation in
+that it will also *include* building and publishing Finatra locally from the Finatra
+`develop` branch.
 
-### [tiny-url](tiny-url/README.md)
-An example [Finatra][finatra] application for url shortening that is deployable to [Heroku](https://heroku.com).
+### `master` or a release branch
+Follow the instructions in the project's `README.md` for how to run the server.
+
+## More information
+For more information please see our [User Guide](http://twitter.github.io/finatra/user-guide/)
+or browse the [source code][finatra] (tests are especially good sources of information and examples).
 
 [finatra]: https://github.com/twitter/finatra

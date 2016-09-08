@@ -13,6 +13,9 @@ import com.twitter.inject.TwitterModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.server.AdminHttpServer
 
+/** AbstractHttpServer for usage from Java */
+abstract class AbstractHttpServer extends HttpServer
+
 trait HttpServer extends BaseHttpServer {
 
   addFrameworkModules(

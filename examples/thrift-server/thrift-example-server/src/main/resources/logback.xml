@@ -81,7 +81,7 @@
   </root>
 
   <!-- Access Logging -->
-  <logger name="com.twitter.finatra.thrift.filters.AccessLoggingFilter" level="info" additivity="false">
+  <logger name="com.twitter.finatra.thrift.filters..AccessLoggingFilter" level="info" additivity="false">
     <appender-ref ref="ASYNC-ACCESS"/>
   </logger>
 

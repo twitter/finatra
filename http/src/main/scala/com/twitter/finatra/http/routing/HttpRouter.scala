@@ -5,7 +5,7 @@ import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
 import com.twitter.finatra.http.internal.routing.{Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
-import com.twitter.finatra.http.{Controller, HttpFilter, JavaController}
+import com.twitter.finatra.http.{Controller, HttpFilter, AbstractController}
 import com.twitter.inject.{Injector, Logging}
 import javax.inject.{Inject, Singleton}
 import scala.collection.mutable.ArrayBuffer
@@ -121,7 +121,7 @@ class HttpRouter @Inject()(
     addInjected(controller)
   }
 
-  def add(clazz: Class[_ <: JavaController]): HttpRouter = {
+  def add(clazz: Class[_ <: AbstractController]): HttpRouter = {
     val controller = injector.instance(clazz)
     controller.configureRoutes()
     addInjected(controller)
