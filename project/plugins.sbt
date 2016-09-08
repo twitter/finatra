@@ -6,11 +6,11 @@ resolvers ++= Seq(
 )
 
 val branch = Process("git" :: "rev-parse" :: "--abbrev-ref" :: "HEAD" :: Nil).!!.trim
-val scroogeSbtPluginVersionPrefix = "4.9.0"
+val scroogeSbtPluginVersionPrefix = "4.10.0"
 val scroogeSbtPluginVersion =
   if (branch == "master") scroogeSbtPluginVersionPrefix
   else scroogeSbtPluginVersionPrefix + "-SNAPSHOT"
-addSbtPlugin("com.twitter" % "scrooge-sbt-plugin" % "4.7.0")
+addSbtPlugin("com.twitter" % "scrooge-sbt-plugin" % scroogeSbtPluginVersion)
 
 addSbtPlugin("com.eed3si9n" % "sbt-unidoc" % "0.3.2")
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.13.0")
