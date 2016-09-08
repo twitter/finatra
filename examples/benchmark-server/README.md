@@ -14,7 +14,7 @@ $ ./sbt benchmarkServer/run
 * Or build and run a deployable jar:
 ```
 $ ./sbt benchmarkServer/assembly
-$ java -jar examples/benchmark-server/target/scala-2.11/benchmark-server-assembly-2.3.0-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
+$ java -jar examples/benchmark-server/target/scala-2.11/benchmark-server-assembly-2.5.0-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
 ```
 
 If you're in a tagged release branch (e.g. [finatra-2.4.0](https://github.com/twitter/finatra/tree/finatra-2.4.0))
