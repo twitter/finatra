@@ -555,6 +555,7 @@ lazy val thrift = project
     scroogePublishThrift in Compile := true,
     scroogeThriftIncludeFolders in Test := Seq(file("thrift/src/main/thrift")),
     scroogeLanguages in Compile := Seq("java", "scala"),
+    scroogeLanguages in Test := Seq("java", "scala"),
     excludeFilter in unmanagedResources := "BUILD",
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
@@ -732,7 +733,7 @@ lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server
   .settings(exampleServerSettings)
   .settings(
     name := "java-thrift-example-server",
-    moduleName := "java-thrift-example-server"//,
+    moduleName := "java-thrift-example-server"
   ).dependsOn(
     thriftJavaExampleIdl,
     slf4j,

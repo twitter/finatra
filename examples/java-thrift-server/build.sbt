@@ -8,6 +8,7 @@ lazy val versions = new {
   val logback = "1.1.7"
   val mockito = "1.9.5"
   val junit = "4.12"
+  val scalatest = "2.2.6"
 }
 
 lazy val baseSettings = Seq(
@@ -16,6 +17,7 @@ lazy val baseSettings = Seq(
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   libraryDependencies ++= Seq(
     "org.mockito" % "mockito-core" % versions.mockito % "test",
+    "org.scalatest" %% "scalatest" % versions.scalatest % "test",
     "junit" % "junit" % versions.junit % "test"
   ),
   resolvers ++= Seq(
