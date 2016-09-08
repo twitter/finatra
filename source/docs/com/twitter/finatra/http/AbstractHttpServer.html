@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>JavaHttpServer - com.twitter.finatra.http.JavaHttpServer</title>
-          <meta name="description" content="JavaHttpServer - com.twitter.finatra.http.JavaHttpServer" />
-          <meta name="keywords" content="JavaHttpServer com.twitter.finatra.http.JavaHttpServer" />
+          <title>AbstractHttpServer - com.twitter.finatra.http.AbstractHttpServer</title>
+          <meta name="description" content="AbstractHttpServer - com.twitter.finatra.http.AbstractHttpServer" />
+          <meta name="keywords" content="AbstractHttpServer com.twitter.finatra.http.AbstractHttpServer" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../index.html';
-            var hash = 'com.twitter.finatra.http.JavaHttpServer';
+            var hash = 'com.twitter.finatra.http.AbstractHttpServer';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -30,10 +30,10 @@
       <div id="definition">
         <img alt="Class" src="../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../package.html" class="extype" name="com">com</a>.<a href="../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="package.html" class="extype" name="com.twitter.finatra.http">http</a></p>
-        <h1>JavaHttpServer</h1><h3><span class="morelinks"><div>Related Doc:
+        <h1>AbstractHttpServer</h1><h3><span class="morelinks"><div>Related Doc:
             <a href="package.html" class="extype" name="com.twitter.finatra.http">package http</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,11 +45,11 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">JavaHttpServer</span><span class="result"> extends <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></span>
+        <span class="name">AbstractHttpServer</span><span class="result"> extends <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>AbstractHttpServer for usage from Java</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a>, <span class="extype" name="com.twitter.finatra.http.internal.server.BaseHttpServer">BaseHttpServer</span>, <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a>, <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.TwitterServer" class="extype" target="_top">TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Stats" class="extype" target="_top">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Admin" class="extype" target="_top">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.AdminHttpServer" class="extype" target="_top">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Hooks" class="extype" target="_top">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.LogFormat" class="extype" target="_top">LogFormat</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.EventSink" class="extype" target="_top">EventSink</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Logging" class="extype" target="_top">Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/index.html#com.twitter.server.Linters" class="extype" target="_top">Linters</a>, <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">Logging</span>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.App" class="extype" target="_top">App</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably" class="extype" target="_top">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.CloseAwaitably0" class="extype" target="_top">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>], <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>], <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Closable" class="extype" target="_top">Closable</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
@@ -69,7 +69,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.twitter.finatra.http.JavaHttpServer"><span>JavaHttpServer</span></li><li class="in" name="com.twitter.finatra.http.HttpServer"><span>HttpServer</span></li><li class="in" name="com.twitter.finatra.http.internal.server.BaseHttpServer"><span>BaseHttpServer</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.LogFormat"><span>LogFormat</span></li><li class="in" name="com.twitter.server.EventSink"><span>EventSink</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="grizzled.slf4j.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.twitter.finatra.http.AbstractHttpServer"><span>AbstractHttpServer</span></li><li class="in" name="com.twitter.finatra.http.HttpServer"><span>HttpServer</span></li><li class="in" name="com.twitter.finatra.http.internal.server.BaseHttpServer"><span>BaseHttpServer</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.LogFormat"><span>LogFormat</span></li><li class="in" name="com.twitter.server.EventSink"><span>EventSink</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="grizzled.slf4j.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -88,19 +88,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.http.JavaHttpServer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;():com.twitter.finatra.http.JavaHttpServer"></a>
-      <a id="&lt;init&gt;:JavaHttpServer"></a>
+              <ol><li name="com.twitter.finatra.http.AbstractHttpServer#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;():com.twitter.finatra.http.AbstractHttpServer"></a>
+      <a id="&lt;init&gt;:AbstractHttpServer"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">JavaHttpServer</span><span class="params">()</span>
+        <span class="name">AbstractHttpServer</span><span class="params">()</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@&lt;init&gt;():com.twitter.finatra.http.JavaHttpServer" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@&lt;init&gt;():com.twitter.finatra.http.AbstractHttpServer" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -124,7 +124,7 @@
         <span class="name">configureHttp</span><span class="params">(<span name="router">router: <a href="routing/HttpRouter.html" class="extype" name="com.twitter.finatra.http.routing.HttpRouter">HttpRouter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@configureHttp(router:com.twitter.finatra.http.routing.HttpRouter):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@configureHttp(router:com.twitter.finatra.http.routing.HttpRouter):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -146,7 +146,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -163,7 +163,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@##():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@##():Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -180,7 +180,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -197,7 +197,7 @@
         <span class="name">MinGrace</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@MinGrace:com.twitter.util.Duration" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@MinGrace:com.twitter.util.Duration" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -214,7 +214,7 @@
         <span class="name">accessLogModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@accessLogModule:com.google.inject.Module" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@accessLogModule:com.google.inject.Module" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -232,7 +232,7 @@
         <span class="name">addAdminRoute</span><span class="params">(<span name="route">route: <span class="extype" name="com.twitter.server.AdminHttpServer.Route">Route</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -249,7 +249,7 @@
         <span class="name">addAdminRoutes</span><span class="params">(<span name="newRoutes">newRoutes: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.server.AdminHttpServer.Route">Route</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -266,7 +266,7 @@
         <span class="name">addFrameworkModule</span><span class="params">(<span name="module">module: <span class="extype" name="com.google.inject.Module">Module</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@addFrameworkModule(module:com.google.inject.Module):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@addFrameworkModule(module:com.google.inject.Module):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -285,7 +285,7 @@ is overriding the default methods using a val instead of a def
         <span class="name">addFrameworkModules</span><span class="params">(<span name="modules">modules: <span class="extype" name="com.google.inject.Module">Module</span>*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@addFrameworkModules(modules:com.google.inject.Module*):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@addFrameworkModules(modules:com.google.inject.Module*):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -302,7 +302,7 @@ is overriding the default methods using a val instead of a def
         <span class="name">addFrameworkOverrideModules</span><span class="params">(<span name="modules">modules: <span class="extype" name="com.google.inject.Module">Module</span>*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -319,7 +319,7 @@ is overriding the default methods using a val instead of a def
         <span class="name">adminBoundAddress</span><span class="result">: <span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@adminBoundAddress:java.net.InetSocketAddress" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@adminBoundAddress:java.net.InetSocketAddress" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -336,7 +336,7 @@ is overriding the default methods using a val instead of a def
         <span class="name">adminHttpServer</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.ListeningServer" class="extype" target="_top">ListeningServer</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@adminHttpServer:com.twitter.finagle.ListeningServer" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@adminHttpServer:com.twitter.finagle.ListeningServer" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -353,7 +353,7 @@ is overriding the default methods using a val instead of a def
         <span class="name">adminPort</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -370,7 +370,7 @@ is overriding the default methods using a val instead of a def
         <span class="name">afterPostWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@afterPostWarmup():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@afterPostWarmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -393,7 +393,7 @@ enable our health endpoint.
         <span class="name">allowUndefinedFlags</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@allowUndefinedFlags:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@allowUndefinedFlags:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -410,7 +410,7 @@ enable our health endpoint.
         <span class="name">appendFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@appendFlag:com.twitter.app.Flag[Boolean]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@appendFlag:com.twitter.app.Flag[Boolean]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -427,7 +427,7 @@ enable our health endpoint.
         <span class="name">args</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@args:Array[String]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@args:Array[String]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -444,7 +444,7 @@ enable our health endpoint.
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -461,7 +461,7 @@ enable our health endpoint.
         <span class="name">await</span><span class="params">(<span name="awaitables">awaitables: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[_]*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@await(awaitables:com.twitter.util.Awaitable[_]*):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@await(awaitables:com.twitter.util.Awaitable[_]*):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -478,7 +478,7 @@ enable our health endpoint.
         <span class="name">await</span><span class="tparams">[<span name="T">T &lt;: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Awaitable" class="extype" target="_top">Awaitable</a>[_]</span>]</span><span class="params">(<span name="awaitable">awaitable: <span class="extype" name="com.twitter.inject.server.TwitterServer.await.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -495,7 +495,7 @@ enable our health endpoint.
         <span class="name">beforePostWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@beforePostWarmup():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@beforePostWarmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -518,7 +518,7 @@ enable our health endpoint.
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@clone():Object" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -541,7 +541,7 @@ enable our health endpoint.
         <span class="name">close</span><span class="params">(<span name="deadline">deadline: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Time" class="extype" target="_top">Time</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -558,7 +558,7 @@ enable our health endpoint.
         <span class="name">close</span><span class="params">(<span name="after">after: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -575,7 +575,7 @@ enable our health endpoint.
         <span class="name">close</span><span class="params">()</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@close():com.twitter.util.Future[Unit]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@close():com.twitter.util.Future[Unit]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -592,7 +592,7 @@ enable our health endpoint.
         <span class="name">closeAwaitably</span><span class="params">(<span name="f">f: ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -609,7 +609,7 @@ enable our health endpoint.
         <span class="name">closeOnExit</span><span class="params">(<span name="closable">closable: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Closable" class="extype" target="_top">Closable</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@closeOnExit(closable:com.twitter.util.Closable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@closeOnExit(closable:com.twitter.util.Closable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -626,7 +626,7 @@ enable our health endpoint.
         <span class="name">configureHttpServer</span><span class="params">(<span name="server">server: <span class="extype" name="com.twitter.finagle.Http.Server">Server</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Http.Server">Server</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@configureHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@configureHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -650,7 +650,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">configureHttpsServer</span><span class="params">(<span name="server">server: <span class="extype" name="com.twitter.finagle.Http.Server">Server</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Http.Server">Server</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -674,7 +674,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -691,7 +691,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -708,7 +708,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">debugFutureResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -726,7 +726,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">debugResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@debugResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@debugResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -744,7 +744,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultAppend</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultAppend:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultAppend:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -761,7 +761,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultCertificatePath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultCertificatePath:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultCertificatePath:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -778,7 +778,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultCloseGracePeriod</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultCloseGracePeriod:com.twitter.util.Duration" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultCloseGracePeriod:com.twitter.util.Duration" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -795,7 +795,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultFinatraHttpPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultFinatraHttpPort:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultFinatraHttpPort:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -812,7 +812,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultFormatter</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Formatter" class="extype" target="_top">Formatter</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultFormatter:com.twitter.logging.Formatter" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultFormatter:com.twitter.logging.Formatter" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -829,7 +829,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultHttpPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultHttpPort:Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultHttpPort:Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -846,7 +846,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultHttpServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultHttpServerName:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultHttpServerName:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -863,7 +863,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultHttpsPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultHttpsPort:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultHttpsPort:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -880,7 +880,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultHttpsServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultHttpsServerName:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultHttpsServerName:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -897,7 +897,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultKeyPath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultKeyPath:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultKeyPath:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -914,7 +914,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultLogLevel</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Level" class="extype" target="_top">Level</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultLogLevel:com.twitter.logging.Level" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultLogLevel:com.twitter.logging.Level" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -931,7 +931,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultMaxRequestSize</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.StorageUnit" class="extype" target="_top">StorageUnit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultMaxRequestSize:com.twitter.util.StorageUnit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultMaxRequestSize:com.twitter.util.StorageUnit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -948,7 +948,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultOutput</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultOutput:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultOutput:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -965,7 +965,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultRollPolicy</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Policy" class="extype" target="_top">Policy</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultRollPolicy:com.twitter.logging.Policy" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultRollPolicy:com.twitter.logging.Policy" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -982,7 +982,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultRotateCount</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultRotateCount:Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultRotateCount:Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -999,7 +999,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultShutdownTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@defaultShutdownTimeout:com.twitter.util.Duration" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@defaultShutdownTimeout:com.twitter.util.Duration" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1016,7 +1016,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">disableAdminHttpServer</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@disableAdminHttpServer:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@disableAdminHttpServer:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1035,7 +1035,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1052,7 +1052,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1069,7 +1069,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1086,7 +1086,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1103,7 +1103,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">errorResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@errorResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@errorResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1121,7 +1121,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">exceptionManagerModule</span><span class="result">: <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@exceptionManagerModule:com.twitter.inject.TwitterModule" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@exceptionManagerModule:com.twitter.inject.TwitterModule" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1140,7 +1140,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">exceptionMapperModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@exceptionMapperModule:com.google.inject.Module" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@exceptionMapperModule:com.google.inject.Module" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1161,7 +1161,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">exitOnError</span><span class="params">(<span name="reason">reason: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@exitOnError(reason:String):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@exitOnError(reason:String):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1178,7 +1178,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">failfastOnFlagsNotParsed</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@failfastOnFlagsNotParsed:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@failfastOnFlagsNotParsed:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1195,7 +1195,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1218,7 +1218,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">flag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flags" class="extype" target="_top">Flags</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@flag:com.twitter.app.Flags" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@flag:com.twitter.app.Flags" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1235,7 +1235,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1252,7 +1252,7 @@ Note: Disabling the admin server allows services to be deployed into environment
         <span class="name">handle</span><span class="tparams">[<span name="T">T &lt;: <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">Handler</a></span>]</span><span class="params">()</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.server.TwitterServer.handle.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1271,7 +1271,7 @@ a warmup handler in #warmup.
         <span class="name">handlers</span><span class="result">: <span class="extype" name="scala.List">List</span>[() ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Handler" class="extype" target="_top">Handler</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@handlers:List[()=&gt;com.twitter.logging.Handler]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@handlers:List[()=&gt;com.twitter.logging.Handler]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1288,7 +1288,7 @@ a warmup handler in #warmup.
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1305,7 +1305,7 @@ a warmup handler in #warmup.
         <span class="name">httpExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@httpExternalPort:Option[Int]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@httpExternalPort:Option[Int]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1322,7 +1322,7 @@ a warmup handler in #warmup.
         <span class="name">httpService</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request" class="extype" target="_top">Request</a>, <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Response" class="extype" target="_top">Response</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@httpService:com.twitter.finagle.Service[com.twitter.finagle.http.Request,com.twitter.finagle.http.Response]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1339,7 +1339,7 @@ a warmup handler in #warmup.
         <span class="name">httpsExternalPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@httpsExternalPort:Option[Int]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@httpsExternalPort:Option[Int]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1356,7 +1356,7 @@ a warmup handler in #warmup.
         <span class="name">inferClassNamesFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@inferClassNamesFlag:com.twitter.app.Flag[Boolean]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@inferClassNamesFlag:com.twitter.app.Flag[Boolean]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1373,7 +1373,7 @@ a warmup handler in #warmup.
         <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1390,7 +1390,7 @@ a warmup handler in #warmup.
         <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1407,7 +1407,7 @@ a warmup handler in #warmup.
         <span class="name">infoResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@infoResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@infoResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1425,7 +1425,7 @@ a warmup handler in #warmup.
         <span class="name">init</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@init(f:=&gt;Unit):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@init(f:=&gt;Unit):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1442,7 +1442,7 @@ a warmup handler in #warmup.
         <span class="name">injector</span><span class="result">: <a href="../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@injector:com.twitter.inject.Injector" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@injector:com.twitter.inject.Injector" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1459,7 +1459,7 @@ a warmup handler in #warmup.
         <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@isDebugEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@isDebugEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1476,7 +1476,7 @@ a warmup handler in #warmup.
         <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@isErrorEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@isErrorEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1493,7 +1493,7 @@ a warmup handler in #warmup.
         <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@isInfoEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@isInfoEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1510,7 +1510,7 @@ a warmup handler in #warmup.
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1527,7 +1527,7 @@ a warmup handler in #warmup.
         <span class="name">isReady</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1544,7 +1544,7 @@ a warmup handler in #warmup.
         <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@isTraceEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@isTraceEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1561,7 +1561,7 @@ a warmup handler in #warmup.
         <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@isWarnEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@isWarnEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1578,7 +1578,7 @@ a warmup handler in #warmup.
         <span class="name">jacksonModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@jacksonModule:com.google.inject.Module" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@jacksonModule:com.google.inject.Module" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1596,7 +1596,7 @@ a warmup handler in #warmup.
         <span class="name">javaModules</span><span class="result">: <span class="extype" name="java.util.Collection">Collection</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@javaModules:java.util.Collection[com.google.inject.Module]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@javaModules:java.util.Collection[com.google.inject.Module]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1613,7 +1613,7 @@ a warmup handler in #warmup.
         <span class="name">javaOverrideModules</span><span class="result">: <span class="extype" name="java.util.Collection">Collection</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@javaOverrideModules:java.util.Collection[com.google.inject.Module]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@javaOverrideModules:java.util.Collection[com.google.inject.Module]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1630,7 +1630,7 @@ a warmup handler in #warmup.
         <span class="name">levelFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Level" class="extype" target="_top">Level</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1647,7 +1647,7 @@ a warmup handler in #warmup.
         <span class="name">libraryName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@libraryName:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@libraryName:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1666,7 +1666,7 @@ a warmup handler in #warmup.
         <span class="name">linterRules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.lint.Rule" class="extype" target="_top">Rule</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@linterRules:Seq[com.twitter.util.lint.Rule]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@linterRules:Seq[com.twitter.util.lint.Rule]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1683,7 +1683,7 @@ a warmup handler in #warmup.
         <span class="name">loadModules</span><span class="params">()</span><span class="result">: <span class="extype" name="com.twitter.inject.app.internal.InstalledModules">InstalledModules</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@loadModules():com.twitter.inject.app.internal.InstalledModules" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@loadModules():com.twitter.inject.app.internal.InstalledModules" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1700,12 +1700,12 @@ a warmup handler in #warmup.
         <span class="name">log</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Logger" class="extype" target="_top">Logger</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@log:com.twitter.logging.Logger" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@log:com.twitter.logging.Logger" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.inject.Logging#logger" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="grizzled.slf4j.Logging#logger" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:grizzled.slf4j.Logger"></a>
       <a id="logger:Logger"></a>
       <h4 class="signature">
@@ -1717,11 +1717,11 @@ a warmup handler in #warmup.
         <span class="name">logger</span><span class="result">: <span class="extype" name="grizzled.slf4j.Logger">Logger</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@logger:grizzled.slf4j.Logger" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@logger:grizzled.slf4j.Logger" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a> → Logging</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="com.twitter.logging.Logging#loggerFactories" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loggerFactories:List[com.twitter.logging.LoggerFactory]"></a>
       <a id="loggerFactories:List[LoggerFactory]"></a>
@@ -1734,7 +1734,7 @@ a warmup handler in #warmup.
         <span class="name">loggerFactories</span><span class="result">: <span class="extype" name="scala.List">List</span>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.LoggerFactory" class="extype" target="_top">LoggerFactory</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@loggerFactories:List[com.twitter.logging.LoggerFactory]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@loggerFactories:List[com.twitter.logging.LoggerFactory]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1751,7 +1751,7 @@ a warmup handler in #warmup.
         <span class="name">loggerName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@loggerName:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@loggerName:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1768,7 +1768,7 @@ a warmup handler in #warmup.
         <span class="name">main</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@main():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@main():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1785,7 +1785,7 @@ a warmup handler in #warmup.
         <span class="name">main</span><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@main(args:Array[String]):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@main(args:Array[String]):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1802,7 +1802,7 @@ a warmup handler in #warmup.
         <span class="name">messageBodyModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@messageBodyModule:com.google.inject.Module" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@messageBodyModule:com.google.inject.Module" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1826,7 +1826,7 @@ a warmup handler in #warmup.
         <span class="name">modules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@modules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@modules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1843,7 +1843,7 @@ a warmup handler in #warmup.
         <span class="name">mustacheModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@mustacheModule:com.google.inject.Module" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@mustacheModule:com.google.inject.Module" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1861,7 +1861,7 @@ a warmup handler in #warmup.
         <span class="name">name</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@name:String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@name:String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1878,7 +1878,7 @@ a warmup handler in #warmup.
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1895,7 +1895,7 @@ a warmup handler in #warmup.
         <span class="name">nonExitingMain</span><span class="params">(<span name="args">args: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@nonExitingMain(args:Array[String]):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@nonExitingMain(args:Array[String]):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1912,7 +1912,7 @@ a warmup handler in #warmup.
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1929,7 +1929,7 @@ a warmup handler in #warmup.
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1946,7 +1946,7 @@ a warmup handler in #warmup.
         <span class="name">onExit</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@onExit(f:=&gt;Unit):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@onExit(f:=&gt;Unit):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1963,7 +1963,7 @@ a warmup handler in #warmup.
         <span class="name">outputFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@outputFlag:com.twitter.app.Flag[String]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@outputFlag:com.twitter.app.Flag[String]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1980,7 +1980,7 @@ a warmup handler in #warmup.
         <span class="name">overrideModules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@overrideModules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@overrideModules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1997,7 +1997,7 @@ a warmup handler in #warmup.
         <span class="name">postInjectorStartup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@postInjectorStartup():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@postInjectorStartup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2017,7 +2017,7 @@ a warmup handler in #warmup.
         <span class="name">postWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@postWarmup():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@postWarmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2045,7 +2045,7 @@ of the server lifecycle.
         <span class="name">postmain</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@postmain(f:=&gt;Unit):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@postmain(f:=&gt;Unit):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2062,7 +2062,7 @@ of the server lifecycle.
         <span class="name">prebindWarmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@prebindWarmup():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@prebindWarmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2079,24 +2079,24 @@ of the server lifecycle.
         <span class="name">premain</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@premain(f:=&gt;Unit):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@premain(f:=&gt;Unit):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
     </li><li name="com.twitter.util.CloseAwaitably0#ready" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type"></a>
-      <a id="ready(Duration)(CanAwait):JavaHttpServer.this.type"></a>
+      <a id="ready(Duration)(CanAwait):AbstractHttpServer.this.type"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ready</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.JavaHttpServer">JavaHttpServer</a>.this.type</span>
+        <span class="name">ready</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.AbstractHttpServer">AbstractHttpServer</a>.this.type</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2113,7 +2113,7 @@ of the server lifecycle.
         <span class="name">resolveFinagleClientsOnStartup</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@resolveFinagleClientsOnStartup:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@resolveFinagleClientsOnStartup:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2130,7 +2130,7 @@ of the server lifecycle.
         <span class="name">result</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Duration" class="extype" target="_top">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2147,7 +2147,7 @@ of the server lifecycle.
         <span class="name">rollPolicyFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.logging.Policy" class="extype" target="_top">Policy</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2164,7 +2164,7 @@ of the server lifecycle.
         <span class="name">rotateCountFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@rotateCountFlag:com.twitter.app.Flag[Int]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@rotateCountFlag:com.twitter.app.Flag[Int]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2181,7 +2181,7 @@ of the server lifecycle.
         <span class="name">routes</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.server.AdminHttpServer.Route">Route</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@routes:Seq[com.twitter.server.AdminHttpServer.Route]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@routes:Seq[com.twitter.server.AdminHttpServer.Route]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2198,7 +2198,7 @@ of the server lifecycle.
         <span class="name">run</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@run():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@run():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2215,7 +2215,7 @@ of the server lifecycle.
         <span class="name">start</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@start():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@start():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2241,7 +2241,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
         <span class="name">statsReceiver</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.finagle.stats.StatsReceiver" class="extype" target="_top">StatsReceiver</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@statsReceiver:com.twitter.finagle.stats.StatsReceiver" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@statsReceiver:com.twitter.finagle.stats.StatsReceiver" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2258,7 +2258,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
         <span class="name">statsReceiverModule</span><span class="result">: <span class="extype" name="com.google.inject.Module">Module</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@statsReceiverModule:com.google.inject.Module" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@statsReceiverModule:com.google.inject.Module" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2276,7 +2276,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
         <span class="name">streamRequest</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@streamRequest:Boolean" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@streamRequest:Boolean" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2297,7 +2297,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2314,7 +2314,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">thriftPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Option" class="extype" target="_top">Option</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@thriftPort:Option[Int]" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@thriftPort:Option[Int]" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2331,7 +2331,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">time</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="formatStr">formatStr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@time[T](formatStr:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@time[T](formatStr:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2348,7 +2348,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@toString():String" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@toString():String" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2365,7 +2365,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2382,7 +2382,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2399,7 +2399,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2422,7 +2422,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2445,7 +2445,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2468,7 +2468,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">warmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@warmup():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@warmup():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2488,7 +2488,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">warmupComplete</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@warmupComplete():Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@warmupComplete():Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2505,7 +2505,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2522,7 +2522,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -2539,7 +2539,7 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">warnResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../index.html#com.twitter.finatra.http.JavaHttpServer@warnResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../index.html#com.twitter.finatra.http.AbstractHttpServer@warnResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>

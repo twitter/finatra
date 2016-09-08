@@ -67,7 +67,7 @@
         <div id="types" class="types members">
               <h3>Type Members</h3>
               <ol><li name="com.twitter.finatra.thrift.thriftscala.ClientError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ClientErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ClientErrorCause,String]withSerializable"></a>
+      <a id="ClientErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ClientErrorCause,String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.ClientError]withSerializable"></a>
       <a id="ClientError:ClientError"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -75,10 +75,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ClientError.html"><span class="name">ClientError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product2" class="extype" target="_top">Product2</a>[<a href="ClientErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ClientErrorCause">ClientErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+        <a href="ClientError.html"><span class="name">ClientError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product2" class="extype" target="_top">Product2</a>[<a href="ClientErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ClientErrorCause">ClientErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="com.twitter.scrooge.HasThriftStructCodec3">HasThriftStructCodec3</span>[<a href="ClientError.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ClientError">ClientError</a>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@ClientErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ClientErrorCause,String]withSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@ClientErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ClientErrorCause,String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.ClientError]withSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -103,8 +103,86 @@
                 <span class="name">@Generated</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="EmptyExceptionsService[+MM[_]]extendsThriftService"></a>
+      <a id="EmptyExceptionsService[+MM[_]]:EmptyExceptionsService[MM]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="EmptyExceptionsService.html"><span class="name">EmptyExceptionsService</span></a><span class="tparams">[<span name="MM">+MM<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> extends <span class="extype" name="com.twitter.scrooge.ThriftService">ThriftService</span></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@EmptyExceptionsService[+MM[_]]extendsThriftService" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle).</p><div class="fullcomment"><div class="comment cmt"><p>To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle). Therefore, we define an empty service to cause the finagle-core
+dep to be introduced.</p><p>see DPB-7778
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Generated</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService$FinagleClient" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="EmptyExceptionsService$FinagleClientextendsEmptyExceptionsService[com.twitter.util.Future]"></a>
+      <a id="EmptyExceptionsService$FinagleClient:EmptyExceptionsService$FinagleClient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EmptyExceptionsService$FinagleClient.html"><span class="name">EmptyExceptionsService$FinagleClient</span></a><span class="result"> extends <a href="EmptyExceptionsService.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService">EmptyExceptionsService</a>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@EmptyExceptionsService$FinagleClientextendsEmptyExceptionsService[com.twitter.util.Future]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle).</p><div class="fullcomment"><div class="comment cmt"><p>To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle). Therefore, we define an empty service to cause the finagle-core
+dep to be introduced.</p><p>see DPB-7778
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Generated</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService$FinagleService" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="EmptyExceptionsService$FinagleServiceextendsService[Array[Byte],Array[Byte]]"></a>
+      <a id="EmptyExceptionsService$FinagleService:EmptyExceptionsService$FinagleService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="EmptyExceptionsService$FinagleService.html"><span class="name">EmptyExceptionsService$FinagleService</span></a><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.Service" class="extype" target="_top">Service</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>], <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Array" class="extype" target="_top">Array</a>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Byte" class="extype" target="_top">Byte</a>]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@EmptyExceptionsService$FinagleServiceextendsService[Array[Byte],Array[Byte]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle).</p><div class="fullcomment"><div class="comment cmt"><p>To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle). Therefore, we define an empty service to cause the finagle-core
+dep to be introduced.</p><p>see DPB-7778
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Generated</span><span class="args">()</span>
+              
+        </dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.thriftscala.NoClientIdError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="NoClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withSerializable"></a>
+      <a id="NoClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.NoClientIdError]withSerializable"></a>
       <a id="NoClientIdError:NoClientIdError"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -112,16 +190,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="NoClientIdError.html"><span class="name">NoClientIdError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product1" class="extype" target="_top">Product1</a>[<span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+        <a href="NoClientIdError.html"><span class="name">NoClientIdError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product1" class="extype" target="_top">Product1</a>[<span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="com.twitter.scrooge.HasThriftStructCodec3">HasThriftStructCodec3</span>[<a href="NoClientIdError.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.NoClientIdError">NoClientIdError</a>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@NoClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@NoClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.NoClientIdError]withSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       
     </li><li name="com.twitter.finatra.thrift.thriftscala.ServerError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ServerErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ServerErrorCause,String]withSerializable"></a>
+      <a id="ServerErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ServerErrorCause,String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.ServerError]withSerializable"></a>
       <a id="ServerError:ServerError"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -129,10 +207,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="ServerError.html"><span class="name">ServerError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product2" class="extype" target="_top">Product2</a>[<a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+        <a href="ServerError.html"><span class="name">ServerError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product2" class="extype" target="_top">Product2</a>[<a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="com.twitter.scrooge.HasThriftStructCodec3">HasThriftStructCodec3</span>[<a href="ServerError.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@ServerErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ServerErrorCause,String]withSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@ServerErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct2[com.twitter.finatra.thrift.thriftscala.ServerErrorCause,String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.ServerError]withSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -158,7 +236,7 @@
               
         </dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.thriftscala.UnknownClientIdError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="UnknownClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withSerializable"></a>
+      <a id="UnknownClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.UnknownClientIdError]withSerializable"></a>
       <a id="UnknownClientIdError:UnknownClientIdError"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -166,10 +244,10 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a href="UnknownClientIdError.html"><span class="name">UnknownClientIdError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product1" class="extype" target="_top">Product1</a>[<span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+        <a href="UnknownClientIdError.html"><span class="name">UnknownClientIdError</span></a><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.SourcedException" class="extype" target="_top">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Product1" class="extype" target="_top">Product1</a>[<span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="com.twitter.scrooge.HasThriftStructCodec3">HasThriftStructCodec3</span>[<a href="UnknownClientIdError.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.UnknownClientIdError">UnknownClientIdError</a>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@UnknownClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withSerializable" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@UnknownClientIdErrorextendsExceptionwithThriftExceptionwithSourcedExceptionwithThriftStructwithProduct1[String]withHasThriftStructCodec3[com.twitter.finatra.thrift.thriftscala.UnknownClientIdError]withSerializable" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -218,6 +296,29 @@
                 <span class="name">@Generated</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="EmptyExceptionsService"></a>
+      <a id="EmptyExceptionsService:EmptyExceptionsService"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EmptyExceptionsService$.html"><span class="name">EmptyExceptionsService</span></a>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.thrift.thriftscala.package@EmptyExceptionsService" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle).</p><div class="fullcomment"><div class="comment cmt"><p>To generate Exceptions, scrooge uses finagle-core, which pants does not provide
+to thrift libraries which do not define services (structs-only definitions generally
+do not need finagle). Therefore, we define an empty service to cause the finagle-core
+dep to be introduced.</p><p>see DPB-7778
+</p></div></div>
     </li><li name="com.twitter.finatra.thrift.thriftscala.NoClientIdError" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="NoClientIdError"></a>
       <a id="NoClientIdError:NoClientIdError"></a>
