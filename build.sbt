@@ -179,6 +179,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectThrift,
   injectThriftClient,
   injectThriftClientHttpMapper,
+  injectSlf4j,
   injectUtils,
   jackson,
   slf4j,
@@ -342,8 +343,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
     name := "inject-slf4j",
     moduleName := "inject-slf4j",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
     libraryDependencies ++= Seq(
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
