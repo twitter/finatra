@@ -8,6 +8,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Move installation of the SLF4JBridgeHandler to the constructor of `c.t.inject.server.TwitterServer`. The
+  `c.t.finatra.logging.modules.Slf4jBridgeModule` has been removed as there is now little reason to use it unless you
+  are building an application directly from `c.t.inject.app.App` since the functionality is now provided by default
+  in the constructor of `c.t.inject.server.TwitterServer`. If using `c.t.inject.app.App`, then users can use the
+  `c.t.inject.logging.modules.LoggerModule`. The main advantage is that slf4j bridges are now installed earlier in
+  the application or server lifecycle and thus more of the initialization logging is bridged to the slf4j-api. ``RB_ID=870913``
+
 ### Fixed
 
 ### Closed

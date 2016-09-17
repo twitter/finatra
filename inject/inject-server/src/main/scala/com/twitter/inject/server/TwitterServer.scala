@@ -5,6 +5,7 @@ import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.App
+import com.twitter.inject.logging.Slf4jBridgeUtility
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
@@ -37,6 +38,13 @@ trait TwitterServer
 
   addFrameworkModules(
     statsReceiverModule)
+
+  /**
+   * Attempt to install the Slf4jBridgeHandler and override the `configureLoggerFactories`
+   * method to do nothing, so that any installed bridges are not removed/replaced.
+   */
+  Slf4jBridgeUtility.attemptSlf4jBridgeHandlerInstallation()
+  override def configureLoggerFactories(): Unit = {}
 
   private val adminAnnounceFlag = flag[String]("admin.announce", "Address for announcing admin server")
 

@@ -5,6 +5,12 @@ README
 # -------------------------------
 
 The Finatra framework uses the slf4j-api for logging. By coupling the framework to only slf4j, application developers
-can choose the logging implementation. finatra-slf4j provides an MDC integration with slf4j and finagle via util Locals.
+can choose the logging implementation. inject-slf4j adds slf4j bridges for the following logging providers:
+
+  * log4j
+  * java-util-logging,
+  * commons-logging
+
+Note: the above bridges are only installed if the slf4j-jdk14 logging implementation is not on the classpath.
 
 See http://twitter.github.io/finatra/user-guide/logging/ for more information.

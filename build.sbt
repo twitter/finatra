@@ -243,6 +243,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.utilVersion,
+      "com.twitter" %% "util-core" % versions.utilVersion,
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -332,7 +333,26 @@ lazy val injectServer = (project in file("inject/inject-server"))
   ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
+    injectSlf4j,
     injectUtils)
+
+lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
+  .settings(projectSettings)
+  .settings(
+    name := "inject-slf4j",
+    moduleName := "inject-slf4j",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
+    publishArtifact in (Test, packageBin):= true,
+    publishArtifact in (Test, packageDoc) := true,
+    libraryDependencies ++= Seq(
+      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
+      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "slf4j-api" % versions.slf4j
+    )
+  ).dependsOn(
+    injectCore)
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   .settings(projectSettings)
@@ -527,14 +547,12 @@ lazy val slf4j = project
   .settings(
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*Slf4jBridgeModule.*;org\\.slf4j\\..*package.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;org\\.slf4j\\..*package.*",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-http" % versions.finagleVersion,
-      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
-      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
-      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
+      "com.twitter" %% "util-core" % versions.utilVersion
     )
   ).dependsOn(
+    injectSlf4j,
     injectCore % "test->test;compile->compile")
 
 lazy val thrift = project
