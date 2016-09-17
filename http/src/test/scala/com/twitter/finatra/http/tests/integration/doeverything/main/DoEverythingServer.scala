@@ -6,7 +6,7 @@ import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.tests.integration.doeverything.main.controllers.{DoEverythingController, DoNothingController, NonGuiceController, ReadHeadersController}
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
-import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{BarExceptionMapper, FooExceptionMapper}
+import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{FooBarBazExceptionMapper, BarExceptionMapper, FooExceptionMapper}
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
 import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
 import com.twitter.finatra.http.{Controller, HttpServer}
@@ -37,6 +37,7 @@ class DoEverythingServer extends HttpServer {
       .add(Filter.identity[Request, Response], new Controller {})
       .exceptionMapper[FooExceptionMapper]
       .exceptionMapper(injector.instance[BarExceptionMapper])
+      .exceptionMapper[FooBarBazExceptionMapper]
       .add[IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]

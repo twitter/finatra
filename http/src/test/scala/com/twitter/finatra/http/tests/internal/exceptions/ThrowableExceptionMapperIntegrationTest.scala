@@ -3,23 +3,23 @@ package com.twitter.finatra.http.tests.internal.exceptions
 import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finagle.{CancelledRequestException, Failure}
 import com.twitter.finatra.http.contexts.RouteInfo
-import com.twitter.finatra.http.internal.exceptions.FinatraDefaultExceptionMapper
+import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 
-class FinatraDefaultExceptionMapperIntegrationTest extends IntegrationTest {
+class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
   override val injector = TestInjector(
     MessageBodyModule,
     FinatraJacksonModule,
     MustacheModule,
     InMemoryStatsReceiverModule)
 
-  val exceptionMapper = injector.instance[FinatraDefaultExceptionMapper]
+  val exceptionMapper = injector.instance[ThrowableExceptionMapper]
 
-  "FinatraDefaultExceptionMapper" should {
+  "ThrowableExceptionMapper" should {
     "unwrap Failure" in {
       val failure = Failure(new CancelledRequestException)
       exceptionMapper.toResponse(request, failure).status should be(Status.ClientClosedRequest)

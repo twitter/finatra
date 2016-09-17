@@ -1340,6 +1340,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     response.headerMap("Foo-ID") should equal("321")
   }
 
+  "FooBarBazException" in {
+    val response = server.httpGet(
+      "/FooBarBazException",
+      andExpect = Forbidden,
+      withBody = "foo")
+    response.headerMap("Foo-ID") should equal("321-123")
+  }
+
   "NoSuchMethodException" in {
     server.httpGet(
       "/NoSuchMethodException",

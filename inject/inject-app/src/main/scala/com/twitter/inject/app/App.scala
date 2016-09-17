@@ -107,10 +107,20 @@ trait App
   /** Production modules from Java */
   protected def javaModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
-  /** Override modules which redefine production bindings (only use overrideModules during testing) */
+  /**
+   * ONLY INTENDED FOR USE IN TESTING.
+   *
+   * Override modules which redefine production bindings (only use overrideModules during testing)
+   * If you think you need this in your main server you are most likely doing something incorrectly.
+   */
   protected def overrideModules: Seq[Module] = Seq()
 
-  /** Override modules from Java which redefine production bindings (only use overrideModules during testing) */
+  /**
+   * ONLY INTENDED FOR USE IN TESTING.
+   *
+   * Override modules from Java which redefine production bindings (only use overrideModules during testing)
+   * If you think you need this in your main server you are most likely doing something incorrectly.
+   */
   protected def javaOverrideModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
 
   /**
@@ -129,17 +139,17 @@ trait App
     frameworkModules += module
   }
 
-  /** Only intended for use by the framework */
+  /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
   protected def addFrameworkModules(modules: Module*): Unit = {
     modules foreach addFrameworkModule
   }
 
-  /** Only intended for use by the framework */
+  /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
   protected[inject] def addFrameworkOverrideModules(modules: Module*): Unit = {
     frameworkOverrideModules ++= modules
   }
 
-  /** Only intended for use by the framework */
+  /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
   protected[inject] def loadModules() = {
     InstalledModules.create(
       flags = flag.getAll(includeGlobal = false).toSeq,

@@ -9,3 +9,6 @@ class FooException(val id: String)
 class BarException extends FooException("123")
 
 class BazException extends FooException("321")
+
+class FooBarBazException extends FooException("321-123")
+

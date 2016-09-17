@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
 import com.twitter.finatra.http.internal.routing.{Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
@@ -44,6 +44,11 @@ class HttpRouter @Inject()(
 
   def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T]): HttpRouter = {
     exceptionManager.add[T](mapper)
+    this
+  }
+
+  def exceptionMapper(mappers: ExceptionMapperCollection): HttpRouter = {
+    exceptionManager.add(mappers)
     this
   }
 

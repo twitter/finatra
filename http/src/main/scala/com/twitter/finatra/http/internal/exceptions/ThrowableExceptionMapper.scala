@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.internal.exceptions
 
 import com.google.common.net.MediaType
-import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finagle.{CancelledRequestException, Failure}
-import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, HttpException, HttpResponseException}
-import com.twitter.finatra.http.internal.exceptions.FinatraDefaultExceptionMapper._
+import com.twitter.finagle.{Failure, CancelledRequestException}
+import com.twitter.finagle.http.{Response, Request}
+import com.twitter.finatra.http.exceptions.{ExceptionMapper, HttpResponseException, HttpException}
+import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
 import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
 import com.twitter.finatra.utils.DeadlineValues
 import com.twitter.inject.Logging
@@ -12,7 +12,7 @@ import com.twitter.inject.utils.ExceptionUtils._
 import javax.inject.{Inject, Singleton}
 import org.apache.thrift.TException
 
-private[http] object FinatraDefaultExceptionMapper {
+private[http] object ThrowableExceptionMapper {
   private val MaxDepth = 5
   private val DefaultExceptionSource = "Internal"
 
@@ -29,9 +29,9 @@ private[http] object FinatraDefaultExceptionMapper {
 }
 
 @Singleton
-private[http] class FinatraDefaultExceptionMapper @Inject()(
+private[http] class ThrowableExceptionMapper @Inject()(
   response: ResponseBuilder)
-  extends DefaultExceptionMapper
+  extends ExceptionMapper[Throwable]
   with Logging {
 
   override def toResponse(request: Request, throwable: Throwable): Response = {

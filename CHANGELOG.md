@@ -22,6 +22,67 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Simplify ExceptionMapper configuration and usage. 
+  We are dropping the need for a specialized DefaultExceptionMapper (which
+  was simply an ExceptionMapper[Throwable]). Instead we now allow the 
+  configuration of mappers in the ExceptionManager to be much more flexible. 
+  Previously, the framework tried to prevent a user from registering a mapper 
+  over a given exception type multiple times and specialized a "default" 
+  ExceptionMapper to invoke on an exception type of Throwable. The 
+  ExceptionManager will now accept any mapper. If a mapper is added over a 
+  type already added, the previous mapper will be overwritten. 
+
+  The last registered mapper for an exception type wins.
+
+  The framework adds three mappers to the manager by default. If a user wants 
+  to swap out any of these defaults they simply need add their own mapper to 
+  the manager for the exception type to map. E.g., by default the framework 
+  will add:
+  Throwable -> 
+      com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper
+  JsonParseException -> 
+      com.twitter.finatra.http.internal.exceptions.json.JsonParseExceptionMapper
+  CaseClassMappingException -> 
+      com.twitter.finatra.http.internal.exceptions.json.CaseClassExceptionMapper
+
+  The manager walks the exception type hierarchy starting at the given 
+  exceptiontype and moving up the inheritence chain until it finds mapper 
+  configured for the type. In this manner an ExceptionMapper[Throwable] will 
+  be the last mapper invoked and performs as the "default".
+
+  Thus, to change the "default" mapper, simply adding a new mapper over the 
+  Throwable type will suffice, i.e., ExceptionMapper[Throwable] to the 
+  ExceptionManager. There  are multiple ways to add a mapper. Either through 
+  the HttpRouter: 
+
+
+    override def configureHttp(router: HttpRouter): Unit = {
+      router
+        .exceptionMapper[MyDefaultExceptionMapper]
+        ...
+    }
+
+
+  Or in a module which is then added to the Server, e.g.,
+
+
+    object MyExceptionMapperModule extends TwitterModule {
+      override def singletonStartup(injector: Injector): Unit = {
+        val manager = injector.instance[ExceptionManager]
+        manager.add[MyDefaultExceptionMapper]
+        manager.add[OtherExceptionMapper]
+      }
+    }
+
+
+    override val modules = Seq(
+      MyExceptionMapperModule,
+      ...)
+
+
+  This also means we can simplify the HttpServer as we no longer need to expose 
+  any "framework" module for overridding the default ExceptionMappers. So the 
+  "def exceptionMapperModule" has also been removed.``RB_ID=868614``
 * finatra-http: Specify HTTP Java API consistently. ``RB_ID=868264``
 * inject-core: Clean up inject.Logging trait. Remove dead code from Logging. ``RB_ID=868261``
 * finatra-http: Move integration tests to a package under `com.twitter.finatra.http`. ``RB_ID=866487``

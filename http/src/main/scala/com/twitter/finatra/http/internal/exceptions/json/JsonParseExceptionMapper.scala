@@ -9,7 +9,7 @@ import com.twitter.inject.Logging
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class JsonParseExceptionMapper @Inject()(
+private[http] class JsonParseExceptionMapper @Inject()(
   response: ResponseBuilder)
   extends ExceptionMapper[JsonParseException]
   with Logging {

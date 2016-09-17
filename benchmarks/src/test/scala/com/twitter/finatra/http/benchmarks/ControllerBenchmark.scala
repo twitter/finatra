@@ -20,7 +20,6 @@ class ControllerBenchmark {
       "http.response.charset.enabled" -> "false"),
     modules = Seq(
       ExceptionManagerModule,
-      ExceptionMapperModule,
       MessageBodyModule,
       FinatraJacksonModule,
       MustacheModule,

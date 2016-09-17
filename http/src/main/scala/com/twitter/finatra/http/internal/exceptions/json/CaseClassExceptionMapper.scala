@@ -7,7 +7,7 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassMappingEx
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class CaseClassExceptionMapper @Inject()(
+private[http] class CaseClassExceptionMapper @Inject()(
   response: ResponseBuilder)
   extends ExceptionMapper[CaseClassMappingException] {
 
