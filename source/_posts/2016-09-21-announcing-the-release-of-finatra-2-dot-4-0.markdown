@@ -9,7 +9,7 @@ author: cacoco
 
 ###  Finatra [release 2.4.0](https://github.com/twitter/finatra/releases/tag/finatra-2.4.0) is now available from [Maven Central][maven-central].
 
-We discovered a bug in [release 2.3.0](https://github.com/twitter/finatra/releases/tag/finatra-2.3.0) and thus it is recommended that you use [release 2.4.0](https://github.com/twitter/finatra/releases/tag/finatra-2.4.0).
+We discovered a [bug](https://github.com/twitter/finatra/commit/698e3e238c494ebd958a30fac19cd65c39195917) in [release 2.3.0](https://github.com/twitter/finatra/releases/tag/finatra-2.3.0) which would have affected some browser requests to Finatra services and it is recommended that users upgrade to [release 2.4.0](https://github.com/twitter/finatra/releases/tag/finatra-2.4.0).
 
 Some of the changes in the latest releases:
 
