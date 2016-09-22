@@ -50,9 +50,41 @@ or
 
 *Note*: with Maven, you **must** append the appropriate scala version to the artifact name (in this example, `_2.11`). See the Finatra [hello-world](https://github.com/twitter/finatra/tree/finatra-2.2.0/examples/hello-world) example for a more in-depth example.
 
+#### Additional Repository
+
+Finatra (through it's dependency on [Finagle](http://twitter.github.io/finagle/)) has transitive dependencies that are not published to maven central and are **only available** via the Twitter `maven.twttr.com` repository. We realize that this is less than ideal, and we hope to be able to publish these dependencies to maven central in the future. For now it requires that you also add a way to resolve these dependencies from the `maven.twttr.com` repository.
+
+To do so with [sbt](http://www.scala-sbt.org/) you would add an additional resolver:
+
+```
+resolvers ++= Seq(
+  Resolver.sonatypeRepo("releases"),
+  "Twitter Maven" at "https://maven.twttr.com"
+)
+```
+
+And in [Maven](http://maven.apache.org/), list as a `<respository/>`:
+
+```
+<repositories>
+    <repository>
+      <id>twitter-repo</id>
+      <name>twitter-repo</name>
+      <url>https://maven.twttr.com</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>twitter-repo</id>
+      <name>twitter-repo</name>
+      <url>https://maven.twttr.com</url>
+    </pluginRepository>
+  </pluginRepositories>
+```
+
 #### Test dependencies
 
-Finatra currently publishes [test-jars](https://maven.apache.org/guides/mini/guide-attached-tests.html) for most modules. The `test-jars` include re-usable utilities for use in testing (e.g., the [EmbeddedTwitterServer](https://github.com/twitter/finatra/blob/finatra-2.2.0/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)). To add a `test-jar` dependency, depend on the appropriate module with the `tests` classifier. Additionally, these dependencies are typically only needed in the `test` scope for your project. E.g., with [sbt](http://www.scala-sbt.org/):
+Finatra publishes [test-jars](https://maven.apache.org/guides/mini/guide-attached-tests.html) for most modules. The `test-jars` include re-usable utilities for use in testing (e.g., the [EmbeddedTwitterServer](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)). To add a `test-jar` dependency, depend on the appropriate module with the `tests` classifier. Additionally, these dependencies are typically only needed in the `test` scope for your project. E.g., with [sbt](http://www.scala-sbt.org/):
 
 ```
 "com.twitter" %% "finatra-http" % VERSION % "test" classifier "tests"
@@ -86,9 +118,11 @@ or
   <type>test-jar</type>
   <version>VERSION</version>
 </dependency>
-```
+``` 
 
-*Note*: There is a [downside](https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html) to the current way Finatra `test-jars` are published: you don't get the transitive test-scoped dependencies automatically. Maven and sbt only resolve the compile-time dependencies, so you'll have to add all the other required test-scoped dependencies by hand. We hope to address this limitation to the published `test-jars` in a future release.
+There is a **[downside](https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html)** to the current way Finatra `test-jars` are published: you don't get the transitive test-scoped dependencies automatically. Maven and sbt only resolve compile-time dependencies transitively, so you'll have to specify all other required test-scoped dependencies manually. 
+
+For example, the finatra-http `test-jar` depends on inject-app `test-jar` (among others). You will have to manually add a dependency on the inject-app `test-jar` since it will not be picked up transitively. We hope to address this limitation to the published `test-jars` in a future release.
 
 #### Lightbend Activator
 
