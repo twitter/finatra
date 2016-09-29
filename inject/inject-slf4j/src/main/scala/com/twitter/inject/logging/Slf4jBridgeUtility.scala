@@ -7,7 +7,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler
 object Slf4jBridgeUtility extends Logging {
 
   private[inject] def attemptSlf4jBridgeHandlerInstallation(): Unit = {
-    if (canInstallBridgeHandler) {
+    if (!SLF4JBridgeHandler.isInstalled && canInstallBridgeHandler) {
       SLF4JBridgeHandler.removeHandlersForRootLogger()
       SLF4JBridgeHandler.install()
       info("org.slf4j.bridge.SLF4JBridgeHandler installed.")
