@@ -297,7 +297,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConvertor.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
@@ -470,7 +470,7 @@ lazy val jackson = project
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
+    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConverter.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,

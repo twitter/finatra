@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JavaType
 import com.google.inject.util.Types
 import java.lang.reflect.Type
 
-private[internal] object JacksonToGuiceTypeConvertor {
+private[internal] object JacksonToGuiceTypeConverter {
 
   // Inspired by net.codingwell.scalaguice.typeOf
   // See: https://github.com/codingwell/scala-guice/blob/v3.0.2/src/main/scala/net/codingwell/package.scala#L26

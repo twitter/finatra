@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Correct instances of misspelled word "converter". There are
+  several instances where the word "converter" is misspelled as "convertor".
+  Specifically, TwitterModule.addTypeConvertor has been changed to
+  TwitterModule.addTypeConverter. Other internal renamings are
+  TwitterDurationTypeConverter, JodatimeDurationTypeConverter, and
+  JacksonToGuiceTypeConverter. ``RB_ID=877736``
 * finatra: Move installation of the SLF4JBridgeHandler to the constructor of `c.t.inject.server.TwitterServer`. The
   `c.t.finatra.logging.modules.Slf4jBridgeModule` has been removed as there is now little reason to use it unless you
   are building an application directly from `c.t.inject.app.App` since the functionality is now provided by default

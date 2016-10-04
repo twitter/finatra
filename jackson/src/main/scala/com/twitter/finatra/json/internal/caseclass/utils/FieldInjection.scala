@@ -35,10 +35,10 @@ private[json] class FieldInjection(
       throw new Exception("Too many binding annotations on " + name)
     else if (bindingAnnotations.size == 1)
       Key.get(
-        JacksonToGuiceTypeConvertor.typeOf(javaType), bindingAnnotations.head)
+        JacksonToGuiceTypeConverter.typeOf(javaType), bindingAnnotations.head)
     else {
       Key.get(
-        JacksonToGuiceTypeConvertor.typeOf(javaType))
+        JacksonToGuiceTypeConverter.typeOf(javaType))
     }
   }
 
