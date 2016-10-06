@@ -6,3 +6,4 @@ Twitter isn't the only company using Finatra. We're sure the following list isn'
 [1]: https://github.com/twitter/finatra/blob/master/CONTRIBUTING.md
 
 * [Grovo](https://www.grovo.com/)
+* [Kueski](https://kueski.com)
