@@ -23,6 +23,11 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-jackson: Test jar is missing files. Classes in the test
+  `c.t.finatra.validation` package were not properly marked for 
+  inclusion in the finatra-jackson tests jar. They've now been added. 
+  ``RB_ID=878755``
+
 ### Closed
 
 ## [finatra-2.4.0](https://github.com/twitter/finatra/tree/finatra-2.4.0) (2016-09-07)

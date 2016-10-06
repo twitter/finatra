@@ -483,7 +483,8 @@ lazy val jackson = project
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
       fileMappings.filter(
         mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/json/JsonDiff")))
+          Seq("com/twitter/finatra/json/JsonDiff",
+              "com/twitter/finatra/validation/")))
     }
   ).dependsOn(
     injectApp % "test->test",
