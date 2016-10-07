@@ -11,6 +11,11 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-jackson: Fix issue around JsonProperty annotation empty value. In
+  CaseClassField.jsonNameForField, if the @JsonProperty annotation is used
+  without a value, the property name is interpreted as "". It now follows the
+  default Jackson behavior of using the name field name as the property
+  name when the annotation is empty. ``RB_ID=877060``
 * finatra: Correct instances of misspelled word "converter". There are
   several instances where the word "converter" is misspelled as "convertor".
   Specifically, TwitterModule.addTypeConvertor has been changed to

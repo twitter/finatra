@@ -357,6 +357,18 @@ class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
   override def getEmptyValue: BigDecimal = BigDecimal(0)
 }
 
+case class WithEmptyJsonProperty(
+  @JsonProperty foo: String)
+
+case class WithNonemptyJsonProperty(
+  @JsonProperty("bar") foo: String)
+
+case class WithoutJsonPropertyAnnotation(foo: String)
+
+case class NamingStrategyJsonProperty(
+  @JsonProperty longFieldName: String)
+
+
 package object internal {
 
   case class SimplePersonInPackageObject( // not recommended but used here for testing use case
@@ -365,3 +377,4 @@ package object internal {
   case class SimplePersonInPackageObjectWithoutConstructorParams() // not recommended but used here for testing use case
 
 }
+
