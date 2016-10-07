@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file. Note that `
 ## [Unreleased]
 
 ### Added
+* finatra-http: Add DarkTrafficFilterModule symmetric with thrift/DarkTrafficFilterModule. Add DarkTrafficService annotation
+  in finatra-utils and a filter function used for requests annotated with Annotation Type in order to add DarkTrafficFilter.
+  ``RB_ID=878079``
 
 ### Changed
 
