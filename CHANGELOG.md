@@ -5,12 +5,17 @@ All notable changes to this project will be documented in this file. Note that `
 ## [Unreleased]
 
 ### Added
-* finatra-http: Add DarkTrafficFilterModule symmetric with thrift/DarkTrafficFilterModule. Add DarkTrafficService annotation
-  in finatra-utils and a filter function used for requests annotated with Annotation Type in order to add DarkTrafficFilter.
-  ``RB_ID=878079``
+
+* finatra-http: Add DarkTrafficFilterModule symmetric with
+  thrift/DarkTrafficFilterModule. Add DarkTrafficService annotation in
+  finatra-utils and a filter function used for requests annotated with
+  Annotation Type in order to add DarkTrafficFilter. ``RB_ID=878079``
 
 ### Changed
 
+* inject-thrift-client: Stop counting response failures in the
+  `c.t.inject.thrift.ThriftClientFilterChain` as these are now counted in the
+  `c.t.finagle.thrift.ThriftServiceIface`. ``RB_ID=879075``
 * finatra-jackson: Fix issue around JsonProperty annotation empty value. In
   CaseClassField.jsonNameForField, if the @JsonProperty annotation is used
   without a value, the property name is interpreted as "". It now follows the
@@ -22,12 +27,17 @@ All notable changes to this project will be documented in this file. Note that `
   TwitterModule.addTypeConverter. Other internal renamings are
   TwitterDurationTypeConverter, JodatimeDurationTypeConverter, and
   JacksonToGuiceTypeConverter. ``RB_ID=877736``
-* finatra: Move installation of the SLF4JBridgeHandler to the constructor of `c.t.inject.server.TwitterServer`. The
-  `c.t.finatra.logging.modules.Slf4jBridgeModule` has been removed as there is now little reason to use it unless you
-  are building an application directly from `c.t.inject.app.App` since the functionality is now provided by default
-  in the constructor of `c.t.inject.server.TwitterServer`. If using `c.t.inject.app.App`, then users can use the
-  `c.t.inject.logging.modules.LoggerModule`. The main advantage is that slf4j bridges are now installed earlier in
-  the application or server lifecycle and thus more of the initialization logging is bridged to the slf4j-api. ``RB_ID=870913``
+* finatra: Move installation of the SLF4JBridgeHandler to the constructor of
+  `c.t.inject.server.TwitterServer`. The
+  `c.t.finatra.logging.modules.Slf4jBridgeModule` has been removed as there is
+  now little reason to use it unless you are building an application directly
+  from `c.t.inject.app.App` since the functionality is now provided by default
+  in the constructor of `c.t.inject.server.TwitterServer`. If using
+  `c.t.inject.app.App`, then users can use the
+  `c.t.inject.logging.modules.LoggerModule`. The main advantage is that slf4j
+  bridges are now installed earlier in the application or server lifecycle and
+  thus more of the initialization logging is bridged to the slf4j-api.
+  ``RB_ID=870913``
 
 ### Fixed
 
@@ -44,7 +54,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 * finatra-thrift: Enhanced support for Java Thrift services. ``RB_ID=868254``
 * finatra-examples: Add web/UI application example. ``RB_ID=868027``
-* inject-server: Allow for the ability to disable test logging via System property. ``RB_ID=867344``
+* inject-server: Allow for the ability to disable test logging via System
+  property. ``RB_ID=867344``
 
 ### Changed
 
@@ -110,12 +121,15 @@ All notable changes to this project will be documented in this file. Note that `
   any "framework" module for overridding the default ExceptionMappers. So the 
   "def exceptionMapperModule" has also been removed.``RB_ID=868614``
 * finatra-http: Specify HTTP Java API consistently. ``RB_ID=868264``
-* inject-core: Clean up inject.Logging trait. Remove dead code from Logging. ``RB_ID=868261``
-* finatra-http: Move integration tests to a package under `com.twitter.finatra.http`. ``RB_ID=866487``
+* inject-core: Clean up inject.Logging trait. Remove dead code from Logging.
+  ``RB_ID=868261``
+* finatra-http: Move integration tests to a package under
+  `com.twitter.finatra.http`. ``RB_ID=866487``
 
 ### Fixed
 
-* finatra-http: Fix issue with unimplemented methods in NonValidatingHttpHeadersResponse. ``RB_ID=868480``
+* finatra-http: Fix issue with unimplemented methods in
+  NonValidatingHttpHeadersResponse. ``RB_ID=868480``
 
 ### Closed
 
