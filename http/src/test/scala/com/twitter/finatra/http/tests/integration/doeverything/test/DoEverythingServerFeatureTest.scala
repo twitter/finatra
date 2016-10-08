@@ -320,6 +320,13 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "future")
     }
 
+    "scoped" in {
+      server.httpGet(
+        "/test/scope",
+        andExpect = Ok
+      )
+    }
+
     "POST" in {
       server.httpPost(
         "/foo",

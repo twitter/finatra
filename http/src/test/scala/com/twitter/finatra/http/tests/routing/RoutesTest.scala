@@ -4,6 +4,7 @@ import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.routing.{Route, Routes}
+import com.twitter.finatra.http.routing.Scope
 import com.twitter.inject.Test
 import com.twitter.util.Future
 import org.scalatest.OptionValues
@@ -45,15 +46,29 @@ class RoutesTest extends Test with OptionValues {
     RouteInfo(request).value should be(RouteInfo("my_endpoint", "/groups/"))
   }
 
+  "scoped route" in {
+    val scope = new Scope {def prefix: String = "/prefix"}
+
+    val routes = Routes.createForMethod(
+      Seq(createRoute(Method.Get, "/groups/", scope)), Method.Get)
+
+    routes.handle(
+      Request("/prefix/groups/")) should be('defined)
+
+    routes.handle(
+      Request("/groups/")) should be('empty)
+  }
+
   def defaultCallback(request: Request) = {
     Future(Response())
   }
 
-  def createRoute(method: Method, path: String): Route = {
+  def createRoute(method: Method, path: String, scope: Scope = Scope.empty): Route = {
     Route(
       name = "my_endpoint",
       method = method,
       path = path,
+      scope = scope,
       admin = false,
       adminIndexInfo = None,
       callback = defaultCallback,

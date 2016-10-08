@@ -18,7 +18,7 @@ private[http] class Routes(
 
   //Assert unique paths
   {
-    val distinctRoutes = routes.toSeq.distinctBy {_.path}
+    val distinctRoutes = routes.toSeq.distinctBy {_.fullPath}
     assert(
       routes.length == distinctRoutes.length,
       "Found non-unique routes " + routes.diff(distinctRoutes).map(_.summary).mkString(", "))
@@ -34,7 +34,7 @@ private[http] class Routes(
   private[this] val constantRouteMap: JMap[String, Route] = {
     val jMap = new JMap[String, Route]()
     for (route <- constantRoutes) {
-      jMap.put(route.path, route)
+      jMap.put(route.fullPath, route)
     }
     jMap
   }
