@@ -78,7 +78,6 @@ lazy val baseSettings = Seq(
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
-    "Twitter Maven" at "https://maven.twttr.com",
     Resolver.sonatypeRepo("snapshots")
   ),
   scalaCompilerOptions,
@@ -376,7 +375,8 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
       "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
-      "com.twitter" %% "util-core" % versions.utilVersion)
+      "com.twitter" %% "util-core" % versions.utilVersion),
+    resolvers += "twitter-repo" at "https://maven.twttr.com"
   ).dependsOn(
     injectCore % "test->test",
     injectUtils)
@@ -451,6 +451,7 @@ lazy val utils = project
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
+    resolvers += "twitter-repo" at "https://maven.twttr.com",
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
