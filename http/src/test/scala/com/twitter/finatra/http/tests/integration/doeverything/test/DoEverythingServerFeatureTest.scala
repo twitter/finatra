@@ -320,9 +320,9 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "future")
     }
 
-    "scoped" in {
+    "prefixed" in {
       server.httpGet(
-        "/test/scope",
+        "/prefix/test",
         andExpect = Ok
       )
     }
