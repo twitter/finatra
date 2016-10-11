@@ -23,8 +23,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
-* finatra: No longer need to add an additional resolver that points to maven.twttr.com.
-  ``RB_ID=878967``
+* inject-thrift-client: Remove deprecated package aliases. We'd like people to
+  move the correct packages.``RB_ID=879330``
+* finatra: No longer need to add an additional resolver that points to
+  maven.twttr.com. ``RB_ID=878967``
 * inject-thrift-client: Stop counting response failures in the
   `c.t.inject.thrift.ThriftClientFilterChain` as these are now counted in the
   `c.t.finagle.thrift.ThriftServiceIface`. ``RB_ID=879075``
