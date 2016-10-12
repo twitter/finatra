@@ -54,7 +54,7 @@ private[finatra] object CaseClassField {
 
   private def jsonNameForField(annotations: Seq[Annotation], namingStrategy: PropertyNamingStrategy, name: String): String = {
     findAnnotation[JsonProperty](annotations) match {
-      case Some(jsonProperty) => jsonProperty.value
+      case Some(jsonProperty) if jsonProperty.value.nonEmpty => jsonProperty.value
       case _ =>
         val decodedName = NameTransformer.decode(name) //decode unicode escaped field names
         namingStrategy.nameForField(//apply json naming strategy (e.g. snake_case)

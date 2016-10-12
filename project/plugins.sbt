@@ -1,12 +1,11 @@
 resolvers ++= Seq(
   Classpaths.sbtPluginSnapshots,
   Classpaths.sbtPluginReleases,
-  Resolver.sonatypeRepo("snapshots"),
-  "Twitter Maven" at "https://maven.twttr.com"
+  Resolver.sonatypeRepo("snapshots")
 )
 
 val branch = Process("git" :: "rev-parse" :: "--abbrev-ref" :: "HEAD" :: Nil).!!.trim
-val scroogeSbtPluginVersionPrefix = "4.10.0"
+val scroogeSbtPluginVersionPrefix = "4.11.0"
 val scroogeSbtPluginVersion =
   if (branch == "master") scroogeSbtPluginVersionPrefix
   else scroogeSbtPluginVersionPrefix + "-SNAPSHOT"

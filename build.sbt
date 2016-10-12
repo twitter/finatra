@@ -5,7 +5,7 @@ import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
-lazy val projectVersion = "2.4.0"
+lazy val projectVersion = "2.5.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -31,10 +31,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.38.0" + suffix
-  val scroogeVersion = "4.10.0" + suffix
-  val twitterserverVersion = "1.23.0" + suffix
-  val utilVersion = "6.37.0" + suffix
+  val finagleVersion = "6.39.0" + suffix
+  val scroogeVersion = "4.11.0" + suffix
+  val twitterserverVersion = "1.24.0" + suffix
+  val utilVersion = "6.38.0" + suffix
 
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
@@ -78,7 +78,6 @@ lazy val baseSettings = Seq(
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
-    "Twitter Maven" at "https://maven.twttr.com",
     Resolver.sonatypeRepo("snapshots")
   ),
   scalaCompilerOptions,
@@ -179,6 +178,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectThrift,
   injectThriftClient,
   injectThriftClientHttpMapper,
+  injectSlf4j,
   injectUtils,
   jackson,
   slf4j,
@@ -243,6 +243,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.utilVersion,
+      "com.twitter" %% "util-core" % versions.utilVersion,
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
@@ -295,7 +296,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConvertor.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
@@ -332,7 +333,24 @@ lazy val injectServer = (project in file("inject/inject-server"))
   ).dependsOn(
     injectApp % "test->test;compile->compile",
     injectModules % "test->test;compile->compile",
+    injectSlf4j,
     injectUtils)
+
+lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
+  .settings(projectSettings)
+  .settings(
+    name := "inject-slf4j",
+    moduleName := "inject-slf4j",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
+    libraryDependencies ++= Seq(
+      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
+      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "slf4j-api" % versions.slf4j
+    )
+  ).dependsOn(
+    injectCore)
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   .settings(projectSettings)
@@ -357,7 +375,8 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
       "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
-      "com.twitter" %% "util-core" % versions.utilVersion)
+      "com.twitter" %% "util-core" % versions.utilVersion),
+    resolvers += "twitter-repo" at "https://maven.twttr.com"
   ).dependsOn(
     injectCore % "test->test",
     injectUtils)
@@ -432,6 +451,7 @@ lazy val utils = project
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
+    resolvers += "twitter-repo" at "https://maven.twttr.com",
     publishArtifact in (Test, packageBin):= true,
     publishArtifact in (Test, packageDoc) := true,
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
@@ -451,7 +471,7 @@ lazy val jackson = project
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConvertor.*",
+    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConverter.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
@@ -464,7 +484,8 @@ lazy val jackson = project
     mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
       fileMappings.filter(
         mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/json/JsonDiff")))
+          Seq("com/twitter/finatra/json/JsonDiff",
+              "com/twitter/finatra/validation/")))
     }
   ).dependsOn(
     injectApp % "test->test",
@@ -478,6 +499,7 @@ lazy val http = project
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
+      "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "javax.servlet" % "servlet-api" % versions.servletApi
     ),
@@ -527,14 +549,12 @@ lazy val slf4j = project
   .settings(
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*Slf4jBridgeModule.*;org\\.slf4j\\..*package.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;org\\.slf4j\\..*package.*",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-http" % versions.finagleVersion,
-      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
-      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
-      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j
+      "com.twitter" %% "util-core" % versions.utilVersion
     )
   ).dependsOn(
+    injectSlf4j,
     injectCore % "test->test;compile->compile")
 
 lazy val thrift = project

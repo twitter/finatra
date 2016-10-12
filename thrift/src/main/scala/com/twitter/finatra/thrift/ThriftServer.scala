@@ -2,7 +2,6 @@ package com.twitter.finatra.thrift
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.{NullServer, ListeningServer, ThriftMux}
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.server.{PortUtils, TwitterServer}
@@ -12,9 +11,6 @@ import com.twitter.util.Await
 abstract class AbstractThriftServer extends ThriftServer
 
 trait ThriftServer extends TwitterServer {
-
-  addFrameworkModule(
-    Slf4jBridgeModule)
 
   protected def defaultFinatraThriftPort: String = ":9999"
   private val thriftPortFlag = flag("thrift.port", defaultFinatraThriftPort, "External Thrift server port")

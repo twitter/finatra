@@ -4,7 +4,7 @@ java_library(
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/google/inject:guice',
     'finatra/inject/inject-server',
-    'finatra/slf4j',
+    'finatra/inject/inject-slf4j',
     '3rdparty/jvm/com/google/guava:guava',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',

@@ -579,6 +579,12 @@ class DoEverythingController @Inject()(
     throw new BazException
   }
 
+  get("/FooBarBazException") { r: Request =>
+    // pretend a JSON parse exception happened resulting in a thrown FooBarBazException
+    // a mapper for this should be added by the DoEverythingInstalledExceptionMappersModule
+    throw new FooBarBazException
+  }
+
   get("/NoSuchMethodException") { r: Request =>
     throw new NoSuchMethodException
   }

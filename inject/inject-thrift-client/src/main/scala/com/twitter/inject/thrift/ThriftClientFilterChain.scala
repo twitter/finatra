@@ -20,7 +20,7 @@ import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftResponse, ThriftStruct}
-import com.twitter.util.{Duration => TwitterDuration, Throwables, Timer, Try}
+import com.twitter.util.{Duration => TwitterDuration, Timer, Try}
 import org.joda.time.Duration
 
 class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
@@ -44,10 +44,8 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
 
   // clnt/thrift/Adder/add1String
   private val methodStats = statsReceiver.scope("clnt").scope(clientLabel).scope(method.serviceName).scope(method.name)
-  private val failuresCounter = methodStats.counter("failures")
   // method invocations - incremented every time we call/invoke the method.
   private val invocationsCounter = methodStats.counter("invocations")
-  private val failuresScope = methodStats.scope("failures")
 
   // Mutable
   private var filterChain: Filter[Req, Rep, Req, Rep] = Filter.identity
@@ -217,7 +215,6 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
 
     new RetryPolicy[(Req, Try[Rep])] {
       override def apply(result: (Req, Try[Rep])): Option[(twitter.util.Duration, RetryPolicy[(Req, Try[Rep])])] = {
-        incrRetryStats(result)
 
         retryPolicy(result) match {
           case Some((duration, policy)) =>
@@ -233,18 +230,6 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
         }
       }
     }
-  }
-
-  private def incrRetryStats(result: (Req, Try[Rep])): Unit = {
-    val (_, rep) = result
-    rep.onFailure { e =>
-      failuresCounter.incr()
-      incrScopedFailureCounter(e)
-    }
-  }
-
-  private def incrScopedFailureCounter(e: Throwable): Unit = {
-    failuresScope.counter(Throwables.mkString(e): _*).incr()
   }
 
   private def exponentialRetryPolicy[T](

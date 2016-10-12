@@ -29,7 +29,7 @@ object DoEverythingModule extends TwitterModule {
     multiBinder.addBinding.to[OneMultiService]
     multiBinder.addBinding.to[TwoMultiService]
 
-    addTypeConvertor[ClassToConvert](
+    addTypeConverter[ClassToConvert](
       new TypeConverter {
         override def convert(s: String, typeLiteral: TypeLiteral[_]): AnyRef = {
           ClassToConvert(s)

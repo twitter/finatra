@@ -545,7 +545,7 @@ class EmbeddedTwitterServer(
   private def runNonExitingMain(): Unit = {
     // we call distinct here b/c port flag args can potentially be added multiple times
     val allArgs = combineArgs().distinct
-    info("Starting " + name + " with args: " + allArgs.mkString(" "))
+    info("\nStarting " + name + " with args: " + allArgs.mkString(" "))
 
     _mainResult = mainRunnerFuturePool {
       try {

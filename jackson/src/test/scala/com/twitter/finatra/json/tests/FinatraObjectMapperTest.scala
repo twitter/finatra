@@ -1,13 +1,15 @@
 package com.twitter.finatra.json.tests
 
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
-import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode}
+import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode, ObjectMapper, PropertyNamingStrategy}
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObjectWithoutConstructorParams, SimplePersonInPackageObject}
+import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.json.tests.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.json.tests.internal._
@@ -207,6 +209,53 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
           "name" : "Bob",
           "type" : "dog"
          }""") should equal(CaseClassWithVal("Bob"))
+    }
+
+    scenario("parse WithEmptyJsonProperty then write and see if it equals original") {
+      val withEmptyJsonProperty =
+        """{
+          |  "foo" : "abc"
+          |}""".stripMargin
+      val obj = parse[WithEmptyJsonProperty](withEmptyJsonProperty)
+      val json = mapper.writePrettyString(obj)
+      json should equal(withEmptyJsonProperty)
+    }
+
+    scenario("parse WithNonemptyJsonProperty then write and see if it equals original") {
+      val withNonemptyJsonProperty =
+        """{
+          |  "bar" : "abc"
+          |}""".stripMargin
+      val obj = parse[WithNonemptyJsonProperty](withNonemptyJsonProperty)
+      val json = mapper.writePrettyString(obj)
+      json should equal(withNonemptyJsonProperty)
+    }
+
+    scenario("parse WithoutJsonPropertyAnnotation then write and see if it equals original") {
+      val withoutJsonPropertyAnnotation =
+        """{
+          |  "foo" : "abc"
+          |}""".stripMargin
+      val obj = parse[WithoutJsonPropertyAnnotation](withoutJsonPropertyAnnotation)
+      val json = mapper.writePrettyString(obj)
+      json should equal(withoutJsonPropertyAnnotation)
+    }
+
+    scenario("use default Jackson mapper without setting naming strategy to see if it remains camelCase to verify default Jackson behavior") {
+      val objMapper = new ObjectMapper with ScalaObjectMapper
+      objMapper.registerModule(DefaultScalaModule)
+
+      val response = objMapper.writeValueAsString(NamingStrategyJsonProperty("abc"))
+      response should equal("""{"longFieldName":"abc"}""")
+    }
+
+    scenario("use default Jackson mapper after setting naming strategy and see if it changes to verify default Jackson behavior") {
+      val objMapper = new ObjectMapper with ScalaObjectMapper
+      objMapper.registerModule(DefaultScalaModule)
+      objMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy)
+
+      val response = objMapper.writeValueAsString(NamingStrategyJsonProperty("abc"))
+      response should equal("""{"long_field_name":"abc"}""")
     }
   }
 

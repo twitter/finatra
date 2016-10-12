@@ -41,7 +41,7 @@ abstract class TwitterModule
       new FactoryModuleBuilder().build(manifest[T].runtimeClass))
   }
 
-  protected def addTypeConvertor[T: Manifest](converter: TypeConverter) {
+  protected def addTypeConverter[T: Manifest](converter: TypeConverter) {
     convertToTypes(
       Matchers.only(typeLiteral[T]),
       converter)

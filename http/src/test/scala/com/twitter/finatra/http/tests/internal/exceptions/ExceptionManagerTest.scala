@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.internal.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.exceptions.{DefaultExceptionMapper, ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.Test
@@ -15,7 +15,11 @@ class ExceptionManagerTest extends Test with Mockito {
   def newExceptionManager =
     new ExceptionManager(
       TestInjector(),
-      TestDefaultExceptionMapper,
+      new InMemoryStatsReceiver)
+
+  lazy val collectionExceptionManager =
+    new ExceptionManager(
+      TestInjector(),
       new InMemoryStatsReceiver)
 
   def randomUri = {
@@ -26,43 +30,55 @@ class ExceptionManagerTest extends Test with Mockito {
   }
 
   val exceptionManager = newExceptionManager
+  exceptionManager.add[TestRootExceptionMapper]
   exceptionManager.add[ForbiddenExceptionMapper]
   exceptionManager.add(new UnauthorizedExceptionMapper)
   exceptionManager.add[UnauthorizedException1Mapper]
 
-  def testException(e: Throwable, status: Status) {
+  val exceptionMapperCollection = new ExceptionMapperCollection {
+    add[TestRootExceptionMapper]
+    add[ForbiddenExceptionMapper]
+    add[UnauthorizedExceptionMapper]
+    add[UnauthorizedException1Mapper]
+  }
+  collectionExceptionManager
+      .add(exceptionMapperCollection)
+
+  def testException(
+    e: Throwable,
+    status: Status,
+    manager: ExceptionManager = exceptionManager
+  ): Unit = {
     val request = RequestBuilder.get(randomUri)
-    val response = exceptionManager.toResponse(request, e)
+    val response = manager.toResponse(request, e)
     response.status should equal(status)
   }
 
   "map exceptions to mappers installed by type" in {
     testException(new ForbiddenException, Status.Forbidden)
+    testException(new ForbiddenException, Status.Forbidden, collectionExceptionManager)
   }
 
   "map exceptions to mappers installed manually" in {
     testException(new UnauthorizedException, Status.Unauthorized)
+    testException(new UnauthorizedException, Status.Unauthorized, collectionExceptionManager)
   }
 
   "map subclass exceptions to parent class mappers" in {
     testException(new ForbiddenException1, Status.Forbidden)
+    testException(new ForbiddenException1, Status.Forbidden, collectionExceptionManager)
     testException(new ForbiddenException2, Status.Forbidden)
+    testException(new ForbiddenException2, Status.Forbidden, collectionExceptionManager)
   }
 
   "map exceptions to mappers of most specific class" in {
     testException(new UnauthorizedException1, Status.NotFound)
+    testException(new UnauthorizedException1, Status.NotFound, collectionExceptionManager)
   }
 
   "fall back to default mapper" in {
     testException(new UnregisteredException, Status.InternalServerError)
-  }
-
-  "throw an IllegalStateException if exception mapped twice" in {
-    val exceptionManager = newExceptionManager
-    exceptionManager.add[ForbiddenExceptionMapper]
-    intercept[IllegalStateException] {
-      exceptionManager.add[ForbiddenExceptionMapper]
-    }
+    testException(new UnregisteredException, Status.InternalServerError, collectionExceptionManager)
   }
 }
 
@@ -73,7 +89,7 @@ class ForbiddenException2 extends ForbiddenException1
 class UnauthorizedException extends Exception
 class UnauthorizedException1 extends UnauthorizedException
 
-object TestDefaultExceptionMapper extends DefaultExceptionMapper {
+class TestRootExceptionMapper extends ExceptionMapper[Throwable] {
   def toResponse(request: Request, throwable: Throwable): Response = {
     SimpleResponse(Status.InternalServerError)
   }

@@ -12,23 +12,136 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.5.0](https://github.com/twitter/finatra/tree/finatra-2.5.0) (2016-10-10)
+
+### Added
+
+* finatra-http: Add DarkTrafficFilterModule symmetric with
+  thrift/DarkTrafficFilterModule. Add DarkTrafficService annotation in
+  finatra-utils and a filter function used for requests annotated with
+  Annotation Type in order to add DarkTrafficFilter. ``RB_ID=878079``
+
+### Changed
+
+* finatra: No longer need to add an additional resolver that points to maven.twttr.com.
+  ``RB_ID=878967``
+* inject-thrift-client: Stop counting response failures in the
+  `c.t.inject.thrift.ThriftClientFilterChain` as these are now counted in the
+  `c.t.finagle.thrift.ThriftServiceIface`. ``RB_ID=879075``
+* finatra-jackson: Fix issue around JsonProperty annotation empty value. In
+  CaseClassField.jsonNameForField, if the @JsonProperty annotation is used
+  without a value, the property name is interpreted as "". It now follows the
+  default Jackson behavior of using the name field name as the property
+  name when the annotation is empty. ``RB_ID=877060``
+* finatra: Correct instances of misspelled word "converter". There are
+  several instances where the word "converter" is misspelled as "convertor".
+  Specifically, TwitterModule.addTypeConvertor has been changed to
+  TwitterModule.addTypeConverter. Other internal renamings are
+  TwitterDurationTypeConverter, JodatimeDurationTypeConverter, and
+  JacksonToGuiceTypeConverter. ``RB_ID=877736``
+* finatra: Move installation of the SLF4JBridgeHandler to the constructor of
+  `c.t.inject.server.TwitterServer`. The
+  `c.t.finatra.logging.modules.Slf4jBridgeModule` has been removed as there is
+  now little reason to use it unless you are building an application directly
+  from `c.t.inject.app.App` since the functionality is now provided by default
+  in the constructor of `c.t.inject.server.TwitterServer`. If using
+  `c.t.inject.app.App`, then users can use the
+  `c.t.inject.logging.modules.LoggerModule`. The main advantage is that slf4j
+  bridges are now installed earlier in the application or server lifecycle and
+  thus more of the initialization logging is bridged to the slf4j-api.
+  ``RB_ID=870913``
+
+### Fixed
+
+* finatra-jackson: Test jar is missing files. Classes in the test
+  `c.t.finatra.validation` package were not properly marked for 
+  inclusion in the finatra-jackson tests jar. They've now been added. 
+  ``RB_ID=878755``
+
+### Closed
+
 ## [finatra-2.4.0](https://github.com/twitter/finatra/tree/finatra-2.4.0) (2016-09-07)
 
 ### Added
 
 * finatra-thrift: Enhanced support for Java Thrift services. ``RB_ID=868254``
 * finatra-examples: Add web/UI application example. ``RB_ID=868027``
-* inject-server: Allow for the ability to disable test logging via System property. ``RB_ID=867344``
+* inject-server: Allow for the ability to disable test logging via System
+  property. ``RB_ID=867344``
 
 ### Changed
 
+* finatra-http: Simplify ExceptionMapper configuration and usage. 
+  We are dropping the need for a specialized DefaultExceptionMapper (which
+  was simply an ExceptionMapper[Throwable]). Instead we now allow the 
+  configuration of mappers in the ExceptionManager to be much more flexible. 
+  Previously, the framework tried to prevent a user from registering a mapper 
+  over a given exception type multiple times and specialized a "default" 
+  ExceptionMapper to invoke on an exception type of Throwable. The 
+  ExceptionManager will now accept any mapper. If a mapper is added over a 
+  type already added, the previous mapper will be overwritten. 
+
+  The last registered mapper for an exception type wins.
+
+  The framework adds three mappers to the manager by default. If a user wants 
+  to swap out any of these defaults they simply need add their own mapper to 
+  the manager for the exception type to map. E.g., by default the framework 
+  will add:
+  Throwable -> 
+      com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper
+  JsonParseException -> 
+      com.twitter.finatra.http.internal.exceptions.json.JsonParseExceptionMapper
+  CaseClassMappingException -> 
+      com.twitter.finatra.http.internal.exceptions.json.CaseClassExceptionMapper
+
+  The manager walks the exception type hierarchy starting at the given 
+  exceptiontype and moving up the inheritence chain until it finds mapper 
+  configured for the type. In this manner an ExceptionMapper[Throwable] will 
+  be the last mapper invoked and performs as the "default".
+
+  Thus, to change the "default" mapper, simply adding a new mapper over the 
+  Throwable type will suffice, i.e., ExceptionMapper[Throwable] to the 
+  ExceptionManager. There  are multiple ways to add a mapper. Either through 
+  the HttpRouter: 
+
+
+    override def configureHttp(router: HttpRouter): Unit = {
+      router
+        .exceptionMapper[MyDefaultExceptionMapper]
+        ...
+    }
+
+
+  Or in a module which is then added to the Server, e.g.,
+
+
+    object MyExceptionMapperModule extends TwitterModule {
+      override def singletonStartup(injector: Injector): Unit = {
+        val manager = injector.instance[ExceptionManager]
+        manager.add[MyDefaultExceptionMapper]
+        manager.add[OtherExceptionMapper]
+      }
+    }
+
+
+    override val modules = Seq(
+      MyExceptionMapperModule,
+      ...)
+
+
+  This also means we can simplify the HttpServer as we no longer need to expose 
+  any "framework" module for overridding the default ExceptionMappers. So the 
+  "def exceptionMapperModule" has also been removed.``RB_ID=868614``
 * finatra-http: Specify HTTP Java API consistently. ``RB_ID=868264``
-* inject-core: Clean up inject.Logging trait. Remove dead code from Logging. ``RB_ID=868261``
-* finatra-http: Move integration tests to a package under `com.twitter.finatra.http`. ``RB_ID=866487``
+* inject-core: Clean up inject.Logging trait. Remove dead code from Logging.
+  ``RB_ID=868261``
+* finatra-http: Move integration tests to a package under
+  `com.twitter.finatra.http`. ``RB_ID=866487``
 
 ### Fixed
 
-* finatra-http: Fix issue with unimplemented methods in NonValidatingHttpHeadersResponse. ``RB_ID=868480``
+* finatra-http: Fix issue with unimplemented methods in
+  NonValidatingHttpHeadersResponse. ``RB_ID=868480``
 
 ### Closed
 

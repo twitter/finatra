@@ -8,8 +8,6 @@ import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.modules._
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.logging.modules.Slf4jBridgeModule
-import com.twitter.inject.TwitterModule
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.server.AdminHttpServer
 
@@ -18,15 +16,14 @@ abstract class AbstractHttpServer extends HttpServer
 
 trait HttpServer extends BaseHttpServer {
 
+  /** Add Framework Modules */
   addFrameworkModules(
-    mustacheModule,
-    messageBodyModule,
-    exceptionMapperModule,
-    exceptionManagerModule,
-    jacksonModule,
-    DocRootModule,
     accessLogModule,
-    Slf4jBridgeModule)
+    DocRootModule,
+    ExceptionManagerModule,
+    jacksonModule,
+    messageBodyModule,
+    mustacheModule)
 
   /* Abstract */
 
@@ -77,23 +74,6 @@ trait HttpServer extends BaseHttpServer {
   protected def messageBodyModule: Module = MessageBodyModule
 
   /**
-   * Default [[com.twitter.inject.TwitterModule]] for providing an implementation for a
-   * [[com.twitter.finatra.http.exceptions.DefaultExceptionMapper]].
-   *
-   * @return a [[com.twitter.inject.TwitterModule]] which provides a
-   *         [[com.twitter.finatra.http.exceptions.DefaultExceptionMapper]] implementation.
-   */
-  protected def exceptionMapperModule: Module = ExceptionMapperModule
-
-  /**
-   * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.http.exceptions.ExceptionManager]].
-   *
-   * @return a [[com.twitter.inject.TwitterModule]] which provides a
-   *         [[com.twitter.finatra.http.exceptions.ExceptionManager]] implementation.
-   */
-  protected def exceptionManagerModule: TwitterModule = ExceptionManagerModule
-
-  /**
    * Default [[com.twitter.inject.TwitterModule]] for providing a [[com.twitter.finatra.json.FinatraObjectMapper]].
    *
    * @return a [[com.twitter.inject.TwitterModule]] which provides a [[com.twitter.finatra.json.FinatraObjectMapper]] implementation.
@@ -111,13 +91,15 @@ trait HttpServer extends BaseHttpServer {
       throw new Exception(errorMessage)
     }
 
-    // Constant routes that don't start with /admin/finatra can be added to the admin index,
-    // all other routes cannot. Only constant /GET routes will be eligible to be added to the admin UI.
-    // NOTE: beforeRouting = true filters will not be properly evaluated on adminIndexRoutes
-    // since the localMuxer in the AdminHttpServer does exact route matching before marshalling
-    // to the handler service (where the filter is composed). Thus if this filter defines a route
-    // it will not get routed to by the localMuxer. Any beforeRouting = true filters should act
-    // only on paths behind /admin/finatra.
+    /*
+     Constant routes which do not begin with /admin/finatra can be added to the admin index,
+     all other routes cannot. Only constant /GET routes will be eligible to be added to the admin UI.
+     NOTE: beforeRouting = true filters will not be properly evaluated on adminIndexRoutes
+     since the local Muxer in the AdminHttpServer does exact route matching before marshalling
+     to the handler service (where the filter is composed). Thus if this filter defines a route
+     it will not get routed to by the local Muxer. Any beforeRouting = true filters should act
+     only on paths behind /admin/finatra.
+    */
     val (adminIndexRoutes, adminRichHandlerRoutes) = router.routesByType.admin.partition { route =>
       // can't start with /admin/finatra/ and is a constant route
       !route.path.startsWith(HttpRouter.FinatraAdminPrefix) && route.constantRoute

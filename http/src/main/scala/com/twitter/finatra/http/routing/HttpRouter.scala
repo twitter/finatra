@@ -1,12 +1,13 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
 import com.twitter.finatra.http.internal.routing.{Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
 import com.twitter.finatra.http.{Controller, HttpFilter, AbstractController}
 import com.twitter.inject.{Injector, Logging}
+import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.{Inject, Singleton}
 import scala.collection.mutable.ArrayBuffer
 
@@ -47,6 +48,11 @@ class HttpRouter @Inject()(
     this
   }
 
+  def exceptionMapper(mappers: ExceptionMapperCollection): HttpRouter = {
+    exceptionManager.add(mappers)
+    this
+  }
+
   def register[MBR <: MessageBodyComponent : Manifest]: HttpRouter = {
     messageBodyManager.add[MBR]()
     this
@@ -55,6 +61,11 @@ class HttpRouter @Inject()(
   def register[MBR <: MessageBodyComponent : Manifest, ObjTypeToReadWrite: Manifest]: HttpRouter = {
     messageBodyManager.addExplicit[MBR, ObjTypeToReadWrite]()
     this
+  }
+
+  /** Add global filter used for all requests annotated with Annotation Type */
+  def filter[FilterType <: HttpFilter : Manifest, Ann <: JavaAnnotation : Manifest]: HttpRouter = {
+    filter(injector.instance[FilterType, Ann])
   }
 
   /** Add global filter used for all requests, by default applied AFTER route matching */

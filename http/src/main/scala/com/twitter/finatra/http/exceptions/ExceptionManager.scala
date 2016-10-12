@@ -15,17 +15,19 @@ import scala.annotation.tailrec
 import scala.collection.JavaConverters._
 
 /**
- * A class to register ExceptionMappers and handle exceptions.
+ * A class to register [[com.twitter.finatra.http.exceptions.ExceptionMapper]]s
+ * and handle exceptions.
  *
- * Given some exception, an ExceptionManager will find an ExceptionMapper
- * to handle that particular class of exceptions. If the mapper for that
- * exception isn't registered, ExceptionManager will try its parent
- * class, and so on, until it reaches the Throwable class. At that point
- * the DefaultExceptionMapper will run which should be defined over all
- * Throwables.
+ * Given an exception, the ExceptionManager will find an
+ * [[com.twitter.finatra.http.exceptions.ExceptionMapper]] to handle
+ * that particular class of exceptions. If the mapper for that exception
+ * isn't registered, the ExceptionManager will try the exception's parent class,
+ * and so on, until it reaches the Throwable class. The framework registers a "root"
+ * exception mapper over Throwable which will eventually be invoked. Users are
+ * free to register their own ExceptionMapper[Throwable] which overrides the
+ * "root" exception mapper.
  *
- * @throws java.lang.IllegalStateException when an exception type is
- * registered twice.
+ * @see [[com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper]]
  *
  * Note: When searching for the parent exception mapper, it would be nice
  * to traverse the entire class linearization so it works for
@@ -37,27 +39,57 @@ import scala.collection.JavaConverters._
  * [2] http://docs.scala-lang.org/overviews/reflection/thread-safety.html
  */
 @Singleton
-class ExceptionManager(
+class ExceptionManager  (
   injector: Injector,
-  defaultExceptionMapper: DefaultExceptionMapper,
   statsReceiver: StatsReceiver) {
 
   private val mappers = new ConcurrentHashMap[Type, ExceptionMapper[_]]().asScala
 
   /* Public */
 
-  def add[T <: Throwable : Manifest](mapper: ExceptionMapper[T]) {
+  /**
+   * Add a [[com.twitter.finatra.http.exceptions.ExceptionMapper]] over type [[T]] to the manager.
+   * If a mapper has already been added for the given [[T]], it will be replaced.
+   *
+   * @param mapper - [[com.twitter.finatra.http.exceptions.ExceptionMapper]] to add
+   * @tparam T - exception class type which should subclass [[java.lang.Throwable]]
+   */
+  def add[T <: Throwable : Manifest](mapper: ExceptionMapper[T]): Unit = {
     add(manifest[T].runtimeClass, mapper)
   }
 
-  def add[T <: ExceptionMapper[_]: Manifest] {
+  /**
+   * Add a collection of [[com.twitter.finatra.http.exceptions.ExceptionMapper]] as defined by a
+   * [[com.twitter.finatra.http.exceptions.ExceptionMapperCollection]]. The collection is iterated
+   * over and each mapper contained therein is added. If a mapper has already been added for the given
+   * type T in ExceptionMapper[T], it will be replaced.
+   *
+   * @param collection - [[com.twitter.finatra.http.exceptions.ExceptionMapperCollection]] to add.
+   */
+  def add(collection: ExceptionMapperCollection): Unit = {
+    collection.foreach(add(_))
+  }
+
+  /**
+   * Add a [[com.twitter.finatra.http.exceptions.ExceptionMapper]] by type [[T]]
+   * @tparam T - ExceptionMapper type T which should subclass [[com.twitter.finatra.http.exceptions.ExceptionMapper]]
+   */
+  def add[T <: ExceptionMapper[_]: Manifest]: Unit = {
     val mapperType = typeLiteral[T].getSupertype(classOf[ExceptionMapper[_]]).getType
     val throwableType = singleTypeParam(mapperType)
     add(throwableType, injector.instance[T])
   }
 
+  /**
+   * Returns a [[com.twitter.finagle.http.Response]] as computed by the matching
+   * [[com.twitter.finatra.http.exceptions.ExceptionMapper]] to the given throwable.
+   *
+   * @param request - a [[com.twitter.finagle.http.Request]]
+   * @param throwable - [[java.lang.Throwable]] to match against registered ExceptionMappers.
+   * @return a [[com.twitter.finagle.http.Response]]
+   */
   def toResponse(request: Request, throwable: Throwable): Response = {
-    val mapper = cachedGetMapper(throwable.getClass)
+    val mapper = getMapper(throwable.getClass)
     val response = mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
     RouteInfo(request).foreach { info =>
       statException(info, request, throwable, response)
@@ -91,18 +123,9 @@ class ExceptionManager(
     }
   }
 
+  // Last entry by type overrides any previous entry.
   private def add(throwableType: Type, mapper: ExceptionMapper[_]) {
-    if (mappers.contains(throwableType)) {
-      throw new IllegalStateException(s"ExceptionMapper for $throwableType already registered")
-    } else {
-      mappers(throwableType) = mapper // mutation
-    }
-  }
-
-  // Assumes mappers are never explicitly registered after configuration
-  // phase, otherwise we'd need to invalidate the cache.
-  private def cachedGetMapper(cls: Class[_]): ExceptionMapper[_] = {
-    mappers.getOrElseUpdate(cls, getMapper(cls))
+    mappers.getOrElseUpdate(throwableType, mapper)
   }
 
   // Get mapper for this throwable class if it exists, otherwise
@@ -112,13 +135,9 @@ class ExceptionManager(
   // Note: we avoid getOrElse so we have tail recursion
   @tailrec
   private def getMapper(cls: Class[_]): ExceptionMapper[_] = {
-    if (cls == classOf[Throwable]) {
-      defaultExceptionMapper
-    } else {
-      mappers.get(cls) match {
-        case Some(mapper) => mapper
-        case None => getMapper(cls.getSuperclass)
-      }
+    mappers.get(cls) match {
+      case Some(mapper) => mapper
+      case None => getMapper(cls.getSuperclass)
     }
   }
 }

@@ -20,3 +20,11 @@ class FooExceptionMapper @Inject()(response: ResponseBuilder)
     response.forbidden("foo").header("Foo-ID", exception.id)
   }
 }
+
+class FooBarBazExceptionMapper @Inject()(response: ResponseBuilder)
+  extends ExceptionMapper[FooBarBazException] {
+
+  override def toResponse(request: Request, exception: FooBarBazException): Response = {
+    response.forbidden("foo").header("Foo-ID", exception.id)
+  }
+}
