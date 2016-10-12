@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
 import com.fasterxml.jackson.databind.JavaType
-import com.fasterxml.jackson.databind.`type`.{ArrayType, TypeFactory}
+import com.fasterxml.jackson.databind.`type`.{ArrayType, TypeFactory, TypeBindings}
 import com.twitter.finatra.json.internal.caseclass.reflection._
 
 private[json] object JacksonTypes {
@@ -27,7 +27,9 @@ private[json] object JacksonTypes {
     else if (scalaType.isArray)
       ArrayType.construct(
         primitiveAwareJavaType(typeFactory, scalaType.typeArguments.head),
-        null, null)
+        TypeBindings.create(
+          scalaType.runtimeClass,
+          javaType(typeFactory, scalaType.typeArguments.head)))
 
     else
       typeFactory.constructParametrizedType(
