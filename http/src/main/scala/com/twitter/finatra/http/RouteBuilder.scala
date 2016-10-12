@@ -18,7 +18,7 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
   def build(prefix: Prefix, callbackConverter: CallbackConverter, injector: Injector) = Route(
     name,
     method,
-    prefix,
+    prefix.andThen(routeDsl.buildPrefix(injector)),
     route,
     admin,
     adminIndexInfo,

@@ -6,6 +6,7 @@ import com.twitter.finatra.http.routing.Prefix
 
 class PrefixedController extends Controller {
   get("/test") { _: Request => response.ok }
+  prefix[TestPrefix].get("/test") { _: Request => response.ok }
 }
 
 class TestPrefix extends Prefix {

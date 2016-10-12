@@ -59,6 +59,26 @@ class RoutesTest extends Test with OptionValues {
       Request("/groups/")) should be('empty)
   }
 
+  "doubly prefixed route" in {
+    val prefix = new Prefix { def prefix: String = "/prefix" }
+    val other = new Prefix { def prefix: String = "/other" }
+
+    val routes = Routes.createForMethod(
+      Seq(createRoute(Method.Get, "/groups/", prefix andThen other)), Method.Get)
+
+    routes.handle(
+      Request("/prefix/other/groups/")) should be('defined)
+
+    routes.handle(
+      Request("/groups/")) should be('empty)
+
+    routes.handle(
+      Request("/prefix/groups/")) should be('empty)
+
+    routes.handle(
+      Request("/other/groups/")) should be('empty)
+  }
+
   def defaultCallback(request: Request) = {
     Future(Response())
   }

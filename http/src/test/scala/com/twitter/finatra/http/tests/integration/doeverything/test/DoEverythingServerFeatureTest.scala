@@ -325,6 +325,11 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         "/prefix/test",
         andExpect = Ok
       )
+
+      server.httpGet(
+        "/prefix/prefix/test",
+        andExpect = Ok
+      )
     }
 
     "POST" in {
