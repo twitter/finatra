@@ -1,9 +1,9 @@
 <!DOCTYPE html >
 <html>
         <head>
-          <title>ExceptionMapperModule - com.twitter.finatra.http.modules.ExceptionMapperModule</title>
-          <meta name="description" content="ExceptionMapperModule - com.twitter.finatra.http.modules.ExceptionMapperModule" />
-          <meta name="keywords" content="ExceptionMapperModule com.twitter.finatra.http.modules.ExceptionMapperModule" />
+          <title>LoggerModule - com.twitter.inject.logging.modules.LoggerModule</title>
+          <meta name="description" content="LoggerModule - com.twitter.inject.logging.modules.LoggerModule" />
+          <meta name="keywords" content="LoggerModule com.twitter.inject.logging.modules.LoggerModule" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -16,7 +16,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../index.html';
-            var hash = 'com.twitter.finatra.http.modules.ExceptionMapperModule$';
+            var hash = 'com.twitter.inject.logging.modules.LoggerModule$';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -29,11 +29,11 @@
         <body class="value">
       <div id="definition">
         <img alt="Object" src="../../../../../lib/object_big.png" />
-        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../package.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../package.html" class="extype" name="com.twitter.finatra.http">http</a>.<a href="package.html" class="extype" name="com.twitter.finatra.http.modules">modules</a></p>
-        <h1>ExceptionMapperModule</h1><h3><span class="morelinks"><div>Related Doc:
-            <a href="package.html" class="extype" name="com.twitter.finatra.http.modules">package modules</a>
+        <p id="owner"><a href="../../../../package.html" class="extype" name="com">com</a>.<a href="../../../package.html" class="extype" name="com.twitter">twitter</a>.<a href="../../package.html" class="extype" name="com.twitter.inject">inject</a>.<a href="../package.html" class="extype" name="com.twitter.inject.logging">logging</a>.<a href="package.html" class="extype" name="com.twitter.inject.logging.modules">modules</a></p>
+        <h1>LoggerModule</h1><h3><span class="morelinks"><div>Related Doc:
+            <a href="package.html" class="extype" name="com.twitter.inject.logging.modules">package modules</a>
           </div></span></h3><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -45,13 +45,15 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">ExceptionMapperModule</span><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+        <span class="name">LoggerModule</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which attempts to install the SLF4JBridgeHandler
+when the <code>slf4j-jdk14</code> logging implementation is not present on the classpath.
+</p></div><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">Logging</span>, <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <span class="extype" name="grizzled.slf4j.Logging">grizzled.slf4j.Logging</span>, <a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></div>
         </div></div>
         
 
@@ -69,7 +71,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="com.twitter.finatra.http.modules.ExceptionMapperModule"><span>ExceptionMapperModule</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="grizzled.slf4j.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="com.twitter.inject.logging.modules.LoggerModule"><span>LoggerModule</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="grizzled.slf4j.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -106,7 +108,7 @@
         <span title="gt4s: $bang$eq" class="name">!=</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@!=(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -123,7 +125,7 @@
         <span title="gt4s: $hash$hash" class="name">##</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@##():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@##():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -140,7 +142,7 @@
         <span title="gt4s: $eq$eq" class="name">==</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@==(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@==(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -157,7 +159,7 @@
         <span class="name">addError</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.spi.Message">Message</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@addError(x$1:com.google.inject.spi.Message):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@addError(x$1:com.google.inject.spi.Message):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -174,7 +176,7 @@
         <span class="name">addError</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@addError(x$1:Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@addError(x$1:Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -191,28 +193,28 @@
         <span class="name">addError</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.String">String</span></span>, <span name="arg1">arg1: <span class="extype" name="scala.&lt;repeated...&gt;">&lt;repeated...&gt;</span>[<a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@addError(x$1:String,x$2:Object*):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@addError(x$1:String,x$2:Object*):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google$inject.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
-    </li><li name="com.twitter.inject.TwitterModule#addTypeConvertor" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="addTypeConvertor[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$3:Manifest[T]):Unit"></a>
-      <a id="addTypeConvertor[T](TypeConverter)(Manifest[T]):Unit"></a>
+    </li><li name="com.twitter.inject.TwitterModule#addTypeConverter" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addTypeConverter[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$3:Manifest[T]):Unit"></a>
+      <a id="addTypeConverter[T](TypeConverter)(Manifest[T]):Unit"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">addTypeConvertor</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="converter">converter: <span class="extype" name="com.google.inject.spi.TypeConverter">TypeConverter</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.addTypeConvertor.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">addTypeConverter</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="converter">converter: <span class="extype" name="com.google.inject.spi.TypeConverter">TypeConverter</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.addTypeConverter.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@addTypeConvertor[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$3:Manifest[T]):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@addTypeConverter[T](converter:com.google.inject.spi.TypeConverter)(implicitevidence$3:Manifest[T]):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -225,7 +227,7 @@
         <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span class="extype" name="scala.Any.asInstanceOf.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@asInstanceOf[T0]:T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -242,11 +244,11 @@
         <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bind[T](implicitevidence$7:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bind[T](implicitevidence$7:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bind" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bind[T](annot:java.lang.annotation.Annotation)(implicitevidence$6:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a>
       <a id="bind[T](Annotation)(Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
@@ -259,11 +261,11 @@
         <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annot">annot: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bind.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bind[T](annot:java.lang.annotation.Annotation)(implicitevidence$6:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bind[T](annot:java.lang.annotation.Annotation)(implicitevidence$6:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bind" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bind[T](x$1:Class[T]):com.google.inject.binder.AnnotatedBindingBuilder[T]"></a>
       <a id="bind[T](Class[T]):AnnotatedBindingBuilder[T]"></a>
@@ -276,7 +278,7 @@
         <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Class">Class</span>[<span class="extype" name="com.google.inject.AbstractModule.bind.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.binder.AnnotatedBindingBuilder">AnnotatedBindingBuilder</span>[<span class="extype" name="com.google.inject.AbstractModule.bind.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bind[T](x$1:Class[T]):com.google.inject.binder.AnnotatedBindingBuilder[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bind[T](x$1:Class[T]):com.google.inject.binder.AnnotatedBindingBuilder[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -293,7 +295,7 @@
         <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.TypeLiteral">TypeLiteral</span>[<span class="extype" name="com.google.inject.AbstractModule.bind.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.binder.AnnotatedBindingBuilder">AnnotatedBindingBuilder</span>[<span class="extype" name="com.google.inject.AbstractModule.bind.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bind[T](x$1:com.google.inject.TypeLiteral[T]):com.google.inject.binder.AnnotatedBindingBuilder[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bind[T](x$1:com.google.inject.TypeLiteral[T]):com.google.inject.binder.AnnotatedBindingBuilder[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -310,7 +312,7 @@
         <span class="name">bind</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.Key">Key</span>[<span class="extype" name="com.google.inject.AbstractModule.bind.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.binder.LinkedBindingBuilder">LinkedBindingBuilder</span>[<span class="extype" name="com.google.inject.AbstractModule.bind.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bind[T](x$1:com.google.inject.Key[T]):com.google.inject.binder.LinkedBindingBuilder[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bind[T](x$1:com.google.inject.Key[T]):com.google.inject.binder.LinkedBindingBuilder[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -327,11 +329,11 @@
         <span class="name">bindAssistedFactory</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindAssistedFactory.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindAssistedFactory[T](implicitevidence$2:Manifest[T]):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindAssistedFactory[T](implicitevidence$2:Manifest[T]):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#bindConstant" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bindConstant():com.google.inject.binder.AnnotatedConstantBindingBuilder"></a>
       <a id="bindConstant():AnnotatedConstantBindingBuilder"></a>
@@ -344,7 +346,7 @@
         <span class="name">bindConstant</span><span class="params">()</span><span class="result">: <span class="extype" name="com.google.inject.binder.AnnotatedConstantBindingBuilder">AnnotatedConstantBindingBuilder</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindConstant():com.google.inject.binder.AnnotatedConstantBindingBuilder" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindConstant():com.google.inject.binder.AnnotatedConstantBindingBuilder" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -361,7 +363,7 @@
         <span class="name">bindInterceptor</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="java.lang.Class">Class</span>[_]]</span>, <span name="arg1">arg1: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="java.lang.reflect.Method">Method</span>]</span>, <span name="arg2">arg2: <span class="extype" name="scala.&lt;repeated...&gt;">&lt;repeated...&gt;</span>[<span class="extype" name="org.aopalliance.intercept.MethodInterceptor">MethodInterceptor</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindInterceptor(x$1:com.google.inject.matcher.Matcher[_&gt;:Class[_]],x$2:com.google.inject.matcher.Matcher[_&gt;:java.lang.reflect.Method],x$3:org.aopalliance.intercept.MethodInterceptor*):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindInterceptor(x$1:com.google.inject.matcher.Matcher[_&gt;:Class[_]],x$2:com.google.inject.matcher.Matcher[_&gt;:java.lang.reflect.Method],x$3:org.aopalliance.intercept.MethodInterceptor*):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -378,7 +380,7 @@
         <span class="name">bindListener</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="com.google.inject.Binding">Binding</span>[_]]</span>, <span name="arg1">arg1: <span class="extype" name="scala.&lt;repeated...&gt;">&lt;repeated...&gt;</span>[<span class="extype" name="com.google.inject.spi.ProvisionListener">ProvisionListener</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindListener(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.Binding[_]],x$2:com.google.inject.spi.ProvisionListener*):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindListener(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.Binding[_]],x$2:com.google.inject.spi.ProvisionListener*):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -395,7 +397,7 @@
         <span class="name">bindListener</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="com.google.inject.TypeLiteral">TypeLiteral</span>[_]]</span>, <span name="arg1">arg1: <span class="extype" name="com.google.inject.spi.TypeListener">TypeListener</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindListener(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeListener):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindListener(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeListener):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -412,7 +414,7 @@
         <span class="name">bindScope</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Class">Class</span>[_ &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]</span>, <span name="arg1">arg1: <span class="extype" name="com.google.inject.Scope">Scope</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindScope(x$1:Class[_&lt;:java.lang.annotation.Annotation],x$2:com.google.inject.Scope):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindScope(x$1:Class[_&lt;:java.lang.annotation.Annotation],x$2:com.google.inject.Scope):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -429,11 +431,11 @@
         <span class="name">bindSingleton</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annot">annot: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindSingleton[T](annot:java.lang.annotation.Annotation)(implicitevidence$5:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindSingleton[T](annot:java.lang.annotation.Annotation)(implicitevidence$5:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#bindSingleton" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="bindSingleton[T](implicitevidence$4:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]"></a>
       <a id="bindSingleton[T](Manifest[T]):ScalaAnnotatedBindingBuilder[T]"></a>
@@ -446,11 +448,11 @@
         <span class="name">bindSingleton</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder">ScalaAnnotatedBindingBuilder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.bindSingleton.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@bindSingleton[T](implicitevidence$4:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@bindSingleton[T](implicitevidence$4:Manifest[T]):net.codingwell.scalaguice.ScalaModule.ScalaAnnotatedBindingBuilder[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#binder" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="binder():com.google.inject.Binder"></a>
       <a id="binder():Binder"></a>
@@ -463,7 +465,7 @@
         <span class="name">binder</span><span class="params">()</span><span class="result">: <span class="extype" name="com.google.inject.Binder">Binder</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@binder():com.google.inject.Binder" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@binder():com.google.inject.Binder" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -480,7 +482,7 @@
         <span class="name">clone</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@clone():Object" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@clone():Object" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -491,7 +493,7 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.modules.ExceptionMapperModule#configure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.TwitterModule#configure" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configure():Unit"></a>
       <a id="configure():Unit"></a>
       <h4 class="signature">
@@ -503,11 +505,11 @@
         <span class="name">configure</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@configure():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@configure():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.modules.ExceptionMapperModule">ExceptionMapperModule</a> → <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#configure" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configure(x$1:com.google.inject.Binder):Unit"></a>
       <a id="configure(Binder):Unit"></a>
@@ -520,7 +522,7 @@
         <span class="name">configure</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.Binder">Binder</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@configure(x$1:com.google.inject.Binder):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@configure(x$1:com.google.inject.Binder):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -537,7 +539,7 @@
         <span class="name">convertToTypes</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.matcher.Matcher">Matcher</span>[_ &gt;: <span class="extype" name="com.google.inject.TypeLiteral">TypeLiteral</span>[_]]</span>, <span name="arg1">arg1: <span class="extype" name="com.google.inject.spi.TypeConverter">TypeConverter</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@convertToTypes(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeConverter):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@convertToTypes(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeConverter):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -554,11 +556,11 @@
         <span class="name">createKey</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterBaseModule.createKey.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Key">Key</span>[<span class="extype" name="com.twitter.inject.TwitterBaseModule.createKey.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@createKey[T](implicitevidence$1:Manifest[T]):com.google.inject.Key[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@createKey[T](implicitevidence$1:Manifest[T]):com.google.inject.Key[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#createMultiBinder" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createMultiBinder[MultiBindType](implicitevidence$8:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]"></a>
       <a id="createMultiBinder[MultiBindType](Manifest[MultiBindType]):ScalaMultibinder[MultiBindType]"></a>
@@ -571,11 +573,11 @@
         <span class="name">createMultiBinder</span><span class="tparams">[<span name="MultiBindType">MultiBindType</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.createMultiBinder.MultiBindType">MultiBindType</span>]</span>)</span><span class="result">: <span class="extype" name="net.codingwell.scalaguice.ScalaMultibinder">ScalaMultibinder</span>[<span class="extype" name="com.twitter.inject.TwitterModule.createMultiBinder.MultiBindType">MultiBindType</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@createMultiBinder[MultiBindType](implicitevidence$8:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@createMultiBinder[MultiBindType](implicitevidence$8:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#currentStage" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="currentStage():com.google.inject.Stage"></a>
       <a id="currentStage():Stage"></a>
@@ -588,7 +590,7 @@
         <span class="name">currentStage</span><span class="params">()</span><span class="result">: <span class="extype" name="com.google.inject.Stage">Stage</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@currentStage():com.google.inject.Stage" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@currentStage():com.google.inject.Stage" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -605,7 +607,7 @@
         <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@debug(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -622,7 +624,7 @@
         <span class="name">debug</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@debug(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -639,12 +641,12 @@
         <span class="name">debugFutureResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.util.Future" class="extype" target="_top">Future</a>[<span class="extype" name="com.twitter.inject.Logging.debugFutureResult.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Log an debug msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an debug msg that contains the result of the passed in func.
-</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function returning a future whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function returning a future whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="com.twitter.inject.Logging#debugResult" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debugResult[T](msg:String)(func:=&gt;T):T"></a>
       <a id="debugResult[T](String)(⇒T):T"></a>
@@ -657,12 +659,12 @@
         <span class="name">debugResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.debugResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@debugResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@debugResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Log an debug msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an debug msg that contains the result of the passed in func.
-</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -675,7 +677,7 @@
         <span class="name">eq</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@eq(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -692,7 +694,7 @@
         <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@equals(x$1:Any):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -709,7 +711,7 @@
         <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@error(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -726,7 +728,7 @@
         <span class="name">error</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@error(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -743,12 +745,12 @@
         <span class="name">errorResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.errorResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@errorResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@errorResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Log an error msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an error msg that contains the result of the passed in func.
-</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <a id="finalize():Unit"></a>
@@ -761,7 +763,7 @@
         <span class="name">finalize</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@finalize():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@finalize():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -784,11 +786,11 @@
         <span class="name">flag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flaggable" class="extype" target="_top">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@flag[T](name:String,help:String)(implicitevidence$2:com.twitter.app.Flaggable[T],implicitevidence$3:Manifest[T]):com.twitter.app.Flag[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a>
       <a id="flag[T](String,T,String)(Flaggable[T]):Flag[T]"></a>
@@ -801,11 +803,11 @@
         <span class="name">flag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flaggable" class="extype" target="_top">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Create a flag and add it to the modules flags list</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag and add it to the modules flags list</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+      <p class="shortcomment cmt">Create a flag and add it to the modules flags list</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag and add it to the modules flags list</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flags" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]"></a>
       <a id="flags:ArrayBuffer[Flag[_]]"></a>
@@ -818,11 +820,11 @@
         <span class="name">flags</span><span class="result">: <span class="extype" name="scala.collection.mutable.ArrayBuffer">ArrayBuffer</span>[<a href="https://twitter.github.io/util/docs/index.html#com.twitter.app.Flag" class="extype" target="_top">Flag</a>[_]]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterBaseModule#frameworkModules" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="frameworkModules:Seq[com.google.inject.Module]"></a>
       <a id="frameworkModules:Seq[Module]"></a>
@@ -835,13 +837,13 @@
         <span class="name">frameworkModules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@frameworkModules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@frameworkModules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Additional framework modules to be composed into this module
 </p><div class="fullcomment"><div class="comment cmt"><p>Additional framework modules to be composed into this module
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <a id="getClass():Class[_]"></a>
@@ -854,7 +856,7 @@
         <span class="name">getClass</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Class">Class</span>[_]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@getClass():Class[_]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@getClass():Class[_]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -871,7 +873,7 @@
         <span class="name">getMembersInjector</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.TypeLiteral">TypeLiteral</span>[<span class="extype" name="com.google.inject.AbstractModule.getMembersInjector.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.MembersInjector">MembersInjector</span>[<span class="extype" name="com.google.inject.AbstractModule.getMembersInjector.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@getMembersInjector[T](x$1:com.google.inject.TypeLiteral[T]):com.google.inject.MembersInjector[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@getMembersInjector[T](x$1:com.google.inject.TypeLiteral[T]):com.google.inject.MembersInjector[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -888,7 +890,7 @@
         <span class="name">getMembersInjector</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Class">Class</span>[<span class="extype" name="com.google.inject.AbstractModule.getMembersInjector.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.MembersInjector">MembersInjector</span>[<span class="extype" name="com.google.inject.AbstractModule.getMembersInjector.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@getMembersInjector[T](x$1:Class[T]):com.google.inject.MembersInjector[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@getMembersInjector[T](x$1:Class[T]):com.google.inject.MembersInjector[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -905,11 +907,11 @@
         <span class="name">getProvider</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModule.getProvider.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Provider">Provider</span>[<span class="extype" name="com.twitter.inject.TwitterModule.getProvider.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@getProvider[T](implicitevidence$1:Manifest[T]):com.google.inject.Provider[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@getProvider[T](implicitevidence$1:Manifest[T]):com.google.inject.Provider[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#getProvider" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getProvider[T](x$1:Class[T]):com.google.inject.Provider[T]"></a>
       <a id="getProvider[T](Class[T]):Provider[T]"></a>
@@ -922,7 +924,7 @@
         <span class="name">getProvider</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Class">Class</span>[<span class="extype" name="com.google.inject.AbstractModule.getProvider.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Provider">Provider</span>[<span class="extype" name="com.google.inject.AbstractModule.getProvider.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@getProvider[T](x$1:Class[T]):com.google.inject.Provider[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@getProvider[T](x$1:Class[T]):com.google.inject.Provider[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -939,7 +941,7 @@
         <span class="name">getProvider</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.Key">Key</span>[<span class="extype" name="com.google.inject.AbstractModule.getProvider.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.google.inject.Provider">Provider</span>[<span class="extype" name="com.google.inject.AbstractModule.getProvider.T">T</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@getProvider[T](x$1:com.google.inject.Key[T]):com.google.inject.Provider[T]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@getProvider[T](x$1:com.google.inject.Key[T]):com.google.inject.Provider[T]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -956,7 +958,7 @@
         <span class="name">hashCode</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@hashCode():Int" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@hashCode():Int" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -973,7 +975,7 @@
         <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@info(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -990,7 +992,7 @@
         <span class="name">info</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@info(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1007,12 +1009,12 @@
         <span class="name">infoResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.infoResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@infoResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@infoResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Log an info msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an info msg that contains the result of the passed in func.
-</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#install" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="install(module:com.google.inject.Module):Unit"></a>
       <a id="install(Module):Unit"></a>
@@ -1025,11 +1027,11 @@
         <span class="name">install</span><span class="params">(<span name="module">module: <span class="extype" name="com.google.inject.Module">Module</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@install(module:com.google.inject.Module):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@install(module:com.google.inject.Module):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> → AbstractModule</dd></dl></div>
     </li><li name="grizzled.slf4j.Logging#isDebugEnabled" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled:Boolean"></a>
       <a id="isDebugEnabled:Boolean"></a>
@@ -1042,7 +1044,7 @@
         <span class="name">isDebugEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@isDebugEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@isDebugEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1059,7 +1061,7 @@
         <span class="name">isErrorEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@isErrorEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@isErrorEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1076,7 +1078,7 @@
         <span class="name">isInfoEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@isInfoEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@isInfoEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1093,7 +1095,7 @@
         <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@isInstanceOf[T0]:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1110,7 +1112,7 @@
         <span class="name">isTraceEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@isTraceEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@isTraceEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1127,24 +1129,24 @@
         <span class="name">isWarnEnabled</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@isWarnEnabled:Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@isWarnEnabled:Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="grizzled.slf4j.Logging#logger" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:grizzled.slf4j.Logger"></a>
-      <a id="logger:Logger"></a>
+      <a id="logger:grizzled.slf4j.Logger"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">logger</span><span class="result">: <span class="extype" name="grizzled.slf4j.Logger">Logger</span></span>
+        <span class="name">logger</span><span class="result">: <span class="extype" name="grizzled.slf4j.Logger">grizzled.slf4j.Logger</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@logger:grizzled.slf4j.Logger" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@logger:grizzled.slf4j.Logger" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1161,7 +1163,7 @@
         <span class="name">loggerName</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@loggerName:String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@loggerName:String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1178,14 +1180,14 @@
         <span class="name">modules</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.google.inject.Module">Module</span>]</span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@modules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@modules:Seq[com.google.inject.Module]" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Additional modules to be composed into this module</p><div class="fullcomment"><div class="comment cmt"><p>Additional modules to be composed into this module</p><p>NOTE: This Seq of modules is generally used instead of the standard Guice 'install' method so that
 TwitterModules with flag definitions can be supported.</p><p>However, AbstractModule.install can still be used for non-TwitterModules, and is sometimes preferred
 due to install being deferred until after flag parsing occurs.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -1198,7 +1200,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">ne</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Boolean" class="extype" target="_top">Boolean</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@ne(x$1:AnyRef):Boolean" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1215,7 +1217,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">notify</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@notify():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@notify():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1232,7 +1234,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@notifyAll():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@notifyAll():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1249,7 +1251,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">requestInjection</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@requestInjection(x$1:Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@requestInjection(x$1:Any):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1266,7 +1268,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">requestStaticInjection</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.&lt;repeated...&gt;">&lt;repeated...&gt;</span>[<span class="extype" name="java.lang.Class">Class</span>[_]]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@requestStaticInjection(x$1:Class[_]*):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@requestStaticInjection(x$1:Class[_]*):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1283,7 +1285,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">requireBinding</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Class">Class</span>[_]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@requireBinding(x$1:Class[_]):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@requireBinding(x$1:Class[_]):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1300,7 +1302,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">requireBinding</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="com.google.inject.Key">Key</span>[_]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@requireBinding(x$1:com.google.inject.Key[_]):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@requireBinding(x$1:com.google.inject.Key[_]):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1314,15 +1316,15 @@ due to install being deferred until after flag parsing occurs.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">singletonPostWarmupComplete</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">singletonPostWarmupComplete</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@singletonPostWarmupComplete(injector:com.twitter.inject.Injector):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@singletonPostWarmupComplete(injector:com.twitter.inject.Injector):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Invoke after external ports are bound and any clients are resolved</p><div class="fullcomment"><div class="comment cmt"><p>Invoke after external ports are bound and any clients are resolved</p><p>This method should only get singleton instances from the injector.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleLifecycle#singletonShutdown" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="singletonShutdown(injector:com.twitter.inject.Injector):Unit"></a>
       <a id="singletonShutdown(Injector):Unit"></a>
@@ -1332,16 +1334,16 @@ due to install being deferred until after flag parsing occurs.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">singletonShutdown</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">singletonShutdown</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@singletonShutdown(injector:com.twitter.inject.Injector):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@singletonShutdown(injector:com.twitter.inject.Injector):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Invoke as JVM shuts down.</p><div class="fullcomment"><div class="comment cmt"><p>Invoke as JVM shuts down.</p><p>This method should only get singleton instances from the injector.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.modules.ExceptionMapperModule#singletonStartup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
+    </li><li name="com.twitter.inject.logging.modules.LoggerModule#singletonStartup" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="singletonStartup(injector:com.twitter.inject.Injector):Unit"></a>
       <a id="singletonStartup(Injector):Unit"></a>
       <h4 class="signature">
@@ -1350,15 +1352,15 @@ due to install being deferred until after flag parsing occurs.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">singletonStartup</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+        <span class="name">singletonStartup</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@singletonStartup(injector:com.twitter.inject.Injector):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@singletonStartup(injector:com.twitter.inject.Injector):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Invoke after the injector is started</p><div class="fullcomment"><div class="comment cmt"><p>Invoke after the injector is started</p><p>This method should only get singleton instances from the injector.
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.modules.ExceptionMapperModule">ExceptionMapperModule</a> → <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.modules.LoggerModule">LoggerModule</a> → <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -1371,7 +1373,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>)</span><span class="result">: <span class="extype" name="java.lang.AnyRef.synchronized.T0">T0</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@synchronized[T0](x$1:=&gt;T0):T0" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1388,11 +1390,11 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">time</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="formatStr">formatStr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.time.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@time[T](formatStr:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@time[T](formatStr:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li><li name="scala.AnyRef#toString" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <a id="toString():String"></a>
@@ -1405,7 +1407,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@toString():String" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@toString():String" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1422,7 +1424,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@trace(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1439,7 +1441,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">trace</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@trace(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1456,7 +1458,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">wait</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@wait():Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@wait():Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1479,7 +1481,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>, <span name="arg1">arg1: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@wait(x$1:Long,x$2:Int):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1502,7 +1504,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Long" class="extype" target="_top">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@wait(x$1:Long):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@wait(x$1:Long):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1525,7 +1527,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="t">t: ⇒ <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@warn(msg:=&gt;Any,t:=&gt;Throwable):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1542,7 +1544,7 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">warn</span><span class="params">(<span name="msg">msg: ⇒ <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Any" class="extype" target="_top">Any</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@warn(msg:=&gt;Any):Unit" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
@@ -1559,12 +1561,12 @@ due to install being deferred until after flag parsing occurs.
         <span class="name">warnResult</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="func">func: ⇒ <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Logging.warnResult.T">T</span></span>
       </span>
       </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.modules.ExceptionMapperModule$@warnResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
+      <a href="../../../../../index.html#com.twitter.inject.logging.modules.LoggerModule$@warnResult[T](msg:String)(func:=&gt;T):T" title="Permalink" target="_top">
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
       <p class="shortcomment cmt">Log an warn msg that contains the result of the passed in func.</p><div class="fullcomment"><div class="comment cmt"><p>Log an warn msg that contains the result of the passed in func.
-</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>A string containing a single %s which will be replaced with the result of func.</p></dd><dt class="param">func</dt><dd class="cmt"><p>The function whose result will be placed in msg.</p></dd><dt>returns</dt><dd class="cmt"><p>Result of func</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
     </li></ol>
             </div>
 
@@ -1575,17 +1577,17 @@ due to install being deferred until after flag parsing occurs.
 
         <div id="inheritedMembers">
         <div class="parent" name="com.twitter.inject.TwitterModule">
-              <h3>Inherited from <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></h3>
+              <h3>Inherited from <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></h3>
             </div><div class="parent" name="com.twitter.inject.Logging">
-              <h3>Inherited from <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
+              <h3>Inherited from <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
             </div><div class="parent" name="grizzled.slf4j.Logging">
-              <h3>Inherited from <span class="extype" name="grizzled.slf4j.Logging">Logging</span></h3>
+              <h3>Inherited from <span class="extype" name="grizzled.slf4j.Logging">grizzled.slf4j.Logging</span></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterBaseModule">
-              <h3>Inherited from <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></h3>
+              <h3>Inherited from <a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterModuleLifecycle">
-              <h3>Inherited from <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></h3>
+              <h3>Inherited from <a href="../../TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterModuleFlags">
-              <h3>Inherited from <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></h3>
+              <h3>Inherited from <a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></h3>
             </div><div class="parent" name="com.google.inject.AbstractModule">
               <h3>Inherited from <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span></h3>
             </div><div class="parent" name="com.google.inject.Module">

@@ -100,23 +100,6 @@
       </a>
     </span>
       
-    </li><li name="com.twitter.finatra.http.exceptions.DefaultExceptionMapper" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="DefaultExceptionMapperextendsExceptionMapper[Throwable]"></a>
-      <a id="DefaultExceptionMapper:DefaultExceptionMapper"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="DefaultExceptionMapper.html"><span class="name">DefaultExceptionMapper</span></a><span class="result"> extends <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="scala.Throwable">Throwable</span>]</span>
-      </span>
-      </h4><span class="permalink">
-      <a href="../../../../../index.html#com.twitter.finatra.http.exceptions.package@DefaultExceptionMapperextendsExceptionMapper[Throwable]" title="Permalink" target="_top">
-        <img src="../../../../../lib/permalink.png" alt="Permalink" />
-      </a>
-    </span>
-      
     </li><li name="com.twitter.finatra.http.exceptions.ExceptionManager" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ExceptionManagerextendsAnyRef"></a>
       <a id="ExceptionManager:ExceptionManager"></a>
@@ -133,17 +116,20 @@
         <img src="../../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">A class to register ExceptionMappers and handle exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>A class to register ExceptionMappers and handle exceptions.</p><p>Given some exception, an ExceptionManager will find an ExceptionMapper
-to handle that particular class of exceptions. If the mapper for that
-exception isn't registered, ExceptionManager will try its parent
-class, and so on, until it reaches the Throwable class. At that point
-the DefaultExceptionMapper will run which should be defined over all
-Throwables.
+      <p class="shortcomment cmt">A class to register <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a>s
+and handle exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>A class to register <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a>s
+and handle exceptions.</p><p>Given an exception, the ExceptionManager will find an
+<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> to handle
+that particular class of exceptions. If the mapper for that exception
+isn't registered, the ExceptionManager will try the exception's parent class,
+and so on, until it reaches the Throwable class. The framework registers a &quot;root&quot;
+exception mapper over Throwable which will eventually be invoked. Users are
+free to register their own ExceptionMapper[Throwable] which overrides the
+&quot;root&quot; exception mapper.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd><dt>Exceptions thrown</dt><dd><span class="cmt"><p><span class="extype" name="java.lang.IllegalStateException"><code>java.lang.IllegalStateException</code></span> when an exception type is
-registered twice.
+        </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper">com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper</span>
 Note: When searching for the parent exception mapper, it would be nice
 to traverse the entire class linearization so it works for
 traits/mixins too [1]. Unfortunately, implementing this would require
@@ -168,6 +154,24 @@ Scala 2.11 might be easier and safer.
       </a>
     </span>
       <p class="shortcomment cmt">An ExceptionMapper converts a <code>T</code>-typed throwable to an HTTP response.</p>
+    </li><li name="com.twitter.finatra.http.exceptions.ExceptionMapperCollection" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ExceptionMapperCollectionextendsTraversable[Manifest[com.twitter.finatra.http.exceptions.ExceptionMapper[_]]]"></a>
+      <a id="ExceptionMapperCollection:ExceptionMapperCollection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ExceptionMapperCollection.html"><span class="name">ExceptionMapperCollection</span></a><span class="result"> extends <span class="extype" name="scala.Traversable">Traversable</span>[<span class="extype" name="scala.Predef.Manifest">Manifest</span>[<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[_]]]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.exceptions.package@ExceptionMapperCollectionextendsTraversable[Manifest[com.twitter.finatra.http.exceptions.ExceptionMapper[_]]]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <p class="shortcomment cmt">Represents a collection of <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a>s
+which is a Traversable[Manifest[ExceptionMapper[_\]\]\].</p>
     </li><li name="com.twitter.finatra.http.exceptions.ForbiddenException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ForbiddenExceptionextendsHttpExceptionwithProductwithSerializable"></a>
       <a id="ForbiddenException:ForbiddenException"></a>
@@ -287,6 +291,26 @@ Scala 2.11 might be easier and safer.
       </a>
     </span>
       
+    </li><li name="com.twitter.finatra.http.exceptions.DefaultExceptionMapper" visbl="pub" data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="DefaultExceptionMapperextendsExceptionMapper[Throwable]"></a>
+      <a id="DefaultExceptionMapper:DefaultExceptionMapper"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="DefaultExceptionMapper.html"><span class="name deprecated" title="Deprecated: (Since version 2016-09-07) Specially typing a default exception mapper is no longer necessary. Extend ExceptionMapper[Throwable] directly.">DefaultExceptionMapper</span></a><span class="result"> extends <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="scala.Throwable">Throwable</span>]</span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../../index.html#com.twitter.finatra.http.exceptions.package@DefaultExceptionMapperextendsExceptionMapper[Throwable]" title="Permalink" target="_top">
+        <img src="../../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2016-09-07)</i> Specially typing a default exception mapper is no longer necessary. Extend ExceptionMapper[Throwable] directly.</p></dd></dl></div>
     </li></ol>
             </div>
 

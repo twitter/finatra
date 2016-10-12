@@ -238,7 +238,7 @@ is overriding the default methods using a val instead of a def
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Only intended for use by the framework</p><div class="fullcomment"><div class="comment cmt"><p>Only intended for use by the framework</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">ONLY INTENDED FOR USE BY THE FRAMEWORK.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE BY THE FRAMEWORK.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.inject.app.App#addFrameworkOverrideModules" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit"></a>
       <a id="addFrameworkOverrideModules(Module*):Unit"></a>
@@ -255,7 +255,7 @@ is overriding the default methods using a val instead of a def
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Only intended for use by the framework</p><div class="fullcomment"><div class="comment cmt"><p>Only intended for use by the framework</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">ONLY INTENDED FOR USE BY THE FRAMEWORK.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE BY THE FRAMEWORK.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.server.AdminHttpServer#adminBoundAddress" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminBoundAddress:java.net.InetSocketAddress"></a>
       <a id="adminBoundAddress:InetSocketAddress"></a>
@@ -563,6 +563,23 @@ enable our health endpoint.
       </a>
     </span>
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#configureLoggerFactories" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="configureLoggerFactories():Unit"></a>
+      <a id="configureLoggerFactories():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">configureLoggerFactories</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.11.8/index.html#scala.Unit" class="extype" target="_top">Unit</a></span>
+      </span>
+      </h4><span class="permalink">
+      <a href="../../../../index.html#com.twitter.inject.server.TwitterServer@configureLoggerFactories():Unit" title="Permalink" target="_top">
+        <img src="../../../../lib/permalink.png" alt="Permalink" />
+      </a>
+    </span>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → Logging</dd></dl></div>
     </li><li name="grizzled.slf4j.Logging#debug" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(msg:=&gt;Any,t:=&gt;Throwable):Unit"></a>
       <a id="debug(⇒Any,⇒Throwable):Unit"></a>
@@ -1307,7 +1324,9 @@ a warmup handler in #warmup.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Override modules from Java which redefine production bindings (only use overrideModules during testing)</p><div class="fullcomment"><div class="comment cmt"><p>Override modules from Java which redefine production bindings (only use overrideModules during testing)</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">ONLY INTENDED FOR USE IN TESTING.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE IN TESTING.</p><p>Override modules from Java which redefine production bindings (only use overrideModules during testing)
+If you think you need this in your main server you are most likely doing something incorrectly.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#levelFlag" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]"></a>
       <a id="levelFlag:Flag[Level]"></a>
@@ -1377,7 +1396,7 @@ a warmup handler in #warmup.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Only intended for use by the framework</p><div class="fullcomment"><div class="comment cmt"><p>Only intended for use by the framework</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">ONLY INTENDED FOR USE BY THE FRAMEWORK.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE BY THE FRAMEWORK.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../package.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#log" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="log:com.twitter.logging.Logger"></a>
       <a id="log:logging.Logger"></a>
@@ -1632,7 +1651,9 @@ a warmup handler in #warmup.
         <img src="../../../../lib/permalink.png" alt="Permalink" />
       </a>
     </span>
-      <p class="shortcomment cmt">Override modules which redefine production bindings (only use overrideModules during testing)</p><div class="fullcomment"><div class="comment cmt"><p>Override modules which redefine production bindings (only use overrideModules during testing)</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+      <p class="shortcomment cmt">ONLY INTENDED FOR USE IN TESTING.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE IN TESTING.</p><p>Override modules which redefine production bindings (only use overrideModules during testing)
+If you think you need this in your main server you are most likely doing something incorrectly.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#postInjectorStartup" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postInjectorStartup():Unit"></a>
       <a id="postInjectorStartup():Unit"></a>
