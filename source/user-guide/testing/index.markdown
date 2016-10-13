@@ -157,7 +157,7 @@ import com.twitter.inject.IntegrationTest
 class ExampleIntegrationTest extends IntegrationTest {
   override val injector =
     TestInjector(
-      clientFlags = Map("foo.flag" -> "meaningfulValue"),
+      flags = Map("foo.flag" -> "meaningfulValue"),
       modules = Seq(ExampleModule))
 
   "MyTest" should  {
@@ -205,7 +205,7 @@ class MyServiceStartupTest extends FeatureTest {
   val server = new EmbeddedHttpServer(
     stage = Stage.PRODUCTION,
     twitterServer = new SampleApiServer,
-    clientFlags = Map(
+    flags = Map(
       "com.twitter.server.resolverMap" -> "some-thrift-service=nil!"
     ))
 
