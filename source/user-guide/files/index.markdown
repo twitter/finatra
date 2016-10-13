@@ -55,7 +55,7 @@ get("/:*") { request: Request =>
 ## <a class="anchor" name="mustache" href="#mustache">Mustache Templating</a>
 ===============================
 
-Finatra supports the rendering of mustache templates. The framework provides a default [MustacheModule](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala) but this is configurable. To set your own module override the mustacheModule def in [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L91), e.g.,
+Finatra supports the rendering of mustache templates. The framework provides a default [MustacheModule](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala) but this is configurable. To set your own module override the mustacheModule def in [`c.t.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L91), e.g.,
 
 ```scala
 class ExampleServer extends HttpServer {
@@ -103,7 +103,7 @@ get("/foo") { request: Request =>
 ```
 <div></div>
 
-Or you can programmatically render a template into a string using `com.twitter.finatra.http.marshalling.mustache.MustacheService#createString` method. This is useful for embedding the resultant content inside a field in a response.
+Or you can programmatically render a template into a string using [`c.t.finatra.http.marshalling.mustache.MustacheService#createString`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/mustache/MustacheService.scala#L37) method. This is useful for embedding the resultant content inside a field in a response.
 
 ```scala
 

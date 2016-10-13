@@ -71,11 +71,11 @@ Here we are adding *by type* allowing the framework to handle class instantiatio
 ## <a class="anchor" name="controllers-and-routing" href="#controllers-and-routing">Controllers and Routing</a>
 ===============================
 
-Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a [`com.twitter.finagle.http.Request`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala) or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a [`com.twitter.finagle.http.Response`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala).
+Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a [`c.t.finagle.http.Request`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala) or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a [`c.t.finagle.http.Response`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala).
 
 When Finatra receives an HTTP request, it will scan all registered controllers **in the order they are added** and dispatch the request to the **first matching** route starting from the top of each controller then invoking the matching route's associated callback function. That is, routes are matched in the order they are added to the HttpRouter. Thus if you are creating routes overlapping URIs it is recommended to list the routes in order starting with the "most specific" to the least specific.
 
-In general, however, it is recommended to that you follow [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) conventions if possible, e.g., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stating provided by Finatra in the [`com.twitter.finatra.http.filters.StatsFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala) works best when this convention is followed.
+In general, however, it is recommended to that you follow [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) conventions if possible, e.g., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stating provided by Finatra in the [`c.t.finatra.http.filters.StatsFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala) works best when this convention is followed.
 
 ```scala
 class GroupsController extends Controller {
@@ -193,7 +193,7 @@ By default if you do not provide any customization to the `AdminIndexInfo` the r
 Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle `http` Request or a custom `case class` Request.
 
 ### Finagle `http` Request:
-This is a [com.twitter.finagle.http.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request) which contains common HTTP attributes.
+This is a [c.t.finagle.http.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request) which contains common HTTP attributes.
 
 ### Custom `case class` Request
 Custom requests allow declarative request parsing with support for type conversions, default values, and validations.
@@ -278,9 +278,9 @@ def deserializeRequest(name: String) = {
 
 For more information and examples, see:
 
-- [`com.twitter.finatra.http.request.RequestUtils`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
-- [`com.twitter.finatra.http.fileupload.MultipartItem`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala)
-- [`com.twitter.finagle.http.Request#decodeBytes`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192)
+- [`c.t.finatra.http.request.RequestUtils`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)
+- [`c.t.finatra.http.fileupload.MultipartItem`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala)
+- [`c.t.finagle.http.Request#decodeBytes`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192)
 - [DoEverythingController](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala#L568)
 - [DoEverythingServerFeatureTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L332)
 - [MultiParamsTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala)
@@ -333,14 +333,14 @@ Note: If you change the default [MessageBodyWriter](https://github.com/twitter/f
 
 For the basics of Futures in Finatra, see: [Futures](/finatra/user-guide/getting-started#futures) in the [Getting Started](/finatra/user-guide/getting-started) documentation.
 
-Finatra will convert your route callbacks return type into a `com.twitter.util.Future[Response]` using the following rules:
+Finatra will convert your route callbacks return type into a `c.t.util.Future[Response]` using the following rules:
 
-* If you return a `com.twitter.util.Future[Response]`, then no conversion will be performed.
+* If you return a `c.t.util.Future[Response]`, then no conversion will be performed.
 * `Some[T]` will be converted into a HTTP `200 OK`.
 * `None` will be converted into a HTTP `404 NotFound`.
 * Non-response classes will be converted into a HTTP `200 OK`.
 
-Callbacks that do not return a [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) will have their return values wrapped in a [`com.twitter.util.ConstFuture`](https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture). If your non-future result calls a blocking method, you must [avoid blocking the Finagle request](https://twitter.github.io/scala_school/finagle.html#DontBlock) by wrapping your blocking operation in a FuturePool e.g.
+Callbacks that do not return a [`c.t.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) will have their return values wrapped in a [`c.t.util.ConstFuture`](https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture). If your non-future result calls a blocking method, you must [avoid blocking the Finagle request](https://twitter.github.io/scala_school/finagle.html#DontBlock) by wrapping your blocking operation in a FuturePool e.g.
 
 ```scala
 import com.twitter.finatra.utils.FuturePools
@@ -359,7 +359,7 @@ class MyController extends Controller {
 <div></div>
 
 ### <a class="anchor" name="response-builder" href="#response-builder">Response Builder</a>
-All HTTP Controllers have a protected `response` field of type [`com.twitter.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala) which can be used to build callback responses. For example:
+All HTTP Controllers have a protected `response` field of type [`c.t.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala) which can be used to build callback responses. For example:
 
 ```scala
 get("/foo") { request: Request =>
@@ -405,7 +405,7 @@ post("/users") { request: MyPostRequest =>
 For more examples, see the [ResponseBuilderTest](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala).
 
 ### Cookies:
-Cookies, like Headers, are read from request and can set via the [`com.twitter.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala#L151):
+Cookies, like Headers, are read from request and can set via the [`c.t.finatra.http.response.ResponseBuilder`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala#L151):
 
 ```scala
 get("/") { request =>
@@ -424,7 +424,7 @@ get("/") { request =>
 ```
 <div></div>
 
-Advanced cookies are supported by creating and configuring [`com.twitter.finagle.http.Cookie`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Cookie.scala) objects:
+Advanced cookies are supported by creating and configuring [`c.t.finagle.http.Cookie`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Cookie.scala) objects:
 
 ```scala
 get("/") { request =>

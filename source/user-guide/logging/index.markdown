@@ -30,7 +30,7 @@ Since [SLF4J](http://www.slf4j.org/manual.html) is an interface, it requires an 
 
 While there are several scala-wrappers for SLF4J, Finatra uses and exposes some additional features on top of the excellent [grizzled-slf4j](http://software.clapper.org/grizzled-slf4j/) project.
 
-The main logging utility is the [com.twitter.inject.Logging](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Logging.scala) trait which can be mixed into any object or class:
+The main logging utility is the [c.t.inject.Logging](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Logging.scala) trait which can be mixed into any object or class:
 
 ```scala
 
@@ -45,7 +45,7 @@ class MyClass extends Logging {
 ```
 <div></div>
 
-This trait is a wrapper over the `grizzled.slf4j.Logger`[[documentation](http://software.clapper.org/grizzled-slf4j/api/#grizzled.slf4j.Logger)] and adds some utility methods on top of the `grizzled.slf4j.Logger`. For more information see the [scaladoc](/finatra/docs/index.html#com.twitter.inject.Logging) for `com.twitter.inject.Logging`.
+This trait is a wrapper over the `grizzled.slf4j.Logger`[[documentation](http://software.clapper.org/grizzled-slf4j/api/#grizzled.slf4j.Logger)] and adds some utility methods on top of the `grizzled.slf4j.Logger`. For more information see the [scaladoc](/finatra/docs/index.html#com.twitter.inject.Logging) for `c.t.inject.Logging`.
 
 ## <a class="anchor" name="logback" href="#logback">Logback</a>
 ===============================

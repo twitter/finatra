@@ -35,7 +35,7 @@ The version of Finatra documented here is v2.x. Version 2.x is a *complete re-wr
     - [Responses](/finatra/user-guide/build-new-http-server/controller.html#responses)
   - [Add Filters](/finatra/user-guide/build-new-http-server/filter.html)
     - [Request Scope](/finatra/user-guide/build-new-http-server/filter.html#request-scope)
-      - [Using `com.twitter.finagle.http.Request#ctx`](/finatra/user-guide/build-new-http-server/filter.html#request-ctx)
+      - [Using `c.t.finagle.http.Request#ctx`](/finatra/user-guide/build-new-http-server/filter.html#request-ctx)
   - [Add an ExceptionMapper](/finatra/user-guide/build-new-http-server/exceptions.html)
   - [Implement a Server "Warmup" Handler](/finatra/user-guide/build-new-http-server/warmup.html)
   - [More information](/finatra/user-guide/build-new-http-server/warmup.html#more-information)

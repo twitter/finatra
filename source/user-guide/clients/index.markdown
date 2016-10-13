@@ -16,7 +16,7 @@ footer: true
 
 When writing your server there may be times you want to make calls to other services. Finatra is built on-top of [Finagle](https://github.com/twitter/finagle) and as such you can always use Finagle directly to create [clients](http://twitter.github.io/finagle/guide/Clients.html) to other services. With that, Finatra has a few utilities to aid in making some of the more common clients you may want to create in your servers.
 
-In Finagle, a client and a server are always of type [`com.twitter.finagle.Service[Req, Rep]`](https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Service.scala); where a `Service` is an asynchronous function from a `Rep` to a `Future[Rep]`. For HTTP, `Req` is generally of type [`com.twitter.finagle.http.Request`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala) and `Rep` of type [`com.twitter.finagle.http.Response`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala).
+In Finagle, a client and a server are always of type [`c.t.finagle.Service[Req, Rep]`](https://github.com/twitter/finagle/blob/develop/finagle-core/src/main/scala/com/twitter/finagle/Service.scala); where a `Service` is an asynchronous function from a `Rep` to a `Future[Rep]`. For HTTP, `Req` is generally of type [`c.t.finagle.http.Request`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala) and `Rep` of type [`c.t.finagle.http.Response`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala).
 
 ### Simple Http Client
 

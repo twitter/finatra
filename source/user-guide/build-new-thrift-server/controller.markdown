@@ -15,7 +15,7 @@ footer: true
 ## Thrift Controller Basics
 ===============================
 
-A *Thrift Controller* is an implementation of your thrift service. To create the controller, extend the `com.twitter.finatra.thrift.Controller` trait and mix-in the [Scrooge](http://twitter.github.io/scrooge/)-generated `BaseServiceIface` trait for your service. Scrooge generates a `ServiceIface` which is a case class containing a `Service` for each thrift method over the corresponding `Args` and `Result` structures for the method that extends from the `BaseServiceIface` trait. E.g,
+A *Thrift Controller* is an implementation of your thrift service. To create the controller, extend the [`c.t.finatra.thrift.Controller`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala) trait and mix-in the [Scrooge](http://twitter.github.io/scrooge/)-generated `BaseServiceIface` trait for your service. Scrooge generates a `ServiceIface` which is a case class containing a `Service` for each thrift method over the corresponding `Args` and `Result` structures for the method that extends from the `BaseServiceIface` trait. E.g,
 
 ```scala
 case class ServiceIface(
@@ -26,7 +26,7 @@ case class ServiceIface(
 
 For Thrift Controllers we use the `BaseServiceIface` trait since we are not able to extend the `ServiceIface` case class.
 
-The Finatra `com.twitter.finatra.thrift.Controller` provides a DSL with which you can easily implement your thrift service methods via a `handle(ThriftMethod)` function that takes a callback from `ThriftMethod.Args => Future[ThriftMethod.Result]`.
+The Finatra `c.t.finatra.thrift.Controller` provides a DSL with which you can easily implement your thrift service methods via a `handle(ThriftMethod)` function that takes a callback from `ThriftMethod.Args => Future[ThriftMethod.Result]`.
 
 For example, given the following thrift IDL: `example_service.thrift`
 

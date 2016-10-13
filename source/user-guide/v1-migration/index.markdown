@@ -41,7 +41,7 @@ request.params("q")
 ```
 
 ## Logging
-To continue using "Java Util Logging", add a jar dependency on [`slf4j-jdk14`](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.slf4j%22%20AND%20a%3A%22slf4j-jdk14%22). Otherwise, we recommend using [Logback][logback] by adding jar dependencies on `ch.qos.logback:logback-classic` and `com.twitter.finatra:finatra-slf4j`.
+To continue using "Java Util Logging", add a jar dependency on [`slf4j-jdk14`](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.slf4j%22%20AND%20a%3A%22slf4j-jdk14%22). Otherwise, we recommend using [Logback][logback] by adding jar dependencies on `ch.qos.logback:logback-classic` and `com.twitter:finatra-slf4j`.
 
 ```scala
 //v1
@@ -58,12 +58,12 @@ trait ExceptionMapper[T <: Throwable] {
   def toResponse(request: Request, throwable: T): Response
 }
 ```
-which says it will handle `T`-typed exceptions. The request that triggered the exception is also provided as an argument. You can make use of exception mapping by adding the [`ExceptionMappingFilter`](../http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) to your `com.twitter.finatra.routing.HttpRouter`, e.g.,
+which says it will handle `T`-typed exceptions. The request that triggered the exception is also provided as an argument. You can make use of exception mapping by adding the [`ExceptionMappingFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/ExceptionMappingFilter.scala) to your `c.t.finatra.routing.HttpRouter`, e.g.,
 ```scala
 router.filter[ExceptionMappingFilter[Request]]
 ```
 
-The `ExceptionMappingFilter` takes an [`ExceptionManager`](../http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ExceptionManager.scala) which is provided by default in the [`ExceptionMapperModule`](../http/src/main/scala/com/twitter/finatra/http/modules/ExceptionMapperModule.scala). You can override the default module if necessary by overriding the value in the [`HttpServer`](../http/src/main/scala/com/twitter/finatra/http/HttpServer.scala).
+The `ExceptionMappingFilter` takes an [`ExceptionManager`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala) which is provided by default in the [`ExceptionManagerModule`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala). You can override the default module if necessary by overriding the value in the [`HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala).
 
 To replicate v1 functionality around `notFound` and `error`, you could do the following:
 ```scala

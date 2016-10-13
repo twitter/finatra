@@ -15,7 +15,7 @@ footer: true
 ## Basics
 ===============================
 
-The ThriftRouter allows your to build a global filter chain that will trigger on the request path when executing an RPC call to the ThriftController. Filters must be a subclass of `com.twitter.finatra.thrift.ThriftFilter` which is a `com.twitter.finagle.Filter[ThriftRequest[T], Rep, ThriftRequest[T], Rep]` that is polymorphic in `T`.
+The ThriftRouter allows your to build a global filter chain that will trigger on the request path when executing an RPC call to the ThriftController. Filters must be a subclass of [`c.t.finatra.thrift.ThriftFilter`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftFilter.scala) which is a `c.t.finagle.Filter[ThriftRequest[T], Rep, ThriftRequest[T], Rep]` that is polymorphic in `T`.
 
 If you want to apply a filter (or filters) in your server you can do the following:
 

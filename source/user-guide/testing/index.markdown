@@ -44,16 +44,16 @@ The embedded utilities are also useful for testing and debugging your code when 
 
 See:
 
-- [`com.twitter.inject.app.EmbeddedApp`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala)
-- [`com.twitter.inject.server.EmbeddedTwitterServer`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)
-- [`com.twitter.finatra.http.EmbeddedHttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala)
-- [`com.twitter.finatra.thrift.EmbeddedThriftServer`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala)
+- [`c.t.inject.app.EmbeddedApp`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala)
+- [`c.t.inject.server.EmbeddedTwitterServer`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)
+- [`c.t.finatra.http.EmbeddedHttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala)
+- [`c.t.finatra.thrift.EmbeddedThriftServer`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala)
 
 <div></div>
 
 ![Embedded Classes](/finatra/images/embedded.png)
 
-You'll notice that this hierarchy generally follows the server class hierarchy as [`com.twitter.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala) and [`com.twitter.finatra.thrift.ThriftServer`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala) extend from [`com.twitter.server.TwitterServer`](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala) which extends from [`com.twitter.app.App`](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala).
+You'll notice that this hierarchy generally follows the server class hierarchy as [`c.t.finatra.http.HttpServer`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala) and [`c.t.finatra.thrift.ThriftServer`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala) extend from [`c.t.server.TwitterServer`](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala) which extends from [`c.t.app.App`](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala).
 
 ## <a class="anchor" name="test-helpers" href="#test-helpers">Test Helper Classes</a>
 ===============================
@@ -66,7 +66,7 @@ If you are familiar with [Gherkin](http://docs.behat.org/en/v2.5/guides/1.gherki
 
 We highly recommend writing feature tests for your services as they provide a very good signal of whether you have correctly implemented the features of your service. If you haven't implemented the feature correctly, it almost doesn't matter that you have lots of unit tests.
 
-For example, to write a feature test for an HTTP server, extend the `com.twitter.inject.server.FeatureTest` trait. Then override the `server` with an instance of your [`EmbeddedHttpServer`](#embedded-server).
+For example, to write a feature test for an HTTP server, extend the `c.t.inject.server.FeatureTest` trait. Then override the `server` with an instance of your [`EmbeddedHttpServer`](#embedded-server).
 
 ```scala
 import com.twitter.finatra.http.EmbeddedHttpServer
@@ -108,7 +108,7 @@ class ExampleThriftServerFeatureTest extends FeatureTest {
 ```
 <div></div>
 
-If you are extending both `com.twitter.finatra.http.HttpServer` **and** `com.twitter.finatra.thrift.ThriftServer` then you can feature test by constructing an `EmbeddedHttpServer with ThriftClient`, e.g.,
+If you are extending both `c.t.finatra.http.HttpServer` **and** `c.t.finatra.thrift.ThriftServer` then you can feature test by constructing an `EmbeddedHttpServer with ThriftClient`, e.g.,
 
 ```scala
 import com.twitter.finatra.http.EmbeddedHttpServer
@@ -137,7 +137,7 @@ class ExampleCombinedServerFeatureTest extends FeatureTest {
 <div></div>
 
 #### Note:
-The `server` is specified as a `def` in `com.twitter.inject.server.FeatureTest` trait. If you only want to start **one instance of your server per test file** make sure to override this `def` with a `val`.
+The `server` is specified as a `def` in `c.t.inject.server.FeatureTest` trait. If you only want to start **one instance of your server per test file** make sure to override this `def` with a `val`.
 
 For more advanced examples see:
 
@@ -147,9 +147,9 @@ For more advanced examples see:
 
 ### <a class="anchor" name="integration-tests" href="#integration-tests">Integration Tests</a>
 
-Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across a few interfaces in the system. In Finatra, we provide the [`com.twitter.inject.app.TestInjector`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala) which allows you to pass it a set of modules and flags to construct a minimal object graph.
+Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across a few interfaces in the system. In Finatra, we provide the [`c.t.inject.app.TestInjector`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala) which allows you to pass it a set of modules and flags to construct a minimal object graph.
 
-To write an integration test, extend the `com.twitter.inject.IntegrationTest` trait. Then override the `injector` val with your constructed instance of `com.twitter.inject.app.TestInjector`. You'll then be able to access instances of necessary classes to execute tests.
+To write an integration test, extend the `c.t.inject.IntegrationTest` trait. Then override the `injector` val with your constructed instance of `c.t.inject.app.TestInjector`. You'll then be able to access instances of necessary classes to execute tests.
 
 ```scala
 import com.twitter.inject.IntegrationTest
@@ -174,11 +174,11 @@ class ExampleIntegrationTest extends IntegrationTest {
 
 ### <a class="anchor" name="http-tests" href="#http-tests">Http Tests</a>
 
-If you are writing a test that has an HTTP server under test, you can optionally extend the [`com.twitter.finatra.http.HttpTest`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala) trait. This trait provides some common utilities for HTTP testing.
+If you are writing a test that has an HTTP server under test, you can optionally extend the [`c.t.finatra.http.HttpTest`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala) trait. This trait provides some common utilities for HTTP testing.
 
 ### <a class="anchor" name="thrift-tests" href="#thrift-tests">Thrift Tests</a>
 
-As shown above, thrift servers can be tested through a [`ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala). The Finatra test framework provides an easy way get access to a real [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) for making calls to your running server in a test. In the case here, creating a [`ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala) requires the thrift service type `T`. This type is expected to be the trait subclass of `com.twitter.scrooge.ThriftService` in the form of `YourService[+MM[_]]`.
+As shown above, thrift servers can be tested through a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala). The Finatra test framework provides an easy way get access to a real [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) for making calls to your running server in a test. In the case here, creating a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala) requires the thrift service type `T`. This type is expected to be the trait subclass of `c.t.scrooge.ThriftService` in the form of `YourService[+MM[_]]`.
 
 ## <a class="anchor" name="startup-tests" href="#startup-tests">Startup Tests</a>
 ===============================
@@ -192,7 +192,7 @@ As such, we recommend creating a simple test -- a `StartupTest` to check that yo
 * a `StartupTest` should mimic production as closely as possible. Thus:
     - avoid using `@Bind` and [override modules](#override-modules).
     - set the [Guice `com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `Stage.DEVELOPMENT` by default).
-    - prevent Finagle clients from making outbound connections during startup tests by setting any `com.twitter.server.resolverMap` entries to `nil!`.
+    - prevent Finagle clients from making outbound connections during startup tests by setting any `c.t.server.resolverMap` entries to `nil!`.
 
 For example:
 
@@ -223,7 +223,7 @@ class MyServiceStartupTest extends FeatureTest {
 ## <a class="anchor" name="mocks" href="#mocks">Working with Mocks</a>
 ===============================
 
-[`com.twitter.inject.Mockito`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala) provides [Specs2](https://etorreborre.github.io/specs2/) Mockito syntax sugar for [ScalaTest](http://www.scalatest.org/).
+[`c.t.inject.Mockito`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala) provides [Specs2](https://etorreborre.github.io/specs2/) Mockito syntax sugar for [ScalaTest](http://www.scalatest.org/).
 
 This is a drop-in replacement for [`org.specs2.mock.Mockito`](http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html). We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures won't be propagated up as ScalaTest test failures.
 
@@ -333,7 +333,7 @@ class ExampleFeatureTest
 
 #### N.B.:
 
-* You **MUST** extend from either `com.twitter.inject.IntegrationTest` directly or from a sub-class. We recommend using `com.twitter.inject.server.FeatureTest`. See more information on these test traits in the [Feature Tests](#feature-tests) section.
+* You **MUST** extend from either [`c.t.inject.IntegrationTest`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTest.scala) directly or from a sub-class. We recommend using [`c.t.inject.server.FeatureTest`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala). See more information on these test traits in the [Feature Tests](#feature-tests) section.
 * Prefer to define `@Bind` and `@Inject` variables before the server definition.
 * While we support the `com.google.inject.testing.fieldbinder.Bind` annotation, our integration does not currently support the `to` annotation field, e.g., `@Bind(to = classOf[T])`, therefore,
 * The type of the variable you annotate with `@Bind` must *exactly* match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,
@@ -342,9 +342,9 @@ class ExampleFeatureTest
 ```
 * Because of lifecycle reasons, access to the embedded server **MUST** either be from a lazy variable or inside a test method.
 
-For a complete example, see the [`TwitterCloneFeatureTest`](https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala).
+For a complete example, see the [TwitterCloneFeatureTest](https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala).
 
-There is also another way to user this type of binding in tests (which will eventually become the preferred way) that does not have the above caveats (but instead comes with a different caveat). You can also achieve the above `@Bind` behavior by using [`EmbeddedTwitterServer#bind`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L136). Unfortunately, we have not yet migrated from using Scala Manifests and thus this method suffers from not being able to fully support [higher-kinded](http://blogs.atlassian.com/2013/09/scala-types-of-a-higher-kind/) types. 
+There is also another way to user this type of binding in tests (which will eventually become the preferred way) that does not have the above caveats (but instead comes with a different caveat). You can also achieve the above `@Bind` behavior by using [`c.t.inject.server.EmbeddedTwitterServer#bind`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L136). Unfortunately, we have not yet migrated from using Scala Manifests and thus this method suffers from not being able to fully support [higher-kinded](http://blogs.atlassian.com/2013/09/scala-types-of-a-higher-kind/) types. 
 
 To use, you can do:
 

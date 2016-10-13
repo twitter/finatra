@@ -11,7 +11,7 @@ footer: true
   <li class="active">Getting Started</li>
 </ol>
 
-Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [com.twitter.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [TwitterServer](http://twitter.github.io/twitter-server/) and [Finagle](https://twitter.github.io/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller, per route in a controller, or across controllers.
+Finatra at it's core is agnostic to the *type* of service being created. It can be used for anything based on [twitter/util](https://github.com/twitter/util): [c.t.app.App](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala"). Finatra builds on top of the [features](http://twitter.github.io/twitter-server/Features.html) of [TwitterServer](http://twitter.github.io/twitter-server/) and [Finagle](https://twitter.github.io/finagle) by allowing you to easily define a [Server](http://twitter.github.io/finagle/guide/Servers.html) and controllers (a [Service](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#services)-like abstraction) which define and handle endpoints of the Server. You can also compose [Filters](http://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters) either per controller, per route in a controller, or across controllers.
 
 ## <a class="no-pad-anchor" name="dependencies" href="#dependencies">Basics</a>
 ===============================
@@ -177,7 +177,7 @@ At a high-level, the start-up lifecycle of a Finatra server looks like:
 
 ![Server Lifecycle](/finatra/images/FinatraLifecycle.png)
 
-Upon *graceful* shutdown, all registered `onExit {...}` blocks are executed (see [`com.twitter.util.App#exits`](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala#L69)). This includes closing the external interface(s), the admin interface, and firing the [`TwitterModule#singletonShutdown`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L25) on all installed modules. See the next section for more information on [Modules](#modules).
+Upon *graceful* shutdown, all registered `onExit {...}` blocks are executed (see [`c.t.util.App#exits`](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala#L69)). This includes closing the external interface(s), the admin interface, and firing the [`c.t.inject.TwitterModuleLifecycle#singletonShutdown`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L25) on all installed modules. See the next section for more information on [Modules](#modules).
 
 
 ### <a class="anchor" name="modules" href="#modules">Modules</a>
@@ -185,7 +185,7 @@ Upon *graceful* shutdown, all registered `onExit {...}` blocks are executed (see
 
 Modules are used in conjunction with dependency injection to specify *how* to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: [Flags](/finatra/user-guide/getting-started#flags)).
 
-We provide a [TwitterModule](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala) base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by [codingwell/scala-guice](https://github.com/codingwell/scala-guice).
+We provide a [`c.t.inject.TwitterModule`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala) base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by [codingwell/scala-guice](https://github.com/codingwell/scala-guice).
 
 #### Module Definition
 * [twitter/util](https://github.com/twitter/util) [Flags](#flags) can be defined inside modules. This allows for re-usable scoping of external configuration that can be composed into a server via the module.
@@ -312,9 +312,9 @@ will de-dupe the module list so there is no penalty but you may want to prefer t
 
 #### Module Lifecycle
 
-Modules also have a hook into the Server lifecycle through the [TwitterModuleLifecycle](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module. For example, the framework uses the `singletonStartup` lifecycle method in the [`Slf4jBridgeModule`](https://github.com/twitter/finatra/blob/develop/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala#L7) to install the [`SLF4JBridgeHandler`](http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html) (see: [Logging](/finatra/user-guide/logging)).
+Modules also have hooks into the Server lifecycle through the [`c.t.inject.TwitterModuleLifecycle`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module.
 
-The [`com.twitter.inject.TwitterModule`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala) exposes the lifecycle methods: `TwitterModule#singletonStartup` and `TwitterModule#singletonShutdown`. If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the `singletonStartup` method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the `singletonShutdown` method of your TwitterModule to close or shutdown any resources provided by the module.
+If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the `singletonStartup` method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the `singletonShutdown` method of your TwitterModule to close or shutdown any resources provided by the module.
 
 Additionally, there is also the `TwitterModule#singletonPostWarmupComplete` method which allows modules to hook into the server lifecycle after external ports have been bound, clients have been resolved, and the server is ready to accept traffic but before the `App#run` or `Server#start` callbacks are invoked.
 
@@ -482,12 +482,12 @@ object MyModule1 extends TwitterModule {
 }
 ```
 
-### <a class="anchor" name="futures" href="#futures">Futures</a> (`com.twitter.util.Future` vs. `scala.concurrent.Future`)
+### <a class="anchor" name="futures" href="#futures">Futures</a> (`c.t.util.Future` vs. `scala.concurrent.Future`)
 ===============================
 
-Finatra, like other frameworks based on Twitter's [Finagle](https://twitter.github.io/finagle), uses the [twitter/util](https://github.com/twitter/util) [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) class. Twitter's `com.twitter.util.Future` is similar to, but predates, [Scala's](http://docs.scala-lang.org/overviews/core/futures.html) [`scala.concurrent.Future`](http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future) (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is *not* compatible without using a [bijection](https://github.com/twitter/bijection) to transform one into the other. It is important to remember that **Finatra uses and expects** [`com.twitter.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala).
+Finatra, like other frameworks based on Twitter's [Finagle](https://twitter.github.io/finagle), uses the [twitter/util](https://github.com/twitter/util) [`c.t.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala) class. Twitter's `com.twitter.util.Future` is similar to, but predates, [Scala's](http://docs.scala-lang.org/overviews/core/futures.html) [`scala.concurrent.Future`](http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future) (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is *not* compatible without using a [bijection](https://github.com/twitter/bijection) to transform one into the other. It is important to remember that **Finatra uses and expects** [`c.t.util.Future`](https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala).
 
-For more information on [twitter/bijection](https://github.com/twitter/bijection) it is highly recommended that you read the [bijection README](https://github.com/twitter/bijection/blob/develop/README.md). For more information on converting between a `com.twitter.util.Future` and a `scala.concurrent.Future` see this [thread](https://groups.google.com/forum/#!searchin/finaglers/UtilBijections/finaglers/DjCqv1Vyw0Q/IWwh9y43CAAJ).
+For more information on [twitter/bijection](https://github.com/twitter/bijection) it is highly recommended that you read the [bijection README](https://github.com/twitter/bijection/blob/develop/README.md). For more information on converting between a `c.t.util.Future` and a `scala.concurrent.Future` see this [thread](https://groups.google.com/forum/#!searchin/finaglers/UtilBijections/finaglers/DjCqv1Vyw0Q/IWwh9y43CAAJ).
 
 A simple example,
 
@@ -500,7 +500,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{Future => ScalaFuture}
 
 val scalaFuture: ScalaFuture[T] = {...} // some call that returns scala.concurrent.Future[T]
-scalaFuture.as[TwitterFuture[T]]        // this converts the scala.concurrent.Future[T] to a com.twitter.util.Future[T]
+scalaFuture.as[TwitterFuture[T]]        // this converts the scala.concurrent.Future[T] to a c.t.util.Future[T]
 ```
 <div></div>
 

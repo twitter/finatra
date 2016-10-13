@@ -21,9 +21,9 @@ Finatra's thrift support is meant to be used in conjunction with [Finagle](http:
 ## <a class="anchor" name="server-definition" href="#server-definition">Create a Server definition</a>
 ===============================
 
-To start, add a dependency on the `com.twitter.finatra:finatra-thrift_{scala-version}` library. We also highly recommend depending on `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [SLF4J](http://www.slf4j.org/manual.html) implementation. For more information on logging with Finatra see: [Logging](/finatra/user-guide/logging).
+To start, add a dependency on the `com.twitter:finatra-thrift_{scala-version}` library. We also highly recommend depending on `ch.qos.logback:logback-classic` to choose [Logback](http://logback.qos.ch/) as your [SLF4J](http://www.slf4j.org/manual.html) implementation. For more information on logging with Finatra see: [Logging](/finatra/user-guide/logging).
 
-Create a new class that extends [`com.twitter.finatra.thrift.ThriftServer`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala):
+Create a new class that extends [`c.t.finatra.thrift.ThriftServer`](https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala):
 
 ```scala
 import DoEverythingModule
