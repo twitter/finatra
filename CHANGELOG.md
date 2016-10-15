@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-thrift-client: (BREAKING API CHANGE) Update filter building API with
+  FilteredThriftClientModule. The `c.t.inject.thrift.filters.ThriftClientFilterChain`
+  builder API has changed along with the underlying mechanisms to support
+  enforcement of a "correct" filter order when using the helper methods. Methods
+  have been renamed to a 'with'-syntax to be more inline with other builders and
+  the confusing "globalFilter" method to the more verbose but more accurate
+  "withAgnosticFilter". ``RB_ID=878260``
+* inject-thrift-client: Remove deprecated package aliases. We'd like people to
+  move the correct packages.``RB_ID=879330``
+
 ### Fixed
 
 ### Closed
@@ -23,8 +33,6 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
-* inject-thrift-client: Remove deprecated package aliases. We'd like people to
-  move the correct packages.``RB_ID=879330``
 * finatra: No longer need to add an additional resolver that points to
   maven.twttr.com. ``RB_ID=878967``
 * inject-thrift-client: Stop counting response failures in the

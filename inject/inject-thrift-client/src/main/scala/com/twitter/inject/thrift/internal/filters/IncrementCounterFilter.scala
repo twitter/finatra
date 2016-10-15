@@ -1,11 +1,10 @@
-package com.twitter.inject.thrift.internal
+package com.twitter.inject.thrift.internal.filters
 
 import com.twitter.finagle.stats.Counter
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.scrooge.{ThriftResponse, ThriftStruct}
 import com.twitter.util._
 
-private[thrift] class IncrementCounterFilter[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
+private[thrift] class IncrementCounterFilter[Req, Rep](
   counter: Counter)
   extends SimpleFilter[Req, Rep] {
 

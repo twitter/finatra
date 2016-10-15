@@ -19,9 +19,8 @@ object GreeterThriftClientModule
 
     serviceIface.copy(
       hi = filter.method(Hi)
-        .timeout(2.minutes)
-        .constantRetry(
-          requestTimeout = 1.minute,
+        .withTimeout(2.minutes)
+        .withConstantRetry(
           shouldRetryResponse = {
             case Return(Hi.Result(_, Some(e: InvalidOperation))) => true
             case Return(Hi.Result(Some(success), _)) => success == "ERROR"
@@ -29,15 +28,16 @@ object GreeterThriftClientModule
           },
           start = 50.millis,
           retries = 3)
-        .filter[HiLoggingThriftClientFilter]
+        .withRequestTimeout(1.minute)
+        .filtered[HiLoggingThriftClientFilter]
         .andThen(serviceIface.hi),
       bye = filter.method(Bye)
-        .exponentialRetry(
+        .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
-          requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
+        .withRequestTimeout(1.minute)
         .andThen(serviceIface.bye))
   }
 }
