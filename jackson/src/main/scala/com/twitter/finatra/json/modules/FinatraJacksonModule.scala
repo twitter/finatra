@@ -84,6 +84,7 @@ class FinatraJacksonModule extends TwitterModule {
   /** Jackson Modules to load */
   protected def defaultJacksonModules: Seq[JacksonModule] = Seq(
     new JodaModule,
+    new JavaTimeModule,
     DefaultScalaModule,
     LongKeyDeserializers,
     FinatraSerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
