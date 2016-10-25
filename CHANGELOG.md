@@ -20,6 +20,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Allow 0,1,t,f as valid boolean values for QueryParam case class requests.
+  ``RB_ID=881939``
+
 ### Closed
 
 ## [finatra-2.5.0](https://github.com/twitter/finatra/tree/finatra-2.5.0) (2016-10-10)

@@ -1421,7 +1421,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   }
 
   "RequestWithBooleanQueryParams which is a true number" in {
-    pending // By default Jackson doesn't turn String numbers into booleans
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=1",
       andExpect = Ok,
@@ -1429,7 +1428,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   }
 
   "RequestWithBooleanQueryParams which is a false number" in {
-    pending // By default Jackson doesn't turn String numbers into booleans
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=0",
       andExpect = Ok,
@@ -1437,7 +1435,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   }
 
   "RequestWithBooleanQueryParam which is a true number" in {
-    pending // By default Jackson doesn't turn String numbers into booleans
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=1",
       andExpect = Ok,
@@ -1445,11 +1442,55 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   }
 
   "RequestWithBooleanQueryParam which is a false number" in {
-    pending // By default Jackson doesn't turn String numbers into booleans
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=0",
       andExpect = Ok,
       withJsonBody = "false")
+  }
+
+  "RequestWithBooleanQueryParam which is a true represented as t" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=t",
+      andExpect = Ok,
+      withJsonBody = "true"
+    )
+  }
+
+  "RequestWithBooleanQueryParam which is a false represented as f" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=f",
+      andExpect = Ok,
+      withJsonBody = "false"
+    )
+  }
+
+  "RequestWithBooleanQueryParam with incorrect param" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParam?param=FOO",
+      andExpect = BadRequest,
+      withJsonBody = """{
+        "errors" : [
+          "param: 'FOO' is not a valid Boolean"
+        ]
+      }""")
+  }
+
+  "RequestWithBooleanQueryParams with multiple params" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParams?param=true&param=0&param=t",
+      andExpect = Ok,
+      withJsonBody = "[true, false, true]")
+  }
+
+  "RequestWithBooleanQueryParams with incorrect params" in {
+    server.httpGet(
+      "/RequestWithBooleanQueryParams?param=true&param=FOO",
+      andExpect = BadRequest,
+      withJsonBody = """{
+        "errors" : [
+          "param: 'FOO' is not a valid Boolean"
+        ]
+      }""")
   }
 
   "RequestWithBooleanQueryParam which is a true" in {
