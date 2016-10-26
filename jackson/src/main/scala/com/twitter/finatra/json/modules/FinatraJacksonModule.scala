@@ -16,6 +16,9 @@ import com.twitter.finatra.json.internal.serde.{FinatraSerDeSimpleModule, LongKe
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
+
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+
 import scala.collection.JavaConverters._
 
 
