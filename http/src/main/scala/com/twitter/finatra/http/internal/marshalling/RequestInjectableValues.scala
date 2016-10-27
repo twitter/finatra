@@ -42,20 +42,20 @@ class RequestInjectableValues(
 
     val fieldName = forProperty.getName
 
-    if (isRequest(forProperty))
+    if (isRequest(forProperty)) {
       request
-    else if (hasAnnotation(forProperty, requestParamsAnnotation)) {
+    } else if (hasAnnotation(forProperty, requestParamsAnnotation)) {
       if (forProperty.getType.isCollectionLikeType) {
-        val paramsValue = getCollectionLikePropertyValue(forProperty)
-        if (hasAnnotation[QueryParam](forProperty))
-          queryParamConvert(forProperty, paramsValue)
-        else
-          convert(forProperty, paramsValue)
+        val modifiedParamsValue = handleExtendedBooleans(
+          forProperty = forProperty,
+          propertyValue = getCollectionLikePropertyValue(forProperty))
+
+        convert(forProperty, modifiedParamsValue)
       } else {
         request.params.get(fieldName) match {
-          case Some(p) if hasAnnotation[QueryParam](forProperty) =>
-            queryParamConvert(forProperty.getType, p)
-          case Some(p) => convert(forProperty.getType, p)
+          case Some(value) =>
+            val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
+            convert(forProperty, modifiedParamsValue)
           case None => null
         }
       }
@@ -91,32 +91,18 @@ class RequestInjectableValues(
         forType)
   }
 
-  private def queryParamConvert(forProperty: BeanProperty, propertyValue: Any): AnyRef = {
-    queryParamConvert(
-      forProperty.getType,
-      propertyValue)
-  }
-
-  private def queryParamConvert(forType: JavaType, propertyValue: Any): AnyRef = {
-    val forTypeClass = forType.getRawClass
-    if (forTypeClass == classOf[Option[_]]) {
-      if (propertyValue == "")
-        None
-      else
-        Option(
-          convert(forType.containedType(0), propertyValue))
+  private def handleExtendedBooleans(forProperty: BeanProperty, propertyValue: Any): Any = {
+    if (hasAnnotation[QueryParam](forProperty)) {
+      val forType = forProperty.getType
+      if (forType.getRawClass == classOf[java.lang.Boolean]) {
+        matchExtendedBooleans(propertyValue.asInstanceOf[String])
+      } else if (isSeqOfBools(forType)) {
+        propertyValue.asInstanceOf[Seq[String]].map(matchExtendedBooleans)
+      } else {
+        propertyValue
+      }
     } else {
-      val modifiedPropertyValue = if (forTypeClass == classOf[java.lang.Boolean]) {
-          matchExtendedBooleans(propertyValue.asInstanceOf[String])
-        } else if (isSeqOfBools(forType)) {
-          propertyValue.asInstanceOf[Seq[String]].map(matchExtendedBooleans)
-        } else {
-          propertyValue
-        }
-
-      objectMapper.convert(
-        modifiedPropertyValue,
-        forType)
+      propertyValue
     }
   }
 
