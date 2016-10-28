@@ -5,7 +5,9 @@ import com.twitter.finagle.exp.DarkTrafficFilter
 import com.twitter.finagle.{Filter, Http, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.annotations.{DarkTrafficFilterType, DarkTrafficService}
+import com.twitter.finatra.annotations.{CanonicalResourceFilter, DarkTrafficFilterType, DarkTrafficService}
+import com.twitter.finatra.http.HttpHeaders
+import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.inject.TwitterModule
 import com.twitter.util.Duration
 
@@ -41,13 +43,15 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
   @DarkTrafficFilterType
   def provideDarkTrafficFilter(
     statsReceiver: StatsReceiver,
+    @CanonicalResourceFilter canonicalResourceFilter: Filter[Request, Response, Request, Response],
     @DarkTrafficService darkService: Option[Service[Request, Response]]
   ): Filter[Request, Response, Request, Response] = {
 
     darkService match {
       case Some(service) =>
+        val filteredDarkService = canonicalResourceFilter.andThen(service)
         new DarkTrafficFilter[Request, Response](
-          service,
+          filteredDarkService,
           enableSampling,
           statsReceiver,
           forwardAfterService)
@@ -73,6 +77,27 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
             .withRequestTimeout(requestTimeout)
             .newService(dest, label))
       case _ => None
+    }
+  }
+
+  /**
+   * Provides a filter to add the Canonical-Resource header which is used by Diffy Proxy
+   * @see [[https://github.com/twitter/diffy Diffy Project]]
+   */
+  @Provides
+  @Singleton
+  @CanonicalResourceFilter
+  def provideCanonicalResourceFilter: Filter[Request, Response, Request, Response] = {
+    Filter.mk[Request, Response, Request, Response] { (request, service) =>
+      RouteInfo(request).foreach { info =>
+        val nameOrPath = if (info.name.nonEmpty) {
+          info.name
+        } else {
+          info.path
+        }
+        request.headerMap.set(HttpHeaders.CanonicalResource, s"${request.method.toString}_${nameOrPath}")
+      }
+      service(request)
     }
   }
 }

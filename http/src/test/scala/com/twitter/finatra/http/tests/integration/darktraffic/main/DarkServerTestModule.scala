@@ -1,13 +1,12 @@
-package com.twitter.finatra.http.tests.integration.doeverything.main.modules
+package com.twitter.finatra.http.tests.integration.darktraffic.main
 
 import com.twitter.conversions.time._
-import com.twitter.finagle.http.Method._
+import com.twitter.finagle.http.Method.{Delete, Post}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.modules.DarkTrafficFilterModule
 import com.twitter.util.Duration
 
-object DoEverythingHttpServerDarkTrafficFilterModule
-  extends DarkTrafficFilterModule {
+object DarkServerTestModule extends DarkTrafficFilterModule {
 
   /**
    * Function to determine if the request should be "sampled", e.g.
