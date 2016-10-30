@@ -23,12 +23,12 @@ object RetryUtils extends NewLogging {
     }
   }
 
-  def retryFuture[T](retryPolicy: RetryPolicy[Try[T]])(func: => Future[T]): Future[T] = {
+  def retryFuture[T](retryPolicy: RetryPolicy[Try[T]], suppress: Boolean = false)(func: => Future[T]): Future[T] = {
     exceptionsToFailedFuture(func) transform { result =>
       retryPolicy(result) match {
         case Some((sleepTime, nextPolicy)) =>
           scheduleFuture(sleepTime) {
-            retryMsg(sleepTime, result)
+            retryMsg(sleepTime, result, suppress)
             retryFuture(nextPolicy)(func)
           }
         case None =>
@@ -39,7 +39,7 @@ object RetryUtils extends NewLogging {
 
   /* Private */
 
-  private def retryMsg[T](sleepTime: Duration, result: Try[T], suppress: Boolean = false) {
+  private def retryMsg[T](sleepTime: Duration, result: Try[T], suppress: Boolean) {
     if (!suppress) {
       warn("Retrying " + result + " after " + sleepTime)
     }
