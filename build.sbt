@@ -53,7 +53,7 @@ lazy val versions = new {
   val servletApi = "2.5"
   val snakeyaml = "1.12"
   val slf4j = "1.7.21"
-  val libThrift = "0.5.0-1"
+  val libThrift = "0.5.0-7"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
@@ -371,7 +371,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
     moduleName := "inject-thrift",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % versions.libThrift,
+      "com.twitter" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
       "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
@@ -447,7 +447,7 @@ lazy val utils = project
       "joda-time" % "joda-time" % versions.jodaTime,
       "commons-io" % "commons-io" % versions.commonsIo,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "org.apache.thrift" % "libthrift" % versions.libThrift,
+      "com.twitter" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "com.twitter" %% "util-core" % versions.utilVersion
     ),

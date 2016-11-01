@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: We now depend on a fork of libthrift hosted in the Central Repository.
+  The new package lives in the 'com.twitter' organization. This removes the necessity of
+  depending on maven.twttr.com. This also means that eviction will not be automatic and
+  using a newer libthrift library requires manual eviction if artifacts are being pulled
+  in transitively. ``RB_ID=885879``
+
 * inject-thrift-client: (BREAKING API CHANGE) Update filter building API with
   FilteredThriftClientModule. The `c.t.inject.thrift.filters.ThriftClientFilterChain`
   builder API has changed along with the underlying mechanisms to support
