@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra: Move the OSS documentation to internal code repository to be co-located with
+  source code. ``RB_ID=881112``
+
 ### Changed
 
 * finatra: We now depend on a fork of libthrift hosted in the Central Repository.
