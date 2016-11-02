@@ -4,23 +4,34 @@ import com.twitter.finatra.json.internal.caseclass.validation.validators.PastTim
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, PastTime, ValidationResult, ValidatorTest}
 import org.joda.time.DateTime
+import org.scalacheck.Gen
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
+class PastTimeValidatorTest
+  extends ValidatorTest
+  with GeneratorDrivenPropertyChecks {
 
-class PastTimeValidatorTest extends ValidatorTest {
-
-  "past validator" should {
+  "pass time validator" should {
 
     "pass validation for valid datetime" in {
-      val minDateTime = new DateTime(0)
-      validate[PastExample](minDateTime) should equal(Valid)
+      val passDateTimeMillis = Gen.choose(DateTime.now().minusWeeks(5).getMillis(), DateTime.now().getMillis)
+
+      forAll(passDateTimeMillis) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[PastExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "fail validation for invalid datetime" in {
-      val futureDateTime = DateTime.now().plusDays(1)
-      validate[PastExample](futureDateTime) should equal(
-        Invalid(
-          errorMessage(messageResolver, futureDateTime),
-          ErrorCode.TimeNotPast(futureDateTime)))
+      val futureDateTimeMillis = Gen.choose(DateTime.now().getMillis, DateTime.now().plusWeeks(5).getMillis())
+
+      forAll(futureDateTimeMillis) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[PastExample](dateTimeValue) should equal(
+          Invalid(
+          errorMessage(messageResolver, dateTimeValue),
+          ErrorCode.TimeNotPast(dateTimeValue)))
+      }
     }
   }
 

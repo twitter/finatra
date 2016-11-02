@@ -5,6 +5,8 @@ import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, TimeGranularity, ValidationResult, ValidatorTest}
 import java.util.concurrent.TimeUnit
 import org.joda.time.DateTime
+import org.scalacheck.Gen
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 case class TimeGranularityNanosecondsExample(@TimeGranularity(TimeUnit.NANOSECONDS) timeValue: DateTime)
 case class TimeGranularityMicrosecondsExample(@TimeGranularity(TimeUnit.MICROSECONDS) timeValue: DateTime)
@@ -14,75 +16,143 @@ case class TimeGranularityMinutesExample(@TimeGranularity(TimeUnit.MINUTES) time
 case class TimeGranularityHoursExample(@TimeGranularity(TimeUnit.HOURS) timeValue: DateTime)
 case class TimeGranularityDaysExample(@TimeGranularity(TimeUnit.DAYS) timeValue: DateTime)
 
-class TimeGranularityValidatorTest extends ValidatorTest {
+class TimeGranularityValidatorTest
+  extends ValidatorTest
+  with GeneratorDrivenPropertyChecks {
 
-  "time granularity validator" should {
+  "time validator" should {
 
     "pass validation for a day granularity value" in {
-      val value = new DateTime("2014-3-26T00:00:00Z")
-      validate[TimeGranularityDaysExample](value) should equal(Valid)
+      val dayGranularity = for {
+        day <- Gen.choose[Long](1, 500)
+      } yield new DateTime("2014-3-26T00:00:00Z").getMillis + java.util.concurrent.TimeUnit.DAYS.toMillis(day)
+
+      forAll(dayGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityDaysExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "fail validation for an invalid day granularity value" in {
-      val value = new DateTime("2014-3-26T01:00:00Z")
-      validate[TimeGranularityDaysExample](value) should equal(
-        Invalid(
-          errorMessage[TimeGranularityDaysExample](value),
-          ErrorCode.InvalidTimeGranularity(value, TimeUnit.DAYS)))
+      val dayInvalidGranularity = for {
+        hour <- Gen.choose[Long](1, 1000).filter(_ % 24 != 0)
+      } yield new DateTime("2014-3-26T00:00:00Z").getMillis + java.util.concurrent.TimeUnit.HOURS.toMillis(hour)
+
+      forAll(dayInvalidGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityDaysExample](dateTimeValue) should equal(
+          Invalid(
+          errorMessage[TimeGranularityDaysExample](dateTimeValue),
+          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.DAYS)))
+      }
     }
 
     "pass validation for a hour granularity value" in {
-      val value = new DateTime("2014-3-26T04:00:00Z")
-      validate[TimeGranularityHoursExample](value) should equal(Valid)
+      val hourGranularity = for {
+        hour <- Gen.choose[Long](1, 500)
+      } yield new DateTime("2014-3-26T01:00:00Z").getMillis + java.util.concurrent.TimeUnit.HOURS.toMillis(hour)
+
+      forAll(hourGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityHoursExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "fail validation for an invalid hour granularity value" in {
-      val value = new DateTime("2014-3-26T04:01:00Z")
-      validate[TimeGranularityHoursExample](value) should equal(
-        Invalid(
-          errorMessage[TimeGranularityHoursExample](value),
-          ErrorCode.InvalidTimeGranularity(value, TimeUnit.HOURS)))
+      val hourInvalidGranularity = for {
+        min <- Gen.choose[Long](1, 1000).filter(_ % 60 != 0)
+      } yield new DateTime("2014-3-26T02:00:00Z").getMillis + java.util.concurrent.TimeUnit.MINUTES.toMillis(min)
+
+      forAll(hourInvalidGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityHoursExample](dateTimeValue) should equal(
+          Invalid(
+          errorMessage[TimeGranularityHoursExample](dateTimeValue),
+          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.HOURS)))
+      }
     }
 
     "pass validation for a minute granularity value" in {
-      val value = new DateTime("2014-3-26T04:07:00Z")
-      validate[TimeGranularityMinutesExample](value) should equal(Valid)
+      val minGranularity = for {
+        min <- Gen.choose[Long](1, 500)
+      } yield new DateTime("2014-3-26T01:10:00Z").getMillis + java.util.concurrent.TimeUnit.MINUTES.toMillis(min)
+
+      forAll(minGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityMinutesExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "fail validation for an invalid minute granularity value" in {
-      val value = new DateTime("2014-3-26T04:07:01Z")
-      validate[TimeGranularityMinutesExample](value) should equal(
-        Invalid(
-          errorMessage[TimeGranularityMinutesExample](value),
-          ErrorCode.InvalidTimeGranularity(value, TimeUnit.MINUTES)))
+      val minInvalidGranularity = for {
+        second <- Gen.choose[Long](1, 1000).filter(_ % 60 != 0)
+      } yield new DateTime("2014-3-26T02:20:00Z").getMillis + java.util.concurrent.TimeUnit.SECONDS.toMillis(second)
+
+      forAll(minInvalidGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityMinutesExample](dateTimeValue) should equal(
+          Invalid(
+          errorMessage[TimeGranularityMinutesExample](dateTimeValue),
+          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.MINUTES)))
+      }
     }
 
     "pass validation for a second granularity value" in {
-      val value = new DateTime("2014-3-26T04:07:31.000Z")
-      validate[TimeGranularitySecondsExample](value) should equal(Valid)
+      val secondGranularity = for {
+        second <- Gen.choose[Long](1, 500)
+      } yield new DateTime("2014-3-26T01:10:10.000Z").getMillis + java.util.concurrent.TimeUnit.SECONDS.toMillis(second)
+
+      forAll(secondGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularitySecondsExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "fail validation for an invalid second granularity value" in {
-      val value = new DateTime("2014-3-26T04:07:31.001Z")
-      validate[TimeGranularitySecondsExample](value) should equal(
-        Invalid(
-          errorMessage[TimeGranularitySecondsExample](value),
-          ErrorCode.InvalidTimeGranularity(value, TimeUnit.SECONDS)))
+      val secondInvalidGranularity = for {
+        millis <- Gen.choose[Long](1, 999)
+      } yield new DateTime("2014-3-26T02:20:20.000Z").getMillis + millis
+
+      forAll(secondInvalidGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularitySecondsExample](dateTimeValue) should equal(
+          Invalid(
+          errorMessage[TimeGranularitySecondsExample](dateTimeValue),
+          ErrorCode.InvalidTimeGranularity(dateTimeValue, TimeUnit.SECONDS)))
+      }
     }
 
     "pass validation for a millisecond granularity value" in {
-      val value = new DateTime("2014-3-26T04:07:31.001Z")
-      validate[TimeGranularityMillisecondsExample](value) should equal(Valid)
+      val millisGranularity = for {
+        millis <- Gen.choose[Long](1, 1000)
+      } yield new DateTime("2014-3-26T01:10:10.001Z").getMillis + millis
+
+      forAll(millisGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityMillisecondsExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "pass validation for a microsecond granularity value" in {
-      val value = new DateTime("2014-3-26T04:07:31.001Z")
-      validate[TimeGranularityMicrosecondsExample](value) should equal(Valid)
+      val microGranularity = for {
+        micro <- Gen.choose[Long](1, 1000)
+      } yield (new DateTime("2014-3-26T01:10:10.001Z").getMillis) + java.util.concurrent.TimeUnit.MICROSECONDS.toMillis(micro)
+
+      forAll(microGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityMicrosecondsExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "pass validation for a nanosecond granularity value" in {
-      val value = new DateTime("2014-3-26T04:07:31.001Z")
-      validate[TimeGranularityNanosecondsExample](value) should equal(Valid)
+      val nanoGranularity = for {
+        nano <- Gen.choose[Long](1, 1000)
+      } yield (new DateTime("2014-3-26T01:10:10.001Z").getMillis) + java.util.concurrent.TimeUnit.NANOSECONDS.toMillis(nano)
+
+      forAll(nanoGranularity) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[TimeGranularityNanosecondsExample](dateTimeValue) should equal(Valid)
+      }
     }
   }
 

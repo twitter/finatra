@@ -73,6 +73,7 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
 lazy val baseSettings = Seq(
   libraryDependencies ++= Seq(
     "org.mockito" % "mockito-core" % "1.9.5" % "test",
+    "org.scalacheck" %% "scalacheck" % "1.12.5" % "test",
     "org.scalatest" %% "scalatest" % "2.2.6" % "test",
     "org.specs2" %% "specs2" % "2.3.12" % "test"
   ),
