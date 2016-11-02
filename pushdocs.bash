@@ -6,7 +6,7 @@ dir=/tmp/finatra.$$
 trap "rm -fr $dir" 0 1 2
 
 echo 'making unidoc...' 1>&2
-./sbt unidoc >/dev/null 2>&1
+./sbt --warn unidoc
 
 echo 'cloning...' 1>&2
 git clone -b gh-pages-source --single-branch git@github.com:twitter/finatra.git $dir >/dev/null 2>&1
