@@ -10,6 +10,10 @@ All notable changes to this project will be documented in this file. Note that `
   source code. ``RB_ID=881112``
 
 ### Changed
+* inject-utils: Deprecated RootMonitor since finagle DefaultMonitor is implicitly installed
+  and handles all exceptions caught in stack. We provide a monitor method by default is a NullMonitor in
+  `c.t.finatra.thrift.modules.DarkTrafficFilterModule` and `c.t.inject.thrift.modules.FilteredThriftClientModule`,
+  users can handle other exceptions (unhandled by DefaultMonitor) by overriding the monitor method ``RB_ID=886773``
 
 * finatra: We now depend on a fork of libthrift hosted in the Central Repository.
   The new package lives in the 'com.twitter' organization. This removes the necessity of

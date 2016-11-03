@@ -13,9 +13,9 @@ import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule.MaxDuration
 import com.twitter.inject.thrift.{AndThenService, NonFiltered}
-import com.twitter.inject.{Injector, RootMonitor, TwitterModule}
+import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.scrooge.{ThriftResponse, ThriftService}
-import com.twitter.util.{Duration => TwitterDuration, Monitor, Try}
+import com.twitter.util.{Monitor, NullMonitor, Try, Duration => TwitterDuration}
 import javax.inject.Singleton
 import org.joda.time.Duration
 import scala.language.implicitConversions
@@ -113,7 +113,14 @@ abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTa
   */
   protected def budget: Budget = Budget.default
 
-  protected def monitor: Monitor = RootMonitor
+  /**
+   * Function to add a user-defined Monitor, c.t.finagle.DefaultMonitor will be installed
+   * implicitly which handles all exceptions caught in stack. Exceptions aren't handled by
+   * user-defined monitor propagated to the default monitor.
+   *
+   * NullMonitor has no influence on DefaultMonitor behavior here
+   */
+  protected def monitor: Monitor = NullMonitor
 
   /**
    * This method allows for further configuration of the client for parameters not exposed by
