@@ -1,4 +1,4 @@
-target(name='utils',
+target(
   dependencies=[
     'finatra/utils/src/main/scala'
   ]

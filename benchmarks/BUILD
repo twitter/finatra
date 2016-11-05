@@ -1,4 +1,4 @@
-target(name='benchmarks',
+target(
   dependencies=[
     'finatra/benchmarks/src/main/java'
   ]

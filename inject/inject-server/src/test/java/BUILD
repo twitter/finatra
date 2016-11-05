@@ -1,4 +1,4 @@
-java_library(name='java',
+java_library(
   dependencies=[
     '3rdparty/jvm/com/google/inject:guice'
   ],

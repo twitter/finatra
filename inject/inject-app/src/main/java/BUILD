@@ -1,4 +1,4 @@
-java_library(name='java',
+java_library(
   provides = artifact(
     org = 'com.twitter.inject',
     name = 'inject-app-java',

@@ -1,5 +1,4 @@
 junit_tests(
-  name='scala',
   dependencies=[
     'finatra/http:test-deps',
     'finatra/examples/web-dashboard',

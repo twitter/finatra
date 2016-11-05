@@ -1,5 +1,4 @@
 junit_tests(
-  name='java',
   dependencies=[
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/junit',

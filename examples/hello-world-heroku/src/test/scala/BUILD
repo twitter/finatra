@@ -1,5 +1,4 @@
 junit_tests(
-  name='scala',
   dependencies=[
     'finatra/examples/hello-world-heroku',
     'finatra/http:test-deps',

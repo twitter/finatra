@@ -1,4 +1,4 @@
-target(name='java-http-server',
+target(
   dependencies=[
     'finatra/examples/java-http-server/src/main/java'
   ]

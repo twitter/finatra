@@ -1,5 +1,4 @@
 junit_tests(
-  name='scala',
   dependencies=[
     'finatra/examples/benchmark-server',
     'finatra/http:test-deps',

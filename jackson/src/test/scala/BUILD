@@ -1,4 +1,4 @@
-junit_tests(name='scala',
+junit_tests(
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     'finatra/jackson/src/main/scala',

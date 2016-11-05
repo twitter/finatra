@@ -1,5 +1,4 @@
 scala_library(
-  name='scala',
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     'finagle/finagle-zipkin',

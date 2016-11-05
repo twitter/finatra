@@ -1,4 +1,4 @@
-target(name='twitter-clone',
+target(
   dependencies=[
     'finatra/examples/twitter-clone/src/main/scala'
   ]

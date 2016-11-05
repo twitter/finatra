@@ -1,4 +1,4 @@
-target(name='thrift-example-server',
+target(
   dependencies=[
     'finatra/examples/java-thrift-server/thrift-example-server/src/main/java',
   ]

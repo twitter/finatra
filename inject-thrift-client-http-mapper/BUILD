@@ -1,4 +1,4 @@
-target(name='inject-thrift-client-http-mapper',
+target(
   dependencies=[
     'finatra/inject-thrift-client-http-mapper/src/main/scala'
   ]

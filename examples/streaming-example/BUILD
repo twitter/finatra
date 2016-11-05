@@ -1,4 +1,4 @@
-target(name='streaming-example',
+target(
   dependencies=[
     'finatra/examples/streaming-example/src/main/scala'
   ]

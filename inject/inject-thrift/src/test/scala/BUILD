@@ -1,4 +1,4 @@
-junit_tests(name='scala',
+junit_tests(
   dependencies=[
     'finatra/inject/inject-core:test-deps',
     'finatra/inject/inject-thrift',

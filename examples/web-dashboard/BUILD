@@ -1,4 +1,4 @@
-target(name='web-dashboard',
+target(
   dependencies=[
     'finatra/examples/web-dashboard/src/main/scala'
   ]
