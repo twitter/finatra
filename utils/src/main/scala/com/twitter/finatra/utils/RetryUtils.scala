@@ -29,7 +29,7 @@ object RetryUtils extends NewLogging {
         case Some((sleepTime, nextPolicy)) =>
           scheduleFuture(sleepTime) {
             retryMsg(sleepTime, result, suppress)
-            retryFuture(nextPolicy)(func)
+            retryFuture(nextPolicy, suppress)(func)
           }
         case None =>
           Future.const(result)
