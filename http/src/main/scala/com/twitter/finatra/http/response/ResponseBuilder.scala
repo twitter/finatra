@@ -356,12 +356,12 @@ class ResponseBuilder @Inject()(
     }
 
     /**
-     * Return the file (only if it's a file w/ an extension), otherwise return the index.
+     * Return the file (only if it's an existing file w/ an extension), otherwise return the index.
      * Note: This functionality is useful for "single-page" UI frameworks (e.g. AngularJS)
      * that perform client side routing.
      */
     def fileOrIndex(filePath: String, indexPath: String) = {
-      if (isFile(filePath))
+      if (isFile(filePath) && hasFile(filePath))
         file(filePath)
       else
         file(indexPath)
@@ -477,6 +477,14 @@ class ResponseBuilder @Inject()(
 
     private def isFile(requestPath: String) = {
       getExtension(requestPath).nonEmpty
+    }
+
+    private def hasFile(file: String): Boolean = {
+      val fileWithSlash = if (file.startsWith("/")) file else "/" + file
+      fileResolver.getInputStream(fileWithSlash).map { is =>
+        is.close
+        true
+      }.getOrElse(false)
     }
 
     private def mediaToString(mediaType: MediaType): String = {
