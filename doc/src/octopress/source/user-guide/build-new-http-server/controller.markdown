@@ -238,7 +238,13 @@ The following field annotations specify where to parse a field out of the reques
      * [`@FormParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala)
      * [`@Header`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala)
  * Other:
-     * [`@Inject`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala): Can be used to inject the underlying Finagle `http` Request or any Guice managed class into your case class.
+     * [`@Inject`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala): Can be used to inject any Guice managed class into your case class. It is not required for injecting the underlying Finagle `http` Request. To access the underlying Finagle `http` Request in your custom case class, simply include a field of type Request, for example:
+
+```scala
+case class CaseClassWithRequestField(
+ request: Request)
+```
+<div></div>
 
 *Note: HTTP requests with a content-type of `application/json` will always have their body. This behavior can be disabled by annotating the `case class` with `@JsonIgnoreBody` leaving the raw request body accessible through `@Inject`.*
 

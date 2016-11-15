@@ -708,7 +708,7 @@ case class MultipleInjectableValueParams(
   @RouteParam @QueryParam id: String)
 
 case class CaseClassWithRequestField(
-  @Inject request: Request)
+  request: Request)
 
 class NonCaseClass {
   val name = "Bob"

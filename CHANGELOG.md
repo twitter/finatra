@@ -10,6 +10,9 @@ All notable changes to this project will be documented in this file. Note that `
   source code. ``RB_ID=881112``
 
 ### Changed
+
+* finatra-http: Request in request case classes no longer requires Inject annotation. ``RB_ID=888197``
+
 * inject-utils: Deprecated RootMonitor since finagle DefaultMonitor is implicitly installed
   and handles all exceptions caught in stack. We provide a monitor method by default is a NullMonitor in
   `c.t.finatra.thrift.modules.DarkTrafficFilterModule` and `c.t.inject.thrift.modules.FilteredThriftClientModule`,

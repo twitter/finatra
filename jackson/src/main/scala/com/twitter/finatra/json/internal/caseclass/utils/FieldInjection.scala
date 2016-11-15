@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.deser.impl.ValueInjector
 import com.fasterxml.jackson.databind.{DeserializationContext, JavaType, PropertyName}
 import com.google.inject.{BindingAnnotation, ConfigurationException, Key}
+import com.twitter.finagle.http.Request
 import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.caseclass.jackson.ImmutableAnnotations
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
@@ -76,6 +77,6 @@ private[json] class FieldInjection(
       "Only 1 injectable annotation allowed per field. " +
         "We found " + (injectableAnnotations map {_.annotationType}) + " on field " + name)
 
-    injectableAnnotations.nonEmpty
+    injectableAnnotations.nonEmpty || beanProperty.getType.getRawClass == classOf[Request]
   }
 }
