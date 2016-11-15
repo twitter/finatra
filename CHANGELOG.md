@@ -31,6 +31,12 @@ All notable changes to this project will be documented in this file. Note that `
 * inject-thrift-client: Remove deprecated package aliases. We'd like people to
   move the correct packages.``RB_ID=879330``
 
+* finatra-http: (BREAKING API CHANGE) Update StreamingResponse to avoid keeping
+  a reference to the head of the AsyncStream. This resolves the memory leak
+  when streaming an infinite stream. The constructor is now private; use the
+  StreamingResponse object methods that take an AsyncStream by-name instead.
+  ``RB_ID=890205''
+
 ### Fixed
 
 * finatra-http: Allow 0,1,t,f as valid boolean values for QueryParam case class requests.
