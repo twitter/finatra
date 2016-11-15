@@ -4,7 +4,7 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.request.RequestWithRouteParams
-import com.twitter.finatra.http.routing.AdminIndexInfo
+import com.twitter.finatra.http.routing.{AdminIndexInfo, Prefix}
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import scala.language.existentials
@@ -13,7 +13,8 @@ import scala.language.existentials
 private[finatra] case class Route(
   name: String,
   method: Method,
-  path: String,
+  prefix: Prefix = Prefix.empty,
+  private val path: String,
   admin: Boolean,
   adminIndexInfo: Option[AdminIndexInfo],
   callback: Request => Future[Response],
@@ -22,8 +23,9 @@ private[finatra] case class Route(
   responseClass: Class[_],
   filter: Filter[Request, Response, Request, Response]) {
 
-  private[this] val pattern = PathPattern(path)
-  private[this] val routeInfo = RouteInfo(name, path)
+  val fullPath: String = prefix(path)
+  private[this] val pattern = PathPattern(fullPath)
+  private[this] val routeInfo = RouteInfo(name, fullPath)
 
   private[this] val filteredCallback: Request => Future[Response] =
     filter andThen Service.mk[Request, Response](callback)
@@ -34,7 +36,7 @@ private[finatra] case class Route(
 
   def constantRoute = captureNames.isEmpty
 
-  def summary: String = f"$method%-7s $path"
+  def summary: String = f"$method%-7s $fullPath"
 
   def withFilter(filter: Filter[Request, Response, Request, Response]): Route = {
     this.copy(filter = filter andThen this.filter)

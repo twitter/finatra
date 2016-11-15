@@ -4,7 +4,7 @@ import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.tests.integration.doeverything.main.controllers.{DoEverythingController, DoNothingController, NonGuiceController, ReadHeadersController}
+import com.twitter.finatra.http.tests.integration.doeverything.main.controllers.{DoEverythingController, DoNothingController, NonGuiceController, ReadHeadersController, TestPrefix, PrefixedController}
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{BarExceptionMapper, FooBarBazExceptionMapper, FooExceptionMapper}
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
@@ -47,6 +47,7 @@ class DoEverythingServer extends HttpServer {
       .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
+      .prefix[TestPrefix, PrefixedController]
   }
 
   override def warmup() {

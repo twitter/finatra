@@ -84,7 +84,7 @@ trait HttpServer extends BaseHttpServer {
 
   private def addAdminRoutes(router: HttpRouter): Unit = {
     val allTwitterServerAdminRoutes = this.routes.map(_.path).union(HttpMuxer.patterns)
-    val conflicts = allTwitterServerAdminRoutes.intersect(router.routesByType.admin.map(_.path))
+    val conflicts = allTwitterServerAdminRoutes.intersect(router.routesByType.admin.map(_.fullPath))
     if (conflicts.nonEmpty) {
       val errorMessage = "Adding admin routes with paths that overlap with pre-defined TwitterServer admin route paths is not allowed."
       error(s"$errorMessage \nConflicting route paths: \n\t${conflicts.mkString("\n\t")}")
@@ -102,7 +102,7 @@ trait HttpServer extends BaseHttpServer {
     */
     val (adminIndexRoutes, adminRichHandlerRoutes) = router.routesByType.admin.partition { route =>
       // can't start with /admin/finatra/ and is a constant route
-      !route.path.startsWith(HttpRouter.FinatraAdminPrefix) && route.constantRoute
+      !route.fullPath.startsWith(HttpRouter.FinatraAdminPrefix) && route.constantRoute
     }
 
     // check if routes define an AdminIndexInfo but are not eligible for admin UI index
@@ -126,7 +126,7 @@ trait HttpServer extends BaseHttpServer {
     for {
       route <- routes if predicate(route) && route.adminIndexInfo.isDefined
     } {
-      warn(s"${route.path} defines an AdminIndexInfo but is not eligible to be added to the admin UI index. " +
+      warn(s"${route.fullPath} defines an AdminIndexInfo but is not eligible to be added to the admin UI index. " +
         s"Only constant /GET routes that do not start with ${HttpRouter.FinatraAdminPrefix} can be added to the admin UI index.")
     }
   }
@@ -136,11 +136,11 @@ trait HttpServer extends BaseHttpServer {
       val includeInIndex = route.adminIndexInfo.isDefined && route.method == Method.Get
       val alias = route.adminIndexInfo match {
         case Some(info) if info.alias.nonEmpty => info.alias
-        case _ => route.path
+        case _ => route.fullPath
       }
       val group = route.adminIndexInfo.map(_.group).getOrElse("Finatra")
       AdminHttpServer.Route(
-        path = route.path,
+        path = route.fullPath,
         handler = router.services.adminService,
         alias = alias,
         group = Some(group),

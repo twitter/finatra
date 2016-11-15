@@ -121,10 +121,21 @@ class HttpRouter @Inject()(
     addInjected(controller)
   }
 
+  def prefix(prefix: Prefix, controller: Controller): HttpRouter = {
+    injector.underlying.injectMembers(controller)
+    addInjected(prefix, controller)
+  }
+
   /** Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route) */
   def add(filter: HttpFilter, controller: Controller): HttpRouter = {
     injector.underlying.injectMembers(controller)
     addInjected(filter, controller)
+  }
+
+  /** Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix(filter: HttpFilter, prefix: Prefix, controller: Controller): HttpRouter = {
+    injector.underlying.injectMembers(controller)
+    addInjected(filter, prefix, controller)
   }
 
   def add[C <: Controller : Manifest]: HttpRouter = {
@@ -132,10 +143,23 @@ class HttpRouter @Inject()(
     addInjected(controller)
   }
 
+  def prefix[P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = {
+    val prefix = injector.instance[P]
+    val controller = injector.instance[C]
+    addInjected(prefix, controller)
+  }
+
   def add(clazz: Class[_ <: AbstractController]): HttpRouter = {
     val controller = injector.instance(clazz)
     controller.configureRoutes()
     addInjected(controller)
+  }
+
+  def prefix(prefixClazz: Class[_ <: Prefix], controllerClazz: Class[_ <: AbstractController]): HttpRouter = {
+    val prefix = injector.instance(prefixClazz)
+    val controller = injector.instance(controllerClazz)
+    controller.configureRoutes()
+    addInjected(prefix, controller)
   }
 
   // Generated
@@ -170,6 +194,36 @@ class HttpRouter @Inject()(
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
   def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, F9 <: HttpFilter : Manifest, F10 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8] andThen injector.instance[F9] andThen injector.instance[F10])
 
+  /** Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, F9 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8] andThen injector.instance[F9])
+
+  /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
+  def prefix[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, F9 <: HttpFilter : Manifest, F10 <: HttpFilter : Manifest, P <: Prefix : Manifest, C <: Controller : Manifest]: HttpRouter = add[P, C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8] andThen injector.instance[F9] andThen injector.instance[F10])
+
   /* Private */
 
   private def add[C <: Controller : Manifest](filter: HttpFilter): HttpRouter = {
@@ -178,8 +232,20 @@ class HttpRouter @Inject()(
       injector.instance[C])
   }
 
+  private def add[P <: Prefix: Manifest, C <: Controller : Manifest](filter: HttpFilter): HttpRouter = {
+    addInjected(
+      filter,
+      injector.instance[P],
+      injector.instance[C])
+  }
+
   private def addInjected(controller: Controller): HttpRouter = {
     routes ++= buildRoutes(controller) map { _.withFilter(globalFilter) }
+    this
+  }
+
+  private def addInjected(prefix: Prefix, controller: Controller): HttpRouter = {
+    routes ++= buildRoutes(prefix, controller) map { _.withFilter(globalFilter) }
     this
   }
 
@@ -189,14 +255,24 @@ class HttpRouter @Inject()(
     this
   }
 
+  private def addInjected(filter: HttpFilter, prefix: Prefix, controller: Controller): HttpRouter = {
+    val routesWithFilter = buildRoutes(prefix, controller) map { _.withFilter(globalFilter andThen filter) }
+    routes ++= routesWithFilter
+    this
+  }
+
   private def buildRoutes(controller: Controller): Seq[Route] = {
-    controller.routeBuilders.map { _.build(callbackConverter, injector) }
+    controller.routeBuilders.map { _.build(Prefix.empty, callbackConverter, injector) }
+  }
+
+  private def buildRoutes(prefix: Prefix, controller: Controller): Seq[Route] = {
+    controller.routeBuilders.map { _.build(prefix, callbackConverter, injector) }
   }
 
   private[finatra] def partitionRoutesByType(): RoutesByType = {
     info("Adding routes\n" + (routes.map {_.summary} mkString "\n"))
     val (adminRoutes, externalRoutes) = routes partition { route =>
-      route.path.startsWith("/admin") || route.admin
+      route.fullPath.startsWith("/admin") || route.admin
     }
     assertAdminRoutes(adminRoutes)
     RoutesByType(
@@ -211,16 +287,16 @@ class HttpRouter @Inject()(
     for (route <- routes) {
       if (route.constantRoute) {
         // constant routes MUST start with at least /admin/
-        if (!(route.path startsWith "/admin/")) {
-          val msg = message.format(route.path, "Constant admin interface routes must start with prefix: /admin/")
+        if (!(route.fullPath startsWith "/admin/")) {
+          val msg = message.format(route.fullPath, "Constant admin interface routes must start with prefix: /admin/")
           error(msg)
           throw new java.lang.AssertionError(msg)
         }
       } else {
         // non-constant routes MUST start with /admin/finatra/
-        if(!(route.path startsWith HttpRouter.FinatraAdminPrefix)) {
+        if(!(route.fullPath startsWith HttpRouter.FinatraAdminPrefix)) {
           val msg = message.format(
-            route.path,
+          route.fullPath,
             "Non-constant admin interface routes must start with prefix: " + HttpRouter.FinatraAdminPrefix)
           error(msg)
           throw new java.lang.AssertionError(msg)

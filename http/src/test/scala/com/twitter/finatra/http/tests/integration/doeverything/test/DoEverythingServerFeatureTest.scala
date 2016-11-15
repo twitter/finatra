@@ -320,6 +320,23 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "future")
     }
 
+    "prefixed" in {
+      server.httpGet(
+        "/prefix/test",
+        andExpect = Ok
+      )
+
+      server.httpGet(
+        "/prefix/prefix/test",
+        andExpect = Ok
+      )
+
+      server.httpGet(
+        "/prefix/prefix/other",
+        andExpect = Ok
+      )
+    }
+
     "POST" in {
       server.httpPost(
         "/foo",

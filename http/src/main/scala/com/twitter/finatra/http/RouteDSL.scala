@@ -2,7 +2,7 @@ package com.twitter.finatra.http
 
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.Method._
-import com.twitter.finatra.http.routing.AdminIndexInfo
+import com.twitter.finatra.http.routing.{AdminIndexInfo, Prefix}
 import com.twitter.inject.Injector
 import scala.collection.mutable.ArrayBuffer
 
@@ -12,16 +12,32 @@ private[http] trait RouteDSL { self =>
   private[http] val annotations = getClass.getDeclaredAnnotations
 
   private[http] def buildFilter(injector: Injector): HttpFilter = Filter.identity
+  private[http] def buildPrefix(injector: Injector): Prefix = Prefix.empty
 
   def filter[FilterType <: HttpFilter : Manifest] = new RouteDSL {
     override val routeBuilders = self.routeBuilders
     override val annotations = self.annotations
     override def buildFilter(injector: Injector) = self.buildFilter(injector).andThen(injector.instance[FilterType])
+    override def buildPrefix(injector: Injector) = self.buildPrefix(injector)
   }
 
   def filter(next: HttpFilter) = new RouteDSL {
     override val routeBuilders = self.routeBuilders
     override def buildFilter(injector: Injector) = self.buildFilter(injector).andThen(next)
+    override def buildPrefix(injector: Injector) = self.buildPrefix(injector)
+  }
+
+  def prefix[PrefixType <: Prefix : Manifest] = new RouteDSL {
+    override val routeBuilders = self.routeBuilders
+    override val annotations = self.annotations
+    override def buildFilter(injector: Injector) = self.buildFilter(injector)
+    override def buildPrefix(injector: Injector) = self.buildPrefix(injector).andThen(injector.instance[PrefixType])
+  }
+
+  def prefix(next: Prefix) = new RouteDSL {
+    override val routeBuilders = self.routeBuilders
+    override def buildFilter(injector: Injector) = self.buildFilter(injector)
+    override def buildPrefix(injector: Injector) = self.buildPrefix(injector).andThen(next)
   }
 
   def get[RequestType: Manifest, ResponseType: Manifest](route: String, name: String = "", admin: Boolean = false, adminIndexInfo: Option[AdminIndexInfo] = None)(callback: RequestType => ResponseType): Unit = routeBuilders += new RouteBuilder(Get, route, name, admin, adminIndexInfo, callback, self)
