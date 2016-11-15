@@ -1698,4 +1698,11 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
     response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
   }
+
+  "Bad request for deserialization of wrapped value from a json object" in {
+    server.httpPost(
+      "/RequestWithSeqWrappedString",
+      postBody = """{"value" : [{"foo" : "foo"}]}""",
+      andExpect = BadRequest)
+  }
 }

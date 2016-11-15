@@ -625,6 +625,10 @@ class DoEverythingController @Inject()(
     r.param
   }
 
+  post("/RequestWithSeqWrappedString") { r: RequestWithSeqWrappedString =>
+    r.value
+  }
+
   post("/SomethingStreamedRequest.json") { r: SomethingStreamedRequest =>
     s"${r.somethingId}/${r.field1.get}/${r.field2.get}"
   }
