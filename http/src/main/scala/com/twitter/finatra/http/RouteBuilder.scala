@@ -1,9 +1,8 @@
 package com.twitter.finatra.http
 
-import com.twitter.finagle.http.{Method => HttpMethod}
+import com.twitter.finagle.http.{Method => HttpMethod, RouteIndex}
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.internal.routing.Route
-import com.twitter.finatra.http.routing.AdminIndexInfo
 import com.twitter.inject.Injector
 
 private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
@@ -11,7 +10,7 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
   route: String,
   name: String,
   admin: Boolean,
-  adminIndexInfo: Option[AdminIndexInfo],
+  index: Option[RouteIndex],
   callback: RequestType => ResponseType,
   routeDsl: RouteDSL) {
 
@@ -20,7 +19,7 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
     method,
     route,
     admin,
-    adminIndexInfo,
+    index,
     callbackConverter.convertToFutureResponse(callback),
     routeDsl.annotations,
     manifest[RequestType].runtimeClass,

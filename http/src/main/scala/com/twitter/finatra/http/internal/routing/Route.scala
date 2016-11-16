@@ -1,10 +1,9 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.{Filter, Service}
-import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finagle.http.{Method, Request, Response, RouteIndex}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.request.RequestWithRouteParams
-import com.twitter.finatra.http.routing.AdminIndexInfo
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import scala.language.existentials
@@ -15,7 +14,7 @@ private[finatra] case class Route(
   method: Method,
   path: String,
   admin: Boolean,
-  adminIndexInfo: Option[AdminIndexInfo],
+  index: Option[RouteIndex],
   callback: Request => Future[Response],
   annotations: Seq[Annotation] = Seq(),
   requestClass: Class[_],

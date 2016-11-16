@@ -11,6 +11,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Update adding routes to the TwitterServer HTTP Admin Interface to use
+  `c.t.finagle.http.RouteIndex` and remove the `c.t.finatra.http.routing.AdminIndexInfo`.
+  Also relaxed the rules for what routes can be added to the index to include constant
+  /POST routes. Additionally, no longer fail if you define conflicting admin routes --
+  we will now only warn. It is up to the user to not shoot themselves in the foot.
+  ``RB_ID=889792``
+
 * finatra-http: Request in request case classes no longer requires Inject annotation. ``RB_ID=888197``
 
 * inject-utils: Deprecated RootMonitor since finagle DefaultMonitor is implicitly installed

@@ -164,28 +164,29 @@ get("/admin/finatra/users/",
 ```
 <div></div>
 
-Constant (no named parameters), HTTP method `GET` routes can also be added to the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) user interface.
+Constant (no named parameters), HTTP method `GET` or `POST` routes can also be added to the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index.
 
-To expose your route to the admin user interface index, the route path:
+To expose your route in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index, the route path:
 
 - **MUST** be a constant path
-- **MUST** start with `/admin/` (**SHOULD NOT** begin with `/admin/finatra/`)
-- **MUST** be HTTP method `GET`.
+- **MUST** start with `/admin/`
+- **MUST NOT** begin with `/admin/finatra/`
+- **MUST** be HTTP method `GET` or `POST`
 
-Set `admin = true` and optionally provide an [`AdminIndexInfo`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/AdminIndexInfo.scala), e.g.,
+Set `admin = true` and optionally provide a [`RouteIndex`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Route.scala), e.g.,
 
 ```scala
 get("/admin/client_id.json",
   admin = true,
-  adminIndexInfo = Some(AdminIndexInfo()) ) { request: Request =>
+  index = Some(RouteIndex(alias = "Thrift Client Id", group = "Finatra")) ) { request: Request =>
   Map("client_id" -> "clientId.1234"))
 }
 ```
 <div></div>
 
-By default if you do not provide any customization to the `AdminIndexInfo` the route will show up in the left-rail under the `Finatra` heading indexed by the route path. If you do not provide an `AdminIndexInfo`, the route will not be visible in the admin user interface index.
+The route will appear in the left-rail of the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) under the heading specified by the `RouteIndex#group` indexed by `RouteIndex#alias` or the route's path. If you do not provide a `RouteIndex` the route will not appear in the index but is still reachable on the admin interface.
 
-**Note**: all routes that start with *only* `/admin/` (and not `/admin/finatra/`) will be routed to by TwitterServer's [AdminHttpServer](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108) and not by the Finatra HttpRouter. Thus any filter chain defined by your server's [HttpRouter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) will **not** be applied to the routes. To maintain filtering as defined in the HttpRouter, the routes MUST be under `/admin/finatra/` and are thus not eligible to be included in the admin user interface index.
+**Note**: all routes that start with *only* `/admin/` (and not `/admin/finatra/`) will be routed to by TwitterServer's [AdminHttpServer](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108) and **not** by the Finatra [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala). Thus any filter chain defined by your server's [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) will **not** be applied to the routes. To maintain filtering as defined in the [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala), the routes **MUST** be under `/admin/finatra/` and are thus **not** eligible to be included in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index.
 
 ## <a class="anchor" name="requests" href="#requests">Requests</a>
 ===============================

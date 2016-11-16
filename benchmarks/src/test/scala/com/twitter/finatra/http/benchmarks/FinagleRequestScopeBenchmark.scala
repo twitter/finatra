@@ -19,7 +19,7 @@ class FinagleRequestScopeBenchmark {
     method = Method.Get,
     path = "/groups/",
     admin = false,
-    adminIndexInfo = None,
+    index = None,
     callback = defaultCallback,
     annotations = Seq(),
     requestClass = classOf[Request],
