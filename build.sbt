@@ -501,6 +501,7 @@ lazy val http = project
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
+      "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "javax.servlet" % "servlet-api" % versions.servletApi
     ),
