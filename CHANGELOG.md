@@ -11,6 +11,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: The 'cookie' method of `c.t.finatra.http.response.ResponseBuilder#EnrichedResponse`
+  that takes a Netty 3 cookie instance has been deprecated. Please use the method which takes a
+  Finagle HTTP cookie instead. ``RB_ID=888683``
+
 * finatra-http: Update adding routes to the TwitterServer HTTP Admin Interface to use
   `c.t.finagle.http.RouteIndex` and remove the `c.t.finatra.http.routing.AdminIndexInfo`.
   Also relaxed the rules for what routes can be added to the index to include constant
