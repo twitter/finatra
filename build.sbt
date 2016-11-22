@@ -43,17 +43,21 @@ lazy val versions = new {
   val grizzled = "1.0.2"
   val guava = "16.0.1"
   val guice = "4.0"
-  val scalaGuice = "4.0.0"
   val jackson = "2.8.4"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
+  val libThrift = "0.5.0-7"
   val logback = "1.1.7"
+  val mockito = "1.9.5"
   val mustache = "0.8.18"
   val nscalaTime = "1.6.0"
+  val scalaCheck = "1.13.4"
+  val scalaGuice = "4.0.0"
+  val scalaTest = "3.0.0"
   val servletApi = "2.5"
-  val snakeyaml = "1.12"
   val slf4j = "1.7.21"
-  val libThrift = "0.5.0-7"
+  val snakeyaml = "1.12"
+  val specs2 = "2.3.12"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
@@ -72,10 +76,10 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
 
 lazy val baseSettings = Seq(
   libraryDependencies ++= Seq(
-    "org.mockito" % "mockito-core" % "1.9.5" % "test",
-    "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
-    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
-    "org.specs2" %% "specs2" % "2.3.12" % "test"
+    "org.mockito" % "mockito-core" %  versions.mockito % "test",
+    "org.scalacheck" %% "scalacheck" % versions.scalaCheck % "test",
+    "org.scalatest" %% "scalatest" %  versions.scalaTest % "test",
+    "org.specs2" %% "specs2" % versions.specs2 % "test"
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -101,7 +105,7 @@ lazy val publishSettings = Seq(
   licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://twitter.github.io/finatra/docs/")),
+  apiURL := Some(url("https://twitter.github.io/finatra/scaladocs/")),
   excludeFilter in (Compile, managedSources) := HiddenFileFilter || "BUILD",
   excludeFilter in (Compile, unmanagedSources) := HiddenFileFilter || "BUILD",
   excludeFilter in (Compile, managedResources) := HiddenFileFilter || "BUILD",

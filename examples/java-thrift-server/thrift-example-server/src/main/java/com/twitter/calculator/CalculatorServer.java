@@ -19,6 +19,10 @@ import com.twitter.finatra.thrift.routing.ThriftRouter;
 class CalculatorServer extends AbstractThriftServer {
 
     @Override
+    public void configureLoggerFactories() {
+    }
+
+    @Override
     public Collection<Module> javaModules() {
         return ImmutableList.<Module>of(
             ClientIdWhitelistModule$.MODULE$);

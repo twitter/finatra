@@ -87,7 +87,7 @@
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_2.11</artifactId>
       <scope>test</scope>
-      <version>2.2.4</version>
+      <version>3.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.specs2</groupId>
@@ -334,13 +334,6 @@
     </plugins>
   </build>
 
-  <repositories>
-    <repository>
-      <id>twitter-repo</id>
-      <name>twitter-repo</name>
-      <url>https://maven.twttr.com</url>
-    </repository>
-  </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>twitter-repo</id>
