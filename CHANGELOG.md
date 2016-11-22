@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-2.6.0](https://github.com/twitter/finatra/tree/finatra-2.6.0) (2016-11-22)
+
+### Added
+
 * finatra: Move the OSS documentation to internal code repository to be co-located with
   source code. ``RB_ID=881112``
 

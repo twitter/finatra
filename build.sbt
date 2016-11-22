@@ -5,7 +5,7 @@ import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
-lazy val projectVersion = "2.6.0-SNAPSHOT"
+lazy val projectVersion = "2.6.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -31,10 +31,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.39.0" + suffix
-  val scroogeVersion = "4.11.0" + suffix
-  val twitterserverVersion = "1.24.0" + suffix
-  val utilVersion = "6.38.0" + suffix
+  val finagleVersion = "6.40.0" + suffix
+  val scroogeVersion = "4.12.0" + suffix
+  val twitterserverVersion = "1.25.0" + suffix
+  val utilVersion = "6.39.0" + suffix
 
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
@@ -191,7 +191,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   utils)
 
 lazy val finatraExamples =
-  // START EXAMPLES
+  /* // START EXAMPLES
   Seq[sbt.ProjectReference](
     benchmarkServer,
     exampleHttpJavaServer,
@@ -204,7 +204,7 @@ lazy val finatraExamples =
     thriftJavaExampleServer,
     tinyUrl,
     twitterClone) ++
-  // END EXAMPLES
+  */ // END EXAMPLES
   Seq.empty
 
 def aggregatedProjects = {
@@ -228,12 +228,12 @@ lazy val root = (project in file("."))
     moduleName := "finatra-root",
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
-      // START EXAMPLES
+      /* // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer, thriftJavaExampleIdl, thriftJavaExampleServer,
          tinyUrl, twitterClone)
-      // END EXAMPLES
+      */ // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
 
 lazy val injectCore = (project in file("inject/inject-core"))
@@ -613,7 +613,7 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     injectServer % "test->test",
     thrift % "test->test;test->compile")
 
-// START EXAMPLES
+/* // START EXAMPLES
 
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
   .settings(exampleServerSettings)
@@ -780,4 +780,4 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard")).
     slf4j,
     injectCore % "test->test")
 
-// END EXAMPLES
+*/ // END EXAMPLES

@@ -1,18 +1,22 @@
-name := "streaming-example"
+import com.typesafe.sbt.SbtNativePackager._
+
+packageArchetype.java_application
+name := "hello-world-heroku"
 organization := "com.twitter"
-version := "2.6.0-SNAPSHOT"
+version := "2.6.0"
 scalaVersion := "2.11.8"
+fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.6.0-SNAPSHOT"
+  val finatra = "2.6.0"
   val guice = "4.0"
   val logback = "1.1.7"
+  val finagleMetrics = "0.0.3"
 }
 
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
-  "Twitter Maven" at "https://maven.twttr.com"
+  Resolver.sonatypeRepo("releases")
 )
 
 assemblyMergeStrategy in assembly := {
@@ -25,6 +29,7 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,
   "com.twitter" %% "finatra-httpclient" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
+  "com.github.rlazoti" %% "finagle-metrics" % versions.finagleMetrics,
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test",
