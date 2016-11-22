@@ -1,14 +1,8 @@
 # Finatra Hello World Heroku Example Application
 
 * A simple example finatra application that is deployable to [Heroku](https://heroku.com) and [integrates](https://github.com/rlazoti/finagle-metrics) with [Dropwizard/Codahale metrics](https://github.com/dropwizard/metrics).
-* Finatra examples are built in different ways depending on the branch you are in:
+* Note: This example should only be used from [master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.5.0](https://github.com/twitter/finatra/tree/finatra-2.5.0))]
 
-If you're in master or a feature branch
-----------------------------------------------------------
-* Development from master or feature branches is not currently supported for this example. Please switch to a release branch and see the instructions below.
-
-If you're in a tagged release branch (e.g. [finatra-2.5.0](https://github.com/twitter/finatra/tree/finatra-2.5.0))
-----------------------------------------------------------
 
 ### Run the server on Heroku ###
 Copy the hello-world-heroku directory contents (minus the .git directory) to another location locally.
@@ -77,7 +71,6 @@ You can then open the application in a browser with `heroku open`, e.g.:
 ```
 $ heroku open hi?name=foo
 ```
-
 
 ### Run the example locally with the Heroku Toolbelt  ###
 
