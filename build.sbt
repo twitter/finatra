@@ -5,7 +5,7 @@ import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
-lazy val projectVersion = "2.5.0"
+lazy val projectVersion = "2.6.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -31,10 +31,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.39.0" + suffix
-  val scroogeVersion = "4.11.0" + suffix
-  val twitterserverVersion = "1.24.0" + suffix
-  val utilVersion = "6.38.0" + suffix
+  val finagleVersion = "6.40.0" + suffix
+  val scroogeVersion = "4.12.0" + suffix
+  val twitterserverVersion = "1.25.0" + suffix
+  val utilVersion = "6.39.0" + suffix
 
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
@@ -43,17 +43,21 @@ lazy val versions = new {
   val grizzled = "1.0.2"
   val guava = "16.0.1"
   val guice = "4.0"
-  val scalaGuice = "4.0.0"
-  val jackson = "2.6.5"
+  val jackson = "2.8.4"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
+  val libThrift = "0.5.0-7"
   val logback = "1.1.7"
+  val mockito = "1.9.5"
   val mustache = "0.8.18"
   val nscalaTime = "1.6.0"
+  val scalaCheck = "1.13.4"
+  val scalaGuice = "4.0.0"
+  val scalaTest = "3.0.0"
   val servletApi = "2.5"
-  val snakeyaml = "1.12"
   val slf4j = "1.7.21"
-  val libThrift = "0.5.0-1"
+  val snakeyaml = "1.12"
+  val specs2 = "2.3.12"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
@@ -72,9 +76,10 @@ lazy val scalaCompilerOptions = scalacOptions ++= Seq(
 
 lazy val baseSettings = Seq(
   libraryDependencies ++= Seq(
-    "org.mockito" % "mockito-core" % "1.9.5" % "test",
-    "org.scalatest" %% "scalatest" % "2.2.6" % "test",
-    "org.specs2" %% "specs2" % "2.3.12" % "test"
+    "org.mockito" % "mockito-core" %  versions.mockito % "test",
+    "org.scalacheck" %% "scalacheck" % versions.scalaCheck % "test",
+    "org.scalatest" %% "scalatest" %  versions.scalaTest % "test",
+    "org.specs2" %% "specs2" % versions.specs2 % "test"
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -100,7 +105,7 @@ lazy val publishSettings = Seq(
   licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
   homepage := Some(url("https://github.com/twitter/finatra")),
   autoAPIMappings := true,
-  apiURL := Some(url("https://twitter.github.io/finatra/docs/")),
+  apiURL := Some(url("https://twitter.github.io/finatra/scaladocs/")),
   excludeFilter in (Compile, managedSources) := HiddenFileFilter || "BUILD",
   excludeFilter in (Compile, unmanagedSources) := HiddenFileFilter || "BUILD",
   excludeFilter in (Compile, managedResources) := HiddenFileFilter || "BUILD",
@@ -371,7 +376,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
     moduleName := "inject-thrift",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % versions.libThrift,
+      "com.twitter" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
       "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
@@ -447,7 +452,7 @@ lazy val utils = project
       "joda-time" % "joda-time" % versions.jodaTime,
       "commons-io" % "commons-io" % versions.commonsIo,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "org.apache.thrift" % "libthrift" % versions.libThrift,
+      "com.twitter" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
@@ -500,6 +505,7 @@ lazy val http = project
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
+      "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "javax.servlet" % "servlet-api" % versions.servletApi
     ),

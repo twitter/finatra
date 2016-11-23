@@ -1,5 +1,4 @@
 junit_tests(
-  name='scala',
   dependencies=[
     'finatra/inject/inject-core:test-deps',
     'finatra/inject/inject-server:test-deps',

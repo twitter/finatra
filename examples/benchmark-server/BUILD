@@ -1,4 +1,4 @@
-target(name='benchmark-server',
+target(
   dependencies=[
     'finatra/examples/benchmark-server/src/main/scala'
   ]

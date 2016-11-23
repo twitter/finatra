@@ -1,8 +1,7 @@
 package com.twitter.finatra.multiserver.CombinedServer
 
-import com.twitter.finagle.http.Request
+import com.twitter.finagle.http.{RouteIndex, Request}
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.http.routing.AdminIndexInfo
 import javax.inject.{Inject, Singleton}
 
 @Singleton
@@ -26,8 +25,8 @@ class DoEverythingCombinedController @Inject()(
 
   get("/admin/foo",
     admin = true,
-    adminIndexInfo =
-      Some(AdminIndexInfo(alias = "Foo"))) { request: Request =>
+    index = Some(
+      RouteIndex(alias = "Foo", group = "Finatra"))) { request: Request =>
     "Bar"
   }
 

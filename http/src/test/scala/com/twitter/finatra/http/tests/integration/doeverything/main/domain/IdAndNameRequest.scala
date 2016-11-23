@@ -1,7 +1,5 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.domain
 
-import javax.inject.Inject
-
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.request.{JsonIgnoreBody, RouteParam}
 
@@ -11,7 +9,7 @@ case class IdAndNameRequest(
 
 case class IdRequest(
   @RouteParam id: Long,
-  @Inject request: Request)
+  request: Request)
 
 @JsonIgnoreBody
 case class IdRequestIgnoringBody(

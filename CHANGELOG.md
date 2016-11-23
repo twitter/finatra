@@ -12,6 +12,62 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.6.0](https://github.com/twitter/finatra/tree/finatra-2.6.0) (2016-11-22)
+
+### Added
+
+* finatra: Move the OSS documentation to internal code repository to be co-located with
+  source code. ``RB_ID=881112``
+
+### Changed
+
+* finatra-http: The 'cookie' method of `c.t.finatra.http.response.ResponseBuilder#EnrichedResponse`
+  that takes a Netty 3 cookie instance has been deprecated. Please use the method which takes a
+  Finagle HTTP cookie instead. ``RB_ID=888683``
+
+* finatra-http: Update adding routes to the TwitterServer HTTP Admin Interface to use
+  `c.t.finagle.http.RouteIndex` and remove the `c.t.finatra.http.routing.AdminIndexInfo`.
+  Also relaxed the rules for what routes can be added to the index to include constant
+  /POST routes. Additionally, no longer fail if you define conflicting admin routes --
+  we will now only warn. It is up to the user to not shoot themselves in the foot.
+  ``RB_ID=889792``
+
+* finatra-http: Request in request case classes no longer requires Inject annotation. ``RB_ID=888197``
+
+* inject-utils: Deprecated RootMonitor since finagle DefaultMonitor is implicitly installed
+  and handles all exceptions caught in stack. We provide a monitor method by default is a NullMonitor in
+  `c.t.finatra.thrift.modules.DarkTrafficFilterModule` and `c.t.inject.thrift.modules.FilteredThriftClientModule`,
+  users can handle other exceptions (unhandled by DefaultMonitor) by overriding the monitor method ``RB_ID=886773``
+
+* finatra: We now depend on a fork of libthrift hosted in the Central Repository.
+  The new package lives in the 'com.twitter' organization. This removes the necessity of
+  depending on maven.twttr.com. This also means that eviction will not be automatic and
+  using a newer libthrift library requires manual eviction if artifacts are being pulled
+  in transitively. ``RB_ID=885879``
+
+* inject-thrift-client: (BREAKING API CHANGE) Update filter building API with
+  FilteredThriftClientModule. The `c.t.inject.thrift.filters.ThriftClientFilterChain`
+  builder API has changed along with the underlying mechanisms to support
+  enforcement of a "correct" filter order when using the helper methods. Methods
+  have been renamed to a 'with'-syntax to be more inline with other builders and
+  the confusing "globalFilter" method to the more verbose but more accurate
+  "withAgnosticFilter". ``RB_ID=878260``
+* inject-thrift-client: Remove deprecated package aliases. We'd like people to
+  move the correct packages.``RB_ID=879330``
+
+* finatra-http: (BREAKING API CHANGE) Update StreamingResponse to avoid keeping
+  a reference to the head of the AsyncStream. This resolves the memory leak
+  when streaming an infinite stream. The constructor is now private; use the
+  StreamingResponse object methods that take an AsyncStream by-name instead.
+  ``RB_ID=890205''
+
+### Fixed
+
+* finatra-http: Allow 0,1,t,f as valid boolean values for QueryParam case class requests.
+  ``RB_ID=881939``
+
+### Closed
+
 ## [finatra-2.5.0](https://github.com/twitter/finatra/tree/finatra-2.5.0) (2016-10-10)
 
 ### Added
@@ -23,8 +79,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
-* finatra: No longer need to add an additional resolver that points to maven.twttr.com.
-  ``RB_ID=878967``
+* finatra: No longer need to add an additional resolver that points to
+  maven.twttr.com. ``RB_ID=878967``
 * inject-thrift-client: Stop counting response failures in the
   `c.t.inject.thrift.ThriftClientFilterChain` as these are now counted in the
   `c.t.finagle.thrift.ThriftServiceIface`. ``RB_ID=879075``

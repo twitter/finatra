@@ -1,4 +1,4 @@
-junit_tests(name='java',
+junit_tests(
   dependencies=[
     'finatra/thrift/src/test/thrift:doeverything-thrift-java',
     'finatra/thrift:test-deps',

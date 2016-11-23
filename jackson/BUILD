@@ -1,4 +1,4 @@
-target(name='jackson',
+target(
   dependencies=[
     'finatra/jackson/src/main/scala'
   ]

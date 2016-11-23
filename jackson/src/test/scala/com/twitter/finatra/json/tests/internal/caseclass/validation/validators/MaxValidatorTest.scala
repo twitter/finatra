@@ -3,6 +3,8 @@ package com.twitter.finatra.json.tests.internal.caseclass.validation.validators
 import com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator
 import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation._
+import org.scalacheck.Gen
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 case class MaxIntExample(@Max(0) numberValue: Int)
 case class MaxDoubleExample(@Max(0) numberValue: Double)
@@ -16,95 +18,140 @@ case class MaxBigDecimalExample(@Max(0) numberValue: BigDecimal)
 case class MaxLargestLongBigDecimalExample(@Max(Long.MaxValue) numberValue: BigDecimal)
 //case class MaxSecondLargestLongBigDecimalExample(@Max(Long.MaxValue - 1) numberValue: BigDecimal)
 case class MaxSmallestLongBigDecimalExample(@Max(Long.MinValue) numberValue: BigDecimal)
-case class MaxSeqExample(@Max(0) numberValue: Seq[Int])
-case class MaxArrayExample(@Max(0) numberValue: Array[Int])
-case class MaxInvalidTypeExample(@Max(0) numberValue: String)
+case class MaxSeqExample(@Max(100) numberValue: Seq[Int])
+case class MaxArrayExample(@Max(100) numberValue: Array[Int])
+case class MaxInvalidTypeExample(@Max(100) numberValue: String)
 
-class MaxValidatorTest extends ValidatorTest {
+class MaxValidatorTest
+  extends ValidatorTest
+  with GeneratorDrivenPropertyChecks {
 
   "max validator" should {
 
     "pass validation for int type" in {
-      val value = 0
-      validate[MaxIntExample](value) should equal(Valid)
+      val passValue = Gen.choose(Int.MinValue, 0)
+
+      forAll(passValue) { value: Int =>
+        validate[MaxIntExample](value) should equal(Valid)
+      }
     }
 
     "fail validation for int type" in {
-      val value = 1
-      validate[MaxIntExample](value) should equal(
-        Invalid(
+      val failValue = Gen.choose(1, Int.MaxValue)
+
+      forAll(failValue) { value =>
+        validate[MaxIntExample](value) should equal(
+          Invalid(
           errorMessage(Integer.valueOf(value)),
           errorCode(Integer.valueOf(value))))
+      }
     }
 
     "pass validation for long type" in {
-      val value = 0L
-      validate[MaxLongExample](value) should equal(Valid)
+      val passValue = Gen.choose(Long.MinValue, 0L)
+
+      forAll(passValue) { value =>
+        validate[MaxLongExample](value) should equal(Valid)
+      }
     }
 
-    "fail validation for long type" in {
-      val value = 1L
-      validate[MaxLongExample](value) should equal(
-        Invalid(
+    "failed validation for long type" in {
+      val failValue = Gen.choose(1L, Long.MaxValue)
+
+      forAll(failValue) { value =>
+        validate[MaxLongExample](value) == Invalid(
           errorMessage(java.lang.Long.valueOf(value)),
-          errorCode(java.lang.Long.valueOf(value))))
+          errorCode(java.lang.Long.valueOf(value)))
+      }
     }
 
     "pass validation for double type" in {
-      val value = 0.0
-      validate[MaxDoubleExample](value) should equal(Valid)
+      val passValue = Gen.choose(Double.MinValue, 0.0)
+
+      forAll(passValue) { value =>
+        validate[MaxDoubleExample](value) should equal(Valid)
+      }
     }
 
     "fail validation for double type" in {
-      val value = 0.5
-      validate[MaxDoubleExample](value) should equal(
-        Invalid(
+      val failValue = Gen.choose(0.1, Double.MaxValue)
+
+      forAll(failValue) { value =>
+        validate[MaxDoubleExample](value) should equal(
+          Invalid(
           errorMessage(java.lang.Double.valueOf(value)),
           errorCode(java.lang.Double.valueOf(value))))
+      }
     }
 
     "pass validation for float type" in {
-      val value = 0.0F
-      validate[MaxFloatExample](value) should equal(Valid)
+      val passValue = Gen.choose(Float.MinValue, 0.0F)
+
+      forAll(passValue) { value =>
+        validate[MaxFloatExample](value) should equal(Valid)
+      }
     }
 
     "fail validation for float type" in {
-      val value = 0.5F
-      validate[MaxFloatExample](value) should equal(
-        Invalid(
+      val failValue = Gen.choose(0.1F, Float.MaxValue)
+
+      forAll(failValue) { value =>
+        validate[MaxFloatExample](value) should equal(
+          Invalid(
           errorMessage(java.lang.Float.valueOf(value)),
           errorCode(java.lang.Float.valueOf(value))))
+      }
     }
 
     "pass validation for big int type" in {
-      val value = BigInt(0)
-      validate[MaxBigIntExample](value) should equal(Valid)
+      val passBigIntValue: Gen[BigInt] = for {
+        long <- Gen.choose[Long](Long.MinValue, 0)
+      } yield BigInt(long)
+
+      forAll(passBigIntValue) { value =>
+        validate[MaxBigIntExample](value) should equal(Valid)
+      }
     }
 
     "pass validation for very small big int type" in {
-      val value = BigInt(Long.MinValue)
-      validate[MaxSmallestLongBigIntExample](value) should equal(Valid)
+      val passValue = BigInt(Long.MinValue)
+      validate[MaxSmallestLongBigIntExample](passValue) should equal(Valid)
     }
 
     "pass validation for very large big int type" in {
-      val value = BigInt(Long.MaxValue)
-      validate[MaxLargestLongBigIntExample](value) should equal(Valid)
+      val passBigIntValue: Gen[BigInt] = for {
+        long <- Gen.choose[Long](Long.MinValue, Long.MaxValue)
+      } yield BigInt(long)
+
+      forAll(passBigIntValue) { value =>
+        validate[MaxLargestLongBigIntExample](value) should equal(Valid)
+      }
     }
 
     "fail validation for big int type" in {
-      val value = BigInt(1)
-      validate[MaxBigIntExample](value) should equal(
-        Invalid(
+      val failBigIntValue: Gen[BigInt] = for {
+        long <- Gen.choose[Long](1, Long.MaxValue)
+      } yield BigInt(long)
+
+      forAll(failBigIntValue) { value =>
+        validate[MaxBigIntExample](value) should equal(
+          Invalid(
           errorMessage(value),
           errorCode(value)))
+      }
     }
 
     "fail validation for very small big int type" in {
-      val value = BigInt(Long.MinValue) + 1
-      validate[MaxSmallestLongBigIntExample](value) should equal(
-        Invalid(
+      val failBigIntValue: Gen[BigInt] = for {
+        long <- Gen.choose[Long](Long.MinValue + 1, Long.MaxValue)
+      } yield BigInt(long)
+
+      forAll(failBigIntValue) { value =>
+        validate[MaxSmallestLongBigIntExample](value) should equal(
+          Invalid(
           errorMessage(value, maxValue = Long.MinValue),
           errorCode(value, maxValue = Long.MinValue)))
+      }
     }
 
 //    "fail validation for very large big int type" in {
@@ -115,34 +162,54 @@ class MaxValidatorTest extends ValidatorTest {
 //    }
 
     "pass validation for big decimal type" in {
-      val value = BigDecimal(0)
-      validate[MaxBigDecimalExample](value) should equal(Valid)
+      val passBigDecimalValue: Gen[BigDecimal] = for {
+        double <- Gen.choose[Double](Long.MinValue, 0)
+      } yield BigDecimal(double)
+
+      forAll(passBigDecimalValue) { value =>
+        validate[MaxBigDecimalExample](value) should equal(Valid)
+      }
     }
 
     "pass validation for very small big decimal type" in {
-      val value = BigDecimal(Long.MinValue)
-      validate[MaxSmallestLongBigDecimalExample](value) should equal(Valid)
+      val passValue = BigDecimal(Long.MinValue)
+      validate[MaxSmallestLongBigDecimalExample](passValue) should equal(Valid)
     }
 
     "pass validation for very large big decimal type" in {
-      val value = BigDecimal(Long.MaxValue)
-      validate[MaxLargestLongBigDecimalExample](value) should equal(Valid)
+      val passBigDecimalValue: Gen[BigDecimal] = for {
+        double <- Gen.choose[Double](Long.MinValue, Long.MaxValue)
+      } yield BigDecimal(double)
+
+      forAll(passBigDecimalValue) { value =>
+        validate[MaxLargestLongBigDecimalExample](value) should equal(Valid)
+      }
     }
 
     "fail validation for big decimal type" in {
-      val value = BigDecimal(0.9)
-      validate[MaxBigDecimalExample](value) should equal(
-        Invalid(
+      val failBigDecimalValue: Gen[BigDecimal] = for {
+        double <- Gen.choose[Double](0.1, Long.MaxValue)
+      } yield BigDecimal(double)
+
+      forAll(failBigDecimalValue) { value =>
+        validate[MaxBigDecimalExample](value) should equal(
+          Invalid(
           errorMessage(value),
           errorCode(value)))
+      }
     }
 
     "fail validation for very small big decimal type" in {
-      val value = BigDecimal(Long.MinValue) + 0.1
-      validate[MaxSmallestLongBigDecimalExample](value) should equal(
-        Invalid(
+      val failBigDecimalValue: Gen[BigDecimal] = for {
+        double <- Gen.choose[Double](Long.MinValue + 0.1, Long.MaxValue)
+      } yield BigDecimal(double)
+
+      forAll(failBigDecimalValue) { value =>
+        validate[MaxSmallestLongBigDecimalExample](value) should equal(
+          Invalid(
           errorMessage(value, maxValue = Long.MinValue),
           errorCode(value, maxValue = Long.MinValue)))
+      }
     }
 
 //    "fail validation for very large big decimal type" in {
@@ -153,29 +220,51 @@ class MaxValidatorTest extends ValidatorTest {
 //    }
 
     "pass validation for sequence of integers" in {
-      val value = Seq()
-      validate[MaxSeqExample](value) should equal(Valid)
+      val passValue = for {
+        size <- Gen.choose(0, 100)
+      } yield Seq.fill(size){0}
+
+      forAll(passValue) { value =>
+        validate[MaxSeqExample](value) should equal(Valid)
+      }
     }
 
     "fail validation for sequence of integers" in {
-      val value = Seq(10)
-      validate[MaxSeqExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.size)),
-          errorCode(Integer.valueOf(value.size))))
+      val failValue = for {
+        n <- Gen.containerOfN[Seq, Int](100, Gen.choose(0, 200))
+        m <- Gen.nonEmptyContainerOf[Seq, Int](Gen.choose(0, 200))
+      } yield n ++ m
+
+      forAll(failValue) { value =>
+        validate[MaxSeqExample](value) should equal(
+          Invalid(
+          errorMessage(value = Integer.valueOf(value.size), maxValue = 100),
+          errorCode(value = Integer.valueOf(value.size), maxValue = 100)))
+      }
     }
 
     "pass validation for array of integers" in {
-      val value = Array()
-      validate[MaxArrayExample](value) should equal(Valid)
+      val passValue = for {
+        size <- Gen.choose(0, 100)
+      } yield Array.fill(size){0}
+
+      forAll(passValue) { value =>
+        validate[MaxArrayExample](value) should equal(Valid)
+      }
     }
 
     "fail validation for array of integers" in {
-      val value = Array(10)
-      validate[MaxArrayExample](value) should equal(
-        Invalid(
-          errorMessage(value = Integer.valueOf(value.length)),
-          errorCode(Integer.valueOf(value.length))))
+      val failValue = for {
+        n <- Gen.containerOfN[Array, Int](100, Gen.choose(0, 200))
+        m <- Gen.nonEmptyContainerOf[Array, Int](Gen.choose(0, 200))
+      } yield n ++ m
+
+      forAll(failValue) { value =>
+        validate[MaxArrayExample](value) should equal(
+          Invalid(
+          errorMessage(value = Integer.valueOf(value.size), maxValue = 100),
+          errorCode(value = Integer.valueOf(value.size), maxValue = 100)))
+      }
     }
 
     "fail for unsupported class type" in {
@@ -185,7 +274,7 @@ class MaxValidatorTest extends ValidatorTest {
     }
   }
 
-  private def validate[C : Manifest](value: Any): ValidationResult = {
+  private def validate[C: Manifest](value: Any): ValidationResult = {
     super.validate(manifest[C].runtimeClass, "numberValue", classOf[Max], value)
   }
 

@@ -1,4 +1,4 @@
-target(name='http',
+target(
   dependencies=[
     'finatra/http/src/main/scala'
   ]

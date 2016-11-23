@@ -1,5 +1,4 @@
 junit_tests(
-  name='scala',
   dependencies=[
     '3rdparty/jvm/org/openjdk/jmh:jmh-core',
     '3rdparty/jvm/com/google/inject:guice',

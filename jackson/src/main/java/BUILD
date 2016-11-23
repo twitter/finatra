@@ -1,4 +1,4 @@
-java_library(name='java',
+java_library(
   dependencies=[
     'finatra/jackson/src/main/scala'
   ],

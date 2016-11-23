@@ -1,5 +1,4 @@
 junit_tests(
-  name='java',
   dependencies=[
     '3rdparty/jvm/junit',
     'finatra/httpclient',

@@ -1,5 +1,4 @@
 junit_tests(
-  name='scala',
   dependencies=[
     'finatra/examples/twitter-clone',
     'finatra/http:test-deps',

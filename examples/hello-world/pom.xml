@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.twitter</groupId>
   <artifactId>hello-world</artifactId>
-  <version>2.5.0</version>
+  <version>2.6.0</version>
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <encoding>UTF-8</encoding>
     <scala.version>2.11.7</scala.version>
-    <finatra.version>2.5.0</finatra.version>
+    <finatra.version>2.6.0</finatra.version>
 
     <mainClass>com.twitter.hello.HelloWorldServerMain</mainClass>
     <buildPropertiesPackage>com.twitter.hello</buildPropertiesPackage>
@@ -87,7 +87,7 @@
       <groupId>org.scalatest</groupId>
       <artifactId>scalatest_2.11</artifactId>
       <scope>test</scope>
-      <version>2.2.4</version>
+      <version>3.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.specs2</groupId>
@@ -334,13 +334,6 @@
     </plugins>
   </build>
 
-  <repositories>
-    <repository>
-      <id>twitter-repo</id>
-      <name>twitter-repo</name>
-      <url>https://maven.twttr.com</url>
-    </repository>
-  </repositories>
   <pluginRepositories>
     <pluginRepository>
       <id>twitter-repo</id>

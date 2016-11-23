@@ -55,7 +55,7 @@ class RoutesTest extends Test with OptionValues {
       method = method,
       path = path,
       admin = false,
-      adminIndexInfo = None,
+      index = None,
       callback = defaultCallback,
       annotations = Seq(),
       requestClass = classOf[Request],

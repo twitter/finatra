@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.routing
 
-import com.twitter.finagle.http.{HttpMuxer, Request}
-import com.twitter.finatra.http.routing.{AdminIndexInfo, HttpRouter}
+import com.twitter.finagle.http.{RouteIndex, HttpMuxer, Request}
+import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.inject.Test
@@ -40,33 +40,6 @@ class HttpServerAdminRouteTest extends Test {
       }
     }
 
-     "not allow conflicting admin routes that start with /admin/" in {
-      val server =  new EmbeddedHttpServer(
-        twitterServer = new HttpServer {
-          override protected def configureHttp(router: HttpRouter) = {
-            router.add(new Controller {
-
-              get("/admin/tracing", admin = true) { request: Request =>
-                response.ok("trace\n")
-              }
-
-              get("/admin/server_info", admin = true) { request: Request =>
-                response.ok("some info here\n")
-              }
-            })
-          }
-        })
-
-      try {
-        // defines overlapping admin route paths
-        intercept[Exception] {
-          server.start()
-        }
-      } finally {
-        server.close()
-      }
-    }
-
     "properly add routes to admin index" in {
       val server =  new EmbeddedHttpServer(
         twitterServer = new HttpServer {
@@ -74,12 +47,12 @@ class HttpServerAdminRouteTest extends Test {
             router.add(new Controller {
               get("/admin/finatra/stuff/:id",
                 admin = true,
-                adminIndexInfo = Some(AdminIndexInfo())) { request : Request =>
+                index = Some(RouteIndex(alias = "", group = "Finatra"))) { request : Request =>
                 response.ok.json(request.params("id"))
               }
 
               get("/admin/finatra/foo",
-                adminIndexInfo = Some(AdminIndexInfo())) { request: Request =>
+                index = Some(RouteIndex(alias = "", group = "Finatra"))) { request: Request =>
                 response.ok.json("bar")
               }
 
@@ -89,8 +62,8 @@ class HttpServerAdminRouteTest extends Test {
 
               get("/admin/thisisacustompath",
                 admin = true,
-                adminIndexInfo = Some(
-                  AdminIndexInfo(
+                index = Some(
+                  RouteIndex(
                     alias = "Custom",
                     group = "My Service"))) { request: Request =>
                 response.ok.json("pong")
@@ -98,7 +71,7 @@ class HttpServerAdminRouteTest extends Test {
 
               post("/admin/finatra/ok/computer",
                 admin = true,
-                adminIndexInfo = Some(AdminIndexInfo())) { request : Request =>
+                index = Some(RouteIndex(alias = "", group = "Finatra"))) { request : Request =>
                 response.ok("roger.")
               }
             })

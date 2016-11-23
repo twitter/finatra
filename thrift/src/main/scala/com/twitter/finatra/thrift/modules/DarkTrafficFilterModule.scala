@@ -7,8 +7,8 @@ import com.twitter.finagle.{Thrift, ThriftMux}
 import com.twitter.finatra.annotations.DarkTrafficFilterType
 import com.twitter.finatra.thrift.filters.DarkTrafficFilter
 import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
-import com.twitter.inject.{RootMonitor, TwitterModule}
-import com.twitter.util.Monitor
+import com.twitter.inject.TwitterModule
+import com.twitter.util.{Monitor, NullMonitor}
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
@@ -47,8 +47,14 @@ abstract class DarkTrafficFilterModule[ServiceIface: ClassTag](
    */
   def enableSampling: ThriftRequest[_] => Boolean
 
-  /* Client defaults */
-  protected def monitor: Monitor = RootMonitor
+  /**
+   * Function to add a user-defined Monitor, c.t.finagle.DefaultMonitor will be installed
+   * implicitly which handles all exceptions caught in stack. Exceptions aren't handled by
+   * user-defined monitor propagated to the default monitor.
+   *
+   * NullMonitor has no influence on DefaultMonitor behavior here
+   */
+  protected def monitor: Monitor = NullMonitor
 
   @Provides
   @Singleton
@@ -82,18 +88,20 @@ abstract class DarkTrafficFilterModule[ServiceIface: ClassTag](
     clientId: ClientId,
     statsReceiver: StatsReceiver): ServiceIface = {
 
-    if (mux) {
-      ThriftMux.client
-        .withStatsReceiver(statsReceiver)
-        .withClientId(clientId)
-        .withMonitor(monitor)
-        .newServiceIface[ServiceIface](dest, label)
-    } else {
-      Thrift.client
-        .withStatsReceiver(statsReceiver)
-        .withClientId(clientId)
-        .withMonitor(monitor)
-        .newServiceIface[ServiceIface](dest, label)
-    }
+    val thriftClient =
+      if (mux) {
+        ThriftMux.client
+          .withStatsReceiver(statsReceiver)
+          .withClientId(clientId)
+          .withMonitor(monitor)
+      } else {
+        Thrift.client
+          .withStatsReceiver(statsReceiver)
+          .withClientId(clientId)
+          .withMonitor(monitor)
+      }
+
+    thriftClient
+      .newServiceIface[ServiceIface](dest, label)
   }
 }

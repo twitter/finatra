@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
-import com.twitter.finagle.http.{Cookie => FinagleCookie, _}
+import com.twitter.finagle.http._
 import com.twitter.finagle.netty3.ChannelBufferBuf
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
@@ -22,7 +22,7 @@ import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.buffer.{ChannelBuffer, ChannelBuffers}
-import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie, DefaultCookie}
+import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
 import scala.runtime.BoxedUnit
 
 object ResponseBuilder {
@@ -177,17 +177,18 @@ class ResponseBuilder @Inject()(
     /* Public */
 
     def cookie(k: String, v: String): EnrichedResponse = {
-      cookie(new FinagleCookie(new DefaultCookie(k, v)))
+      cookie(new Cookie(k, v))
       this
     }
 
-    def cookie(c: FinagleCookie): EnrichedResponse = {
+    def cookie(c: Cookie): EnrichedResponse = {
       response.addCookie(c)
       this
     }
 
+    @deprecated("use cookie(Cookie)", "2016-11-07")
     def cookie(c: NettyCookie): EnrichedResponse = {
-      response.addCookie(new FinagleCookie(c))
+      response.addCookie(new Cookie(c))
       this
     }
 

@@ -3,21 +3,20 @@ import com.typesafe.sbt.SbtNativePackager._
 packageArchetype.java_application
 name := "hello-world-heroku"
 organization := "com.twitter"
-version := "2.5.0"
+version := "2.6.0"
 scalaVersion := "2.11.8"
 fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.5.0"
+  val finatra = "2.6.0"
   val guice = "4.0"
   val logback = "1.1.7"
   val finagleMetrics = "0.0.3"
 }
 
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
-  "Twitter Maven" at "https://maven.twttr.com"
+  Resolver.sonatypeRepo("releases")
 )
 
 assemblyMergeStrategy in assembly := {
@@ -48,5 +47,6 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "inject-modules" % versions.finatra % "test" classifier "tests",
 
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
-  "org.scalatest" %% "scalatest" % "2.2.3" % "test",
+  "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
+  "org.scalatest" %% "scalatest" %  "3.0.0" % "test",
   "org.specs2" %% "specs2" % "2.3.12" % "test")

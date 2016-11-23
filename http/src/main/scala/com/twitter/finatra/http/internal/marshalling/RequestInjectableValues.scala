@@ -42,23 +42,32 @@ class RequestInjectableValues(
 
     val fieldName = forProperty.getName
 
-    if (isRequest(forProperty))
+    if (isRequest(forProperty)) {
       request
-    else if (hasAnnotation(forProperty, requestParamsAnnotation))
+    } else if (hasAnnotation(forProperty, requestParamsAnnotation)) {
       if (forProperty.getType.isCollectionLikeType) {
-        val paramsValue = request.params.getAll(fieldName)
-        if (paramsValue == SeqWithSingleEmptyString && hasStringTypeParam(forProperty))
-          convert(forProperty, Seq())
-        else
-          convert(forProperty, request.params.getAll(fieldName))
+        val modifiedParamsValue = handleExtendedBooleans(
+          forProperty = forProperty,
+          propertyValue = getCollectionLikePropertyValue(forProperty))
+
+        convert(forProperty, modifiedParamsValue)
+      } else {
+        request.params.get(fieldName) match {
+          case Some(value) =>
+            val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
+            convert(forProperty, modifiedParamsValue)
+          case None => null
+        }
       }
-      else
-        (request.params.get(fieldName) map { convert(forProperty, _) }).orNull
-    else if (hasAnnotation[Header](forProperty))
-      (request.headerMap.get(fieldName) map { convert(forProperty, _) }).orNull
-    else
+    } else if (hasAnnotation[Header](forProperty)) {
+      request.headerMap.get(fieldName) match {
+        case Some(p) => convert(forProperty, p)
+        case None => null
+      }
+    } else {
       injector.getInstance(
         valueId.asInstanceOf[Key[_]]).asInstanceOf[Object]
+    }
   }
 
   /* Private */
@@ -80,6 +89,40 @@ class RequestInjectableValues(
       objectMapper.convert(
         propertyValue,
         forType)
+  }
+
+  private def handleExtendedBooleans(forProperty: BeanProperty, propertyValue: Any): Any = {
+    if (hasAnnotation[QueryParam](forProperty)) {
+      val forType = forProperty.getType
+      if (forType.getRawClass == classOf[java.lang.Boolean]) {
+        matchExtendedBooleans(propertyValue.asInstanceOf[String])
+      } else if (isSeqOfBools(forType)) {
+        propertyValue.asInstanceOf[Seq[String]].map(matchExtendedBooleans)
+      } else {
+        propertyValue
+      }
+    } else {
+      propertyValue
+    }
+  }
+
+  private def matchExtendedBooleans(value: String): String = value match {
+    case "t" | "1" => "true"
+    case "f" | "0" => "false"
+    case _ => value
+  }
+
+  private def getCollectionLikePropertyValue(forProperty: BeanProperty): AnyRef = {
+    val fieldName = forProperty.getName
+    if (request.params.getAll(fieldName) == SeqWithSingleEmptyString && hasStringTypeParam(forProperty))
+      Seq.empty
+    else
+      request.params.getAll(fieldName)
+  }
+
+  private def isSeqOfBools(forType: JavaType): Boolean = {
+    forType.getRawClass == classOf[Seq[_]] &&
+      forType.containedType(0).getRawClass == classOf[java.lang.Boolean]
   }
 
   private def hasStringTypeParam(forProperty: BeanProperty): Boolean = {

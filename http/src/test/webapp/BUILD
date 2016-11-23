@@ -1,3 +1,3 @@
-resources(name='webapp',
+resources(
   sources=globs('*')
 )

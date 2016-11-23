@@ -1,4 +1,4 @@
-target(name='tiny-url',
+target(
   dependencies=[
     'finatra/examples/tiny-url/src/main/scala'
   ]

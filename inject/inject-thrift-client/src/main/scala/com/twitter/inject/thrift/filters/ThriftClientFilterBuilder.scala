@@ -3,7 +3,7 @@ package com.twitter.inject.thrift.filters
 import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.Injector
-import com.twitter.inject.thrift.{AndThenService, ThriftClientFilterChain}
+import com.twitter.inject.thrift.AndThenService
 import com.twitter.scrooge.ThriftMethod
 
 class ThriftClientFilterBuilder(

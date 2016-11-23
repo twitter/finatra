@@ -1,4 +1,4 @@
-junit_tests(name='scala',
+junit_tests(
   dependencies=[
     'finatra/thrift/src/test/thrift:doeverything-thrift-scala',
     'finatra/thrift:test-deps',

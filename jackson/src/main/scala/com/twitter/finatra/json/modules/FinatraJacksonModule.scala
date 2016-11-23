@@ -108,7 +108,7 @@ class FinatraJacksonModule extends TwitterModule {
   }
 
   protected val serializationInclusion: Include =
-    JsonInclude.Include.NON_NULL
+    JsonInclude.Include.NON_ABSENT
 
   protected val serializationConfig: Map[SerializationFeature, Boolean] = Map(
     SerializationFeature.WRITE_DATES_AS_TIMESTAMPS -> false,

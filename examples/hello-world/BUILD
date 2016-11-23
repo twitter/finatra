@@ -1,4 +1,4 @@
-target(name='hello-world',
+target(
   dependencies=[
     'finatra/examples/hello-world/src/main/scala'
   ]

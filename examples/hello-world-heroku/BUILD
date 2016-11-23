@@ -1,4 +1,4 @@
-target(name='hello-world-heroku',
+target(
   dependencies=[
     'finatra/examples/hello-world-heroku/src/main/scala'
   ]

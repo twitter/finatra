@@ -1,13 +1,6 @@
 # Finatra Tiny URL Example Application
 
-* Finatra examples are built in different ways depending on the branch you are in:
-
-If you're in master or a feature branch
-----------------------------------------------------------
-* Development from master or feature branches is not currently supported for this example. Please switch to a release branch and see the instructions below.
-
-If you're in a tagged release branch (e.g. [finatra-2.5.0](https://github.com/twitter/finatra/tree/finatra-2.5.0))
-----------------------------------------------------------
+* Note: This example should only be used from [master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.6.0](https://github.com/twitter/finatra/tree/finatra-2.6.0))]
 
 ### Building
 
@@ -64,7 +57,6 @@ $ ➔ PORT=8080 REDIS_URL=redis://127.0.0.1:12345 foreman start web
 15:15:59 web.1     | 2015-06-28 15:15:59,180 INF                           TinyUrlServerMain$         App started.
 15:15:59 web.1     | 2015-06-28 15:15:59,181 INF                           TinyUrlServerMain$         Startup complete, server ready.
 ```
-
 
 To run in [Heroku](https://www.heroku.com): Make sure you have the [Heroku Toolbelt](https://toolbelt.heroku.com/) [installed](https://devcenter.heroku.com/articles/getting-started-with-scala#set-up).
 

@@ -1,4 +1,4 @@
-junit_tests(name='scala',
+junit_tests(
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     'finatra/jackson/src/main/scala',
@@ -22,6 +22,7 @@ junit_tests(name='scala',
     '3rdparty/jvm/net/codingwell:scala-guice',
     '3rdparty/jvm/org/apache/thrift:libthrift-0.5.0',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
+    '3rdparty/jvm/org/scalacheck:scalacheck',
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/specs2:specs2',
     'finagle/finagle-http/src/main/scala:scala',

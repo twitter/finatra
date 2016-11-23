@@ -4,6 +4,7 @@ import com.twitter.finagle.{BackupRequestLost, CancelledRequestException, Failur
 import com.twitter.inject.utils.ExceptionUtils
 import com.twitter.util.{Monitor, NonFatal, RootMonitor => UtilRootMonitor}
 
+@deprecated("com.twitter.finagle.util.DefaultMonitor will be implicitly installed which will handle these exceptions", "2016-11-1")
 object RootMonitor extends Monitor with Logging {
   override def handle(exc: Throwable): Boolean = exc match {
     case _: CancelledRequestException => true // suppress logging

@@ -19,41 +19,41 @@ object AdderThriftClientModule
 
     serviceIface.copy(
       add1 = filter.method(Add1)
-        .exceptionFilter(Filter.identity[Add1.Args, Add1.Result]) // Example of replacing the default exception filter
-        .timeout(3.minutes)
-        .exponentialRetry(
+        .withExceptionFilter(Filter.identity[Add1.Args, Add1.Result]) // Example of replacing the default exception filter
+        .withTimeout(3.minutes)
+        .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
-          requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
+        .withRequestTimeout(1.minute)
         .andThen(serviceIface.add1),
       add1String = filter.method(Add1String)
-        .timeout(3.minutes)
-        .exponentialRetry(
+        .withTimeout(3.minutes)
+        .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
-          requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
+        .withRequestTimeout(1.minute)
         .andThen(serviceIface.add1String),
       add1Slowly = filter.method(Add1Slowly)
-        .timeout(3.minutes)
-        .exponentialRetry(
+        .withTimeout(3.minutes)
+        .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
-          requestTimeout = 1.millis, // We purposely set a very small timeout so that we can test handling IndividualRequestTimeoutException
           start = 50.millis,
           multiplier = 2,
           retries = 3)
+        .withRequestTimeout(1.millis) // We purposely set a very small timeout so that we can test handling IndividualRequestTimeoutException
         .andThen(serviceIface.add1Slowly),
       add1AlwaysError = filter.method(Add1AlwaysError)
-        .timeout(3.minutes)
-        .exponentialRetry(
+        .withTimeout(3.minutes)
+        .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
-          requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
+        .withRequestTimeout(1.minute)
         .andThen(serviceIface.add1AlwaysError))
   }
 }

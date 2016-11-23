@@ -4,26 +4,38 @@ import com.twitter.finatra.json.internal.caseclass.validation.validators.FutureT
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, FutureTime, ValidationResult, ValidatorTest}
 import org.joda.time.DateTime
+import org.scalacheck.Gen
+import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
-class FutureValidatorTest extends ValidatorTest {
+class FutureValidatorTest
+  extends ValidatorTest
+  with GeneratorDrivenPropertyChecks {
 
-  "future validator" should {
+  "future time validator" should {
 
     "pass validation for valid datetime" in {
-      val futureDateTime = DateTime.now().plusDays(5)
-      validate[FutureExample](futureDateTime) should equal(Valid)
+      val futureDateTimeMillis = Gen.choose(DateTime.now().getMillis, DateTime.now().plusWeeks(5).getMillis())
+
+      forAll(futureDateTimeMillis) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[FutureExample](dateTimeValue) should equal(Valid)
+      }
     }
 
     "fail validation for invalid datetime" in {
-      val pastDateTime = DateTime.now.minusDays(5)
-      validate[FutureExample](pastDateTime) should equal(
-        Invalid(
-          errorMessage(pastDateTime),
-          ErrorCode.TimeNotFuture(pastDateTime)))
+      val passDateTimeMillis = Gen.choose(DateTime.now().minusWeeks(5).getMillis(), DateTime.now().getMillis)
+
+      forAll(passDateTimeMillis) { millisValue =>
+        val dateTimeValue = new DateTime(millisValue)
+        validate[FutureExample](dateTimeValue) should equal(
+          Invalid(
+          errorMessage(dateTimeValue),
+          ErrorCode.TimeNotFuture(dateTimeValue)))
+      }
     }
   }
 
-  private def validate[C : Manifest](value: DateTime): ValidationResult = {
+  private def validate[C: Manifest](value: DateTime): ValidationResult = {
     super.validate(manifest[C].runtimeClass, "dateTime", classOf[FutureTime], value)
   }
 

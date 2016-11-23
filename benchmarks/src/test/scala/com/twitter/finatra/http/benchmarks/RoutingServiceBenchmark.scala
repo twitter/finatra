@@ -43,7 +43,7 @@ class RoutingServiceBenchmark {
     method = Method.Get,
     path = path,
     admin = false,
-    adminIndexInfo = None,
+    index = None,
     callback = defaultCallback,
     annotations = Seq(),
     requestClass = classOf[Request],

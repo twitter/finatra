@@ -1,4 +1,4 @@
-target(name='slf4j',
+target(
   dependencies=[
     'finatra/slf4j/src/main/scala'
   ]

@@ -1,4 +1,4 @@
-java_library(name='java',
+java_library(
   provides = artifact(
     org = 'com.twitter.finatra',
     name = 'finatra-http-java',

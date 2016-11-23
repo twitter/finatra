@@ -5,7 +5,6 @@ jar_library(name='jedis',
 )
 
 scala_library(
-  name='scala',
   dependencies=[
     ':jedis',
     '3rdparty/jvm/ch/qos/logback:logback-classic',

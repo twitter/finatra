@@ -1,4 +1,4 @@
-target(name='inject-app',
+target(
   dependencies=[
     'finatra/inject/inject-app/src/main/scala'
   ]

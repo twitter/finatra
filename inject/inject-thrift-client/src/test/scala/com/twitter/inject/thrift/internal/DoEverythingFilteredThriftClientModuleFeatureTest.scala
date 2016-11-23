@@ -41,12 +41,27 @@ class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
     thriftServer.close()
   }
 
+  override protected def afterEach(): Unit = {
+    httpServer.clearStats()
+    thriftServer.clearStats()
+    super.afterEach()
+  }
+
   "GreeterHttpServer" should {
     "Say hi" in {
       httpServer.httpGet(
         path = "/hi?name=Bob",
         andExpect = Ok,
         withBody = "Hi Bob")
+
+      // per-method -- all the requests in this test were to the same method
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/hi/invocations", 1)
+      /* assert counters added by ThriftServiceIface#statsFilter */
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/hi/requests", 4)
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/hi/success", 2)
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
+      /* assert latency stat exists */
+      httpServer.getStat("clnt/greeter-thrift-client/Greeter/hi/latency_ms") should not be Seq()
     }
 
     "Say bye" in {
@@ -54,6 +69,16 @@ class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
         path = "/bye?name=Bob&age=18",
         andExpect = Ok,
         withBody = "Bye Bob of 18 years!")
+
+      // per-method -- all the requests in this test were to the same method
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/bye/invocations", 1)
+      /* assert counters added by StatsFilter */
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/bye/requests", 3)
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/bye/success", 1)
+      httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
+      /* assert latency stat exists */
+      httpServer.getStat("clnt/greeter-thrift-client/Greeter/bye/latency_ms") should not be Seq()
+      httpServer.getStat("clnt/greeter-thrift-client/Greeter/bye/request_latency_ms") should not be Seq()
     }
   }
 }
@@ -71,8 +96,9 @@ object GreeterThriftClientModule2
 
     serviceIface.copy(
       hi = filter.method(Hi)
-        .constantRetry(
-          requestTimeout = 1.minute,
+        .withAgnosticFilter(new RequestLoggingThriftClientFilter)
+        .withMethodLatency
+        .withConstantRetry(
           shouldRetry = {
             case (_, Return(Hi.Result(_, Some(e: InvalidOperation)))) => true
             case (_, Return(Hi.Result(Some(success), _))) => success == "ERROR"
@@ -80,17 +106,19 @@ object GreeterThriftClientModule2
           },
           start = 50.millis,
           retries = 3)
-        .globalFilter(new RequestLoggingThriftClientFilter)
-        .filter(new HiLoggingThriftClientFilter)
+        .withRequestTimeout(1.minute)
+        .filtered(new HiLoggingThriftClientFilter)
         .andThen(serviceIface.hi),
       bye = filter.method(Bye)
-        .globalFilter[RequestLoggingThriftClientFilter]
-        .exponentialRetry(
+        .withAgnosticFilter[RequestLoggingThriftClientFilter]
+        .withMethodLatency
+        .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
-          requestTimeout = 1.minute,
           start = 50.millis,
           multiplier = 2,
           retries = 3)
+        .withRequestLatency
+        .withRequestTimeout(1.minute)
         .andThen(serviceIface.bye))
   }
 }

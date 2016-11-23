@@ -29,14 +29,14 @@ object StreamingResponse {
       prefix = prefix,
       separator = separator,
       suffix = suffix,
-      asyncStream = asyncStream)
+      asyncStream = () => asyncStream)
   }
 
   def jsonArray[T](
     toBuf: T => Buf,
     status: Status = Status.Ok,
     headers: Map[String, String] = Map(),
-    asyncStream: AsyncStream[T]) = {
+    asyncStream: => AsyncStream[T]) = {
 
     new StreamingResponse[T](
       toBuf = toBuf ,
@@ -45,18 +45,18 @@ object StreamingResponse {
       prefix = JsonArrayPrefix,
       separator = JsonArraySeparator,
       suffix = JsonArraySuffix,
-      asyncStream = asyncStream)
+      asyncStream = () => asyncStream)
   }
 }
 
-case class StreamingResponse[T](
+class StreamingResponse[T] private(
   toBuf: T => Buf,
   status: Status,
   headers: Map[String, String],
   prefix: Option[Buf],
   separator: Option[Buf],
   suffix: Option[Buf],
-  asyncStream: AsyncStream[T])
+  asyncStream: () => AsyncStream[T])
   extends Logging {
 
   def toFutureFinagleResponse: Future[Response] = {
@@ -69,7 +69,7 @@ case class StreamingResponse[T](
     /* Orphan the future which writes to our response thread */
     (for {
       _ <- writePrefix(writer)
-      bufs = asyncStream map toBuf
+      bufs = asyncStream() map toBuf
       _ <- addSeparatorIfPresent(bufs) foreachF writer.write
       result <- writeSuffix(writer)
     } yield result) onSuccess { r =>

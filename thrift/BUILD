@@ -1,4 +1,4 @@
-target(name='thrift',
+target(
   dependencies=[
     'finatra/thrift/src/main/scala'
   ]
