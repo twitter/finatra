@@ -1,18 +1,15 @@
-import com.typesafe.sbt.SbtNativePackager._
+import sbt.Keys._
 
-packageArchetype.java_application
-name := "hello-world-heroku"
+name := "web-dashboard"
 organization := "com.twitter"
-version := "2.6.0"
+version := "2.7.0-SNAPSHOT"
 scalaVersion := "2.11.8"
-fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.6.0"
+  val finatra = "2.7.0-SNAPSHOT"
   val guice = "4.0"
   val logback = "1.1.7"
-  val finagleMetrics = "0.0.3"
 }
 
 resolvers ++= Seq(
@@ -25,11 +22,17 @@ assemblyMergeStrategy in assembly := {
   case other => MergeStrategy.defaultMergeStrategy(other)
 }
 
+excludeFilter in (Compile, unmanagedSources) := HiddenFileFilter || "BUILD"
+excludeFilter in (Compile, unmanagedResources) := HiddenFileFilter || "BUILD"
+
+unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
+
+Revolver.settings
+
 libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,
   "com.twitter" %% "finatra-httpclient" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
-  "com.github.rlazoti" %% "finagle-metrics" % versions.finagleMetrics,
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test",

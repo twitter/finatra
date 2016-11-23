@@ -40,6 +40,6 @@ $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" .
 * Or build and run a deployable jar:
 ```
 $ ./sbt exampleWebDashboard/assembly
-$ java -jar -Dlog.service.output=web-dashboard.log -Dlog.access.output=access.log examples/web-dashboard/target/scala-2.11/web-dashboard-assembly-2.6.0-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
+$ java -jar -Dlog.service.output=web-dashboard.log -Dlog.access.output=access.log examples/web-dashboard/target/scala-2.11/web-dashboard-assembly-2.7.0-SNAPSHOT.jar -http.port=:8888 -admin.port=:9990
 ```
 *Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. When not set the [logback.xml](./src/main/resources/logback.xml) is parameterized with defaults of `service.log` and `access.log`, respectively.
