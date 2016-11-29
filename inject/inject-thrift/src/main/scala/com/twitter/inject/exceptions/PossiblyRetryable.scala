@@ -3,7 +3,8 @@ package com.twitter.inject.exceptions
 import com.twitter.finagle.mux.ClientDiscardedRequestException
 import com.twitter.finagle.{BackupRequestLost, CancelledConnectionException, CancelledRequestException, Failure}
 import com.twitter.scrooge.ThriftResponse
-import com.twitter.util.{NonFatal, Return, Throw, Try}
+import com.twitter.util.{Return, Throw, Try}
+import scala.util.control.NonFatal
 
 /**
  * PossiblyRetryable attempts to determine if a request is possibly retryable based on the
@@ -46,7 +47,7 @@ object PossiblyRetryable {
   def possiblyRetryable(t: Throwable): Boolean = {
     !isCancellation(t) &&
       !t.isInstanceOf[NonRetryableException] &&
-      NonFatal.isNonFatal(t)
+      NonFatal(t)
   }
 
   def isCancellation(t: Throwable): Boolean = t match {

@@ -2,7 +2,8 @@ package com.twitter.inject
 
 import com.twitter.finagle.{BackupRequestLost, CancelledRequestException, Failure}
 import com.twitter.inject.utils.ExceptionUtils
-import com.twitter.util.{Monitor, NonFatal, RootMonitor => UtilRootMonitor}
+import com.twitter.util.{Monitor, RootMonitor => UtilRootMonitor}
+import scala.util.control.NonFatal
 
 @deprecated("com.twitter.finagle.util.DefaultMonitor will be implicitly installed which will handle these exceptions", "2016-11-1")
 object RootMonitor extends Monitor with Logging {

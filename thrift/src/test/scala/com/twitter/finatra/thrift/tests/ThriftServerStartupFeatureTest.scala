@@ -6,7 +6,7 @@ import com.twitter.finatra.thrift.tests.doeverything.controllers.DoNothingContro
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftServer}
 import com.twitter.inject.Test
 import com.twitter.inject.server.EmbeddedTwitterServer
-import com.twitter.util.NonFatal
+import scala.util.control.NonFatal
 
 class ThriftServerStartupFeatureTest extends Test {
 

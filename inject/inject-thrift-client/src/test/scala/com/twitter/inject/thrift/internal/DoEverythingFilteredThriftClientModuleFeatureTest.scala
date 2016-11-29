@@ -13,6 +13,7 @@ import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThrif
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftClientModule}
 import com.twitter.util._
+import scala.util.control.NonFatal
 
 class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
 

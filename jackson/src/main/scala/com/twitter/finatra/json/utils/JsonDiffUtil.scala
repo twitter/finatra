@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.{JsonNode, ObjectMapperCopier, Serializati
 import com.twitter.finatra.conversions.boolean._
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
-import com.twitter.util.NonFatal
+import scala.util.control.NonFatal
 
 
 object JsonDiffUtil extends Logging {

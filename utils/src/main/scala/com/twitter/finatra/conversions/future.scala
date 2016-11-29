@@ -4,6 +4,7 @@ import com.twitter.finatra.conversions.option._
 import com.twitter.finatra.conversions.seq._
 import com.twitter.util._
 import grizzled.slf4j.Logger
+import scala.util.control.NonFatal
 
 object future {
 
