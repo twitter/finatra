@@ -107,7 +107,7 @@ case class FinatraObjectMapper(
     try {
       objectMapper.convertValue[T](any)
     } catch {
-      case e: IllegalArgumentException =>
+      case e: IllegalArgumentException if e.getCause != null =>
         throw e.getCause
     }
   }
@@ -117,7 +117,7 @@ case class FinatraObjectMapper(
     try {
       objectMapper.convertValue(from, toValueType)
     } catch {
-      case e: IllegalArgumentException =>
+      case e: IllegalArgumentException if e.getCause != null =>
         throw e.getCause
     }
   }
