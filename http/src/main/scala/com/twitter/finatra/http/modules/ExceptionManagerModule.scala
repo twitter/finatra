@@ -2,8 +2,8 @@ package com.twitter.finatra.http.modules
 
 import com.google.inject.Provides
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finatra.http.internal.exceptions._
 import com.twitter.finatra.http.exceptions.ExceptionManager
-import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper
 import com.twitter.finatra.http.internal.exceptions.json.{CaseClassExceptionMapper, JsonParseExceptionMapper}
 import com.twitter.inject.{Injector, TwitterModule}
 import javax.inject.Singleton
@@ -22,8 +22,14 @@ object ExceptionManagerModule extends TwitterModule {
   /** Add default Framework Exception Mappers */
   override def singletonStartup(injector: Injector) {
     val manager = injector.instance[ExceptionManager]
-    manager.add[ThrowableExceptionMapper]
-    manager.add[JsonParseExceptionMapper]
+
+    manager.add[CancelledRequestExceptionMapper]
     manager.add[CaseClassExceptionMapper]
+    manager.add[FailureExceptionMapper]
+    manager.add[HttpExceptionMapper]
+    manager.add[HttpResponseExceptionMapper]
+    manager.add[JsonParseExceptionMapper]
+    manager.add[ThriftExceptionMapper]
+    manager.add[ThrowableExceptionMapper]
   }
 }

@@ -1,80 +1,19 @@
 package com.twitter.finatra.http.internal.exceptions
 
-import com.google.common.net.MediaType
-import com.twitter.finagle.{Failure, CancelledRequestException}
-import com.twitter.finagle.http.{Response, Request}
-import com.twitter.finatra.http.exceptions.{ExceptionMapper, HttpResponseException, HttpException}
+import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
-import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
-import com.twitter.finatra.utils.DeadlineValues
+import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.inject.Logging
 import com.twitter.inject.utils.ExceptionUtils._
 import javax.inject.{Inject, Singleton}
-import org.apache.thrift.TException
 
-private[http] object ThrowableExceptionMapper {
-  private val MaxDepth = 5
-  private val DefaultExceptionSource = "Internal"
+private[exceptions] object ThrowableExceptionMapper {
+  val DefaultExceptionSource = "Internal"
 
-  private def unwrapFailure(failure: Failure, depth: Int): Throwable = {
-    if (depth == 0)
-      failure
-    else
-      failure.cause match {
-        case Some(inner: Failure) => unwrapFailure(inner, depth - 1)
-        case Some(cause) => cause
-        case None => failure
-      }
-  }
-}
-
-@Singleton
-private[http] class ThrowableExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends ExceptionMapper[Throwable]
-  with Logging {
-
-  override def toResponse(request: Request, throwable: Throwable): Response = {
-    throwable match {
-      case e: HttpException =>
-        val builder = response.status(e.statusCode)
-        if (e.mediaType.is(MediaType.JSON_UTF_8))
-          builder.json(ErrorsResponse(e.errors))
-        else
-          builder.plain(e.errors.mkString(", "))
-      case e: HttpResponseException =>
-        response.create(e.response)
-      case e: CancelledRequestException =>
-        val deadlineValues = DeadlineValues.current()
-        response
-          .clientClosed
-          .failureClassifier(
-            deadlineValues.exists(_.expired),
-            request,
-            source = DefaultExceptionSource,
-            details = Seq("CancelledRequestException"),
-            message = deadlineValues.map(_.elapsed).getOrElse("unknown") + " ms")
-      case e: Failure =>
-        unwrapFailure(e, MaxDepth) match {
-          case cause: Failure =>
-            unhandledResponse(request, e)
-          case cause =>
-            toResponse(request, cause)
-        }
-      case e: TException =>
-        unhandledResponse(request, e, logStackTrace = false)
-      case e => // Note: We don't use NonFatal(e) since ExceptionMappingFilter is protecting us
-        unhandledResponse(request, e)
-    }
-  }
-
-  private def unhandledResponse(request: Request, e: Throwable, logStackTrace: Boolean = true): Response = {
-    if (logStackTrace) {
-      error("Unhandled Exception", e)
-    }
-    else {
-      error("Unhandled Exception: " + e)
-    }
+  def unhandledExceptionResponse(
+    request: Request,
+    response: ResponseBuilder,
+    throwable: Throwable): Response = {
 
     response
       .internalServerError
@@ -83,7 +22,44 @@ private[http] class ThrowableExceptionMapper @Inject()(
         source = DefaultExceptionSource,
         details = Seq(
           "Unhandled",
-          toExceptionDetails(e)))
+          toExceptionDetails(throwable)))
       .jsonError
+  }
+}
+
+/**
+ * A general [[com.twitter.finatra.http.exceptions.ExceptionMapper]] over the Throwable
+ * exception type. This mapper specifically attempts to handle the following exceptions
+ * (with a default handling of any other exception type):
+ *
+ * [[com.twitter.finatra.http.exceptions.HttpException]]
+ * [[com.twitter.finatra.http.exceptions.HttpResponseException]]
+ * [[com.twitter.finagle.CancelledRequestException]]
+ * [[org.apache.thrift.TException]]
+ *
+ * Each exception is handled by a `xxxExceptionResponse` method, with the default
+ * behavior for any "unhandled" type implemented in the unhandledExceptionResponse method.
+ *
+ * Users can subclass this mapper and provide their own implementation of any
+ * of the `xxxExceptionResponse` methods to customize how that exception type is
+ * converted into a [[com.twitter.finagle.http.Response]]. That subclass can then be
+ * registered over the Throwable exception type.
+ *
+ * @see [[http://twitter.github.io/finatra/user-guide/build-new-http-server/exceptions.html#override-defaults]]
+ * @param response - a [[com.twitter.finatra.http.response.ResponseBuilder]]
+ */
+@Singleton
+private[http] class ThrowableExceptionMapper @Inject()(
+  response: ResponseBuilder)
+  extends AbstractExceptionMapper[Throwable](response)
+  with Logging {
+
+  override protected def handle(
+    request: Request,
+    response: ResponseBuilder,
+    throwable: Throwable): Response = {
+
+    error("Unhandled Exception", throwable)
+    unhandledExceptionResponse(request, response, throwable)
   }
 }

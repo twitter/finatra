@@ -21,6 +21,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Decompose the `ThrowableExceptionMapper` to allow users to more easily replace
+  the portions they care about. Users can now just replace the functionality per exception
+  type rather than needing to replace the entire `ThrowableExceptionMapper`. `RB_ID=891666``
+
 * finatra-http: The 'cookie' method of `c.t.finatra.http.response.ResponseBuilder#EnrichedResponse`
   that takes a Netty 3 cookie instance has been deprecated. Please use the method which takes a
   Finagle HTTP cookie instead. ``RB_ID=888683``
