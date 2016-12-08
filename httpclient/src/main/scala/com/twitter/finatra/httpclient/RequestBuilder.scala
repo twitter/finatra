@@ -2,7 +2,7 @@ package com.twitter.finatra.httpclient
 
 import com.google.common.net.HttpHeaders
 import com.twitter.finagle.http.{Message, Method, Request, RequestProxy}
-import com.twitter.io.Charsets
+import java.nio.charset.StandardCharsets.UTF_8
 import org.apache.commons.io.IOUtils
 
 /**
@@ -87,7 +87,7 @@ class RequestBuilder(
 
   def body(string: String, contentType: String = Message.ContentTypeJson): RequestBuilder = {
     request.setContentString(string)
-    request.headerMap.set(HttpHeaders.CONTENT_LENGTH, string.getBytes(Charsets.Utf8).length.toString)
+    request.headerMap.set(HttpHeaders.CONTENT_LENGTH, string.getBytes(UTF_8).length.toString)
     request.headerMap.set(HttpHeaders.CONTENT_TYPE, contentType)
     this
   }
