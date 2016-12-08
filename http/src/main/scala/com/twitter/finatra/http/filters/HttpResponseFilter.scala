@@ -6,7 +6,7 @@ import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.util.{ScheduledThreadPoolTimer, Future}
-import java.util.TimeZone
+import java.util.{Locale, TimeZone}
 import javax.inject.Singleton
 import org.apache.commons.lang.time.FastDateFormat
 
@@ -19,7 +19,10 @@ import org.apache.commons.lang.time.FastDateFormat
 class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
 
   // optimized
-  private val dateFormat = FastDateFormat.getInstance(HttpHeaders.RFC7231DateFormat, TimeZone.getTimeZone("GMT"))
+  private val dateFormat = FastDateFormat.getInstance(
+    HttpHeaders.RFC7231DateFormat,
+    TimeZone.getTimeZone("GMT"),
+    Locale.ENGLISH)
   @volatile private var currentDateValue: String = getCurrentDateValue()
   new ScheduledThreadPoolTimer(
     poolSize = 1,
