@@ -5,6 +5,10 @@ junit_tests(
     'finatra/http:test-deps',
     'finatra/examples/java-http-server',
     'finagle/finagle-http/src/main/scala:scala',
+    '3rdparty/jvm/com/google/guava:guava',
+    '3rdparty/jvm/com/google/inject:guice',
+    'finagle/finagle-base-http/src/main/scala:scala',
+    'finatra/inject/inject-server/src/main/scala:scala',
   ],
   sources=globs('com/twitter/hello/server/*.java'),
   resources=[
