@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Add built-in support for Scala `scala.concurrent.Future`. The
+  CallbackConverter now supports a return type of Scala `scala.concurrent.Future`
+  by using a bijection to convert to a Twitter `c.t.util.Future`. ``RB_ID=898147``
+
 * finatra-http: Support for request forwarding. Requests can be forwarded from
   one route to another. Forwarded requests will not go through the server's
   defined filter chain again but will pass through any Controller defined filters

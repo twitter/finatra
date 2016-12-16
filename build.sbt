@@ -36,6 +36,7 @@ lazy val versions = new {
   val twitterserverVersion = "1.25.0" + suffix
   val utilVersion = "6.39.0" + suffix
 
+  val bijectionVersion = "0.9.4"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
@@ -504,6 +505,7 @@ lazy val http = project
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
+      "com.twitter" %% "bijection-util" % versions.bijectionVersion,
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,

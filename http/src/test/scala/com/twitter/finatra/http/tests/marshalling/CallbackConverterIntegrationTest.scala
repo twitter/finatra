@@ -12,6 +12,7 @@ import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.{IntegrationTest, Mockito}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Future}
+import scala.concurrent.{Future => ScalaFuture}
 
 class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
@@ -92,6 +93,75 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       callbackConverter.convertToFutureResponse(futureSeqCarTrait),
       withBody = """[{"name":"Ford"}]""")
   }
+  
+  
+  // ScalaFuture
+  "ScalaFuture Some String" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureSomeString),
+      withBody = "hello")
+  }
+
+  "ScalaFuture None String" in {
+    assertStatus(
+      callbackConverter.convertToFutureResponse(scalaFutureNoneString),
+      expectedStatus = Status.NotFound)
+  }
+
+  "ScalaFuture Some Product" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureSomeProduct),
+      withBody = """{"name":"Ford"}""")
+  }
+
+  "ScalaFuture Some Trait" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureSomeTrait),
+      withBody = """{"name":"Ford"}""")
+  }
+
+  "ScalaFuture String" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureString),
+      withBody = "bob")
+  }
+
+  "ScalaFuture Response" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureResponse),
+      withBody = "bob")
+  }
+
+  "ScalaFuture Some Response" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureSomeResponse),
+      withBody = "bob")
+  }
+
+  "ScalaFuture None Response" in {
+    assertStatus(
+      callbackConverter.convertToFutureResponse(scalaFutureNoneResponse),
+      expectedStatus = Status.NotFound)
+  }
+
+  "ScalaFuture Seq String" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureSeqString),
+      withBody = """["bob"]""")
+  }
+
+  "ScalaFuture Seq Car" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureSeqCar),
+      withBody = """[{"name":"Ford"}]""")
+  }
+
+  "ScalaFuture Seq CarTrait" in {
+    assertOk(
+      callbackConverter.convertToFutureResponse(scalaFutureSeqCarTrait),
+      withBody = """[{"name":"Ford"}]""")
+  }
+
 
   "Object" in {
     assertOk(
@@ -253,6 +323,50 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
   def futureSeqCarTrait(request: Request): Future[Seq[CarTrait]] = {
     Future(Seq(ford))
+  }
+  
+  def scalaFutureSomeString(request: Request): ScalaFuture[Option[String]] = {
+    ScalaFuture.successful(Some("hello"))
+  }
+
+  def scalaFutureNoneString(request: Request): ScalaFuture[Option[String]] = {
+    ScalaFuture.successful(None)
+  }
+
+  def scalaFutureSomeProduct(request: Request): ScalaFuture[Option[Car]] = {
+    ScalaFuture.successful(Some(ford))
+  }
+
+  def scalaFutureSomeTrait(request: Request): ScalaFuture[Option[CarTrait]] = {
+    ScalaFuture.successful(Some(ford))
+  }
+
+  def scalaFutureString(request: Request): ScalaFuture[String] = {
+    ScalaFuture.successful("bob")
+  }
+
+  def scalaFutureResponse(request: Request): ScalaFuture[Response] = {
+    ScalaFuture.successful(okResponse)
+  }
+
+  def scalaFutureSomeResponse(request: Request): ScalaFuture[Option[Response]] = {
+    ScalaFuture.successful(Some(okResponse))
+  }
+
+  def scalaFutureNoneResponse(request: Request): ScalaFuture[Option[Response]] = {
+    ScalaFuture.successful(None)
+  }
+
+  def scalaFutureSeqString(request: Request): ScalaFuture[Seq[String]] = {
+    ScalaFuture.successful(Seq("bob"))
+  }
+
+  def scalaFutureSeqCar(request: Request): ScalaFuture[Seq[Car]] = {
+    ScalaFuture.successful(Seq(ford))
+  }
+
+  def scalaFutureSeqCarTrait(request: Request): ScalaFuture[Seq[CarTrait]] = {
+    ScalaFuture.successful(Seq(ford))
   }
 
   def asyncStreamRequestAndResponse(stream: AsyncStream[Int]): AsyncStream[String] = {
