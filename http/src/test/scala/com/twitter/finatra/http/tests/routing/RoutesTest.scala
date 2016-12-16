@@ -15,13 +15,13 @@ class RoutesTest extends Test with OptionValues {
       Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 
     routes.handle(
-      Request("/groups/")) should be('defined)
+      Request("/groups/"), bypassFilters = false) should be('defined)
 
     routes.handle(
-      Request("/groups")) should be('empty)
+      Request("/groups"), bypassFilters = false) should be('empty)
 
     routes.handle(
-      Request("/foo")) should be('empty)
+      Request("/foo"), bypassFilters = false) should be('empty)
   }
 
   "path pattern route" in {
@@ -29,10 +29,10 @@ class RoutesTest extends Test with OptionValues {
       Seq(createRoute(Method.Get, "/groups/:id")), Method.Get)
 
     routes.handle(
-      Request("/groups/1")) should be('defined)
+      Request("/groups/1"), bypassFilters = false) should be('defined)
 
     routes.handle(
-      Request("/groups/")) should be('empty)
+      Request("/groups/"), bypassFilters = false) should be('empty)
   }
 
   "route info" in {
@@ -40,7 +40,7 @@ class RoutesTest extends Test with OptionValues {
       Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 
     val request = Request("/groups/")
-    routes.handle(request) should be('defined)
+    routes.handle(request, bypassFilters = false) should be('defined)
 
     RouteInfo(request).value should be(RouteInfo("my_endpoint", "/groups/"))
   }
@@ -60,6 +60,7 @@ class RoutesTest extends Test with OptionValues {
       annotations = Seq(),
       requestClass = classOf[Request],
       responseClass = classOf[Response],
+      routeFilter = Filter.identity,
       filter = Filter.identity)
   }
 }

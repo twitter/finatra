@@ -15,14 +15,15 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
   routeDsl: RouteDSL) {
 
   def build(callbackConverter: CallbackConverter, injector: Injector) = Route(
-    name,
-    method,
-    route,
-    admin,
-    index,
-    callbackConverter.convertToFutureResponse(callback),
-    routeDsl.annotations,
-    manifest[RequestType].runtimeClass,
-    manifest[ResponseType].runtimeClass,
-    routeDsl.buildFilter(injector))
+    name = name,
+    method = method,
+    path = route,
+    admin = admin,
+    index = index,
+    callback = callbackConverter.convertToFutureResponse(callback),
+    annotations = routeDsl.annotations,
+    requestClass = manifest[RequestType].runtimeClass,
+    responseClass = manifest[ResponseType].runtimeClass,
+    routeFilter = routeDsl.buildFilter(injector),
+    filter = routeDsl.buildFilter(injector))
 }

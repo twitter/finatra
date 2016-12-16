@@ -251,7 +251,42 @@ case class CaseClassWithRequestField(
 
 For more specifics on how JSON parsing integrates with routing see: [Integration with Routing](/finatra/user-guide/json#routing-json) in the [JSON](/finatra/user-guide/json) documentation.
 
-### Multipart Requests
+### <a class="anchor" name="forwarding-requests" href="#forwarding-requests">Request Forwarding</a>
+
+You can forward a request to another controller. This is similar to other frameworks where forwarding will re-use the same request, as opposed to issuing a redirect which will force a client to issue a new request.
+
+To forward, you need to include a `c.t.finatra.http.request.HttpForward` instance in your controller, e.g.,
+
+```scala
+class MyController @Inject()(
+  forward: HttpForward)
+  extends Controller {
+```
+<div></div>
+
+Then, to use in your route:
+
+```scala
+get("/foo") { request: Request =>
+  forward(request, "/bar")
+}
+```
+<div></div>
+
+Forwarded requests will bypass the server defined filter chain (as the requests have already passed through the filter chain) but will still pass through controller defined filters.
+
+For example, if a route is defined:
+
+```scala
+filter[MyAwesomeFilter].get("/bar") { request: Request =>
+  "Hello, world."
+}
+```
+<div></div>
+
+When another controller forwards to this route, `MyAwesomeFilter` will be executed on the forwarded request.
+
+### <a class="anchor" name="multipart-requests" href="#multipart-requests">Multipart Requests</a>
 
 Finatra has support for multi-part requests. Here's an example of a multi-part `POST` controller route definition that simply returns all of the keys in the multi-part request:
 

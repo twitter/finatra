@@ -48,5 +48,6 @@ class RoutingServiceBenchmark {
     annotations = Seq(),
     requestClass = classOf[Request],
     responseClass = classOf[Response],
+    routeFilter = Filter.identity,
     filter = Filter.identity)
 }

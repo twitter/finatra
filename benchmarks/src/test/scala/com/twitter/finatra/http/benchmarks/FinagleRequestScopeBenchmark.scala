@@ -24,6 +24,7 @@ class FinagleRequestScopeBenchmark {
     annotations = Seq(),
     requestClass = classOf[Request],
     responseClass = classOf[Response],
+    routeFilter = Filter.identity,
     filter = Filter.identity)
 
   val routingController = new RoutingService(routes = Seq(route))

@@ -8,7 +8,7 @@ object RouteInfo {
   private[http] val SlashRegexp = "/".r
 
   private[http] def set(request: Request, info: RouteInfo): Unit = {
-    request.ctx.updateAndLock(field, Some(info))
+    request.ctx.update(field, Some(info))
   }
 
   def apply(request: Request): Option[RouteInfo] = {
@@ -22,8 +22,8 @@ case class RouteInfo(
 
   val sanitizedPath = {
     val noSlashes = RouteInfo.SlashRegexp.replaceAllIn(
-      target = path.stripPrefix("/").stripSuffix("/")
-    , replacement = "_")
+      target = path.stripPrefix("/").stripSuffix("/"),
+      replacement = "_")
     RouteInfo.SanitizeRegexp.replaceAllIn(noSlashes, "")
   }
 }

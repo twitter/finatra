@@ -86,7 +86,7 @@ class StatsFilter[R <: Request] @Inject()(
 
   def apply(request: R, service: Service[R, Response]): Future[Response] = {
     val elapsed = Stopwatch.start()
-    service(request) respond {
+    service(request).respond {
       case Return(response) =>
         record(request, response, elapsed())
       case Throw(e) =>
@@ -99,7 +99,7 @@ class StatsFilter[R <: Request] @Inject()(
 
   private def record(request: Request, response: Response, duration: Duration): Unit = {
     globalStats(response.statusCode).count(duration, response)
-    RouteInfo(request) foreach { routeInfo =>
+    RouteInfo(request).foreach { routeInfo =>
       perRouteStats((routeInfo, request.method, response.statusCode)).count(duration, response)
     }
   }

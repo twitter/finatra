@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Support for request forwarding. Requests can be forwarded from
+  one route to another. Forwarded requests will not go through the server's
+  defined filter chain again but will pass through any Controller defined filters
+  on the "forwarded to" route. ``RB_ID=883224``
+
 ### Changed
 
 ### Fixed

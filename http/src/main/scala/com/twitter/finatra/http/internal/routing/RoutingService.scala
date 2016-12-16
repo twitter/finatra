@@ -28,18 +28,22 @@ private[http] class RoutingService(
   /* Public */
 
   override def apply(request: Request): Future[Response] = {
+    route(request, bypassFilters = false)
+  }
+
+  private[finatra] def route(request: Request, bypassFilters: Boolean): Future[Response] = {
     (request.method match {
-      case Get => get.handle(request)
-      case Post => post.handle(request)
-      case Put => put.handle(request)
-      case Delete => delete.handle(request)
-      case Options => options.handle(request)
-      case Patch => patch.handle(request)
-      case Head => head.handle(request)
-      case Trace => trace.handle(request)
+      case Get => get.handle(request, bypassFilters)
+      case Post => post.handle(request, bypassFilters)
+      case Put => put.handle(request, bypassFilters)
+      case Delete => delete.handle(request, bypassFilters)
+      case Options => options.handle(request, bypassFilters)
+      case Patch => patch.handle(request, bypassFilters)
+      case Head => head.handle(request, bypassFilters)
+      case Trace => trace.handle(request, bypassFilters)
       case _ => badRequest(request.method)
     }).getOrElse {
-      any.handle(request)
+      any.handle(request, bypassFilters)
         .getOrElse(notFound(request))
     }
   }
