@@ -1705,4 +1705,11 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       postBody = """{"value" : [{"foo" : "foo"}]}""",
       andExpect = BadRequest)
   }
+
+  "Bad request for deserialization of an invalid joda LocalDate" in {
+    server.httpPost(
+      "/localDateRequest",
+      postBody = """{"date" : "2016-11-32"}""",
+      andExpect = BadRequest)
+  }
 }

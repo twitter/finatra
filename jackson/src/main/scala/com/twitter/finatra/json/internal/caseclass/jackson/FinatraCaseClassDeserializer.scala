@@ -126,8 +126,7 @@ private[finatra] class FinatraCaseClassDeserializer(
         case e: CaseClassValidationException =>
           addException(field, e)
 
-        // joda throws specific exception when a date is invalid
-        case e: org.joda.time.IllegalFieldValueException =>
+        case e: IllegalArgumentException =>
           val ex = CaseClassValidationException(
             PropertyPath.leaf(field.name),
             Invalid(
