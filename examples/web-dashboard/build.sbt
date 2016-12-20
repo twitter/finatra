@@ -1,18 +1,19 @@
-name := "twitter-clone"
+import sbt.Keys._
+
+name := "web-dashboard"
 organization := "com.twitter"
-version := "2.7.0-SNAPSHOT"
+version := "2.7.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.7.0-SNAPSHOT"
+  val finatra = "2.7.0"
   val guice = "4.0"
   val logback = "1.1.7"
 }
 
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases"),
-  "Twitter Maven" at "https://maven.twttr.com"
+  Resolver.sonatypeRepo("releases")
 )
 
 assemblyMergeStrategy in assembly := {
@@ -20,6 +21,13 @@ assemblyMergeStrategy in assembly := {
   case "META-INF/io.netty.versions.properties" => MergeStrategy.last
   case other => MergeStrategy.defaultMergeStrategy(other)
 }
+
+excludeFilter in (Compile, unmanagedSources) := HiddenFileFilter || "BUILD"
+excludeFilter in (Compile, unmanagedResources) := HiddenFileFilter || "BUILD"
+
+unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
+
+Revolver.settings
 
 libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,

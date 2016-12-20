@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-2.7.0](https://github.com/twitter/finatra/tree/finatra-2.7.0) (2016-12-20)
+
+### Added
+
 * finatra-http: Add built-in support for Scala `scala.concurrent.Future`. The
   CallbackConverter now supports a return type of Scala `scala.concurrent.Future`
   by using a bijection to convert to a Twitter `c.t.util.Future`. ``RB_ID=898147``
