@@ -39,11 +39,11 @@ private[http] class Routes(
     jMap
   }
 
-  def handle(request: Request): Option[Future[Response]] = {
+  def handle(request: Request, bypassFilters: Boolean): Option[Future[Response]] = {
     val path = request.path // Store path since Request#path is derived
     val constantRouteResult = constantRouteMap.get(path)
     if (constantRouteResult != null) {
-      constantRouteResult.handleMatch(request)
+      constantRouteResult.handleMatch(request, bypassFilters)
     }
     else {
       var response: Option[Future[Response]] = None
@@ -51,7 +51,7 @@ private[http] class Routes(
       while (response.isEmpty && nonConstantRouteIdx < nonConstantRoutesLimit) {
         nonConstantRouteIdx += 1
         val currentRoute = nonConstantRoutes(nonConstantRouteIdx)
-        response = currentRoute.handle(request, path)
+        response = currentRoute.handle(request, path, bypassFilters)
       }
       response
     }

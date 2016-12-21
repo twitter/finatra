@@ -6,7 +6,7 @@ import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.util.{ScheduledThreadPoolTimer, Future}
-import java.util.TimeZone
+import java.util.{Locale, TimeZone}
 import javax.inject.Singleton
 import org.apache.commons.lang.time.FastDateFormat
 
@@ -19,7 +19,10 @@ import org.apache.commons.lang.time.FastDateFormat
 class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
 
   // optimized
-  private val dateFormat = FastDateFormat.getInstance(HttpHeaders.RFC7231DateFormat, TimeZone.getTimeZone("GMT"))
+  private val dateFormat = FastDateFormat.getInstance(
+    HttpHeaders.RFC7231DateFormat,
+    TimeZone.getTimeZone("GMT"),
+    Locale.ENGLISH)
   @volatile private var currentDateValue: String = getCurrentDateValue()
   new ScheduledThreadPoolTimer(
     poolSize = 1,
@@ -51,11 +54,11 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
    * @param response - the response on which to set the header values.
    */
   private def setResponseHeaders(response: Response) = {
-    response.headerMap.add(HttpHeaders.Server, "Finatra")
-    response.headerMap.add(HttpHeaders.Date, currentDateValue)
+    response.headerMap.set(HttpHeaders.Server, "Finatra")
+    response.headerMap.set(HttpHeaders.Date, currentDateValue)
     if (response.contentType.isEmpty && response.length != 0) {
       // see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7.2.1
-      response.headerMap.add(HttpHeaders.ContentType, "application/octet-stream")
+      response.headerMap.set(HttpHeaders.ContentType, "application/octet-stream")
     }
   }
 

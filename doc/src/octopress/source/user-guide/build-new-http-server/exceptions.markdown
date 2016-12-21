@@ -71,13 +71,18 @@ The [`ExceptionManager`](https://github.com/twitter/finatra/blob/develop/http/sr
 
 If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten. Thus, the last registered mapper for an exception type wins.
 
-The framework adds three mappers to the `ExceptionManager` by default. If a user wants to swap out any of these defaults they simply need add their own mapper to the manager for the exception type to map. E.g., by default the framework will add:
+The framework adds several mappers to the `ExceptionManager` by default. If a user wants to swap out any of these defaults they simply need add their own mapper to the manager for the exception type to map. E.g., by default the framework will add the follow mappers:
   
-- `Throwable` -> [`c.t.finatra.http.internal.exceptions.ThrowableExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThrowableExceptionMapper.scala)
-- `JsonParseException` -> [`c.t.finatra.http.internal.exceptions.json.JsonParseExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/JsonParseExceptionMapper.scala)
-- `CaseClassMappingException` -> [`c.t.finatra.http.internal.exceptions.json.CaseClassExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/CaseClassExceptionMapper.scala)
+- `Throwable`                       -> [`c.t.finatra.http.internal.exceptions.ThrowableExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThrowableExceptionMapper.scala)
+- `JsonParseException`              -> [`c.t.finatra.http.internal.exceptions.json.JsonParseExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/JsonParseExceptionMapper.scala)
+- `CaseClassMappingException`       -> [`c.t.finatra.http.internal.exceptions.json.CaseClassExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/json/CaseClassExceptionMapper.scala)
+- `CancelledRequestException`       -> [`c.t.finatra.http.internal.exceptions.CancelledRequestExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/CancelledRequestExceptionMapper.scala)
+- `c.t.finagle.Failure`             -> [`c.t.finatra.http.internal.exceptions.FailureExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/FailureExceptionMapper.scala)
+- `HttpException`                   -> [`c.t.finatra.http.internal.exceptions.HttpExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpExceptionMapper.scala)
+- `HttpResponseException`           -> [`c.t.finatra.http.internal.exceptions.HttpResponseExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/HttpResponseExceptionMapper.scala)
+- `org.apache.thrift.TException`    -> [`c.t.finatra.http.internal.exceptions.ThriftExceptionMapper`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/exceptions/ThriftExceptionMapper.scala)
 
-The `ExceptionManager` walks the exception type hierarchy starting at the given exception type moving up the inheritence chain until it finds mapper configured for the type. In this manner an `ExceptionMapper[Throwable]` will be the last mapper invoked and acts as the "default".
+The `ExceptionManager` walks the exception type hierarchy starting at the given exception type moving up the inheritance chain until it finds mapper configured for the type. In this manner an `ExceptionMapper[Throwable]` will be the last mapper invoked and acts as the "default".
 
 Therefore to change the framework "default" mapper, simply add a new mapper over the `Throwable` type, i.e., `ExceptionMapper[Throwable]` to the `ExceptionManager`. There are multiple ways to add a mapper. 
 
@@ -108,7 +113,7 @@ Or in a module which is then added to the Server, e.g.,
     MyExceptionMapperModule)
 ```
 
-Similarily, you can override the "default" mappers for `JsonParseException` and `CaseClassMappingException` by registering your own mapper over these types.
+Similarly, you can override the "default" mappers for `JsonParseException` and `CaseClassMappingException` by registering your own mapper over these types.
 <div></div>
 
 Next section: [Implement a Server "Warmup" Handler](/finatra/user-guide/build-new-http-server/warmup.html).

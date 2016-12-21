@@ -1,14 +1,18 @@
 package com.twitter.finatra.http.internal.marshalling
 
+import com.twitter.bijection.Conversion._
+import com.twitter.bijection.twitter_util.TwitterExecutionContext
+import com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaFuture
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http._
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.io.Buf
-import com.twitter.util.Future
+import com.twitter.util.{Future, FuturePool}
 import javax.inject.Inject
 import org.jboss.netty.handler.codec.http.HttpResponseStatus
+import scala.concurrent.{Future => ScalaFuture}
 
 private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
@@ -56,6 +60,7 @@ private[http] class CallbackConverter @Inject()(
       requestCallback.asInstanceOf[(Request => Future[Response])]
     }
     else if (isFutureOption[ResponseType]) {
+      // we special-case in order to convert None --> 404 NotFound
       request: Request =>
         requestCallback(request).asInstanceOf[Future[Option[_]]].map(optionToHttpResponse(request))
     }
@@ -113,6 +118,20 @@ private[http] class CallbackConverter @Inject()(
         response.headerMap.add(Fields.ContentType, responseBuilder.jsonContentType)
         Future.value(response)
     }
+    else if (runtimeClassEq[ResponseType, ScalaFuture[_]]) {
+      implicit val ec = immediatePoolEc
+      def toTwitterFuture[A](in: ScalaFuture[A]) = in.as[Future[A]]
+
+      if (isScalaFutureOption[ResponseType]) {
+        val fn = (request: Request) =>
+          toTwitterFuture(requestCallback.asInstanceOf[Request => ScalaFuture[Option[_]]](request))
+        createResponseCallback(fn)
+      } else {
+        val fn = (request: Request) =>
+          toTwitterFuture(requestCallback.asInstanceOf[Request => ScalaFuture[_]](request))
+        createResponseCallback(fn)
+      }
+    }
     else {
       request: Request =>
         requestCallback(request) match {
@@ -153,4 +172,16 @@ private[http] class CallbackConverter @Inject()(
       typeArgs.size == 1 &&
       typeArgs.head.runtimeClass == classOf[Option[_]]
   }
+
+  private def isScalaFutureOption[T: Manifest]: Boolean = {
+    val typeArgs = manifest[T].typeArguments
+    runtimeClassEq[T, ScalaFuture[_]] &&
+      typeArgs.size == 1 &&
+      typeArgs.head.runtimeClass == classOf[Option[_]]  }
+
+  // Ideally, it would be up to the user to determine where next to run their code but exposing that explicitly would be very difficult 
+  // just for addressing this case. By using the `c.t.util.FuturePool.immediatePool`, the user will still have control over the thread 
+  // pool at least tangentially in that whatever thread satisfied the Future (Promise) is where the bijection conversion will be run 
+  // (and presumably whatever comes after since we use a thread local scheduler by default).
+  private[this] val immediatePoolEc = new TwitterExecutionContext(FuturePool.immediatePool)
 }

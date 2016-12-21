@@ -12,6 +12,25 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.7.0](https://github.com/twitter/finatra/tree/finatra-2.7.0) (2016-12-20)
+
+### Added
+
+* finatra-http: Add built-in support for Scala `scala.concurrent.Future`. The
+  CallbackConverter now supports a return type of Scala `scala.concurrent.Future`
+  by using a bijection to convert to a Twitter `c.t.util.Future`. ``RB_ID=898147``
+
+* finatra-http: Support for request forwarding. Requests can be forwarded from
+  one route to another. Forwarded requests will not go through the server's
+  defined filter chain again but will pass through any Controller defined filters
+  on the "forwarded to" route. ``RB_ID=883224``
+
+### Changed
+
+### Fixed
+
+### Closed
+
 ## [finatra-2.6.0](https://github.com/twitter/finatra/tree/finatra-2.6.0) (2016-11-22)
 
 ### Added
@@ -20,6 +39,10 @@ All notable changes to this project will be documented in this file. Note that `
   source code. ``RB_ID=881112``
 
 ### Changed
+
+* finatra-http: Decompose the `ThrowableExceptionMapper` to allow users to more easily replace
+  the portions they care about. Users can now just replace the functionality per exception
+  type rather than needing to replace the entire `ThrowableExceptionMapper`. `RB_ID=891666``
 
 * finatra-http: The 'cookie' method of `c.t.finatra.http.response.ResponseBuilder#EnrichedResponse`
   that takes a Netty 3 cookie instance has been deprecated. Please use the method which takes a

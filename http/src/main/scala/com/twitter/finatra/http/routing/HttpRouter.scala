@@ -29,11 +29,13 @@ class HttpRouter @Inject()(
   private[finatra] val routes = ArrayBuffer[Route]()
 
   private[finatra] lazy val routesByType = partitionRoutesByType()
+  private[finatra] lazy val adminRoutingService = new RoutingService(routesByType.admin)
+  private[finatra] lazy val externalRoutingService = new RoutingService(routesByType.external)
   private[finatra] lazy val services: Services = {
     Services(
       routesByType,
-      adminService = globalBeforeRouteMatchingFilter andThen new RoutingService(routesByType.admin),
-      externalService = globalBeforeRouteMatchingFilter andThen new RoutingService(routesByType.external))
+      adminService = globalBeforeRouteMatchingFilter andThen adminRoutingService,
+      externalService = globalBeforeRouteMatchingFilter andThen externalRoutingService)
   }
 
   /* Public */
@@ -179,22 +181,22 @@ class HttpRouter @Inject()(
   }
 
   private def addInjected(controller: Controller): HttpRouter = {
-    routes ++= buildRoutes(controller) map { _.withFilter(globalFilter) }
+    routes ++= buildRoutes(controller).map(_.withFilter(globalFilter))
     this
   }
 
   private def addInjected(filter: HttpFilter, controller: Controller): HttpRouter = {
-    val routesWithFilter = buildRoutes(controller) map { _.withFilter(globalFilter andThen filter) }
+    val routesWithFilter = buildRoutes(controller).map(_.withFilter(globalFilter.andThen(filter)))
     routes ++= routesWithFilter
     this
   }
 
   private def buildRoutes(controller: Controller): Seq[Route] = {
-    controller.routeBuilders.map { _.build(callbackConverter, injector) }
+    controller.routeBuilders.map(_.build(callbackConverter, injector))
   }
 
   private[finatra] def partitionRoutesByType(): RoutesByType = {
-    info("Adding routes\n" + (routes.map {_.summary} mkString "\n"))
+    info("Adding routes\n" + routes.map(_.summary).mkString("\n"))
     val (adminRoutes, externalRoutes) = routes partition { route =>
       route.path.startsWith("/admin") || route.admin
     }

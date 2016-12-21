@@ -6,7 +6,7 @@ import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
-import com.twitter.finatra.http.request.RequestUtils
+import com.twitter.finatra.http.request.{HttpForward, RequestUtils}
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
@@ -31,6 +31,7 @@ class DoEverythingController @Inject()(
   complexServiceFactory: ComplexServiceFactory,
   objectMapper: FinatraObjectMapper,
   @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
+  forward: HttpForward,
   mustacheService: MustacheService)
   extends Controller {
 
@@ -49,6 +50,14 @@ class DoEverythingController @Inject()(
     "Hello, World!"
   }
 
+  get("/forwarded") { request: Request =>
+    forward(request, "/forwarded/get")
+  }
+
+  post("/forwarded") { request: Request =>
+    forward(request, "/forwarded/post")
+  }
+
   get("/bytearray") { request: Request =>
     val b = new Array[Byte](20)
     ThreadLocalRandom.current().nextBytes(b)
@@ -65,12 +74,16 @@ class DoEverythingController @Inject()(
     request.`user-agent`
   }
 
+  get("/forwardCaseClass") { request: CaseClassWithRequestField =>
+    forward(request.request, "/forwarded/get")
+  }
+
   get("/json") { request: Request =>
     response.ok.json("{}".getBytes)
   }
 
   get("/admin/foo") { request: Request =>
-    response.ok("Hanging out on the externl interface")
+    response.ok("Hanging out on the external interface")
   }
 
   get("/json2") { request: Request =>
@@ -656,6 +669,10 @@ class DoEverythingController @Inject()(
 
   filter[ForbiddenFilter].get("/forbiddenByFilter") { r: Request =>
     "ok!"
+  }
+
+  get("/forwardToForbidden") { request: Request =>
+    forward(request, "/forwarded/forbiddenByFilter")
   }
 
   filter[IdentityFilter]

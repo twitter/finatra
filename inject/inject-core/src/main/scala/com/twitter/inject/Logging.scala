@@ -1,7 +1,8 @@
 package com.twitter.inject
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.twitter.util.{Future, NonFatal, Stopwatch}
+import com.twitter.util.{Future, Stopwatch}
+import scala.util.control.NonFatal
 
 /**
  * Mix this trait into a class/object to get helpful logging methods.

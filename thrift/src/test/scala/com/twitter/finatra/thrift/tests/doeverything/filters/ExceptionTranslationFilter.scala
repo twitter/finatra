@@ -6,7 +6,8 @@ import com.twitter.finatra.thrift.thriftscala.{ServerError, NoClientIdError, Unk
 import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.RequestTimeout
 import com.twitter.finatra.thrift.{ThriftRequest, ThriftFilter}
 import com.twitter.inject.Logging
-import com.twitter.util.{NonFatal, Future}
+import com.twitter.util.Future
+import scala.util.control.NonFatal
 
 class ExceptionTranslationFilter
   extends ThriftFilter

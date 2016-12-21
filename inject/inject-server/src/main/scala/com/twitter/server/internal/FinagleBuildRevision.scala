@@ -2,7 +2,7 @@ package com.twitter.server.internal
 
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.{Injector, Logging}
-import com.twitter.util.NonFatal
+import scala.util.control.NonFatal
 import com.twitter.util.U64._
 
 object FinagleBuildRevision extends Logging {

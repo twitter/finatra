@@ -53,6 +53,17 @@ class FileResolver @Inject()(
       getClasspathInputStream(path)
   }
 
+  def exists(path: String): Boolean = {
+    assert(path.startsWith("/"))
+    if (isDirectory(path))
+      false
+    else if (localFileMode)
+      // try absolute path first, then under local.doc.root
+      new File(path).exists || new File(localDocRoot, path).exists
+    else
+      getClasspathInputStream(path).isDefined
+  }
+
   def getContentType(file: String) = {
     extMap.getContentType(
       dottedFileExtension(file))

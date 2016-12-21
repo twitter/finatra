@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang.reflect.FieldUtils
 import org.scalatest.Matchers
 import scala.collection.JavaConverters._
+import scala.util.control.NonFatal
 
 object EmbeddedTwitterServer {
   private def resolveFlags(useSocksProxy: Boolean, flags: Map[String, String]) = {
@@ -557,7 +558,7 @@ class EmbeddedTwitterServer(
             "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)")
           e.printStackTrace()
           System.exit(-1)
-        case e if !NonFatal.isNonFatal(e) =>
+        case e if !NonFatal(e) =>
           println("Fatal exception in server startup.")
           throw new Exception(e) // Need to rethrow as a NonFatal for FuturePool to "see" the exception :/
       }

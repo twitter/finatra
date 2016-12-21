@@ -11,7 +11,6 @@ author: cacoco
 
 Some of the changes in the latest releases:
 
-- We've [upgraded to Jackson 2.8.3](https://github.com/twitter/finatra/commit/e8e7837a9c79f67dac40ce21ef361104edcf99d7)!
 - We've [*mostly* removed](https://github.com/twitter/finatra/commit/73158b8295e861390123e2abf373aea251f3841c) the need of the `maven.twttr.com` sbt resolver. It's still necessary to resolve specific Twitter thrift dependencies.
 - We [fixed](https://github.com/twitter/finatra/commit/152d43dd56e88b37770e0271cbc057203b7106df) an [issue with missing files](https://github.com/twitter/finatra/issues/357) in the finatra-jackson test jar. Classes in the test `c.t.finatra.validation` package were not properly marked for 
   inclusion.

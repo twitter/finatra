@@ -6,8 +6,9 @@ import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerErr
 import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
 import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.inject.Logging
-import com.twitter.util.{Future, NonFatal}
+import com.twitter.util.Future
 import javax.inject.Singleton
+import scala.util.control.NonFatal
 
 @Singleton
 class ExceptionTranslationFilter

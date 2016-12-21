@@ -38,12 +38,17 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     server.inMemoryStatsReceiver.stat(key.split("/"): _*)()
   }
 
+  override protected def beforeEach(): Unit = {
+    super.beforeEach()
+    server.inMemoryStatsReceiver.clear()
+  }
+
   "DoEverythingServer" should {
     "named string" in {
       namedExampleString should equal("named")
     }
 
-    "response to /example" in {
+    "respond to /example" in {
       server.httpGet(
         "/example/routing/always",
         withBody = "always response")
@@ -53,7 +58,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "always response")
     }
 
-    "/plaintext" in {
+    "GET /plaintext" in {
       val response = server.httpGet(
         "/plaintext",
         withBody = "Hello, World!")
@@ -61,21 +66,21 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
     }
 
-    "/bytearray" in {
+    "GET /bytearray" in {
       val response = server.httpGet(
         "/bytearray")
 
       response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
     }
 
-    "/inputstream" in {
+    "GET /inputstream" in {
       val response = server.httpGet(
         "/inputstream")
 
       response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
     }
 
-    "/useragent" in {
+    "GET /useragent" in {
       server.httpGet(
         "/useragent",
         headers = Map("User-Agent" -> "Firefox"),
@@ -97,26 +102,26 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
     }
 
-    "stringMap" in {
+    "GET /stringMap" in {
       server.httpGet(
         "/stringMap",
         andExpect = Ok,
         withJsonBody = """{"message":"Hello, World!"}""")
     }
 
-    "ok" in {
+    "GET /ok" in {
       server.httpGet(
         "/ok",
         andExpect = Ok)
     }
 
-    "created" in {
+    "GET /created" in {
       server.httpGet(
         "/created",
         andExpect = Created)
     }
 
-    "accepted" in {
+    "respond to /accepted" in {
       server.httpGet(
         "/accepted",
         andExpect = Accepted,
@@ -128,43 +133,43 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "accepted")
     }
 
-    "json" in {
+    "GET /json" in {
       server.httpGet(
         "/json",
         withJsonBody = "{}")
     }
 
-    "json2" in {
+    "GET /json2" in {
       server.httpGet(
         "/json2",
         withJsonBody = "{}")
     }
 
-    "none" in {
+    "GET /none" in {
       server.httpGet(
         "/none",
         withBody = "")
     }
 
-    "bodyunit" in {
+    "GET /bodyunit" in {
       server.httpGet(
         "/bodyunit",
         withBody = "")
     }
 
-    "bodynull" in {
+    "GET /bodynull" in {
       server.httpGet(
         "/bodynull",
         withBody = "")
     }
 
-    "bodyEmptyString" in {
+    "GET /bodyEmptyString" in {
       server.httpGet(
         "/bodyEmptyString",
         withBody = "")
     }
 
-    "/routeParamGetAll/:id" in {
+    "GET /routeParamGetAll/:id" in {
       server.httpGet(
         "/routeParamGetAll/1",
         withJsonBody = """
@@ -175,152 +180,152 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         """)
     }
 
-    "notfound" in {
+    "GET /notfound" in {
       server.httpGet(
         "/notfound",
         andExpect = NotFound)
     }
 
-    "notfound2" in {
+    "GET /notfound2" in {
       server.httpGet(
         "/notfound2",
         andExpect = NotFound)
     }
 
-    "notfound exc" in {
+    "GET /notfoundexception" in {
       server.httpGet(
         "/notfoundexception",
         andExpect = NotFound)
     }
 
-    "notfound exc2" in {
+    "GET /notfoundexception2" in {
       server.httpGet(
         "/notfoundexception2",
         andExpect = NotFound)
     }
 
-    "badrequest" in {
+    "GET /badrequest" in {
       server.httpGet(
         "/badrequest",
         andExpect = BadRequest)
     }
 
-    "BadRequestException" in {
+    "GET /BadRequestException" in {
       server.httpGet(
         "/BadRequestException",
         andExpect = BadRequest)
     }
 
-    "forbidden" in {
+    "GET /forbidden" in {
       server.httpGet(
         "/forbidden",
         andExpect = Forbidden)
     }
 
-    "ForbiddenException" in {
+    "GET /ForbiddenException" in {
       server.httpGet(
         "/ForbiddenException",
         andExpect = Forbidden)
     }
 
-    "ForbiddenException2" in {
+    "GET /ForbiddenException2" in {
       server.httpGet(
         "/ForbiddenException2",
         andExpect = Forbidden)
     }
 
-    "methodnotallowed" in {
+    "GET /methodnotallowed" in {
       server.httpGet(
         "/methodnotallowed",
         andExpect = MethodNotAllowed)
     }
 
-    "unavailable" in {
+    "GET /unavailable" in {
       server.httpGet(
         "/unavailable",
         andExpect = ServiceUnavailable)
     }
 
-    "unauthorized" in {
+    "GET /unauthorized" in {
       server.httpGet(
         "/unauthorized",
         andExpect = Unauthorized)
     }
 
-    "conflict" in {
+    "GET /conflict" in {
       server.httpGet(
         "/conflict",
         andExpect = Conflict)
     }
 
-    "ConflictException" in {
+    "GET /ConflictException" in {
       server.httpGet(
         "/ConflictException",
         andExpect = Conflict)
     }
 
-    "ConflictException2" in {
+    "GET /ConflictException2" in {
       server.httpGet(
         "/ConflictException2",
         andExpect = Conflict)
     }
 
-    "ConflictException3" in {
+    "GET /ConflictException3" in {
       server.httpGet(
         "/ConflictException3",
         andExpect = Conflict)
     }
 
-    "servererror exc" in {
+    "GET /servererrorexception" in {
       server.httpGet(
         "/servererrorexception",
         andExpect = InternalServerError)
     }
 
-    "serviceunavailable exception" in {
+    "GET /serviceunavailableexception" in {
       server.httpGet(
         "/serviceunavailableexception",
         andExpect = ServiceUnavailable)
     }
 
-    "serviceunavailable exception2" in {
+    "GET /serviceunavailableexception2" in {
       server.httpGet(
         "/serviceunavailableexception2",
         andExpect = ServiceUnavailable)
     }
 
-    "serviceunavailable exception builder status code" in {
+    "GET /responsebuilder_status_code" in {
       server.httpGet(
         "/responsebuilder_status_code",
         andExpect = ServiceUnavailable)
     }
 
-    "serviceunavailable exception builder" in {
+    "GET /responsebuilder_status" in {
       server.httpGet(
         "/responsebuilder_status",
         andExpect = ServiceUnavailable)
     }
 
-    "redirect" in {
+    "GET /redirect" in {
       server.httpGet(
         "/redirect",
         andExpect = TemporaryRedirect)
     }
 
-    "found" in {
+    "GET /found" in {
       server.httpGet(
         "/found",
         andExpect = Found)
     }
 
-    "future" in {
+    "GET /future" in {
       server.httpGet(
         "/future",
         andExpect = Ok,
         withBody = "future")
     }
 
-    "POST" in {
+    "POST /foo" in {
       server.httpPost(
         "/foo",
         postBody = "",
@@ -328,7 +333,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "bar")
     }
 
-    "POST form" in {
+    "POST /formPost" in {
       server.httpFormPost(
         "/formPost",
         params = Map("name" -> "bob", "age" -> "18"),
@@ -336,7 +341,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "bob")
     }
 
-    "POST multipart" in {
+    "POST /multipartParamsEcho" in {
       val request = deserializeRequest("/multipart/request-POST-android.bytes")
       request.uri = "/multipartParamsEcho"
 
@@ -347,7 +352,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withJsonBody = """["banner"]""")
     }
 
-    "POST multipart form" in {
+    "POST /formPostMultipart" in {
       server.httpMultipartFormPost(
         "/formPostMultipart",
         params = Seq(
@@ -360,7 +365,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "text/plain")
     }
 
-    "PUT multipart" in {
+    "PUT /multipartParamsPutEcho" in {
       val request = deserializeRequest("/multipart/request-POST-android.bytes")
       request.uri = "/multipartParamsPutEcho"
       request.method = Method.Put
@@ -372,7 +377,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withJsonBody = """["banner"]""")
     }
 
-    "formPostView" in {
+    "POST /formPostView" in {
       server.httpFormPost(
         "/formPostView",
         params = Map("name" -> "bob", "age" -> "18"),
@@ -380,14 +385,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "age:18\nname:bob\nuser1\nuser2\n")
     }
 
-    "getView" in {
+    "GET /getView" in {
       server.httpGet(
         "/getView?age=18&name=bob",
         andExpect = Ok,
         withBody = "age:18\nname:bob\nuser1\nuser2\n")
     }
 
-    "formPostViewFromBuilderViewWithDiffTemplateThanAnnotation" in {
+    "POST /formPostViewFromBuilderView (from BuilderView with diff template than annotation)" in {
       server.httpFormPost(
         "/formPostViewFromBuilderView",
         params = Map("name" -> "bob", "age" -> "18"),
@@ -395,7 +400,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
     }
 
-    "formPostViewFromBuilderHtml" in {
+    "POST /formPostViewFromBuilderHtml" in {
       server.httpFormPost(
         "/formPostViewFromBuilderHtml",
         params = Map("name" -> "bob", "age" -> "18"),
@@ -403,7 +408,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "age:18\nname:bob\nuser1\nuser2\n")
     }
 
-    "formPostViewFromBuilderCreatedView" in {
+    "POST /formPostViewFromBuilderCreatedView" in {
       val response = server.httpFormPost(
         "/formPostViewFromBuilderCreatedView",
         params = Map("name" -> "bob", "age" -> "18"),
@@ -413,7 +418,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.location should equal(Some("/foo/1"))
     }
 
-    "formPostViewFromBuilderCreatedHtml" in {
+    "POST /formPostViewFromBuilderCreatedHtml" in {
       val response = server.httpFormPost(
         "/formPostViewFromBuilderCreatedHtml",
         params = Map("name" -> "bob", "age" -> "18"),
@@ -442,21 +447,21 @@ class DoEverythingServerFeatureTest extends FeatureTest {
           """)
     }
 
-    "multipleRouteParams" in {
+    "POST /multipleRouteParams" in {
       server.httpPost(
         "/multipleRouteParams",
         "",
         andExpect = InternalServerError)
     }
 
-    "caseClassWithRequestField" in {
+    "POST /caseClassWithRequestField" in {
       server.httpPost(
         "/caseClassWithRequestField",
         "",
         andExpect = Ok)
     }
 
-    "null" in {
+    "GET /null" in {
       pending
       server.httpGet(
         "/null",
@@ -464,14 +469,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "")
     }
 
-    "empty" in {
+    "GET /empty" in {
       server.httpGet(
         "/empty",
         andExpect = Ok,
         withBody = "")
     }
 
-    "unit" in {
+    "GET /unit" in {
       val response = server.httpGet(
         "/unit",
         andExpect = Ok,
@@ -482,48 +487,48 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.contentType should equal(None)
     }
 
-    "not found path" in {
+    "GET not found path" in {
       server.httpGet(
         "/sdafasdfsadfsadfsafd",
         andExpect = NotFound,
         withBody = "")
     }
 
-    "complex path" in {
+    "GET complex path" in {
       server.httpGet(
         "/complexpath/steve",
         andExpect = Ok,
         withBody = "done steve 5000")
     }
 
-    "complex query" in {
+    "GET complex query" in {
       server.httpGet(
         "/complexquery?name=fred",
         andExpect = Ok,
         withBody = "done fred 5000")
     }
 
-    "testfile" in {
+    "GET /testfile" in {
       server.httpGet(
         "/testfile",
         andExpect = Ok,
         withBody = "testfile123")
     }
 
-    "testfile when not found" in {
+    "GET /testfileWhenNotfound" in {
       server.httpGet(
         "/testfileWhenNotfound",
         andExpect = NotFound,
         withBody = "/doesntexist.txt not found")
     }
 
-    "exception" in {
+    "GET /exception" in {
       server.httpGet(
         "/exception",
         andExpect = InternalServerError)
     }
 
-    "pathUrl" in {
+    "GET /pathUrl" in {
       val request = server.httpGet(
         "/pathUrl",
         andExpect = Ok)
@@ -531,7 +536,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       request.contentString should endWith("/pathUrl/")
     }
 
-    "path" in {
+    "GET /path" in {
       val request = server.httpGet(
         "/path",
         andExpect = Ok)
@@ -539,7 +544,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       request.contentString should endWith("/path/")
     }
 
-    "GET to PUT" in {
+    "GET /put (NotFound)" in {
       server.httpGet(
         "/put",
         andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
@@ -576,7 +581,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       )
     }
 
-    "PUT to PUT" in {
+    "PUT" in {
       server.httpPut(
         "/put/123",
         putBody = "asdf",
@@ -609,7 +614,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "123_")
     }
 
-    "put_route_param_and_name" in {
+    "PUT /put_route_param_and_name" in {
       server.httpPut(
         "/put_route_param_and_name/123",
         putBody = """{"name": "bob"}""",
@@ -617,7 +622,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "123_bob")
     }
 
-    "put_route_param_and_name with empty PUT body" in {
+    "PUT /put_route_param_and_name (with empty PUT body)" in {
       server.httpPut(
         "/put_route_param_and_name/123",
         putBody = "",
@@ -630,7 +635,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         }""")
     }
 
-    "put_route_param_and_name with non json PUT body" in {
+    "PUT /put_route_param_and_name (with non-json PUT body)" in {
       server.httpPut(
         "/put_route_param_and_name/123",
         putBody = "foo",
@@ -644,7 +649,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         }""")
     }
 
-    "put_id_ignoring_body" in {
+    "PUT /put_id_ignoring_body" in {
       val response = server.httpPut(
         "/put_id_ignoring_body/42",
         putBody = "invalid JSON",
@@ -654,7 +659,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
     }
 
-    "put_id_not_ignoring_body" in {
+    "PUT /put_id_not_ignoring_body" in {
       server.httpPut(
         "/put_id_not_ignoring_body/42",
         putBody = "invalid JSON",
@@ -667,7 +672,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         }""")
     }
 
-    "POST to putAndPost" in {
+    "POST /putAndPost" in {
       server.httpPost(
         "/putAndPost",
         postBody = "1",
@@ -675,7 +680,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "POST1")
     }
 
-    "PUT to putAndPost" in {
+    "PUT /putAndPost" in {
       server.httpPut(
         "/putAndPost",
         putBody = "2",
@@ -683,13 +688,13 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "PUT2")
     }
 
-    "GET to putAndPost" in {
+    "GET /putAndPost (NotFound)" in {
       server.httpGet(
         "/putAndPost",
         andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
     }
 
-    "POST to postAndPut" in {
+    "POST /postAndPut" in {
       server.httpPost(
         "/postAndPut",
         postBody = "1",
@@ -697,7 +702,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "POST1")
     }
 
-    "PUT to postAndPut" in {
+    "PUT /postAndPut" in {
       server.httpPut(
         "/postAndPut",
         putBody = "2",
@@ -705,47 +710,47 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "PUT2")
     }
 
-    "GET to postAndPut" in {
+    "GET /postAndPut (NotFound)" in {
       server.httpGet(
         "/postAndPut",
         andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
     }
 
-    "true" in {
+    "GET /true" in {
       server.httpGet(
         "/true",
         andExpect = Ok,
         withBody = "true")
     }
 
-    "index root" in {
+    "GET /index (root)" in {
       server.httpGet(
         "/index/",
         andExpect = Ok,
         withBody = "testindex")
     }
 
-    "index file without extension" in {
+    "GET index file without extension" in {
       server.httpGet(
         "/index/testfile",
         andExpect = Ok,
         withBody = "testindex")
     }
 
-    "index file with extension" in {
+    "GET index file with extension" in {
       server.httpGet(
         "/index/testfile.txt",
         andExpect = Ok,
         withBody = "testfile123")
     }
 
-    "implicitOkAndException when ok" in {
+    "GET /implicitOkAndException (when ok)" in {
       server.httpGet(
         "/implicitOkAndException?hi",
         andExpect = Ok)
     }
 
-    "implicitOkAndException when bad request exception" in {
+    "GET /implicitOkAndException (when bad request exception)" in {
       server.httpGet(
         "/implicitOkAndException",
         andExpect = BadRequest)
@@ -1002,21 +1007,21 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       server.injector.instance(key) should equal(exampleService)
     }
 
-    "array" in {
+    "GET /array" in {
       server.httpGet(
         "/array",
         andExpect = Ok,
         withJsonBody = """["a", "b"]""")
     }
 
-    "set" in {
+    "GET /set" in {
       server.httpGet(
         "/set",
         andExpect = Ok,
         withJsonBody = """["a", "b"]""")
     }
 
-    "seq" in {
+    "GET /seq" in {
       server.httpGet(
         "/seq",
         andExpect = Ok,
@@ -1039,6 +1044,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "delete")
     }
 
+
     "DELETE with JSON body" in {
       server.httpDelete(
         "/delete",
@@ -1053,6 +1059,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withBody = "options")
     }
+
 
     "HEAD" in {
       server.httpHead(
@@ -1089,7 +1096,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = body)
     }
 
-    "non guice controller" in {
+    "GET /NonGuice" in {
       server.httpGet(
         "/NonGuice",
         andExpect = Ok,
@@ -1129,27 +1136,27 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       )
     }
 
-    "Apply route filter" in {
+    "apply route filter" in {
       server.httpGet(
         "/forbiddenByFilter",
         andExpect = Forbidden)
     }
 
-    "Apply multiple route filters added by type and instance" in {
+    "apply multiple route filters added by type and instance" in {
       server.httpGet(
         "/multiFilterAppend",
         andExpect = Ok,
         withBody = "014")
     }
 
-    "Apply multiple route filters added by type" in {
+    "apply multiple route filters added by type" in {
       server.httpGet(
         "/multiIdentityFilterAppend",
         andExpect = Ok,
         withBody = "ok!")
     }
 
-    "Apply multiple route filters" in {
+    "apply multiple route filters" in {
       server.httpGet(
         "/multipleRouteFilters",
         andExpect = Ok,
@@ -1202,7 +1209,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "foo/bar")
     }
 
-    "POST SomethingStreamedRequest" in {
+    "POST /SomethingStreamedRequest" in {
       server.httpPost(
         "/SomethingStreamedRequest.json?something_id=FOO&field1=BAR&field2=3",
         postBody = "",
@@ -1210,7 +1217,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "FOO/BAR/3")
     }
 
-    "POST SomethingStreamedRequestAsJsonResponse" in {
+    "POST /SomethingStreamedRequestAsJsonResponse" in {
       val response = server.httpPostJson[SomethingStreamedResponse](
         "/SomethingStreamedRequestAsJsonResponse.json?something_id=FOO&field1=BAR&field2=3",
         postBody = "",
@@ -1218,6 +1225,34 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       assert(response.somethingId == "FOO")
       assert(response.field1.get == "BAR")
       assert(response.field2.get == 3)
+    }
+
+    "GET /forwarded" in {
+      server.httpGet(
+        "/forwarded",
+        andExpect = Ok,
+        withBody =  "This works.")
+    }
+
+    "GET /forwardToForbidden" in {
+      server.httpGet(
+        "/forwardToForbidden",
+        andExpect = Forbidden)
+    }
+
+    "GET /forwardCaseClass" in {
+      server.httpGet(
+        "/forwardCaseClass",
+        andExpect = Ok,
+        withBody =  "This works.")
+    }
+
+    "POST /forwarded" in {
+      server.httpPost(
+        "/forwarded",
+        postBody = "",
+        andExpect = Ok,
+        withBody =  "This works.")
     }
   }
 
@@ -1627,6 +1662,74 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     stat("route/ok/GET/time") should have size (1)
     stat("route/ok/GET/time/200") should have size (1)
     stat("route/ok/GET/time/2XX") should have size (1)
+
+    counter("route/longer_post_path_capture/POST/requests") should be(1)
+    counter("route/longer_post_path_capture/POST/status/200") should be(1)
+    counter("route/longer_post_path_capture/POST/status/2XX") should be(1)
+    stat("route/longer_post_path_capture/POST/response_size") should contain(3.0)
+    stat("route/longer_post_path_capture/POST/time") should have size (1)
+    stat("route/longer_post_path_capture/POST/time/200") should have size (1)
+    stat("route/longer_post_path_capture/POST/time/2XX") should have size (1)
+
+    counter("route/my_cool_endpoint/POST/requests") should be(1)
+    counter("route/my_cool_endpoint/POST/status/200") should be(1)
+    counter("route/my_cool_endpoint/POST/status/2XX") should be(1)
+    stat("route/my_cool_endpoint/POST/response_size") should contain(3.0)
+    stat("route/my_cool_endpoint/POST/time") should have size (1)
+    stat("route/my_cool_endpoint/POST/time/200") should have size (1)
+    stat("route/my_cool_endpoint/POST/time/2XX") should have size (1)
+  }
+
+  "per-route forwarded stats" in {
+    server.httpGet(
+      "/ok",
+      andExpect = Ok)
+
+    server.httpGet(
+      "/forwarded",
+      andExpect = Ok,
+      withBody =  "This works.")
+
+    server.httpPost(
+      "/longer/post/path/foo",
+      postBody = "",
+      andExpect = Ok)
+
+    server.httpPost(
+      "/longer/post/path/with/name/:capture",
+      postBody = "",
+      andExpect = Ok)
+
+    // global stats
+    // compatible with com.twitter.finagle.http.filter.StatsFilter
+    counter("status/200") should be(4)
+    counter("status/2XX") should be(4)
+    stat("response_size") should be(List(2.0, 11.0, 3.0, 3.0))
+    stat("time/200") should have size (4)
+    stat("time/2XX") should have size (4)
+
+    // don't record stats that finagle already has
+    counter("requests") should be(0)
+    stat("time") should be('empty)
+    counter("http/requests") should be(4)
+    stat("http/request_latency_ms") should have size (4)
+
+    // per-route stats
+    counter("route/ok/GET/requests") should be(1)
+    counter("route/ok/GET/status/200") should be(1)
+    counter("route/ok/GET/status/2XX") should be(1)
+    stat("route/ok/GET/response_size") should contain(2.0)
+    stat("route/ok/GET/time") should have size (1)
+    stat("route/ok/GET/time/200") should have size (1)
+    stat("route/ok/GET/time/2XX") should have size (1)
+
+    counter("route/forwarded_get/GET/requests") should be(1)
+    counter("route/forwarded_get/GET/status/200") should be(1)
+    counter("route/forwarded_get/GET/status/2XX") should be(1)
+    stat("route/forwarded_get/GET/response_size") should contain(11.0)
+    stat("route/forwarded_get/GET/time") should have size (1)
+    stat("route/forwarded_get/GET/time/200") should have size (1)
+    stat("route/forwarded_get/GET/time/2XX") should have size (1)
 
     counter("route/longer_post_path_capture/POST/requests") should be(1)
     counter("route/longer_post_path_capture/POST/status/200") should be(1)

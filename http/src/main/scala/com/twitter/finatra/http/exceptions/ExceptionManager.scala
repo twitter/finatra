@@ -72,6 +72,7 @@ class ExceptionManager  (
 
   /**
    * Add a [[com.twitter.finatra.http.exceptions.ExceptionMapper]] by type [[T]]
+   *
    * @tparam T - ExceptionMapper type T which should subclass [[com.twitter.finatra.http.exceptions.ExceptionMapper]]
    */
   def add[T <: ExceptionMapper[_]: Manifest]: Unit = {

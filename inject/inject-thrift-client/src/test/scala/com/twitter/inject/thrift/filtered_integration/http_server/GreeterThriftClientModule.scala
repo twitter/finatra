@@ -5,6 +5,7 @@ import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule
 import com.twitter.util._
+import scala.util.control.NonFatal
 
 object GreeterThriftClientModule
   extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {

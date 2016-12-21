@@ -5,6 +5,7 @@ scala_library(
     repo = artifactory,
   ),
   dependencies=[
+    '3rdparty/jvm/com/twitter/bijection:util',
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-core',
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind',
     '3rdparty/jvm/com/github/spullara/mustache/java',

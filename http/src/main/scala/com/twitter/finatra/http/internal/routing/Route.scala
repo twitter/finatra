@@ -19,13 +19,16 @@ private[finatra] case class Route(
   annotations: Seq[Annotation] = Seq(),
   requestClass: Class[_],
   responseClass: Class[_],
+  routeFilter: Filter[Request, Response, Request, Response],
   filter: Filter[Request, Response, Request, Response]) {
 
   private[this] val pattern = PathPattern(path)
   private[this] val routeInfo = RouteInfo(name, path)
 
+  private[this] val callbackService: Service[Request, Response] =
+    Service.mk[Request, Response](callback)
   private[this] val filteredCallback: Request => Future[Response] =
-    filter andThen Service.mk[Request, Response](callback)
+    filter.andThen(callbackService)
 
   /* Public */
 
@@ -36,27 +39,34 @@ private[finatra] case class Route(
   def summary: String = f"$method%-7s $path"
 
   def withFilter(filter: Filter[Request, Response, Request, Response]): Route = {
-    this.copy(filter = filter andThen this.filter)
+    this.copy(filter = filter.andThen(this.filter))
   }
 
-  // Note: incomingPath is an optimization to avoid calling incomingRequest.path for every potential route
-  def handle(incomingRequest: Request, incomingPath: String): Option[Future[Response]] = {
+  // Note: incomingPath is an optimization to avoid calling request.path for every potential route
+  def handle(
+    request: Request,
+    incomingPath: String,
+    bypassFilters: Boolean): Option[Future[Response]] = {
     val routeParamsOpt = pattern.extract(incomingPath)
     if (routeParamsOpt.isEmpty) {
       None
-    }
-    else {
+    } else {
       handleMatch(
         createRequest(
-          incomingRequest,
-          routeParamsOpt.get))
+          request,
+          routeParamsOpt.get),
+        bypassFilters)
     }
   }
 
-  def handleMatch(request: Request): Some[Future[Response]] = {
+  def handleMatch(request: Request, bypassFilters: Boolean): Some[Future[Response]] = {
     RouteInfo.set(request, routeInfo)
-    Some(
-      filteredCallback(request))
+    if (bypassFilters)
+      Some(
+        routeFilter.andThen(callbackService).apply(request))
+    else
+      Some(
+        filteredCallback(request))
   }
 
   /* Private */

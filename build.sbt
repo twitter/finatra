@@ -5,7 +5,7 @@ import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
-lazy val projectVersion = "2.6.0"
+lazy val projectVersion = "2.7.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -31,16 +31,17 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.40.0" + suffix
-  val scroogeVersion = "4.12.0" + suffix
-  val twitterserverVersion = "1.25.0" + suffix
-  val utilVersion = "6.39.0" + suffix
+  val finagleVersion = "6.41.0" + suffix
+  val scroogeVersion = "4.13.0" + suffix
+  val twitterserverVersion = "1.26.0" + suffix
+  val utilVersion = "6.40.0" + suffix
 
+  val bijectionVersion = "0.9.4"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
   val commonsLang = "2.6"
-  val grizzled = "1.0.2"
+  val grizzled = "1.3.0"
   val guava = "16.0.1"
   val guice = "4.0"
   val jackson = "2.8.4"
@@ -52,7 +53,7 @@ lazy val versions = new {
   val mustache = "0.8.18"
   val nscalaTime = "1.6.0"
   val scalaCheck = "1.13.4"
-  val scalaGuice = "4.0.0"
+  val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
   val servletApi = "2.5"
   val slf4j = "1.7.21"
@@ -504,6 +505,7 @@ lazy val http = project
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
+      "com.twitter" %% "bijection-util" % versions.bijectionVersion,
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,

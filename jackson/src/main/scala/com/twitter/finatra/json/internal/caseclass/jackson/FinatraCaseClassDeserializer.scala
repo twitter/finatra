@@ -12,7 +12,7 @@ import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.{ErrorCode, ValidationMessageResolver}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.inject.Logging
-import com.twitter.util.NonFatal
+import scala.util.control.NonFatal
 import java.lang.reflect.InvocationTargetException
 import javax.annotation.concurrent.ThreadSafe
 import scala.collection.mutable.ArrayBuffer

@@ -23,6 +23,7 @@ class RouteBenchmark {
     annotations = Seq(),
     requestClass = classOf[Request],
     responseClass = classOf[Response],
+    routeFilter = Filter.identity,
     filter = Filter.identity)
 
   val routeWithPathParams = Route(
@@ -35,6 +36,7 @@ class RouteBenchmark {
     annotations = Seq(),
     requestClass = classOf[Request],
     responseClass = classOf[Response],
+    routeFilter = Filter.identity,
     filter = Filter.identity)
 
   val postGroupsPath = "/groups/"
@@ -45,11 +47,11 @@ class RouteBenchmark {
 
   @Benchmark
   def testRoute() = {
-    route.handle(postGroupsRequest, postGroupsPath)
+    route.handle(postGroupsRequest, postGroupsPath, bypassFilters = false)
   }
 
   @Benchmark
   def testRouteWithPathParams() = {
-    routeWithPathParams.handle(postGroups123Request, postGroups123Path)
+    routeWithPathParams.handle(postGroups123Request, postGroups123Path, bypassFilters = false)
   }
 }
