@@ -5,7 +5,7 @@ import ScoverageSbtPlugin._
 
 parallelExecution in ThisBuild := false
 
-lazy val projectVersion = "2.7.0"
+lazy val projectVersion = "2.8.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -192,7 +192,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   utils)
 
 lazy val finatraExamples =
-  /* // START EXAMPLES
+  // START EXAMPLES
   Seq[sbt.ProjectReference](
     benchmarkServer,
     exampleHttpJavaServer,
@@ -205,7 +205,7 @@ lazy val finatraExamples =
     thriftJavaExampleServer,
     tinyUrl,
     twitterClone) ++
-  */ // END EXAMPLES
+  // END EXAMPLES
   Seq.empty
 
 def aggregatedProjects = {
@@ -229,12 +229,12 @@ lazy val root = (project in file("."))
     moduleName := "finatra-root",
     unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
-      /* // START EXAMPLES
+      // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer, thriftJavaExampleIdl, thriftJavaExampleServer,
          tinyUrl, twitterClone)
-      */ // END EXAMPLES
+      // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
 
 lazy val injectCore = (project in file("inject/inject-core"))
@@ -615,7 +615,7 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     injectServer % "test->test",
     thrift % "test->test;test->compile")
 
-/* // START EXAMPLES
+// START EXAMPLES
 
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
   .settings(exampleServerSettings)
@@ -782,4 +782,4 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard")).
     slf4j,
     injectCore % "test->test")
 
-*/ // END EXAMPLES
+// END EXAMPLES
