@@ -11,7 +11,7 @@ import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.{InvalidValidationInternal, Min, NotEmpty, ValidationResult}
 import com.twitter.inject.Logging
 import javax.inject.{Inject, Named}
-import org.joda.time.DateTime
+import org.joda.time.{DateTime, LocalDate}
 import scala.annotation.meta.param
 import scala.math.BigDecimal.RoundingMode
 
@@ -368,6 +368,9 @@ case class WithoutJsonPropertyAnnotation(foo: String)
 case class NamingStrategyJsonProperty(
   @JsonProperty longFieldName: String)
 
+
+case class CaseClassWithLocalDate(
+  date: LocalDate)
 
 package object internal {
 
