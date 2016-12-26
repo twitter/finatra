@@ -1,7 +1,7 @@
 import sbt.Keys._
 import sbtunidoc.Plugin.UnidocKeys._
 import scala.language.reflectiveCalls
-import ScoverageSbtPlugin._
+import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
