@@ -457,6 +457,7 @@ lazy val utils = project
   .settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ClassUtils.*;.*WrappedValue.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
@@ -567,6 +568,7 @@ lazy val slf4j = project
   .settings(
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;org\\.slf4j\\..*package.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.utilVersion
@@ -580,6 +582,7 @@ lazy val thrift = project
   .settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
