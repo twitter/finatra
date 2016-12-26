@@ -51,14 +51,14 @@ lazy val versions = new {
   val logback = "1.1.7"
   val mockito = "1.9.5"
   val mustache = "0.8.18"
-  val nscalaTime = "1.6.0"
+  val nscalaTime = "2.16.0"
   val scalaCheck = "1.13.4"
   val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
   val servletApi = "2.5"
   val slf4j = "1.7.21"
   val snakeyaml = "1.12"
-  val specs2 = "2.3.12"
+  val specs2 = "2.4.17"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
@@ -82,9 +82,11 @@ lazy val baseSettings = Seq(
     "org.scalatest" %% "scalatest" %  versions.scalaTest % "test",
     "org.specs2" %% "specs2" % versions.specs2 % "test"
   ),
+
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
+    Resolver.sonatypeRepo("snapshots"),
+    "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
   ),
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
@@ -399,7 +401,6 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
