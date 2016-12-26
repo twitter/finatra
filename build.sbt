@@ -242,6 +242,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
   .settings(
     name := "inject-core",
     moduleName := "inject-core",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.google.guava" % "guava" % versions.guava,
@@ -280,6 +281,7 @@ lazy val injectModules = (project in file("inject/inject-modules"))
   .settings(
     name := "inject-modules",
     moduleName := "inject-modules",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "util-stats" % versions.utilVersion
@@ -299,6 +301,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
   .settings(
     name := "inject-app",
     moduleName := "inject-app",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
@@ -323,6 +326,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   .settings(
     name := "inject-server",
     moduleName := "inject-server",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-stats" % versions.finagleVersion,
@@ -347,6 +351,7 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
   .settings(
     name := "inject-slf4j",
     moduleName := "inject-slf4j",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
     libraryDependencies ++= Seq(
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
@@ -363,6 +368,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   .settings(
     name := "inject-request-scope",
     moduleName := "inject-request-scope",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion
     )
@@ -375,6 +381,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
   .settings(
     name := "inject-thrift",
     moduleName := "inject-thrift",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" % "libthrift" % versions.libThrift,
@@ -392,6 +399,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
@@ -412,6 +420,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
   .settings(
     name := "inject-utils",
     moduleName := "inject-utils",
+    crossScalaVersions := Seq("2.11.8", "2.12.1"),
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
