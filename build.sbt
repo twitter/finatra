@@ -85,8 +85,7 @@ lazy val baseSettings = Seq(
 
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots"),
-    "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
+    Resolver.sonatypeRepo("snapshots")
   ),
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
