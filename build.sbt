@@ -92,6 +92,10 @@ lazy val baseSettings = Seq(
   javacOptions in doc ++= Seq("-source", "1.8")
 )
 
+// This is defined outside of the base settings for a partial upgrade where possible
+// until the other finatra dependencies are updated to support scala-2.12
+lazy val temporaryCrossScalaVersions = Seq("2.11.8", "2.12.1")
+
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact := true,
@@ -243,7 +247,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
   .settings(
     name := "inject-core",
     moduleName := "inject-core",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.google.guava" % "guava" % versions.guava,
@@ -282,7 +286,7 @@ lazy val injectModules = (project in file("inject/inject-modules"))
   .settings(
     name := "inject-modules",
     moduleName := "inject-modules",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "util-stats" % versions.utilVersion
@@ -302,7 +306,7 @@ lazy val injectApp = (project in file("inject/inject-app"))
   .settings(
     name := "inject-app",
     moduleName := "inject-app",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
@@ -327,7 +331,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
   .settings(
     name := "inject-server",
     moduleName := "inject-server",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-stats" % versions.finagleVersion,
@@ -352,7 +356,7 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
   .settings(
     name := "inject-slf4j",
     moduleName := "inject-slf4j",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
     libraryDependencies ++= Seq(
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
@@ -369,7 +373,7 @@ lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   .settings(
     name := "inject-request-scope",
     moduleName := "inject-request-scope",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion
     )
@@ -382,7 +386,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
   .settings(
     name := "inject-thrift",
     moduleName := "inject-thrift",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" % "libthrift" % versions.libThrift,
@@ -420,7 +424,7 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
   .settings(
     name := "inject-utils",
     moduleName := "inject-utils",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
@@ -456,7 +460,7 @@ lazy val utils = project
   .settings(
     name := "finatra-utils",
     moduleName := "finatra-utils",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     ScoverageKeys.coverageExcludedPackages := "<empty>;com\\.twitter\\.finatra\\..*package.*;.*ClassUtils.*;.*WrappedValue.*;.*DeadlineValues.*;.*RichBuf.*;.*RichByteBuf.*",
     libraryDependencies ++= Seq(
       "com.google.inject" % "guice" % versions.guice,
@@ -567,7 +571,7 @@ lazy val slf4j = project
   .settings(
     name := "finatra-slf4j",
     moduleName := "finatra-slf4j",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     ScoverageKeys.coverageExcludedPackages := "<empty>;org\\.slf4j\\..*package.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "util-core" % versions.utilVersion
@@ -581,7 +585,7 @@ lazy val thrift = project
   .settings(
     name := "finatra-thrift",
     moduleName := "finatra-thrift",
-    crossScalaVersions := Seq("2.11.8", "2.12.1"),
+    crossScalaVersions := temporaryCrossScalaVersions,
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
