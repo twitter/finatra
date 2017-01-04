@@ -126,6 +126,15 @@ private[finatra] class FinatraCaseClassDeserializer(
         case e: CaseClassValidationException =>
           addException(field, e)
 
+        case e: IllegalArgumentException =>
+          val ex = CaseClassValidationException(
+            PropertyPath.leaf(field.name),
+            Invalid(
+              e.getMessage,
+              ErrorCode.Unknown))
+
+          addException(field, ex)
+
         case e: InvalidFormatException =>
           addException(
             field,

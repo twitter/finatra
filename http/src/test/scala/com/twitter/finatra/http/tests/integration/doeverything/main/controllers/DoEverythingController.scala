@@ -13,6 +13,7 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter, ForbiddenFilter}
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestCaseClassWithLocalDate
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
@@ -718,6 +719,10 @@ class DoEverythingController @Inject()(
       case _ =>
         response.methodNotAllowed
     }
+  }
+
+  post("/localDateRequest") { r: TestCaseClassWithLocalDate =>
+    response.ok
   }
 }
 
