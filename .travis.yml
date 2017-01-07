@@ -15,6 +15,7 @@ cache:
    - $HOME/.ivy2
    - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
    - $HOME/.dodo
+
 before_cache:
   # Tricks to avoid unnecessary cache updates
   - find $HOME/.ivy2 -name "ivydata-*.properties" -delete

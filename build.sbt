@@ -19,7 +19,14 @@ def travisTestJavaOptions: Seq[String] = {
   // When building on travis-ci, we want to suppress logging to error level only.
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
   if (travisBuild) {
-    Seq("-Dorg.slf4j.simpleLogger.defaultLogLevel=error", "-Dcom.twitter.inject.test.logging.disabled")
+    Seq(
+      "-Dorg.slf4j.simpleLogger.defaultLogLevel=error", 
+      "-Dcom.twitter.inject.test.logging.disabled",
+      // Needed to avoid cryptic EOFException crashes in forked tests
+      // in Travis with `sudo: false`.
+      // See https://github.com/sbt/sbt/issues/653
+      // and https://github.com/travis-ci/travis-ci/issues/3775
+      "-Xmx1G")
   } else Seq.empty
 }
 
