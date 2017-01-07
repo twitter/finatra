@@ -51,6 +51,16 @@ class DoEverythingController @Inject()(
     "Hello, World!"
   }
 
+  prefix("/1.1") {
+    get("/plaintext") { request: Request =>
+      "Hello, World!"
+    }
+
+    post("/foo") { request: Request =>
+      "bar"
+    }
+  }
+
   get("/forwarded") { request: Request =>
     forward(request, "/forwarded/get")
   }

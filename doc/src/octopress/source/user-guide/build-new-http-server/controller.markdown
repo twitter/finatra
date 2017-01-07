@@ -73,7 +73,7 @@ Here we are adding *by type* allowing the framework to handle class instantiatio
 
 Routes are defined in a [Sinatra](http://www.sinatrarb.com/)-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a [`c.t.finagle.http.Request`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala) or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a [`c.t.finagle.http.Response`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala).
 
-When Finatra receives an HTTP request, it will scan all registered controllers **in the order they are added** and dispatch the request to the **first matching** route starting from the top of each controller then invoking the matching route's associated callback function. That is, routes are matched in the order they are added to the HttpRouter. Thus if you are creating routes overlapping URIs it is recommended to list the routes in order starting with the "most specific" to the least specific.
+When Finatra receives an HTTP request, it will scan all registered controllers **in the order they are added** and dispatch the request to the **first matching** route starting from the top of each controller then invoking the matching route's associated callback function. That is, routes are matched in the order they are added to the [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala). Thus if you are creating routes overlapping URIs it is recommended to list the routes in order starting with the "most specific" to the least specific.
 
 In general, however, it is recommended to that you follow [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) conventions if possible, e.g., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller. The per-route stating provided by Finatra in the [`c.t.finatra.http.filters.StatsFilter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala) works best when this convention is followed.
 
@@ -132,7 +132,7 @@ get("/users/:id") { request: Request =>
 ```
 <div></div>
 
-Note: *Query params and route params are both stored in the "params" field of the request.* If a route parameter and a query parameter have the same name, the route parameter always wins. Therefore, you should ensure your route parameter names do not collide with any query parameter name that you plan to read.
+**Note:** *Query params and route params are both stored in the "params" field of the request.* If a route parameter and a query parameter have the same name, the route parameter always wins. Therefore, you should ensure your route parameter names do not collide with any query parameter name that you plan to read.
 
 #### Wildcard Parameter
 
@@ -149,7 +149,68 @@ For a `GET` of `/files/abc/123/foo.txt` the endpoint will return `abc/123/foo.tx
 
 #### Regular Expressions
 
-Regular expressions are no longer allowed in string defined paths. Note: We are planning to support regular expression based paths in a future release.
+Regular expressions are no longer allowed in string defined paths (since v2).
+
+#### <a class="anchor" name="route-prefix" href="#route-prefix">Route Prefixes</a>
+
+Finatra provides a simple DSL for adding a common prefix to a set of routes within a Controller. For instance, if you have a group of routes within a controller that should all have a common prefix you can define them by making use of the `c.t.finatra.http.RouteDSL#prefix` function available in any subclass of `c.t.finatra.http.Controller`, e.g.,
+
+```
+class MyController extends Controller {
+
+  // regular route
+  get("/foo") { request: Request =>
+    "Hello, world!"
+  }
+
+  // set of prefixed routes
+  prefix("/2") {
+    get("/foo") { request: Request =>
+      "Hello, world!"
+    }
+
+    post("/bar") { request: Request =>
+      response.ok
+    }
+  }
+}
+```
+
+This definition would produce the following routes:
+
+```
+GET     /foo
+GET     /2/foo
+POST    /2/bar
+```
+
+The input to the `c.t.finatra.http.RouteDSL#prefix` function is a String and how you determine the value of that String is entirely up to you. You could choose to hard code the value like in the above example, or inject it as a parameter to the Controller (by using a [flag](/finatra/user-guide/getting-started#flags) or a [Binding Annotation](/finatra/user-guide/getting-started/#binding-annotations) that looks for a bound String type in the object graph which would allow you provide it in any manner appropriate for your use case).
+
+E.g.,
+
+```
+class MyController @Inject()(
+  @Flag("api.version.prefix") apiVersionPrefix: String, // value from a "api.version.prefix" flag
+  @VersionPrefix otherVersionPrefix otherApiVersionPrefix: String // value from a String bound with annotation: @VersionPrefix
+) extends Controller {
+  ...
+
+  prefix(apiVersionPrefix) {
+    get("/foo") { request: Request =>
+      ...
+    }
+  }
+
+  prefix(otherVersionPrefix) {
+    get("/bar") { request: Request =>
+      ...
+    }
+  }
+```
+
+##### Things to keep in mind:
+- Routes are always added to the [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala)` [in the order defined in the Controller](/finatra/user-guide/build-new-http-server/controller.html#controllers-and-routing) (and are scanned in this order as well), this remains true even when defined within a `prefix` block. I.e., the `prefix` is merely a convenience for adding a common prefix to a set of routes. You should still be aware of the total order in which your routes are defined in a Controller.
+- You can use the `c.t.finatra.http.RouteDSL#prefix` function multiple times in a Controller with the same or different values.
 
 #### <a class="anchor" name="admin-paths" href="#admin-index">Admin Paths</a>
 
@@ -186,27 +247,29 @@ get("/admin/client_id.json",
 
 The route will appear in the left-rail of the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) under the heading specified by the `RouteIndex#group` indexed by `RouteIndex#alias` or the route's path. If you do not provide a `RouteIndex` the route will not appear in the index but is still reachable on the admin interface.
 
-**Note**: all routes that start with *only* `/admin/` (and not `/admin/finatra/`) will be routed to by TwitterServer's [AdminHttpServer](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108) and **not** by the Finatra [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala). Thus any filter chain defined by your server's [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) will **not** be applied to the routes. To maintain filtering as defined in the [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala), the routes **MUST** be under `/admin/finatra/` and are thus **not** eligible to be included in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index.
+**Note**: all routes that start with *only* `/admin/` (and not `/admin/finatra/`) will be routed to by TwitterServer's [AdminHttpServer](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108) and **not** by the Finatra [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala).
+
+Thus any filter chain defined by your server's [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) will **not** be applied to these routes. To maintain filtering as defined in the [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) the routes **MUST** be under `/admin/finatra/` and are thus **not** eligible to be included in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index.
 
 ## <a class="anchor" name="requests" href="#requests">Requests</a>
 ===============================
 
-Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle `http` Request or a custom `case class` Request.
+Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle `http` Request or a custom `case class` request object.
 
-### Finagle `http` Request:
+### Finagle `c.t.finagle.http.Request`
 This is a [c.t.finagle.http.Request](https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request) which contains common HTTP attributes.
 
-### Custom `case class` Request
-Custom requests allow declarative request parsing with support for type conversions, default values, and validations.
+### Custom `case class` request object
+Custom request case classes are used for requests with a content-type of `application/json` and allow declarative request parsing with support for type conversions, default values, and validations.
 
-For example suppose you wanted to parse a `GET` request with three query params: `max`, `startDate`, and `verbose`, e.g.,
+For example, suppose you want to parse a `GET` request with three query params: `max`, `startDate`, and `verbose`, e.g.,
 
 ```text
 http://foo.com/users?max=10&start_date=2014-05-30TZ&verbose=true
 ```
 <div></div>
 
-This can be parsed with the following `case class`:
+This can be modeled with the following `case class`:
 
 ```scala
 case class UsersRequest(
@@ -216,7 +279,7 @@ case class UsersRequest(
 ```
 <div></div>
 
-The custom `UsersRequest` can then be used as the callback's input type:
+The custom `UsersRequest` `case class` can then be used as the route callback's input type:
 
 ```scala
 get("/users") { request: UsersRequest =>
@@ -225,35 +288,33 @@ get("/users") { request: UsersRequest =>
 ```
 <div></div>
 
-The `case class` field names should match the request parameters or use the [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) annotation to specify the JSON field name in the case class (see: [example](https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/tests/json/internal/ExampleCaseClasses.scala#L141)). A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`](https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
+##### Things to keep in mind:
 
-Use a Scala ["back-quote" literal](http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html) for the field name when special characters are involved (e.g. @Header \`user-agent\` : String).
-
-Non-optional fields without default values are considered required. If a required field is missing, a `CaseClassMappingException` is thrown.
-
-The following field annotations specify where to parse a field out of the request
-
+- The `case class` field names should match the request parameters or use the [@JsonProperty](https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties) annotation to specify the JSON field name in the case class (see: [example](https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/tests/json/internal/ExampleCaseClasses.scala#L141)). A [PropertyNamingStrategy](http://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html) can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is used (defaults are set in [`FinatraJacksonModule`](https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala)).
+- Use a Scala ["back-quote" literal](http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html) for the field name when special characters are involved (e.g. ``@Header `user-agent`: String``).
+- **Non-option fields without default values are considered required.** If a required field is missing, a `CaseClassMappingException` is thrown.
+- The following field annotations specify where to parse a field out of the request
   * Request Fields:
      * [`@RouteParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala)
-     * [`@QueryParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) (*ensure that @RouteParam names do not collide with @QueryParam names. Otherwise, an @QueryParam could end up parsing an @RouteParam*)
+     * [`@QueryParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala) - make sure that `@RouteParam` names do not collide with `@QueryParam` names. Otherwise, an `@QueryParam` could end up parsing an `@RouteParam`.
      * [`@FormParam`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala)
      * [`@Header`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala)
- * Other:
-     * [`@Inject`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala): Can be used to inject any Guice managed class into your case class. It is not required for injecting the underlying Finagle `http` Request. To access the underlying Finagle `http` Request in your custom case class, simply include a field of type Request, for example:
-
+     * [`@Inject`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala) - can be used to inject any Guice managed class into your case class. It is not required for injecting the underlying Finagle `http` Request. To access the underlying Finagle `http` Request in your custom case class, simply include a field of type `c.t.finagle.http.Request`, for example:
 ```scala
 case class CaseClassWithRequestField(
+ @Header `user-agent`: String,
+ @QueryParam verbose: Boolean = false,
  request: Request)
 ```
 <div></div>
 
-*Note: HTTP requests with a content-type of `application/json` will always have their body. This behavior can be disabled by annotating the `case class` with `@JsonIgnoreBody` leaving the raw request body accessible through `@Inject`.*
+**<font color="red">Note:</font>** HTTP requests with a content-type of `application/json` sent to routes with a custom request case class callback input type will **always trigger** the parsing of the request body as well-formed JSON in attempt to convert the JSON into the request case class. This behavior can be disabled by annotating the case class with `@JsonIgnoreBody` leaving the raw request body accessible by simply adding a member of type `c.t.finagle.http.Request` as mentioned above.
 
 For more specifics on how JSON parsing integrates with routing see: [Integration with Routing](/finatra/user-guide/json#routing-json) in the [JSON](/finatra/user-guide/json) documentation.
 
 ### <a class="anchor" name="forwarding-requests" href="#forwarding-requests">Request Forwarding</a>
 
-You can forward a request to another controller. This is similar to other frameworks where forwarding will re-use the same request, as opposed to issuing a redirect which will force a client to issue a new request.
+You can forward a request to another controller. This is similar to other frameworks where forwarding will re-use the same request as opposed to issuing a redirect which will force a client to issue a new request.
 
 To forward, you need to include a `c.t.finatra.http.request.HttpForward` instance in your controller, e.g.,
 
@@ -369,7 +430,7 @@ will produce a response:
 ```
 <div></div>
 
-Note: If you change the default [MessageBodyWriter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/FinatraDefaultMessageBodyWriter.scala) implementation (used by the [MessageBodyManager](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala)) this will no longer be the default behavior, depending. You can also always use the [ResponseBuilder](#response-builder) to explicitly render a JSON response.
+**Note:** If you change the default [MessageBodyWriter](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/FinatraDefaultMessageBodyWriter.scala) implementation (used by the [MessageBodyManager](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala)) this will no longer be the default behavior, depending. You can also always use the [ResponseBuilder](#response-builder) to explicitly render a JSON response.
 
 ### <a class="anchor" name="future-conversion" href="#future-conversion">Future Conversion</a>
 

@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Support for Controller route prefixes. This allows users to define a
+  common prefix for a set of routes declaritively inside a controller. ``RB_ID=894695``
+
 ### Changed
 
 ### Fixed

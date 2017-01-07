@@ -66,6 +66,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
     }
 
+    "/plaintext (prefixed)" in {
+      val response = server.httpGet(
+          "/1.1/plaintext",
+          withBody = "Hello, World!")
+
+      response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    }
+
     "GET /bytearray" in {
       val response = server.httpGet(
         "/bytearray")
@@ -328,6 +336,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     "POST /foo" in {
       server.httpPost(
         "/foo",
+        postBody = "",
+        andExpect = Ok,
+        withBody = "bar")
+    }
+
+    "POST /foo (prefixed)" in {
+      server.httpPost(
+        "/1.1/foo",
         postBody = "",
         andExpect = Ok,
         withBody = "bar")
@@ -1043,7 +1059,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withBody = "delete")
     }
-
 
     "DELETE with JSON body" in {
       server.httpDelete(
