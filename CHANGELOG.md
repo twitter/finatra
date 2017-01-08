@@ -13,6 +13,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra: Correctly filter published tests-javadocs and tests-sources jars for
+  projects. We are incorrectly publishing tests in the sources and javadocs jars
+  for projects which publish a test-jar dependency (http, httpclient, jackson,
+  thrift, util, inject-app, inject-core, inject-modules, and inject-server).
+  ``RB_ID=901153``
+
 ### Closed
 
 ## [finatra-2.7.0](https://github.com/twitter/finatra/tree/finatra-2.7.0) (2016-12-20)

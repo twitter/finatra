@@ -34,7 +34,7 @@ junit_tests(
 scala_library(name="test-deps",
   provides = scala_artifact(
     org = 'com.twitter',
-    name = 'finatra-httpclient-test-jar',
+    name = 'finatra-httpclient-tests',
     repo = artifactory,
   ),
   dependencies=[

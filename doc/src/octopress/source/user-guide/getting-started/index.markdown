@@ -82,7 +82,7 @@ And in [Maven](http://maven.apache.org/), list as a `<respository/>`:
   </pluginRepositories>
 ```
 
-#### Test dependencies
+#### <a class="anchor" name="test-dependencies" href="#test-dependencies">Test dependencies</a>
 
 Finatra publishes [test-jars](https://maven.apache.org/guides/mini/guide-attached-tests.html) for most modules. The `test-jars` include re-usable utilities for use in testing (e.g., the [EmbeddedTwitterServer](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala)). To add a `test-jar` dependency, depend on the appropriate module with the `tests` classifier. Additionally, these dependencies are typically only needed in the `test` scope for your project. E.g., with [sbt](http://www.scala-sbt.org/):
 
@@ -120,9 +120,29 @@ or
 </dependency>
 ``` 
 
-There is a **[downside](https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html)** to the current way Finatra `test-jars` are published: you don't get the transitive test-scoped dependencies automatically. Maven and sbt only resolve compile-time dependencies transitively, so you'll have to specify all other required test-scoped dependencies manually. 
+There is a **[downside](https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html)** to this manner of publishing `test-jars`: you don't get the transitive test-scoped dependencies automatically. Maven and sbt only resolve compile-time dependencies transitively, so you'll have to specify all other required test-scoped dependencies manually. 
 
-For example, the finatra-http `test-jar` depends on inject-app `test-jar` (among others). You will have to manually add a dependency on the inject-app `test-jar` since it will not be picked up transitively. We hope to address this limitation to the published `test-jars` in a future release.
+For example, the finatra-http `test-jar` depends on inject-app `test-jar` (among others). You will have to manually add a dependency on the inject-app `test-jar` since it will not be picked up transitively. You can infer the dependency graph of the test-jar based on the dependencies of the main module that are listed as being in the "test->test" or ("test" and "test->compile") ivy configurations.
+
+Additionally, using the [sbt-dependency-graph](https://github.com/jrudolph/sbt-dependency-graph) plugin, you can list the dependencies of the `finatra/http` test configuration for the `packageBin` task:
+
+```
+$ ./sbt -Dsbt.log.noformat=true http/test:packageBin::dependencyList 2>&1 | grep 'com\.twitter:finatra\|com\.twitter:inject'
+[info] com.twitter:finatra-http_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:finatra-httpclient_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:finatra-jackson_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:finatra-slf4j_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:finatra-utils_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:inject-app_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:inject-core_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:inject-modules_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:inject-request-scope_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:inject-server_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:inject-slf4j_2.11:2.8.0-SNAPSHOT
+[info] com.twitter:inject-utils_2.11:2.8.0-SNAPSHOT
+```
+
+In this case, when executing the `packageBin` task for `finatra/http` in the test configuration these dependencies are necessary. Unfortunately, this listing does not explicity state if it's the compile-time or test-jar version of the dependency that is necessary. However, it is safe to assume that if you want a dependency on the `finatra/http` test-jar you will also need to add dependencies on any test-jar from the listed dependencies as well.
 
 #### Lightbend Activator
 

@@ -22,15 +22,12 @@ junit_tests(
     'com/twitter/inject/app/tests/*.scala',
     'com/twitter/inject/app/tests/internal/*.scala'
   ),
-  resources=[
-    'finatra/inject/inject-app/src/test/resources'
-  ]
 )
 
 scala_library(name="test-deps",
   provides = scala_artifact(
     org = 'com.twitter',
-    name = 'inject-app-test-jar',
+    name = 'inject-app-tests',
     repo = artifactory,
   ),
   dependencies=[

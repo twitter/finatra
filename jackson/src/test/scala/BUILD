@@ -38,15 +38,12 @@ junit_tests(
     'com/twitter/finatra/json/tests/*.scala',
     'com/twitter/finatra/json/tests/*.java',
   ),
-  resources=[
-    'finatra/jackson/src/test/resources'
-  ]
 )
 
 scala_library(name="test-deps",
   provides = scala_artifact(
     org = 'com.twitter',
-    name = 'finatra-jackson-test-jar',
+    name = 'finatra-jackson-tests',
     repo = artifactory,
   ),
   dependencies=[

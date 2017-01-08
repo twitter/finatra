@@ -10,6 +10,10 @@ class FinagleMDCAdapterTest extends Test {
     adapter.put("name", "bob")
     adapter.get("name") should equal("bob")
 
+    intercept[IllegalArgumentException] {
+      adapter.put(null, "bar")
+    }
+
     adapter.put("age", "10")
     adapter.get("age") should equal("10")
 

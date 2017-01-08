@@ -25,6 +25,13 @@ case class Car(
   }
 
   @MethodValidation
+  def validateYearBeforeNow: ValidationResult = {
+    val thisYear = new DateTime().getYear
+    val yearMoreThanOneYearInFuture: Boolean = if (year > thisYear) { (year - thisYear) > 1 } else false
+    ValidationResult.validateNot(yearMoreThanOneYearInFuture, "Model year can be at most one year newer.")
+  }
+
+  @MethodValidation
   def ownershipTimesValid = {
     CommonMethodValidations.validateTimeRange(
       ownershipStart,

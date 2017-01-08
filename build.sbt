@@ -100,8 +100,8 @@ lazy val baseSettings = Seq(
 
 lazy val publishSettings = Seq(
   publishMavenStyle := true,
-  publishArtifact := true,
-  publishArtifact in (Compile, packageDoc) := true,
+  publishArtifact in Compile := true,
+  publishArtifact in Test := false,
   pomIncludeRepository := { _ => false },
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
@@ -244,6 +244,14 @@ lazy val root = (project in file("."))
       // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
 
+lazy val injectCoreTestJarSources =
+  Seq("com/twitter/inject/IntegrationTest",
+    "com/twitter/inject/Mockito",
+    "com/twitter/inject/PoolUtils",
+    "com/twitter/inject/Resettable",
+    "com/twitter/inject/Test",
+    "com/twitter/inject/TwitterTestModule",
+    "org/specs2/matcher/ScalaTestExpectations")
 lazy val injectCore = (project in file("inject/inject-core"))
   .settings(projectSettings)
   .settings(
@@ -267,21 +275,23 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject" % "guice" % versions.guice % "test",
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
     ),
-    publishArtifact in (Test, packageBin) := true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/inject/IntegrationTest",
-              "com/twitter/inject/Mockito",
-              "com/twitter/inject/PoolUtils",
-              "com/twitter/inject/Resettable",
-              "com/twitter/inject/Test",
-              "com/twitter/inject/TwitterTestModule",
-              "org/specs2/matcher/ScalaTestExpectations")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
     }
   )
 
+lazy val injectModulesTestJarSources =
+  Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
 lazy val injectModules = (project in file("inject/inject-modules"))
   .settings(projectSettings)
   .settings(
@@ -291,16 +301,29 @@ lazy val injectModules = (project in file("inject/inject-modules"))
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "util-stats" % versions.utilVersion
     ),
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, injectModulesTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, injectModulesTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, injectModulesTestJarSources))
     }
   ).dependsOn(
     injectCore % "test->test;compile->compile")
 
+lazy val injectAppTestJarSources =
+  Seq("com/twitter/inject/app/Banner",
+    "com/twitter/inject/app/EmbeddedApp",
+    "com/twitter/inject/app/FeatureTest",
+    "com/twitter/inject/app/InjectionServiceModule",
+    "com/twitter/inject/app/StartupTimeoutException",
+    "com/twitter/inject/app/TestInjector")
 lazy val injectApp = (project in file("inject/inject-app"))
   .settings(projectSettings)
   .settings(
@@ -310,21 +333,25 @@ lazy val injectApp = (project in file("inject/inject-app"))
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/inject/app/Banner",
-              "com/twitter/inject/app/EmbeddedApp",
-              "com/twitter/inject/app/FeatureTest",
-              "com/twitter/inject/app/InjectionServiceModule",
-              "com/twitter/inject/app/StartupTimeoutException",
-              "com/twitter/inject/app/TestInjector")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
     }
   ).dependsOn(
     injectCore % "test->test;compile->compile")
 
+lazy val injectServerTestJarSources =
+  Seq("com/twitter/inject/server/EmbeddedTwitterServer",
+    "com/twitter/inject/server/FeatureTest")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
   .settings(
@@ -335,13 +362,18 @@ lazy val injectServer = (project in file("inject/inject-server"))
       "com.twitter" %% "finagle-stats" % versions.finagleVersion,
       "com.twitter" %% "twitter-server" % versions.twitterserverVersion
     ),
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/inject/server/EmbeddedTwitterServer",
-              "com/twitter/inject/server/FeatureTest")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, injectServerTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, injectServerTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, injectServerTestJarSources))
     }
   ).dependsOn(
     injectApp % "test->test;compile->compile",
@@ -388,8 +420,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
       "com.twitter" %% "finagle-mux" % versions.finagleVersion,
       "com.twitter" %% "scrooge-core" % versions.scroogeVersion,
-      "com.twitter" %% "util-core" % versions.utilVersion),
-    resolvers += "twitter-repo" at "https://maven.twttr.com"
+      "com.twitter" %% "util-core" % versions.utilVersion)
   ).dependsOn(
     injectCore % "test->test",
     injectUtils)
@@ -405,7 +436,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
       "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "com.twitter" %% "finagle-http" % versions.finagleVersion % "test->compile")
+      "com.twitter" %% "finagle-http" % versions.finagleVersion % "test")
   ).dependsOn(
     injectCore % "test->test;compile->compile",
     injectUtils,
@@ -449,6 +480,9 @@ lazy val benchmarks = project
     injectCore % "test->test",
     injectApp % "test->test;compile->compile")
 
+lazy val utilsTestJarSources =
+  Seq("com/twitter/finatra/modules/",
+    "com/twitter/finatra/test/")
 lazy val utils = project
   .settings(projectSettings)
   .settings(
@@ -464,14 +498,18 @@ lazy val utils = project
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "com.twitter" %% "util-core" % versions.utilVersion
     ),
-    resolvers += "twitter-repo" at "https://maven.twttr.com",
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/modules/",
-              "com/twitter/finatra/test/")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, utilsTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, utilsTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, utilsTestJarSources))
     }
   ).dependsOn(
     injectApp % "test->test",
@@ -479,12 +517,16 @@ lazy val utils = project
     injectServer % "test->test",
     injectUtils)
 
+lazy val jacksonTestJarSources =
+  Seq(
+    "com/twitter/finatra/validation",
+    "com/twitter/finatra/json/JsonDiff")
 lazy val jackson = project
   .settings(projectSettings)
   .settings(
     name := "finatra-jackson",
     moduleName := "finatra-jackson",
-    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConverter.*",
+    ScoverageKeys.coverageExcludedPackages := ".*CaseClassSigParser.*;.*JacksonToGuiceTypeConverter.*;.*DurationMillisSerializer.*;.*ByteBufferUtils.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
@@ -492,24 +534,39 @@ lazy val jackson = project
       "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler"),
       "com.twitter.finatra" %% "finatra-scalap-compiler-deps" % "2.0.0"
     ),
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/json/JsonDiff",
-              "com/twitter/finatra/validation/")))
+    // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
+    sources in Test in doc := {
+      val previous: Seq[File] = (sources in Test in doc).value
+      previous.filter(file => jacksonTestJarSources.foldLeft(false)(_ || file.getPath.contains(_)))
+    },
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, jacksonTestJarSources))
     }
   ).dependsOn(
     injectApp % "test->test",
     utils)
 
+lazy val httpTestJarSources =
+  Seq("com/twitter/finatra/http/EmbeddedHttpServer",
+    "com/twitter/finatra/http/HttpMockResponses",
+    "com/twitter/finatra/http/HttpTest",
+    "com/twitter/finatra/http/StreamingJsonTestHelper")
 lazy val http = project
   .settings(projectSettings)
   .settings(
     name := "finatra-http",
     moduleName := "finatra-http",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
       "com.twitter" %% "bijection-util" % versions.bijectionVersion,
@@ -522,15 +579,18 @@ lazy val http = project
       _ / "src" / "test" / "webapp"
     ),
     excludeFilter in Test in unmanagedResources := "BUILD",
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/http/EmbeddedHttpServer",
-              "com/twitter/finatra/http/HttpMockResponses",
-              "com/twitter/finatra/http/HttpTest",
-              "com/twitter/finatra/http/StreamingJsonTestHelper")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, httpTestJarSources))
     }
   ).dependsOn(
     jackson % "test->test;compile->compile",
@@ -539,6 +599,8 @@ lazy val http = project
     httpclient % "test->test",
     slf4j)
 
+lazy val httpclientTestJarSources =
+  Seq("com/twitter/finatra/httpclient/test/")
 lazy val httpclient = project
   .settings(projectSettings)
   .settings(
@@ -547,12 +609,18 @@ lazy val httpclient = project
     libraryDependencies ++= Seq(
       "commons-codec" % "commons-codec" % versions.commonsCodec
     ),
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/httpclient/test/")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, httpclientTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, httpclientTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, httpclientTestJarSources))
     }
   ).dependsOn(
     jackson,
@@ -572,6 +640,10 @@ lazy val slf4j = project
     injectSlf4j,
     injectCore % "test->test;compile->compile")
 
+lazy val thriftTestJarSources =
+  Seq("com/twitter/finatra/thrift/EmbeddedThriftServer",
+    "com/twitter/finatra/thrift/ThriftClient",
+    "com/twitter/finatra/thrift/ThriftTest")
 lazy val thrift = project
   .settings(projectSettings)
   .settings(
@@ -592,14 +664,18 @@ lazy val thrift = project
     scroogeLanguages in Compile := Seq("java", "scala"),
     scroogeLanguages in Test := Seq("java", "scala"),
     excludeFilter in unmanagedResources := "BUILD",
-    publishArtifact in (Test, packageBin):= true,
-    publishArtifact in (Test, packageDoc) := true,
-    mappings in (Test, packageBin) ~= { fileMappings: Seq[(File, String)] =>
-      fileMappings.filter(
-        mappingContainsAnyPath(_,
-          Seq("com/twitter/finatra/thrift/EmbeddedThriftServer",
-              "com/twitter/finatra/thrift/ThriftClient",
-              "com/twitter/finatra/thrift/ThriftTest")))
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, thriftTestJarSources))
     }
   ).dependsOn(
     injectServer % "test->test;compile->compile",
