@@ -3,7 +3,7 @@ import sbtunidoc.Plugin.UnidocKeys._
 import scala.language.reflectiveCalls
 import ScoverageSbtPlugin._
 
-parallelExecution in ThisBuild := false
+concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 lazy val projectVersion = "2.8.0-SNAPSHOT"
 
@@ -26,7 +26,7 @@ def travisTestJavaOptions: Seq[String] = {
       // in Travis with `sudo: false`.
       // See https://github.com/sbt/sbt/issues/653
       // and https://github.com/travis-ci/travis-ci/issues/3775
-      "-Xmx2G")
+      "-Xmx3G")
   } else Seq.empty
 }
 
