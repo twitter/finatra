@@ -26,7 +26,7 @@ def travisTestJavaOptions: Seq[String] = {
       // in Travis with `sudo: false`.
       // See https://github.com/sbt/sbt/issues/653
       // and https://github.com/travis-ci/travis-ci/issues/3775
-      "-Xmx1G")
+      "-Xmx2G")
   } else Seq.empty
 }
 
