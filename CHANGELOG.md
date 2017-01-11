@@ -13,6 +13,11 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* inject-app: Fix TestInjector to properly parse flags. The TestInjector didn't
+  properly handle defaulted boolean flags when defined in Modules. Updated the
+  TestInjector logic to properly parse flags. Fixes [Issue #373](https://github.com/twitter/finatra/issues/373) 
+  ``RB_ID=901525``
+
 * finatra: Correctly filter published tests-javadocs and tests-sources jars for
   projects. We are incorrectly publishing tests in the sources and javadocs jars
   for projects which publish a test-jar dependency (http, httpclient, jackson,
