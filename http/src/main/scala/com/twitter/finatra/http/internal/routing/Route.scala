@@ -4,15 +4,20 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.http.{Method, Request, Response, RouteIndex}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.request.RequestWithRouteParams
+import com.twitter.finatra.http.internal.routing.Route._
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import scala.language.existentials
 
+private[http] object Route {
+  val OptionalTrailingSlashIdentifier = "/?"
+}
+
 //optimized
-private[finatra] case class Route(
+private[http] case class Route(
   name: String,
   method: Method,
-  path: String,
+  uri: String,
   admin: Boolean,
   index: Option[RouteIndex],
   callback: Request => Future[Response],
@@ -22,21 +27,27 @@ private[finatra] case class Route(
   routeFilter: Filter[Request, Response, Request, Response],
   filter: Filter[Request, Response, Request, Response]) {
 
+  val path = normalizeUriToPath(uri)
+
   private[this] val pattern = PathPattern(path)
   private[this] val routeInfo = RouteInfo(name, path)
 
   private[this] val callbackService: Service[Request, Response] =
     Service.mk[Request, Response](callback)
+  private[this] val filteredRouteCallback: Request => Future[Response] =
+    routeFilter.andThen(callbackService)
   private[this] val filteredCallback: Request => Future[Response] =
     filter.andThen(callbackService)
 
   /* Public */
 
-  def captureNames = pattern.captureNames
+  val captureNames: Seq[String] = pattern.captureNames
 
-  def constantRoute = captureNames.isEmpty
+  val constantRoute: Boolean = captureNames.isEmpty
 
-  def summary: String = f"$method%-7s $path"
+  val hasOptionalTrailingSlash: Boolean = uri.endsWith(OptionalTrailingSlashIdentifier)
+
+  val summary: String = f"$method%-7s $uri"
 
   def withFilter(filter: Filter[Request, Response, Request, Response]): Route = {
     this.copy(filter = filter.andThen(this.filter))
@@ -47,7 +58,9 @@ private[finatra] case class Route(
     request: Request,
     incomingPath: String,
     bypassFilters: Boolean): Option[Future[Response]] = {
-    val routeParamsOpt = pattern.extract(incomingPath)
+    val path = toMatchPath(incomingPath)
+    val routeParamsOpt = pattern.extract(path)
+
     if (routeParamsOpt.isEmpty) {
       None
     } else {
@@ -63,7 +76,7 @@ private[finatra] case class Route(
     RouteInfo.set(request, routeInfo)
     if (bypassFilters)
       Some(
-        routeFilter.andThen(callbackService).apply(request))
+        filteredRouteCallback(request))
     else
       Some(
         filteredCallback(request))
@@ -76,5 +89,28 @@ private[finatra] case class Route(
       request
     else
       new RequestWithRouteParams(request, routeParams)
+  }
+
+  /** routes are stored with the optional trailing slash, thus we add it to match if not present */
+  private[this] def toMatchPath(incomingPath: String): String = {
+    if (hasOptionalTrailingSlash && !incomingPath.endsWith("/"))
+      incomingPath+"/"
+    else
+      incomingPath
+  }
+
+  /** normalize a URI to a route path */
+  private[this] def normalizeUriToPath(uri: String): String = {
+    if (uri.endsWith(OptionalTrailingSlashIdentifier)) {
+      // store path with trailing slash only
+      val path = uri.substring(0, uri.length - 1)
+      // transform paths that now end with :*/ to :* (which matches optional trailing slashes)
+      if (path.endsWith(":*/")) {
+        path.substring(0, path.length - 1)
+      } else {
+        path
+      }
+    }
+    else uri
   }
 }

@@ -47,7 +47,7 @@ class DoEverythingController @Inject()(
     response.ok("always response")
   }
 
-  get("/plaintext") { request: Request =>
+  get("/plaintext/?") { request: Request =>
     "Hello, World!"
   }
 

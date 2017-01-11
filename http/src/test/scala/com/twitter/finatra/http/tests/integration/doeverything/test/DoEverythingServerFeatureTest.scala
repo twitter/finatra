@@ -59,11 +59,17 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "GET /plaintext" in {
-      val response = server.httpGet(
+      val response1 = server.httpGet(
         "/plaintext",
         withBody = "Hello, World!")
 
-      response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+      response1.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+
+      val response2 = server.httpGet(
+        "/plaintext/",
+        withBody = "Hello, World!")
+
+      response2.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
     }
 
     "/plaintext (prefixed)" in {
@@ -1074,7 +1080,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withBody = "options")
     }
-
 
     "HEAD" in {
       server.httpHead(

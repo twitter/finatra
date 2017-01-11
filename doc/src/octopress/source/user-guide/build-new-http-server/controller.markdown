@@ -212,7 +212,18 @@ class MyController @Inject()(
 - Routes are always added to the [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala)` [in the order defined in the Controller](/finatra/user-guide/build-new-http-server/controller.html#controllers-and-routing) (and are scanned in this order as well), this remains true even when defined within a `prefix` block. I.e., the `prefix` is merely a convenience for adding a common prefix to a set of routes. You should still be aware of the total order in which your routes are defined in a Controller.
 - You can use the `c.t.finatra.http.RouteDSL#prefix` function multiple times in a Controller with the same or different values.
 
-#### <a class="anchor" name="admin-paths" href="#admin-index">Admin Paths</a>
+#### <a class="anchor" name="trailing-slashes" href="#trailing-slashes">Trailing Slashes</a>
+
+If you want to ignore trailing slashes on routes such that `/groups/1` and `groups/1/` are treated to be equivalent, append `/?` to your route URI, e.g.,
+
+```scala
+get("/groups/:*/?") { request: Request =>
+  //
+}
+```
+<div></div>
+
+#### <a class="anchor" name="admin-index" href="#admin-index">Admin Paths</a>
 
 All [TwitterServer](http://twitter.github.io/twitter-server/)-based servers have an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) which includes a variety of tools for diagnostics, profiling, and more. This admin interface should not be exposed outside your DMZ. Any route path starting with `/admin/` or `/admin/finatra/` will be included on the server's admin interface (accessible via the server's admin port).
 

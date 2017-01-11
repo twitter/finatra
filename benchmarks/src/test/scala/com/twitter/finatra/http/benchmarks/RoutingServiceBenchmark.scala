@@ -41,7 +41,7 @@ class RoutingServiceBenchmark {
   def route(path: String) = Route(
     name = path,
     method = Method.Get,
-    path = path,
+    uri = path,
     admin = false,
     index = None,
     callback = defaultCallback,
