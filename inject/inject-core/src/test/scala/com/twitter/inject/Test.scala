@@ -4,11 +4,8 @@ import com.twitter.util.{Await, Future}
 import java.util.TimeZone
 import org.apache.commons.io.IOUtils
 import org.joda.time.{DateTimeZone, Duration}
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpec}
 
-@RunWith(classOf[JUnitRunner])
 abstract class Test
   extends WordSpec
   with BeforeAndAfterAll

@@ -2,7 +2,7 @@ junit_tests(
   dependencies=[
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest',
-    '3rdparty/jvm/org/specs2',
+    '3rdparty/jvm/org/specs2:mock',
     'finatra/httpclient',
     'finatra/httpclient/src/test/scala:test-deps',
     'finatra/inject/inject-app:test-deps',

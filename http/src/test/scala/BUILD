@@ -31,7 +31,7 @@ junit_tests(
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scala-lang/modules:scala-xml',
     '3rdparty/jvm/org/scalatest:scalatest',
-    '3rdparty/jvm/org/specs2:specs2',
+    '3rdparty/jvm/org/specs2:mock',
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/http/src/main/java:java',

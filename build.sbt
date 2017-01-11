@@ -54,6 +54,7 @@ lazy val versions = new {
   val jackson = "2.8.4"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
+  val junit = "4.12"
   val libThrift = "0.5.0-7"
   val logback = "1.1.7"
   val mockito = "1.9.5"
@@ -87,7 +88,7 @@ lazy val baseSettings = Seq(
     "org.mockito" % "mockito-core" %  versions.mockito % "test",
     "org.scalacheck" %% "scalacheck" % versions.scalaCheck % "test",
     "org.scalatest" %% "scalatest" %  versions.scalaTest % "test",
-    "org.specs2" %% "specs2" % versions.specs2 % "test"
+    "org.specs2" %% "specs2-mock" % versions.specs2 % "test"
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -573,7 +574,8 @@ lazy val http = project
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
-      "javax.servlet" % "servlet-api" % versions.servletApi
+      "javax.servlet" % "servlet-api" % versions.servletApi,
+      "junit" % "junit" % versions.junit % "test"
     ),
     unmanagedResourceDirectories in Test <+= baseDirectory(
       _ / "src" / "test" / "webapp"
@@ -657,6 +659,7 @@ lazy val thrift = project
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
       "com.twitter" %% "util-core" % versions.utilVersion,
       "javax.inject" % "javax.inject" % "1",
+      "junit" % "junit" % versions.junit % "test",
       "org.yaml" % "snakeyaml" % versions.snakeyaml
     ),
     scroogePublishThrift in Compile := true,

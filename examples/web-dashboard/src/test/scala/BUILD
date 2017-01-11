@@ -10,7 +10,7 @@ junit_tests(
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/mockito:mockito-all',
     '3rdparty/jvm/org/scalatest:scalatest',
-    '3rdparty/jvm/org/specs2:specs2',
+    '3rdparty/jvm/org/specs2:mock',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',

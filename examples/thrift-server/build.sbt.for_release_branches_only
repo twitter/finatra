@@ -20,7 +20,7 @@ lazy val baseSettings = Seq(
     "org.mockito" % "mockito-core" % versions.mockito % "test",
     "org.scalacheck" %% "scalacheck" % versions.scalacheck % "test",
     "org.scalatest" %% "scalatest" % versions.scalatest % "test",
-    "org.specs2" %% "specs2" % versions.specs2 % "test"
+    "org.specs2" %% "specs2-mock" % versions.specs2 % "test"
   ),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
