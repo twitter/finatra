@@ -1,6 +1,6 @@
 
 # Change Log
-All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` corresponds to associated message in commits.
+All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` and ``DIFF_ID=#`` correspond to associated message in commits.
 
 ## [Unreleased]
 
@@ -14,6 +14,11 @@ All notable changes to this project will be documented in this file. Note that `
   common prefix for a set of routes declaratively inside a controller. ``RB_ID=894695``
 
 ### Changed
+
+* inject-core: Remove JUnitRunner from `c.t.inject.Test`. This was only necessary for
+  internal building with pants and is no longer required. The sbt build uses the 
+  ScalaTest runner and is thus not affected. Additionally, update specs2 to 2.4.17 and 
+  to depend on just the `specs2-mock` dependency where needed. ``DIFF_ID=D18011``
 
 ### Fixed
 
