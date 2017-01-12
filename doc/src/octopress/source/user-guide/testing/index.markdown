@@ -33,7 +33,9 @@ What are we talking about when we talk about *testing*? At a high-level the phil
 ## [ScalaTest](http://www.scalatest.org/)
 ===============================
 
-The Finatra testing framework uses the [`WordSpec`](http://doc.scalatest.org/2.2.4/#org.scalatest.WordSpec) ScalaTest [testing style](http://www.scalatest.org/user_guide/selecting_a_style) testing style for framework testing and to facilitate the types of testing outlined above we have several testing traits to aid in creating simple and powerful tests. For more information on [ScalaTest](http://www.scalatest.org/), see the [ScalaTest User Guide](http://www.scalatest.org/user_guide).
+The Finatra testing framework uses the [`WordSpec`](http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec) ScalaTest [testing style](http://www.scalatest.org/user_guide/selecting_a_style) testing style for framework testing and to facilitate the types of testing outlined above we have several testing traits to aid in creating simple and powerful tests.
+For more information on [ScalaTest](http://www.scalatest.org/), see the [ScalaTest User Guide](http://www.scalatest.org/user_guide).
+To make use of another ScalaTest test style, such as [`FunSuite`](http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite), see [Test Mixins](#test-mixins).
 
 ## <a class="anchor" name="embedded-server" href="#embedded-server">Embedded Servers and Apps</a>
 ===============================
@@ -179,6 +181,45 @@ If you are writing a test that has an HTTP server under test, you can optionally
 ### <a class="anchor" name="thrift-tests" href="#thrift-tests">Thrift Tests</a>
 
 As shown above, thrift servers can be tested through a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala). The Finatra test framework provides an easy way get access to a real [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) for making calls to your running server in a test. In the case here, creating a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala) requires the thrift service type `T`. This type is expected to be the trait subclass of `c.t.scrooge.ThriftService` in the form of `YourService[+MM[_]]`.
+
+### <a class="anchor" name="test-mixins" href="#test-mixins">Tests Mixins</a>
+
+Twitter's recommended ScalaTest test style is [`FunSuite`](http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite). 
+Though, inheriting the current `c.t.inject.server.FeatureTest`, `c.t.inject.IntegrationTest`, `c.t.finatra.http.HttpTest` test classes forces the test style to be [`WordSpec`](http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec).
+To start using `FunSuite` ScalaTest test style and preserve `c.t.inject.server.FeatureTest`, `c.t.inject.IntegrationTest`, `c.t.finatra.http.HttpTest` test logic, there are companion trait test classes.
+These mixin classes are fully backwards compatible companion test classes.
+
+ScalaTest Finatra mixin companion test classes
+
+- `c.t.inject.server.FeatureTest` -> `c.t.inject.server.FeatureTestMixin`
+- `c.t.inject.IntegrationTest` -> `c.t.inject.IntegrationTestMixin`
+- `c.t.finatra.http.HttpTest` -> `c.t.finatra.http.HttpTestMixin`
+
+Example use case of `c.t.inject.server.FeatureTestMixin` with `FunSuite` ScalaTest test style.
+
+```scala
+import com.google.inject.Stage
+import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.inject.server.FeatureTestMixin
+import org.scalatest.FunSuite
+
+class SampleApiStartupTest extends FunSuite with FeatureTestMixin {
+
+  override val server = new EmbeddedHttpServer(
+    twitterServer = new SampleApiServer,
+    stage = Stage.PRODUCTION,
+    flags = Map(
+      "foo.flag" -> "bar"
+    )
+  )
+
+  test("SampleApi should startup") {
+    server.assertHealthy()
+  }
+
+}
+
+```
 
 ## <a class="anchor" name="startup-tests" href="#startup-tests">Startup Tests</a>
 ===============================
