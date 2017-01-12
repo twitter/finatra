@@ -3,6 +3,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.CommonFilters
+import com.twitter.finatra.http.jsonpatch.{JsonPatchExceptionMapper, JsonPatchMessageBodyReader}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.tests.integration.doeverything.main.controllers._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
@@ -25,6 +26,7 @@ class DoEverythingServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
     router
+      .register[JsonPatchMessageBodyReader]
       .register[DomainTestUserReader]
       .filter(new AppendToHeaderFilter("test", "0"), beforeRouting = true)
       .filter[CommonFilters]
@@ -38,6 +40,7 @@ class DoEverythingServer extends HttpServer {
       .exceptionMapper[FooExceptionMapper]
       .exceptionMapper(injector.instance[BarExceptionMapper])
       .exceptionMapper[FooBarBazExceptionMapper]
+      .exceptionMapper[JsonPatchExceptionMapper]
       .add[IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]

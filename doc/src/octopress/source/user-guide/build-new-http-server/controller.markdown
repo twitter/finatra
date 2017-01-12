@@ -390,6 +390,65 @@ def deserializeRequest(name: String) = {
 ```
 <div></div>
 
+### <a class="anchor" name="jsonpatch-requests" href="#jsonpatch-requests">JSON Patch Requests</a>
+
+Finatra has support for JSON Patch requests, see [JSON Patch definition](https://tools.ietf.org/html/rfc6902).
+
+To handle JSON Patch requests, you need to include a `c.t.finatra.http.jsonpatch.JsonPatchOperator` instance in your controller, which provides `toJsonNode` methods and all JSON Patch operations. After the target data has been converted to a JsonNode, just call `JsonPatchUtility.operate` to apply JSON Patch operations to the target.
+
+For example:
+
+```scala
+patch("/jsonPatch") { jsonPatch: JsonPatch =>
+  val testCase = ExampleCaseClass("world")
+  val originalJson = jsonPatchOperator.toJsonNode[ExampleCaseClass](testCase)
+  JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+}
+```
+
+<div></div>
+
+You should also register the `JsonPatchMessageBodyReader` and the `JsonPatchExceptionMapper` in the server. `JsonPatchMessageBodyReader` is for parsing JSON Patch requests as type `c.t.finatra.http.jsonpatch.JsonPatch`, and `JsonPatchExceptionMapper` can convert corresponding exceptions to HTTP responses, see [Add an ExceptionMapper](http://twitter.github.io/finatra/user-guide/build-new-http-server/exceptions.html)
+
+```scala
+class ExampleServer extends HttpServer {
+
+  override def configureHttp(router: HttpRouter): Unit = {
+    router
+      .register[JsonPatchMessageBodyReader]
+      .exceptionMapper[JsonPatchExceptionMapper]
+      .add[ExampleController]
+  }
+}
+```
+
+<div></div>
+
+An example of testing this endpoint:
+
+```scala
+"JsonPatch" in {
+  val request = RequestBuilder.patch("/jsonPatch")
+    .body(
+      """[
+        |{"op":"add","path":"/fruit","value":"orange"},
+        |{"op":"remove","path":"/hello"},
+        |{"op":"copy","from":"/fruit","path":"/veggie"},
+        |{"op":"replace","path":"/veggie","value":"bean"},
+        |{"op":"move","from":"/fruit","path":"/food"},
+        |{"op":"test","path":"/food","value":"orange"}
+        |]""".stripMargin,
+      contentType = Message.ContentTypeJsonPatch)
+
+  server.httpRequestJson[JsonNode](
+    request = request,
+    andExpect = Ok,
+    withJsonBody = """{"food":"orange","veggie":"bean"}""")
+}
+```
+
+<div></div>
+
 For more information and examples, see:
 
 - [`c.t.finatra.http.request.RequestUtils`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala)

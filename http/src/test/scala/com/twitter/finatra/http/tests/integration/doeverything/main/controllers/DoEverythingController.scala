@@ -5,12 +5,14 @@ import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
 import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
+import com.twitter.finatra.http.jsonpatch.{JsonPatch, JsonPatchOperator, JsonPatchUtility}
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.request.{HttpForward, RequestUtils}
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter, ForbiddenFilter}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter, IdentityFilter}
+import com.twitter.finatra.http.tests.integration.doeverything.main.jsonpatch._
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestCaseClassWithLocalDate
@@ -32,6 +34,7 @@ class DoEverythingController @Inject()(
   complexServiceFactory: ComplexServiceFactory,
   objectMapper: FinatraObjectMapper,
   @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
+  jsonPatchOperator: JsonPatchOperator,
   forward: HttpForward,
   mustacheService: MustacheService)
   extends Controller {
@@ -513,6 +516,36 @@ class DoEverythingController @Inject()(
 
   patch("/patch") { r: Request =>
     "patch"
+  }
+
+  patch("/jsonPatch") { jsonPatch: JsonPatch =>
+    val testCase = ExampleCaseClass("world")
+    val originalJson = jsonPatchOperator.toJsonNode[ExampleCaseClass](testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/nested") { jsonPatch: JsonPatch =>
+    val testCase = Level1CaseClass(Level2CaseClass(ExampleCaseClass("world")))
+    val originalJson = jsonPatchOperator.toJsonNode[Level1CaseClass](testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/level3") { jsonPatch: JsonPatch =>
+    val testCase = Level0CaseClass(Level1CaseClass(Level2CaseClass(ExampleCaseClass("world"))))
+    val originalJson = jsonPatchOperator.toJsonNode[Level0CaseClass](testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/string") { jsonPatch: JsonPatch =>
+    val testCase = """{"hello":"world"}"""
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/nonleaf") { jsonPatch: JsonPatch =>
+    val testCase = RootCaseClass(DuoCaseClass(DuoStringCaseClass("left-left", "left-right"), DuoStringCaseClass("right-left", "right-right")))
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
   }
 
   patch("/echo") { request: Request =>

@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Support for JSON Patch (https://tools.ietf.org/html/rfc6902). Utilities are
+  located in package `com.twitter.finatra.http.jsonpatch`. ``RB_ID=889152``
 * finatra: Created companion trait mixins for Test/FeatureTest/IntegrationTest/HttpTest.
   ``RB_ID=897778``
 * finatra-http: Support for optional trailing slashes in HTTP routes. Routes can

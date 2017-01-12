@@ -5,11 +5,12 @@ import com.google.common.net.MediaType
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{FileElement, Method, Request}
+import com.twitter.finagle.http.{FileElement, Message, Method, Request}
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
+import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
@@ -1834,5 +1835,173 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       "/localDateRequest",
       postBody = """{"date" : "2016-11-32"}""",
       andExpect = BadRequest)
+  }
+
+  "PATCH with JsonPatch" should {
+    "JsonPatch" in {
+      val request = RequestBuilder.patch("/jsonPatch")
+        .body(
+          """[
+            |{"op":"add","path":"/fruit","value":"orange"},
+            |{"op":"remove","path":"/hello"},
+            |{"op":"copy","from":"/fruit","path":"/veggie"},
+            |{"op":"replace","path":"/veggie","value":"bean"},
+            |{"op":"move","from":"/fruit","path":"/food"},
+            |{"op":"test","path":"/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"food":"orange","veggie":"bean"}""")
+    }
+
+    "JsonPatch with nested path" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[
+            |{"op":"add","path":"/level1/level2/fruit","value":"orange"},
+            |{"op":"remove","path":"/level1/level2/hello"},
+            |{"op":"copy","from":"/level1/level2/fruit","path":"/level1/level2/veggie"},
+            |{"op":"replace","path":"/level1/level2/veggie","value":"bean"},
+            |{"op":"move","from":"/level1/level2/fruit","path":"/level1/level2/food"},
+            |{"op":"test","path":"/level1/level2/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"level1":{"level2":{"food":"orange","veggie":"bean"}}}""")
+    }
+
+    "JsonPatch with nested 4 levels path" in {
+      val request = RequestBuilder.patch("/jsonPatch/level3")
+        .body(
+          """[
+            |{"op":"add","path":"/level0/level1/level2/fruit","value":"orange"},
+            |{"op":"remove","path":"/level0/level1/level2/hello"},
+            |{"op":"copy","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/veggie"},
+            |{"op":"replace","path":"/level0/level1/level2/veggie","value":"bean"},
+            |{"op":"move","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/food"},
+            |{"op":"test","path":"/level0/level1/level2/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"level0":{"level1":{"level2":{"food":"orange","veggie":"bean"}}}}""")
+    }
+
+    "JsonPatch operating with non-leaf node" in {
+      val request = RequestBuilder.patch("/jsonPatch/nonleaf")
+        .body(
+          """[
+            |{"op":"add","path":"/root/middle","value":{"left":"middle-left"}},
+            |{"op":"remove","path":"/root/left"},
+            |{"op":"copy","from":"/root/right","path":"/root/left"},
+            |{"op":"replace","path":"/root/left","value":{"left":"left-left-2","right":"left-right-2"}},
+            |{"op":"move","from":"/root/left","path":"/root/left2"},
+            |{"op":"test","path":"/root/left2","value":{"left":"left-left-2","right":"left-right-2"}}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody =
+          """
+            |{"root":{
+            |"left2":{"left":"left-left-2","right":"left-right-2"},
+            |"middle":{"left":"middle-left"},
+            |"right":{"left":"right-left","right":"right-right"}}
+            |}""".stripMargin)
+    }
+
+    "JsonPatch for string" in {
+      val request = RequestBuilder.patch("/jsonPatch/string")
+        .body(
+          """[
+            |{"op":"add","path":"/fruit","value":"orange"},
+            |{"op":"remove","path":"/hello"},
+            |{"op":"copy","from":"/fruit","path":"/veggie"},
+            |{"op":"replace","path":"/veggie","value":"bean"},
+            |{"op":"move","from":"/fruit","path":"/food"},
+            |{"op":"test","path":"/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"food":"orange","veggie":"bean"}""")
+    }
+
+    // error message for a path does not begin with a slash: CaseClassMappingException,
+    // "path: Can not construct instance of com.fasterxml.jackson.core.JsonPointer,
+    // problem: Invalid input: JSON Pointer expression must start with '/'.
+    "JsonPatch fails when a path does not begin with a slash" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[{"op":"add","path":"fruit","value":"orange"}]""",
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest)
+    }
+
+    "JsonPatch fails when a path is empty" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[{"op":"add","path":"","value":"orange"}]""",
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest,
+        withJsonBody = """{"errors":["invalid path - empty path"]}""")
+    }
+
+    "JsonPatch fails when the patch operation specs are invalid" in {
+      val request = RequestBuilder.patch("/jsonPatch")
+        .body(
+          """[{"op":"copy","path":"/hello","value":"/shouldbefrom"}]""",
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest,
+        withJsonBody = """{"errors":["invalid from for copy operation"]}""")
+    }
+
+    "JsonPatch move operation with same from and path - jsonNode" in {
+      val request = RequestBuilder.patch("/jsonPatch")
+        .body(
+          """[
+            |{"op":"move","from":"/hello","path":"/hello"},
+            |{"op":"test","path":"/hello","value":"world"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"hello":"world"}""")
+    }
+
+    "JsonPatch fails when Content-Type is not consistent" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[{"op":"add","path":"/fruit","value":"orange"}]""",
+          contentType = Message.ContentTypeJson)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest,
+        withJsonBody = """{"errors":["incorrect Content-Type, should be application/json-patch+json"]}""")
+    }
   }
 }
