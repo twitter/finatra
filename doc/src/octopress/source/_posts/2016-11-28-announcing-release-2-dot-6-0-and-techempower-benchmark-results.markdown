@@ -38,4 +38,8 @@ https://www.techempower.com/benchmarks/#section=data-r13&hw=ph&test=json&l=4ftbo
 
 For more information on Round 13 of the [TechEmpower Web Famework Benchmarks](https://www.techempower.com/benchmarks/) see the blog post [here](https://www.techempower.com/blog/2016/11/16/framework-benchmarks-round-13/).
 
+See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User Guide](/finatra/user-guide) for more information on getting started with Finatra.
+
+-- The Finatra Team | [forum](https://groups.google.com/forum/#!forum/finatra-users) | [@finatra](https://twitter.com/finatra) | [chat](https://gitter.im/twitter/finatra)
+
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20(a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22)%20AND%20v%3A%222.6.0%22
