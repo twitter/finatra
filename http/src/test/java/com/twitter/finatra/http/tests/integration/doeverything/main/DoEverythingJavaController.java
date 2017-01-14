@@ -1,9 +1,13 @@
-package com.twitter.finatra.http.tests.integration.main;
+package com.twitter.finatra.http.tests.integration.doeverything.main;
 
 import javax.inject.Inject;
 
+import scala.runtime.AbstractFunction0;
+import scala.runtime.BoxedUnit;
+
 import com.twitter.finagle.http.Request;
 import com.twitter.finatra.http.AbstractController;
+import com.twitter.util.Future;
 
 /**
  * Test all HTTP methods
@@ -38,5 +42,20 @@ public class DoEverythingJavaController extends AbstractController {
         head("/head",  (Request request) -> "head");
 
         any("/any",  (Request request) -> "any");
+
+        get("/exception", (Request request) ->
+            new DoEverythingJavaException("error processing request"));
+
+        get("/futureException", (Request request) ->
+            Future.exception(new DoEverythingJavaException("error processing request")));
+
+        get("/futureThrowException", (Request request) ->
+            Future.apply(
+                new AbstractFunction0<BoxedUnit>() {
+                    @Override
+                    public BoxedUnit apply() {
+                        throw new DoEverythingJavaException("error processing request");
+                    }
+                }));
     }
 }

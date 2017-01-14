@@ -2,8 +2,13 @@ package com.twitter.finatra.http.exceptions
 
 import com.twitter.finagle.http.{Request, Response}
 
+/** AbstractExceptionMapper for usage from Java */
+abstract class AbstractExceptionMapper[T <: Throwable] extends ExceptionMapper[T]
+
 /**
  * An ExceptionMapper converts a `T`-typed throwable to an HTTP response.
+ *
+ * Java users should use the [[AbstractExceptionMapper]].
  */
 trait ExceptionMapper[T <: Throwable] {
 

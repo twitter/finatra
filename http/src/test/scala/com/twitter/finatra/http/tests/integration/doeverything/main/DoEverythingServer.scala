@@ -53,7 +53,7 @@ class DoEverythingServer extends HttpServer {
       .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
   }
 
-  override def warmup() {
-    handle[DoEverythingWarmupHandler]()
-  }
+//  override def warmup() {
+//    handle[DoEverythingWarmupHandler]()
+//  }
 }

@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.tests.integration.main;
+package com.twitter.finatra.http.tests.integration.doeverything.main;
 
 public class GoodbyeResponse {
     public final String name;

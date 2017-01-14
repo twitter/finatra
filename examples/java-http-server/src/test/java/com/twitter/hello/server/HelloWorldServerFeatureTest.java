@@ -48,4 +48,13 @@ public class HelloWorldServerFeatureTest extends Assert {
         assertEquals(Status.Ok(), response.status());
         assertEquals("pong", response.contentString());
     }
+
+    /** test exception endpoint */
+    @Test
+    public void testExceptionEndpoint() {
+        Request request = RequestBuilder.get("/exception");
+        Response response = server.httpRequest(request);
+        assertEquals(Status.InternalServerError(), response.status());
+        assertEquals("error processing request", response.contentString());
+    }
 }

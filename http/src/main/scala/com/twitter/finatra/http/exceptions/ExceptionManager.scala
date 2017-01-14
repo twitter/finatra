@@ -55,7 +55,7 @@ class ExceptionManager  (
    * @tparam T - exception class type which should subclass [[java.lang.Throwable]]
    */
   def add[T <: Throwable : Manifest](mapper: ExceptionMapper[T]): Unit = {
-    add(manifest[T].runtimeClass, mapper)
+    register(manifest[T].runtimeClass, mapper)
   }
 
   /**
@@ -78,7 +78,7 @@ class ExceptionManager  (
   def add[T <: ExceptionMapper[_]: Manifest]: Unit = {
     val mapperType = typeLiteral[T].getSupertype(classOf[ExceptionMapper[_]]).getType
     val throwableType = singleTypeParam(mapperType)
-    add(throwableType, injector.instance[T])
+    register(throwableType, injector.instance[T])
   }
 
   /**
@@ -125,7 +125,7 @@ class ExceptionManager  (
   }
 
   // Last entry by type overrides any previous entry.
-  private def add(throwableType: Type, mapper: ExceptionMapper[_]) {
+  private def register(throwableType: Type, mapper: ExceptionMapper[_]): Unit = {
     mappers.getOrElseUpdate(throwableType, mapper)
   }
 

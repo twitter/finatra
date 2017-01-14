@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.tests.integration.main;
+package com.twitter.finatra.http.tests.integration.doeverything.main;
 
 import com.twitter.finatra.http.AbstractHttpServer;
 import com.twitter.finatra.http.filters.CommonFilters;
@@ -14,6 +14,7 @@ public class DoEverythingJavaServer extends AbstractHttpServer {
     public void configureHttp(HttpRouter httpRouter) {
         httpRouter
             .filter(CommonFilters.class)
-            .add(DoEverythingJavaController.class);
+            .add(DoEverythingJavaController.class)
+            .exceptionMapper(DoEverythingJavaExceptionMapper.class);
     }
 }

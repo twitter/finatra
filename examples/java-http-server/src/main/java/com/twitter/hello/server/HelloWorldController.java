@@ -20,5 +20,8 @@ public class HelloWorldController extends AbstractController {
 
         get("/ping", request ->
             Future.value("pong"));
+
+        get("/exception", request ->
+            new HelloWorldException("error processing request"));
     }
 }

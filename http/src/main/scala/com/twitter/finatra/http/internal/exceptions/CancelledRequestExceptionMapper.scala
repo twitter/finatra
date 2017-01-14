@@ -10,7 +10,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 private[http] class CancelledRequestExceptionMapper @Inject()(
   response: ResponseBuilder)
-  extends AbstractExceptionMapper[CancelledRequestException](response) {
+  extends AbstractFrameworkExceptionMapper[CancelledRequestException](response) {
 
   private val CancelledRequestExceptionDetails = Seq("CancelledRequestException")
 

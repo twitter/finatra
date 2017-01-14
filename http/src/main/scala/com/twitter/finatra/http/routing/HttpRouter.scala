@@ -1,11 +1,12 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.http.exceptions.{AbstractExceptionMapper, ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
 import com.twitter.finatra.http.internal.routing.{Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
 import com.twitter.finatra.http.{Controller, HttpFilter, AbstractController}
+import com.twitter.inject.TypeUtils._
 import com.twitter.inject.{Injector, Logging}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.{Inject, Singleton}
@@ -40,13 +41,20 @@ class HttpRouter @Inject()(
 
   /* Public */
 
-  def exceptionMapper[T <: ExceptionMapper[_]: Manifest]: HttpRouter = {
+  def exceptionMapper[T <: ExceptionMapper[_] : Manifest]: HttpRouter = {
     exceptionManager.add[T]
     this
   }
 
   def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T]): HttpRouter = {
     exceptionManager.add[T](mapper)
+    this
+  }
+
+  def exceptionMapper[T <: Throwable](clazz: Class[_ <: AbstractExceptionMapper[T]]): HttpRouter = {
+    val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_]])
+    val throwableType = singleTypeParam(mapperType)
+    exceptionMapper(injector.instance(clazz))(Manifest.classType(Class.forName(throwableType.getTypeName)))
     this
   }
 

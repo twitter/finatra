@@ -6,13 +6,20 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Add AbstractExceptionMapper for ExceptionMapper usage from Java.
+  Also update the HttpRouter to allow for registration of AbstractExceptionMappers.
+  ``RB_ID=902995``
+
 * finatra-http: Support for JSON Patch (https://tools.ietf.org/html/rfc6902). Utilities are
   located in package `com.twitter.finatra.http.jsonpatch`. ``RB_ID=889152``
+
 * finatra: Created companion trait mixins for Test/FeatureTest/IntegrationTest/HttpTest.
   ``RB_ID=897778``
+
 * finatra-http: Support for optional trailing slashes in HTTP routes. Routes can
   now specify that they allow an optional trailing slash by ending the route URI
   in the Controller with "/?". ``RB_ID=893167``
+
 * finatra-http: Support for Controller route prefixes. This allows users to define a
   common prefix for a set of routes declaratively inside a controller. ``RB_ID=894695``
 

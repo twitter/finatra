@@ -12,7 +12,7 @@ import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
 import com.twitter.finatra.http.EmbeddedHttpServer;
-import com.twitter.finatra.http.tests.integration.main.DoEverythingJavaServer;
+import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingJavaServer;
 import com.twitter.finatra.httpclient.RequestBuilder;
 
 public class DoEverythingJavaServerFeatureTest extends Assert {
@@ -89,6 +89,30 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
                     + "\"user\":\"Bob\","
                     + "\"timestamp\":\"Thu, 19 May 2016 00:00:00 +00:00\"}",
                 response.contentString());
+    }
+
+    @Test
+    public void testExceptionEndpoint() {
+        Request request = RequestBuilder.get("/exception");
+        Response response = server.httpRequest(request);
+        assertEquals(Status.InternalServerError(), response.status());
+        assertEquals("error processing request", response.contentString());
+    }
+
+    @Test
+    public void testFutureExceptionEndpoint() {
+        Request request = RequestBuilder.get("/futureException");
+        Response response = server.httpRequest(request);
+        assertEquals(Status.InternalServerError(), response.status());
+        assertEquals("error processing request", response.contentString());
+    }
+
+    @Test
+    public void testFutureThrowExceptionEndpoint() {
+        Request request = RequestBuilder.get("/futureThrowException");
+        Response response = server.httpRequest(request);
+        assertEquals(Status.InternalServerError(), response.status());
+        assertEquals("error processing request", response.contentString());
     }
 
     private void assertMethod(Method httpMethod) {
