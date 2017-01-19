@@ -32,6 +32,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Fix for custom request case class collection-type fields which are
+  annotated with either `@RouteParam`, `@QueryParam`, or `@FormParam` to correctly
+  use a specified default value when a value is not sent in the request. ``RB_ID=903697``
+
 * inject-app: Fix TestInjector to properly parse flags. The TestInjector didn't
   properly handle defaulted boolean flags when defined in Modules. Updated the
   TestInjector logic to properly parse flags. Fixes [Issue #373](https://github.com/twitter/finatra/issues/373) 

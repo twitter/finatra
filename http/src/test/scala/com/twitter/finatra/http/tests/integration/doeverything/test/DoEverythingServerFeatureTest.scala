@@ -485,7 +485,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "GET /null" in {
-      pending
       server.httpGet(
         "/null",
         andExpect = Ok,
@@ -1130,8 +1129,76 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withJsonBody =
           """
-            |{ "foo": ["11", "21", "31"] }
-          """.stripMargin
+            { "foo": ["11", "21", "31"] }
+          """
+      )
+    }
+
+    "GET with query parameters as string sequence with no values (required)" in {
+      server.httpGet(
+        "/RequestWithQueryParamSeqString",
+        andExpect = BadRequest,
+        withJsonBody =
+          """{
+              "errors": [
+                "foo: queryParam is required"
+              ]
+            }"""
+      )
+    }
+
+    "GET defaulted request case class parameters as string sequence" in {
+      server.httpGet(
+        "/RequestWithDefaultedQueryParamSeqString",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "foo": ["foo", "bar", "baz"] }
+          """
+      )
+    }
+
+    "GET defaulted request case class parameters as string sequence with query params" in {
+      server.httpGet(
+        "/RequestWithDefaultedQueryParamSeqString?foo=override1&foo=override2",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "foo": ["override1", "override2"] }
+          """
+      )
+    }
+
+    "GET with query parameters as empty string sequence" in {
+      server.httpGet(
+        "/RequestWithDefaultedQueryParamSeqString?foo=",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "foo": [""] }
+          """
+      )
+    }
+
+    "GET defaulted request case class parameter as string" in {
+      server.httpGet(
+        "/RequestWithDefaultQueryParam",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "param": "default" }
+          """
+      )
+    }
+
+    "GET defaulted request case class parameter as string with query param" in {
+      server.httpGet(
+        "/RequestWithDefaultQueryParam?param=set",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "param": "set" }
+          """
       )
     }
 
@@ -1141,8 +1208,8 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withJsonBody =
           """
-            |{ "foo": [2, 3, 4] }
-          """.stripMargin
+            { "foo": [2, 3, 4] }
+          """
       )
     }
 

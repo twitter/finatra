@@ -243,7 +243,6 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   }
 
   "Null" in {
-    pending
     assertOk(
       callbackConverter.convertToFutureResponse(nullCallback),
       withBody = "")

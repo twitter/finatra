@@ -682,6 +682,14 @@ class DoEverythingController @Inject()(
     r.param
   }
 
+  get("/RequestWithDefaultedQueryParamSeqString") { r: RequestWithDefaultedQueryParamSeqString =>
+    Map("foo" -> r.foo)
+  }
+
+  get("/RequestWithDefaultQueryParam") { r: RequestWithDefaultQueryParam =>
+    Map("param" -> r.param)
+  }
+
   post("/RequestWithSeqWrappedString") { r: RequestWithSeqWrappedString =>
     r.value
   }
