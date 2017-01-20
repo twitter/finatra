@@ -6,7 +6,19 @@ import org.apache.commons.io.IOUtils
 import org.joda.time.{DateTimeZone, Duration}
 import org.scalatest._
 
-
+/**
+ * Testing trait which provides the following stackable modification traits:
+ *  - [[org.scalatest.BeforeAndAfterAll]]
+ *  - [[org.scalatest.BeforeAndAfterEach]]
+ *  - [[org.scalatest.Matchers]]
+ *  - [[com.twitter.inject.Logging]]
+ *
+ * This trait is expected to be mixed with a class that extends a core Suite trait,
+ * e.g., [[org.scalatest.FunSuite]].
+ *
+ * While you can use this mixin directly, it is recommended that users extend
+ * the [[com.twitter.inject.Test]] abstract class.
+ */
 trait TestMixin
   extends SuiteMixin
   with BeforeAndAfterAll

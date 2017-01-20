@@ -12,12 +12,12 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.domain.Somet
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.io.Buf
 import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
 
-class DoEverythingServerFeatureTest extends FeatureTest {
+class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
 
   override val server = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2"),

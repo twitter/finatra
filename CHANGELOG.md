@@ -25,6 +25,14 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: (BREAKING API CHANGE) Rename the existing test helper classes to include
+  their current opinionated testing style, "WordSpec". These are functionally
+  equivalent as this is just a name change. We also introduce new versions of the
+  test helpers which mix in the recommended FunSuite. Thus it will look like your
+  tests are broken as you will need to update to change to use the new "WordSpec"
+  classes or changed your testing style to the recommended `FunSuite` style.
+  ``DIFF_ID=D19822``
+
 * inject-core: Remove JUnitRunner from `c.t.inject.Test`. This was only necessary for
   internal building with pants and is no longer required. The sbt build uses the 
   ScalaTest runner and is thus not affected. Additionally, update specs2 to 2.4.17 and 

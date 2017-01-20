@@ -1,9 +1,9 @@
 package com.twitter.inject.server.tests
 
 import com.google.inject.testing.fieldbinder.Bind
-import com.twitter.inject.server.{EmbeddedTwitterServer, FeatureTest, TwitterServer}
+import com.twitter.inject.server.{EmbeddedTwitterServer, WordSpecFeatureTest, TwitterServer}
 
-class FeatureTestTest extends FeatureTest {
+class FeatureTestTest extends WordSpecFeatureTest {
 
   @Bind
   val string: String = "helloworld"

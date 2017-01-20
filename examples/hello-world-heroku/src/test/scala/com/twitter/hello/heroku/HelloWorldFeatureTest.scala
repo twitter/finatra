@@ -14,12 +14,10 @@ class HelloWorldFeatureTest extends FeatureTest {
     MetricsStatsReceiver.metrics.removeMatching(MetricFilter.ALL)
   }
 
-  "Server" should {
-    "Say hi" in {
-      server.httpGet(
-        path = "/hi?name=Bob",
-        andExpect = Ok,
-        withBody = "Hello Bob")
-    }
+  test("Server#Say hi") {
+    server.httpGet(
+      path = "/hi?name=Bob",
+      andExpect = Ok,
+      withBody = "Hello Bob")
   }
 }

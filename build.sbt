@@ -235,7 +235,7 @@ lazy val root = (project in file("."))
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
-    unidocProjectFilter in(ScalaUnidoc, unidoc) := inAnyProject
+    unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
       // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
@@ -247,11 +247,15 @@ lazy val root = (project in file("."))
 
 lazy val injectCoreTestJarSources =
   Seq("com/twitter/inject/IntegrationTest",
+    "com/twitter/inject/IntegrationTestMixin",
     "com/twitter/inject/Mockito",
     "com/twitter/inject/PoolUtils",
     "com/twitter/inject/Resettable",
     "com/twitter/inject/Test",
+    "com/twitter/inject/TestMixin",
     "com/twitter/inject/TwitterTestModule",
+    "com/twitter/inject/WordSpecIntegrationTest",
+    "com/twitter/inject/WordSpecTest",
     "org/specs2/matcher/ScalaTestExpectations")
 lazy val injectCore = (project in file("inject/inject-core"))
   .settings(projectSettings)
@@ -321,7 +325,6 @@ lazy val injectModules = (project in file("inject/inject-modules"))
 lazy val injectAppTestJarSources =
   Seq("com/twitter/inject/app/Banner",
     "com/twitter/inject/app/EmbeddedApp",
-    "com/twitter/inject/app/FeatureTest",
     "com/twitter/inject/app/InjectionServiceModule",
     "com/twitter/inject/app/StartupTimeoutException",
     "com/twitter/inject/app/TestInjector")
@@ -352,7 +355,9 @@ lazy val injectApp = (project in file("inject/inject-app"))
 
 lazy val injectServerTestJarSources =
   Seq("com/twitter/inject/server/EmbeddedTwitterServer",
-    "com/twitter/inject/server/FeatureTest")
+    "com/twitter/inject/server/FeatureTest",
+    "com/twitter/inject/server/FeatureTestMixin",
+    "com/twitter/inject/server/WordSpecFeatureTest")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
   .settings(

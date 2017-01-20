@@ -10,10 +10,8 @@ class TinyUrlServerStartupTest extends FeatureTest {
     twitterServer = new TinyUrlServer,
     stage = Stage.PRODUCTION)
 
-  "Server" should {
-    "startup" in {
-      // Because we disabled the adminHttpServer we instead check the started flag.
-      server.assertStarted()
-    }
+  test("Server#startup") {
+    // Because we disabled the adminHttpServer we instead check the started flag.
+    server.assertStarted()
   }
 }

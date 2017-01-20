@@ -3,10 +3,10 @@ package com.twitter.finatra.tests.utils
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.utils.{RetryPolicyUtils, RetryUtils}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Await, Future}
 
-class RetryUtilsTest extends Test {
+class RetryUtilsTest extends WordSpecTest {
 
   val nonFatalExponentialPolicy = RetryPolicyUtils.exponentialRetry(
     start = 10.millis,

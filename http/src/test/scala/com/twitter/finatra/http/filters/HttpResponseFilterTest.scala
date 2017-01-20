@@ -2,10 +2,10 @@ package com.twitter.finatra.http.filters
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Await, Future}
 
-class HttpResponseFilterTest extends Test {
+class HttpResponseFilterTest extends WordSpecTest {
 
   val respFilter = new HttpResponseFilter[Request]
   val rfc7231Regex = """^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d\d (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d\d:\d\d:\d\d GMT$"""

@@ -6,11 +6,11 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftClientModule}
-import com.twitter.inject.{InjectorModule, IntegrationTest}
+import com.twitter.inject.{InjectorModule, WordSpecIntegrationTest}
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
+class FilteredThriftClientModuleNonMuxTest extends WordSpecIntegrationTest {
 
   override val injector = TestInjector(
     modules = Seq(FilteredThriftClientModuleNonMux, ThriftClientIdModule, StatsReceiverModule, InjectorModule),

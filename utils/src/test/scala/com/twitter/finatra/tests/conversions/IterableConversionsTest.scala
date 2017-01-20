@@ -1,10 +1,10 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.iterable._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
 
-class IterableConversionsTest extends Test {
+class IterableConversionsTest extends WordSpecTest {
 
   "RichIterable" should {
     "#distinctBy" in {

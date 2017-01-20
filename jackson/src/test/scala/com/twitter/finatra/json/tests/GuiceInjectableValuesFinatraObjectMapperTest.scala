@@ -5,12 +5,12 @@ import com.google.inject.{ConfigurationException, Injector, Key}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.JsonInjectException
 import com.twitter.finatra.json.tests.internal._
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.{Mockito, WordSpecTest}
 import java.util
 import net.codingwell.scalaguice.typeLiteral
 
 class GuiceInjectableValuesFinatraObjectMapperTest
-  extends Test
+  extends WordSpecTest
   with Mockito {
 
   val injector = mock[Injector]

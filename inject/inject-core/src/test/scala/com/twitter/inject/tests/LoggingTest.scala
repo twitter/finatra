@@ -1,9 +1,9 @@
 package com.twitter.inject.tests
 
-import com.twitter.inject.{Logger, Logging, Test}
+import com.twitter.inject.{Logger, Logging, WordSpecTest}
 import com.twitter.util.Future
 
-class LoggingTest extends Test with Logging {
+class LoggingTest extends WordSpecTest with Logging {
 
   "Logging" in {
     debug("a")

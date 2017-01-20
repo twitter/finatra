@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.JsonDiff._
 import com.twitter.finatra.json.utils.JsonDiffUtil
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import org.scalatest.exceptions.TestFailedException
 
-class JsonDiffTest extends Test {
+class JsonDiffTest extends WordSpecTest {
   "json diff test" in {
     val a =
       """

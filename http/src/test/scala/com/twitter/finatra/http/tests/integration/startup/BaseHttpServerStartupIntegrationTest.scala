@@ -3,9 +3,9 @@ package com.twitter.finatra.http.tests.integration.startup
 import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.modules.ResponseBuilderModule
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class BaseHttpServerStartupIntegrationTest extends Test {
+class BaseHttpServerStartupIntegrationTest extends WordSpecTest {
 
   "BaseHttpServer startup" in {
     val server = new EmbeddedHttpServer(

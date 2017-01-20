@@ -6,10 +6,10 @@ import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
 import com.twitter.inject.Mockito
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.util.Future
 
-class Add1ServerFeatureTest extends FeatureTest with Mockito {
+class Add1ServerFeatureTest extends WordSpecFeatureTest with Mockito {
 
   @Bind
   val adderFuture = mock[Adder[Future]]

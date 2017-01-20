@@ -2,12 +2,12 @@ package com.twitter.finatra.tests.utils
 
 import com.twitter.finatra.utils.FutureUtils
 import com.twitter.finatra.utils.FutureUtils._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Await, Future, FuturePool}
 import java.util.concurrent.{ConcurrentLinkedQueue, Executors}
 import scala.collection.JavaConverters._
 
-class FutureUtilsTest extends Test {
+class FutureUtilsTest extends WordSpecTest {
   val ActionLog = new ConcurrentLinkedQueue[String]
   val TestFuturePool = FuturePool(Executors.newFixedThreadPool(4))
 

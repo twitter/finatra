@@ -1,10 +1,10 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.option._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Future, Throw, Try}
 
-class OptionsConversionsTest extends Test {
+class OptionsConversionsTest extends WordSpecTest {
 
   "RichOption" should {
     "#toFutureOrFail when Some" in {

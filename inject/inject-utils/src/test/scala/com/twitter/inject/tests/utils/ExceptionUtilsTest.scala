@@ -2,11 +2,11 @@ package com.twitter.inject.tests.utils
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.{FailedFastException, IndividualRequestTimeoutException}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.utils.ExceptionUtils
 import com.twitter.util.{Throw, Return}
 
-class ExceptionUtilsTest extends Test {
+class ExceptionUtilsTest extends WordSpecTest {
 
   "ExceptionUtils" should {
 

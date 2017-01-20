@@ -2,12 +2,12 @@ package com.twitter.inject.tests.exceptions
 
 import com.twitter.finagle.mux.ClientDiscardedRequestException
 import com.twitter.finagle.{BackupRequestLost, CancelledConnectionException, CancelledRequestException, Failure}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.scrooge.{ThriftException, ThriftResponse}
 import com.twitter.util.{Throw, Return}
 
-class PossiblyRetryableTest extends Test {
+class PossiblyRetryableTest extends WordSpecTest {
 
   object PossiblyRetryableException extends ThriftException
   object NonRetryableException extends ThriftException with com.twitter.inject.exceptions.NonRetryableException

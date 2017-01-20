@@ -7,12 +7,12 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestU
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import java.io.{File, FileWriter}
 import org.apache.commons.io.FileUtils
 
 class LocalDocRootDoEverythingServerFeatureTest
-  extends FeatureTest
+  extends WordSpecFeatureTest
   with DocRootLocalFilesystemTestUtility {
 
   override protected def beforeAll() = {

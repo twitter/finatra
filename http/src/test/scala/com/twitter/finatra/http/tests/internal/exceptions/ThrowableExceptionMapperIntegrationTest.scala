@@ -6,11 +6,11 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.exceptions._
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.IntegrationTest
+import com.twitter.inject.WordSpecIntegrationTest
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 
-class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
+class ThrowableExceptionMapperIntegrationTest extends WordSpecIntegrationTest {
   override val injector = TestInjector(
     MessageBodyModule,
     FinatraJacksonModule,

@@ -1,9 +1,9 @@
 package com.twitter.inject.tests.exceptions
 
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.exceptions.DetailedNonRetryableSourcedException
 
-class DetailedNonRetryableSourcedExceptionTest extends Test {
+class DetailedNonRetryableSourcedExceptionTest extends WordSpecTest {
 
   "DetailedNonRetryableSourcedException" should {
 

@@ -1,10 +1,10 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.bytebuffer._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.io.Buf
 
-class ByteBufferConversionsTest extends Test {
+class ByteBufferConversionsTest extends WordSpecTest {
 
   "debug output" in {
     val buf = Buf.Utf8("hello")

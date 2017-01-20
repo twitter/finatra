@@ -7,8 +7,12 @@ import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
 import com.twitter.finatra.multiserver.AdderThriftServer.AdderThriftServer
 import com.twitter.finatra.multiserver.Add2HttpServer.Add2Server
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftTest}
+import com.twitter.inject.WordSpecTest
 
-class MultiServerFeatureTest extends HttpTest with ThriftTest {
+class MultiServerFeatureTest 
+  extends WordSpecTest 
+  with HttpTest 
+  with ThriftTest {
 
   val add1ThriftServer = new EmbeddedThriftServer(new AdderThriftServer)
   val add1HttpServer = new EmbeddedHttpServer(new Add1Server, flags = Map(resolverMap("adder-thrift-server", add1ThriftServer)))

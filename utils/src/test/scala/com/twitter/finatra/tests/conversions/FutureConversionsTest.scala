@@ -1,10 +1,10 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.future._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Throw, Future, Return}
 
-class FutureConversionsTest extends Test {
+class FutureConversionsTest extends WordSpecTest {
 
   def intToString(num: Int): String = num.toString
 

@@ -1,10 +1,10 @@
 package com.twitter.inject.tests.thrift.utils
 
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.scrooge.{ThriftStructCodec3, ThriftMethod}
 
-class ThriftMethodUtilsTest extends Test {
+class ThriftMethodUtilsTest extends WordSpecTest {
 
   "ThriftMethodUtils" should {
 

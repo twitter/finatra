@@ -2,9 +2,9 @@ package com.twitter.inject.tests
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.{BackupRequestLost, Failure, IndividualRequestTimeoutException, CancelledRequestException}
-import com.twitter.inject.{RootMonitor, Test}
+import com.twitter.inject.{RootMonitor, WordSpecTest}
 
-class RootMonitorTest extends Test {
+class RootMonitorTest extends WordSpecTest {
 
   "RootMonitor" should {
 

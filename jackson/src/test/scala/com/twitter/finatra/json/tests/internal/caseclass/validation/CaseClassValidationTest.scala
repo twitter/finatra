@@ -7,10 +7,10 @@ import com.twitter.finatra.json.tests.internal.CarMake
 import com.twitter.finatra.json.tests.internal.caseclass.validation.domain.{Address, Car, Person}
 import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult.Invalid
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import org.joda.time.DateTime
 
-class CaseClassValidationTest extends Test {
+class CaseClassValidationTest extends WordSpecTest {
 
   val now = new DateTime("2015-04-09T05:17:15Z")
 

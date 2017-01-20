@@ -3,7 +3,7 @@ package com.twitter.inject.app.tests
 import com.twitter.app.GlobalFlag
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.{Test, TwitterModule}
+import com.twitter.inject.{WordSpecTest, TwitterModule}
 import javax.inject.Inject
 
 object testBooleanGlobalFlag extends GlobalFlag[Boolean](false, "Test boolean global flag defaulted to false")
@@ -25,7 +25,7 @@ class Bar {
   val mapGlobalFlag = testMapGlobalFlag()
 }
 
-class TestInjectorTest extends Test {
+class TestInjectorTest extends WordSpecTest {
 
   override protected def afterEach(): Unit = {
     // reset flags

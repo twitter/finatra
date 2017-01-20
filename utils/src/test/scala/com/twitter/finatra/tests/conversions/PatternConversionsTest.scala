@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.pattern._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class PatternConversionsTest extends Test {
+class PatternConversionsTest extends WordSpecTest {
 
   "RichPattern" should {
     val regex = ".*abc.*".r

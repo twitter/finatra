@@ -8,6 +8,7 @@ import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.thrift.filtered_integration.http_server.{GreeterHttpController, HiLoggingThriftClientFilter}
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
@@ -15,7 +16,9 @@ import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftCl
 import com.twitter.util._
 import scala.util.control.NonFatal
 
-class DoEverythingFilteredThriftClientModuleFeatureTest extends HttpTest {
+class DoEverythingFilteredThriftClientModuleFeatureTest 
+  extends WordSpecTest 
+  with HttpTest {
 
   val thriftServer = new EmbeddedThriftServer(
     twitterServer = new GreeterThriftServer)

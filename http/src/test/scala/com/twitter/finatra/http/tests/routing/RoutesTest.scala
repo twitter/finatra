@@ -4,11 +4,11 @@ import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.routing.{Route, Routes}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.Future
 import org.scalatest.OptionValues
 
-class RoutesTest extends Test with OptionValues {
+class RoutesTest extends WordSpecTest with OptionValues {
 
   "constant route" in {
     val routes = Routes.createForMethod(

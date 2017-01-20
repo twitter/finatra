@@ -12,7 +12,7 @@ class ServerFeatureTest extends FeatureTest {
       twitterServer = new Server,
       disableTestLogging = true)
 
-  "/ping" in {
+  test("/ping") {
     val response = server.httpGet(
       "/ping",
       andExpect = Status.Ok,
@@ -22,7 +22,7 @@ class ServerFeatureTest extends FeatureTest {
     assert(response.contentType.get == MediaType.PLAIN_TEXT_UTF_8.toString)
   }
 
-  "/user" in {
+  test("/user") {
     val response = server.httpGet(
       "/user?first=Jane&last=Doe",
       andExpect = Status.Ok,
@@ -35,7 +35,7 @@ class ServerFeatureTest extends FeatureTest {
     assert(response.contentType.get == MediaType.HTML_UTF_8.toString)
   }
 
-  "/other" in {
+  test("/other") {
     val response = server.httpGet(
       "/other",
       andExpect = Status.Ok)
@@ -44,7 +44,7 @@ class ServerFeatureTest extends FeatureTest {
     assert(response.contentType.get == MediaType.HTML_UTF_8.toString)
   }
 
-  "/document.xml" in {
+  test("/document.xml") {
     val response = server.httpGet(
       "/document.xml",
       andExpect = Status.Ok)

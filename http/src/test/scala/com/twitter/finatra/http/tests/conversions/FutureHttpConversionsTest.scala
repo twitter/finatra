@@ -5,10 +5,10 @@ import com.twitter.finagle._
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.conversions.futureHttp._
 import com.twitter.finatra.http.exceptions.{HttpException, NotFoundException}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Await, Future}
 
-class FutureHttpConversionsTest extends Test {
+class FutureHttpConversionsTest extends WordSpecTest {
 
   "Future[Option[T]]" should {
     "#getInnerOrElseNotFound when Some" in {

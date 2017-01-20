@@ -8,9 +8,9 @@
 package com.twitter.finatra.request
 
 import com.twitter.finatra.http.request.{MediaType, MediaRange}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class MediaRangeTest extends Test {
+class MediaRangeTest extends WordSpecTest {
 
   "A MediaRange" should {
 

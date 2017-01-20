@@ -1,10 +1,10 @@
 package com.twitter.finatra.tests.utils
 
 import com.twitter.finatra.utils.FuturePools
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.Await
 
-class FuturePoolsTest extends Test {
+class FuturePoolsTest extends WordSpecTest {
 
   "named bounded" in {
     val pool = FuturePools.fixedPool("myBoundedPool", 1)

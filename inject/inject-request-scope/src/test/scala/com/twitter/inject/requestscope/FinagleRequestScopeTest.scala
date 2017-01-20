@@ -1,9 +1,9 @@
 package com.twitter.inject.requestscope
 
 import com.google.inject.{OutOfScopeException, Key}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class FinagleRequestScopeTest extends Test {
+class FinagleRequestScopeTest extends WordSpecTest {
 
   "seed string" in {
     val scope = new FinagleRequestScope()

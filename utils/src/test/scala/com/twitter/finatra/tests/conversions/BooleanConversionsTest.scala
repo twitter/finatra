@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.boolean._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class BooleanConversionsTest extends Test {
+class BooleanConversionsTest extends WordSpecTest {
 
   "RichBoolean" should {
     "#option when true" in {

@@ -1,10 +1,10 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.seq._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
 
-class SeqConversionsTest extends Test {
+class SeqConversionsTest extends WordSpecTest {
 
   "RichSeq" should {
     "#extractMap" in {

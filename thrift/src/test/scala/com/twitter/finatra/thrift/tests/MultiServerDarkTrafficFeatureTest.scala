@@ -4,11 +4,11 @@ import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.thrift.{ThriftTest, EmbeddedThriftServer}
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.server.PortUtils
 import com.twitter.util.{Await, Future}
 
-class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
+class MultiServerDarkTrafficFeatureTest extends WordSpecTest with ThriftTest {
 
   val darkDoEverythingThriftServer = new EmbeddedThriftServer(new DoEverythingThriftServer)
   val liveDoEverythingThriftServer = new EmbeddedThriftServer(

@@ -5,10 +5,10 @@ import com.twitter.finatra.conversions.buf._
 import com.twitter.finatra.json.internal.streaming.{ParsingState, JsonArrayChunker}
 import com.twitter.finatra.json.{JsonDiff, FinatraObjectMapper}
 import com.twitter.finatra.json.internal.streaming.ParsingState._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.io.Buf
 
-class JsonObjectDecoderTest extends Test {
+class JsonObjectDecoderTest extends WordSpecTest {
 
   "decode" in {
     val decoder = new JsonArrayChunker()

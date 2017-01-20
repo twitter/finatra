@@ -5,12 +5,12 @@ import com.twitter.finatra.http.integration.doeverything.test.DocRootLocalFilesy
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import java.io.File
 import org.apache.commons.io.FileUtils
 
 class OverlappingRootsDoEverythingServerFeatureTest
-  extends FeatureTest
+  extends WordSpecFeatureTest
   with DocRootLocalFilesystemTestUtility {
 
   override protected def beforeAll() = {

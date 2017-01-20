@@ -2,10 +2,10 @@ package com.twitter.finatra.tests.conversions
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finatra.conversions.asyncStream._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Await, Future, Throw, Try}
 
-class AsyncStreamConversionsTest extends Test {
+class AsyncStreamConversionsTest extends WordSpecTest {
 
   "Future[Seq[T]]" in {
     assertAsyncStream(

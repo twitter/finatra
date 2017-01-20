@@ -1,10 +1,10 @@
 package com.twitter.inject.tests.conversions
 
 import com.twitter.inject.conversions.map._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import scala.collection.SortedMap
 
-class MapsConversionsTest extends Test {
+class MapsConversionsTest extends WordSpecTest {
 
   "RichSortedMap" should {
     "#mapKeys" in {

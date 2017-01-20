@@ -11,9 +11,7 @@ class HelloWorldStartupTest extends FeatureTest {
     stage = Stage.PRODUCTION,
     verbose = false)
 
-  "Server" should {
-    "startup" in {
-      server.assertHealthy()
-    }
+  test("Server#startup") {
+    server.assertHealthy()
   }
 }

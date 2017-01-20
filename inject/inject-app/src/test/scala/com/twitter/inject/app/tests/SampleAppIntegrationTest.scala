@@ -1,9 +1,9 @@
 package com.twitter.inject.app.tests
 
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.app.EmbeddedApp
 
-class SampleAppIntegrationTest extends Test {
+class SampleAppIntegrationTest extends WordSpecTest {
 
   "start app" in {
     val app =

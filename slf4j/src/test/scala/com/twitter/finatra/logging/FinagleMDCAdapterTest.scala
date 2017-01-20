@@ -1,8 +1,8 @@
 package com.twitter.finatra.logging
 
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class FinagleMDCAdapterTest extends Test {
+class FinagleMDCAdapterTest extends WordSpecTest {
 
   val adapter = new FinagleMDCAdapter()
 

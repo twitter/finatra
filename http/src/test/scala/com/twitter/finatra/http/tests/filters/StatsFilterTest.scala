@@ -4,10 +4,10 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.filters.StatsFilter
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Await, Future}
 
-class StatsFilterTest extends Test {
+class StatsFilterTest extends WordSpecTest {
 
   val statsReceiver = new InMemoryStatsReceiver
   val statsFilter = new StatsFilter[Request](statsReceiver)

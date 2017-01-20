@@ -4,9 +4,9 @@ import com.twitter.finagle.http.{RouteIndex, HttpMuxer, Request}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class HttpServerAdminRouteTest extends Test {
+class HttpServerAdminRouteTest extends WordSpecTest {
 
   "Server" should {
 

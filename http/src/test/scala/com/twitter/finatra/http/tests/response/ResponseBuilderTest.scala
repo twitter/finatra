@@ -7,14 +7,14 @@ import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.finatra.http.routing.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.inject.{Test, Mockito}
+import com.twitter.inject.{WordSpecTest, Mockito}
 import com.twitter.util.Await
 import java.io.{File, FileWriter}
 import org.apache.commons.io.IOUtils
 import org.jboss.netty.handler.codec.http.DefaultCookie
 
 class ResponseBuilderTest
-  extends Test
+  extends WordSpecTest
   with Mockito {
 
   protected lazy val responseBuilder = new ResponseBuilder(

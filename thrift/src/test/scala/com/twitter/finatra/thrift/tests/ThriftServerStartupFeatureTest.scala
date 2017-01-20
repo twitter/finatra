@@ -4,11 +4,11 @@ import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoNothingController
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftServer}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.server.EmbeddedTwitterServer
 import scala.util.control.NonFatal
 
-class ThriftServerStartupFeatureTest extends Test {
+class ThriftServerStartupFeatureTest extends WordSpecTest {
 
   "fail startup" in {
     val server = new EmbeddedThriftServer(new ThriftServer {

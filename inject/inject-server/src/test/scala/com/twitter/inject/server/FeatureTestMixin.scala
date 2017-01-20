@@ -4,6 +4,19 @@ import com.twitter.inject.{Injector, IntegrationTestMixin}
 import com.twitter.util.{Await, Future}
 import org.scalatest.{Suite, SuiteMixin}
 
+/**
+ * Testing trait which extends the [[com.twitter.inject.IntegrationTestMixin]] to provide
+ * utilities for [[http://twitter.github.io/finatra/user-guide/testing/#feature-tests Feature testing]]
+ * with a test-defined [[com.twitter.inject.server.EmbeddedTwitterServer]] or subclass thereof.
+ *
+ * This trait is expected to be mixed with a class that extends a core Suite trait,
+ * e.g., [[org.scalatest.FunSuite]].
+ *
+ * While you can use this mixin directly, it is recommended that users extend
+ * the [[com.twitter.inject.server.FeatureTest]] abstract class.
+ *
+ * @see [[com.twitter.inject.IntegrationTestMixin]]
+ */
 trait FeatureTestMixin
   extends SuiteMixin
   with IntegrationTestMixin { this: Suite =>

@@ -2,9 +2,9 @@ package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.http.{Message, Method}
 import com.twitter.finagle.http.Method._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class RequestBuilderTest extends Test {
+class RequestBuilderTest extends WordSpecTest {
 
   "get" in {
     val request = RequestBuilder.get("/abc")

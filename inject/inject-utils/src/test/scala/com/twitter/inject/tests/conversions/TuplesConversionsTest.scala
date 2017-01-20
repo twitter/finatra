@@ -1,9 +1,9 @@
 package com.twitter.inject.tests.conversions
 
 import com.twitter.inject.conversions.tuple._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class TuplesConversionsTest extends Test {
+class TuplesConversionsTest extends WordSpecTest {
 
   val tuples = Seq(1 -> "bob", 2 -> "sally")
 

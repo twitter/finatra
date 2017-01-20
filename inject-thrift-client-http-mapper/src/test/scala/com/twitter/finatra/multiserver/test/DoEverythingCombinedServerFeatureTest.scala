@@ -5,10 +5,10 @@ import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.multiserver.CombinedServer.{AdminAdd1Request, DoEverythingCombinedServer}
 import com.twitter.finatra.thrift.ThriftClient
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.util.{Await, Future}
 
-class DoEverythingCombinedServerFeatureTest extends FeatureTest {
+class DoEverythingCombinedServerFeatureTest extends WordSpecFeatureTest {
 
   val server = new EmbeddedHttpServer(
     twitterServer = new DoEverythingCombinedServer)

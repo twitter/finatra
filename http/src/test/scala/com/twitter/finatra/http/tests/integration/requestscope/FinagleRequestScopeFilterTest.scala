@@ -12,13 +12,13 @@ import com.twitter.finatra.utils.RetryPolicyUtils.constantRetry
 import com.twitter.finatra.utils.RetryUtils.retry
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.util.{Future, Return, Try}
 import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.{Inject, Provider}
 import scala.collection.JavaConversions._
 
-class RequestScopeFeatureTest extends FeatureTest {
+class RequestScopeFeatureTest extends WordSpecFeatureTest {
 
   override val server = new EmbeddedHttpServer(new PooledServer)
 

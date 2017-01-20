@@ -1,12 +1,12 @@
 package com.twitter.inject.thrift.internal
 
 import com.twitter.greeter.thriftscala.Greeter
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.thrift.modules.{ThriftClientModule, ThriftClientIdModule}
 
-class ThriftClientModuleNonMuxTest extends Test {
+class ThriftClientModuleNonMuxTest extends WordSpecTest {
 
   val injector = TestInjector(
     modules = Seq(ThriftClientModuleNonMux, ThriftClientIdModule, StatsReceiverModule),

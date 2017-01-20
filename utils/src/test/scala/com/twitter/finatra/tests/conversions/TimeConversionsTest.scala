@@ -1,10 +1,10 @@
 package com.twitter.finatra.tests.conversions
 
 import com.twitter.finatra.conversions.time._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import org.joda.time.DateTime
 
-class TimeConversionsTest extends Test {
+class TimeConversionsTest extends WordSpecTest {
 
   "DateTime" should {
     "be comparable" in {

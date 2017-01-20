@@ -9,12 +9,12 @@ import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{IntegrationTest, Mockito}
+import com.twitter.inject.{WordSpecIntegrationTest, Mockito}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Future}
 import scala.concurrent.{Future => ScalaFuture}
 
-class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
+class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mockito {
 
   override val injector = TestInjector(
     MessageBodyModule,

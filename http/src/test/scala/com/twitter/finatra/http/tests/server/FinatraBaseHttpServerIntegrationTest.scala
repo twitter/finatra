@@ -4,10 +4,10 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.Future
 
-class FinatraBaseHttpServerIntegrationTest extends Test {
+class FinatraBaseHttpServerIntegrationTest extends WordSpecTest {
 
   "HiServiceServer" should {
     "respond" in {

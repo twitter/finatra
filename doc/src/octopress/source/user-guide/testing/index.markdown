@@ -33,9 +33,10 @@ What are we talking about when we talk about *testing*? At a high-level the phil
 ## [ScalaTest](http://www.scalatest.org/)
 ===============================
 
-The Finatra testing framework uses the [`WordSpec`](http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec) ScalaTest [testing style](http://www.scalatest.org/user_guide/selecting_a_style) testing style for framework testing and to facilitate the types of testing outlined above we have several testing traits to aid in creating simple and powerful tests.
+The Finatra testing framework is in transition from the [`WordSpec`](http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec) ScalaTest [testing style](http://www.scalatest.org/user_guide/selecting_a_style) to [`FunSuite`](http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite) for framework testing and to facilitate the types of testing outlined above we have several testing traits to aid in creating simple and powerful tests.
 For more information on [ScalaTest](http://www.scalatest.org/), see the [ScalaTest User Guide](http://www.scalatest.org/user_guide).
-To make use of another ScalaTest test style, such as [`FunSuite`](http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite), see [Test Mixins](#test-mixins).
+
+To make use of another ScalaTest test style, such as [`FunSpec`](http://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec) or others, see [Test Mixins](#test-mixins).
 
 ## <a class="anchor" name="embedded-server" href="#embedded-server">Embedded Servers and Apps</a>
 ===============================
@@ -64,7 +65,7 @@ You'll notice that this hierarchy generally follows the server class hierarchy a
 
 ### <a class="anchor" name="feature-tests" href="#feature-tests">Feature Tests</a>
 
-If you are familiar with [Gherkin](http://docs.behat.org/en/v2.5/guides/1.gherkin.html) or [Cucumber](https://github.com/cucumber/cucumber/wiki/Feature-Introduction) or other similar testing languages and frameworks, then [feature testing](https://wiki.documentfoundation.org/QA/Testing/Feature_Tests) will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the [server/FeatureTest](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala) trait.
+If you are familiar with [Gherkin](http://docs.behat.org/en/v2.5/guides/1.gherkin.html) or [Cucumber](https://github.com/cucumber/cucumber/wiki/Feature-Introduction) or other similar testing languages and frameworks, then [feature testing](https://wiki.documentfoundation.org/QA/Testing/Feature_Tests) will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the [FeatureTest](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala) trait.
 
 We highly recommend writing feature tests for your services as they provide a very good signal of whether you have correctly implemented the features of your service. If you haven't implemented the feature correctly, it almost doesn't matter that you have lots of unit tests.
 
@@ -77,9 +78,7 @@ import com.twitter.inject.server.FeatureTest
 class ExampleServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedHttpServer(new ExampleServer)
 
-  "MyTest" should  {
-
-    "perform feature" in {
+  test("ExampleServer#perform feature") {
       server.httpGet(
         path = "/",
         andExpect = Status.Ok)
@@ -101,8 +100,7 @@ class ExampleThriftServerFeatureTest extends FeatureTest {
 
   lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = "client123")
 
-  "MyTest" should {
-    "return data accordingly" in {
+  test("ExampleThriftServer#return data accordingly") {
       Await.result(client.doExample("input")) should equal("output")
     }
   }
@@ -122,15 +120,14 @@ class ExampleCombinedServerFeatureTest extends FeatureTest {
 
   lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = "client123")
 
-  "MyTest" should {
-    "perform feature" in {
+  "ExampleCombinedServer#perform feature") {
       server.httpGet(
         path = "/",
         andExpect = Status.Ok)
         ...
     }
 
-    "return data accordingly" in {
+   "ExampleCombinedServer#return data accordingly") {
       Await.result(client.doExample("input")) should equal("output")
     }
   }
@@ -139,7 +136,7 @@ class ExampleCombinedServerFeatureTest extends FeatureTest {
 <div></div>
 
 #### Note:
-The `server` is specified as a `def` in `c.t.inject.server.FeatureTest` trait. If you only want to start **one instance of your server per test file** make sure to override this `def` with a `val`.
+The `server` is specified as a [`def` in `c.t.inject.server.FeatureTestMixin` trait](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L11). If you only want to start **one instance of your server per test file** make sure to override this `def` with a `val`.
 
 For more advanced examples see:
 
@@ -149,7 +146,8 @@ For more advanced examples see:
 
 ### <a class="anchor" name="integration-tests" href="#integration-tests">Integration Tests</a>
 
-Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across a few interfaces in the system. In Finatra, we provide the [`c.t.inject.app.TestInjector`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala) which allows you to pass it a set of modules and flags to construct a minimal object graph.
+Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across a few interfaces in the system. In Finatra, we provide the [`c.t.inject.app.TestInjector`](https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala)
+which allows you to pass it a set of modules and flags to construct a minimal object graph.
 
 To write an integration test, extend the `c.t.inject.IntegrationTest` trait. Then override the `injector` val with your constructed instance of `c.t.inject.app.TestInjector`. You'll then be able to access instances of necessary classes to execute tests.
 
@@ -162,48 +160,64 @@ class ExampleIntegrationTest extends IntegrationTest {
       flags = Map("foo.flag" -> "meaningfulValue"),
       modules = Seq(ExampleModule))
 
-  "MyTest" should  {
-
-    "perform feature" in {
-        val exampleThingy = injector.instance[ExampleThingy]
-        ...
-    }
+  test("MyTest#perform feature") {
+    val exampleThingy = injector.instance[ExampleThingy]
+    ...
   }
 }
 
 ```
 <div></div>
 
+#### Note:
+The `injector` is specified as a [`def` in `c.t.inject.IntegrationTestMixin` trait](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTestMixin.scala#L15). If you only want to start **one instance of your injector per test file** make sure to override this `def` with a `val`.
+
 ### <a class="anchor" name="http-tests" href="#http-tests">Http Tests</a>
 
-If you are writing a test that has an HTTP server under test, you can optionally extend the [`c.t.finatra.http.HttpTest`](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala) trait. This trait provides some common utilities for HTTP testing.
+If you are writing a test that has an HTTP server under test, you can also extend the [`c.t.finatra.http.HttpTest` trait](https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala). This trait provides some common utilities for HTTP testing, specifically utilities for constructing a [`resolverMap`](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/FlagResolver.scala#L9) flag value for setting on your server under test.
 
 ### <a class="anchor" name="thrift-tests" href="#thrift-tests">Thrift Tests</a>
 
-As shown above, thrift servers can be tested through a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala). The Finatra test framework provides an easy way get access to a real [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) for making calls to your running server in a test. In the case here, creating a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala) requires the thrift service type `T`. This type is expected to be the trait subclass of `c.t.scrooge.ThriftService` in the form of `YourService[+MM[_]]`.
+As shown above, thrift servers can be tested through a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala). The Finatra test framework provides an easy way get access to a real [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) for making calls to your running server in a test.
+In the case here, creating a [`c.t.finatra.thrift.ThriftClient`](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala) requires the thrift service type `T`. This type is expected to be the trait subclass of `c.t.scrooge.ThriftService` in the form of `YourService[+MM[_]]`.
+
+Additionally, your test can also extend the [`c.t.finatra.thrift.ThriftTest` trait](https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftTest.scala) which provides a utility specifically for constructing a [`resolverMap`](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/FlagResolver.scala#L9) flag value for setting on your server under test.
 
 ### <a class="anchor" name="test-mixins" href="#test-mixins">Tests Mixins</a>
 
 Twitter's recommended ScalaTest test style is [`FunSuite`](http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite). 
-Though, inheriting the current `c.t.inject.server.FeatureTest`, `c.t.inject.IntegrationTest`, `c.t.finatra.http.HttpTest` test classes forces the test style to be [`WordSpec`](http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec).
-To start using `FunSuite` ScalaTest test style and preserve `c.t.inject.server.FeatureTest`, `c.t.inject.IntegrationTest`, `c.t.finatra.http.HttpTest` test logic, there are companion trait test classes.
-These mixin classes are fully backwards compatible companion test classes.
 
-ScalaTest Finatra mixin companion test classes
+You can use this ScalaTest test style by extending either
 
-- `c.t.inject.server.FeatureTest` -> `c.t.inject.server.FeatureTestMixin`
-- `c.t.inject.IntegrationTest` -> `c.t.inject.IntegrationTestMixin`
-- `c.t.finatra.http.HttpTest` -> `c.t.finatra.http.HttpTestMixin`
+- `c.t.inject.Test`, or
+- `c.t.inject.IntegrationTest`, or
+- `c.t.inject.server.FeatureTest`.
 
-Example use case of `c.t.inject.server.FeatureTestMixin` with `FunSuite` ScalaTest test style.
+There are also deprecated versions which mix-in the [`WordSpec`](http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec) testing style:
+
+- `c.t.inject.WordSpecTest`,
+- `c.t.inject.WordSpecIntegrationTest`, and
+- `c.t.inject.server.WordSpecFeatureTest`.
+
+However, you are free to choose a ScalaTest testing style that suits your team by using the test Mixin companion classes directly and mixing in your preferred ScalaTest style.
+
+ScalaTest Mixin test classes:
+
+- [`c.t.inject.TestMixin`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/TestMixin.scala)
+- [`c.t.inject.IntegrationTestMixin`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTestMixin.scala)
+- [`c.t.inject.server.FeatureTestMixin`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala)
+
+An example of using the `c.t.inject.server.FeatureTestMixin` with `FunSpec` ScalaTest test style:
 
 ```scala
 import com.google.inject.Stage
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.server.FeatureTestMixin
-import org.scalatest.FunSuite
+import org.scalatest.FunSpec
 
-class SampleApiStartupTest extends FunSuite with FeatureTestMixin {
+class SampleApiStartupTest
+  extends FunSpec
+  with FeatureTestMixin {
 
   override val server = new EmbeddedHttpServer(
     twitterServer = new SampleApiServer,
@@ -213,10 +227,11 @@ class SampleApiStartupTest extends FunSuite with FeatureTestMixin {
     )
   )
 
-  test("SampleApi should startup") {
-    server.assertHealthy()
+  describe("Sample Server") {
+    it("should startup") {
+      server.assertHealthy()
+    }
   }
-
 }
 
 ```
@@ -228,11 +243,11 @@ By default the Finatra embedded testing infrastructure sets the [Guice `com.goog
 
 However, this also means that if you have misconfigured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.
 
-As such, we recommend creating a simple test -- a `StartupTest` to check that your service can start up and report itself as healthy. This checks the correctness of the Guice dependency graph, catching errors that could otherwise cause the server to fail to start.
+As such, we recommend creating a simple test -- a `StartupTest` to check that your service can start up and report itself as healthy. This checks the correctness of the dependency graph, catching errors that could otherwise cause the server to fail to start.
 
 * a `StartupTest` should mimic production as closely as possible. Thus:
-    - avoid using `@Bind` and [override modules](#override-modules).
-    - set the [Guice `com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `Stage.DEVELOPMENT` by default).
+    - avoid using `@Bind` or [override modules](#override-modules).
+    - set the [`com.google.inject.Stage`](https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html) to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `Stage.DEVELOPMENT` by default).
     - prevent Finagle clients from making outbound connections during startup tests by setting any `c.t.server.resolverMap` entries to `nil!`.
 
 For example:
@@ -250,10 +265,8 @@ class MyServiceStartupTest extends FeatureTest {
       "com.twitter.server.resolverMap" -> "some-thrift-service=nil!"
     ))
 
-  "SampleApiServer" should {
-    "startup" in {
-      server.assertHealthy()
-    }
+  test("SampleApiServer#startup") {
+    server.assertHealthy()
   }
 }
 ```
@@ -312,7 +325,7 @@ object MyServiceAModule extends TwitterModule {
 ```
 <div></div>
 
-To test you may want to use a mock or stub version of `ServiceA` in your controller instead of the real version. You could do this by writing a re-usable module for testing and compose it into the server when testing as an override module.
+In order to test, you may want to use a mock or stub version of `ServiceA` in your controller instead of the real version. You could do this by writing a re-usable module for testing and compose it into the server when testing by including it as an override module.
 
 ```scala
 object StubServiceAModule extends TwitterModule {
@@ -335,6 +348,9 @@ override val server = new EmbeddedHttpServer(
 ```
 <div></div>
 
+An "override module" does what it sounds like. It overrides any bound instance in the object graph with the version it provides. As seen above, the `StubServiceAModule` provided a version of `ServiceA` that happens to be a stub. In this manner
+the main server does not need to change and we can replace parts of it's object graph during testing.
+
 Note, modules used specifically for testing should be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: [`@Bind`](#at-bind) section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase. 
 
 Also note, that you can always create an override module over a mock, however it is generally preferable to want control over the expected mock behavior per-test and as such it's more common to keep a reference to a mock and use it with the [`@Bind`](#at-bind) functionality in a test.
@@ -350,11 +366,11 @@ In the cases where we'd like to easily replace a bound instance with another ins
 
 import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.inject.Mockito
 
 class ExampleFeatureTest
-  extends FeatureTest
+  extends WordSpecFeatureTest
   with Mockito
   with HttpTest {
 
@@ -374,7 +390,7 @@ class ExampleFeatureTest
 
 #### N.B.:
 
-* You **MUST** extend from either [`c.t.inject.IntegrationTest`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTest.scala) directly or from a sub-class. We recommend using [`c.t.inject.server.FeatureTest`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala). See more information on these test traits in the [Feature Tests](#feature-tests) section.
+* You **MUST** extend from either [`c.t.inject.IntegrationTest`](https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTest.scala) directly or from a sub-class. We recommend using [`c.t.inject.server.WordSpecFeatureTest`](https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/WordSpecFeatureTest.scala). See more information on these test traits in the [Feature Tests](#feature-tests) section.
 * Prefer to define `@Bind` and `@Inject` variables before the server definition.
 * While we support the `com.google.inject.testing.fieldbinder.Bind` annotation, our integration does not currently support the `to` annotation field, e.g., `@Bind(to = classOf[T])`, therefore,
 * The type of the variable you annotate with `@Bind` must *exactly* match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,
