@@ -6,11 +6,11 @@ scala_library(
   ),
   dependencies=[
     '3rdparty/jvm/commons-lang',
-    'finatra/inject/inject-core',
     '3rdparty/jvm/joda-time:joda-time',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-mux/src/main/scala:scala',
+    'finatra/inject/inject-core/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
   ],
   fatal_warnings=True,

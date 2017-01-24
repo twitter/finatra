@@ -1,10 +1,10 @@
 junit_tests(
   dependencies=[
-    'finatra/examples/benchmark-server',
-    'finatra/http:test-deps',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
     'finagle/finagle-http/src/main/scala:scala',
+    'finatra/examples/benchmark-server/src/main/scala:scala',
+    'finatra/http/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
   ],

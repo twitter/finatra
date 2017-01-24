@@ -5,10 +5,10 @@ scala_library(
     repo = artifactory,
   ),
   dependencies=[
-    'finatra/inject/inject-utils',
-    'scrooge/scrooge-core',
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-mux/src/main/scala:scala',
+    'finatra/inject/inject-utils/src/main/scala:scala',
+    'scrooge/scrooge-core/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
   ],
   fatal_warnings=True,

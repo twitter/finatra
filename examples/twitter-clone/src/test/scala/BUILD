@@ -1,8 +1,5 @@
 junit_tests(
   dependencies=[
-    'finatra/examples/twitter-clone',
-    'finatra/http:test-deps',
-    'finatra/inject/inject-server:test-deps',
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind',
     '3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda',
     '3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala',
@@ -15,8 +12,11 @@ junit_tests(
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/specs2:mock',
     'finagle/finagle-http/src/main/scala:scala',
+    'finatra/examples/twitter-clone/src/main/scala:scala',
+    'finatra/http/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-server/src/test/scala:test-deps',
     'util/util-core/src/main/scala:scala',
   ],
   fatal_warnings=True,

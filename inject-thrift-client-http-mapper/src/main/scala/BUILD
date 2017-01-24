@@ -5,8 +5,6 @@ scala_library(
     repo = artifactory,
   ),
   dependencies=[
-    'finatra/http',
-    'finatra/inject/inject-thrift-client',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject:guice',
@@ -14,7 +12,9 @@ scala_library(
     '3rdparty/jvm/net/codingwell:scala-guice',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     'finagle/finagle-http/src/main/scala:scala',
+    'finatra/http/src/main/scala:scala',
     'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-thrift-client/src/main/scala:scala',
     'finatra/inject/inject-utils/src/main/scala:scala',
     'scrooge/scrooge-core/src/main/scala:scala',
   ],

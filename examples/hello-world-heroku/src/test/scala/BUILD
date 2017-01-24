@@ -1,8 +1,5 @@
 junit_tests(
   dependencies=[
-    'finatra/examples/hello-world-heroku',
-    'finatra/http:test-deps',
-    'finatra/inject/inject-server:test-deps',
     '3rdparty/jvm/com/github/rlazoti:finagle-metrics',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
@@ -12,8 +9,11 @@ junit_tests(
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
     'finagle/finagle-http/src/main/scala:scala',
+    'finatra/examples/hello-world-heroku/src/main/scala:scala',
+    'finatra/http/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-server/src/test/scala:test-deps',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),

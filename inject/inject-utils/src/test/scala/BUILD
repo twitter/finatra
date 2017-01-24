@@ -1,13 +1,13 @@
 junit_tests(
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
-    'finatra/inject/inject-core',
-    'finatra/inject/inject-core:test-deps',
-    'finatra/inject/inject-utils',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-mux/src/main/scala:scala',
+    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-utils/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
   ],
   fatal_warnings=True,
