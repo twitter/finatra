@@ -1,4 +1,4 @@
-package com.twitter.finatra.conversions
+package com.twitter.inject.conversions
 
 import com.github.nscala_time.time.{DurationBuilder, Implicits}
 import com.twitter.util.{Duration => TwitterDuration, Time}

@@ -1,19 +1,19 @@
-package com.twitter.finatra.tests.conversions
+package com.twitter.inject.tests.conversions
 
 import com.twitter.concurrent.AsyncStream
-import com.twitter.finatra.conversions.asyncStream._
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
+import com.twitter.inject.conversions.asyncStream._
 import com.twitter.util.{Await, Future, Throw, Try}
 
-class AsyncStreamConversionsTest extends WordSpecTest {
+class AsyncStreamConversionsTest extends Test {
 
-  "Future[Seq[T]]" in {
+  test("Future[Seq[T]]") {
     assertAsyncStream(
       Future(Seq(1, 2, 3)).toAsyncStream,
       Seq(1, 2, 3))
   }
 
-  "Future[Option[T]]" in {
+  test("Future[Option[T]]") {
     assertAsyncStream(
       Future(Option(1)).toAsyncStream,
       Seq(1))
@@ -23,20 +23,20 @@ class AsyncStreamConversionsTest extends WordSpecTest {
       Seq())
   }
 
-  "Future[T]" in {
+  test("Future[T]") {
     assertAsyncStream(
       Future(1).toAsyncStream,
       Seq(1))
   }
 
-  "Failed Future[T]" in {
+  test("Failed Future[T]") {
     intercept[TestException] {
       Await.result(
         Future.exception[Int](new TestException).toAsyncStream.toSeq())
     }
   }
 
-  "Option[T]" in {
+  test("Option[T]") {
     assertAsyncStream(
       Some(1).toAsyncStream,
       Seq(1))
@@ -46,13 +46,13 @@ class AsyncStreamConversionsTest extends WordSpecTest {
       Seq())
   }
 
-  "Try[T]" in {
+  test("Try[T]") {
     assertAsyncStream(
       Try(1).toAsyncStream,
       Seq(1))
   }
 
-  "Failed Try[T]" in {
+  test("Failed Try[T]") {
     intercept[TestException] {
       Await.result(
         Throw(new TestException).toAsyncStream.toSeq())

@@ -3,10 +3,10 @@ package com.twitter.finatra.httpclient
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.service.RetryPolicy
-import com.twitter.finatra.conversions.future._
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.utils.RetryUtils
 import com.twitter.inject.Logging
+import com.twitter.inject.conversions.future._
+import com.twitter.inject.utils.RetryUtils
 import com.twitter.util.{Future, Try}
 
 /**
@@ -55,7 +55,7 @@ class HttpClient(
     }
   }
 
-  @deprecated("Use execute(RequestBuilder.get(...))", "")
+  @deprecated("Use execute(Request)", "")
   def get(uri: String, headers: Seq[(String, String)] = Seq()): Future[Response] = {
     execute(RequestBuilder
       .get(uri)

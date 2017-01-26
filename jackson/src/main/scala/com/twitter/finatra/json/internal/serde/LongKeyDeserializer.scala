@@ -3,8 +3,8 @@ package com.twitter.finatra.json.internal.serde
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.deser.KeyDeserializers
 import com.fasterxml.jackson.module.scala.JacksonModule
-import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
+import com.twitter.inject.domain.WrappedValue
 
 private[finatra] class LongKeyDeserializer(clazz: Class[_]) extends KeyDeserializer {
   private val constructor = clazz.getConstructor(classOf[Long])

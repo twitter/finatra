@@ -1,4 +1,4 @@
-package com.twitter.finatra.conversions
+package com.twitter.inject.conversions
 
 import com.twitter.util.{Future, Return, Throw, Try}
 

@@ -5,7 +5,6 @@ scala_library(
     repo = artifactory,
   ),
   dependencies=[
-    '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject:guice',

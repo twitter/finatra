@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.conversions
 
-import com.twitter.finatra.conversions.option.RichOption
 import com.twitter.finatra.http.exceptions._
+import com.twitter.inject.conversions.option.RichOption
 
 object optionHttp {
 

@@ -1,4 +1,4 @@
-package com.twitter.finatra.conversions
+package com.twitter.inject.conversions
 
 import scala.collection.generic.CanBuildFrom
 import scala.collection.mutable.{HashSet => MutableHashSet}

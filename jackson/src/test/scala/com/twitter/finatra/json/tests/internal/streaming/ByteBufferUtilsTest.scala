@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.tests.internal.streaming
 
-import com.twitter.finatra.conversions.bytebuffer._
+import com.twitter.inject.conversions.bytebuffer._
 import com.twitter.finatra.json.internal.streaming.ByteBufferUtils
 import com.twitter.inject.WordSpecTest
 import com.twitter.io.Buf

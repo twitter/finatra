@@ -6,15 +6,15 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.CamelCaseMapper
-import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
-import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.json.tests.internal.Obj.NestedCaseClassInObject
 import com.twitter.finatra.json.tests.internal._
+import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
+import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.Logging
 import com.twitter.inject.app.TestInjector
+import com.twitter.inject.conversions.time._
 import com.twitter.io.Buf
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import org.apache.commons.lang.RandomStringUtils
@@ -305,7 +305,7 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
 
   feature("Jodatime") {
     scenario("DateTime") {
-      DateTime.now < DateTime.now //including so that import com.twitter.finatra.conversions.time._ is not removed (since there was a previous bug where _time included a DateTime type alias)
+      DateTime.now < DateTime.now //including so that import com.twitter.inject.conversions.time._ is not removed (since there was a previous bug where _time included a DateTime type alias)
       parse[CaseClassWithDateTime]("""{
            "date_time" : "2014-05-30T03:57:59.302Z"
          }""") should equal(CaseClassWithDateTime(new DateTime("2014-05-30T03:57:59.302Z", DateTimeZone.UTC)))

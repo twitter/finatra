@@ -1,5 +1,4 @@
-package com.twitter.finatra.conversions
-
+package com.twitter.inject.conversions
 
 object boolean {
 

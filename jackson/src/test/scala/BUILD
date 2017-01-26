@@ -28,10 +28,10 @@ junit_tests(
     'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-utils/src/main/scala:scala',
     'finatra/jackson/src/main/java:java',
     'finatra/jackson/src/main/scala:scala',
     'finatra/jackson/src/test/scala:test-deps',
-    'finatra/utils/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
   ],
   sources=rglobs(

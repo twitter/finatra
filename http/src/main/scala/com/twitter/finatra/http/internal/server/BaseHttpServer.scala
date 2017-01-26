@@ -3,12 +3,12 @@ package com.twitter.finatra.http.internal.server
 import com.twitter.app.Flag
 import com.twitter.conversions.storage._
 import com.twitter.conversions.time._
-import com.twitter.finagle.{NullServer, ListeningServer, Http, Service}
 import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.conversions.string._
+import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
 import com.twitter.inject.annotations.Lifecycle
+import com.twitter.inject.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util._
 import java.net.InetSocketAddress

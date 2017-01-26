@@ -538,6 +538,8 @@ lazy val jackson = project
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler"),
+      "com.twitter" %% "finagle-http" % versions.finagleVersion,
+      "com.twitter" %% "util-core" % versions.utilVersion,
       "com.twitter.finatra" %% "finatra-scalap-compiler-deps" % "2.0.0"
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
@@ -560,7 +562,7 @@ lazy val jackson = project
     }
   ).dependsOn(
     injectApp % "test->test",
-    utils)
+    injectUtils)
 
 lazy val httpTestJarSources =
   Seq("com/twitter/finatra/http/EmbeddedHttpServer",
@@ -601,10 +603,11 @@ lazy val http = project
     }
   ).dependsOn(
     jackson % "test->test;compile->compile",
-    injectRequestScope,
+    injectRequestScope % "test",
     injectServer % "test->test;compile->compile",
     httpclient % "test->test",
-    slf4j)
+    slf4j,
+    utils % "test->test;compile->compile")
 
 lazy val httpclientTestJarSources =
   Seq("com/twitter/finatra/httpclient/test/")
@@ -614,7 +617,11 @@ lazy val httpclient = project
     name := "finatra-httpclient",
     moduleName := "finatra-httpclient",
     libraryDependencies ++= Seq(
-      "commons-codec" % "commons-codec" % versions.commonsCodec
+      "commons-codec" % "commons-codec" % versions.commonsCodec,
+      "com.twitter" %% "finagle-core" % versions.finagleVersion,
+      "com.twitter" %% "finagle-http" % versions.finagleVersion,
+      "com.twitter" %% "twitter-server" % versions.twitterserverVersion % "test",
+      "com.twitter" %% "util-core" % versions.utilVersion
     ),
     publishArtifact in Test := true,
     mappings in (Test, packageBin) := {
@@ -631,8 +638,9 @@ lazy val httpclient = project
     }
   ).dependsOn(
     jackson,
-    utils % "test->test",
-    injectApp % "test->test")
+    injectUtils,
+    injectApp % "test->test",
+    injectCore % "test->test")
 
 lazy val slf4j = project
   .settings(projectSettings)

@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.tests.internal.streaming
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.finatra.conversions.buf._
+import com.twitter.inject.conversions.buf._
 import com.twitter.finatra.json.internal.streaming.{ParsingState, JsonArrayChunker}
 import com.twitter.finatra.json.{JsonDiff, FinatraObjectMapper}
 import com.twitter.finatra.json.internal.streaming.ParsingState._

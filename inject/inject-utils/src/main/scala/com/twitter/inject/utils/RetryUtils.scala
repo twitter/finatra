@@ -1,12 +1,12 @@
-package com.twitter.finatra.utils
+package com.twitter.inject.utils
 
 import com.twitter.finagle.service.RetryPolicy
-import com.twitter.finatra.utils.FutureUtils._
-import com.twitter.inject.{Logging => NewLogging}
+import com.twitter.inject.Logging
+import com.twitter.inject.utils.FutureUtils._
 import com.twitter.util._
 import scala.annotation.tailrec
 
-object RetryUtils extends NewLogging {
+object RetryUtils extends Logging {
 
   /* Public */
 

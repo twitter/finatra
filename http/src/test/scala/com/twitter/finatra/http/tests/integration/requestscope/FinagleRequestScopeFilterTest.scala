@@ -3,16 +3,16 @@ package com.twitter.finatra.http.tests.integration.requestscope
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
-import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.http.filters.ExceptionMappingFilter
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.utils.FuturePools
-import com.twitter.finatra.utils.RetryPolicyUtils.constantRetry
-import com.twitter.finatra.utils.RetryUtils.retry
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
 import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.inject.conversions.time._
+import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
+import com.twitter.inject.utils.RetryUtils.retry
 import com.twitter.util.{Future, Return, Try}
 import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.{Inject, Provider}

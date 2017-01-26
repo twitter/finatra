@@ -5,11 +5,11 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.ValueNode
-import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.request._
 import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.{InvalidValidationInternal, Min, NotEmpty, ValidationResult}
 import com.twitter.inject.Logging
+import com.twitter.inject.domain.WrappedValue
 import javax.inject.{Inject, Named}
 import org.joda.time.DateTime
 import scala.annotation.meta.param

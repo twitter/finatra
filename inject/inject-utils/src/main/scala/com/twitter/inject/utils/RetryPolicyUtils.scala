@@ -1,12 +1,10 @@
-package com.twitter.finatra.utils
+package com.twitter.inject.utils
 
-import com.twitter.finagle.http.Response
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
-import com.twitter.finatra.conversions.time._
-import com.twitter.finatra.utils.ResponseUtils._
-import com.twitter.util.{Return, Throw, Try}
+import com.twitter.inject.conversions.time._
+import com.twitter.util.{Throw, Try}
 import org.joda.time.Duration
 import scala.util.control.NonFatal
 
@@ -14,10 +12,6 @@ object RetryPolicyUtils {
 
   val NonFatalExceptions: PartialFunction[Try[Any], Boolean] = {
     case Throw(NonFatal(_)) => true
-  }
-
-  val Http4xxOr5xxResponses: PartialFunction[Try[Response], Boolean] = {
-    case Return(response) if is4xxOr5xxResponse(response) => true
   }
 
   def exponentialRetry[T](

@@ -1,46 +1,43 @@
-package com.twitter.finatra.tests.utils
+package com.twitter.inject.tests.utils
 
-import com.twitter.finatra.utils.FutureUtils
-import com.twitter.finatra.utils.FutureUtils._
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
+import com.twitter.inject.utils.FutureUtils
 import com.twitter.util.{Await, Future, FuturePool}
 import java.util.concurrent.{ConcurrentLinkedQueue, Executors}
 import scala.collection.JavaConverters._
 
-class FutureUtilsTest extends WordSpecTest {
+class FutureUtilsTest extends Test {
   val ActionLog = new ConcurrentLinkedQueue[String]
   val TestFuturePool = FuturePool(Executors.newFixedThreadPool(4))
 
   override def beforeEach {
     ActionLog.clear()
   }
+  
+  test("FutureUtils#sequentialMap") {
+    assertFuture(
+      FutureUtils.sequentialMap(Seq(1, 2, 3))(mockSvcCall),
+      Future(Seq("1", "2", "3")))
 
-  "FutureUtils" should {
-    "#sequentialMap" in {
-      assertFuture(
-        sequentialMap(Seq(1, 2, 3))(mockSvcCall),
-        Future(Seq("1", "2", "3")))
-
-      ActionLog.asScala.toSeq should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3"))
-    }
+    ActionLog.asScala.toSeq should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3"))
   }
 
-  "#collectMap" in {
+  test("FutureUtils#collectMap") {
     val result = Await.result(
-      collectMap(Seq(1, 2, 3))(mockSvcCall))
+      FutureUtils.collectMap(Seq(1, 2, 3))(mockSvcCall))
     result.sorted should equal(Seq("1", "2", "3"))
 
     ActionLog.asScala.toSeq.sorted should equal(Seq("S1", "E1", "S2", "E2", "S3", "E3").sorted)
   }
 
-  "success future" in {
+  test("FutureUtils#success future") {
     val f = Await.result(FutureUtils.exceptionsToFailedFuture {
       Future("hi")
     })
     f should equal("hi")
   }
 
-  "failed future" in {
+  test("FutureUtils#failed future") {
     val e = intercept[Exception] {
       Await.result(FutureUtils.exceptionsToFailedFuture {
         Future.exception(new Exception("failure"))
@@ -49,7 +46,7 @@ class FutureUtilsTest extends WordSpecTest {
     e.getMessage should equal("failure")
   }
 
-  "thrown exception" in {
+  test("FutureUtils#thrown exception") {
     val e = intercept[Exception] {
       Await.result(FutureUtils.exceptionsToFailedFuture {
         throw new Exception("failure")

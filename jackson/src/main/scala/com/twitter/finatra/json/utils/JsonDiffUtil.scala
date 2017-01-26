@@ -2,11 +2,10 @@ package com.twitter.finatra.json.utils
 
 import com.fasterxml.jackson.databind.node.TextNode
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapperCopier, SerializationFeature}
-import com.twitter.finatra.conversions.boolean._
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
+import com.twitter.inject.conversions.boolean._
 import scala.util.control.NonFatal
-
 
 object JsonDiffUtil extends Logging {
 
@@ -21,6 +20,7 @@ object JsonDiffUtil extends Logging {
   /**
    * Computes the diff for two snippets of json both of expected type T.
    * If a difference is detected a Some(JsonDiffResult) is returned.
+   *
    * @param receivedJson - the received json
    * @param expectedJson - the expected json
    * @param normalizer - Optional normalizer
@@ -57,6 +57,7 @@ object JsonDiffUtil extends Logging {
   /**
    * Creates a string representation of the given <code>JsonNode</code> with entries
    * sorted alphabetically by key.
+   *
    * @param jsonNode - input <code>JsonNode</code>
    * @return string representation of the JsonNode.
    */

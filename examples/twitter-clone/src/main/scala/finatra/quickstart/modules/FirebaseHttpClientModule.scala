@@ -1,8 +1,9 @@
 package finatra.quickstart.modules
 
-import com.twitter.finatra.conversions.time._
 import com.twitter.finatra.httpclient.modules.HttpClientModule
-import com.twitter.finatra.utils.RetryPolicyUtils._
+import com.twitter.finatra.utils.ResponseUtils._
+import com.twitter.inject.conversions.time._
+import com.twitter.inject.utils.RetryPolicyUtils._
 
 object FirebaseHttpClientModule extends HttpClientModule {
 

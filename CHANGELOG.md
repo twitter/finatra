@@ -25,6 +25,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Move conversions and retry utilities from finatra/utils to finatra/inject/inject-utils.
+  ``RB_ID=905109``
+
 * finatra: (BREAKING API CHANGE) Rename the existing test helper classes to include
   their current opinionated testing style, "WordSpec". These are functionally
   equivalent as this is just a name change. We also introduce new versions of the

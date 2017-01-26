@@ -1,4 +1,4 @@
-package com.twitter.finatra.utils
+package com.twitter.inject.utils
 
 import com.twitter.finagle.util.DefaultTimer
 import com.twitter.util.{Duration, Future, Promise, Time}

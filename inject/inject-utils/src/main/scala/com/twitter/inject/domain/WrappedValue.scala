@@ -1,4 +1,4 @@
-package com.twitter.finatra.domain
+package com.twitter.inject.domain
 
 /**
  * Marker interface for Case Classes wrapping a single value.

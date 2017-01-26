@@ -1,7 +1,7 @@
-package com.twitter.finatra.conversions
+package com.twitter.inject.conversions
 
-import com.twitter.finatra.conversions.option._
-import com.twitter.finatra.conversions.seq._
+import com.twitter.inject.conversions.option._
+import com.twitter.inject.conversions.seq._
 import com.twitter.util._
 import grizzled.slf4j.Logger
 import scala.util.control.NonFatal

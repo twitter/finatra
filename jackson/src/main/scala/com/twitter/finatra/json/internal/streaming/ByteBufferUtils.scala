@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.streaming
 
-import com.twitter.finatra.conversions.buf._
 import com.twitter.inject.Logging
+import com.twitter.inject.conversions.buf._
 import com.twitter.io.Buf
 import java.nio.ByteBuffer
 

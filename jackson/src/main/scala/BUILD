@@ -26,7 +26,7 @@ scala_library(
     '3rdparty/jvm/org/scala-lang:scalap',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/inject/inject-core/src/main/scala:scala',
-    'finatra/utils/src/main/scala:scala',
+    'finatra/inject/inject-utils/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
   ],
   fatal_warnings=True,
