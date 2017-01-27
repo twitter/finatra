@@ -851,7 +851,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Boolean): Response = {
 
-    val (client, port) = chooseHttpClient(request.path, routeToAdminServer, secure)
+    val (client, port) = chooseHttpClient(request.method, request.path, routeToAdminServer, secure)
     request.headerMap.set("Host", loopbackAddressForPort(port))
 
     val response = httpExecute(client, request, headers, suppress, andExpect, withLocation, withBody)
@@ -881,8 +881,12 @@ class EmbeddedHttpServer(
     params.map { case (k, v) => SimpleElement(k, v) }.toSeq
   }
 
-  private def chooseHttpClient(path: String, routeToAdmin: Boolean, secure: Boolean) = {
-    if (routeToAdmin || isAdminPath(path))
+  private def chooseHttpClient(
+    method: Method,
+    path: String,
+    routeToAdmin: Boolean,
+    secure: Boolean) = {
+    if (routeToAdmin || matchesAdminRoute(method, path))
       (httpAdminClient, httpAdminPort)
     else if (secure)
       (httpsClient, twitterServer.httpsExternalPort.get)
@@ -890,13 +894,16 @@ class EmbeddedHttpServer(
       (httpClient, twitterServer.httpExternalPort.get)
   }
 
-  private def isAdminPath(path: String): Boolean = {
-    path.startsWith(HttpRouter.FinatraAdminPrefix) || adminHttpRoutesContainPath(path)
+  private def matchesAdminRoute(method: Method, path: String): Boolean = {
+    path.startsWith(HttpRouter.FinatraAdminPrefix) ||
+      adminHttpRouteMatchesPath(method -> path)
   }
 
-  private val adminHttpRoutesContainPath = Memoize { path: String =>
-    adminHttpServerRoutes.map(_.path).contains(path)
-  }
+  private val adminHttpRouteMatchesPath: ((Method, String)) => Boolean =
+    Memoize { case (method, path) =>
+      adminHttpServerRoutes
+        .exists(route => route.method == method && route.path == path)
+    }
 
   private def addAcceptHeader(
     accept: MediaType,

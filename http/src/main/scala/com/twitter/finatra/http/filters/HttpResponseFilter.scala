@@ -23,13 +23,13 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
     HttpHeaders.RFC7231DateFormat,
     TimeZone.getTimeZone("GMT"),
     Locale.ENGLISH)
-  @volatile private var currentDateValue: String = getCurrentDateValue()
+  @volatile private var currentDateValue: String = getCurrentDateValue
   new ScheduledThreadPoolTimer(
     poolSize = 1,
     name = "HttpDateUpdater",
     makeDaemons = true)
     .schedule(1.second) {
-      currentDateValue = getCurrentDateValue()
+      currentDateValue = getCurrentDateValue
     }
 
   /* Public */
@@ -62,7 +62,7 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
     }
   }
 
-  private def getCurrentDateValue(): String = {
+  private def getCurrentDateValue: String = {
     dateFormat.format(System.currentTimeMillis())
   }
 

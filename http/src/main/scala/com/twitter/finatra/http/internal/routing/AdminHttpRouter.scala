@@ -106,14 +106,16 @@ private[http] object AdminHttpRouter extends Logging {
             handler = router.services.adminService,
             alias = if (index.alias.nonEmpty) index.alias else route.path,
             group = Some(index.group),
-            includeInIndex = canIndexRoute(route))
+            includeInIndex = canIndexRoute(route),
+            method = route.method)
         case _ =>
           mkRoute(
             path = route.path,
             handler = router.services.adminService,
             alias = route.path,
             group = None,
-            includeInIndex = false)
+            includeInIndex = false,
+            method = route.method)
       }
     }
   }

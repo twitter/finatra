@@ -49,6 +49,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Fix issue where added admin routes did not have their HTTP method
+  correctly specified leading to all routes being defaulted to 'GET'. ``RB_ID=905887``
+
 * finatra-http: Fix for custom request case class collection-type fields which are
   annotated with either `@RouteParam`, `@QueryParam`, or `@FormParam` to correctly
   use a specified default value when a value is not sent in the request. ``RB_ID=903697``
