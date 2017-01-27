@@ -218,39 +218,49 @@ If you want to ignore trailing slashes on routes such that `/groups/1` and `grou
 
 ```scala
 get("/groups/:*/?") { request: Request =>
-  //
+  response.ok(...)
 }
 ```
 <div></div>
 
 #### <a class="anchor" name="admin-index" href="#admin-index">Admin Paths</a>
 
-All [TwitterServer](http://twitter.github.io/twitter-server/)-based servers have an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) which includes a variety of tools for diagnostics, profiling, and more. This admin interface should not be exposed outside your DMZ. Any route path starting with `/admin/` or `/admin/finatra/` will be included on the server's admin interface (accessible via the server's admin port).
+All [TwitterServer](http://twitter.github.io/twitter-server/)-based servers have an [HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface) which includes a variety of tools for diagnostics, profiling, and more. This admin interface **should not** be exposed outside your datacenter DMZ. Any route path starting with `/admin/finatra/` will be included by default on the server's admin interface (accessible via the server's admin port). Other paths can also be included on the server's admin interface by setting `admin = true` when defining the route. These routes **MUST** be constant routes (no named parameters).
 
 ```scala
-get("/admin/finatra/users/",
-  admin = true) { request: Request =>
+get("/admin/finatra/users/") { request: Request =>
   userDatabase.getAllUsers(
     request.params("cursor"))
+}
+
+get("/admin/display/", admin = true) { request: Request =>
+  response.ok(...)
+}
+
+post("/special/route/", admin = true) { request: Request =>
+  ...
 }
 ```
 <div></div>
 
-Constant (no named parameters), HTTP method `GET` or `POST` routes can also be added to the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index.
+Some admin routes can also be listed in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface index](https://twitter.github.io/twitter-server/Admin.html).
 
-To expose your route in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index, the route path:
+To expose your route in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface index](https://twitter.github.io/twitter-server/Admin.html), the route path:
 
-- **MUST** be a constant path
+- **MUST** be a constant path (no named parameters)
 - **MUST** start with `/admin/`
-- **MUST NOT** begin with `/admin/finatra/`
-- **MUST** be HTTP method `GET` or `POST`
+- **MUST NOT** start with `/admin/finatra/`
+- **MUST** be an HTTP method `GET` or `POST` route
 
-Set `admin = true` and optionally provide a [`RouteIndex`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Route.scala), e.g.,
+When defining the route in a Controller, in addtion to setting `admin = true` you must also provide a [`RouteIndex`](https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Route.scala), e.g.,
 
 ```scala
 get("/admin/client_id.json",
   admin = true,
-  index = Some(RouteIndex(alias = "Thrift Client Id", group = "Finatra")) ) { request: Request =>
+  index = Some(
+    RouteIndex(
+      alias = "Thrift Client Id", 
+      group = "Finatra"))) { request: Request =>
   Map("client_id" -> "clientId.1234"))
 }
 ```
@@ -258,9 +268,9 @@ get("/admin/client_id.json",
 
 The route will appear in the left-rail of the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) under the heading specified by the `RouteIndex#group` indexed by `RouteIndex#alias` or the route's path. If you do not provide a `RouteIndex` the route will not appear in the index but is still reachable on the admin interface.
 
-**Note**: all routes that start with *only* `/admin/` (and not `/admin/finatra/`) will be routed to by TwitterServer's [AdminHttpServer](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108) and **not** by the Finatra [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala).
+**Note**: only routes which start with `/admin/finatra/` will be routed to by the Finatra [`HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala). All other admin routes will be routed to by TwitterServer's [AdminHttpServer](https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108). Which only supports exact path matching and thus why only constant routes are allowed.
 
-Thus any filter chain defined by your server's [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) will **not** be applied to these routes. To maintain filtering as defined in the [`c.t.finata.http.routing.HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) the routes **MUST** be under `/admin/finatra/` and are thus **not** eligible to be included in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index.
+Thus any filter chain defined by your server's configured [`HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala) will only be applied to admin routes starting with `/admin/finatra`. To maintain any filtering as defined in the [`HttpRouter`](https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala), the admin routes **MUST** be prefixed with `/admin/finatra/` and are thus not eligible to be included in the [TwitterServer](http://twitter.github.io/twitter-server/) [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) index.
 
 ## <a class="anchor" name="requests" href="#requests">Requests</a>
 ===============================

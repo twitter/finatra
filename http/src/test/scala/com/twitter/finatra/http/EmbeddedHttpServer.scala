@@ -5,9 +5,10 @@ import com.google.common.net.{HttpHeaders => CommonHttpHeaders, MediaType}
 import com.google.inject.Stage
 import com.twitter.finagle.http.{Method, Status, _}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
+import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
-import com.twitter.util.Try
+import com.twitter.util.{Memoize, Try}
 import scala.collection.JavaConverters._
 
 /**
@@ -877,18 +878,24 @@ class EmbeddedHttpServer(
   }
 
   private def paramsToElements(params: Map[String, String]): Seq[SimpleElement] = {
-    (params map { case (key, value) =>
-      SimpleElement(key, value)
-    }).toSeq
+    params.map { case (k, v) => SimpleElement(k, v) }.toSeq
   }
 
-  private def chooseHttpClient(path: String, forceAdmin: Boolean, secure: Boolean) = {
-    if (path.startsWith("/admin") || forceAdmin)
+  private def chooseHttpClient(path: String, routeToAdmin: Boolean, secure: Boolean) = {
+    if (routeToAdmin || isAdminPath(path))
       (httpAdminClient, httpAdminPort)
     else if (secure)
       (httpsClient, twitterServer.httpsExternalPort.get)
     else
       (httpClient, twitterServer.httpExternalPort.get)
+  }
+
+  private def isAdminPath(path: String): Boolean = {
+    path.startsWith(HttpRouter.FinatraAdminPrefix) || adminHttpRoutesContainPath(path)
+  }
+
+  private val adminHttpRoutesContainPath = Memoize { path: String =>
+    adminHttpServerRoutes.map(_.path).contains(path)
   }
 
   private def addAcceptHeader(

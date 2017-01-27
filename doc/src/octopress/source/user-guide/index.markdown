@@ -35,7 +35,7 @@ For more information about the changes from v1.x see the blog post [here](https:
   - [Override Default Behavior](/finatra/user-guide/build-new-http-server#override-defaults)
   - [Add an HTTP Controller](/finatra/user-guide/build-new-http-server/controller.html)
     - [Routing](/finatra/user-guide/build-new-http-server/controller.html#controllers-and-routing)
-      - [Adding a Route to the TwitterServer Admin Interface UI Index](/finatra/user-guide/build-new-http-server/controller.html#admin-paths)
+      - [Adding a Route to the TwitterServer Admin Interface UI Index](/finatra/user-guide/build-new-http-server/controller.html#admin-index)
     - [Requests](/finatra/user-guide/build-new-http-server/controller.html#requests)
     - [Responses](/finatra/user-guide/build-new-http-server/controller.html#responses)
   - [Add Filters](/finatra/user-guide/build-new-http-server/filter.html)

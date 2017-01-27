@@ -25,6 +25,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Allow routes which begin with "/admin" to be exposed on the external
+  interface and routes which DO NOT begin with "/admin" to be exposed on the admin interface.
+  NOTE: routes which begin with "/admin/finatra" will continue to be on the admin interface
+  only. Routes which begin with "/admin" that should be served from the admin interface MUST
+  set the flag "admin = true" on the route in the Controller. ``RB_ID=905225``
+
 * finatra: Move conversions and retry utilities from finatra/utils to finatra/inject/inject-utils.
   ``RB_ID=905109``
 

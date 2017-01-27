@@ -96,10 +96,6 @@ class DoEverythingController @Inject()(
     response.ok.json("{}".getBytes)
   }
 
-  get("/admin/foo") { request: Request =>
-    response.ok("Hanging out on the external interface")
-  }
-
   get("/json2") { request: Request =>
     response.ok.json("{}")
   }
@@ -562,8 +558,27 @@ class DoEverythingController @Inject()(
     response.conflict("conflicted").toFutureException
   }
 
-  get("/admin/finatra/foo") { r: Request =>
-    "bar"
+  /* Admin routes */
+
+  get("/admin/finatra/foo", admin = true) { r: Request =>
+    "on the admin interface"
+  }
+
+  // routes that start with /admin/finatra ALWAYS added to admin
+  get("/admin/finatra/implied") { r: Request =>
+    response.ok("on the admin interface")
+  }
+
+  get("/admin/bar", admin = true) { r: Request =>
+    response.ok("on the admin interface")
+  }
+
+  get("/admin/foo") { request: Request =>
+    response.ok("on the external interface")
+  }
+
+  get("/admin/external/filtered") { request: Request =>
+    request.headerMap("test")
   }
 
   get("/HttpExceptionPlain") { r: Request =>

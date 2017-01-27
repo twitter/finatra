@@ -31,8 +31,11 @@ private[http] object AdminHttpRouter extends Logging {
     val allTwitterServerAdminRoutes = twitterServerAdminRoutes.map(_.path).union(HttpMuxer.patterns)
     val duplicates = allTwitterServerAdminRoutes.intersect(router.routesByType.admin.map(_.path))
     if (duplicates.nonEmpty) {
+      val errorMsg = "Duplicating pre-defined TwitterServer AdminHttpServer routes is not allowed."
       val message = "The following routes are duplicates of pre-defined TwitterServer admin routes:"
-      warn(s"$message \n\t${duplicates.mkString("\n\t")}")
+      error(s"$message \n\t${duplicates.mkString("\n\t")}")
+      error(errorMsg)
+      throw new java.lang.AssertionError(errorMsg)
     }
 
     // Partition routes into admin index routes and admin rich handler routes
@@ -46,11 +49,13 @@ private[http] object AdminHttpRouter extends Logging {
       Rule(
         Category.Configuration,
         "Non-indexable HTTP Admin Interface Finatra Routes",
-        s"""Only constant /GET or /POST routes that DO NOT begin with "${HttpRouter.FinatraAdminPrefix}" can be added to the TwitterServer HTTP Admin Interface index."""
+        s"""Only constant /GET or /POST routes prefixed with "/admin" that DO NOT begin
+           |with "${HttpRouter.FinatraAdminPrefix}" can be added to the TwitterServer
+           |HTTP Admin Interface index.""".stripMargin
       ) {
         Seq(
-          checkIfRoutesDefineRouteIndex(adminRichHandlerRoutes) { _ => true },
-          checkIfRoutesDefineRouteIndex(adminIndexRoutes) { !hasAcceptableAdminIndexRouteMethod(_) }
+          checkRoutesWithRouteIndex(adminRichHandlerRoutes) { _ => true },
+          checkRoutesWithRouteIndex(adminIndexRoutes) { !canIndexRoute(_) }
         ).flatten
       }
     )
@@ -71,7 +76,7 @@ private[http] object AdminHttpRouter extends Logging {
   /* Private */
 
   /** Check if routes define a RouteIndex but are NOT eligible for TwitterServer HTTP Admin Interface index. */
-  private def checkIfRoutesDefineRouteIndex(
+  private def checkRoutesWithRouteIndex(
     routes: Seq[Route]
   )(predicate: Route => Boolean): Seq[Issue] = {
     routes.filter(route => route.index.isDefined && predicate(route)).map { route =>
@@ -85,6 +90,10 @@ private[http] object AdminHttpRouter extends Logging {
     case _ => false
   }
 
+  /** Routes to include in the index MUST start with /admin and have an acceptable HTTP method */
+  private def canIndexRoute(route: Route) =
+    route.path.startsWith("/admin") && hasAcceptableAdminIndexRouteMethod(route)
+
   private def toAdminHttpServerRoutes(
     routes: Seq[Route],
     router: HttpRouter
@@ -97,7 +106,7 @@ private[http] object AdminHttpRouter extends Logging {
             handler = router.services.adminService,
             alias = if (index.alias.nonEmpty) index.alias else route.path,
             group = Some(index.group),
-            includeInIndex = hasAcceptableAdminIndexRouteMethod(route))
+            includeInIndex = canIndexRoute(route))
         case _ =>
           mkRoute(
             path = route.path,

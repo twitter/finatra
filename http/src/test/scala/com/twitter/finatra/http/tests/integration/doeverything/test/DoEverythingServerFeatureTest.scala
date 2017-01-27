@@ -5,7 +5,7 @@ import com.google.common.net.MediaType
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{FileElement, Message, Method, Request}
+import com.twitter.finagle.http._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
@@ -47,6 +47,78 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
   "DoEverythingServer" should {
     "named string" in {
       namedExampleString should equal("named")
+    }
+
+    /* Admin routes */
+
+    "GET /admin/finatra/foo" in {
+      // on the admin
+      server.httpGet(
+        "/admin/finatra/foo",
+        routeToAdminServer = true,
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+      // on the admin and will be routed even if routeToAdminServer flag isn't set because route starts with /admin/finatra
+      server.httpGet(
+        "/admin/finatra/foo",
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+    }
+
+    "GET /admin/finatra/implied" in {
+      // on the admin
+      server.httpGet(
+        "/admin/finatra/implied",
+        routeToAdminServer = true,
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+      // on the admin and will be routed even if routeToAdminServer flag isn't set because route starts with /admin/finatra
+      server.httpGet(
+        "/admin/finatra/implied",
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+    }
+
+    "GET /admin/bar" in {
+      // on the admin
+      server.httpGet(
+        "/admin/bar",
+        routeToAdminServer = true,
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+      // on the admin and will be routed even if routeToAdminServer flag isn't set as it's in the list of admin http routes on the server
+      server.httpGet(
+        "/admin/bar",
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+    }
+
+    "GET /admin/foo" in {
+      // NOT on the admin
+      server.httpGet(
+        "/admin/foo",
+        routeToAdminServer = true,
+        andExpect = Status.NotFound)
+      // on the external
+      server.httpGet(
+        "/admin/foo",
+        routeToAdminServer = false,
+        andExpect = Status.Ok,
+        withBody = "on the external interface")
+    }
+
+    "GET /admin/external/filtered" in {
+      // NOT on the admin
+      server.httpGet(
+        "/admin/external/filtered",
+        routeToAdminServer = true,
+        andExpect = Status.NotFound)
+      // on the external and reads headers appended by external filters
+      server.httpGet(
+        "/admin/external/filtered",
+        routeToAdminServer = false,
+        andExpect = Ok,
+        withBody = "01")
     }
 
     "respond to /example" in {
