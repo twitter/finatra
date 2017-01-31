@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Add Java support for declaring admin routes. ``RB_ID=906264``
+
 * finatra-http: Add AbstractExceptionMapper for ExceptionMapper usage from Java.
   Also update the HttpRouter to allow for registration of AbstractExceptionMappers.
   ``RB_ID=902995``
