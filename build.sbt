@@ -714,6 +714,17 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     injectServer % "test->test",
     thrift % "test->test;test->compile")
 
+lazy val userguide = (project in file("doc"))
+  .enablePlugins(SphinxPlugin)
+  .settings(baseSettings ++ buildSettings ++ Seq(
+    sourceDirectory in Sphinx := {
+      val previous = (sourceDirectory in Sphinx).value
+      previous / "user-guide"
+    },
+    siteSubdirName in Sphinx := "user-guide",
+    scalacOptions in doc <++= version.map(v => Seq("-doc-title", "Finatra User Guide ", "-doc-version", v)),
+    includeFilter in Sphinx := ("*.html" | "*.png" | "*.svg" | "*.js" | "*.css" | "*.gif" | "*.txt")))
+
 // START EXAMPLES
 
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
