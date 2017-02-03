@@ -13,7 +13,7 @@ and is being actively developed and maintained.
 
 <img src="./finatra_logo_text.png" title="Finatra Logo" alt="Finatra Logo" height=394 width=679/>
 
-Finatra is a lightweight framework for building fast, testable, scala applications on top of [TwitterServer][twitter-server] and [Finagle][finagle]. Finatra provides an easy-to-use API for creating and [testing](http://twitter.github.io/finatra/user-guide/testing/) [Finagle servers](http://twitter.github.io/finagle/guide/Servers.html) and [apps](http://twitter.github.io/util/docs/#com.twitter.app.App) as well as powerful JSON support, modern logging via [SLF4J][slf4j], [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) utilities, and more.
+Finatra is a lightweight framework for building fast, testable, scala applications on top of [TwitterServer][twitter-server] and [Finagle][finagle]. Finatra provides an easy-to-use API for creating and [testing](http://twitter.github.io/finatra/user-guide/testing/index.html) [Finagle servers](http://twitter.github.io/finagle/guide/Servers.html) and [apps](http://twitter.github.io/util/docs/#com.twitter.app.App) as well as powerful JSON support, modern logging via [SLF4J][slf4j], [Finagle client](http://twitter.github.io/finagle/guide/Clients.html) utilities, and more.
 
 
 ## Getting involved
@@ -31,12 +31,12 @@ Finatra is a lightweight framework for building fast, testable, scala applicatio
 * ~50 times faster than v1.6 in several benchmarks.
 * Powerful Feature and Integration test support.
 * Optional JSR-330 Dependency Injection using [Google Guice][guice].
-* [Jackson][jackson]-based JSON parsing supporting required fields, default values, and [validations](http://twitter.github.io/finatra/user-guide/json/#validation-framework).
+* [Jackson][jackson]-based JSON parsing supporting required fields, default values, and [validations](http://twitter.github.io/finatra/user-guide/json/validations.html).
 * [Logback][logback] [MDC][mdc] integration with [com.twitter.util.Local][local] for contextual logging across [futures](http://twitter.github.io/util/guide/util-cookbook/futures.html).
 
 ## Documentation
 
-To get started, see the [Getting Started](http://twitter.github.io/finatra/user-guide/getting-started) section of our [User Guide](http://twitter.github.io/finatra/user-guide/) to get up and running. Or check out the sections for building [HTTP](http://twitter.github.io/finatra/user-guide/build-new-http-server/) or [Thrift](http://twitter.github.io/finatra/user-guide/build-new-thrift-server/) servers.
+To get started, see the [Getting Started](http://twitter.github.io/finatra/user-guide/getting-started/index.html) section of our [User Guide][user-guide] to get up and running. Or check out the specific sections for building [HTTP](http://twitter.github.io/finatra/user-guide/http/server.html) or [Thrift](http://twitter.github.io/finatra/user-guide/thrift/server.html) servers.
 
 ## Examples
 
@@ -104,7 +104,7 @@ The [master branch](https://github.com/twitter/finatra/tree/master) in Github tr
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)][maven-central]
 
-available on Maven Central. See the [basics](http://twitter.github.io/finatra/user-guide/getting-started/#dependencies) section in the [User Guide][user-guide] for how to add dependencies.
+available on Maven Central. See the [First Steps](http://twitter.github.io/finatra/user-guide/getting-started/basics.html#first-steps) section in the [User Guide][user-guide] for how to add dependencies.
 
 Releases are done on an approximately monthly schedule. While
 [semver](http://semver.org/) is not followed, the
@@ -146,4 +146,4 @@ Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/L
 [local]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala
 [mdc]: http://logback.qos.ch/manual/mdc.html
 [maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20%28a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22%29
-[user-guide]: http://twitter.github.io/finatra/user-guide/
+[user-guide]: http://twitter.github.io/finatra/user-guide/index.html
