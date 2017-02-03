@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-2.8.0](https://github.com/twitter/finatra/tree/finatra-2.8.0) (2017-02-03)
+
+### Added
+
 * finatra-http: Add Java support for declaring admin routes. ``RB_ID=906264``
 
 * finatra-http: Add AbstractExceptionMapper for ExceptionMapper usage from Java.

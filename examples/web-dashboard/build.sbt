@@ -2,12 +2,12 @@ import sbt.Keys._
 
 name := "web-dashboard"
 organization := "com.twitter"
-version := "2.8.0-SNAPSHOT"
+version := "2.8.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.8.0-SNAPSHOT"
+  val finatra = "2.8.0"
   val guice = "4.0"
   val logback = "1.1.7"
 }
