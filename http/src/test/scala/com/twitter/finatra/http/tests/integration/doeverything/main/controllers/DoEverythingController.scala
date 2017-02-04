@@ -5,14 +5,17 @@ import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
 import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
+import com.twitter.finatra.http.jsonpatch.{JsonPatch, JsonPatchOperator, JsonPatchUtility}
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.request.{HttpForward, RequestUtils}
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter, ForbiddenFilter}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter, IdentityFilter}
+import com.twitter.finatra.http.tests.integration.doeverything.main.jsonpatch._
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestCaseClassWithLocalDate
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
@@ -31,6 +34,7 @@ class DoEverythingController @Inject()(
   complexServiceFactory: ComplexServiceFactory,
   objectMapper: FinatraObjectMapper,
   @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
+  jsonPatchOperator: JsonPatchOperator,
   forward: HttpForward,
   mustacheService: MustacheService)
   extends Controller {
@@ -46,8 +50,18 @@ class DoEverythingController @Inject()(
     response.ok("always response")
   }
 
-  get("/plaintext") { request: Request =>
+  get("/plaintext/?") { request: Request =>
     "Hello, World!"
+  }
+
+  prefix("/1.1") {
+    get("/plaintext") { request: Request =>
+      "Hello, World!"
+    }
+
+    post("/foo") { request: Request =>
+      "bar"
+    }
   }
 
   get("/forwarded") { request: Request =>
@@ -80,10 +94,6 @@ class DoEverythingController @Inject()(
 
   get("/json") { request: Request =>
     response.ok.json("{}".getBytes)
-  }
-
-  get("/admin/foo") { request: Request =>
-    response.ok("Hanging out on the external interface")
   }
 
   get("/json2") { request: Request =>
@@ -504,6 +514,36 @@ class DoEverythingController @Inject()(
     "patch"
   }
 
+  patch("/jsonPatch") { jsonPatch: JsonPatch =>
+    val testCase = ExampleCaseClass("world")
+    val originalJson = jsonPatchOperator.toJsonNode[ExampleCaseClass](testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/nested") { jsonPatch: JsonPatch =>
+    val testCase = Level1CaseClass(Level2CaseClass(ExampleCaseClass("world")))
+    val originalJson = jsonPatchOperator.toJsonNode[Level1CaseClass](testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/level3") { jsonPatch: JsonPatch =>
+    val testCase = Level0CaseClass(Level1CaseClass(Level2CaseClass(ExampleCaseClass("world"))))
+    val originalJson = jsonPatchOperator.toJsonNode[Level0CaseClass](testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/string") { jsonPatch: JsonPatch =>
+    val testCase = """{"hello":"world"}"""
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/nonleaf") { jsonPatch: JsonPatch =>
+    val testCase = RootCaseClass(DuoCaseClass(DuoStringCaseClass("left-left", "left-right"), DuoStringCaseClass("right-left", "right-right")))
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
   patch("/echo") { request: Request =>
     response.ok(request.contentString)
   }
@@ -518,8 +558,27 @@ class DoEverythingController @Inject()(
     response.conflict("conflicted").toFutureException
   }
 
-  get("/admin/finatra/foo") { r: Request =>
-    "bar"
+  /* Admin routes */
+
+  get("/admin/finatra/foo", admin = true) { r: Request =>
+    "on the admin interface"
+  }
+
+  // routes that start with /admin/finatra ALWAYS added to admin
+  get("/admin/finatra/implied") { r: Request =>
+    response.ok("on the admin interface")
+  }
+
+  get("/admin/bar", admin = true) { r: Request =>
+    response.ok("on the admin interface")
+  }
+
+  get("/admin/foo") { request: Request =>
+    response.ok("on the external interface")
+  }
+
+  get("/admin/external/filtered") { request: Request =>
+    request.headerMap("test")
   }
 
   get("/HttpExceptionPlain") { r: Request =>
@@ -638,6 +697,14 @@ class DoEverythingController @Inject()(
     r.param
   }
 
+  get("/RequestWithDefaultedQueryParamSeqString") { r: RequestWithDefaultedQueryParamSeqString =>
+    Map("foo" -> r.foo)
+  }
+
+  get("/RequestWithDefaultQueryParam") { r: RequestWithDefaultQueryParam =>
+    Map("param" -> r.param)
+  }
+
   post("/RequestWithSeqWrappedString") { r: RequestWithSeqWrappedString =>
     r.value
   }
@@ -718,6 +785,10 @@ class DoEverythingController @Inject()(
       case _ =>
         response.methodNotAllowed
     }
+  }
+
+  post("/localDateRequest") { r: TestCaseClassWithLocalDate =>
+    response.ok
   }
 }
 

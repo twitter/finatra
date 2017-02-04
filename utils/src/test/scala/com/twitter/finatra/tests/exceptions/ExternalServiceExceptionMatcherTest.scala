@@ -3,13 +3,13 @@ package com.twitter.finatra.tests.exceptions
 import com.twitter.conversions.time._
 import com.twitter.finagle._
 import com.twitter.finatra.exceptions.ExternalServiceExceptionMatcher
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.Duration
 import java.io.IOException
 import java.net.ConnectException
 import org.apache.thrift.transport.TTransportException
 
-class ExternalServiceExceptionMatcherTest extends Test {
+class ExternalServiceExceptionMatcherTest extends WordSpecTest {
 
   "match external exceptions" in {
     val externalExceptions: Seq[Exception] = Seq(

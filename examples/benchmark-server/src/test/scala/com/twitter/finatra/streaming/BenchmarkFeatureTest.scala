@@ -12,7 +12,7 @@ class BenchmarkFeatureTest extends Test {
     flags = Map("http.response.charset.enabled" -> "false"))
   val finagleServer = new EmbeddedHttpServer(new FinagleBenchmarkServer)
 
-  "Servers" in {
+  test("Benchmark#Servers") {
     assertServers(
       path = "/json",
       withContentType = "application/json",

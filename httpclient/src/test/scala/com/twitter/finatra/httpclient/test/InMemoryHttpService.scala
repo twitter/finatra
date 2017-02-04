@@ -3,14 +3,12 @@ package com.twitter.finatra.httpclient.test
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.{Method, Request, Response}
-import com.twitter.finatra.utils.Resettable
 import com.twitter.inject.app.Banner
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.{Injector, Logging, Resettable}
 import com.twitter.util.Future
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import scala.collection._
 import scala.collection.mutable.ArrayBuffer
-
 
 object InMemoryHttpService {
   def fromInjector[Ann <: JavaAnnotation : Manifest](injector: Injector): InMemoryHttpService = {

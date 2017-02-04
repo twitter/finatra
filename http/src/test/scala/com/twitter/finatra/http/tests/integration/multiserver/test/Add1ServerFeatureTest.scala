@@ -3,9 +3,9 @@ package com.twitter.finatra.http.tests.integration.multiserver.test
 import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.tests.integration.multiserver.add1server.Add1Server
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 
-class Add1ServerFeatureTest extends FeatureTest {
+class Add1ServerFeatureTest extends WordSpecFeatureTest {
 
   override val server = new EmbeddedHttpServer(new Add1Server)
 

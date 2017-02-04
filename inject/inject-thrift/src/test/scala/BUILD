@@ -1,12 +1,12 @@
 junit_tests(
   dependencies=[
-    'finatra/inject/inject-core:test-deps',
-    'finatra/inject/inject-thrift',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-mux/src/main/scala:scala',
     'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-thrift/src/main/scala:scala',
     'finatra/inject/inject-utils/src/main/scala:scala',
     'scrooge/scrooge-core/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',

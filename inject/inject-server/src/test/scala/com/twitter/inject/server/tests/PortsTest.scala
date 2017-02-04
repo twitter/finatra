@@ -1,9 +1,9 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.server.Ports
 
-class PortsTest extends Test {
+class PortsTest extends WordSpecTest {
 
   lazy val server: Ports =
     new Ports {

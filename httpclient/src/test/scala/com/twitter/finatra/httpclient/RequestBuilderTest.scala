@@ -2,9 +2,9 @@ package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.http.{Message, Method}
 import com.twitter.finagle.http.Method._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class RequestBuilderTest extends Test {
+class RequestBuilderTest extends WordSpecTest {
 
   "get" in {
     val request = RequestBuilder.get("/abc")
@@ -46,7 +46,7 @@ class RequestBuilderTest extends Test {
 
   "put with form params" in {
     val request = RequestBuilder.put("/abc")
-      .body("Pcode=9999&Locality=A%20New%20Location", Message.ContentTypeWwwFrom)
+      .body("Pcode=9999&Locality=A%20New%20Location", Message.ContentTypeWwwForm)
       .headers(Seq("c" -> "3"))
       .headers(
         "a" -> "1",
@@ -60,7 +60,7 @@ class RequestBuilderTest extends Test {
         "b" -> "2",
         "c" -> "3",
         "Content-Length" -> "38",
-        "Content-Type" -> Message.ContentTypeWwwFrom))
+        "Content-Type" -> Message.ContentTypeWwwForm))
 
       request.contentString should be("Pcode=9999&Locality=A%20New%20Location")
   }

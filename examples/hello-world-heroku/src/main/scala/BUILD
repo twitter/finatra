@@ -2,9 +2,9 @@ scala_library(
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/google/inject:guice',
-    'finatra/http',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     'finagle/finagle-http/src/main/scala:scala',
+    'finatra/http/src/main/scala:scala',
     'finatra/inject/inject-app/src/main/scala:scala',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-server/src/main/scala:scala',

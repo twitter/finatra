@@ -6,10 +6,10 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import org.apache.commons.io.FileUtils
 
-class LocalFileServerFeatureTest extends Test {
+class LocalFileServerFeatureTest extends WordSpecTest {
 
   "local file mode" in {
     assertServer(

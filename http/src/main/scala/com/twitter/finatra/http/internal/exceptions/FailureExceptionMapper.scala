@@ -10,7 +10,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 private[http] class FailureExceptionMapper @Inject()(
   response: ResponseBuilder)
-  extends AbstractExceptionMapper[Failure](response)
+  extends AbstractFrameworkExceptionMapper[Failure](response)
   with Logging {
 
   private val MaxDepth = 5

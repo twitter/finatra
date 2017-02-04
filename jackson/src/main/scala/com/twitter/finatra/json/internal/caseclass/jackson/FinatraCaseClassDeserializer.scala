@@ -3,7 +3,6 @@ package com.twitter.finatra.json.internal.caseclass.jackson
 import com.fasterxml.jackson.core.{JsonParser, JsonProcessingException, JsonToken}
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
-import com.twitter.finatra.domain.WrappedValue
 import com.twitter.finatra.json.internal.caseclass.exceptions._
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
@@ -12,6 +11,7 @@ import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.{ErrorCode, ValidationMessageResolver}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.inject.Logging
+import com.twitter.inject.domain.WrappedValue
 import scala.util.control.NonFatal
 import java.lang.reflect.InvocationTargetException
 import javax.annotation.concurrent.ThreadSafe
@@ -125,6 +125,15 @@ private[finatra] class FinatraCaseClassDeserializer(
       } catch {
         case e: CaseClassValidationException =>
           addException(field, e)
+
+        case e: IllegalArgumentException =>
+          val ex = CaseClassValidationException(
+            PropertyPath.leaf(field.name),
+            Invalid(
+              e.getMessage,
+              ErrorCode.Unknown))
+
+          addException(field, ex)
 
         case e: InvalidFormatException =>
           addException(

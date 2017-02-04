@@ -51,7 +51,7 @@ private[exceptions] object ThrowableExceptionMapper {
 @Singleton
 private[http] class ThrowableExceptionMapper @Inject()(
   response: ResponseBuilder)
-  extends AbstractExceptionMapper[Throwable](response)
+  extends AbstractFrameworkExceptionMapper[Throwable](response)
   with Logging {
 
   override protected def handle(

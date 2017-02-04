@@ -1,7 +1,7 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
 import com.fasterxml.jackson.databind.util.Annotations
-import com.twitter.finatra.conversions.seq._
+import com.twitter.inject.conversions.seq._
 import java.lang.annotation.Annotation
 
 private[json] case class ImmutableAnnotations(

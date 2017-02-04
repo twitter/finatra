@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule
 import com.twitter.finagle.http.Status
 import com.twitter.inject.app.App
 import com.twitter.inject.server.{EmbeddedTwitterServer, Ports, TwitterServer}
-import com.twitter.inject.{Test, TwitterModule}
+import com.twitter.inject.{WordSpecTest, TwitterModule}
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.{TwitterServer => BaseTwitterServer}
 import com.twitter.util.Await
@@ -12,7 +12,7 @@ import com.twitter.util.registry.GlobalRegistry
 import scala.util.parsing.json.JSON
 
 
-class StartupIntegrationTest extends Test {
+class StartupIntegrationTest extends WordSpecTest {
 
   override protected def afterEach(): Unit = {
     // "clear" GlobalRegistry

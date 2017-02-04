@@ -1,10 +1,10 @@
 package com.twitter.server.tests
 
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.server.internal.FinagleBuildRevision
 import org.apache.commons.lang.RandomStringUtils
 
-class FinagleBuildRevisionTest extends Test {
+class FinagleBuildRevisionTest extends WordSpecTest {
 
   val revision = "e748e2fe89da63923e525b71f82f398b18c9a60c"
 

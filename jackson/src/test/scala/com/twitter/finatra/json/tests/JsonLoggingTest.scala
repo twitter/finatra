@@ -1,10 +1,10 @@
 package com.twitter.finatra.json.tests
 
 import com.twitter.finatra.json.JsonLogging
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
 class JsonLoggingTest
-  extends Test
+  extends WordSpecTest
   with JsonLogging {
 
   "json logging" in {

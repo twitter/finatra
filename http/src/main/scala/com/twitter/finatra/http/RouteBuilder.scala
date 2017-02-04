@@ -17,7 +17,7 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
   def build(callbackConverter: CallbackConverter, injector: Injector) = Route(
     name = name,
     method = method,
-    path = route,
+    uri = route,
     admin = admin,
     index = index,
     callback = callbackConverter.convertToFutureResponse(callback),

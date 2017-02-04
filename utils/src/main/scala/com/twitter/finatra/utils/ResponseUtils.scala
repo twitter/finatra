@@ -2,8 +2,13 @@ package com.twitter.finatra.utils
 
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finagle.http.Status._
+import com.twitter.util.{Return, Try}
 
 object ResponseUtils {
+
+  val Http4xxOr5xxResponses: PartialFunction[Try[Response], Boolean] = {
+    case Return(response) if is4xxOr5xxResponse(response) => true
+  }
 
   def is2xxResponse(response: Response): Boolean = {
     errorClass(response) == 2

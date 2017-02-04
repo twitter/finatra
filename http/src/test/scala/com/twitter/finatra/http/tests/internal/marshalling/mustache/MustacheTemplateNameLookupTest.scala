@@ -3,9 +3,9 @@ package com.twitter.finatra.http.tests.internal.marshalling.mustache
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheTemplateNameLookup
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.response.Mustache
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class MustacheTemplateNameLookupTest extends Test {
+class MustacheTemplateNameLookupTest extends WordSpecTest {
 
   @Mustache("teststandard")
   case class StandardView(name: String)

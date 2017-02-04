@@ -9,7 +9,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class HttpExceptionMapper @Inject()(
   response: ResponseBuilder)
-  extends AbstractExceptionMapper[HttpException](response) {
+  extends AbstractFrameworkExceptionMapper[HttpException](response) {
 
   override protected def handle(
     request: Request,

@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.{ObjectMapper, SerializationFeature}
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import org.joda.time.{DateTime, DateTimeZone}
 
-class FinatraJodaTimeModuleTest extends Test {
+class FinatraJodaTimeModuleTest extends WordSpecTest {
 
   val nowUtc = DateTime.now.withZone(DateTimeZone.UTC)
 

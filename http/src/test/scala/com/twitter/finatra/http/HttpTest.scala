@@ -2,8 +2,10 @@ package com.twitter.finatra.http
 
 import java.net.URLEncoder
 
-trait HttpTest
-  extends com.twitter.inject.Test {
+/**
+ * Provides utilities for writing a test involving [[EmbeddedHttpServer]]
+ */
+trait HttpTest {
 
   def resolverMap(resolverMap: (String, String)*): String = {
     if (resolverMap.isEmpty)

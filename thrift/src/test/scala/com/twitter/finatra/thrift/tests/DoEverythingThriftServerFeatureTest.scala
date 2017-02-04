@@ -4,10 +4,10 @@ import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.util.{Await, Future}
 
-class DoEverythingThriftServerFeatureTest extends FeatureTest {
+class DoEverythingThriftServerFeatureTest extends WordSpecFeatureTest {
   override val server = new EmbeddedThriftServer(
     twitterServer = new DoEverythingThriftServer,
     flags = Map("magicNum" -> "57"))

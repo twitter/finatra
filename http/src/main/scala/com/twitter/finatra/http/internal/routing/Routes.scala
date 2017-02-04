@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.internal.routing
 
 import com.twitter.finagle.http.{Method, Request, Response}
-import com.twitter.finatra.conversions.iterable._
+import com.twitter.inject.conversions.iterable._
 import com.twitter.util.Future
 import java.util.{HashMap => JMap}
 
@@ -39,11 +39,21 @@ private[http] class Routes(
     jMap
   }
 
-  def handle(request: Request, bypassFilters: Boolean): Option[Future[Response]] = {
+  def handle(request: Request, bypassFilters: Boolean = false): Option[Future[Response]] = {
     val path = request.path // Store path since Request#path is derived
+    val secondaryPath = if (!path.endsWith("/")) path+"/" else null
+
+    // look for constant route matches
     val constantRouteResult = constantRouteMap.get(path)
+    val secondaryConstantRouteResult = constantRouteMap.get(secondaryPath)
     if (constantRouteResult != null) {
       constantRouteResult.handleMatch(request, bypassFilters)
+    }
+    else if (secondaryPath != null && secondaryConstantRouteResult != null) {
+      if (secondaryConstantRouteResult.hasOptionalTrailingSlash)
+        secondaryConstantRouteResult.handleMatch(request, bypassFilters)
+      else
+        None
     }
     else {
       var response: Option[Future[Response]] = None

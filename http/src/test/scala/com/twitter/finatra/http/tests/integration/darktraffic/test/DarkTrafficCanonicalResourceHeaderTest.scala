@@ -8,11 +8,11 @@ import com.twitter.finatra.annotations.DarkTrafficService
 import com.twitter.finatra.http.{HttpHeaders, EmbeddedHttpServer}
 import com.twitter.finatra.http.tests.integration.darktraffic.main.DarkTrafficTestServer
 import com.twitter.inject.Mockito
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.util.Future
 import org.mockito.ArgumentCaptor
 
-class DarkTrafficCanonicalResourceHeaderTest extends FeatureTest with Mockito {
+class DarkTrafficCanonicalResourceHeaderTest extends WordSpecFeatureTest with Mockito {
 
   @Bind
   @DarkTrafficService

@@ -16,7 +16,7 @@ class RouteBenchmark {
   val route = Route(
     name = "groups",
     method = Method.Post,
-    path = "/groups/",
+    uri = "/groups/",
     admin = false,
     index = None,
     callback = defaultCallback,
@@ -29,7 +29,7 @@ class RouteBenchmark {
   val routeWithPathParams = Route(
     name = "groups",
     method = Method.Post,
-    path = "/groups/:id",
+    uri = "/groups/:id",
     admin = false,
     index = None,
     callback = defaultCallback,

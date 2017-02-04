@@ -2,9 +2,9 @@ package com.twitter.calculator
 
 import com.google.inject.Stage
 import com.twitter.finatra.thrift.EmbeddedThriftServer
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 
-class CalculatorServerStartupTest extends FeatureTest {
+class CalculatorServerStartupTest extends WordSpecFeatureTest {
 
   val server = new EmbeddedThriftServer(
     twitterServer = new CalculatorServer,

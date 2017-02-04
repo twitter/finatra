@@ -2,9 +2,9 @@ package com.twitter.finatra.http.tests.request
 
 import com.twitter.finagle.http.MapParamMap
 import com.twitter.finatra.http.internal.request.RouteParamMap
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class RouteParamMapTest extends Test {
+class RouteParamMapTest extends WordSpecTest {
 
   val emptyFinagleParamMap = new MapParamMap(Map())
 

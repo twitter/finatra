@@ -2,10 +2,10 @@ package com.twitter.finatra.tests.utils
 
 import com.twitter.finagle.http.{Response, Status, Version}
 import com.twitter.finatra.utils.ResponseUtils
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
 class ResponseUtilsTest
-  extends Test {
+  extends WordSpecTest {
 
   val internalServerErrorResponse = Response(
       Version.Http11,

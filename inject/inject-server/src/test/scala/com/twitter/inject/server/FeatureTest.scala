@@ -1,50 +1,31 @@
 package com.twitter.inject.server
 
-import com.twitter.inject.{Injector, IntegrationTest, Test}
-import com.twitter.util.{Await, Future}
+import com.twitter.inject.Test
 
-trait FeatureTest extends Test with IntegrationTest {
-
-  protected def server: EmbeddedTwitterServer
-
-  override protected def injector: Injector = server.injector
-
-  def printStats = true
-
-  override protected def beforeAll() {
-    if (server.isStarted && hasBoundFields) {
-      throw new Exception("ERROR: Server started before integrationTestModule added. " +
-        "@Bind will not work unless references to the server are lazy, or within a ScalaTest " +
-        "lifecycle method or test method, or the integrationTestModule is manually added as " +
-        "an override module.")
-    }
-
-    assert(server.isInjectable)
-    server.injectableServer.addFrameworkOverrideModules(integrationTestModule)
-    super.beforeAll()
-  }
-
-  override protected def afterEach() {
-    super.afterEach()
-    if (server.isInjectable) {
-      if (printStats) {
-        server.printStats()
-      }
-      server.clearStats()
-    }
-  }
-
-  override protected def afterAll() {
-    try {
-      super.afterAll()
-    } finally {
-      server.close()
-    }
-  }
-
-  implicit class RichFuture[T](future: Future[T]) {
-    def value: T = {
-      Await.result(future)
-    }
-  }
-}
+/**
+ * Extensible abstract test class which uses the [[org.scalatest.FunSuite]] ScalaTest
+ * style and mixes in the [[com.twitter.inject.server.FeatureTestMixin]] trait.
+ *
+ * Example usage:
+ *
+ * {{{
+ *   class MyFooTest
+ *     extends FeatureTest
+ *     with Mockito {
+ *
+ *     override val server = new EmbeddedTwitterServer(
+ *       twitterServer = new MyTwitterServer)
+ *
+ *     test("TestServer#endpoint should do what it's supposed to do") {
+ *       ...
+ *     }
+ *   }
+ * }}}
+ *
+ * @see [[org.scalatest.FunSuite FunSuite]]
+ * @see [[com.twitter.inject.Test Finatra Test Class]]
+ * @see [[com.twitter.inject.server.FeatureTestMixin Finatra FeatureTestMixin]]
+ */
+abstract class FeatureTest
+  extends Test
+  with FeatureTestMixin

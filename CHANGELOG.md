@@ -1,6 +1,6 @@
 
 # Change Log
-All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` corresponds to associated message in commits.
+All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` and ``DIFF_ID=#`` correspond to associated message in commits.
 
 ## [Unreleased]
 
@@ -9,6 +9,75 @@ All notable changes to this project will be documented in this file. Note that `
 ### Changed
 
 ### Fixed
+
+### Closed
+
+## [finatra-2.8.0](https://github.com/twitter/finatra/tree/finatra-2.8.0) (2017-02-03)
+
+### Added
+
+* finatra-http: Add Java support for declaring admin routes. ``RB_ID=906264``
+
+* finatra-http: Add AbstractExceptionMapper for ExceptionMapper usage from Java.
+  Also update the HttpRouter to allow for registration of AbstractExceptionMappers.
+  ``RB_ID=902995``
+
+* finatra-http: Support for JSON Patch (https://tools.ietf.org/html/rfc6902). Utilities are
+  located in package `com.twitter.finatra.http.jsonpatch`. ``RB_ID=889152``
+
+* finatra: Created companion trait mixins for Test/FeatureTest/IntegrationTest/HttpTest.
+  ``RB_ID=897778``
+
+* finatra-http: Support for optional trailing slashes in HTTP routes. Routes can
+  now specify that they allow an optional trailing slash by ending the route URI
+  in the Controller with "/?". ``RB_ID=893167``
+
+* finatra-http: Support for Controller route prefixes. This allows users to define a
+  common prefix for a set of routes declaratively inside a controller. ``RB_ID=894695``
+
+### Changed
+
+* finatra-http: Allow routes which begin with "/admin" to be exposed on the external
+  interface and routes which DO NOT begin with "/admin" to be exposed on the admin interface.
+  NOTE: routes which begin with "/admin/finatra" will continue to be on the admin interface
+  only. Routes which begin with "/admin" that should be served from the admin interface MUST
+  set the flag "admin = true" on the route in the Controller. ``RB_ID=905225``
+
+* finatra: Move conversions and retry utilities from finatra/utils to finatra/inject/inject-utils.
+  ``RB_ID=905109``
+
+* finatra: (BREAKING API CHANGE) Rename the existing test helper classes to include
+  their current opinionated testing style, "WordSpec". These are functionally
+  equivalent as this is just a name change. We also introduce new versions of the
+  test helpers which mix in the recommended FunSuite. Thus it will look like your
+  tests are broken as you will need to update to change to use the new "WordSpec"
+  classes or changed your testing style to the recommended `FunSuite` style.
+  ``DIFF_ID=D19822``
+
+* inject-core: Remove JUnitRunner from `c.t.inject.Test`. This was only necessary for
+  internal building with pants and is no longer required. The sbt build uses the 
+  ScalaTest runner and is thus not affected. Additionally, update specs2 to 2.4.17 and 
+  to depend on just the `specs2-mock` dependency where needed. ``DIFF_ID=D18011``
+
+### Fixed
+
+* finatra-http: Fix issue where added admin routes did not have their HTTP method
+  correctly specified leading to all routes being defaulted to 'GET'. ``RB_ID=905887``
+
+* finatra-http: Fix for custom request case class collection-type fields which are
+  annotated with either `@RouteParam`, `@QueryParam`, or `@FormParam` to correctly
+  use a specified default value when a value is not sent in the request. ``RB_ID=903697``
+
+* inject-app: Fix TestInjector to properly parse flags. The TestInjector didn't
+  properly handle defaulted boolean flags when defined in Modules. Updated the
+  TestInjector logic to properly parse flags. Fixes [Issue #373](https://github.com/twitter/finatra/issues/373) 
+  ``RB_ID=901525``
+
+* finatra: Correctly filter published tests-javadocs and tests-sources jars for
+  projects. We are incorrectly publishing tests in the sources and javadocs jars
+  for projects which publish a test-jar dependency (http, httpclient, jackson,
+  thrift, util, inject-app, inject-core, inject-modules, and inject-server).
+  ``RB_ID=901153``
 
 ### Closed
 

@@ -2,10 +2,10 @@ package com.twitter.inject.modules.tests
 
 import com.google.inject.Guice
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.modules.{InMemoryStatsReceiverModule, StatsReceiverModule}
 
-class StatsReceiverModuleTest extends Test {
+class StatsReceiverModuleTest extends WordSpecTest {
 
   "StatsReceiverModule" in {
     val injector = Guice.createInjector(StatsReceiverModule)

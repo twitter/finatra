@@ -4,11 +4,11 @@ import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.io.Buf
 import com.twitter.util.Await
 
-class StreamingTest extends Test {
+class StreamingTest extends WordSpecTest {
 
   //        idx: 0123456
   val jsonStr = "[1,2,3]"

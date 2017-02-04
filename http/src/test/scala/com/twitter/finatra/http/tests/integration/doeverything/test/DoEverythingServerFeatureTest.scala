@@ -5,18 +5,19 @@ import com.google.common.net.MediaType
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.http.{FileElement, Method, Request}
+import com.twitter.finagle.http._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
+import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.io.Buf
 import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
 
-class DoEverythingServerFeatureTest extends FeatureTest {
+class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
 
   override val server = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
@@ -48,6 +49,78 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       namedExampleString should equal("named")
     }
 
+    /* Admin routes */
+
+    "GET /admin/finatra/foo" in {
+      // on the admin
+      server.httpGet(
+        "/admin/finatra/foo",
+        routeToAdminServer = true,
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+      // on the admin and will be routed even if routeToAdminServer flag isn't set because route starts with /admin/finatra
+      server.httpGet(
+        "/admin/finatra/foo",
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+    }
+
+    "GET /admin/finatra/implied" in {
+      // on the admin
+      server.httpGet(
+        "/admin/finatra/implied",
+        routeToAdminServer = true,
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+      // on the admin and will be routed even if routeToAdminServer flag isn't set because route starts with /admin/finatra
+      server.httpGet(
+        "/admin/finatra/implied",
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+    }
+
+    "GET /admin/bar" in {
+      // on the admin
+      server.httpGet(
+        "/admin/bar",
+        routeToAdminServer = true,
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+      // on the admin and will be routed even if routeToAdminServer flag isn't set as it's in the list of admin http routes on the server
+      server.httpGet(
+        "/admin/bar",
+        andExpect = Status.Ok,
+        withBody = "on the admin interface")
+    }
+
+    "GET /admin/foo" in {
+      // NOT on the admin
+      server.httpGet(
+        "/admin/foo",
+        routeToAdminServer = true,
+        andExpect = Status.NotFound)
+      // on the external
+      server.httpGet(
+        "/admin/foo",
+        routeToAdminServer = false,
+        andExpect = Status.Ok,
+        withBody = "on the external interface")
+    }
+
+    "GET /admin/external/filtered" in {
+      // NOT on the admin
+      server.httpGet(
+        "/admin/external/filtered",
+        routeToAdminServer = true,
+        andExpect = Status.NotFound)
+      // on the external and reads headers appended by external filters
+      server.httpGet(
+        "/admin/external/filtered",
+        routeToAdminServer = false,
+        andExpect = Ok,
+        withBody = "01")
+    }
+
     "respond to /example" in {
       server.httpGet(
         "/example/routing/always",
@@ -59,9 +132,23 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "GET /plaintext" in {
-      val response = server.httpGet(
+      val response1 = server.httpGet(
         "/plaintext",
         withBody = "Hello, World!")
+
+      response1.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+
+      val response2 = server.httpGet(
+        "/plaintext/",
+        withBody = "Hello, World!")
+
+      response2.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+    }
+
+    "/plaintext (prefixed)" in {
+      val response = server.httpGet(
+          "/1.1/plaintext",
+          withBody = "Hello, World!")
 
       response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
     }
@@ -333,6 +420,14 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "bar")
     }
 
+    "POST /foo (prefixed)" in {
+      server.httpPost(
+        "/1.1/foo",
+        postBody = "",
+        andExpect = Ok,
+        withBody = "bar")
+    }
+
     "POST /formPost" in {
       server.httpFormPost(
         "/formPost",
@@ -462,7 +557,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     }
 
     "GET /null" in {
-      pending
       server.httpGet(
         "/null",
         andExpect = Ok,
@@ -1044,7 +1138,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         withBody = "delete")
     }
 
-
     "DELETE with JSON body" in {
       server.httpDelete(
         "/delete",
@@ -1059,7 +1152,6 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withBody = "options")
     }
-
 
     "HEAD" in {
       server.httpHead(
@@ -1109,8 +1201,76 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withJsonBody =
           """
-            |{ "foo": ["11", "21", "31"] }
-          """.stripMargin
+            { "foo": ["11", "21", "31"] }
+          """
+      )
+    }
+
+    "GET with query parameters as string sequence with no values (required)" in {
+      server.httpGet(
+        "/RequestWithQueryParamSeqString",
+        andExpect = BadRequest,
+        withJsonBody =
+          """{
+              "errors": [
+                "foo: queryParam is required"
+              ]
+            }"""
+      )
+    }
+
+    "GET defaulted request case class parameters as string sequence" in {
+      server.httpGet(
+        "/RequestWithDefaultedQueryParamSeqString",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "foo": ["foo", "bar", "baz"] }
+          """
+      )
+    }
+
+    "GET defaulted request case class parameters as string sequence with query params" in {
+      server.httpGet(
+        "/RequestWithDefaultedQueryParamSeqString?foo=override1&foo=override2",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "foo": ["override1", "override2"] }
+          """
+      )
+    }
+
+    "GET with query parameters as empty string sequence" in {
+      server.httpGet(
+        "/RequestWithDefaultedQueryParamSeqString?foo=",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "foo": [""] }
+          """
+      )
+    }
+
+    "GET defaulted request case class parameter as string" in {
+      server.httpGet(
+        "/RequestWithDefaultQueryParam",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "param": "default" }
+          """
+      )
+    }
+
+    "GET defaulted request case class parameter as string with query param" in {
+      server.httpGet(
+        "/RequestWithDefaultQueryParam?param=set",
+        andExpect = Ok,
+        withJsonBody =
+          """
+            { "param": "set" }
+          """
       )
     }
 
@@ -1120,8 +1280,8 @@ class DoEverythingServerFeatureTest extends FeatureTest {
         andExpect = Ok,
         withJsonBody =
           """
-            |{ "foo": [2, 3, 4] }
-          """.stripMargin
+            { "foo": [2, 3, 4] }
+          """
       )
     }
 
@@ -1807,5 +1967,180 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       "/RequestWithSeqWrappedString",
       postBody = """{"value" : [{"foo" : "foo"}]}""",
       andExpect = BadRequest)
+  }
+
+  "Bad request for deserialization of an invalid joda LocalDate" in {
+    server.httpPost(
+      "/localDateRequest",
+      postBody = """{"date" : "2016-11-32"}""",
+      andExpect = BadRequest)
+  }
+
+  "PATCH with JsonPatch" should {
+    "JsonPatch" in {
+      val request = RequestBuilder.patch("/jsonPatch")
+        .body(
+          """[
+            |{"op":"add","path":"/fruit","value":"orange"},
+            |{"op":"remove","path":"/hello"},
+            |{"op":"copy","from":"/fruit","path":"/veggie"},
+            |{"op":"replace","path":"/veggie","value":"bean"},
+            |{"op":"move","from":"/fruit","path":"/food"},
+            |{"op":"test","path":"/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"food":"orange","veggie":"bean"}""")
+    }
+
+    "JsonPatch with nested path" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[
+            |{"op":"add","path":"/level1/level2/fruit","value":"orange"},
+            |{"op":"remove","path":"/level1/level2/hello"},
+            |{"op":"copy","from":"/level1/level2/fruit","path":"/level1/level2/veggie"},
+            |{"op":"replace","path":"/level1/level2/veggie","value":"bean"},
+            |{"op":"move","from":"/level1/level2/fruit","path":"/level1/level2/food"},
+            |{"op":"test","path":"/level1/level2/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"level1":{"level2":{"food":"orange","veggie":"bean"}}}""")
+    }
+
+    "JsonPatch with nested 4 levels path" in {
+      val request = RequestBuilder.patch("/jsonPatch/level3")
+        .body(
+          """[
+            |{"op":"add","path":"/level0/level1/level2/fruit","value":"orange"},
+            |{"op":"remove","path":"/level0/level1/level2/hello"},
+            |{"op":"copy","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/veggie"},
+            |{"op":"replace","path":"/level0/level1/level2/veggie","value":"bean"},
+            |{"op":"move","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/food"},
+            |{"op":"test","path":"/level0/level1/level2/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"level0":{"level1":{"level2":{"food":"orange","veggie":"bean"}}}}""")
+    }
+
+    "JsonPatch operating with non-leaf node" in {
+      val request = RequestBuilder.patch("/jsonPatch/nonleaf")
+        .body(
+          """[
+            |{"op":"add","path":"/root/middle","value":{"left":"middle-left"}},
+            |{"op":"remove","path":"/root/left"},
+            |{"op":"copy","from":"/root/right","path":"/root/left"},
+            |{"op":"replace","path":"/root/left","value":{"left":"left-left-2","right":"left-right-2"}},
+            |{"op":"move","from":"/root/left","path":"/root/left2"},
+            |{"op":"test","path":"/root/left2","value":{"left":"left-left-2","right":"left-right-2"}}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody =
+          """
+            |{"root":{
+            |"left2":{"left":"left-left-2","right":"left-right-2"},
+            |"middle":{"left":"middle-left"},
+            |"right":{"left":"right-left","right":"right-right"}}
+            |}""".stripMargin)
+    }
+
+    "JsonPatch for string" in {
+      val request = RequestBuilder.patch("/jsonPatch/string")
+        .body(
+          """[
+            |{"op":"add","path":"/fruit","value":"orange"},
+            |{"op":"remove","path":"/hello"},
+            |{"op":"copy","from":"/fruit","path":"/veggie"},
+            |{"op":"replace","path":"/veggie","value":"bean"},
+            |{"op":"move","from":"/fruit","path":"/food"},
+            |{"op":"test","path":"/food","value":"orange"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"food":"orange","veggie":"bean"}""")
+    }
+
+    // error message for a path does not begin with a slash: CaseClassMappingException,
+    // "path: Can not construct instance of com.fasterxml.jackson.core.JsonPointer,
+    // problem: Invalid input: JSON Pointer expression must start with '/'.
+    "JsonPatch fails when a path does not begin with a slash" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[{"op":"add","path":"fruit","value":"orange"}]""",
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest)
+    }
+
+    "JsonPatch fails when a path is empty" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[{"op":"add","path":"","value":"orange"}]""",
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest,
+        withJsonBody = """{"errors":["invalid path - empty path"]}""")
+    }
+
+    "JsonPatch fails when the patch operation specs are invalid" in {
+      val request = RequestBuilder.patch("/jsonPatch")
+        .body(
+          """[{"op":"copy","path":"/hello","value":"/shouldbefrom"}]""",
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest,
+        withJsonBody = """{"errors":["invalid from for copy operation"]}""")
+    }
+
+    "JsonPatch move operation with same from and path - jsonNode" in {
+      val request = RequestBuilder.patch("/jsonPatch")
+        .body(
+          """[
+            |{"op":"move","from":"/hello","path":"/hello"},
+            |{"op":"test","path":"/hello","value":"world"}
+            |]""".stripMargin,
+          contentType = Message.ContentTypeJsonPatch)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = Ok,
+        withJsonBody = """{"hello":"world"}""")
+    }
+
+    "JsonPatch fails when Content-Type is not consistent" in {
+      val request = RequestBuilder.patch("/jsonPatch/nested")
+        .body(
+          """[{"op":"add","path":"/fruit","value":"orange"}]""",
+          contentType = Message.ContentTypeJson)
+
+      server.httpRequestJson[JsonNode](
+        request = request,
+        andExpect = BadRequest,
+        withJsonBody = """{"errors":["incorrect Content-Type, should be application/json-patch+json"]}""")
+    }
   }
 }

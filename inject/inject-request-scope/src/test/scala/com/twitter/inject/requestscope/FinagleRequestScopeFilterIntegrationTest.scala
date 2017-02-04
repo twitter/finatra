@@ -2,11 +2,11 @@ package com.twitter.inject.requestscope
 
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.{Test, TwitterModule}
+import com.twitter.inject.{WordSpecTest, TwitterModule}
 import com.twitter.util.{Await, Future}
 import javax.inject.{Provider, Inject}
 
-class FinagleRequestScopeFilterIntegrationTest extends Test {
+class FinagleRequestScopeFilterIntegrationTest extends WordSpecTest {
 
   val injector = TestInjector(FinagleRequestScopeModule, MyTestRequestScopeModule)
 

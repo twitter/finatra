@@ -4,9 +4,9 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class HttpServerStartupIntegrationTest extends Test {
+class HttpServerStartupIntegrationTest extends WordSpecTest {
 
   "Duplicate route paths fails server startup" in {
     val server = new EmbeddedHttpServer(

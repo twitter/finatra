@@ -3,9 +3,9 @@ package com.twitter.finatra.http.tests.integration.pools.test
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.tests.integration.pools.main.{PooledController, PooledServer}
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 
-class PooledServerIntegrationTest extends FeatureTest {
+class PooledServerIntegrationTest extends WordSpecFeatureTest {
 
   override val server = new EmbeddedHttpServer(new PooledServer)
 

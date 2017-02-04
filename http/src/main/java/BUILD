@@ -6,8 +6,8 @@ java_library(
   ),
   dependencies=[
     '3rdparty/jvm/com/google/inject:guice',
-    'finagle/finagle-http/src/main/scala:scala',
     'finagle/finagle-base-http/src/main/scala:scala',
+    'finagle/finagle-http/src/main/scala:scala',
   ],
   fatal_warnings=False,
   sources=rglobs('*.java')

@@ -1,3 +1,6 @@
+# container-based build
+sudo: false
+
 language: scala
 
 scala:
@@ -6,8 +9,25 @@ scala:
 env:
   - JAVA_OPTS="-Dsbt.log.noformat=true"
 
+# These directories are cached to S3 at the end of the build
+cache:
+  directories:
+   - $HOME/.ivy2
+   - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
+   - $HOME/.dodo
+
+before_cache:
+  # Tricks to avoid unnecessary cache updates
+  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt -name "*.lock" -delete
+
 jdk:
   - oraclejdk8
+
+notifications:
+  hipchat:
+    rooms:
+      secure: UlvjA1u/K7a/ykVt9hfRksqI5coq9k5fFqpeGCcEmqPOyrkOnCLj21xHHB16SzUfwy3pqjVK+B8kWORB9zaNyalHZm6I11Ba1hfmPXWemH/qA972IN/hdAQxnMVhhnWqJPzuoVlW7WAFxwltPTbAwDMzIczmsyMv+rCc2Xffiks=
 
 before_script:
   # default $SBT_OPTS is irrelevant to sbt launcher

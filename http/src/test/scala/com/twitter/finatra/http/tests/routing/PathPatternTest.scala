@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.tests.routing
 
 import com.twitter.finatra.http.internal.routing.PathPattern
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import java.net.URI
 
-class PathPatternTest extends Test {
+class PathPatternTest extends WordSpecTest {
 
   "path pattern" should {
     "routes" in {

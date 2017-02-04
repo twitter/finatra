@@ -2,19 +2,19 @@ package com.twitter.finatra.http.tests.marshalling
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Method => HttpMethod, Request, Response, Status}
-import com.twitter.finatra.conversions.buf._
 import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.modules.{DocRootModule, MessageBodyModule, MustacheModule}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
+import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{IntegrationTest, Mockito}
+import com.twitter.inject.{Mockito, WordSpecIntegrationTest}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Future}
 import scala.concurrent.{Future => ScalaFuture}
 
-class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
+class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mockito {
 
   override val injector = TestInjector(
     MessageBodyModule,
@@ -243,7 +243,6 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   }
 
   "Null" in {
-    pending
     assertOk(
       callbackConverter.convertToFutureResponse(nullCallback),
       withBody = "")

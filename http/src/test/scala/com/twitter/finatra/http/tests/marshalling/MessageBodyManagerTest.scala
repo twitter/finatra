@@ -5,11 +5,11 @@ import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.app.TestInjector
 import org.specs2.mock.Mockito
 
-class MessageBodyManagerTest extends Test with Mockito {
+class MessageBodyManagerTest extends WordSpecTest with Mockito {
 
   val request = mock[Request]
   val injector = TestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule)

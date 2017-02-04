@@ -80,11 +80,8 @@ class MessageBodyManager @Inject()(
 
   private def findReaderBySuperType(t: Type): Option[MessageBodyReader[Any]] = {
     classTypeToReader
-      .filterKeys(_.asInstanceOf[Class[_]].isAssignableFrom(t.asInstanceOf[Class[_]]))
-      .headOption
-      .map { case (classType, messageBodyReader) =>
-        messageBodyReader
-      }
+      .find { case (tpe, _) => tpe.asInstanceOf[Class[_]].isAssignableFrom(t.asInstanceOf[Class[_]]) }
+      .map { case (_, messageBodyReader) => messageBodyReader }
   }
 
   // Note: writerCache is bounded on the number of unique classes returned from controller routes */

@@ -2,9 +2,9 @@ package com.twitter.inject.server.tests
 
 import com.twitter.finagle.http.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
-import com.twitter.inject.{Logging, Test, TwitterModule}
+import com.twitter.inject.{Logging, WordSpecTest, TwitterModule}
 
-class EmbeddedTwitterServerIntegrationTest extends Test {
+class EmbeddedTwitterServerIntegrationTest extends WordSpecTest {
 
   "server" should {
     "start" in {

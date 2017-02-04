@@ -7,11 +7,11 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.Future
 import org.scalatest.Matchers
 
-class RoutingIntegrationTest extends Test {
+class RoutingIntegrationTest extends WordSpecTest {
 
   "Provide RouteInfo in a global filter" in {
     val server = new EmbeddedHttpServer(

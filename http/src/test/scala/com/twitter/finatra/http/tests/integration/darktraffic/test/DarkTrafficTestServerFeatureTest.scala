@@ -4,10 +4,10 @@ import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.darktraffic.main.DarkTrafficTestServer
 import com.twitter.inject.Mockito
-import com.twitter.inject.server.{FeatureTest, PortUtils}
+import com.twitter.inject.server.{WordSpecFeatureTest, PortUtils}
 import org.scalatest.concurrent.Eventually._
 
-class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
+class DarkTrafficTestServerFeatureTest extends WordSpecFeatureTest with Mockito {
 
   // receive dark traffic service
   override val server = new EmbeddedHttpServer(

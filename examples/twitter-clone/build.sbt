@@ -1,11 +1,11 @@
 name := "twitter-clone"
 organization := "com.twitter"
-version := "2.7.0"
+version := "2.8.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.7.0"
+  val finatra = "2.8.0"
   val guice = "4.0"
   val logback = "1.1.7"
 }
@@ -44,4 +44,4 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
   "org.scalatest" %% "scalatest" %  "3.0.0" % "test",
-  "org.specs2" %% "specs2" % "2.3.12" % "test")
+  "org.specs2" %% "specs2-mock" % "2.4.17" % "test")

@@ -12,7 +12,7 @@ class TwitterCloneStartupTest extends FeatureTest {
     flags = Map(
       "com.twitter.server.resolverMap" -> "firebase=nil!"))
 
-  "server" in {
+  test("Server#startup") {
     server.assertHealthy()
   }
 }

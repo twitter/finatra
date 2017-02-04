@@ -11,7 +11,9 @@ import finatra.quickstart.domain.http.{TweetLocation, TweetResponse}
 import finatra.quickstart.firebase.FirebaseClient
 import finatra.quickstart.services.IdService
 
-class TwitterCloneFeatureTest extends FeatureTest with Mockito {
+class TwitterCloneFeatureTest
+  extends FeatureTest
+  with Mockito {
 
   override val server = new EmbeddedHttpServer(new TwitterCloneServer)
 
@@ -22,7 +24,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
   /* Mock GET Request performed in TwitterCloneWarmup */
   firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(None)
 
-  "tweet creation" in {
+  test("tweet creation") {
     idService.getId returns Future(TweetId("123"))
 
     val savedStatus = TweetResponse(
@@ -65,7 +67,7 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
       withJsonBody = result.contentString)
   }
 
-  "Post bad tweet" in {
+  test("Post bad tweet") {
     server.httpPost(
       path = "/tweet",
       postBody = """

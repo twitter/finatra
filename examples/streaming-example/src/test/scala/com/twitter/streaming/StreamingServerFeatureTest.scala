@@ -17,7 +17,7 @@ class StreamingServerFeatureTest extends FeatureTest {
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
 
-  "post streaming json" in {
+  test("streaming#post json") {
     val request = RequestBuilder.post("/tweets").chunked
 
     val tweets = for (i <- 1 to 100) yield {

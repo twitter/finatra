@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField
 import com.twitter.finatra.json.tests.internal.{WithEmptyJsonProperty, WithNonemptyJsonProperty, WithoutJsonPropertyAnnotation}
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class CaseClassFieldTest extends Test {
+class CaseClassFieldTest extends WordSpecTest {
 
   "CaseClassField.createFields" should {
     "have field name foo" in {

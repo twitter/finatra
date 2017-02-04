@@ -1,11 +1,11 @@
 package com.twitter.finatra.json.tests.internal.streaming
 
-import com.twitter.finatra.conversions.bytebuffer._
+import com.twitter.inject.conversions.bytebuffer._
 import com.twitter.finatra.json.internal.streaming.ByteBufferUtils
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.io.Buf
 
-class ByteBufferUtilsTest extends Test {
+class ByteBufferUtilsTest extends WordSpecTest {
 
   "ByteBufferUtils.append" in {
     val input = Buf.ByteBuffer.Shared.extract(Buf.Utf8("1"))

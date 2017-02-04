@@ -1,11 +1,11 @@
 junit_tests(
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
-    'finatra/slf4j',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/slf4j/src/main/scala:scala',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),

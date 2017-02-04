@@ -10,6 +10,7 @@ public class HelloWorldServer extends AbstractHttpServer {
     public void configureHttp(HttpRouter httpRouter) {
         httpRouter
             .filter(CommonFilters.class)
-            .add(HelloWorldController.class);
+            .add(HelloWorldController.class)
+            .exceptionMapper(HelloWorldExceptionMapper.class);
     }
 }

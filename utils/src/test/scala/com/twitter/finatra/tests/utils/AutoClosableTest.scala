@@ -1,9 +1,9 @@
 package com.twitter.finatra.tests.utils
 
 import com.twitter.finatra.utils.AutoClosable
-import com.twitter.inject.{Logging, Test}
+import com.twitter.inject.{Logging, WordSpecTest}
 
-class AutoClosableTest extends Test {
+class AutoClosableTest extends WordSpecTest {
 
   "AutoClosable" should {
     "close" in {

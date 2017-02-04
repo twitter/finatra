@@ -17,7 +17,7 @@ class FinagleRequestScopeBenchmark {
   val route = Route(
     name = "groups",
     method = Method.Get,
-    path = "/groups/",
+    uri = "/groups/",
     admin = false,
     index = None,
     callback = defaultCallback,

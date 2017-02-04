@@ -17,10 +17,8 @@ class HelloWorldStartupTest extends FeatureTest {
     MetricsStatsReceiver.metrics.removeMatching(MetricFilter.ALL)
   }
 
-  "Server" should {
-    "startup" in {
-      // Because we disabled the adminHttpServer we instead check the started flag.
-      server.assertStarted()
-    }
+  test("Server#startup") {
+    // Because we disabled the adminHttpServer we instead check the started flag.
+    server.assertStarted()
   }
 }

@@ -7,10 +7,10 @@ import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.util.{Await, Future}
 
-class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
+class EmbeddedThriftServerControllerIntegrationTest extends WordSpecFeatureTest {
   override val server = new EmbeddedThriftServer(new ConverterControllerServer)
 
   val client123 = server.thriftClient[Converter[Future]](clientId = "client123")

@@ -5,12 +5,12 @@ import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.app.TestInjector
 import org.apache.commons.lang.RandomStringUtils
 import org.specs2.mock.Mockito
 
-class ExceptionManagerTest extends Test with Mockito {
+class ExceptionManagerTest extends WordSpecTest with Mockito {
 
   def newExceptionManager =
     new ExceptionManager(

@@ -8,6 +8,12 @@ case class RequestWithQueryParamSeqString(
 case class ResponseOfQueryParamSeqString(
   foo: Seq[String])
 
+case class RequestWithDefaultedQueryParamSeqString(
+ @QueryParam foo: Seq[String] = Seq("foo", "bar", "baz"))
+
+case class RequestWithDefaultQueryParam(
+  @QueryParam param: String = "default")
+
 case class RequestWithQueryParamSeqLong(
   @QueryParam foo: Seq[Long])
 
@@ -18,7 +24,7 @@ case class RequestWithIntQueryParams(
   @QueryParam param: Seq[Int])
 
 case class RequestWithShortQueryParams(
-  @QueryParam param: Seq[Int])
+  @QueryParam param: Seq[Short])
 
 case class RequestWithBooleanQueryParams(
   @QueryParam param: Seq[Boolean])

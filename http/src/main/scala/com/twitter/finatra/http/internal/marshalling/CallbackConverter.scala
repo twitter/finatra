@@ -135,6 +135,7 @@ private[http] class CallbackConverter @Inject()(
     else {
       request: Request =>
         requestCallback(request) match {
+          case throwable: Throwable => Future.exception(throwable)
           case futureResult: Future[_] => futureResult.map(createHttpResponse(request))
           case result => Future(createHttpResponse(request)(result))
         }

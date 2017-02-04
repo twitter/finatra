@@ -12,11 +12,11 @@ case class MinDoubleExample(@Min(1) numberValue: Double)
 case class MinFloatExample(@Min(1) numberValue: Float)
 case class MinBigIntExample(@Min(1) numberValue: BigInt)
 case class MinSmallestLongBigIntExample(@Min(Long.MinValue) numberValue: BigInt)
-//case class MinSecondSmallestLongBigIntExample(@Min(Long.MinValue + 1) numberValue: BigInt)
+case class MinSecondSmallestLongBigIntExample(@Min(Long.MinValue + 1) numberValue: BigInt)
 case class MinLargestLongBigIntExample(@Min(Long.MaxValue) numberValue: BigInt)
 case class MinBigDecimalExample(@Min(1) numberValue: BigDecimal)
 case class MinSmallestLongBigDecimalExample(@Min(Long.MinValue) numberValue: BigDecimal)
-//case class MinSecondSmallestLongBigDecimalExample(@Min(Long.MinValue + 1) numberValue: BigDecimal)
+case class MinSecondSmallestLongBigDecimalExample(@Min(Long.MinValue + 1) numberValue: BigDecimal)
 case class MinLargestLongBigDecimalExample(@Min(Long.MaxValue) numberValue: BigDecimal)
 case class MinSeqExample(@Min(10) numberValue: Seq[Int])
 case class MinArrayExample(@Min(10) numberValue: Array[Int])
@@ -142,12 +142,13 @@ class MinValidatorTest
       }
     }
 
-//    "fail validation for very small big int type" in {
-//      val value = BigInt(Long.MinValue)
-//      validate[MinSecondSmallestLongBigIntExample](value) should equal(
-//        Invalid(
-//          errorMessage(value, minValue = Long.MinValue + 1)))
-//    }
+    "fail validation for very small big int type" in {
+      val value = BigInt(Long.MinValue)
+      validate[MinSecondSmallestLongBigIntExample](value) should equal(
+        Invalid(
+          errorMessage(value, minValue = Long.MinValue + 1),
+          errorCode(value, minValue = Long.MinValue + 1)))
+    }
 
     "fail validation for very large big int type" in {
       val failBigIntValue: Gen[BigInt] = for {
@@ -200,12 +201,13 @@ class MinValidatorTest
       }
     }
 
-//    "fail validation for very small big decimal type" in {
-//      val value = BigDecimal(Long.MinValue) + 0.1
-//      validate[MinSecondSmallestLongBigDecimalExample](value) should equal(
-//        Invalid(
-//          errorMessage(value, minValue = Long.MinValue + 1)))
-//    }
+    "fail validation for very small big decimal type" in {
+      val value = BigDecimal(Long.MinValue) + 0.1
+      validate[MinSecondSmallestLongBigDecimalExample](value) should equal(
+        Invalid(
+          errorMessage(value, minValue = Long.MinValue + 1),
+          errorCode(value, minValue = Long.MinValue + 1)))
+    }
 
     "fail validation for very large big decimal type" in {
       val failBigDecimalValue: Gen[BigDecimal] = for {
@@ -263,8 +265,8 @@ class MinValidatorTest
       forAll(failValue) { value =>
         validate[MinArrayExample](value) should equal(
           Invalid(
-          errorMessage(value = Integer.valueOf(value.size), minValue = 10),
-          errorCode(value = Integer.valueOf(value.size), minValue = 10)))
+          errorMessage(value = Integer.valueOf(value.length), minValue = 10),
+          errorCode(value = Integer.valueOf(value.length), minValue = 10)))
       }
     }
 

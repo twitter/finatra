@@ -1,6 +1,6 @@
 package finatra.quickstart.domain
 
-import com.twitter.finatra.domain.WrappedValue
+import com.twitter.inject.domain.WrappedValue
 
 case class TweetId(
   id: String)

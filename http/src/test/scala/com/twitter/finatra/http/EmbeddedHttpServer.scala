@@ -5,9 +5,10 @@ import com.google.common.net.{HttpHeaders => CommonHttpHeaders, MediaType}
 import com.google.inject.Stage
 import com.twitter.finagle.http.{Method, Status, _}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
+import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
-import com.twitter.util.Try
+import com.twitter.util.{Memoize, Try}
 import scala.collection.JavaConverters._
 
 /**
@@ -187,7 +188,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a GET request against the embedded server serializing the normalized
+    * Performs a GET request to the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
     *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
@@ -208,7 +209,7 @@ class EmbeddedHttpServer(
     * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
     * @return instance of type [[ResponseType]] serialized from the the response#contentString.
     */
-  def httpGetJson[ResponseType: Manifest](
+  def httpGetJson[ResponseType : Manifest](
     path: String,
     accept: MediaType = null,
     headers: Map[String, String] = Map(),
@@ -233,7 +234,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a POST request against the embedded server.
+    * Performs a POST request to the embedded server.
     *
     * @param path - URI of the request
     * @param postBody - body of the POST request
@@ -277,7 +278,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a POST request against the embedded server serializing the normalized
+    * Performs a POST request to the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
     *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
@@ -298,7 +299,7 @@ class EmbeddedHttpServer(
     * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
     * @return instance of type [[ResponseType]] serialized from the the response#contentString.
     */
-  def httpPostJson[ResponseType: Manifest](
+  def httpPostJson[ResponseType : Manifest](
     path: String,
     postBody: String,
     suppress: Boolean = false,
@@ -319,7 +320,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a PUT request against the embedded server.
+    * Performs a PUT request to the embedded server.
     *
     * @param path - URI of the request
     * @param putBody - the body of the PUT request
@@ -363,7 +364,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a PUT request against the embedded server serializing the normalized
+    * Performs a PUT request to the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
     *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
@@ -384,7 +385,7 @@ class EmbeddedHttpServer(
     * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
     * @return instance of type [[ResponseType]] serialized from the the response#contentString.
     */
-  def httpPutJson[ResponseType: Manifest](
+  def httpPutJson[ResponseType : Manifest](
     path: String,
     putBody: String,
     suppress: Boolean = false,
@@ -405,7 +406,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a DELETE request against the embedded server.
+    * Performs a DELETE request to the embedded server.
     *
     * @param path - URI of the request
     * @param deleteBody - the body of the DELETE request
@@ -462,7 +463,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a DELETE request against the embedded server serializing the normalized
+    * Performs a DELETE request to the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
     *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
@@ -483,7 +484,7 @@ class EmbeddedHttpServer(
     * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
     * @return instance of type [[ResponseType]] serialized from the the response#contentString.
     */
-  def httpDeleteJson[ResponseType: Manifest](
+  def httpDeleteJson[ResponseType : Manifest](
     path: String,
     deleteBody: String,
     suppress: Boolean = false,
@@ -504,7 +505,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a OPTIONS request against the embedded server.
+    * Performs a OPTIONS request to the embedded server.
     *
     * @param path - URI of the request
     * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
@@ -540,7 +541,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a PATCH request against the embedded server.
+    * Performs a PATCH request to the embedded server.
     *
     * @param path - URI of the request
     * @param patchBody - the body of the PATCH request
@@ -584,7 +585,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a PATCH request against the embedded server serializing the normalized
+    * Performs a PATCH request to the embedded server serializing the normalized
     * response#contentString into an instance of type [[ResponseType]].
     *
     * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
@@ -605,7 +606,7 @@ class EmbeddedHttpServer(
     * @tparam ResponseType - parse the response#contentString into type [[ResponseType]]
     * @return instance of type [[ResponseType]] serialized from the the response#contentString.
     */
-  def httpPatchJson[ResponseType: Manifest](
+  def httpPatchJson[ResponseType : Manifest](
     path: String,
     patchBody: String,
     suppress: Boolean = false,
@@ -626,7 +627,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a HEAD request against the embedded server.
+    * Performs a HEAD request to the embedded server.
     *
     * @param path - URI of the request
     * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
@@ -662,7 +663,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a form POST request against the embedded server.
+    * Performs a form POST request to the embedded server.
     *
     * @param path - URI of the request
     * @param params - a Map[String,String] of form params to send in the request
@@ -700,7 +701,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Performs a multi-part form POST request against the embedded server.
+    * Performs a multi-part form POST request to the embedded server.
     *
     * @param path - URI of the request
     * @param params - a Seq of [[com.twitter.finagle.http.FormElement]] to send in the request
@@ -736,7 +737,7 @@ class EmbeddedHttpServer(
   }
 
   /**
-    * Sends the given [[com.twitter.finagle.http.Request]] against the embedded server.
+    * Sends the given [[com.twitter.finagle.http.Request]] to the embedded server.
     *
     * @param request - built [[com.twitter.finagle.http.Request]] to send to the embedded server
     * @param suppress - suppress http client logging
@@ -771,6 +772,43 @@ class EmbeddedHttpServer(
     request: Request): Response = {
 
     httpRequest(request, suppress = false)
+  }
+
+  /**
+   * Sends the given [[com.twitter.finagle.http.Request]] to the embedded server
+   * serializing the normalized response#contentString into an instance of type [[ResponseType]]
+   *
+   * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
+   * @param request - built [[com.twitter.finagle.http.Request]] to send to the embedded server
+   * @param suppress - suppress http client logging
+   * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
+   * @param withLocation - expected response Location header value
+   * @param withBody - expected body as a String
+   * @param withJsonBody - expected body as JSON
+   * @param withJsonBodyNormalizer - normalizer to use in conjunction with withJsonBody
+   * @param normalizeJsonParsedReturnValue - if the normalizer SHOULD be applied on the parsing of the
+   *                                       response#contentString into type [[ResponseType]], default = false
+   * @param withErrors - expected errors
+   * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default
+   * @param secure - use the https port to address the embedded server, default = None
+   * @return instance of type [[ResponseType]] serialized from the response#contentString
+   */
+  def httpRequestJson[ResponseType : Manifest](
+    request: Request,
+    suppress: Boolean = false,
+    andExpect: Status = null,
+    withLocation: String = null,
+    withBody: String = null,
+    withJsonBody: String = null,
+    withJsonBodyNormalizer: JsonNode => JsonNode = null,
+    normalizeJsonParsedReturnValue: Boolean = false,
+    withErrors: Seq[String] = null,
+    routeToAdminServer: Boolean = false,
+    secure: Option[Boolean] = None): ResponseType = {
+
+    assert(manifest[ResponseType] != manifest[Nothing], "httpRequestJson requires a type-param to parse the JSON response into, e.g. http<Method>Json[MyCaseClass] or http<Method>Json[JsonNode]")
+    val response = httpRequest(request, suppress, andExpect, withLocation, withBody, withJsonBody, withJsonBodyNormalizer, withErrors, routeToAdminServer, secure)
+    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
   }
 
   /* Private */
@@ -813,7 +851,7 @@ class EmbeddedHttpServer(
     routeToAdminServer: Boolean = false,
     secure: Boolean): Response = {
 
-    val (client, port) = chooseHttpClient(request.path, routeToAdminServer, secure)
+    val (client, port) = chooseHttpClient(request.method, request.path, routeToAdminServer, secure)
     request.headerMap.set("Host", loopbackAddressForPort(port))
 
     val response = httpExecute(client, request, headers, suppress, andExpect, withLocation, withBody)
@@ -840,19 +878,32 @@ class EmbeddedHttpServer(
   }
 
   private def paramsToElements(params: Map[String, String]): Seq[SimpleElement] = {
-    (params map { case (key, value) =>
-      SimpleElement(key, value)
-    }).toSeq
+    params.map { case (k, v) => SimpleElement(k, v) }.toSeq
   }
 
-  private def chooseHttpClient(path: String, forceAdmin: Boolean, secure: Boolean) = {
-    if (path.startsWith("/admin") || forceAdmin)
+  private def chooseHttpClient(
+    method: Method,
+    path: String,
+    routeToAdmin: Boolean,
+    secure: Boolean) = {
+    if (routeToAdmin || matchesAdminRoute(method, path))
       (httpAdminClient, httpAdminPort)
     else if (secure)
       (httpsClient, twitterServer.httpsExternalPort.get)
     else
       (httpClient, twitterServer.httpExternalPort.get)
   }
+
+  private def matchesAdminRoute(method: Method, path: String): Boolean = {
+    path.startsWith(HttpRouter.FinatraAdminPrefix) ||
+      adminHttpRouteMatchesPath(method -> path)
+  }
+
+  private val adminHttpRouteMatchesPath: ((Method, String)) => Boolean =
+    Memoize { case (method, path) =>
+      adminHttpServerRoutes
+        .exists(route => route.method == method && route.path == path)
+    }
 
   private def addAcceptHeader(
     accept: MediaType,
@@ -863,7 +914,7 @@ class EmbeddedHttpServer(
       headers
   }
 
-  private def jsonParseWithNormalizer[T: Manifest](
+  private def jsonParseWithNormalizer[T : Manifest](
     response: Response,
     normalizer: JsonNode => JsonNode,
     normalizeParsedJsonNode: Boolean) = {

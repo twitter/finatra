@@ -5,10 +5,10 @@ import com.twitter.finagle.http.{Fields, Status}
 import com.twitter.finatra.http.tests.integration.tweetexample.main.TweetsEndpointServer
 import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
-import com.twitter.inject.server.FeatureTest
+import com.twitter.inject.server.WordSpecFeatureTest
 import com.twitter.util.{Await, Future}
 
-class TweetsControllerIntegrationTest extends FeatureTest {
+class TweetsControllerIntegrationTest extends WordSpecFeatureTest {
 
   override val server = new EmbeddedHttpServer(
     new TweetsEndpointServer,

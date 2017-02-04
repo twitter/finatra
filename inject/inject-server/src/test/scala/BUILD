@@ -1,8 +1,6 @@
 junit_tests(
   dependencies=[
     '3rdparty/jvm/ch/qos/logback:logback-classic',
-    'finatra/inject/inject-server',
-    'finatra/inject/inject-server:test-deps',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
@@ -13,12 +11,14 @@ junit_tests(
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scala-lang/modules:scala-parser-combinators',
     '3rdparty/jvm/org/scalatest:scalatest',
-    '3rdparty/jvm/org/specs2:specs2',
+    '3rdparty/jvm/org/specs2:mock',
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/inject/inject-app/src/main/scala:scala',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-server/src/main/scala:scala',
+    'finatra/inject/inject-server/src/test/scala:test-deps',
     'twitter-server/src/main/scala:scala',
     'util/util-app/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
@@ -29,22 +29,15 @@ junit_tests(
   sources=globs(
     'com/twitter/server/tests/*.scala',
     'com/twitter/inject/server/tests/*.scala'),
-  resources=[
-    'finatra/inject/inject-server/src/test/resources'
-  ]
 )
 
 scala_library(name="test-deps",
   provides = scala_artifact(
     org = 'com.twitter',
-    name = 'inject-server-test-jar',
+    name = 'inject-server-tests',
     repo = artifactory,
   ),
   dependencies=[
-    'finatra/inject/inject-app:test-deps',
-    'finatra/inject/inject-core:test-deps',
-    'finatra/inject/inject-modules:test-deps',
-    'finatra/inject/inject-server',
     '//:scala-reflect',
     '3rdparty/jvm/com/google/guava:guava',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
@@ -60,7 +53,11 @@ scala_library(name="test-deps",
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/inject/inject-app/src/main/scala:scala',
+    'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-modules/src/test/scala:test-deps',
+    'finatra/inject/inject-server/src/main/scala:scala',
     'finatra/inject/inject-utils/src/main/scala:scala',
     'twitter-server/src/main/scala:scala',
     'util/util-app/src/main/scala:scala',

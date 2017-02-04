@@ -5,10 +5,10 @@ import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.finatra.request.ContentType
-import com.twitter.inject.{Mockito, Test}
+import com.twitter.inject.{Mockito, WordSpecTest}
 
 class RequestUtilsTest
-  extends Test
+  extends WordSpecTest
   with Mockito {
 
   "RequestUtils" should {

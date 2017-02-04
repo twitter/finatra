@@ -26,9 +26,9 @@ class RequestInjectableValues(
   /* Public */
 
   /**
-   * Lookup the key using the data in the Request object or objects in the Guice object graph.
+   * Lookup the key using the data in the Request object or objects in the object graph.
    *
-   * @param valueId Guice Key for looking up the value
+   * @param valueId Key for looking up the value
    * @param ctxt DeserializationContext
    * @param forProperty BeanProperty
    * @param beanInstance Bean instance
@@ -46,11 +46,13 @@ class RequestInjectableValues(
       request
     } else if (hasAnnotation(forProperty, requestParamsAnnotation)) {
       if (forProperty.getType.isCollectionLikeType) {
-        val modifiedParamsValue = handleExtendedBooleans(
-          forProperty = forProperty,
-          propertyValue = getCollectionLikePropertyValue(forProperty))
-
-        convert(forProperty, modifiedParamsValue)
+        request.params.getAll(fieldName) match {
+          case propertyValue: Seq[String] if propertyValue.nonEmpty || request.params.contains(fieldName) =>
+            val value = handleEmptySeq(forProperty, propertyValue)
+            val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
+            convert(forProperty, modifiedParamsValue)
+          case _ => null
+        }
       } else {
         request.params.get(fieldName) match {
           case Some(value) =>
@@ -91,6 +93,17 @@ class RequestInjectableValues(
         forType)
   }
 
+  private def handleEmptySeq(forProperty: BeanProperty, propertyValue: Any): Any = {
+    if (propertyValue == SeqWithSingleEmptyString &&
+      forProperty.getType.containedType(0).getRawClass != classOf[String]) {
+      // if a query param is set with an empty value we will get an empty seq of
+      // string, yet the property type may not be string
+      Seq.empty
+    } else {
+      propertyValue
+    }
+  }
+
   private def handleExtendedBooleans(forProperty: BeanProperty, propertyValue: Any): Any = {
     if (hasAnnotation[QueryParam](forProperty)) {
       val forType = forProperty.getType
@@ -112,37 +125,22 @@ class RequestInjectableValues(
     case _ => value
   }
 
-  private def getCollectionLikePropertyValue(forProperty: BeanProperty): AnyRef = {
-    val fieldName = forProperty.getName
-    if (request.params.getAll(fieldName) == SeqWithSingleEmptyString && hasStringTypeParam(forProperty))
-      Seq.empty
-    else
-      request.params.getAll(fieldName)
+  private def hasAnnotation[T <: Annotation : Manifest](beanProperty: BeanProperty): Boolean = {
+    val clazz = manifest[T].runtimeClass.asInstanceOf[Class[_ <: Annotation]]
+    beanProperty.getContextAnnotation(clazz) != null
   }
 
-  private def isSeqOfBools(forType: JavaType): Boolean = {
+  private lazy val isSeqOfBools: (JavaType) => Boolean = { forType =>
     forType.getRawClass == classOf[Seq[_]] &&
       forType.containedType(0).getRawClass == classOf[java.lang.Boolean]
   }
 
-  private def hasStringTypeParam(forProperty: BeanProperty): Boolean = {
-    forProperty.getType.containedType(0).getRawClass != classOf[String]
+  private lazy val hasAnnotation: (BeanProperty, Seq[Class[_ <: Annotation]]) => Boolean = {
+    (beanProperty, annotations) =>
+      annotations.exists(beanProperty.getContextAnnotation(_) != null)
   }
 
-  private def hasAnnotation[T <: Annotation : Manifest](beanProperty: BeanProperty): Boolean = {
-    val annotClass = manifest[T].runtimeClass.asInstanceOf[Class[_ <: Annotation]]
-    beanProperty.getContextAnnotation(annotClass) != null
-  }
-
-  private def hasAnnotation(
-    beanProperty: BeanProperty,
-    annotationClasses: Seq[Class[_ <: Annotation]]): Boolean = {
-    annotationClasses exists { annotationClass =>
-      beanProperty.getContextAnnotation(annotationClass) != null
-    }
-  }
-
-  private def isRequest(forProperty: BeanProperty): Boolean = {
+  private lazy val isRequest: (BeanProperty) => Boolean = { forProperty =>
     forProperty.getType.getRawClass == classOf[Request]
   }
 }

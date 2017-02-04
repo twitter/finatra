@@ -7,11 +7,11 @@ import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.httpclient.modules.HttpClientModule
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.IntegrationTest
+import com.twitter.inject.WordSpecIntegrationTest
 import com.twitter.inject.app.TestInjector
 import com.twitter.util.Await
 
-class HttpClientIntegrationTest extends IntegrationTest {
+class HttpClientIntegrationTest extends WordSpecIntegrationTest {
 
   val inMemoryHttpService = new InMemoryHttpService()
 

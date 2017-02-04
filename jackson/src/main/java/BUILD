@@ -1,7 +1,8 @@
 java_library(
   dependencies=[
-    'finatra/jackson/src/main/scala'
-  , '3rdparty/jvm/com/google/inject:guice'],
+    '3rdparty/jvm/com/google/inject:guice',
+    'finatra/jackson/src/main/scala:scala',
+  ],
   fatal_warnings=False,
   sources=rglobs('*.java')
 )

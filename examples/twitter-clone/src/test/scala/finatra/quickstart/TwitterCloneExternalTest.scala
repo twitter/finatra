@@ -25,7 +25,12 @@ class TwitterCloneExternalTest extends Test {
       "firebase.host" -> "finatra.firebaseio.com",
       "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"))
 
-  "tweet creation" in {
+  override protected def afterAll(): Unit = {
+    super.afterAll()
+    server.close()
+  }
+
+  test("tweet creation") {
     pending
     val result = server.httpPost(
       path = "/tweet",

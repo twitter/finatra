@@ -1,14 +1,14 @@
 junit_tests(
   dependencies=[
-    'finatra/examples/streaming-example',
-    'finatra/http:test-deps',
-    'finatra/httpclient',
-    'finatra/inject/inject-server:test-deps',
     '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
     'finagle/finagle-http/src/main/scala:scala',
+    'finatra/examples/streaming-example/src/main/scala:scala',
+    'finatra/http/src/test/scala:test-deps',
+    'finatra/httpclient/src/main/scala:scala',
     'finatra/inject/inject-core/src/main/scala:scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-server/src/test/scala:test-deps',
     'util/util-core/src/main/scala:scala',
   ],
   fatal_warnings=True,

@@ -2,10 +2,10 @@ package com.twitter.finatra.tests.utils
 
 import com.twitter.finatra.modules.InMemoryCredentialsModule
 import com.twitter.finatra.utils.Credentials
-import com.twitter.inject.IntegrationTest
+import com.twitter.inject.WordSpecIntegrationTest
 import com.twitter.inject.app.TestInjector
 
-class InMemoryCredentialsIntegrationTest extends IntegrationTest {
+class InMemoryCredentialsIntegrationTest extends WordSpecIntegrationTest {
   val credentialsMap = Map(
     "username" -> "foo",
     "password" -> "bar")

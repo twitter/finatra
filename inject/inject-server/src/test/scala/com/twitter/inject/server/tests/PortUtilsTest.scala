@@ -1,13 +1,13 @@
 package com.twitter.inject.server.tests
 
 import com.twitter.finagle.builder.Server
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.inject.server.PortUtils
 import com.twitter.util.Awaitable.CanAwait
 import com.twitter.util.{Time, Duration}
 import java.net.InetSocketAddress
 
-class PortUtilsTest extends Test {
+class PortUtilsTest extends WordSpecTest {
 
   "PortUtils" should {
 

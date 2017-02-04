@@ -3,7 +3,7 @@ package com.twitter.finatra.modules
 import com.google.inject.Provides
 import com.twitter.finatra.utils.Credentials
 import com.twitter.inject.TwitterModule
-import com.twitter.util.{Credentials => UtilCredentials}
+import com.twitter.util
 import java.io.File
 import javax.inject.Singleton
 
@@ -29,7 +29,7 @@ object CredentialsModule extends TwitterModule {
         case path if path.isEmpty =>
           Map.empty[String, String]
         case path =>
-          UtilCredentials(new File(path))
+          util.Credentials(new File(path))
       }
     Credentials(credentialsMap)
   }

@@ -2,10 +2,10 @@ package com.twitter.finatra.http.tests.conversions
 
 import com.twitter.finatra.http.conversions.optionHttp._
 import com.twitter.finatra.http.exceptions._
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Future, Throw, Try}
 
-class OptionHttpConversionsTest extends Test {
+class OptionHttpConversionsTest extends WordSpecTest {
 
   "Option[T]" should {
 

@@ -4,10 +4,10 @@ import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField._
 import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser._
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import java.lang.annotation.Annotation
 
-class ValidatorTest extends Test {
+class ValidatorTest extends WordSpecTest {
 
   val messageResolver = new ValidationMessageResolver
   val validationManager = new ValidationManager(messageResolver)

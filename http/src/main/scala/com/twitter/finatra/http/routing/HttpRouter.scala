@@ -1,11 +1,13 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.http.exceptions.{AbstractExceptionMapper, ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
 import com.twitter.finatra.http.internal.routing.{Route, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
-import com.twitter.finatra.http.{Controller, HttpFilter, AbstractController}
+import com.twitter.finatra.http.routing.HttpRouter._
+import com.twitter.finatra.http.{AbstractController, Controller, HttpFilter}
+import com.twitter.inject.TypeUtils._
 import com.twitter.inject.{Injector, Logging}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.{Inject, Singleton}
@@ -40,13 +42,20 @@ class HttpRouter @Inject()(
 
   /* Public */
 
-  def exceptionMapper[T <: ExceptionMapper[_]: Manifest]: HttpRouter = {
+  def exceptionMapper[T <: ExceptionMapper[_] : Manifest]: HttpRouter = {
     exceptionManager.add[T]
     this
   }
 
   def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T]): HttpRouter = {
     exceptionManager.add[T](mapper)
+    this
+  }
+
+  def exceptionMapper[T <: Throwable](clazz: Class[_ <: AbstractExceptionMapper[T]]): HttpRouter = {
+    val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_]])
+    val throwableType = singleTypeParam(mapperType)
+    exceptionMapper(injector.instance(clazz))(Manifest.classType(Class.forName(throwableType.getTypeName)))
     this
   }
 
@@ -198,7 +207,7 @@ class HttpRouter @Inject()(
   private[finatra] def partitionRoutesByType(): RoutesByType = {
     info("Adding routes\n" + routes.map(_.summary).mkString("\n"))
     val (adminRoutes, externalRoutes) = routes partition { route =>
-      route.path.startsWith("/admin") || route.admin
+      route.path.startsWith(FinatraAdminPrefix) || route.admin
     }
     assertAdminRoutes(adminRoutes)
     RoutesByType(
@@ -206,24 +215,15 @@ class HttpRouter @Inject()(
       admin = adminRoutes.toSeq)
   }
 
-  // constant routes CAN start with /admin/, all others MUST start with /admin/finatra
+  // non-constant routes MUST start with /admin/finatra
   private def assertAdminRoutes(routes: ArrayBuffer[Route]): Unit = {
-    val message = "Error adding route: %s. %s"
+    val message = "Error adding route: %s. Non-constant admin interface routes must start with prefix: " + HttpRouter.FinatraAdminPrefix
 
     for (route <- routes) {
-      if (route.constantRoute) {
-        // constant routes MUST start with at least /admin/
-        if (!(route.path startsWith "/admin/")) {
-          val msg = message.format(route.path, "Constant admin interface routes must start with prefix: /admin/")
-          error(msg)
-          throw new java.lang.AssertionError(msg)
-        }
-      } else {
+      if (!route.constantRoute) {
         // non-constant routes MUST start with /admin/finatra/
-        if(!(route.path startsWith HttpRouter.FinatraAdminPrefix)) {
-          val msg = message.format(
-            route.path,
-            "Non-constant admin interface routes must start with prefix: " + HttpRouter.FinatraAdminPrefix)
+        if(!route.path.startsWith(HttpRouter.FinatraAdminPrefix)) {
+          val msg = message.format(route.path)
           error(msg)
           throw new java.lang.AssertionError(msg)
         }

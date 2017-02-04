@@ -1,9 +1,9 @@
 package com.twitter.inject.tests
 
 import com.twitter.app.FlagFactory
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 
-class FlagFactoryTest extends Test {
+class FlagFactoryTest extends WordSpecTest {
 
   "FlagFactory" should {
 

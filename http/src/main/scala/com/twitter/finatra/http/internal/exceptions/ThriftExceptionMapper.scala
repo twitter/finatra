@@ -9,7 +9,7 @@ import org.apache.thrift.TException
 @Singleton
 private[http] class ThriftExceptionMapper @Inject()(
   response: ResponseBuilder)
-  extends AbstractExceptionMapper[TException](response) {
+  extends AbstractFrameworkExceptionMapper[TException](response) {
 
   override protected def handle(
     request: Request,

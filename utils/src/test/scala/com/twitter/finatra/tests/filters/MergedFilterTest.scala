@@ -3,10 +3,10 @@ package com.twitter.finatra.tests.filters
 import com.twitter.finagle.{Filter, Service, SimpleFilter}
 import com.twitter.finagle.http.{Status, RequestBuilder, Response, Request}
 import com.twitter.finatra.filters.MergedFilter
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import com.twitter.util.{Await, Future}
 
-class MergedFilterTest extends Test {
+class MergedFilterTest extends WordSpecTest {
   class AppendToHeaderFilter(header: String, value: String) extends SimpleFilter[Request, Response] {
     def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
       val oldValue = request.headerMap.getOrElse(header, "")

@@ -4,13 +4,13 @@ import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finagle.{http => finagle}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.request.RequestUtils
-import com.twitter.inject.Test
+import com.twitter.inject.WordSpecTest
 import org.apache.commons.fileupload.util.FileItemHeadersImpl
 import org.apache.commons.io.IOUtils
 import org.specs2.mock.Mockito
 import scala.collection.JavaConverters._
 
-class MultiParamsTest extends Test with Mockito {
+class MultiParamsTest extends WordSpecTest with Mockito {
 
   "multipart parsing" should {
 

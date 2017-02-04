@@ -2,9 +2,9 @@ package com.twitter.inject.app.tests.internal
 
 import com.twitter.inject.app.EmbeddedApp
 import com.twitter.inject.app.tests.SampleApp
-import com.twitter.inject.{Test, TwitterModule}
+import com.twitter.inject.{WordSpecTest, TwitterModule}
 
-class InternalAppIntegrationTest extends Test {
+class InternalAppIntegrationTest extends WordSpecTest {
 
   "start app" in {
     val app = new EmbeddedApp(

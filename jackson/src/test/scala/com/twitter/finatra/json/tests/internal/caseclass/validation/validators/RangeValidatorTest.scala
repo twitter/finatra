@@ -14,12 +14,12 @@ case class RangeBigDecimalExample(@Range(min = 1, max = 50) pointValue: BigDecim
 case class RangeBigIntExample(@Range(min = 1, max = 50) pointValue: BigInt)
 case class RangeLargestLongBigDecimalExample(@Range(min = 1, max = Long.MaxValue) pointValue: BigDecimal)
 case class RangeLargestLongBigIntExample(@Range(min = 1, max = Long.MaxValue) pointValue: BigInt)
-//case class RangeSecondLargestLongBigDecimalExample(@Range(min = 1, max = Long.MaxValue - 1) pointValue: BigDecimal)
-//case class RangeSecondLargestLongBigIntExample(@Range(min = 1, max = Long.MaxValue - 1) pointValue: BigInt)
+case class RangeSecondLargestLongBigDecimalExample(@Range(min = 1, max = Long.MaxValue - 1) pointValue: BigDecimal)
+case class RangeSecondLargestLongBigIntExample(@Range(min = 1, max = Long.MaxValue - 1) pointValue: BigInt)
 case class RangeSmallestLongBigDecimalExample(@Range(min = Long.MinValue, max = 5) pointValue: BigDecimal)
-//case class RangeSecondSmallestLongBigDecimalExample(@Range(min = Long.MinValue + 1, max = 5) pointValue: BigDecimal)
+case class RangeSecondSmallestLongBigDecimalExample(@Range(min = Long.MinValue + 1, max = 5) pointValue: BigDecimal)
 case class RangeSmallestLongBigIntExample(@Range(min = Long.MinValue, max = 5) pointValue: BigInt)
-//case class RangeSecondSmallestLongBigIntExample(@Range(min = Long.MinValue + 1, max = 5) pointValue: BigInt)
+case class RangeSecondSmallestLongBigIntExample(@Range(min = Long.MinValue + 1, max = 5) pointValue: BigInt)
 case class RangeInvalidTypeExample(@Range(min = 1, max = 5) pointValue: String)
 
 class RangeValidatorTest
@@ -118,7 +118,7 @@ class RangeValidatorTest
       val smallerValue = Gen.choose(Float.MinValue, 0.0F)
       val largerValue = Gen.choose(51.0F, Float.MaxValue)
       val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
-      val failBigDecimalValue = for {value <- failValue} yield BigDecimal(value)
+      val failBigDecimalValue = for {value <- failValue} yield BigDecimal.decimal(value)
 
       forAll(failBigDecimalValue) { value =>
         validate[RangeBigDecimalExample](value) should equal(invalid(value))
@@ -156,11 +156,11 @@ class RangeValidatorTest
       }
     }
 
-    //    "fail validation for very large big decimal type" in {
-    //      val value = BigDecimal(Long.MaxValue)
-    //      validate[RangeSecondLargestLongBigDecimalExample](value) should equal(
-    //        invalid(value, maxValue = Long.MaxValue - 1))
-    //    }
+    "fail validation for very large big decimal type" in {
+      val value = BigDecimal(Long.MaxValue)
+      validate[RangeSecondLargestLongBigDecimalExample](value) should equal(
+        invalid(value, maxValue = Long.MaxValue - 1))
+    }
 
     "pass validation for very large big int type" in {
       val passBigIntValue: Gen[BigInt] = for {
@@ -172,11 +172,11 @@ class RangeValidatorTest
       }
     }
 
-    //    "fail validation for very large big int type" in {
-    //      val value = BigInt(Long.MaxValue)
-    //      validate[RangeSecondLargestLongBigIntExample](value) should equal(
-    //        invalid(value, maxValue = Long.MaxValue - 1))
-    //    }
+    "fail validation for very large big int type" in {
+      val value = BigInt(Long.MaxValue)
+      validate[RangeSecondLargestLongBigIntExample](value) should equal(
+        invalid(value, maxValue = Long.MaxValue - 1))
+    }
 
     "pass validation for very small big int type" in {
       val passBigIntValue: Gen[BigInt] = for {
@@ -188,11 +188,11 @@ class RangeValidatorTest
       }
     }
 
-    //    "fail validation for very small big int type" in {
-    //      val value = BigInt(Long.MinValue)
-    //      validate[RangeSecondSmallestLongBigIntExample](value) should equal(
-    //        invalid(value, minValue = Long.MinValue + 1))
-    //    }
+    "fail validation for very small big int type" in {
+      val value = BigInt(Long.MinValue)
+      validate[RangeSecondSmallestLongBigIntExample](value) should equal(
+        invalid(value, minValue = Long.MinValue + 1, maxValue = 5))
+    }
 
     "pass validation for very small big decimal type" in {
       val passBigDecimalValue: Gen[BigDecimal] = for {
@@ -204,11 +204,11 @@ class RangeValidatorTest
       }
     }
 
-    //    "fail validation for a very small big decimal type" in {
-    //      val value = BigDecimal(Long.MinValue)
-    //      validate[RangeSecondSmallestLongBigDecimalExample](value) should equal(
-    //        invalid(value, minValue = Long.MinValue + 1))
-    //    }
+    "fail validation for a very small big decimal type" in {
+      val value = BigDecimal(Long.MinValue)
+      validate[RangeSecondSmallestLongBigDecimalExample](value) should equal(
+        invalid(value, minValue = Long.MinValue + 1, maxValue = 5))
+    }
 
     "fail for unsupported class type" in {
       intercept[IllegalArgumentException] {
