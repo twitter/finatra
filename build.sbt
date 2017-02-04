@@ -5,7 +5,7 @@ import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
-lazy val projectVersion = "2.8.0"
+lazy val projectVersion = "2.9.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -200,7 +200,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   utils)
 
 lazy val finatraExamples =
-  /* // START EXAMPLES
+  // START EXAMPLES
   Seq[sbt.ProjectReference](
     benchmarkServer,
     exampleHttpJavaServer,
@@ -213,7 +213,7 @@ lazy val finatraExamples =
     thriftJavaExampleServer,
     tinyUrl,
     twitterClone) ++
-  */ // END EXAMPLES
+  // END EXAMPLES
   Seq.empty
 
 def aggregatedProjects = {
@@ -237,12 +237,12 @@ lazy val root = (project in file("."))
     moduleName := "finatra-root",
     unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
-      /* // START EXAMPLES
+      // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
          helloWorld, helloWorldHeroku, streamingExample,
          thriftExampleIdl, thriftExampleServer, thriftJavaExampleIdl, thriftJavaExampleServer,
          tinyUrl, twitterClone)
-      */ // END EXAMPLES
+      // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
 
 lazy val injectCoreTestJarSources =
@@ -725,7 +725,7 @@ lazy val userguide = (project in file("doc"))
     scalacOptions in doc <++= version.map(v => Seq("-doc-title", "Finatra User Guide ", "-doc-version", v)),
     includeFilter in Sphinx := ("*.html" | "*.png" | "*.svg" | "*.js" | "*.css" | "*.gif" | "*.txt")))
 
-/* // START EXAMPLES
+// START EXAMPLES
 
 lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
   .settings(exampleServerSettings)
@@ -892,4 +892,4 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard")).
     slf4j,
     injectCore % "test->test")
 
-*/ // END EXAMPLES
+// END EXAMPLES
