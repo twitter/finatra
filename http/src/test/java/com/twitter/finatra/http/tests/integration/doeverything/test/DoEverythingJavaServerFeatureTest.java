@@ -145,10 +145,10 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
                 scala.collection.JavaConverters$.MODULE$.
                         asJavaCollectionConverter(SERVER.adminHttpServerRoutes()).
                         asJavaCollection();
-        assertTrue(adminRoutePathExists(routes, "/admin/clients", Method.Get$.MODULE$, true));
-        assertTrue(adminRoutePathExists(routes, "/admin/bar", Method.Post$.MODULE$, true));
-        assertTrue(adminRoutePathExists(routes, "/admin/foo", Method.Get$.MODULE$, false));
-        assertTrue(adminRoutePathExists(routes, "/admin/delete", Method.Delete$.MODULE$, false));
+        assertTrue(adminRoutePathExists(routes, "/admin/clients", Method.Get(), true));
+        assertTrue(adminRoutePathExists(routes, "/admin/bar", Method.Post(), true));
+        assertTrue(adminRoutePathExists(routes, "/admin/foo", Method.Get(), false));
+        assertTrue(adminRoutePathExists(routes, "/admin/delete", Method.Delete(), false));
 
         assertTrue(HttpMuxer$.MODULE$.patterns().contains("/admin/finatra/"));
     }
