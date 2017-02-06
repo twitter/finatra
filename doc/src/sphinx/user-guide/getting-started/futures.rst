@@ -18,4 +18,4 @@ Finatra will `attempt to perform a bijection <https://github.com/twitter/finatra
 
 For more information on the `Twitter Bijection <https://github.com/twitter/bijection>`__ library it is highly recommended that you read the `Bijection README <https://github.com/twitter/bijection/blob/develop/README.md>`__. 
 
-For more information on converting between ``c.t.util.Future`` and ``scala.concurrent.Future`` see this `documentation <https://twitter.github.io/util/guide/util-cookbook/futures.html#conversions-between-twitter-s-future-and-scala-s-future>`__ from the TwitterUtil documentation (which includes a simple example).
+For more information on converting between ``c.t.util.Future`` and ``scala.concurrent.Future`` see this `documentation <https://twitter.github.io/util/guide/util-cookbook/futures.html#conversions-between-twitter-s-future-and-scala-s-future>`__ from the `TwitterUtil project <http://twitter.github.io/util/>`__ (which includes a simple example).

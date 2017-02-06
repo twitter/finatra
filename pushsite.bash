@@ -42,7 +42,6 @@ done
 # END: OPTION PARSING AND VALIDATION --------------------------------------------------------------------   
 
 echo 'cleaning workspace...' 1>&2
-./sbt clean
 rm -fr $savedir/doc/src/octopress/public/finatra
 echo 'making site...' 1>&2
 cd $savedir/doc/src/octopress
@@ -51,8 +50,11 @@ rake setup_github_pages[git@github.com:twitter/finatra.git]
 rake generate
 
 if [[ "$release" == true ]]; then
-    echo 'making user-guide...' 1>&2
     cd $savedir
+    echo 'cleaning workspace...' 1>&2
+    ./sbt clean
+    
+    echo 'making user-guide...' 1>&2
     ./sbt --warn userguide/make-site
     echo 'copying user-guide to site...' 1>&2
     cp -r $savedir/doc/target/site/user-guide/ $savedir/doc/src/octopress/public/finatra/user-guide >/dev/null 2>&1
@@ -79,6 +81,8 @@ else
     rm -rf /tmp/finatra-github
 fi
 
+# make sure there is a .nojekyll file as we want the reStructuredText user-guide render appropriately in GithubPages
+touch $savedir/doc/src/octopress/public/finatra/.nojekyll
 echo 'deploying site...' 1>&2
 cd $savedir/doc/src/octopress
 rake deploy

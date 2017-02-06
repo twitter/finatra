@@ -16,7 +16,7 @@ Please note that the published  [groupId](https://maven.apache.org/guides/mini/g
 Here's a list of some of the major changes, updates, and fixes:
 
 - The [groupId](https://maven.apache.org/guides/mini/guide-naming-conventions.html) of both finatra and finatra/inject published artifacts has changed from `com.twitter.finatra` and `com.twitter.inject` respectively to [just `com.twitter`](https://github.com/twitter/finatra/commit/7f25e3c51c368f901538e38959656fbf1cf45e76).
-- [SLF4J](http://www.slf4j.org/) api has been [updated to 1.7.21](https://github.com/twitter/finatra/commit/a174f36638919887ef052bbdd3443b1c58869b43) and examples and tests using [Logback](http://logback.qos.ch/) have been updated to 1.1.7. It is recommended that you also update your version if you are using the [Logback](http://logback.qos.ch/) logging implementation.
+- [SLF4J](https://www.slf4j.org/) api has been [updated to 1.7.21](https://github.com/twitter/finatra/commit/a174f36638919887ef052bbdd3443b1c58869b43) and examples and tests using [Logback][logback] have been updated to 1.1.7. It is recommended that you also update your version if you are using the [Logback][logback] logging implementation.
 - The [Jackson](https://github.com/FasterXML/jackson-module-scala) Module Scala has been updated to [version 2.6.5](https://github.com/twitter/finatra/commit/bb1288a84f8fc4d98919ceb35aab35f69200167c).
 - Support for [`any` HTTP method](https://github.com/twitter/finatra/commit/7123ba1122cbb60c8be509205a95d2b587942360) in HTTP Controllers.
 - HTTP test utilities have been [moved to a consistent package naming](https://github.com/twitter/finatra/commit/e61e6e309c2cc892306d0f93f9d4bc4b5605b020). Thus utilities formerly in `com.twitter.finatra.http.test` **are now packaged** `com.twitter.finatra.http`. As always these test utilities are available in the [finatra-http test jar](https://oss.sonatype.org/#nexus-search;gav~com.twitter~finatra-http_2.11~2.2.0~~tests).
@@ -28,8 +28,10 @@ Here's a list of some of the major changes, updates, and fixes:
 - [Narrowed visibility](https://github.com/twitter/finatra/commit/a3275378ae96b1a4d3af5f6ab81115eba247a0eb) on classes and objects in **internal** [packages](https://github.com/twitter/finatra/tree/develop/http/src/main/scala/com/twitter/finatra/http/internal) which are not necessarily meant to be publicly exposed. It is expected that users depend only on the "public" framework APIs and not internal framework implementations.
 - [Re-worked](https://github.com/twitter/finatra/commit/b8f9b609f595ba7e6f996fd1f4c31d6933e6eb04) the server lifecycle to address confusion around naming and intent. Added scaladocs around the lifecycle to better aid in understanding of what the framework is providing on top of TwitterServer and addressed lot of testing utility issues including re-writing EmbeddedApp to make it simpler/easier to test cmd line applications (which is the central purpose of `com.twitter.inject.app.App`).
 
-See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User Guide](/finatra/user-guide) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User's Guide][user-guide] for more information on getting started.
 
 -- The Finatra Team | [forum](https://groups.google.com/forum/#!forum/finatra-users) | [@finatra](https://twitter.com/finatra) | [chat](https://gitter.im/twitter/finatra)
 
-[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20v%3A%222.2.0%22
+[maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20v%3A%222.2.0%22
+[logback]: https://logback.qos.ch/
+[user-guide]: /finatra/user-guide/index.html

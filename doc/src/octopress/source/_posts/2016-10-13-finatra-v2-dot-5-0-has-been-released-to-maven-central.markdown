@@ -20,8 +20,9 @@ Some of the changes in the latest releases:
 
 Please checkout the [finatra-2.5.0](https://github.com/twitter/finatra/releases/tag/finatra-2.5.0) release notes on github for more information.
 
-See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User Guide](/finatra/user-guide) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User's Guide][user-guide] for more information on getting started.
 
 -- The Finatra Team | [forum](https://groups.google.com/forum/#!forum/finatra-users) | [@finatra](https://twitter.com/finatra) | [chat](https://gitter.im/twitter/finatra)
 
-[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20(a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22)%20AND%20v%3A%222.5.0%22
+[maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20(a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22)%20AND%20v%3A%222.5.0%22
+[user-guide]: /finatra/user-guide/index.html

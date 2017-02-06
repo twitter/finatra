@@ -15,8 +15,9 @@ In addition to lots of code improvements, we've addressed an issue in building o
 
 As always, you can download the release from [Maven Central][maven-central].
 
-See the Finatra [Github page](https://github.com/twitter/finatra) or check out our [User Guide](/finatra/user-guide) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) or check out our [User's Guide][user-guide] for more information on getting started.
 
 -- The [Finatra](https://groups.google.com/forum/#!forum/finatra-users) Team
 
-[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.5%22
+[maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.5%22
+[user-guide]: /finatra/user-guide/index.html

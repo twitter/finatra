@@ -18,12 +18,13 @@ Getting Started
 ---------------
 
 - :doc:`getting-started/basics`
-- :doc:`getting-started/examples`
+- :doc:`getting-started/framework`
 - :doc:`getting-started/lifecycle`
 - :doc:`getting-started/modules`
 - :doc:`getting-started/binding_annotations`
 - :doc:`getting-started/flags`
 - :doc:`getting-started/futures`
+- :doc:`getting-started/examples`
 
 Logging
 -------
@@ -92,12 +93,13 @@ For support feel free to follow and/or tweet at the `@finatra <https://twitter.c
    :hidden:
 
    getting-started/basics.rst
-   getting-started/examples.rst
+   getting-started/framework.rst
    getting-started/lifecycle.rst
    getting-started/modules.rst
    getting-started/binding_annotations.rst
    getting-started/flags.rst
    getting-started/futures.rst
+   getting-started/examples.rst
    logging/index.rst
    logging/logback.rst
    http/server.rst
