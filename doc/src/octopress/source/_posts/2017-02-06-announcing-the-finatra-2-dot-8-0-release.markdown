@@ -100,7 +100,7 @@ See the Finatra [Github page](https://github.com/twitter/finatra) or checkout ou
 [maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20(a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22)%20AND%20v%3A%222.8.0%22
 [scalatest]: http://www.scalatest.org/
 [wordspec]: http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec
-[wordspece-glance]: http://www.scalatest.org/at_a_glance/WordSpec
+[wordspec-glance]: http://www.scalatest.org/at_a_glance/WordSpec
 [funsuite]: http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite
 [funsuite-glance]: http://www.scalatest.org/getting_started_with_fun_suite
 [test-mixins]: /finatra/user-guide/testing/index.html#test-mixins
