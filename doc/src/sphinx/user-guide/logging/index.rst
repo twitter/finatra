@@ -17,7 +17,6 @@ Finatra uses the `SLF4J <http://www.slf4j.org/manual.html>`__ API for framework 
 
 -  `Log4j <http://en.wikipedia.org/wiki/Log4j>`__
 -  `commons-logging <http://commons.apache.org/proper/commons-logging/>`__
--  jdk14-logging
 -  `java.util.logging <http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html>`__: there is a performance penalty for intercepting jul log messages, so make sure the framework includes the `Slf4jBridgeModule <https://github.com/twitter/finatra/blob/develop/slf4j/src/main/scala/com/twitter/finatra/logging/modules/Slf4jBridgeModule.scala>`__ as a framework module. This will install the `SLF4JBridgeHandler <http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html>`__ which mitigates most of the performance penalty.
 
 

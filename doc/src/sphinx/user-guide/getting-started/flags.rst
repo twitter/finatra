@@ -75,13 +75,15 @@ to the created, then you can use the `Flag#apply <https://github.com/twitter/uti
 Flag Value Injection
 ^^^^^^^^^^^^^^^^^^^^
 
-Flags specified with defaults can be injected as a constructor-arg to a class. When the class is obtained from the injector the correctly parsed flag value will be injected. Note, you can also always instantiate this class manually. When doing so, you obviously will need to pass all the constructor args manually including a value for the flag argument.
+Flags specified with defaults can be injected as a constructor-arg to a class. When the class is obtained from the injector the correctly parsed flag value will be injected.
 
 .. code:: scala
 
     class MyService @Inject()(
       @Flag("key") key: String) {
     }
+
+Note, you can also always instantiate the above class manually. When doing so, you obviously will need to pass all the constructor args manually including a value for the flag argument.
 
 Flags Without Defaults
 ----------------------
@@ -104,12 +106,13 @@ Flags Without Defaults
       }
     }
 
-Keep in mind that `T` in this case must be a `Flaggable <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flaggable.scala>`__ type.
+Keep in mind that the specified `T` in this case must be a `Flaggable <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flaggable.scala>`__ type.
 
 Note that you should not call `Flag#apply <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__ on a `Flag` without a default (as this will result in an Exception) but instead use `Flag#get <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala#L205>`__ which returns an `Option[T]`.
 
 Because Finatra does not currently support binding optional types, Flags without defaults *are not injectable* but can still be useful for accepting external configuration for either `providing instances to the object graph <modules.html#using-flags-in-modules>`__ or for a server.
-This means if you try to inject a non-defaulted `Flag` using the ``@Flag`` binding annotation `you will get an IllegalArgumentException <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala#L34>`__.
+
+This means if you try to inject a non-defaulted `Flag` instance using the ``@Flag`` binding annotation `you will get an IllegalArgumentException <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/FlagsModule.scala#L34>`__.
 
 Passing Flag Values as Command-Line Arguments
 ---------------------------------------------
