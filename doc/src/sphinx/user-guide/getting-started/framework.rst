@@ -72,7 +72,7 @@ Similarily, to create an injectable TwitterServer:
 	}
 
 Note:
-^^^^
+^^^^^
 
 It is important to remember that the Finatra framework handles the `lifecycle <lifecycle.html>`__ for you for both a `TwitterUtil <https://twitter.github.io/util/>`__'s `c.t.app.App` and a `TwitterServer <https://twitter.github.io/twitter-server/>`__ `c.t.server.TwitterServer` (see `here <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L53>`__ and `here <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L127>`__), thus you do not have access to the `main` method. Instead, any logic should be contained in either the `c.t.inject.app.App#run` or `c.t.inject.server.TwitterServer#start` method.
 

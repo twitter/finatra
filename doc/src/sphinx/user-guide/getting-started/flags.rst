@@ -83,7 +83,7 @@ Flags specified with defaults can be injected as a constructor-arg to a class. W
       @Flag("key") key: String) {
     }
 
-Note, you can also always instantiate the above class manually. When doing so, you obviously will need to pass all the constructor args manually including a value for the flag argument.
+Note, you can also always instantiate the above class manually. When doing so, you will need to pass all the constructor args manually including a value for the flag argument.
 
 Flags Without Defaults
 ----------------------

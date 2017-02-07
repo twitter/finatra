@@ -58,7 +58,7 @@ Conversion Rules
 Finatra will attempt to convert your route callback's return type into a `c.t.util.Future[Response]` using the following rules:
 
 -  If you return a `Future[Response]` no conversion will be performed.
--  If you return a `Future[T]` the `Future[T]` will be mapped to wrap the `T` into an HTTP `200 OK` Response with `T` as the body.
+-  If you return a `Future[T]` it will be mapped to wrap the `T` into an HTTP `200 OK` Response, with `T` as the body.
 -  If you return a `scala.concurrent.Future[T]` a Bijection will be attempted to convert the Scala Future into a `Future[T]` then the above case is performed.
 -  `Some[T]` will be converted into a HTTP `200 OK`.
 -  `None` will be converted into a HTTP `404 NotFound`.
@@ -89,7 +89,7 @@ If you are not returning a Future from your callback and it does synchronous wor
       }
     }
 
-More information on blocking in Finagle can be found `here <http://finagle.github.io/blog/2016/09/01/block-party/>`__.
+More information on blocking in Finagle can be found `here <https://finagle.github.io/blog/2016/09/01/block-party/>`__.
 
 ResponseBuilder
 ----------------
@@ -165,7 +165,7 @@ If you have a `Future[T]` and want to return a `c.t.finagle.http.Response` you s
 - convert it to a `Future[Response]` or 
 - do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L139>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
 
-To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <http://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures>`__:
+To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures>`__:
 
 .. code:: scala
 
