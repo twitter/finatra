@@ -91,6 +91,10 @@ As mentioned, there are lot of [changes and fixes][changelog] in this release. H
 - [Fixed](https://github.com/twitter/finatra/commit/e226beee463bf2ef620eb3792230f4c5d245fd41) issue around "injectable value" fields of a collection type e.g., a custom case class request object field annotated with `@RouteParam`, `@QueryParam`, or `@FormParam` of a collection type, not correctly picking up default values.
 - A [fix](https://github.com/twitter/finatra/commit/8f4820c2b20f82d64f86f898d10a73f4ac1e123e) to correctly publish sources and javdoc jar for published Finatra test-jars.
 
+## Miscellanea
+
+- The [TwitterServer][twitter-server] [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) was moved to [Netty4](https://github.com/twitter/twitter-server/commit/bb18649069b0332291148ff1afc85b6c10912900) in September. This change should be transparent to end-users but you may notice that you now have thread pools for both Netty3 and Netty4 until the full migration is completed. For more information about Finagle and Netty4 see the Finagle blog post [here](https://finagle.github.io/blog/2017/02/06/finagle-loves-netty4/).
+
 ***
 
 See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User's Guide][user-guide] for more information on getting started.
@@ -105,5 +109,6 @@ See the Finatra [Github page](https://github.com/twitter/finatra) or checkout ou
 [funsuite-glance]: http://www.scalatest.org/getting_started_with_fun_suite
 [test-mixins]: /finatra/user-guide/testing/index.html#test-mixins
 [changelog]: https://github.com/twitter/finatra/blob/master/CHANGELOG.md#finatra-280-2017-02-03
+[twitter-server]: https://twitter.github.io/twitter-server/
 [user-guide]: /finatra/user-guide/index.html
 
