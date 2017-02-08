@@ -93,7 +93,7 @@ As mentioned, there are lot of [changes and fixes][changelog] in this release. H
 
 ## Miscellanea
 
-- The [TwitterServer][twitter-server] [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) was moved to [Netty4](https://github.com/twitter/twitter-server/commit/bb18649069b0332291148ff1afc85b6c10912900) in September. This change should be transparent to end-users but you may notice that you now have thread pools for both Netty3 and Netty4 until the full migration is completed. For more information about Finagle and Netty4 see the Finagle blog post [here](https://finagle.github.io/blog/2017/02/06/finagle-loves-netty4/).
+- The [TwitterServer][twitter-server] [HTTP Admin Interface](https://twitter.github.io/twitter-server/Admin.html) was moved to [Netty4](https://github.com/twitter/twitter-server/commit/bb18649069b0332291148ff1afc85b6c10912900) in September. This change should be transparent to end-users but you may notice that you now have thread pools for both Netty3 and Netty4 (which should have no impact on your server performance) until the migration is completed. For more information about Finagle and Netty4 see the Finagle blog post [here](https://finagle.github.io/blog/2017/02/06/finagle-loves-netty4/).
 
 ***
 
