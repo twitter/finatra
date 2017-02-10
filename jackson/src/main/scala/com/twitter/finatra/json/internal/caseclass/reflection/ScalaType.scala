@@ -5,7 +5,13 @@ import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
 private[json] case class ScalaType(
   typeRefType: TypeRefType) {
 
-  private val path = typeRefType.symbol.path
+  private val path = {
+    val sym = typeRefType.symbol
+
+    // Class loading for object-contained types uses 'Parent$Child' rather than 'Parent.Child' paths.
+    // TODO(virusdave): Migrate the fix upstream so that arbitrary nesting levels will be supported.
+    sym.parent.map(p => p.path + (if (p.isModule) "$" else ".")).getOrElse("") + sym.name
+  }
 
   /* Public */
 
