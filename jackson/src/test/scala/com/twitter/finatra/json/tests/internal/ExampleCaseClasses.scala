@@ -207,6 +207,9 @@ object Obj {
 
   case class NestedCaseClassInObject(id: String)
 
+  case class NestedCaseClassInObjectWithNestedCaseClassInObjectParam(
+    nested: NestedCaseClassInObject)
+
 }
 
 case class WrappedValueInt(value: Int)
