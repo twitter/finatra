@@ -8,7 +8,7 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.Obj.NestedCaseClassInObject
+import com.twitter.finatra.json.tests.internal.Obj.{NestedCaseClassInObject, NestedCaseClassInObjectWithNestedCaseClassInObjectParam}
 import com.twitter.finatra.json.tests.internal._
 import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
@@ -710,6 +710,18 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
           "id": "foo"
         }
         """) should equal(NestedCaseClassInObject(id = "foo"))
+    }
+
+    scenario("case class nested within an object with member that is also a case class in an object") {
+      parse[NestedCaseClassInObjectWithNestedCaseClassInObjectParam](
+        """
+        {
+          "nested": {
+            "id": "foo"
+          }
+        }
+        """
+      ) should equal(NestedCaseClassInObjectWithNestedCaseClassInObjectParam(nested = NestedCaseClassInObject(id = "foo")))
     }
 
     case class NestedCaseClassInClass(id: String)
