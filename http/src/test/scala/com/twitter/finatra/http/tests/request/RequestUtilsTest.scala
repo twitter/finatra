@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.request
 
-import com.twitter.finagle.http.{MapHeaderMap, Request}
+import com.twitter.finagle.http.{HeaderMap, Request}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.request.RequestUtils
@@ -15,7 +15,7 @@ class RequestUtilsTest
 
     "throw BadRequestException when missing host header for pathUrl" in {
       val request = smartMock[Request]
-      request.headerMap returns MapHeaderMap()
+      request.headerMap returns HeaderMap()
       request.host returns None
 
       intercept[BadRequestException] {
@@ -25,7 +25,7 @@ class RequestUtilsTest
 
     "pathUrl with slash" in {
       val request = smartMock[Request]
-      request.headerMap returns MapHeaderMap()
+      request.headerMap returns HeaderMap()
       request.host returns Some("www.foo.com")
       request.path returns "/part/next/end/"
 
@@ -35,7 +35,7 @@ class RequestUtilsTest
 
     "respondTo */* content type in request when no accept header is sent" in {
       val request = smartMock[Request]
-      request.headerMap returns MapHeaderMap()
+      request.headerMap returns HeaderMap()
 
        val response = RequestUtils.respondTo(request) {
         case _ => true
@@ -46,7 +46,7 @@ class RequestUtilsTest
 
     "respondTo text/html content-type in request" in {
       val request = smartMock[Request]
-      request.headerMap returns MapHeaderMap(HttpHeaders.Accept -> ContentType.HTML.toString)
+      request.headerMap returns HeaderMap(HttpHeaders.Accept -> ContentType.HTML.toString)
 
       val response = RequestUtils.respondTo(request) {
         case ContentType.HTML => true
@@ -58,7 +58,7 @@ class RequestUtilsTest
 
     "respondTo application/json content-type in request" in {
       val request = smartMock[Request]
-      request.headerMap returns MapHeaderMap(HttpHeaders.Accept -> ContentType.JSON.toString)
+      request.headerMap returns HeaderMap(HttpHeaders.Accept -> ContentType.JSON.toString)
 
       val response = RequestUtils.respondTo(request) {
         case ContentType.JSON => true
@@ -71,7 +71,7 @@ class RequestUtilsTest
     "return NotAcceptableException for request" in {
       val request = smartMock[Request]
       // accept application/json
-      request.headerMap returns MapHeaderMap(HttpHeaders.Accept -> ContentType.JSON.toString)
+      request.headerMap returns HeaderMap(HttpHeaders.Accept -> ContentType.JSON.toString)
 
       intercept[NotAcceptableException] {
         // only handle text/html
