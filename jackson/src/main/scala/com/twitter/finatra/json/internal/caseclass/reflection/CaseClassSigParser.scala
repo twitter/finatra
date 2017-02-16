@@ -104,25 +104,25 @@ private[finatra] object CaseClassSigParser {
   private def findSym[A](clazz: Class[A]): ClassSymbol = {
     val name = simpleName(clazz)
     val pss = parseScalaSig(clazz)
+    val clazzIsInObject = clazz.getName.contains("$")
     pss match {
       case Some(x) => {
         val topLevelClasses = x.topLevelClasses
         topLevelClasses.headOption match {
-          case Some(tlc) => {
+          // If the desired class lives in an object that is itself a companion object to a 2nd class,
+          // we don't want to match the 2nd class itself.
+          case Some(tlc) if !clazzIsInObject =>
             tlc
-          }
-          case None => {
+          case _ =>
             val topLevelObjects = x.topLevelObjects
             topLevelObjects.headOption match {
-              case Some(tlo) => {
+              case Some(tlo) =>
                 x.symbols.find { s => !s.isModule && s.name == name} match {
                   case Some(s) => s.asInstanceOf[ClassSymbol]
                   case None => throw new MissingExpectedType(clazz)
                 }
-              }
               case _ => throw new MissingExpectedType(clazz)
             }
-          }
         }
       }
       case None => throw new MissingPickledSig(clazz)
