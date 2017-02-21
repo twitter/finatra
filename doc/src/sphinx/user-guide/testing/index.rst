@@ -287,7 +287,7 @@ Override Modules
 
 For basic information on Modules in Finatra, see `Modules <../getting-started/modules.html>`__.
 
-Defining a module is generally used to tell Guice *how* to instantiate an object to be provided to the object graph. When testing, however, we may want to provide an alternative instance of a type to the object graph. For instance, instead of making network calls to an external service through a real client we want to instead use a mock version of the client. Or load an in-memory implementation to which we can keep a reference in order to make assertions on it's internal state. In these cases we can compose a server with a collection of override modules that selectively replace bound instances.
+Defining a module is generally used to tell Guice *how* to instantiate an object to be provided to the object graph. When testing, however, we may want to provide an alternative instance of a type to the object graph. For instance, instead of making network calls to an external service through a real client we want to instead use a mock version of the client. Or load an in-memory implementation to which we can keep a reference in order to make assertions on its internal state. In these cases we can compose a server with a collection of override modules that selectively replace bound instances.
 
 .. code:: scala
 
@@ -347,7 +347,7 @@ And in your test, add this stub module as a override module:
       ...
 
 
-An "override module" does what it sounds like. It overrides any bound instance in the object graph with the version it provides. As seen above, the `StubServiceAModule` provided a version of `ServiceA` that happens to be a stub. In this manner the main server does not need to change and we can replace parts of it's object graph during testing.
+An "override module" does what it sounds like. It overrides any bound instance in the object graph with the version it provides. As seen above, the `StubServiceAModule` provided a version of `ServiceA` that happens to be a stub. In this manner the main server does not need to change and we can replace parts of its object graph during testing.
 
 Note, modules used specifically for testing should be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: `@Bind`_ section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.
 

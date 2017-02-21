@@ -55,7 +55,7 @@ Define a flag (in this case within a `TwitterModule`)
       }
     }
 
-In the example above, notice that we do not save a local reference to the created `Flag` and instead reference it's value in the provider method by use of the ``@Flag`` binding annotation.
+In the example above, notice that we do not save a local reference to the created `Flag` and instead reference its value in the provider method by use of the ``@Flag`` binding annotation.
 
 However, when defining a flag you can also simply dereference the flag directly within the module or server (in lieu of using the ``@Flag`` annotation). Just keep a local reference
 to the created, then you can use the `Flag#apply <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala#L171>`__, `Flag#get <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala#L205>`__ or other methods, depending e.g.:

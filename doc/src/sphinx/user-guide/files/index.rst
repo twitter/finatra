@@ -38,7 +38,7 @@ Additionally, it is recommend to use local filesystem serving *only during testi
 
 For changes from Finatra v1.x static files behavior see the `Static Files <../v1-migration/index.html#static-files>`__ section in the `Version 1 Migration Guide <../v1-migration/index.html>`__.
 
-To set a flag value, pass the flag and it's value as a argument to your server:
+To set a flag value, pass the flag and its value as an argument to your server:
 
 .. code:: bash
 

@@ -126,7 +126,7 @@ Route patterns may include named parameters. E.g., a defined variable in the rou
       "You looked up " + request.params("id")
     }
 
-In the above example, `:id` is considered a "named parameter" of the route and will capture the value in it's position in the incoming request URI.
+In the above example, `:id` is considered a "named parameter" of the route and will capture the value in its position in the incoming request URI.
 
 As shown, the incoming value from the request can be obtained from the request parameters map, e.g. `request.params("id")`.
 
@@ -171,13 +171,13 @@ Therefore, you should ensure your route parameter names do not collide with any 
 Constant Routes
 ^^^^^^^^^^^^^^^
 
-A "constant route" is any defined route which *does not* specify a `named parameter <#named-parameters>`__ in it's route path. Routing is optimized to do a simple lookup against a "constant route" map whereas
+A "constant route" is any defined route which *does not* specify a `named parameter <#named-parameters>`__ in its route path. Routing is optimized to do a simple lookup against a "constant route" map whereas
 `named parameter <#named-parameters>`__ routes are tried in their defined order for a route which will handle the request.
 
 Wildcard Parameter
 ^^^^^^^^^^^^^^^^^^
 
-Routes can also contain the wildcard pattern as a `named parameter <#named-parameters>`__, `:*`. The wildcard can only appear once at the end of a pattern and it will capture *all text in it's place*.
+Routes can also contain the wildcard pattern as a `named parameter <#named-parameters>`__, `:*`. The wildcard can only appear once at the end of a pattern and it will capture *all text in its place*.
 
 For example,
 
@@ -209,7 +209,7 @@ would produce a response:
     [Header]	Content-Length -> 15
     abc/123/foo.txt
 
-The wildcard named parameter matches everything in it's position. In this case: `abc/123/foo.txt`.
+The wildcard named parameter matches everything in its position. In this case: `abc/123/foo.txt`.
 
 Regular Expressions
 ^^^^^^^^^^^^^^^^^^^
