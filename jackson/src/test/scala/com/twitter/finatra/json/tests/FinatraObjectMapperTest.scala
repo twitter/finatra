@@ -7,8 +7,10 @@ import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
+import com.twitter.finatra.json.internal.caseclass.reflection.MissingExpectedType
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.finatra.json.tests.internal.Obj.{NestedCaseClassInObject, NestedCaseClassInObjectWithNestedCaseClassInObjectParam}
+import com.twitter.finatra.json.tests.internal.TypeAndCompanion.NestedCaseClassInCompanion
 import com.twitter.finatra.json.tests.internal._
 import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
@@ -724,9 +726,26 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       ) should equal(NestedCaseClassInObjectWithNestedCaseClassInObjectParam(nested = NestedCaseClassInObject(id = "foo")))
     }
 
+    scenario("case class nested within a companion object") {
+      parse[NestedCaseClassInCompanion](
+        """
+        {
+          "id": "foo"
+        }
+        """
+      ) should equal(NestedCaseClassInCompanion(id = "foo"))
+    }
+
+    // This was "passing" by throwing the AssertionError "accidentally", not because the assertion actually
+    // caught the "this is a non-static inner case class" case in question.  Rather, the attempt to find
+    // the constructor would find the wrong thing (the constructor of the containing FinatraObjectMapperTest),
+    // which indeed doesn't have the same number of parameters as the number of annotated-and-implicit parameters
+    // to the case class's constructor.  But that's incidental.  Two unrelated things happened to be unrelated
+    // in this way also, triggering this particular assertion failure.  But really we should fail because we
+    // didn't find the right class's constructor in the first place.
     case class NestedCaseClassInClass(id: String)
     scenario("case class nested within a class") {
-      intercept[AssertionError] {
+      intercept[MissingExpectedType] {
         parse[NestedCaseClassInClass](
           """
           {

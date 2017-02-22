@@ -212,6 +212,11 @@ object Obj {
 
 }
 
+class TypeAndCompanion
+object TypeAndCompanion {
+  case class NestedCaseClassInCompanion(id: String)
+}
+
 case class WrappedValueInt(value: Int)
   extends WrappedValue[Int]
 
