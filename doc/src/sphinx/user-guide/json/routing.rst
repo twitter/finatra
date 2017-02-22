@@ -3,7 +3,7 @@
 JSON Integration with Routing
 =============================
 
-If a `custom case class request object <requests.html#custom-case-class-request-object>`__ is used as a route callback's input type, Finatra will parse the request body into the custom request class. Similar to declaratively parsing a `GET` request (described above), Finatra will perform validations and return a `400 BadRequest` with a list of all accumulated errors in JSON format.
+If a `custom case class request object <../http/requests.html#custom-case-class-request-object>`__ is used as a route callback's input type, Finatra will parse the request body into the custom request class. Similar to declaratively parsing a `GET` request (described above), Finatra will perform validations and return a `400 BadRequest` with a list of all accumulated errors in JSON format.
 
 Suppose you wanted to handle a POST of the following JSON (representing a group of tweet ids):
 
