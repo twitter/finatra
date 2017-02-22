@@ -179,7 +179,7 @@ Integration Tests
 ^^^^^^^^^^^^^^^^^
 
 Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across
-a few interfaces in the system. In Finatra, we provide the `c.t.inject.app.TestInjector <https://github.com/twitter/finatra/blob/develop/inject/inject app/src/test/scala/com/twitter/inject/app/TestInjector.scala>`__  which allows you to pass it a set of modules and flags to construct a minimal object graph.
+a few interfaces in the system. In Finatra, we provide the `c.t.inject.app.TestInjector <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala>`__  which allows you to pass it a set of modules and flags to construct a minimal object graph.
 
 To write an integration test, extend the `c.t.inject.IntegrationTest` trait. Then override the `injector` val with your constructed instance of `c.t.inject.app.TestInjector`. You'll then be able to access instances of necessary classes to execute tests.
 
