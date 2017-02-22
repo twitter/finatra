@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Bump guava to 19.0. ``RB_ID=907807``
+
 ### Fixed
 
 ### Closed
