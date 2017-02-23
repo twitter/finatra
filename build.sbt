@@ -9,7 +9,8 @@ lazy val projectVersion = "2.9.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   fork in Test := true,
   javaOptions in Test ++= travisTestJavaOptions
@@ -43,7 +44,7 @@ lazy val versions = new {
   val twitterserverVersion = "1.27.0" + suffix
   val utilVersion = "6.41.0" + suffix
 
-  val bijectionVersion = "0.9.4"
+  val bijectionVersion = "0.9.5"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
@@ -59,7 +60,7 @@ lazy val versions = new {
   val logback = "1.1.7"
   val mockito = "1.9.5"
   val mustache = "0.8.18"
-  val nscalaTime = "1.6.0"
+  val nscalaTime = "2.14.0"
   val scalaCheck = "1.13.4"
   val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
@@ -88,6 +89,8 @@ lazy val baseSettings = Seq(
     "org.mockito" % "mockito-core" %  versions.mockito % "test",
     "org.scalacheck" %% "scalacheck" % versions.scalaCheck % "test",
     "org.scalatest" %% "scalatest" %  versions.scalaTest % "test",
+    "org.specs2" %% "specs2-core" % versions.specs2 % "test",
+    "org.specs2" %% "specs2-junit" % versions.specs2 % "test",
     "org.specs2" %% "specs2-mock" % versions.specs2 % "test"
   ),
   resolvers ++= Seq(
@@ -537,10 +540,9 @@ lazy val jackson = project
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
-      "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler"),
+      "org.scala-lang" % "scalap" % scalaVersion.value,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
-      "com.twitter" %% "util-core" % versions.utilVersion,
-      "com.twitter.finatra" %% "finatra-scalap-compiler-deps" % "2.0.0"
+      "com.twitter" %% "util-core" % versions.utilVersion
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
     sources in Test in doc := {
@@ -733,7 +735,7 @@ lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
     name := "hello-world-heroku",
     moduleName := "hello-world-heroku",
     libraryDependencies ++= Seq(
-      "com.github.rlazoti" %% "finagle-metrics" % "0.0.3"
+      "com.github.rlazoti" %% "finagle-metrics" % "0.0.8"
     )
   ).dependsOn(
     http % "test->test;compile->compile",

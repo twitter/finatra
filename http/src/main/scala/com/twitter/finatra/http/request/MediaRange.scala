@@ -17,25 +17,6 @@ import scala.util.parsing.input.CharSequenceReader
 object MediaRange extends Logging {
 
   /**
-   * Function and extractor object for parsing media ranges.
-   */
-  object parseAndSort {
-
-    def apply(mediaRanges: String): Seq[MediaRange] = {
-      MediaRangeParser(new CharSequenceReader(mediaRanges)) match {
-        case MediaRangeParser.Success(mrs: List[MediaRange], next) =>
-          if (next.atEnd) {
-            debug("Reached the last media range : '" + next.source + "'")
-          }
-          mrs.sorted
-        case MediaRangeParser.NoSuccess(err, _) =>
-          debug("Unable to parse media range header '" + mediaRanges + "': " + err)
-          Nil
-      }
-    }
-  }
-
-  /**
    * Ordering for MediaRanges, in order of highest priority to lowest priority.
    *
    * The reason it is highest to lowest instead of lowest to highest is to ensure sorting is stable, so if two media
@@ -70,6 +51,25 @@ object MediaRange extends Logging {
       } else if (a.mediaType == "*") 1
       else if (b.mediaType == "*") -1
       else 0
+    }
+  }
+
+  /**
+   * Function and extractor object for parsing media ranges.
+   */
+  object parseAndSort {
+
+    def apply(mediaRanges: String): Seq[MediaRange] = {
+      MediaRangeParser(new CharSequenceReader(mediaRanges)) match {
+        case MediaRangeParser.Success(mrs: List[MediaRange], next) =>
+          if (next.atEnd) {
+            debug("Reached the last media range : '" + next.source + "'")
+          }
+          mrs.sorted
+        case MediaRangeParser.NoSuccess(err, _) =>
+          debug("Unable to parse media range header '" + mediaRanges + "': " + err)
+          Nil
+      }
     }
   }
 
