@@ -123,3 +123,80 @@ E.g,
     }
 
 See the `Server Lifecycle <lifecycle.html>`__ diagram for a more visual depiction of the server lifecycle.
+
+Modules Depending on Other Modules
+----------------------------------
+
+There may be times where you would like to reuse types bound by one module inside another module. For instance, you may have a Module which provides a type `Foo` and need that instance when constructing a type `Bar` in another module. E.g.
+
+.. code:: scala
+
+    object FooModule extends TwitterModule {
+
+      @Singleton
+      @Provides
+      def providesFoo: Foo = {
+        new Foo(....)
+      }
+    }
+
+How do you get access to the bound instance of Foo inside of another Module? 
+
+Most often you are trying to inject the bound instance into a class as a class constructor-arg. E.g.,
+
+.. code:: scala
+
+    @Singleton
+    class MyClassFoo @Inject() (
+      foo: Foo) {
+      ...
+    }
+
+You can do something similar in a module. However, instead of the injection point being the constructor annotated with ``@Inject``, it is the argument list of any ``@Provides``-annotated method. 
+
+.. code:: scala
+
+   object BarModule extends TwitterModule {
+     override val modules = Seq(FooModule)
+
+      @Singleton
+      @Provides
+      def providesBar(
+        foo: Foo): Bar = {
+        new Bar(foo)
+      }
+   }
+
+What's happening here?
+
+Firstly, we've defined a `BarModule` that overrides the `modules` val with a `Seq` of modules that includes the `FooModule`. This guarantees that if the `FooModule` is not mixed into the list of modules for a server, the `BarModule` ensures it will be installed since it's declared as a dependency and thus there will be a bound instance of `Foo` available for use in providing an instance of `Bar`.
+
+Finatra will de-dupe all modules before installing, so it is OK if a module appears twice in the server configuration, though you should strive to make this the exception.
+
+Secondly, we've defined a method which provides a `Bar` instance and add an argument of type `Foo` which will be provided by the Injector since injection is by type and the argument list to an ``@Provides`` annotated method in a module is an injection point.
+
+Why? 
+
+Because the Injector is what calls the `providesBar` method. When the Injector needs to provide an instance of `Bar` it looks for a "provider" of `Bar` in the list of modules. It will thus try to supply all arguments to the function from the object graph.
+
+We could continue this through another module. For example, if we wanted to provide a `Baz` which needs both a `Foo` and a `Bar` instance we could define a `BazModule`:
+
+.. code:: scala
+
+    object BazModule extends TwitterModule {
+      override val modules = Seq(
+        FooModule,
+        BarModule)
+
+      @Singleton
+      @Provides
+      def providesBaz(
+        foo: Foo,
+        bar: Bar): Baz = {
+        new Baz(foo, bar)
+      }
+    }
+
+Notice that we choose to list both the `FooModule` and `BarModule` in the modules for the `BazModule`. Yet, since we know that the `BarModule` includes the `FooModule` we could have choosen to leave it out. The `providesBaz` method in the module above takes in both `Foo` and a `Bar` instances as arguments. 
+
+Since it declares the two modules, we're assured that instances of these types will be available from the injector for our `providesBaz` method to use.
