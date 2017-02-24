@@ -21,7 +21,7 @@ def travisTestJavaOptions: Seq[String] = {
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
   if (travisBuild) {
     Seq(
-      "-Dorg.slf4j.simpleLogger.defaultLogLevel=error", 
+      "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
       "-Dcom.twitter.inject.test.logging.disabled",
       // Needed to avoid cryptic EOFException crashes in forked tests
       // in Travis with `sudo: false`.
@@ -341,6 +341,11 @@ lazy val injectApp = (project in file("inject/inject-app"))
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in Test := true,
+    // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
+    scalacOptions in (Compile, doc) ++= {
+      if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
+      else Nil
+    },
     mappings in (Test, packageBin) := {
       val previous = (mappings in (Test, packageBin)).value
       previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
