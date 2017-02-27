@@ -9,6 +9,9 @@ class ThriftClientExceptionTest extends WordSpecTest {
   val FakeThriftMethod = new ThriftMethod {
     override val name = "fakeThriftMethod"
 
+    /** Thrift annotations (user-defined key-value metadata) on the method */
+    override def annotations: Map[String, String] = ???
+
     /** Thrift service name. A thrift service is a list of methods. */
     override def serviceName: String = "FakeService"
 

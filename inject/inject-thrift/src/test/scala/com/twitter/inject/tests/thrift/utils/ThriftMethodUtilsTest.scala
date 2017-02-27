@@ -13,6 +13,9 @@ class ThriftMethodUtilsTest extends WordSpecTest {
       val method = new ThriftMethod {
         override val name = "Foo"
 
+        /** Thrift annotations (user-defined key-value metadata) on the method */
+        override def annotations: Map[String, String] = ???
+
         /** Convert a function implementation of this method into a service implementation */
         override def functionToService(f: FunctionType): ServiceType = ???
 
