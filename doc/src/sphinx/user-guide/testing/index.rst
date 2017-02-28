@@ -405,7 +405,7 @@ Notes:
 For a complete example, see the
 `TwitterCloneFeatureTest <https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala>`__.
 
-There is also another way to user this type of binding in tests (which will eventually become the preferred way) that does not have the above caveats (but instead comes with a different caveat). 
+There is another way to use this type of binding in tests (which will eventually become the preferred way) that does not have the above caveats (but instead comes with a different caveat).
 
 You can also achieve the above ``@Bind`` behavior by using `c.t.inject.server.EmbeddedTwitterServer#bind <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L136>`__.
 
