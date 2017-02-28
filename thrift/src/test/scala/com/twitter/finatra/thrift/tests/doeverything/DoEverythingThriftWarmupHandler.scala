@@ -23,14 +23,14 @@ class DoEverythingThriftWarmupHandler @Inject()(
         warmup.send(
           method = Echo,
           args = Echo.Args("hello")){ result =>
-            assert(result.success.isDefined)
-            result.success.foreach(value => assertExpected(value, "hello"))
+            assert(result.isReturn)
+            assertExpected(result.get(), "hello")
           }
 
         warmup.send(
           method = Uppercase,
           args = Uppercase.Args("hi")){ result =>
-            result.success.foreach(value => assertExpected(value, "HI"))
+            assertExpected(result.get(), "HI")
           }
       }
     } catch {
