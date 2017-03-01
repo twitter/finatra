@@ -23,8 +23,8 @@ object GreeterThriftClientModule
         .withTimeout(2.minutes)
         .withConstantRetry(
           shouldRetryResponse = {
-            case Return(Hi.Result(_, Some(e: InvalidOperation))) => true
-            case Return(Hi.Result(Some(success), _)) => success == "ERROR"
+            case Throw(InvalidOperation(_)) => true
+            case Return(success) => success == "ERROR"
             case Throw(NonFatal(_)) => true
           },
           start = 50.millis,
