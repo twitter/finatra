@@ -14,7 +14,7 @@ For example, if we wanted to run an initial call through our Thrift service we c
     import com.twitter.example.thriftscala.ExampleService.Add1
     import com.twitter.inject.Logging
     import com.twitter.inject.utils.Handler
-    import com.twitter.util.{Await, Return, Throw, Try}
+    import com.twitter.util.Await
     import javax.inject.Inject
 
     class ExampleThriftWarmupHandler @Inject()(
@@ -30,11 +30,9 @@ For example, if we wanted to run an initial call through our Thrift service we c
             clientId.asCurrent {
               warmup.send(
                 method = Add1,
-                args = Add1.Args(5)) { result: Try[Add1.SuccessType] =>
-                  result match {
-                    case Return(value) => assert(value == 6, "Warmup request failed.")
-                    case Throw(_) => assert(false, "Warmup request failed.")
-                  }
+                args = Add1.Args(5)) { result: Add1.Result =>
+                  assert(result.success.isDefined, "Warmup request failed.")
+                  assert(result.success.get == 6, "Warmup request failed.")
                 }
             }
         } catch {

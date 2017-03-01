@@ -1,9 +1,10 @@
 package com.twitter.inject.thrift.internal
 
 import com.twitter.finagle.http.Status._
+import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{EmbeddedHttpServer, HttpServer, HttpTest}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
@@ -11,7 +12,7 @@ import com.twitter.inject.WordSpecTest
 import com.twitter.inject.thrift.filtered_integration.http_server.{GreeterHttpController, HiLoggingThriftClientFilter}
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
-import com.twitter.inject.thrift.modules.{FilteredThriftClientModule, ThriftClientIdModule}
+import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftClientModule}
 import com.twitter.util._
 import scala.util.control.NonFatal
 
@@ -99,12 +100,12 @@ object GreeterThriftClientModule2
 
     serviceIface.copy(
       hi = filter.method(Hi)
-        .withAgnosticFilter(new RequestLoggingThriftClientFilter())
+        .withAgnosticFilter(new RequestLoggingThriftClientFilter)
         .withMethodLatency
         .withConstantRetry(
           shouldRetry = {
-            case (_, Throw(InvalidOperation(_))) => true
-            case (_, Return(success)) => success == "ERROR"
+            case (_, Return(Hi.Result(_, Some(e: InvalidOperation)))) => true
+            case (_, Return(Hi.Result(Some(success), _))) => success == "ERROR"
             case (_, Throw(NonFatal(_))) => true
           },
           start = 50.millis,

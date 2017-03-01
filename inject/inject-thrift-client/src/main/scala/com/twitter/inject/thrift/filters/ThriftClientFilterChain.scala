@@ -15,12 +15,12 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.util.{DefaultTimer, HashedWheelTimer}
 import com.twitter.inject.conversions.duration._
 import com.twitter.inject.thrift.AndThenService
-import com.twitter.inject.thrift.internal.filters.{IncrementCounterFilter, LatencyFilter, ThriftClientExceptionFilter}
+import com.twitter.inject.thrift.internal.filters.{LatencyFilter, ThriftClientExceptionFilter, IncrementCounterFilter}
 import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.{Injector, Logging}
-import com.twitter.scrooge.{ThriftMethod, ThriftStruct}
-import com.twitter.util.{Timer, Try, Duration => TwitterDuration}
+import com.twitter.scrooge.{ThriftMethod, ThriftResponse, ThriftStruct}
+import com.twitter.util.{Duration => TwitterDuration, Timer, Try}
 import java.util.concurrent.TimeUnit
 import org.joda.time.Duration
 
@@ -66,7 +66,7 @@ import org.joda.time.Duration
  * @see [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder]]
  * @see [[com.twitter.finagle.thrift.ThriftServiceIface]]
  */
-class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
+class ThriftClientFilterChain[Req <: ThriftStruct, Rep <: ThriftResponse[_]](
   injector: Injector,
   statsReceiver: StatsReceiver,
   clientLabel: String,
@@ -135,22 +135,22 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   * Install a [[com.twitter.finagle.Filter]] that is agnostic to the [[ThriftMethod]] Req/Rep types. This allows for
   * use of more general filters that do not care about the [[ThriftMethod]] input and output types.
   *
-  * @param filter the [[com.twitter.finagle.Filter.TypeAgnostic]] to install.
+  * @param filter the [[com.twitter.finagle.Filter]] to install.
   * @return [[ThriftClientFilterChain]]
   */
-  def withAgnosticFilter(filter: Filter.TypeAgnostic): ThriftClientFilterChain[Req, Rep] = {
-    filterChain = filterChain.andThen(filter.toFilter[Req, Rep])
+  def withAgnosticFilter(filter: Filter[ThriftStruct, ThriftResponse[_], ThriftStruct, ThriftResponse[_]]): ThriftClientFilterChain[Req, Rep] = {
+    filterChain = filterChain andThen filter.asInstanceOf[Filter[Req, Rep, Req, Rep]]
     this
   }
 
  /**
-  * Install a [[com.twitter.finagle.Filter.TypeAgnostic]] that is agnostic to the [[ThriftMethod]] Req/Rep types. This allows for
+  * Install a [[com.twitter.finagle.Filter]] that is agnostic to the [[ThriftMethod]] Req/Rep types. This allows for
   * use of more general filters that do not care about the [[ThriftMethod]] input and output types.
   *
   * @tparam T the type of the filter to instantiate from the injector
   * @return [[ThriftClientFilterChain]]
   */
-  def withAgnosticFilter[T <: Filter.TypeAgnostic : Manifest]: ThriftClientFilterChain[Req, Rep] = {
+  def withAgnosticFilter[T <: Filter[ThriftStruct, ThriftResponse[_], ThriftStruct, ThriftResponse[_]] : Manifest]: ThriftClientFilterChain[Req, Rep] = {
     withAgnosticFilter(injector.instance[T])
   }
 

@@ -19,7 +19,7 @@ object AdderThriftClientModule
 
     serviceIface.copy(
       add1 = filter.method(Add1)
-        .withExceptionFilter(Filter.identity[Add1.Args, Add1.SuccessType]) // Example of replacing the default exception filter
+        .withExceptionFilter(Filter.identity[Add1.Args, Add1.Result]) // Example of replacing the default exception filter
         .withTimeout(3.minutes)
         .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,

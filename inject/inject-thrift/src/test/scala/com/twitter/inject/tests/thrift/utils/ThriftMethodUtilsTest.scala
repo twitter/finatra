@@ -11,23 +11,28 @@ class ThriftMethodUtilsTest extends WordSpecTest {
     "return pretty string" in {
 
       val method = new ThriftMethod {
-        val name: String = "Foo"
+        override val name = "Foo"
 
+        /** Thrift annotations (user-defined key-value metadata) on the method */
         override def annotations: Map[String, String] = ???
 
-        def toServiceIfaceService(f: FunctionType): ServiceIfaceServiceType = ???
+        /** Convert a function implementation of this method into a service implementation */
+        override def functionToService(f: FunctionType): ServiceType = ???
 
-        def functionToService(f: FunctionType): ServiceType = ???
+        /** Convert a service implementation of this method into a function implementation */
+        override def serviceToFunction(svc: ServiceType): FunctionType = ???
 
-        def serviceToFunction(svc: ServiceType): FunctionType = ???
+        /** Thrift service name. A thrift service is a list of methods. */
+        override val serviceName: String = "FooService"
 
-        val serviceName: String = "FooService"
+        /** Codec for the request args */
+        override def argsCodec: ThriftStructCodec3[Args] = ???
 
-        def argsCodec: ThriftStructCodec3[Args] = ???
+        /** Codec for the response */
+        override def responseCodec: ThriftStructCodec3[Result] = ???
 
-        def responseCodec: ThriftStructCodec3[Result] = ???
-
-        val oneway: Boolean = false
+        /** True for oneway thrift methods */
+        override val oneway: Boolean = false
       }
 
       val prettyString = ThriftMethodUtils.prettyStr(method)

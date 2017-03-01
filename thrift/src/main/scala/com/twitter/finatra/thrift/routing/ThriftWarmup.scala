@@ -5,7 +5,7 @@ import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
 import com.twitter.inject.thrift.utils.ThriftMethodUtils._
 import com.twitter.scrooge.ThriftMethod
-import com.twitter.util.{Await, Try}
+import com.twitter.util.Await
 import javax.inject.Inject
 
 class ThriftWarmup @Inject()(
@@ -32,7 +32,7 @@ class ThriftWarmup @Inject()(
   def send[M <: ThriftMethod](
     method: M,
     args: M#Args,
-    times: Int = 1)(responseCallback: Try[M#SuccessType] => Unit = unitFunction _): Unit = {
+    times: Int = 1)(responseCallback: M#Result => Unit = unitFunction _): Unit = {
 
     for (i <- 1 to times) {
       time(s"Warmup ${prettyStr(method)} completed in %sms.") {
@@ -42,7 +42,7 @@ class ThriftWarmup @Inject()(
     }
   }
 
-  def close(): Unit = {
+  def close() = {
     pool.executor.shutdownNow()
   }
 
@@ -50,19 +50,19 @@ class ThriftWarmup @Inject()(
 
   private def executeRequest[M <: ThriftMethod](
     method: M,
-    args: M#Args): Try[M#SuccessType] = {
+    args: M#Args): M#Result = {
 
     val response = pool {
       info(s"Warmup ${prettyStr(method)}")
-      val service = router.methods(method).asInstanceOf[ThriftMethodService[M#Args, M#SuccessType]]
+      val service = router.methods(method).asInstanceOf[ThriftMethodService[M#Args, M#Result]]
       service(args)
     }.flatten
 
-    Try { Await.result(response) }
+    Await.result(response)
   }
 
   /**
-    * Function curried as the default arg for the responseCallback: M#SuccessType => Unit parameter.
+    * Function curried as the default arg for the responseCallback: M#Result => Unit parameter.
  *
     * @param a - [[AnyRef]]
     * @return Unit

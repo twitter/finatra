@@ -7,23 +7,28 @@ import com.twitter.scrooge.{ThriftStructCodec3, ThriftMethod}
 
 class ThriftClientExceptionTest extends WordSpecTest {
   val FakeThriftMethod = new ThriftMethod {
-    val name: String = "fakeThriftMethod"
+    override val name = "fakeThriftMethod"
 
+    /** Thrift annotations (user-defined key-value metadata) on the method */
     override def annotations: Map[String, String] = ???
 
-    def serviceName: String = "FakeService"
+    /** Thrift service name. A thrift service is a list of methods. */
+    override def serviceName: String = "FakeService"
 
-    def serviceToFunction(svc: ServiceType): FunctionType = ???
+    /** Convert a service implementation of this method into a function implementation */
+    override def serviceToFunction(svc: ServiceType): FunctionType = ???
 
-    def oneway: Boolean = ???
+    /** True for oneway thrift methods */
+    override def oneway: Boolean = ???
 
-    def argsCodec: ThriftStructCodec3[Args] = ???
+    /** Codec for the request args */
+    override def argsCodec: ThriftStructCodec3[Args] = ???
 
-    def responseCodec: ThriftStructCodec3[Result] = ???
+    /** Codec for the response */
+    override def responseCodec: ThriftStructCodec3[Result] = ???
 
-    def functionToService(f: FunctionType): ServiceType = ???
-
-    def toServiceIfaceService(f: FunctionType): ServiceIfaceServiceType = ???
+    /** Convert a function implementation of this method into a service implementation */
+    override def functionToService(f: FunctionType): ServiceType = ???
 
     override def toString: String = name
   }

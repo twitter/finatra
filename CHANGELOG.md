@@ -10,10 +10,6 @@ All notable changes to this project will be documented in this file. Note that `
 
 * finatra: Bump guava to 19.0. ``RB_ID=907807``
 
-* inject-thrift-client: Various APIs have changed to work with `ThriftMethod.SuccessType`
-  instead of `ThriftMethod.Result`. See `ThriftClientFilterChain`, `Controller`,
-  `ThriftWarmup`, `PossiblyRetryable`. ``RB_ID=908846``
-
 ### Fixed
 
 ### Closed
