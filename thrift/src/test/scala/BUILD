@@ -30,7 +30,7 @@ junit_tests(
     'util/util-stats/src/main/scala:scala',
   ],
   fatal_warnings=True,
-  sources=rglobs('*.scala'),
+  sources=rglobs('com/twitter/finatra/thrift/tests/*.scala'),
   resources=[
     'finatra/thrift/src/test/resources'
   ]
