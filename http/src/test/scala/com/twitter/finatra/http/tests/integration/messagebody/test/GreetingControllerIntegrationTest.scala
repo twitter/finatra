@@ -2,27 +2,25 @@ package com.twitter.finatra.http.tests.integration.messagebody.test
 
 import com.google.common.net.MediaType
 import com.twitter.finagle.http.Status
-import com.twitter.finatra.http.tests.integration.messagebody.main.GreetingServer
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.finatra.http.tests.integration.messagebody.main.GreetingServer
+import com.twitter.inject.server.FeatureTest
 
-class GreetingControllerIntegrationTest extends WordSpecFeatureTest {
+class GreetingControllerIntegrationTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(
-    new GreetingServer,
-    defaultRequestHeaders = Map(),
-    flags = Map())
+    new GreetingServer)
 
   val requestPath = "/greet?name=Bob"
 
-  "get English greeting" in {
+  test("get English greeting") {
     server.httpGet(
       path = requestPath,
       andExpect = Status.Ok,
       withBody = "Hello Bob")
   }
 
-  "get Spanish greeting" in {
+  test("get Spanish greeting") {
     server.httpGet(
       path = requestPath,
       headers = Map("Accept-Language" -> "es"),
@@ -30,7 +28,7 @@ class GreetingControllerIntegrationTest extends WordSpecFeatureTest {
       withBody = "Hola Bob")
   }
 
-  "get English json greeting" in {
+  test("get English json greeting") {
     server.httpGet(
       path = requestPath,
       accept = MediaType.JSON_UTF_8,
@@ -38,7 +36,7 @@ class GreetingControllerIntegrationTest extends WordSpecFeatureTest {
       withJsonBody = """{ "greeting" : "Hello Bob" }""")
   }
 
-  "get Spanish json greeting" in {
+  test("get Spanish json greeting") {
     server.httpGet(
       path = requestPath,
       accept = MediaType.JSON_UTF_8,
@@ -46,5 +44,4 @@ class GreetingControllerIntegrationTest extends WordSpecFeatureTest {
       andExpect = Status.Ok,
       withJsonBody = """{ "greeting" : "Hola Bob" }""")
   }
-
 }

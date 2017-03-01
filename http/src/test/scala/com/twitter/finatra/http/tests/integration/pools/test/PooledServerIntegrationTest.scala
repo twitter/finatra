@@ -3,13 +3,13 @@ package com.twitter.finatra.http.tests.integration.pools.test
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.tests.integration.pools.main.{PooledController, PooledServer}
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.inject.server.FeatureTest
 
-class PooledServerIntegrationTest extends WordSpecFeatureTest {
+class PooledServerIntegrationTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(new PooledServer)
 
-  "PooledServer should return right away" in {
+  test("PooledServer should return right away") {
     for (i <- 1 to 100) {
       server.httpGet("/hi?id=" + i, andExpect = Ok)
     }

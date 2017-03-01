@@ -560,19 +560,6 @@ class DoEverythingController @Inject()(
 
   /* Admin routes */
 
-  get("/admin/finatra/foo", admin = true) { r: Request =>
-    "on the admin interface"
-  }
-
-  // routes that start with /admin/finatra ALWAYS added to admin
-  get("/admin/finatra/implied") { r: Request =>
-    response.ok("on the admin interface")
-  }
-
-  get("/admin/bar", admin = true) { r: Request =>
-    response.ok("on the admin interface")
-  }
-
   get("/admin/foo") { request: Request =>
     response.ok("on the external interface")
   }

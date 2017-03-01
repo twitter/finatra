@@ -4,13 +4,13 @@ import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.routing.{Route, Routes}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.util.Future
 import org.scalatest.OptionValues
 
-class RoutesTest extends WordSpecTest with OptionValues {
+class RoutesTest extends Test with OptionValues {
 
-  "constant route" in {
+  test("constant route") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 
@@ -24,7 +24,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/foo")) should be('empty)
   }
 
-  "constant route (bypassFilters = true)" in {
+  test("constant route (bypassFilters = true)") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 
@@ -38,7 +38,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/foo"), bypassFilters = true) should be('empty)
   }
 
-  "constant route with optional trailing slashes" in {
+  test("constant route with optional trailing slashes") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/?")), Method.Get)
 
@@ -52,7 +52,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/foo")) should be('empty)
   }
 
-  "constant route with optional trailing slashes (bypassFilters = true)" in {
+  test("constant route with optional trailing slashes (bypassFilters = true)") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/?")), Method.Get)
 
@@ -66,7 +66,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/foo"), bypassFilters = true) should be('empty)
   }
 
-  "constant route with wildcard" in {
+  test("constant route with wildcard") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/:*")), Method.Get)
 
@@ -80,7 +80,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/foo")) should be('empty)
   }
 
-  "constant route with wildcard and optional trailing slashes" in {
+  test("constant route with wildcard and optional trailing slashes") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/:*/?")), Method.Get)
 
@@ -94,7 +94,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/foo")) should be('empty)
   }
 
-  "path pattern route" in {
+  test("path pattern route") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/:id")), Method.Get)
 
@@ -105,7 +105,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/groups/")) should be('empty)
   }
 
-  "path pattern route (bypassFilters = true)" in {
+  test("path pattern route (bypassFilters = true)") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/:id")), Method.Get)
 
@@ -116,7 +116,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/groups/"), bypassFilters = true) should be('empty)
   }
 
-  "path pattern route with optional trailing slash" in {
+  test("path pattern route with optional trailing slash") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/:id/?")), Method.Get)
 
@@ -130,7 +130,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/groups/")) should be('empty)
   }
 
-  "path pattern route with wildcard" in {
+  test("path pattern route with wildcard") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/:id/:*")), Method.Get)
 
@@ -144,7 +144,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/groups/")) should be('empty)
   }
 
-  "path pattern route with wildcard and optional trailing slash identifier" in {
+  test("path pattern route with wildcard and optional trailing slash identifier") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/:id/:*/?")), Method.Get)
 
@@ -158,7 +158,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
       Request("/groups/")) should be('empty)
   }
 
-  "route info" in {
+  test("route info") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 
@@ -168,7 +168,7 @@ class RoutesTest extends WordSpecTest with OptionValues {
     RouteInfo(request).value should be(RouteInfo("my_endpoint", "/groups/"))
   }
 
-  "route info (bypassFilters = true)" in {
+  test("route info (bypassFilters = true)") {
     val routes = Routes.createForMethod(
       Seq(createRoute(Method.Get, "/groups/")), Method.Get)
 

@@ -4,184 +4,181 @@ import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finagle.{http => finagle}
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.request.RequestUtils
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import org.apache.commons.fileupload.util.FileItemHeadersImpl
 import org.apache.commons.io.IOUtils
 import org.specs2.mock.Mockito
 import scala.collection.JavaConverters._
 
-class MultiParamsTest extends WordSpecTest with Mockito {
+class MultiParamsTest extends Test with Mockito {
 
-  "multipart parsing" should {
+  test("handle mixed multipart") {
 
-    "handle mixed multipart" in {
+    /*
+      'upload.bytes' is a serialized request of a multipart upload from Chrome using the form:
+        <form enctype="multipart/form-data" action="/groups_file?debug=true" method="POST">
+          <label for="groups">Filename:</label>
+          <input type="file" name="groups" id="groups"><br>
+          <input type="hidden" name="type" value="text"/>
+          <input type="submit" name="submit" value="Submit">
+        </form>
 
-      /*
-        'upload.bytes' is a serialized request of a multipart upload from Chrome using the form:
-          <form enctype="multipart/form-data" action="/groups_file?debug=true" method="POST">
-            <label for="groups">Filename:</label>
-            <input type="file" name="groups" id="groups"><br>
-            <input type="hidden" name="type" value="text"/>
-            <input type="submit" name="submit" value="Submit">
-          </form>
+      The infamous 'dealwithit.gif' was used for the "groups" file
+    */
 
-        The infamous 'dealwithit.gif' was used for the "groups" file
-      */
+    val fileUploadFileBytes = resourceAsBytes("/multipart/dealwithit.gif")
+    val requestAsBytes = resourceAsBytes("/multipart/upload.bytes")
+    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
 
-      val fileUploadFileBytes = resourceAsBytes("/multipart/dealwithit.gif")
-      val requestAsBytes = resourceAsBytes("/multipart/upload.bytes")
-      val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val expectedMultiParams = Map[String, MultipartItem](
 
-      val expectedMultiParams = Map[String, MultipartItem](
+      "type" -> MultipartItem(
+        data = "text".getBytes("utf-8"),
+        fieldName = "type",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"type\""))),
 
-        "type" -> MultipartItem(
-          data = "text".getBytes("utf-8"),
-          fieldName = "type",
-          isFormField = true,
-          contentType = None,
-          filename = None,
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"type\""))),
+      "submit" -> MultipartItem(
+        data = "Submit".getBytes("utf-8"),
+        fieldName = "submit",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"submit\""))),
 
-        "submit" -> MultipartItem(
-          data = "Submit".getBytes("utf-8"),
-          fieldName = "submit",
-          isFormField = true,
-          contentType = None,
-          filename = None,
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"submit\""))),
+      "groups" -> MultipartItem(
+        data = fileUploadFileBytes,
+        fieldName = "groups",
+        isFormField = false,
+        contentType = Some("image/gif"),
+        filename = Some("dealwithit.gif"),
+        headers = mkHeader(Map(
+          "content-disposition" -> "form-data; name=\"groups\"; filename=\"dealwithit.gif\"",
+          "content-type" -> "image/gif"))))
 
-        "groups" -> MultipartItem(
-          data = fileUploadFileBytes,
-          fieldName = "groups",
-          isFormField = false,
-          contentType = Some("image/gif"),
-          filename = Some("dealwithit.gif"),
-          headers = mkHeader(Map(
-            "content-disposition" -> "form-data; name=\"groups\"; filename=\"dealwithit.gif\"",
-            "content-type" -> "image/gif"))))
+    assertMultiParams(finagleRequest, expectedMultiParams)
+  }
 
-      assertMultiParams(finagleRequest, expectedMultiParams)
-    }
+  test("handle MS Surface Upload with quoted boundary") {
+    val fileUploadFileBytes = resourceAsBytes("/multipart/TempProfileImageCrop.png")
+    val requestAsBytes = resourceAsBytes("/multipart/ms-surface.bytes")
+    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
 
-    "handle MS Surface Upload with quoted boundary" in {
-      val fileUploadFileBytes = resourceAsBytes("/multipart/TempProfileImageCrop.png")
-      val requestAsBytes = resourceAsBytes("/multipart/ms-surface.bytes")
-      val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val expectedMultiParams = Map[String, MultipartItem](
+      "banner" -> MultipartItem(
+        data = fileUploadFileBytes,
+        fieldName = "banner",
+        isFormField = false,
+        contentType = None,
+        filename = Some("TempProfileImageCrop.png"),
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=banner; filename=TempProfileImageCrop.png"))))
 
-      val expectedMultiParams = Map[String, MultipartItem](
-        "banner" -> MultipartItem(
-          data = fileUploadFileBytes,
-          fieldName = "banner",
-          isFormField = false,
-          contentType = None,
-          filename = Some("TempProfileImageCrop.png"),
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=banner; filename=TempProfileImageCrop.png"))))
+    assertMultiParams(finagleRequest, expectedMultiParams)
+  }
 
-      assertMultiParams(finagleRequest, expectedMultiParams)
-    }
+  test("handle Iphone Upload with multiple boundaries") {
+    val fileUploadFileBytes = resourceAsBytes("/multipart/image.jpg")
+    val requestAsBytes = resourceAsBytes("/multipart/request-POST-iphone.bytes")
+    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
 
-    "handle Iphone Upload with multiple boundaries" in {
-      val fileUploadFileBytes = resourceAsBytes("/multipart/image.jpg")
-      val requestAsBytes = resourceAsBytes("/multipart/request-POST-iphone.bytes")
-      val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val expectedMultiParams = Map[String, MultipartItem](
 
-      val expectedMultiParams = Map[String, MultipartItem](
+      "offset_top" -> MultipartItem(
+        data = "0".getBytes("utf-8"),
+        fieldName = "offset_top",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"offset_top\""))),
 
-        "offset_top" -> MultipartItem(
-          data = "0".getBytes("utf-8"),
-          fieldName = "offset_top",
-          isFormField = true,
-          contentType = None,
-          filename = None,
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"offset_top\""))),
+      "offset_left" -> MultipartItem(
+        data = "0".getBytes("utf-8"),
+        fieldName = "offset_left",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"offset_left\""))),
 
-        "offset_left" -> MultipartItem(
-          data = "0".getBytes("utf-8"),
-          fieldName = "offset_left",
-          isFormField = true,
-          contentType = None,
-          filename = None,
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"offset_left\""))),
+      "height" -> MultipartItem(
+        data = "626".getBytes("utf-8"),
+        fieldName = "height",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"height\""))),
 
-        "height" -> MultipartItem(
-          data = "626".getBytes("utf-8"),
-          fieldName = "height",
-          isFormField = true,
-          contentType = None,
-          filename = None,
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"height\""))),
+      "width" -> MultipartItem(
+        data = "1252".getBytes("utf-8"),
+        fieldName = "width",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"width\""))),
 
-        "width" -> MultipartItem(
-          data = "1252".getBytes("utf-8"),
-          fieldName = "width",
-          isFormField = true,
-          contentType = None,
-          filename = None,
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"width\""))),
+      "true" -> MultipartItem(
+        data = "include_user_entities".getBytes("utf-8"),
+        fieldName = "true",
+        isFormField = true,
+        contentType = None,
+        filename = None,
+        headers = mkHeader(Map("content-disposition" -> "form-data; name=\"true\""))),
 
-        "true" -> MultipartItem(
-          data = "include_user_entities".getBytes("utf-8"),
-          fieldName = "true",
-          isFormField = true,
-          contentType = None,
-          filename = None,
-          headers = mkHeader(Map("content-disposition" -> "form-data; name=\"true\""))),
+      "banner" -> MultipartItem(
+        data = fileUploadFileBytes,
+        fieldName = "banner",
+        isFormField = false,
+        contentType = Some("image/jpeg"),
+        filename = Some("image.jpg"),
+        headers = mkHeader(Map(
+          "content-disposition" -> "form-data; name=\"banner\"; filename=\"image.jpg\"",
+          "content-type" -> "image/jpeg"))))
 
-        "banner" -> MultipartItem(
-          data = fileUploadFileBytes,
-          fieldName = "banner",
-          isFormField = false,
-          contentType = Some("image/jpeg"),
-          filename = Some("image.jpg"),
-          headers = mkHeader(Map(
-            "content-disposition" -> "form-data; name=\"banner\"; filename=\"image.jpg\"",
-            "content-type" -> "image/jpeg"))))
+    assertMultiParams(finagleRequest, expectedMultiParams)
+  }
 
-      assertMultiParams(finagleRequest, expectedMultiParams)
-    }
+  test("Android Upload with multiple boundaries") {
+    val fileUploadFileBytes = resourceAsBytes("/multipart/kM1K5C4p")
+    val requestAsBytes = resourceAsBytes("/multipart/request-POST-android.bytes")
+    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
 
-    "Android Upload with multiple boundaries" in {
-      val fileUploadFileBytes = resourceAsBytes("/multipart/kM1K5C4p")
-      val requestAsBytes = resourceAsBytes("/multipart/request-POST-android.bytes")
-      val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val expectedMultiParams = Map[String, MultipartItem](
+      "banner" -> MultipartItem(
+        data = fileUploadFileBytes,
+        fieldName = "banner",
+        isFormField = false,
+        contentType = Some("image/jpeg"),
+        filename = Some("kM1K5C4p"),
+        headers = mkHeader(Map(
+          "content-disposition" -> "form-data; name=\"banner\"; filename=\"kM1K5C4p\"",
+          "content-type" -> "image/jpeg",
+          "content-transfer-encoding" -> "binary"))))
 
-      val expectedMultiParams = Map[String, MultipartItem](
-        "banner" -> MultipartItem(
-          data = fileUploadFileBytes,
-          fieldName = "banner",
-          isFormField = false,
-          contentType = Some("image/jpeg"),
-          filename = Some("kM1K5C4p"),
-          headers = mkHeader(Map(
-            "content-disposition" -> "form-data; name=\"banner\"; filename=\"kM1K5C4p\"",
-            "content-type" -> "image/jpeg",
-            "content-transfer-encoding" -> "binary"))))
+    assertMultiParams(finagleRequest, expectedMultiParams)
+  }
 
-      assertMultiParams(finagleRequest, expectedMultiParams)
-    }
+  test("invalid upload data") {
+    val requestAsBytes = resourceAsBytes("/multipart/request-POST-android.bytes")
+    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    finagleRequest.setContentType("text/html; bounfoodary=foo; charset=UTF-8\"")
 
-    "invalid upload data" in {
-      val requestAsBytes = resourceAsBytes("/multipart/request-POST-android.bytes")
-      val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
-      finagleRequest.setContentType("text/html; bounfoodary=foo; charset=UTF-8\"")
+    assertMultiParamsEmpty(finagleRequest)
+  }
 
-      assertMultiParamsEmpty(finagleRequest)
-    }
+  test("return empty map if not post") {
+    val mockFinagleRequest = mock[finagle.Request]
+    mockFinagleRequest.method returns Method.Get
 
-    "return empty map if not post" in {
-      val mockFinagleRequest = mock[finagle.Request]
-      mockFinagleRequest.method returns Method.Get
+    assertMultiParamsEmpty(mockFinagleRequest)
+  }
 
-      assertMultiParamsEmpty(mockFinagleRequest)
-    }
+  test("return empty map if post, but not multipart content type") {
+    val mockFinagleRequest = mock[finagle.Request]
+    mockFinagleRequest.method returns Method.Post
+    mockFinagleRequest.contentType returns None
 
-    "return empty map if post, but not multipart content type" in {
-      val mockFinagleRequest = mock[finagle.Request]
-      mockFinagleRequest.method returns Method.Post
-      mockFinagleRequest.contentType returns None
-
-      assertMultiParamsEmpty(mockFinagleRequest)
-    }
+    assertMultiParamsEmpty(mockFinagleRequest)
   }
 
   private def resourceAsBytes(resource: String) = {
@@ -234,5 +231,5 @@ class MultiParamsTest extends WordSpecTest with Mockito {
 
   private def headerString(item: MultipartItem) = {
     item.headers.getHeaderNames.asScala.map(name => name + ":" + item.headers.getHeader(name)).mkString("|")
-   }
+  }
 }

@@ -5,11 +5,11 @@ import com.twitter.finatra.http.tests.integration.multiserver.add2server.Add2Ser
 import com.twitter.finatra.http.{HttpMockResponses, EmbeddedHttpServer}
 import com.twitter.finatra.httpclient.HttpClient
 import com.twitter.inject.Mockito
-import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
 
 class Add2ServerFeatureTest
-  extends WordSpecFeatureTest
+  extends FeatureTest
   with Mockito
   with HttpMockResponses {
 
@@ -19,7 +19,7 @@ class Add2ServerFeatureTest
     new EmbeddedHttpServer(new Add2Server)
         .bind[HttpClient](mockHttpClient)
 
-  "add2" in {
+  test("add2") {
     mockHttpClient.execute(any[Request]) returns(
       Future(ok("6")),
       Future(ok("7")))

@@ -9,12 +9,12 @@ import com.twitter.finatra.json.modules.FinatraJacksonModule
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.buf._
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.{Mockito, WordSpecIntegrationTest}
+import com.twitter.inject.{Mockito, IntegrationTest}
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Future}
 import scala.concurrent.{Future => ScalaFuture}
 
-class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mockito {
+class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
   override val injector = TestInjector(
     MessageBodyModule,
@@ -28,67 +28,67 @@ class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mock
   val ford = Car("Ford")
   val okResponse = SimpleResponse(Status.Ok, "bob")
 
-  "Future Some String" in {
+  test("Future Some String") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSomeString),
       withBody = "hello")
   }
 
-  "Future None String" in {
+  test("Future None String") {
     assertStatus(
       callbackConverter.convertToFutureResponse(futureNoneString),
       expectedStatus = Status.NotFound)
   }
 
-  "Future Some Product" in {
+  test("Future Some Product") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSomeProduct),
       withBody = """{"name":"Ford"}""")
   }
 
-  "Future Some Trait" in {
+  test("Future Some Trait") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSomeTrait),
       withBody = """{"name":"Ford"}""")
   }
 
-  "Future String" in {
+  test("Future String") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureString),
       withBody = "bob")
   }
 
-  "Future Response" in {
+  test("Future Response") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureResponse),
       withBody = "bob")
   }
 
-  "Future Some Response" in {
+  test("Future Some Response") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSomeResponse),
       withBody = "bob")
   }
 
-  "Future None Response" in {
+  test("Future None Response") {
     assertStatus(
       callbackConverter.convertToFutureResponse(futureNoneResponse),
       expectedStatus = Status.NotFound)
   }
 
-  "Future Seq String" in {
+  test("Future Seq String") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSeqString),
       withBody = """["bob"]""")
   }
 
-  "Future Seq Car" in {
+  test("Future Seq Car") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSeqCar),
       withBody = """[{"name":"Ford"}]""")
   }
 
-  "Future Seq CarTrait" in {
+  test("Future Seq CarTrait") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSeqCarTrait),
       withBody = """[{"name":"Ford"}]""")
@@ -96,116 +96,116 @@ class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mock
   
   
   // ScalaFuture
-  "ScalaFuture Some String" in {
+  test("ScalaFuture Some String") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSomeString),
       withBody = "hello")
   }
 
-  "ScalaFuture None String" in {
+  test("ScalaFuture None String") {
     assertStatus(
       callbackConverter.convertToFutureResponse(scalaFutureNoneString),
       expectedStatus = Status.NotFound)
   }
 
-  "ScalaFuture Some Product" in {
+  test("ScalaFuture Some Product") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSomeProduct),
       withBody = """{"name":"Ford"}""")
   }
 
-  "ScalaFuture Some Trait" in {
+  test("ScalaFuture Some Trait") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSomeTrait),
       withBody = """{"name":"Ford"}""")
   }
 
-  "ScalaFuture String" in {
+  test("ScalaFuture String") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureString),
       withBody = "bob")
   }
 
-  "ScalaFuture Response" in {
+  test("ScalaFuture Response") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureResponse),
       withBody = "bob")
   }
 
-  "ScalaFuture Some Response" in {
+  test("ScalaFuture Some Response") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSomeResponse),
       withBody = "bob")
   }
 
-  "ScalaFuture None Response" in {
+  test("ScalaFuture None Response") {
     assertStatus(
       callbackConverter.convertToFutureResponse(scalaFutureNoneResponse),
       expectedStatus = Status.NotFound)
   }
 
-  "ScalaFuture Seq String" in {
+  test("ScalaFuture Seq String") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSeqString),
       withBody = """["bob"]""")
   }
 
-  "ScalaFuture Seq Car" in {
+  test("ScalaFuture Seq Car") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSeqCar),
       withBody = """[{"name":"Ford"}]""")
   }
 
-  "ScalaFuture Seq CarTrait" in {
+  test("ScalaFuture Seq CarTrait") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSeqCarTrait),
       withBody = """[{"name":"Ford"}]""")
   }
 
 
-  "Object" in {
+  test("Object") {
     assertOk(
       callbackConverter.convertToFutureResponse(objectCallback),
       withBody = """asdf""")
   }
 
-  "None" in {
+  test("None") {
     assertStatus(
       callbackConverter.convertToFutureResponse(noneCallback),
       expectedStatus = Status.NotFound)
   }
 
-  "Some" in {
+  test("Some") {
     assertOk(
       callbackConverter.convertToFutureResponse(someCallback),
       withBody = """asdf""")
   }
 
-  "Nothing" in {
+  test("Nothing") {
     intercept[Exception] {
       callbackConverter.convertToFutureResponse(noParameterCallback)
     }
   }
 
-  "Int" in {
+  test("Int") {
     intercept[Exception] {
       callbackConverter.convertToFutureResponse(intParameterCallback)
     }
   }
 
-  "Map[String, String]" in {
+  test("Map[String, String]") {
     assertOk(
       callbackConverter.convertToFutureResponse(stringMapCallback),
       withBody = """{"message":"Hello, World!"}""")
   }
 
-  "String" in {
+  test("String") {
     assertOk(
       callbackConverter.convertToFutureResponse(stringCallback),
       withBody = "Hello, World!")
   }
 
-  "AsyncStream request" in {
+  test("AsyncStream request") {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")
     request.setChunked(true)
@@ -219,7 +219,7 @@ class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mock
     assertOk(response, "List(1, 2)")
   }
 
-  "AsyncStream response" in {
+  test("AsyncStream response") {
     val converted = callbackConverter.convertToFutureResponse(asyncStreamResponse)
 
     val response = Await.result(converted(Request()))
@@ -227,7 +227,7 @@ class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mock
     Await.result(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
 
-  "AsyncStream request and response" in {
+  test("AsyncStream request and response") {
     val jsonStr = "[1,2]"
     val request = Request(HttpMethod.Post, "/")
     request.setChunked(true)
@@ -242,7 +242,7 @@ class CallbackConverterIntegrationTest extends WordSpecIntegrationTest with Mock
     Await.result(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
   }
 
-  "Null" in {
+  test("Null") {
     assertOk(
       callbackConverter.convertToFutureResponse(nullCallback),
       withBody = "")

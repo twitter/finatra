@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=909349``
+
 * finatra: Bump guava to 19.0. ``RB_ID=907807``
 
 * inject-thrift-client: Various APIs have changed to work with `ThriftMethod.SuccessType`

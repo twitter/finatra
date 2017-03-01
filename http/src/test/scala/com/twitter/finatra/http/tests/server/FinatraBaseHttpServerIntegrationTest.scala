@@ -2,25 +2,23 @@ package com.twitter.finatra.http.tests.server
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.WordSpecTest
+import com.twitter.finatra.http.internal.server.BaseHttpServer
+import com.twitter.inject.Test
 import com.twitter.util.Future
 
-class FinatraBaseHttpServerIntegrationTest extends WordSpecTest {
+class FinatraBaseHttpServerIntegrationTest extends Test {
 
-  "HiServiceServer" should {
-    "respond" in {
-      val server = new EmbeddedHttpServer(new HiServer)
-      try {
-        server.httpGet(
-          "/asdf",
-          andExpect = Status.Ok,
-          withBody = "hi")
-      }
-      finally {
-        server.close()
-      }
+  test("HiServiceServer#respond") {
+    val server = new EmbeddedHttpServer(new HiServer)
+    try {
+      server.httpGet(
+        "/asdf",
+        andExpect = Status.Ok,
+        withBody = "hi")
+    }
+    finally {
+      server.close()
     }
   }
 }

@@ -6,12 +6,12 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import org.apache.commons.io.FileUtils
 
-class LocalFileServerFeatureTest extends WordSpecTest {
+class LocalFileServerFeatureTest extends Test {
 
-  "local file mode" in {
+  test("local file mode") {
     assertServer(
       new Controller {
         get("/foo") { request: Request =>
@@ -26,7 +26,7 @@ class LocalFileServerFeatureTest extends WordSpecTest {
     }
   }
 
-  "server file which is directory" in {
+  test("server file which is directory") {
     assertServer(
       new Controller {
         get("/foo") { request: Request =>
@@ -41,7 +41,7 @@ class LocalFileServerFeatureTest extends WordSpecTest {
     }
   }
 
-  "server existing file" in {
+  test("server existing file") {
     val path = "/tmp"
     val filename = "finatra-test-file.txt"
     val fileContent = "file content"
@@ -61,7 +61,7 @@ class LocalFileServerFeatureTest extends WordSpecTest {
     }
   }
 
-  "server index when file doesn't exists" in {
+  test("server index when file doesn't exists") {
     val path = "/tmp"
     val indexName = "index.html"
     val filename = "non-existing-file.txt"
@@ -83,8 +83,8 @@ class LocalFileServerFeatureTest extends WordSpecTest {
   }
 
   private def assertServer(
-    controller: Controller,
-    flags: Map[String, String])(asserts: EmbeddedHttpServer => Unit) = {
+                            controller: Controller,
+                            flags: Map[String, String])(asserts: EmbeddedHttpServer => Unit) = {
 
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {

@@ -2,13 +2,13 @@ package com.twitter.finatra.http.tests.request
 
 import com.twitter.finagle.http.MapParamMap
 import com.twitter.finatra.http.internal.request.RouteParamMap
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class RouteParamMapTest extends WordSpecTest {
+class RouteParamMapTest extends Test {
 
   val emptyFinagleParamMap = new MapParamMap(Map())
 
-  "string params" in {
+  test("string params") {
     val params = new RouteParamMap(
       emptyFinagleParamMap,
       Map("name" -> "bob"))
@@ -21,7 +21,7 @@ class RouteParamMapTest extends WordSpecTest {
     }
   }
 
-  "long params" in {
+  test("long params") {
     val params = new RouteParamMap(
       emptyFinagleParamMap,
       Map("age" -> "10"))
@@ -31,14 +31,14 @@ class RouteParamMapTest extends WordSpecTest {
     params.getLong("age").get should equal(10L)
   }
 
-  "int params" in {
+  test("int params") {
     val params = new RouteParamMap(
       emptyFinagleParamMap,
       Map("age" -> "10"))
     params.getInt("age") should equal(Some(10))
   }
 
-  "boolean params" in {
+  test("boolean params") {
     val params = new RouteParamMap(
       emptyFinagleParamMap,
       Map(

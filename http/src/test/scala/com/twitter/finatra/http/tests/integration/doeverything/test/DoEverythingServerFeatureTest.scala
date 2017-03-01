@@ -12,12 +12,12 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.domain.Somet
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.finatra.json.JsonDiff._
-import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
 
-class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
+class DoEverythingServerFeatureTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
@@ -44,833 +44,791 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     server.inMemoryStatsReceiver.clear()
   }
 
-  "DoEverythingServer" should {
-    "named string" in {
-      namedExampleString should equal("named")
-    }
-
-    /* Admin routes */
-
-    "GET /admin/finatra/foo" in {
-      // on the admin
-      server.httpGet(
-        "/admin/finatra/foo",
-        routeToAdminServer = true,
-        andExpect = Status.Ok,
-        withBody = "on the admin interface")
-      // on the admin and will be routed even if routeToAdminServer flag isn't set because route starts with /admin/finatra
-      server.httpGet(
-        "/admin/finatra/foo",
-        andExpect = Status.Ok,
-        withBody = "on the admin interface")
-    }
-
-    "GET /admin/finatra/implied" in {
-      // on the admin
-      server.httpGet(
-        "/admin/finatra/implied",
-        routeToAdminServer = true,
-        andExpect = Status.Ok,
-        withBody = "on the admin interface")
-      // on the admin and will be routed even if routeToAdminServer flag isn't set because route starts with /admin/finatra
-      server.httpGet(
-        "/admin/finatra/implied",
-        andExpect = Status.Ok,
-        withBody = "on the admin interface")
-    }
-
-    "GET /admin/bar" in {
-      // on the admin
-      server.httpGet(
-        "/admin/bar",
-        routeToAdminServer = true,
-        andExpect = Status.Ok,
-        withBody = "on the admin interface")
-      // on the admin and will be routed even if routeToAdminServer flag isn't set as it's in the list of admin http routes on the server
-      server.httpGet(
-        "/admin/bar",
-        andExpect = Status.Ok,
-        withBody = "on the admin interface")
-    }
-
-    "GET /admin/foo" in {
-      // NOT on the admin
-      server.httpGet(
-        "/admin/foo",
-        routeToAdminServer = true,
-        andExpect = Status.NotFound)
-      // on the external
-      server.httpGet(
-        "/admin/foo",
-        routeToAdminServer = false,
-        andExpect = Status.Ok,
-        withBody = "on the external interface")
-    }
-
-    "GET /admin/external/filtered" in {
-      // NOT on the admin
-      server.httpGet(
-        "/admin/external/filtered",
-        routeToAdminServer = true,
-        andExpect = Status.NotFound)
-      // on the external and reads headers appended by external filters
-      server.httpGet(
-        "/admin/external/filtered",
-        routeToAdminServer = false,
-        andExpect = Ok,
-        withBody = "01")
-    }
-
-    "respond to /example" in {
-      server.httpGet(
-        "/example/routing/always",
-        withBody = "always response")
-
-      server.httpGet(
-        "/example/routing/always2",
-        withBody = "always response")
-    }
-
-    "GET /plaintext" in {
-      val response1 = server.httpGet(
-        "/plaintext",
-        withBody = "Hello, World!")
-
-      response1.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
-
-      val response2 = server.httpGet(
-        "/plaintext/",
-        withBody = "Hello, World!")
-
-      response2.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
-    }
-
-    "/plaintext (prefixed)" in {
-      val response = server.httpGet(
-          "/1.1/plaintext",
-          withBody = "Hello, World!")
-
-      response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
-    }
-
-    "GET /bytearray" in {
-      val response = server.httpGet(
-        "/bytearray")
-
-      response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
-    }
-
-    "GET /inputstream" in {
-      val response = server.httpGet(
-        "/inputstream")
-
-      response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
-    }
-
-    "GET /useragent" in {
-      server.httpGet(
-        "/useragent",
-        headers = Map("User-Agent" -> "Firefox"),
-        withBody = "Firefox")
-    }
-
-    "response should contain server/date headers" in {
-      val response = server.httpGet("/example/routing/always")
-      response.statusCode should equal(200)
-      response.contentString should equal("always response")
-
-      response.headerMap.get("Date") should not be empty
-      response.headerMap.get("Server") should not be empty
-    }
-
-    "json response to /example" in {
-      val response = server.httpGet("/example/routing/json/1")
-      response.statusCode should equal(200)
-      jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
-    }
-
-    "GET /stringMap" in {
-      server.httpGet(
-        "/stringMap",
-        andExpect = Ok,
-        withJsonBody = """{"message":"Hello, World!"}""")
-    }
-
-    "GET /ok" in {
-      server.httpGet(
-        "/ok",
-        andExpect = Ok)
-    }
-
-    "GET /created" in {
-      server.httpGet(
-        "/created",
-        andExpect = Created)
-    }
-
-    "respond to /accepted" in {
-      server.httpGet(
-        "/accepted",
-        andExpect = Accepted,
-        withBody = "accepted")
-
-      server.httpGet(
-        "/accepted2",
-        andExpect = Accepted,
-        withBody = "accepted")
-    }
-
-    "GET /json" in {
-      server.httpGet(
-        "/json",
-        withJsonBody = "{}")
-    }
-
-    "GET /json2" in {
-      server.httpGet(
-        "/json2",
-        withJsonBody = "{}")
-    }
-
-    "GET /none" in {
-      server.httpGet(
-        "/none",
-        withBody = "")
-    }
-
-    "GET /bodyunit" in {
-      server.httpGet(
-        "/bodyunit",
-        withBody = "")
-    }
-
-    "GET /bodynull" in {
-      server.httpGet(
-        "/bodynull",
-        withBody = "")
-    }
-
-    "GET /bodyEmptyString" in {
-      server.httpGet(
-        "/bodyEmptyString",
-        withBody = "")
-    }
-
-    "GET /routeParamGetAll/:id" in {
-      server.httpGet(
-        "/routeParamGetAll/1",
-        withJsonBody = """
-        [
-          "1",
-          "1"
-        ]
-        """)
-    }
-
-    "GET /notfound" in {
-      server.httpGet(
-        "/notfound",
-        andExpect = NotFound)
-    }
-
-    "GET /notfound2" in {
-      server.httpGet(
-        "/notfound2",
-        andExpect = NotFound)
-    }
-
-    "GET /notfoundexception" in {
-      server.httpGet(
-        "/notfoundexception",
-        andExpect = NotFound)
-    }
-
-    "GET /notfoundexception2" in {
-      server.httpGet(
-        "/notfoundexception2",
-        andExpect = NotFound)
-    }
-
-    "GET /badrequest" in {
-      server.httpGet(
-        "/badrequest",
-        andExpect = BadRequest)
-    }
-
-    "GET /BadRequestException" in {
-      server.httpGet(
-        "/BadRequestException",
-        andExpect = BadRequest)
-    }
-
-    "GET /forbidden" in {
-      server.httpGet(
-        "/forbidden",
-        andExpect = Forbidden)
-    }
-
-    "GET /ForbiddenException" in {
-      server.httpGet(
-        "/ForbiddenException",
-        andExpect = Forbidden)
-    }
-
-    "GET /ForbiddenException2" in {
-      server.httpGet(
-        "/ForbiddenException2",
-        andExpect = Forbidden)
-    }
-
-    "GET /methodnotallowed" in {
-      server.httpGet(
-        "/methodnotallowed",
-        andExpect = MethodNotAllowed)
-    }
-
-    "GET /unavailable" in {
-      server.httpGet(
-        "/unavailable",
-        andExpect = ServiceUnavailable)
-    }
-
-    "GET /unauthorized" in {
-      server.httpGet(
-        "/unauthorized",
-        andExpect = Unauthorized)
-    }
-
-    "GET /conflict" in {
-      server.httpGet(
-        "/conflict",
-        andExpect = Conflict)
-    }
-
-    "GET /ConflictException" in {
-      server.httpGet(
-        "/ConflictException",
-        andExpect = Conflict)
-    }
-
-    "GET /ConflictException2" in {
-      server.httpGet(
-        "/ConflictException2",
-        andExpect = Conflict)
-    }
-
-    "GET /ConflictException3" in {
-      server.httpGet(
-        "/ConflictException3",
-        andExpect = Conflict)
-    }
-
-    "GET /servererrorexception" in {
-      server.httpGet(
-        "/servererrorexception",
-        andExpect = InternalServerError)
-    }
-
-    "GET /serviceunavailableexception" in {
-      server.httpGet(
-        "/serviceunavailableexception",
-        andExpect = ServiceUnavailable)
-    }
-
-    "GET /serviceunavailableexception2" in {
-      server.httpGet(
-        "/serviceunavailableexception2",
-        andExpect = ServiceUnavailable)
-    }
-
-    "GET /responsebuilder_status_code" in {
-      server.httpGet(
-        "/responsebuilder_status_code",
-        andExpect = ServiceUnavailable)
-    }
-
-    "GET /responsebuilder_status" in {
-      server.httpGet(
-        "/responsebuilder_status",
-        andExpect = ServiceUnavailable)
-    }
-
-    "GET /redirect" in {
-      server.httpGet(
-        "/redirect",
-        andExpect = TemporaryRedirect)
-    }
-
-    "GET /found" in {
-      server.httpGet(
-        "/found",
-        andExpect = Found)
-    }
-
-    "GET /future" in {
-      server.httpGet(
-        "/future",
-        andExpect = Ok,
-        withBody = "future")
-    }
-
-    "POST /foo" in {
-      server.httpPost(
-        "/foo",
-        postBody = "",
-        andExpect = Ok,
-        withBody = "bar")
-    }
-
-    "POST /foo (prefixed)" in {
-      server.httpPost(
-        "/1.1/foo",
-        postBody = "",
-        andExpect = Ok,
-        withBody = "bar")
-    }
-
-    "POST /formPost" in {
-      server.httpFormPost(
-        "/formPost",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Ok,
-        withBody = "bob")
-    }
-
-    "POST /multipartParamsEcho" in {
-      val request = deserializeRequest("/multipart/request-POST-android.bytes")
-      request.uri = "/multipartParamsEcho"
-
-      server.httpRequest(
-        request = request,
-        suppress = true,
-        andExpect = Ok,
-        withJsonBody = """["banner"]""")
-    }
-
-    "POST /formPostMultipart" in {
-      server.httpMultipartFormPost(
-        "/formPostMultipart",
-        params = Seq(
-          FileElement(
-            "file",
-            Buf.ByteArray.Owned("hi".getBytes()),
-            Some("text/plain"),
-            Some("hi.txt"))),
-        andExpect = Ok,
-        withBody = "text/plain")
-    }
-
-    "PUT /multipartParamsPutEcho" in {
-      val request = deserializeRequest("/multipart/request-POST-android.bytes")
-      request.uri = "/multipartParamsPutEcho"
-      request.method = Method.Put
-
-      server.httpRequest(
-        request = request,
-        suppress = true,
-        andExpect = Ok,
-        withJsonBody = """["banner"]""")
-    }
-
-    "POST /formPostView" in {
-      server.httpFormPost(
-        "/formPostView",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Ok,
-        withBody = "age:18\nname:bob\nuser1\nuser2\n")
-    }
-
-    "GET /getView" in {
-      server.httpGet(
-        "/getView?age=18&name=bob",
-        andExpect = Ok,
-        withBody = "age:18\nname:bob\nuser1\nuser2\n")
-    }
-
-    "POST /formPostViewFromBuilderView (from BuilderView with diff template than annotation)" in {
-      server.httpFormPost(
-        "/formPostViewFromBuilderView",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Ok,
-        withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
-    }
-
-    "POST /formPostViewFromBuilderHtml" in {
-      server.httpFormPost(
-        "/formPostViewFromBuilderHtml",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Ok,
-        withBody = "age:18\nname:bob\nuser1\nuser2\n")
-    }
-
-    "POST /formPostViewFromBuilderCreatedView" in {
-      val response = server.httpFormPost(
-        "/formPostViewFromBuilderCreatedView",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Created,
-        withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
-
-      response.location should equal(Some("/foo/1"))
-    }
-
-    "POST /formPostViewFromBuilderCreatedHtml" in {
-      val response = server.httpFormPost(
-        "/formPostViewFromBuilderCreatedHtml",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Created,
-        withBody = "age:18\nname:bob\nuser1\nuser2\n")
-
-      response.location should equal(Some("/foo/1"))
-    }
-
-    "POST user with injected group_id from route param" in {
-      server.httpPost(
-        "/groups/123/users",
-        postBody =
-          """
+  test("named string") {
+    namedExampleString should equal("named")
+  }
+
+  /* Admin routes */
+
+  /* Note that tests against the Global Singleton HttpMuxer break when multiple servers are started in process */
+  test("GET /admin/foo") {
+    // NOT on the admin
+    server.httpGet(
+      "/admin/foo",
+      routeToAdminServer = true,
+      andExpect = Status.NotFound)
+    // on the external
+    server.httpGet(
+      "/admin/foo",
+      routeToAdminServer = false,
+      andExpect = Status.Ok,
+      withBody = "on the external interface")
+  }
+
+  test("GET /admin/external/filtered") {
+    // NOT on the admin
+    server.httpGet(
+      "/admin/external/filtered",
+      routeToAdminServer = true,
+      andExpect = Status.NotFound)
+    // on the external and reads headers appended by external filters
+    server.httpGet(
+      "/admin/external/filtered",
+      routeToAdminServer = false,
+      andExpect = Ok,
+      withBody = "01")
+  }
+
+  test("respond to /example") {
+    server.httpGet(
+      "/example/routing/always",
+      withBody = "always response")
+
+    server.httpGet(
+      "/example/routing/always2",
+      withBody = "always response")
+  }
+
+  test("GET /plaintext") {
+    val response1 = server.httpGet(
+      "/plaintext",
+      withBody = "Hello, World!")
+
+    response1.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+
+    val response2 = server.httpGet(
+      "/plaintext/",
+      withBody = "Hello, World!")
+
+    response2.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+  }
+
+  test("/plaintext (prefixed)") {
+    val response = server.httpGet(
+      "/1.1/plaintext",
+      withBody = "Hello, World!")
+
+    response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+  }
+
+  test("GET /bytearray") {
+    val response = server.httpGet(
+      "/bytearray")
+
+    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+  }
+
+  test("GET /inputstream") {
+    val response = server.httpGet(
+      "/inputstream")
+
+    response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
+  }
+
+  test("GET /useragent") {
+    server.httpGet(
+      "/useragent",
+      headers = Map("User-Agent" -> "Firefox"),
+      withBody = "Firefox")
+  }
+
+  test("response should contain server/date headers") {
+    val response = server.httpGet("/example/routing/always")
+    response.statusCode should equal(200)
+    response.contentString should equal("always response")
+
+    response.headerMap.get("Date") should not be empty
+    response.headerMap.get("Server") should not be empty
+  }
+
+  test("json response to /example") {
+    val response = server.httpGet("/example/routing/json/1")
+    response.statusCode should equal(200)
+    jsonDiff(response.contentString, """{"id":"1","name":"bob","magic":"1","module_magic":"2"}""")
+  }
+
+  test("GET /stringMap") {
+    server.httpGet(
+      "/stringMap",
+      andExpect = Ok,
+      withJsonBody = """{"message":"Hello, World!"}""")
+  }
+
+  test("GET /ok") {
+    server.httpGet(
+      "/ok",
+      andExpect = Ok)
+  }
+
+  test("GET /created") {
+    server.httpGet(
+      "/created",
+      andExpect = Created)
+  }
+
+  test("respond to /accepted") {
+    server.httpGet(
+      "/accepted",
+      andExpect = Accepted,
+      withBody = "accepted")
+
+    server.httpGet(
+      "/accepted2",
+      andExpect = Accepted,
+      withBody = "accepted")
+  }
+
+  test("GET /json") {
+    server.httpGet(
+      "/json",
+      withJsonBody = "{}")
+  }
+
+  test("GET /json2") {
+    server.httpGet(
+      "/json2",
+      withJsonBody = "{}")
+  }
+
+  test("GET /none") {
+    server.httpGet(
+      "/none",
+      withBody = "")
+  }
+
+  test("GET /bodyunit") {
+    server.httpGet(
+      "/bodyunit",
+      withBody = "")
+  }
+
+  test("GET /bodynull") {
+    server.httpGet(
+      "/bodynull",
+      withBody = "")
+  }
+
+  test("GET /bodyEmptyString") {
+    server.httpGet(
+      "/bodyEmptyString",
+      withBody = "")
+  }
+
+  test("GET /routeParamGetAll/:id") {
+    server.httpGet(
+      "/routeParamGetAll/1",
+      withJsonBody = """
+      [
+        "1",
+        "1"
+      ]
+                     """)
+  }
+
+  test("GET /notfound") {
+    server.httpGet(
+      "/notfound",
+      andExpect = NotFound)
+  }
+
+  test("GET /notfound2") {
+    server.httpGet(
+      "/notfound2",
+      andExpect = NotFound)
+  }
+
+  test("GET /notfoundexception") {
+    server.httpGet(
+      "/notfoundexception",
+      andExpect = NotFound)
+  }
+
+  test("GET /notfoundexception2") {
+    server.httpGet(
+      "/notfoundexception2",
+      andExpect = NotFound)
+  }
+
+  test("GET /badrequest") {
+    server.httpGet(
+      "/badrequest",
+      andExpect = BadRequest)
+  }
+
+  test("GET /BadRequestException") {
+    server.httpGet(
+      "/BadRequestException",
+      andExpect = BadRequest)
+  }
+
+  test("GET /forbidden") {
+    server.httpGet(
+      "/forbidden",
+      andExpect = Forbidden)
+  }
+
+  test("GET /ForbiddenException") {
+    server.httpGet(
+      "/ForbiddenException",
+      andExpect = Forbidden)
+  }
+
+  test("GET /ForbiddenException2") {
+    server.httpGet(
+      "/ForbiddenException2",
+      andExpect = Forbidden)
+  }
+
+  test("GET /methodnotallowed") {
+    server.httpGet(
+      "/methodnotallowed",
+      andExpect = MethodNotAllowed)
+  }
+
+  test("GET /unavailable") {
+    server.httpGet(
+      "/unavailable",
+      andExpect = ServiceUnavailable)
+  }
+
+  test("GET /unauthorized") {
+    server.httpGet(
+      "/unauthorized",
+      andExpect = Unauthorized)
+  }
+
+  test("GET /conflict") {
+    server.httpGet(
+      "/conflict",
+      andExpect = Conflict)
+  }
+
+  test("GET /ConflictException") {
+    server.httpGet(
+      "/ConflictException",
+      andExpect = Conflict)
+  }
+
+  test("GET /ConflictException2") {
+    server.httpGet(
+      "/ConflictException2",
+      andExpect = Conflict)
+  }
+
+  test("GET /ConflictException3") {
+    server.httpGet(
+      "/ConflictException3",
+      andExpect = Conflict)
+  }
+
+  test("GET /servererrorexception") {
+    server.httpGet(
+      "/servererrorexception",
+      andExpect = InternalServerError)
+  }
+
+  test("GET /serviceunavailableexception") {
+    server.httpGet(
+      "/serviceunavailableexception",
+      andExpect = ServiceUnavailable)
+  }
+
+  test("GET /serviceunavailableexception2") {
+    server.httpGet(
+      "/serviceunavailableexception2",
+      andExpect = ServiceUnavailable)
+  }
+
+  test("GET /responsebuilder_status_code") {
+    server.httpGet(
+      "/responsebuilder_status_code",
+      andExpect = ServiceUnavailable)
+  }
+
+  test("GET /responsebuilder_status") {
+    server.httpGet(
+      "/responsebuilder_status",
+      andExpect = ServiceUnavailable)
+  }
+
+  test("GET /redirect") {
+    server.httpGet(
+      "/redirect",
+      andExpect = TemporaryRedirect)
+  }
+
+  test("GET /found") {
+    server.httpGet(
+      "/found",
+      andExpect = Found)
+  }
+
+  test("GET /future") {
+    server.httpGet(
+      "/future",
+      andExpect = Ok,
+      withBody = "future")
+  }
+
+  test("POST /foo") {
+    server.httpPost(
+      "/foo",
+      postBody = "",
+      andExpect = Ok,
+      withBody = "bar")
+  }
+
+  test("POST /foo (prefixed)") {
+    server.httpPost(
+      "/1.1/foo",
+      postBody = "",
+      andExpect = Ok,
+      withBody = "bar")
+  }
+
+  test("POST /formPost") {
+    server.httpFormPost(
+      "/formPost",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Ok,
+      withBody = "bob")
+  }
+
+  test("POST /multipartParamsEcho") {
+    val request = deserializeRequest("/multipart/request-POST-android.bytes")
+    request.uri = "/multipartParamsEcho"
+
+    server.httpRequest(
+      request = request,
+      suppress = true,
+      andExpect = Ok,
+      withJsonBody = """["banner"]""")
+  }
+
+  test("POST /formPostMultipart") {
+    server.httpMultipartFormPost(
+      "/formPostMultipart",
+      params = Seq(
+        FileElement(
+          "file",
+          Buf.ByteArray.Owned("hi".getBytes()),
+          Some("text/plain"),
+          Some("hi.txt"))),
+      andExpect = Ok,
+      withBody = "text/plain")
+  }
+
+  test("PUT /multipartParamsPutEcho") {
+    val request = deserializeRequest("/multipart/request-POST-android.bytes")
+    request.uri = "/multipartParamsPutEcho"
+    request.method = Method.Put
+
+    server.httpRequest(
+      request = request,
+      suppress = true,
+      andExpect = Ok,
+      withJsonBody = """["banner"]""")
+  }
+
+  test("POST /formPostView") {
+    server.httpFormPost(
+      "/formPostView",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Ok,
+      withBody = "age:18\nname:bob\nuser1\nuser2\n")
+  }
+
+  test("GET /getView") {
+    server.httpGet(
+      "/getView?age=18&name=bob",
+      andExpect = Ok,
+      withBody = "age:18\nname:bob\nuser1\nuser2\n")
+  }
+
+  test("POST /formPostViewFromBuilderView (from BuilderView with diff template than annotation)") {
+    server.httpFormPost(
+      "/formPostViewFromBuilderView",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Ok,
+      withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
+  }
+
+  test("POST /formPostViewFromBuilderHtml") {
+    server.httpFormPost(
+      "/formPostViewFromBuilderHtml",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Ok,
+      withBody = "age:18\nname:bob\nuser1\nuser2\n")
+  }
+
+  test("POST /formPostViewFromBuilderCreatedView") {
+    val response = server.httpFormPost(
+      "/formPostViewFromBuilderCreatedView",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Created,
+      withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
+
+    response.location should equal(Some("/foo/1"))
+  }
+
+  test("POST /formPostViewFromBuilderCreatedHtml") {
+    val response = server.httpFormPost(
+      "/formPostViewFromBuilderCreatedHtml",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Created,
+      withBody = "age:18\nname:bob\nuser1\nuser2\n")
+
+    response.location should equal(Some("/foo/1"))
+  }
+
+  test("POST user with injected group_id from route param") {
+    server.httpPost(
+      "/groups/123/users",
+      postBody =
+        """
           {
             "name" : "Bob"
           }
-          """",
-        andExpect = Created,
-        withJsonBody =
-          """
+        """",
+      andExpect = Created,
+      withJsonBody =
+        """
             {
               "group_id":123,
               "name":"Bob"
             }
-          """)
-    }
+        """)
+  }
 
-    "POST /multipleRouteParams" in {
-      server.httpPost(
-        "/multipleRouteParams",
-        "",
-        andExpect = InternalServerError)
-    }
+  test("POST /multipleRouteParams") {
+    server.httpPost(
+      "/multipleRouteParams",
+      "",
+      andExpect = InternalServerError)
+  }
 
-    "POST /caseClassWithRequestField" in {
-      server.httpPost(
-        "/caseClassWithRequestField",
-        "",
-        andExpect = Ok)
-    }
+  test("POST /caseClassWithRequestField") {
+    server.httpPost(
+      "/caseClassWithRequestField",
+      "",
+      andExpect = Ok)
+  }
 
-    "GET /null" in {
-      server.httpGet(
-        "/null",
-        andExpect = Ok,
-        withBody = "")
-    }
+  test("GET /null") {
+    server.httpGet(
+      "/null",
+      andExpect = Ok,
+      withBody = "")
+  }
 
-    "GET /empty" in {
-      server.httpGet(
-        "/empty",
-        andExpect = Ok,
-        withBody = "")
-    }
+  test("GET /empty") {
+    server.httpGet(
+      "/empty",
+      andExpect = Ok,
+      withBody = "")
+  }
 
-    "GET /unit" in {
-      val response = server.httpGet(
-        "/unit",
-        andExpect = Ok,
-        withBody = "")
+  test("GET /unit") {
+    val response = server.httpGet(
+      "/unit",
+      andExpect = Ok,
+      withBody = "")
 
-      response.contentLength should equal(Some(0))
-      // no content-type as there is no content-body
-      response.contentType should equal(None)
-    }
+    response.contentLength should equal(Some(0))
+    // no content-type as there is no content-body
+    response.contentType should equal(None)
+  }
 
-    "GET not found path" in {
-      server.httpGet(
-        "/sdafasdfsadfsadfsafd",
-        andExpect = NotFound,
-        withBody = "")
-    }
+  test("GET not found path") {
+    server.httpGet(
+      "/sdafasdfsadfsadfsafd",
+      andExpect = NotFound,
+      withBody = "")
+  }
 
-    "GET complex path" in {
-      server.httpGet(
-        "/complexpath/steve",
-        andExpect = Ok,
-        withBody = "done steve 5000")
-    }
+  test("GET complex path") {
+    server.httpGet(
+      "/complexpath/steve",
+      andExpect = Ok,
+      withBody = "done steve 5000")
+  }
 
-    "GET complex query" in {
-      server.httpGet(
-        "/complexquery?name=fred",
-        andExpect = Ok,
-        withBody = "done fred 5000")
-    }
+  test("GET complex query") {
+    server.httpGet(
+      "/complexquery?name=fred",
+      andExpect = Ok,
+      withBody = "done fred 5000")
+  }
 
-    "GET /testfile" in {
-      server.httpGet(
-        "/testfile",
-        andExpect = Ok,
-        withBody = "testfile123")
-    }
+  test("GET /testfile") {
+    server.httpGet(
+      "/testfile",
+      andExpect = Ok,
+      withBody = "testfile123")
+  }
 
-    "GET /testfileWhenNotfound" in {
-      server.httpGet(
-        "/testfileWhenNotfound",
-        andExpect = NotFound,
-        withBody = "/doesntexist.txt not found")
-    }
+  test("GET /testfileWhenNotfound") {
+    server.httpGet(
+      "/testfileWhenNotfound",
+      andExpect = NotFound,
+      withBody = "/doesntexist.txt not found")
+  }
 
-    "GET /exception" in {
-      server.httpGet(
-        "/exception",
-        andExpect = InternalServerError)
-    }
+  test("GET /exception") {
+    server.httpGet(
+      "/exception",
+      andExpect = InternalServerError)
+  }
 
-    "GET /pathUrl" in {
-      val request = server.httpGet(
-        "/pathUrl",
-        andExpect = Ok)
+  test("GET /pathUrl") {
+    val request = server.httpGet(
+      "/pathUrl",
+      andExpect = Ok)
 
-      request.contentString should endWith("/pathUrl/")
-    }
+    request.contentString should endWith("/pathUrl/")
+  }
 
-    "GET /path" in {
-      val request = server.httpGet(
-        "/path",
-        andExpect = Ok)
+  test("GET /path") {
+    val request = server.httpGet(
+      "/path",
+      andExpect = Ok)
 
-      request.contentString should endWith("/path/")
-    }
+    request.contentString should endWith("/path/")
+  }
 
-    "GET /put (NotFound)" in {
-      server.httpGet(
-        "/put",
-        andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
-    }
+  test("GET /put (NotFound)") {
+    server.httpGet(
+      "/put",
+      andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
+  }
 
-    "putJson" in {
-      server.httpPutJson[JsonNode](
+  test("putJson") {
+    server.httpPutJson[JsonNode](
+      "/putJson/123",
+      putBody = """{"name": "Steve"}""",
+      andExpect = Ok,
+      withJsonBody = """{"id": 123, "name": "Steve"}""")
+  }
+
+  test("putJson without type param") {
+    val e = intercept[TestFailedException] {
+      server.httpPutJson(
         "/putJson/123",
         putBody = """{"name": "Steve"}""",
         andExpect = Ok,
         withJsonBody = """{"id": 123, "name": "Steve"}""")
     }
+    e.getMessage() should include("requires a type-param")
+  }
 
-    "putJson without type param" in {
-      val e = intercept[TestFailedException] {
-        server.httpPutJson(
-          "/putJson/123",
-          putBody = """{"name": "Steve"}""",
-          andExpect = Ok,
-          withJsonBody = """{"id": 123, "name": "Steve"}""")
-      }
-      e.getMessage() should include("requires a type-param")
-    }
+  test("PUT body with multi-byte characters") {
+    val musicalNote = "\uD83C\uDFB5"
+    val body = s"${musicalNote} ${musicalNote}"
+    server.httpPut(
+      "/echo",
+      putBody = body,
+      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      andExpect = Ok,
+      withBody = body
+    )
+  }
 
-    "PUT body with multi-byte characters" in {
-      val musicalNote = "\uD83C\uDFB5"
-      val body = s"${musicalNote} ${musicalNote}"
-      server.httpPut(
-        "/echo",
-        putBody = body,
-        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
-        andExpect = Ok,
-        withBody = body
-      )
-    }
+  test("PUT") {
+    server.httpPut(
+      "/put/123",
+      putBody = "asdf",
+      andExpect = Ok,
+      withBody = "123_asdf")
+  }
 
-    "PUT" in {
-      server.httpPut(
-        "/put/123",
-        putBody = "asdf",
-        andExpect = Ok,
-        withBody = "123_asdf")
-    }
+  test("PUT with RouteParam and non-json body") {
+    server.httpPut(
+      "/put_route_param/123",
+      contentType = "plain/text",
+      putBody = "asdf",
+      andExpect = Ok,
+      withBody = "123_asdf")
+  }
 
-    "PUT with RouteParam and non-json body" in {
-      server.httpPut(
-        "/put_route_param/123",
-        contentType = "plain/text",
-        putBody = "asdf",
-        andExpect = Ok,
-        withBody = "123_asdf")
-    }
+  test("PUT with RouteParam and json body") {
+    server.httpPut(
+      "/put_route_param/123",
+      putBody = "{}",
+      andExpect = Ok,
+      withBody = "123_")
+  }
 
-    "PUT with RouteParam and json body" in {
-      server.httpPut(
-        "/put_route_param/123",
-        putBody = "{}",
-        andExpect = Ok,
-        withBody = "123_")
-    }
+  test("PUT with RouteParam and empty body") {
+    server.httpPut(
+      "/put_route_param/123",
+      putBody = "",
+      andExpect = Ok,
+      withBody = "123_")
+  }
 
-    "PUT with RouteParam and empty body" in {
-      server.httpPut(
-        "/put_route_param/123",
-        putBody = "",
-        andExpect = Ok,
-        withBody = "123_")
-    }
+  test("PUT /put_route_param_and_name") {
+    server.httpPut(
+      "/put_route_param_and_name/123",
+      putBody = """{"name": "bob"}""",
+      andExpect = Ok,
+      withBody = "123_bob")
+  }
 
-    "PUT /put_route_param_and_name" in {
-      server.httpPut(
-        "/put_route_param_and_name/123",
-        putBody = """{"name": "bob"}""",
-        andExpect = Ok,
-        withBody = "123_bob")
-    }
-
-    "PUT /put_route_param_and_name (with empty PUT body)" in {
-      server.httpPut(
-        "/put_route_param_and_name/123",
-        putBody = "",
-        andExpect = BadRequest,
-        withJsonBody = """
+  test("PUT /put_route_param_and_name (with empty PUT body)") {
+    server.httpPut(
+      "/put_route_param_and_name/123",
+      putBody = "",
+      andExpect = BadRequest,
+      withJsonBody = """
         {
           "errors" : [
             "name: field is required"
           ]
         }""")
-    }
+  }
 
-    "PUT /put_route_param_and_name (with non-json PUT body)" in {
-      server.httpPut(
-        "/put_route_param_and_name/123",
-        putBody = "foo",
-        contentType = "plain/text",
-        andExpect = BadRequest,
-        withJsonBody = """
+  test("PUT /put_route_param_and_name (with non-json PUT body)") {
+    server.httpPut(
+      "/put_route_param_and_name/123",
+      putBody = "foo",
+      contentType = "plain/text",
+      andExpect = BadRequest,
+      withJsonBody = """
         {
           "errors" : [
             "name: field is required"
           ]
         }""")
-    }
+  }
 
-    "PUT /put_id_ignoring_body" in {
-      val response = server.httpPut(
-        "/put_id_ignoring_body/42",
-        putBody = "invalid JSON",
-        andExpect = Ok,
-        withJsonBody = "42")
+  test("PUT /put_id_ignoring_body") {
+    val response = server.httpPut(
+      "/put_id_ignoring_body/42",
+      putBody = "invalid JSON",
+      andExpect = Ok,
+      withJsonBody = "42")
 
-      response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
-    }
+    response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
+  }
 
-    "PUT /put_id_not_ignoring_body" in {
-      server.httpPut(
-        "/put_id_not_ignoring_body/42",
-        putBody = "invalid JSON",
-        andExpect = BadRequest,
-        withJsonBody = """
+  test("PUT /put_id_not_ignoring_body") {
+    server.httpPut(
+      "/put_id_not_ignoring_body/42",
+      putBody = "invalid JSON",
+      andExpect = BadRequest,
+      withJsonBody = """
         {
           "errors":[
             "Unrecognized token 'invalid': was expecting ('true', 'false' or 'null')"
           ]
         }""")
-    }
+  }
 
-    "POST /putAndPost" in {
-      server.httpPost(
-        "/putAndPost",
-        postBody = "1",
-        andExpect = Ok,
-        withBody = "POST1")
-    }
+  test("POST /putAndPost") {
+    server.httpPost(
+      "/putAndPost",
+      postBody = "1",
+      andExpect = Ok,
+      withBody = "POST1")
+  }
 
-    "PUT /putAndPost" in {
-      server.httpPut(
-        "/putAndPost",
-        putBody = "2",
-        andExpect = Ok,
-        withBody = "PUT2")
-    }
+  test("PUT /putAndPost") {
+    server.httpPut(
+      "/putAndPost",
+      putBody = "2",
+      andExpect = Ok,
+      withBody = "PUT2")
+  }
 
-    "GET /putAndPost (NotFound)" in {
-      server.httpGet(
-        "/putAndPost",
-        andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
-    }
+  test("GET /putAndPost (NotFound)") {
+    server.httpGet(
+      "/putAndPost",
+      andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
+  }
 
-    "POST /postAndPut" in {
-      server.httpPost(
-        "/postAndPut",
-        postBody = "1",
-        andExpect = Ok,
-        withBody = "POST1")
-    }
+  test("POST /postAndPut") {
+    server.httpPost(
+      "/postAndPut",
+      postBody = "1",
+      andExpect = Ok,
+      withBody = "POST1")
+  }
 
-    "PUT /postAndPut" in {
-      server.httpPut(
-        "/postAndPut",
-        putBody = "2",
-        andExpect = Ok,
-        withBody = "PUT2")
-    }
+  test("PUT /postAndPut") {
+    server.httpPut(
+      "/postAndPut",
+      putBody = "2",
+      andExpect = Ok,
+      withBody = "PUT2")
+  }
 
-    "GET /postAndPut (NotFound)" in {
-      server.httpGet(
-        "/postAndPut",
-        andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
-    }
+  test("GET /postAndPut (NotFound)") {
+    server.httpGet(
+      "/postAndPut",
+      andExpect = NotFound) //TODO: Should be 405 Method Not Allowed
+  }
 
-    "GET /true" in {
-      server.httpGet(
-        "/true",
-        andExpect = Ok,
-        withBody = "true")
-    }
+  test("GET /true") {
+    server.httpGet(
+      "/true",
+      andExpect = Ok,
+      withBody = "true")
+  }
 
-    "GET /index (root)" in {
-      server.httpGet(
-        "/index/",
-        andExpect = Ok,
-        withBody = "testindex")
-    }
+  test("GET /index (root)") {
+    server.httpGet(
+      "/index/",
+      andExpect = Ok,
+      withBody = "testindex")
+  }
 
-    "GET index file without extension" in {
-      server.httpGet(
-        "/index/testfile",
-        andExpect = Ok,
-        withBody = "testindex")
-    }
+  test("GET index file without extension") {
+    server.httpGet(
+      "/index/testfile",
+      andExpect = Ok,
+      withBody = "testindex")
+  }
 
-    "GET index file with extension" in {
-      server.httpGet(
-        "/index/testfile.txt",
-        andExpect = Ok,
-        withBody = "testfile123")
-    }
+  test("GET index file with extension") {
+    server.httpGet(
+      "/index/testfile.txt",
+      andExpect = Ok,
+      withBody = "testfile123")
+  }
 
-    "GET /implicitOkAndException (when ok)" in {
-      server.httpGet(
-        "/implicitOkAndException?hi",
-        andExpect = Ok)
-    }
+  test("GET /implicitOkAndException (when ok)") {
+    server.httpGet(
+      "/implicitOkAndException?hi",
+      andExpect = Ok)
+  }
 
-    "GET /implicitOkAndException (when bad request exception)" in {
-      server.httpGet(
-        "/implicitOkAndException",
-        andExpect = BadRequest)
-    }
+  test("GET /implicitOkAndException (when bad request exception)") {
+    server.httpGet(
+      "/implicitOkAndException",
+      andExpect = BadRequest)
+  }
 
-    "slow" in {
-      pending // manually run to test fix for go/jira/CSL-565
-      server.httpGet(
-        "/slow",
-        andExpect = Ok)
-    }
+  test("slow") {
+    pending // manually run to test fix for go/jira/CSL-565
+    server.httpGet(
+      "/slow",
+      andExpect = Ok)
+  }
 
-    "response builder" in {
-      val response = server.httpGet(
-        "/builderCreatedWithHeader",
-        andExpect = Created,
-        withLocation = "http://foo.com/1")
+  test("response builder") {
+    val response = server.httpGet(
+      "/builderCreatedWithHeader",
+      andExpect = Created,
+      withLocation = "http://foo.com/1")
 
-      response.headerMap.get("a") should equal(Some("b"))
-    }
+    response.headerMap.get("a") should equal(Some("b"))
+  }
 
-    "request injection" in {
-      server.httpGet(
-        "/requestInjection?id=5&id2=6&id3&id4=7",
-        andExpect = Ok,
-        withJsonBody = """
+  test("request injection") {
+    server.httpGet(
+      "/requestInjection?id=5&id2=6&id3&id4=7",
+      andExpect = Ok,
+      withJsonBody = """
         {
           "id" : 5,
           "id2" : 6,
@@ -880,564 +838,563 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
           "default_opt_string" : "default option string",
           "default_opt_prod_string" : "prod option string"
         }""")
-    }
+  }
 
-    "request injections not found" in {
-      server.httpGet(
-        "/requestInjectionsNotFound",
-        andExpect = InternalServerError,
-        withErrors = Seq(
-          "internal server error"))
-    }
+  test("request injections not found") {
+    server.httpGet(
+      "/requestInjectionsNotFound",
+      andExpect = InternalServerError,
+      withErrors = Seq(
+        "internal server error"))
+  }
 
-    "GET request injections not available" in {
-      server.httpGet(
-        "/requestInjectionsNotAvailable",
-        andExpect = InternalServerError,
-        withErrors = Seq(
-          "internal server error"))
-    }
+  test("GET request injections not available") {
+    server.httpGet(
+      "/requestInjectionsNotAvailable",
+      andExpect = InternalServerError,
+      withErrors = Seq(
+        "internal server error"))
+  }
 
-    "POST request injections not available" in {
-      server.httpPost(
-        "/requestInjectionsNotAvailable",
-        "{}",
-        andExpect = InternalServerError,
-        withErrors = Seq(
-          "internal server error"))
-    }
+  test("POST request injections not available") {
+    server.httpPost(
+      "/requestInjectionsNotAvailable",
+      "{}",
+      andExpect = InternalServerError,
+      withErrors = Seq(
+        "internal server error"))
+  }
 
-    "POST empty json request injections not available" in {
-      server.httpPost(
-        "/requestInjectionsNotAvailable",
-        "",
-        andExpect = InternalServerError,
-        withErrors = Seq(
-          "internal server error"))
-    }
+  test("POST empty json request injections not available") {
+    server.httpPost(
+      "/requestInjectionsNotAvailable",
+      "",
+      andExpect = InternalServerError,
+      withErrors = Seq(
+        "internal server error"))
+  }
 
-    "POST invalid json request injections not available" in {
-      server.httpPost(
-        "/requestInjectionsNotAvailable",
-        "{abc",
-        andExpect = BadRequest,
-        withErrors = Seq(
-          "Unexpected character ('a' (code 97)): was expecting double-quote to start field name"))
-    }
+  test("POST invalid json request injections not available") {
+    server.httpPost(
+      "/requestInjectionsNotAvailable",
+      "{abc",
+      andExpect = BadRequest,
+      withErrors = Seq(
+        "Unexpected character ('a' (code 97)): was expecting double-quote to start field name"))
+  }
 
-    "GET json user" in {
-      val response = server.httpGet(
-        "/users/mary",
-        andExpect = Ok,
-        withJsonBody = """{ "name" : "mary" }""")
+  test("GET json user") {
+    val response = server.httpGet(
+      "/users/mary",
+      andExpect = Ok,
+      withJsonBody = """{ "name" : "mary" }""")
 
-      response.headerMap("content-type") should equal(MediaType.JSON_UTF_8.toString)
-    }
+    response.headerMap("content-type") should equal(MediaType.JSON_UTF_8.toString)
+  }
 
-    "POST json user" in {
-      server.httpPost(
-        "/users",
-        """
+  test("POST json user") {
+    server.httpPost(
+      "/users",
+      """
           {
             "name" : "bob"
           }
-        """,
-        andExpect = Ok,
-        withBody = "bob")
-    }
+      """,
+      andExpect = Ok,
+      withBody = "bob")
+  }
 
-    "POST json user with missing required field" in {
-      server.httpPost(
-        "/users",
-        """
+  test("POST json user with missing required field") {
+    server.httpPost(
+      "/users",
+      """
           {
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("name: field is required"))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name: field is required"))
+  }
 
-    "POST body with multi-byte characters" in {
-      val musicalNote = "\uD83C\uDFB5"
-      val body = s"${musicalNote} ${musicalNote}"
-      server.httpPost(
-        "/echo",
-        postBody = body,
-        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
-        andExpect = Ok,
-        withBody = body
-      )
-    }
+  test("POST body with multi-byte characters") {
+    val musicalNote = "\uD83C\uDFB5"
+    val body = s"${musicalNote} ${musicalNote}"
+    server.httpPost(
+      "/echo",
+      postBody = body,
+      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      andExpect = Ok,
+      withBody = body
+    )
+  }
 
-    "POST json user with failed field validation" in {
-      server.httpPost(
-        "/users",
-        """
+  test("POST json user with failed field validation") {
+    server.httpPost(
+      "/users",
+      """
           {
             "name": "a"
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("name: size [1] is not between 2 and 20"))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name: size [1] is not between 2 and 20"))
+  }
 
-    "POST json user with null required field" in {
-      server.httpPost(
-        "/users",
-        """
+  test("POST json user with null required field") {
+    server.httpPost(
+      "/users",
+      """
           {
             "name": null
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("name: field is required"))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name: field is required"))
+  }
 
-    "POST json with failed array element validation" in {
-      server.httpPost(
-        "/arrayElementValidation",
-        """
+  test("POST json with failed array element validation") {
+    server.httpPost(
+      "/arrayElementValidation",
+      """
           {
             "seq": [0]
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("seq.value: [0] is not greater than or equal to 1"))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("seq.value: [0] is not greater than or equal to 1"))
+  }
 
-    "POST json with null array element" in {
-      server.httpPost(
-        "/arrayElementValidation",
-        """
+  test("POST json with null array element") {
+    server.httpPost(
+      "/arrayElementValidation",
+      """
           {
             "seq": [null]
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("seq: Literal null values are not allowed as json array elements."))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("seq: Literal null values are not allowed as json array elements."))
+  }
 
-    "POST json user with failed method validation" in {
-      server.httpPost(
-        "/users",
-        """
+  test("POST json user with failed method validation") {
+    server.httpPost(
+      "/users",
+      """
           {
             "name": "foo"
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("name cannot be foo"))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name cannot be foo"))
+  }
 
-    "POST json user with invalid field validation" in {
-      server.httpPost(
-        "/userWithInvalidFieldValidation",
-        """
+  test("POST json user with invalid field validation") {
+    server.httpPost(
+      "/userWithInvalidFieldValidation",
+      """
           {
             "name": "a"
           }
-        """,
-        andExpect = InternalServerError,
-        withErrors = Seq("internal server error"))
-    }
+      """,
+      andExpect = InternalServerError,
+      withErrors = Seq("internal server error"))
+  }
 
-    "POST json user with invalid method validation" in {
-      server.httpPost(
-        "/userWithInvalidMethodValidation",
-        """
+  test("POST json user with invalid method validation") {
+    server.httpPost(
+      "/userWithInvalidMethodValidation",
+      """
           {
             "name": "foo"
           }
-        """,
-        andExpect = InternalServerError,
-        withErrors = Seq("internal server error"))
-    }
+      """,
+      andExpect = InternalServerError,
+      withErrors = Seq("internal server error"))
+  }
 
-    "POST json user with invalid content type" in {
-      server.httpPost(
-        "/users",
-        """
+  test("POST json user with invalid content type") {
+    server.httpPost(
+      "/users",
+      """
           {
             "name" : "bob"
           }
-        """,
-        contentType = "foo",
-        andExpect = BadRequest)
-    }
+      """,
+      contentType = "foo",
+      andExpect = BadRequest)
+  }
 
-    "POST json user with missing required field when message body reader uses intermediate JsonNode" in {
-      pending //IllegalArgumentException (ObjectMapper.java:2774)
-      server.httpPost(
-        "/userWithMessageBodyReader",
-        """
+  test("POST json user with missing required field when message body reader uses intermediate JsonNode") {
+    pending //IllegalArgumentException (ObjectMapper.java:2774)
+    server.httpPost(
+      "/userWithMessageBodyReader",
+      """
           {
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("name is a required field"))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name is a required field"))
+  }
 
-    "POST json user with method validation error when message body reader uses intermediate JsonNode" in {
-      pending //IllegalArgumentException (ObjectMapper.java:2774)
-      server.httpPost(
-        "/userWithMessageBodyReader",
-        """
+  test("POST json user with method validation error when message body reader uses intermediate JsonNode") {
+    pending //IllegalArgumentException (ObjectMapper.java:2774)
+    server.httpPost(
+      "/userWithMessageBodyReader",
+      """
           {
             "name": "foo"
           }
-        """,
-        andExpect = BadRequest,
-        withErrors = Seq("name cannot be foo"))
-    }
+      """,
+      andExpect = BadRequest,
+      withErrors = Seq("name cannot be foo"))
+  }
 
-    "injector test" in {
-      server.injector.instance[String]("example") should equal("named")
+  test("injector test") {
+    server.injector.instance[String]("example") should equal("named")
 
-      val exampleService = server.injector.instance[DoEverythingService]
-      exampleService should not equal null
-      server.injector.instance(classOf[DoEverythingService]) should equal(exampleService)
+    val exampleService = server.injector.instance[DoEverythingService]
+    exampleService should not equal null
+    server.injector.instance(classOf[DoEverythingService]) should equal(exampleService)
 
-      val key = Key.get(new TypeLiteral[DoEverythingService]() {})
-      server.injector.instance(key) should equal(exampleService)
-    }
+    val key = Key.get(new TypeLiteral[DoEverythingService]() {})
+    server.injector.instance(key) should equal(exampleService)
+  }
 
-    "GET /array" in {
-      server.httpGet(
-        "/array",
-        andExpect = Ok,
-        withJsonBody = """["a", "b"]""")
-    }
+  test("GET /array") {
+    server.httpGet(
+      "/array",
+      andExpect = Ok,
+      withJsonBody = """["a", "b"]""")
+  }
 
-    "GET /set" in {
-      server.httpGet(
-        "/set",
-        andExpect = Ok,
-        withJsonBody = """["a", "b"]""")
-    }
+  test("GET /set") {
+    server.httpGet(
+      "/set",
+      andExpect = Ok,
+      withJsonBody = """["a", "b"]""")
+  }
 
-    "GET /seq" in {
-      server.httpGet(
-        "/seq",
-        andExpect = Ok,
-        withJsonBody = """["a", "b"]""")
-    }
+  test("GET /seq") {
+    server.httpGet(
+      "/seq",
+      andExpect = Ok,
+      withJsonBody = """["a", "b"]""")
+  }
 
-    "DELETE" in {
-      server.httpDelete(
-        "/delete",
-        andExpect = Ok,
-        withBody = "delete")
-    }
+  test("DELETE") {
+    server.httpDelete(
+      "/delete",
+      andExpect = Ok,
+      withBody = "delete")
+  }
 
-    "DELETE with body" in {
-      server.httpDelete(
-        "/delete",
-        deleteBody = "DELETE BODY",
-        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
-        andExpect = Ok,
-        withBody = "delete")
-    }
+  test("DELETE with body") {
+    server.httpDelete(
+      "/delete",
+      deleteBody = "DELETE BODY",
+      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      andExpect = Ok,
+      withBody = "delete")
+  }
 
-    "DELETE with JSON body" in {
-      server.httpDelete(
-        "/delete",
-        deleteBody = "{\"id\": \"11211\"}",
-        andExpect = Ok,
-        withBody = "delete")
-    }
+  test("DELETE with JSON body") {
+    server.httpDelete(
+      "/delete",
+      deleteBody = "{\"id\": \"11211\"}",
+      andExpect = Ok,
+      withBody = "delete")
+  }
 
-    "OPTIONS" in {
-      server.httpOptions(
-        "/options",
-        andExpect = Ok,
-        withBody = "options")
-    }
+  test("OPTIONS") {
+    server.httpOptions(
+      "/options",
+      andExpect = Ok,
+      withBody = "options")
+  }
 
-    "HEAD" in {
-      server.httpHead(
-        "/head",
-        andExpect = Conflict,
-        withBody = "") //HEAD responses cannot have bodies
-    }
+  test("HEAD") {
+    server.httpHead(
+      "/head",
+      andExpect = Conflict,
+      withBody = "") //HEAD responses cannot have bodies
+  }
 
-    "PATCH" in {
-      server.httpPatch(
-        "/patch",
-        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
-        patchBody = "asdf",
-        andExpect = Ok,
-        withBody = "patch")
-    }
+  test("PATCH") {
+    server.httpPatch(
+      "/patch",
+      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      patchBody = "asdf",
+      andExpect = Ok,
+      withBody = "patch")
+  }
 
-    "PATCH with JSON body" in {
-      server.httpPatch(
-        "/patch",
-        patchBody = "{\"id\": \"11211\"}", // note: this is not json-patch (RFC6902), just PATCH with a JSON content-type.
-        andExpect = Ok,
-        withBody = "patch")
-    }
+  test("PATCH with JSON body") {
+    server.httpPatch(
+      "/patch",
+      patchBody = "{\"id\": \"11211\"}", // note: this is not json-patch (RFC6902), just PATCH with a JSON content-type.
+      andExpect = Ok,
+      withBody = "patch")
+  }
 
-    "PATCH body with multi-byte characters" in {
-      val musicalNote = "\uD83C\uDFB5"
-      val body = s"${musicalNote} ${musicalNote}"
-      server.httpPatch(
-        "/echo",
-        contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
-        patchBody = body,
-        andExpect = Ok,
-        withBody = body)
-    }
+  test("PATCH body with multi-byte characters") {
+    val musicalNote = "\uD83C\uDFB5"
+    val body = s"${musicalNote} ${musicalNote}"
+    server.httpPatch(
+      "/echo",
+      contentType = MediaType.PLAIN_TEXT_UTF_8.toString,
+      patchBody = body,
+      andExpect = Ok,
+      withBody = body)
+  }
 
-    "GET /NonGuice" in {
-      server.httpGet(
-        "/NonGuice",
-        andExpect = Ok,
-        withBody = "pong")
-    }
+  test("GET /NonGuice") {
+    server.httpGet(
+      "/NonGuice",
+      andExpect = Ok,
+      withBody = "pong")
+  }
 
-    "GET with query parameters as string sequence" in {
-      server.httpGet(
-        "/RequestWithQueryParamSeqString?foo=1&foo=2&foo=3",
-        andExpect = Ok,
-        withJsonBody =
-          """
+  test("GET with query parameters as string sequence") {
+    server.httpGet(
+      "/RequestWithQueryParamSeqString?foo=1&foo=2&foo=3",
+      andExpect = Ok,
+      withJsonBody =
+        """
             { "foo": ["11", "21", "31"] }
-          """
-      )
-    }
+        """
+    )
+  }
 
-    "GET with query parameters as string sequence with no values (required)" in {
-      server.httpGet(
-        "/RequestWithQueryParamSeqString",
-        andExpect = BadRequest,
-        withJsonBody =
-          """{
+  test("GET with query parameters as string sequence with no values (required)") {
+    server.httpGet(
+      "/RequestWithQueryParamSeqString",
+      andExpect = BadRequest,
+      withJsonBody =
+        """{
               "errors": [
                 "foo: queryParam is required"
               ]
             }"""
-      )
-    }
-
-    "GET defaulted request case class parameters as string sequence" in {
-      server.httpGet(
-        "/RequestWithDefaultedQueryParamSeqString",
-        andExpect = Ok,
-        withJsonBody =
-          """
-            { "foo": ["foo", "bar", "baz"] }
-          """
-      )
-    }
-
-    "GET defaulted request case class parameters as string sequence with query params" in {
-      server.httpGet(
-        "/RequestWithDefaultedQueryParamSeqString?foo=override1&foo=override2",
-        andExpect = Ok,
-        withJsonBody =
-          """
-            { "foo": ["override1", "override2"] }
-          """
-      )
-    }
-
-    "GET with query parameters as empty string sequence" in {
-      server.httpGet(
-        "/RequestWithDefaultedQueryParamSeqString?foo=",
-        andExpect = Ok,
-        withJsonBody =
-          """
-            { "foo": [""] }
-          """
-      )
-    }
-
-    "GET defaulted request case class parameter as string" in {
-      server.httpGet(
-        "/RequestWithDefaultQueryParam",
-        andExpect = Ok,
-        withJsonBody =
-          """
-            { "param": "default" }
-          """
-      )
-    }
-
-    "GET defaulted request case class parameter as string with query param" in {
-      server.httpGet(
-        "/RequestWithDefaultQueryParam?param=set",
-        andExpect = Ok,
-        withJsonBody =
-          """
-            { "param": "set" }
-          """
-      )
-    }
-
-    "GET with query parameters as long sequence" in {
-      server.httpGet(
-        "/RequestWithQueryParamSeqLong?foo=1&foo=2&foo=3",
-        andExpect = Ok,
-        withJsonBody =
-          """
-            { "foo": [2, 3, 4] }
-          """
-      )
-    }
-
-    "GET with query parameters as empty long sequence" in {
-      server.httpGet(
-        "/RequestWithQueryParamSeqLong?foo=",
-        andExpect = Ok,
-        withJsonBody =
-          """
-            { "foo": [] }
-          """
-      )
-    }
-
-    "apply route filter" in {
-      server.httpGet(
-        "/forbiddenByFilter",
-        andExpect = Forbidden)
-    }
-
-    "apply multiple route filters added by type and instance" in {
-      server.httpGet(
-        "/multiFilterAppend",
-        andExpect = Ok,
-        withBody = "014")
-    }
-
-    "apply multiple route filters added by type" in {
-      server.httpGet(
-        "/multiIdentityFilterAppend",
-        andExpect = Ok,
-        withBody = "ok!")
-    }
-
-    "apply multiple route filters" in {
-      server.httpGet(
-        "/multipleRouteFilters",
-        andExpect = Ok,
-        withBody = "012345")
-    }
-
-    "anyMethod GET" in {
-      server.httpGet(
-        "/anyMethod",
-        andExpect = Ok)
-    }
-
-    "anyMethod TRACE" in {
-      server.httpRequest(
-        Request(Method.Trace, "/anyMethod"),
-        andExpect = Ok)
-    }
-
-    "anyMethod HEAD" in {
-      server.httpHead(
-        "/anyMethod",
-        andExpect = Ok)
-    }
-
-    "anyMethod POST" in {
-      server.httpPost(
-        "/anyMethod",
-        postBody = "",
-        andExpect = MethodNotAllowed)
-    }
-
-    "anyMethod PUT" in {
-      server.httpPut(
-        "/anyMethod",
-        putBody = "",
-        andExpect = MethodNotAllowed)
-    }
-
-    "anyMethod DELETE" in {
-      server.httpDelete(
-        "/anyMethod",
-        deleteBody = "",
-        andExpect = MethodNotAllowed)
-    }
-
-    "GET /column/:key//:*" in {
-      server.httpGet(
-        "/column/foo//bar?baz=quux",
-        andExpect = Ok,
-        withBody = "foo/bar")
-    }
-
-    "POST /SomethingStreamedRequest" in {
-      server.httpPost(
-        "/SomethingStreamedRequest.json?something_id=FOO&field1=BAR&field2=3",
-        postBody = "",
-        andExpect = Ok,
-        withBody = "FOO/BAR/3")
-    }
-
-    "POST /SomethingStreamedRequestAsJsonResponse" in {
-      val response = server.httpPostJson[SomethingStreamedResponse](
-        "/SomethingStreamedRequestAsJsonResponse.json?something_id=FOO&field1=BAR&field2=3",
-        postBody = "",
-        andExpect = Ok)
-      assert(response.somethingId == "FOO")
-      assert(response.field1.get == "BAR")
-      assert(response.field2.get == 3)
-    }
-
-    "GET /forwarded" in {
-      server.httpGet(
-        "/forwarded",
-        andExpect = Ok,
-        withBody =  "This works.")
-    }
-
-    "GET /forwardToForbidden" in {
-      server.httpGet(
-        "/forwardToForbidden",
-        andExpect = Forbidden)
-    }
-
-    "GET /forwardCaseClass" in {
-      server.httpGet(
-        "/forwardCaseClass",
-        andExpect = Ok,
-        withBody =  "This works.")
-    }
-
-    "POST /forwarded" in {
-      server.httpPost(
-        "/forwarded",
-        postBody = "",
-        andExpect = Ok,
-        withBody =  "This works.")
-    }
+    )
   }
 
-  "HttpResponseException" in {
+  test("GET defaulted request case class parameters as string sequence") {
+    server.httpGet(
+      "/RequestWithDefaultedQueryParamSeqString",
+      andExpect = Ok,
+      withJsonBody =
+        """
+            { "foo": ["foo", "bar", "baz"] }
+        """
+    )
+  }
+
+  test("GET defaulted request case class parameters as string sequence with query params") {
+    server.httpGet(
+      "/RequestWithDefaultedQueryParamSeqString?foo=override1&foo=override2",
+      andExpect = Ok,
+      withJsonBody =
+        """
+            { "foo": ["override1", "override2"] }
+        """
+    )
+  }
+
+  test("GET with query parameters as empty string sequence") {
+    server.httpGet(
+      "/RequestWithDefaultedQueryParamSeqString?foo=",
+      andExpect = Ok,
+      withJsonBody =
+        """
+            { "foo": [""] }
+        """
+    )
+  }
+
+  test("GET defaulted request case class parameter as string") {
+    server.httpGet(
+      "/RequestWithDefaultQueryParam",
+      andExpect = Ok,
+      withJsonBody =
+        """
+            { "param": "default" }
+        """
+    )
+  }
+
+  test("GET defaulted request case class parameter as string with query param") {
+    server.httpGet(
+      "/RequestWithDefaultQueryParam?param=set",
+      andExpect = Ok,
+      withJsonBody =
+        """
+            { "param": "set" }
+        """
+    )
+  }
+
+  test("GET with query parameters as long sequence") {
+    server.httpGet(
+      "/RequestWithQueryParamSeqLong?foo=1&foo=2&foo=3",
+      andExpect = Ok,
+      withJsonBody =
+        """
+            { "foo": [2, 3, 4] }
+        """
+    )
+  }
+
+  test("GET with query parameters as empty long sequence") {
+    server.httpGet(
+      "/RequestWithQueryParamSeqLong?foo=",
+      andExpect = Ok,
+      withJsonBody =
+        """
+            { "foo": [] }
+        """
+    )
+  }
+
+  test("apply route filter") {
+    server.httpGet(
+      "/forbiddenByFilter",
+      andExpect = Forbidden)
+  }
+
+  test("apply multiple route filters added by type and instance") {
+    server.httpGet(
+      "/multiFilterAppend",
+      andExpect = Ok,
+      withBody = "014")
+  }
+
+  test("apply multiple route filters added by type") {
+    server.httpGet(
+      "/multiIdentityFilterAppend",
+      andExpect = Ok,
+      withBody = "ok!")
+  }
+
+  test("apply multiple route filters") {
+    server.httpGet(
+      "/multipleRouteFilters",
+      andExpect = Ok,
+      withBody = "012345")
+  }
+
+  test("anyMethod GET") {
+    server.httpGet(
+      "/anyMethod",
+      andExpect = Ok)
+  }
+
+  test("anyMethod TRACE") {
+    server.httpRequest(
+      Request(Method.Trace, "/anyMethod"),
+      andExpect = Ok)
+  }
+
+  test("anyMethod HEAD") {
+    server.httpHead(
+      "/anyMethod",
+      andExpect = Ok)
+  }
+
+  test("anyMethod POST") {
+    server.httpPost(
+      "/anyMethod",
+      postBody = "",
+      andExpect = MethodNotAllowed)
+  }
+
+  test("anyMethod PUT") {
+    server.httpPut(
+      "/anyMethod",
+      putBody = "",
+      andExpect = MethodNotAllowed)
+  }
+
+  test("anyMethod DELETE") {
+    server.httpDelete(
+      "/anyMethod",
+      deleteBody = "",
+      andExpect = MethodNotAllowed)
+  }
+
+  test("GET /column/:key//:*") {
+    server.httpGet(
+      "/column/foo//bar?baz=quux",
+      andExpect = Ok,
+      withBody = "foo/bar")
+  }
+
+  test("POST /SomethingStreamedRequest") {
+    server.httpPost(
+      "/SomethingStreamedRequest.json?something_id=FOO&field1=BAR&field2=3",
+      postBody = "",
+      andExpect = Ok,
+      withBody = "FOO/BAR/3")
+  }
+
+  test("POST /SomethingStreamedRequestAsJsonResponse") {
+    val response = server.httpPostJson[SomethingStreamedResponse](
+      "/SomethingStreamedRequestAsJsonResponse.json?something_id=FOO&field1=BAR&field2=3",
+      postBody = "",
+      andExpect = Ok)
+    assert(response.somethingId == "FOO")
+    assert(response.field1.get == "BAR")
+    assert(response.field2.get == 3)
+  }
+
+  test("GET /forwarded") {
+    server.httpGet(
+      "/forwarded",
+      andExpect = Ok,
+      withBody =  "This works.")
+  }
+
+  test("GET /forwardToForbidden") {
+    server.httpGet(
+      "/forwardToForbidden",
+      andExpect = Forbidden)
+  }
+
+  test("GET /forwardCaseClass") {
+    server.httpGet(
+      "/forwardCaseClass",
+      andExpect = Ok,
+      withBody =  "This works.")
+  }
+
+  test("POST /forwarded") {
+    server.httpPost(
+      "/forwarded",
+      postBody = "",
+      andExpect = Ok,
+      withBody =  "This works.")
+  }
+
+  test("HttpResponseException") {
     server.httpGet(
       "/HttpResponseException",
       andExpect = Conflict,
       withBody = "conflicted")
   }
 
-  "toFutureException" in {
+  test("toFutureException") {
     server.httpGet(
       "/toFutureException",
       andExpect = Conflict,
       withBody = "conflicted")
   }
 
-  "HttpExceptionPlain" in {
+  test("HttpExceptionPlain") {
     server.httpGet(
       "/HttpExceptionPlain",
       andExpect = Created,
       withBody = "foo")
   }
 
-  "HttpExceptionErrors" in {
+  test("HttpExceptionErrors") {
     server.httpGet(
       "/HttpExceptionErrors",
       andExpect = Created,
@@ -1449,7 +1406,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
         """)
   }
 
-  "NotFoundException" in {
+  test("NotFoundException") {
     server.httpGet(
       "/NotFoundException",
       andExpect = NotFound,
@@ -1461,7 +1418,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
         """)
   }
 
-  "ConflictException" in {
+  test("ConflictException") {
     server.httpGet(
       "/ConflictException",
       andExpect = Conflict,
@@ -1473,14 +1430,14 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
         """)
   }
 
-  "InternalServerErrorExceptionPlain" in {
+  test("InternalServerErrorExceptionPlain") {
     server.httpGet(
       "/InternalServerErrorExceptionPlain",
       andExpect = InternalServerError,
       withBody = "foo1")
   }
 
-  "NotAcceptableException" in {
+  test("NotAcceptableException") {
     server.httpGet(
       "/NotAcceptableException",
       andExpect = NotAcceptable,
@@ -1492,13 +1449,13 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
         """)
   }
 
-  "NotAcceptableException2" in {
+  test("NotAcceptableException2") {
     server.httpGet(
       "/NotAcceptableException2",
       andExpect = NotAcceptable)
   }
 
-  "Unserializable class field" in {
+  test("Unserializable class field") {
     server.httpGet(
       "/UnserializableClassField",
       andExpect = InternalServerError,
@@ -1510,7 +1467,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
         """)
   }
 
-  "FooException" in {
+  test("FooException") {
     val response = server.httpGet(
       "/FooException/42",
       andExpect = Forbidden,
@@ -1518,7 +1475,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     response.headerMap("Foo-ID") should equal("42")
   }
 
-  "BarException" in {
+  test("BarException") {
     val response = server.httpGet(
       "/BarException",
       andExpect = Unauthorized,
@@ -1527,7 +1484,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     response.headerMap("Bar-ID") should equal("123")
   }
 
-  "BazException" in {
+  test("BazException") {
     val response = server.httpGet(
       "/BazException",
       andExpect = Forbidden,
@@ -1535,7 +1492,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     response.headerMap("Foo-ID") should equal("321")
   }
 
-  "FooBarBazException" in {
+  test("FooBarBazException") {
     val response = server.httpGet(
       "/FooBarBazException",
       andExpect = Forbidden,
@@ -1543,13 +1500,13 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     response.headerMap("Foo-ID") should equal("321-123")
   }
 
-  "NoSuchMethodException" in {
+  test("NoSuchMethodException") {
     server.httpGet(
       "/NoSuchMethodException",
       andExpect = InternalServerError)
   }
 
-  "UsersRequest" in {
+  test("UsersRequest") {
     server.httpGet(
       path = "/users?start_date=2013&max=10&verbose=true",
       andExpect = Ok,
@@ -1591,59 +1548,59 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
           "verbose: '5' is not a valid Boolean"
         ]
       }
-      """)
+                     """)
   }
 
-  "CaseClassWithIntQueryParam" in {
+  test("CaseClassWithIntQueryParam") {
     server.httpGet(
       "/CaseClassWithIntQueryParam?param=123",
       andExpect = Ok,
       withJsonBody = "[123]")
   }
 
-  "CaseClassWithShortQueryParam" in {
+  test("CaseClassWithShortQueryParam") {
     server.httpGet(
       "/CaseClassWithShortQueryParam?param=123",
       andExpect = Ok,
       withJsonBody = "[123]")
   }
 
-  "RequestWithBooleanQueryParams" in {
+  test("RequestWithBooleanQueryParams") {
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=true",
       andExpect = Ok,
       withJsonBody = "[true]")
   }
 
-  "RequestWithBooleanQueryParams which is a true number" in {
+  test("RequestWithBooleanQueryParams which is a true number") {
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=1",
       andExpect = Ok,
       withJsonBody = "[true]")
   }
 
-  "RequestWithBooleanQueryParams which is a false number" in {
+  test("RequestWithBooleanQueryParams which is a false number") {
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=0",
       andExpect = Ok,
       withJsonBody = "[false]")
   }
 
-  "RequestWithBooleanQueryParam which is a true number" in {
+  test("RequestWithBooleanQueryParam which is a true number") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=1",
       andExpect = Ok,
       withJsonBody = "true")
   }
 
-  "RequestWithBooleanQueryParam which is a false number" in {
+  test("RequestWithBooleanQueryParam which is a false number") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=0",
       andExpect = Ok,
       withJsonBody = "false")
   }
 
-  "RequestWithBooleanQueryParam which is a true represented as t" in {
+  test("RequestWithBooleanQueryParam which is a true represented as t") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=t",
       andExpect = Ok,
@@ -1651,7 +1608,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     )
   }
 
-  "RequestWithBooleanQueryParam which is a false represented as f" in {
+  test("RequestWithBooleanQueryParam which is a false represented as f") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=f",
       andExpect = Ok,
@@ -1659,7 +1616,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     )
   }
 
-  "RequestWithBooleanQueryParam with incorrect param" in {
+  test("RequestWithBooleanQueryParam with incorrect param") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=FOO",
       andExpect = BadRequest,
@@ -1670,14 +1627,14 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
       }""")
   }
 
-  "RequestWithBooleanQueryParams with multiple params" in {
+  test("RequestWithBooleanQueryParams with multiple params") {
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=true&param=0&param=t",
       andExpect = Ok,
       withJsonBody = "[true, false, true]")
   }
 
-  "RequestWithBooleanQueryParams with incorrect params" in {
+  test("RequestWithBooleanQueryParams with incorrect params") {
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=true&param=FOO",
       andExpect = BadRequest,
@@ -1688,14 +1645,14 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
       }""")
   }
 
-  "RequestWithBooleanQueryParam which is a true" in {
+  test("RequestWithBooleanQueryParam which is a true") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=true",
       andExpect = Ok,
       withJsonBody = "true")
   }
 
-  "RequestWithBooleanQueryParam which is empty" in {
+  test("RequestWithBooleanQueryParam which is empty") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=",
       andExpect = BadRequest,
@@ -1706,47 +1663,47 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
       }""")
   }
 
-  "RequestWithOptionBooleanQueryParam which is a true" in {
+  test("RequestWithOptionBooleanQueryParam which is a true") {
     server.httpGet(
       "/RequestWithOptionBooleanQueryParam?param=true",
       andExpect = Ok,
       withJsonBody = "Hi Some(true)")
   }
 
-  "RequestWithOptionBooleanQueryParam which is empty" in {
+  test("RequestWithOptionBooleanQueryParam which is empty") {
     server.httpGet(
       "/RequestWithOptionBooleanQueryParam?param=",
       andExpect = Ok,
       withJsonBody = "Hi None")
   }
 
-  "RequestWithOptionBooleanQueryParam which is a false" in {
+  test("RequestWithOptionBooleanQueryParam which is a false") {
     server.httpGet(
       "/RequestWithOptionBooleanQueryParam?param=false",
       andExpect = Ok,
       withJsonBody = "Hi Some(false)")
   }
 
-  "RequestWithBooleanQueryParam which is a false" in {
+  test("RequestWithBooleanQueryParam which is a false") {
     server.httpGet(
       "/RequestWithBooleanQueryParam?param=false",
       andExpect = Ok,
       withJsonBody = "false")
   }
 
-  "RequestWithBooleanQueryParams bad request" in {
+  test("RequestWithBooleanQueryParams bad request") {
     server.httpGet(
       "/RequestWithBooleanQueryParams?param=foo",
       andExpect = BadRequest)
   }
 
-  "CaseClassWithCaseClassQueryParam" in {
+  test("CaseClassWithCaseClassQueryParam") {
     server.httpGet(
       "/CaseClassWithCaseClassQueryParam?param=true",
       andExpect = BadRequest)
   }
 
-  "TestCaseClassWithHtml" in {
+  test("TestCaseClassWithHtml") {
     server.httpGet(
       "/testClassWithHtml",
       andExpect = Ok,
@@ -1760,7 +1717,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
         """.stripMargin)
   }
 
-  "TRACE" in {
+  test("TRACE") {
     val request = Request(Trace, "/trace")
     server.httpRequest(
       request,
@@ -1768,24 +1725,24 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
       withBody = "trace 123")
   }
 
-  "bad method" in {
+  test("bad method") {
     val request = Request(Method("foo"), "/trace")
     server.httpRequest(
       request,
       andExpect = BadRequest)
   }
 
-  "camelCaseJson" in {
+  test("camelCaseJson") {
     server.httpGet(
       "/camelCaseJson",
       withJsonBody = """
       {
         "firstName": "Bob"
       }
-      """)
+                     """)
   }
 
-  "per-route stats" in {
+  test("per-route stats") {
     server.httpGet(
       "/ok",
       andExpect = Ok)
@@ -1840,7 +1797,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     stat("route/my_cool_endpoint/POST/time/2XX") should have size (1)
   }
 
-  "per-route forwarded stats" in {
+  test("per-route forwarded stats") {
     server.httpGet(
       "/ok",
       andExpect = Ok)
@@ -1908,7 +1865,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     stat("route/my_cool_endpoint/POST/time/2XX") should have size (1)
   }
 
-  "ports" in {
+  test("ports") {
     server.httpExternalPort should be > 0
 
     // no https server configured
@@ -1917,7 +1874,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     }
   }
 
-  "Bad request for missing header" in {
+  test("Bad request for missing header") {
     server.httpPost(
       "/createUser",
       postBody = """{"name":"bob", "age":50}""",
@@ -1926,7 +1883,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     )
   }
 
-  "Bad request for missing form param" in {
+  test("Bad request for missing form param") {
     server.httpFormPost(
       "/formPost",
       params = Map("name" -> "bob"),
@@ -1934,7 +1891,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
       withBody = """{"errors":["age: formParam is required"]}""")
   }
 
-  "accepts request with header and body" in {
+  test("accepts request with header and body") {
     server.httpPost(
       "/createUser",
       headers = Map("request_id" -> "732647326473"),
@@ -1943,7 +1900,7 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
       withLocation = "/users/732647326473")
   }
 
-  "non case class returned" in {
+  test("non case class returned") {
     server.httpGet(
       "/non_case_class",
       withJsonBody = """
@@ -1951,10 +1908,10 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
         "name" : "Bob",
         "age" : 21
       }
-      """)
+                     """)
   }
 
-  "bytes returned" in {
+  test("bytes returned") {
     val response = server.httpGet(
       "/bytes",
       withBody = "Steve")
@@ -1962,185 +1919,183 @@ class DoEverythingServerFeatureTest extends WordSpecFeatureTest {
     response.contentType should equal(Some(MediaType.OCTET_STREAM.toString))
   }
 
-  "Bad request for deserialization of wrapped value from a json object" in {
+  test("Bad request for deserialization of wrapped value from a json object") {
     server.httpPost(
       "/RequestWithSeqWrappedString",
       postBody = """{"value" : [{"foo" : "foo"}]}""",
       andExpect = BadRequest)
   }
 
-  "Bad request for deserialization of an invalid joda LocalDate" in {
+  test("Bad request for deserialization of an invalid joda LocalDate") {
     server.httpPost(
       "/localDateRequest",
       postBody = """{"date" : "2016-11-32"}""",
       andExpect = BadRequest)
   }
 
-  "PATCH with JsonPatch" should {
-    "JsonPatch" in {
-      val request = RequestBuilder.patch("/jsonPatch")
-        .body(
-          """[
-            |{"op":"add","path":"/fruit","value":"orange"},
-            |{"op":"remove","path":"/hello"},
-            |{"op":"copy","from":"/fruit","path":"/veggie"},
-            |{"op":"replace","path":"/veggie","value":"bean"},
-            |{"op":"move","from":"/fruit","path":"/food"},
-            |{"op":"test","path":"/food","value":"orange"}
-            |]""".stripMargin,
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch") {
+    val request = RequestBuilder.patch("/jsonPatch")
+      .body(
+        """[
+          |{"op":"add","path":"/fruit","value":"orange"},
+          |{"op":"remove","path":"/hello"},
+          |{"op":"copy","from":"/fruit","path":"/veggie"},
+          |{"op":"replace","path":"/veggie","value":"bean"},
+          |{"op":"move","from":"/fruit","path":"/food"},
+          |{"op":"test","path":"/food","value":"orange"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = Ok,
-        withJsonBody = """{"food":"orange","veggie":"bean"}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"food":"orange","veggie":"bean"}""")
+  }
 
-    "JsonPatch with nested path" in {
-      val request = RequestBuilder.patch("/jsonPatch/nested")
-        .body(
-          """[
-            |{"op":"add","path":"/level1/level2/fruit","value":"orange"},
-            |{"op":"remove","path":"/level1/level2/hello"},
-            |{"op":"copy","from":"/level1/level2/fruit","path":"/level1/level2/veggie"},
-            |{"op":"replace","path":"/level1/level2/veggie","value":"bean"},
-            |{"op":"move","from":"/level1/level2/fruit","path":"/level1/level2/food"},
-            |{"op":"test","path":"/level1/level2/food","value":"orange"}
-            |]""".stripMargin,
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch with nested path") {
+    val request = RequestBuilder.patch("/jsonPatch/nested")
+      .body(
+        """[
+          |{"op":"add","path":"/level1/level2/fruit","value":"orange"},
+          |{"op":"remove","path":"/level1/level2/hello"},
+          |{"op":"copy","from":"/level1/level2/fruit","path":"/level1/level2/veggie"},
+          |{"op":"replace","path":"/level1/level2/veggie","value":"bean"},
+          |{"op":"move","from":"/level1/level2/fruit","path":"/level1/level2/food"},
+          |{"op":"test","path":"/level1/level2/food","value":"orange"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = Ok,
-        withJsonBody = """{"level1":{"level2":{"food":"orange","veggie":"bean"}}}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"level1":{"level2":{"food":"orange","veggie":"bean"}}}""")
+  }
 
-    "JsonPatch with nested 4 levels path" in {
-      val request = RequestBuilder.patch("/jsonPatch/level3")
-        .body(
-          """[
-            |{"op":"add","path":"/level0/level1/level2/fruit","value":"orange"},
-            |{"op":"remove","path":"/level0/level1/level2/hello"},
-            |{"op":"copy","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/veggie"},
-            |{"op":"replace","path":"/level0/level1/level2/veggie","value":"bean"},
-            |{"op":"move","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/food"},
-            |{"op":"test","path":"/level0/level1/level2/food","value":"orange"}
-            |]""".stripMargin,
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch with nested 4 levels path") {
+    val request = RequestBuilder.patch("/jsonPatch/level3")
+      .body(
+        """[
+          |{"op":"add","path":"/level0/level1/level2/fruit","value":"orange"},
+          |{"op":"remove","path":"/level0/level1/level2/hello"},
+          |{"op":"copy","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/veggie"},
+          |{"op":"replace","path":"/level0/level1/level2/veggie","value":"bean"},
+          |{"op":"move","from":"/level0/level1/level2/fruit","path":"/level0/level1/level2/food"},
+          |{"op":"test","path":"/level0/level1/level2/food","value":"orange"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = Ok,
-        withJsonBody = """{"level0":{"level1":{"level2":{"food":"orange","veggie":"bean"}}}}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"level0":{"level1":{"level2":{"food":"orange","veggie":"bean"}}}}""")
+  }
 
-    "JsonPatch operating with non-leaf node" in {
-      val request = RequestBuilder.patch("/jsonPatch/nonleaf")
-        .body(
-          """[
-            |{"op":"add","path":"/root/middle","value":{"left":"middle-left"}},
-            |{"op":"remove","path":"/root/left"},
-            |{"op":"copy","from":"/root/right","path":"/root/left"},
-            |{"op":"replace","path":"/root/left","value":{"left":"left-left-2","right":"left-right-2"}},
-            |{"op":"move","from":"/root/left","path":"/root/left2"},
-            |{"op":"test","path":"/root/left2","value":{"left":"left-left-2","right":"left-right-2"}}
-            |]""".stripMargin,
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch operating with non-leaf node") {
+    val request = RequestBuilder.patch("/jsonPatch/nonleaf")
+      .body(
+        """[
+          |{"op":"add","path":"/root/middle","value":{"left":"middle-left"}},
+          |{"op":"remove","path":"/root/left"},
+          |{"op":"copy","from":"/root/right","path":"/root/left"},
+          |{"op":"replace","path":"/root/left","value":{"left":"left-left-2","right":"left-right-2"}},
+          |{"op":"move","from":"/root/left","path":"/root/left2"},
+          |{"op":"test","path":"/root/left2","value":{"left":"left-left-2","right":"left-right-2"}}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = Ok,
-        withJsonBody =
-          """
-            |{"root":{
-            |"left2":{"left":"left-left-2","right":"left-right-2"},
-            |"middle":{"left":"middle-left"},
-            |"right":{"left":"right-left","right":"right-right"}}
-            |}""".stripMargin)
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody =
+        """
+          |{"root":{
+          |"left2":{"left":"left-left-2","right":"left-right-2"},
+          |"middle":{"left":"middle-left"},
+          |"right":{"left":"right-left","right":"right-right"}}
+          |}""".stripMargin)
+  }
 
-    "JsonPatch for string" in {
-      val request = RequestBuilder.patch("/jsonPatch/string")
-        .body(
-          """[
-            |{"op":"add","path":"/fruit","value":"orange"},
-            |{"op":"remove","path":"/hello"},
-            |{"op":"copy","from":"/fruit","path":"/veggie"},
-            |{"op":"replace","path":"/veggie","value":"bean"},
-            |{"op":"move","from":"/fruit","path":"/food"},
-            |{"op":"test","path":"/food","value":"orange"}
-            |]""".stripMargin,
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch for string") {
+    val request = RequestBuilder.patch("/jsonPatch/string")
+      .body(
+        """[
+          |{"op":"add","path":"/fruit","value":"orange"},
+          |{"op":"remove","path":"/hello"},
+          |{"op":"copy","from":"/fruit","path":"/veggie"},
+          |{"op":"replace","path":"/veggie","value":"bean"},
+          |{"op":"move","from":"/fruit","path":"/food"},
+          |{"op":"test","path":"/food","value":"orange"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = Ok,
-        withJsonBody = """{"food":"orange","veggie":"bean"}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"food":"orange","veggie":"bean"}""")
+  }
 
-    // error message for a path does not begin with a slash: CaseClassMappingException,
-    // "path: Can not construct instance of com.fasterxml.jackson.core.JsonPointer,
-    // problem: Invalid input: JSON Pointer expression must start with '/'.
-    "JsonPatch fails when a path does not begin with a slash" in {
-      val request = RequestBuilder.patch("/jsonPatch/nested")
-        .body(
-          """[{"op":"add","path":"fruit","value":"orange"}]""",
-          contentType = Message.ContentTypeJsonPatch)
+  // error message for a path does not begin with a slash: CaseClassMappingException,
+  // "path: Can not construct instance of com.fasterxml.jackson.core.JsonPointer,
+  // problem: Invalid input: JSON Pointer expression must start with '/'.
+  test("JsonPatch fails when a path does not begin with a slash") {
+    val request = RequestBuilder.patch("/jsonPatch/nested")
+      .body(
+        """[{"op":"add","path":"fruit","value":"orange"}]""",
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = BadRequest)
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest)
+  }
 
-    "JsonPatch fails when a path is empty" in {
-      val request = RequestBuilder.patch("/jsonPatch/nested")
-        .body(
-          """[{"op":"add","path":"","value":"orange"}]""",
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch fails when a path is empty") {
+    val request = RequestBuilder.patch("/jsonPatch/nested")
+      .body(
+        """[{"op":"add","path":"","value":"orange"}]""",
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = BadRequest,
-        withJsonBody = """{"errors":["invalid path - empty path"]}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path - empty path"]}""")
+  }
 
-    "JsonPatch fails when the patch operation specs are invalid" in {
-      val request = RequestBuilder.patch("/jsonPatch")
-        .body(
-          """[{"op":"copy","path":"/hello","value":"/shouldbefrom"}]""",
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch fails when the patch operation specs are invalid") {
+    val request = RequestBuilder.patch("/jsonPatch")
+      .body(
+        """[{"op":"copy","path":"/hello","value":"/shouldbefrom"}]""",
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = BadRequest,
-        withJsonBody = """{"errors":["invalid from for copy operation"]}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid from for copy operation"]}""")
+  }
 
-    "JsonPatch move operation with same from and path - jsonNode" in {
-      val request = RequestBuilder.patch("/jsonPatch")
-        .body(
-          """[
-            |{"op":"move","from":"/hello","path":"/hello"},
-            |{"op":"test","path":"/hello","value":"world"}
-            |]""".stripMargin,
-          contentType = Message.ContentTypeJsonPatch)
+  test("JsonPatch move operation with same from and path - jsonNode") {
+    val request = RequestBuilder.patch("/jsonPatch")
+      .body(
+        """[
+          |{"op":"move","from":"/hello","path":"/hello"},
+          |{"op":"test","path":"/hello","value":"world"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = Ok,
-        withJsonBody = """{"hello":"world"}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"hello":"world"}""")
+  }
 
-    "JsonPatch fails when Content-Type is not consistent" in {
-      val request = RequestBuilder.patch("/jsonPatch/nested")
-        .body(
-          """[{"op":"add","path":"/fruit","value":"orange"}]""",
-          contentType = Message.ContentTypeJson)
+  test("JsonPatch fails when Content-Type is not consistent") {
+    val request = RequestBuilder.patch("/jsonPatch/nested")
+      .body(
+        """[{"op":"add","path":"/fruit","value":"orange"}]""",
+        contentType = Message.ContentTypeJson)
 
-      server.httpRequestJson[JsonNode](
-        request = request,
-        andExpect = BadRequest,
-        withJsonBody = """{"errors":["incorrect Content-Type, should be application/json-patch+json"]}""")
-    }
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["incorrect Content-Type, should be application/json-patch+json"]}""")
   }
 }
