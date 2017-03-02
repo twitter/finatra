@@ -2,21 +2,21 @@ package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.httpclient.test.{InMemoryHttpService, PostRequestWithIncorrectBodyException}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.util.Await
 import org.specs2.mock.Mockito
 
-class InMemoryHttpServiceTest extends WordSpecTest with Mockito {
+class InMemoryHttpServiceTest extends Test with Mockito {
   val inMemoryHttpService = new InMemoryHttpService()
   val mockResponse1 = mock[Response]
   val mockResponse2 = mock[Response]
 
-  "single post mocked" in {
+  test("single post mocked") {
     inMemoryHttpService.mockPost("/foo", andReturn = mockResponse1)
     assertPost("/foo", "", mockResponse1)
   }
 
-  "multiple posts mocked" in {
+  test("multiple posts mocked") {
     inMemoryHttpService.mockPost("/foo", andReturn = mockResponse1)
     inMemoryHttpService.mockPost("/foo", andReturn = mockResponse2)
 
@@ -24,12 +24,12 @@ class InMemoryHttpServiceTest extends WordSpecTest with Mockito {
     assertPost("/foo", "", mockResponse2)
   }
 
-  "post mocked with matching body" in {
+  test("post mocked with matching body") {
     inMemoryHttpService.mockPost("/foo", withBody = "asdf", andReturn = mockResponse1)
     assertPost("/foo", "asdf", mockResponse1)
   }
 
-  "post mocked with different body" in {
+  test("post mocked with different body") {
     inMemoryHttpService.mockPost("/foo", withBody = "asdf", andReturn = mockResponse1)
 
     val request = Request(Method.Post, "/foo")

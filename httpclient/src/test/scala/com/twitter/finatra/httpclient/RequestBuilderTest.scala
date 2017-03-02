@@ -2,11 +2,11 @@ package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.http.{Message, Method}
 import com.twitter.finagle.http.Method._
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class RequestBuilderTest extends WordSpecTest {
+class RequestBuilderTest extends Test {
 
-  "get" in {
+  test("get") {
     val request = RequestBuilder.get("/abc")
       .header("c", "3")
       .headers(
@@ -22,7 +22,7 @@ class RequestBuilderTest extends WordSpecTest {
       "c" -> "3"))
   }
 
-  "post" in {
+  test("post") {
     val request = RequestBuilder.post("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -33,7 +33,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Post, request)
   }
 
-  "put" in {
+  test("put") {
     val request = RequestBuilder.put("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -44,7 +44,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Put, request)
   }
 
-  "put with form params" in {
+  test("put with form params") {
     val request = RequestBuilder.put("/abc")
       .body("Pcode=9999&Locality=A%20New%20Location", Message.ContentTypeWwwForm)
       .headers(Seq("c" -> "3"))
@@ -65,7 +65,7 @@ class RequestBuilderTest extends WordSpecTest {
       request.contentString should be("Pcode=9999&Locality=A%20New%20Location")
   }
 
-  "patch" in {
+  test("patch") {
     val request = RequestBuilder.patch("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -76,7 +76,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Patch, request)
   }
 
-  "delete" in {
+  test("delete") {
     val request = RequestBuilder.delete("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -87,7 +87,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Delete, request)
   }
 
-  "head" in {
+  test("head") {
     val request = RequestBuilder.head("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -98,7 +98,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Head, request)
   }
 
-  "trace" in {
+  test("trace") {
     val request = RequestBuilder.trace("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -109,7 +109,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Trace, request)
   }
 
-  "connect" in {
+  test("connect") {
     val request = RequestBuilder.connect("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -120,7 +120,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Connect, request)
   }
 
-  "options" in {
+  test("options") {
     val request = RequestBuilder.options("/abc")
       .body("testbody", "foo/bar")
       .headers(Seq("c" -> "3"))
@@ -131,7 +131,7 @@ class RequestBuilderTest extends WordSpecTest {
     assertRequestWithBody(Options, request)
   }
 
-  "post json" in {
+  test("post json") {
     val request = RequestBuilder.post("/abc")
       .body("{}")
 
@@ -139,7 +139,7 @@ class RequestBuilderTest extends WordSpecTest {
     request.contentString should be("{}")
   }
 
-  "post json with resource" in {
+  test("post json with resource") {
     val request = RequestBuilder.post("/abc")
       .bodyFromResource("/test_resource.json")
 
@@ -148,7 +148,7 @@ class RequestBuilderTest extends WordSpecTest {
     request.contentString should be("""{"a": "1", "b": "2"}""")
   }
 
-  "post utf8 content" in {
+  test("post utf8 content") {
     val request = RequestBuilder.post("/abc")
       .body("ＴＥＳＴＢＯＤＹ")
 

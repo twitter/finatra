@@ -7,11 +7,11 @@ import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.httpclient.modules.HttpClientModule
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.WordSpecIntegrationTest
+import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 import com.twitter.util.Await
 
-class HttpClientIntegrationTest extends WordSpecIntegrationTest {
+class HttpClientIntegrationTest extends IntegrationTest {
 
   val inMemoryHttpService = new InMemoryHttpService()
 
@@ -24,7 +24,7 @@ class HttpClientIntegrationTest extends WordSpecIntegrationTest {
 
   val httpClient = injector.instance[HttpClient]
 
-  "execute" in {
+  test("execute") {
     val okResponse = Response(Status.Ok)
     inMemoryHttpService.mockGet("/foo", okResponse)
     val request = RequestBuilder.get("/foo")
@@ -33,7 +33,7 @@ class HttpClientIntegrationTest extends WordSpecIntegrationTest {
       httpClient.execute(request)) should be(okResponse)
   }
 
-  "executeJson" in {
+  test("executeJson") {
     val mockResponse = Response(Status.Ok)
     mockResponse.setContentString("{}")
     inMemoryHttpService.mockPost("/foo", "bar", mockResponse)
@@ -44,7 +44,7 @@ class HttpClientIntegrationTest extends WordSpecIntegrationTest {
       httpClient.executeJson[JsonNode](request)).toString should be("{}")
   }
 
-  "executeJson w/ unexpected response" in {
+  test("executeJson w/ unexpected response") {
     val errorResponse = Response(Status.InternalServerError)
     inMemoryHttpService.mockGet("/foo", errorResponse)
     val request = RequestBuilder.get("/foo")
@@ -55,7 +55,7 @@ class HttpClientIntegrationTest extends WordSpecIntegrationTest {
     }
   }
 
-  "executeJson w/ expected response but unparsable body" in {
+  test("executeJson w/ expected response but unparsable body") {
     val mockResponse = Response(Status.Ok)
     mockResponse.setContentString("{}")
     inMemoryHttpService.mockGet("/foo", mockResponse)
@@ -68,7 +68,7 @@ class HttpClientIntegrationTest extends WordSpecIntegrationTest {
     assert(e.getMessage.contains("com.fasterxml.jackson.databind.JsonMappingException"))
   }
 
-  "get" in {
+  test("get") {
     val mockResponse = Response(Status.Ok)
     mockResponse.setContentString("{}")
     inMemoryHttpService.mockGet("/foo", mockResponse)
