@@ -3,14 +3,14 @@ package com.twitter.inject.tests
 import com.google.inject.{Guice, Key}
 import com.twitter.finatra.tests.Prod
 import com.twitter.inject.tests.module.{ClassToConvert, ComplexServiceFactory, DoEverythingModule}
-import com.twitter.inject.{Injector, WordSpecTest}
+import com.twitter.inject.{Injector, Test}
 
-class TwitterModuleTest extends WordSpecTest {
+class TwitterModuleTest extends Test {
 
-  val guiceInjector = Guice.createInjector(DoEverythingModule)
-  val injector = Injector(guiceInjector)
+  val injector =
+    Injector(Guice.createInjector(DoEverythingModule))
 
-  "get assisted factory instance from injector" in {
+  test("get assisted factory instance from injector") {
     assertServiceFactory(
       injector.instance[ComplexServiceFactory])
 
@@ -21,13 +21,13 @@ class TwitterModuleTest extends WordSpecTest {
       injector.instance(Key.get(classOf[ComplexServiceFactory])))
   }
 
-  "get additional instances from injector" in {
+  test("get additional instances from injector") {
     injector.instance[String](name = "str1") should be("string1")
 
     injector.instance[String, Prod] should be("prod string")
   }
 
-  "type conversion" in {
+  test("type conversion") {
     injector.instance[ClassToConvert](name = "name") should be(ClassToConvert("Steve"))
   }
 

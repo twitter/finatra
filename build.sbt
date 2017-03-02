@@ -273,13 +273,14 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.utilVersion,
       "com.twitter" %% "util-core" % versions.utilVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.utilVersion,
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "net.codingwell" %% "scala-guice" % versions.scalaGuice,
-      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.joda" % "joda-convert" % versions.jodaConvert,
+      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "com.google.inject" % "guice" % versions.guice % "test",
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
     ),
@@ -402,7 +403,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
     moduleName := "inject-slf4j",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
     libraryDependencies ++= Seq(
-      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,

@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-core: Move Logging from grizzled-slf4j to util/util-slf4j-api.
+  `c.t.inject.Logger` is now deprecated in favor of `c.t.util.logging.Logger`
+  in util. ``DIFF_ID=D29713``
+
 * finatra-httpclient: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=909526``
 
 * finatra-http: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=909349``

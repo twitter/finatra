@@ -13,6 +13,9 @@ scala_library(
     'finatra/inject/inject-slf4j/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
   ],
+  excludes=[
+    exclude(org='org.clapper', name='grizzled-slf4j')
+  ],
   fatal_warnings=True,
   sources=rglobs('*.scala')
 )

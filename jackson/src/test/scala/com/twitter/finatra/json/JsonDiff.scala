@@ -2,10 +2,9 @@ package com.twitter.finatra.json
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.twitter.finatra.json.utils.{JsonDiffResult, JsonDiffUtil}
-import com.twitter.inject.Logging
 import org.scalatest.exceptions.TestFailedException
 
-object JsonDiff extends Logging {
+object JsonDiff {
 
   def jsonDiff[T](
     receivedJson: Any,

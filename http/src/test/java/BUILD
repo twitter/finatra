@@ -2,8 +2,8 @@ junit_tests(
   dependencies=[
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/junit',
-    '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
+    '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-base-http/src/main/java:java',
     'finagle/finagle-base-http/src/main/scala:scala',
     'finagle/finagle-core/src/main/scala:scala',
@@ -23,6 +23,7 @@ junit_tests(
     'util/util-core/src/main/scala:scala',
     'util/util-lint/src/main/scala:scala',
     'util/util-logging/src/main/scala:scala',
+    'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala:scala',
   ],
   fatal_warnings=False,

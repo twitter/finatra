@@ -176,6 +176,13 @@ case class Person(
   age_with_default: Option[Int] = None,
   nickname: String = "unknown")
 
+case class PersonWithLogging(
+  id: Int,
+  name: String,
+  age: Option[Int],
+  age_with_default: Option[Int] = None,
+  nickname: String = "unknown") extends Logging
+
 case class PersonWithDottedName(
   id: Int,
   @JsonProperty("name.last") lastName: String)

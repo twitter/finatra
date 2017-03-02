@@ -1,11 +1,11 @@
 package com.twitter.inject.tests
 
-import com.twitter.inject.{Logger, Logging, WordSpecTest}
+import com.twitter.inject.{Logging, Test}
 import com.twitter.util.Future
 
-class LoggingTest extends WordSpecTest with Logging {
+class LoggingTest extends Test with Logging {
 
-  "Logging" in {
+  test("Logging") {
     debug("a")
     warn("a")
     info("a")
@@ -28,10 +28,5 @@ class LoggingTest extends WordSpecTest with Logging {
         throw new RuntimeException("oops")
       }
     }
-  }
-
-  "Logger" in {
-    val log = Logger[LoggingTest]()
-    log.info("Hi")
   }
 }

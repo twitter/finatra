@@ -83,6 +83,17 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
       nums should equal(Seq(1, 2, 3))
     }
 
+    scenario("serialize case class with logging") {
+      val steveWithLogging = PersonWithLogging(
+      id = 1,
+      name = "Steve",
+      age = Some(20),
+      age_with_default = Some(20),
+      nickname = "ace")
+
+      assertJson(steveWithLogging, steveJson)
+    }
+
     scenario("parse json with extra field at end") {
       val person = parse[Person]("""
       {
