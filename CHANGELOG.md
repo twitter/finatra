@@ -51,6 +51,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-core: Add back JUNitRUnner to `c.t.inject.Test` and `c.t.inject.WordSpecTest`
+  so that tests can be run when building with maven. ``RB_ID=909789``
+
 * finatra-http: Allow routes which begin with "/admin" to be exposed on the external
   interface and routes which DO NOT begin with "/admin" to be exposed on the admin interface.
   NOTE: routes which begin with "/admin/finatra" will continue to be on the admin interface
