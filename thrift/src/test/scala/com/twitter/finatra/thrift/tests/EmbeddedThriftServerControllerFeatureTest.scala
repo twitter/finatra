@@ -7,40 +7,40 @@ import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
-import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
 
-class EmbeddedThriftServerControllerIntegrationTest extends WordSpecFeatureTest {
+class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(new ConverterControllerServer)
 
   val client123 = server.thriftClient[Converter[Future]](clientId = "client123")
 
-  "success" in {
+  test("success") {
     Await.result(client123.uppercase("Hi")) should equal("HI")
   }
 
-  "failure" in {
+  test("failure") {
     val e = assertFailedFuture[Exception] {
       client123.uppercase("fail")
     }
     e.getMessage should include("oops")
   }
 
-  "blacklist" in {
+  test("blacklist") {
     val notWhitelistClient = server.thriftClient[Converter[Future]](clientId = "not_on_whitelist")
     assertFailedFuture[UnknownClientIdError] {
       notWhitelistClient.uppercase("Hi")
     }
   }
 
-  "no client id" in {
+  test("no client id") {
     val noClientIdClient = server.thriftClient[Converter[Future]]()
     assertFailedFuture[NoClientIdError] {
       noClientIdClient.uppercase("Hi")
     }
   }
 
-  "more than 22 args" in {
+  test("more than 22 args") {
     Await.result(
       client123.moreThanTwentyTwoArgs("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree")
     ) should equal("foo")
