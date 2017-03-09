@@ -99,7 +99,12 @@ lazy val baseSettings = Seq(
   ),
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
-  javacOptions in doc ++= Seq("-source", "1.8")
+  javacOptions in doc ++= Seq("-source", "1.8"),
+  // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
+  scalacOptions in (Compile, doc) ++= {
+    if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
+    else Nil
+  }
 )
 
 lazy val publishSettings = Seq(
@@ -342,11 +347,6 @@ lazy val injectApp = (project in file("inject/inject-app"))
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in Test := true,
-    // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
-    scalacOptions in (Compile, doc) ++= {
-      if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
-      else Nil
-    },
     mappings in (Test, packageBin) := {
       val previous = (mappings in (Test, packageBin)).value
       previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
