@@ -62,6 +62,38 @@ class DoEverythingController @Inject()(
     post("/foo") { request: Request =>
       "bar"
     }
+
+    filter[ForbiddenFilter].get("/forbiddenByFilter") { request: Request =>
+      "ok!"
+    }
+
+    filter(new AppendToHeaderFilter("appended" , "1")).
+      filter(new AppendToHeaderFilter("appended" , "2")).
+      get("/appendMultiplePrefixed") { request: Request =>
+        request.headerMap("appended")
+    }
+
+    filter(new AppendToHeaderFilter("freestyle", "bang")) {
+      get("/freestyleWithHeader") { request: Request =>
+        request.headerMap("freestyle")
+      }
+    }
+  }
+
+  prefix("/1.1") {
+    prefix("/waterfall") {
+      prefix("/users") {
+        get("/") { request: Request =>
+          "ok!"
+        }
+      }
+    }
+  }
+
+  filter[ForbiddenFilter].prefix("/1.1") {
+    get("/forbiddenByFilterPrefilter"){ request: Request =>
+      "ok!"
+    }
   }
 
   get("/forwarded") { request: Request =>
