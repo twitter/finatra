@@ -6,7 +6,7 @@ import com.google.inject.Provides
 import com.twitter.finagle._
 import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.{ClientId, MethodIfaceBuilder, ServiceIfaceBuilder}
+import com.twitter.finagle.thrift.{ClientId, MethodIfaceBuilder, ServiceIfaceBuilder, ThriftServiceIface}
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.conversions.duration._
 import com.twitter.inject.exceptions.PossiblyRetryable
@@ -58,9 +58,11 @@ object FilteredThriftClientModule {
  * @see [[https://finagle.github.io/blog/2015/09/10/services-per-endpoint-in-scrooge/ Services-per-endpoint in Scrooge]]
  * @see [[http://twitter.github.io/scrooge/Finagle.html#creating-a-client Finagle Clients]]
  */
-abstract class FilteredThriftClientModule[FutureIface <: ThriftService : ClassTag, ServiceIface: ClassTag](
-  implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface],
-  methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface])
+abstract class FilteredThriftClientModule[
+    FutureIface <: ThriftService : ClassTag,
+    ServiceIface <: ThriftServiceIface.Filterable[ServiceIface] : ClassTag](
+    implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface],
+    methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface])
   extends TwitterModule
   with time.Implicits {
 

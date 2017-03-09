@@ -2,6 +2,7 @@ package com.twitter.finatra.thrift.modules
 
 import com.google.inject.Provides
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.thrift.ThriftServiceIface.Filterable
 import com.twitter.finagle.thrift.{ClientId, ServiceIfaceBuilder}
 import com.twitter.finagle.{Thrift, ThriftMux}
 import com.twitter.finatra.annotations.DarkTrafficFilterType
@@ -12,7 +13,7 @@ import com.twitter.util.{Monitor, NullMonitor}
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
-abstract class DarkTrafficFilterModule[ServiceIface: ClassTag](
+abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]: ClassTag](
   implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface])
   extends TwitterModule {
 
