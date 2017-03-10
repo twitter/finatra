@@ -9,7 +9,9 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import com.twitter.util.{Memoize, Try}
+import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
+import scala.reflect.runtime.universe._
 
 /**
  *
@@ -114,8 +116,35 @@ class EmbeddedHttpServer(
     }
   }
 
-  override def bind[T : Manifest](instance: T): EmbeddedHttpServer = {
+  /**
+   * Bind an instance of type [T] to the object graph of the underlying http server.
+   * This will REPLACE any previously bound instance of the given type.
+   *
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @return this [[EmbeddedHttpServer]].
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   */
+  override def bind[T : TypeTag](instance: T): EmbeddedHttpServer = {
     bindInstance[T](instance)
+    this
+  }
+
+  /**
+   * Bind an instance of type [T] annotated with Annotation type [A] to the object
+   * graph of the underlying http server. This will REPLACE any previously bound instance of
+   * the given type bound with the given annotation type.
+   *
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @tparam A - type of the Annotation used to bind the instance.
+   * @return this [[EmbeddedHttpServer]].
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   */
+  override def bind[T : TypeTag, A <: Annotation : TypeTag](instance: T): EmbeddedHttpServer = {
+    bindInstance[T, A](instance)
     this
   }
 

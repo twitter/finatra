@@ -11,10 +11,12 @@ package com.twitter.inject
  *     extends IntegrationTest
  *     with Mockito {
  *
- *     override val injector = TestInjector(
- *       MyModule1,
- *       MyBarModule
- *       FooModule)
+ *     override val injector =
+ *       TestInjector(
+ *         MyModule1,
+ *         MyBarModule,
+ *         FooModule)
+ *       .create
  *
  *     test("Foo#method should do what it's supposed to do") {
  *       ...

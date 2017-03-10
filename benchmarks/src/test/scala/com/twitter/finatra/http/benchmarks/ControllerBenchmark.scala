@@ -15,16 +15,18 @@ import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 @State(Scope.Thread)
 class ControllerBenchmark {
 
-  val injector = TestInjector(
-    flags = Map(
-      "http.response.charset.enabled" -> "false"),
-    modules = Seq(
-      ExceptionManagerModule,
-      MessageBodyModule,
-      FinatraJacksonModule,
-      MustacheModule,
-      DocRootModule,
-      NullStatsReceiverModule))
+  val injector =
+    TestInjector(
+      flags = Map(
+        "http.response.charset.enabled" -> "false"),
+      modules = Seq(
+        ExceptionManagerModule,
+        MessageBodyModule,
+        FinatraJacksonModule,
+        MustacheModule,
+        DocRootModule,
+        NullStatsReceiverModule))
+      .create
 
   val httpRouter = injector.instance[HttpRouter]
 

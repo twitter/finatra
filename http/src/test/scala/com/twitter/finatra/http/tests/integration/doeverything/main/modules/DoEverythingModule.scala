@@ -23,7 +23,7 @@ object DoEverythingModule extends TwitterModule {
     bind[String].annotatedWith[Prod].toInstance("prod string")
     bind[Option[String]].annotatedWith[Prod].toInstance(Some("prod option string"))
 
-    bindAssistedFactory[ComplexServiceFactory]
+    bindAssistedFactory[ComplexServiceFactory]()
 
     val multiBinder = createMultiBinder[MultiService]
     multiBinder.addBinding.to[OneMultiService]

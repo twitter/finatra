@@ -30,8 +30,10 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   /* Class under test */
   val mapper = FinatraObjectMapper.create()
   /* Test Injector */
-  val injector = TestInjector(
-    FinatraJacksonModule)
+  val injector =
+    TestInjector(
+      FinatraJacksonModule)
+    .create
 
   feature("simple tests") {
 

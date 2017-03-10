@@ -10,8 +10,10 @@ class InMemoryCredentialsIntegrationTest extends WordSpecIntegrationTest {
     "username" -> "foo",
     "password" -> "bar")
 
-  override def injector =
-    TestInjector(new InMemoryCredentialsModule(credentialsMap))
+  override val injector =
+    TestInjector(
+      new InMemoryCredentialsModule(credentialsMap))
+      .create
 
   "InMemoryCredentialsModule" should {
 

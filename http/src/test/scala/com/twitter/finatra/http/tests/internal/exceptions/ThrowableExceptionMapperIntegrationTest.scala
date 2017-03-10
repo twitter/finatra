@@ -11,11 +11,13 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 
 class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
-  override val injector = TestInjector(
-    MessageBodyModule,
-    FinatraJacksonModule,
-    MustacheModule,
-    InMemoryStatsReceiverModule)
+  override val injector =
+    TestInjector(
+      MessageBodyModule,
+      FinatraJacksonModule,
+      MustacheModule,
+      InMemoryStatsReceiverModule)
+    .create
 
   test("ThrowableExceptionMapper#unwrap Failure") {
     val failureExceptionMapper = injector.instance[FailureExceptionMapper]

@@ -1,18 +1,18 @@
 package com.twitter.inject.app.tests
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.app.EmbeddedApp
 
-class SampleAppIntegrationTest extends WordSpecTest {
+class SampleAppIntegrationTest extends Test {
 
-  "start app" in {
+  test("start app") {
     val app =
       new EmbeddedApp(new SampleApp)
 
     app.main()
   }
 
-  "exception in App#run() throws" in {
+  test("exception in App#run() throws") {
     val app = new EmbeddedApp(
       new SampleApp {
         override protected def run(): Unit = {

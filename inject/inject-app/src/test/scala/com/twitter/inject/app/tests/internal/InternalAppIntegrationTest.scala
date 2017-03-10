@@ -2,11 +2,11 @@ package com.twitter.inject.app.tests.internal
 
 import com.twitter.inject.app.EmbeddedApp
 import com.twitter.inject.app.tests.SampleApp
-import com.twitter.inject.{WordSpecTest, TwitterModule}
+import com.twitter.inject.{Test, TwitterModule}
 
-class InternalAppIntegrationTest extends WordSpecTest {
+class InternalAppIntegrationTest extends Test {
 
-  "start app" in {
+  test("start app") {
     val app = new EmbeddedApp(
       new SampleApp {
         addFrameworkModule(FooModule)
@@ -20,7 +20,7 @@ class InternalAppIntegrationTest extends WordSpecTest {
     app.main()
   }
 
-  "call injector before main" in {
+  test("call injector before main") {
     val e = intercept[Exception] {
       new SampleApp {
         addFrameworkModules(FooModule)
@@ -30,7 +30,7 @@ class InternalAppIntegrationTest extends WordSpecTest {
     e.getMessage should startWith("injector is not available")
   }
 
-  "error in run fails startup" in {
+  test("error in run fails startup") {
     val app = new SampleApp {
       override protected def run(): Unit = {
         super.run()
@@ -43,7 +43,7 @@ class InternalAppIntegrationTest extends WordSpecTest {
     }
   }
 
-  "two apps starting" in {
+  test("two apps starting") {
     val a = new EmbeddedApp(new com.twitter.inject.app.App {})
     a.main()
 

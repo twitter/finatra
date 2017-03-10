@@ -16,13 +16,13 @@ import java.nio.ByteBuffer
 object FinatraObjectMapper {
 
   /**
-   * When not using Guice, this factory method can be used, but be aware that the @JsonInject annotation will not work.
-   * NOTE: The preferred way of obtaining a FinatraObjectMapper is through Guice injection using FinatraJacksonModule.
+   * When not using injection, this factory method can be used but be aware that the @JsonInject annotation will not work.
+   * NOTE: The preferred way of obtaining a FinatraObjectMapper is through injection using FinatraJacksonModule.
    */
   def create(injector: Injector = null): FinatraObjectMapper = {
-    val guiceJacksonModule = new FinatraJacksonModule()
+    val jacksonModule = new FinatraJacksonModule()
     new FinatraObjectMapper(
-      guiceJacksonModule.provideScalaObjectMapper(injector))
+      jacksonModule.provideScalaObjectMapper(injector))
   }
 
   def parseMessageBody[T: Manifest](message: Message, reader: ObjectReader): T = {

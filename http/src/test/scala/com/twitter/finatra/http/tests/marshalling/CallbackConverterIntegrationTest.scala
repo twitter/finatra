@@ -16,12 +16,14 @@ import scala.concurrent.{Future => ScalaFuture}
 
 class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
-  override val injector = TestInjector(
-    MessageBodyModule,
-    FinatraJacksonModule,
-    MustacheModule,
-    DocRootModule,
-    StatsReceiverModule)
+  override val injector =
+    TestInjector(
+      MessageBodyModule,
+      FinatraJacksonModule,
+      MustacheModule,
+      DocRootModule,
+      StatsReceiverModule)
+    .create
 
   val callbackConverter = injector.instance[CallbackConverter]
 

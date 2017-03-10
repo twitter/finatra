@@ -7,8 +7,8 @@ import com.twitter.inject.app.TestInjector
 
 class CredentialsIntegrationTest extends WordSpecIntegrationTest {
 
-  override def injector =
-    TestInjector(CredentialsModule)
+  override val injector =
+    TestInjector(CredentialsModule).create
 
   "Credentials Module" should {
 

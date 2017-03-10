@@ -1,11 +1,11 @@
 package com.twitter.inject.requestscope
 
 import com.google.inject.{OutOfScopeException, Key}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class FinagleRequestScopeTest extends WordSpecTest {
+class FinagleRequestScopeTest extends Test {
 
-  "seed string" in {
+  test("seed string") {
     val scope = new FinagleRequestScope()
     scope.toString should be("FinagleRequestScope")
     scope.enter()
@@ -19,7 +19,7 @@ class FinagleRequestScopeTest extends WordSpecTest {
     scope.exit()
   }
 
-  "Use provider after scope exited" in {
+  test("Use provider after scope exited") {
     val scope = new FinagleRequestScope()
     scope.enter()
     scope.seed[String]("abc")
@@ -33,7 +33,7 @@ class FinagleRequestScopeTest extends WordSpecTest {
     }
   }
 
-  "get scope for unseeded value" in {
+  test("get scope for unseeded value") {
     val scope = new FinagleRequestScope()
     scope.enter()
 
@@ -45,14 +45,14 @@ class FinagleRequestScopeTest extends WordSpecTest {
     }
   }
 
-  "seed string before scope started" in {
+  test("seed string before scope started") {
     val scope = new FinagleRequestScope()
     intercept[OutOfScopeException] {
       scope.seed[String]("abc")
     }
   }
 
-  "seed same object twice" in {
+  test("seed same object twice") {
     val scope = new FinagleRequestScope()
     scope.enter()
 

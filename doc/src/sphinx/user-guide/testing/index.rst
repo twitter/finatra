@@ -190,8 +190,11 @@ To write an integration test, extend the `c.t.inject.IntegrationTest` trait. The
     class ExampleIntegrationTest extends IntegrationTest {
       override val injector =
         TestInjector(
-          flags = Map("foo.flag" -> "meaningfulValue"),
-          modules = Seq(ExampleModule))
+          flags =
+            Map("foo.flag" -> "meaningfulValue"),
+          modules =
+            Seq(ExampleModule))
+          .create
 
       test("MyTest#perform feature") {
         val exampleThingy = injector.instance[ExampleThingy]
@@ -280,7 +283,7 @@ syntax sugar for `ScalaTest <http://www.scalatest.org/>`__.
 
 This is a drop-in replacement for `org.specs2.mock.Mockito <http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html>`__. We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures will not be propagated up as ScalaTest test failures.
 
-See the next few sections on how you can use mocks in testing with either `Override Modules`_ or using `@Bind`_.
+See the next few sections on how you can use mocks in testing with either `Override Modules`_ or using `Embedded Server #bind[T] <#embedded-server-bind-t>`__.
 
 Override Modules
 ----------------
@@ -349,91 +352,89 @@ And in your test, add this stub module as a override module:
 
 An "override module" does what it sounds like. It overrides any bound instance in the object graph with the version it provides. As seen above, the `StubServiceAModule` provided a version of `ServiceA` that happens to be a stub. In this manner the main server does not need to change and we can replace parts of its object graph during testing.
 
-Note, modules used specifically for testing should be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: `@Bind`_ section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.
+Note, modules used specifically for testing should be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: `Embedded Server #bind[T] <#embedded-server-bind-t>`__ section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.
 
-Also note, that you can always create an override module over a mock, however it is generally preferable to want control over the expected mock behavior per-test and as such it's more common to keep a reference to a mock and use it with the `@Bind`_ functionality in a test.
+Also note, that you can always create an override module over a mock, however it is generally preferable to want control over the expected mock behavior per-test and as such it's more common to keep a reference to a mock and use it with the `embedded server #bind[T] <#embedded-server-bind-t>`__ functionality in a test.
 
-``@Bind``
----------
+Embedded Server ``#bind[T]``
+----------------------------
 
-First, check out the `Google Guice <https://github.com/google/guice>`__ documentation on Bound Fields `here <https://github.com/google/guice/wiki/BoundFields>`__.
-
-In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a simple stub implementation), we do not need to create a specific module for testing to compose into our server as an override module. Instead we can use the `com.google.inject.testing.fieldbinder.Bind` annotation.
+In the cases where we'd like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a simple stub implementation), we do not need to create a specific module for testing to compose into our server as an override module. Instead we can use the `bind[T]` function on the embedded server, eg. `c.t.inject.server.EmbeddedTwitterServer#bind <https://github.com/twitter/finatra/blob/92bfb74ecf7b299adb6602847ca9daa89895f3af/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L138>`__.
 
 .. code:: scala
 
-
-    import com.google.inject.testing.fieldbinder.Bind
     import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
-    import com.twitter.inject.server.WordSpecFeatureTest
+    import com.twitter.inject.server.FeatureTest
     import com.twitter.inject.Mockito
 
     class ExampleFeatureTest
-      extends WordSpecFeatureTest
+      extends FeatureTest
       with Mockito
       with HttpTest {
 
-      @Bind val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
+      val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
+      val mockIdService = smartMock[IdService]
 
-      @Bind val mockIdService = smartMock[IdService]
+      override val server =
+        new EmbeddedHttpServer(new ExampleServer)
+        .bind[DownstreamServiceClient](mockDownstreamServiceClient)
+        .bind[IdService](mockIdService)
 
-      override val server = new EmbeddedHttpServer(new ExampleServer)  
-
-      "test" in {
+      test("service test") {
         /* Mock GET Request performed by DownstreamServiceClient */
         mockDownstreamServiceClient.get("/tweets/123.json")(manifest[FooResponse]) returns Future(None)
         ...
       }
 
-
-Notes:
-^^^^^^
-
--  You **MUST** extend from either `c.t.inject.IntegrationTest <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTest.scala>`__ directly or from a sub-class. We recommend using `c.t.inject.server.WordSpecFeatureTest <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/WordSpecFeatureTest.scala>`__.
-   
-   See more information on these test traits in the `Feature Tests`_ section.
--  Prefer to define ``@Bind`` and ``@Inject`` variables before the server definition.
--  While we support the `com.google.inject.testing.fieldbinder.Bind` annotation, our integration does not currently support the `to` annotation field, e.g., ``@Bind(to = classOf[T])``, therefore,
--  The type of the variable you annotate with ``@Bind`` must *exactly* match the type in the object graph you want to override. E.g., if you want to override an implementation bound to an interface with a mock or stub that implements the same interface, you should make sure to type the variable definition. For instance,
-
-   .. code:: scala
-
-       @Bind val idService: IdService = new MockIdServiceImpl
-
--  Because of lifecycle reasons, access to the embedded server **MUST** either be from a lazy variable or inside a test method.
-
 For a complete example, see the
 `TwitterCloneFeatureTest <https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala>`__.
 
-There is another way to use this type of binding in tests (which will eventually become the preferred way) that does not have the above caveats (but instead comes with a different caveat).
+Using ``@Bind`` (the `com.google.inject.testing.fieldbinder.Bind` annotation) is to be considered deprecated.
 
-You can also achieve the above ``@Bind`` behavior by using `c.t.inject.server.EmbeddedTwitterServer#bind <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L136>`__.
+TestInjector ``#bind[T]``
+-------------------------
 
-Unfortunately, we have not yet migrated from using Scala Manifests and thus this method suffers from not being able to fully support `higher-kinded <http://blogs.atlassian.com/2013/09/scala-types-of-a-higher-kind/>`__ types.
+As described in the `Integration Tests <#integration-tests>`__ section you can use the `TestInjector` to construct a minimal object graph for testing. The `TestInjector` also supports a `bind[T]` function to let you easily replace bound instances in the constructed object graph with another instance, like a mock or stub.
 
-To use, you can do:
+E.g.,
 
 .. code:: scala
 
-    val mockIdService = smartMock[IdService]
+    import com.twitter.inject.IntegrationTest
 
-    override val server = 
-      new EmbeddedHttpServer(new ExampleServer)
-        .bind[IdService](mockIdService)
+    class ExampleIntegrationTest extends IntegrationTest {
+      val mockIdService = smartMock[IdService]
+
+      override val injector =
+        TestInjector(
+          flags =
+            Map("foo.flag" -> "meaningfulValue"),
+          modules =
+            Seq(ExampleModule, IdServiceModule))
+          .bind[IdService](mockIdService)
+          .create
+
+      test("MyTest#perform feature") {
+        ...
+      }
+    }
+
+In this example, the bound `IdService` would be replaced with the `mockIdService`. For a more complete example, see the
+`DarkTrafficCanonicalResourceHeaderTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/darktraffic/test/DarkTrafficCanonicalResourceHeaderTest.scala>`__.
 
 Startup Tests
 -------------
 
 By default the Finatra embedded testing infrastructure sets the `Guice` `com.google.inject.Stage <https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html>`__ to `DEVELOPMENT`. For testing we choose the trade-off of a fast start-up time for the embedded server at the expense of some runtime performance as classes are lazily loaded when accessed by the test features.
 
-However, this also means that if you have misconfigured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.
+However, this also means that if you have mis-configured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.
 
 As such, we recommend creating a simple test -- a `StartupTest` to check that your service can start up and report itself as healthy. This checks the correctness of the dependency graph, catching errors that could otherwise cause the server to fail to start.
 
 A `StartupTest` should mimic production as closely as possible. Therefore, you should
 
 -  set the `com.google.inject.Stage <https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html>`__ to `PRODUCTION` so that all singletons will be eagerly created at startup (integration/feature tests run in `Stage.DEVELOPMENT` by default).
--  avoid using `@Bind`_ or `Override Modules`_ to replace bound types.
+-  avoid using `embedded server #bind[T] <#embedded-server-bind-t>`__ or `Override Modules`_ to replace bound types.
 -  prevent Finagle clients from making outbound connections during startup tests by setting any `c.t.server.resolverMap` entries to `nil!`.
 
 For example:

@@ -2,17 +2,17 @@ package com.twitter.inject.modules.tests
 
 import com.google.inject.Guice
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.modules.{InMemoryStatsReceiverModule, StatsReceiverModule}
 
-class StatsReceiverModuleTest extends WordSpecTest {
+class StatsReceiverModuleTest extends Test {
 
-  "StatsReceiverModule" in {
+  test("StatsReceiverModule") {
     val injector = Guice.createInjector(StatsReceiverModule)
     injector.getInstance(classOf[StatsReceiver])
   }
 
-  "InMemoryStatsReceiverModule" in {
+    test("InMemoryStatsReceiverModule") {
     val injector = Guice.createInjector(InMemoryStatsReceiverModule)
     injector.getInstance(classOf[StatsReceiver])
   }

@@ -286,6 +286,7 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "net.codingwell" %% "scala-guice" % versions.scalaGuice,
       "org.joda" % "joda-convert" % versions.jodaConvert,
       "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
+      "org.scala-lang" % "scalap" % scalaVersion.value,
       "com.google.inject" % "guice" % versions.guice % "test",
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
     ),

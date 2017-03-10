@@ -1,5 +1,6 @@
 junit_tests(
   dependencies=[
+    '//:scala-reflect',
     '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',

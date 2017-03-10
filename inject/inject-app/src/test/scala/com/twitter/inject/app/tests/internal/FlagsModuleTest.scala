@@ -2,13 +2,13 @@ package com.twitter.inject.app.tests.internal
 
 import com.google.inject.ProvisionException
 import com.twitter.app.Flags
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.app.internal.FlagsModule
 import javax.inject.Inject
 
-class FlagsModuleTest extends WordSpecTest {
+class FlagsModuleTest extends Test {
 
   val flag = new Flags("FlagsModuleTest", includeGlobal = false, failFastUntilParsed = false)
   val myFlag = flag[String]("my.flag", "This flag has no default")
@@ -16,20 +16,21 @@ class FlagsModuleTest extends WordSpecTest {
   flag.parseArgs(Array())
   val flagsModule = FlagsModule.create(flag.getAll(includeGlobal = false).toSeq)
 
-  "FlagsModule" should {
-    "inject flag with default" in {
-      TestInjector(flagsModule).instance[RequiresFlagWithDefault].flagValue should be("default value")
+  test("inject flag with default") {
+    val flagValue = TestInjector(flagsModule).create.instance[RequiresFlagWithDefault].flagValue
+    assert(flagValue == "default value")
+  }
+
+  test("throw exception when injecting flag without default") {
+    val e = intercept[ProvisionException] {
+      TestInjector(flagsModule).create.instance[RequiresFlag]
     }
 
-    "throw exception when injecting flag without default" in {
-      intercept[ProvisionException] {
-        TestInjector(flagsModule).instance[RequiresFlag]
-      }.getCause shouldBe an[IllegalArgumentException]
-    }
+    assert(e.getCause.getClass == classOf[IllegalArgumentException])
+  }
 
-    "use flag without default" in {
-      myFlag.get should be(None)
-    }
+  test("use flag without default") {
+    assert(myFlag.get.isEmpty)
   }
 }
 

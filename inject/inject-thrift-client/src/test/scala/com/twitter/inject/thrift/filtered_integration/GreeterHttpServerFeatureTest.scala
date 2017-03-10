@@ -3,12 +3,12 @@ package com.twitter.inject.thrift.filtered_integration
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.thrift.filtered_integration.http_server.GreeterHttpServer
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
 
 class GreeterHttpServerFeatureTest 
-  extends WordSpecTest 
+  extends Test
   with HttpTest {
 
   val thriftServer = new EmbeddedThriftServer(
@@ -26,19 +26,17 @@ class GreeterHttpServerFeatureTest
     thriftServer.close()
   }
 
-  "GreeterHttpServer" should {
-    "Say hi" in {
-      httpServer.httpGet(
-        path = "/hi?name=Bob",
-        andExpect = Ok,
-        withBody = "Hi Bob")
-    }
+  test("GreeterHttpServer#Say hi") {
+    httpServer.httpGet(
+      path = "/hi?name=Bob",
+      andExpect = Ok,
+      withBody = "Hi Bob")
+  }
 
-    "Say bye" in {
-      httpServer.httpGet(
-        path = "/bye?name=Bob&age=18",
-        andExpect = Ok,
-        withBody = "Bye Bob of 18 years!")
-    }
+  test("GreeterHttpServer#Say bye") {
+    httpServer.httpGet(
+      path = "/bye?name=Bob&age=18",
+      andExpect = Ok,
+      withBody = "Bye Bob of 18 years!")
   }
 }

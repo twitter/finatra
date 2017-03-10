@@ -11,18 +11,20 @@ import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Service}
 import com.twitter.inject.PoolUtils
-import com.twitter.inject.app.{InjectionServiceModule, StartupTimeoutException}
+import com.twitter.inject.app.{InjectionServiceWithAnnotationModule, InjectionServiceModule, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.inject.server.PortUtils._
 import com.twitter.server.AdminHttpServer
-import com.twitter.util._
+import com.twitter.util.{Await, Duration, Future, Stopwatch, Try}
+import java.lang.annotation.Annotation
 import java.net.{InetSocketAddress, URI}
 import java.util.concurrent.TimeUnit._
 import org.apache.commons.lang.reflect.FieldUtils
 import org.scalatest.Matchers
 import scala.collection.JavaConverters._
+import scala.reflect.runtime.universe._
 import scala.util.control.NonFatal
 
 object EmbeddedTwitterServer {
@@ -135,8 +137,35 @@ class EmbeddedTwitterServer(
 
   /* Public */
 
-  def bind[T : Manifest](instance: T): EmbeddedTwitterServer = {
+  /**
+   * Bind an instance of type [T] to the object graph of the underlying server.
+   * This will REPLACE any previously bound instance of the given type.
+   *
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @return this [[EmbeddedTwitterServer]].
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   */
+  def bind[T : TypeTag](instance: T): EmbeddedTwitterServer = {
     bindInstance[T](instance)
+    this
+  }
+
+  /**
+   * Bind an instance of type [T] annotated with Annotation type [A] to the object
+   * graph of the underlying server. This will REPLACE any previously bound instance of
+   * the given type bound with the given annotation type.
+   *
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @tparam A - type of the Annotation used to bind the instance.
+   * @return this [[EmbeddedTwitterServer]].
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   */
+  def bind[T : TypeTag, A <: Annotation : TypeTag](instance: T): EmbeddedTwitterServer = {
+    bindInstance[T, A](instance)
     this
   }
 
@@ -187,6 +216,7 @@ class EmbeddedTwitterServer(
    * NOTE: We avoid using slf4j-api info logging so that we can differentiate the
    * underlying server logs from the testing framework logging without requiring a
    * test logging configuration to be loaded.
+   *
    * @param str - the string message to log
    */
   def info(str: String): Unit = {
@@ -425,14 +455,22 @@ class EmbeddedTwitterServer(
     ("-admin.port=" + PortUtils.ephemeralLoopback) +: (args ++ flagsStr).toArray
   }
 
-  protected def bindInstance[T: Manifest](instance: T): Unit = {
-    if (!isInjectable) {
-      throw new IllegalStateException("Cannot call bind() with a non-injectable underlying server." )
-    }
-    injectableServer.addFrameworkOverrideModules(new InjectionServiceModule(instance))
+  protected[twitter] def bindInstance[T : TypeTag](instance: T): Unit = {
+    addInjectionServiceFrameworkOverrideModule(new InjectionServiceModule(instance))
+  }
+
+  protected[twitter] def bindInstance[T : TypeTag, A <: Annotation : TypeTag](instance: T): Unit = {
+    addInjectionServiceFrameworkOverrideModule(new InjectionServiceWithAnnotationModule[T, A](instance))
   }
 
   /* Private */
+
+  private def addInjectionServiceFrameworkOverrideModule(module: com.google.inject.Module): Unit = {
+    if (!isInjectable) {
+      throw new IllegalStateException("Cannot call bind() with a non-injectable underlying server." )
+    }
+    injectableServer.addFrameworkOverrideModules(module)
+  }
 
   private def disableLogging = {
     disableTestLogging || System.getProperties.keySet().contains("com.twitter.inject.test.logging.disabled")

@@ -12,7 +12,12 @@ import org.specs2.mock.Mockito
 class MessageBodyManagerTest extends Test with Mockito {
 
   val request = mock[Request]
-  val injector = TestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule)
+  val injector =
+    TestInjector(
+      MessageBodyModule,
+      FinatraJacksonModule,
+      MustacheModule)
+    .create
 
   val messageBodyManager = injector.instance[MessageBodyManager]
   messageBodyManager.add[DogMessageBodyReader]()

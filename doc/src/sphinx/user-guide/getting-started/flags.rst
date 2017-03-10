@@ -30,7 +30,7 @@ Flags can be `defined <https://github.com/twitter/finatra/blob/ec8d584eb914f50f9
 
 When defined within a `Module <modules.html>`__, flags can be used to aid in the construction of an instance to be `provided to the object graph <modules.html#provides>`__, e.g., a DatabaseConnection instance with the database URL specified by a flag. The module is then able to tell the injector how to provide an instance of this type when necessary by defining an ``@Provides`` annotated method.
 
-In Finatra, we also provide a way to override bound instances in the object graph when testing through `Override Modules <../testing/index.html#override-modules>`__ or with `@Bind <../testing/index.html#bind>`__.
+In Finatra, we also provide a way to override bound instances in the object graph when testing through `Override Modules <../testing/index.html#override-modules>`__ or by using `Embedded Server #bind[T] <../testing/index.html##embedded-server-bind-t>`__.
 
 ``@Flag`` annotation
 --------------------

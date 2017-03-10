@@ -5,21 +5,20 @@ import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
-import com.twitter.inject.Test
+import com.twitter.inject.{Mockito, Test}
 import com.twitter.inject.app.TestInjector
 import org.apache.commons.lang.RandomStringUtils
-import org.specs2.mock.Mockito
 
 class ExceptionManagerTest extends Test with Mockito {
 
   def newExceptionManager =
     new ExceptionManager(
-      TestInjector(),
+      TestInjector().create,
       new InMemoryStatsReceiver)
 
   lazy val collectionExceptionManager =
     new ExceptionManager(
-      TestInjector(),
+      TestInjector().create,
       new InMemoryStatsReceiver)
 
   def randomUri = {
@@ -45,10 +44,9 @@ class ExceptionManagerTest extends Test with Mockito {
     .add(exceptionMapperCollection)
 
   def testException(
-                     e: Throwable,
-                     status: Status,
-                     manager: ExceptionManager = exceptionManager
-                   ): Unit = {
+    e: Throwable,
+    status: Status,
+    manager: ExceptionManager = exceptionManager): Unit = {
     val request = RequestBuilder.get(randomUri)
     val response = manager.toResponse(request, e)
     response.status should equal(status)

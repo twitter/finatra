@@ -1,13 +1,12 @@
 package com.twitter.finatra.httpclient
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.httpclient.modules.HttpClientModule
 import com.twitter.finatra.httpclient.test.InMemoryHttpService
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.IntegrationTest
+import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.inject.app.TestInjector
 import com.twitter.util.Await
 
@@ -15,12 +14,13 @@ class HttpClientIntegrationTest extends IntegrationTest {
 
   val inMemoryHttpService = new InMemoryHttpService()
 
-  @Bind
-  val httpService: Service[Request, Response] = inMemoryHttpService
-
-  override val injector = TestInjector(
-    modules = Seq(MyHttpClientModule, FinatraJacksonModule),
-    overrideModules = Seq(integrationTestModule))
+  override val injector: Injector =
+    TestInjector(
+      modules = Seq(
+        MyHttpClientModule,
+        FinatraJacksonModule))
+      .bind[Service[Request, Response]](inMemoryHttpService)
+      .create
 
   val httpClient = injector.instance[HttpClient]
 

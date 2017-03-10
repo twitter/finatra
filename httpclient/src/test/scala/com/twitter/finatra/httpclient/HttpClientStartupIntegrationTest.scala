@@ -14,6 +14,7 @@ class HttpClientStartupIntegrationTest extends Test {
       }),
       flags = Map(
         "com.twitter.server.resolverMap" -> "myservice=nil!"))
+      .create
 
     injector.instance[HttpClient]
   }
@@ -26,6 +27,7 @@ class HttpClientStartupIntegrationTest extends Test {
       }),
       flags = Map(
         "com.twitter.server.resolverMap" -> "myservice=nil!"))
+      .create
 
     injector.instance[HttpClient]
   }

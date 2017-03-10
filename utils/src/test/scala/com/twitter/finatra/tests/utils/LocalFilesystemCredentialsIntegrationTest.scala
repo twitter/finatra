@@ -34,10 +34,11 @@ class LocalFilesystemCredentialsIntegrationTest extends WordSpecIntegrationTest 
     super.afterAll()
   }
 
-  override def injector =
+  override val injector =
     TestInjector(
       flags = Map("credentials.file.path" -> s"${BaseDirectory}keys/finatra/credentials.yml"),
       modules = Seq(CredentialsModule))
+    .create
 
   "Credentials Module" should {
 

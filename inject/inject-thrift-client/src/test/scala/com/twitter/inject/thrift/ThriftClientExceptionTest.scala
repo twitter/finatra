@@ -1,11 +1,11 @@
 package com.twitter.inject.thrift
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.inject.utils.ExceptionUtils
 import com.twitter.scrooge.{ThriftStructCodec3, ThriftMethod}
 
-class ThriftClientExceptionTest extends WordSpecTest {
+class ThriftClientExceptionTest extends Test {
   val FakeThriftMethod = new ThriftMethod {
     val name: String = "fakeThriftMethod"
 
@@ -29,7 +29,7 @@ class ThriftClientExceptionTest extends WordSpecTest {
   }
 
 
-  "toString" in {
+  test("toString") {
     val cause = new Exception("ThriftClientException")
 
     val thriftClientException = new ThriftClientException(

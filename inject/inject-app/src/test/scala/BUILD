@@ -32,6 +32,7 @@ scala_library(name="test-deps",
     repo = artifactory,
   ),
   dependencies=[
+    '//:scala-reflect',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject/extensions:guice-testlib',

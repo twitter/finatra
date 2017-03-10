@@ -1,9 +1,9 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.server.Ports
 
-class PortsTest extends WordSpecTest {
+class PortsTest extends Test {
 
   lazy val server: Ports =
     new Ports {
@@ -20,11 +20,9 @@ class PortsTest extends WordSpecTest {
     }
   }
 
-  "Ports" should {
-    "resolve" in {
-      server.httpExternalPort shouldBe Some(9999)
-      server.httpsExternalPort shouldBe Some(4443)
-      server.thriftPort shouldBe Some(9991)
-    }
+  test("Ports#resolve") {
+    server.httpExternalPort shouldBe Some(9999)
+    server.httpsExternalPort shouldBe Some(4443)
+    server.thriftPort shouldBe Some(9991)
   }
 }
