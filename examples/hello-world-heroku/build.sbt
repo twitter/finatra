@@ -1,25 +1,18 @@
-name := "java-http-server"
+import com.typesafe.sbt.SbtNativePackager._
+
+packageArchetype.java_application
+name := "hello-world-heroku"
 organization := "com.twitter"
-version := "2.9.0-SNAPSHOT"
+version := "2.9.0"
 scalaVersion := "2.11.8"
+fork in run := true
 parallelExecution in ThisBuild := false
-publishMavenStyle := true
-crossPaths := false
-autoScalaLibrary := false
-
-javacOptions ++= Seq(
-  "-source", "1.8",
-  "-target", "1.8",
-  "-Xlint:unchecked"
-)
-
-mainClass in (Compile, packageBin) := Some("com.twitter.hello.server.HelloWorldServerMain")
 
 lazy val versions = new {
-  val finatra = "2.9.0-SNAPSHOT"
+  val finatra = "2.9.0"
   val guice = "4.0"
   val logback = "1.1.7"
-  val junit = "4.12"
+  val finagleMetrics = "0.0.3"
 }
 
 resolvers ++= Seq(
@@ -36,6 +29,7 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,
   "com.twitter" %% "finatra-httpclient" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
+  "com.github.rlazoti" %% "finagle-metrics" % versions.finagleMetrics,
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test",
@@ -52,9 +46,7 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "inject-core" % versions.finatra % "test" classifier "tests",
   "com.twitter" %% "inject-modules" % versions.finatra % "test" classifier "tests",
 
-  "junit" % "junit" % versions.junit % "test",
   "org.mockito" % "mockito-core" % "1.9.5" % "test",
   "org.scalacheck" %% "scalacheck" % "1.13.4" % "test",
   "org.scalatest" %% "scalatest" %  "3.0.0" % "test",
-  "org.specs2" %% "specs2-mock" % "2.4.17" % "test",
-  "com.novocode" % "junit-interface" % "0.11" % Test)
+  "org.specs2" %% "specs2-mock" % "2.4.17" % "test")

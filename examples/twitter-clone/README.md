@@ -2,7 +2,7 @@
 
 * Note: Finatra examples are built in different ways depending on the branch.
 
-[Master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.8.0](https://github.com/twitter/finatra/tree/finatra-2.8.0))
+[Master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.9.0](https://github.com/twitter/finatra/tree/finatra-2.9.0))
 ----------------------------------------------------------
 Run sbt from **this** project's directory, e.g.
 ```
@@ -13,7 +13,7 @@ $ sbt "run -firebase.host=finatra.firebaseio.com -com.twitter.server.resolverMap
 Or build and run a deployable jar:
 ```
 $ sbt assembly
-$ java -jar -Dlog.service.output=twitter-clone.log -Dlog.access.output=access.log target/scala-2.11/twitter-clone-assembly-2.8.0.jar -http.port=:8888 -admin.port=:9990 -firebase.host=finatra.firebaseio.com -com.twitter.server.resolverMap=firebase=finatra.firebaseio.com:443
+$ java -jar -Dlog.service.output=twitter-clone.log -Dlog.access.output=access.log target/scala-2.11/twitter-clone-assembly-2.9.0.jar -http.port=:8888 -admin.port=:9990 -firebase.host=finatra.firebaseio.com -com.twitter.server.resolverMap=firebase=finatra.firebaseio.com:443
 ```
 
 Any other branch

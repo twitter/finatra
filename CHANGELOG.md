@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+### Fixed
+
+### Closed
+
+## [finatra-2.9.0](https://github.com/twitter/finatra/tree/finatra-2.9.0) (2017-03-10)
+
+### Added
+
+### Changed
+
 * inject-core: (BREAKING API CHANGE) Allow for binding of higher-kinded types when testing.
   Deprecated `@Bind` mechanism for replacing bound types in an object graph. Now instead of
   using `@Bind` like this:

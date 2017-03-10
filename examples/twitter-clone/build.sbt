@@ -1,18 +1,18 @@
-name := "benchmark-server"
+name := "twitter-clone"
 organization := "com.twitter"
-version := "2.9.0-SNAPSHOT"
+version := "2.9.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.9.0-SNAPSHOT"
+  val finatra = "2.9.0"
+  val guice = "4.0"
   val logback = "1.1.7"
 }
 
-mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain")
-
 resolvers ++= Seq(
-  Resolver.sonatypeRepo("releases")
+  Resolver.sonatypeRepo("releases"),
+  "Twitter Maven" at "https://maven.twttr.com"
 )
 
 assemblyMergeStrategy in assembly := {
@@ -32,6 +32,7 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "inject-app" % versions.finatra % "test",
   "com.twitter" %% "inject-core" % versions.finatra % "test",
   "com.twitter" %% "inject-modules" % versions.finatra % "test",
+  "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test",
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test" classifier "tests",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",
