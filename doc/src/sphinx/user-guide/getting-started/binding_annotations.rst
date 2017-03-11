@@ -5,13 +5,13 @@ Binding Annotations
 
 Occasionally, you may want multiple bound instances of the same type. For instance you may want both a `FooHttpClient <: HttpClient` and a `BarHttpClient <: HttpClient`.
 
-To do this we recommend creating specific `binding annotation <https://github.com/google/guice/wiki/BindingAnnotations>`__.
+To do this we recommend creating a specific `binding annotation <https://github.com/google/guice/wiki/BindingAnnotations>`__.
 
 Define an Annotation
 --------------------
 
 Defining a binding annotation is a few lines of java code plus imports.
-We recommend that you put the annotation in it's own `.java` file.
+We recommend that you put the annotation in its own `.java` file.
 
 .. code:: scala
 

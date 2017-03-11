@@ -1,37 +1,35 @@
 package com.twitter.inject.thrift
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.inject.utils.ExceptionUtils
 import com.twitter.scrooge.{ThriftStructCodec3, ThriftMethod}
 
-class ThriftClientExceptionTest extends WordSpecTest {
+class ThriftClientExceptionTest extends Test {
   val FakeThriftMethod = new ThriftMethod {
-    override val name = "fakeThriftMethod"
+    val name: String = "fakeThriftMethod"
 
-    /** Thrift service name. A thrift service is a list of methods. */
-    override def serviceName: String = "FakeService"
+    override def annotations: Map[String, String] = ???
 
-    /** Convert a service implementation of this method into a function implementation */
-    override def serviceToFunction(svc: ServiceType): FunctionType = ???
+    def serviceName: String = "FakeService"
 
-    /** True for oneway thrift methods */
-    override def oneway: Boolean = ???
+    def serviceToFunction(svc: ServiceType): FunctionType = ???
 
-    /** Codec for the request args */
-    override def argsCodec: ThriftStructCodec3[Args] = ???
+    def oneway: Boolean = ???
 
-    /** Codec for the response */
-    override def responseCodec: ThriftStructCodec3[Result] = ???
+    def argsCodec: ThriftStructCodec3[Args] = ???
 
-    /** Convert a function implementation of this method into a service implementation */
-    override def functionToService(f: FunctionType): ServiceType = ???
+    def responseCodec: ThriftStructCodec3[Result] = ???
+
+    def functionToService(f: FunctionType): ServiceType = ???
+
+    def toServiceIfaceService(f: FunctionType): ServiceIfaceServiceType = ???
 
     override def toString: String = name
   }
 
 
-  "toString" in {
+  test("toString") {
     val cause = new Exception("ThriftClientException")
 
     val thriftClientException = new ThriftClientException(

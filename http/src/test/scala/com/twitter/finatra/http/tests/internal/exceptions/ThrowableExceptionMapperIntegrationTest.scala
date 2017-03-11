@@ -6,63 +6,63 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.exceptions._
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.WordSpecIntegrationTest
+import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 
-class ThrowableExceptionMapperIntegrationTest extends WordSpecIntegrationTest {
-  override val injector = TestInjector(
-    MessageBodyModule,
-    FinatraJacksonModule,
-    MustacheModule,
-    InMemoryStatsReceiverModule)
+class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
+  override val injector =
+    TestInjector(
+      MessageBodyModule,
+      FinatraJacksonModule,
+      MustacheModule,
+      InMemoryStatsReceiverModule)
+    .create
 
-  "ThrowableExceptionMapper" should {
-    "unwrap Failure" in {
-      val failureExceptionMapper = injector.instance[FailureExceptionMapper]
-      val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
+  test("ThrowableExceptionMapper#unwrap Failure") {
+    val failureExceptionMapper = injector.instance[FailureExceptionMapper]
+    val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
 
-      val failure = Failure(new CancelledRequestException)
+    val failure = Failure(new CancelledRequestException)
 
-      val e = intercept[CancelledRequestException] {
-        failureExceptionMapper.toResponse(request, failure)
-      }
-
-      cancelledRequestExceptionMapper.toResponse(request, e).status should be(Status.ClientClosedRequest)
+    val e = intercept[CancelledRequestException] {
+      failureExceptionMapper.toResponse(request, failure)
     }
 
-    "unwrap nested Failure" in {
-      val failureExceptionMapper = injector.instance[FailureExceptionMapper]
-      val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
+    cancelledRequestExceptionMapper.toResponse(request, e).status should be(Status.ClientClosedRequest)
+  }
 
-      val failure = Failure(Failure(new CancelledRequestException))
+  test("ThrowableExceptionMapper#unwrap nested Failure") {
+    val failureExceptionMapper = injector.instance[FailureExceptionMapper]
+    val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
 
-      val e = intercept[CancelledRequestException] {
-        failureExceptionMapper.toResponse(request, failure).status
-      }
+    val failure = Failure(Failure(new CancelledRequestException))
 
-      cancelledRequestExceptionMapper.toResponse(request, e).status should be(Status.ClientClosedRequest)
+    val e = intercept[CancelledRequestException] {
+      failureExceptionMapper.toResponse(request, failure).status
     }
 
-    "handle Failure without cause" in {
-      val failureExceptionMapper = injector.instance[FailureExceptionMapper]
+    cancelledRequestExceptionMapper.toResponse(request, e).status should be(Status.ClientClosedRequest)
+  }
 
-      val failure = Failure("NO REASON")
-      failureExceptionMapper.toResponse(request, failure).status should be(Status.InternalServerError)
-    }
+  test("ThrowableExceptionMapper#handle Failure without cause") {
+    val failureExceptionMapper = injector.instance[FailureExceptionMapper]
 
-    "handle pathological Failure (greater than MaxDepth)" in {
-      val failureExceptionMapper = injector.instance[FailureExceptionMapper]
+    val failure = Failure("NO REASON")
+    failureExceptionMapper.toResponse(request, failure).status should be(Status.InternalServerError)
+  }
 
-      val failure = Failure(Failure(Failure(Failure(Failure(Failure(new CancelledRequestException()))))))
-      failureExceptionMapper.toResponse(request, failure).status should be(Status.InternalServerError)
-    }
+  test("ThrowableExceptionMapper#handle pathological Failure (greater than MaxDepth)") {
+    val failureExceptionMapper = injector.instance[FailureExceptionMapper]
 
-    "handle 'unhandled' exception" in {
-      val throwableExceptionMapper = injector.instance[ThrowableExceptionMapper]
+    val failure = Failure(Failure(Failure(Failure(Failure(Failure(new CancelledRequestException()))))))
+    failureExceptionMapper.toResponse(request, failure).status should be(Status.InternalServerError)
+  }
 
-      throwableExceptionMapper.toResponse(request, new Throwable("NO REASON")).status should be(Status.InternalServerError)
-    }
+  test("ThrowableExceptionMapper#handle 'unhandled' exception") {
+    val throwableExceptionMapper = injector.instance[ThrowableExceptionMapper]
+
+    throwableExceptionMapper.toResponse(request, new Throwable("NO REASON")).status should be(Status.InternalServerError)
   }
 
   def request: Request = {

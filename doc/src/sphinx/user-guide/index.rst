@@ -3,13 +3,13 @@ User's Guide
 
 |Build Status| |Test Coverage| |Project status| |Maven Central| |Gitter|
 
-Finatra uses `Finagle <https://twitter.github.io/finagle/guide/>`__ and `TwitterServer <https://twitter.github.io/twitter-server/>`__ and it is *highly recommended* that you familiarize yourself with those frameworks before getting started.
+Finatra builds on `TwitterServer <https://twitter.github.io/twitter-server/>`__ and uses `Finagle <https://twitter.github.io/finagle/guide/>`__, therefore it is *highly recommended* that you familiarize yourself with those frameworks before getting started.
 
 The version of Finatra documented here is **version 2.x**. Version 2.x is a **complete rewrite** over v1.x and as such many things are different.
 
-For more information about the changes from v1.x see the blog post `here <https://blog.twitter.com/2015/finatra-20-the-fast-testable-scala-services-framework-that-powers-twitter>`__.
+For high-level information about the changes from v1.x see the blog post `here <https://blog.twitter.com/2015/finatra-20-the-fast-testable-scala-services-framework-that-powers-twitter>`__.
 
-Finatra at it's core is agnostic to the type of service or application being created. It can be used to build anything based on the `TwitterUtil <https://github.com/twitter/util>`__: `c.t.app.App <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala>`__. 
+Finatra at its core is agnostic to the type of service or application being created. It can be used to build anything based on `TwitterUtil <https://github.com/twitter/util>`__: `c.t.app.App <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala>`__. 
 
 For servers, Finatra builds on top of the `features <https://twitter.github.io/twitter-server/Features.html>`__ of `TwitterServer <https://twitter.github.io/twitter-server/>`__ (and `Finagle <https://twitter.github.io/finagle>`__) by allowing you to easily define a `Server <https://twitter.github.io/finagle/guide/Servers.html>`__ and controllers (a `Service <https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services>`__-like abstraction) which define and handle endpoints of the Server. You can also compose `Filters <https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters>`__ either per controller, per route in a controller, or across all controllers.
 
@@ -18,12 +18,13 @@ Getting Started
 ---------------
 
 - :doc:`getting-started/basics`
-- :doc:`getting-started/examples`
+- :doc:`getting-started/framework`
 - :doc:`getting-started/lifecycle`
 - :doc:`getting-started/modules`
 - :doc:`getting-started/binding_annotations`
 - :doc:`getting-started/flags`
 - :doc:`getting-started/futures`
+- :doc:`getting-started/examples`
 
 Logging
 -------
@@ -92,12 +93,13 @@ For support feel free to follow and/or tweet at the `@finatra <https://twitter.c
    :hidden:
 
    getting-started/basics.rst
-   getting-started/examples.rst
+   getting-started/framework.rst
    getting-started/lifecycle.rst
    getting-started/modules.rst
    getting-started/binding_annotations.rst
    getting-started/flags.rst
    getting-started/futures.rst
+   getting-started/examples.rst
    logging/index.rst
    logging/logback.rst
    http/server.rst

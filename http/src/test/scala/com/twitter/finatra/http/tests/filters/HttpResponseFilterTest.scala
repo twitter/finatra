@@ -1,16 +1,17 @@
-package com.twitter.finatra.http.filters
+package com.twitter.finatra.http.tests.filters
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.inject.WordSpecTest
+import com.twitter.finatra.http.filters.HttpResponseFilter
+import com.twitter.inject.Test
 import com.twitter.util.{Await, Future}
 
-class HttpResponseFilterTest extends WordSpecTest {
+class HttpResponseFilterTest extends Test {
 
   val respFilter = new HttpResponseFilter[Request]
   val rfc7231Regex = """^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d\d (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d\d:\d\d:\d\d GMT$"""
 
-  "test response header" in {
+  test("test response header") {
     val service = Service.mk[Request, Response] { request =>
       val response = Response()
       response.setStatusCode(200)

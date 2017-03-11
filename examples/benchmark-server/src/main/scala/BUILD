@@ -5,7 +5,6 @@ scala_library(
     '3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda',
     '3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala',
     '3rdparty/jvm/com/google/inject:guice',
-    '3rdparty/jvm/org/clapper:grizzled-slf4j',
     'finagle/finagle-core/src/main/scala:scala',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/http/src/main/scala:scala',
@@ -16,6 +15,7 @@ scala_library(
     'util/util-app/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
     'util/util-logging/src/main/scala:scala',
+    'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala:scala',
   ],
   excludes = [

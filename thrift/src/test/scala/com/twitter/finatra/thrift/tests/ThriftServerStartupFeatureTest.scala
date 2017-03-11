@@ -4,13 +4,13 @@ import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoNothingController
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftServer}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.server.EmbeddedTwitterServer
 import scala.util.control.NonFatal
 
-class ThriftServerStartupFeatureTest extends WordSpecTest {
+class ThriftServerStartupFeatureTest extends Test {
 
-  "fail startup" in {
+  test("fail startup") {
     val server = new EmbeddedThriftServer(new ThriftServer {
       override val modules = Seq(ClientIdWhitelistModule)
 
@@ -30,7 +30,7 @@ class ThriftServerStartupFeatureTest extends WordSpecTest {
     }
   }
 
-  "use default thrift port" in {
+  test("use default thrift port") {
     val server = new EmbeddedTwitterServer(new ThriftServer {
       override val modules = Seq(ClientIdWhitelistModule)
 
@@ -52,7 +52,7 @@ class ThriftServerStartupFeatureTest extends WordSpecTest {
     }
   }
 
-  "start with directly instantiated controller" in {
+  test("start with directly instantiated controller") {
     val server = new EmbeddedTwitterServer(new ThriftServer {
       override val modules = Seq(ClientIdWhitelistModule)
 

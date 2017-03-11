@@ -2,23 +2,24 @@ package com.twitter.finatra.httpclient
 
 import com.twitter.finatra.httpclient.modules.HttpClientModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.app.TestInjector
 
-class HttpClientStartupIntegrationTest extends WordSpecTest {
+class HttpClientStartupIntegrationTest extends Test {
 
-  "startup non ssl" in {
+  test("startup non ssl") {
     val injector = TestInjector(
       modules = Seq(FinatraJacksonModule, new HttpClientModule {
         override val dest = "flag!myservice"
       }),
       flags = Map(
         "com.twitter.server.resolverMap" -> "myservice=nil!"))
+      .create
 
     injector.instance[HttpClient]
   }
 
-  "startup ssl" in {
+  test("startup ssl") {
     val injector = TestInjector(
       modules = Seq(FinatraJacksonModule, new HttpClientModule {
         override val dest = "flag!myservice"
@@ -26,6 +27,7 @@ class HttpClientStartupIntegrationTest extends WordSpecTest {
       }),
       flags = Map(
         "com.twitter.server.resolverMap" -> "myservice=nil!"))
+      .create
 
     injector.instance[HttpClient]
   }

@@ -1,10 +1,9 @@
 package com.twitter.inject.requestscope
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-
-class UnseededFinagleScopeProviderTest extends WordSpecTest {
-  "expect exception" in {
+class UnseededFinagleScopeProviderTest extends Test {
+  test("expect exception") {
     intercept[IllegalStateException] {
       new UnseededFinagleScopeProvider[String].get
     }

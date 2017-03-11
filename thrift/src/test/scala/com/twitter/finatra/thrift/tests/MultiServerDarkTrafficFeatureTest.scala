@@ -4,11 +4,11 @@ import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.thrift.{ThriftTest, EmbeddedThriftServer}
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.server.PortUtils
 import com.twitter.util.{Await, Future}
 
-class MultiServerDarkTrafficFeatureTest extends WordSpecTest with ThriftTest {
+class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
 
   val darkDoEverythingThriftServer = new EmbeddedThriftServer(new DoEverythingThriftServer)
   val liveDoEverythingThriftServer = new EmbeddedThriftServer(
@@ -21,7 +21,7 @@ class MultiServerDarkTrafficFeatureTest extends WordSpecTest with ThriftTest {
 
   // See DoEverythingThriftServerDarkTrafficFilterModule#enableSampling
 
-  "magicNum is forwarded" in {
+  test("magicNum is forwarded") {
     Await.result(client123.magicNum()) should equal("26")
 
     // service stats
@@ -36,7 +36,7 @@ class MultiServerDarkTrafficFeatureTest extends WordSpecTest with ThriftTest {
     darkDoEverythingThriftServer.assertCounter("per_method_stats/magicNum/success", 1)
   }
 
-  "uppercase not forwarded" in {
+  test("uppercase not forwarded") {
     Await.result(client123.uppercase("hello")) should equal("HELLO")
 
     // service stats
@@ -50,7 +50,7 @@ class MultiServerDarkTrafficFeatureTest extends WordSpecTest with ThriftTest {
     darkDoEverythingThriftServer.assertCounter("per_method_stats/uppercase/success", 0)
   }
 
-  "echo is forwarded" in {
+  test("echo is forwarded") {
     Await.result(client123.echo("words")) should equal("words")
 
     // service stats
@@ -65,7 +65,7 @@ class MultiServerDarkTrafficFeatureTest extends WordSpecTest with ThriftTest {
     darkDoEverythingThriftServer.assertCounter("per_method_stats/echo/success", 1)
   }
 
-  "moreThanTwentyTwoArgs is not forwarded" in {
+  test("moreThanTwentyTwoArgs is not forwarded") {
     Await.result(
       client123.moreThanTwentyTwoArgs(
         "one",

@@ -3,7 +3,9 @@ package com.twitter.finatra.thrift
 import com.google.inject.Stage
 import com.twitter.inject.server.PortUtils._
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
+import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
+import scala.reflect.runtime.universe._
 
 /**
  * EmbeddedThriftServer allows a [[com.twitter.server.TwitterServer]] serving thrift endpoints to be started
@@ -55,8 +57,35 @@ class EmbeddedThriftServer(
 
   /* Overrides */
 
-  override def bind[T : Manifest](instance: T): EmbeddedThriftServer = {
+  /**
+   * Bind an instance of type [T] to the object graph of the underlying thrift server.
+   * This will REPLACE any previously bound instance of the given type.
+   *
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @return this [[EmbeddedThriftServer]].
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   */
+  override def bind[T : TypeTag](instance: T): EmbeddedThriftServer = {
     bindInstance[T](instance)
+    this
+  }
+
+  /**
+   * Bind an instance of type [T] annotated with Annotation type [A] to the object
+   * graph of the underlying thrift server. This will REPLACE any previously bound instance of
+   * the given type bound with the given annotation type.
+   *
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @tparam A - type of the Annotation used to bind the instance.
+   * @return this [[EmbeddedThriftServer]].
+   *
+   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   */
+  override def bind[T : TypeTag, A <: Annotation : TypeTag](instance: T): EmbeddedThriftServer = {
+    bindInstance[T, A](instance)
     this
   }
 

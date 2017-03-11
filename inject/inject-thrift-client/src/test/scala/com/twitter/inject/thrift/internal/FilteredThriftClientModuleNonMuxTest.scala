@@ -6,24 +6,28 @@ import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftClientModule}
-import com.twitter.inject.{InjectorModule, WordSpecIntegrationTest}
+import com.twitter.inject.{TypeUtils, InjectorModule, IntegrationTest}
 import com.twitter.util.Future
-import javax.inject.Inject
 
-class FilteredThriftClientModuleNonMuxTest extends WordSpecIntegrationTest {
+class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
 
   override val injector = TestInjector(
-    modules = Seq(FilteredThriftClientModuleNonMux, ThriftClientIdModule, StatsReceiverModule, InjectorModule),
+    modules =
+      Seq(FilteredThriftClientModuleNonMux,
+        ThriftClientIdModule, StatsReceiverModule,
+        InjectorModule),
     flags = Map("com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!"))
+    .create
 
-  @Inject
-  var greeter: Greeter[Future] = _
+  lazy val greeter =
+    injector.instance[Greeter[Future]](TypeUtils.asManifest[Greeter[Future]])
 
-  "test" in {
+  test("bind expected type properly") {
     assert(greeter != null)
   }
 
-  object FilteredThriftClientModuleNonMux extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
+  object FilteredThriftClientModuleNonMux
+    extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
     override val label = "greeter-thrift-client"
     override val dest = "flag!greeter-thrift-service"
     override val mux = false

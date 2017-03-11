@@ -13,8 +13,9 @@ As [previously noted](/finatra/blog/2016/04/26/announcing-our-final-scala-2-dot-
 
 Please checkout the [v2.1.6](https://github.com/twitter/finatra/releases/tag/finatra-2.1.6) release notes on github for more information. As always, you can download the release from [Maven Central][maven-central].
 
-See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User Guide](/finatra/user-guide) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User's Guide][user-guide] for more information on getting started.
 
 -- The Finatra Team | [forum](https://groups.google.com/forum/#!forum/finatra-users) | [@finatra](https://twitter.com/finatra) | [chat](https://gitter.im/twitter/finatra)
 
-[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.6%22
+[maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.6%22
+[user-guide]: /finatra/user-guide/index.html

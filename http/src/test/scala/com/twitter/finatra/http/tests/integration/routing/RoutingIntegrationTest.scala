@@ -7,13 +7,13 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.util.Future
 import org.scalatest.Matchers
 
-class RoutingIntegrationTest extends WordSpecTest {
+class RoutingIntegrationTest extends Test {
 
-  "Provide RouteInfo in a global filter" in {
+  test("Provide RouteInfo in a global filter") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter) {
@@ -32,7 +32,7 @@ class RoutingIntegrationTest extends WordSpecTest {
     }
   }
 
-  "Support global filter beforeRouting true" in {
+  test("Support global filter beforeRouting true") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter) {
@@ -52,7 +52,7 @@ class RoutingIntegrationTest extends WordSpecTest {
     }
   }
 
-  "Support global filter beforeRouting false" in {
+  test("Support global filter beforeRouting false") {
     // NOTE: you SHOULD NOT need to do this, just
     // call the no-argument version of router#filter
     val server = new EmbeddedHttpServer(
@@ -73,7 +73,7 @@ class RoutingIntegrationTest extends WordSpecTest {
     }
   }
 
-  "Provide RouteInfo in a per-controller filter" in {
+  test("Provide RouteInfo in a per-controller filter") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter) {
@@ -91,7 +91,7 @@ class RoutingIntegrationTest extends WordSpecTest {
     }
   }
 
-  "Fail if adding a filter after adding a controller" in {
+  test("Fail if adding a filter after adding a controller") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter) {
@@ -111,7 +111,7 @@ class RoutingIntegrationTest extends WordSpecTest {
     }
   }
 
-  "Support any route for matching" in {
+  test("Support any route for matching") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter): Unit = {

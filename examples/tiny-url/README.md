@@ -1,6 +1,6 @@
 # Finatra Tiny URL Example Application
 
-* Note: This example should only be used from [master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.8.0](https://github.com/twitter/finatra/tree/finatra-2.8.0))]
+* Note: This example should only be used from [master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.9.0](https://github.com/twitter/finatra/tree/finatra-2.9.0))]
 
 ### Building
 

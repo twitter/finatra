@@ -3,7 +3,7 @@ package com.twitter.inject.conversions
 import com.twitter.inject.conversions.option._
 import com.twitter.inject.conversions.seq._
 import com.twitter.util._
-import grizzled.slf4j.Logger
+import com.twitter.util.logging.Logger
 import scala.util.control.NonFatal
 
 object future {
@@ -187,7 +187,7 @@ object future {
     def toOption: Future[Option[A]] = {
       self map Some.apply handle {
         case NonFatal(e) =>
-          log.warn(e)
+          log.warn(e.toString)
           None
       }
     }
@@ -195,7 +195,7 @@ object future {
     def toBoolean: Future[Boolean] = {
       self map { _ => true } handle {
         case NonFatal(e) =>
-          log.warn(e)
+          log.warn(e.toString)
           false
       }
     }

@@ -13,8 +13,9 @@ There are lots of improvements in this release. Please checkout the [v2.1.3](htt
 
 As always, you can download the release from [Maven Central][maven-central].
 
-See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User Guide](/finatra/user-guide) for more information on getting started.
+See the Finatra [Github page](https://github.com/twitter/finatra) or checkout our [User's Guide](/finatra/user-guide/index.html) for more information on getting started.
 
 -- The [Finatra](https://groups.google.com/forum/#!forum/finatra-users) Team
 
-[maven-central]: http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.3%22
+[maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter.finatra%22%20AND%20v%3A%222.1.3%22
+[user-guide]: /finatra/user-guide/index.html

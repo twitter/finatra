@@ -29,6 +29,7 @@ trait IntegrationTestMixin
   protected val resetBindings = true
 
   /** See https://github.com/google/guice/wiki/BoundFields */
+  @deprecated("Use #bind[T] DSL instead.", "2017-03-01")
   protected val integrationTestModule: Module = BoundFieldModule.of(this)
 
   override protected def beforeAll() {

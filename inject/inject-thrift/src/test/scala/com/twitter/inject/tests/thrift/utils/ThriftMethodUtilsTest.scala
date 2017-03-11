@@ -1,39 +1,34 @@
 package com.twitter.inject.tests.thrift.utils
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.scrooge.{ThriftStructCodec3, ThriftMethod}
 
-class ThriftMethodUtilsTest extends WordSpecTest {
+class ThriftMethodUtilsTest extends Test {
 
-  "ThriftMethodUtils" should {
+  test("ThriftMethodUtils#return pretty string") {
 
-    "return pretty string" in {
+    val method = new ThriftMethod {
+      val name: String = "Foo"
 
-      val method = new ThriftMethod {
-        override val name = "Foo"
+      override def annotations: Map[String, String] = ???
 
-        /** Convert a function implementation of this method into a service implementation */
-        override def functionToService(f: FunctionType): ServiceType = ???
+      def toServiceIfaceService(f: FunctionType): ServiceIfaceServiceType = ???
 
-        /** Convert a service implementation of this method into a function implementation */
-        override def serviceToFunction(svc: ServiceType): FunctionType = ???
+      def functionToService(f: FunctionType): ServiceType = ???
 
-        /** Thrift service name. A thrift service is a list of methods. */
-        override val serviceName: String = "FooService"
+      def serviceToFunction(svc: ServiceType): FunctionType = ???
 
-        /** Codec for the request args */
-        override def argsCodec: ThriftStructCodec3[Args] = ???
+      val serviceName: String = "FooService"
 
-        /** Codec for the response */
-        override def responseCodec: ThriftStructCodec3[Result] = ???
+      def argsCodec: ThriftStructCodec3[Args] = ???
 
-        /** True for oneway thrift methods */
-        override val oneway: Boolean = false
-      }
+      def responseCodec: ThriftStructCodec3[Result] = ???
 
-      val prettyString = ThriftMethodUtils.prettyStr(method)
-      prettyString should be("FooService.Foo")
+      val oneway: Boolean = false
     }
+
+    val prettyString = ThriftMethodUtils.prettyStr(method)
+    prettyString should be("FooService.Foo")
   }
 }

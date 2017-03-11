@@ -176,6 +176,13 @@ case class Person(
   age_with_default: Option[Int] = None,
   nickname: String = "unknown")
 
+case class PersonWithLogging(
+  id: Int,
+  name: String,
+  age: Option[Int],
+  age_with_default: Option[Int] = None,
+  nickname: String = "unknown") extends Logging
+
 case class PersonWithDottedName(
   id: Int,
   @JsonProperty("name.last") lastName: String)
@@ -207,6 +214,14 @@ object Obj {
 
   case class NestedCaseClassInObject(id: String)
 
+  case class NestedCaseClassInObjectWithNestedCaseClassInObjectParam(
+    nested: NestedCaseClassInObject)
+
+}
+
+class TypeAndCompanion
+object TypeAndCompanion {
+  case class NestedCaseClassInCompanion(id: String)
 }
 
 case class WrappedValueInt(value: Int)

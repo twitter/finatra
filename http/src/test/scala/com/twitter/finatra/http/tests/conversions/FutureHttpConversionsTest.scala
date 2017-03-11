@@ -5,52 +5,52 @@ import com.twitter.finagle._
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.conversions.futureHttp._
 import com.twitter.finatra.http.exceptions.{HttpException, NotFoundException}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.util.{Await, Future}
 
-class FutureHttpConversionsTest extends WordSpecTest {
+class FutureHttpConversionsTest extends Test {
 
-  "Future[Option[T]]" should {
-    "#getInnerOrElseNotFound when Some" in {
-      assertFuture(
-        Future(Some(1)).valueOrNotFound("id 1 not found"),
-        Future(1))
-    }
-    "#getInnerOrElseNotFound when None" in {
-      assertFailedFuture[NotFoundException](
-        Future(None).valueOrNotFound("not found"))
-    }
-    "#getInnerOrElseNotFound with msg when None" in {
-      val thrown = assertFailedFuture[NotFoundException](
-        Future(None).valueOrNotFound("msg"))
-      thrown.errors should equal(Seq("msg"))
-    }
+  test("Future[Option[T]]#getInnerOrElseNotFound when Some") {
+    assertFuture(
+      Future(Some(1)).valueOrNotFound("id 1 not found"),
+      Future(1))
+  }
 
-    "httpRescue when success" in {
-      val searchService = new SearchService(Future(123), Future("abc needle xyz"))
-      Await.result(
-        searchService.search("needle")) should equal("processed abc needle xyz")
-    }
+  test("Future[Option[T]]#getInnerOrElseNotFound when None") {
+    assertFailedFuture[NotFoundException](
+      Future(None).valueOrNotFound("not found"))
+  }
 
-    "httpRescue when future 1 fails with timeoutexception" in {
-      val searchService = new SearchService(
-        future1Response = Future.exception(new IndividualRequestTimeoutException(5.seconds)),
-        future2Response = Future("asdf"))
+  test("Future[Option[T]]#getInnerOrElseNotFound with msg when None") {
+    val thrown = assertFailedFuture[NotFoundException](
+      Future(None).valueOrNotFound("msg"))
+    thrown.errors should equal(Seq("msg"))
+  }
 
-      assertSearchServiceFailure(
-        searchService,
-        HttpException(ServiceUnavailable, "AuthError #1"))
-    }
+  test("Future[Option[T]]httpRescue when success") {
+    val searchService = new SearchService(Future(123), Future("abc needle xyz"))
+    Await.result(
+      searchService.search("needle")) should equal("processed abc needle xyz")
+  }
 
-    "httpRescue when future 2 fails with timeoutexception" in {
-      val searchService = new SearchService(
-        future1Response = Future(123),
-        future2Response = Future.exception(new IndividualRequestTimeoutException(5.seconds)))
+  test("Future[Option[T]]httpRescue when future 1 fails with timeoutexception") {
+    val searchService = new SearchService(
+      future1Response = Future.exception(new IndividualRequestTimeoutException(5.seconds)),
+      future2Response = Future("asdf"))
 
-      assertSearchServiceFailure(
-        searchService,
-        HttpException(ServiceUnavailable, "SearchError #1"))
-    }
+    assertSearchServiceFailure(
+      searchService,
+      HttpException(ServiceUnavailable, "AuthError #1"))
+  }
+
+  test("Future[Option[T]]httpRescue when future 2 fails with timeoutexception") {
+    val searchService = new SearchService(
+      future1Response = Future(123),
+      future2Response = Future.exception(new IndividualRequestTimeoutException(5.seconds)))
+
+    assertSearchServiceFailure(
+      searchService,
+      HttpException(ServiceUnavailable, "SearchError #1"))
   }
 
   def intToString(num: Int): String = num.toString

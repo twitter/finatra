@@ -2,20 +2,12 @@ package com.twitter.inject.exceptions
 
 import com.twitter.finagle.mux.ClientDiscardedRequestException
 import com.twitter.finagle.{BackupRequestLost, CancelledConnectionException, CancelledRequestException, Failure}
-import com.twitter.scrooge.ThriftResponse
 import com.twitter.util.{Return, Throw, Try}
 import scala.util.control.NonFatal
 
 /**
  * PossiblyRetryable attempts to determine if a request is possibly retryable based on the
- * returned [[com.twitter.scrooge.ThriftResponse]].
- *
- * The [[com.twitter.scrooge.ThriftResponse#successField]] = None is a possibility on successful
- * void methods. We only want to mark a request as "possibly retryable" if the successField is empty
- * and there exists a "possibly retryable" exception in the first position in the returned Seq of
- * exceptions in [[com.twitter.scrooge.ThriftResponse#errorFields]].
- *
- * @see [[com.twitter.scrooge.ThriftResponse#firstException]]
+ * returned `Try`.
  *
  * The request is "possibly retryable" because while the framework can say the request is retryable
  * due to the type of [[com.twitter.scrooge.ThriftException]] returned it is ultimately up to the
@@ -24,12 +16,9 @@ import scala.util.control.NonFatal
  */
 object PossiblyRetryable {
 
-  val PossiblyRetryableExceptions: PartialFunction[Try[ThriftResponse[_]], Boolean] = {
+  val PossiblyRetryableExceptions: PartialFunction[Try[_], Boolean] = {
+    case Return(_) => false
     case Throw(t) => possiblyRetryable(t)
-    case Return(response) =>
-      response.successField.isEmpty &&
-        response.exceptionFields.nonEmpty &&
-          response.firstException().exists(possiblyRetryable)
   }
 
   def apply(t: Throwable): Boolean = {

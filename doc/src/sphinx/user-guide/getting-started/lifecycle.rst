@@ -1,7 +1,11 @@
 .. _lifecycle:
 
-Server Lifecycle
-================
+Application and Server Lifecycle
+================================
+
+Finatra manages the lifecycle of your `TwitterUtil <https://twitter.github.io/util/>`__ `c.t.app.App <https://twitter.github.io/util/docs/com/twitter/app/App.html>`__ or `TwitterServer <https://twitter.github.io/twitter-server/>`__ `c.t.server.TwitterServer` for you and provides methods which can be implemented for running or starting core logic. This is to ensure that flag parsing and module installation to build the object graph happens in the correct order for the application or server.
+
+Thus you do not have access to the `main` method. Instead, any logic should be contained in either the `c.t.inject.app.App#run` or `c.t.inject.server.TwitterServer#start` method, respectively.
 
 Startup
 -------

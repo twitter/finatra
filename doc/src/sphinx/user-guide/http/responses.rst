@@ -50,20 +50,29 @@ You can also always use the `ResponseBuilder`_ to explicitly render a JSON respo
 Future Conversion
 -----------------
 
-For the basics of Futures in Finatra, see: `Futures <../getting-started/futures.html>`__ in the `Getting Started <../getting-started/futures.html>`__ documentation.
+For the basics of Futures in Finatra, see: `Futures <../getting-started/futures.html>`__ in the `Getting Started <../index.html#getting-started>`__ documentation.
 
-Finatra will convert your route callbacks return type into a `c.t.util.Future[Response]` using the following rules:
+Conversion Rules
+^^^^^^^^^^^^^^^^
 
--  If you return a `c.t.util.Future[Response]` no conversion will be performed.
--  If you return a `c.t.util.Future[T]` the Future[T] will be mapped to wrap the `T` into an HTTP `200 OK` with `T` as the body.
--  If you return a `scala.concurrent.Future[T]` a Bijection will be attempted to convert the Scala Future into a `c.t.util.Future[T]` then the above case is performed.
+Finatra will attempt to convert your route callback's return type into a `c.t.util.Future[Response]` using the following rules:
+
+-  If you return a `Future[Response]` no conversion will be performed.
+-  If you return a `Future[T]` it will be mapped to wrap the `T` into an HTTP `200 OK` Response, with `T` as the body.
+-  If you return a `scala.concurrent.Future[T]` a Bijection will be attempted to convert the Scala Future into a `Future[T]` then the above case is performed.
 -  `Some[T]` will be converted into a HTTP `200 OK`.
 -  `None` will be converted into a HTTP `404 NotFound`.
--  Non-response classes will be converted into an HTTP `200 OK` with the class written a the response body.
+-  Non-Response classes will be converted into an HTTP `200 OK` with the class written as the response body.
 
-Callbacks that do not return a `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ will have their return values wrapped in a `c.t.util.ConstFuture <https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture>`__.
+Non-Future Callback Return Types
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If your non-future result calls a blocking method, you must `avoid blocking the Finagle thread <https://twitter.github.io/scala_school/finagle.html#DontBlock>`__ by wrapping your blocking operation in a FuturePool e.g.
+Callbacks that do not return a `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ will have their return values wrapped in a `c.t.util.ConstFuture <https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture>`__ (which does no asynchronous work) for the purpose of satisfying types only.
+
+Don't Block
+^^^^^^^^^^^
+
+If you are not returning a Future from your callback and it does synchronous work or calls a blocking method, you must `avoid blocking the Finagle thread <https://twitter.github.io/scala_school/finagle.html#DontBlock>`__ by wrapping your blocking operation in a `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__ e.g.
 
 .. code:: scala
 
@@ -75,16 +84,17 @@ If your non-future result calls a blocking method, you must `avoid blocking the 
 
       get("/") { request: Request =>
         futurePool {
-          blockingCall()
+          blockingOperation()
         }
       }
     }
 
+More information on blocking in Finagle can be found `here <https://finagle.github.io/blog/2016/09/01/block-party/>`__.
 
 ResponseBuilder
 ----------------
 
-All HTTP Controllers have a protected `response` field of type `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__ which can be used to build callback responses.
+All HTTP Controllers have a protected `response` field of type `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__ which can be used to build a `c.t.finagle.http.Response` in your Controller route callback functions.
 
 For example:
 
@@ -120,6 +130,17 @@ For example:
         .location("/foo/123")
     }
 
+    get("/foo/future") { request: Request =>
+      ...
+
+      val futureOpResult: Future[Bar] = ...
+      futureOpResult.map { result =>
+        response
+          .ok
+          .body(result)
+      }
+    }
+
     post("/users") { request: MyPostRequest =>
       ...
 
@@ -130,6 +151,34 @@ For example:
 
 
 For more examples, see the `ResponseBuilderTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/response/ResponseBuilderTest.scala>`__.
+
+Wait, how do I create a `Response` from a `Future[T]`?
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As noted in the `Future Conversion`_ section, Finatra will attempt to construct a proper return type of `Future[Response]` from your callback's return type. Though, in many cases, you may find that you have a `Future[T]` and want to translate this into a `c.t.finagle.http.Response` yourself using the `ResponseBuilder`_. 
+
+Constructing a response is synchronous, thus the `ResponseBuilder`_ has no concept of Futures. However, the `ResponseBuilder`_
+is meant to be somewhat generic so its API for constructing a response body accepts an `Any` type which may make it *seem like* it should work to simply put in a `Future[T]` into the body. However, this is incorrect.
+
+If you have a `Future[T]` and want to return a `c.t.finagle.http.Response` you should either:
+
+- convert it to a `Future[Response]` or 
+- do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L139>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
+
+To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures>`__:
+
+.. code:: scala
+
+    get("/foo") { request: Request => 
+      val futureResult: Future[Foo] = ... // a call that returns a Future[Foo]
+
+      // map the Future[T] to create a Future[Response]
+      futureResult.map { result: Foo =>
+        // construct your response here using the ResponseBuilder
+        response.ok.body(result)
+      }
+    }
+    
 
 Cookies:
 --------

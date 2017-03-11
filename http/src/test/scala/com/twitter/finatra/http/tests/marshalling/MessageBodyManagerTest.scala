@@ -5,33 +5,38 @@ import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.inject.app.TestInjector
 import org.specs2.mock.Mockito
 
-class MessageBodyManagerTest extends WordSpecTest with Mockito {
+class MessageBodyManagerTest extends Test with Mockito {
 
   val request = mock[Request]
-  val injector = TestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule)
+  val injector =
+    TestInjector(
+      MessageBodyModule,
+      FinatraJacksonModule,
+      MustacheModule)
+    .create
 
   val messageBodyManager = injector.instance[MessageBodyManager]
   messageBodyManager.add[DogMessageBodyReader]()
   messageBodyManager.add[FatherMessageBodyReader]()
   messageBodyManager.add(new Car2MessageBodyReader)
 
-  "parse car2" in {
+  test("parse car2") {
     messageBodyManager.read[Car2](request) should equal(Car2("Car"))
   }
 
-  "parse dog" in {
+  test("parse dog") {
     messageBodyManager.read[Dog](request) should equal(Dog("Dog"))
   }
 
-  "parse son with father MBR" in {
+  test("parse son with father MBR") {
     messageBodyManager.read[Son](request) should equal(Son("Son"))
   }
 
-  "parse father impl with father MBR" in {
+  test("parse father impl with father MBR") {
     messageBodyManager.read[Son](request) should equal(Son("Son"))
   }
 }

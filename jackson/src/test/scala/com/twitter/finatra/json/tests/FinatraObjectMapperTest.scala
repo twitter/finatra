@@ -7,8 +7,10 @@ import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
+import com.twitter.finatra.json.internal.caseclass.reflection.MissingExpectedType
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.Obj.NestedCaseClassInObject
+import com.twitter.finatra.json.tests.internal.Obj.{NestedCaseClassInObject, NestedCaseClassInObjectWithNestedCaseClassInObjectParam}
+import com.twitter.finatra.json.tests.internal.TypeAndCompanion.NestedCaseClassInCompanion
 import com.twitter.finatra.json.tests.internal._
 import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
@@ -28,8 +30,10 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
   /* Class under test */
   val mapper = FinatraObjectMapper.create()
   /* Test Injector */
-  val injector = TestInjector(
-    FinatraJacksonModule)
+  val injector =
+    TestInjector(
+      FinatraJacksonModule)
+    .create
 
   feature("simple tests") {
 
@@ -79,6 +83,17 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
     scenario("parse json list of ints") {
       val nums = parse[Seq[Int]]("""[1,2,3]""")
       nums should equal(Seq(1, 2, 3))
+    }
+
+    scenario("serialize case class with logging") {
+      val steveWithLogging = PersonWithLogging(
+      id = 1,
+      name = "Steve",
+      age = Some(20),
+      age_with_default = Some(20),
+      nickname = "ace")
+
+      assertJson(steveWithLogging, steveJson)
     }
 
     scenario("parse json with extra field at end") {
@@ -712,9 +727,31 @@ class FinatraObjectMapperTest extends FeatureSpec with Matchers with Logging {
         """) should equal(NestedCaseClassInObject(id = "foo"))
     }
 
+    scenario("case class nested within an object with member that is also a case class in an object") {
+      parse[NestedCaseClassInObjectWithNestedCaseClassInObjectParam](
+        """
+        {
+          "nested": {
+            "id": "foo"
+          }
+        }
+        """
+      ) should equal(NestedCaseClassInObjectWithNestedCaseClassInObjectParam(nested = NestedCaseClassInObject(id = "foo")))
+    }
+
+    scenario("case class nested within a companion object") {
+      parse[NestedCaseClassInCompanion](
+        """
+        {
+          "id": "foo"
+        }
+        """
+      ) should equal(NestedCaseClassInCompanion(id = "foo"))
+    }
+
     case class NestedCaseClassInClass(id: String)
     scenario("case class nested within a class") {
-      intercept[AssertionError] {
+      intercept[MissingExpectedType] {
         parse[NestedCaseClassInClass](
           """
           {

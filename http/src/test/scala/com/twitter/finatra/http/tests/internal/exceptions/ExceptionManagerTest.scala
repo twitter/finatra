@@ -5,21 +5,20 @@ import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.{Mockito, Test}
 import com.twitter.inject.app.TestInjector
 import org.apache.commons.lang.RandomStringUtils
-import org.specs2.mock.Mockito
 
-class ExceptionManagerTest extends WordSpecTest with Mockito {
+class ExceptionManagerTest extends Test with Mockito {
 
   def newExceptionManager =
     new ExceptionManager(
-      TestInjector(),
+      TestInjector().create,
       new InMemoryStatsReceiver)
 
   lazy val collectionExceptionManager =
     new ExceptionManager(
-      TestInjector(),
+      TestInjector().create,
       new InMemoryStatsReceiver)
 
   def randomUri = {
@@ -42,41 +41,40 @@ class ExceptionManagerTest extends WordSpecTest with Mockito {
     add[UnauthorizedException1Mapper]
   }
   collectionExceptionManager
-      .add(exceptionMapperCollection)
+    .add(exceptionMapperCollection)
 
   def testException(
     e: Throwable,
     status: Status,
-    manager: ExceptionManager = exceptionManager
-  ): Unit = {
+    manager: ExceptionManager = exceptionManager): Unit = {
     val request = RequestBuilder.get(randomUri)
     val response = manager.toResponse(request, e)
     response.status should equal(status)
   }
 
-  "map exceptions to mappers installed by type" in {
+  test("map exceptions to mappers installed by type") {
     testException(new ForbiddenException, Status.Forbidden)
     testException(new ForbiddenException, Status.Forbidden, collectionExceptionManager)
   }
 
-  "map exceptions to mappers installed manually" in {
+  test("map exceptions to mappers installed manually") {
     testException(new UnauthorizedException, Status.Unauthorized)
     testException(new UnauthorizedException, Status.Unauthorized, collectionExceptionManager)
   }
 
-  "map subclass exceptions to parent class mappers" in {
+  test("map subclass exceptions to parent class mappers") {
     testException(new ForbiddenException1, Status.Forbidden)
     testException(new ForbiddenException1, Status.Forbidden, collectionExceptionManager)
     testException(new ForbiddenException2, Status.Forbidden)
     testException(new ForbiddenException2, Status.Forbidden, collectionExceptionManager)
   }
 
-  "map exceptions to mappers of most specific class" in {
+  test("map exceptions to mappers of most specific class") {
     testException(new UnauthorizedException1, Status.NotFound)
     testException(new UnauthorizedException1, Status.NotFound, collectionExceptionManager)
   }
 
-  "fall back to default mapper" in {
+  test("fall back to default mapper") {
     testException(new UnregisteredException, Status.InternalServerError)
     testException(new UnregisteredException, Status.InternalServerError, collectionExceptionManager)
   }

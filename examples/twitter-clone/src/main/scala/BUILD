@@ -11,7 +11,7 @@ scala_library(
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/javax/inject:javax.inject',
     '3rdparty/jvm/net/codingwell:scala-guice',
-    '3rdparty/jvm/org/clapper:grizzled-slf4j',
+    '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/http/src/main/scala:scala',
     'finatra/httpclient/src/main/scala:scala',
@@ -25,6 +25,7 @@ scala_library(
     'util/util-app/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
     'util/util-logging/src/main/scala:scala',
+    'util/util-slf4j-api/src/main/scala',
   ],
   excludes = [
     exclude(org='org.slf4j', name='slf4j-jdk14')

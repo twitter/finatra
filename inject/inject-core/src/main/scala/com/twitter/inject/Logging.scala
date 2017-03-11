@@ -7,7 +7,7 @@ import scala.util.control.NonFatal
 /**
  * Mix this trait into a class/object to get helpful logging methods.
  *
- * Note: This trait simply adds several methods to the grizzled.slf4j.Logging traits.
+ * Note: This trait simply adds several methods to the [[com.twitter.util.logging.Logging]] trait.
  *
  * The methods below are used as so:
  *
@@ -25,61 +25,8 @@ import scala.util.control.NonFatal
  * }
  * }
  */
-@JsonIgnoreProperties(Array("trace_enabled", "debug_enabled", "error_enabled", "info_enabled", "warn_enabled"))
-trait Logging
-  extends grizzled.slf4j.Logging {
-
-  /**
-   * Log an error msg that contains the result of the passed in func.
-   *
-   * @param msg A string containing a single %s which will be replaced with the result of func.
-   * @param func The function whose result will be placed in msg.
-   * @return Result of func
-   */
-  protected def errorResult[T](msg: String)(func: => T) = {
-    val result = func
-    error(msg.format(result))
-    result
-  }
-
-  /**
-   * Log an warn msg that contains the result of the passed in func.
-   *
-   * @param msg A string containing a single %s which will be replaced with the result of func.
-   * @param func The function whose result will be placed in msg.
-   * @return Result of func
-   */
-  protected def warnResult[T](msg: String)(func: => T) = {
-    val result = func
-    warn(msg.format(result))
-    result
-  }
-
-  /**
-   * Log an info msg that contains the result of the passed in func.
-   *
-   * @param msg A string containing a single %s which will be replaced with the result of func.
-   * @param func The function whose result will be placed in msg.
-   * @return Result of func
-   */
-  protected def infoResult[T](msg: String)(func: => T) = {
-    val result = func
-    info(msg.format(result))
-    result
-  }
-
-  /**
-   * Log an debug msg that contains the result of the passed in func.
-   *
-   * @param msg A string containing a single %s which will be replaced with the result of func.
-   * @param func The function whose result will be placed in msg.
-   * @return Result of func
-   */
-  protected def debugResult[T](msg: String)(func: => T) = {
-    val result = func
-    debug(msg.format(result))
-    result
-  }
+@JsonIgnoreProperties(Array("logger_name", "trace_enabled", "debug_enabled", "error_enabled", "info_enabled", "warn_enabled"))
+trait Logging extends com.twitter.util.logging.Logging {
 
   /**
    * Log an debug msg that contains the result of the passed in func.

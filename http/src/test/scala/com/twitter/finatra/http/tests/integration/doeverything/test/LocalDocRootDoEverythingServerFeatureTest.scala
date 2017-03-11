@@ -7,12 +7,12 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestU
 import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
-import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.inject.server.FeatureTest
 import java.io.{File, FileWriter}
 import org.apache.commons.io.FileUtils
 
 class LocalDocRootDoEverythingServerFeatureTest
-  extends WordSpecFeatureTest
+  extends FeatureTest
   with DocRootLocalFilesystemTestUtility {
 
   override protected def beforeAll() = {
@@ -43,118 +43,115 @@ class LocalDocRootDoEverythingServerFeatureTest
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer)
 
-  "DoEverythingServer" should {
+  test("DoEverythingServer#getView") {
+    server.httpGet(
+      "/getView?age=18&name=bob",
+      andExpect = Ok,
+      withBody = "age:18\nname:bob\nuser1\nuser2\n")
+  }
 
-    "getView" in {
-      server.httpGet(
-        "/getView?age=18&name=bob",
-        andExpect = Ok,
-        withBody = "age:18\nname:bob\nuser1\nuser2\n")
-    }
+  test("DoEverythingServer#formPostViewFromBuilderViewWithDiffTemplateThanAnnotation") {
+    server.httpFormPost(
+      "/formPostViewFromBuilderView",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Ok,
+      withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
+  }
 
-    "formPostViewFromBuilderViewWithDiffTemplateThanAnnotation" in {
-      server.httpFormPost(
-        "/formPostViewFromBuilderView",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Ok,
-        withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
-    }
+  test("DoEverythingServer#formPostViewFromBuilderHtml") {
+    server.httpFormPost(
+      "/formPostViewFromBuilderHtml",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Ok,
+      withBody = "age:18\nname:bob\nuser1\nuser2\n")
+  }
 
-    "formPostViewFromBuilderHtml" in {
-      server.httpFormPost(
-        "/formPostViewFromBuilderHtml",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Ok,
-        withBody = "age:18\nname:bob\nuser1\nuser2\n")
-    }
+  test("DoEverythingServer#formPostViewFromBuilderCreatedView") {
+    val response = server.httpFormPost(
+      "/formPostViewFromBuilderCreatedView",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Created,
+      withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
 
-    "formPostViewFromBuilderCreatedView" in {
-      val response = server.httpFormPost(
-        "/formPostViewFromBuilderCreatedView",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Created,
-        withBody = "age2:18\nname2:bob\nuser1\nuser2\n")
+    response.location should equal(Some("/foo/1"))
+  }
 
-      response.location should equal(Some("/foo/1"))
-    }
+  test("DoEverythingServer#formPostViewFromBuilderCreatedHtml") {
+    val response = server.httpFormPost(
+      "/formPostViewFromBuilderCreatedHtml",
+      params = Map("name" -> "bob", "age" -> "18"),
+      andExpect = Created,
+      withBody = "age:18\nname:bob\nuser1\nuser2\n")
 
-    "formPostViewFromBuilderCreatedHtml" in {
-      val response = server.httpFormPost(
-        "/formPostViewFromBuilderCreatedHtml",
-        params = Map("name" -> "bob", "age" -> "18"),
-        andExpect = Created,
-        withBody = "age:18\nname:bob\nuser1\nuser2\n")
+    response.location should equal(Some("/foo/1"))
+  }
 
-      response.location should equal(Some("/foo/1"))
-    }
+  test("DoEverythingServer#testfile") {
+    server.httpGet(
+      "/testfile",
+      andExpect = Ok,
+      withBody = "testfile123")
+  }
 
-    "testfile" in {
-      server.httpGet(
-        "/testfile",
-        andExpect = Ok,
-        withBody = "testfile123")
-    }
+  test("DoEverythingServer#testfile when not found") {
+    server.httpGet(
+      "/testfileWhenNotfound",
+      andExpect = NotFound,
+      withBody = "/doesntexist.txt not found")
+  }
 
-    "testfile when not found" in {
-      server.httpGet(
-        "/testfileWhenNotfound",
-        andExpect = NotFound,
-        withBody = "/doesntexist.txt not found")
-    }
+  test("DoEverythingServer#index root") {
+    server.httpGet(
+      "/index/",
+      andExpect = Ok,
+      withBody = "testindex")
+  }
 
-    "index root" in {
-      server.httpGet(
-        "/index/",
-        andExpect = Ok,
-        withBody = "testindex")
-    }
+  test("DoEverythingServer#index file without extension") {
+    server.httpGet(
+      "/index/testfile",
+      andExpect = Ok,
+      withBody = "testindex")
+  }
 
-    "index file without extension" in {
-      server.httpGet(
-        "/index/testfile",
-        andExpect = Ok,
-        withBody = "testindex")
-    }
+  test("DoEverythingServer#index file with extension") {
+    server.httpGet(
+      "/index/testfile.txt",
+      andExpect = Ok,
+      withBody = "testfile123")
+  }
 
-    "index file with extension" in {
-      server.httpGet(
-        "/index/testfile.txt",
-        andExpect = Ok,
-        withBody = "testfile123")
-    }
-
-    "TestCaseClassWithHtml" in {
-      server.httpGet(
-        "/testClassWithHtml",
-        andExpect = Ok,
-        withJsonBody =
-          """
+  test("DoEverythingServer#TestCaseClassWithHtml") {
+    server.httpGet(
+      "/testClassWithHtml",
+      andExpect = Ok,
+      withJsonBody =
+        """
           |{
           |  "address" : "123 Main St. Anywhere, CA US 90210",
           |  "phone" : "+12221234567",
           |  "rendered_html" : "&lt;div class=&quot;nav&quot;&gt;\n  &lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;\n    &lt;tr&gt;\n        &lt;th&gt;Name&lt;/th&gt;\n        &lt;th&gt;Age&lt;/th&gt;\n        &lt;th&gt;Friends&lt;/th&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n        &lt;td&gt;age2:28&lt;/td&gt;\n        &lt;td&gt;name:Bob Smith&lt;/td&gt;\n        &lt;td&gt;\n            user1\n            user2\n        &lt;/td&gt;\n    &lt;/tr&gt;\n  &lt;/table&gt;\n&lt;/div&gt;"
           |}
         """.stripMargin)
-    }
+  }
 
-    "Support un-cached templates" in {
-      val testUser = TestUserView(
-        28,
-        "Bob Smith",
-        Seq("user1", "user2"))
+  test("DoEverythingServer#Support un-cached templates") {
+    val testUser = TestUserView(
+      28,
+      "Bob Smith",
+      Seq("user1", "user2"))
 
-      val mustacheService = injector.instance[MustacheService]
-      val firstResult = mustacheService.createString("testuser.mustache", testUser)
-      firstResult should be("age:28\nname:Bob Smith\nuser1\nuser2\n")
+    val mustacheService = injector.instance[MustacheService]
+    val firstResult = mustacheService.createString("testuser.mustache", testUser)
+    firstResult should be("age:28\nname:Bob Smith\nuser1\nuser2\n")
 
-      // alter the file
-      val testUserMustacheFile = new FileWriter(s"${BaseDirectory}src/main/resources/templates/testuser.mustache")
-      testUserMustacheFile.write("")
-      testUserMustacheFile.append("another age:{{age}}\nanother name:{{name}}\n{{#friends}}\n{{.}}\n{{/friends}}")
-      testUserMustacheFile.close()
+    // alter the file
+    val testUserMustacheFile = new FileWriter(s"${BaseDirectory}src/main/resources/templates/testuser.mustache")
+    testUserMustacheFile.write("")
+    testUserMustacheFile.append("another age:{{age}}\nanother name:{{name}}\n{{#friends}}\n{{.}}\n{{/friends}}")
+    testUserMustacheFile.close()
 
-      val alteredResult = mustacheService.createString("testuser.mustache", testUser)
-      alteredResult should be("another age:28\nanother name:Bob Smith\nuser1\nuser2\n")
-    }
+    val alteredResult = mustacheService.createString("testuser.mustache", testUser)
+    alteredResult should be("another age:28\nanother name:Bob Smith\nuser1\nuser2\n")
   }
 }

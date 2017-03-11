@@ -2,12 +2,11 @@ package com.twitter.inject.server.tests
 
 import com.twitter.finagle.http.Status
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
-import com.twitter.inject.{Logging, WordSpecTest, TwitterModule}
+import com.twitter.inject.{Logging, Test, TwitterModule}
 
-class EmbeddedTwitterServerIntegrationTest extends WordSpecTest {
+class EmbeddedTwitterServerIntegrationTest extends Test {
 
-  "server" should {
-    "start" in {
+  test("server#start") {
       val twitterServer = new TwitterServer {}
       twitterServer.addFrameworkOverrideModules(new TwitterModule {})
       val embeddedServer = new EmbeddedTwitterServer(twitterServer)
@@ -20,13 +19,13 @@ class EmbeddedTwitterServerIntegrationTest extends WordSpecTest {
       embeddedServer.close()
     }
 
-    "fail if server is a singleton" in {
+  test("server#fail if server is a singleton") {
       intercept[IllegalArgumentException] {
         new EmbeddedTwitterServer(SingletonServer)
       }
     }
 
-    "fail if bind on a non-injectable server" in {
+  test("server#fail if bind on a non-injectable server") {
       intercept[IllegalStateException] {
         new EmbeddedTwitterServer(
           new NonInjectableServer)
@@ -34,7 +33,7 @@ class EmbeddedTwitterServerIntegrationTest extends WordSpecTest {
       }
     }
 
-    "support bind in server" in {
+  test("server#support bind in server") {
       val server = new EmbeddedTwitterServer(
         new TwitterServer {})
         .bind[String]("helloworld")
@@ -43,17 +42,16 @@ class EmbeddedTwitterServerIntegrationTest extends WordSpecTest {
       server.close()
     }
 
-    "fail because of unknown flag" in {
-      val server = new EmbeddedTwitterServer(
-        new TwitterServer {},
-        flags = Map("foo.bar" -> "true"))
+  test("server#fail because of unknown flag") {
+    val server = new EmbeddedTwitterServer(
+      new TwitterServer {},
+      flags = Map("foo.bar" -> "true"))
 
-      val e = intercept[Exception] {
-        server.assertHealthy()
-      }
-      e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
-      server.close()
+    val e = intercept[Exception] {
+      server.assertHealthy()
     }
+    e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
+    server.close()
   }
 }
 

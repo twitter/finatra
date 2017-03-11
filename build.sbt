@@ -5,11 +5,12 @@ import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
-lazy val projectVersion = "2.8.0"
+lazy val projectVersion = "2.9.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
-  scalaVersion := "2.11.8",
+  scalaVersion := "2.12.1",
+  crossScalaVersions := Seq("2.11.8", "2.12.1"),
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   fork in Test := true,
   javaOptions in Test ++= travisTestJavaOptions
@@ -20,7 +21,7 @@ def travisTestJavaOptions: Seq[String] = {
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
   if (travisBuild) {
     Seq(
-      "-Dorg.slf4j.simpleLogger.defaultLogLevel=error", 
+      "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
       "-Dcom.twitter.inject.test.logging.disabled",
       // Needed to avoid cryptic EOFException crashes in forked tests
       // in Travis with `sudo: false`.
@@ -38,18 +39,18 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.42.0" + suffix
-  val scroogeVersion = "4.14.0" + suffix
-  val twitterserverVersion = "1.27.0" + suffix
-  val utilVersion = "6.41.0" + suffix
+  val finagleVersion = "6.43.0" + suffix
+  val scroogeVersion = "4.15.0" + suffix
+  val twitterserverVersion = "1.28.0" + suffix
+  val utilVersion = "6.42.0" + suffix
 
-  val bijectionVersion = "0.9.4"
+  val bijectionVersion = "0.9.5"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
   val commonsLang = "2.6"
   val grizzled = "1.3.0"
-  val guava = "16.0.1"
+  val guava = "19.0"
   val guice = "4.0"
   val jackson = "2.8.4"
   val jodaConvert = "1.2"
@@ -59,7 +60,7 @@ lazy val versions = new {
   val logback = "1.1.7"
   val mockito = "1.9.5"
   val mustache = "0.8.18"
-  val nscalaTime = "1.6.0"
+  val nscalaTime = "2.14.0"
   val scalaCheck = "1.13.4"
   val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
@@ -88,6 +89,8 @@ lazy val baseSettings = Seq(
     "org.mockito" % "mockito-core" %  versions.mockito % "test",
     "org.scalacheck" %% "scalacheck" % versions.scalaCheck % "test",
     "org.scalatest" %% "scalatest" %  versions.scalaTest % "test",
+    "org.specs2" %% "specs2-core" % versions.specs2 % "test",
+    "org.specs2" %% "specs2-junit" % versions.specs2 % "test",
     "org.specs2" %% "specs2-mock" % versions.specs2 % "test"
   ),
   resolvers ++= Seq(
@@ -96,7 +99,12 @@ lazy val baseSettings = Seq(
   ),
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
-  javacOptions in doc ++= Seq("-source", "1.8")
+  javacOptions in doc ++= Seq("-source", "1.8"),
+  // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
+  scalacOptions in (Compile, doc) ++= {
+    if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
+    else Nil
+  }
 )
 
 lazy val publishSettings = Seq(
@@ -270,13 +278,15 @@ lazy val injectCore = (project in file("inject/inject-core"))
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.utilVersion,
       "com.twitter" %% "util-core" % versions.utilVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.utilVersion,
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "net.codingwell" %% "scala-guice" % versions.scalaGuice,
-      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.joda" % "joda-convert" % versions.jodaConvert,
+      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
+      "org.scala-lang" % "scalap" % scalaVersion.value,
       "com.google.inject" % "guice" % versions.guice % "test",
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
     ),
@@ -394,7 +404,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
     moduleName := "inject-slf4j",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
     libraryDependencies ++= Seq(
-      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
@@ -537,10 +546,9 @@ lazy val jackson = project
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
-      "org.scala-lang" % "scalap" % scalaVersion.value exclude("org.scala-lang", "scala-compiler"),
+      "org.scala-lang" % "scalap" % scalaVersion.value,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
-      "com.twitter" %% "util-core" % versions.utilVersion,
-      "com.twitter.finatra" %% "finatra-scalap-compiler-deps" % "2.0.0"
+      "com.twitter" %% "util-core" % versions.utilVersion
     ),
     // special-case to only scaladoc what's necessary as some of the tests cannot generate scaladocs
     sources in Test in doc := {
@@ -733,7 +741,7 @@ lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
     name := "hello-world-heroku",
     moduleName := "hello-world-heroku",
     libraryDependencies ++= Seq(
-      "com.github.rlazoti" %% "finagle-metrics" % "0.0.3"
+      "com.github.rlazoti" %% "finagle-metrics" % "0.0.8"
     )
   ).dependsOn(
     http % "test->test;compile->compile",

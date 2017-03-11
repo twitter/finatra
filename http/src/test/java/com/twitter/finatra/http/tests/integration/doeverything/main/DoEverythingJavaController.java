@@ -46,7 +46,7 @@ public class DoEverythingJavaController extends AbstractController {
                 "Special",
                 "Finatra",
                 scala.Option.apply(null),
-                Method.Get$.MODULE$),
+                Method.Get()),
             (Request request) -> "admin route with index");
 
         get("/query", request ->
@@ -61,7 +61,7 @@ public class DoEverythingJavaController extends AbstractController {
                 "Special",
                 "Finatra",
                 scala.Option.apply(null),
-                Method.Post$.MODULE$),
+                Method.Post()),
             (Request request) -> "post");
 
         put("/put",  (Request request) -> "put");
@@ -75,7 +75,7 @@ public class DoEverythingJavaController extends AbstractController {
                     "Special",
                     "Finatra",
                     scala.Option.apply(null),
-                    Method.Post$.MODULE$),
+                    Method.Post()),
             (Request request) -> "delete");
 
         options("/options",  (Request request) -> "options");

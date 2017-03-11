@@ -7,10 +7,10 @@ import com.twitter.finatra.multiserver.Add1HttpServer.Add1Server
 import com.twitter.finatra.multiserver.AdderThriftServer.AdderThriftServer
 import com.twitter.finatra.multiserver.Add2HttpServer.Add2Server
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftTest}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
 class MultiServerFeatureTest 
-  extends WordSpecTest 
+  extends Test
   with HttpTest 
   with ThriftTest {
 
@@ -18,7 +18,7 @@ class MultiServerFeatureTest
   val add1HttpServer = new EmbeddedHttpServer(new Add1Server, flags = Map(resolverMap("adder-thrift-server", add1ThriftServer)))
   val add2Server = new EmbeddedHttpServer(new Add2Server, flags = Map(resolverMap("add1-http-server", add1HttpServer)))
 
-  "add2" in {
+  test("add2") {
     add2Server.httpGet(
       "/add2?num=5",
       andExpect = Status.Ok,
@@ -34,7 +34,7 @@ class MultiServerFeatureTest
     add1HttpServer.assertCounter("route/add1/GET/status/200", 2)
   }
 
-  "add1" in {
+  test("add1") {
     add1HttpServer.httpGet(
       "/add1String?num=10",
       andExpect = Status.ServiceUnavailable)
@@ -69,7 +69,7 @@ class MultiServerFeatureTest
     add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1String/com.twitter.finatra.thrift.thriftscala.ServerError", 1)
   }
 
-  "add1 always error" in {
+  test("add1 always error") {
     val numHttpRequests = 10
     val maxThriftRequestsPerHttpRequest = 4
     val expectedFailedThriftRequests = numHttpRequests * maxThriftRequestsPerHttpRequest
@@ -100,7 +100,7 @@ class MultiServerFeatureTest
     add1HttpServer.assertCounter("service/failure/adder-thrift/Adder/add1AlwaysError/org.apache.thrift.TApplicationException", numHttpRequests)
   }
 
-  "slow add resulting in request timeouts" in {
+  test("slow add resulting in request timeouts") {
     val numHttpRequests = 1
     val maxThriftRequestsPerHttpRequest = 4
     val expectedFailedThriftRequests = numHttpRequests * maxThriftRequestsPerHttpRequest

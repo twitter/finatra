@@ -45,8 +45,8 @@ trait App
     val allModules = requiredModules ++ overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules
     val allModuleFlags = findModuleFlags(allModules)
 
-    /* Parse all flags */
-    allModuleFlags foreach flag.add
+    /* Register all flags */
+    allModuleFlags.foreach(flag.add)
   }
 
   /** DO NOT BLOCK */

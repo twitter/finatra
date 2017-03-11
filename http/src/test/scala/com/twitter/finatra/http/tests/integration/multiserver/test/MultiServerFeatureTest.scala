@@ -4,10 +4,10 @@ import com.twitter.finagle.http.Status
 import com.twitter.finatra.http.tests.integration.multiserver.add1server.Add1Server
 import com.twitter.finatra.http.tests.integration.multiserver.add2server.Add2Server
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
 class MultiServerFeatureTest 
-  extends WordSpecTest
+  extends Test
   with HttpTest {
 
   val add1Server = new EmbeddedHttpServer(
@@ -23,7 +23,7 @@ class MultiServerFeatureTest
     add2Server.close()
   }
 
-  "add2" in {
+  test("add2#num = 5") {
     add2Server.httpGet(
       "/add2?num=5",
       andExpect = Status.Ok,

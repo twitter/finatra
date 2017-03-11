@@ -5,7 +5,20 @@ import scala.tools.scalap.scalax.rules.scalasig.TypeRefType
 private[json] case class ScalaType(
   typeRefType: TypeRefType) {
 
-  private val path = typeRefType.symbol.path
+  private val path = {
+    val symbol = typeRefType.symbol
+
+    // Class loading for object-contained types uses 'Parent$Child' rather than 'Parent.Child' paths.
+    val parent: String = symbol.parent match {
+      case Some(p) if p.isModule =>
+        p.path + "$"
+      case Some(p) =>
+        p.path + "."
+      case _ =>
+        ""
+    }
+    parent + symbol.name
+  }
 
   /* Public */
 

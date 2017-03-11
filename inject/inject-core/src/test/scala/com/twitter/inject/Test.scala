@@ -1,6 +1,8 @@
 package com.twitter.inject
 
+import org.junit.runner.RunWith
 import org.scalatest.FunSuite
+import org.scalatest.junit.JUnitRunner
 
 /**
  * Extensible abstract test class which extends [[org.scalatest.FunSuite]] and
@@ -22,6 +24,7 @@ import org.scalatest.FunSuite
  * @see [[org.scalatest.FunSuite FunSuite]]
  * @see [[com.twitter.inject.TestMixin Finatra TestMixin]]
  */
+ @RunWith(classOf[JUnitRunner])
 abstract class Test
   extends FunSuite
   with TestMixin

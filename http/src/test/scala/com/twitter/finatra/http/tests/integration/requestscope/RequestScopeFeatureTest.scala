@@ -9,7 +9,7 @@ import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
-import com.twitter.inject.server.WordSpecFeatureTest
+import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.conversions.time._
 import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
 import com.twitter.inject.utils.RetryUtils.retry
@@ -18,11 +18,11 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.{Inject, Provider}
 import scala.collection.JavaConversions._
 
-class RequestScopeFeatureTest extends WordSpecFeatureTest {
+class RequestScopeFeatureTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(new PooledServer)
 
-  "request scope propagates to multiple future pools" in {
+  test("request scope propagates to multiple future pools") {
     for (i <- 1 to 50) {
       server.httpGet(
         "/hi?msg=hello",

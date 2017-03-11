@@ -141,6 +141,18 @@ class CaseClassValidationTest extends WordSpecTest {
 
       CaseClassMappingException(unsorted).errors should equal(expectedSorted)
     }
+
+    "option[string] validation" in {
+      val address = Address(
+        street = Some(""), // invalid
+        city = "New Orleans",
+        state = "LA")
+
+      val parseError = intercept[CaseClassMappingException] {
+        mapper.parse[Address](mapper.writeValueAsBytes(address))
+      }
+      println(parseError)
+    }
   }
 
   private def parseCar(car: Car): Car = {

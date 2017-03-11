@@ -4,11 +4,11 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class HttpServerStartupIntegrationTest extends WordSpecTest {
+class HttpServerStartupIntegrationTest extends Test {
 
-  "Duplicate route paths fails server startup" in {
+  test("Duplicate route paths fails server startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter): Unit = {
@@ -33,7 +33,7 @@ class HttpServerStartupIntegrationTest extends WordSpecTest {
     }
   }
 
-  "Empty callbacks fails server startup" in {
+  test("Empty callbacks fails server startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter): Unit = {
@@ -52,7 +52,7 @@ class HttpServerStartupIntegrationTest extends WordSpecTest {
     server.close()
   }
 
-  "Callback with parameter of type Int fails server startup" in {
+  test("Callback with parameter of type Int fails server startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
         override def configureHttp(router: HttpRouter): Unit = {

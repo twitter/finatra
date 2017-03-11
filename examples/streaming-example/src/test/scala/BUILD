@@ -1,7 +1,7 @@
 junit_tests(
   dependencies=[
-    '3rdparty/jvm/org/clapper:grizzled-slf4j',
     '3rdparty/jvm/org/scalatest:scalatest',
+    '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-http/src/main/scala:scala',
     'finatra/examples/streaming-example/src/main/scala:scala',
     'finatra/http/src/test/scala:test-deps',
@@ -10,6 +10,7 @@ junit_tests(
     'finatra/inject/inject-core/src/test/scala:test-deps',
     'finatra/inject/inject-server/src/test/scala:test-deps',
     'util/util-core/src/main/scala:scala',
+    'util/util-slf4j-api/src/main/scala',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),

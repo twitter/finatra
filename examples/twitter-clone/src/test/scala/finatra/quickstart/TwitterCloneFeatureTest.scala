@@ -1,6 +1,5 @@
 package finatra.quickstart
 
-import com.google.inject.testing.fieldbinder.Bind
 import com.twitter.finagle.http.Status._
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.inject.Mockito
@@ -15,14 +14,16 @@ class TwitterCloneFeatureTest
   extends FeatureTest
   with Mockito {
 
-  override val server = new EmbeddedHttpServer(new TwitterCloneServer)
-
-  @Bind val firebaseClient = smartMock[FirebaseClient]
-
-  @Bind val idService = smartMock[IdService]
+  val firebaseClient = smartMock[FirebaseClient]
+  val idService = smartMock[IdService]
 
   /* Mock GET Request performed in TwitterCloneWarmup */
   firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(None)
+
+  override val server =
+    new EmbeddedHttpServer(new TwitterCloneServer)
+    .bind[FirebaseClient](firebaseClient)
+    .bind[IdService](idService)
 
   test("tweet creation") {
     idService.getId returns Future(TweetId("123"))

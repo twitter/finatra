@@ -3,11 +3,11 @@ package com.twitter.finatra.http.tests.integration.startup
 import com.twitter.finatra.http.internal.server.BaseHttpServer
 import com.twitter.finatra.http.modules.ResponseBuilderModule
 import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class BaseHttpServerStartupIntegrationTest extends WordSpecTest {
+class BaseHttpServerStartupIntegrationTest extends Test {
 
-  "BaseHttpServer startup" in {
+  test("BaseHttpServer startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new BaseHttpServer {
         override val modules = Seq(ResponseBuilderModule)
@@ -18,7 +18,7 @@ class BaseHttpServerStartupIntegrationTest extends WordSpecTest {
     server.close()
   }
 
-  "BaseHttpServer startup with only an http external port and no admin port" in {
+  test("BaseHttpServer startup with only an http external port and no admin port") {
     val server = new EmbeddedHttpServer(
       twitterServer = new BaseHttpServer {
         override val disableAdminHttpServer = true

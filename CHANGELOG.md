@@ -12,6 +12,90 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.9.0](https://github.com/twitter/finatra/tree/finatra-2.9.0) (2017-03-10)
+
+### Added
+
+### Changed
+
+* inject-core: (BREAKING API CHANGE) Allow for binding of higher-kinded types when testing.
+  Deprecated `@Bind` mechanism for replacing bound types in an object graph. Now instead of
+  using `@Bind` like this:
+
+  ```
+  class DarkTrafficCanonicalResourceHeaderTest
+    extends FeatureTest
+    with Mockito {
+
+    @Bind
+    @DarkTrafficService
+    val darkTrafficService: Option[Service[Request, Response]] =
+      Some(smartMock[Service[Request, Response]])
+
+    /* mock request */
+    darkTrafficService.get.apply(any[Request]).returns(Future.value(smartMock[Response]))
+
+    override val server = new EmbeddedHttpServer(
+      twitterServer = new DarkTrafficTestServer)
+
+    test("DarkTrafficServer#has Canonical-Resource header correctly set") {
+      ...
+   ```
+
+   Users can instead do:
+
+   ```
+   class DarkTrafficCanonicalResourceHeaderTest
+     extends FeatureTest
+     with Mockito {
+
+     val darkTrafficService: Option[Service[Request, Response]] =
+       Some(smartMock[Service[Request, Response]])
+
+     /* mock request */
+     darkTrafficService.get.apply(any[Request]).returns(Future.value(smartMock[Response]))
+
+     override val server = new EmbeddedHttpServer(
+       twitterServer = new DarkTrafficTestServer)
+       .bind[Option[Service[Request, Response]], DarkTrafficService](darkTrafficService)
+
+     test("DarkTrafficServer#has Canonical-Resource header correctly set") {
+       ...
+   ```
+
+   This allows for more flexibility (as the binding is now per object graph, rather
+   than per test files) and is less susceptible to errors due to incorrect usage.
+
+   The breaking API change is due to adding this support in the TestInjector, it is
+   now required that users call the `TestInjector#create` method in order to build
+   the injector and that this is done *after* calls to `TestInjector#bind`. Previously,
+   an `Injector` was directly returned from `TestInjector#apply` which is no longer true,
+   thus it may look like your IntegrationTests are broken as you now need to add a
+   call to `TestInjector#create`.
+
+   Additionally, this change updates all of the framework tests in the inject modules to
+   the FunSuite testing style from the deprecated WordSpec testing style. ``RB_ID=910011``
+
+* finatra-thrift: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=910262``
+
+* inject-core: Move Logging from grizzled-slf4j to util/util-slf4j-api.
+  `c.t.inject.Logger` is now deprecated in favor of `c.t.util.logging.Logger`
+  in util. ``DIFF_ID=D29713``
+
+* finatra-httpclient: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=909526``
+
+* finatra-http: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=909349``
+
+* finatra: Bump guava to 19.0. ``RB_ID=907807``
+
+* inject-thrift-client: Various APIs have changed to work with `ThriftMethod.SuccessType`
+  instead of `ThriftMethod.Result`. See `ThriftClientFilterChain`, `Controller`,
+  `ThriftWarmup`, `PossiblyRetryable`. ``RB_ID=908846``
+
+### Fixed
+
+### Closed
+
 ## [finatra-2.8.0](https://github.com/twitter/finatra/tree/finatra-2.8.0) (2017-02-03)
 
 ### Added
@@ -36,6 +120,9 @@ All notable changes to this project will be documented in this file. Note that `
   common prefix for a set of routes declaratively inside a controller. ``RB_ID=894695``
 
 ### Changed
+
+* inject-core: Add back JUNitRUnner to `c.t.inject.Test` and `c.t.inject.WordSpecTest`
+  so that tests can be run when building with maven. ``RB_ID=909789``
 
 * finatra-http: Allow routes which begin with "/admin" to be exposed on the external
   interface and routes which DO NOT begin with "/admin" to be exposed on the admin interface.
