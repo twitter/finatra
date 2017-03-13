@@ -2,10 +2,9 @@ package com.twitter.finatra.tests.utils
 
 import com.twitter.finagle.http.{Response, Status, Version}
 import com.twitter.finatra.utils.ResponseUtils
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class ResponseUtilsTest
-  extends WordSpecTest {
+class ResponseUtilsTest extends Test {
 
   val internalServerErrorResponse = Response(
       Version.Http11,
@@ -39,61 +38,59 @@ class ResponseUtilsTest
       Version.Http11,
       Status.Ok)
   okResponseWithBody.setContentString("ok")
+  
 
-  "ResponseUtils" should {
+  test("correctly identify 5xx response") {
+    ResponseUtils.is5xxResponse(internalServerErrorResponse) should be(true)
+    ResponseUtils.is5xxResponse(notFoundResponse) should be(false)
+    ResponseUtils.is5xxResponse(okResponse) should be(false)
+  }
 
-    "correctly identify 5xx response" in {
-      ResponseUtils.is5xxResponse(internalServerErrorResponse) should be(true)
-      ResponseUtils.is5xxResponse(notFoundResponse) should be(false)
-      ResponseUtils.is5xxResponse(okResponse) should be(false)
+  test("correctly identify 2xx response") {
+    ResponseUtils.is2xxResponse(okResponse) should be(true)
+    ResponseUtils.is2xxResponse(notFoundResponse) should be(false)
+    ResponseUtils.is2xxResponse(internalServerErrorResponse) should be(false)
+  }
+
+  test("correct identify 4xx or 5xx responses") {
+    ResponseUtils.is4xxOr5xxResponse(internalServerErrorResponse) should be(true)
+    ResponseUtils.is4xxOr5xxResponse(notFoundResponse) should be(true)
+    ResponseUtils.is4xxOr5xxResponse(okResponse) should be(false)
+  }
+
+  test("expect ok response") {
+    intercept[java.lang.AssertionError] {
+      ResponseUtils.expectOkResponse(forbiddenResponse)
     }
 
-    "correctly identify 2xx response" in {
-      ResponseUtils.is2xxResponse(okResponse) should be(true)
-      ResponseUtils.is2xxResponse(notFoundResponse) should be(false)
-      ResponseUtils.is2xxResponse(internalServerErrorResponse) should be(false)
+    ResponseUtils.expectOkResponse(okResponse)
+  }
+
+  test("expect ok response with body") {
+    ResponseUtils.expectOkResponse(okResponseWithBody, "ok")
+  }
+
+  test("expect forbidden response") {
+    intercept[java.lang.AssertionError] {
+      ResponseUtils.expectForbiddenResponse(okResponse)
     }
 
-    "correct identify 4xx or 5xx responses" in {
-      ResponseUtils.is4xxOr5xxResponse(internalServerErrorResponse) should be(true)
-      ResponseUtils.is4xxOr5xxResponse(notFoundResponse) should be(true)
-      ResponseUtils.is4xxOr5xxResponse(okResponse) should be(false)
-    }
+    ResponseUtils.expectForbiddenResponse(forbiddenResponse)
+  }
 
-    "expect ok response" in {
+  test("expect forbidden response with body") {
+    ResponseUtils.expectForbiddenResponse(forbiddenResponseWithBody, "forbidden")
+  }
+
+  test("expect not found response") {
       intercept[java.lang.AssertionError] {
-        ResponseUtils.expectOkResponse(forbiddenResponse)
-      }
-
-      ResponseUtils.expectOkResponse(okResponse)
+      ResponseUtils.expectNotFoundResponse(okResponse)
     }
 
-    "expect ok response with body" in {
-      ResponseUtils.expectOkResponse(okResponseWithBody, "ok")
-    }
+    ResponseUtils.expectNotFoundResponse(notFoundResponse)
+  }
 
-    "expect forbidden response" in {
-      intercept[java.lang.AssertionError] {
-        ResponseUtils.expectForbiddenResponse(okResponse)
-      }
-
-      ResponseUtils.expectForbiddenResponse(forbiddenResponse)
-    }
-
-    "expect forbidden response with body" in {
-      ResponseUtils.expectForbiddenResponse(forbiddenResponseWithBody, "forbidden")
-    }
-
-    "expect not found response" in {
-        intercept[java.lang.AssertionError] {
-        ResponseUtils.expectNotFoundResponse(okResponse)
-      }
-
-      ResponseUtils.expectNotFoundResponse(notFoundResponse)
-    }
-
-    "expect not found response with body" in {
-      ResponseUtils.expectNotFoundResponse(notFoundResponseWithBody, "not found")
-    }
+  test("expect not found response with body") {
+    ResponseUtils.expectNotFoundResponse(notFoundResponseWithBody, "not found")
   }
 }

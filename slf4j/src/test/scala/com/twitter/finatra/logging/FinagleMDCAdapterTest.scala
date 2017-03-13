@@ -1,12 +1,12 @@
 package com.twitter.finatra.logging
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class FinagleMDCAdapterTest extends WordSpecTest {
+class FinagleMDCAdapterTest extends Test {
 
   val adapter = new FinagleMDCAdapter()
 
-  "test" in {
+  test("finagle MDC adapter") {
     adapter.put("name", "bob")
     adapter.get("name") should equal("bob")
 

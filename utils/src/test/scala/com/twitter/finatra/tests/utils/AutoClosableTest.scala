@@ -1,20 +1,18 @@
 package com.twitter.finatra.tests.utils
 
 import com.twitter.finatra.utils.AutoClosable
-import com.twitter.inject.{Logging, WordSpecTest}
+import com.twitter.inject.{Logging, Test}
 
-class AutoClosableTest extends WordSpecTest {
+class AutoClosableTest extends Test {
 
-  "AutoClosable" should {
-    "close" in {
-      val closable = new AutoClosableObject()
+  test("AutoClosable#close") {
+    val closable = new AutoClosableObject()
 
-      AutoClosable.tryWith(closable) { closable =>
-        closable.doSomething()
-      }
-
-      closable.isClosed should be(true)
+    AutoClosable.tryWith(closable) { closable =>
+      closable.doSomething()
     }
+
+    closable.isClosed should be(true)
   }
 
 }

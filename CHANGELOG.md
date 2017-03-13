@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra: Move finatra/benchmarks and finatra/utils framework tests to FunSuite ScalaTest
+  testing style. ``RB_ID=910680``
+
 ### Fixed
 
 ### Closed
