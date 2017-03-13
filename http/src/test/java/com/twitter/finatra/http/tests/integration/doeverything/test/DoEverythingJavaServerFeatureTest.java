@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import com.twitter.finagle.http.HttpMuxer$;
 import com.twitter.finagle.http.Method;
-import com.twitter.finagle.http.Methods;
 import com.twitter.finagle.http.Request;
 import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
@@ -42,6 +41,22 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
     @Test
     public void testHelloEndpoint() {
         Request request = RequestBuilder.get("/hello?name=Bob");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("Hello Bob", response.contentString());
+    }
+
+    @Test
+    public void testHeadersEndpoint() {
+        Request request = RequestBuilder.get("/headers");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("12", response.contentString());
+    }
+
+    @Test
+    public void testNonInjectedHelloEndpoint() {
+        Request request = RequestBuilder.get("/nonInjected/hello?name=Bob");
         Response response = SERVER.httpRequest(request);
         assertEquals(Status.Ok(), response.status());
         assertEquals("Hello Bob", response.contentString());
@@ -94,10 +109,10 @@ public class DoEverythingJavaServerFeatureTest extends Assert {
 
     @Test
     public void testOtherEndpoints() {
-        assertMethod(Methods.PUT);
-        assertMethod(Methods.PATCH);
-        assertMethod(Methods.DELETE);
-        assertMethod(Methods.OPTIONS);
+        assertMethod(Method.Put());
+        assertMethod(Method.Patch());
+        assertMethod(Method.Delete());
+        assertMethod(Method.Options());
     }
 
     @Test

@@ -94,6 +94,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Correctly support adding Java AbstractController by instance. ``RB_ID=910502``
+
 ### Closed
 
 ## [finatra-2.8.0](https://github.com/twitter/finatra/tree/finatra-2.8.0) (2017-02-03)
