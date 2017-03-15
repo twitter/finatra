@@ -6,7 +6,7 @@ import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class JsonPatchExceptionMapper @Inject()(
+class JsonPatchExceptionMapper @Inject()(
   response: ResponseBuilder)
   extends ExceptionMapper[JsonPatchException] {
 
