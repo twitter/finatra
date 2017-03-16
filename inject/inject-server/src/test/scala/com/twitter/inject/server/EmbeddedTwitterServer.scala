@@ -202,11 +202,14 @@ class EmbeddedTwitterServer(
       twitterServer.log.clearHandlers()
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
       try {
-        Await.result(twitterServer.close())
+        Await.all(
+          httpAdminClient.close(),
+          twitterServer.close())
         mainRunnerFuturePool.executor.shutdown()
       } catch {
-        case e: Throwable =>
+        case NonFatal(e) =>
           info(s"Error while closing ${this.getClass.getSimpleName}: $e")
+          e.printStackTrace()
       }
       closed = true
     }
@@ -398,6 +401,7 @@ class EmbeddedTwitterServer(
       .retryPolicy(retryPolicy)
       .reportTo(NullStatsReceiver)
       .failFast(false)
+      .daemon(true)
 
     if (secure)
       builder.tlsWithoutValidation().build()

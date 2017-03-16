@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra: Close embedded server clients on embedded server close. ``RB_ID=910862``
+
 ### Closed
 
 ## [finatra-2.9.0](https://github.com/twitter/finatra/tree/finatra-2.9.0) (2017-03-10)
