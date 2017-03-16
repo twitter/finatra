@@ -2,7 +2,7 @@ package com.twitter.finatra.http.jsonpatch
 
 import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.{ArrayNode, ObjectNode}
 import com.google.inject.{Inject, Singleton}
 import com.twitter.finatra.json.FinatraObjectMapper
 import scala.annotation.tailrec
@@ -131,6 +131,7 @@ class JsonPatchOperator @Inject()(
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.put(path.getMatchingProperty, value)
+        case an: ArrayNode => an.insert(path.getMatchingIndex, value)
         case _ => throw new JsonPatchException("invalid target for add")
       }
     } else {
@@ -152,6 +153,7 @@ class JsonPatchOperator @Inject()(
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.remove(path.getMatchingProperty)
+        case an: ArrayNode => an.remove(path.getMatchingIndex)
         case _ => throw new JsonPatchException("invalid target for remove")
       }
     } else {
@@ -174,6 +176,7 @@ class JsonPatchOperator @Inject()(
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.put(path.getMatchingProperty, value)
+        case an: ArrayNode => an.set(path.getMatchingIndex, value)
         case _ => throw new JsonPatchException("invalid target for replace")
       }
     } else {

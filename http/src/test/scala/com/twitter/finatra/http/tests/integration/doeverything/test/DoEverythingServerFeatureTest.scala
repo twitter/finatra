@@ -2098,4 +2098,23 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = BadRequest,
       withJsonBody = """{"errors":["incorrect Content-Type, should be application/json-patch+json"]}""")
   }
+
+  test("JsonPatch handles array indices") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "test", "path": "/list_of_bears/0", "value": "grizzly"},
+          |{"op": "replace", "path": "/list_of_bears/0", "value": "panda"},
+          |{"op": "remove", "path": "/list_of_bears/1"},
+          |{"op": "add", "path": "/list_of_bears/1", "value": "brown"},
+          |{"op": "copy", "from": "/list_of_bears/0", "path": "/list_of_bears/2"},
+          |{"op": "move", "from": "/list_of_bears/0", "path": "/list_of_bears/2"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"list_of_bears": ["brown", "panda", "panda"]}""")
+  }
 }

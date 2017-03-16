@@ -544,6 +544,12 @@ class DoEverythingController @Inject()(
     JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
   }
 
+  patch("/jsonPatch/innerSeqCaseClass") { jsonPatch: JsonPatch =>
+    val testCase = InnerSeqCaseClass(listOfBears = Seq("grizzly", "polar"))
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
   patch("/echo") { request: Request =>
     response.ok(request.contentString)
   }
