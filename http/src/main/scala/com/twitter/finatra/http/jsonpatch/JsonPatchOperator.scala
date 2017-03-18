@@ -120,6 +120,48 @@ class JsonPatchOperator @Inject()(
   private val lastElementPointer: JsonPointer = JsonPointer.compile("/-")
 
   /**
+   * Get a node in the tree structure JsonNode, controlling that array indices are valid
+   *
+   * @param path   a JsonPointer instance indicating location
+   * @param target an instance of [[JsonNode]] that is queried for the path
+   * @return JsonNode at path in target
+   */
+  @tailrec
+  private def safeGetNode(path: JsonPointer, target: JsonNode): JsonNode = {
+    if (path.tail == null) {
+      throw new JsonPatchException("invalid path")
+    } else if (path.tail.matches) {
+      target match {
+        case on: ObjectNode => on.get(path.getMatchingProperty)
+        case an: ArrayNode =>
+          val index = if (path == lastElementPointer) an.size - 1 else path.getMatchingIndex
+          if (index < an.size && index >= 0) {
+            an.get(index)
+          } else {
+            throw new JsonPatchException("invalid target, array index out of bounds")
+          }
+        case _ => throw new JsonPatchException("invalid target")
+      }
+    } else {
+      target match {
+        case arrayNodeTarget: ArrayNode =>
+          if (path.mayMatchElement) {
+            val index: Int = path.getMatchingIndex
+            if (index < arrayNodeTarget.size && index >= 0) {
+              safeGetNode(path.tail, arrayNodeTarget.get(index))
+            } else {
+              throw new JsonPatchException("Invalid path, array index out of bounds")
+            }
+          } else {
+            throw new JsonPatchException("Invalid path, expected array index")
+          }
+        case _: JsonNode =>
+          safeGetNode(path.tail, target.get(path.getMatchingProperty))
+      }
+    }
+  }
+
+  /**
    * Add node in tree structure JsonNode
    *
    * @param path   a JsonPointer instance indicating location
@@ -261,7 +303,7 @@ class JsonPatchOperator @Inject()(
    * @return modified JsonNode
    */
   private def moveNode(path: JsonPointer, target: JsonNode, from: JsonPointer): Unit = {
-    val nodeToMove: JsonNode = target.at(from)
+    val nodeToMove: JsonNode = safeGetNode(from, target)
     removeNode(from, target)
     addNode(path, nodeToMove, target)
   }
@@ -275,7 +317,7 @@ class JsonPatchOperator @Inject()(
    * @return modified JsonNode
    */
   private def copyNode(path: JsonPointer, target: JsonNode, from: JsonPointer): Unit = {
-    addNode(path, target.at(from), target)
+    addNode(path, safeGetNode(from, target), target)
   }
 
   /**
@@ -287,7 +329,7 @@ class JsonPatchOperator @Inject()(
    * @return modified JsonNode
    */
   private def testNode(path: JsonPointer, target: JsonNode, value: JsonNode): Unit = {
-    if (target.at(path) != value) {
+    if (safeGetNode(path, target) != value) {
       throw new JsonPatchException("test operation failed")
     }
   }
