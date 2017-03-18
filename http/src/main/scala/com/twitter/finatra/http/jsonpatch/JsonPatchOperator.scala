@@ -261,8 +261,9 @@ class JsonPatchOperator @Inject()(
    * @return modified JsonNode
    */
   private def moveNode(path: JsonPointer, target: JsonNode, from: JsonPointer): Unit = {
-    addNode(path, target.at(from), target)
+    val nodeToMove: JsonNode = target.at(from)
     removeNode(from, target)
+    addNode(path, nodeToMove, target)
   }
 
   /**
