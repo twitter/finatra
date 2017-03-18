@@ -116,6 +116,9 @@ class JsonPatchOperator @Inject()(
   }
   /* Private */
 
+
+  private val lastElementPointer: JsonPointer = JsonPointer.compile("/-")
+
   /**
    * Add node in tree structure JsonNode
    *
@@ -131,11 +134,34 @@ class JsonPatchOperator @Inject()(
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.put(path.getMatchingProperty, value)
-        case an: ArrayNode => an.insert(path.getMatchingIndex, value)
+        case an: ArrayNode =>
+          // Gotcha: '<= an.size' and not '< an.size' because we may (of course) add at the end of the array
+          //         'index = an.size' and not 'index = an.size - 1' becuase the '/-' pointer means append for the add operation.
+          val index: Int = if (path == lastElementPointer) an.size else path.getMatchingIndex
+          if (index <= an.size && index >= 0) {
+            an.insert(index, value)
+          } else {
+            throw new JsonPatchException("invalid target for add, array index out of bounds")
+          }
         case _ => throw new JsonPatchException("invalid target for add")
       }
     } else {
-      addNode(path.tail, value, target.get(path.getMatchingProperty))
+      target match {
+        case arrayNodeTarget: ArrayNode =>
+          if (path.mayMatchElement) {
+            val index = path.getMatchingIndex
+            if (index < arrayNodeTarget.size && index >= 0) {
+              addNode(path.tail, value, arrayNodeTarget.get(index))
+            } else {
+              throw new JsonPatchException("Invalid path for add operation, array index out of bounds")
+            }
+          } else {
+            throw new JsonPatchException("Invalid path for add operation, expected array index")
+          }
+
+        case _: JsonNode =>
+          addNode(path.tail, value, target.get(path.getMatchingProperty))
+      }
     }
   }
 
@@ -153,11 +179,32 @@ class JsonPatchOperator @Inject()(
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.remove(path.getMatchingProperty)
-        case an: ArrayNode => an.remove(path.getMatchingIndex)
+        case an: ArrayNode =>
+          val index: Int = if (path == lastElementPointer) an.size - 1 else path.getMatchingIndex
+          if (index < an.size && index >= 0) {
+            an.remove(index)
+          } else {
+            throw new JsonPatchException("invalid target for remove, array index out of bounds")
+          }
         case _ => throw new JsonPatchException("invalid target for remove")
       }
     } else {
-      removeNode(path.tail, target.get(path.getMatchingProperty))
+      target match {
+        case arrayNodeTarget: ArrayNode =>
+          if (path.mayMatchElement) {
+            val index: Int = path.getMatchingIndex
+            if (index < arrayNodeTarget.size && index >= 0) {
+              removeNode(path.tail, arrayNodeTarget.get(index))
+            } else {
+              throw new JsonPatchException("Invalid path for remove operation, array index out of bounds")
+            }
+          } else {
+            throw new JsonPatchException("Invalid path for remove operation, expected array index")
+          }
+
+        case _: JsonNode =>
+          removeNode(path.tail, target.get(path.getMatchingProperty))
+      }
     }
   }
 
@@ -176,11 +223,32 @@ class JsonPatchOperator @Inject()(
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.put(path.getMatchingProperty, value)
-        case an: ArrayNode => an.set(path.getMatchingIndex, value)
+        case an: ArrayNode =>
+          val index: Int = if (path == lastElementPointer) an.size - 1 else path.getMatchingIndex
+          if (index < an.size && index >= 0) {
+            an.set(index, value)
+          } else {
+            throw new JsonPatchException("invalid target for replace, array index out of bounds")
+          }
         case _ => throw new JsonPatchException("invalid target for replace")
       }
     } else {
-      replaceNode(path.tail, value, target.get(path.getMatchingProperty))
+      target match {
+        case arrayNodeTarget: ArrayNode =>
+          if (path.mayMatchElement) {
+            val index: Int = path.getMatchingIndex
+            if (index < arrayNodeTarget.size && index >= 0) {
+              replaceNode(path.tail, value, arrayNodeTarget.get(index))
+            } else {
+              throw new JsonPatchException("Invalid path for replace operation, array index out of bounds")
+            }
+          } else {
+            throw new JsonPatchException("Invalid path for replace operation, expected array index")
+          }
+
+        case _: JsonNode =>
+          replaceNode(path.tail, value, target.get(path.getMatchingProperty))
+      }
     }
   }
 
