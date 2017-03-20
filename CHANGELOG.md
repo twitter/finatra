@@ -611,7 +611,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 - Bump to latest finagle? [Github Issue 266](https://github.com/twitter/finatra/issues/266)
 
-- ClassCastException: com.twitter.finatra.logging.FinagleMDCAdapter cannot be cast to ch.qos.logback.classic.util.LogbackMDCAdapter [Github Issue 256](https://github.com/twitter/finatra/issues/256)
+- ClassCastException: com.twitter.inject.logging.FinagleMDCAdapter cannot be cast to ch.qos.logback.classic.util.LogbackMDCAdapter [Github Issue 256](https://github.com/twitter/finatra/issues/256)
 
 ## [v2.1.1](https://github.com/twitter/finatra/tree/v2.1.1) (2015-10-29)
 

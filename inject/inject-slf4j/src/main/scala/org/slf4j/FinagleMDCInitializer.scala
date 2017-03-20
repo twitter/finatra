@@ -1,6 +1,6 @@
 package org.slf4j
 
-import com.twitter.finatra.logging.FinagleMDCAdapter
+import com.twitter.inject.logging.FinagleMDCAdapter
 
 object FinagleMDCInitializer {
 

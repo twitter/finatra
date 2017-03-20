@@ -1,4 +1,4 @@
-package com.twitter.finatra.logging
+package com.twitter.inject.logging
 
 import com.google.common.collect.ImmutableMap
 import com.twitter.util.Local
@@ -58,7 +58,7 @@ final class FinagleMDCAdapter extends MDCAdapter {
   }
 
   /** FOR INTERNAL USE ONLY */
-  private[finatra] def getPropertyContextMap: JMap[String, String] = {
+  private[twitter] def getPropertyContextMap: JMap[String, String] = {
     local() match {
       case Some(map) => map
       case _ => ImmutableMap.of()

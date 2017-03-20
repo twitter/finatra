@@ -13,7 +13,7 @@ Finatra uses the `SLF4J <http://www.slf4j.org/manual.html>`__ API for framework 
     java.util.logging, Logback and log4j. SLF4J allows the end-user to
     plug in the desired logging framework at deployment time."
 
-`finatra/slf4j <https://github.com/twitter/finatra/tree/develop/slf4j>`__ provides transitively SLF4J bridges for the following logging providers:
+`finatra/inject/inject-slf4j <https://github.com/twitter/finatra/tree/develop/inject/inject-slf4j>`__ provides transitively SLF4J bridges for the following logging providers:
 
 -  `Log4j <http://en.wikipedia.org/wiki/Log4j>`__
 -  `commons-logging <http://commons.apache.org/proper/commons-logging/>`__
