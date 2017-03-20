@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-jackson: Patch `FinatraDatetimeDeserializer` to support parsing of Long value passed
+  as String, e.g., when parsing a query parameter.``RB_ID=911162``
+
 * finatra: Close embedded server clients on embedded server close. ``RB_ID=910862``
 
 ### Closed

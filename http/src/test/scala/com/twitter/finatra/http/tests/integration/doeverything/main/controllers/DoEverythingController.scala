@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
+import org.joda.time.DateTime
 import scala.collection.SortedSet
 
 class DoEverythingController @Inject()(
@@ -774,6 +775,10 @@ class DoEverythingController @Inject()(
     }
   }
 
+  get("/millis") { r: ClassWithQueryParamDateTime =>
+    r.dateTime.getMillis
+  }
+
   post("/localDateRequest") { r: TestCaseClassWithLocalDate =>
     response.ok
   }
@@ -784,6 +789,9 @@ case class MultipleInjectableValueParams(
 
 case class CaseClassWithRequestField(
   request: Request)
+
+case class ClassWithQueryParamDateTime(
+  @QueryParam dateTime: DateTime)
 
 class NonCaseClass {
   val name = "Bob"

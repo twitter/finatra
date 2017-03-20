@@ -15,6 +15,7 @@ import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import org.apache.commons.io.IOUtils
+import org.joda.time.DateTime
 import org.scalatest.exceptions.TestFailedException
 
 class DoEverythingServerFeatureTest extends FeatureTest {
@@ -2097,5 +2098,15 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       request = request,
       andExpect = BadRequest,
       withJsonBody = """{"errors":["incorrect Content-Type, should be application/json-patch+json"]}""")
+  }
+
+  test("/millis") {
+    val inMillis = 1489719177279L
+    val request = RequestBuilder.get(s"/millis?date_time=$inMillis")
+
+    server.httpRequest(
+      request,
+      andExpect = Ok,
+      withBody = s"$inMillis")
   }
 }
