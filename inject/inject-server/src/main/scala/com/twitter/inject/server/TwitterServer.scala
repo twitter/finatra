@@ -1,7 +1,9 @@
 package com.twitter.inject.server
 
 import com.google.inject.Module
+import com.twitter.conversions.time._
 import com.twitter.finagle.client.ClientRegistry
+import com.twitter.finagle.util.DefaultTimer
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.App
@@ -10,8 +12,8 @@ import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision
-import com.twitter.util.{Awaitable, Await}
-import java.util.concurrent.ConcurrentLinkedQueue
+import com.twitter.util.{Awaitable, Await, Duration}
+import java.util.concurrent.{ConcurrentLinkedQueue, CountDownLatch}
 import scala.collection.JavaConverters._
 
 /** AbstractTwitterServer for usage from Java */
@@ -51,6 +53,7 @@ trait TwitterServer
   /* Mutable State */
 
   private[inject] val awaitables: ConcurrentLinkedQueue[Awaitable[_]] = new ConcurrentLinkedQueue()
+  private[this] val CheckDuration: Duration = 1.second
 
   premain {
     awaitables.add(adminHttpServer)
@@ -128,7 +131,18 @@ trait TwitterServer
     super.main() // Call inject.App.main() to create injector
 
     info("Startup complete, server ready.")
-    Await.all(awaitables.asScala.toSeq: _*)
+
+    // exit if any of the awaitables is ready
+    val latch = new CountDownLatch(1)
+    val awaits = awaitables.asScala
+    val task = DefaultTimer.twitter.schedule(CheckDuration) {
+      if (awaits.exists(Await.isReady(_)))
+        latch.countDown()
+    }
+
+    // we don't set a timeout because it should already be ready
+    latch.await()
+    task.close()
   }
 
   /**
@@ -184,6 +198,7 @@ trait TwitterServer
 
     if (disableAdminHttpServer) {
       info("Disabling the Admin HTTP Server since disableAdminHttpServer=true")
+      awaitables.remove(adminHttpServer)
       adminHttpServer.close()
     } else {
       for (addr <- adminAnnounceFlag.get) adminHttpServer.announce(addr)
