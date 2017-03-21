@@ -143,6 +143,7 @@ class HttpRouter @Inject()(
   }
 
   def add(controller: AbstractController): HttpRouter = {
+    injector.underlying.injectMembers(controller)
     controller.configureRoutes()
     addRoutes(controller)
   }

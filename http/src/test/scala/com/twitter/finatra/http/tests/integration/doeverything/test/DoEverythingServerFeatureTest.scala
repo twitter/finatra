@@ -15,7 +15,6 @@ import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import org.apache.commons.io.IOUtils
-import org.joda.time.DateTime
 import org.scalatest.exceptions.TestFailedException
 
 class DoEverythingServerFeatureTest extends FeatureTest {

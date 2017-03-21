@@ -12,6 +12,10 @@ public class DoEverythingJavaNonInjectedController extends AbstractController {
 
     /** Define routes */
     public void configureRoutes() {
-        get("/nonInjected/hello", (Request request) -> helloService.hi(request.getParam("name")));
+        get("/nonInjected/hello", (Request request) ->
+            helloService.hi(request.getParam("name")));
+
+        get("/nonInjected/response", (Request request) ->
+            response().ok(helloService.hi(request.getParam("name"))));
     }
 }

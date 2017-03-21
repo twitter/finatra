@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Ensure underlying members are injected for AbstractControllers. ``RB_ID=911635``
+
 * finatra-jackson: Patch `FinatraDatetimeDeserializer` to support parsing of Long value passed
   as String, e.g., when parsing a query parameter.``RB_ID=911162``
 
