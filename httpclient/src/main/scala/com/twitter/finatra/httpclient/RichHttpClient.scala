@@ -8,7 +8,7 @@ object RichHttpClient {
   /* Public */
 
   def newClientService(dest: String): Service[Request, Response] = {
-    Http.newClient(dest).toService
+    Http.client.newService(dest)
   }
 
   def newSslClientService(sslHostname: String, dest: String): Service[Request, Response] = {
