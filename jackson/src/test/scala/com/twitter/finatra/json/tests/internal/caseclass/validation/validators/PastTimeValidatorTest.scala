@@ -11,27 +11,24 @@ class PastTimeValidatorTest
   extends ValidatorTest
   with GeneratorDrivenPropertyChecks {
 
-  "pass time validator" should {
+  test("pass validation for valid datetime") {
+    val passDateTimeMillis = Gen.choose(DateTime.now().minusWeeks(5).getMillis(), DateTime.now().getMillis)
 
-    "pass validation for valid datetime" in {
-      val passDateTimeMillis = Gen.choose(DateTime.now().minusWeeks(5).getMillis(), DateTime.now().getMillis)
-
-      forAll(passDateTimeMillis) { millisValue =>
-        val dateTimeValue = new DateTime(millisValue)
-        validate[PastExample](dateTimeValue) should equal(Valid)
-      }
+    forAll(passDateTimeMillis) { millisValue =>
+      val dateTimeValue = new DateTime(millisValue)
+      validate[PastExample](dateTimeValue) should equal(Valid)
     }
+  }
 
-    "fail validation for invalid datetime" in {
-      val futureDateTimeMillis = Gen.choose(DateTime.now().getMillis, DateTime.now().plusWeeks(5).getMillis())
+  test("fail validation for invalid datetime") {
+    val futureDateTimeMillis = Gen.choose(DateTime.now().getMillis, DateTime.now().plusWeeks(5).getMillis())
 
-      forAll(futureDateTimeMillis) { millisValue =>
-        val dateTimeValue = new DateTime(millisValue)
-        validate[PastExample](dateTimeValue) should equal(
-          Invalid(
-          errorMessage(messageResolver, dateTimeValue),
-          ErrorCode.TimeNotPast(dateTimeValue)))
-      }
+    forAll(futureDateTimeMillis) { millisValue =>
+      val dateTimeValue = new DateTime(millisValue)
+      validate[PastExample](dateTimeValue) should equal(
+        Invalid(
+        errorMessage(messageResolver, dateTimeValue),
+        ErrorCode.TimeNotPast(dateTimeValue)))
     }
   }
 

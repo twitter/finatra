@@ -13,25 +13,22 @@ class UUIDValidatorTest
   extends ValidatorTest
   with GeneratorDrivenPropertyChecks {
 
-  "uuid validator" should {
+  test("pass validation for valid uuid") {
+    val passValue = Gen.uuid
 
-    "pass validation for valid uuid" in {
-      val passValue = Gen.uuid
-
-      forAll(passValue) { value =>
-        validate[UUIDExample](value.toString) should equal(Valid)
-      }
+    forAll(passValue) { value =>
+      validate[UUIDExample](value.toString) should equal(Valid)
     }
+  }
 
-    "fail validation for valid uuid" in {
-      val passValue = Gen.alphaStr
+  test("fail validation for valid uuid") {
+    val passValue = Gen.alphaStr
 
-      forAll(passValue) { value =>
-        validate[UUIDExample](value) should equal(
-          Invalid(
-          errorMessage(value),
-          ErrorCode.InvalidUUID(value)))
-      }
+    forAll(passValue) { value =>
+      validate[UUIDExample](value) should equal(
+        Invalid(
+        errorMessage(value),
+        ErrorCode.InvalidUUID(value)))
     }
   }
 

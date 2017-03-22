@@ -15,107 +15,104 @@ class SizeValidatorTest
   extends ValidatorTest
   with GeneratorDrivenPropertyChecks {
 
-  "size validator" should {
+  test("pass validation for array type") {
+    val passValue = for {
+      size <- Gen.choose(10, 50)
+    } yield Array.fill(size){0}
 
-    "pass validation for array type" in {
-      val passValue = for {
-        size <- Gen.choose(10, 50)
-      } yield Array.fill(size){0}
-
-      forAll(passValue) { value =>
-        validate[SizeArrayExample](value) should equal(Valid)
-      }
+    forAll(passValue) { value =>
+      validate[SizeArrayExample](value) should equal(Valid)
     }
+  }
 
-    "fail validation for too few array type" in {
-      val failValue = for {
-        size <- Gen.choose(0, 9)
-      } yield Array.fill(size){0}
+  test("fail validation for too few array type") {
+    val failValue = for {
+      size <- Gen.choose(0, 9)
+    } yield Array.fill(size){0}
 
-      forAll(failValue) { value =>
-        validate[SizeArrayExample](value) should equal(
-          Invalid(
-          errorMessage(value),
-          ErrorCode.SizeOutOfRange(value.size, 10, 50)))
-      }
+    forAll(failValue) { value =>
+      validate[SizeArrayExample](value) should equal(
+        Invalid(
+        errorMessage(value),
+        ErrorCode.SizeOutOfRange(value.size, 10, 50)))
     }
+  }
 
-    "fail validation for too many array type" in {
-      val failValue = for {
-        size <- Gen.choose(51, 100)
-      } yield Array.fill(size){0}
+  test("fail validation for too many array type") {
+    val failValue = for {
+      size <- Gen.choose(51, 100)
+    } yield Array.fill(size){0}
 
-      forAll(failValue) { value =>
-        validate[SizeArrayExample](value) should equal(
-          Invalid(
-          errorMessage(value),
-          ErrorCode.SizeOutOfRange(value.size, 10, 50)))
-      }
+    forAll(failValue) { value =>
+      validate[SizeArrayExample](value) should equal(
+        Invalid(
+        errorMessage(value),
+        ErrorCode.SizeOutOfRange(value.size, 10, 50)))
     }
+  }
 
-    "pass validation for seq type" in {
-      val passValue = for {
-        size <- Gen.choose(10, 50)
-      } yield Seq.fill(size){0}
+  test("pass validation for seq type") {
+    val passValue = for {
+      size <- Gen.choose(10, 50)
+    } yield Seq.fill(size){0}
 
-      forAll(passValue) { value =>
-        validate[SizeSeqExample](value) should equal(Valid)
-      }
+    forAll(passValue) { value =>
+      validate[SizeSeqExample](value) should equal(Valid)
     }
+  }
 
-    "fail validation for too few seq type" in {
-      val failValue = for {
-        size <- Gen.choose(0, 9)
-      } yield Seq.fill(size){0}
+  test("fail validation for too few seq type") {
+    val failValue = for {
+      size <- Gen.choose(0, 9)
+    } yield Seq.fill(size){0}
 
-      forAll(failValue) { value =>
-        validate[SizeSeqExample](value) should equal(
-          Invalid(
-          errorMessage(value),
-          ErrorCode.SizeOutOfRange(value.size, 10, 50)))
-      }
+    forAll(failValue) { value =>
+      validate[SizeSeqExample](value) should equal(
+        Invalid(
+        errorMessage(value),
+        ErrorCode.SizeOutOfRange(value.size, 10, 50)))
     }
+  }
 
-    "fail validation for too many seq type" in {
-      val failValue = for {
-        size <- Gen.choose(51, 100)
-      } yield Seq.fill(size){0}
+  test("fail validation for too many seq type") {
+    val failValue = for {
+      size <- Gen.choose(51, 100)
+    } yield Seq.fill(size){0}
 
-      forAll(failValue) { value =>
-        validate[SizeSeqExample](value) should equal(
-          Invalid(
-          errorMessage(value),
-          ErrorCode.SizeOutOfRange(value.size, 10, 50)))
-      }
+    forAll(failValue) { value =>
+      validate[SizeSeqExample](value) should equal(
+        Invalid(
+        errorMessage(value),
+        ErrorCode.SizeOutOfRange(value.size, 10, 50)))
     }
+  }
 
-    "pass validation for string type" in {
-      val passValue = for {
-        size <- Gen.choose(10, 140)
-      } yield List.fill(size) {'a'}.mkString
+  test("pass validation for string type") {
+    val passValue = for {
+      size <- Gen.choose(10, 140)
+    } yield List.fill(size) {'a'}.mkString
 
-      forAll(passValue) { value =>
-        validate[SizeStringExample](value) should equal(Valid)
-      }
+    forAll(passValue) { value =>
+      validate[SizeStringExample](value) should equal(Valid)
     }
+  }
 
-    "fail validation for too few string type" in {
-      val failValue = for {
-        size <- Gen.choose(0, 9)
-      } yield List.fill(size){'a'}.mkString
+  test("fail validation for too few string type") {
+    val failValue = for {
+      size <- Gen.choose(0, 9)
+    } yield List.fill(size){'a'}.mkString
 
-      forAll(failValue) { value =>
-        validate[SizeStringExample](value) should equal(
-          Invalid(
-          errorMessage(value, minValue = 10, maxValue = 140),
-          ErrorCode.SizeOutOfRange(value.size, 10, 140)))
-      }
+    forAll(failValue) { value =>
+      validate[SizeStringExample](value) should equal(
+        Invalid(
+        errorMessage(value, minValue = 10, maxValue = 140),
+        ErrorCode.SizeOutOfRange(value.size, 10, 140)))
     }
+  }
 
-    "fail for unsupported class type" in {
-      intercept[IllegalArgumentException] {
-        validate[SizeInvalidTypeExample](2)}
-    }
+  test("fail for unsupported class type") {
+    intercept[IllegalArgumentException] {
+      validate[SizeInvalidTypeExample](2)}
   }
 
   private def validate[C: Manifest](value: Any): ValidationResult = {

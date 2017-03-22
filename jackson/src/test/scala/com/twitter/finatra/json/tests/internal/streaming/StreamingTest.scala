@@ -4,17 +4,17 @@ import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 import com.twitter.io.Buf
 import com.twitter.util.Await
 
-class StreamingTest extends WordSpecTest {
+class StreamingTest extends Test {
 
   //        idx: 0123456
   val jsonStr = "[1,2,3]"
   val expected123 = AsyncStream(1, 2, 3)
 
-  "bufs to json" in {
+  test("bufs to json") {
     assertParsed(AsyncStream(
       Buf.Utf8(jsonStr.substring(0, 1)),
       Buf.Utf8(jsonStr.substring(1, 4)),
@@ -23,7 +23,7 @@ class StreamingTest extends WordSpecTest {
       expected = expected123)
   }
 
-  "bufs to json 2" in {
+  test("bufs to json 2") {
     assertParsed(AsyncStream(
       Buf.Utf8("[1"),
       Buf.Utf8(",2"),
@@ -33,7 +33,7 @@ class StreamingTest extends WordSpecTest {
       expected = expected123)
   }
 
-  "bufs to json 3" in {
+  test("bufs to json 3") {
     assertParsed(
       AsyncStream(
         Buf.Utf8("[1"),
@@ -43,7 +43,7 @@ class StreamingTest extends WordSpecTest {
       expected = AsyncStream(1, 2, 3, 444, 5))
   }
 
-  "parse request" in {
+  test("parse request") {
     val jsonStr = "[1,2]"
     val request = Request(Method.Post, "/")
     request.setChunked(true)
