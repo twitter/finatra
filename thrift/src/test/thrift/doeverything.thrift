@@ -22,6 +22,15 @@ service DoEverything {
     3: finatra_thrift_exceptions.NoClientIdError noClientIdError
   )
 
+  string echo2(
+    1: string msg
+  ) throws (
+    1: finatra_thrift_exceptions.ServerError serverError,
+    2: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
+    3: finatra_thrift_exceptions.NoClientIdError noClientIdError
+    4: finatra_thrift_exceptions.ClientError clientError,
+  )
+
   string magicNum()
 
   string moreThanTwentyTwoArgs(

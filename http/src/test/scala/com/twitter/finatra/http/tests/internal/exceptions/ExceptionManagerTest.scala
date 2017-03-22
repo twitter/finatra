@@ -33,12 +33,16 @@ class ExceptionManagerTest extends Test with Mockito {
   exceptionManager.add[ForbiddenExceptionMapper]
   exceptionManager.add(new UnauthorizedExceptionMapper)
   exceptionManager.add[UnauthorizedException1Mapper]
+  exceptionManager.add[FirstExceptionMapper]
+  exceptionManager.add[SecondExceptionMapper]
 
   val exceptionMapperCollection = new ExceptionMapperCollection {
     add[TestRootExceptionMapper]
     add[ForbiddenExceptionMapper]
     add[UnauthorizedExceptionMapper]
     add[UnauthorizedException1Mapper]
+    add[FirstExceptionMapper]
+    add[SecondExceptionMapper]
   }
   collectionExceptionManager
     .add(exceptionMapperCollection)
@@ -78,6 +82,11 @@ class ExceptionManagerTest extends Test with Mockito {
     testException(new UnregisteredException, Status.InternalServerError)
     testException(new UnregisteredException, Status.InternalServerError, collectionExceptionManager)
   }
+
+  test("map exceptions to first registered mapper") {
+    testException(new ExceptionForDupMapper, Status.Accepted)
+    testException(new ExceptionForDupMapper, Status.Accepted, collectionExceptionManager)
+  }
 }
 
 class UnregisteredException extends Exception
@@ -86,6 +95,7 @@ class ForbiddenException1 extends ForbiddenException
 class ForbiddenException2 extends ForbiddenException1
 class UnauthorizedException extends Exception
 class UnauthorizedException1 extends UnauthorizedException
+class ExceptionForDupMapper extends Exception
 
 class TestRootExceptionMapper extends ExceptionMapper[Throwable] {
   def toResponse(request: Request, throwable: Throwable): Response = {
@@ -106,4 +116,16 @@ class UnauthorizedExceptionMapper extends ExceptionMapper[UnauthorizedException]
 class UnauthorizedException1Mapper extends ExceptionMapper[UnauthorizedException1] {
   def toResponse(request: Request, throwable: UnauthorizedException1): Response =
     SimpleResponse(Status.NotFound)
+}
+
+class FirstExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
+  def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
+    SimpleResponse(Status.Accepted)
+  }
+}
+
+class SecondExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
+  def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
+    SimpleResponse(Status.BadRequest)
+  }
 }

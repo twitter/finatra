@@ -1,5 +1,6 @@
 package com.twitter.calculator
 
+import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.filters._
@@ -20,8 +21,9 @@ class CalculatorServer extends ThriftServer {
       .filter[ThriftMDCFilter]
       .filter[AccessLoggingFilter]
       .filter[StatsFilter]
-      .filter[ExceptionTranslationFilter]
+      .filter[ExceptionMappingFilter]
       .filter[ClientIdWhitelistFilter]
+      .exceptionMapper[FinatraThriftExceptionMapper]
       .add[CalculatorController]
   }
 }

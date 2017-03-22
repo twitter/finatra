@@ -62,6 +62,7 @@ Thrift
 - :doc:`thrift/server`
 - :doc:`thrift/controllers`
 - :doc:`thrift/filters`
+- :doc:`thrift/exceptions`
 - :doc:`thrift/warmup`
 
 Twitter Server

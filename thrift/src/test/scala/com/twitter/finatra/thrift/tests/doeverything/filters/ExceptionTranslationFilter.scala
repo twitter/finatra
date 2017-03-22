@@ -9,6 +9,7 @@ import com.twitter.inject.Logging
 import com.twitter.util.Future
 import scala.util.control.NonFatal
 
+@deprecated("Use `com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper` instead", "2017-03-07")
 class ExceptionTranslationFilter
   extends ThriftFilter
   with Logging {

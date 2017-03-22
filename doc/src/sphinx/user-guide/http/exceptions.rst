@@ -101,14 +101,14 @@ as a framework module in every `HttpServer <https://github.com/twitter/finatra/b
 
 If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten.
 
-Thus, the last registered mapper for an exception type wins.
+Thus, the user registered mapper for an exception type wins.
 
 Default Exception Mappers
 -------------------------
 
 The framework adds several mappers to the `ExceptionManager` by default. To swap out any of these defaults simply need add a mapper to the manager for the exception type to map.
 
-As noted above the last registered mapper for a type wins.
+As noted above the user registered mapper for a type wins.
 
 By default the framework will add the follow mappers:
 
