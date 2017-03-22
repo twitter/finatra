@@ -7,18 +7,57 @@ import com.twitter.inject.Injector
 import com.twitter.util.Var
 import scala.collection.mutable.ArrayBuffer
 
+/**
+ * RouteContext represents the current contextual attributes at a given point within a controller declaration using RouteDSL
+ * In other words, a RouteContext provides information relevant to the current state of the RouteDSL declaration.
+ *
+ * For instance:
+ * {{{
+ * class MyController extends Controller {
+ *   // RouteContext(prefix = "", buildFilter = identity)
+ *   get("endpoint") {}
+ *
+ *   // Filter pushes a context onto the "stack". It is generated using the context at the top of the "stack"
+ *   // RouteContext(prefix = "", buildFilter = filterFunc...)
+ *   filter[MyFilter].get("filtered") {}
+ *
+ *   // We've now returned to the initial context
+ *   post("endpoint") {}
+ *
+ *   // Prefix pushes a new context
+ *   // RouteContext(prefix = "v1", buildFilter = identity)
+ *   prefix("v1") {
+ *     get("api") {}
+ *
+ *     // RouteContext(prefix = "v1", buildFilter = filterFunc...)
+ *     filter[MyFilter].post("filteredPost") {}
+ *   }
+ * }
+ * }}}
+ *
+ * @param prefix The current routing state's path prefix
+ * @param buildFilter The current routing state's filter factory function
+ */
 private[http] case class RouteContext(prefix: String, buildFilter: (Injector) => HttpFilter)
 
 private trait MutableRouteState {
-  private[http] val context: RouteContext = RouteContext(
+  // We define this constant separately rather than as a directly as a default value of context
+  // so the "contextRef" val does not rely on "context" val
+  private[this] val defaultContext = RouteContext(
     prefix = "",
-    buildFilter = (_) => Filter.identity
+    buildFilter = Function.const(Filter.identity)
   )
 
-  private[http] lazy val contextRef = Var(context)
+  private[http] val context: RouteContext = defaultContext
+
+  // It is important that contextRef is lazy so that NullPointerExceptions are not thrown
+  // due to class linearization / initialization order
+  // Because RouteDSLs are declared as the "body" of an implementing trait (i.e. extending RouteDSL)
+  // we ensure that no eagerly evaluated "context" val will attempt to access an uninitialized reference to "contextRef"
+  private[http] lazy val contextRef = Var(defaultContext)
 }
 
-private class FilteredDSL[FilterType <: HttpFilter : Manifest] extends RouteDSL {
+private[http] class FilteredDSL[FilterType <: HttpFilter : Manifest] extends RouteDSL {
   override private[http] val context = {
     val curr = contextRef()
     curr.copy(buildFilter = getBuildFilterFunc(curr.buildFilter))
@@ -33,7 +72,7 @@ private class FilteredDSL[FilterType <: HttpFilter : Manifest] extends RouteDSL 
   override private[http] def contextWrapper[T](f: => T): T = withContext(context)(f)
 }
 
-private class PrefixedDSL(prefix: String) extends RouteDSL {
+private[http] class PrefixedDSL(prefix: String) extends RouteDSL {
   override private[http] val context = {
     val curr = contextRef()
     curr.copy(prefix = curr.prefix + prefix)
