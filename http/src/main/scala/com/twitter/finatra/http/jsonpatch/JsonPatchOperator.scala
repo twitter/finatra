@@ -156,7 +156,11 @@ class JsonPatchOperator @Inject()(
           } else {
             throw new JsonPatchException(s"invalid path for $operation operation, expected array index")
           }
-        case _: JsonNode =>
+
+        case null =>
+          throw new JsonPatchException(s"invalid target for $operation operation")
+
+        case _ =>
           safeGetNode(path.tail, target.get(path.getMatchingProperty), operation)
       }
     }
@@ -202,7 +206,10 @@ class JsonPatchOperator @Inject()(
             throw new JsonPatchException("invalid path for add operation, expected array index")
           }
 
-        case _: JsonNode =>
+        case null =>
+          throw new JsonPatchException("invalid target for add operation")
+
+        case _ =>
           addNode(path.tail, value, target.get(path.getMatchingProperty))
       }
     }
@@ -245,7 +252,10 @@ class JsonPatchOperator @Inject()(
             throw new JsonPatchException("invalid path for remove operation, expected array index")
           }
 
-        case _: JsonNode =>
+        case null =>
+          throw new JsonPatchException("invalid target for remove operation")
+
+        case _ =>
           removeNode(path.tail, target.get(path.getMatchingProperty))
       }
     }
@@ -289,7 +299,10 @@ class JsonPatchOperator @Inject()(
             throw new JsonPatchException("invalid path for replace operation, expected array index")
           }
 
-        case _: JsonNode =>
+        case null =>
+          throw new JsonPatchException("invalid target for replace operation")
+
+        case _ =>
           replaceNode(path.tail, value, target.get(path.getMatchingProperty))
       }
     }
