@@ -2304,4 +2304,21 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = BadRequest,
       withJsonBody = """{"errors":["invalid target for add operation, array index out of bounds"]}""")
   }
+
+  test("JsonPatch fails when mutating objects that do not contain fields requested") {
+    // note: innerSeqCaseClass is of the form { "bears": [...] }
+    // this test intentionally tries to patch the 'wrong' object
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "add", "path": "/animal_families/2/name", "value": "brown"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid target for add operation"]}""")
+
+  }
 }
