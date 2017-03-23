@@ -118,6 +118,7 @@ For support feel free to follow and/or tweet at the `@finatra <https://twitter.c
    thrift/server.rst
    thrift/controllers.rst
    thrift/filters.rst
+   thrift/exceptions.rst
    thrift/warmup.rst
    twitter-server/index.rst
    testing/index.rst

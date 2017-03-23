@@ -24,8 +24,7 @@ class ExceptionManagerTest extends Test {
   def testException(
     e: Throwable,
     mapped: String,
-    manager: ExceptionManager = exceptionManager
-  ): Unit = {
+    manager: ExceptionManager = exceptionManager): Unit = {
     Await.result(manager.handleException[String](e)) should equal(mapped)
   }
 
@@ -37,8 +36,8 @@ class ExceptionManagerTest extends Test {
     testException(new TypeThreeException, "typeOneException")
   }
 
-  test("map exceptions to first registered mapper") {
-    testException(new ExceptionForDupMapper, "first, win!")
+  test("map exceptions to last registered mapper") {
+    testException(new ExceptionForDupMapper, "second, overridden!")
   }
 }
 
@@ -68,7 +67,7 @@ class TypeTwoExceptionMapper extends ExceptionMapper[TypeTwoException, String] {
 
 class FirstExceptionMapper extends ExceptionMapper[ExceptionForDupMapper, String] {
   def handleException(throwable: ExceptionForDupMapper): Future[String] = {
-    Future.value("first, win!");
+    Future.value("first, win!")
   }
 }
 

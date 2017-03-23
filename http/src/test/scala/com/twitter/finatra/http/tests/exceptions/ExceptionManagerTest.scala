@@ -1,15 +1,15 @@
-package com.twitter.finatra.http.tests.internal.exceptions
+package com.twitter.finatra.http.tests.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
-import com.twitter.inject.{Mockito, Test}
 import com.twitter.inject.app.TestInjector
+import com.twitter.inject.Test
 import org.apache.commons.lang.RandomStringUtils
 
-class ExceptionManagerTest extends Test with Mockito {
+class ExceptionManagerTest extends Test {
 
   def newExceptionManager =
     new ExceptionManager(
@@ -83,9 +83,9 @@ class ExceptionManagerTest extends Test with Mockito {
     testException(new UnregisteredException, Status.InternalServerError, collectionExceptionManager)
   }
 
-  test("map exceptions to first registered mapper") {
-    testException(new ExceptionForDupMapper, Status.Accepted)
-    testException(new ExceptionForDupMapper, Status.Accepted, collectionExceptionManager)
+  test("map exceptions to last registered mapper") {
+    testException(new ExceptionForDupMapper, Status.BadRequest)
+    testException(new ExceptionForDupMapper, Status.BadRequest, collectionExceptionManager)
   }
 }
 

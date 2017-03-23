@@ -25,7 +25,7 @@ trait App
   extends com.twitter.app.App
   with Logging {
 
-  private[inject] lazy val requiredModules = modules ++ javaModules.asScala ++ frameworkModules
+  private[inject] lazy val requiredModules = frameworkModules ++ modules ++ javaModules.asScala
 
   /* Mutable State */
 
@@ -42,7 +42,7 @@ trait App
     info("Process started")
 
     /* Get all module flags */
-    val allModules = requiredModules ++ overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules
+    val allModules = requiredModules ++ frameworkOverrideModules ++ overrideModules ++ javaOverrideModules.asScala
     val allModuleFlags = findModuleFlags(allModules)
 
     /* Register all flags */
@@ -53,8 +53,8 @@ trait App
   def main(): Unit = {
     installedModules = loadModules()
 
-    postInjectorStartup()
     installedModules.postInjectorStartup()
+    postInjectorStartup()
 
     info("Warming up.")
     warmup()

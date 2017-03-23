@@ -3,18 +3,24 @@
 Thrift Exception Mapping
 ========================
 
-It is recommended in Finatra Scala Framework that you use exceptions for flow control in your controller and services and rely on the `c.t.finatra.thrift.exceptions.ExceptionMapper <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/ExceptionMapper.scala>`__ to convert exceptions into proper finatra-thrift exceptions or thrift responses.
+It is recommended in Finatra that you generally prefer to use exceptions for flow control in your controller and services and rely on the `c.t.finatra.thrift.exceptions.ExceptionMapper <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/ExceptionMapper.scala>`__ to convert exceptions into proper finatra-thrift exceptions or thrift responses.
 
-Look at `Http Exception Mapping <https://twitter.github.io/finatra/user-guide/http/exceptions.html#why>`__ for why the framework provides this.
+Please see `Http Exception Mapping <https://twitter.github.io/finatra/user-guide/http/exceptions.html#why>`__ for why the framework provides this.
 
-``Note: Thrift Exception Mapping is only supported for Finatra Scala Framework now.``
+.. admonition:: ``Support for Scala only``
+
+   Thrift exception mapping is currently only supported for Scala servers using
+   Scala Scrooge generated classes. The Scrooge generated Java stack does not yet
+   provide enough flexibility to easily map responses to different types.
+
+More information on the Scrooge thrift code generator can be found `here <https://github.com/twitter/scrooge>`__.
 
 How?
 ----
 
-In order to turn on Exception Mapping, you should include the `c.t.finatra.thrift.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ExceptionMappingFilter.scala>`__ in your server's filter chain. The Finatra framework adds a `ThrowableExceptionMapper <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/ThrowableExceptionMapper.scala>`__ by default to ExceptionMappingFilter which provides root-level mapping for exceptions. You can register additional mappers or override the default one altogether.
+The Finatra framework adds a `default <#default-exception-mapper>`__ to ExceptionMappingFilter which provides root-level mapping for exceptions. You can register additional mappers or override the default one altogether.
 
-For instance, if you want to map a `ClassCastException` to a `ThriftException`, such as `ClientError(ClientErrorCause, errorMessage)`, which is defined in `finatra_thrift_exceptions.thrift <https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift>`__ . You could create the following ExceptionMapper:
+For instance, if you want to map a `java.lang.ClassCastException` to a `ThriftException` -- e.g., `ClientError(ClientErrorCause, errorMessage)`, which is defined in `finatra_thrift_exceptions.thrift <https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift>`__ you could create the following ExceptionMapper:
 
 .. code:: scala
 
@@ -43,9 +49,31 @@ Then register this exception mapper in your server.
       ...
     }
 
-Two more examples mapping exceptions to actual thrift responses are located at `mappers <https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/doeverything/exceptions/mappers.scala>`__.
+Two more examples mapping exceptions to actual thrift responses are located in the test `mappers <https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/doeverything/exceptions/mappers.scala>`__.
 
 Also, you can see we register the exception mapper *by type* allowing the framework to instantiate an instance.
+
+ExceptionMappingFilter
+----------------------
+
+Using exception mappers requires you to include the `c.t.finatra.thrift.filters.ExceptionMappingFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/ExceptionMappingFilter.scala>`__ in your server's filter chain.
+
+For information on how to add a filter to your ThriftServer see the `Filters <filters.html>`__ section.
+
+Default Exception Mapper
+------------------------
+
+The framework adds only the `ThrowableExceptionMapper` to the `ExceptionManager` by default which simply throws back any uncaught `Throwable`.
+
+==============================  ==================================================================================================================================================================================
+`Throwable`                     `ThrowableExceptionMapper <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/exceptions/ThrowableExceptionMapper.scala>`__
+==============================  ==================================================================================================================================================================================
+
+The `ExceptionManager` walks the exception type hierarchy starting at the given exception type, moving up the inheritance chain until it finds mapper configured for the type. In this manner, an `ExceptionMapper[Throwable]` will be the last mapper invoked and acts as the "default". Therefore to change the framework "default" mapper, simply add a new mapper over the `Throwable` type (i.e., `ExceptionMapper[Throwable]`) to the `ExceptionManager`.
+
+As noted above the last registered mapper for a type wins.
+
+The Finatra framework also provides a `FinatraThriftExceptionMapper <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/FinatraThriftExceptionMapper.scala>`__ for mapping other exceptions to known ThriftExceptions. If you are also using `finatra_thrift_exceptions.thrift <https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift>`__, this mapper is recommended to be registered.
 
 Override Default Behavior
 -------------------------
@@ -55,21 +83,14 @@ In the example above, the `ThriftRouter#exceptionMapper <https://github.com/twit
 with the `ExceptionManager`.
 
 The `ExceptionManager` is configured by the inclusion of the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/modules/ExceptionManagerModule.scala>`__
-as a framework module in every `ThriftServer <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala#L93>`__.
+as a framework module in every `ThriftServer <https://github.com/twitter/finatra/blob/b3fe5676794490ebd0cf228551de1285f2b9707e/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala#L16>`__.
 
 If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten.
 
-Thus, the user registered mapper for an exception type wins.
+Thus, the last registered mapper for an exception type wins.
 
-Default Exception Mappers
--------------------------
-
-The framework adds only `ThrowableExceptionMapper` to the `ExceptionManager` by default, which simply throws back all uncaught `Throwable` s. The `ExceptionManager` walks the exception type hierarchy starting at the given exception type, moving up the inheritance chain until it finds mapper configured for the type. In this manner, an `ExceptionMapper[Throwable]` will be the last mapper invoked and acts as the "default". Therefore to change the framework "default" mapper, simply add a new mapper over the `Throwable` type (i.e., `ExceptionMapper[Throwable]`) to the `ExceptionManager`.
-
-As noted above the user registered mapper for a type wins.
-
-Finatra framework also provides a `FinatraThriftExceptionMapper` for mapping other exceptions to known ThriftException. If you are also using `finatra_thrift_exceptions.thrift <https://github.com/twitter/finatra/blob/develop/thrift/src/main/thrift/finatra-thrift/finatra_thrift_exceptions.thrift>`__, this mapper is recommended to be registered.
-
+Register an Exception Mapper
+----------------------------
 
 There are two ways to add a mapper.
 

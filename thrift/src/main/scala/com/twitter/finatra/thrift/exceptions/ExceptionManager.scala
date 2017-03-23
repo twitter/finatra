@@ -68,11 +68,9 @@ class ExceptionManager (
 
   /* Private */
 
-  // First entry by type overrides any next entry.
-  // Currently, finatra registers user exception mappers from router first, then from user modules,
-  // and from framework modules in the end. So users' mappers overrides frameworks'
+  // Last entry by type overrides any previous entry.
   private def register(throwableType: Type, mapper: ExceptionMapper[_, _]): Unit = {
-    mappers.getOrElseUpdate(throwableType, mapper)
+    mappers.update(throwableType, mapper)
   }
 
   // Get mapper for this throwable class if it exists, otherwise

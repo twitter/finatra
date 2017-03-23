@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-app: Run installed modules postInjectorStartup before server function. This makes
+  reasoning about the server lifecycle a bit more straight-forward and simplifies things
+  like the exception manager logic for adding and overridding mappers. ``RB_ID=911965``
+
 * finatra-jackson: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=911745``
 
 * finatra: Move finatra/benchmarks and finatra/utils framework tests to FunSuite ScalaTest
