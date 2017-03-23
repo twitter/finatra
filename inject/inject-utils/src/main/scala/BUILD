@@ -12,12 +12,10 @@ scala_library(
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-mux/src/main/scala',
     'finatra/inject/inject-core/src/main/scala',
+    'finatra/inject/inject-utils/src/main/resources',
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  resources=[
-    'finatra/inject/inject-utils/src/main/resources'
-  ]
 )

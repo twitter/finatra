@@ -10,6 +10,7 @@ junit_tests(
     'finagle/finagle-http/src/main/scala',
     'finatra/http/src/main/java',
     'finatra/http/src/main/scala',
+    'finatra/http/src/test/resources',
     'finatra/http/src/test/scala:test-deps',
     'finatra/httpclient/src/main/scala',
     'finatra/inject/inject-app/src/main/scala',
@@ -32,7 +33,4 @@ junit_tests(
     'com/twitter/finatra/http/*.java',
     'com/twitter/finatra/test/*.java',
   ),
-  resources=[
-    'finatra/http/src/test/resources'
-  ]
 )

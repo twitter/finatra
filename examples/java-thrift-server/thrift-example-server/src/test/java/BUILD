@@ -8,6 +8,7 @@ junit_tests(
     '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-core/src/main/scala',
     'finatra/examples/java-thrift-server/thrift-example-server/src/main/java',
+    'finatra/examples/java-thrift-server/thrift-example-server/src/test/resources',
     'finatra/examples/thrift-server/thrift-example-idl/src/main/thrift:thrift-java',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-core/src/main/scala',
@@ -24,7 +25,4 @@ junit_tests(
   ],
   fatal_warnings=False,
   sources=rglobs('*.java'),
-  resources=[
-    'finatra/examples/java-thrift-server/thrift-example-server/src/test/resources'
-  ]
 )

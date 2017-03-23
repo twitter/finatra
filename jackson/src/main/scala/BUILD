@@ -27,6 +27,7 @@ scala_library(
     'finagle/finagle-http/src/main/scala',
     'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-utils/src/main/scala',
+    'finatra/jackson/src/main/resources',
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
   ],
@@ -35,7 +36,4 @@ scala_library(
   java_sources=[
     'finatra/jackson/src/main/java'
   ],
-  resources=[
-    'finatra/jackson/src/main/resources'
-  ]
 )

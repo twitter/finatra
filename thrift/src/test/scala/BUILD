@@ -18,6 +18,7 @@ junit_tests(
     'finatra/inject/inject-utils/src/main/scala',
     'finatra/thrift/src/main/scala',
     'finatra/thrift/src/main/thrift:thrift-scala',
+    'finatra/thrift/src/test/resources',
     'finatra/thrift/src/test/scala:test-deps',
     'finatra/thrift/src/test/thrift:doeverything-thrift-scala',
     'finatra/utils/src/main/java',
@@ -32,9 +33,6 @@ junit_tests(
   ],
   fatal_warnings=True,
   sources=rglobs('com/twitter/finatra/thrift/tests/*.scala'),
-  resources=[
-    'finatra/thrift/src/test/resources'
-  ]
 )
 
 scala_library(name="test-deps",

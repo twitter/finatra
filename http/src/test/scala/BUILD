@@ -30,7 +30,9 @@ junit_tests(
     'finatra/http/src/main/java',
     'finatra/http/src/main/scala',
     'finatra/http/src/test/java',
+    'finatra/http/src/test/resources',
     'finatra/http/src/test/scala:test-deps',
+    'finatra/http/src/test/webapp',
     'finatra/httpclient/src/main/scala',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-app/src/test/scala:test-deps',
@@ -55,11 +57,7 @@ junit_tests(
   ],
   sources=rglobs(
     'com/twitter/finatra/http/tests/*.scala',
-  ),
-  resources=[
-    'finatra/http/src/test/resources',
-    'finatra/http/src/test/webapp',
-  ]
+  )
 )
 
 scala_library(name="test-deps",

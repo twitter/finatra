@@ -9,6 +9,8 @@ scala_library(
     '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-http/src/main/scala',
     'finagle/finagle-zipkin/src/main/scala',
+    'finatra/examples/web-dashboard/src/main/resources',
+    'finatra/examples/web-dashboard/src/main/webapp',
     'finatra/http/src/main/java',
     'finatra/http/src/main/scala',
     'finatra/httpclient/src/main/scala',
@@ -29,8 +31,4 @@ scala_library(
     'com/twitter/web/dashboard/controllers/*.scala',
     'com/twitter/web/dashboard/views/*.scala',
   ),
-  resources=[
-    'finatra/examples/web-dashboard/src/main/resources',
-    'finatra/examples/web-dashboard/src/main/webapp'
-  ]
 )

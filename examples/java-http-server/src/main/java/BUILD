@@ -6,6 +6,7 @@ java_library(
     'finagle/finagle-base-http/src/main/scala',
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala',
+    'finatra/examples/java-http-server/src/main/resources',
     'finatra/http/src/main/java',
     'finatra/http/src/main/scala',
     'finatra/inject/inject-app/src/main/scala',
@@ -24,7 +25,4 @@ java_library(
   ],
   fatal_warnings=False,
   sources=rglobs('*.java'),
-  resources=[
-    'finatra/examples/java-http-server/src/main/resources'
-  ]
 )

@@ -10,6 +10,7 @@ java_library(
     'finagle/finagle-thrift/src/main/scala',
     'finagle/finagle-thriftmux/src/main/scala',
     'finatra/examples/java-thrift-server/thrift-example-idl',
+    'finatra/examples/java-thrift-server/thrift-example-server/src/main/resources',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-server/src/main/scala',
@@ -26,7 +27,4 @@ java_library(
   ],
   fatal_warnings=True,
   sources=rglobs('*.java'),
-  resources=[
-    'finatra/examples/java-thrift-server/thrift-example-server/src/main/resources'
-  ]
 )

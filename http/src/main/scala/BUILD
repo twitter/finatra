@@ -33,6 +33,7 @@ scala_library(
     'finagle/finagle-exp/src/main/scala',
     'finagle/finagle-http/src/main/scala',
     'finatra/http/src/main/java',
+    'finatra/http/src/main/resources',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-modules/src/main/scala',
@@ -52,7 +53,4 @@ scala_library(
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  resources=[
-    'finatra/http/src/main/resources'
-  ]
 )
