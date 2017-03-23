@@ -3,7 +3,7 @@
 First Steps
 ===========
 
-To get started, add a dependency on either `finatra-http <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.11%22>`__ or `finatra-thrift <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.11%22>`__ depending if you are building an HTTP or Thrift server.
+To get started, add a dependency on either `finatra-http <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22>`__ or `finatra-thrift <http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22>`__ depending if you are building an HTTP or Thrift server.
 
 E.g., with `sbt <http://www.scala-sbt.org/>`__:
 
@@ -23,7 +23,7 @@ Or similarily with `Maven <http://maven.apache.org/>`__:
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra-http_2.11</artifactId>
+      <artifactId>finatra-http_2.12</artifactId>
       <version>\ |release|\ </version>
     </dependency>
 
@@ -33,11 +33,11 @@ or
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra-thrift_2.11</artifactId>
+      <artifactId>finatra-thrift_2.12</artifactId>
       <version>\ |release|\ </version>
     </dependency>
 
-Note: with Maven, you **must** append the appropriate scala version to the artifact name (e.g., `_2.11`). 
+Note: with Maven, you **must** append the appropriate scala version to the artifact name (e.g., `_2.12`). 
 
 See the Finatra `hello-world <https://github.com/twitter/finatra/tree/finatra-2.2.0/examples/hello-world>`__ example for a more in-depth example.
 
@@ -66,7 +66,7 @@ And with `Maven <http://maven.apache.org/>`__:
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra-http_2.11</artifactId>
+      <artifactId>finatra-http_2.12</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>\ |release|\ </version>
@@ -78,7 +78,7 @@ or
 
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>finatra-thrift_2.11</artifactId>
+      <artifactId>finatra-thrift_2.12</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>\ |release|\ </version>
@@ -93,18 +93,18 @@ Using the `sbt-dependency-graph <https://github.com/jrudolph/sbt-dependency-grap
 .. code:: bash
 
     $ ./sbt -Dsbt.log.noformat=true http/test:packageBin::dependencyList 2>&1 | grep 'com\.twitter:finatra\|com\.twitter:inject'
-    [info] com.twitter:finatra-http_2.11:...
-    [info] com.twitter:finatra-httpclient_2.11:...
-    [info] com.twitter:finatra-jackson_2.11:...
-    [info] com.twitter:finatra-slf4j_2.11:...
-    [info] com.twitter:finatra-utils_2.11:...
-    [info] com.twitter:inject-app_2.11:...
-    [info] com.twitter:inject-core_2.11:...
-    [info] com.twitter:inject-modules_2.11:...
-    [info] com.twitter:inject-request-scope_2.11:...
-    [info] com.twitter:inject-server_2.11:...
-    [info] com.twitter:inject-slf4j_2.11:...
-    [info] com.twitter:inject-utils_2.11:...
+    [info] com.twitter:finatra-http_2.12:...
+    [info] com.twitter:finatra-httpclient_2.12:...
+    [info] com.twitter:finatra-jackson_2.12:...
+    [info] com.twitter:finatra-slf4j_2.12:...
+    [info] com.twitter:finatra-utils_2.12:...
+    [info] com.twitter:inject-app_2.12:...
+    [info] com.twitter:inject-core_2.12:...
+    [info] com.twitter:inject-modules_2.12:...
+    [info] com.twitter:inject-request-scope_2.12:...
+    [info] com.twitter:inject-server_2.12:...
+    [info] com.twitter:inject-slf4j_2.12:...
+    [info] com.twitter:inject-utils_2.12:...
 
 In this case, when executing the `packageBin` task for `finatra-http` in the test configuration these dependencies are necessary. Unfortunately, this listing does not explicity state if it's the compile-time or the test-jar version of the dependency that is necessary. However, it is safe to assume that if you want a dependency on the `finatra-http` test-jar you will also need to add dependencies on any test-jar from the listed dependencies as well.
 
