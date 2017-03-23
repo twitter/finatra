@@ -116,7 +116,12 @@ class JsonPatchOperator @Inject()(
   }
   /* Private */
 
-
+  /**
+   * RFC6901 (JavaScript Object Notation (JSON) Pointer) specifies that the '/-' index is the last element of an array,
+   * the lastElementPointer value is used for comparisons when handling array indices.
+   *
+   * See: https://tools.ietf.org/html/rfc6901
+   */
   private val lastElementPointer: JsonPointer = JsonPointer.compile("/-")
 
   /**
