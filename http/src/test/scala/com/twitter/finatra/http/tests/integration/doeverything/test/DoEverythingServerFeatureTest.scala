@@ -111,6 +111,42 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     response.contentType should equal(Some(MediaType.PLAIN_TEXT_UTF_8.toString))
   }
 
+  test("/forbiddenByFilter (prefixed)") {
+    server.httpGet(
+      "/1.1/forbiddenByFilter",
+      andExpect = Forbidden
+    )
+  }
+
+  test("/forbiddenByFilter (prefixed outer)") {
+    server.httpGet(
+      "/1.1/forbiddenByFilterPrefilter",
+      andExpect = Forbidden
+    )
+  }
+
+  test("/appendMultiplePrefixed (prefixed)") {
+    server.httpGet(
+      "/1.1/appendMultiplePrefixed",
+      withBody = "12"
+    )
+  }
+
+  test("/freestyleWithHeader (prefixed)") {
+    server.httpGet(
+      "/1.1/freestyleWithHeader",
+      withBody = "bang"
+    )
+  }
+
+  test("/1.1/waterfall/users (cascading prefixes)") {
+    server.httpGet(
+      "/1.1/waterfall/users/",
+      andExpect = Ok,
+      withBody = "ok!"
+    )
+  }
+
   test("GET /bytearray") {
     val response = server.httpGet(
       "/bytearray")

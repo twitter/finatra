@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Increase composability and flexibility of RouteDSL. ``RB_ID=912095``
+
 * inject-app: Run installed modules postInjectorStartup before server function. This makes
   reasoning about the server lifecycle a bit more straight-forward and simplifies things
   like the exception manager logic for adding and overridding mappers. ``RB_ID=911965``
