@@ -21,6 +21,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Correctly return a JsonParseException when the incoming JSON is not parsable
+  as an expected custom case class request object. ``RB_ID=``
+
 * finatra-http: Ensure underlying members are injected for AbstractControllers. ``RB_ID=911635``
 
 * finatra-jackson: Patch `FinatraDatetimeDeserializer` to support parsing of Long value passed

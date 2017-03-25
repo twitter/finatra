@@ -1084,6 +1084,17 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       withErrors = Seq("name cannot be foo"))
   }
 
+  test("POST invalid JSON") {
+    server.httpPost(
+      "/userWithMessageBodyReader",
+      """
+          [{
+            "name": "foo"
+          }]
+      """,
+      andExpect = BadRequest)
+  }
+
   test("injector test") {
     server.injector.instance[String]("example") should equal("named")
 

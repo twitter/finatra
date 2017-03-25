@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
-import com.fasterxml.jackson.core.{JsonParser, JsonProcessingException, JsonToken}
+import com.fasterxml.jackson.core.{JsonParseException, JsonParser, JsonProcessingException, JsonToken}
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.twitter.finatra.json.internal.caseclass.exceptions._
@@ -93,7 +93,7 @@ private[finatra] class FinatraCaseClassDeserializer(
       jp.nextToken()
     }
     if (jp.getCurrentToken != JsonToken.FIELD_NAME && jp.getCurrentToken != JsonToken.END_OBJECT) {
-      throw ctxt.mappingException(javaType.getRawClass)
+      throw new JsonParseException(jp, ctxt.mappingException(javaType.getRawClass).getMessage)
     }
   }
 
