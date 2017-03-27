@@ -331,7 +331,9 @@ lazy val injectModules = (project in file("inject/inject-modules"))
 lazy val injectAppTestJarSources =
   Seq("com/twitter/inject/app/Banner",
     "com/twitter/inject/app/EmbeddedApp",
+    "com/twitter/inject/app/modules",
     "com/twitter/inject/app/InjectionServiceModule",
+    "com/twitter/inject/app/InjectionServiceWithAnnotationModule",
     "com/twitter/inject/app/StartupTimeoutException",
     "com/twitter/inject/app/TestInjector")
 lazy val injectApp = (project in file("inject/inject-app"))
