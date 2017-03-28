@@ -9,8 +9,6 @@ scala_library(
     '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-http/src/main/scala',
     'finagle/finagle-zipkin/src/main/scala',
-    'finatra/examples/web-dashboard/src/main/resources',
-    'finatra/examples/web-dashboard/src/main/webapp',
     'finatra/http/src/main/java',
     'finatra/http/src/main/scala',
     'finatra/httpclient/src/main/scala',
@@ -24,6 +22,8 @@ scala_library(
     'util/util-core/src/main/scala',
     'util/util-logging/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
+    'finatra/examples/web-dashboard/src/main/resources',
+    'finatra/examples/web-dashboard/src/main/webapp',
   ],
   fatal_warnings=True,
   sources=globs(

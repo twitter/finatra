@@ -22,7 +22,6 @@ junit_tests(
     'finatra/inject/inject-utils/src/main/scala',
     'finatra/thrift/src/main/scala',
     'finatra/thrift/src/main/thrift:thrift-java',
-    'finatra/thrift/src/test/resources',
     'finatra/thrift/src/test/scala:test-deps',
     'finatra/thrift/src/test/thrift:doeverything-thrift-java',
     'finatra/utils/src/main/java',
@@ -35,6 +34,7 @@ junit_tests(
     'util/util-logging/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala',
+    'finatra/thrift/src/test/resources',
   ],
   fatal_warnings=True,
   sources=globs(

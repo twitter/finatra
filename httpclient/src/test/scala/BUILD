@@ -15,7 +15,6 @@ junit_tests(
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala',
     'finatra/httpclient/src/main/scala',
-    'finatra/httpclient/src/test/resources',
     'finatra/httpclient/src/test/scala:test-deps',
     'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala',
@@ -24,6 +23,7 @@ junit_tests(
     'twitter-server/src/main/scala',
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
+    'finatra/httpclient/src/test/resources',
   ],
   sources=globs(
     'com/twitter/finatra/httpclient/*.scala'
