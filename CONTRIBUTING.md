@@ -10,11 +10,12 @@ dependencies, which means that it may be necessary to build and publish the
 [`develop`][develop-branch] branch.
 
 To do this you can run the same command used in the
-[`.travis.yml`](/.travis.yml#L12) script which will clone all the necessary
+[`.travis.yml`](/.travis.yml#L35) script which will clone all the necessary
 repositories and publish their artifacts locally. I.e.,
 
-``` curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build |
-bash -s -- --no-test finatra ```
+```sh
+curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
+```
 
 Finatra's [`master`][master-branch] branch is built against released versions of
 Twitter OSS dependencies and is itself frozen to the last released version of
