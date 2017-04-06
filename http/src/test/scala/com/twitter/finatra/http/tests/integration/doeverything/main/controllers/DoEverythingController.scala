@@ -577,6 +577,21 @@ class DoEverythingController @Inject()(
     JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
   }
 
+  patch("/jsonPatch/innerSeqCaseClass") { jsonPatch: JsonPatch =>
+    val testCase = InnerSeqCaseClass(bears = Seq("grizzly", "polar"))
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/nestedSeqCaseClass") { jsonPatch: JsonPatch =>
+    val testCase = NestedSeqCaseClass(animalFamilies = Seq(
+      AnimalFamily(name = "ursidae", animals = Seq("grizzly", "polar"))
+    ))
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+
   patch("/echo") { request: Request =>
     response.ok(request.contentString)
   }

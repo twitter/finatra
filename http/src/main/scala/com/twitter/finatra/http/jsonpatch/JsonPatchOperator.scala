@@ -2,7 +2,7 @@ package com.twitter.finatra.http.jsonpatch
 
 import com.fasterxml.jackson.core.JsonPointer
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.{ArrayNode, ObjectNode}
 import com.google.inject.{Inject, Singleton}
 import com.twitter.finatra.json.FinatraObjectMapper
 import scala.annotation.tailrec
@@ -117,6 +117,88 @@ class JsonPatchOperator @Inject()(
   /* Private */
 
   /**
+   * RFC6901 (JavaScript Object Notation (JSON) Pointer) specifies that the '/-' index is the last element of an array,
+   * the lastElementPointer value is used for comparisons when handling array indices.
+   *
+   * @see [[https://tools.ietf.org/html/rfc6901 RFC 6901]]
+   */
+  private val lastElementPointer: JsonPointer = JsonPointer.compile("/-")
+
+  /**
+   * Helper function for checking array index bound
+   */
+  private def checkBound(operation: String, condition: Boolean): Unit = {
+    if (!condition.equals(true)) {
+      throw new JsonPatchException(s"invalid path for $operation operation, array index out of bounds")
+    }
+  }
+
+ /**
+   * Gets and validates an array index for leaf nodes, handling the special '/-' last element pointer.
+   * Note: this function should not be used for non-leaf nodes, as the /- index is not defined for non-leaf arrays.
+   *
+   * @param path      a JsonPointer instance indicating location
+   * @param target    an instance of [[ArrayNode]] that is used to validate the indexess
+   * @param operation a String used for logging, to log '$error for $operation operation' in line with the other node functions
+   * @return JsonNode at path in target
+   */
+ private def getLeafIndex(path: JsonPointer, target: ArrayNode, operation: String): Int = {
+   val index: Int = if (path == lastElementPointer) target.size - 1 else path.getMatchingIndex
+   checkBound(operation, index < target.size && index >= 0)
+   index
+ }
+
+  /**
+   * Gets the field in the targetspecified by the path, fails on invalid indexes or when the target is null.
+   *
+   * @param path      a JsonPointer instance indicating location
+   * @param target    an instance of [[JsonNode]] that is queried for the path
+   * @param operation a String used for logging, to log '$error for $operation operation' in line with the other node functions
+   * @return JsonNode at path in target
+   */
+  private def nextNodeByPath(path: JsonPointer, target: JsonNode, operation: String): JsonNode = {
+    target match {
+      case arrayNodeTarget: ArrayNode =>
+        if (path.mayMatchElement) {
+          val index: Int = path.getMatchingIndex
+          checkBound(operation, index < arrayNodeTarget.size && index >= 0)
+          arrayNodeTarget.get(index)
+        } else {
+          throw new JsonPatchException(s"invalid path for $operation operation, expected array index")
+        }
+
+      case null =>
+        throw new JsonPatchException(s"invalid target for $operation operation")
+
+      case _ =>
+        target.get(path.getMatchingProperty)
+    }
+  }
+
+  /**
+   * Get a node in the tree structure JsonNode, controlling that array indices are valid
+   *
+   * @param path      a JsonPointer instance indicating location
+   * @param target    an instance of [[JsonNode]] that is queried for the path
+   * @param operation a String used for logging, to log '$error for $operation operation' in line with the other node functions
+   * @return JsonNode at path in target
+   */
+  @tailrec
+  private def safeGetNode(path: JsonPointer, target: JsonNode, operation: String): JsonNode = {
+    if (path.tail == null) {
+      throw new JsonPatchException(s"invalid path for $operation operation")
+    } else if (path.tail.matches) {
+      target match {
+        case on: ObjectNode => on.get(path.getMatchingProperty)
+        case an: ArrayNode => an.get(getLeafIndex(path, an, operation))
+        case _ => throw new JsonPatchException(s"invalid target for $operation operation")
+      }
+    } else {
+      safeGetNode(path.tail, nextNodeByPath(path, target, operation), operation)
+    }
+  }
+
+  /**
    * Add node in tree structure JsonNode
    *
    * @param path   a JsonPointer instance indicating location
@@ -127,14 +209,22 @@ class JsonPatchOperator @Inject()(
   @tailrec
   private def addNode(path: JsonPointer, value: JsonNode, target: JsonNode): Unit = {
     if (path.tail == null) {
-      throw new JsonPatchException("Invalid path for add operation")
+      throw new JsonPatchException("invalid path for add operation")
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.put(path.getMatchingProperty, value)
+        case an: ArrayNode =>
+          // this does not use the 'getLeafIndex' helper function because 'add' indexes are slightly different.
+          // Gotcha: '<= an.size' and not '< an.size' because we may (of course) add at the end of the array
+          //         'index = an.size' and not 'index = an.size - 1' because the '/-' pointer means append for the add operation.
+          val index: Int = if (path == lastElementPointer) an.size else path.getMatchingIndex
+          checkBound("add", index <= an.size && index >= 0)
+          an.insert(index, value)
+
         case _ => throw new JsonPatchException("invalid target for add")
       }
     } else {
-      addNode(path.tail, value, target.get(path.getMatchingProperty))
+      addNode(path.tail, value, nextNodeByPath(path, target, "add"))
     }
   }
 
@@ -148,14 +238,15 @@ class JsonPatchOperator @Inject()(
   @tailrec
   private def removeNode(path: JsonPointer, target: JsonNode): Unit = {
     if (path.tail == null) {
-      throw new JsonPatchException("Invalid path for remove operation")
+      throw new JsonPatchException("invalid path for remove operation")
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.remove(path.getMatchingProperty)
+        case an: ArrayNode => an.remove(getLeafIndex(path, an, "remove"))
         case _ => throw new JsonPatchException("invalid target for remove")
       }
     } else {
-      removeNode(path.tail, target.get(path.getMatchingProperty))
+      removeNode(path.tail, nextNodeByPath(path, target, "remove"))
     }
   }
 
@@ -170,14 +261,15 @@ class JsonPatchOperator @Inject()(
   @tailrec
   private def replaceNode(path: JsonPointer, value: JsonNode, target: JsonNode): Unit = {
     if (path.tail == null) {
-      throw new JsonPatchException("Invalid path for replace operation")
+      throw new JsonPatchException("invalid path for replace operation")
     } else if (path.tail.matches) {
       target match {
         case on: ObjectNode => on.put(path.getMatchingProperty, value)
+        case an: ArrayNode => an.set(getLeafIndex(path, an, "replace"), value)
         case _ => throw new JsonPatchException("invalid target for replace")
       }
     } else {
-      replaceNode(path.tail, value, target.get(path.getMatchingProperty))
+      replaceNode(path.tail, value, nextNodeByPath(path, target, "replace"))
     }
   }
 
@@ -190,8 +282,9 @@ class JsonPatchOperator @Inject()(
    * @return modified JsonNode
    */
   private def moveNode(path: JsonPointer, target: JsonNode, from: JsonPointer): Unit = {
-    addNode(path, target.at(from), target)
+    val nodeToMove: JsonNode = safeGetNode(from, target, "move")
     removeNode(from, target)
+    addNode(path, nodeToMove, target)
   }
 
   /**
@@ -203,7 +296,7 @@ class JsonPatchOperator @Inject()(
    * @return modified JsonNode
    */
   private def copyNode(path: JsonPointer, target: JsonNode, from: JsonPointer): Unit = {
-    addNode(path, target.at(from), target)
+    addNode(path, safeGetNode(from, target, "copy"), target)
   }
 
   /**
@@ -215,7 +308,7 @@ class JsonPatchOperator @Inject()(
    * @return modified JsonNode
    */
   private def testNode(path: JsonPointer, target: JsonNode, value: JsonNode): Unit = {
-    if (target.at(path) != value) {
+    if (safeGetNode(path, target, "test") != value) {
       throw new JsonPatchException("test operation failed")
     }
   }

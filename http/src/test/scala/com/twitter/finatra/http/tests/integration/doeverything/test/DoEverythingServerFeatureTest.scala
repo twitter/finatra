@@ -2146,6 +2146,228 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       withJsonBody = """{"errors":["incorrect Content-Type, should be application/json-patch+json"]}""")
   }
 
+  test("JsonPatch handles array indices") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "test", "path": "/bears/0", "value": "grizzly"},
+          |{"op": "replace", "path": "/bears/0", "value": "panda"},
+          |{"op": "remove", "path": "/bears/1"},
+          |{"op": "add", "path": "/bears/1", "value": "brown"},
+          |{"op": "copy", "from": "/bears/0", "path": "/bears/2"},
+          |{"op": "move", "from": "/bears/0", "path": "/bears/2"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"bears": ["brown", "panda", "panda"]}""")
+  }
+
+  test("JsonPatch handles the special '/-' index for array leaf nodes") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "test", "path": "/bears/-", "value": "polar"},
+          |{"op": "replace", "path": "/bears/-", "value": "panda"},
+          |{"op": "remove", "path": "/bears/-"},
+          |{"op": "add", "path": "/bears/-", "value": "brown"},
+          |{"op": "copy", "from": "/bears/-", "path": "/bears/-"},
+          |{"op": "move", "from": "/bears/0", "path": "/bears/-"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = Ok,
+      withJsonBody = """{"bears": ["brown", "brown", "grizzly"]}""")
+  }
+
+  test("JsonPatch fails when out of bound indices are input for test") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "test", "path": "/bears/2", "value": "Bear Grylls"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for test operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when out of bound indices are input for replace") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "replace", "path": "/bears/2", "value": "panda"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for replace operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when out of bound indices are input for add") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "add", "path": "/bears/3", "value": "brown"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for add operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when out of bound indices are input for copy") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "copy", "from": "/bears/3", "path": "/bears/4"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for copy operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when out of bound indices are input for move") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "move", "from": "/bears/4", "path": "/bears/8"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for move operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when nested out of bound indices are input for test") {
+    val request = RequestBuilder.patch("/jsonPatch/nestedSeqCaseClass")
+      .body(
+        """[
+          |{"op": "test", "path": "/animal_families/1/name", "value": "ursidae"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for test operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when nested out of bound indices are input for replace") {
+    val request = RequestBuilder.patch("/jsonPatch/nestedSeqCaseClass")
+      .body(
+        """[
+          |{"op": "replace", "path": "/animal_families/1/name", "value": "cervidae"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for replace operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when nested out of bound indices are input for add") {
+    val request = RequestBuilder.patch("/jsonPatch/nestedSeqCaseClass")
+      .body(
+        """[
+          |{"op": "add", "path": "/animal_families/1/animals/-", "value": "deer"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for add operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when nested out of bound indices are input for copy") {
+    val request = RequestBuilder.patch("/jsonPatch/nestedSeqCaseClass")
+      .body(
+        """[
+          |{"op": "copy", "from": "/animal_families/3/name", "path": "/animal_families/4/name"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for copy operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when nested out of bound indices are input for move") {
+    val request = RequestBuilder.patch("/jsonPatch/nestedSeqCaseClass")
+      .body(
+        """[
+          |{"op": "move", "from": "/animal_families/4/name", "path": "/animal_families/8/name"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for move operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when property names are input for array operations") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "add", "path": "/bears/first_bear", "value": "brown"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for add operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when array indices aren't integers") {
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "add", "path": "/bears/1e0", "value": "brown"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid path for add operation, array index out of bounds"]}""")
+  }
+
+  test("JsonPatch fails when mutating objects that do not contain fields requested") {
+    // note: innerSeqCaseClass is of the form { "bears": [...] }
+    // this test intentionally tries to patch the 'wrong' object
+    val request = RequestBuilder.patch("/jsonPatch/innerSeqCaseClass")
+      .body(
+        """[
+          |{"op": "add", "path": "/animal_families/2/name", "value": "brown"}
+          |]""".stripMargin,
+        contentType = Message.ContentTypeJsonPatch)
+
+    server.httpRequestJson[JsonNode](
+      request = request,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["invalid target for add operation"]}""")
+  }
+
   test("/millis") {
     val inMillis = 1489719177279L
     val request = RequestBuilder.get(s"/millis?date_time=$inMillis")
@@ -2155,4 +2377,5 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = Ok,
       withBody = s"$inMillis")
   }
+
 }
