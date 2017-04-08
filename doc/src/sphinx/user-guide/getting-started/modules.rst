@@ -88,7 +88,7 @@ A server can be configured with a list of modules:
     }
 
 
-How explicit to be in listing the modules for your server is up to you. If you include a module that is all ready `included by another module <flags.html#modules-depending-on-other-modules>`__, Finatra will de-dupe the module list so there is no penalty, but you may want to prefer to define your list of modules as `DRY <https://en.wikipedia.org/wiki/Don%27t_repeat_yourself>`__ as possible. 
+How explicit to be in listing the modules for your server is up to you. If you include a module that is all ready `included by another module <modules.html#modules-depending-on-other-modules>`__, Finatra will de-dupe the module list so there is no penalty, but you may want to prefer to define your list of modules as `DRY <https://en.wikipedia.org/wiki/Don%27t_repeat_yourself>`__ as possible. 
 
 For more information on server configuration see the `HTTP <../http/server.html>`__ or `Thrift <../thrift/server.html>`__ sections.
 
