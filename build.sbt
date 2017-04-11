@@ -1,5 +1,4 @@
 import sbt.Keys._
-import sbtunidoc.Plugin.UnidocKeys._
 import scala.language.reflectiveCalls
 import scoverage.ScoverageKeys
 
@@ -235,10 +234,10 @@ def mappingContainsAnyPath(mapping: (File, String), paths: Seq[String]): Boolean
 }
 
 lazy val root = (project in file("."))
+  .enablePlugins(ScalaUnidocPlugin)
   .settings(baseSettings)
   .settings(buildSettings)
   .settings(publishSettings)
-  .settings(unidocSettings)
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
