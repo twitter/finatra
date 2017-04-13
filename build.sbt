@@ -148,15 +148,15 @@ lazy val publishSettings = Seq(
 
     new scala.xml.transform.RuleTransformer(rule).transform(node).head
   },
-  resourceGenerators in Compile <+=
-    (resourceManaged in Compile, name, version) map { (dir, name, ver) =>
-      val file = dir / "com" / "twitter" / name / "build.properties"
-      val buildRev = Process("git" :: "rev-parse" :: "HEAD" :: Nil).!!.trim
-      val buildName = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date)
-      val contents = s"name=$name\nversion=$ver\nbuild_revision=$buildRev\nbuild_name=$buildName"
-      IO.write(file, contents)
-      Seq(file)
-    }
+  resourceGenerators in Compile += Def.task {
+    val dir = (resourceManaged in Compile).value
+    val file = dir / "com" / "twitter" / name.value / "build.properties"
+    val buildRev = Process("git" :: "rev-parse" :: "HEAD" :: Nil).!!.trim
+    val buildName = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date)
+    val contents = s"name=${name.value}\nversion=${version.value}\nbuild_revision=$buildRev\nbuild_name=$buildName"
+    IO.write(file, contents)
+    Seq(file)
+  }.taskValue
 )
 
 lazy val slf4jSimpleTestDependency = Seq(
@@ -591,9 +591,9 @@ lazy val http = project
       "javax.servlet" % "servlet-api" % versions.servletApi,
       "junit" % "junit" % versions.junit % "test"
     ),
-    unmanagedResourceDirectories in Test <+= baseDirectory(
+    unmanagedResourceDirectories in Test += baseDirectory(
       _ / "src" / "test" / "webapp"
-    ),
+    ).value,
     excludeFilter in Test in unmanagedResources := "BUILD",
     publishArtifact in Test := true,
     mappings in (Test, packageBin) := {
@@ -729,7 +729,7 @@ lazy val userguide = (project in file("doc"))
       previous / "user-guide"
     },
     siteSubdirName in Sphinx := "user-guide",
-    scalacOptions in doc <++= version.map(v => Seq("-doc-title", "Finatra User Guide ", "-doc-version", v)),
+    scalacOptions in doc ++= version.map(v => Seq("-doc-title", "Finatra User Guide ", "-doc-version", v)).value,
     includeFilter in Sphinx := ("*.html" | "*.png" | "*.svg" | "*.js" | "*.css" | "*.gif" | "*.txt")))
 
 /* // START EXAMPLES
