@@ -57,11 +57,10 @@ trait IntegrationTestMixin
   /* Private */
 
   private lazy val mockObjects = {
-    val mockUtil = new MockUtil()
     for {
       field <- boundFields
       fieldValue = field.get(this)
-      if mockUtil.isMock(fieldValue)
+      if MockUtil.isMock(fieldValue)
     } yield fieldValue
   }
 
