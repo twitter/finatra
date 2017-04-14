@@ -56,7 +56,7 @@ object FilteredThriftClientModule {
  *
  * @see [[com.twitter.finagle.thrift.MethodIfaceBuilder]]
  * @see [[https://finagle.github.io/blog/2015/09/10/services-per-endpoint-in-scrooge/ Services-per-endpoint in Scrooge]]
- * @see [[http://twitter.github.io/scrooge/Finagle.html#creating-a-client Finagle Clients]]
+ * @see [[https://twitter.github.io/scrooge/Finagle.html#creating-a-client Finagle Clients]]
  */
 abstract class FilteredThriftClientModule[
     FutureIface <: ThriftService : ClassTag,
@@ -86,7 +86,7 @@ abstract class FilteredThriftClientModule[
   * Note: Both server and client must have mux enabled otherwise
   * a nondescript ChannelClosedException will be seen.
   *
-  * @see [[http://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]
+  * @see [[https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]
   */
   protected val mux: Boolean = true
 

@@ -6,7 +6,7 @@ import org.scalatest.{Suite, SuiteMixin}
 
 /**
  * Testing trait which extends the [[com.twitter.inject.IntegrationTestMixin]] to provide
- * utilities for [[http://twitter.github.io/finatra/user-guide/testing/#feature-tests Feature testing]]
+ * utilities for [[https://twitter.github.io/finatra/user-guide/testing/#feature-tests Feature testing]]
  * with a test-defined [[com.twitter.inject.server.EmbeddedTwitterServer]] or subclass thereof.
  *
  * This trait is expected to be mixed with a class that extends a core Suite trait,

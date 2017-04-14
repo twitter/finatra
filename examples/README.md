@@ -31,7 +31,7 @@ that it will also *include* building and publishing Finatra locally from the Fin
 Follow the instructions in the project's `README.md` for how to run the server.
 
 ## More information
-For more information please see our [User Guide](http://twitter.github.io/finatra/user-guide/)
+For more information please see our [User Guide](https://twitter.github.io/finatra/user-guide/)
 or browse the [source code][finatra] (tests are especially good sources of information and examples).
 
 [finatra]: https://github.com/twitter/finatra

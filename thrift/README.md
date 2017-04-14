@@ -9,7 +9,7 @@ Quick Start
 * Take a look at our [examples.](../examples/)
 
 
-We highly recommend taking a look at our [User Guide](http://twitter.github.io/finatra/user-guide/) for more information on getting started building services with Finatra.
+We highly recommend taking a look at our [User Guide](https://twitter.github.io/finatra/user-guide/) for more information on getting started building services with Finatra.
 
 Note:
 -----------------------------------------------------------

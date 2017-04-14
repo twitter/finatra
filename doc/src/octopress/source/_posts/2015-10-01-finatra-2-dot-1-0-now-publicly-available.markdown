@@ -11,7 +11,7 @@ author: cacoco
 
 There are several improvements and features in this release:
 
-- the ability to "disable" the [TwitterServer HTTP Admin Interface](http://twitter.github.io/twitter-server/Features.html#http-admin-interface) for deploying to environments that only allow binding to a *single* port for your application.
+- the ability to "disable" the [TwitterServer HTTP Admin Interface](https://twitter.github.io/twitter-server/Features.html#http-admin-interface) for deploying to environments that only allow binding to a *single* port for your application.
 - the ability to "turn-off" automatic JSON body parsing into a case class for requests that represent JSON blobs (useful for document stores).
 - Closed issues and pull-requests:
 

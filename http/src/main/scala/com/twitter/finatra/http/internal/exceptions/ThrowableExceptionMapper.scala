@@ -45,7 +45,7 @@ private[exceptions] object ThrowableExceptionMapper {
  * converted into a [[com.twitter.finagle.http.Response]]. That subclass can then be
  * registered over the Throwable exception type.
  *
- * @see [[http://twitter.github.io/finatra/user-guide/build-new-http-server/exceptions.html#override-defaults]]
+ * @see [[https://twitter.github.io/finatra/user-guide/build-new-http-server/exceptions.html#override-defaults]]
  * @param response - a [[com.twitter.finatra.http.response.ResponseBuilder]]
  */
 @Singleton

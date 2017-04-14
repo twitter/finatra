@@ -21,7 +21,7 @@ Modules in `inject` include:
 - `inject-slf4j` - core library integration with the `SLF4J <http://www.slf4j.org/manual.html>`__ API.
 - `inject-request-scope` - core library for integrating Guice's `Request Scope` with `TwitterUtil <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ `c.t.util.Future`. See the `Request Scope <../http/filters.html#request-scope>`__ section for more information.
 - `inject-thrift` - core library for thrift utilities useful for both clients and server.
-- `inject-thrift-client` - core library for supporting creation of a Thrift `Finagle Client <http://twitter.github.io/finagle/guide/Clients.html>`__.
+- `inject-thrift-client` - core library for supporting creation of a Thrift `Finagle Client <https://twitter.github.io/finagle/guide/Clients.html>`__.
 - `inject-utils` - core library which provides a collection of useful utilities, including implicit conversions, exceptions and futures handling and retries.
 
 Creating an injectable App or TwitterServer
@@ -86,7 +86,7 @@ Finatra's integration with `jackson-module-scala <https://github.com/FasterXML/j
 HttpClient
 ----------
 
-A simple and barebones `Finagle Client <http://twitter.github.io/finagle/guide/Clients.html>`__ for making HTTP requests.
+A simple and barebones `Finagle Client <https://twitter.github.io/finagle/guide/Clients.html>`__ for making HTTP requests.
 
 HTTP
 ----
