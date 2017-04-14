@@ -10,7 +10,7 @@ lazy val versions = new {
   val junit = "4.12"
   val scalacheck = "1.13.4"
   val scalatest = "3.0.0"
-  val specs2 = "2.4.17"
+  val specs2 = "3.8.9"
 }
 
 lazy val baseSettings = Seq(
