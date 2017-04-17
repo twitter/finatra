@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/twitter/finatra.png?label=ready&title=Ready)](https://waffle.io/twitter/finatra)
 # Finatra
 
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](https://travis-ci.org/twitter/finatra?branch=master)
