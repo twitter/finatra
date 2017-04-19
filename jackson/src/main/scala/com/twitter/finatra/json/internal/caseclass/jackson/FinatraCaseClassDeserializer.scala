@@ -5,17 +5,17 @@ import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.twitter.finatra.json.internal.caseclass.exceptions._
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
-import com.twitter.finatra.json.internal.caseclass.validation.ValidationManager
+import com.twitter.finatra.json.internal.caseclass.validation.ValidationProvider
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.validation.{ErrorCode, ValidationMessageResolver}
+import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
-import scala.util.control.NonFatal
 import java.lang.reflect.InvocationTargetException
 import javax.annotation.concurrent.ThreadSafe
 import scala.collection.mutable.ArrayBuffer
+import scala.util.control.NonFatal
 
 /**
  * Custom case class deserializer which overcomes limitations in jackson-scala-module.
@@ -34,7 +34,8 @@ import scala.collection.mutable.ArrayBuffer
 private[finatra] class FinatraCaseClassDeserializer(
   javaType: JavaType,
   config: DeserializationConfig,
-  beanDesc: BeanDescription)
+  beanDesc: BeanDescription,
+  validationProvider: ValidationProvider)
   extends JsonDeserializer[AnyRef]
   with Logging {
 
@@ -50,8 +51,7 @@ private[finatra] class FinatraCaseClassDeserializer(
     constructors.head
   }
   private val isWrapperClass = classOf[WrappedValue[_]].isAssignableFrom(javaType.getRawClass)
-  private val messageResolver = new ValidationMessageResolver
-  private val validationManager = new ValidationManager(messageResolver)
+  private val validationManager = validationProvider()
   private lazy val firstFieldName = caseClassFields.head.name
 
   /* Public */

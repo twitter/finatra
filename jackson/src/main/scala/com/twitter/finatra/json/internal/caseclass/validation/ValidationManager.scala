@@ -6,7 +6,7 @@ import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 import scala.collection.mutable
 
-class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
+class ValidationManager(validationMessageResolver: ValidationMessageResolver) extends CaseClassValidator {
 
   private val validatorMap = mutable.Map[Annotation, Validator[_, _]]()
 
@@ -18,7 +18,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
    * Validate a field's value according to the field's validation annotations
    * @return Failed ValidationResults
    */
-  def validateField[V](fieldValue: V, fieldValidationAnnotations: Seq[Annotation]): Seq[ValidationResult] = {
+  override def validateField[V](fieldValue: V, fieldValidationAnnotations: Seq[Annotation]): Seq[ValidationResult] = {
     for {
       annotation <- fieldValidationAnnotations
       result = isValid(fieldValue, findValidator[V](annotation))
@@ -30,7 +30,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) {
    * Validate an object using @MethodValidation annotated methods
    * @return Failed ValidationResults
    */
-  def validateObject(obj: Any): Seq[ValidationResult] = {
+  override def validateObject(obj: Any): Seq[ValidationResult] = {
     for {
       method <- findMethodValidations(obj.getClass)
       result = method.invoke(obj).asInstanceOf[ValidationResult]
