@@ -2,9 +2,8 @@ package com.twitter.finatra.httpclient
 
 import com.twitter.finagle.http.{Method, Request, Response}
 import com.twitter.finatra.httpclient.test.{InMemoryHttpService, PostRequestWithIncorrectBodyException}
-import com.twitter.inject.Test
+import com.twitter.inject.{Mockito, Test}
 import com.twitter.util.Await
-import org.specs2.mock.Mockito
 
 class InMemoryHttpServiceTest extends Test with Mockito {
   val inMemoryHttpService = new InMemoryHttpService()

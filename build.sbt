@@ -56,16 +56,16 @@ lazy val versions = new {
   val junit = "4.12"
   val libThrift = "0.5.0-7"
   val logback = "1.1.7"
-  val mockito = "1.9.5"
+  val mockito = "2.7.22"
   val mustache = "0.8.18"
   val nscalaTime = "2.14.0"
-  val scalaCheck = "1.13.4"
+  val scalaCheck = "1.13.5"
   val scalaGuice = "4.1.0"
-  val scalaTest = "3.0.0"
+  val scalaTest = "3.0.1"
   val servletApi = "2.5"
   val slf4j = "1.7.21"
   val snakeyaml = "1.12"
-  val specs2 = "2.4.17"
+  val specs2 = "3.8.9"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(
