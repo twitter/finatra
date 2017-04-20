@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+### Fixed
+
+### Closed
+
+## [finatra-2.10.0](https://github.com/twitter/finatra/tree/finatra-2.10.0) (2017-04-20)
+
+### Added
+
+### Changed
+
 * finatra-http: Increase composability and flexibility of RouteDSL. ``RB_ID=912095``
 
 * inject-app: Run installed modules postInjectorStartup before server function. This makes

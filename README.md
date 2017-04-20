@@ -1,7 +1,7 @@
 # Finatra
 
-[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=develop)](https://travis-ci.org/twitter/finatra?branch=develop)
-[![Test Coverage](https://codecov.io/github/twitter/finatra/coverage.svg?branch=develop)](https://codecov.io/github/twitter/finatra?branch=develop)
+[![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=master)](https://travis-ci.org/twitter/finatra?branch=master)
+[![Test Coverage](https://codecov.io/github/twitter/finatra/coverage.svg?branch=master)](https://codecov.io/github/twitter/finatra?branch=master)
 [![Project status](https://img.shields.io/badge/status-active-brightgreen.svg)](#status)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)][maven-central]
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
@@ -94,7 +94,7 @@ class ExampleServer extends ThriftServer {
 
 ## Example Projects
 
-Finatra includes working examples which highlight various features of the framework and include tests. In the [develop branch](https://github.com/twitter/finatra/tree/develop/examples) these examples are included in the root [sbt][sbt] build and are thus buildable as part of the entire project. In the [master branch](https://github.com/twitter/finatra/tree/master/examples) (or a [release branch](https://github.com/twitter/finatra/tree/finatra-2.9.0/examples)) these examples can be built using their invididual [sbt][sbt] (or [Maven][maven]) build files.
+Finatra includes working examples which highlight various features of the framework and include tests. In the [develop branch](https://github.com/twitter/finatra/tree/develop/examples) these examples are included in the root [sbt][sbt] build and are thus buildable as part of the entire project. In the [master branch](https://github.com/twitter/finatra/tree/master/examples) (or a [release branch](https://github.com/twitter/finatra/tree/finatra-2.10.0/examples)) these examples can be built using their invididual [sbt][sbt] (or [Maven][maven]) build files.
 
 Please take a look through the [examples](/examples) for more detailed information on features, testing, and building with sbt (or Maven).
 
