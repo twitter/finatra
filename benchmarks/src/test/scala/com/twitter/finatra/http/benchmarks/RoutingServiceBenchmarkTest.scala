@@ -1,10 +1,10 @@
 package com.twitter.finatra.http.benchmarks
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class RoutingServiceBenchmarkTest extends WordSpecTest {
+class RoutingServiceBenchmarkTest extends Test {
 
-  "test" in {
+  test("routing service") {
     val benchmark = new RoutingServiceBenchmark()
     benchmark.timeOldLastConstant()
     benchmark.timeOldLastNonConstant()

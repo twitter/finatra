@@ -1,13 +1,13 @@
 package com.twitter.finatra.json.tests
 
 import com.twitter.finatra.json.JsonLogging
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
 class JsonLoggingTest
-  extends WordSpecTest
+  extends Test
   with JsonLogging {
 
-  "json logging" in {
+  test("json logging") {
     val fooBar = FooBar("steve")
     infoJson("foo", fooBar)
     infoPretty("foo", fooBar)

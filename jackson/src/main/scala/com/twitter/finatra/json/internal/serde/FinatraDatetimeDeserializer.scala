@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.{JsonParser, JsonToken}
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.twitter.finatra.json.internal.caseclass.exceptions.FinatraJsonMappingException
+import com.twitter.util.{Return, Try}
 import org.joda.time.DateTime
 
 /**
@@ -25,7 +26,14 @@ private[finatra] object FinatraDatetimeDeserializer extends StdDeserializer[Date
           if (value.isEmpty)
             throw new FinatraJsonMappingException("field cannot be empty")
           else
-            new DateTime(value)
+            // First, attempt to convert as a String value (for backwards-compatibility),
+            // Long millis will fail and we then attempt to parse with value.toLong
+            Try(new DateTime(value)) match {
+              case Return(datetime) =>
+                datetime
+              case _ =>
+                new DateTime(value.toLong)
+            }
         case _ =>
           throw ctxt.mappingException(handledType())
       }

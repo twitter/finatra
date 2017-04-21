@@ -4,7 +4,7 @@ import com.twitter.finatra.modules.CredentialsModule
 import com.twitter.finatra.tests.utils.LocalFilesystemCredentialsIntegrationTest._
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
 import com.twitter.finatra.utils.Credentials
-import com.twitter.inject.WordSpecIntegrationTest
+import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 import java.io.File
 import org.apache.commons.io.FileUtils
@@ -18,7 +18,7 @@ object LocalFilesystemCredentialsIntegrationTest {
     """.stripMargin
 }
 
-class LocalFilesystemCredentialsIntegrationTest extends WordSpecIntegrationTest {
+class LocalFilesystemCredentialsIntegrationTest extends IntegrationTest {
 
   override protected def beforeAll() = {
     super.beforeAll()
@@ -40,14 +40,11 @@ class LocalFilesystemCredentialsIntegrationTest extends WordSpecIntegrationTest 
       modules = Seq(CredentialsModule))
     .create
 
-  "Credentials Module" should {
+  test("load credentials") {
+    val credentials = injector.instance[Credentials]
+    credentials.isEmpty should be(false)
 
-    "load credentials" in {
-      val credentials = injector.instance[Credentials]
-      credentials.isEmpty should be(false)
-
-      credentials.get("test_token").get should be("asdf")
-      credentials.get("test_authorization_id").get should be("123456")
-    }
+    credentials.get("test_token").get should be("asdf")
+    credentials.get("test_authorization_id").get should be("123456")
   }
 }

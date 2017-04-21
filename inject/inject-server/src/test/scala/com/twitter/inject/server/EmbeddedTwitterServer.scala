@@ -4,12 +4,12 @@ import com.google.common.net.{HttpHeaders, MediaType}
 import com.google.inject.Stage
 import com.twitter.conversions.time._
 import com.twitter.finagle.builder.ClientBuilder
-import com.twitter.finagle.http._
+import com.twitter.finagle.http.{Http => _, _}
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
-import com.twitter.finagle.{ChannelClosedException, Service}
+import com.twitter.finagle.{ChannelClosedException, Http, Service}
 import com.twitter.inject.PoolUtils
 import com.twitter.inject.app.{InjectionServiceWithAnnotationModule, InjectionServiceModule, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
@@ -202,11 +202,14 @@ class EmbeddedTwitterServer(
       twitterServer.log.clearHandlers()
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
       try {
-        Await.result(twitterServer.close())
+        Await.all(
+          httpAdminClient.close(),
+          twitterServer.close())
         mainRunnerFuturePool.executor.shutdown()
       } catch {
-        case e: Throwable =>
+        case NonFatal(e) =>
           info(s"Error while closing ${this.getClass.getSimpleName}: $e")
+          e.printStackTrace()
       }
       closed = true
     }
@@ -389,7 +392,7 @@ class EmbeddedTwitterServer(
     val host = new InetSocketAddress(PortUtils.loopbackAddress, port)
     val builder = ClientBuilder()
       .name(name)
-      .codec(Http(_streaming = streamResponse))
+      .stack(Http.client.withStreaming(streamResponse))
       .tcpConnectTimeout(tcpConnectTimeout)
       .connectTimeout(connectTimeout)
       .requestTimeout(requestTimeout)
@@ -398,6 +401,7 @@ class EmbeddedTwitterServer(
       .retryPolicy(retryPolicy)
       .reportTo(NullStatsReceiver)
       .failFast(false)
+      .daemon(true)
 
     if (secure)
       builder.tlsWithoutValidation().build()

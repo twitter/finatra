@@ -1,22 +1,31 @@
-package com.twitter.calculator
+package com.twitter.finatra.thrift.exceptions
 
-import com.twitter.finagle.{Service, TimeoutException}
+import com.google.inject.Singleton
+import com.twitter.finagle.TimeoutException
 import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.RequestTimeout
 import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerError
 import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
-import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
 import com.twitter.inject.Logging
+import com.twitter.scrooge.ThriftException
 import com.twitter.util.Future
-import javax.inject.Singleton
 import scala.util.control.NonFatal
 
+/**
+ * A generic [[com.twitter.finatra.thrift.exceptions.ExceptionMapper]] over the [[Exception]]
+ * exception type. This mapper attempts to translate other exceptions to known finatra-thrift
+ * exceptions.
+ *
+ * We recommend for users to register this mapper in their scala Servers.
+ *
+ * Note: this is only applicable in scala since it is using thriftscala exceptions
+ */
 @Singleton
-class ExceptionTranslationFilter
-  extends ThriftFilter
+class FinatraThriftExceptionMapper
+  extends ExceptionMapper[Exception, ThriftException]
   with Logging {
 
-  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
-    service(request).rescue {
+  def handleException(throwable: Exception): Future[ThriftException] = {
+    throwable match {
       case e: TimeoutException =>
         Future.exception(
           ClientError(RequestTimeout, e.getMessage))

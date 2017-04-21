@@ -28,6 +28,12 @@ class DoEverythingJavaThriftController implements DoEverything.ServiceIface {
         return Future.value(msg);
     }
 
+
+    @Override
+    public Future<String> echo2(String msg) {
+        return Future.value(msg);
+    }
+
     @Override
     public Future<String> magicNum() {
         return Future.value(magicNum);

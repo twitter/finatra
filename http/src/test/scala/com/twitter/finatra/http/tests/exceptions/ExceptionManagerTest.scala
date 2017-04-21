@@ -1,15 +1,15 @@
-package com.twitter.finatra.http.tests.internal.exceptions
+package com.twitter.finatra.http.tests.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.exceptions.{ExceptionMapperCollection, ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
-import com.twitter.inject.{Mockito, Test}
 import com.twitter.inject.app.TestInjector
+import com.twitter.inject.Test
 import org.apache.commons.lang.RandomStringUtils
 
-class ExceptionManagerTest extends Test with Mockito {
+class ExceptionManagerTest extends Test {
 
   def newExceptionManager =
     new ExceptionManager(
@@ -33,12 +33,16 @@ class ExceptionManagerTest extends Test with Mockito {
   exceptionManager.add[ForbiddenExceptionMapper]
   exceptionManager.add(new UnauthorizedExceptionMapper)
   exceptionManager.add[UnauthorizedException1Mapper]
+  exceptionManager.add[FirstExceptionMapper]
+  exceptionManager.add[SecondExceptionMapper]
 
   val exceptionMapperCollection = new ExceptionMapperCollection {
     add[TestRootExceptionMapper]
     add[ForbiddenExceptionMapper]
     add[UnauthorizedExceptionMapper]
     add[UnauthorizedException1Mapper]
+    add[FirstExceptionMapper]
+    add[SecondExceptionMapper]
   }
   collectionExceptionManager
     .add(exceptionMapperCollection)
@@ -78,6 +82,11 @@ class ExceptionManagerTest extends Test with Mockito {
     testException(new UnregisteredException, Status.InternalServerError)
     testException(new UnregisteredException, Status.InternalServerError, collectionExceptionManager)
   }
+
+  test("map exceptions to last registered mapper") {
+    testException(new ExceptionForDupMapper, Status.BadRequest)
+    testException(new ExceptionForDupMapper, Status.BadRequest, collectionExceptionManager)
+  }
 }
 
 class UnregisteredException extends Exception
@@ -86,6 +95,7 @@ class ForbiddenException1 extends ForbiddenException
 class ForbiddenException2 extends ForbiddenException1
 class UnauthorizedException extends Exception
 class UnauthorizedException1 extends UnauthorizedException
+class ExceptionForDupMapper extends Exception
 
 class TestRootExceptionMapper extends ExceptionMapper[Throwable] {
   def toResponse(request: Request, throwable: Throwable): Response = {
@@ -106,4 +116,16 @@ class UnauthorizedExceptionMapper extends ExceptionMapper[UnauthorizedException]
 class UnauthorizedException1Mapper extends ExceptionMapper[UnauthorizedException1] {
   def toResponse(request: Request, throwable: UnauthorizedException1): Response =
     SimpleResponse(Status.NotFound)
+}
+
+class FirstExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
+  def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
+    SimpleResponse(Status.Accepted)
+  }
+}
+
+class SecondExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
+  def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
+    SimpleResponse(Status.BadRequest)
+  }
 }

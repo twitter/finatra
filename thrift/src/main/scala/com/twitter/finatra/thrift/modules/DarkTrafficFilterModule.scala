@@ -32,7 +32,7 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
    * a nondescript ChannelClosedException will be seen.
    *
    * What is ThriftMux?
-   * http://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
+   * https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
    */
   protected val mux: Boolean = true
 

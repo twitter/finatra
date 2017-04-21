@@ -1,16 +1,16 @@
 package com.twitter.finatra.http.benchmarks
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class ControllerBenchmarkTest extends WordSpecTest {
+class ControllerBenchmarkTest extends Test {
 
   val benchmark = new ControllerBenchmark
 
-  "test plaintext" in {
+  test("test plaintext") {
     benchmark.plaintext()
   }
 
-  "test json" in {
+  test("test json") {
     benchmark.json()
   }
 }

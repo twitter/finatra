@@ -19,23 +19,27 @@ class TwitterCloneExternalTest extends Test {
     objNode
   }
 
-  val server = new EmbeddedHttpServer(
-    new TwitterCloneServer,
-    flags = Map(
-      "firebase.host" -> "finatra.firebaseio.com",
-      "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"))
-
-  override protected def afterAll(): Unit = {
-    super.afterAll()
-    server.close()
-  }
-
   test("tweet creation") {
     pending
-    val result = server.httpPost(
-      path = "/tweet",
-      postBody =
-        """
+
+    /* Typically, we would create the server once outside of any individual test
+       case since there is a non-zero startup cost to creating a server. In this
+       case, however, we have single test case AND we do not want the server to
+       start UNLESS this test case is run, therefore we move all access to the
+       server into this single test method -- which is marked `pending` as it
+       should only ever be run manually and not within any continuous
+       integration workflow.*/
+
+    val server = new EmbeddedHttpServer(
+      new TwitterCloneServer,
+      flags = Map(
+        "firebase.host" -> "finatra.firebaseio.com",
+        "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"))
+    try {
+      val result = server.httpPost(
+        path = "/tweet",
+        postBody =
+          """
         {
           "message": "Hello #FinagleCon",
           "location": {
@@ -44,10 +48,10 @@ class TwitterCloneExternalTest extends Test {
           },
           "nsfw": false
         }
-        """,
-      andExpect = Created,
-      withJsonBody =
-        """
+          """,
+        andExpect = Created,
+        withJsonBody =
+          """
         {
           "id": "0",
           "message": "Hello #FinagleCon",
@@ -57,14 +61,17 @@ class TwitterCloneExternalTest extends Test {
           },
           "nsfw": false
         }
-        """,
-      withJsonBodyNormalizer = idNormalizer)
+          """,
+        withJsonBodyNormalizer = idNormalizer)
 
-    val tweet = server.httpGetJson[TweetResponse](
-      path = result.location.get,
-      andExpect = Ok,
-      withJsonBody = result.contentString)
+      val tweet = server.httpGetJson[TweetResponse](
+        path = result.location.get,
+        andExpect = Ok,
+        withJsonBody = result.contentString)
 
-    println(s"Firebase Tweet: https://finatra.firebaseio.com/tweets/${tweet.id}")
+      println(s"Firebase Tweet: https://finatra.firebaseio.com/tweets/${tweet.id}")
+    } finally {
+      server.close()
+    }
   }
 }

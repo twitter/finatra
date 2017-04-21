@@ -18,75 +18,72 @@ class CountryCodeValidatorTest
 
   private val countryCodes = Locale.getISOCountries.toSeq
 
-  "country code validator" should {
-
-    "pass validation for valid country code" in {
-      countryCodes.foreach { value =>
-        validate[CountryCodeExample](value) should equal(Valid)
-      }
+  test("pass validation for valid country code") {
+    countryCodes.foreach { value =>
+      validate[CountryCodeExample](value) should equal(Valid)
     }
+  }
 
-    "fail validation for invalid country code" in {
-      forAll(genFakeCountryCode) { value =>
-        validate[CountryCodeExample](value) should equal(
-          Invalid(
+  test("fail validation for invalid country code") {
+    forAll(genFakeCountryCode) { value =>
+      validate[CountryCodeExample](value) should equal(
+        Invalid(
           errorMessage(value),
           ErrorCode.InvalidCountryCodes(Set(value))))
-      }
     }
+  }
 
-    "pass validation for valid country codes in seq" in {
-      val passValue = Gen.containerOf[Seq, String](Gen.oneOf(countryCodes))
+  test("pass validation for valid country codes in seq") {
+    val passValue = Gen.containerOf[Seq, String](Gen.oneOf(countryCodes))
 
-      forAll(passValue) { value =>
-        validate[CountryCodeSeqExample](value) should equal(Valid)
-      }
+    forAll(passValue) { value =>
+      validate[CountryCodeSeqExample](value) should equal(Valid)
     }
+  }
 
-    "pass validation for empty seq" in {
-      val emptyValue = Seq.empty
-      validate[CountryCodeSeqExample](emptyValue) should equal(Valid)
-    }
+  test("pass validation for empty seq") {
+    val emptyValue = Seq.empty
+    validate[CountryCodeSeqExample](emptyValue) should equal(Valid)
+  }
 
-    "fail validation for invalid country codes in seq" in {
-      val failValue = Gen.nonEmptyContainerOf[Seq, String](genFakeCountryCode)
+  test("fail validation for invalid country codes in seq") {
+    val failValue = Gen.nonEmptyContainerOf[Seq, String](genFakeCountryCode)
 
-      forAll(failValue) { value =>
-        validate[CountryCodeSeqExample](value) should equal(
-          Invalid(
+    forAll(failValue) { value =>
+      validate[CountryCodeSeqExample](value) should equal(
+        Invalid(
           errorMessage(value),
           ErrorCode.InvalidCountryCodes(value.toSet)))
-      }
     }
+  }
 
-    "pass validation for valid country codes in array" in {
-      val passValue = Gen.containerOf[Array, String](Gen.oneOf(countryCodes))
+  test("pass validation for valid country codes in array") {
+    val passValue = Gen.containerOf[Array, String](Gen.oneOf(countryCodes))
 
-      forAll(passValue) { value =>
-        validate[CountryCodeArrayExample](value) should equal(Valid)
-      }
+    forAll(passValue) { value =>
+      validate[CountryCodeArrayExample](value) should equal(Valid)
     }
+  }
 
-    "fail validation for invalid country codes in array" in {
-      val failValue = Gen.nonEmptyContainerOf[Array, String](genFakeCountryCode)
+  test("fail validation for invalid country codes in array") {
+    val failValue = Gen.nonEmptyContainerOf[Array, String](genFakeCountryCode)
 
-      forAll(failValue) { value =>
-        validate[CountryCodeArrayExample](value) should equal(
-          Invalid(
+    forAll(failValue) { value =>
+      validate[CountryCodeArrayExample](value) should equal(
+        Invalid(
           errorMessage(value),
           ErrorCode.InvalidCountryCodes(value.toSet)))
-      }
     }
+  }
 
-    "fail validation for invalid country code type" in {
-      val failValue = Gen.choose[Int](0, 100)
+  test("fail validation for invalid country code type") {
+    val failValue = Gen.choose[Int](0, 100)
 
-      forAll(failValue) { value =>
-        validate[CountryCodeInvalidTypeExample](value) should equal(
-          Invalid(
+    forAll(failValue) { value =>
+      validate[CountryCodeInvalidTypeExample](value) should equal(
+        Invalid(
           errorMessage(value),
           ErrorCode.InvalidCountryCodes(Set(value.toString))))
-      }
     }
   }
 

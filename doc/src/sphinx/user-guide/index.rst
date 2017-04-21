@@ -62,6 +62,7 @@ Thrift
 - :doc:`thrift/server`
 - :doc:`thrift/controllers`
 - :doc:`thrift/filters`
+- :doc:`thrift/exceptions`
 - :doc:`thrift/warmup`
 
 Twitter Server
@@ -117,6 +118,7 @@ For support feel free to follow and/or tweet at the `@finatra <https://twitter.c
    thrift/server.rst
    thrift/controllers.rst
    thrift/filters.rst
+   thrift/exceptions.rst
    thrift/warmup.rst
    twitter-server/index.rst
    testing/index.rst
@@ -128,7 +130,7 @@ For support feel free to follow and/or tweet at the `@finatra <https://twitter.c
    :target: http://codecov.io/github/twitter/finatra?branch=develop
 .. |Project status| image:: https://img.shields.io/badge/status-active-brightgreen.svg 
    :target: https://github.com/twitter/finatra#status
-.. |Maven Central| image:: https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg
+.. |Maven Central| image:: https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg
 .. |Gitter| image:: https://badges.gitter.im/Join%20Chat.svg 
    :target: https://gitter.im/twitter/finatra
    

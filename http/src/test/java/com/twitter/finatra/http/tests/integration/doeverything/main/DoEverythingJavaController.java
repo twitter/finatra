@@ -26,6 +26,9 @@ public class DoEverythingJavaController extends AbstractController {
     public void configureRoutes() {
         get("/hello", (Request request) -> helloService.hi(request.getParam("name")));
 
+        get("/response", (Request request) ->
+            response().ok(helloService.hi(request.getParam("name"))));
+
         get("/goodbye", (Request request) -> new GoodbyeResponse("guest", "cya", 123));
 
         get(

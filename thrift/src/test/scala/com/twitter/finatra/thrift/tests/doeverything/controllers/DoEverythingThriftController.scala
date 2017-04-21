@@ -1,8 +1,13 @@
 package com.twitter.finatra.thrift.tests.doeverything.controllers
 
+import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.DoEverything
-import com.twitter.doeverything.thriftscala.DoEverything.{Echo, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
+import com.twitter.doeverything.thriftscala.DoEverything.{Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
+import com.twitter.finagle.{ChannelException, RequestException, RequestTimeoutException}
 import com.twitter.finatra.thrift.Controller
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, FooException}
+import com.twitter.finatra.thrift.thriftscala.{ClientError, UnknownClientIdError}
+import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.BadRequest
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
 import javax.inject.Inject
@@ -21,16 +26,36 @@ class DoEverythingThriftController @Inject()(
   }
 
   override val echo = handle(Echo) { args: Echo.Args =>
-    Future.value(args.msg)
+    if (args.msg == "clientError") {
+      Future.exception(ClientError(BadRequest, "client error"))
+    } else {
+      Future.value(args.msg)
+    }
+  }
+
+  override val echo2 = handle(Echo2) { args: Echo2.Args =>
+    args.msg match {
+      // should be handled by FinatraExceptionMapper
+      case "clientError" => throw new ClientError(BadRequest, "client error")
+      case "unknownClientIdError" => throw new UnknownClientIdError("unknown client id error")
+      case "requestException" => throw new RequestException
+      case "timeoutException" => throw new RequestTimeoutException(1.second, "timeout exception")
+      case "unhandledException" => throw new Exception("unhandled exception")
+      // should be handled by BarExceptionMapper and FooExceptionMapper
+      case "barException" => throw new BarException
+      case "fooException" => throw new FooException
+      case "unhandledSourcedException" => throw new ChannelException
+      // should be handled by root mapper, ThrowableExceptionMapper
+      case "unhandledThrowable" => throw new Throwable("unhandled throwable")
+      case _ => Future.value("no specified exception")
+    }
   }
 
   override val magicNum = handle(MagicNum) { args: MagicNum.Args =>
     Future.value(magicNumValue)
   }
 
-  override val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { args : MoreThanTwentyTwoArgs.Args =>
+  override val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { args: MoreThanTwentyTwoArgs.Args =>
     Future.value("handled")
   }
-
-
 }

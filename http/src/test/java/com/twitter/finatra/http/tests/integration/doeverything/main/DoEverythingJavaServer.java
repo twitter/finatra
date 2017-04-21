@@ -14,7 +14,11 @@ public class DoEverythingJavaServer extends AbstractHttpServer {
     public void configureHttp(HttpRouter httpRouter) {
         httpRouter
             .filter(CommonFilters.class)
+            .filter(new AppendToHeaderJavaFilter("test", "1"))
             .add(DoEverythingJavaController.class)
+            .add(new DoEverythingJavaNonInjectedController(new HelloService()))
+            .add(new AppendToHeaderJavaFilter("test", "2"),
+                    new DoEverythingJavaReadHeadersController())
             .exceptionMapper(DoEverythingJavaExceptionMapper.class);
     }
 }

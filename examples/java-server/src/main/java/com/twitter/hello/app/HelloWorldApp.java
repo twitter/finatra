@@ -7,7 +7,7 @@ import com.google.inject.Module;
 
 import com.twitter.hello.HelloService;
 import com.twitter.inject.app.AbstractApp;
-import com.twitter.inject.logging.modules.LoggerModule$;
+import com.twitter.inject.modules.LoggerModule$;
 
 public class HelloWorldApp extends AbstractApp {
 

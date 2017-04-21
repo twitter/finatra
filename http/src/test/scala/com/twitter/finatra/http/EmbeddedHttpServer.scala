@@ -8,10 +8,11 @@ import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
-import com.twitter.util.{Memoize, Try}
+import com.twitter.util.{Future, Await, Memoize, Try}
 import java.lang.annotation.Annotation
 import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe._
+import scala.util.control.NonFatal
 
 /**
  *
@@ -101,15 +102,25 @@ class EmbeddedHttpServer(
     }
   }
 
-  override def close() {
+  override def close(): Unit = {
     if (!closed) {
       super.close()
 
+      val awaitables: scala.collection.mutable.Seq[Future[Unit]] =
+        scala.collection.mutable.Seq.empty
+
       if (twitterServer.httpExternalPort.isDefined) {
-        httpClient.close()
+        awaitables :+ httpClient.close()
       }
       if (twitterServer.httpsExternalPort.isDefined) {
-        httpsClient.close()
+        awaitables :+ httpsClient.close()
+      }
+      try {
+        Await.all(awaitables: _*)
+      } catch {
+        case NonFatal(e) =>
+          info(s"Error while closing ${this.getClass.getSimpleName}: $e")
+          e.printStackTrace()
       }
 
       closed = true
@@ -123,7 +134,6 @@ class EmbeddedHttpServer(
    * @param instance - to bind instance.
    * @tparam T - type of the instance to bind.
    * @return this [[EmbeddedHttpServer]].
-   *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
   override def bind[T : TypeTag](instance: T): EmbeddedHttpServer = {
@@ -140,7 +150,6 @@ class EmbeddedHttpServer(
    * @tparam T - type of the instance to bind.
    * @tparam A - type of the Annotation used to bind the instance.
    * @return this [[EmbeddedHttpServer]].
-   *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
   override def bind[T : TypeTag, A <: Annotation : TypeTag](instance: T): EmbeddedHttpServer = {

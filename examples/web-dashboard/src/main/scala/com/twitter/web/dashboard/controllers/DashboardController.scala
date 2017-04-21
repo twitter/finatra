@@ -846,8 +846,8 @@ class DashboardController extends Controller {
    * Routes a are matched in the order they are defined, thus this route SHOULD be LAST as it is
    * a "catch-all" and routes should be defined in order of most-specific to least-specific.
    *
-   * @see http://twitter.github.io/finatra/user-guide/build-new-http-server/controller.html#controllers-and-routing
-   * @see http://twitter.github.io/finatra/user-guide/files/
+   * @see https://twitter.github.io/finatra/user-guide/build-new-http-server/controller.html#controllers-and-routing
+   * @see https://twitter.github.io/finatra/user-guide/files/
    */
   get("/:*") { request: Request =>
     response.ok.fileOrIndex(

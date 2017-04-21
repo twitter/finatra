@@ -1,16 +1,9 @@
-README
+Overview
+========
 
-# -------------------------------
-# Overview
-# -------------------------------
+The Finatra framework uses the slf4j-api for logging. By coupling the framework to only slf4j application developers
+can choose the logging implementation. This module provides a thin scala-wrapper trait (c.t.inject.Logging) over the
+util-slf4j-api c.t.util.logging.Logging trait and provides a [Mapped Diagnostic Context (MDC)](https://logback.qos.ch/manual/mdc.html)
+integration with slf4j and [Finagle](https://github.com/twitter/finagle) via util Locals.
 
-The Finatra framework uses the slf4j-api for logging. By coupling the framework to only slf4j, application developers
-can choose the logging implementation. inject-slf4j adds slf4j bridges for the following logging providers:
-
-  * log4j
-  * java-util-logging,
-  * commons-logging
-
-Note: the above bridges are only installed if the slf4j-jdk14 logging implementation is not on the classpath.
-
-See http://twitter.github.io/finatra/user-guide/logging/ for more information.
+See https://twitter.github.io/finatra/user-guide/logging/index.html for more information.

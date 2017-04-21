@@ -127,74 +127,84 @@ class HttpRouter @Inject()(
     }
   }
 
+  def add[C <: Controller : Manifest]: HttpRouter = {
+    val controller = injector.instance[C]
+    addRoutes(controller)
+  }
+
+  def add(clazz: Class[_ <: AbstractController]): HttpRouter = {
+    val controller = injector.instance(clazz)
+    add(controller)
+  }
+
   def add(controller: Controller): HttpRouter = {
     injector.underlying.injectMembers(controller)
-    addInjected(controller)
+    addRoutes(controller)
+  }
+
+  def add(controller: AbstractController): HttpRouter = {
+    injector.underlying.injectMembers(controller)
+    controller.configureRoutes()
+    addRoutes(controller)
   }
 
   /** Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route) */
   def add(filter: HttpFilter, controller: Controller): HttpRouter = {
     injector.underlying.injectMembers(controller)
-    addInjected(filter, controller)
-  }
-
-  def add[C <: Controller : Manifest]: HttpRouter = {
-    val controller = injector.instance[C]
-    addInjected(controller)
-  }
-
-  def add(clazz: Class[_ <: AbstractController]): HttpRouter = {
-    val controller = injector.instance(clazz)
-    controller.configureRoutes()
-    addInjected(controller)
+    controller match {
+      case abstractController: AbstractController =>
+        abstractController.configureRoutes()
+      case _ => // do nothing
+    }
+    addRoutes(filter, controller)
   }
 
   // Generated
   /* Note: If you have more than 10 filters, combine some of them using MergedFilter (@see CommonFilters) */
   /** Add per-controller filter (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1])
+  def add[F1 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, F9 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8] andThen injector.instance[F9])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, F9 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8] andThen injector.instance[F9])
 
   /** Add per-controller filters (Note: Per-controller filters only run if the paired controller has a matching route) */
-  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, F9 <: HttpFilter : Manifest, F10 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = add[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8] andThen injector.instance[F9] andThen injector.instance[F10])
+  def add[F1 <: HttpFilter : Manifest, F2 <: HttpFilter : Manifest, F3 <: HttpFilter : Manifest, F4 <: HttpFilter : Manifest, F5 <: HttpFilter : Manifest, F6 <: HttpFilter : Manifest, F7 <: HttpFilter : Manifest, F8 <: HttpFilter : Manifest, F9 <: HttpFilter : Manifest, F10 <: HttpFilter : Manifest, C <: Controller : Manifest]: HttpRouter = addFiltered[C](injector.instance[F1] andThen injector.instance[F2] andThen injector.instance[F3] andThen injector.instance[F4] andThen injector.instance[F5] andThen injector.instance[F6] andThen injector.instance[F7] andThen injector.instance[F8] andThen injector.instance[F9] andThen injector.instance[F10])
 
   /* Private */
 
-  private def add[C <: Controller : Manifest](filter: HttpFilter): HttpRouter = {
-    addInjected(
+  private def addFiltered[C <: Controller : Manifest](filter: HttpFilter): HttpRouter = {
+    addRoutes(
       filter,
       injector.instance[C])
   }
 
-  private def addInjected(controller: Controller): HttpRouter = {
+  private def addRoutes(controller: Controller): HttpRouter = {
     routes ++= buildRoutes(controller).map(_.withFilter(globalFilter))
     this
   }
 
-  private def addInjected(filter: HttpFilter, controller: Controller): HttpRouter = {
+  private def addRoutes(filter: HttpFilter, controller: Controller): HttpRouter = {
     val routesWithFilter = buildRoutes(controller).map(_.withFilter(globalFilter.andThen(filter)))
     routes ++= routesWithFilter
     this
@@ -206,7 +216,7 @@ class HttpRouter @Inject()(
 
   private[finatra] def partitionRoutesByType(): RoutesByType = {
     info("Adding routes\n" + routes.map(_.summary).mkString("\n"))
-    val (adminRoutes, externalRoutes) = routes partition { route =>
+    val (adminRoutes, externalRoutes) = routes.partition { route =>
       route.path.startsWith(FinatraAdminPrefix) || route.admin
     }
     assertAdminRoutes(adminRoutes)

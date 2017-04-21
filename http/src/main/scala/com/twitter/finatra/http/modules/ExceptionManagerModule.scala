@@ -8,7 +8,7 @@ import com.twitter.finatra.http.internal.exceptions.json.{CaseClassExceptionMapp
 import com.twitter.inject.{Injector, TwitterModule}
 import javax.inject.Singleton
 
-object ExceptionManagerModule extends TwitterModule {
+private[http] object ExceptionManagerModule extends TwitterModule {
 
   @Provides
   @Singleton

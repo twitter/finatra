@@ -5,12 +5,12 @@ import com.google.inject.{ConfigurationException, Injector, Key}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.exceptions.JsonInjectException
 import com.twitter.finatra.json.tests.internal._
-import com.twitter.inject.{Mockito, WordSpecTest}
+import com.twitter.inject.{Mockito, Test}
 import java.util
 import net.codingwell.scalaguice.typeLiteral
 
 class GuiceInjectableValuesFinatraObjectMapperTest
-  extends WordSpecTest
+  extends Test
   with Mockito {
 
   val injector = mock[Injector]
@@ -23,7 +23,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
     reset(injector)
   }
 
-  "@Inject value should work when field not sent in json" in {
+  test("@Inject value should work when field not sent in json") {
     val keyString = Key.get(classOf[String])
     injector.getInstance(keyString) returns "Foo"
     assert(parse[CaseClassInjectString](
@@ -33,7 +33,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
       """) == CaseClassInjectString("Foo"))
   }
 
-  "@Inject Guice Option[String] into case class Option[String]" in {
+  test("@Inject Guice Option[String] into case class Option[String]") {
     val key = Key.get(typeLiteral[Option[String]])
     injector.getInstance(key) returns Some("Foo")
     assert(parse[CaseClassInjectOptionString](
@@ -43,7 +43,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
       """) == CaseClassInjectOptionString(Some("Foo")))
   }
 
-  "@Inject value should use default when field not sent in json" in {
+  test("@Inject value should use default when field not sent in json") {
     assert(parse[CaseClassInjectStringWithDefault](
       """
       {
@@ -51,7 +51,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
       """) == CaseClassInjectStringWithDefault("DefaultHello"))
   }
 
-  "@Inject value should use default when field sent in json" in {
+  test("@Inject value should use default when field sent in json") {
     assert(parse[CaseClassInjectStringWithDefault](
       """
       {
@@ -60,7 +60,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
       """) == CaseClassInjectStringWithDefault("DefaultHello"))
   }
 
-  "@Inject value should use None assumed default when field sent in json" in {
+  test("@Inject value should use None assumed default when field sent in json") {
     assert(parse[CaseClassInjectOptionString](
       """
       {
@@ -69,7 +69,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
       """) == CaseClassInjectOptionString(None))
   }
 
-  "@Inject value takes precedence over value in json" in {
+  test("@Inject value takes precedence over value in json") {
     val keyString = Key.get(classOf[String])
     injector.getInstance(keyString) returns "Foo"
     assert(parse[CaseClassInjectString]("""
@@ -78,7 +78,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
       }""") == CaseClassInjectString("Foo"))
   }
 
-  "@Inject ConfigurationException" in {
+  test("@Inject ConfigurationException") {
     val keyString = Key.get(classOf[String])
     injector.getInstance(keyString) throws new ConfigurationException(new util.LinkedList[Message]())
 
@@ -90,13 +90,13 @@ class GuiceInjectableValuesFinatraObjectMapperTest
     }
   }
 
-  "Too many injectable annotations" in {
+  test("Too many injectable annotations") {
     intercept[AssertionError] {
       parse[CaseClassTooManyInjectableAnnotations]("""{}""")
     }
   }
 
-  "Too many binding annotations" in {
+  test("Too many binding annotations") {
     intercept[Exception] {
       parse[CaseClassTooManyBindingAnnotations]("""{}""")
     }

@@ -24,6 +24,7 @@ import java.nio.charset.StandardCharsets
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
+import org.joda.time.DateTime
 import scala.collection.SortedSet
 
 class DoEverythingController @Inject()(
@@ -61,6 +62,38 @@ class DoEverythingController @Inject()(
 
     post("/foo") { request: Request =>
       "bar"
+    }
+
+    filter[ForbiddenFilter].get("/forbiddenByFilter") { request: Request =>
+      "ok!"
+    }
+
+    filter(new AppendToHeaderFilter("appended" , "1")).
+      filter(new AppendToHeaderFilter("appended" , "2")).
+      get("/appendMultiplePrefixed") { request: Request =>
+        request.headerMap("appended")
+    }
+
+    filter(new AppendToHeaderFilter("freestyle", "bang")) {
+      get("/freestyleWithHeader") { request: Request =>
+        request.headerMap("freestyle")
+      }
+    }
+  }
+
+  prefix("/1.1") {
+    prefix("/waterfall") {
+      prefix("/users") {
+        get("/") { request: Request =>
+          "ok!"
+        }
+      }
+    }
+  }
+
+  filter[ForbiddenFilter].prefix("/1.1") {
+    get("/forbiddenByFilterPrefilter"){ request: Request =>
+      "ok!"
     }
   }
 
@@ -544,6 +577,21 @@ class DoEverythingController @Inject()(
     JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
   }
 
+  patch("/jsonPatch/innerSeqCaseClass") { jsonPatch: JsonPatch =>
+    val testCase = InnerSeqCaseClass(bears = Seq("grizzly", "polar"))
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+  patch("/jsonPatch/nestedSeqCaseClass") { jsonPatch: JsonPatch =>
+    val testCase = NestedSeqCaseClass(animalFamilies = Seq(
+      AnimalFamily(name = "ursidae", animals = Seq("grizzly", "polar"))
+    ))
+    val originalJson = jsonPatchOperator.toJsonNode(testCase)
+    JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+  }
+
+
   patch("/echo") { request: Request =>
     response.ok(request.contentString)
   }
@@ -774,6 +822,10 @@ class DoEverythingController @Inject()(
     }
   }
 
+  get("/millis") { r: ClassWithQueryParamDateTime =>
+    r.dateTime.getMillis
+  }
+
   post("/localDateRequest") { r: TestCaseClassWithLocalDate =>
     response.ok
   }
@@ -784,6 +836,9 @@ case class MultipleInjectableValueParams(
 
 case class CaseClassWithRequestField(
   request: Request)
+
+case class ClassWithQueryParamDateTime(
+  @QueryParam dateTime: DateTime)
 
 class NonCaseClass {
   val name = "Bob"

@@ -12,6 +12,37 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.10.0](https://github.com/twitter/finatra/tree/finatra-2.10.0) (2017-04-20)
+
+### Added
+
+### Changed
+
+* finatra-http: Increase composability and flexibility of RouteDSL. ``RB_ID=912095``
+
+* inject-app: Run installed modules postInjectorStartup before server function. This makes
+  reasoning about the server lifecycle a bit more straight-forward and simplifies things
+  like the exception manager logic for adding and overridding mappers. ``RB_ID=911965``
+
+* finatra-jackson: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=911745``
+
+* finatra: Move finatra/benchmarks and finatra/utils framework tests to FunSuite ScalaTest
+  testing style. ``RB_ID=910680``
+
+### Fixed
+
+* finatra-http: Correctly return a JsonParseException when the incoming JSON is not parsable
+  as an expected custom case class request object. ``RB_ID=``
+
+* finatra-http: Ensure underlying members are injected for AbstractControllers. ``RB_ID=911635``
+
+* finatra-jackson: Patch `FinatraDatetimeDeserializer` to support parsing of Long value passed
+  as String, e.g., when parsing a query parameter.``RB_ID=911162``
+
+* finatra: Close embedded server clients on embedded server close. ``RB_ID=910862``
+
+### Closed
+
 ## [finatra-2.9.0](https://github.com/twitter/finatra/tree/finatra-2.9.0) (2017-03-10)
 
 ### Added
@@ -93,6 +124,8 @@ All notable changes to this project will be documented in this file. Note that `
   `ThriftWarmup`, `PossiblyRetryable`. ``RB_ID=908846``
 
 ### Fixed
+
+* finatra-http: Correctly support adding Java AbstractController by instance. ``RB_ID=910502``
 
 ### Closed
 
@@ -604,7 +637,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 - Bump to latest finagle? [Github Issue 266](https://github.com/twitter/finatra/issues/266)
 
-- ClassCastException: com.twitter.finatra.logging.FinagleMDCAdapter cannot be cast to ch.qos.logback.classic.util.LogbackMDCAdapter [Github Issue 256](https://github.com/twitter/finatra/issues/256)
+- ClassCastException: com.twitter.inject.logging.FinagleMDCAdapter cannot be cast to ch.qos.logback.classic.util.LogbackMDCAdapter [Github Issue 256](https://github.com/twitter/finatra/issues/256)
 
 ## [v2.1.1](https://github.com/twitter/finatra/tree/v2.1.1) (2015-10-29)
 

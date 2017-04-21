@@ -1,19 +1,22 @@
 package com.twitter.finatra.thrift.routing
 
-import com.twitter.finagle.Service
+import com.twitter.finagle.{Thrift, ThriftMux, Service}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.thrift._
-import com.twitter.finatra.thrift.internal.{ThriftRequestWrapFilter, ThriftRequestUnwrapFilter, ThriftMethodService}
+import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.thrift.internal.{ThriftMethodService, ThriftRequestUnwrapFilter, ThriftRequestWrapFilter}
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Services}
 import com.twitter.inject.{Injector, Logging}
+import com.twitter.inject.TypeUtils._
 import com.twitter.scrooge.{ThriftMethod, ThriftService, ToThriftService}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.{Inject, Singleton}
-import org.apache.thrift.protocol.{TBinaryProtocol, TProtocolFactory}
+import org.apache.thrift.protocol.TProtocolFactory
 import scala.collection.mutable.{Map => MutableMap}
 
 @Singleton
 class ThriftRouter @Inject()(
+  exceptionManager: ExceptionManager,
   statsReceiver: StatsReceiver,
   injector: Injector)
   extends Logging {
@@ -30,6 +33,26 @@ class ThriftRouter @Inject()(
   }
 
   /* Public */
+
+  /** Add exception mapper used for the corresponding exceptions */
+  def exceptionMapper[T <: ExceptionMapper[_, _] : Manifest]: ThriftRouter = {
+    exceptionManager.add[T]
+    this
+  }
+
+  /** Add exception mapper used for the corresponding exceptions */
+  def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T, _]): ThriftRouter = {
+    exceptionManager.add[T](mapper)
+    this
+  }
+
+  /** Add exception mapper used for the corresponding exceptions */
+  def exceptionMapper[T <: Throwable](clazz: Class[_ <: ExceptionMapper[T, _]]): ThriftRouter = {
+    val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_, _]])
+    val throwableType = singleTypeParam(mapperType)
+    exceptionMapper(injector.instance(clazz))(Manifest.classType(Class.forName(throwableType.getTypeName)))
+    this
+  }
 
   /** Add global filter used for all requests */
   def filter[FilterType <: ThriftFilter : Manifest]: ThriftRouter = {
@@ -75,16 +98,27 @@ class ThriftRouter @Inject()(
 
   /** Add controller used for all requests for usage from Java */
   def add(controller: Class[_], service: Class[_]): ThriftRouter = {
-    add(controller, service, new TBinaryProtocol.Factory())
+    add(
+      controller,
+      service,
+      ThriftMux.server
+        .params.apply[Thrift.param.ProtocolFactory]
+        .protocolFactory)
   }
 
   /** Add controller used for all requests for usage from Java */
   def add(controller: Class[_], service: Class[_], protocolFactory: TProtocolFactory): ThriftRouter = {
     add {
       val instance = injector.instance(controller)
-      val constructor = service.getConstructor(instance.getClass.getInterfaces.head, classOf[TProtocolFactory])
-      val serviceInstance: Service[Array[Byte], Array[Byte]] =
-        constructor.newInstance(instance.asInstanceOf[Object], protocolFactory).asInstanceOf[Service[Array[Byte], Array[Byte]]]
+      val iface: Class[_] = instance.getClass.getInterfaces.head // MyService$ServiceIface
+      val service: Class[_] = // MyService$Service
+        Class.forName(iface.getName.stripSuffix("$ServiceIface") + "$" + "Service")
+      val constructor = service.getConstructor(iface, classOf[TProtocolFactory])
+      // instantiate service
+      val serviceInstance =
+        constructor.newInstance(
+          instance.asInstanceOf[Object], protocolFactory)
+          .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
       info("Adding methods\n" + (controller.getDeclaredMethods.map(method => s"${controller.getSimpleName}.${method.getName}") mkString "\n"))
       filteredService = Some(

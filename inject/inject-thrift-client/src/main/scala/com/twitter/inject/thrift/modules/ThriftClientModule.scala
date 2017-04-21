@@ -35,7 +35,7 @@ abstract class ThriftClientModule[T: ClassTag]
    * a nondescript ChannelClosedException will be seen.
    *
    * What is ThriftMux?
-   * http://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
+   * https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
    */
   def mux: Boolean = true
 

@@ -8,18 +8,16 @@ junit_tests(
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
     '3rdparty/jvm/org/specs2:mock',
-    'finagle/finagle-http/src/main/scala:scala',
+    'finagle/finagle-http/src/main/scala',
+    'finatra/examples/tiny-url/src/main/scala',
     'finatra/examples/tiny-url/src/main/scala:jedis',
-    'finatra/examples/tiny-url/src/main/scala:scala',
     'finatra/http/src/test/scala:test-deps',
-    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
     'finatra/inject/inject-server/src/test/scala:test-deps',
     'util/util-slf4j-api/src/main/scala',
+    'finatra/examples/tiny-url/src/test/resources',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  resources=[
-    'finatra/examples/tiny-url/src/test/resources'
-  ]
 )

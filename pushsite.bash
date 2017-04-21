@@ -64,7 +64,7 @@ if [[ "$release" == true ]]; then
     ./sbt --warn unidoc
     echo 'copying unidoc to site...' 1>&2
     cd $savedir
-    cp -r $savedir/target/scala-2.11/unidoc/ $savedir/doc/src/octopress/public/finatra/scaladocs >/dev/null 2>&1
+    cp -r $savedir/target/scala-2.12/unidoc/ $savedir/doc/src/octopress/public/finatra/scaladocs >/dev/null 2>&1
 else
     echo 'cloning current user-guide and scaladocs...' 1>&2
     cd /tmp

@@ -1,7 +1,8 @@
 package com.twitter.finatra.thrift
 
 import com.twitter.conversions.time._
-import com.twitter.finagle.{NullServer, ListeningServer, ThriftMux}
+import com.twitter.finagle.{ListeningServer, NullServer, ThriftMux}
+import com.twitter.finatra.thrift.modules.ExceptionManagerModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.server.{PortUtils, TwitterServer}
@@ -11,6 +12,8 @@ import com.twitter.util.Await
 abstract class AbstractThriftServer extends ThriftServer
 
 trait ThriftServer extends TwitterServer {
+
+  addFrameworkModules(ExceptionManagerModule)
 
   protected def defaultFinatraThriftPort: String = ":9999"
   private val thriftPortFlag = flag("thrift.port", defaultFinatraThriftPort, "External Thrift server port")
@@ -53,8 +56,10 @@ trait ThriftServer extends TwitterServer {
           .withLabel(thriftServerNameFlag()))
 
     thriftServer = router.services.service.map { service =>
+      // if we have a built Service[-Req, +Rep] we serve it
       thriftServerBuilder.serve(thriftPortFlag(), service)
     }.getOrElse {
+      // otherwise we serve from a ServiceIface
       thriftServerBuilder.serveIface(thriftPortFlag(), router.services.serviceIface)
     }
     onExit {

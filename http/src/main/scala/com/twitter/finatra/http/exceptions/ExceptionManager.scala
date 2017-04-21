@@ -126,7 +126,7 @@ class ExceptionManager  (
 
   // Last entry by type overrides any previous entry.
   private def register(throwableType: Type, mapper: ExceptionMapper[_]): Unit = {
-    mappers.getOrElseUpdate(throwableType, mapper)
+    mappers.update(throwableType, mapper)
   }
 
   // Get mapper for this throwable class if it exists, otherwise

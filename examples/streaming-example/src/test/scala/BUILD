@@ -2,19 +2,17 @@ junit_tests(
   dependencies=[
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
-    'finagle/finagle-http/src/main/scala:scala',
-    'finatra/examples/streaming-example/src/main/scala:scala',
+    'finagle/finagle-http/src/main/scala',
+    'finatra/examples/streaming-example/src/main/scala',
     'finatra/http/src/test/scala:test-deps',
-    'finatra/httpclient/src/main/scala:scala',
-    'finatra/inject/inject-core/src/main/scala:scala',
+    'finatra/httpclient/src/main/scala',
+    'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
     'finatra/inject/inject-server/src/test/scala:test-deps',
-    'util/util-core/src/main/scala:scala',
+    'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
+    'finatra/examples/streaming-example/src/test/resources',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  resources=[
-    'finatra/examples/streaming-example/src/test/resources'
-  ]
 )

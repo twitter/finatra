@@ -1,11 +1,10 @@
 import sbt.Keys._
-import sbtunidoc.Plugin.UnidocKeys._
 import scala.language.reflectiveCalls
 import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
-lazy val projectVersion = "2.9.0"
+lazy val projectVersion = "2.10.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -39,17 +38,16 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.43.0" + suffix
-  val scroogeVersion = "4.15.0" + suffix
-  val twitterserverVersion = "1.28.0" + suffix
-  val utilVersion = "6.42.0" + suffix
+  val finagleVersion = "6.44.0" + suffix
+  val scroogeVersion = "4.16.0" + suffix
+  val twitterserverVersion = "1.29.0" + suffix
+  val utilVersion = "6.43.0" + suffix
 
   val bijectionVersion = "0.9.5"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
   val commonsLang = "2.6"
-  val grizzled = "1.3.0"
   val guava = "19.0"
   val guice = "4.0"
   val jackson = "2.8.4"
@@ -236,10 +234,10 @@ def mappingContainsAnyPath(mapping: (File, String), paths: Seq[String]): Boolean
 }
 
 lazy val root = (project in file("."))
+  .enablePlugins(ScalaUnidocPlugin)
   .settings(baseSettings)
   .settings(buildSettings)
   .settings(publishSettings)
-  .settings(unidocSettings)
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
@@ -271,21 +269,16 @@ lazy val injectCore = (project in file("inject/inject-core"))
     name := "inject-core",
     moduleName := "inject-core",
     libraryDependencies ++= Seq(
-      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
-      "com.google.guava" % "guava" % versions.guava,
       "com.google.inject" % "guice" % versions.guice,
       "com.google.inject.extensions" % "guice-assistedinject" % versions.guice,
       "com.google.inject.extensions" % "guice-multibindings" % versions.guice,
       "com.twitter" %% "util-app" % versions.utilVersion,
-      "com.twitter" %% "util-core" % versions.utilVersion,
-      "com.twitter" %% "util-slf4j-api" % versions.utilVersion,
       "commons-io" % "commons-io" % versions.commonsIo,
       "javax.inject" % "javax.inject" % "1",
       "joda-time" % "joda-time" % versions.jodaTime,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "net.codingwell" %% "scala-guice" % versions.scalaGuice,
       "org.joda" % "joda-convert" % versions.jodaConvert,
-      "org.clapper" %% "grizzled-slf4j" % versions.grizzled,
       "org.scala-lang" % "scalap" % scalaVersion.value,
       "com.google.inject" % "guice" % versions.guice % "test",
       "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test"
@@ -303,7 +296,8 @@ lazy val injectCore = (project in file("inject/inject-core"))
       val previous = (mappings in (Test, packageSrc)).value
       previous.filter(mappingContainsAnyPath(_, injectCoreTestJarSources))
     }
-  )
+  ).dependsOn(
+    injectSlf4j)
 
 lazy val injectModulesTestJarSources =
   Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
@@ -314,6 +308,7 @@ lazy val injectModules = (project in file("inject/inject-modules"))
     moduleName := "inject-modules",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.finagleVersion,
+      "com.twitter" %% "util-slf4j-jul-bridge" % versions.utilVersion,
       "com.twitter" %% "util-stats" % versions.utilVersion
     ),
     publishArtifact in Test := true,
@@ -335,7 +330,9 @@ lazy val injectModules = (project in file("inject/inject-modules"))
 lazy val injectAppTestJarSources =
   Seq("com/twitter/inject/app/Banner",
     "com/twitter/inject/app/EmbeddedApp",
+    "com/twitter/inject/app/modules",
     "com/twitter/inject/app/InjectionServiceModule",
+    "com/twitter/inject/app/InjectionServiceWithAnnotationModule",
     "com/twitter/inject/app/StartupTimeoutException",
     "com/twitter/inject/app/TestInjector")
 lazy val injectApp = (project in file("inject/inject-app"))
@@ -404,13 +401,15 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
     moduleName := "inject-slf4j",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
     libraryDependencies ++= Seq(
+      "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
+      "com.google.guava" % "guava" % versions.guava,
+      "com.twitter" %% "util-core" % versions.utilVersion,
+      "com.twitter" %% "util-slf4j-api" % versions.utilVersion,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
       "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
       "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
-      "org.slf4j" % "slf4j-api" % versions.slf4j
-    )
-  ).dependsOn(
-    injectCore)
+      "org.slf4j" % "slf4j-api" % versions.slf4j)
+  )
 
 lazy val injectRequestScope = (project in file("inject/inject-request-scope"))
   .settings(projectSettings)

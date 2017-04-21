@@ -4,6 +4,7 @@ import com.twitter.inject.Logging
 import org.slf4j.LoggerFactory
 import org.slf4j.bridge.SLF4JBridgeHandler
 
+@deprecated("Use com.twitter.util.logging.Slf4jBridgeUtility in util-slf4j-jul-bridge.", "2017-03-06")
 object Slf4jBridgeUtility extends Logging {
 
   private[inject] def attemptSlf4jBridgeHandlerInstallation(): Unit = {

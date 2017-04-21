@@ -14,14 +14,14 @@ Inject
 
 Modules in `inject` include:
 
-- `inject-core` - core library which defines the `TwitterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala>`__, `Injector <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala>`__, `Logging trait <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Logging.scala>`__ and the framework `Flag factory <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/app/FlagFactory.scala>`__ for defining injectable `TwitterUtil <https://github.com/twitter/util>`__ `Flags <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala>`__.
+- `inject-core` - core library which defines the `TwitterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala>`__, `Injector <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala>`__, and the framework `TwitterModuleFlags <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala>`__ for defining injectable `TwitterUtil <https://github.com/twitter/util>`__ `Flags <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala>`__.
 - `inject-modules` - core library which defines framework modules.
 - `inject-app` - core integration with `c.t.app.App <https://twitter.github.io/util/docs/com/twitter/app/App.html>`__
 - `inject-server` - core integration with `c.t.server.TwitterServer`.
 - `inject-slf4j` - core library integration with the `SLF4J <http://www.slf4j.org/manual.html>`__ API.
-- `inject-request-scope` - core library for integrating Guice's `Request Scope` with `TwitterUtil <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ `c.t.util.Future`. See the `Request Scope </http/filters.html#request-scope>`__ section for more information.
+- `inject-request-scope` - core library for integrating Guice's `Request Scope` with `TwitterUtil <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ `c.t.util.Future`. See the `Request Scope <../http/filters.html#request-scope>`__ section for more information.
 - `inject-thrift` - core library for thrift utilities useful for both clients and server.
-- `inject-thrift-client` - core library for supporting creation of a Thrift `Finagle Client <http://twitter.github.io/finagle/guide/Clients.html>`__.
+- `inject-thrift-client` - core library for supporting creation of a Thrift `Finagle Client <https://twitter.github.io/finagle/guide/Clients.html>`__.
 - `inject-utils` - core library which provides a collection of useful utilities, including implicit conversions, exceptions and futures handling and retries.
 
 Creating an injectable App or TwitterServer
@@ -86,7 +86,7 @@ Finatra's integration with `jackson-module-scala <https://github.com/FasterXML/j
 HttpClient
 ----------
 
-A simple and barebones `Finagle Client <http://twitter.github.io/finagle/guide/Clients.html>`__ for making HTTP requests.
+A simple and barebones `Finagle Client <https://twitter.github.io/finagle/guide/Clients.html>`__ for making HTTP requests.
 
 HTTP
 ----

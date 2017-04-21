@@ -1,10 +1,10 @@
 package com.twitter.finatra.json.benchmarks
 
-import com.twitter.inject.WordSpecTest
+import com.twitter.inject.Test
 
-class JsonBenchmarkTest extends WordSpecTest {
+class JsonBenchmarkTest extends Test {
 
-  "test" in {
+  test("json serde") {
     val benchmark = new JsonBenchmark()
     benchmark.finatraCustomCaseClassDeserializer()
     benchmark.jacksonScalaModuleCaseClassDeserializer()

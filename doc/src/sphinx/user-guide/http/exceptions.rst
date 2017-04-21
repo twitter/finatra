@@ -89,20 +89,6 @@ To manually add the `ExceptionMappingFilter`:
 
 Again, you can see we register the exception mapper *by type* allowing the framework to instantiate an instance.
 
-Override Default Behavior
--------------------------
-
-The `ExceptionManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala>`__ is the class that handles registration of exception mappers.
-In the example above, the `HttpRouter#exceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L45>`__ method is simply registering the given mapper
-with the `ExceptionManager`.
-
-The `ExceptionManager` is configured by the inclusion of the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`__
-as a framework module in every `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L22>`__.
-
-If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten.
-
-Thus, the last registered mapper for an exception type wins.
-
 Default Exception Mappers
 -------------------------
 
@@ -135,6 +121,23 @@ In this manner an `ExceptionMapper[Throwable]` will be the last mapper invoked a
 
 Therefore to change the framework "default" mapper, simply add a new mapper over the `Throwable` type (i.e., `ExceptionMapper[Throwable]`) to the `ExceptionManager`.
 
+Override Default Behavior
+-------------------------
+
+The `ExceptionManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala>`__ is the class that handles registration of exception mappers.
+In the example above, the `HttpRouter#exceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L45>`__ method is simply registering the given mapper
+with the `ExceptionManager`.
+
+The `ExceptionManager` is configured by the inclusion of the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`__
+as a framework module in every `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L22>`__.
+
+If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten.
+
+Thus, the last registered mapper for an exception type wins.
+
+Register an Exception Mapper
+----------------------------
+
 There are multiple ways to add a mapper.
 
 Either directly through the `HttpRouter`:
@@ -143,6 +146,7 @@ Either directly through the `HttpRouter`:
 
       override def configureHttp(router: HttpRouter): Unit = {
         router
+          .filter[ExceptionMappingFilter[Request]]
           .exceptionMapper[MyThrowableExceptionMapper]
           .exceptionMapper[OtherExceptionMapper]
       }

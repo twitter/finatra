@@ -7,5 +7,7 @@ import org.joda.time.DateTime
 private[finatra] object FinatraSerDeSimpleModule extends SimpleModule {
   addSerializer(WrappedValueSerializer)
   addSerializer(DurationMillisSerializer)
+  addSerializer(TwitterUtilDurationStringSerializer)
+  addSerializer(TwitterUtilTimeStringSerializer)
   addDeserializer(classOf[DateTime], FinatraDatetimeDeserializer)
 }

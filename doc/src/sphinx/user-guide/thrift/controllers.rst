@@ -66,7 +66,13 @@ See the `Filters <filters.html>`__ section for more information on adding filter
 
 Note, in the example above we implement the `ExampleService.BaseServiceIface#add1` method to satisfy the `ExampleService.BaseServiceIface` interface -- however, the framework will not call the `add1` method in this way as it uses the implementation of the thrift method captured by the `handle(ThriftMethod)` function (as mentioned above this in order to apply the configured filter chain to requests). Thus if you were to directly call `ExampleThriftController.add1(request)` this would by-pass any configured `filters <filters.html>`__ from the server definition.
 
-We use `override val` since the computed `ThriftMethodService <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala>`__ instance returned `is effectively constant <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L19>`__.
+Ensure you override using `val`
+-------------------------------
+
+You will see above that we use `override val` since the computed `ThriftMethodService <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala>`__ instance returned `is effectively constant <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L19>`__. However, you MUST override as a `val` when using the `handle(ThriftMethod)` function as using a `def` here will cause indeterminate behavior that will be hard to debug.
+
+Add the Controller to the Server
+--------------------------------
 
 As previously shown, the server can then be defined with this Thrift
 Controller:
@@ -91,7 +97,7 @@ Don't worry. You don't have to.
 
 The only requirement is a single class which implements the service's `BaseServiceIface`. Nothing specifies that *this* class needs to contain all of your service implementation or logic.
 
-If you want to modularize or componentize to have better separation of concerns in your code, the `BaseServiceIface` can be implemented easily to inject other services or handlers such that complicated logic can be handled in other classes as is generally good practice. E.g.,
+If you want to modularize or componentize to have a better separation of concerns in your code, your `BaseServiceIface` implementation can be easily written to inject other services or handlers such that complicated logic can be handled in other classes as is generally good practice. E.g.,
 
 .. code:: scala
 
