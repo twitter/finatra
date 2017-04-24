@@ -1,6 +1,6 @@
 name := "java-server"
 organization := "com.twitter"
-version := "2.10.0-SNAPSHOT"
+version := "2.10.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 publishMavenStyle := true
@@ -10,7 +10,7 @@ autoScalaLibrary := false
 mainClass in (Compile, packageBin) := Some("com.twitter.hello.server.HelloWorldServerMain")
 
 lazy val versions = new {
-  val finatra = "2.10.0-SNAPSHOT"
+  val finatra = "2.10.0"
   val guice = "4.0"
   val logback = "1.1.7"
 }

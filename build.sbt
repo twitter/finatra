@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
-lazy val projectVersion = "2.10.0-SNAPSHOT"
+lazy val projectVersion = "2.10.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
