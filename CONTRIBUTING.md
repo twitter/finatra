@@ -45,13 +45,30 @@ list.
 We follow the [GitHub Flow Workflow](https://guides.github.com/introduction/flow/)
 
 1.  Fork finatra 
-2.  Check out the `develop` branch 
-3.  Create a feature branch
-4.  Write code and tests for your change 
-5.  From your branch, make a pull request against `twitter/finatra/develop` 
-6.  Work with repo maintainers to get your change reviewed 
-7.  Wait for your change to be pulled into `twitter/finatra/develop`
-8.  Delete your feature branch
+1.  Check out the `develop` branch 
+1.  Create a feature branch
+1.  Write code and tests for your change 
+1.  From your branch, make a pull request against `twitter/finatra/develop` 
+1.  Work with repo maintainers to get your change reviewed 
+1.  Wait for your change to be pulled into `twitter/finatra/develop`
+1.  Delete your feature branch
+
+## Checklist
+
+There are a number of things we like to see in pull requests. Depending
+on the scope of your change, there may not be many to take care of, but
+please scan this list and see which apply. It's okay if something is missed;
+the maintainers will help out during code review.
+
+1. Include [tests](CONTRIBUTING.md#testing).
+1. Update the [changelog](CHANGELOG.md) for new features, API breakages, runtime behavior changes,
+   deprecations, and bug fixes.
+1. All public APIs should have [Scaladoc][scaladoc].
+1. When adding a constructor to an existing class or arguments to an existing
+   method, in order to preserve backwards compatibility for Java users, avoid
+   Scala's default arguments. Instead use explicit forwarding methods.
+1. The second argument of an `@deprecated` annotation should be the current
+   date, in `YYYY-MM-DD` form.
 
 ## Testing
 
@@ -64,6 +81,14 @@ to get these defaults.
 Note that while you will see a [Travis CI][travis-ci] status message in your
 pull request, all changes will also be tested internally at Twitter before being
 merged.
+
+### Property-based testing
+
+When appropriate, use [ScalaCheck][scalacheck] to write property-based
+tests for your code. This will often produce more thorough and effective
+inputs for your tests. We use ScalaTest's
+[GeneratorDrivenPropertyChecks][gendrivenprop] as the entry point for
+writing these tests.
 
 ## Compatibility
 
@@ -85,9 +110,9 @@ We take a variety of approaches to minimize this.
 
 1. Add a "compilation" unit test, written in Java, that verifies the APIs are
    usable from Java.
-2. If there is anything gnarly, we add Java adapters either by adding
+1. If there is anything gnarly, we add Java adapters either by adding
    a non-symbolic method name or by adding a class that does forwarding.
-3. Prefer `abstract` classes over `traits` as they are easier for Java
+1. Prefer `abstract` classes over `traits` as they are easier for Java
    developers to extend.
 
 ## Style
@@ -99,7 +124,7 @@ look around the codebase and see how it's done elsewhere.
 
 When creating an issue please try to ahere to the following format:
 
-    One line summary of the issue (less than 72 characters)
+    module-name: One line summary of the issue (less than 72 characters)
 
     ### Expected behavior
 
@@ -123,7 +148,7 @@ We adhere to a specific format for commit messages. Please write your commit
 messages along these guidelines. Please keep the line width no greater than 80
 columns (You can use `fmt -n -p -w 80` to accomplish this).
 
-    One line description of your change (less than 72 characters)
+    module-name: One line description of your change (less than 72 characters)
 
     Problem
 
@@ -187,6 +212,9 @@ Scaladocs. Please file an [issue](https://github.com/twitter/finatra/issues).
 [sbt]: http://www.scala-sbt.org/
 [travis-ci]: https://travis-ci.org/twitter/finatra 
 [test-trait]: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
+[scaladoc]: http://docs.scala-lang.org/style/scaladoc.html
+[scalacheck]: https://www.scalacheck.org/
+[gendrivenprop]: http://www.scalatest.org/user_guide/generator_driven_property_checks
 
 ### License 
 By contributing your code, you agree to license your contribution under the 
