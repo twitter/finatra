@@ -1,15 +1,14 @@
-name := "benchmark-server"
+name := "hello-world"
 organization := "com.twitter"
-version := "2.10.0-SNAPSHOT"
+version := "2.10.0"
 scalaVersion := "2.11.8"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.10.0-SNAPSHOT"
+  val finatra = "2.10.0"
+  val guice = "4.0"
   val logback = "1.1.7"
 }
-
-mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain")
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
@@ -20,6 +19,8 @@ assemblyMergeStrategy in assembly := {
   case "META-INF/io.netty.versions.properties" => MergeStrategy.last
   case other => MergeStrategy.defaultMergeStrategy(other)
 }
+
+Revolver.settings
 
 libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,
@@ -32,6 +33,7 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "inject-app" % versions.finatra % "test",
   "com.twitter" %% "inject-core" % versions.finatra % "test",
   "com.twitter" %% "inject-modules" % versions.finatra % "test",
+  "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test",
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test" classifier "tests",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",
