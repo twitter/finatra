@@ -4,7 +4,7 @@ import com.twitter.finagle.builder.Server
 import com.twitter.inject.Test
 import com.twitter.inject.server.PortUtils
 import com.twitter.util.Awaitable.CanAwait
-import com.twitter.util.{Time, Duration}
+import com.twitter.util.{Time, Duration, Future}
 import java.net.InetSocketAddress
 
 class PortUtilsTest extends Test {
@@ -16,7 +16,7 @@ class PortUtilsTest extends Test {
        */
       override def boundAddress = new InetSocketAddress(9999)
 
-      override protected def closeServer(deadline: Time) = ???
+      override protected def closeServer(deadline: Time): Future[Unit] = Future.Done
 
       /**
        * Support for `Await.result`. The use of the implicit permit is an
