@@ -544,6 +544,7 @@ lazy val jackson = project
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-databind" % versions.jackson,
       "com.fasterxml.jackson.datatype" % "jackson-datatype-joda" % versions.jackson,
+      "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % versions.jackson,
       "com.fasterxml.jackson.module" %% "jackson-module-scala" % versions.jackson,
       "org.scala-lang" % "scalap" % scalaVersion.value,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,

@@ -16,6 +16,9 @@ import com.twitter.finatra.json.internal.serde.{FinatraSerDeSimpleModule, LongKe
 import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
+
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+
 import scala.collection.JavaConverters._
 
 
@@ -84,6 +87,7 @@ class FinatraJacksonModule extends TwitterModule {
   /** Jackson Modules to load */
   protected def defaultJacksonModules: Seq[JacksonModule] = Seq(
     new JodaModule,
+    new JavaTimeModule,
     DefaultScalaModule,
     LongKeyDeserializers,
     FinatraSerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
