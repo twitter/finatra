@@ -7,6 +7,7 @@ java_library(
     '3rdparty/jvm/org/apache/thrift:libthrift-0.5.0',
     '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-core/src/main/scala',
+    'finagle/finagle-http/src/main/scala',
     'finagle/finagle-thrift/src/main/scala',
     'finagle/finagle-thriftmux/src/main/scala',
     'finatra/examples/java-thrift-server/thrift-example-idl',
