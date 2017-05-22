@@ -54,9 +54,7 @@ trait IntegrationTestMixin
 
   protected def hasBoundFields: Boolean = boundFields.nonEmpty
 
-  /* Private */
-
-  private lazy val mockObjects = {
+  protected lazy val mockObjects = {
     val mockUtil = new MockUtil()
     for {
       field <- boundFields
@@ -65,6 +63,16 @@ trait IntegrationTestMixin
     } yield fieldValue
   }
 
+  protected lazy val boundFields = {
+    for {
+      field <- getDeclaredFieldsRespectingInheritance(getClass)
+      if hasBindAnnotation(field)
+      _ = field.setAccessible(true)
+    } yield field
+  }
+
+  /* Private */
+
   private lazy val resettableObjects = {
     for {
       field <- boundFields
@@ -72,14 +80,6 @@ trait IntegrationTestMixin
       _ = field.setAccessible(true)
       fieldValue = field.get(this)
     } yield fieldValue.asInstanceOf[Resettable]
-  }
-
-  private lazy val boundFields = {
-    for {
-      field <- getDeclaredFieldsRespectingInheritance(getClass)
-      if hasBindAnnotation(field)
-      _ = field.setAccessible(true)
-    } yield field
   }
 
   private def hasBindAnnotation(field: Field): Boolean = {
