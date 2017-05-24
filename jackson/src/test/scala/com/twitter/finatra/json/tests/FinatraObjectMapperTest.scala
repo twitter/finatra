@@ -206,6 +206,14 @@ class FinatraObjectMapperTest extends Test with Logging {
     person should equal(steve)
   }
 
+  test("simple tests#generate then parse Either type") {
+    type T = Either[String, Int]
+    val l: T = Left("Q?")
+    val r: T = Right(42)
+    assertJson(l, """{"l":"Q?"}""")
+    assertJson(r, """{"r":42}""")
+  }
+
   test("simple tests#generate then parse nested case class") {
     val origCar = Car(1, CarMake.Ford, "Explorer", Seq(steve, steve))
     val carJson = generate(origCar)

@@ -23,6 +23,7 @@ private[finatra] class FinatraCaseClassDeserializers(
     else if (OPTION.isAssignableFrom(cls)) false
     else if (LIST.isAssignableFrom(cls)) false
     else if (cls.getName.startsWith("scala.Tuple")) false
+    else if (cls.getName.startsWith("scala.util.Either")) false
     else true
   }
 }
