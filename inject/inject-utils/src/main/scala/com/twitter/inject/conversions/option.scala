@@ -8,14 +8,14 @@ object option {
   object RichOption {
 
     //In companion so can be called from httpfuture.scala
-    def toFutureOrFail[A](option: Option[A], throwable: Throwable) = {
+    def toFutureOrFail[A](option: Option[A], throwable: => Throwable) = {
       option match {
         case Some(returnVal) => Future.value(returnVal)
         case None => Future.exception(throwable)
       }
     }
 
-    def toTryOrFail[A](option: Option[A], throwable: Throwable) = {
+    def toTryOrFail[A](option: Option[A], throwable: => Throwable) = {
       option match {
         case Some(returnVal) => Return(returnVal)
         case None => Throw(throwable)
@@ -24,20 +24,20 @@ object option {
   }
 
   implicit class RichOption[A](val self: Option[A]) extends AnyVal {
-    def toFutureOrFail(throwable: Throwable) = {
+    def toFutureOrFail(throwable: => Throwable) = {
       RichOption.toFutureOrFail(self, throwable)
     }
 
-    def toTryOrFail(throwable: Throwable): Try[A] = {
+    def toTryOrFail(throwable: => Throwable): Try[A] = {
       RichOption.toTryOrFail(self, throwable)
     }
 
-    def toFutureOrElse(orElse: A): Future[A] = self match {
+    def toFutureOrElse(orElse: => A): Future[A] = self match {
       case Some(returnVal) => Future.value(returnVal)
       case None => Future.value(orElse)
     }
 
-    def toFutureOrElse(orElse: Future[A]): Future[A] = self match {
+    def toFutureOrElse(orElse: => Future[A])(implicit dummy: DummyImplicit): Future[A] = self match {
       case Some(returnVal) => Future.value(returnVal)
       case None => orElse
     }
