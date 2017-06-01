@@ -3,7 +3,7 @@ import sbt.Keys._
 name := "web-dashboard"
 organization := "com.twitter"
 version := "2.11.0-SNAPSHOT"
-scalaVersion := "2.11.8"
+scalaVersion := "2.12.1"
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
