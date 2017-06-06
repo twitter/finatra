@@ -1,19 +1,15 @@
-import com.typesafe.sbt.SbtNativePackager._
-
-packageArchetype.java_application
-name := "hello-world-heroku"
+name := "benchmark-server"
 organization := "com.twitter"
-version := "2.11.0-SNAPSHOT"
+version := "2.11.0"
 scalaVersion := "2.12.1"
-fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.11.0-SNAPSHOT"
-  val guice = "4.0"
+  val finatra = "2.11.0"
   val logback = "1.1.7"
-  val finagleMetrics = "0.0.3"
 }
+
+mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain")
 
 resolvers ++= Seq(
   Resolver.sonatypeRepo("releases")
@@ -29,7 +25,6 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "finatra-http" % versions.finatra,
   "com.twitter" %% "finatra-httpclient" % versions.finatra,
   "ch.qos.logback" % "logback-classic" % versions.logback,
-  "com.github.rlazoti" %% "finagle-metrics" % versions.finagleMetrics,
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test",
@@ -37,7 +32,6 @@ libraryDependencies ++= Seq(
   "com.twitter" %% "inject-app" % versions.finatra % "test",
   "com.twitter" %% "inject-core" % versions.finatra % "test",
   "com.twitter" %% "inject-modules" % versions.finatra % "test",
-  "com.google.inject.extensions" % "guice-testlib" % versions.guice % "test",
 
   "com.twitter" %% "finatra-http" % versions.finatra % "test" classifier "tests",
   "com.twitter" %% "finatra-jackson" % versions.finatra % "test" classifier "tests",

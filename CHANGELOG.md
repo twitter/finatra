@@ -10,6 +10,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+### Closed
+
+## [finatra-2.11.0](https://github.com/twitter/finatra/tree/finatra-2.11.0) (2017-06-06)
+
+### Added
+
+### Changed
+
+### Fixed
+
 * finatra-jackson: Fix JSON deserialization of scala.util.Either type in FinatraObjectMapper
   for Scala 2.12. ``RB_ID=917699``
 

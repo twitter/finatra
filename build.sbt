@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
-lazy val projectVersion = "2.11.0-SNAPSHOT"
+lazy val projectVersion = "2.11.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -38,10 +38,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.44.0" + suffix
-  val scroogeVersion = "4.16.0" + suffix
-  val twitterserverVersion = "1.29.0" + suffix
-  val utilVersion = "6.43.0" + suffix
+  val finagleVersion = "6.45.0" + suffix
+  val scroogeVersion = "4.18.0" + suffix
+  val twitterserverVersion = "1.30.0" + suffix
+  val utilVersion = "6.45.0" + suffix
 
   val bijectionVersion = "0.9.5"
   val commonsCodec = "1.9"

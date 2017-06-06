@@ -3,30 +3,28 @@ import sbt.Keys._
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.11.0-SNAPSHOT"
+  val finatra = "2.11.0"
   val guice = "4.0"
   val logback = "1.1.7"
   val mockito = "1.9.5"
-  val junit = "4.12"
   val scalacheck = "1.13.4"
   val scalatest = "3.0.0"
   val specs2 = "2.4.17"
 }
 
 lazy val baseSettings = Seq(
-  version := "2.11.0-SNAPSHOT",
+  version := "2.11.0",
   scalaVersion := "2.12.1",
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   libraryDependencies ++= Seq(
     "org.mockito" % "mockito-core" % versions.mockito % "test",
     "org.scalacheck" %% "scalacheck" % versions.scalacheck % "test",
-    "org.scalatest" %% "scalatest" %  versions.scalatest  % "test",
-    "org.specs2" %% "specs2-mock" % versions.specs2 % "test",
-    "org.mockito" % "mockito-core" % versions.mockito % "test",
-    "junit" % "junit" % versions.junit % "test"
+    "org.scalatest" %% "scalatest" % versions.scalatest % "test",
+    "org.specs2" %% "specs2-mock" % versions.specs2 % "test"
   ),
   resolvers ++= Seq(
-    Resolver.sonatypeRepo("releases")
+    Resolver.sonatypeRepo("releases"),
+    "Twitter Maven" at "https://maven.twttr.com"
   ),
   fork in run := true,
   assemblyMergeStrategy in assembly := {
@@ -38,7 +36,7 @@ lazy val baseSettings = Seq(
 
 lazy val root = (project in file(".")).
   settings(
-    name := "java-thrift-server",
+    name := "thrift-server",
     organization := "com.twitter",
     moduleName := "thrift-example-root",
     run := {
@@ -52,7 +50,6 @@ lazy val thriftExampleServer = (project in file("thrift-example-server")).
   settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
-    mainClass in (Compile, run) := Some("com.twitter.calculator.CalculatorServerMain"),
     libraryDependencies ++= Seq(
       "com.twitter" %% "finatra-thrift" % versions.finatra,
       "ch.qos.logback" % "logback-classic" % versions.logback,
@@ -74,15 +71,14 @@ lazy val thriftExampleServer = (project in file("thrift-example-server")).
   dependsOn(thriftExampleIdl)
 
 lazy val thriftExampleIdl = (project in file("thrift-example-idl")).
-  settings(baseSettings).
-  settings(
-    name := "thrift-example-idl",
-    moduleName := "thrift-example-idl",
-    scroogeLanguages in Compile := Seq("java"),
-    scroogeThriftDependencies in Compile := Seq(
-      "finatra-thrift_2.11"
-    ),
-    libraryDependencies ++= Seq(
-      "com.twitter" %% "finatra-thrift" % versions.finatra
+    settings(baseSettings).
+    settings(
+      name := "thrift-example-idl",
+      moduleName := "thrift-example-idl",
+      scroogeThriftDependencies in Compile := Seq(
+        "finatra-thrift_2.11"
+      ),
+      libraryDependencies ++= Seq(
+        "com.twitter" %% "finatra-thrift" % versions.finatra
+      )
     )
-  )
