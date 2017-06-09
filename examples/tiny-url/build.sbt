@@ -3,13 +3,13 @@ import com.typesafe.sbt.SbtNativePackager._
 packageArchetype.java_application
 name := "tiny-url"
 organization := "com.twitter"
-version := "2.10.0"
-scalaVersion := "2.11.8"
+version := "2.11.0"
+scalaVersion := "2.12.1"
 fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.10.0"
+  val finatra = "2.11.0"
   val guice = "4.0"
   val logback = "1.1.7"
   val redis = "2.7.2"
@@ -52,12 +52,12 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" %  "3.0.0" % "test",
   "org.specs2" %% "specs2-mock" % "2.4.17" % "test")
 
-resourceGenerators in Compile <+=
-  (resourceManaged in Compile, name, version) map { (dir, name, ver) =>
-    val file = dir / "build.properties"
-    val buildRev = Process("git" :: "rev-parse" :: "HEAD" :: Nil).!!.trim
-    val buildName = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date)
-    val contents = "name=%s\nversion=%s\nbuild_revision=%s\nbuild_name=%s".format(name, ver, buildRev, buildName)
-    IO.write(file, contents)
-    Seq(file)
-  }
+resourceGenerators in Compile += Def.task {
+  val dir = (resourceManaged in Compile).value
+  val file = dir / "build.properties"
+  val buildRev = Process("git" :: "rev-parse" :: "HEAD" :: Nil).!!.trim
+  val buildName = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date)
+  val contents = "name=%s\nversion=%s\nbuild_revision=%s\nbuild_name=%s".format(name.value, version.value, buildRev, buildName)
+  IO.write(file, contents)
+  Seq(file)
+}.taskValue
