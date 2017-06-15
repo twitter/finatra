@@ -10,8 +10,16 @@ import com.twitter.inject.utils.RetryUtils
 import com.twitter.util.{Future, Try}
 
 /**
- * A simple HTTP client
- */
+  * A simple HTTP client.
+  *
+  * @param hostname - hostname of the destination server. set if the server requires a Host header
+  * @param httpService - [[com.twitter.finagle.Service]] that takes a
+  *                    [[com.twitter.finagle.http.Request]] and returns a
+  *                    [[com.twitter.finagle.http.Response]] future
+  * @param retryPolicy - optional retry policy if the service fails to get a successful response
+  * @param defaultHeaders - headers to add to every request
+  * @param mapper - object mapper
+  */
 class HttpClient(
   hostname: String = "",
   httpService: Service[Request, Response],
