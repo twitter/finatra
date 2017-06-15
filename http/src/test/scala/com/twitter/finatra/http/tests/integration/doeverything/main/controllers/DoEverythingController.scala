@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main.controllers
 
 import com.twitter.finagle.http.{Method, Request, Status}
-import com.twitter.finagle.{ChannelClosedException, ChannelWriteException}
+import com.twitter.finagle.{ChannelClosedException, ChannelWriteException, Failure}
 import com.twitter.finatra.annotations.CamelCaseMapper
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.exceptions._
@@ -460,6 +460,10 @@ class DoEverythingController @Inject()(
     println("SLOW ROUTE CALLED")
     Thread.sleep(9999)
     "slow"
+  }
+
+  get("/nack") { request: Request =>
+    Future.exception(Failure.rejected("overloaded!"))
   }
 
   get("/builderCreatedWithHeader") { request: Request =>

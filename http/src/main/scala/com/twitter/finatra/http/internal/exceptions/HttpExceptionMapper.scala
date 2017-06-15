@@ -15,7 +15,10 @@ class HttpExceptionMapper @Inject()(
     request: Request,
     response: ResponseBuilder,
     exception: HttpException): Response = {
-    val builder = response.status(exception.statusCode)
+    val builder = response
+      .status(exception.statusCode)
+      .headers(exception.headers:_*)
+
     if (exception.mediaType.is(MediaType.JSON_UTF_8))
       builder.json(ErrorsResponse(exception.errors))
     else

@@ -3,6 +3,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.test
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType
 import com.google.inject.{Key, TypeLiteral}
+import com.twitter.finagle.FailureFlags
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http._
@@ -849,6 +850,16 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     server.httpGet(
       "/slow",
       andExpect = Ok)
+  }
+
+  test("nack") {
+    val ff = intercept[Throwable] {
+      server.httpGet(
+        "/nack",
+        andExpect = ServiceUnavailable)
+    }
+
+    assert(FailureFlags.isFlagged(FailureFlags.Rejected)(ff))
   }
 
   test("response builder") {
