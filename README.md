@@ -36,7 +36,7 @@ Finatra is a lightweight framework for building fast, testable, scala applicatio
 
 ## Documentation
 
-To get started, see the [Getting Started](https://twitter.github.io/finatra/user-guide/getting-started/index.html) section of our [User Guide][user-guide] to get up and running. Or check out the specific sections for building [HTTP](https://twitter.github.io/finatra/user-guide/http/server.html) or [Thrift](https://twitter.github.io/finatra/user-guide/thrift/server.html) servers.
+To get started, see the [Getting Started](https://twitter.github.io/finatra/user-guide/index.html#getting-started) section of our [User Guide][user-guide] to get up and running. Or check out the specific sections for building [HTTP](https://twitter.github.io/finatra/user-guide/http/server.html) or [Thrift](https://twitter.github.io/finatra/user-guide/thrift/server.html) servers.
 
 ## Examples
 
