@@ -24,7 +24,11 @@ scala_library(
     'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala',
     'finatra/inject/inject-server/src/main/resources',
+    '3rdparty/jvm/com/fasterxml/jackson:jackson-annotations',
+    'finagle/finagle-http/src/main/scala:scala',
+    'util/util-lint/src/main/scala:scala',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
+  strict_deps=True,
 )

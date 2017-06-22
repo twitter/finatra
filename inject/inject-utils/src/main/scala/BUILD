@@ -15,7 +15,10 @@ scala_library(
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
     'finatra/inject/inject-utils/src/main/resources',
+    'finatra/inject/inject-slf4j/src/main/scala:scala',
+    '3rdparty/jvm/com/fasterxml/jackson:jackson-annotations',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
+  strict_deps=True,
 )

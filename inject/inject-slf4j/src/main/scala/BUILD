@@ -18,5 +18,6 @@ scala_library(
     exclude(org='org.clapper', name='grizzled-slf4j')
   ],
   fatal_warnings=True,
-  sources=rglobs('*.scala')
+  sources=rglobs('*.scala'),
+  strict_deps=True,
 )
