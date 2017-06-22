@@ -4,7 +4,7 @@ import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.inject.Logging
 import com.twitter.io.{Buf, Writer}
-import com.twitter.util.Future
+import com.twitter.util.{Closable, Future}
 
 object StreamingResponse {
 
@@ -21,7 +21,8 @@ object StreamingResponse {
     headers: Map[String, String] = Map(),
     prefix: Option[Buf] = None,
     separator: Option[Buf] = None,
-    suffix: Option[Buf] = None)(asyncStream: => AsyncStream[T]) = {
+    suffix: Option[Buf] = None,
+    closeOnFinish: Closable = Closable.nop)(asyncStream: => AsyncStream[T]) = {
     new StreamingResponse[T](
       status = status,
       toBuf = toBuf,
@@ -29,13 +30,15 @@ object StreamingResponse {
       prefix = prefix,
       separator = separator,
       suffix = suffix,
-      asyncStream = () => asyncStream)
+      asyncStream = () => asyncStream,
+      closeOnFinish = closeOnFinish)
   }
 
   def jsonArray[T](
     toBuf: T => Buf,
     status: Status = Status.Ok,
     headers: Map[String, String] = Map(),
+    closeOnFinish: Closable = Closable.nop,
     asyncStream: => AsyncStream[T]) = {
 
     new StreamingResponse[T](
@@ -45,7 +48,8 @@ object StreamingResponse {
       prefix = JsonArrayPrefix,
       separator = JsonArraySeparator,
       suffix = JsonArraySuffix,
-      asyncStream = () => asyncStream)
+      asyncStream = () => asyncStream,
+      closeOnFinish = closeOnFinish)
   }
 }
 
@@ -56,13 +60,14 @@ class StreamingResponse[T] private(
   prefix: Option[Buf],
   separator: Option[Buf],
   suffix: Option[Buf],
-  asyncStream: () => AsyncStream[T])
+  asyncStream: () => AsyncStream[T],
+  closeOnFinish: Closable)
   extends Logging {
 
   def toFutureFinagleResponse: Future[Response] = {
     val response = Response()
     response.setChunked(true)
-    response.setStatusCode(status.code)
+    response.statusCode = status.code
     setHeaders(headers, response)
     val writer = response.writer
 
@@ -78,7 +83,7 @@ class StreamingResponse[T] private(
       warn("Failure writing to chunked response", e)
     } ensure {
       debug("Closing chunked response")
-      response.close()
+      Closable.all(response.writer, closeOnFinish).close()
     }
 
     Future.value(response)

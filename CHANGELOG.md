@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Add close hook when constructing a StreamingResponse to allow for resource
+  release without consuming an entire AsyncStream. ``PHAB_ID=D64013``
+
 ### Fixed
 
 ### Closed
