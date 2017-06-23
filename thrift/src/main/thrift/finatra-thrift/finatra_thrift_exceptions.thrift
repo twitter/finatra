@@ -1,6 +1,7 @@
 namespace java com.twitter.finatra.thrift.thriftjava
 namespace py gen.twitter.finatra.thrift.thriftpy
 #@namespace scala com.twitter.finatra.thrift.thriftscala
+#@namespace strato com.twitter.finatra.thrift
 namespace rb FinatraThrift
 
 exception UnknownClientIdError {
