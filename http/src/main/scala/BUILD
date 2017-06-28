@@ -51,6 +51,7 @@ scala_library(
     'util/util-stats/src/main/scala',
     'finatra/http/src/main/resources',
     'finagle/finagle-base-http/src/main/scala:scala',
+    'finagle/finagle-netty3/src/main/scala:scala',
     'util/util-lint/src/main/scala:scala',
   ],
   fatal_warnings=True,

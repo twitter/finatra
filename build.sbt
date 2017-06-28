@@ -449,6 +449,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
+      "com.twitter" %% "finagle-netty3" % versions.finagleVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.finagleVersion % "test")
   ).dependsOn(
