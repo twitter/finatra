@@ -12,10 +12,9 @@ import com.twitter.util.{Future, Try}
 /**
   * A simple HTTP client.
   *
-  * @param hostname - hostname of the destination server. set if the server requires a Host header
-  * @param httpService - [[com.twitter.finagle.Service]] that takes a
-  *                    [[com.twitter.finagle.http.Request]] and returns a
-  *                    [[com.twitter.finagle.http.Response]] future
+  * @note some servers won't handle requests properly if the Host header is not set
+  * @param hostname - the hostname that will be used for the Host header. leave as default or set as "" to not set a Host header
+  * @param httpService - underlying [[com.twitter.finagle.Service]]
   * @param retryPolicy - optional retry policy if the service fails to get a successful response
   * @param defaultHeaders - headers to add to every request
   * @param mapper - object mapper
