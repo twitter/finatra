@@ -14,8 +14,8 @@ object StatTestUtils extends Matchers {
   def assertCounter(
     statsReceiver: InMemoryStatsReceiver,
     name: String,
-    expectedValue: Int) {
-    val actualValue = statsReceiver.counters.get(Seq(name)) getOrElse 0
+    expectedValue: Long) {
+    val actualValue = statsReceiver.counters.get(Seq(name)) getOrElse 0L
     actualValue should equal(expectedValue)
   }
 

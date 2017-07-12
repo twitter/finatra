@@ -290,15 +290,15 @@ class EmbeddedTwitterServer(
     }
   }
 
-  def getCounter(name: String): Int = {
+  def getCounter(name: String): Long = {
     countersMap.getOrElse(name, 0)
   }
 
-  def assertCounter(name: String, expected: Int): Unit = {
+  def assertCounter(name: String, expected: Long): Unit = {
     getCounter(name) should equal(expected)
   }
 
-  def assertCounter(name: String)(callback: Int => Boolean): Unit = {
+  def assertCounter(name: String)(callback: Long => Boolean): Unit = {
     callback(getCounter(name)) should be(true)
   }
 

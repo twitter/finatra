@@ -32,7 +32,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     Request.decodeBytes(requestBytes)
   }
 
-  def counter(key: String): Int = {
+  def counter(key: String): Long = {
     server.inMemoryStatsReceiver.counter(key.split("/"): _*)()
   }
 
