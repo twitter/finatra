@@ -40,7 +40,7 @@ The custom `UsersRequest` case class can then be used as the route callback's in
       request
     }
 
-The case class field names should match the request parameters or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__ annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/tests/json/internal/ExampleCaseClasses.scala#L141>`__).
+The case class field names should match the request parameters or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__ annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L141>`__).
 
 A `PropertyNamingStrategy <https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html>`__ can be configured to handle common name substitutions (e.g. snake\_case or camelCase). By default, snake\_case is
 used (defaults are set in `FinatraJacksonModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__).

@@ -202,7 +202,7 @@ Cookies, like Headers, are read from request and can set on the response via the
     }
 
 
-Advanced cookies are supported by creating and configuring `c.t.finagle.http.Cookie <https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Cookie.scala>`__ objects:
+Advanced cookies are supported by creating and configuring `c.t.finagle.http.Cookie <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Cookie.scala>`__ objects:
 
 .. code:: scala
 

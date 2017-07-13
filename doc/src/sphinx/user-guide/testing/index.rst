@@ -281,7 +281,7 @@ Working with Mocks
 provides `Specs2 <https://etorreborre.github.io/specs2/>`__ Mockito
 syntax sugar for `ScalaTest <http://www.scalatest.org/>`__.
 
-This is a drop-in replacement for `org.specs2.mock.Mockito <http://etorreborre.github.io/specs2/guide/SPECS2-3.0/org.specs2.guide.UseMockito.html>`__. We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures will not be propagated up as ScalaTest test failures.
+This is a drop-in replacement for `org.specs2.mock.Mockito <http://etorreborre.github.io/specs2/guide/SPECS2-3.9.1/org.specs2.guide.UseMockito.html>`__. We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures will not be propagated up as ScalaTest test failures.
 
 See the next few sections on how you can use mocks in testing with either `Override Modules`_ or using `Embedded Server #bind[T] <#embedded-server-bind-t>`__.
 
