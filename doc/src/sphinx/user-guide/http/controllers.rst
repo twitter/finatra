@@ -57,7 +57,7 @@ Here we are adding *by type* allowing the framework to handle class instantiatio
 Controllers and Routing
 -----------------------
 
-Routes are defined in a `Sinatra <http://www.sinatrarb.com/>`__-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a `c.t.finagle.http.Request <https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__ or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a `c.t.finagle.http.Response <https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Response.scala>`__.
+Routes are defined in a `Sinatra <http://www.sinatrarb.com/>`__-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a `c.t.finagle.http.Request <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__ or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a `c.t.finagle.http.Response <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala>`__.
 
 When Finatra receives an HTTP request, it will scan all registered controllers **in the order they are added** and dispatch the request to the **first matching** route starting from the top of each controller then invoking the matching route's associated callback function.
 

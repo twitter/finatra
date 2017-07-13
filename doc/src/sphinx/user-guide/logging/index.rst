@@ -40,6 +40,6 @@ trait which can be mixed into any object or class:
 
 This trait is a wrapper with some added utility over the `c.t.util.logging.Logging <https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala>`__.
 
-Scala users should prefer using the logging methods of the `c.t.inject.Logging <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Logging.scala>`__ trait (as opposed to directly accessing the Logger instance) as these methods use "call-by-name" parameters.
+Scala users should prefer using the logging methods of the `c.t.inject.Logging <https://github.com/twitter/finatra/blob/develop/inject/inject-slf4j/src/main/scala/com/twitter/inject/Logging.scala>`__ trait (as opposed to directly accessing the Logger instance) as these methods use "call-by-name" parameters.
 
 For more information see the `scaladocs <https://twitter.github.io/finatra/scaladocs/index.html#com.twitter.inject.Logging>`__ for `c.t.inject.Logging` or the `util-slf4j-api README <https://github.com/twitter/util/blob/develop/util-slf4j-api/README.md>`__.

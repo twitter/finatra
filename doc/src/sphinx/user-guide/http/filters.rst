@@ -214,7 +214,7 @@ Using `c.t.finagle.http.Request#ctx`
 
 Above we saw how to seed classes to the Finatra Request scope using a `Provider[T]`.
 
-However, we recommend *not* seeding with a request-scope `Provider[T]` but instead using Finagle's `c.t.finagle.http.Request#ctx <https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L33>`__.
+However, we recommend *not* seeding with a request-scope `Provider[T]` but instead using Finagle's `c.t.finagle.http.Request#ctx <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L33>`__.
 Internally, we generally use the `Request#ctx` over `Provider[T]` even though we use Guice extensively.
 
 To use the `Request#ctx` technique, first create a `RecordSchema <https://github.com/twitter/util/blob/develop/util-collection/src/main/scala/com/twitter/collection/RecordSchema.scala#L6>`__ `request field <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L34>`__, a context and a filter which can set the context:
