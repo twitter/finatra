@@ -15,6 +15,27 @@ object StreamingResponse {
   private val JsonArraySeparator = Some(Buf.Utf8(","))
   private val JsonArraySuffix = Some(Buf.Utf8("]"))
 
+  /**
+   * Construct a [[StreamingResponse]] from an `AsyncStream`.
+   *
+   * A [[StreamingResponse]] is useful for streaming data back to the client in chunks: data will
+   * be rendered to the client as it resolves from the `AsyncStream` while also utilizing the
+   * back-pressure mechanisms provide by the underlying transport, preventing unnecessary resource
+   * consumption for properly constructed `AsyncStream`s.
+   *
+   * @param toBuf Function for converting messages to a binary `Buf` representation.
+   * @param status Status code of the generated response.
+   * @param headers Headers for the generated response.
+   * @param prefix Optional first chunk of the response body. Note that a separator will not be
+   *               added between the prefix and the elements of the `AsyncStream`.
+   * @param separator Separator to be interleaved between each result of the `AsyncStream`.
+   * @param suffix Suffix to append to the end of the `AsyncStream`. Note that a separator will
+   *               not be included between the last stream chunk and the suffix.
+   * @param closeOnFinish A hook for cleaning up resources after completion of the rendering
+   *                      process. Note that this will be called regardless of whether rendering
+   *                      the body is successful.
+   * @param asyncStream The data that will represent the body of the response.
+   */
   def apply[T](
     toBuf: T => Buf,
     status: Status = Status.Ok,
@@ -53,6 +74,9 @@ object StreamingResponse {
   }
 }
 
+/**
+ * Representation of a streaming HTTP response based on the `AsyncStream` construct.
+ */
 class StreamingResponse[T] private(
   toBuf: T => Buf,
   status: Status,
@@ -74,8 +98,8 @@ class StreamingResponse[T] private(
     /* Orphan the future which writes to our response thread */
     (for {
       _ <- writePrefix(writer)
-      bufs = asyncStream() map toBuf
-      _ <- addSeparatorIfPresent(bufs) foreachF writer.write
+      bufs = asyncStream().map(toBuf)
+      _ <- addSeparatorIfPresent(bufs).foreachF(writer.write)
       result <- writeSuffix(writer)
     } yield result) onSuccess { r =>
       debug("Success writing to chunked response")
@@ -89,29 +113,29 @@ class StreamingResponse[T] private(
     Future.value(response)
   }
 
-  private def writePrefix(writer: Writer) = {
-    prefix map writer.write getOrElse Future.Unit
+  private[this] def writePrefix(writer: Writer): Future[Unit] =
+    writeOption(prefix, writer)
+
+  private[this] def writeSuffix(writer: Writer): Future[Unit] =
+    writeOption(suffix, writer)
+
+  private[this] def writeOption(data: Option[Buf], writer: Writer): Future[Unit] = data match {
+    case Some(data) => writer.write(data)
+    case None => Future.Unit
   }
 
-  private def writeSuffix(writer: Writer) = {
-    suffix map writer.write getOrElse Future.Unit
+  private[this] def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] = separator match {
+    case Some(sep) => addSeparator(stream, sep)
+    case None => stream
   }
 
-  private def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] = {
-    separator map { sep: Buf =>
-      addSeparator(stream, sep)
-    } getOrElse {
-      stream
-    }
-  }
-
-  private def addSeparator(stream: AsyncStream[Buf], separator: Buf): AsyncStream[Buf] = {
-    stream.take(1) ++ (stream.drop(1) map { buf =>
+  private[this] def addSeparator(stream: AsyncStream[Buf], separator: Buf): AsyncStream[Buf] = {
+    stream.take(1) ++ (stream.drop(1).map { buf =>
       separator.concat(buf)
     })
   }
 
-  private def setHeaders(headersOpt: Map[String, String], response: Response) = {
+  private[this] def setHeaders(headersOpt: Map[String, String], response: Response) = {
     for((k,v) <- headers) {
       response.headerMap.set(k, v)
     }
