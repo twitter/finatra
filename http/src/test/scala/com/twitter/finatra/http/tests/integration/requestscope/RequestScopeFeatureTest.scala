@@ -12,8 +12,8 @@ import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScope
 import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.conversions.time._
 import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
-import com.twitter.inject.utils.RetryUtils.retry
-import com.twitter.util.{Future, Return, Try}
+import com.twitter.inject.utils.RetryUtils.retryFuture
+import com.twitter.util.{Await, Future, Return}
 import java.util.concurrent.ConcurrentLinkedQueue
 import javax.inject.{Inject, Provider}
 import scala.collection.JavaConversions._
@@ -21,6 +21,8 @@ import scala.collection.JavaConversions._
 class RequestScopeFeatureTest extends FeatureTest {
 
   override val server = new EmbeddedHttpServer(new PooledServer)
+
+  def await[T](f: Future[T]): T = Await.result(f, 5.seconds.toTwitterDuration)
 
   test("request scope propagates to multiple future pools") {
     for (i <- 1 to 50) {
@@ -44,13 +46,13 @@ class RequestScopeFeatureTest extends FeatureTest {
         "Pool2 User Bob said hello",
         "Pool2 User Sally said yo").sorted
 
-      retry(constantRetry[Boolean](
+      await(retryFuture(constantRetry[Boolean](
         start = 1.second,
         numRetries = 200,
         shouldRetry = {case Return(expectedMatches) => !expectedMatches})) {
 
-        FuturePooledController.msgLog.toSeq.sorted == expectedMsgs
-      } should be(Try(true))
+        Future.value(FuturePooledController.msgLog.toSeq.sorted == expectedMsgs)
+      }) should be(true)
 
       FuturePooledController.msgLog.clear()
     }
