@@ -8,16 +8,12 @@ import com.twitter.inject.server.FeatureTest
 
 class GreetingControllerIntegrationTest extends FeatureTest {
 
-  override val server = new EmbeddedHttpServer(
-    new GreetingServer)
+  override val server = new EmbeddedHttpServer(new GreetingServer)
 
   val requestPath = "/greet?name=Bob"
 
   test("get English greeting") {
-    server.httpGet(
-      path = requestPath,
-      andExpect = Status.Ok,
-      withBody = "Hello Bob")
+    server.httpGet(path = requestPath, andExpect = Status.Ok, withBody = "Hello Bob")
   }
 
   test("get Spanish greeting") {
@@ -25,7 +21,8 @@ class GreetingControllerIntegrationTest extends FeatureTest {
       path = requestPath,
       headers = Map("Accept-Language" -> "es"),
       andExpect = Status.Ok,
-      withBody = "Hola Bob")
+      withBody = "Hola Bob"
+    )
   }
 
   test("get English json greeting") {
@@ -33,7 +30,8 @@ class GreetingControllerIntegrationTest extends FeatureTest {
       path = requestPath,
       accept = MediaType.JSON_UTF_8,
       andExpect = Status.Ok,
-      withJsonBody = """{ "greeting" : "Hello Bob" }""")
+      withJsonBody = """{ "greeting" : "Hello Bob" }"""
+    )
   }
 
   test("get Spanish json greeting") {
@@ -42,6 +40,7 @@ class GreetingControllerIntegrationTest extends FeatureTest {
       accept = MediaType.JSON_UTF_8,
       headers = Map("Accept-Language" -> "es"),
       andExpect = Status.Ok,
-      withJsonBody = """{ "greeting" : "Hola Bob" }""")
+      withJsonBody = """{ "greeting" : "Hola Bob" }"""
+    )
   }
 }

@@ -10,9 +10,6 @@ class Add1ServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedHttpServer(new Add1Server)
 
   test("add1") {
-    server.httpGet(
-      "/add1?num=5",
-      andExpect = Status.Ok,
-      withBody = "6")
+    server.httpGet("/add1?num=5", andExpect = Status.Ok, withBody = "6")
   }
 }

@@ -16,8 +16,8 @@ class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
       MessageBodyModule,
       FinatraJacksonModule,
       MustacheModule,
-      InMemoryStatsReceiverModule)
-    .create
+      InMemoryStatsReceiverModule
+    ).create
 
   test("ThrowableExceptionMapper#unwrap Failure") {
     val failureExceptionMapper = injector.instance[FailureExceptionMapper]
@@ -29,7 +29,9 @@ class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
       failureExceptionMapper.toResponse(request, failure)
     }
 
-    cancelledRequestExceptionMapper.toResponse(request, e).status should be(Status.ClientClosedRequest)
+    cancelledRequestExceptionMapper.toResponse(request, e).status should be(
+      Status.ClientClosedRequest
+    )
   }
 
   test("ThrowableExceptionMapper#unwrap nested Failure") {
@@ -42,7 +44,9 @@ class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
       failureExceptionMapper.toResponse(request, failure).status
     }
 
-    cancelledRequestExceptionMapper.toResponse(request, e).status should be(Status.ClientClosedRequest)
+    cancelledRequestExceptionMapper.toResponse(request, e).status should be(
+      Status.ClientClosedRequest
+    )
   }
 
   test("ThrowableExceptionMapper#handle Failure without cause") {
@@ -55,14 +59,17 @@ class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
   test("ThrowableExceptionMapper#handle pathological Failure (greater than MaxDepth)") {
     val failureExceptionMapper = injector.instance[FailureExceptionMapper]
 
-    val failure = Failure(Failure(Failure(Failure(Failure(Failure(new CancelledRequestException()))))))
+    val failure =
+      Failure(Failure(Failure(Failure(Failure(Failure(new CancelledRequestException()))))))
     failureExceptionMapper.toResponse(request, failure).status should be(Status.InternalServerError)
   }
 
   test("ThrowableExceptionMapper#handle 'unhandled' exception") {
     val throwableExceptionMapper = injector.instance[ThrowableExceptionMapper]
 
-    throwableExceptionMapper.toResponse(request, new Throwable("NO REASON")).status should be(Status.InternalServerError)
+    throwableExceptionMapper.toResponse(request, new Throwable("NO REASON")).status should be(
+      Status.InternalServerError
+    )
   }
 
   def request: Request = {

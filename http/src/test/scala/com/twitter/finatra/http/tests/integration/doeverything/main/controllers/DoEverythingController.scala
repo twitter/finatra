@@ -11,9 +11,17 @@ import com.twitter.finatra.http.request.{HttpForward, RequestUtils}
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter, IdentityFilter}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
+  AppendToHeaderFilter,
+  ForbiddenFilter,
+  IdentityFilter
+}
 import com.twitter.finatra.http.tests.integration.doeverything.main.jsonpatch._
-import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
+import com.twitter.finatra.http.tests.integration.doeverything.main.services.{
+  ComplexServiceFactory,
+  DoEverythingService,
+  MultiService
+}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestCaseClassWithLocalDate
 import com.twitter.finatra.request.{QueryParam, RouteParam}
@@ -37,8 +45,8 @@ class DoEverythingController @Inject()(
   @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
   jsonPatchOperator: JsonPatchOperator,
   forward: HttpForward,
-  mustacheService: MustacheService)
-  extends Controller {
+  mustacheService: MustacheService
+) extends Controller {
 
   private val flakyCount = new AtomicInteger()
   private val helloWorldText = "Hello, World!"
@@ -68,11 +76,11 @@ class DoEverythingController @Inject()(
       "ok!"
     }
 
-    filter(new AppendToHeaderFilter("appended" , "1")).
-      filter(new AppendToHeaderFilter("appended" , "2")).
-      get("/appendMultiplePrefixed") { request: Request =>
+    filter(new AppendToHeaderFilter("appended", "1"))
+      .filter(new AppendToHeaderFilter("appended", "2"))
+      .get("/appendMultiplePrefixed") { request: Request =>
         request.headerMap("appended")
-    }
+      }
 
     filter(new AppendToHeaderFilter("freestyle", "bang")) {
       get("/freestyleWithHeader") { request: Request =>
@@ -92,7 +100,7 @@ class DoEverythingController @Inject()(
   }
 
   filter[ForbiddenFilter].prefix("/1.1") {
-    get("/forbiddenByFilterPrefilter"){ request: Request =>
+    get("/forbiddenByFilterPrefilter") { request: Request =>
       "ok!"
     }
   }
@@ -154,7 +162,8 @@ class DoEverythingController @Inject()(
       id = request.params("id"),
       name = "bob",
       magic = magicNum,
-      moduleMagic = moduleMagicNum)
+      moduleMagic = moduleMagicNum
+    )
   }
 
   get("/routeParamGetAll/:id") { request: Request =>
@@ -183,17 +192,11 @@ class DoEverythingController @Inject()(
   }
 
   post("/formPostView") { formPost: FormPostRequest =>
-    TestUserView(
-      formPost.age,
-      formPost.name,
-      Seq("user1", "user2"))
+    TestUserView(formPost.age, formPost.name, Seq("user1", "user2"))
   }
 
   get("/getView") { request: Request =>
-    TestUserView(
-      request.params.getInt("age").get,
-      request.params("name"),
-      Seq("user1", "user2"))
+    TestUserView(request.params.getInt("age").get, request.params("name"), Seq("user1", "user2"))
   }
 
   post("/echo") { request: Request =>
@@ -201,29 +204,24 @@ class DoEverythingController @Inject()(
   }
 
   post("/formPostViewFromBuilderView") { formPost: FormPostRequest =>
-    response.ok.view(
-      "testuser2.mustache",
-      TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
+    response.ok
+      .view("testuser2.mustache", TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
   post("/formPostViewFromBuilderHtml") { formPost: FormPostRequest =>
-    response.ok.html(
-      TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
+    response.ok.html(TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
   post("/formPostViewFromBuilderCreatedView") { formPost: FormPostRequest =>
-    response.created.
-      location("/foo/1").
-      view(
-        "testuser2.mustache",
-        TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
+    response.created
+      .location("/foo/1")
+      .view("testuser2.mustache", TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
   post("/formPostViewFromBuilderCreatedHtml") { formPost: FormPostRequest =>
-    response.created.
-      location("/foo/1").
-      html(
-        TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
+    response.created
+      .location("/foo/1")
+      .html(TestUserView(formPost.age, formPost.name, Seq("user1", "user2")))
   }
 
   post("/formPostMultipart") { request: Request =>
@@ -359,9 +357,7 @@ class DoEverythingController @Inject()(
   }
 
   get("/index/:*") { request: Request =>
-    response.ok.fileOrIndex(
-      request.params("*"),
-      "testindex.html")
+    response.ok.fileOrIndex(request.params("*"), "testindex.html")
   }
 
   get("/null") { request: Request =>
@@ -373,7 +369,7 @@ class DoEverythingController @Inject()(
   }
 
   get("/unit") { request: Request =>
-  }
+    }
 
   get("/exception") { request: Request =>
     throw new Exception("bad")
@@ -467,12 +463,8 @@ class DoEverythingController @Inject()(
   }
 
   get("/builderCreatedWithHeader") { request: Request =>
-    response.
-      created.
-      header("a", "b").
-      header("Location", "http://foo.com/1")
+    response.created.header("a", "b").header("Location", "http://foo.com/1")
   }
-
 
   get("/requestInjectionsNotFound") { request: RequestWithNotFoundInjections =>
     request.fooClass
@@ -576,7 +568,12 @@ class DoEverythingController @Inject()(
   }
 
   patch("/jsonPatch/nonleaf") { jsonPatch: JsonPatch =>
-    val testCase = RootCaseClass(DuoCaseClass(DuoStringCaseClass("left-left", "left-right"), DuoStringCaseClass("right-left", "right-right")))
+    val testCase = RootCaseClass(
+      DuoCaseClass(
+        DuoStringCaseClass("left-left", "left-right"),
+        DuoStringCaseClass("right-left", "right-right")
+      )
+    )
     val originalJson = jsonPatchOperator.toJsonNode(testCase)
     JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
   }
@@ -588,13 +585,14 @@ class DoEverythingController @Inject()(
   }
 
   patch("/jsonPatch/nestedSeqCaseClass") { jsonPatch: JsonPatch =>
-    val testCase = NestedSeqCaseClass(animalFamilies = Seq(
-      AnimalFamily(name = "ursidae", animals = Seq("grizzly", "polar"))
-    ))
+    val testCase = NestedSeqCaseClass(
+      animalFamilies = Seq(
+        AnimalFamily(name = "ursidae", animals = Seq("grizzly", "polar"))
+      )
+    )
     val originalJson = jsonPatchOperator.toJsonNode(testCase)
     JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
   }
-
 
   patch("/echo") { request: Request =>
     response.ok(request.contentString)
@@ -786,26 +784,24 @@ class DoEverythingController @Inject()(
     .filter(new AppendToHeaderFilter("test", "4"))
     .filter[IdentityFilter]
     .get("/multiFilterAppend") { request: Request =>
-    request.headerMap("test")
-  }
+      request.headerMap("test")
+    }
 
   filter[IdentityFilter]
     .filter[IdentityFilter]
     .filter[IdentityFilter]
     .get("/multiIdentityFilterAppend") { request: Request =>
-    "ok!"
-  }
+      "ok!"
+    }
 
   get("/testClassWithHtml") { r: Request =>
-    val testUser = TestUserView(
-      28,
-      "Bob Smith",
-      Seq("user1", "user2"))
+    val testUser = TestUserView(28, "Bob Smith", Seq("user1", "user2"))
 
     TestCaseClassWithHtml(
       address = "123 Main St. Anywhere, CA US 90210",
       phone = "+12221234567",
-      renderedHtml = xml.Utility.escape(mustacheService.createString("testHtml.mustache", testUser)))
+      renderedHtml = xml.Utility.escape(mustacheService.createString("testHtml.mustache", testUser))
+    )
   }
 
   get("/non_case_class") { r: Request =>
@@ -835,14 +831,11 @@ class DoEverythingController @Inject()(
   }
 }
 
-case class MultipleInjectableValueParams(
-  @RouteParam @QueryParam id: String)
+case class MultipleInjectableValueParams(@RouteParam @QueryParam id: String)
 
-case class CaseClassWithRequestField(
-  request: Request)
+case class CaseClassWithRequestField(request: Request)
 
-case class ClassWithQueryParamDateTime(
-  @QueryParam dateTime: DateTime)
+case class ClassWithQueryParamDateTime(@QueryParam dateTime: DateTime)
 
 class NonCaseClass {
   val name = "Bob"

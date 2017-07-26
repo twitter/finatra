@@ -10,9 +10,7 @@ import com.twitter.io.Buf
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class TweetsController @Inject()(
-  tweetsRepository: TweetsRepository)
-  extends Controller {
+class TweetsController @Inject()(tweetsRepository: TweetsRepository) extends Controller {
 
   get("/tweets/hello") { request: Request =>
     "hello world"
@@ -21,14 +19,13 @@ class TweetsController @Inject()(
   post("/tweets/") { tweet: Tweet =>
     "tweet with id " + tweet.id + " is valid"
   }
-  
+
   post("/tweets/streaming") { ids: AsyncStream[Long] =>
     tweetsRepository.getByIds(ids)
   }
 
   get("/tweets/streaming_json") { request: Request =>
-    tweetsRepository.getByIds(
-      AsyncStream(0, 1, 2, 3, 4, 5))
+    tweetsRepository.getByIds(AsyncStream(0, 1, 2, 3, 4, 5))
   }
 
   get("/tweets/streaming_custom_tobuf") { request: Request =>
@@ -41,7 +38,8 @@ class TweetsController @Inject()(
     val headers = Map(
       Fields.ContentType -> "text/event-stream;charset=UTF-8",
       Fields.CacheControl -> "no-cache, no-store, max-age=0, must-revalidate",
-      Fields.Pragma -> "no-cache")
+      Fields.Pragma -> "no-cache"
+    )
 
     StreamingResponse(Buf.Utf8.apply, Status.Created, headers) {
       AsyncStream("A", "B", "C")

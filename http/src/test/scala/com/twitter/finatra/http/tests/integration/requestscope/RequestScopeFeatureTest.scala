@@ -8,7 +8,11 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
 import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.TwitterModule
-import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter, RequestScopeBinding}
+import com.twitter.inject.requestscope.{
+  FinagleRequestScope,
+  FinagleRequestScopeFilter,
+  RequestScopeBinding
+}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.conversions.time._
 import com.twitter.inject.utils.RetryPolicyUtils.constantRetry
@@ -30,13 +34,15 @@ class RequestScopeFeatureTest extends FeatureTest {
         "/hi?msg=hello",
         headers = Map("Username" -> "Bob"),
         andExpect = Ok,
-        withBody = "Hello Bob who said hello")
+        withBody = "Hello Bob who said hello"
+      )
 
       server.httpGet(
         "/hi?msg=yo",
         headers = Map("Username" -> "Sally"),
         andExpect = Ok,
-        withBody = "Hello Sally who said yo")
+        withBody = "Hello Sally who said yo"
+      )
 
       val expectedMsgs = Seq(
         "User Bob said hello",
@@ -44,12 +50,12 @@ class RequestScopeFeatureTest extends FeatureTest {
         "Pool1 User Bob said hello",
         "Pool1 User Sally said yo",
         "Pool2 User Bob said hello",
-        "Pool2 User Sally said yo").sorted
+        "Pool2 User Sally said yo"
+      ).sorted
 
-      await(retryFuture(constantRetry[Boolean](
-        start = 1.second,
-        numRetries = 200,
-        shouldRetry = {case Return(expectedMatches) => !expectedMatches})) {
+      await(retryFuture(constantRetry[Boolean](start = 1.second, numRetries = 200, shouldRetry = {
+        case Return(expectedMatches) => !expectedMatches
+      })) {
 
         Future.value(FuturePooledController.msgLog.toSeq.sorted == expectedMsgs)
       }) should be(true)
@@ -62,12 +68,10 @@ class RequestScopeFeatureTest extends FeatureTest {
   }
 }
 
-
 /* ==================================================== */
 /* Request Scope Filter */
-class TestUserRequestScopeFilter @Inject()(
-  requestScope: FinagleRequestScope)
-  extends SimpleFilter[Request, Response] {
+class TestUserRequestScopeFilter @Inject()(requestScope: FinagleRequestScope)
+    extends SimpleFilter[Request, Response] {
 
   override def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
     val username = request.headerMap.get("Username").get
@@ -96,9 +100,7 @@ object FuturePooledController {
   val pool2 = FuturePools.unboundedPool("FuturePooledController 2")
 }
 
-class FuturePooledController @Inject()(
-  testUserProvider: Provider[TestUser])
-  extends Controller {
+class FuturePooledController @Inject()(testUserProvider: Provider[TestUser]) extends Controller {
 
   get("/hi") { request: Request =>
     val msg = request.params("msg")

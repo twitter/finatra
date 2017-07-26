@@ -12,7 +12,8 @@ class FlagsModuleTest extends Test {
 
   val flag = new Flags("FlagsModuleTest", includeGlobal = false, failFastUntilParsed = false)
   val myFlag = flag[String]("my.flag", "This flag has no default")
-  val myFlagWithDefault = flag("my.flag.with.default", "default value", "this flag has a default value")
+  val myFlagWithDefault =
+    flag("my.flag.with.default", "default value", "this flag has a default value")
   flag.parseArgs(Array())
   val flagsModule = FlagsModule.create(flag.getAll(includeGlobal = false).toSeq)
 

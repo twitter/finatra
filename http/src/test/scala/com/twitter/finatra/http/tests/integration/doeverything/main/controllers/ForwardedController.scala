@@ -34,7 +34,7 @@ class ForwardedController extends Controller {
     "This works."
   }
 
-  head("/forwarded/head")  { _: Request =>
+  head("/forwarded/head") { _: Request =>
     response.ok
   }
 

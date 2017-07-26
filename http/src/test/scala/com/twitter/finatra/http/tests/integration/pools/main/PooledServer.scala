@@ -8,10 +8,10 @@ import com.twitter.finatra.http.routing.HttpRouter
 class PooledServer extends HttpServer {
 
   override def configureHttp(router: HttpRouter) {
-    router.
-      filter[LoggingMDCFilter[Request, Response]].
-      filter[TraceIdMDCFilter[Request, Response]].
-      filter[CommonFilters].
-      add[PooledController]
+    router
+      .filter[LoggingMDCFilter[Request, Response]]
+      .filter[TraceIdMDCFilter[Request, Response]]
+      .filter[CommonFilters]
+      .add[PooledController]
   }
 }

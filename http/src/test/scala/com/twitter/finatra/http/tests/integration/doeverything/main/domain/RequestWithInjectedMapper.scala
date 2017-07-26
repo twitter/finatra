@@ -6,4 +6,5 @@ import javax.inject.Inject
 
 case class RequestWithInjectedMapper(
   @Inject mapper: FinatraObjectMapper,
-  @QueryParam foo: Option[String])
+  @QueryParam foo: Option[String]
+)

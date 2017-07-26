@@ -5,4 +5,5 @@ import com.twitter.finatra.validation.Size
 
 case class TestUserWithGroupIdFromRoute(
   @RouteParam groupId: Long,
-  @Size(min = 2, max = 20) name: String)
+  @Size(min = 2, max = 20) name: String
+)

@@ -7,4 +7,5 @@ import org.joda.time.DateTime
 case class UsersRequest(
   @Max(100) @QueryParam max: Int,
   @PastTime @QueryParam startDate: Option[DateTime],
-  @QueryParam verbose: Boolean = false)
+  @QueryParam verbose: Boolean = false
+)

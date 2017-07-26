@@ -5,9 +5,7 @@ import com.twitter.finatra.utils.Credentials
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 
-class InMemoryCredentialsModule(
-  credentials: Map[String, String])
-  extends TwitterModule {
+class InMemoryCredentialsModule(credentials: Map[String, String]) extends TwitterModule {
 
   @Singleton
   @Provides

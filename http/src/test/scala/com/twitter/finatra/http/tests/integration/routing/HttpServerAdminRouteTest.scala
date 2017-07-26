@@ -9,24 +9,23 @@ import com.twitter.inject.Test
 class HttpServerAdminRouteTest extends Test {
 
   test("Server#not allow conflicting admin routes") {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new HttpServer {
-        override protected def configureHttp(router: HttpRouter) = {
-          router.add(new Controller {
-            get("/healthy", name = "Health", admin = true) { request: Request =>
-              response.ok("OK\n")
-            }
+    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
+      override protected def configureHttp(router: HttpRouter) = {
+        router.add(new Controller {
+          get("/healthy", name = "Health", admin = true) { request: Request =>
+            response.ok("OK\n")
+          }
 
-            get("/quitquitquit", name = "Quit", admin = true) { request: Request =>
-              response.ok("go away")
-            }
+          get("/quitquitquit", name = "Quit", admin = true) { request: Request =>
+            response.ok("go away")
+          }
 
-            post("/abortabortabort", admin = true) { request: Request =>
-              response.ok("go away now")
-            }
-          })
-        }
-      })
+          post("/abortabortabort", admin = true) { request: Request =>
+            response.ok("go away now")
+          }
+        })
+      }
+    })
 
     try {
       // defines overlapping admin route paths
@@ -39,59 +38,60 @@ class HttpServerAdminRouteTest extends Test {
   }
 
   test("Server#properly add routes to admin index") {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new HttpServer {
-        override protected def configureHttp(router: HttpRouter) = {
-          router.add(new Controller {
-            get("/admin/finatra/stuff/:id",
-              admin = true,
-              index = Some(RouteIndex(alias = "", group = "Finatra"))) { request: Request =>
-              response.ok.json(request.params("id"))
-            }
+    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
+      override protected def configureHttp(router: HttpRouter) = {
+        router.add(new Controller {
+          get(
+            "/admin/finatra/stuff/:id",
+            admin = true,
+            index = Some(RouteIndex(alias = "", group = "Finatra"))
+          ) { request: Request =>
+            response.ok.json(request.params("id"))
+          }
 
-            get("/admin/finatra/foo",
-              index = Some(RouteIndex(alias = "", group = "Finatra"))) { request: Request =>
+          get("/admin/finatra/foo", index = Some(RouteIndex(alias = "", group = "Finatra"))) {
+            request: Request =>
               response.ok.json("bar")
-            }
+          }
 
-            post("/admin/resource", admin = true) { request: Request =>
-              response.ok("affirmative")
-            }
+          post("/admin/resource", admin = true) { request: Request =>
+            response.ok("affirmative")
+          }
 
-            get("/admin/thisisacustompath",
-              admin = true,
-              index = Some(
-                RouteIndex(
-                  alias = "Custom",
-                  group = "My Service"))) { request: Request =>
-              response.ok.json("pong")
-            }
+          get(
+            "/admin/thisisacustompath",
+            admin = true,
+            index = Some(RouteIndex(alias = "Custom", group = "My Service"))
+          ) { request: Request =>
+            response.ok.json("pong")
+          }
 
-            get("/admin/externalroute") { request: Request =>
-              response.ok.json("external")
-            }
+          get("/admin/externalroute") { request: Request =>
+            response.ok.json("external")
+          }
 
-            post("/special/admin/route", admin = true) { request: Request =>
-              response.created.location("/special/admin/foo")
-            }
+          post("/special/admin/route", admin = true) { request: Request =>
+            response.created.location("/special/admin/foo")
+          }
 
-            get("/another/admin/route",
-              admin = true,
-              index = Some(
-                RouteIndex(
-                  alias = "Special",
-                  group = "My Service"))) { request: Request =>
-              response.ok("pong")
-            }
+          get(
+            "/another/admin/route",
+            admin = true,
+            index = Some(RouteIndex(alias = "Special", group = "My Service"))
+          ) { request: Request =>
+            response.ok("pong")
+          }
 
-            post("/admin/finatra/ok/computer",
-              admin = true,
-              index = Some(RouteIndex(alias = "", group = "Finatra"))) { request: Request =>
-              response.ok("roger.")
-            }
-          })
-        }
-      })
+          post(
+            "/admin/finatra/ok/computer",
+            admin = true,
+            index = Some(RouteIndex(alias = "", group = "Finatra"))
+          ) { request: Request =>
+            response.ok("roger.")
+          }
+        })
+      }
+    })
 
     try {
       server.start()
@@ -100,7 +100,9 @@ class HttpServerAdminRouteTest extends Test {
       server.adminHttpServerRoutes.map(_.path).contains("/admin/finatra/stuff/:id") should be(false)
 
       // POST /admin/finatra/ok/computer constant route should not be added
-      server.adminHttpServerRoutes.map(_.path).contains("/admin/finatra/ok/computer") should be(false)
+      server.adminHttpServerRoutes.map(_.path).contains("/admin/finatra/ok/computer") should be(
+        false
+      )
 
       // GET /admin/finatra/foo constant route should not be added (starts with /admin/finatra so won't be in the HttpMuxer)
       server.adminHttpServerRoutes.map(_.path).contains("/admin/finatra/foo") should be(false)
@@ -140,16 +142,15 @@ class HttpServerAdminRouteTest extends Test {
   test("Server#Add HttpMuxer handler for /admin/finatra and non-constant or non-GET routes") {
     // if we only add non-constant routes to the admin there should still be a handler
     // registered on the HttpMuxer
-    val server = new EmbeddedHttpServer(
-      twitterServer = new HttpServer {
-        override protected def configureHttp(router: HttpRouter) = {
-          router.add(new Controller {
-            get("/admin/finatra/prefix/resource/:id") { request: Request =>
-              response.ok.json(request.params("id"))
-            }
-          })
-        }
-      })
+    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
+      override protected def configureHttp(router: HttpRouter) = {
+        router.add(new Controller {
+          get("/admin/finatra/prefix/resource/:id") { request: Request =>
+            response.ok.json(request.params("id"))
+          }
+        })
+      }
+    })
 
     try {
       server.start()
@@ -162,16 +163,15 @@ class HttpServerAdminRouteTest extends Test {
   }
 
   test("Server#Non-constant admin route does not start") {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new HttpServer {
-        override protected def configureHttp(router: HttpRouter) = {
-          router.add(new Controller {
-            get("/prefix/resource/:id", admin = true) { request: Request =>
-              response.ok.json(request.params("id"))
-            }
-          })
-        }
-      })
+    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
+      override protected def configureHttp(router: HttpRouter) = {
+        router.add(new Controller {
+          get("/prefix/resource/:id", admin = true) { request: Request =>
+            response.ok.json(request.params("id"))
+          }
+        })
+      }
+    })
 
     try {
       // non-constant admin routes not supported
@@ -184,51 +184,55 @@ class HttpServerAdminRouteTest extends Test {
   }
 
   test("Server#Similar paths but differing Http Methods") {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new HttpServer {
-        override protected def configureHttp(router: HttpRouter) = {
-          router.add(new Controller {
+    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
+      override protected def configureHttp(router: HttpRouter) = {
+        router.add(new Controller {
 
-            post("/foo/bar") { request: Request =>
-              response.ok.location("baz")
-            }
+          post("/foo/bar") { request: Request =>
+            response.ok.location("baz")
+          }
 
-            get("/foo/bar", admin = true) { request: Request =>
-              "baz"
-            }
+          get("/foo/bar", admin = true) { request: Request =>
+            "baz"
+          }
 
-            post("/great/work", admin = true) { request: Request =>
-              "this is an admin POST route"
-            }
+          post("/great/work", admin = true) { request: Request =>
+            "this is an admin POST route"
+          }
 
-            get("/great/work") { request: Request =>
-              "this is an external GET route"
-            }
-          })
-        }
-      })
+          get("/great/work") { request: Request =>
+            "this is an external GET route"
+          }
+        })
+      }
+    })
 
     try {
       server.start()
 
-      server.adminHttpServerRoutes.map(_.path).contains("/foo/bar") should be(true) // a route with the path is there
-      server.adminHttpServerRoutes.exists(route => route.path == "/foo/bar" && route.method == Method.Get) should be(true) // however, we should also check the Method
-      server.adminHttpServerRoutes.exists(route => route.path == "/foo/bar" && route.method == Method.Post) should be(false) // in this case, the path with a Post does not exist
+      server.adminHttpServerRoutes
+        .map(_.path)
+        .contains("/foo/bar") should be(true) // a route with the path is there
+      server.adminHttpServerRoutes.exists(
+        route => route.path == "/foo/bar" && route.method == Method.Get
+      ) should be(true) // however, we should also check the Method
+      server.adminHttpServerRoutes.exists(
+        route => route.path == "/foo/bar" && route.method == Method.Post
+      ) should be(false) // in this case, the path with a Post does not exist
 
-      server.adminHttpServerRoutes.map(_.path).contains("/great/work") should be(true) // a route with the path is there
-      server.adminHttpServerRoutes.exists(route => route.path == "/great/work" && route.method == Method.Post) should be(true) // however, we should also check the Method
-      server.adminHttpServerRoutes.exists(route => route.path == "/great/work" && route.method == Method.Get) should be(false) // in this case, the path with a Get does not exist
+      server.adminHttpServerRoutes
+        .map(_.path)
+        .contains("/great/work") should be(true) // a route with the path is there
+      server.adminHttpServerRoutes.exists(
+        route => route.path == "/great/work" && route.method == Method.Post
+      ) should be(true) // however, we should also check the Method
+      server.adminHttpServerRoutes.exists(
+        route => route.path == "/great/work" && route.method == Method.Get
+      ) should be(false) // in this case, the path with a Get does not exist
 
-      server.httpPost(
-        "/foo/bar",
-        "",
-        andExpect = Status.Ok,
-        withLocation = "baz")
+      server.httpPost("/foo/bar", "", andExpect = Status.Ok, withLocation = "baz")
 
-      server.httpGet(
-        "/foo/bar",
-        andExpect = Status.Ok,
-        withBody = "baz")
+      server.httpGet("/foo/bar", andExpect = Status.Ok, withBody = "baz")
 
     } finally {
       server.close()

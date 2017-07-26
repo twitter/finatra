@@ -13,11 +13,11 @@ class SampleAppIntegrationTest extends Test {
   }
 
   test("exception in App#run() throws") {
-    val app = new EmbeddedApp(
-      new SampleApp {
-        override protected def run(): Unit = {
-          throw new RuntimeException("FORCED EXCEPTION")
-        }})
+    val app = new EmbeddedApp(new SampleApp {
+      override protected def run(): Unit = {
+        throw new RuntimeException("FORCED EXCEPTION")
+      }
+    })
 
     intercept[Exception] {
       app.main()

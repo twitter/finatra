@@ -2,7 +2,11 @@ package com.twitter.finatra.http.tests.exceptions
 
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finatra.http.exceptions.{ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
+import com.twitter.finatra.http.exceptions.{
+  ExceptionManager,
+  ExceptionMapper,
+  ExceptionMapperCollection
+}
 import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.app.TestInjector
@@ -12,14 +16,10 @@ import org.apache.commons.lang.RandomStringUtils
 class ExceptionManagerTest extends Test {
 
   def newExceptionManager =
-    new ExceptionManager(
-      TestInjector().create,
-      new InMemoryStatsReceiver)
+    new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
 
   lazy val collectionExceptionManager =
-    new ExceptionManager(
-      TestInjector().create,
-      new InMemoryStatsReceiver)
+    new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
 
   def randomUri = {
     val version = s"${RandomStringUtils.randomNumeric(1)}.${RandomStringUtils.randomNumeric(1)}"
@@ -50,7 +50,8 @@ class ExceptionManagerTest extends Test {
   def testException(
     e: Throwable,
     status: Status,
-    manager: ExceptionManager = exceptionManager): Unit = {
+    manager: ExceptionManager = exceptionManager
+  ): Unit = {
     val request = RequestBuilder.get(randomUri)
     val response = manager.toResponse(request, e)
     response.status should equal(status)

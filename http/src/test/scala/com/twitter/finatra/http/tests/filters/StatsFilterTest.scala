@@ -22,8 +22,7 @@ class StatsFilterTest extends Test {
       Await.ready(statsFilter.apply(request, service))
       statsReceiver.counters.get(List("status", "5XX")) should equal(Some(1))
       statsReceiver.counters.get(List("status", "500")) should equal(Some(1))
-    }
-    finally {
+    } finally {
       service.close()
     }
   }

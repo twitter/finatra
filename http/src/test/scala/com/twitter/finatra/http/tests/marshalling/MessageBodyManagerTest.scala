@@ -13,11 +13,7 @@ class MessageBodyManagerTest extends Test with Mockito {
 
   val request = mock[Request]
   val injector =
-    TestInjector(
-      MessageBodyModule,
-      FinatraJacksonModule,
-      MustacheModule)
-    .create
+    TestInjector(MessageBodyModule, FinatraJacksonModule, MustacheModule).create
 
   val messageBodyManager = injector.instance[MessageBodyManager]
   messageBodyManager.add[DogMessageBodyReader]()
@@ -60,7 +56,7 @@ class DogMessageBodyReader extends MessageBodyReader[Dog] {
 }
 
 class FatherMessageBodyReader extends MessageBodyReader[Father] {
-  override def parse[M <: Father : Manifest](request: Request): Father = {
+  override def parse[M <: Father: Manifest](request: Request): Father = {
     if (manifest[M].runtimeClass == classOf[Son]) {
       Son("Son").asInstanceOf[Father]
     } else if (manifest[M].runtimeClass == classOf[FatherImpl]) {

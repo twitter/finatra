@@ -51,7 +51,13 @@ class MediaRangeTest extends Test {
   }
 
   test("extract the qvalue from the parameters") {
-    parseSingleMediaRange("foo/bar;q=0.25") shouldEqual new MediaRange("foo", "bar", Nil, Some(0.25), Nil)
+    parseSingleMediaRange("foo/bar;q=0.25") shouldEqual new MediaRange(
+      "foo",
+      "bar",
+      Nil,
+      Some(0.25),
+      Nil
+    )
   }
 
   test("differentiate between media type parameters and accept extensions") {
@@ -96,8 +102,14 @@ class MediaRangeTest extends Test {
   }
 
   test("order by parameters (complex)") {
-    info(MediaRange.parseAndSort("foo/bar1;q=0.25, */*;q=0.25, foo/*;q=0.25, foo/bar2, foo/bar3;q=0.5, foo/*, foo/bar4") )
-    MediaRange.parseAndSort("foo/bar1;q=0.25, */*;q=0.25, foo/*;q=0.25, foo/bar2, foo/bar3;q=0.5, foo/*, foo/bar4") should contain theSameElementsInOrderAs List(
+    info(
+      MediaRange.parseAndSort(
+        "foo/bar1;q=0.25, */*;q=0.25, foo/*;q=0.25, foo/bar2, foo/bar3;q=0.5, foo/*, foo/bar4"
+      )
+    )
+    MediaRange.parseAndSort(
+      "foo/bar1;q=0.25, */*;q=0.25, foo/*;q=0.25, foo/bar2, foo/bar3;q=0.5, foo/*, foo/bar4"
+    ) should contain theSameElementsInOrderAs List(
       new MediaRange("foo", "bar2", Nil, None, Nil),
       new MediaRange("foo", "bar4", Nil, None, Nil),
       new MediaRange("foo", "*", Nil, None, Nil),
