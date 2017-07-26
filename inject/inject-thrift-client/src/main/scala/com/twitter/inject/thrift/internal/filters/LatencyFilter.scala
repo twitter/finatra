@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit
 private[thrift] class LatencyFilter[Req, Rep](
   statsReceiver: StatsReceiver,
   statName: String = "latency",
-  timeUnit: TimeUnit = TimeUnit.MILLISECONDS)
-  extends SimpleFilter[Req, Rep] {
+  timeUnit: TimeUnit = TimeUnit.MILLISECONDS
+) extends SimpleFilter[Req, Rep] {
 
   private val latencyStat = statsReceiver.stat(s"${statName}_$latencyStatSuffix")
 

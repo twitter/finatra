@@ -36,18 +36,19 @@ class EmbeddedThriftServer(
   override val thriftPortFlag: String = "thrift.port",
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
-  maxStartupTimeSeconds: Int = 60)
-  extends EmbeddedTwitterServer(
-    twitterServer,
-    flags + (thriftPortFlag -> ephemeralLoopback),
-    args,
-    waitForWarmup,
-    stage,
-    useSocksProxy,
-    verbose = verbose,
-    disableTestLogging = disableTestLogging,
-    maxStartupTimeSeconds = maxStartupTimeSeconds)
-  with ThriftClient {
+  maxStartupTimeSeconds: Int = 60
+) extends EmbeddedTwitterServer(
+      twitterServer,
+      flags + (thriftPortFlag -> ephemeralLoopback),
+      args,
+      waitForWarmup,
+      stage,
+      useSocksProxy,
+      verbose = verbose,
+      disableTestLogging = disableTestLogging,
+      maxStartupTimeSeconds = maxStartupTimeSeconds
+    )
+    with ThriftClient {
 
   /* Additional Constructors */
 
@@ -67,7 +68,7 @@ class EmbeddedThriftServer(
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
-  override def bind[T : TypeTag](instance: T): EmbeddedThriftServer = {
+  override def bind[T: TypeTag](instance: T): EmbeddedThriftServer = {
     bindInstance[T](instance)
     this
   }
@@ -84,7 +85,7 @@ class EmbeddedThriftServer(
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
-  override def bind[T : TypeTag, A <: Annotation : TypeTag](instance: T): EmbeddedThriftServer = {
+  override def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedThriftServer = {
     bindInstance[T, A](instance)
     this
   }

@@ -6,7 +6,12 @@ import com.google.inject.Provides
 import com.twitter.finagle._
 import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.{ClientId, MethodIfaceBuilder, ServiceIfaceBuilder, ThriftServiceIface}
+import com.twitter.finagle.thrift.{
+  ClientId,
+  MethodIfaceBuilder,
+  ServiceIfaceBuilder,
+  ThriftServiceIface
+}
 import com.twitter.inject.annotations.Flag
 import com.twitter.inject.conversions.duration._
 import com.twitter.inject.exceptions.PossiblyRetryable
@@ -59,16 +64,15 @@ object FilteredThriftClientModule {
  * @see [[https://twitter.github.io/scrooge/Finagle.html#creating-a-client Finagle Clients]]
  */
 abstract class FilteredThriftClientModule[
-    FutureIface <: ThriftService : ClassTag,
-    ServiceIface <: ThriftServiceIface.Filterable[ServiceIface] : ClassTag](
-    implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface],
-    methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface])
-  extends TwitterModule
-  with time.Implicits {
+  FutureIface <: ThriftService: ClassTag,
+  ServiceIface <: ThriftServiceIface.Filterable[ServiceIface]: ClassTag
+](
+  implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface],
+  methodBuilder: MethodIfaceBuilder[ServiceIface, FutureIface]
+) extends TwitterModule
+    with time.Implicits {
 
-  override val frameworkModules = Seq(
-    AndThenServiceModule,
-    FilteredThriftClientFlagsModule)
+  override val frameworkModules = Seq(AndThenServiceModule, FilteredThriftClientFlagsModule)
 
   /**
    * Name of client for use in metrics
@@ -80,39 +84,39 @@ abstract class FilteredThriftClientModule[
    */
   val dest: String
 
- /**
-  * Enable thrift mux for this connection.
-  *
-  * Note: Both server and client must have mux enabled otherwise
-  * a nondescript ChannelClosedException will be seen.
-  *
-  * @see [[https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]
-  */
+  /**
+   * Enable thrift mux for this connection.
+   *
+   * Note: Both server and client must have mux enabled otherwise
+   * a nondescript ChannelClosedException will be seen.
+   *
+   * @see [[https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]
+   */
   protected val mux: Boolean = true
 
- /**
-  * Use a high resolution [[com.twitter.util.Timer]] such that retries are run tighter to their schedule. Default: false.
-  *
-  * Note: There are performance implications to enabling.
-  */
+  /**
+   * Use a high resolution [[com.twitter.util.Timer]] such that retries are run tighter to their schedule. Default: false.
+   *
+   * Note: There are performance implications to enabling.
+   */
   protected val useHighResTimerForRetries = false
 
- /**
-  * Configures the session acquisition `timeout` of this client (default: unbounded).
-  *
-  * @see [[com.twitter.finagle.param.ClientSessionParams#acquisitionTimeout]]
-  * @see [[https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration]]
-  * @return an [[org.joda.time.Duration]] which represents the acquisition timeout
-  */
+  /**
+   * Configures the session acquisition `timeout` of this client (default: unbounded).
+   *
+   * @see [[com.twitter.finagle.param.ClientSessionParams#acquisitionTimeout]]
+   * @see [[https://twitter.github.io/finagle/guide/Clients.html#timeouts-expiration]]
+   * @return an [[org.joda.time.Duration]] which represents the acquisition timeout
+   */
   protected def sessionAcquisitionTimeout: Duration = MaxDuration
 
- /**
-  * Default [[com.twitter.finagle.service.RetryBudget]]. It is highly recommended that budgets
-  * be shared between all filters that retry or re-queue requests to prevent retry storms.
-  *
-  * @see https://twitter.github.io/finagle/guide/Clients.html#retries
-  * @return a default [[com.twitter.finagle.service.RetryBudget]]
-  */
+  /**
+   * Default [[com.twitter.finagle.service.RetryBudget]]. It is highly recommended that budgets
+   * be shared between all filters that retry or re-queue requests to prevent retry storms.
+   *
+   * @see https://twitter.github.io/finagle/guide/Clients.html#retries
+   * @return a default [[com.twitter.finagle.service.RetryBudget]]
+   */
   protected def budget: Budget = Budget.default
 
   /**
@@ -167,40 +171,41 @@ abstract class FilteredThriftClientModule[
     client
   }
 
- /**
-  * Add filters to the ServiceIface. This is done by copying the [[ServiceIface]] then filtering
-  * each method as desired via a [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]] returned
-  * from [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder.method]]. E.g.,
-  *
-  *      filters.method(FetchBlob)
-  *        .withMethodLatency
-  *        .withConstantRetry(
-  *          shouldRetryResponse = PossiblyRetryableExceptions,
-  *          start = 50.millis,
-  *          retries = 3)
-  *        .withRequestLatency
-  *        .withRequestTimeout(250.millis)
-  *        .withConcurrencyLimit(
-  *          initialPermits = 500)
-  *        .filtered(new MyFilter)
-  *        .filtered[MyOtherFilter]
-  *        .andThen(serviceIface.fetchBlob))
-  *
-  * Note: the [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]] supports adding filters
-  * either by instance or by type.
-  *
-  * Subclasses of this module MAY provide an implementation of `filterServiceIface` which filters the [[ServiceIface]]
-  * per-method.
-  *
-  * @param serviceIface - the [[ServiceIface]] to filter per-method.
-  * @param filters      - a [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder]] which can be invoked
-  *                     to construct a [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]] per-method.
-  * @return a per-method filtered [[ServiceIface]]
-  * @see [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]]
-  */
+  /**
+   * Add filters to the ServiceIface. This is done by copying the [[ServiceIface]] then filtering
+   * each method as desired via a [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]] returned
+   * from [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder.method]]. E.g.,
+   *
+   *      filters.method(FetchBlob)
+   *        .withMethodLatency
+   *        .withConstantRetry(
+   *          shouldRetryResponse = PossiblyRetryableExceptions,
+   *          start = 50.millis,
+   *          retries = 3)
+   *        .withRequestLatency
+   *        .withRequestTimeout(250.millis)
+   *        .withConcurrencyLimit(
+   *          initialPermits = 500)
+   *        .filtered(new MyFilter)
+   *        .filtered[MyOtherFilter]
+   *        .andThen(serviceIface.fetchBlob))
+   *
+   * Note: the [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]] supports adding filters
+   * either by instance or by type.
+   *
+   * Subclasses of this module MAY provide an implementation of `filterServiceIface` which filters the [[ServiceIface]]
+   * per-method.
+   *
+   * @param serviceIface - the [[ServiceIface]] to filter per-method.
+   * @param filters      - a [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder]] which can be invoked
+   *                     to construct a [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]] per-method.
+   * @return a per-method filtered [[ServiceIface]]
+   * @see [[com.twitter.inject.thrift.filters.ThriftClientFilterChain]]
+   */
   protected def filterServiceIface(
     serviceIface: ServiceIface,
-    filters: ThriftClientFilterBuilder): ServiceIface = serviceIface
+    filters: ThriftClientFilterBuilder
+  ): ServiceIface = serviceIface
 
   @Provides
   @Singleton
@@ -220,12 +225,12 @@ abstract class FilteredThriftClientModule[
       label,
       budget,
       useHighResTimerForRetries,
-      andThenService)
+      andThenService
+    )
 
     Thrift.client.newMethodIface(
-      filterServiceIface(
-        serviceIface = serviceIface,
-        filters = filterBuilder))
+      filterServiceIface(serviceIface = serviceIface, filters = filterBuilder)
+    )
   }
 
   @Provides
@@ -234,29 +239,32 @@ abstract class FilteredThriftClientModule[
   final def providesUnfilteredServiceIface(
     @Flag("timeout.multiplier") timeoutMultiplier: Int,
     clientId: ClientId,
-    statsReceiver: StatsReceiver): ServiceIface = {
+    statsReceiver: StatsReceiver
+  ): ServiceIface = {
     val acquisitionTimeout = sessionAcquisitionTimeout.toTwitterDuration * timeoutMultiplier
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
     val thriftClient =
       if (mux) {
         configureThriftMuxClient(
-          ThriftMux.client
-            .withSession.acquisitionTimeout(acquisitionTimeout)
+          ThriftMux.client.withSession
+            .acquisitionTimeout(acquisitionTimeout)
             .withStatsReceiver(clientStatsReceiver)
             .withClientId(clientId)
             .withMonitor(monitor)
             .withRetryBudget(budget.retryBudget)
-            .withRetryBackoff(budget.requeueBackoffs))
+            .withRetryBackoff(budget.requeueBackoffs)
+        )
       } else {
         configureNonThriftMuxClient(
-          Thrift.client
-            .withSession.acquisitionTimeout(acquisitionTimeout)
+          Thrift.client.withSession
+            .acquisitionTimeout(acquisitionTimeout)
             .withStatsReceiver(clientStatsReceiver)
             .withClientId(clientId)
             .withMonitor(monitor)
             .withRetryBudget(budget.retryBudget)
-            .withRetryBackoff(budget.requeueBackoffs))
+            .withRetryBackoff(budget.requeueBackoffs)
+        )
       }
 
     thriftClient

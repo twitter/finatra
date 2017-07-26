@@ -17,8 +17,8 @@ class HttpClient(
   httpService: Service[Request, Response],
   retryPolicy: Option[RetryPolicy[Try[Response]]] = None,
   defaultHeaders: Map[String, String] = Map(),
-  mapper: FinatraObjectMapper)
-  extends Logging {
+  mapper: FinatraObjectMapper
+) extends Logging {
 
   /* Public */
 
@@ -33,33 +33,28 @@ class HttpClient(
     }
   }
 
-  def executeJson[T: Manifest](
-    request: Request,
-    expectedStatus: Status = Status.Ok): Future[T] = {
+  def executeJson[T: Manifest](request: Request, expectedStatus: Status = Status.Ok): Future[T] = {
 
     execute(request) flatMap { httpResponse =>
       if (httpResponse.status != expectedStatus) {
-        Future.exception(new HttpClientException(
-          httpResponse.status,
-          httpResponse.contentString))
-      }
-      else {
-        Future(
-          FinatraObjectMapper.parseResponseBody[T](httpResponse, mapper.reader[T]))
-            .transformException { e =>
-              new HttpClientException(
-                httpResponse.status,
-                s"${e.getClass.getName} - ${e.getMessage}")
-        }
+        Future.exception(new HttpClientException(httpResponse.status, httpResponse.contentString))
+      } else {
+        Future(FinatraObjectMapper.parseResponseBody[T](httpResponse, mapper.reader[T]))
+          .transformException { e =>
+            new HttpClientException(httpResponse.status, s"${e.getClass.getName} - ${e.getMessage}")
+          }
       }
     }
   }
 
   @deprecated("Use execute(Request)", "")
   def get(uri: String, headers: Seq[(String, String)] = Seq()): Future[Response] = {
-    execute(RequestBuilder
-      .get(uri)
-      .headers(headers).request)
+    execute(
+      RequestBuilder
+        .get(uri)
+        .headers(headers)
+        .request
+    )
   }
 
   /* Private */

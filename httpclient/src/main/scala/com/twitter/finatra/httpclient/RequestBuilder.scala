@@ -46,17 +46,14 @@ object RequestBuilder {
   }
 
   def create(method: Method, url: String): RequestBuilder = {
-    new RequestBuilder(
-      Request(method, url))
+    new RequestBuilder(Request(method, url))
   }
 }
 
 /**
  * RequestBuilder is a finagle.http.Request with a builder API for common mutations
  */
-class RequestBuilder(
-  override val request: Request)
-  extends RequestProxy {
+class RequestBuilder(override val request: Request) extends RequestProxy {
 
   def headers(headers: Map[String, String]): RequestBuilder = {
     for {
@@ -92,7 +89,10 @@ class RequestBuilder(
     this
   }
 
-  def bodyFromResource(resource: String, contentType: String = Message.ContentTypeJson): RequestBuilder = {
+  def bodyFromResource(
+    resource: String,
+    contentType: String = Message.ContentTypeJson
+  ): RequestBuilder = {
     val bodyStream = getClass.getResourceAsStream(resource)
     body(IOUtils.toString(bodyStream), contentType)
   }
