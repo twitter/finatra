@@ -7,14 +7,12 @@ import com.twitter.io.Buf
 import com.twitter.util.Await
 
 /**
-  * Helper class to "stream" JSON to a [[com.twitter.finagle.http.Request]]. Uses the given mapper
-  * or the passed optional com.fasterxml.jackson.databind.ObjectWriter for writing JSON values.
-  * @param mapper - default [[com.twitter.finatra.json.FinatraObjectMapper]] to use for writing values.
-  * @param writer - optional com.fasterxml.jackson.databind.ObjectWriter to use instead of the given mapper.
-  */
-class StreamingJsonTestHelper(
-  mapper: FinatraObjectMapper,
-  writer: Option[ObjectWriter] = None) {
+ * Helper class to "stream" JSON to a [[com.twitter.finagle.http.Request]]. Uses the given mapper
+ * or the passed optional com.fasterxml.jackson.databind.ObjectWriter for writing JSON values.
+ * @param mapper - default [[com.twitter.finatra.json.FinatraObjectMapper]] to use for writing values.
+ * @param writer - optional com.fasterxml.jackson.databind.ObjectWriter to use instead of the given mapper.
+ */
+class StreamingJsonTestHelper(mapper: FinatraObjectMapper, writer: Option[ObjectWriter] = None) {
 
   def writeJsonArray(request: Request, seq: Seq[Any], delayMs: Long): Unit = {
     writeAndWait(request, "[")
@@ -40,12 +38,10 @@ class StreamingJsonTestHelper(
 
   private def writeAndWait(request: Request, str: String) {
     println("Write:\t" + str)
-    Await.result(
-      request.writer.write(Buf.Utf8(str)))
+    Await.result(request.writer.write(Buf.Utf8(str)))
   }
 
   private def closeAndWait(request: Request) {
-    Await.result(
-      request.close())
+    Await.result(request.close())
   }
 }

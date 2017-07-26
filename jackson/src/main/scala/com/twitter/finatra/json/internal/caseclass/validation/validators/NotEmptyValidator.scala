@@ -1,12 +1,17 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.NotEmptyValidator._
-import com.twitter.finatra.validation.{ErrorCode, NotEmpty, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{
+  ErrorCode,
+  NotEmpty,
+  ValidationMessageResolver,
+  ValidationResult,
+  Validator
+}
 
 private[finatra] object NotEmptyValidator {
 
-  def errorMessage(
-    resolver: ValidationMessageResolver) = {
+  def errorMessage(resolver: ValidationMessageResolver) = {
 
     resolver.resolve(classOf[NotEmpty])
   }
@@ -14,10 +19,8 @@ private[finatra] object NotEmptyValidator {
 
 private[finatra] class NotEmptyValidator(
   validationMessageResolver: ValidationMessageResolver,
-  annotation: NotEmpty)
-  extends Validator[NotEmpty, Any](
-    validationMessageResolver,
-    annotation) {
+  annotation: NotEmpty
+) extends Validator[NotEmpty, Any](validationMessageResolver, annotation) {
 
   /* Public */
 
@@ -40,13 +43,15 @@ private[finatra] class NotEmptyValidator(
     ValidationResult.validate(
       value.nonEmpty,
       errorMessage(validationMessageResolver),
-      ErrorCode.ValueCannotBeEmpty)
+      ErrorCode.ValueCannotBeEmpty
+    )
   }
 
   private def validationResult(value: String) = {
     ValidationResult.validate(
       value.nonEmpty,
       errorMessage(validationMessageResolver),
-      ErrorCode.ValueCannotBeEmpty)
+      ErrorCode.ValueCannotBeEmpty
+    )
   }
 }

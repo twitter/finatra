@@ -9,15 +9,17 @@ import javax.inject.Singleton
 import org.apache.commons.lang.time.FastDateFormat
 
 @Singleton
-class AccessLoggingFilter
-  extends ThriftFilter
-  with Logging {
+class AccessLoggingFilter extends ThriftFilter with Logging {
 
-  private val DateFormat = FastDateFormat.getInstance("dd/MMM/yyyy:HH:mm:ss Z", TimeZone.getTimeZone("GMT"))
+  private val DateFormat =
+    FastDateFormat.getInstance("dd/MMM/yyyy:HH:mm:ss Z", TimeZone.getTimeZone("GMT"))
 
   /* Public */
 
-  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
+  override def apply[T, U](
+    request: ThriftRequest[T],
+    service: Service[ThriftRequest[T], U]
+  ): Future[U] = {
     val start = Time.now
     service(request).respond {
       case Return(_) =>

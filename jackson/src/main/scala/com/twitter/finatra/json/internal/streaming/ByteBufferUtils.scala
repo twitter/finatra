@@ -20,13 +20,13 @@ private[finatra] object ByteBufferUtils extends Logging {
   }
 
   def debugBuffer(byteBuffer: ByteBuffer) = {
-    if (logger.isDebugEnabled) { 
+    if (logger.isDebugEnabled) {
       val copy = byteBuffer.duplicate()
       copy.position(0)
       val buf = Buf.ByteBuffer.Shared(copy)
       val str = buf.utf8str
 
-      debug(s"byteBuffer: $str pos: ${byteBuffer.position }")
+      debug(s"byteBuffer: $str pos: ${byteBuffer.position}")
     }
   }
 }

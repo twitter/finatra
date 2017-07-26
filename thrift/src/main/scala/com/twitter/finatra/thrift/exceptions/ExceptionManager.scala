@@ -23,9 +23,7 @@ import scala.collection.JavaConverters._
  * ExceptionMapper[Throwable] which will be the root exception mapper.
  */
 @Singleton
-class ExceptionManager (
-  injector: Injector,
-  statsReceiver: StatsReceiver) {
+class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
 
   private val mappers = new ConcurrentHashMap[Type, ExceptionMapper[_, _]]().asScala
 
@@ -50,7 +48,7 @@ class ExceptionManager (
    * @param mapper - [[com.twitter.finatra.thrift.exceptions.ExceptionMapper]] to add
    * @tparam T - exception class type which should be a subclass of [[java.lang.Throwable]]
    */
-  def add[T <: Throwable : Manifest](mapper: ExceptionMapper[T, _]): Unit = {
+  def add[T <: Throwable: Manifest](mapper: ExceptionMapper[T, _]): Unit = {
     register(manifest[T].runtimeClass, mapper)
   }
 

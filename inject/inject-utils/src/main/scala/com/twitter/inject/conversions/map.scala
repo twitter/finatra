@@ -28,12 +28,13 @@ object map {
     }
 
     def invertSingleValue: Map[V, K] = {
-      self map {_.swap}
+      self map { _.swap }
     }
 
     def filterValues(func: V => Boolean): Map[K, V] = {
-      self filter { case (_, value) =>
-        func(value)
+      self filter {
+        case (_, value) =>
+          func(value)
       }
     }
 
@@ -57,7 +58,9 @@ object map {
     }
   }
 
-  implicit class RichMapOfMaps[A, B, C](val self: scala.collection.Map[A, scala.collection.Map[B, C]]) extends AnyVal {
+  implicit class RichMapOfMaps[A, B, C](
+    val self: scala.collection.Map[A, scala.collection.Map[B, C]]
+  ) extends AnyVal {
 
     /**
      * Swap the keys between the inner and outer maps
@@ -70,19 +73,25 @@ object map {
         (b, c) <- bc
       } yield b -> (a -> c)
 
-      entries.groupByKey mapValues {_.toMap}
+      entries.groupByKey mapValues { _.toMap }
     }
   }
 
-  implicit class RichSortedMapOfSortedMaps[A, B, C](val self: SortedMap[A, SortedMap[B, C]]) extends AnyVal {
+  implicit class RichSortedMapOfSortedMaps[A, B, C](val self: SortedMap[A, SortedMap[B, C]])
+      extends AnyVal {
 
     /**
      * Swap the keys between the inner and outer maps
      * Input: Map[A,Map[B,C]] Output: Map[B, Map[A,C]]
      */
-    def swapKeys(implicit orderingA: Ordering[A], orderingB: Ordering[B]): SortedMap[B, SortedMap[A, C]] = {
-      self.asInstanceOf[scala.collection.Map[A, scala.collection.Map[B, C]]].
-        swapKeys.toSortedMap mapValues {_.toSortedMap}
+    def swapKeys(
+      implicit orderingA: Ordering[A],
+      orderingB: Ordering[B]
+    ): SortedMap[B, SortedMap[A, C]] = {
+      self
+        .asInstanceOf[scala.collection.Map[A, scala.collection.Map[B, C]]]
+        .swapKeys
+        .toSortedMap mapValues { _.toSortedMap }
     }
   }
 

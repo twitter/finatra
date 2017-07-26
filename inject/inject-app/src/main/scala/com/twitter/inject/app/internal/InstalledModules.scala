@@ -14,12 +14,11 @@ private[app] object InstalledModules {
     flags: Seq[Flag[_]],
     modules: Seq[GuiceModule],
     overrideModules: Seq[GuiceModule],
-    stage: Stage = Stage.PRODUCTION): InstalledModules = {
+    stage: Stage = Stage.PRODUCTION
+  ): InstalledModules = {
 
     val allNonOverrideModules = {
-      val frameworkModules = Seq(
-        FlagsModule.create(flags),
-        TwitterTypeConvertersModule)
+      val frameworkModules = Seq(FlagsModule.create(flags), TwitterTypeConvertersModule)
 
       val composedModules = modules flatMap findInstalledModules
       modules ++ composedModules ++ frameworkModules
@@ -31,14 +30,13 @@ private[app] object InstalledModules {
     }
 
     val combinedModule =
-      Modules.`override`(
-        allNonOverrideModules.asJava).
-        `with`(allOverrideModules.asJava)
+      Modules.`override`(allNonOverrideModules.asJava).`with`(allOverrideModules.asJava)
 
     new InstalledModules(
       injector = Injector(Guice.createInjector(stage, combinedModule)),
       modules =
-        allNonOverrideModules ++ allOverrideModules)
+        allNonOverrideModules ++ allOverrideModules
+    )
   }
 
   /* Private */
@@ -69,10 +67,8 @@ private[app] object InstalledModules {
   }
 }
 
-private[app] case class InstalledModules(
-  injector: Injector,
-  modules: Seq[GuiceModule])
-  extends Logging {
+private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceModule])
+    extends Logging {
 
   def postInjectorStartup() {
     modules foreach {

@@ -22,8 +22,7 @@ object time extends Implicits {
     def utcIso8601: String = time.utcIso8601(self)
 
     def reverseUtcIso8601 = {
-      time.utcIso8601(
-        new DateTime(LongTimeFromNowMillis - self.getMillis))
+      time.utcIso8601(new DateTime(LongTimeFromNowMillis - self.getMillis))
     }
 
     def toTwitterTime: Time = {
@@ -38,8 +37,7 @@ object time extends Implicits {
   /* ------------------------------------------------ */
   implicit class RichDuration(val self: Duration) extends AnyVal {
     def toTwitterDuration: TwitterDuration = {
-      TwitterDuration.fromMilliseconds(
-        self.getMillis)
+      TwitterDuration.fromMilliseconds(self.getMillis)
     }
   }
 
@@ -47,8 +45,7 @@ object time extends Implicits {
   // com.github.nscala_time.time.DurationBuilder already extends AnyVal
   implicit class RichDurationBuilder(val self: DurationBuilder) {
     def toTwitterDuration: TwitterDuration = {
-      TwitterDuration.fromMilliseconds(
-        self.toDuration.getMillis)
+      TwitterDuration.fromMilliseconds(self.toDuration.getMillis)
     }
   }
 

@@ -17,13 +17,12 @@ object DeadlineValues extends Logging {
       val nowMillis = DateTime.now.getMillis
       DeadlineValues(
         elapsed = nowMillis - deadline.timestamp.inMillis,
-        remaining = deadline.deadline.inMillis - nowMillis)
+        remaining = deadline.deadline.inMillis - nowMillis
+      )
     }
   }
 }
 
-case class DeadlineValues(
-  elapsed: Long,
-  remaining: Long) {
+case class DeadlineValues(elapsed: Long, remaining: Long) {
   def expired = remaining <= 0
 }

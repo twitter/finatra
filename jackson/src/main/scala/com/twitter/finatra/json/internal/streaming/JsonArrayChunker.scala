@@ -33,11 +33,9 @@ private[finatra] class JsonArrayChunker extends Logging {
         parsingState = InsideArray
         openBraces = 1
         byteBuffer = byteBuffer.slice()
-      }
-      else if (!arrayFound && Character.isWhitespace(currByte.toChar)) {
+      } else if (!arrayFound && Character.isWhitespace(currByte.toChar)) {
         debug("Skip space")
-      }
-      else {
+      } else {
         decodeByteAndUpdateState(currByte, byteBuffer)
         if (!insideString && (openBraces == 1 && currByte == ',' || openBraces == 0 && currByte == ']')) {
           result += extractBuf()
@@ -60,12 +58,10 @@ private[finatra] class JsonArrayChunker extends Logging {
     if ((c == '{' || c == '[') && !insideString) {
       openBraces += 1
       debug("openBraces = " + openBraces)
-    }
-    else if ((c == '}' || c == ']') && !insideString) {
+    } else if ((c == '}' || c == ']') && !insideString) {
       openBraces -= 1
       debug("openBraces = " + openBraces)
-    }
-    else if (c == '"') {
+    } else if (c == '"') {
       // start of a new JSON string. It's necessary to detect strings as they may
       // also contain braces/brackets and that could lead to incorrect results.
       if (!insideString) {

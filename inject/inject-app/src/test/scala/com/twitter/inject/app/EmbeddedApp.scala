@@ -10,8 +10,7 @@ import scala.reflect.runtime.universe._
  *
  * @param app The [[com.twitter.inject.app.App]] to be started for testing
  */
-class EmbeddedApp(
-  app: com.twitter.inject.app.App) extends Logging {
+class EmbeddedApp(app: com.twitter.inject.app.App) extends Logging {
 
   /**
    * Bind an instance of type [T] to the object graph of the underlying app.
@@ -23,7 +22,7 @@ class EmbeddedApp(
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
-  def bind[T : TypeTag](instance: T): EmbeddedApp = {
+  def bind[T: TypeTag](instance: T): EmbeddedApp = {
     app.addFrameworkOverrideModules(new InjectionServiceModule[T](instance))
     this
   }
@@ -40,7 +39,7 @@ class EmbeddedApp(
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
-  def bind[T : TypeTag, A <: Annotation : TypeTag](instance: T): EmbeddedApp = {
+  def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedApp = {
     app.addFrameworkOverrideModules(new InjectionServiceWithAnnotationModule[T, A](instance))
     this
   }
@@ -71,5 +70,3 @@ class EmbeddedApp(
     flags.map { case (k, v) => "-" + k + "=" + v }
   }
 }
-
-

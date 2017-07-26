@@ -8,10 +8,7 @@ import com.twitter.inject.Logging
 import com.twitter.util.{Await, Future}
 import javax.inject.Inject
 
-class HttpWarmup @Inject()(
-  router: HttpRouter,
-  mapper: FinatraObjectMapper)
-  extends Logging {
+class HttpWarmup @Inject()(router: HttpRouter, mapper: FinatraObjectMapper) extends Logging {
 
   private val userAgent = "http-warmup-client"
 
@@ -36,7 +33,8 @@ class HttpWarmup @Inject()(
     request: => Request,
     forceRouteToAdminHttpMuxers: Boolean = false,
     times: Int = 1,
-    responseCallback: Response => Unit = identity _) {
+    responseCallback: Response => Unit = identity _
+  ) {
 
     for (i <- 1 to times) {
       val response = executeRequest(request, forceRouteToAdminHttpMuxers)

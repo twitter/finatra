@@ -22,12 +22,15 @@ import org.jboss.netty.handler.codec.http._
  * @param content - [[com.twitter.io.Buf]] response body
  * @param contentType - String representation of response content-type.
  */
-@deprecated("This class is an optimization over Netty3 header handling and not intended for wide usage.", "2016-08-23")
+@deprecated(
+  "This class is an optimization over Netty3 header handling and not intended for wide usage.",
+  "2016-08-23"
+)
 private[twitter] class NonValidatingHttpHeadersResponse(
   status: HttpResponseStatus,
   content: Buf,
-  contentType: String)
-  extends Response {
+  contentType: String
+) extends Response {
 
   override protected[finagle] val httpResponse: HttpResponse = new HttpResponse {
     private[this] var _content: ChannelBuffer = BufChannelBuffer(content)

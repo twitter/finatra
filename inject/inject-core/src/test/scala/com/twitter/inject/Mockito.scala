@@ -10,10 +10,7 @@ import org.specs2.matcher.ScalaTestExpectations
  * org.specs2.mock.Mockito directly. Otherwise, match failures won't be
  * propagated up as ScalaTest test failures.
  */
-trait Mockito
-  extends org.specs2.mock.Mockito
-  with ScalaTestExpectations
-  with Logging {
+trait Mockito extends org.specs2.mock.Mockito with ScalaTestExpectations with Logging {
 
   protected def meq[T](obj: T): T = {
     Matchers.eq(obj)

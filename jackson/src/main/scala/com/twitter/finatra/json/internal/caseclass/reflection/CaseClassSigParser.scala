@@ -27,13 +27,15 @@ private[finatra] object CaseClassSigParser {
   /* Public */
 
   def parseConstructorParams[A](clazz: Class[A]): Seq[ConstructorParam] = {
-    findSym(clazz).children.filter(c => c.isCaseAccessor && !c.isPrivate)
+    findSym(clazz).children
+      .filter(c => c.isCaseAccessor && !c.isPrivate)
       .flatMap { ms =>
-      ms.asInstanceOf[MethodSymbol].infoType match {
-        case NullaryMethodType(typeRefType: TypeRefType) => ConstructorParam(ms.name, typeRefType) :: Nil
-        case _ => Nil
+        ms.asInstanceOf[MethodSymbol].infoType match {
+          case NullaryMethodType(typeRefType: TypeRefType) =>
+            ConstructorParam(ms.name, typeRefType) :: Nil
+          case _ => Nil
+        }
       }
-    }
   }
 
   def loadClass(path: String) = path match {
@@ -68,14 +70,15 @@ private[finatra] object CaseClassSigParser {
 
   /* Private */
 
-  private def parseClassFileFromByteCode(clazz: Class[_]): Option[ClassFile] = try {
-    // taken from ScalaSigParser parse method with the explicit purpose of walking away from NPE
-    val byteCode = ByteCode.forClass(clazz)
-    Option(ClassFileParser.parse(byteCode))
-  }
-  catch {
-    case e: NullPointerException => None // yes, this is the exception, but it is totally unhelpful to the end user
-  }
+  private def parseClassFileFromByteCode(clazz: Class[_]): Option[ClassFile] =
+    try {
+      // taken from ScalaSigParser parse method with the explicit purpose of walking away from NPE
+      val byteCode = ByteCode.forClass(clazz)
+      Option(ClassFileParser.parse(byteCode))
+    } catch {
+      case e: NullPointerException =>
+        None // yes, this is the exception, but it is totally unhelpful to the end user
+    }
 
   private def parseByteCodeFromAnnotation(clazz: Class[_]): Option[ByteCode] = {
     if (clazz.isAnnotationPresent(classOf[ScalaSignature])) {
@@ -117,7 +120,9 @@ private[finatra] object CaseClassSigParser {
             val topLevelObjects = x.topLevelObjects
             topLevelObjects.headOption match {
               case Some(tlo) =>
-                x.symbols.find { s => !s.isModule && s.name == name} match {
+                x.symbols.find { s =>
+                  !s.isModule && s.name == name
+                } match {
                   case Some(s) => s.asInstanceOf[ClassSymbol]
                   case None => throw new MissingExpectedType(clazz)
                 }
@@ -130,9 +135,11 @@ private[finatra] object CaseClassSigParser {
   }
 }
 
-private[finatra] class MissingPickledSig(clazz: Class[_]) extends Error("Failed to parse pickled Scala signature from: %s".format(clazz))
+private[finatra] class MissingPickledSig(clazz: Class[_])
+    extends Error("Failed to parse pickled Scala signature from: %s".format(clazz))
 
-private[finatra] class MissingExpectedType(clazz: Class[_]) extends Error(
-  "Parsed pickled Scala signature, but no expected type found: %s"
-    .format(clazz)
-)
+private[finatra] class MissingExpectedType(clazz: Class[_])
+    extends Error(
+      "Parsed pickled Scala signature, but no expected type found: %s"
+        .format(clazz)
+    )

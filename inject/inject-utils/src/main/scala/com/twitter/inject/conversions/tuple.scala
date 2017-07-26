@@ -7,7 +7,7 @@ object tuple {
 
   implicit class RichTuples[A, B](val self: Iterable[(A, B)]) extends AnyVal {
     def toKeys: Seq[A] = {
-      self.toSeq map { case (key, value) => key}
+      self.toSeq map { case (key, value) => key }
     }
 
     def toKeySet: Set[A] = {
@@ -15,12 +15,13 @@ object tuple {
     }
 
     def toValues: Seq[B] = {
-      self.toSeq map { case (key, value) => value}
+      self.toSeq map { case (key, value) => value }
     }
 
     def mapValues[C](func: B => C): Seq[(A, C)] = {
-      self.toSeq map { case (key, value) =>
-        key -> func(value)
+      self.toSeq map {
+        case (key, value) =>
+          key -> func(value)
       }
     }
 
@@ -46,7 +47,7 @@ object tuple {
     }
 
     def sortByKey(implicit ord: Ordering[A]): Seq[(A, B)] = {
-      self.toSeq sortBy { case (key, value) => key}
+      self.toSeq sortBy { case (key, value) => key }
     }
 
     def toSortedMap(implicit ord: Ordering[A]): SortedMap[A, B] = {

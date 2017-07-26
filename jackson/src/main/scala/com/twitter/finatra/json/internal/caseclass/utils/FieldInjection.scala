@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.deser.impl.ValueInjector
 import com.fasterxml.jackson.databind.{DeserializationContext, JavaType, PropertyName}
 import com.google.inject.{BindingAnnotation, ConfigurationException, Key}
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{
+  JsonInjectException,
+  JsonInjectionNotSupportedException
+}
 import com.twitter.finatra.json.internal.caseclass.jackson.ImmutableAnnotations
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection.InjectableAnnotations
@@ -20,14 +23,16 @@ private[json] object FieldInjection {
     classOf[RouteParam],
     classOf[QueryParam],
     classOf[FormParam],
-    classOf[Header])
+    classOf[Header]
+  )
 }
 
 private[json] class FieldInjection(
   name: String,
   javaType: JavaType,
   parentClass: Class[_],
-  annotations: Seq[Annotation]) {
+  annotations: Seq[Annotation]
+) {
 
   private lazy val guiceKey = {
     val bindingAnnotations = filterIfAnnotationPresent[BindingAnnotation](annotations)
@@ -35,11 +40,9 @@ private[json] class FieldInjection(
     if (bindingAnnotations.size > 1)
       throw new Exception("Too many binding annotations on " + name)
     else if (bindingAnnotations.size == 1)
-      Key.get(
-        JacksonToGuiceTypeConverter.typeOf(javaType), bindingAnnotations.head)
+      Key.get(JacksonToGuiceTypeConverter.typeOf(javaType), bindingAnnotations.head)
     else {
-      Key.get(
-        JacksonToGuiceTypeConverter.typeOf(javaType))
+      Key.get(JacksonToGuiceTypeConverter.typeOf(javaType))
     }
   }
 
@@ -49,20 +52,17 @@ private[json] class FieldInjection(
       javaType,
       ImmutableAnnotations(annotations),
       /* mutator = */ null,
-      /* valueId = */ null)
+      /* valueId = */ null
+    )
   }
 
   /* Public */
 
-  def inject(
-    context: DeserializationContext,
-    codec: ObjectCodec): Option[Object] = {
+  def inject(context: DeserializationContext, codec: ObjectCodec): Option[Object] = {
 
     try {
-      Option(
-        context.findInjectableValue(guiceKey, beanProperty, /* beanInstance = */ null))
-    }
-    catch {
+      Option(context.findInjectableValue(guiceKey, beanProperty, /* beanInstance = */ null))
+    } catch {
       case e: IllegalStateException =>
         throw new JsonInjectionNotSupportedException(parentClass, name)
       case e: ConfigurationException =>
@@ -75,7 +75,8 @@ private[json] class FieldInjection(
     assert(
       injectableAnnotations.size <= 1,
       "Only 1 injectable annotation allowed per field. " +
-        "We found " + (injectableAnnotations map {_.annotationType}) + " on field " + name)
+        "We found " + (injectableAnnotations map { _.annotationType }) + " on field " + name
+    )
 
     injectableAnnotations.nonEmpty || beanProperty.getType.getRawClass == classOf[Request]
   }

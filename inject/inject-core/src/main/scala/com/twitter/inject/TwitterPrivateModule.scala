@@ -7,9 +7,9 @@ import net.codingwell.scalaguice._
  * Note: Calling install in the configure method is not supported. Please use 'override val modules = Seq(module1, module2, ...)' instead
  */
 abstract class TwitterPrivateModule
-  extends GuicePrivateModule
-  with TwitterBaseModule
-  with ScalaPrivateModule {
+    extends GuicePrivateModule
+    with TwitterBaseModule
+    with ScalaPrivateModule {
 
   /* Overrides */
 

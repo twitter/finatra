@@ -10,7 +10,7 @@ class ValidationMessageResolver {
   //TODO: Use [T <: Annotation : Manifest] instead of clazz
   def resolve(clazz: Class[_ <: Annotation], values: Any*): String = {
     val unresolvedMessage = validationProperties.getProperty(clazz.getName)
-    if(unresolvedMessage == null)
+    if (unresolvedMessage == null)
       "unable to resolve error message due to unknown validation annotation: " + clazz
     else
       unresolvedMessage.format(values: _*)
@@ -29,7 +29,7 @@ class ValidationMessageResolver {
 
   private def loadPropertiesFromClasspath(properties: Properties) {
     val validationPropertiesUrl = getClass.getResource("/validation.properties")
-    if(validationPropertiesUrl != null) {
+    if (validationPropertiesUrl != null) {
       properties.load(validationPropertiesUrl.openStream())
     }
   }

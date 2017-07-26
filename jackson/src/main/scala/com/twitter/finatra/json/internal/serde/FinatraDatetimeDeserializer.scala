@@ -10,7 +10,8 @@ import org.joda.time.DateTime
 /**
  * A Datetime deserializer with improved exception handling (compared to jackson-datatype-joda)
  */
-private[finatra] object FinatraDatetimeDeserializer extends StdDeserializer[DateTime](classOf[DateTime]) {
+private[finatra] object FinatraDatetimeDeserializer
+    extends StdDeserializer[DateTime](classOf[DateTime]) {
 
   def deserialize(jp: JsonParser, ctxt: DeserializationContext): DateTime = {
     try {
@@ -39,7 +40,9 @@ private[finatra] object FinatraDatetimeDeserializer extends StdDeserializer[Date
       }
     } catch {
       case e: IllegalArgumentException =>
-        throw new FinatraJsonMappingException("error parsing '" + jp.getText + "' into an ISO 8601 datetime")
+        throw new FinatraJsonMappingException(
+          "error parsing '" + jp.getText + "' into an ISO 8601 datetime"
+        )
     }
   }
 }

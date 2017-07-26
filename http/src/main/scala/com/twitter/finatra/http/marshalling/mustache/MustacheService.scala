@@ -17,8 +17,7 @@ import javax.inject.{Inject, Singleton}
  * @param mustacheFactory the factory to use for compiling a given template
  */
 @Singleton
-class MustacheService @Inject()(
-  mustacheFactory: MustacheFactory) {
+class MustacheService @Inject()(mustacheFactory: MustacheFactory) {
 
   private[finatra] def createBuffer(templateName: String, obj: Any): Buf = {
     val mustache = mustacheFactory.compile(templateName)

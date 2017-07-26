@@ -1,7 +1,6 @@
 package com.twitter.finatra.utils
 
-case class Credentials(
-  underlying: Map[String, String]) {
+case class Credentials(underlying: Map[String, String]) {
 
   val isEmpty = underlying.isEmpty
 

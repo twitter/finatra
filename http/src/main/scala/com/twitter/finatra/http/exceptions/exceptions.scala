@@ -21,11 +21,11 @@ object HttpException {
 }
 
 class HttpException(
-    val statusCode: Status,
-    val mediaType: MediaType,
-    val errors: Seq[String] = Seq(),
-    val headers: Seq[(String, String)] = Seq()
-  ) extends Exception {
+  val statusCode: Status,
+  val mediaType: MediaType,
+  val errors: Seq[String] = Seq(),
+  val headers: Seq[(String, String)] = Seq()
+) extends Exception {
 
   override def getMessage: String = {
     "HttpException(" + statusCode + ":" + mediaType + ") with errors: " + errors.mkString(",") + {
@@ -66,10 +66,8 @@ object NotFoundException {
   }
 }
 
-case class NotFoundException(
-  override val mediaType: MediaType,
-  override val errors: Seq[String])
-  extends HttpException(Status.NotFound, mediaType, errors) {
+case class NotFoundException(override val mediaType: MediaType, override val errors: Seq[String])
+    extends HttpException(Status.NotFound, mediaType, errors) {
 
   def this(error: String) = {
     this(MediaType.JSON_UTF_8, Seq(error))
@@ -86,16 +84,13 @@ object ConflictException {
   }
 }
 
-case class ConflictException(
-  override val mediaType: MediaType,
-  override val errors: Seq[String])
-  extends HttpException(Status.Conflict, mediaType, errors) {
+case class ConflictException(override val mediaType: MediaType, override val errors: Seq[String])
+    extends HttpException(Status.Conflict, mediaType, errors) {
 
   def this(error: String) = {
     this(MediaType.JSON_UTF_8, Seq(error))
   }
 }
-
 
 object InternalServerErrorException {
   def plainText(body: String) = {
@@ -109,8 +104,8 @@ object InternalServerErrorException {
 
 case class InternalServerErrorException(
   override val mediaType: MediaType,
-  override val errors: Seq[String])
-  extends HttpException(Status.InternalServerError, mediaType, errors)
+  override val errors: Seq[String]
+) extends HttpException(Status.InternalServerError, mediaType, errors)
 
 object ServiceUnavailableException {
   def plainText(body: String) = {
@@ -124,13 +119,11 @@ object ServiceUnavailableException {
 
 case class ServiceUnavailableException(
   override val mediaType: MediaType,
-  override val errors: Seq[String])
-  extends HttpException(Status.ServiceUnavailable, mediaType, errors)
+  override val errors: Seq[String]
+) extends HttpException(Status.ServiceUnavailable, mediaType, errors)
 
-
-private[finatra] class HttpNackException(
-  val retryable: Boolean = true)
-  extends HttpException(Status.ServiceUnavailable, MediaType.JSON_UTF_8, Seq()) {
+private[finatra] class HttpNackException(val retryable: Boolean = true)
+    extends HttpException(Status.ServiceUnavailable, MediaType.JSON_UTF_8, Seq()) {
   override val headers = if (retryable) {
     Seq((HttpNackFilter.RetryableNackHeader, "true"))
   } else {
@@ -148,16 +141,13 @@ object BadRequestException {
   }
 }
 
-case class BadRequestException(
-  override val mediaType: MediaType,
-  override val errors: Seq[String])
-  extends HttpException(Status.BadRequest, mediaType, errors) {
+case class BadRequestException(override val mediaType: MediaType, override val errors: Seq[String])
+    extends HttpException(Status.BadRequest, mediaType, errors) {
 
   def this(error: String) = {
     this(MediaType.JSON_UTF_8, Seq(error))
   }
 }
-
 
 object ForbiddenException {
   def plainText(body: String) = {
@@ -169,11 +159,8 @@ object ForbiddenException {
   }
 }
 
-case class ForbiddenException(
-  override val mediaType: MediaType,
-  override val errors: Seq[String])
-  extends HttpException(Status.Forbidden, mediaType, errors)
-
+case class ForbiddenException(override val mediaType: MediaType, override val errors: Seq[String])
+    extends HttpException(Status.Forbidden, mediaType, errors)
 
 object NotAcceptableException {
   def plainText(body: String) = {
@@ -187,5 +174,5 @@ object NotAcceptableException {
 
 case class NotAcceptableException(
   override val mediaType: MediaType,
-  override val errors: Seq[String])
-  extends HttpException(Status.NotAcceptable, mediaType, errors)
+  override val errors: Seq[String]
+) extends HttpException(Status.NotAcceptable, mediaType, errors)

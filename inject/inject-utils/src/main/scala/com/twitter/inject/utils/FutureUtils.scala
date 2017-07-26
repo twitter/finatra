@@ -9,11 +9,12 @@ object FutureUtils {
    * Note: Ordering of results is preserved
    */
   def sequentialMap[A, B](seq: Seq[A])(func: A => Future[B]): Future[Seq[B]] = {
-    seq.foldLeft(Future.value(Vector.empty[B])) { case (futureResults, element) =>
-      for {
-        results <- futureResults
-        result <- func(element)
-      } yield results :+ result
+    seq.foldLeft(Future.value(Vector.empty[B])) {
+      case (futureResults, element) =>
+        for {
+          results <- futureResults
+          result <- func(element)
+        } yield results :+ result
     }
   }
 

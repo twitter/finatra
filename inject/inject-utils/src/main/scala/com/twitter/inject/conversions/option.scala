@@ -36,7 +36,7 @@ object option {
       case Some(returnVal) => Future.value(returnVal)
       case None => Future.value(orElse)
     }
-    
+
     def toFutureOrElse(orElse: Future[A]): Future[A] = self match {
       case Some(returnVal) => Future.value(returnVal)
       case None => orElse
@@ -59,7 +59,7 @@ object option {
   implicit class RichOptionFuture[A](val self: Option[Future[A]]) extends AnyVal {
     def toFutureOption: Future[Option[A]] = {
       self match {
-        case Some(future) => future map {Some(_)}
+        case Some(future) => future map { Some(_) }
         case None => Future.None
       }
     }

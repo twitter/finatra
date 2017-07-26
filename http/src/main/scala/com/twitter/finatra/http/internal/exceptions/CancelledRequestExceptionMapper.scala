@@ -8,25 +8,25 @@ import com.twitter.finatra.utils.DeadlineValues
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class CancelledRequestExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends AbstractFrameworkExceptionMapper[CancelledRequestException](response) {
+private[http] class CancelledRequestExceptionMapper @Inject()(response: ResponseBuilder)
+    extends AbstractFrameworkExceptionMapper[CancelledRequestException](response) {
 
   private val CancelledRequestExceptionDetails = Seq("CancelledRequestException")
 
   override protected def handle(
     request: Request,
     response: ResponseBuilder,
-    exception: CancelledRequestException): Response = {
+    exception: CancelledRequestException
+  ): Response = {
     val deadlineValues = DeadlineValues.current()
 
-    response
-      .clientClosed
+    response.clientClosed
       .failureClassifier(
         deadlineValues.exists(_.expired),
         request,
         source = DefaultExceptionSource,
         details = CancelledRequestExceptionDetails,
-        message = deadlineValues.map(_.elapsed).getOrElse("unknown") + " ms")
+        message = deadlineValues.map(_.elapsed).getOrElse("unknown") + " ms"
+      )
   }
 }

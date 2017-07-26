@@ -15,9 +15,8 @@ import javax.inject.{Inject, Singleton}
  * ExceptionMapper
  */
 @Singleton
-class HttpNackFilter[R <: Request] @Inject()(
-    statsReceiver: StatsReceiver)
-  extends SimpleFilter[R, Response] {
+class HttpNackFilter[R <: Request] @Inject()(statsReceiver: StatsReceiver)
+    extends SimpleFilter[R, Response] {
   import FinagleHttpNackFilter._
 
   private[this] val RetryableHttpNackException =

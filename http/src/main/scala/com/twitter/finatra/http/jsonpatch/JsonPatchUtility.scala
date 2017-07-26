@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode
  * Apply each JSON Patch operation to target JSON document
  */
 object JsonPatchUtility {
+
   /**
    * Apply each patch operation to target object/document
    *
@@ -22,7 +23,11 @@ object JsonPatchUtility {
    *            JsonPatchUtility.operate(patches, jsonPatchOperator, originalJson)
    *         }}}
    */
-  def operate(patches: Seq[PatchOperation], operator: JsonPatchOperator, target: JsonNode): JsonNode = {
+  def operate(
+    patches: Seq[PatchOperation],
+    operator: JsonPatchOperator,
+    target: JsonNode
+  ): JsonNode = {
     patches.foldLeft[JsonNode](target) { (t, patch) =>
       handlePatchOperation(patch, operator, t)
     }
@@ -43,7 +48,8 @@ object JsonPatchUtility {
   private def handlePatchOperation(
     patch: PatchOperation,
     operator: JsonPatchOperator,
-    target: JsonNode): JsonNode = {
+    target: JsonNode
+  ): JsonNode = {
 
     // For empty string as path
     if (patch.path.matches) {

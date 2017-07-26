@@ -30,7 +30,8 @@ object JsonDiffUtil extends Logging {
   def jsonDiff[T](
     receivedJson: Any,
     expectedJson: Any,
-    normalizer: JsonNode => JsonNode = null): Option[JsonDiffResult] = {
+    normalizer: JsonNode => JsonNode = null
+  ): Option[JsonDiffResult] = {
 
     val receivedJsonStr = jsonString(receivedJson)
     val expectedJsonStr = jsonString(expectedJson)
@@ -47,10 +48,7 @@ object JsonDiffUtil extends Logging {
 
     val expectedJsonNode = tryJsonNodeParse(expectedJsonStr)
     (receivedJsonNode != expectedJsonNode).option {
-      JsonDiffResult.create(
-        finatraMapper,
-        expectedJsonNode,
-        receivedJsonNode)
+      JsonDiffResult.create(finatraMapper, expectedJsonNode, receivedJsonNode)
     }
   }
 

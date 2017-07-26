@@ -6,14 +6,14 @@ import com.twitter.finatra.http.response.ResponseBuilder
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class HttpResponseExceptionMapper@Inject()(
-  response: ResponseBuilder)
-  extends AbstractFrameworkExceptionMapper[HttpResponseException](response) {
+private[http] class HttpResponseExceptionMapper @Inject()(response: ResponseBuilder)
+    extends AbstractFrameworkExceptionMapper[HttpResponseException](response) {
 
   override protected def handle(
     request: Request,
     response: ResponseBuilder,
-    exception: HttpResponseException): Response = {
+    exception: HttpResponseException
+  ): Response = {
     response.create(exception.response)
   }
 }

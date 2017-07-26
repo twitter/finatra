@@ -1,7 +1,11 @@
 package com.twitter.finatra.http.modules
 
 import com.twitter.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter
-import com.twitter.finatra.http.internal.marshalling.{FinatraDefaultMessageBodyReader, FinatraDefaultMessageBodyWriter, MessageBodyManager}
+import com.twitter.finatra.http.internal.marshalling.{
+  FinatraDefaultMessageBodyReader,
+  FinatraDefaultMessageBodyWriter,
+  MessageBodyManager
+}
 import com.twitter.finatra.http.marshalling._
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
 import com.twitter.finatra.response.Mustache

@@ -14,7 +14,7 @@ object asyncStream {
 
   implicit class RichFutureOption[T](val self: Future[Option[T]]) extends AnyVal {
     def toAsyncStream: AsyncStream[T] = {
-      (self map {_.toSeq}).toAsyncStream
+      (self map { _.toSeq }).toAsyncStream
     }
   }
 

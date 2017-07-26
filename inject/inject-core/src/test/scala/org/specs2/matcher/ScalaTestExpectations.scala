@@ -40,7 +40,8 @@ trait ScalaTestExpectations extends Expectations {
 
       override def map[S](f: T => S): Expectable[S] = createExpectable(f(value), desc)
 
-      override def mapDescription(d: Option[String => String]): Expectable[T] = createExpectable(value, d)
+      override def mapDescription(d: Option[String => String]): Expectable[T] =
+        createExpectable(value, d)
 
       override def evaluateOnce = {
         val v = t

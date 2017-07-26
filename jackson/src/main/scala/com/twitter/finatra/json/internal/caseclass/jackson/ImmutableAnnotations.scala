@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.util.Annotations
 import com.twitter.inject.conversions.seq._
 import java.lang.annotation.Annotation
 
-private[json] case class ImmutableAnnotations(
-  annotations: Seq[Annotation])
-  extends Annotations {
+private[json] case class ImmutableAnnotations(annotations: Seq[Annotation]) extends Annotations {
 
   private val annotationsMap: Map[Class[_ <: Annotation], Annotation] =
     annotations.groupBySingleValue(_.annotationType)

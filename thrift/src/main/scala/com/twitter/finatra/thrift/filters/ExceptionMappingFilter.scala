@@ -14,7 +14,10 @@ import javax.inject.{Inject, Singleton}
 class ExceptionMappingFilter @Inject()(
   exceptionManager: ExceptionManager
 ) extends ThriftFilter {
-  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
+  override def apply[T, U](
+    request: ThriftRequest[T],
+    service: Service[ThriftRequest[T], U]
+  ): Future[U] = {
     service(request).rescue {
       case e => exceptionManager.handleException[U](e)
     }

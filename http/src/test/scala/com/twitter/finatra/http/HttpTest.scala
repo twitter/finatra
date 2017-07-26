@@ -12,8 +12,9 @@ trait HttpTest {
       ""
     else
       "-com.twitter.server.resolverMap=" + {
-        resolverMap map { case (k, v) =>
-          k + "=" + v
+        resolverMap map {
+          case (k, v) =>
+            k + "=" + v
         } mkString ","
       }
   }
@@ -23,7 +24,8 @@ trait HttpTest {
   }
 
   def urlEncode(str: String) = {
-    URLEncoder.encode(str, "UTF-8")
+    URLEncoder
+      .encode(str, "UTF-8")
       .replaceAll("\\+", "%20")
       .replaceAll("\\%21", "!")
       .replaceAll("\\%27", "'")

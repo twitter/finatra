@@ -14,16 +14,17 @@ private[http] object PathPattern extends Logging {
   private val NamedAsteriskRegex = """:\*$""".r
 
   def apply(uriPattern: String): PathPattern = {
-    PathPattern(
-      regex = regex(uriPattern),
-      captureNames = captureNames(uriPattern))
+    PathPattern(regex = regex(uriPattern), captureNames = captureNames(uriPattern))
   }
 
   /* Private */
 
   private def regex(uriPattern: String): Regex = {
     val asterisksReplaced = NamedAsteriskRegex.replaceAllIn(uriPattern, """\\E(.*)\\Q""") // The special token :* captures everything after the prefix string
-    val colonNameReplaced = NamedRouteParamRegex.replaceAllIn(asterisksReplaced, """\\E([^/]+)\\Q""") // Replace "colon word (e.g. :id) with a capture group that stops at the next forward slash
+    val colonNameReplaced = NamedRouteParamRegex.replaceAllIn(
+      asterisksReplaced,
+      """\\E([^/]+)\\Q"""
+    ) // Replace "colon word (e.g. :id) with a capture group that stops at the next forward slash
     val regexStr = """^\Q""" + colonNameReplaced ++ """\E$"""
     new Regex(regexStr)
   }
@@ -39,9 +40,7 @@ private[http] object PathPattern extends Logging {
   }
 }
 
-private[http] case class PathPattern(
-  regex: Regex,
-  captureNames: Seq[String] = Seq()) {
+private[http] case class PathPattern(regex: Regex, captureNames: Seq[String] = Seq()) {
 
   def extract(requestPath: String): Option[Map[String, String]] = {
     val matcher = regex.pattern.matcher(requestPath)

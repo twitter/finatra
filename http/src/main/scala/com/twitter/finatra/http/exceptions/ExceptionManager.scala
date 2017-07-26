@@ -39,9 +39,7 @@ import scala.collection.JavaConverters._
  * [2] http://docs.scala-lang.org/overviews/reflection/thread-safety.html
  */
 @Singleton
-class ExceptionManager  (
-  injector: Injector,
-  statsReceiver: StatsReceiver) {
+class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
 
   private val mappers = new ConcurrentHashMap[Type, ExceptionMapper[_]]().asScala
 
@@ -54,7 +52,7 @@ class ExceptionManager  (
    * @param mapper - [[com.twitter.finatra.http.exceptions.ExceptionMapper]] to add
    * @tparam T - exception class type which should subclass [[java.lang.Throwable]]
    */
-  def add[T <: Throwable : Manifest](mapper: ExceptionMapper[T]): Unit = {
+  def add[T <: Throwable: Manifest](mapper: ExceptionMapper[T]): Unit = {
     register(manifest[T].runtimeClass, mapper)
   }
 
@@ -104,22 +102,26 @@ class ExceptionManager  (
     routeInfo: RouteInfo,
     request: Request,
     throwable: Throwable,
-    response: Response): Unit = {
-    statsReceiver.counter(
-      "route",
-      routeInfo.sanitizedPath,
-      request.method.toString,
-      "status",
-      response.status.code.toString,
-      "mapped",
-      exceptionDetails(throwable))
+    response: Response
+  ): Unit = {
+    statsReceiver
+      .counter(
+        "route",
+        routeInfo.sanitizedPath,
+        request.method.toString,
+        "status",
+        response.status.code.toString,
+        "mapped",
+        exceptionDetails(throwable)
+      )
       .incr()
   }
 
   private def exceptionDetails(throwable: Throwable): String = {
     val className = ClassUtils.simpleName(throwable.getClass)
     throwable match {
-      case sourceDetails: DetailedNonRetryableSourcedException => className + "/" + sourceDetails.toDetailsString
+      case sourceDetails: DetailedNonRetryableSourcedException =>
+        className + "/" + sourceDetails.toDetailsString
       case _ => className
     }
   }

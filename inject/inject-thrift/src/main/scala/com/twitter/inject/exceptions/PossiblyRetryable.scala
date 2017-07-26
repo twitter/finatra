@@ -1,7 +1,12 @@
 package com.twitter.inject.exceptions
 
 import com.twitter.finagle.mux.ClientDiscardedRequestException
-import com.twitter.finagle.{BackupRequestLost, CancelledConnectionException, CancelledRequestException, Failure}
+import com.twitter.finagle.{
+  BackupRequestLost,
+  CancelledConnectionException,
+  CancelledRequestException,
+  Failure
+}
 import com.twitter.util.{Return, Throw, Try}
 import scala.util.control.NonFatal
 
@@ -35,8 +40,8 @@ object PossiblyRetryable {
   // TODO: RetryableWriteException's are automatically retried by Finagle (how many times?), so we should avoid retrying again here
   def possiblyRetryable(t: Throwable): Boolean = {
     !isCancellation(t) &&
-      !t.isInstanceOf[NonRetryableException] &&
-      NonFatal(t)
+    !t.isInstanceOf[NonRetryableException] &&
+    NonFatal(t)
   }
 
   def isCancellation(t: Throwable): Boolean = t match {

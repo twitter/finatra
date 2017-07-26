@@ -14,7 +14,7 @@ object CaseClassValidationException {
     private[finatra] def leaf(name: String): PropertyPath = empty.withParent(name)
   }
 
-  case class PropertyPath private(names: Seq[String]) {
+  case class PropertyPath private (names: Seq[String]) {
     private[finatra] def withParent(name: String): PropertyPath = copy(name +: names)
 
     def isEmpty: Boolean = names.isEmpty
@@ -28,10 +28,8 @@ object CaseClassValidationException {
  * @param fieldPath - path to the case class field that caused the validation failure
  * @param reason - the validation failure
  */
-case class CaseClassValidationException(
-  path: PropertyPath,
-  reason: ValidationResult.Invalid)
-  extends Exception {
+case class CaseClassValidationException(path: PropertyPath, reason: ValidationResult.Invalid)
+    extends Exception {
 
   /**
    * Render a human readable message. If the error message pertains to

@@ -3,7 +3,7 @@ package com.twitter.inject.conversions
 import org.apache.commons.lang.StringUtils
 
 object string {
-  
+
   implicit class RichString(val self: String) extends AnyVal {
     def toOption = {
       if (self == null || self.isEmpty)

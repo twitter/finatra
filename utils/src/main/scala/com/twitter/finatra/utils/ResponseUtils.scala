@@ -47,7 +47,6 @@ object ResponseUtils {
     expectResponseStatus(response)(NotFound, withBody)
   }
 
-
   /* Private */
 
   private def errorClass(response: Response): Int = {
@@ -55,16 +54,17 @@ object ResponseUtils {
   }
 
   private def expectResponseStatus(
-    response: Response)(
-    expectedStatus: Status = null,
-    withBody: String = null): Unit = {
+    response: Response
+  )(expectedStatus: Status = null, withBody: String = null): Unit = {
 
     assert(
       expectedStatus == null || response.status == expectedStatus,
-      "Expected " + expectedStatus + " but received " + response.status)
+      "Expected " + expectedStatus + " but received " + response.status
+    )
 
     assert(
       withBody == null || response.contentString == withBody,
-      "Expected body " + withBody + " but received \"" + response.contentString + "\"")
+      "Expected body " + withBody + " but received \"" + response.contentString + "\""
+    )
   }
 }

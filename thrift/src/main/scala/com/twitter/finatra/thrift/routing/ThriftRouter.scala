@@ -4,7 +4,11 @@ import com.twitter.finagle.{Thrift, ThriftMux, Service}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
-import com.twitter.finatra.thrift.internal.{ThriftMethodService, ThriftRequestUnwrapFilter, ThriftRequestWrapFilter}
+import com.twitter.finatra.thrift.internal.{
+  ThriftMethodService,
+  ThriftRequestUnwrapFilter,
+  ThriftRequestWrapFilter
+}
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Services}
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.inject.TypeUtils._
@@ -18,8 +22,8 @@ import scala.collection.mutable.{Map => MutableMap}
 class ThriftRouter @Inject()(
   exceptionManager: ExceptionManager,
   statsReceiver: StatsReceiver,
-  injector: Injector)
-  extends Logging {
+  injector: Injector
+) extends Logging {
 
   private var filterChain = ThriftFilter.Identity
   private var done = false
@@ -35,13 +39,13 @@ class ThriftRouter @Inject()(
   /* Public */
 
   /** Add exception mapper used for the corresponding exceptions */
-  def exceptionMapper[T <: ExceptionMapper[_, _] : Manifest]: ThriftRouter = {
+  def exceptionMapper[T <: ExceptionMapper[_, _]: Manifest]: ThriftRouter = {
     exceptionManager.add[T]
     this
   }
 
   /** Add exception mapper used for the corresponding exceptions */
-  def exceptionMapper[T <: Throwable : Manifest](mapper: ExceptionMapper[T, _]): ThriftRouter = {
+  def exceptionMapper[T <: Throwable: Manifest](mapper: ExceptionMapper[T, _]): ThriftRouter = {
     exceptionManager.add[T](mapper)
     this
   }
@@ -50,17 +54,20 @@ class ThriftRouter @Inject()(
   def exceptionMapper[T <: Throwable](clazz: Class[_ <: ExceptionMapper[T, _]]): ThriftRouter = {
     val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_, _]])
     val throwableType = singleTypeParam(mapperType)
-    exceptionMapper(injector.instance(clazz))(Manifest.classType(Class.forName(throwableType.getTypeName)))
+    exceptionMapper(injector.instance(clazz))(
+      Manifest.classType(Class.forName(throwableType.getTypeName))
+    )
     this
   }
 
   /** Add global filter used for all requests */
-  def filter[FilterType <: ThriftFilter : Manifest]: ThriftRouter = {
+  def filter[FilterType <: ThriftFilter: Manifest]: ThriftRouter = {
     filter(injector.instance[FilterType])
   }
 
   /** Add global filter used for all requests annotated with Annotation Type */
-  def filter[FilterType <: ThriftFilter : Manifest, Ann <: JavaAnnotation : Manifest]: ThriftRouter = {
+  def filter[FilterType <: ThriftFilter: Manifest, Ann <: JavaAnnotation: Manifest]
+    : ThriftRouter = {
     filter(injector.instance[FilterType, Ann])
   }
 
@@ -77,7 +84,7 @@ class ThriftRouter @Inject()(
   }
 
   /** Instantiate and add thrift controller used for all requests **/
-  def add[C <: Controller with ToThriftService : Manifest]: ThriftRouter = {
+  def add[C <: Controller with ToThriftService: Manifest]: ThriftRouter = {
     val controller = injector.instance[C]
     add(controller)
   }
@@ -89,8 +96,12 @@ class ThriftRouter @Inject()(
         m.setFilter(filterChain)
         methods += (m.method -> m)
       }
-      info("Adding methods\n" + (controller.methods.map(method => s"${controller.getClass.getSimpleName}.${method.name}") mkString "\n"))
-      if (controller.methods.isEmpty) error(s"${controller.getClass.getCanonicalName} contains no methods!")
+      info(
+        "Adding methods\n" + (controller.methods
+          .map(method => s"${controller.getClass.getSimpleName}.${method.name}") mkString "\n")
+      )
+      if (controller.methods.isEmpty)
+        error(s"${controller.getClass.getCanonicalName} contains no methods!")
       filteredThriftService = controller.toThriftService
     }
     this
@@ -101,13 +112,16 @@ class ThriftRouter @Inject()(
     add(
       controller,
       service,
-      ThriftMux.server
-        .params.apply[Thrift.param.ProtocolFactory]
-        .protocolFactory)
+      ThriftMux.server.params.apply[Thrift.param.ProtocolFactory].protocolFactory
+    )
   }
 
   /** Add controller used for all requests for usage from Java */
-  def add(controller: Class[_], service: Class[_], protocolFactory: TProtocolFactory): ThriftRouter = {
+  def add(
+    controller: Class[_],
+    service: Class[_],
+    protocolFactory: TProtocolFactory
+  ): ThriftRouter = {
     add {
       val instance = injector.instance(controller)
       val iface: Class[_] = instance.getClass.getInterfaces.head // MyService$ServiceIface
@@ -116,16 +130,20 @@ class ThriftRouter @Inject()(
       val constructor = service.getConstructor(iface, classOf[TProtocolFactory])
       // instantiate service
       val serviceInstance =
-        constructor.newInstance(
-          instance.asInstanceOf[Object], protocolFactory)
+        constructor
+          .newInstance(instance.asInstanceOf[Object], protocolFactory)
           .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
-      info("Adding methods\n" + (controller.getDeclaredMethods.map(method => s"${controller.getSimpleName}.${method.getName}") mkString "\n"))
+      info(
+        "Adding methods\n" + (controller.getDeclaredMethods
+          .map(method => s"${controller.getSimpleName}.${method.getName}") mkString "\n")
+      )
       filteredService = Some(
         new ThriftRequestWrapFilter[Array[Byte], Array[Byte]](controller.getSimpleName)
           .andThen(filterChain.toFilter[Array[Byte], Array[Byte]])
           .andThen(new ThriftRequestUnwrapFilter[Array[Byte], Array[Byte]])
-          .andThen(serviceInstance))
+          .andThen(serviceInstance)
+      )
     }
     this
   }
@@ -133,7 +151,10 @@ class ThriftRouter @Inject()(
   /* Private */
 
   private def add(f: => Unit): Unit = {
-    assert(!done, "ThriftRouter#add cannot be called multiple times, as we don't currently support serving multiple thrift services.")
+    assert(
+      !done,
+      "ThriftRouter#add cannot be called multiple times, as we don't currently support serving multiple thrift services."
+    )
     f
     done = true
   }

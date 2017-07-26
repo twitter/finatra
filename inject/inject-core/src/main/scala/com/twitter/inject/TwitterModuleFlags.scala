@@ -20,7 +20,7 @@ trait TwitterModuleFlags {
     flag
   }
 
-  protected def flag[T: Flaggable : Manifest](name: String, help: String): Flag[T] = {
+  protected def flag[T: Flaggable: Manifest](name: String, help: String): Flag[T] = {
     val flag = new Flag[T](name, help, manifest[T].runtimeClass.toString)
     flags += flag
     flag

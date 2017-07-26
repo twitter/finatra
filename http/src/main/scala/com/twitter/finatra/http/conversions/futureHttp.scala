@@ -20,15 +20,18 @@ object futureHttp {
   // We specifically log here (which allocates) so we do not extend AnyVal
   implicit class RichHttpFuture[A](self: Future[A]) extends Logging {
 
-    def httpRescue[ExceptionToRescue: Manifest](status: Status, errors: Seq[String] = Seq(), log: String = ""): Future[A] = {
+    def httpRescue[ExceptionToRescue: Manifest](
+      status: Status,
+      errors: Seq[String] = Seq(),
+      log: String = ""
+    ): Future[A] = {
       self.rescue {
         case t if manifest[ExceptionToRescue].runtimeClass.isAssignableFrom(t.getClass) =>
           if (log.nonEmpty) {
             warn(log)
           }
 
-          Future.exception(
-            HttpException(status, errors: _*))
+          Future.exception(HttpException(status, errors: _*))
       }
     }
   }

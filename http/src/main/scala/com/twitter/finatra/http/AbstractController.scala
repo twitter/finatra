@@ -16,11 +16,22 @@ abstract class AbstractController extends Controller {
     get(route, admin, null, callback)
   }
 
-  protected def get(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def get(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     get(route, "", admin, index, callback)
   }
 
-  protected def get(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def get(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     get[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -36,11 +47,22 @@ abstract class AbstractController extends Controller {
     post(route, admin, null, callback)
   }
 
-  protected def post(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def post(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     post(route, "", admin, index, callback)
   }
 
-  protected def post(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def post(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     post[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -56,11 +78,22 @@ abstract class AbstractController extends Controller {
     put(route, admin, null, callback)
   }
 
-  protected def put(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def put(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     put(route, "", admin, index, callback)
   }
 
-  protected def put(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def put(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     put[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -76,11 +109,22 @@ abstract class AbstractController extends Controller {
     delete(route, admin, null, callback)
   }
 
-  protected def delete(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def delete(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     delete(route, "", admin, index, callback)
   }
 
-  protected def delete(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def delete(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     delete[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -96,11 +140,22 @@ abstract class AbstractController extends Controller {
     options(route, admin, null, callback)
   }
 
-  protected def options(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def options(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     options(route, "", admin, index, callback)
   }
 
-  protected def options(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def options(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     options[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -116,11 +171,22 @@ abstract class AbstractController extends Controller {
     patch(route, admin, null, callback)
   }
 
-  protected def patch(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def patch(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     patch(route, "", admin, index, callback)
   }
 
-  protected def patch(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def patch(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     patch[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -136,11 +202,22 @@ abstract class AbstractController extends Controller {
     head(route, admin, null, callback)
   }
 
-  protected def head(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def head(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     head(route, "", admin, index, callback)
   }
 
-  protected def head(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def head(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     head[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -156,11 +233,22 @@ abstract class AbstractController extends Controller {
     trace(route, admin, null, callback)
   }
 
-  protected def trace(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def trace(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     trace(route, "", admin, index, callback)
   }
 
-  protected def trace(route: String, name: String,  admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def trace(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     trace[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }
@@ -176,11 +264,22 @@ abstract class AbstractController extends Controller {
     any(route, admin, null, callback)
   }
 
-  protected def any(route: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def any(
+    route: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     any(route, "", admin, index, callback)
   }
 
-  protected def any(route: String, name: String, admin: Boolean, index: RouteIndex, callback: JavaCallback): Unit = {
+  protected def any(
+    route: String,
+    name: String,
+    admin: Boolean,
+    index: RouteIndex,
+    callback: JavaCallback
+  ): Unit = {
     any[Request, Object](route, name, admin, Option.apply(index)) { request =>
       callback.handle(request)
     }

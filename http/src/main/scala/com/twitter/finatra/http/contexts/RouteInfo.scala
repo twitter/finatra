@@ -16,14 +16,11 @@ object RouteInfo {
   }
 }
 
-case class RouteInfo(
-  name: String,
-  path: String) {
+case class RouteInfo(name: String, path: String) {
 
   val sanitizedPath = {
-    val noSlashes = RouteInfo.SlashRegexp.replaceAllIn(
-      target = path.stripPrefix("/").stripSuffix("/"),
-      replacement = "_")
+    val noSlashes = RouteInfo.SlashRegexp
+      .replaceAllIn(target = path.stripPrefix("/").stripSuffix("/"), replacement = "_")
     RouteInfo.SanitizeRegexp.replaceAllIn(noSlashes, "")
   }
 }

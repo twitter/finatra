@@ -7,14 +7,14 @@ import javax.inject.{Inject, Singleton}
 import org.apache.thrift.TException
 
 @Singleton
-private[http] class ThriftExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends AbstractFrameworkExceptionMapper[TException](response) {
+private[http] class ThriftExceptionMapper @Inject()(response: ResponseBuilder)
+    extends AbstractFrameworkExceptionMapper[TException](response) {
 
   override protected def handle(
     request: Request,
     response: ResponseBuilder,
-    exception: TException): Response = {
+    exception: TException
+  ): Response = {
     unhandledExceptionResponse(request, response, exception)
   }
 }

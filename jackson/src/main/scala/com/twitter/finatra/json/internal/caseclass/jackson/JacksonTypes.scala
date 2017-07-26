@@ -12,30 +12,29 @@ private[json] object JacksonTypes {
   def javaType(typeFactory: TypeFactory, scalaType: ScalaType): JavaType = {
     if (scalaType.typeArguments.isEmpty || scalaType.isEnum)
       typeFactory.constructType(scalaType.runtimeClass)
-
     else if (scalaType.isMap)
       typeFactory.constructMapLikeType(
         scalaType.runtimeClass,
         javaType(typeFactory, scalaType.typeArguments(0)),
-        javaType(typeFactory, scalaType.typeArguments(1)))
-
+        javaType(typeFactory, scalaType.typeArguments(1))
+      )
     else if (scalaType.isCollection)
       typeFactory.constructCollectionLikeType(
         scalaType.runtimeClass,
-        javaType(typeFactory, scalaType.typeArguments.head))
-
+        javaType(typeFactory, scalaType.typeArguments.head)
+      )
     else if (scalaType.isArray)
       ArrayType.construct(
         primitiveAwareJavaType(typeFactory, scalaType.typeArguments.head),
-        TypeBindings.create(
-          scalaType.runtimeClass,
-          javaType(typeFactory, scalaType.typeArguments.head)))
-
+        TypeBindings
+          .create(scalaType.runtimeClass, javaType(typeFactory, scalaType.typeArguments.head))
+      )
     else
       typeFactory.constructParametrizedType(
         scalaType.runtimeClass,
         scalaType.runtimeClass,
-        javaTypes(typeFactory, scalaType.typeArguments): _*)
+        javaTypes(typeFactory, scalaType.typeArguments): _*
+      )
   }
 
   /* Private */

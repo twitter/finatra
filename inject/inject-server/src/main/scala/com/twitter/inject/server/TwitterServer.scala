@@ -32,14 +32,13 @@ abstract class AbstractTwitterServer extends TwitterServer
  *  start -- callback executed after the injector is created and all @Lifecycle methods have completed.
  */
 trait TwitterServer
-  extends App
-  with com.twitter.server.TwitterServer
-  with Ports
-  with Warmup
-  with Logging {
+    extends App
+    with com.twitter.server.TwitterServer
+    with Ports
+    with Warmup
+    with Logging {
 
-  addFrameworkModules(
-    statsReceiverModule)
+  addFrameworkModules(statsReceiverModule)
 
   /**
    * Attempt to install the Slf4jBridgeHandler and override the `configureLoggerFactories`
@@ -48,7 +47,8 @@ trait TwitterServer
   Slf4jBridgeUtility.attemptSlf4jBridgeHandlerInstallation()
   override def configureLoggerFactories(): Unit = {}
 
-  private val adminAnnounceFlag = flag[String]("admin.announce", "Address for announcing admin server")
+  private val adminAnnounceFlag =
+    flag[String]("admin.announce", "Address for announcing admin server")
 
   /* Mutable State */
 
@@ -102,7 +102,7 @@ trait TwitterServer
    * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
    * @see [[com.twitter.inject.utils.Handler]]
    */
-  protected def handle[T <: Handler : Manifest](): Unit = {
+  protected def handle[T <: Handler: Manifest](): Unit = {
     injector.instance[T].handle()
   }
 
@@ -122,8 +122,7 @@ trait TwitterServer
    *
    * Any exceptions thrown in this method will result in the server exiting.
    */
-  protected def start(): Unit = {
-  }
+  protected def start(): Unit = {}
 
   /* Overrides */
 

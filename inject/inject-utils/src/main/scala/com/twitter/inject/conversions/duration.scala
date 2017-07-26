@@ -7,8 +7,7 @@ object duration {
 
   implicit class RichDuration(val self: Duration) extends AnyVal {
     def toTwitterDuration: TwitterDuration = {
-      TwitterDuration.fromMilliseconds(
-        self.getMillis)
+      TwitterDuration.fromMilliseconds(self.getMillis)
     }
   }
 

@@ -1,7 +1,6 @@
 package com.twitter.inject.server
 
-trait Ports
-  extends com.twitter.server.TwitterServer {
+trait Ports extends com.twitter.server.TwitterServer {
 
   def httpExternalPort: Option[Int] = None
 

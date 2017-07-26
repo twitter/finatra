@@ -1,13 +1,16 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.validation.{ErrorCode, Min, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{
+  ErrorCode,
+  Min,
+  ValidationMessageResolver,
+  ValidationResult,
+  Validator
+}
 
 private[finatra] object MinValidator {
 
-  def errorMessage(
-    resolver: ValidationMessageResolver,
-    value: Any,
-    minValue: Long): String = {
+  def errorMessage(resolver: ValidationMessageResolver, value: Any, minValue: Long): String = {
 
     resolver.resolve(classOf[Min], value, minValue)
   }
@@ -15,10 +18,8 @@ private[finatra] object MinValidator {
 
 private[finatra] class MinValidator(
   validationMessageResolver: ValidationMessageResolver,
-  annotation: Min)
-  extends Validator[Min, Any](
-    validationMessageResolver,
-    annotation) {
+  annotation: Min
+) extends Validator[Min, Any](validationMessageResolver, annotation) {
 
   private val minValue = annotation.value()
 
@@ -47,28 +48,24 @@ private[finatra] class MinValidator(
     ValidationResult.validate(
       minValue <= value.size,
       errorMessage(Integer.valueOf(value.size)),
-      errorCode(Integer.valueOf(value.size)))
+      errorCode(Integer.valueOf(value.size))
+    )
   }
 
   private def validationResult(value: BigDecimal) = {
-    ValidationResult.validate(
-      BigDecimal(minValue) <= value,
-      errorMessage(value),
-      errorCode(value))
+    ValidationResult.validate(BigDecimal(minValue) <= value, errorMessage(value), errorCode(value))
   }
 
   private def validationResult(value: BigInt) = {
-    ValidationResult.validate(
-      BigInt(minValue) <= value,
-      errorMessage(value),
-      errorCode(value))
+    ValidationResult.validate(BigInt(minValue) <= value, errorMessage(value), errorCode(value))
   }
 
   private def validationResult(value: Number) = {
     ValidationResult.validate(
       minValue <= value.doubleValue(),
       errorMessage(value),
-      errorCode(value))
+      errorCode(value)
+    )
   }
 
   private def errorMessage(value: Number) = {

@@ -7,17 +7,17 @@ import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class HttpExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends AbstractFrameworkExceptionMapper[HttpException](response) {
+class HttpExceptionMapper @Inject()(response: ResponseBuilder)
+    extends AbstractFrameworkExceptionMapper[HttpException](response) {
 
   override protected def handle(
     request: Request,
     response: ResponseBuilder,
-    exception: HttpException): Response = {
+    exception: HttpException
+  ): Response = {
     val builder = response
       .status(exception.statusCode)
-      .headers(exception.headers:_*)
+      .headers(exception.headers: _*)
 
     if (exception.mediaType.is(MediaType.JSON_UTF_8))
       builder.json(ErrorsResponse(exception.errors))

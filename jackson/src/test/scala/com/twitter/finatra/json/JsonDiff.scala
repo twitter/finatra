@@ -10,21 +10,17 @@ object JsonDiff {
     receivedJson: Any,
     expectedJson: Any,
     normalizer: JsonNode => JsonNode = null,
-    verbose: Boolean = true) {
+    verbose: Boolean = true
+  ) {
     assertJsonNodesSame(
-      jsonDiffResultOpt =
-        JsonDiffUtil.jsonDiff[T](
-          receivedJson,
-          expectedJson,
-          normalizer),
-      verbose = verbose)
+      jsonDiffResultOpt = JsonDiffUtil.jsonDiff[T](receivedJson, expectedJson, normalizer),
+      verbose = verbose
+    )
   }
 
   /* Private */
 
-  private def assertJsonNodesSame(
-    jsonDiffResultOpt: Option[JsonDiffResult],
-    verbose: Boolean) = {
+  private def assertJsonNodesSame(jsonDiffResultOpt: Option[JsonDiffResult], verbose: Boolean) = {
 
     jsonDiffResultOpt map { result =>
       println("JSON DIFF FAILED!")

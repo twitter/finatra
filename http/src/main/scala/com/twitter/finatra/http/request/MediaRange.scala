@@ -13,7 +13,6 @@ import scala.collection.BitSet
 import scala.util.parsing.combinator.Parsers
 import scala.util.parsing.input.CharSequenceReader
 
-
 object MediaRange extends Logging {
 
   /**
@@ -146,28 +145,29 @@ object MediaRange extends Logging {
 
     // Some clients think that '*' is a valid media range.  Spec says it isn't, but it's used widely enough that we
     // need to support it.
-    val mediaRange = (mediaType | ('*' ~> parameters.map(ps => MediaType("*", "*", ps.flatten)))) ^^ { mediaType =>
-      val (params, rest) = mediaType.parameters.span(_._1 != "q")
-      val (qValueStr, acceptParams) = rest match {
-        case q :: ps => (q._2, ps)
-        case _ => (None, Nil)
-      }
-      val qValue = qValueStr.flatMap { q =>
-        try {
-          val qbd = BigDecimal(q)
-          if (qbd > 1) {
-            debug("Invalid q value: " + q)
-            None
-          } else {
-            Some(BigDecimal(q))
-          }
-        } catch {
-          case _: NumberFormatException =>
-            debug("Invalid q value: " + q)
-            None
+    val mediaRange = (mediaType | ('*' ~> parameters.map(ps => MediaType("*", "*", ps.flatten)))) ^^ {
+      mediaType =>
+        val (params, rest) = mediaType.parameters.span(_._1 != "q")
+        val (qValueStr, acceptParams) = rest match {
+          case q :: ps => (q._2, ps)
+          case _ => (None, Nil)
         }
-      }
-      new MediaRange(mediaType.mediaType, mediaType.mediaSubType, params, qValue, acceptParams)
+        val qValue = qValueStr.flatMap { q =>
+          try {
+            val qbd = BigDecimal(q)
+            if (qbd > 1) {
+              debug("Invalid q value: " + q)
+              None
+            } else {
+              Some(BigDecimal(q))
+            }
+          } catch {
+            case _: NumberFormatException =>
+              debug("Invalid q value: " + q)
+              None
+          }
+        }
+        new MediaRange(mediaType.mediaType, mediaType.mediaSubType, params, qValue, acceptParams)
     }
 
     // Either it's a valid media range followed immediately by the end or a comma, or it's a bad media type
@@ -183,7 +183,6 @@ object MediaRange extends Logging {
   }
 }
 
-
 /**
  * A media range as defined by RFC 2616 14.1
  *
@@ -198,8 +197,9 @@ class MediaRange(
   override val mediaSubType: String,
   parameters: Seq[(String, Option[String])],
   val qValue: Option[BigDecimal],
-  val acceptExtensions: Seq[(String, Option[String])])
-  extends MediaType(mediaType, mediaSubType, parameters) {
+  val acceptExtensions: Seq[(String, Option[String])]
+) extends MediaType(mediaType, mediaSubType, parameters) {
+
   /**
 
    * @return true if `mimeType` matches this media type, otherwise false
@@ -212,8 +212,11 @@ class MediaRange(
   lazy val contentType = mediaType + "/" + mediaSubType
 
   override def toString = {
-    new MediaType(mediaType, mediaSubType,
-      parameters ++ qValue.map(q => ("q", Some(q.toString()))).toSeq ++ acceptExtensions).toString
+    new MediaType(
+      mediaType,
+      mediaSubType,
+      parameters ++ qValue.map(q => ("q", Some(q.toString()))).toSeq ++ acceptExtensions
+    ).toString
   }
 }
 
@@ -224,19 +227,24 @@ class MediaRange(
  * @param mediaSubType The media sub type
  * @param parameters The parameters
  */
-case class MediaType (
+case class MediaType(
   mediaType: String,
   mediaSubType: String,
-  parameters: Seq[(String, Option[String])]) {
+  parameters: Seq[(String, Option[String])]
+) {
   override def toString = {
-    mediaType + "/" + mediaSubType + parameters.map { param =>
-      "; " + param._1 + param._2.map { value =>
-        if (MediaRangeParser.token(new CharSequenceReader(value)).next.atEnd) {
-          "=" + value
-        } else {
-          "=\"" + value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"") + "\""
-        }
-      }.getOrElse("")
-    }.mkString("")
+    mediaType + "/" + mediaSubType + parameters
+      .map { param =>
+        "; " + param._1 + param._2
+          .map { value =>
+            if (MediaRangeParser.token(new CharSequenceReader(value)).next.atEnd) {
+              "=" + value
+            } else {
+              "=\"" + value.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"") + "\""
+            }
+          }
+          .getOrElse("")
+      }
+      .mkString("")
   }
 }

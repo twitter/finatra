@@ -4,7 +4,10 @@ import com.twitter.inject.Logging
 import org.slf4j.LoggerFactory
 import org.slf4j.bridge.SLF4JBridgeHandler
 
-@deprecated("Use com.twitter.util.logging.Slf4jBridgeUtility in util-slf4j-jul-bridge.", "2017-03-06")
+@deprecated(
+  "Use com.twitter.util.logging.Slf4jBridgeUtility in util-slf4j-jul-bridge.",
+  "2017-03-06"
+)
 object Slf4jBridgeUtility extends Logging {
 
   private[inject] def attemptSlf4jBridgeHandlerInstallation(): Unit = {
@@ -22,7 +25,11 @@ object Slf4jBridgeUtility extends Logging {
     // exists on the classpath. See: http://www.slf4j.org/legacy.html#jul-to-slf4j
     try {
       Class.forName("org.slf4j.impl.JDK14LoggerFactory", false, this.getClass.getClassLoader)
-      LoggerFactory.getLogger(this.getClass).warn("Detected [org.slf4j.impl.JDK14LoggerFactory] on classpath. SLF4JBridgeHandler cannot be installed, see: http://www.slf4j.org/legacy.html#jul-to-slf4j")
+      LoggerFactory
+        .getLogger(this.getClass)
+        .warn(
+          "Detected [org.slf4j.impl.JDK14LoggerFactory] on classpath. SLF4JBridgeHandler cannot be installed, see: http://www.slf4j.org/legacy.html#jul-to-slf4j"
+        )
       false
     } catch {
       case e: ClassNotFoundException =>

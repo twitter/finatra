@@ -14,8 +14,7 @@ import scala.annotation.tailrec
  * @param mapper default [[com.twitter.finatra.json.FinatraObjectMapper]] to use for writing values.
  */
 @Singleton
-class JsonPatchOperator @Inject()(
-  mapper: FinatraObjectMapper) {
+class JsonPatchOperator @Inject()(mapper: FinatraObjectMapper) {
 
   /**
    * Transform type T to JsonNode
@@ -38,6 +37,7 @@ class JsonPatchOperator @Inject()(
   def toJsonNode(original: String): JsonNode = {
     mapper.parse[JsonNode](original)
   }
+
   /**
    * Apply add operation on target
    *
@@ -129,11 +129,13 @@ class JsonPatchOperator @Inject()(
    */
   private def checkBound(operation: String, condition: Boolean): Unit = {
     if (!condition.equals(true)) {
-      throw new JsonPatchException(s"invalid path for $operation operation, array index out of bounds")
+      throw new JsonPatchException(
+        s"invalid path for $operation operation, array index out of bounds"
+      )
     }
   }
 
- /**
+  /**
    * Gets and validates an array index for leaf nodes, handling the special '/-' last element pointer.
    * Note: this function should not be used for non-leaf nodes, as the /- index is not defined for non-leaf arrays.
    *
@@ -142,11 +144,11 @@ class JsonPatchOperator @Inject()(
    * @param operation a String used for logging, to log '$error for $operation operation' in line with the other node functions
    * @return JsonNode at path in target
    */
- private def getLeafIndex(path: JsonPointer, target: ArrayNode, operation: String): Int = {
-   val index: Int = if (path == lastElementPointer) target.size - 1 else path.getMatchingIndex
-   checkBound(operation, index < target.size && index >= 0)
-   index
- }
+  private def getLeafIndex(path: JsonPointer, target: ArrayNode, operation: String): Int = {
+    val index: Int = if (path == lastElementPointer) target.size - 1 else path.getMatchingIndex
+    checkBound(operation, index < target.size && index >= 0)
+    index
+  }
 
   /**
    * Gets the field in the targetspecified by the path, fails on invalid indexes or when the target is null.
@@ -164,7 +166,9 @@ class JsonPatchOperator @Inject()(
           checkBound(operation, index < arrayNodeTarget.size && index >= 0)
           arrayNodeTarget.get(index)
         } else {
-          throw new JsonPatchException(s"invalid path for $operation operation, expected array index")
+          throw new JsonPatchException(
+            s"invalid path for $operation operation, expected array index"
+          )
         }
 
       case null =>

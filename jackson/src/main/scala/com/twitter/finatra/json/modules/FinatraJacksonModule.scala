@@ -18,7 +18,6 @@ import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 import scala.collection.JavaConverters._
 
-
 object FinatraJacksonModule extends FinatraJacksonModule
 
 /**
@@ -37,7 +36,8 @@ class FinatraJacksonModule extends TwitterModule {
   @Singleton
   @Provides
   def provideFinatraObjectMapper(
-    objectMapper: ObjectMapper with ScalaObjectMapper): FinatraObjectMapper = {
+    objectMapper: ObjectMapper with ScalaObjectMapper
+  ): FinatraObjectMapper = {
     new FinatraObjectMapper(objectMapper)
   }
 
@@ -49,7 +49,9 @@ class FinatraJacksonModule extends TwitterModule {
   @Singleton
   @Provides
   @CamelCaseMapper
-  def provideCamelCaseFinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper): FinatraObjectMapper = {
+  def provideCamelCaseFinatraObjectMapper(
+    objectMapper: ObjectMapper with ScalaObjectMapper
+  ): FinatraObjectMapper = {
     val objectMapperCopy = copy(objectMapper)
     objectMapperCopy.setPropertyNamingStrategy(CamelCasePropertyNamingStrategy)
     new FinatraObjectMapper(objectMapperCopy)
@@ -82,11 +84,8 @@ class FinatraJacksonModule extends TwitterModule {
   /* Protected */
 
   /** Jackson Modules to load */
-  protected def defaultJacksonModules: Seq[JacksonModule] = Seq(
-    new JodaModule,
-    DefaultScalaModule,
-    LongKeyDeserializers,
-    FinatraSerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
+  protected def defaultJacksonModules: Seq[JacksonModule] =
+    Seq(new JodaModule, DefaultScalaModule, LongKeyDeserializers, FinatraSerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
 
   protected def finatraCaseClassModule: Option[JacksonModule] = {
     Some(FinatraCaseClassModule)
@@ -112,14 +111,16 @@ class FinatraJacksonModule extends TwitterModule {
 
   protected val serializationConfig: Map[SerializationFeature, Boolean] = Map(
     SerializationFeature.WRITE_DATES_AS_TIMESTAMPS -> false,
-    SerializationFeature.WRITE_ENUMS_USING_TO_STRING -> true)
+    SerializationFeature.WRITE_ENUMS_USING_TO_STRING -> true
+  )
 
   protected val deserializationConfig: Map[DeserializationFeature, Boolean] = Map(
     DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES -> true,
     DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES -> false,
     DeserializationFeature.READ_ENUMS_USING_TO_STRING -> true,
     DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY -> true,
-    DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY -> true /* see jackson-module-scala/issues/148 */)
+    DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY -> true /* see jackson-module-scala/issues/148 */
+  )
 
   protected val propertyNamingStrategy: PropertyNamingStrategy = {
     new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy
@@ -127,8 +128,7 @@ class FinatraJacksonModule extends TwitterModule {
 
   protected def additionalJacksonModules: Seq[JacksonModule] = Seq()
 
-  protected def additionalMapperConfiguration(mapper: ObjectMapper) {
-  }
+  protected def additionalMapperConfiguration(mapper: ObjectMapper) {}
 
   protected def copy(objectMapper: ObjectMapper with ScalaObjectMapper) = {
     ObjectMapperCopier.copy(objectMapper)

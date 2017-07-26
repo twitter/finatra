@@ -6,7 +6,6 @@ import com.twitter.util.Local
 import java.util.{HashMap => JHashMap, Map => JMap}
 import net.codingwell.scalaguice.typeLiteral
 
-
 /**
  * A Guice 'Request Scope' implemented with com.twitter.util.Local
  *
@@ -26,8 +25,7 @@ class FinagleRequestScope extends Scope {
         val scopedObject = scopedObjects.get(key).asInstanceOf[T]
         if (scopedObject == null && !scopedObjects.containsKey(key)) {
           unscopedObject(key, unscopedProvider, scopedObjects)
-        }
-        else {
+        } else {
           scopedObject
         }
       }
@@ -56,11 +54,8 @@ class FinagleRequestScope extends Scope {
    * @param value Value to seed/add into the request scope
    * @param overwrite Whether to overwrite an existing value already in the request scope (defaults to false)
    */
-  def seed[T <: AnyRef : Manifest](value: T, overwrite: Boolean = false) {
-    seed(
-      Key.get(typeLiteral[T]),
-      value,
-      overwrite = overwrite)
+  def seed[T <: AnyRef: Manifest](value: T, overwrite: Boolean = false) {
+    seed(Key.get(typeLiteral[T]), value, overwrite = overwrite)
   }
 
   /**
@@ -77,7 +72,8 @@ class FinagleRequestScope extends Scope {
       assert(
         !scopedObjects.containsKey(key),
         "A value for the key " + key + " was already seeded in this scope. " +
-          "Old value: " + scopedObjects.get(key) + " New value: " + value)
+          "Old value: " + scopedObjects.get(key) + " New value: " + value
+      )
     }
 
     scopedObjects.put(key, value)
@@ -99,12 +95,17 @@ class FinagleRequestScope extends Scope {
           "Ensure that FinagleRequestScopeFilter is in your filter chain and FinagleRequestScopeModule is a loaded Guice module.\n" +
           "Ensure that the filter seeding " + lookupType + " is configured and in your filter chain.\n" +
           "Ensure that you're injecting Provider[" + lookupType + "] if injecting into a Singleton.\n" +
-          "Ensure that you're calling provider.get every time (and not caching/storing the providers result in a class val)")
+          "Ensure that you're calling provider.get every time (and not caching/storing the providers result in a class val)"
+      )
     }
   }
 
   // For details on CircularDependencyProxy, see https://github.com/google/guice/issues/843#issuecomment-54749202
-  private def unscopedObject[T](key: Key[T], unscoped: Provider[T], scopedObjects: JMap[Key[_], Object]): T = {
+  private def unscopedObject[T](
+    key: Key[T],
+    unscoped: Provider[T],
+    scopedObjects: JMap[Key[_], Object]
+  ): T = {
     val unscopedObject = unscoped.get()
 
     // don't remember proxies; these exist only to serve circular dependencies

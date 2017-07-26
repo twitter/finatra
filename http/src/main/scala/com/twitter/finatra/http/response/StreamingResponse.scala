@@ -43,7 +43,8 @@ object StreamingResponse {
     prefix: Option[Buf] = None,
     separator: Option[Buf] = None,
     suffix: Option[Buf] = None,
-    closeOnFinish: Closable = Closable.nop)(asyncStream: => AsyncStream[T]) = {
+    closeOnFinish: Closable = Closable.nop
+  )(asyncStream: => AsyncStream[T]) = {
     new StreamingResponse[T](
       status = status,
       toBuf = toBuf,
@@ -52,7 +53,8 @@ object StreamingResponse {
       separator = separator,
       suffix = suffix,
       asyncStream = () => asyncStream,
-      closeOnFinish = closeOnFinish)
+      closeOnFinish = closeOnFinish
+    )
   }
 
   def jsonArray[T](
@@ -60,24 +62,26 @@ object StreamingResponse {
     status: Status = Status.Ok,
     headers: Map[String, String] = Map(),
     closeOnFinish: Closable = Closable.nop,
-    asyncStream: => AsyncStream[T]) = {
+    asyncStream: => AsyncStream[T]
+  ) = {
 
     new StreamingResponse[T](
-      toBuf = toBuf ,
+      toBuf = toBuf,
       status = status,
       headers = headers,
       prefix = JsonArrayPrefix,
       separator = JsonArraySeparator,
       suffix = JsonArraySuffix,
       asyncStream = () => asyncStream,
-      closeOnFinish = closeOnFinish)
+      closeOnFinish = closeOnFinish
+    )
   }
 }
 
 /**
  * Representation of a streaming HTTP response based on the `AsyncStream` construct.
  */
-class StreamingResponse[T] private(
+class StreamingResponse[T] private (
   toBuf: T => Buf,
   status: Status,
   headers: Map[String, String],
@@ -85,8 +89,8 @@ class StreamingResponse[T] private(
   separator: Option[Buf],
   suffix: Option[Buf],
   asyncStream: () => AsyncStream[T],
-  closeOnFinish: Closable)
-  extends Logging {
+  closeOnFinish: Closable
+) extends Logging {
 
   def toFutureFinagleResponse: Future[Response] = {
     val response = Response()
@@ -124,10 +128,11 @@ class StreamingResponse[T] private(
     case None => Future.Unit
   }
 
-  private[this] def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] = separator match {
-    case Some(sep) => addSeparator(stream, sep)
-    case None => stream
-  }
+  private[this] def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] =
+    separator match {
+      case Some(sep) => addSeparator(stream, sep)
+      case None => stream
+    }
 
   private[this] def addSeparator(stream: AsyncStream[Buf], separator: Buf): AsyncStream[Buf] = {
     stream.take(1) ++ (stream.drop(1).map { buf =>
@@ -136,7 +141,7 @@ class StreamingResponse[T] private(
   }
 
   private[this] def setHeaders(headersOpt: Map[String, String], response: Response) = {
-    for((k,v) <- headers) {
+    for ((k, v) <- headers) {
       response.headerMap.set(k, v)
     }
   }

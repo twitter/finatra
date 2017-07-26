@@ -6,16 +6,10 @@ import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.ThriftRequest
 import com.twitter.util.Future
 
-class ThriftRequestWrapFilter[T, U](
-  methodName: String)
-  extends Filter[T, U, ThriftRequest[T], U] {
+class ThriftRequestWrapFilter[T, U](methodName: String) extends Filter[T, U, ThriftRequest[T], U] {
 
   override def apply(request: T, service: Service[ThriftRequest[T], U]): Future[U] = {
-    val thriftRequest = new ThriftRequest[T](
-      methodName,
-      Trace.id,
-      ClientId.current,
-      request)
+    val thriftRequest = new ThriftRequest[T](methodName, Trace.id, ClientId.current, request)
 
     service(thriftRequest)
   }

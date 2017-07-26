@@ -2,7 +2,10 @@ package com.twitter.finatra.json.internal.caseclass.jackson
 
 import com.fasterxml.jackson.databind.deser.Deserializers
 import com.fasterxml.jackson.databind.{BeanDescription, DeserializationConfig, JavaType}
-import com.twitter.finatra.json.internal.caseclass.validation.{DefaultValidationProvider, ValidationProvider}
+import com.twitter.finatra.json.internal.caseclass.validation.{
+  DefaultValidationProvider,
+  ValidationProvider
+}
 
 private[finatra] class FinatraCaseClassDeserializers(
   validationProvider: ValidationProvider = DefaultValidationProvider
@@ -11,7 +14,11 @@ private[finatra] class FinatraCaseClassDeserializers(
   val OPTION = classOf[Option[_]]
   val LIST = classOf[List[_]]
 
-  override def findBeanDeserializer(javaType: JavaType, config: DeserializationConfig, beanDesc: BeanDescription) = {
+  override def findBeanDeserializer(
+    javaType: JavaType,
+    config: DeserializationConfig,
+    beanDesc: BeanDescription
+  ) = {
     if (maybeIsCaseClass(javaType.getRawClass))
       new FinatraCaseClassDeserializer(javaType, config, beanDesc, validationProvider)
     else

@@ -21,9 +21,7 @@ abstract class AbstractApp extends App
  * Typically, you will only need to interact with the following methods:
  *   run -- callback executed after the injector is created and all @Lifecycle methods have completed.
  */
-trait App
-  extends com.twitter.app.App
-  with Logging {
+trait App extends com.twitter.app.App with Logging {
 
   private[inject] lazy val requiredModules = frameworkModules ++ modules ++ javaModules.asScala
 
@@ -98,8 +96,7 @@ trait App
    *
    * Any exceptions thrown in this method will result in the app exiting.
    */
-  protected def run(): Unit = {
-  }
+  protected def run(): Unit = {}
 
   /** Production modules */
   protected def modules: Seq[Module] = Seq()
@@ -121,7 +118,8 @@ trait App
    * Override modules from Java which redefine production bindings (only use overrideModules during testing)
    * If you think you need this in your main server you are most likely doing something incorrectly.
    */
-  protected def javaOverrideModules: java.util.Collection[Module] = new java.util.ArrayList[Module]()
+  protected def javaOverrideModules: java.util.Collection[Module] =
+    new java.util.ArrayList[Module]()
 
   /**
    * ONLY INTENDED FOR USE BY THE FRAMEWORK.
@@ -135,7 +133,8 @@ trait App
     assert(
       module != null,
       "Module cannot be null. If you are overriding a default module, " +
-      "override it with 'def' instead of 'val'")
+        "override it with 'def' instead of 'val'"
+    )
     frameworkModules += module
   }
 
@@ -155,33 +154,29 @@ trait App
       flags = flag.getAll(includeGlobal = false).toSeq,
       modules = requiredModules,
       overrideModules = overrideModules ++ javaOverrideModules.asScala ++ frameworkOverrideModules,
-      stage = stage)
+      stage = stage
+    )
   }
 
   /** Method to be called after injector creation */
   @Lifecycle
-  protected def postInjectorStartup(): Unit = {
-  }
+  protected def postInjectorStartup(): Unit = {}
 
   /** Warmup method to be called before postWarmup */
   @Lifecycle
-  protected def warmup(): Unit = {
-  }
+  protected def warmup(): Unit = {}
 
   /** Method to be called after successful warmup but before application initialization */
   @Lifecycle
-  protected def beforePostWarmup(): Unit = {
-  }
+  protected def beforePostWarmup(): Unit = {}
 
   /** Method to be called after successful warmup */
   @Lifecycle
-  protected def postWarmup(): Unit = {
-  }
+  protected def postWarmup(): Unit = {}
 
   /** Method to be be called after port warmup */
   @Lifecycle
-  protected def afterPostWarmup(): Unit = {
-  }
+  protected def afterPostWarmup(): Unit = {}
 
   /* Private */
 

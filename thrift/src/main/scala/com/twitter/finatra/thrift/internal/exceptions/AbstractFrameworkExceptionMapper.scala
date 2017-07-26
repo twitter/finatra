@@ -10,7 +10,7 @@ import com.twitter.util.Future
  * @tparam Rep the response mapped from T
  */
 private[exceptions] abstract class AbstractFrameworkExceptionMapper[T <: Throwable, Rep]
-  extends ExceptionMapper[T, Rep] {
+    extends ExceptionMapper[T, Rep] {
 
   final override def handleException(throwable: T): Future[Rep] = {
     handle(throwable)

@@ -20,11 +20,11 @@ import org.scalatest._
  * the [[com.twitter.inject.Test]] abstract class.
  */
 trait TestMixin
-  extends SuiteMixin
-  with BeforeAndAfterAll
-  with BeforeAndAfterEach
-  with Matchers
-  with Logging { this: Suite =>
+    extends SuiteMixin
+    with BeforeAndAfterAll
+    with BeforeAndAfterEach
+    with Matchers
+    with Logging { this: Suite =>
 
   /* Constructor */
 
@@ -55,8 +55,7 @@ trait TestMixin
   }
 
   protected def resourceAsString(resource: String) = {
-    IOUtils.toString(
-      getClass.getResourceAsStream(resource))
+    IOUtils.toString(getClass.getResourceAsStream(resource))
   }
 
   protected def sleep(duration: Duration, verbose: Boolean = false) {
@@ -83,7 +82,7 @@ trait TestMixin
     resultVal should equal(expectedVal)
   }
 
-  protected def assertFailedFuture[T <: Throwable : Manifest](result: Future[_]): T = {
+  protected def assertFailedFuture[T <: Throwable: Manifest](result: Future[_]): T = {
     try {
       Await.result(result)
       fail("Expected exception " + manifest[T].runtimeClass + " never thrown")

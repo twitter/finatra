@@ -1,6 +1,12 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
-import com.twitter.finatra.validation.{ErrorCode, Range, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{
+  ErrorCode,
+  Range,
+  ValidationMessageResolver,
+  ValidationResult,
+  Validator
+}
 
 private[finatra] object RangeValidator {
 
@@ -8,7 +14,8 @@ private[finatra] object RangeValidator {
     resolver: ValidationMessageResolver,
     value: Any,
     minValue: Long,
-    maxValue: Long): String = {
+    maxValue: Long
+  ): String = {
 
     resolver.resolve(classOf[Range], value, minValue, maxValue)
   }
@@ -16,10 +23,8 @@ private[finatra] object RangeValidator {
 
 private[finatra] class RangeValidator(
   validationMessageResolver: ValidationMessageResolver,
-  annotation: Range)
-  extends Validator[Range, Any](
-    validationMessageResolver,
-    annotation) {
+  annotation: Range
+) extends Validator[Range, Any](validationMessageResolver, annotation) {
 
   private val minValue = annotation.min()
   private val maxValue = annotation.max()
@@ -45,14 +50,16 @@ private[finatra] class RangeValidator(
     ValidationResult.validate(
       BigDecimal(minValue) <= value && value <= BigDecimal(maxValue),
       errorMessage(value),
-      errorCode(value))
+      errorCode(value)
+    )
   }
 
   private def validationResult(value: BigInt) = {
     ValidationResult.validate(
       BigInt(minValue) <= value && value <= BigInt(maxValue),
       errorMessage(value),
-      errorCode(value))
+      errorCode(value)
+    )
   }
 
   private def validationResult(value: Number) = {
@@ -60,15 +67,12 @@ private[finatra] class RangeValidator(
     ValidationResult.validate(
       minValue <= doubleValue && doubleValue <= maxValue,
       errorMessage(value),
-      errorCode(value))
+      errorCode(value)
+    )
   }
 
   private def errorMessage(value: Number) = {
-    RangeValidator.errorMessage(
-      validationMessageResolver,
-      value,
-      minValue,
-      maxValue)
+    RangeValidator.errorMessage(validationMessageResolver, value, minValue, maxValue)
   }
 
   private def errorCode(value: Number) = {

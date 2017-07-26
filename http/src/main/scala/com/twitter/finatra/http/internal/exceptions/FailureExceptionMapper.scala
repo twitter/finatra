@@ -8,17 +8,17 @@ import com.twitter.inject.Logging
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class FailureExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends AbstractFrameworkExceptionMapper[Failure](response)
-  with Logging {
+private[http] class FailureExceptionMapper @Inject()(response: ResponseBuilder)
+    extends AbstractFrameworkExceptionMapper[Failure](response)
+    with Logging {
 
   private val MaxDepth = 5
 
   override protected def handle(
     request: Request,
     response: ResponseBuilder,
-    exception: Failure): Response = {
+    exception: Failure
+  ): Response = {
     unwrapFailure(exception, MaxDepth) match {
       case cause: Failure =>
         error("Unhandled Exception", exception)

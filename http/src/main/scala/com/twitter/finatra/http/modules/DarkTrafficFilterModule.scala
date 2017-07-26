@@ -5,7 +5,11 @@ import com.twitter.finagle.exp.DarkTrafficFilter
 import com.twitter.finagle.{Filter, Http, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.annotations.{CanonicalResourceFilter, DarkTrafficFilterType, DarkTrafficService}
+import com.twitter.finatra.annotations.{
+  CanonicalResourceFilter,
+  DarkTrafficFilterType,
+  DarkTrafficService
+}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.inject.TwitterModule
@@ -13,7 +17,8 @@ import com.twitter.util.Duration
 
 abstract class DarkTrafficFilterModule extends TwitterModule {
 
-  private val destFlag = flag[String]("http.dark.service.dest", "Resolvable name/dest of dark traffic service")
+  private val destFlag =
+    flag[String]("http.dark.service.dest", "Resolvable name/dest of dark traffic service")
 
   /**
    * Forward the dark request after the service has processed the request
@@ -54,7 +59,8 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
           filteredDarkService,
           enableSampling,
           statsReceiver,
-          forwardAfterService)
+          forwardAfterService
+        )
       case _ => Filter.identity
     }
   }
@@ -71,11 +77,12 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
         val clientStatsReceiver = statsReceiver.scope("clnt", "dark_traffic_filter")
 
         Some(
-          Http.client
-            .withSession.acquisitionTimeout(acquisitionTimeout)
+          Http.client.withSession
+            .acquisitionTimeout(acquisitionTimeout)
             .withStatsReceiver(clientStatsReceiver)
             .withRequestTimeout(requestTimeout)
-            .newService(dest, label))
+            .newService(dest, label)
+        )
       case _ => None
     }
   }
@@ -95,7 +102,8 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
         } else {
           info.path
         }
-        request.headerMap.set(HttpHeaders.CanonicalResource, s"${request.method.toString}_${nameOrPath}")
+        request.headerMap
+          .set(HttpHeaders.CanonicalResource, s"${request.method.toString}_${nameOrPath}")
       }
       service(request)
     }

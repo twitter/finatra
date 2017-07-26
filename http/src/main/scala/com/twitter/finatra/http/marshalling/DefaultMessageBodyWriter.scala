@@ -1,4 +1,3 @@
 package com.twitter.finatra.http.marshalling
 
-trait DefaultMessageBodyWriter
-  extends MessageBodyWriter[Any]
+trait DefaultMessageBodyWriter extends MessageBodyWriter[Any]

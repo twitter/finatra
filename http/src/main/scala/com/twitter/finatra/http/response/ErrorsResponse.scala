@@ -11,11 +11,10 @@ object ErrorsResponse {
   def apply(request: Request, throwable: Throwable, msg: String): ErrorsResponse = {
     if (request.path.startsWith("/admin")) {
       ErrorsResponse(msg + ": " + throwable.getMessage)
-     } else {
+    } else {
       ErrorsResponse(msg)
     }
   }
 }
 
-case class ErrorsResponse(
-  errors: Seq[String])
+case class ErrorsResponse(errors: Seq[String])

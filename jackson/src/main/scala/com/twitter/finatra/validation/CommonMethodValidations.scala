@@ -10,7 +10,8 @@ object CommonMethodValidations {
     startTime: Option[DateTime],
     endTime: Option[DateTime],
     startTimeProperty: String,
-    endTimeProperty: String): ValidationResult = {
+    endTimeProperty: String
+  ): ValidationResult = {
 
     val rangeDefined = startTime.isDefined && endTime.isDefined
     val partialRange = !rangeDefined && (startTime.isDefined || endTime.isDefined)
@@ -19,9 +20,8 @@ object CommonMethodValidations {
       validateTimeRange(startTime.get, endTime.get, startTimeProperty, endTimeProperty)
     else if (partialRange)
       Invalid(
-        "both %s and %s are required for a valid range".format(
-          startTimeProperty,
-          endTimeProperty))
+        "both %s and %s are required for a valid range".format(startTimeProperty, endTimeProperty)
+      )
     else
       Valid
   }
@@ -30,13 +30,13 @@ object CommonMethodValidations {
     startTime: DateTime,
     endTime: DateTime,
     startTimeProperty: String,
-    endTimeProperty: String): ValidationResult = {
+    endTimeProperty: String
+  ): ValidationResult = {
 
-    ValidationResult.validate(startTime < endTime,
-      "%s [%s] must be after %s [%s]".format(
-        endTimeProperty,
-        endTime.utcIso8601,
-        startTimeProperty,
-        startTime.utcIso8601))
+    ValidationResult.validate(
+      startTime < endTime,
+      "%s [%s] must be after %s [%s]"
+        .format(endTimeProperty, endTime.utcIso8601, startTimeProperty, startTime.utcIso8601)
+    )
   }
 }

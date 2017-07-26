@@ -5,8 +5,8 @@ import com.twitter.finatra.http.exceptions.ExceptionMapper
 import com.twitter.finatra.http.response.ResponseBuilder
 
 private[exceptions] abstract class AbstractFrameworkExceptionMapper[T <: Throwable](
-  response: ResponseBuilder)
-  extends ExceptionMapper[T] {
+  response: ResponseBuilder
+) extends ExceptionMapper[T] {
 
   /**
    * Maps an exception of [[T]] to a [[com.twitter.finagle.http.Response]]

@@ -16,10 +16,8 @@ object CredentialsModule extends TwitterModule {
    * @see com.twitter.util.Credentials
    * @see com.twitter.finatra.utils.Credentials#isEmpty
    */
-  val credentialsFilePath = flag(
-    "credentials.file.path",
-    "",
-    "Path to a text file that contains credentials.")
+  val credentialsFilePath =
+    flag("credentials.file.path", "", "Path to a text file that contains credentials.")
 
   @Singleton
   @Provides

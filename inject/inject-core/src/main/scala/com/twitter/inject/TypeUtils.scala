@@ -24,7 +24,7 @@ object TypeUtils {
    * @tparam T - the [[TypeTag]] to convert
    * @return a Manifest[T] representation from the given type [T].
    */
-  def asManifest[T : TypeTag]: Manifest[T] = {
+  def asManifest[T: TypeTag]: Manifest[T] = {
     val t = typeTag[T]
     val mirror = t.mirror
     def manifestFromType(t: Type): Manifest[_] = {

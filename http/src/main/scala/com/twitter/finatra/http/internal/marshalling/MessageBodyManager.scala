@@ -17,18 +17,20 @@ import scala.reflect.ScalaSignature
 class MessageBodyManager @Inject()(
   injector: Injector,
   defaultMessageBodyReader: DefaultMessageBodyReader,
-  defaultMessageBodyWriter: DefaultMessageBodyWriter) {
+  defaultMessageBodyWriter: DefaultMessageBodyWriter
+) {
 
   private val classTypeToReader = mutable.Map[Type, MessageBodyReader[Any]]()
   private val classTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
   private val annotationTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
 
-  private val readerCache = new ConcurrentHashMap[Manifest[_], Option[MessageBodyReader[Any]]]().asScala
+  private val readerCache =
+    new ConcurrentHashMap[Manifest[_], Option[MessageBodyReader[Any]]]().asScala
   private val writerCache = new ConcurrentHashMap[Any, MessageBodyWriter[Any]]().asScala
 
   /* Public (Config methods called during server startup) */
 
-  def add[MBC <: MessageBodyComponent : Manifest](): Unit = {
+  def add[MBC <: MessageBodyComponent: Manifest](): Unit = {
     val componentSupertypeClass =
       if (classOf[MessageBodyReader[_]].isAssignableFrom(manifest[MBC].runtimeClass))
         classOf[MessageBodyReader[_]]
@@ -37,30 +39,30 @@ class MessageBodyManager @Inject()(
 
     val componentSupertypeType = typeLiteral.getSupertype(componentSupertypeClass).getType
 
-    add[MBC](
-      singleTypeParam(componentSupertypeType))
+    add[MBC](singleTypeParam(componentSupertypeType))
   }
 
-  def add[MBC <: MessageBodyComponent : Manifest](reader: MBC) = {
-    val componentSupertypeType = typeLiteral[MBC].getSupertype(classOf[MessageBodyReader[_]]).getType
+  def add[MBC <: MessageBodyComponent: Manifest](reader: MBC) = {
+    val componentSupertypeType =
+      typeLiteral[MBC].getSupertype(classOf[MessageBodyReader[_]]).getType
     addComponent(reader, singleTypeParam(componentSupertypeType))
   }
 
-  def addByAnnotation[Ann <: Annotation : Manifest, T <: MessageBodyWriter[_] : Manifest](): Unit = {
+  def addByAnnotation[Ann <: Annotation: Manifest, T <: MessageBodyWriter[_]: Manifest](): Unit = {
     val messageBodyWriter = injector.instance[T]
     val annot = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
     annotationTypeToWriter(annot) = messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]]
   }
 
-  def addByComponentType[M <: MessageBodyComponent : Manifest, T <: MessageBodyWriter[_] : Manifest](): Unit = {
+  def addByComponentType[M <: MessageBodyComponent: Manifest, T <: MessageBodyWriter[_]: Manifest]()
+    : Unit = {
     val messageBodyWriter = injector.instance[T]
     val componentType = manifest[M].runtimeClass.asInstanceOf[Class[M]]
     writerCache.putIfAbsent(componentType, messageBodyWriter.asInstanceOf[MessageBodyWriter[Any]])
   }
 
-  def addExplicit[MBC <: MessageBodyComponent : Manifest, TypeToReadOrWrite: Manifest](): Unit = {
-    add[MBC](
-      typeLiteral[TypeToReadOrWrite].getType)
+  def addExplicit[MBC <: MessageBodyComponent: Manifest, TypeToReadOrWrite: Manifest](): Unit = {
+    add[MBC](typeLiteral[TypeToReadOrWrite].getType)
   }
 
   /* Public (Per-request read and write methods) */
@@ -80,7 +82,9 @@ class MessageBodyManager @Inject()(
 
   private def findReaderBySuperType(t: Type): Option[MessageBodyReader[Any]] = {
     classTypeToReader
-      .find { case (tpe, _) => tpe.asInstanceOf[Class[_]].isAssignableFrom(t.asInstanceOf[Class[_]]) }
+      .find {
+        case (tpe, _) => tpe.asInstanceOf[Class[_]].isAssignableFrom(t.asInstanceOf[Class[_]])
+      }
       .map { case (_, messageBodyReader) => messageBodyReader }
   }
 
@@ -88,7 +92,8 @@ class MessageBodyManager @Inject()(
   def writer(obj: Any): MessageBodyWriter[Any] = {
     val objClass = obj.getClass
     writerCache.getOrElseUpdate(objClass, {
-      (classTypeToWriter.get(objClass) orElse classAnnotationToWriter(objClass)) getOrElse defaultMessageBodyWriter
+      (classTypeToWriter
+        .get(objClass) orElse classAnnotationToWriter(objClass)) getOrElse defaultMessageBodyWriter
     })
   }
 
