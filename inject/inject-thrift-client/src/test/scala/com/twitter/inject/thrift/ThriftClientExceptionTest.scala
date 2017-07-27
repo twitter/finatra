@@ -28,17 +28,15 @@ class ThriftClientExceptionTest extends Test {
     override def toString: String = name
   }
 
-
   test("toString") {
     val cause = new Exception("ThriftClientException")
 
-    val thriftClientException = new ThriftClientException(
-      "my-client",
-      FakeThriftMethod,
-      cause)
+    val thriftClientException = new ThriftClientException("my-client", FakeThriftMethod, cause)
 
     thriftClientException.toString should equal(
-      s"ThriftClientException: my-client/${ThriftMethodUtils.prettyStr(FakeThriftMethod)} = ${ExceptionUtils.stripNewlines(cause)}")
+      s"ThriftClientException: my-client/${ThriftMethodUtils
+        .prettyStr(FakeThriftMethod)} = ${ExceptionUtils.stripNewlines(cause)}"
+    )
   }
 
 }

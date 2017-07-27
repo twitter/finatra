@@ -6,6 +6,6 @@ import com.twitter.inject.conversions.iterable._
 class IterableConversionsTest extends Test {
 
   test("RichIterable#distinctBy") {
-    Seq("a", "b", "aa", "aaa", "bb", "c") distinctBy {_.size} should equal(Seq("a", "aa", "aaa"))
+    Seq("a", "b", "aa", "aaa", "bb", "c") distinctBy { _.size } should equal(Seq("a", "aa", "aaa"))
   }
 }

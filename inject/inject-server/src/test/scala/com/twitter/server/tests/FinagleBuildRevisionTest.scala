@@ -13,7 +13,9 @@ class FinagleBuildRevisionTest extends Test {
   }
 
   test("fail revision parsing") {
-    FinagleBuildRevision.convertBuildRevision(RandomStringUtils.randomAlphanumeric(20)) should be(-1L)
+    FinagleBuildRevision.convertBuildRevision(RandomStringUtils.randomAlphanumeric(20)) should be(
+      -1L
+    )
   }
 
 }

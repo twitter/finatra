@@ -8,9 +8,7 @@ import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
 
-class Add1ServerFeatureTest
-  extends FeatureTest
-  with Mockito {
+class Add1ServerFeatureTest extends FeatureTest with Mockito {
 
   val adderFuture = mock[Adder[Future]]
 
@@ -21,9 +19,6 @@ class Add1ServerFeatureTest
   test("add1") {
     adderFuture.add1(5) returns Future(6)
 
-    server.httpGet(
-      "/add1?num=5",
-      andExpect = Status.Ok,
-      withBody = "6")
+    server.httpGet("/add1?num=5", andExpect = Status.Ok, withBody = "6")
   }
 }

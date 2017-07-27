@@ -42,16 +42,12 @@ class JsonBenchmark {
     val mapperModule = new FinatraJacksonModule() {
 
       // omit FinatraCaseClassModule
-      override def defaultJacksonModules = Seq(
-        new JodaModule,
-        DefaultScalaModule,
-        FinatraSerDeSimpleModule)
+      override def defaultJacksonModules =
+        Seq(new JodaModule, DefaultScalaModule, FinatraSerDeSimpleModule)
     }
     val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
     new FinatraObjectMapper(scalaObjectMapper)
   }
-
-
   @Benchmark
   def finatraCustomCaseClassDeserializer() = {
     val is = new ByteArrayInputStream(bytes)
@@ -65,19 +61,18 @@ class JsonBenchmark {
   }
 }
 
-case class TestTask(
-  request_id: String,
-  group_ids: Seq[String],
-  params: TestTaskParams)
+case class TestTask(request_id: String, group_ids: Seq[String], params: TestTaskParams)
 
 case class TestTaskParams(
   results: TaskTaskResults,
   start_time: DateTime,
   end_time: DateTime,
-  priority: String)
+  priority: String
+)
 
 case class TaskTaskResults(
   country_codes: Seq[String],
   group_by: Seq[String],
   format: Option[TestFormat],
-  demographics: Seq[TestDemographic])
+  demographics: Seq[TestDemographic]
+)

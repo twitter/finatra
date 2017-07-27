@@ -25,7 +25,8 @@ class ExternalServiceExceptionMatcherTest extends Test {
       new TimeoutException() {
         override protected val timeout: Duration = 5.seconds
         override protected def explanation: String = "timeout!"
-      })
+      }
+    )
 
     externalExceptions forall ExternalServiceExceptionMatcher.apply should equal(true)
 
@@ -35,10 +36,8 @@ class ExternalServiceExceptionMatcherTest extends Test {
   }
 
   test("not match non-external exceptions") {
-    val nonExternalExceptions = Seq(
-      new RuntimeException(),
-      new IOException(),
-      new NullPointerException)
+    val nonExternalExceptions =
+      Seq(new RuntimeException(), new IOException(), new NullPointerException)
 
     nonExternalExceptions forall ExternalServiceExceptionMatcher.apply should equal(false)
 

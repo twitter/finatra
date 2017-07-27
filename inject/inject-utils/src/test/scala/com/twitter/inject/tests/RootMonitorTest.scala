@@ -1,7 +1,12 @@
 package com.twitter.inject.tests
 
 import com.twitter.conversions.time._
-import com.twitter.finagle.{BackupRequestLost, Failure, IndividualRequestTimeoutException, CancelledRequestException}
+import com.twitter.finagle.{
+  BackupRequestLost,
+  Failure,
+  IndividualRequestTimeoutException,
+  CancelledRequestException
+}
 import com.twitter.inject.{RootMonitor, Test}
 
 class RootMonitorTest extends Test {

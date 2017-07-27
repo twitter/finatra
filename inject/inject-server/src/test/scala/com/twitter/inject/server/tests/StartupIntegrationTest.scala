@@ -25,9 +25,7 @@ class StartupIntegrationTest extends Test {
     val server = new EmbeddedTwitterServer(new SimpleHttpTwitterServer)
     server.assertHealthy()
 
-    server.httpGetAdmin(
-      "/admin/server_info",
-      andExpect = Status.Ok)
+    server.httpGetAdmin("/admin/server_info", andExpect = Status.Ok)
 
     server.close()
   }
@@ -39,16 +37,14 @@ class StartupIntegrationTest extends Test {
   }
 
   test("embedded raw com.twitter.server.Twitter starts up") {
-    val server = new EmbeddedTwitterServer(
-      twitterServer = new ExtendedBaseTwitterServer)
+    val server = new EmbeddedTwitterServer(twitterServer = new ExtendedBaseTwitterServer)
 
     server.assertHealthy()
     server.close()
   }
 
   test("TwitterServer starts up") {
-    val server = new EmbeddedTwitterServer(
-      twitterServer = new TwitterServer {})
+    val server = new EmbeddedTwitterServer(twitterServer = new TwitterServer {})
 
     server.assertHealthy()
     server.close()
@@ -89,8 +85,7 @@ class StartupIntegrationTest extends Test {
       }
     }
 
-    val server = new EmbeddedTwitterServer(
-      twitterServer = new WarmupServer)
+    val server = new EmbeddedTwitterServer(twitterServer = new WarmupServer)
 
     server.assertHealthy(healthy = true)
     server.close()
@@ -122,17 +117,14 @@ class StartupIntegrationTest extends Test {
   }
 
   test("register framework library") {
-    val server = new EmbeddedTwitterServer(
-      new ServerWithModuleInstall,
-      disableTestLogging = true)
+    val server = new EmbeddedTwitterServer(new ServerWithModuleInstall, disableTestLogging = true)
     try {
       server.start()
 
-      val response = server.httpGetAdmin(
-        "/admin/registry.json",
-        andExpect = Status.Ok)
+      val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
 
-      val json: Map[String, Any] = JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+      val json: Map[String, Any] =
+        JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
       val registry = json("registry").asInstanceOf[Map[String, Any]]
       assert(registry.contains("library"))
       assert(registry("library").asInstanceOf[Map[String, String]].contains("finatra"))
@@ -154,8 +146,7 @@ class SimpleTwitterServer extends TwitterServer {
   override val modules = Seq()
 }
 
-class SimpleHttpTwitterServer extends TwitterServer {
-}
+class SimpleHttpTwitterServer extends TwitterServer {}
 
 class ServerWithTwitterModuleInstall extends TwitterServer {
   override val modules = Seq(new TwitterModule {
@@ -196,8 +187,6 @@ class StartupTestException(msg: String) extends Exception(msg)
 
 class ExtendedBaseTwitterServer extends BaseTwitterServer {
   def main() {
-    Await.ready(
-      adminHttpServer)
+    Await.ready(adminHttpServer)
   }
 }
-

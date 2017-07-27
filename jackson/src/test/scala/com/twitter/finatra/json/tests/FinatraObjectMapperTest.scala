@@ -1,18 +1,34 @@
 package com.twitter.finatra.json.tests
 
 import com.fasterxml.jackson.databind.node.{IntNode, TreeTraversingParser}
-import com.fasterxml.jackson.databind.{JsonMappingException, JsonNode, ObjectMapper, PropertyNamingStrategy}
+import com.fasterxml.jackson.databind.{
+  JsonMappingException,
+  JsonNode,
+  ObjectMapper,
+  PropertyNamingStrategy
+}
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.annotations.CamelCaseMapper
-import com.twitter.finatra.json.internal.caseclass.exceptions.{CaseClassMappingException, CaseClassValidationException, JsonInjectionNotSupportedException, RequestFieldInjectionNotSupportedException}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{
+  CaseClassMappingException,
+  CaseClassValidationException,
+  JsonInjectionNotSupportedException,
+  RequestFieldInjectionNotSupportedException
+}
 import com.twitter.finatra.json.internal.caseclass.reflection.MissingExpectedType
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.finatra.json.tests.internal.Obj.{NestedCaseClassInObject, NestedCaseClassInObjectWithNestedCaseClassInObjectParam}
+import com.twitter.finatra.json.tests.internal.Obj.{
+  NestedCaseClassInObject,
+  NestedCaseClassInObjectWithNestedCaseClassInObjectParam
+}
 import com.twitter.finatra.json.tests.internal.TypeAndCompanion.NestedCaseClassInCompanion
 import com.twitter.finatra.json.tests.internal._
-import com.twitter.finatra.json.tests.internal.internal.{SimplePersonInPackageObject, SimplePersonInPackageObjectWithoutConstructorParams}
+import com.twitter.finatra.json.tests.internal.internal.{
+  SimplePersonInPackageObject,
+  SimplePersonInPackageObjectWithoutConstructorParams
+}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.{Logging, Test}
 import com.twitter.inject.app.TestInjector
@@ -30,21 +46,15 @@ class FinatraObjectMapperTest extends Test with Logging {
   val mapper = FinatraObjectMapper.create()
   /* Test Injector */
   val injector =
-    TestInjector(
-      FinatraJacksonModule)
-    .create
+    TestInjector(FinatraJacksonModule).create
 
   test("simple tests#parse super simple") {
     val foo = parse[SimplePerson]("""{"name": "Steve"}""")
     foo should equal(SimplePerson("Steve"))
   }
 
-  val steve = Person(
-    id = 1,
-    name = "Steve",
-    age = Some(20),
-    age_with_default = Some(20),
-    nickname = "ace")
+  val steve =
+    Person(id = 1, name = "Steve", age = Some(20), age_with_default = Some(20), nickname = "ace")
 
   val steveJson =
     """{
@@ -84,11 +94,12 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   test("simple tests#serialize case class with logging") {
     val steveWithLogging = PersonWithLogging(
-    id = 1,
-    name = "Steve",
-    age = Some(20),
-    age_with_default = Some(20),
-    nickname = "ace")
+      id = 1,
+      name = "Steve",
+      age = Some(20),
+      age_with_default = Some(20),
+      nickname = "ace"
+    )
 
     assertJson(steveWithLogging, steveJson)
   }
@@ -103,8 +114,7 @@ class FinatraObjectMapperTest extends Test with Logging {
        "nickname" : "ace",
        "extra" : "extra"
      }
-                                """
-    )
+                                """)
     person should equal(steve)
   }
 
@@ -118,8 +128,7 @@ class FinatraObjectMapperTest extends Test with Logging {
        "age_with_default" : 20,
        "nickname" : "ace"
      }
-                                """
-    )
+                                """)
     person should equal(steve)
   }
 
@@ -129,14 +138,14 @@ class FinatraObjectMapperTest extends Test with Logging {
       "id" : 1,
       "name.last" : "Cosenza"
     }
-                                              """
-    )
+                                              """)
 
     person should equal(
       PersonWithDottedName(
         id = 1,
         lastName = "Cosenza"
-      ))
+      )
+    )
   }
 
   test("simple tests#parse json with missing 'id' and 'name' field and invalid age field") {
@@ -146,10 +155,9 @@ class FinatraObjectMapperTest extends Test with Logging {
              "age_with_default" : 20,
              "nickname" : "ace"
           }""",
-      withErrors = Seq(
-        "age: 'foo' is not a valid Integer",
-        "id: field is required",
-        "name: field is required"))
+      withErrors =
+        Seq("age: 'foo' is not a valid Integer", "id: field is required", "name: field is required")
+    )
   }
 
   test("simple tests#parse nested json with missing fields") {
@@ -166,7 +174,9 @@ class FinatraObjectMapperTest extends Test with Logging {
         "make: 'Foo' is not a valid CarMake with valid values: Ford, Honda",
         "model: field is required",
         "passengers.age: 'blah' is not a valid Integer",
-        "passengers.name: field is required"))
+        "passengers.name: field is required"
+      )
+    )
   }
 
   test("simple tests#parse json with missing 'nickname' field that has a string default") {
@@ -180,9 +190,10 @@ class FinatraObjectMapperTest extends Test with Logging {
     person should equal(steve.copy(nickname = "unknown"))
   }
 
-  test("simple tests#parse json with missing 'age' field that is an Option without a default should succeed") {
-    parse[Person](
-      """
+  test(
+    "simple tests#parse json with missing 'age' field that is an Option without a default should succeed"
+  ) {
+    parse[Person]("""
         {
            "id" : 1,
            "name" : "Steve",
@@ -258,7 +269,9 @@ class FinatraObjectMapperTest extends Test with Logging {
     json should equal(withoutJsonPropertyAnnotation)
   }
 
-  test("simple tests#use default Jackson mapper without setting naming strategy to see if it remains camelCase to verify default Jackson behavior") {
+  test(
+    "simple tests#use default Jackson mapper without setting naming strategy to see if it remains camelCase to verify default Jackson behavior"
+  ) {
     val objMapper = new ObjectMapper with ScalaObjectMapper
     objMapper.registerModule(DefaultScalaModule)
 
@@ -266,7 +279,9 @@ class FinatraObjectMapperTest extends Test with Logging {
     response should equal("""{"longFieldName":"abc"}""")
   }
 
-  test("simple tests#use default Jackson mapper after setting naming strategy and see if it changes to verify default Jackson behavior") {
+  test(
+    "simple tests#use default Jackson mapper after setting naming strategy and see if it changes to verify default Jackson behavior"
+  ) {
     val objMapper = new ObjectMapper with ScalaObjectMapper
     objMapper.registerModule(DefaultScalaModule)
     objMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy)
@@ -296,7 +311,9 @@ class FinatraObjectMapperTest extends Test with Logging {
         CarMakeEnum.vw,
         Some(CarMakeEnum.ford),
         Seq(CarMakeEnum.vw, CarMakeEnum.ford),
-        Set(CarMakeEnum.ford, CarMakeEnum.vw)))
+        Set(CarMakeEnum.ford, CarMakeEnum.vw)
+      )
+    )
   }
 
   test("enums#invalid enum entry") {
@@ -306,7 +323,9 @@ class FinatraObjectMapperTest extends Test with Logging {
         "make" : "foo"
        }""")
     }
-    e.errors map { _.getMessage } should equal(Seq("""make: 'foo' is not a valid CarMakeEnum with valid values: ford, vw"""))
+    e.errors map { _.getMessage } should equal(
+      Seq("""make: 'foo' is not a valid CarMakeEnum with valid values: ford, vw""")
+    )
   }
 
   test("enums#invalid validation") {
@@ -324,19 +343,20 @@ class FinatraObjectMapperTest extends Test with Logging {
     DateTime.now < DateTime.now //including so that import com.twitter.inject.conversions.time._ is not removed (since there was a previous bug where _time included a DateTime type alias)
     parse[CaseClassWithDateTime]("""{
          "date_time" : "2014-05-30T03:57:59.302Z"
-       }""") should equal(CaseClassWithDateTime(new DateTime("2014-05-30T03:57:59.302Z", DateTimeZone.UTC)))
+       }""") should equal(
+      CaseClassWithDateTime(new DateTime("2014-05-30T03:57:59.302Z", DateTimeZone.UTC))
+    )
   }
 
   test("Jodatime#invalid DateTime") {
     assertJsonParse[CaseClassWithDateTime]("""{
          "date_time" : ""
-       }""",
-      withErrors = Seq(
-        """date_time: field cannot be empty"""))
+       }""", withErrors = Seq("""date_time: field cannot be empty"""))
   }
 
   test("Jodatime#invalid DateTime's") {
-    assertJsonParse[CaseClassWithIntAndDateTime]("""{
+    assertJsonParse[CaseClassWithIntAndDateTime](
+      """{
          "name" : "Bob",
          "age" : "old",
          "age2" : "1",
@@ -352,7 +372,8 @@ class FinatraObjectMapperTest extends Test with Logging {
         """date_time3: field cannot be negative""",
         """date_time4: field cannot be empty""",
         """date_time: error parsing 'today' into an ISO 8601 datetime"""
-      ))
+      )
+    )
   }
 
   test("escaped fields#long") {
@@ -368,15 +389,15 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("escaped fields#non-unicode escaped") {
-    parse[CaseClassWithEscapedNormalString](
-      """{
+    parse[CaseClassWithEscapedNormalString]("""{
           "a" : "foo"
          }""") should equal(CaseClassWithEscapedNormalString("foo"))
   }
 
   test("escaped fields#unicode and non-unicode fields") {
-    parse[UnicodeNameCaseClass](
-      """{"winning-id":23,"name":"the name of this"}""") should equal(UnicodeNameCaseClass(23, "the name of this"))
+    parse[UnicodeNameCaseClass]("""{"winning-id":23,"name":"the name of this"}""") should equal(
+      UnicodeNameCaseClass(23, "the name of this")
+    )
   }
 
   test("Injection when using FinatraObjectMapper.create#Inject not found field") {
@@ -403,7 +424,9 @@ class FinatraObjectMapperTest extends Test with Logging {
     origObj should equal(obj)
   }
 
-  test("wrapped values#direct WrappedValue for String when asked to parse wrapped json object should throw exception") {
+  test(
+    "wrapped values#direct WrappedValue for String when asked to parse wrapped json object should throw exception"
+  ) {
     val origObj = WrappedValueString("1")
     intercept[JsonMappingException] {
       parse[WrappedValueString]("""{"value": "1"}""")
@@ -438,8 +461,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("wrapped values#Seq[WrappedValue]") {
-    generate(
-      Seq(WrappedValueLong(11111111))) should be("""[11111111]""")
+    generate(Seq(WrappedValueLong(11111111))) should be("""[11111111]""")
   }
 
   test("wrapped values#Map[WrappedValueString, String]") {
@@ -450,9 +472,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("wrapped values#Map[WrappedValueLong, String]") {
-    assertJson(
-      Map(WrappedValueLong(11111111) -> "asdf"),
-      """{"11111111":"asdf"}""")
+    assertJson(Map(WrappedValueLong(11111111) -> "asdf"), """{"11111111":"asdf"}""")
   }
 
   test("wrapped values#deser Map[Long, String]") {
@@ -468,24 +488,22 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("wrapped values#Map[String, WrappedValueLong]") {
-    generate(
-      Map("asdf" -> WrappedValueLong(11111111))) should be("""{"asdf":11111111}""")
+    generate(Map("asdf" -> WrappedValueLong(11111111))) should be("""{"asdf":11111111}""")
   }
 
   test("wrapped values#Map[String, WrappedValueString]") {
-    generate(
-      Map("asdf" -> WrappedValueString("11111111"))) should be("""{"asdf":"11111111"}""")
+    generate(Map("asdf" -> WrappedValueString("11111111"))) should be("""{"asdf":"11111111"}""")
   }
 
   test("wrapped values#object with Map[WrappedValueString, String]") {
     assertJson(
       obj = WrappedValueStringMapObject(Map(WrappedValueString("11111111") -> "asdf")),
-      expected =
-        """{
+      expected = """{
               "map" : {
                 "11111111":"asdf"
            }
-         }""")
+         }"""
+    )
   }
 
   test("fail when CaseClassWithSeqLongs with null array element") {
@@ -545,15 +563,19 @@ class FinatraObjectMapperTest extends Test with Logging {
   // Using Arrays of non-wrapped types that extend AnyVal (Integer, Long, Boolean, etc) in case
   // classes is not recommended and bypasses both Jackson's and Finatra's null checking as
   // demonstrated here:
-  test("Arrays of types extending AnyVal (inconsistent corner case)#" +
-    "Deserialize null -> 0 when CaseClassWithArrayLong with null array element") {
+  test(
+    "Arrays of types extending AnyVal (inconsistent corner case)#" +
+      "Deserialize null -> 0 when CaseClassWithArrayLong with null array element"
+  ) {
     val obj = parse[CaseClassWithArrayLong]("""{"array": [null]}""")
     val expected = CaseClassWithArrayLong(array = Array(0L))
     obj.array should equal(expected.array)
   }
 
-  test("Arrays of types extending AnyVal (inconsistent corner case)#" +
-    "Deserialize null -> false when CaseClassWithArrayBoolean with null array element") {
+  test(
+    "Arrays of types extending AnyVal (inconsistent corner case)#" +
+      "Deserialize null -> false when CaseClassWithArrayBoolean with null array element"
+  ) {
     val obj = parse[CaseClassWithArrayBoolean]("""{"array": [null]}""")
     val expected = CaseClassWithArrayBoolean(array = Array(false))
     obj.array should equal(expected.array)
@@ -601,7 +623,9 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   test("A case class with ignored members is parsable from a JSON object without those fields") {
     parse[CaseClassWithIgnoredField]("""{"id":1}""") should be(CaseClassWithIgnoredField(1))
-    parse[CaseClassWithIgnoredFieldsMatchAfterToSnakeCase]("""{"id":1}""") should be(CaseClassWithIgnoredFieldsMatchAfterToSnakeCase(1))
+    parse[CaseClassWithIgnoredFieldsMatchAfterToSnakeCase]("""{"id":1}""") should be(
+      CaseClassWithIgnoredFieldsMatchAfterToSnakeCase(1)
+    )
   }
 
   test("A case class with ignored members is not parsable from an incomplete JSON object") {
@@ -636,7 +660,9 @@ class FinatraObjectMapperTest extends Test with Logging {
     parse[CaseClassWithLazyField]("""{"id":1}""") should be(CaseClassWithLazyField(1))
   }
 
-  test("A case class with an overloaded field generates a JSON object with the nullary version of that field") {
+  test(
+    "A case class with an overloaded field generates a JSON object with the nullary version of that field"
+  ) {
     pending //fails on java 7. ok for now since we don't need this functionality
     generate(CaseClassWithOverloadedField(1)) should be("""{"id":1}""")
   }
@@ -653,11 +679,15 @@ class FinatraObjectMapperTest extends Test with Logging {
     generate(CaseClassWithOption(None)) should be("""{}""")
   }
 
-  test("A case class with an Option[String] member is parsable from a JSON object without that field") {
+  test(
+    "A case class with an Option[String] member is parsable from a JSON object without that field"
+  ) {
     parse[CaseClassWithOption]("""{}""") should be(CaseClassWithOption(None))
   }
 
-  test("A case class with an Option[String] member is parsable from a JSON object with a null value for that field") {
+  test(
+    "A case class with an Option[String] member is parsable from a JSON object with a null value for that field"
+  ) {
     parse[CaseClassWithOption]("""{"value":null}""") should be(CaseClassWithOption(None))
   }
 
@@ -666,8 +696,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("issues#standalone map") {
-    val map = parse[Map[String, String]](
-      """
+    val map = parse[Map[String, String]]("""
       {
         "one": "two"
       }
@@ -676,8 +705,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("issues#case class with map") {
-    val obj = parse[CaseClassWithMap](
-      """
+    val obj = parse[CaseClassWithMap]("""
       {
         "map": {"one": "two"}
       }
@@ -692,15 +720,16 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("issues#case class nested within an object") {
-    parse[NestedCaseClassInObject](
-      """
+    parse[NestedCaseClassInObject]("""
       {
         "id": "foo"
       }
       """) should equal(NestedCaseClassInObject(id = "foo"))
   }
 
-  test("issues#case class nested within an object with member that is also a case class in an object") {
+  test(
+    "issues#case class nested within an object with member that is also a case class in an object"
+  ) {
     parse[NestedCaseClassInObjectWithNestedCaseClassInObjectParam](
       """
       {
@@ -709,7 +738,11 @@ class FinatraObjectMapperTest extends Test with Logging {
         }
       }
       """
-    ) should equal(NestedCaseClassInObjectWithNestedCaseClassInObjectParam(nested = NestedCaseClassInObject(id = "foo")))
+    ) should equal(
+      NestedCaseClassInObjectWithNestedCaseClassInObjectParam(
+        nested = NestedCaseClassInObject(id = "foo")
+      )
+    )
   }
 
   test("issues#case class nested within a companion object") {
@@ -725,8 +758,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   case class NestedCaseClassInClass(id: String)
   test("issues#case class nested within a class") {
     intercept[MissingExpectedType] {
-      parse[NestedCaseClassInClass](
-        """
+      parse[NestedCaseClassInClass]("""
         {
           "id": "foo"
         }
@@ -735,8 +767,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("case class with set of longs") {
-    val obj = parse[CaseClassWithSetOfLongs](
-      """
+    val obj = parse[CaseClassWithSetOfLongs]("""
       {
         "set": [5000000, 1, 2, 3, 1000]
       }
@@ -745,8 +776,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("case class with seq of longs") {
-    val obj = parse[CaseClassWithSeqOfLongs](
-      """
+    val obj = parse[CaseClassWithSeqOfLongs]("""
       {
         "seq": [%s]
       }
@@ -756,8 +786,7 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   test("nested case class with collection of longs") {
     val idsStr = 1004 to 1500 mkString ","
-    val obj = parse[CaseClassWithNestedSeqLong](
-      """
+    val obj = parse[CaseClassWithNestedSeqLong]("""
       {
         "seq_class" : {"seq": [%s]},
         "set_class" : {"set": [%s]}
@@ -768,7 +797,8 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("complex without companion class") {
-    val json = """{
+    val json =
+      """{
                  "entity_ids" : [ 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1036, 1037, 1038, 1039, 1040, 1041, 1042, 1043, 1044, 1045, 1046, 1047, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1058, 1059, 1060, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118, 1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1128, 1129, 1130, 1131, 1132, 1133, 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154, 1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163, 1164, 1165, 1166, 1167, 1168, 1169, 1170, 1171, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1179, 1180, 1181, 1182, 1183, 1184, 1185, 1186, 1187, 1188, 1189, 1190, 1191, 1192, 1193, 1194, 1195, 1196, 1197, 1198, 1199, 1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1234, 1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243, 1244, 1245, 1246, 1247, 1248, 1249, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1259, 1260, 1261, 1262, 1263, 1264, 1265, 1266, 1267, 1268, 1269, 1270, 1271, 1272, 1273, 1274, 1275, 1276, 1277, 1278, 1279, 1280, 1281, 1282, 1283, 1284, 1285, 1286, 1287, 1288, 1289, 1290, 1291, 1292, 1293, 1294, 1295, 1296, 1297, 1298, 1299, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312, 1313, 1314, 1315, 1316, 1317, 1318, 1319, 1320, 1321, 1322, 1323, 1324, 1325, 1326, 1327, 1328, 1329, 1330, 1331, 1332, 1333, 1334, 1335, 1336, 1337, 1338, 1339, 1340, 1341, 1342, 1343, 1344, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1352, 1353, 1354, 1355, 1356, 1357, 1358, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1366, 1367, 1368, 1369, 1370, 1371, 1372, 1373, 1374, 1375, 1376, 1377, 1378, 1379, 1380, 1381, 1382, 1383, 1384, 1385, 1386, 1387, 1388, 1389, 1390, 1391, 1392, 1393, 1394, 1395, 1396, 1397, 1398, 1399, 1400, 1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1414, 1415, 1416, 1417, 1418, 1419, 1420, 1421, 1422, 1423, 1424, 1425, 1426, 1427, 1428, 1429, 1430, 1431, 1432, 1433, 1434, 1435, 1436, 1437, 1438, 1439, 1440, 1441, 1442, 1443, 1444, 1445, 1446, 1447, 1448, 1449, 1450, 1451, 1452, 1453, 1454, 1455, 1456, 1457, 1458, 1459, 1460, 1461, 1462, 1463, 1464, 1465, 1466, 1467, 1468, 1469, 1470, 1471, 1472, 1473, 1474, 1475, 1476, 1477, 1478, 1479, 1480, 1481, 1482, 1483, 1484, 1485, 1486, 1487, 1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1497, 1498, 1499, 1500 ],
                  "previous_cursor" : "$",
                  "next_cursor" : "2892e7ab37d44c6a15b438f78e8d76ed$"
@@ -778,7 +808,8 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("complex with companion class") {
-    val json = """{
+    val json =
+      """{
                  "entity_ids" : [ 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1036, 1037, 1038, 1039, 1040, 1041, 1042, 1043, 1044, 1045, 1046, 1047, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1058, 1059, 1060, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118, 1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1128, 1129, 1130, 1131, 1132, 1133, 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154, 1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163, 1164, 1165, 1166, 1167, 1168, 1169, 1170, 1171, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1179, 1180, 1181, 1182, 1183, 1184, 1185, 1186, 1187, 1188, 1189, 1190, 1191, 1192, 1193, 1194, 1195, 1196, 1197, 1198, 1199, 1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1234, 1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243, 1244, 1245, 1246, 1247, 1248, 1249, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1259, 1260, 1261, 1262, 1263, 1264, 1265, 1266, 1267, 1268, 1269, 1270, 1271, 1272, 1273, 1274, 1275, 1276, 1277, 1278, 1279, 1280, 1281, 1282, 1283, 1284, 1285, 1286, 1287, 1288, 1289, 1290, 1291, 1292, 1293, 1294, 1295, 1296, 1297, 1298, 1299, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312, 1313, 1314, 1315, 1316, 1317, 1318, 1319, 1320, 1321, 1322, 1323, 1324, 1325, 1326, 1327, 1328, 1329, 1330, 1331, 1332, 1333, 1334, 1335, 1336, 1337, 1338, 1339, 1340, 1341, 1342, 1343, 1344, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1352, 1353, 1354, 1355, 1356, 1357, 1358, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1366, 1367, 1368, 1369, 1370, 1371, 1372, 1373, 1374, 1375, 1376, 1377, 1378, 1379, 1380, 1381, 1382, 1383, 1384, 1385, 1386, 1387, 1388, 1389, 1390, 1391, 1392, 1393, 1394, 1395, 1396, 1397, 1398, 1399, 1400, 1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1414, 1415, 1416, 1417, 1418, 1419, 1420, 1421, 1422, 1423, 1424, 1425, 1426, 1427, 1428, 1429, 1430, 1431, 1432, 1433, 1434, 1435, 1436, 1437, 1438, 1439, 1440, 1441, 1442, 1443, 1444, 1445, 1446, 1447, 1448, 1449, 1450, 1451, 1452, 1453, 1454, 1455, 1456, 1457, 1458, 1459, 1460, 1461, 1462, 1463, 1464, 1465, 1466, 1467, 1468, 1469, 1470, 1471, 1472, 1473, 1474, 1475, 1476, 1477, 1478, 1479, 1480, 1481, 1482, 1483, 1484, 1485, 1486, 1487, 1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1497, 1498, 1499, 1500 ],
                  "previous_cursor" : "$",
                  "next_cursor" : "2892e7ab37d44c6a15b438f78e8d76ed$"
@@ -825,8 +856,10 @@ class FinatraObjectMapperTest extends Test with Logging {
    """
    */
 
-  test("A case class with members of all ScalaSig types " +
-    "is parsable from a JSON object with those fields") {
+  test(
+    "A case class with members of all ScalaSig types " +
+      "is parsable from a JSON object with those fields"
+  ) {
     val got = parse[CaseClassWithAllTypes](json)
     val expected = CaseClassWithAllTypes(
       map = Map("one" -> "two"),
@@ -865,8 +898,12 @@ class FinatraObjectMapperTest extends Test with Logging {
     parse[OuterObject.NestedCaseClass]("""{"id": 1}""") should be(OuterObject.NestedCaseClass(1))
   }
 
-  test("A case class nested inside of an object nested inside of an object is parsable from a JSON object") {
-    parse[OuterObject.InnerObject.SuperNestedCaseClass]("""{"id": 1}""") should be(OuterObject.InnerObject.SuperNestedCaseClass(1))
+  test(
+    "A case class nested inside of an object nested inside of an object is parsable from a JSON object"
+  ) {
+    parse[OuterObject.InnerObject.SuperNestedCaseClass]("""{"id": 1}""") should be(
+      OuterObject.InnerObject.SuperNestedCaseClass(1)
+    )
   }
 
   test("A case class with array members is parsable from a JSON object") {
@@ -891,7 +928,10 @@ class FinatraObjectMapperTest extends Test with Logging {
     c.four should be(Array(4L, 5L))
     c.five should be(Array('x', 'y'))
 
-    JsonDiff.jsonDiff(generate(c), """{"bools":[true,false],"bytes":"AQI=","doubles":[1.0,5.0],"five":"xy","floats":[1.1,22.0],"four":[4,5],"one":"1","three":[1,2,3],"two":["a","b","c"]}""")
+    JsonDiff.jsonDiff(
+      generate(c),
+      """{"bools":[true,false],"bytes":"AQI=","doubles":[1.0,5.0],"five":"xy","floats":[1.1,22.0],"four":[4,5],"one":"1","three":[1,2,3],"two":["a","b","c"]}"""
+    )
   }
 
   test("A case class with collection of Longs array of longs") {
@@ -924,8 +964,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("old#handle options and defaults in case class") {
-    val bob = parse[Person](
-      """
+    val bob = parse[Person]("""
       {
         "id" :1,
         "name" : "Bob",
@@ -937,8 +976,7 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   test("old#missing required field") {
     intercept[CaseClassMappingException] {
-      parse[Person](
-        """
+      parse[Person]("""
         {
         }
         """)
@@ -946,13 +984,11 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("old#nulls will not render") {
-    generate(
-      Person(1, null, null, null)) should equal("""{"id":1,"nickname":"unknown"}""")
+    generate(Person(1, null, null, null)) should equal("""{"id":1,"nickname":"unknown"}""")
   }
 
   test("old#string wrapper deserialization") {
-    val parsedValue = parse[ObjWithTestId](
-      """
+    val parsedValue = parse[ObjWithTestId]("""
     {
       "id": "5"
     }
@@ -980,49 +1016,39 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
   test("case class with boolean as number") {
-    parse[CaseClassWithBoolean](
-      """ {
+    parse[CaseClassWithBoolean](""" {
             "foo": 100
           }""") should equal(CaseClassWithBoolean(true))
   }
 
   //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
   test("case class with Seq[Boolean]") {
-    parse[CaseClassWithSeqBooleans](
-      """ {
+    parse[CaseClassWithSeqBooleans](""" {
             "foos": [100, 5, 0, 9]
           }""") should equal(CaseClassWithSeqBooleans(Seq(true, true, false, true)))
   }
 
   //Jackson parses numbers into boolean type without error. see http://jira.codehaus.org/browse/JACKSON-78
   test("Seq[Boolean]") {
-    parse[Seq[Boolean]](
-      """[100, 5, 0, 9]""") should equal(Seq(true, true, false, true))
+    parse[Seq[Boolean]]("""[100, 5, 0, 9]""") should equal(Seq(true, true, false, true))
   }
 
   test("case class with boolean as number 0") {
-    parse[CaseClassWithBoolean](
-      """ {
+    parse[CaseClassWithBoolean](""" {
             "foo": 0
           }""") should equal(CaseClassWithBoolean(false))
   }
 
   test("case class with boolean as string") {
-    assertJsonParse[CaseClassWithBoolean](
-      """ {
+    assertJsonParse[CaseClassWithBoolean](""" {
             "foo": "bar"
-          }""",
-      withErrors = Seq(
-        "foo: 'bar' is not a valid Boolean"))
+          }""", withErrors = Seq("foo: 'bar' is not a valid Boolean"))
   }
 
   test("case class with boolean number as string") {
-    assertJsonParse[CaseClassWithBoolean](
-      """ {
+    assertJsonParse[CaseClassWithBoolean](""" {
             "foo": "1"
-          }""",
-      withErrors = Seq(
-        "foo: '1' is not a valid Boolean"))
+          }""", withErrors = Seq("foo: '1' is not a valid Boolean"))
   }
 
   val msgHiJsonStr = """{"msg":"hi"}"""
@@ -1037,9 +1063,8 @@ class FinatraObjectMapperTest extends Test with Logging {
     val request = Request()
     request.setContentString("""{"msg": "hi"}""")
 
-    val jsonNode = FinatraObjectMapper.parseRequestBody[JsonNode](
-      request,
-      mapper.objectMapper.readerFor[JsonNode])
+    val jsonNode = FinatraObjectMapper
+      .parseRequestBody[JsonNode](request, mapper.objectMapper.readerFor[JsonNode])
 
     jsonNode.get("msg").textValue() should equal("hi")
   }
@@ -1081,9 +1106,8 @@ class FinatraObjectMapperTest extends Test with Logging {
     val response = Response()
     response.setContentString("""{"msg": "hi"}""")
 
-    val jsonNode = FinatraObjectMapper.parseResponseBody[JsonNode](
-      response,
-      mapper.objectMapper.readerFor[JsonNode])
+    val jsonNode = FinatraObjectMapper
+      .parseResponseBody[JsonNode](response, mapper.objectMapper.readerFor[JsonNode])
 
     jsonNode.get("msg").textValue() should equal("hi")
   }
@@ -1116,31 +1140,33 @@ class FinatraObjectMapperTest extends Test with Logging {
     assert(mapper.reader[JsonNode] != null)
   }
 
-  test("jackson JsonDeserialize annotations deserializes json to case class with 2 decimal places for mandatory field") {
-    parse[CaseClassWithCustomDecimalFormat](
-      """ {
+  test(
+    "jackson JsonDeserialize annotations deserializes json to case class with 2 decimal places for mandatory field"
+  ) {
+    parse[CaseClassWithCustomDecimalFormat](""" {
           "my_big_decimal": 23.1201
         }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12), None))
   }
 
   test("jackson JsonDeserialize annotations long with JsonDeserialize") {
-    parse[CaseClassWithLongAndDeserializer](
-      """ {
+    parse[CaseClassWithLongAndDeserializer](""" {
           "long": 12345
         }""") should equal(CaseClassWithLongAndDeserializer(12345))
   }
 
-  test("jackson JsonDeserialize annotations deserializes json to case class with 2 decimal places for option field") {
-    parse[CaseClassWithCustomDecimalFormat](
-      """ {
+  test(
+    "jackson JsonDeserialize annotations deserializes json to case class with 2 decimal places for option field"
+  ) {
+    parse[CaseClassWithCustomDecimalFormat](""" {
           "my_big_decimal": 23.1201,
           "opt_my_big_decimal": 23.1201
-        }""") should equal(CaseClassWithCustomDecimalFormat(BigDecimal(23.12), Some(BigDecimal(23.12))))
+        }""") should equal(
+      CaseClassWithCustomDecimalFormat(BigDecimal(23.12), Some(BigDecimal(23.12)))
+    )
   }
 
   test("jackson JsonDeserialize annotations opt long with JsonDeserialize") {
-    parse[CaseClassWithOptionLongAndDeserializer](
-      """
+    parse[CaseClassWithOptionLongAndDeserializer]("""
       {
         "opt_long": 12345
       }
@@ -1148,25 +1174,37 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("case class in package object") {
-    parse[SimplePersonInPackageObject]("""{"name": "Steve"}""") should equal(SimplePersonInPackageObject("Steve"))
+    parse[SimplePersonInPackageObject]("""{"name": "Steve"}""") should equal(
+      SimplePersonInPackageObject("Steve")
+    )
   }
 
   test("case class in package object uses default when name not specified") {
-    parse[SimplePersonInPackageObject]("""{}""") should equal(SimplePersonInPackageObject("default-name"))
+    parse[SimplePersonInPackageObject]("""{}""") should equal(
+      SimplePersonInPackageObject("default-name")
+    )
   }
 
   test("case class in package object without constructor params and parsing an empty json object") {
-    parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{}""") should equal(SimplePersonInPackageObjectWithoutConstructorParams())
+    parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{}""") should equal(
+      SimplePersonInPackageObjectWithoutConstructorParams()
+    )
   }
 
-  test("case class in package object without constructor params and parsing a json object with extra fields") {
-    parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{"name": "Steve"}""") should equal(SimplePersonInPackageObjectWithoutConstructorParams())
+  test(
+    "case class in package object without constructor params and parsing a json object with extra fields"
+  ) {
+    parse[SimplePersonInPackageObjectWithoutConstructorParams]("""{"name": "Steve"}""") should equal(
+      SimplePersonInPackageObjectWithoutConstructorParams()
+    )
   }
 
   test("Support camel case mapper#camel case object") {
     val camelCaseObjectMapper = injector.instance[FinatraObjectMapper, CamelCaseMapper]
 
-    camelCaseObjectMapper.parse[Map[String, String]]("""{"firstName": "Bob"}""") should equal(Map("firstName" -> "Bob"))
+    camelCaseObjectMapper.parse[Map[String, String]]("""{"firstName": "Bob"}""") should equal(
+      Map("firstName" -> "Bob")
+    )
   }
 
   test("Support sealed traits and case objects#json serialization") {
@@ -1192,8 +1230,7 @@ class FinatraObjectMapperTest extends Test with Logging {
       assertObjectParseException(e2, withErrors)
 
       null
-    }
-    else {
+    } else {
       parse[T](json)
     }
   }

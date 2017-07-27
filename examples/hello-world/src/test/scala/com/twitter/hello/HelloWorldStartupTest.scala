@@ -9,7 +9,8 @@ class HelloWorldStartupTest extends FeatureTest {
   override val server = new EmbeddedHttpServer(
     twitterServer = new HelloWorldServer,
     stage = Stage.PRODUCTION,
-    verbose = false)
+    verbose = false
+  )
 
   test("Server#startup") {
     server.assertHealthy()

@@ -10,8 +10,7 @@ object Counter {
 }
 
 @Singleton
-class Counter @Inject()(
-  client: JedisClient) {
+class Counter @Inject()(client: JedisClient) {
 
   def next: Long = {
     val current: Long = Option(client.get(CounterKey)) match {

@@ -6,9 +6,7 @@ import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class EchoHttpController @Inject()(
-  echoThriftService: EchoService[Future])
-  extends Controller {
+class EchoHttpController @Inject()(echoThriftService: EchoService[Future]) extends Controller {
 
   get("/echo") { request: Request =>
     val msg = request.params("msg")

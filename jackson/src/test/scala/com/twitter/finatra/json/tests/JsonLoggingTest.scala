@@ -3,9 +3,7 @@ package com.twitter.finatra.json.tests
 import com.twitter.finatra.json.JsonLogging
 import com.twitter.inject.Test
 
-class JsonLoggingTest
-  extends Test
-  with JsonLogging {
+class JsonLoggingTest extends Test with JsonLogging {
 
   test("json logging") {
     val fooBar = FooBar("steve")
@@ -26,5 +24,4 @@ class JsonLoggingTest
   }
 }
 
-case class FooBar(
-  name: String)
+case class FooBar(name: String)

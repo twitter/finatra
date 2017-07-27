@@ -6,14 +6,10 @@ import com.twitter.inject.IntegrationTest
 import com.twitter.inject.app.TestInjector
 
 class InMemoryCredentialsIntegrationTest extends IntegrationTest {
-  val credentialsMap = Map(
-    "username" -> "foo",
-    "password" -> "bar")
+  val credentialsMap = Map("username" -> "foo", "password" -> "bar")
 
   override val injector =
-    TestInjector(
-      new InMemoryCredentialsModule(credentialsMap))
-      .create
+    TestInjector(new InMemoryCredentialsModule(credentialsMap)).create
 
   test("load credentials") {
     val credentials = injector.instance[Credentials]

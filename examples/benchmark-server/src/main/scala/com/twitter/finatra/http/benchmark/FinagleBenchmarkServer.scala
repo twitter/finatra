@@ -23,7 +23,8 @@ class FinagleBenchmarkServer extends TwitterServer with Ports {
   val mapper: ObjectMapper = new ObjectMapper().registerModule(DefaultScalaModule)
 
   val dateFormat: ThreadLocal[DateFormat] = new ThreadLocal[DateFormat] {
-    override def initialValue: DateFormat = TwitterDateFormat("E, dd MMM yyyy HH:mm:ss 'GMT'", Locale.ENGLISH)
+    override def initialValue: DateFormat =
+      TwitterDateFormat("E, dd MMM yyyy HH:mm:ss 'GMT'", Locale.ENGLISH)
   }
 
   val helloWorld: Buf = Buf.Utf8("Hello, World!")
@@ -35,13 +36,17 @@ class FinagleBenchmarkServer extends TwitterServer with Ports {
     .serve(httpPortFlag(), serverAndDate.andThen(muxer))
 
   val muxer: HttpMuxer = new HttpMuxer()
-    .withHandler("/json", Service.mk { req: Request =>
-      val rep = Response()
-      rep.content = Buf.ByteArray.Owned(mapper.writeValueAsBytes(Map("message" -> "Hello, World!")))
-      rep.contentType = "application/json"
+    .withHandler(
+      "/json",
+      Service.mk { req: Request =>
+        val rep = Response()
+        rep.content =
+          Buf.ByteArray.Owned(mapper.writeValueAsBytes(Map("message" -> "Hello, World!")))
+        rep.contentType = "application/json"
 
-      Future.value(rep)
-    })
+        Future.value(rep)
+      }
+    )
     .withHandler("/plaintext", Service.mk { req: Request =>
       val rep = Response()
       rep.content = helloWorld

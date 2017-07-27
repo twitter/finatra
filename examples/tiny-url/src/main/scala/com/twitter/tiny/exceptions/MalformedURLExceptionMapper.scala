@@ -7,7 +7,7 @@ import java.net.MalformedURLException
 import javax.inject.Inject
 
 class MalformedURLExceptionMapper @Inject()(response: ResponseBuilder)
-  extends ExceptionMapper[MalformedURLException] {
+    extends ExceptionMapper[MalformedURLException] {
 
   override def toResponse(request: Request, exception: MalformedURLException): Response = {
     response.badRequest(s"Malformed URL - ${exception.getMessage}")

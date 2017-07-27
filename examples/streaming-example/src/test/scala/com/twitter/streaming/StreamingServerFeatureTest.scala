@@ -10,9 +10,7 @@ import com.twitter.util.Await
 
 class StreamingServerFeatureTest extends FeatureTest {
 
-  override val server = new EmbeddedHttpServer(
-    new StreamingServer,
-    streamResponse = true)
+  override val server = new EmbeddedHttpServer(new StreamingServer, streamResponse = true)
 
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
@@ -33,19 +31,18 @@ class StreamingServerFeatureTest extends FeatureTest {
     response.printAsyncStrings()
   }
 
-
   /* Response Implicit Utils */
 
   implicit class RichResponse(val self: Response) {
     def asyncStrings = {
-      AsyncStream.fromReader(self.reader) map { case Buf.Utf8(str) =>
-        str
+      AsyncStream.fromReader(self.reader) map {
+        case Buf.Utf8(str) =>
+          str
       }
     }
 
     def printAsyncStrings() = {
-      Await.result(
-        self.asyncStrings map { "Read:\t" + _ } foreach println)
+      Await.result(self.asyncStrings map { "Read:\t" + _ } foreach println)
     }
   }
 }

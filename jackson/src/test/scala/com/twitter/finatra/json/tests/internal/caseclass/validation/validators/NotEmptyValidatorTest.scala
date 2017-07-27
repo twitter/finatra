@@ -10,9 +10,7 @@ case class NotEmptyExample(@NotEmpty stringValue: String)
 case class NotEmptySeqExample(@NotEmpty stringValue: Seq[String])
 case class NotEmptyInvalidTypeExample(@NotEmpty stringValue: Long)
 
-class NotEmptyValidatorTest
-  extends ValidatorTest
-  with GeneratorDrivenPropertyChecks {
+class NotEmptyValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
 
   test("pass validation for valid value") {
     val passValue = Gen.alphaStr.filter(_.size > 0)
@@ -26,14 +24,12 @@ class NotEmptyValidatorTest
     val failValue = ""
 
     validate[NotEmptyExample](failValue) should equal(
-      Invalid(
-      errorMessage, ErrorCode.ValueCannotBeEmpty))
+      Invalid(errorMessage, ErrorCode.ValueCannotBeEmpty)
+    )
   }
 
   test("pass validation for all whitespace value") {
-    val whiteSpaceValue = for (
-      n <- Gen.choose(1, 100)
-    ) yield Seq.fill(n){' '}
+    val whiteSpaceValue = for (n <- Gen.choose(1, 100)) yield Seq.fill(n) { ' ' }
 
     val passValue = whiteSpaceValue.map(_.mkString)
 
@@ -53,16 +49,17 @@ class NotEmptyValidatorTest
   test("fail validation for empty seq") {
     val failValue = Seq.empty
     validate[NotEmptySeqExample](failValue) should equal(
-      Invalid(
-      errorMessage, ErrorCode.ValueCannotBeEmpty))
+      Invalid(errorMessage, ErrorCode.ValueCannotBeEmpty)
+    )
   }
 
   test("fail validation for invalid type") {
     intercept[IllegalArgumentException] {
-      validate[NotEmptyInvalidTypeExample](2)}
+      validate[NotEmptyInvalidTypeExample](2)
+    }
   }
 
-  private def validate[C : Manifest](value: Any): ValidationResult = {
+  private def validate[C: Manifest](value: Any): ValidationResult = {
     super.validate(manifest[C].runtimeClass, "stringValue", classOf[NotEmpty], value)
   }
 

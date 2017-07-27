@@ -12,7 +12,7 @@ class StatsReceiverModuleTest extends Test {
     injector.getInstance(classOf[StatsReceiver])
   }
 
-    test("InMemoryStatsReceiverModule") {
+  test("InMemoryStatsReceiverModule") {
     val injector = Guice.createInjector(InMemoryStatsReceiverModule)
     injector.getInstance(classOf[StatsReceiver])
   }

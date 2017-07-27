@@ -37,8 +37,8 @@ class LocalFilesystemCredentialsIntegrationTest extends IntegrationTest {
   override val injector =
     TestInjector(
       flags = Map("credentials.file.path" -> s"${BaseDirectory}keys/finatra/credentials.yml"),
-      modules = Seq(CredentialsModule))
-    .create
+      modules = Seq(CredentialsModule)
+    ).create
 
   test("load credentials") {
     val credentials = injector.instance[Credentials]

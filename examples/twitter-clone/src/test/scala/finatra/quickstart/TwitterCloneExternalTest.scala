@@ -34,12 +34,13 @@ class TwitterCloneExternalTest extends Test {
       new TwitterCloneServer,
       flags = Map(
         "firebase.host" -> "finatra.firebaseio.com",
-        "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"))
+        "com.twitter.server.resolverMap" -> "firebase=finatra.firebaseio.com:443"
+      )
+    )
     try {
       val result = server.httpPost(
         path = "/tweet",
-        postBody =
-          """
+        postBody = """
         {
           "message": "Hello #FinagleCon",
           "location": {
@@ -50,8 +51,7 @@ class TwitterCloneExternalTest extends Test {
         }
           """,
         andExpect = Created,
-        withJsonBody =
-          """
+        withJsonBody = """
         {
           "id": "0",
           "message": "Hello #FinagleCon",
@@ -62,12 +62,14 @@ class TwitterCloneExternalTest extends Test {
           "nsfw": false
         }
           """,
-        withJsonBodyNormalizer = idNormalizer)
+        withJsonBodyNormalizer = idNormalizer
+      )
 
       val tweet = server.httpGetJson[TweetResponse](
         path = result.location.get,
         andExpect = Ok,
-        withJsonBody = result.contentString)
+        withJsonBody = result.contentString
+      )
 
       println(s"Firebase Tweet: https://finatra.firebaseio.com/tweets/${tweet.id}")
     } finally {

@@ -22,16 +22,13 @@ class DashboardController extends Controller {
   get("/user") { request: Request =>
     val firstName = request.params("first")
     val lastName = request.params("last")
-    UserView(
-      firstName,
-      lastName)
+    UserView(firstName, lastName)
   }
 
   get("/document.xml") { request: Request =>
     response.ok
       .contentType(MediaType.XML_UTF_8)
-      .body(
-        """<?xml version="1.0" encoding="UTF-8" ?>
+      .body("""<?xml version="1.0" encoding="UTF-8" ?>
           |<records>
           |	<record>
           |		<foo>Ac Eleifend Vitae Industries</foo>
@@ -850,8 +847,6 @@ class DashboardController extends Controller {
    * @see https://twitter.github.io/finatra/user-guide/files/
    */
   get("/:*") { request: Request =>
-    response.ok.fileOrIndex(
-      filePath = request.params("*"),
-      indexPath = "index.html")
+    response.ok.fileOrIndex(filePath = request.params("*"), indexPath = "index.html")
   }
 }

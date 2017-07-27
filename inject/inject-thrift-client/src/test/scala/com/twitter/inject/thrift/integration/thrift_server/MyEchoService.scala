@@ -8,9 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 
 @Singleton
-class MyEchoService
-  extends EchoService[Future]
-  with Logging {
+class MyEchoService extends EchoService[Future] with Logging {
 
   private val timesToEcho = new AtomicInteger(1)
 
@@ -19,8 +17,7 @@ class MyEchoService
   override def echo(msg: String): Future[String] = {
     info("echo " + msg)
     assertClientId("echo-http-service")
-    Future.value(
-      msg * timesToEcho.get)
+    Future.value(msg * timesToEcho.get)
   }
 
   override def setTimesToEcho(times: Int): Future[Int] = {
@@ -33,8 +30,6 @@ class MyEchoService
   /* Private */
 
   private def assertClientId(name: String): Unit = {
-    assert(
-      ClientId.current.exists(_ == ClientId(name)),
-      "Invalid Client ID: " + ClientId.current)
+    assert(ClientId.current.exists(_ == ClientId(name)), "Invalid Client ID: " + ClientId.current)
   }
 }

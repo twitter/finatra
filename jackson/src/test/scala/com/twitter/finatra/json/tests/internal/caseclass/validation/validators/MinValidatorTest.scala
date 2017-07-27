@@ -22,9 +22,7 @@ case class MinSeqExample(@Min(10) numberValue: Seq[Int])
 case class MinArrayExample(@Min(10) numberValue: Array[Int])
 case class MinInvalidTypeExample(@Min(10) numberValue: String)
 
-class MinValidatorTest
-  extends ValidatorTest
-  with GeneratorDrivenPropertyChecks {
+class MinValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
 
   test("pass validation for int type") {
     val passValue = Gen.choose(1, Int.MaxValue)
@@ -39,9 +37,8 @@ class MinValidatorTest
 
     forAll(failValue) { value =>
       validate[MinIntExample](value) should equal(
-        Invalid(
-        errorMessage(Integer.valueOf(value)),
-        errorCode(Integer.valueOf(value))))
+        Invalid(errorMessage(Integer.valueOf(value)), errorCode(Integer.valueOf(value)))
+      )
     }
   }
 
@@ -59,8 +56,10 @@ class MinValidatorTest
     forAll(failValue) { value =>
       validate[MinLongExample](value) should equal(
         Invalid(
-        errorMessage(java.lang.Long.valueOf(value)),
-        errorCode(java.lang.Long.valueOf(value))))
+          errorMessage(java.lang.Long.valueOf(value)),
+          errorCode(java.lang.Long.valueOf(value))
+        )
+      )
     }
   }
 
@@ -78,8 +77,10 @@ class MinValidatorTest
     forAll(failValue) { value =>
       validate[MinDoubleExample](value) should equal(
         Invalid(
-        errorMessage(java.lang.Double.valueOf(value)),
-        errorCode(java.lang.Double.valueOf(value))))
+          errorMessage(java.lang.Double.valueOf(value)),
+          errorCode(java.lang.Double.valueOf(value))
+        )
+      )
     }
   }
 
@@ -97,8 +98,10 @@ class MinValidatorTest
     forAll(failValue) { value =>
       validate[MinFloatExample](value) should equal(
         Invalid(
-        errorMessage(java.lang.Float.valueOf(value)),
-        errorCode(java.lang.Float.valueOf(value))))
+          errorMessage(java.lang.Float.valueOf(value)),
+          errorCode(java.lang.Float.valueOf(value))
+        )
+      )
     }
   }
 
@@ -133,10 +136,7 @@ class MinValidatorTest
     } yield BigInt(long)
 
     forAll(failBigIntValue) { value =>
-      validate[MinBigIntExample](value) should equal(
-        Invalid(
-        errorMessage(value),
-        errorCode(value)))
+      validate[MinBigIntExample](value) should equal(Invalid(errorMessage(value), errorCode(value)))
     }
   }
 
@@ -145,7 +145,9 @@ class MinValidatorTest
     validate[MinSecondSmallestLongBigIntExample](value) should equal(
       Invalid(
         errorMessage(value, minValue = Long.MinValue + 1),
-        errorCode(value, minValue = Long.MinValue + 1)))
+        errorCode(value, minValue = Long.MinValue + 1)
+      )
+    )
   }
 
   test("fail validation for very large big int type") {
@@ -156,8 +158,10 @@ class MinValidatorTest
     forAll(failBigIntValue) { value =>
       validate[MinLargestLongBigIntExample](value) should equal(
         Invalid(
-        errorMessage(value, minValue = Long.MaxValue),
-        errorCode(value, minValue = Long.MaxValue)))
+          errorMessage(value, minValue = Long.MaxValue),
+          errorCode(value, minValue = Long.MaxValue)
+        )
+      )
     }
   }
 
@@ -193,9 +197,8 @@ class MinValidatorTest
 
     forAll(failBigDecimalValue) { value =>
       validate[MinBigDecimalExample](value) should equal(
-        Invalid(
-        errorMessage(value),
-        errorCode(value)))
+        Invalid(errorMessage(value), errorCode(value))
+      )
     }
   }
 
@@ -204,7 +207,9 @@ class MinValidatorTest
     validate[MinSecondSmallestLongBigDecimalExample](value) should equal(
       Invalid(
         errorMessage(value, minValue = Long.MinValue + 1),
-        errorCode(value, minValue = Long.MinValue + 1)))
+        errorCode(value, minValue = Long.MinValue + 1)
+      )
+    )
   }
 
   test("fail validation for very large big decimal type") {
@@ -215,8 +220,10 @@ class MinValidatorTest
     forAll(failBigDecimalValue) { value =>
       validate[MinLargestLongBigDecimalExample](value) should equal(
         Invalid(
-        errorMessage(value, minValue = Long.MaxValue),
-        errorCode(value, minValue = Long.MaxValue)))
+          errorMessage(value, minValue = Long.MaxValue),
+          errorCode(value, minValue = Long.MaxValue)
+        )
+      )
     }
   }
 
@@ -234,13 +241,15 @@ class MinValidatorTest
   test("fail validation for sequence of integers") {
     val failValue = for {
       size <- Gen.choose(0, 9)
-    } yield Seq.fill(size){0}
+    } yield Seq.fill(size) { 0 }
 
     forAll(failValue) { value =>
       validate[MinSeqExample](value) should equal(
         Invalid(
-        errorMessage(value = Integer.valueOf(value.size), minValue = 10),
-        errorCode(value = Integer.valueOf(value.size), minValue = 10)))
+          errorMessage(value = Integer.valueOf(value.size), minValue = 10),
+          errorCode(value = Integer.valueOf(value.size), minValue = 10)
+        )
+      )
     }
   }
 
@@ -258,19 +267,22 @@ class MinValidatorTest
   test("fail validation for array of integers") {
     val failValue = for {
       size <- Gen.choose(0, 9)
-    } yield Array.fill(size){0}
+    } yield Array.fill(size) { 0 }
 
     forAll(failValue) { value =>
       validate[MinArrayExample](value) should equal(
         Invalid(
-        errorMessage(value = Integer.valueOf(value.length), minValue = 10),
-        errorCode(value = Integer.valueOf(value.length), minValue = 10)))
+          errorMessage(value = Integer.valueOf(value.length), minValue = 10),
+          errorCode(value = Integer.valueOf(value.length), minValue = 10)
+        )
+      )
     }
   }
 
   test("fail for unsupported class type") {
     intercept[IllegalArgumentException] {
-      validate[MinInvalidTypeExample]("strings are not supported")}
+      validate[MinInvalidTypeExample]("strings are not supported")
+    }
   }
 
   private def validate[C: Manifest](value: Any): ValidationResult = {
@@ -278,10 +290,7 @@ class MinValidatorTest
   }
 
   private def errorMessage(value: Number, minValue: Long = 1): String = {
-    MinValidator.errorMessage(
-      messageResolver,
-      value,
-      minValue)
+    MinValidator.errorMessage(messageResolver, value, minValue)
   }
 
   private def errorCode(value: Number, minValue: Long = 1) = {

@@ -22,9 +22,7 @@ case class MaxSeqExample(@Max(100) numberValue: Seq[Int])
 case class MaxArrayExample(@Max(100) numberValue: Array[Int])
 case class MaxInvalidTypeExample(@Max(100) numberValue: String)
 
-class MaxValidatorTest
-  extends ValidatorTest
-  with GeneratorDrivenPropertyChecks {
+class MaxValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
 
   test("pass validation for int type") {
     val passValue = Gen.choose(Int.MinValue, 0)
@@ -39,9 +37,8 @@ class MaxValidatorTest
 
     forAll(failValue) { value =>
       validate[MaxIntExample](value) should equal(
-        Invalid(
-          errorMessage(Integer.valueOf(value)),
-          errorCode(Integer.valueOf(value))))
+        Invalid(errorMessage(Integer.valueOf(value)), errorCode(Integer.valueOf(value)))
+      )
     }
   }
 
@@ -59,7 +56,8 @@ class MaxValidatorTest
     forAll(failValue) { value =>
       validate[MaxLongExample](value) == Invalid(
         errorMessage(java.lang.Long.valueOf(value)),
-        errorCode(java.lang.Long.valueOf(value)))
+        errorCode(java.lang.Long.valueOf(value))
+      )
     }
   }
 
@@ -78,7 +76,9 @@ class MaxValidatorTest
       validate[MaxDoubleExample](value) should equal(
         Invalid(
           errorMessage(java.lang.Double.valueOf(value)),
-          errorCode(java.lang.Double.valueOf(value))))
+          errorCode(java.lang.Double.valueOf(value))
+        )
+      )
     }
   }
 
@@ -97,7 +97,9 @@ class MaxValidatorTest
       validate[MaxFloatExample](value) should equal(
         Invalid(
           errorMessage(java.lang.Float.valueOf(value)),
-          errorCode(java.lang.Float.valueOf(value))))
+          errorCode(java.lang.Float.valueOf(value))
+        )
+      )
     }
   }
 
@@ -132,10 +134,7 @@ class MaxValidatorTest
     } yield BigInt(long)
 
     forAll(failBigIntValue) { value =>
-      validate[MaxBigIntExample](value) should equal(
-        Invalid(
-          errorMessage(value),
-          errorCode(value)))
+      validate[MaxBigIntExample](value) should equal(Invalid(errorMessage(value), errorCode(value)))
     }
   }
 
@@ -148,7 +147,9 @@ class MaxValidatorTest
       validate[MaxSmallestLongBigIntExample](value) should equal(
         Invalid(
           errorMessage(value, maxValue = Long.MinValue),
-          errorCode(value, maxValue = Long.MinValue)))
+          errorCode(value, maxValue = Long.MinValue)
+        )
+      )
     }
   }
 
@@ -157,7 +158,9 @@ class MaxValidatorTest
     validate[MaxSecondLargestLongBigIntExample](value) should equal(
       Invalid(
         errorMessage(value, maxValue = Long.MaxValue - 1),
-        errorCode(value, maxValue = Long.MaxValue - 1)))
+        errorCode(value, maxValue = Long.MaxValue - 1)
+      )
+    )
   }
 
   test("pass validation for big decimal type") {
@@ -192,9 +195,8 @@ class MaxValidatorTest
 
     forAll(failBigDecimalValue) { value =>
       validate[MaxBigDecimalExample](value) should equal(
-        Invalid(
-          errorMessage(value),
-          errorCode(value)))
+        Invalid(errorMessage(value), errorCode(value))
+      )
     }
   }
 
@@ -207,7 +209,9 @@ class MaxValidatorTest
       validate[MaxSmallestLongBigDecimalExample](value) should equal(
         Invalid(
           errorMessage(value, maxValue = Long.MinValue),
-          errorCode(value, maxValue = Long.MinValue)))
+          errorCode(value, maxValue = Long.MinValue)
+        )
+      )
     }
   }
 
@@ -216,13 +220,15 @@ class MaxValidatorTest
     validate[MaxSecondLargestLongBigDecimalExample](value) should equal(
       Invalid(
         errorMessage(value, maxValue = Long.MaxValue - 1),
-        errorCode(value, maxValue = Long.MaxValue - 1)))
+        errorCode(value, maxValue = Long.MaxValue - 1)
+      )
+    )
   }
 
   test("pass validation for sequence of integers") {
     val passValue = for {
       size <- Gen.choose(0, 100)
-    } yield Seq.fill(size) {0}
+    } yield Seq.fill(size) { 0 }
 
     forAll(passValue) { value =>
       validate[MaxSeqExample](value) should equal(Valid)
@@ -233,13 +239,15 @@ class MaxValidatorTest
     val failValue = for {
       n <- Gen.containerOfN[Seq, Int](100, Gen.choose(0, 200))
       m <- Gen.nonEmptyContainerOf[Seq, Int](Gen.choose(0, 200))
-    } yield {n ++ m}
+    } yield { n ++ m }
 
     forAll(failValue) { value =>
       validate[MaxSeqExample](value) should equal(
         Invalid(
           errorMessage(value = Integer.valueOf(value.size), maxValue = 100),
-          errorCode(value = Integer.valueOf(value.size), maxValue = 100)))
+          errorCode(value = Integer.valueOf(value.size), maxValue = 100)
+        )
+      )
     }
   }
 
@@ -247,7 +255,7 @@ class MaxValidatorTest
     val passValue = for {
       size <- Gen.choose(0, 100)
     } yield {
-      Array.fill(size) {0}
+      Array.fill(size) { 0 }
     }
 
     forAll(passValue) { value =>
@@ -259,13 +267,15 @@ class MaxValidatorTest
     val failValue = for {
       n <- Gen.containerOfN[Array, Int](100, Gen.choose(0, 200))
       m <- Gen.nonEmptyContainerOf[Array, Int](Gen.choose(0, 200))
-    } yield {n ++ m}
+    } yield { n ++ m }
 
     forAll(failValue) { value =>
       validate[MaxArrayExample](value) should equal(
         Invalid(
           errorMessage(value = Integer.valueOf(value.length), maxValue = 100),
-          errorCode(value = Integer.valueOf(value.length), maxValue = 100)))
+          errorCode(value = Integer.valueOf(value.length), maxValue = 100)
+        )
+      )
     }
   }
 
@@ -280,10 +290,7 @@ class MaxValidatorTest
   }
 
   private def errorMessage(value: Number, maxValue: Long = 0): String = {
-    MaxValidator.errorMessage(
-      messageResolver,
-      value,
-      maxValue)
+    MaxValidator.errorMessage(messageResolver, value, maxValue)
   }
 
   private def errorCode(value: Number, maxValue: Long = 0) = {

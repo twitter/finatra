@@ -17,7 +17,6 @@ class AutoClosableTest extends Test {
 
 }
 
-
 class AutoClosableObject extends AutoCloseable with Logging {
   private var closed = false
 
@@ -33,4 +32,3 @@ class AutoClosableObject extends AutoCloseable with Logging {
     closed = true
   }
 }
-

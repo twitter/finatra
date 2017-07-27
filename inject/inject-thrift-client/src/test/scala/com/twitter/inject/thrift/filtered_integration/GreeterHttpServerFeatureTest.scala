@@ -7,18 +7,17 @@ import com.twitter.inject.Test
 import com.twitter.inject.thrift.filtered_integration.http_server.GreeterHttpServer
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
 
-class GreeterHttpServerFeatureTest 
-  extends Test
-  with HttpTest {
+class GreeterHttpServerFeatureTest extends Test with HttpTest {
 
-  val thriftServer = new EmbeddedThriftServer(
-    twitterServer = new GreeterThriftServer)
+  val thriftServer = new EmbeddedThriftServer(twitterServer = new GreeterThriftServer)
 
   val httpServer = new EmbeddedHttpServer(
     twitterServer = new GreeterHttpServer,
     args = Seq(
       "-thrift.clientId=greeter-http-service",
-      resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)))
+      resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)
+    )
+  )
 
   override def afterAll() {
     super.afterAll()
@@ -27,16 +26,14 @@ class GreeterHttpServerFeatureTest
   }
 
   test("GreeterHttpServer#Say hi") {
-    httpServer.httpGet(
-      path = "/hi?name=Bob",
-      andExpect = Ok,
-      withBody = "Hi Bob")
+    httpServer.httpGet(path = "/hi?name=Bob", andExpect = Ok, withBody = "Hi Bob")
   }
 
   test("GreeterHttpServer#Say bye") {
     httpServer.httpGet(
       path = "/bye?name=Bob&age=18",
       andExpect = Ok,
-      withBody = "Bye Bob of 18 years!")
+      withBody = "Bye Bob of 18 years!"
+    )
   }
 }

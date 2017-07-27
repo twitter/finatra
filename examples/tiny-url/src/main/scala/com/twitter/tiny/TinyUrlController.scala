@@ -13,9 +13,9 @@ import com.twitter.tiny.services.UrlShortenerService
 class TinyUrlController @Inject()(
   @Flag("secure") secure: Boolean,
   urlShortenerService: UrlShortenerService,
-  response: ResponseBuilder)
-  extends Controller
-  with Logging {
+  response: ResponseBuilder
+) extends Controller
+    with Logging {
 
   post("/url") { request: PostUrlRequest =>
     val url = new URL(request.url)

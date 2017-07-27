@@ -20,21 +20,12 @@ class JsonObjectDecoderTest extends Test {
       remainder = "1",
       pos = 1,
       openBraces = 1,
-      parsingState = InsideArray)
+      parsingState = InsideArray
+    )
 
-    assertDecode(
-      decoder,
-      input = ",2",
-      output = Seq("1"),
-      remainder = "2",
-      pos = 1)
+    assertDecode(decoder, input = ",2", output = Seq("1"), remainder = "2", pos = 1)
 
-    assertDecode(
-      decoder,
-      input = ",3",
-      output = Seq("2"),
-      remainder = "3",
-      pos = 1)
+    assertDecode(decoder, input = ",3", output = Seq("2"), remainder = "3", pos = 1)
 
     assertDecode(
       decoder,
@@ -43,7 +34,8 @@ class JsonObjectDecoderTest extends Test {
       remainder = "",
       pos = 0,
       openBraces = 0,
-      done = true)
+      done = true
+    )
   }
 
   val mapper = FinatraObjectMapper.create()
@@ -81,7 +73,8 @@ class JsonObjectDecoderTest extends Test {
     pos: Int,
     openBraces: Int = 1,
     parsingState: ParsingState = InsideArray,
-    done: Boolean = false): Unit = {
+    done: Boolean = false
+  ): Unit = {
 
     val result = decoder.decode(Buf.Utf8(input))
     result map { _.utf8str } should equal(output)

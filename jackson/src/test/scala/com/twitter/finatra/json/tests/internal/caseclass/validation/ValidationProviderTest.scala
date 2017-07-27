@@ -1,6 +1,9 @@
 package com.twitter.finatra.json.tests.internal.caseclass.validation
 
-import com.twitter.finatra.json.internal.caseclass.validation.{DefaultValidationProvider, ValidationProvider}
+import com.twitter.finatra.json.internal.caseclass.validation.{
+  DefaultValidationProvider,
+  ValidationProvider
+}
 import com.twitter.inject.Test
 
 class ValidationProviderTest extends Test {

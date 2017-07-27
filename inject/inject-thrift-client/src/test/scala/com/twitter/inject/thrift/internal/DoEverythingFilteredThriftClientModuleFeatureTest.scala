@@ -8,35 +8,33 @@ import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.greeter.thriftscala.Greeter.{Bye, Hi}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.Test
-import com.twitter.inject.thrift.filtered_integration.http_server.{GreeterHttpController, HiLoggingThriftClientFilter}
+import com.twitter.inject.thrift.filtered_integration.http_server.{
+  GreeterHttpController,
+  HiLoggingThriftClientFilter
+}
 import com.twitter.inject.thrift.filtered_integration.thrift_server.GreeterThriftServer
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.{FilteredThriftClientModule, ThriftClientIdModule}
 import com.twitter.util._
 import scala.util.control.NonFatal
 
-class DoEverythingFilteredThriftClientModuleFeatureTest 
-  extends Test
-  with HttpTest {
+class DoEverythingFilteredThriftClientModuleFeatureTest extends Test with HttpTest {
 
-  val thriftServer = new EmbeddedThriftServer(
-    twitterServer = new GreeterThriftServer)
+  val thriftServer = new EmbeddedThriftServer(twitterServer = new GreeterThriftServer)
 
   val httpServer = new EmbeddedHttpServer(
     twitterServer = new HttpServer {
-      override val modules = Seq(
-        ThriftClientIdModule,
-        GreeterThriftClientModule2)
+      override val modules = Seq(ThriftClientIdModule, GreeterThriftClientModule2)
 
       override def configureHttp(router: HttpRouter) {
-        router.
-          filter[CommonFilters].
-          add[GreeterHttpController]
+        router.filter[CommonFilters].add[GreeterHttpController]
       }
     },
     args = Seq(
       "-thrift.clientId=greeter-http-service",
-      resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)))
+      resolverMap("greeter-thrift-service" -> thriftServer.thriftHostAndPort)
+    )
+  )
 
   override def afterAll() {
     super.afterAll()
@@ -51,10 +49,7 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
   }
 
   test("GreeterHttpServer#Say hi") {
-    httpServer.httpGet(
-      path = "/hi?name=Bob",
-      andExpect = Ok,
-      withBody = "Hi Bob")
+    httpServer.httpGet(path = "/hi?name=Bob", andExpect = Ok, withBody = "Hi Bob")
 
     // per-method -- all the requests in this test were to the same method
     httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/hi/invocations", 1)
@@ -70,7 +65,8 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
     httpServer.httpGet(
       path = "/bye?name=Bob&age=18",
       andExpect = Ok,
-      withBody = "Bye Bob of 18 years!")
+      withBody = "Bye Bob of 18 years!"
+    )
 
     // per-method -- all the requests in this test were to the same method
     httpServer.assertCounter("clnt/greeter-thrift-client/Greeter/bye/invocations", 1)
@@ -85,7 +81,7 @@ class DoEverythingFilteredThriftClientModuleFeatureTest
 }
 
 object GreeterThriftClientModule2
-  extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
+    extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
 
   override val label = "greeter-thrift-client"
   override val dest = "flag!greeter-thrift-service"
@@ -93,10 +89,12 @@ object GreeterThriftClientModule2
 
   override def filterServiceIface(
     serviceIface: Greeter.ServiceIface,
-    filter: ThriftClientFilterBuilder) = {
+    filter: ThriftClientFilterBuilder
+  ) = {
 
     serviceIface.copy(
-      hi = filter.method(Hi)
+      hi = filter
+        .method(Hi)
         .withAgnosticFilter(new RequestLoggingThriftClientFilter())
         .withMethodLatency
         .withConstantRetry(
@@ -106,20 +104,24 @@ object GreeterThriftClientModule2
             case (_, Throw(NonFatal(_))) => true
           },
           start = 50.millis,
-          retries = 3)
+          retries = 3
+        )
         .withRequestTimeout(1.minute)
         .filtered(new HiLoggingThriftClientFilter)
         .andThen(serviceIface.hi),
-      bye = filter.method(Bye)
+      bye = filter
+        .method(Bye)
         .withAgnosticFilter[RequestLoggingThriftClientFilter]
         .withMethodLatency
         .withExponentialRetry(
           shouldRetryResponse = PossiblyRetryableExceptions,
           start = 50.millis,
           multiplier = 2,
-          retries = 3)
+          retries = 3
+        )
         .withRequestLatency
         .withRequestTimeout(1.minute)
-        .andThen(serviceIface.bye))
+        .andThen(serviceIface.bye)
+    )
   }
 }

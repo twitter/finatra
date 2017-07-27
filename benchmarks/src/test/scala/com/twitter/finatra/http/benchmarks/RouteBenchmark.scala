@@ -24,7 +24,8 @@ class RouteBenchmark {
     requestClass = classOf[Request],
     responseClass = classOf[Response],
     routeFilter = Filter.identity,
-    filter = Filter.identity)
+    filter = Filter.identity
+  )
 
   val routeWithPathParams = Route(
     name = "groups",
@@ -37,7 +38,8 @@ class RouteBenchmark {
     requestClass = classOf[Request],
     responseClass = classOf[Response],
     routeFilter = Filter.identity,
-    filter = Filter.identity)
+    filter = Filter.identity
+  )
 
   val postGroupsPath = "/groups/"
   val postGroupsRequest = Request(Method.Post, postGroupsPath)

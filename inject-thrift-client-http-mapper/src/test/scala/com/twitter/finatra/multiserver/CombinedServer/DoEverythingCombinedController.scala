@@ -5,9 +5,7 @@ import com.twitter.finatra.http.Controller
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DoEverythingCombinedController @Inject()(
-  adder: AdderService)
-  extends Controller {
+class DoEverythingCombinedController @Inject()(adder: AdderService) extends Controller {
 
   get("/ping") { request: Request =>
     "pong"
@@ -23,11 +21,9 @@ class DoEverythingCombinedController @Inject()(
     adder.add1String(num)
   }
 
-  get("/admin/foo",
-    admin = true,
-    index = Some(
-      RouteIndex(alias = "Foo", group = "Finatra"))) { request: Request =>
-    "Bar"
+  get("/admin/foo", admin = true, index = Some(RouteIndex(alias = "Foo", group = "Finatra"))) {
+    request: Request =>
+      "Bar"
   }
 
   post("/admin/finatra/add1", admin = true) { request: AdminAdd1Request =>

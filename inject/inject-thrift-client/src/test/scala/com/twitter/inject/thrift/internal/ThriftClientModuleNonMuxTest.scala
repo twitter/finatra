@@ -10,13 +10,9 @@ class ThriftClientModuleNonMuxTest extends Test {
 
   val injector =
     TestInjector(
-      modules = Seq(
-        ThriftClientModuleNonMux,
-        ThriftClientIdModule,
-        StatsReceiverModule),
-      flags = Map(
-        "com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!"))
-    .create
+      modules = Seq(ThriftClientModuleNonMux, ThriftClientIdModule, StatsReceiverModule),
+      flags = Map("com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!")
+    ).create
 
   test("client is created as expected") {
     val client = injector.instance[Greeter.FutureIface]

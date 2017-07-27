@@ -12,9 +12,13 @@ object FirebaseHttpClientModule extends HttpClientModule {
   override def sslHostname = Some(sslHostFlag())
   override val dest = "flag!firebase"
 
-  override def retryPolicy = Some(exponentialRetry(
-    start = 10.millis,
-    multiplier = 2,
-    numRetries = 3,
-    shouldRetry = Http4xxOr5xxResponses))
+  override def retryPolicy =
+    Some(
+      exponentialRetry(
+        start = 10.millis,
+        multiplier = 2,
+        numRetries = 3,
+        shouldRetry = Http4xxOr5xxResponses
+      )
+    )
 }

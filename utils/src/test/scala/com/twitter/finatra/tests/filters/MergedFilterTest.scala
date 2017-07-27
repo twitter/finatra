@@ -7,7 +7,8 @@ import com.twitter.inject.Test
 import com.twitter.util.{Await, Future}
 
 class MergedFilterTest extends Test {
-  class AppendToHeaderFilter(header: String, value: String) extends SimpleFilter[Request, Response] {
+  class AppendToHeaderFilter(header: String, value: String)
+      extends SimpleFilter[Request, Response] {
     def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
       val oldValue = request.headerMap.getOrElse(header, "")
       request.headerMap.update(header, oldValue + value)
@@ -23,7 +24,8 @@ class MergedFilterTest extends Test {
       new AppendToHeaderFilter("test", "4"),
       new AppendToHeaderFilter("test", "5"),
       Filter.identity[Request, Response],
-      Filter.identity[Request, Response])
+      Filter.identity[Request, Response]
+    )
 
     val request =
       RequestBuilder

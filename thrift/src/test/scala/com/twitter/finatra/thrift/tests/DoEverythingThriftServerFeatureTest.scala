@@ -3,7 +3,12 @@ package com.twitter.finatra.thrift.tests
 import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
-import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
+import com.twitter.finatra.thrift.thriftscala.{
+  ClientError,
+  NoClientIdError,
+  ServerError,
+  UnknownClientIdError
+}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
 import org.apache.thrift.TApplicationException
@@ -11,7 +16,8 @@ import org.apache.thrift.TApplicationException
 class DoEverythingThriftServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(
     twitterServer = new DoEverythingThriftServer,
-    flags = Map("magicNum" -> "57"))
+    flags = Map("magicNum" -> "57")
+  )
 
   val client123 = server.thriftClient[DoEverything[Future]](clientId = "client123")
 
@@ -31,7 +37,8 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   }
 
   test("blacklist") {
-    val notWhitelistClient = server.thriftClient[DoEverything[Future]](clientId = "not_on_whitelist")
+    val notWhitelistClient =
+      server.thriftClient[DoEverything[Future]](clientId = "not_on_whitelist")
     assertFailedFuture[UnknownClientIdError] {
       notWhitelistClient.echo("Hi")
     }
@@ -81,7 +88,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   // should be caught by BarExceptionMapper
   test("BarException mapping") {
-     Await.result(client123.echo2("barException")) should equal("BarException caught")
+    Await.result(client123.echo2("barException")) should equal("BarException caught")
   }
   // should be caught by FooExceptionMapper
   test("FooException mapping") {
@@ -132,7 +139,8 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
         "twenty",
         "twentyone",
         "twentytwo",
-        "twentythree")
+        "twentythree"
+      )
     ) should equal("handled")
   }
 }

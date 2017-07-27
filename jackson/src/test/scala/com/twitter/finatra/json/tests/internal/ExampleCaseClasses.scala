@@ -31,7 +31,6 @@ object Volkswagen extends CarType {
 
 case class Vehicle(vin: String, `type`: CarType)
 
-
 case class CaseClass(id: Long, name: String)
 
 case class CaseClassWithLazyVal(id: Long) {
@@ -93,7 +92,8 @@ case class CaseClassWithAllTypes(
   any: Any,
   anyRef: AnyRef,
   intMap: Map[Int, Int] = Map(),
-  longMap: Map[Long, Long] = Map())
+  longMap: Map[Long, Long] = Map()
+)
 
 case class CaseClassWithException() {
   throw new NullPointerException("Oops!!!")
@@ -126,7 +126,8 @@ case class CaseClassWithArrays(
   bools: Array[Boolean],
   bytes: Array[Byte],
   doubles: Array[Double],
-  floats: Array[Float])
+  floats: Array[Float]
+)
 
 case class CaseClassWithArrayLong(array: Array[Long])
 
@@ -138,34 +139,22 @@ case class CaseClassWithArrayWrappedValueLong(array: Array[WrappedValueLong])
 
 case class CaseClassWithSeqLong(seq: Seq[Long])
 
-case class CaseClassWithSeqWrappedValueLong(
-  seq: Seq[WrappedValueLong])
+case class CaseClassWithSeqWrappedValueLong(seq: Seq[WrappedValueLong])
 
-case class CaseClassWithValidation(
-  @Min(1) value: Long)
+case class CaseClassWithValidation(@Min(1) value: Long)
 
-case class CaseClassWithSeqOfCaseClassWithValidation(
-  seq: Seq[CaseClassWithValidation])
+case class CaseClassWithSeqOfCaseClassWithValidation(seq: Seq[CaseClassWithValidation])
 
-case class WrappedValueLongWithValidation(
-  @Min(1) value: Long)
-  extends WrappedValue[Long]
+case class WrappedValueLongWithValidation(@Min(1) value: Long) extends WrappedValue[Long]
 
-case class CaseClassWithSeqWrappedValueLongWithValidation(
-  seq: Seq[WrappedValueLongWithValidation])
+case class CaseClassWithSeqWrappedValueLongWithValidation(seq: Seq[WrappedValueLongWithValidation])
 
 case class Foo(name: String)
 
-case class Car(
-  id: Long,
-  make: CarMake,
-  model: String,
-  passengers: Seq[Person]) {
+case class Car(id: Long, make: CarMake, model: String, passengers: Seq[Person]) {
 
   def validateId = {
-    ValidationResult.validate(
-      id > 0,
-      "id must be > 0")
+    ValidationResult.validate(id > 0, "id must be > 0")
   }
 }
 
@@ -174,24 +163,23 @@ case class Person(
   name: String,
   age: Option[Int],
   age_with_default: Option[Int] = None,
-  nickname: String = "unknown")
+  nickname: String = "unknown"
+)
 
 case class PersonWithLogging(
   id: Int,
   name: String,
   age: Option[Int],
   age_with_default: Option[Int] = None,
-  nickname: String = "unknown") extends Logging
+  nickname: String = "unknown"
+) extends Logging
 
-case class PersonWithDottedName(
-  id: Int,
-  @JsonProperty("name.last") lastName: String)
+case class PersonWithDottedName(id: Int, @JsonProperty("name.last") lastName: String)
 
 case class SimplePerson(name: String)
 
 @JsonCamelCase
-case class CamelCaseSimplePerson(
-  myName: String)
+case class CamelCaseSimplePerson(myName: String)
 
 case class CaseClassWithMap(map: Map[String, String])
 
@@ -201,12 +189,12 @@ case class CaseClassWithSeqOfLongs(seq: Seq[Long])
 
 case class CaseClassWithNestedSeqLong(
   seqClass: CaseClassWithSeqLong,
-  setClass: CaseClassWithSetOfLongs)
+  setClass: CaseClassWithSetOfLongs
+)
 
 case class Blah(foo: String)
 
-case class TestIdStringWrapper(id: String)
-  extends WrappedValue[String]
+case class TestIdStringWrapper(id: String) extends WrappedValue[String]
 
 case class ObjWithTestId(id: TestIdStringWrapper)
 
@@ -215,7 +203,8 @@ object Obj {
   case class NestedCaseClassInObject(id: String)
 
   case class NestedCaseClassInObjectWithNestedCaseClassInObjectParam(
-    nested: NestedCaseClassInObject)
+    nested: NestedCaseClassInObject
+  )
 
 }
 
@@ -224,49 +213,38 @@ object TypeAndCompanion {
   case class NestedCaseClassInCompanion(id: String)
 }
 
-case class WrappedValueInt(value: Int)
-  extends WrappedValue[Int]
+case class WrappedValueInt(value: Int) extends WrappedValue[Int]
 
-case class WrappedValueLong(value: Long)
-  extends WrappedValue[Long]
+case class WrappedValueLong(value: Long) extends WrappedValue[Long]
 
-case class WrappedValueString(value: String)
-  extends WrappedValue[String]
+case class WrappedValueString(value: String) extends WrappedValue[String]
 
-case class WrappedValueIntInObj(
-  foo: WrappedValueInt)
+case class WrappedValueIntInObj(foo: WrappedValueInt)
 
-case class WrappedValueStringInObj(
-  foo: WrappedValueString)
+case class WrappedValueStringInObj(foo: WrappedValueString)
 
-case class WrappedValueLongInObj(
-  foo: WrappedValueLong)
+case class WrappedValueLongInObj(foo: WrappedValueLong)
 
-case class CaseClassWithVal(
-  name: String) {
+case class CaseClassWithVal(name: String) {
 
   val `type`: String = "person"
 }
 
-case class CaseClassWithEnum(
-  name: String,
-  make: CarMakeEnum)
+case class CaseClassWithEnum(name: String, make: CarMakeEnum)
 
 case class CaseClassWithComplexEnums(
   name: String,
   make: CarMakeEnum,
   makeOpt: Option[CarMakeEnum],
   makeSeq: Seq[CarMakeEnum],
-  makeSet: Set[CarMakeEnum])
+  makeSet: Set[CarMakeEnum]
+)
 
-case class CaseClassWithSeqEnum(
-  enumSeq: Seq[CarMakeEnum])
+case class CaseClassWithSeqEnum(enumSeq: Seq[CarMakeEnum])
 
-case class CaseClassWithOptionEnum(
-  enumOpt: Option[CarMakeEnum])
+case class CaseClassWithOptionEnum(enumOpt: Option[CarMakeEnum])
 
-case class CaseClassWithDateTime(
-  dateTime: DateTime)
+case class CaseClassWithDateTime(dateTime: DateTime)
 
 case class CaseClassWithIntAndDateTime(
   @NotEmpty name: String,
@@ -277,29 +255,22 @@ case class CaseClassWithIntAndDateTime(
   dateTime2: DateTime,
   dateTime3: DateTime,
   dateTime4: DateTime,
-  @NotEmpty dateTime5: Option[DateTime])
+  @NotEmpty dateTime5: Option[DateTime]
+)
 
-case class ClassWithFooClassInject(
-  @Inject fooClass: FooClass)
+case class ClassWithFooClassInject(@Inject fooClass: FooClass)
 
-case class ClassWithQueryParamDateTimeInject(
-  @QueryParam dateTime: DateTime)
+case class ClassWithQueryParamDateTimeInject(@QueryParam dateTime: DateTime)
 
-case class CaseClassWithEscapedLong(
-  `1-5`: Long)
+case class CaseClassWithEscapedLong(`1-5`: Long)
 
-case class CaseClassWithEscapedString(
-  `1-5`: String)
+case class CaseClassWithEscapedString(`1-5`: String)
 
-case class CaseClassWithEscapedNormalString(
-  `a`: String)
+case class CaseClassWithEscapedNormalString(`a`: String)
 
 case class UnicodeNameCaseClass(`winning-id`: Int, name: String)
 
-case class TestEntityIdsResponse(
-  entityIds: Seq[Long],
-  previousCursor: String,
-  nextCursor: String)
+case class TestEntityIdsResponse(entityIds: Seq[Long], previousCursor: String, nextCursor: String)
 
 object TestEntityIdsResponseWithCompanion {
   val msg = "im the companion"
@@ -308,19 +279,19 @@ object TestEntityIdsResponseWithCompanion {
 case class TestEntityIdsResponseWithCompanion(
   entityIds: Seq[Long],
   previousCursor: String,
-  nextCursor: String)
+  nextCursor: String
+)
 
-case class WrappedValueStringMapObject(
-  map: Map[WrappedValueString, String])
+case class WrappedValueStringMapObject(map: Map[WrappedValueString, String])
 
 case class FooClass(id: String)
 
-case class Group3(id: String)
-  extends Logging
+case class Group3(id: String) extends Logging
 
 case class CaseClassWithInvalidValidation(
-  @(InvalidValidationInternal@param) name: String,
-  make: CarMakeEnum)
+  @(InvalidValidationInternal @param) name: String,
+  make: CarMakeEnum
+)
 
 case class NoConstructorArgs()
 
@@ -328,40 +299,36 @@ case class CaseClassWithBoolean(foo: Boolean)
 
 case class CaseClassWithSeqBooleans(foos: Seq[Boolean])
 
-case class CaseClassInjectStringWithDefault(
-  @Inject string: String = "DefaultHello")
+case class CaseClassInjectStringWithDefault(@Inject string: String = "DefaultHello")
 
-case class CaseClassInjectInt(
-  @Inject age: Int)
+case class CaseClassInjectInt(@Inject age: Int)
 
-case class CaseClassInjectOptionInt(
-  @Inject age: Option[Int])
+case class CaseClassInjectOptionInt(@Inject age: Option[Int])
 
-case class CaseClassInjectOptionString(
-  @Inject string: Option[String])
+case class CaseClassInjectOptionString(@Inject string: Option[String])
 
-case class CaseClassInjectString(
-  @Inject string: String)
+case class CaseClassInjectString(@Inject string: String)
 
-case class CaseClassTooManyInjectableAnnotations(
-  @Inject @QueryParam string: String)
+case class CaseClassTooManyInjectableAnnotations(@Inject @QueryParam string: String)
 
-case class CaseClassTooManyBindingAnnotations(
-  @Inject @Named("foo") @Named("bar") string: String)
+case class CaseClassTooManyBindingAnnotations(@Inject @Named("foo") @Named("bar") string: String)
 
 case class CaseClassWithCustomDecimalFormat(
   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
   myBigDecimal: BigDecimal,
   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
-  optMyBigDecimal: Option[BigDecimal])
+  optMyBigDecimal: Option[BigDecimal]
+)
 
 case class CaseClassWithLongAndDeserializer(
   @JsonDeserialize(contentAs = classOf[java.lang.Long])
-  long: Long)
+  long: Long
+)
 
 case class CaseClassWithOptionLongAndDeserializer(
   @JsonDeserialize(contentAs = classOf[java.lang.Long])
-  optLong: Option[Long])
+  optLong: Option[Long]
+)
 
 class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
   override def deserialize(jp: JsonParser, ctxt: DeserializationContext): BigDecimal = {
@@ -372,24 +339,20 @@ class MyBigDecimalDeserializer extends JsonDeserializer[BigDecimal] {
   override def getEmptyValue: BigDecimal = BigDecimal(0)
 }
 
-case class WithEmptyJsonProperty(
-  @JsonProperty foo: String)
+case class WithEmptyJsonProperty(@JsonProperty foo: String)
 
-case class WithNonemptyJsonProperty(
-  @JsonProperty("bar") foo: String)
+case class WithNonemptyJsonProperty(@JsonProperty("bar") foo: String)
 
 case class WithoutJsonPropertyAnnotation(foo: String)
 
-case class NamingStrategyJsonProperty(
-  @JsonProperty longFieldName: String)
-
+case class NamingStrategyJsonProperty(@JsonProperty longFieldName: String)
 
 package object internal {
 
   case class SimplePersonInPackageObject( // not recommended but used here for testing use case
-    name: String = "default-name")
+    name: String = "default-name"
+  )
 
   case class SimplePersonInPackageObjectWithoutConstructorParams() // not recommended but used here for testing use case
 
 }
-

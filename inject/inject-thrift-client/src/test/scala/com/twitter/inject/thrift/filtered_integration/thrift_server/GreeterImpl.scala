@@ -8,9 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 
 @Singleton
-class GreeterImpl
-  extends Greeter[Future]
-  with Logging {
+class GreeterImpl extends Greeter[Future] with Logging {
 
   private val hiNumCalled = new AtomicInteger(0)
   private val byeNumCalled = new AtomicInteger(0)
@@ -40,15 +38,12 @@ class GreeterImpl
     else if (numCalled == 2)
       Future.exception(new ByeOperation(code = 456))
     else
-      Future.value(
-        ByeResponse(code = 123, s"Bye $name of $age years!"))
+      Future.value(ByeResponse(code = 123, s"Bye $name of $age years!"))
   }
 
   /* Private */
 
   private def assertClientId(name: String): Unit = {
-    assert(
-      ClientId.current.exists(_ == ClientId(name)),
-      "Invalid Client ID: " + ClientId.current)
+    assert(ClientId.current.exists(_ == ClientId(name)), "Invalid Client ID: " + ClientId.current)
   }
 }

@@ -6,9 +6,8 @@ import com.twitter.inject.server.FeatureTest
 
 class CalculatorServerStartupTest extends FeatureTest {
 
-  val server = new EmbeddedThriftServer(
-    twitterServer = new CalculatorServer,
-    stage = Stage.PRODUCTION)
+  val server =
+    new EmbeddedThriftServer(twitterServer = new CalculatorServer, stage = Stage.PRODUCTION)
 
   test("server#startup") {
     server.assertHealthy()

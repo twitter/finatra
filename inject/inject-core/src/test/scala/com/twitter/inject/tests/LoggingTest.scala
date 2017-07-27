@@ -11,10 +11,10 @@ class LoggingTest extends Test with Logging {
     info("a")
     trace("a")
 
-    debugResult("%s") {"a"}
-    warnResult("%s") {"a"}
-    infoResult("%s") {"a"}
-    errorResult("%s") {"a"}
+    debugResult("%s") { "a" }
+    warnResult("%s") { "a" }
+    infoResult("%s") { "a" }
+    errorResult("%s") { "a" }
     debugFutureResult("%s") {
       Future("a")
     }

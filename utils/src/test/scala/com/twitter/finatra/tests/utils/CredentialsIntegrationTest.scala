@@ -10,9 +10,9 @@ class CredentialsIntegrationTest extends IntegrationTest {
   override val injector =
     TestInjector(CredentialsModule).create
 
-    test("load empty credentials") {
-      val credentials = injector.instance[Credentials]
-      credentials.isEmpty should be(true)
-      credentials.get("foo") should be(None)
-    }
+  test("load empty credentials") {
+    val credentials = injector.instance[Credentials]
+    credentials.isEmpty should be(true)
+    credentials.get("foo") should be(None)
+  }
 }

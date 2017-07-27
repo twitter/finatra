@@ -2,7 +2,13 @@ package com.twitter.finatra.thrift.tests.doeverything.controllers
 
 import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.DoEverything
-import com.twitter.doeverything.thriftscala.DoEverything.{Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
+import com.twitter.doeverything.thriftscala.DoEverything.{
+  Echo,
+  Echo2,
+  MagicNum,
+  MoreThanTwentyTwoArgs,
+  Uppercase
+}
 import com.twitter.finagle.{ChannelException, RequestException, RequestTimeoutException}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, FooException}
@@ -12,10 +18,9 @@ import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
 import javax.inject.Inject
 
-class DoEverythingThriftController @Inject()(
-  @Flag("magicNum") magicNumValue: String)
-  extends Controller
-  with DoEverything.BaseServiceIface {
+class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: String)
+    extends Controller
+    with DoEverything.BaseServiceIface {
 
   override val uppercase = handle(Uppercase) { args: Uppercase.Args =>
     if (args.msg == "fail") {
@@ -55,7 +60,8 @@ class DoEverythingThriftController @Inject()(
     Future.value(magicNumValue)
   }
 
-  override val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { args: MoreThanTwentyTwoArgs.Args =>
-    Future.value("handled")
+  override val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) {
+    args: MoreThanTwentyTwoArgs.Args =>
+      Future.value("handled")
   }
 }

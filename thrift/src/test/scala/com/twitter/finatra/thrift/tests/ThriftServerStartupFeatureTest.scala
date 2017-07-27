@@ -24,8 +24,7 @@ class ThriftServerStartupFeatureTest extends Test {
       intercept[AssertionError] {
         server.start()
       }
-    }
-    finally {
+    } finally {
       server.close()
     }
   }
@@ -42,12 +41,10 @@ class ThriftServerStartupFeatureTest extends Test {
 
     try {
       server.start()
-    }
-    catch {
+    } catch {
       case NonFatal(e) =>
       // no-op: Since it's ok if we can't start on the default port since it may be already in use
-    }
-    finally {
+    } finally {
       server.close()
     }
   }
@@ -58,19 +55,17 @@ class ThriftServerStartupFeatureTest extends Test {
 
       override def configureThrift(router: ThriftRouter): Unit = {
         router
-          // directly instantiate controller and add it to the router
+        // directly instantiate controller and add it to the router
           .add(new DoNothingController())
       }
     })
 
     try {
       server.start()
-    }
-    catch {
+    } catch {
       case NonFatal(e) =>
       // no-op: Since it's ok if we can't start on the default port since it may be already in use
-    }
-    finally {
+    } finally {
       server.close()
     }
   }

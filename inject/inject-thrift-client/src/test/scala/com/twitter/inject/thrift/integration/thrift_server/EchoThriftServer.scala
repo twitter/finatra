@@ -8,7 +8,11 @@ import com.twitter.util.Await
 class EchoThriftServer extends TwitterServer {
 
   private val thriftPortFlag = flag("thrift.port", ":0", "External Thrift server port")
-  private val thriftShutdownTimeout = flag("thrift.shutdown.time", 1.minute, "Maximum amount of time to wait for pending requests to complete on shutdown")
+  private val thriftShutdownTimeout = flag(
+    "thrift.shutdown.time",
+    1.minute,
+    "Maximum amount of time to wait for pending requests to complete on shutdown"
+  )
 
   /* Private Mutable State */
   private var thriftServer: ListeningServer = _
@@ -18,16 +22,13 @@ class EchoThriftServer extends TwitterServer {
   override def postWarmup() {
     super.postWarmup()
 
-    thriftServer = ThriftMux.server.serveIface(
-      thriftPortFlag(),
-      injector.instance[MyEchoService])
+    thriftServer = ThriftMux.server.serveIface(thriftPortFlag(), injector.instance[MyEchoService])
 
     info("Thrift server started on port: " + thriftPort.get)
   }
 
   onExit {
-    Await.result(
-      thriftServer.close(thriftShutdownTimeout().fromNow))
+    Await.result(thriftServer.close(thriftShutdownTimeout().fromNow))
   }
 
   /* Overrides */
