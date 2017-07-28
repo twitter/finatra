@@ -4,6 +4,5 @@ create_thrift_libraries(
     'finatra/thrift/src/main/thrift:thrift'
   ],
   sources=rglobs('*.thrift'),
-  generate_languages=["java", "scala", "ruby", "python", "go"],
   provides_scala_name='calculator-thrift-scala'
 )
