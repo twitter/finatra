@@ -38,19 +38,31 @@ class ThriftRouter @Inject()(
 
   /* Public */
 
-  /** Add exception mapper used for the corresponding exceptions */
+  /**
+   * Add exception mapper used for the corresponding exceptions.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/exceptions.html user guide]]
+   */
   def exceptionMapper[T <: ExceptionMapper[_, _]: Manifest]: ThriftRouter = {
     exceptionManager.add[T]
     this
   }
 
-  /** Add exception mapper used for the corresponding exceptions */
+  /**
+   * Add exception mapper used for the corresponding exceptions.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/exceptions.html user guide]]
+   */
   def exceptionMapper[T <: Throwable: Manifest](mapper: ExceptionMapper[T, _]): ThriftRouter = {
     exceptionManager.add[T](mapper)
     this
   }
 
-  /** Add exception mapper used for the corresponding exceptions */
+  /**
+   * Add exception mapper used for the corresponding exceptions.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/exceptions.html user guide]]
+   */
   def exceptionMapper[T <: Throwable](clazz: Class[_ <: ExceptionMapper[T, _]]): ThriftRouter = {
     val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_, _]])
     val throwableType = singleTypeParam(mapperType)
@@ -60,36 +72,76 @@ class ThriftRouter @Inject()(
     this
   }
 
-  /** Add global filter used for all requests */
+  /**
+   * Add global filter used for all requests.
+   *
+   * The filter is appended after other `Filters` that have already been added
+   * via `filter`.
+   *
+   * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
+   */
   def filter[FilterType <: ThriftFilter: Manifest]: ThriftRouter = {
     filter(injector.instance[FilterType])
   }
 
-  /** Add global filter used for all requests annotated with Annotation Type */
+  /**
+   * Add global filter used for all requests that are annotated with Annotation Type.
+   *
+   * The filter is appended after other `Filters` that have already been added
+   * via `filter`.
+   *
+   * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
+   */
   def filter[FilterType <: ThriftFilter: Manifest, Ann <: JavaAnnotation: Manifest]
     : ThriftRouter = {
     filter(injector.instance[FilterType, Ann])
   }
 
-  /** Add global filter used for all requests */
+  /**
+   * Add global filter used for all requests.
+   *
+   * The filter is appended after other `Filters` that have already been added
+   * via `filter`.
+   *
+   * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
+   */
   def filter(clazz: Class[_ <: ThriftFilter]): ThriftRouter = {
     filter(injector.instance(clazz))
   }
 
-  /** Add global filter used for all requests */
+  /**
+   * Add global filter used for all requests.
+   *
+   * The filter is appended after other `Filters` that have already been added
+   * via `filter`.
+   *
+   * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
+   */
   def filter(filter: ThriftFilter): ThriftRouter = {
     assert(filteredThriftService == NullThriftService, "'filter' must be called before 'add'.")
     filterChain = filterChain andThen filter
     this
   }
 
-  /** Instantiate and add thrift controller used for all requests **/
+  /**
+   * Instantiate and add thrift controller used for all requests.
+   *
+   * [[ThriftRouter]] only supports a single controller, so `add` may only be called once.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
+   */
   def add[C <: Controller with ToThriftService: Manifest]: ThriftRouter = {
     val controller = injector.instance[C]
     add(controller)
   }
 
-  /** Add controller used for all requests **/
+  /**
+   * Add controller used for all requests
+   *
+   * [[ThriftRouter]] only supports a single controller, so `add` may only be called once.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
+   */
   def add(controller: Controller with ToThriftService): ThriftRouter = {
     add {
       for (m <- controller.methods) {
@@ -97,8 +149,9 @@ class ThriftRouter @Inject()(
         methods += (m.method -> m)
       }
       info(
-        "Adding methods\n" + (controller.methods
-          .map(method => s"${controller.getClass.getSimpleName}.${method.name}") mkString "\n")
+        "Adding methods\n" + controller.methods
+          .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
+          .mkString("\n")
       )
       if (controller.methods.isEmpty)
         error(s"${controller.getClass.getCanonicalName} contains no methods!")
@@ -107,7 +160,13 @@ class ThriftRouter @Inject()(
     this
   }
 
-  /** Add controller used for all requests for usage from Java */
+  /**
+   * Add controller used for all requests for usage from Java
+   *
+   * [[ThriftRouter]] only supports a single controller, so `add` may only be called once.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
+   */
   def add(controller: Class[_], service: Class[_]): ThriftRouter = {
     add(
       controller,
@@ -116,7 +175,13 @@ class ThriftRouter @Inject()(
     )
   }
 
-  /** Add controller used for all requests for usage from Java */
+  /**
+   * Add controller used for all requests for usage from Java
+   *
+   * [[ThriftRouter]] only supports a single controller, so `add` may only be called once.
+   *
+   * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
+   */
   def add(
     controller: Class[_],
     service: Class[_],
@@ -126,6 +191,8 @@ class ThriftRouter @Inject()(
       val instance = injector.instance(controller)
       val iface: Class[_] = instance.getClass.getInterfaces.head // MyService$ServiceIface
       val service: Class[_] = // MyService$Service
+        // note, the $ gets concat-ed strangely to avoid a false positive scalac warning
+        // for "possible missing interpolator".
         Class.forName(iface.getName.stripSuffix("$ServiceIface") + "$" + "Service")
       val constructor = service.getConstructor(iface, classOf[TProtocolFactory])
       // instantiate service
@@ -135,8 +202,9 @@ class ThriftRouter @Inject()(
           .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
       info(
-        "Adding methods\n" + (controller.getDeclaredMethods
-          .map(method => s"${controller.getSimpleName}.${method.getName}") mkString "\n")
+        "Adding methods\n" + controller.getDeclaredMethods
+          .map(method => s"${controller.getSimpleName}.${method.getName}")
+          .mkString("\n")
       )
       filteredService = Some(
         new ThriftRequestWrapFilter[Array[Byte], Array[Byte]](controller.getSimpleName)
