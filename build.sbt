@@ -8,8 +8,8 @@ lazy val projectVersion = "2.12.0-SNAPSHOT"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
-  scalaVersion := "2.12.1",
-  crossScalaVersions := Seq("2.11.11", "2.12.1"),
+  scalaVersion := "2.12.3",
+  crossScalaVersions := Seq("2.11.11", "2.12.3"),
   ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
   fork in Test := true,
   javaOptions in Test ++= travisTestJavaOptions
