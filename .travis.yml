@@ -5,7 +5,7 @@ language: scala
 
 scala:
   - 2.11.11
-  - 2.12.3
+  - 2.12.1
 
 env:
   - JAVA_OPTS="-Dsbt.log.noformat=true"
