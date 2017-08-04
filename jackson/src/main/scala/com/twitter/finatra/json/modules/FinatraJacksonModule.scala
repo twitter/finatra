@@ -8,7 +8,7 @@ import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala._
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.google.inject.{Injector, Provides}
-import com.twitter.finatra.annotations.CamelCaseMapper
+import com.twitter.finatra.annotations.{CamelCaseMapper, SnakeCaseMapper}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.guice.GuiceInjectableValues
 import com.twitter.finatra.json.internal.caseclass.jackson.FinatraCaseClassModule
@@ -54,6 +54,17 @@ class FinatraJacksonModule extends TwitterModule {
   ): FinatraObjectMapper = {
     val objectMapperCopy = copy(objectMapper)
     objectMapperCopy.setPropertyNamingStrategy(CamelCasePropertyNamingStrategy)
+    new FinatraObjectMapper(objectMapperCopy)
+  }
+
+  @Singleton
+  @Provides
+  @SnakeCaseMapper
+  def provideSnakeCaseFinatraObjectMapper(
+    objectMapper: ObjectMapper with ScalaObjectMapper
+  ): FinatraObjectMapper = {
+    val objectMapperCopy = copy(objectMapper)
+    objectMapperCopy.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
     new FinatraObjectMapper(objectMapperCopy)
   }
 

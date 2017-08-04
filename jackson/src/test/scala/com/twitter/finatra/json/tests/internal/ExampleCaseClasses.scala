@@ -181,6 +181,8 @@ case class SimplePerson(name: String)
 @JsonCamelCase
 case class CamelCaseSimplePerson(myName: String)
 
+case class CamelCaseSimplePersonNoAnnotation(myName: String)
+
 case class CaseClassWithMap(map: Map[String, String])
 
 case class CaseClassWithSetOfLongs(set: Set[Long])

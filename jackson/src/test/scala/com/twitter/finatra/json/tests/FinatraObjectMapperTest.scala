@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.{
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finatra.annotations.CamelCaseMapper
+import com.twitter.finatra.annotations.{CamelCaseMapper, SnakeCaseMapper}
 import com.twitter.finatra.json.internal.caseclass.exceptions.{
   CaseClassMappingException,
   CaseClassValidationException,
@@ -1205,6 +1205,16 @@ class FinatraObjectMapperTest extends Test with Logging {
     camelCaseObjectMapper.parse[Map[String, String]]("""{"firstName": "Bob"}""") should equal(
       Map("firstName" -> "Bob")
     )
+  }
+
+  test("Support snake case mapper#snake case object") {
+    val snakeCaseObjectMapper = injector.instance[FinatraObjectMapper, SnakeCaseMapper]
+
+    val person = CamelCaseSimplePersonNoAnnotation(myName = "Bob")
+
+    val serialized = snakeCaseObjectMapper.writeValueAsString(person)
+    serialized should equal("""{"my_name":"Bob"}""")
+    snakeCaseObjectMapper.parse[CamelCaseSimplePersonNoAnnotation](serialized) should equal(person)
   }
 
   test("Support sealed traits and case objects#json serialization") {

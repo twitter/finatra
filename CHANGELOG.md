@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-jackson: Add support for injecting a snake case FinatraObjectMapper by annotating
+  parameters with a new @SnakeCaseMapper binding annotation. ``PHAB_ID=D7798``
+
 ### Changed
 
 * finatra-http: Add close hook when constructing a StreamingResponse to allow for resource
