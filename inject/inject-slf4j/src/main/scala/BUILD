@@ -14,6 +14,9 @@ scala_library(
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
   ],
+  exports=[
+    'util/util-slf4j-api/src/main/scala',
+  ],
   excludes=[
     exclude(org='org.clapper', name='grizzled-slf4j')
   ],
