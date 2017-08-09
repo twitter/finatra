@@ -213,7 +213,7 @@ lazy val finatraExamples =
     exampleInjectJavaServer,
     exampleWebDashboard,
     helloWorld,
-    helloWorldHeroku,
+    // helloWorldHeroku, // CSL-5015
     streamingExample,
     thriftExampleServer,
     thriftJavaExampleServer,
@@ -244,9 +244,11 @@ lazy val root = (project in file("."))
     unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
       // START EXAMPLES
-      -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
-         helloWorld, helloWorldHeroku, streamingExample,
-         thriftExampleIdl, thriftExampleServer, thriftJavaExampleIdl, thriftJavaExampleServer,
+      -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
+         exampleWebDashboard, helloWorld,
+         // helloWorldHeroku, // CSL-5015
+         streamingExample, thriftExampleIdl, thriftExampleServer,
+         thriftJavaExampleIdl, thriftJavaExampleServer,
          tinyUrl, twitterClone)
       // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
@@ -735,18 +737,19 @@ lazy val userguide = (project in file("doc"))
 
 // START EXAMPLES
 
-lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
-  .settings(exampleServerSettings)
-  .settings(
-    name := "hello-world-heroku",
-    moduleName := "hello-world-heroku",
-    libraryDependencies ++= Seq(
-      "com.github.rlazoti" %% "finagle-metrics" % "0.0.8"
-    )
-  ).dependsOn(
-    http % "test->test;compile->compile",
-    slf4j,
-    injectCore % "test->test")
+// TODO: Re-enable when finagle-metrics is updated (CSL-5015)
+// lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
+//   .settings(exampleServerSettings)
+//   .settings(
+//     name := "hello-world-heroku",
+//     moduleName := "hello-world-heroku",
+//     libraryDependencies ++= Seq(
+//       "com.github.rlazoti" %% "finagle-metrics" % "0.0.8"
+//     )
+//   ).dependsOn(
+//     http % "test->test;compile->compile",
+//     slf4j,
+//     injectCore % "test->test")
 
 lazy val helloWorld = (project in file("examples/hello-world"))
   .settings(exampleServerSettings)
