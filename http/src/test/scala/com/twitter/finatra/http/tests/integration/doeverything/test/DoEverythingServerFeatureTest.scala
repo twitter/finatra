@@ -566,7 +566,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   }
 
   test("PUT with RouteParam and json body") {
-    server.httpPut("/put_route_param/123", putBody = "{}", andExpect = Ok, withBody = "123_")
+    server.httpPut("/put_route_param/123", putBody = "{}", andExpect = Ok, withBody = "123_{}")
   }
 
   test("PUT with RouteParam and empty body") {

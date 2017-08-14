@@ -14,6 +14,9 @@ All notable changes to this project will be documented in this file. Note that `
 * finatra-http: Add close hook when constructing a StreamingResponse to allow for resource
   release without consuming an entire AsyncStream. ``PHAB_ID=D64013``
 
+* finatra-http: Unmarshalling JSON no longer consumes the body of a HTTP Request.
+  ``PHAB_ID=D74519``
+
 * finatra-inject: RetryUtil.retry has been removed because it used a blocking call
   to Thread.sleep. Blocking Finagle threads results in poor performance and
   RetryUtil.retryFuture should be used instead. ``PHAB_ID=D73949``

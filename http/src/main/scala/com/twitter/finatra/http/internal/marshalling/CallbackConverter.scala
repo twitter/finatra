@@ -11,7 +11,6 @@ import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.io.Buf
 import com.twitter.util.{Future, FuturePool}
 import javax.inject.Inject
-import org.jboss.netty.handler.codec.http.HttpResponseStatus
 import scala.concurrent.{Future => ScalaFuture}
 
 private[http] class CallbackConverter @Inject()(
@@ -86,8 +85,8 @@ private[http] class CallbackConverter @Inject()(
       // optimized
       request: Request =>
         Future.value(
-          new NonValidatingHttpHeadersResponse(
-            status = HttpResponseStatus.OK,
+          createHttpResponseWithContent(
+            status = Status.Ok,
             content = Buf.Utf8(requestCallback(request).asInstanceOf[String]),
             contentType = responseBuilder.plainTextContentType
           )
@@ -96,8 +95,8 @@ private[http] class CallbackConverter @Inject()(
       // optimized
       request: Request =>
         Future.value(
-          new NonValidatingHttpHeadersResponse(
-            status = HttpResponseStatus.OK,
+          createHttpResponseWithContent(
+            status = Status.Ok,
             content = mapper
               .writeStringMapAsBuf(requestCallback(request).asInstanceOf[Map[String, String]]),
             contentType = responseBuilder.jsonContentType
@@ -130,6 +129,17 @@ private[http] class CallbackConverter @Inject()(
         case result => Future(createHttpResponse(request)(result))
       }
     }
+  }
+
+  private def createHttpResponseWithContent(
+    status: Status,
+    content: Buf,
+    contentType: String
+  ): Response = {
+    val orig = Response(status)
+    orig.content = content
+    orig.headerMap.add(Fields.ContentType, contentType)
+    orig
   }
 
   private def optionToHttpResponse(request: Request)(response: Option[_]): Response = {
