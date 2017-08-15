@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-2.12.0](https://github.com/twitter/finatra/tree/finatra-2.12.0) (2017-08-15)
+
+### Added
+
 * finatra-jackson: Add support for injecting a snake case FinatraObjectMapper by annotating
   parameters with a new @SnakeCaseMapper binding annotation. ``PHAB_ID=D7798``
 
