@@ -14,6 +14,8 @@ abstract class HttpClientModule extends TwitterModule {
 
   def dest: String
 
+  // used to set the Host header in the requests
+  // override if the dest requires a Host header
   def hostname: String = ""
 
   def retryPolicy: Option[RetryPolicy[Try[Response]]] = None
