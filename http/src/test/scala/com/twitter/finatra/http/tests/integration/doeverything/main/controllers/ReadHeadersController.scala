@@ -6,11 +6,11 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.filters.Appe
 
 class ReadHeadersController extends Controller {
 
-  filter(new AppendToHeaderFilter("test", "3")).
-    filter(new AppendToHeaderFilter("test", "4")).
-    filter(new AppendToHeaderFilter("test", "5")).
-    get("/multipleRouteFilters") { r: Request =>
+  filter(new AppendToHeaderFilter("test", "3"))
+    .filter(new AppendToHeaderFilter("test", "4"))
+    .filter(new AppendToHeaderFilter("test", "5"))
+    .get("/multipleRouteFilters") { r: Request =>
       r.headerMap("test")
-  }
+    }
 
 }

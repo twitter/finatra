@@ -2,9 +2,7 @@ package com.twitter.inject
 
 import com.google.inject.name.Names
 
-abstract class TwitterTestModule
-  extends TwitterModule
-  with Mockito {
+abstract class TwitterTestModule extends TwitterModule with Mockito {
 
   protected def bindToMock[T: Manifest]: T = {
     val mocked = smartMock[T]
@@ -18,7 +16,7 @@ abstract class TwitterTestModule
     mocked
   }
 
-  protected def bindToMock[T: Manifest, Ann <: java.lang.annotation.Annotation : Manifest]: T = {
+  protected def bindToMock[T: Manifest, Ann <: java.lang.annotation.Annotation: Manifest]: T = {
     val mocked = smartMock[T]
     val annotation = manifest[Ann].runtimeClass.asInstanceOf[Class[Ann]]
     bind[T].annotatedWith(annotation).toInstance(mocked)

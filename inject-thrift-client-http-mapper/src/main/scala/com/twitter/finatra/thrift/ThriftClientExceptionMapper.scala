@@ -11,9 +11,9 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class ThriftClientExceptionMapper @Inject()(
   response: ResponseBuilder,
-  source: ThriftClientExceptionSource)
-  extends ExceptionMapper[ThriftClientException]
-  with Logging {
+  source: ThriftClientExceptionSource
+) extends ExceptionMapper[ThriftClientException]
+    with Logging {
 
   override def toResponse(
     request: Request,
@@ -28,7 +28,9 @@ class ThriftClientExceptionMapper @Inject()(
         details = Seq(
           exception.method.serviceName,
           exception.method.name,
-          toExceptionDetails(exception.cause)),
-        message = toExceptionMessage(exception.cause))
+          toExceptionDetails(exception.cause)
+        ),
+        message = toExceptionMessage(exception.cause)
+      )
   }
 }

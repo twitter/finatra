@@ -1,7 +1,13 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.SizeValidator._
-import com.twitter.finatra.validation.{ErrorCode, Size, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{
+  ErrorCode,
+  Size,
+  ValidationMessageResolver,
+  ValidationResult,
+  Validator
+}
 
 private[finatra] object SizeValidator {
 
@@ -9,13 +15,10 @@ private[finatra] object SizeValidator {
     resolver: ValidationMessageResolver,
     value: Any,
     minValue: Long,
-    maxValue: Long): String = {
+    maxValue: Long
+  ): String = {
 
-    resolver.resolve(
-      classOf[Size],
-      toErrorValue(value),
-      minValue,
-      maxValue)
+    resolver.resolve(classOf[Size], toErrorValue(value), minValue, maxValue)
   }
 
   private def toErrorValue(value: Any) = {
@@ -34,10 +37,8 @@ private[finatra] object SizeValidator {
 
 private[finatra] class SizeValidator(
   validationMessageResolver: ValidationMessageResolver,
-  annotation: Size)
-  extends Validator[Size, Any](
-    validationMessageResolver,
-    annotation) {
+  annotation: Size
+) extends Validator[Size, Any](validationMessageResolver, annotation) {
 
   private val minValue: Long = annotation.min()
 
@@ -56,12 +57,9 @@ private[finatra] class SizeValidator(
 
     ValidationResult.validate(
       isValid(size.toLong),
-      errorMessage(
-        validationMessageResolver,
-        value,
-        minValue,
-        maxValue),
-      ErrorCode.SizeOutOfRange(Integer.valueOf(size), minValue, maxValue))
+      errorMessage(validationMessageResolver, value, minValue, maxValue),
+      ErrorCode.SizeOutOfRange(Integer.valueOf(size), minValue, maxValue)
+    )
   }
 
   /* Private */

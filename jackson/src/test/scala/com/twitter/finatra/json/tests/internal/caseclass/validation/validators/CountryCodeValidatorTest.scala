@@ -12,9 +12,7 @@ case class CountryCodeSeqExample(@CountryCode countryCode: Seq[String])
 case class CountryCodeArrayExample(@CountryCode countryCode: Array[String])
 case class CountryCodeInvalidTypeExample(@CountryCode countryCode: Long)
 
-class CountryCodeValidatorTest
-  extends ValidatorTest
-  with GeneratorDrivenPropertyChecks {
+class CountryCodeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
 
   private val countryCodes = Locale.getISOCountries.toSeq
 
@@ -27,9 +25,8 @@ class CountryCodeValidatorTest
   test("fail validation for invalid country code") {
     forAll(genFakeCountryCode) { value =>
       validate[CountryCodeExample](value) should equal(
-        Invalid(
-          errorMessage(value),
-          ErrorCode.InvalidCountryCodes(Set(value))))
+        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(Set(value)))
+      )
     }
   }
 
@@ -51,9 +48,8 @@ class CountryCodeValidatorTest
 
     forAll(failValue) { value =>
       validate[CountryCodeSeqExample](value) should equal(
-        Invalid(
-          errorMessage(value),
-          ErrorCode.InvalidCountryCodes(value.toSet)))
+        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(value.toSet))
+      )
     }
   }
 
@@ -70,9 +66,8 @@ class CountryCodeValidatorTest
 
     forAll(failValue) { value =>
       validate[CountryCodeArrayExample](value) should equal(
-        Invalid(
-          errorMessage(value),
-          ErrorCode.InvalidCountryCodes(value.toSet)))
+        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(value.toSet))
+      )
     }
   }
 
@@ -81,15 +76,15 @@ class CountryCodeValidatorTest
 
     forAll(failValue) { value =>
       validate[CountryCodeInvalidTypeExample](value) should equal(
-        Invalid(
-          errorMessage(value),
-          ErrorCode.InvalidCountryCodes(Set(value.toString))))
+        Invalid(errorMessage(value), ErrorCode.InvalidCountryCodes(Set(value.toString)))
+      )
     }
   }
 
   //generate random uppercase string for fake country code
   private def genFakeCountryCode: Gen[String] = {
-    Gen.nonEmptyContainerOf[Seq, Char](Gen.alphaUpperChar)
+    Gen
+      .nonEmptyContainerOf[Seq, Char](Gen.alphaUpperChar)
       .map(_.mkString)
       .filter(!countryCodes.contains(_))
   }

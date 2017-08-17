@@ -12,4 +12,5 @@ case class RequestWithInjections(
   @Inject defaultString: String,
   @Prod @Inject defaultProdString: String,
   @Inject defaultOptString: Option[String],
-  @Prod @Inject defaultOptProdString: Option[String])
+  @Prod @Inject defaultOptProdString: Option[String]
+)

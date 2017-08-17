@@ -22,12 +22,10 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
   private val dateFormat = FastDateFormat.getInstance(
     HttpHeaders.RFC7231DateFormat,
     TimeZone.getTimeZone("GMT"),
-    Locale.ENGLISH)
+    Locale.ENGLISH
+  )
   @volatile private var currentDateValue: String = getCurrentDateValue
-  new ScheduledThreadPoolTimer(
-    poolSize = 1,
-    name = "HttpDateUpdater",
-    makeDaemons = true)
+  new ScheduledThreadPoolTimer(poolSize = 1, name = "HttpDateUpdater", makeDaemons = true)
     .schedule(1.second) {
       currentDateValue = getCurrentDateValue
     }
@@ -69,9 +67,8 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
   private def updateLocationHeader(request: R, response: Response) = {
     for (existingLocation <- response.location) {
       if (!existingLocation.startsWith("http") && !existingLocation.startsWith("/")) {
-        response.headerMap.set(
-          HttpHeaders.Location,
-          RequestUtils.pathUrl(request) + existingLocation)
+        response.headerMap
+          .set(HttpHeaders.Location, RequestUtils.pathUrl(request) + existingLocation)
       }
     }
   }

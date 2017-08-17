@@ -10,9 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Singleton
 
 @Singleton
-class AdderThriftController
-  extends Controller
-  with Adder.BaseServiceIface {
+class AdderThriftController extends Controller with Adder.BaseServiceIface {
 
   private val add1MethodCalls = new AtomicInteger(0)
   private val addStringsMethodCalls = new AtomicInteger(0)

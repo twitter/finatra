@@ -54,22 +54,20 @@ private[http] object AdminHttpRouter extends Logging {
            |HTTP Admin Interface index.""".stripMargin
       ) {
         Seq(
-          checkRoutesWithRouteIndex(adminRichHandlerRoutes) { _ => true },
+          checkRoutesWithRouteIndex(adminRichHandlerRoutes) { _ =>
+            true
+          },
           checkRoutesWithRouteIndex(adminIndexRoutes) { !canIndexRoute(_) }
         ).flatten
       }
     )
 
     // Add constant routes to admin index
-    server.addAdminRoutes(
-      toAdminHttpServerRoutes(
-        adminIndexRoutes, router))
+    server.addAdminRoutes(toAdminHttpServerRoutes(adminIndexRoutes, router))
 
     // Add rich handler for all other routes
     if (adminRichHandlerRoutes.nonEmpty) {
-      HttpMuxer.addRichHandler(
-        HttpRouter.FinatraAdminPrefix,
-        router.services.adminService)
+      HttpMuxer.addRichHandler(HttpRouter.FinatraAdminPrefix, router.services.adminService)
     }
   }
 
@@ -107,7 +105,8 @@ private[http] object AdminHttpRouter extends Logging {
             alias = if (index.alias.nonEmpty) index.alias else route.path,
             group = Some(index.group),
             includeInIndex = canIndexRoute(route),
-            method = route.method)
+            method = route.method
+          )
         case _ =>
           mkRoute(
             path = route.path,
@@ -115,7 +114,8 @@ private[http] object AdminHttpRouter extends Logging {
             alias = route.path,
             group = None,
             includeInIndex = false,
-            method = route.method)
+            method = route.method
+          )
       }
     }
   }

@@ -8,15 +8,16 @@ import com.twitter.util.{Future, Memoize, Return, Throw}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class StatsFilter @Inject()(
-  statsReceiver: StatsReceiver)
-  extends ThriftFilter {
+class StatsFilter @Inject()(statsReceiver: StatsReceiver) extends ThriftFilter {
 
   private val requestStats = statsReceiver.scope("per_method_stats")
   private val exceptionCounter = statsReceiver.counter("exceptions")
   private val exceptionStatsReceiver = statsReceiver.scope("exceptions")
 
-  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
+  override def apply[T, U](
+    request: ThriftRequest[T],
+    service: Service[ThriftRequest[T], U]
+  ): Future[U] = {
     val methodStats = lookupThriftMethodStats(request.methodName)
 
     timeFuture(methodStats.latencyStat) {
@@ -33,8 +34,7 @@ class StatsFilter @Inject()(
   }
 
   private val lookupThriftMethodStats = Memoize { methodName: String =>
-    ThriftMethodStats(
-      requestStats.scope(methodName))
+    ThriftMethodStats(requestStats.scope(methodName))
   }
 
   object ThriftMethodStats {
@@ -43,12 +43,14 @@ class StatsFilter @Inject()(
         latencyStat = stats.stat("latency_ms"),
         successCounter = stats.counter("success"),
         failuresCounter = stats.counter("failures"),
-        failuresScope = stats.scope("failures"))
+        failuresScope = stats.scope("failures")
+      )
   }
 
   case class ThriftMethodStats(
     latencyStat: Stat,
     successCounter: Counter,
     failuresCounter: Counter,
-    failuresScope: StatsReceiver)
+    failuresScope: StatsReceiver
+  )
 }

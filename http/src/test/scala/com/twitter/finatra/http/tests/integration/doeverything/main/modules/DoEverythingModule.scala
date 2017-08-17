@@ -3,7 +3,12 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.modules
 import com.google.inject.Provides
 import com.google.inject.name.{Named, Names}
 import com.twitter.conversions.time._
-import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, MultiService, OneMultiService, TwoMultiService}
+import com.twitter.finatra.http.tests.integration.doeverything.main.services.{
+  ComplexServiceFactory,
+  MultiService,
+  OneMultiService,
+  TwoMultiService
+}
 import com.twitter.finatra.test.Prod
 import com.twitter.inject.{Injector, TwitterModule}
 

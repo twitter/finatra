@@ -44,9 +44,8 @@ private[http] case class RouteContext(prefix: String, buildFilter: (Injector) =>
 private trait RouteState {
   // We define this constant separately rather than directly as a default value of context
   // so the "contextVar" val does not rely on "context" val
-  private[this] val defaultContext = RouteContext(
-    prefix = "",
-    buildFilter = Function.const(Filter.identity))
+  private[this] val defaultContext =
+    RouteContext(prefix = "", buildFilter = Function.const(Filter.identity))
 
   private[http] val context: RouteContext = defaultContext
 
@@ -57,7 +56,7 @@ private trait RouteState {
   private[http] lazy val contextVar = Var(defaultContext)
 }
 
-private[http] class FilteredDSL[FilterType <: HttpFilter : Manifest] extends RouteDSL {
+private[http] class FilteredDSL[FilterType <: HttpFilter: Manifest] extends RouteDSL {
   override private[http] val context = {
     val current = contextVar()
     current.copy(buildFilter = getBuildFilterFunc(current.buildFilter))
@@ -67,8 +66,8 @@ private[http] class FilteredDSL[FilterType <: HttpFilter : Manifest] extends Rou
 
   protected def getBuildFilterFunc(
     currentFunc: (Injector) => HttpFilter
-  ): (Injector) => HttpFilter = {
-    (injector: Injector) => currentFunc(injector).andThen(injector.instance[FilterType])
+  ): (Injector) => HttpFilter = { (injector: Injector) =>
+    currentFunc(injector).andThen(injector.instance[FilterType])
   }
 
   override private[http] def contextWrapper[T](f: => T): T = withContext(context)(f)
@@ -89,7 +88,7 @@ private[http] trait RouteDSL extends RouteState { self =>
   private[http] val routeBuilders = ArrayBuffer[RouteBuilder[_, _]]()
   private[http] val annotations = getClass.getDeclaredAnnotations
 
-  def filter[FilterType <: HttpFilter : Manifest]: FilteredDSL[FilterType] = contextWrapper {
+  def filter[FilterType <: HttpFilter: Manifest]: FilteredDSL[FilterType] = contextWrapper {
     new FilteredDSL[FilterType] {
       override private[http] val routeBuilders = self.routeBuilders
       override private[http] val annotations = self.annotations
@@ -104,8 +103,8 @@ private[http] trait RouteDSL extends RouteState { self =>
       override private[http] lazy val contextVar = self.contextVar
       override protected def getBuildFilterFunc(
         currentFunc: (Injector) => HttpFilter
-      ): (Injector) => HttpFilter = {
-        (injector: Injector) => currentFunc(injector).andThen(next)
+      ): (Injector) => HttpFilter = { (injector: Injector) =>
+        currentFunc(injector).andThen(next)
       }
     }
   }
@@ -122,63 +121,72 @@ private[http] trait RouteDSL extends RouteState { self =>
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Get, route, name, admin, index, callback)
 
   def post[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Post, route, name, admin, index, callback)
 
   def put[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Put, route, name, admin, index, callback)
 
   def delete[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Delete, route, name, admin, index, callback)
 
   def options[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Options, route, name, admin, index, callback)
 
   def patch[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Patch, route, name, admin, index, callback)
 
   def head[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Head, route, name, admin, index, callback)
 
   def trace[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(Trace, route, name, admin, index, callback)
 
   def any[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None)(callback: RequestType => ResponseType): Unit =
+    index: Option[RouteIndex] = None
+  )(callback: RequestType => ResponseType): Unit =
     add(AnyMethod, route, name, admin, index, callback)
 
   /* Protected */
@@ -205,8 +213,18 @@ private[http] trait RouteDSL extends RouteState { self =>
     name: String,
     admin: Boolean,
     index: Option[RouteIndex],
-    callback: RequestType => ResponseType) = contextWrapper {
-    routeBuilders += new RouteBuilder(method, prefixRoute(route), name, admin, index, callback, annotations, contextVar().copy())
+    callback: RequestType => ResponseType
+  ) = contextWrapper {
+    routeBuilders += new RouteBuilder(
+      method,
+      prefixRoute(route),
+      name,
+      admin,
+      index,
+      callback,
+      annotations,
+      contextVar().copy()
+    )
   }
 
   private def prefixRoute(route: String): String = {

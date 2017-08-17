@@ -1,18 +1,20 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.CountryCodeValidator._
-import com.twitter.finatra.validation.{CountryCode, ErrorCode, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{
+  CountryCode,
+  ErrorCode,
+  ValidationMessageResolver,
+  ValidationResult,
+  Validator
+}
 import java.util.Locale
 
 private[finatra] object CountryCodeValidator {
 
-  def errorMessage(
-    resolver: ValidationMessageResolver,
-    value: Any) = {
+  def errorMessage(resolver: ValidationMessageResolver, value: Any) = {
 
-    resolver.resolve(
-      classOf[CountryCode],
-      toErrorValue(value))
+    resolver.resolve(classOf[CountryCode], toErrorValue(value))
   }
 
   private def toErrorValue(value: Any) = {
@@ -29,10 +31,8 @@ private[finatra] object CountryCodeValidator {
 
 private[finatra] class CountryCodeValidator(
   validationMessageResolver: ValidationMessageResolver,
-  annotation: CountryCode)
-  extends Validator[CountryCode, Any](
-    validationMessageResolver,
-    annotation) {
+  annotation: CountryCode
+) extends Validator[CountryCode, Any](validationMessageResolver, annotation) {
 
   private val countryCodes = Locale.getISOCountries.toSet
 
@@ -45,8 +45,7 @@ private[finatra] class CountryCodeValidator(
       case typedValue: Traversable[Any] =>
         validationResult(typedValue)
       case anyValue =>
-        validationResult(
-          Seq(anyValue.toString))
+        validationResult(Seq(anyValue.toString))
     }
   }
 
@@ -64,9 +63,8 @@ private[finatra] class CountryCodeValidator(
     val invalidCountryCodes = findInvalidCountryCodes(value)
     ValidationResult.validate(
       invalidCountryCodes.isEmpty,
-      errorMessage(
-        validationMessageResolver,
-        value),
-      ErrorCode.InvalidCountryCodes(invalidCountryCodes))
+      errorMessage(validationMessageResolver, value),
+      ErrorCode.InvalidCountryCodes(invalidCountryCodes)
+    )
   }
 }

@@ -9,9 +9,7 @@ import com.twitter.util.{Await, Future}
 class ExceptionManagerTest extends Test {
 
   def newExceptionManager =
-    new ExceptionManager(
-      TestInjector().create,
-      new InMemoryStatsReceiver)
+    new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
 
   val exceptionManager = newExceptionManager
 
@@ -24,7 +22,8 @@ class ExceptionManagerTest extends Test {
   def testException(
     e: Throwable,
     mapped: String,
-    manager: ExceptionManager = exceptionManager): Unit = {
+    manager: ExceptionManager = exceptionManager
+  ): Unit = {
     Await.result(manager.handleException[String](e)) should equal(mapped)
   }
 

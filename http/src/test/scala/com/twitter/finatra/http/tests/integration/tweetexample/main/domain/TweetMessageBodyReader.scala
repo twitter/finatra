@@ -5,16 +5,11 @@ import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import javax.inject.Inject
 
-class TweetMessageBodyReader @Inject()(
-  mapper: FinatraObjectMapper)
-  extends MessageBodyReader[Tweet] {
+class TweetMessageBodyReader @Inject()(mapper: FinatraObjectMapper)
+    extends MessageBodyReader[Tweet] {
 
   override def parse[M: Manifest](request: Request): Tweet = {
     val tweetRequest = mapper.parse[TweetRequest](request)
-    Tweet(
-      tweetRequest.customId,
-      tweetRequest.username,
-      tweetRequest.tweetMsg)
+    Tweet(tweetRequest.customId, tweetRequest.username, tweetRequest.tweetMsg)
   }
 }
-

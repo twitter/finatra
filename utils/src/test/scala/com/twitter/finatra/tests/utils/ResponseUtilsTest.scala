@@ -6,39 +6,22 @@ import com.twitter.inject.Test
 
 class ResponseUtilsTest extends Test {
 
-  val internalServerErrorResponse = Response(
-      Version.Http11,
-      Status.InternalServerError)
+  val internalServerErrorResponse = Response(Version.Http11, Status.InternalServerError)
 
-  val notFoundResponse = Response(
-      Version.Http11,
-      Status.NotFound)
-  val notFoundResponseWithBody = Response(
-      Version.Http11,
-      Status.NotFound)
+  val notFoundResponse = Response(Version.Http11, Status.NotFound)
+  val notFoundResponseWithBody = Response(Version.Http11, Status.NotFound)
   notFoundResponseWithBody.setContentString("not found")
 
-  val forbiddenResponse = Response(
-      Version.Http11,
-      Status.Forbidden)
-  val forbiddenResponseWithBody = Response(
-      Version.Http11,
-      Status.Forbidden)
+  val forbiddenResponse = Response(Version.Http11, Status.Forbidden)
+  val forbiddenResponseWithBody = Response(Version.Http11, Status.Forbidden)
   forbiddenResponseWithBody.setContentString("forbidden")
 
-  val movedPermanentlyResponse = Response(
-      Version.Http11,
-      Status.MovedPermanently)
+  val movedPermanentlyResponse = Response(Version.Http11, Status.MovedPermanently)
 
-  val okResponse = Response(
-      Version.Http11,
-      Status.Ok)
+  val okResponse = Response(Version.Http11, Status.Ok)
 
-  val okResponseWithBody = Response(
-      Version.Http11,
-      Status.Ok)
+  val okResponseWithBody = Response(Version.Http11, Status.Ok)
   okResponseWithBody.setContentString("ok")
-  
 
   test("correctly identify 5xx response") {
     ResponseUtils.is5xxResponse(internalServerErrorResponse) should be(true)
@@ -83,7 +66,7 @@ class ResponseUtilsTest extends Test {
   }
 
   test("expect not found response") {
-      intercept[java.lang.AssertionError] {
+    intercept[java.lang.AssertionError] {
       ResponseUtils.expectNotFoundResponse(okResponse)
     }
 

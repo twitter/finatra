@@ -31,7 +31,7 @@ class JsonDiffTest extends Test {
   test("json diff failure") {
 
     val a =
-    """
+      """
       {
         "a": 1,
         "b": 2
@@ -39,7 +39,7 @@ class JsonDiffTest extends Test {
     """
 
     val b =
-    """
+      """
       {
         "a": 11,
         "b": 2
@@ -47,10 +47,7 @@ class JsonDiffTest extends Test {
     """
 
     intercept[TestFailedException] {
-      jsonDiff(
-        receivedJson = a,
-        expectedJson = b,
-        verbose = false)
+      jsonDiff(receivedJson = a, expectedJson = b, verbose = false)
     }
   }
 

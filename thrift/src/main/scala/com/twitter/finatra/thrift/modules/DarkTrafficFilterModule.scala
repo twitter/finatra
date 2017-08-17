@@ -14,11 +14,13 @@ import javax.inject.Singleton
 import scala.reflect.ClassTag
 
 abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]: ClassTag](
-  implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface])
-  extends TwitterModule {
+  implicit serviceBuilder: ServiceIfaceBuilder[ServiceIface]
+) extends TwitterModule {
 
-  private val destFlag = flag[String]("thrift.dark.service.dest", "Resolvable name/dest of dark traffic service")
-  private val clientIdFlag = flag("thrift.dark.service.clientId", "", "Thrift client id to the dark traffic service")
+  private val destFlag =
+    flag[String]("thrift.dark.service.dest", "Resolvable name/dest of dark traffic service")
+  private val clientIdFlag =
+    flag("thrift.dark.service.clientId", "", "Thrift client id to the dark traffic service")
 
   /**
    * Name of dark service client for use in metrics.
@@ -60,23 +62,20 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
   @Provides
   @Singleton
   @DarkTrafficFilterType
-  final def providesDarkTrafficFilter(
-   statsReceiver: StatsReceiver): ThriftFilter = {
+  final def providesDarkTrafficFilter(statsReceiver: StatsReceiver): ThriftFilter = {
     destFlag.get match {
       case Some(dest) =>
         val clientStatsReceiver = statsReceiver.scope("clnt", "dark_traffic_filter")
         val clientId = ClientId(clientIdFlag())
 
-        val service = newServiceIface(
-          dest,
-          clientId,
-          clientStatsReceiver)
+        val service = newServiceIface(dest, clientId, clientStatsReceiver)
 
         new DarkTrafficFilter[ServiceIface](
           service,
           enableSampling,
           forwardAfterService,
-          statsReceiver)
+          statsReceiver
+        )
 
       case _ => ThriftFilter.Identity
     }
@@ -87,7 +86,8 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
   private def newServiceIface(
     dest: String,
     clientId: ClientId,
-    statsReceiver: StatsReceiver): ServiceIface = {
+    statsReceiver: StatsReceiver
+  ): ServiceIface = {
 
     val thriftClient =
       if (mux) {

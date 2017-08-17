@@ -25,7 +25,8 @@ private[http] case class Route(
   requestClass: Class[_],
   responseClass: Class[_],
   routeFilter: Filter[Request, Response, Request, Response],
-  filter: Filter[Request, Response, Request, Response]) {
+  filter: Filter[Request, Response, Request, Response]
+) {
 
   val path = normalizeUriToPath(uri)
 
@@ -57,29 +58,24 @@ private[http] case class Route(
   def handle(
     request: Request,
     incomingPath: String,
-    bypassFilters: Boolean): Option[Future[Response]] = {
+    bypassFilters: Boolean
+  ): Option[Future[Response]] = {
     val path = toMatchPath(incomingPath)
     val routeParamsOpt = pattern.extract(path)
 
     if (routeParamsOpt.isEmpty) {
       None
     } else {
-      handleMatch(
-        createRequest(
-          request,
-          routeParamsOpt.get),
-        bypassFilters)
+      handleMatch(createRequest(request, routeParamsOpt.get), bypassFilters)
     }
   }
 
   def handleMatch(request: Request, bypassFilters: Boolean): Some[Future[Response]] = {
     RouteInfo.set(request, routeInfo)
     if (bypassFilters)
-      Some(
-        filteredRouteCallback(request))
+      Some(filteredRouteCallback(request))
     else
-      Some(
-        filteredCallback(request))
+      Some(filteredCallback(request))
   }
 
   /* Private */
@@ -94,7 +90,7 @@ private[http] case class Route(
   /** routes are stored with the optional trailing slash, thus we add it to match if not present */
   private[this] def toMatchPath(incomingPath: String): String = {
     if (hasOptionalTrailingSlash && !incomingPath.endsWith("/"))
-      incomingPath+"/"
+      incomingPath + "/"
     else
       incomingPath
   }
@@ -110,7 +106,6 @@ private[http] case class Route(
       } else {
         path
       }
-    }
-    else uri
+    } else uri
   }
 }

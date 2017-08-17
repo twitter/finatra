@@ -3,7 +3,12 @@ package com.twitter.finatra.thrift.tests.exceptions
 import com.twitter.conversions.time._
 import com.twitter.finagle.{CancelledRequestException, Failure, RequestTimeoutException}
 import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
-import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
+import com.twitter.finatra.thrift.thriftscala.{
+  ClientError,
+  NoClientIdError,
+  ServerError,
+  UnknownClientIdError
+}
 import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.{BadRequest, RequestTimeout}
 import com.twitter.finatra.thrift.thriftscala.ServerErrorCause.InternalServerError
 import com.twitter.inject.app.TestInjector
@@ -51,7 +56,7 @@ class FinatraThriftExceptionMapperIntegrationTest extends IntegrationTest {
     val e = assertFailedFuture[ServerError] {
       finatraThriftExceptionMapper.handleException(failure)
     }
-    e.getMessage should include ("request cancelled")
+    e.getMessage should include("request cancelled")
     e.errorCause should equal(InternalServerError)
   }
 

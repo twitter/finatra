@@ -45,11 +45,11 @@ object future {
     }
 
     def flatMapInner[B](func: A => Future[B]): Future[Option[B]] = {
-      self mapInner func flatMap {_.toFutureOption}
+      self mapInner func flatMap { _.toFutureOption }
     }
 
     def flatMapInnerOpt[B](func: A => Future[Option[B]]): Future[Option[B]] = {
-      self flatMapInner func map {_.getOrElse(None)}
+      self flatMapInner func map { _.getOrElse(None) }
     }
 
     def flatMapIfUndefined(func: Unit => Future[Option[A]]): Future[Option[A]] = {
@@ -95,7 +95,7 @@ object future {
 
     def mapInnerOpt[B](func: A => Option[B]): Future[Seq[B]] = {
       for (seq <- self) yield {
-        seq map func flatMap {_.toIterable}
+        seq map func flatMap { _.toIterable }
       }
     }
 
@@ -106,11 +106,11 @@ object future {
     }
 
     def flatMapInner[B](func: A => Future[B]): Future[Seq[B]] = {
-      mapInner(func) flatMap {Future.collect(_)}
+      mapInner(func) flatMap { Future.collect(_) }
     }
 
     def flatMapInnerOpt[B](func: A => Future[Option[B]]): Future[Seq[B]] = {
-      mapInner(func) flatMap {Future.collect(_)} map {_.flatten}
+      mapInner(func) flatMap { Future.collect(_) } map { _.flatten }
     }
 
     def groupBySingleValue[B](func: A => B): Future[Map[B, A]] = {
@@ -138,7 +138,7 @@ object future {
   implicit class RichFutureSeqFutures[A](val self: Future[Seq[Future[A]]]) extends AnyVal {
 
     def flattenInner: Future[Seq[A]] = {
-      self flatMap {Future.collect(_)}
+      self flatMap { Future.collect(_) }
     }
   }
 
@@ -193,7 +193,9 @@ object future {
     }
 
     def toBoolean: Future[Boolean] = {
-      self map { _ => true } handle {
+      self map { _ =>
+        true
+      } handle {
         case NonFatal(e) =>
           log.warn(e.toString)
           false
@@ -202,9 +204,9 @@ object future {
 
     def partialTransform(pf: PartialFunction[Try[A], Future[A]]): Future[A] = {
       self.transform {
-        case ret@Return(r) if pf.isDefinedAt(ret) =>
+        case ret @ Return(r) if pf.isDefinedAt(ret) =>
           pf(ret)
-        case thr@Throw(t) if pf.isDefinedAt(thr) =>
+        case thr @ Throw(t) if pf.isDefinedAt(thr) =>
           pf(thr)
         case _ =>
           self

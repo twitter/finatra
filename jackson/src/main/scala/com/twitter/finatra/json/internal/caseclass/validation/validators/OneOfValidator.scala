@@ -1,19 +1,23 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.OneOfValidator._
-import com.twitter.finatra.validation.{ErrorCode, OneOf, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{
+  ErrorCode,
+  OneOf,
+  ValidationMessageResolver,
+  ValidationResult,
+  Validator
+}
 
 private[finatra] object OneOfValidator {
 
-  def errorMessage(
-    resolver: ValidationMessageResolver,
-    oneOfValues: Set[String],
-    value: Any) = {
+  def errorMessage(resolver: ValidationMessageResolver, oneOfValues: Set[String], value: Any) = {
 
     resolver.resolve(
       classOf[OneOf],
       toCommaSeparatedValue(value),
-      toCommaSeparatedValue(oneOfValues))
+      toCommaSeparatedValue(oneOfValues)
+    )
   }
 
   private def toCommaSeparatedValue(value: Any) = {
@@ -34,10 +38,8 @@ private[finatra] object OneOfValidator {
  */
 private[finatra] class OneOfValidator(
   validationMessageResolver: ValidationMessageResolver,
-  annotation: OneOf)
-  extends Validator[OneOf, Any](
-    validationMessageResolver,
-    annotation) {
+  annotation: OneOf
+) extends Validator[OneOf, Any](validationMessageResolver, annotation) {
 
   private val oneOfValues = annotation.value().toSet
 
@@ -50,8 +52,7 @@ private[finatra] class OneOfValidator(
       case traversableValue: Traversable[_] =>
         validationResult(traversableValue)
       case anyValue =>
-        validationResult(
-          Seq(anyValue.toString))
+        validationResult(Seq(anyValue.toString))
     }
   }
 
@@ -66,10 +67,8 @@ private[finatra] class OneOfValidator(
     val invalidValues = findInvalidValues(value)
     ValidationResult.validate(
       invalidValues.isEmpty,
-      errorMessage(
-        validationMessageResolver,
-        oneOfValues,
-        value),
-      ErrorCode.InvalidValues(invalidValues, oneOfValues))
+      errorMessage(validationMessageResolver, oneOfValues, value),
+      ErrorCode.InvalidValues(invalidValues, oneOfValues)
+    )
   }
 }

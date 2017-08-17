@@ -6,9 +6,7 @@ import finatra.quickstart.services.TweetsService
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TweetsController @Inject()(
-  tweetsService: TweetsService)
-  extends Controller {
+class TweetsController @Inject()(tweetsService: TweetsService) extends Controller {
 
   post("/tweet") { tweetPostRequest: TweetPostRequest =>
     for {

@@ -19,7 +19,11 @@ private[finatra] object LongKeyDeserializers extends JacksonModule {
   override def getModuleName = "LongKeyDeserializers"
 
   private val keyDeserializers = new KeyDeserializers {
-    override def findKeyDeserializer(`type`: JavaType, config: DeserializationConfig, beanDesc: BeanDescription): KeyDeserializer = {
+    override def findKeyDeserializer(
+      `type`: JavaType,
+      config: DeserializationConfig,
+      beanDesc: BeanDescription
+    ): KeyDeserializer = {
       val clazz = beanDesc.getBeanClass
       if (isJsonWrappedLong(clazz))
         new LongKeyDeserializer(clazz)
@@ -30,7 +34,7 @@ private[finatra] object LongKeyDeserializers extends JacksonModule {
 
   private def isJsonWrappedLong(clazz: Class[_]): Boolean = {
     classOf[WrappedValue[_]].isAssignableFrom(clazz) &&
-      isWrappedLong(clazz)
+    isWrappedLong(clazz)
   }
 
   private def isWrappedLong(clazz: Class[_]): Boolean = {
@@ -38,5 +42,5 @@ private[finatra] object LongKeyDeserializers extends JacksonModule {
     constructorParams.head.scalaType.primitiveAwareErasure == classOf[Long]
   }
 
-  this += {_.addKeyDeserializers(keyDeserializers)}
+  this += { _.addKeyDeserializers(keyDeserializers) }
 }

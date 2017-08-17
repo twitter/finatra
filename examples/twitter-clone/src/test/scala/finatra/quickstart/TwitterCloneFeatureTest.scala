@@ -10,9 +10,7 @@ import finatra.quickstart.domain.http.{TweetLocation, TweetResponse}
 import finatra.quickstart.firebase.FirebaseClient
 import finatra.quickstart.services.IdService
 
-class TwitterCloneFeatureTest
-  extends FeatureTest
-  with Mockito {
+class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
   val firebaseClient = smartMock[FirebaseClient]
   val idService = smartMock[IdService]
@@ -22,8 +20,8 @@ class TwitterCloneFeatureTest
 
   override val server =
     new EmbeddedHttpServer(new TwitterCloneServer)
-    .bind[FirebaseClient](firebaseClient)
-    .bind[IdService](idService)
+      .bind[FirebaseClient](firebaseClient)
+      .bind[IdService](idService)
 
   test("tweet creation") {
     idService.getId returns Future(TweetId("123"))
@@ -32,10 +30,13 @@ class TwitterCloneFeatureTest
       id = TweetId("123"),
       message = "Hello #FinagleCon",
       location = Some(TweetLocation(37.7821120598956, -122.400612831116)),
-      nsfw = false)
+      nsfw = false
+    )
 
     firebaseClient.put("/tweets/123.json", savedStatus) returns Future.Unit
-    firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(Option(savedStatus))
+    firebaseClient.get("/tweets/123.json")(manifest[TweetResponse]) returns Future(
+      Option(savedStatus)
+    )
     firebaseClient.get("/tweets/124.json")(manifest[TweetResponse]) returns Future(None)
     firebaseClient.get("/tweets/125.json")(manifest[TweetResponse]) returns Future(None)
 
@@ -60,12 +61,14 @@ class TwitterCloneFeatureTest
             "long": "-122.400612831116"
           },
           "nsfw": false
-        }""")
+        }"""
+    )
 
     server.httpGetJson[TweetResponse](
       path = result.location.get,
       andExpect = Ok,
-      withJsonBody = result.contentString)
+      withJsonBody = result.contentString
+    )
   }
 
   test("Post bad tweet") {
@@ -89,6 +92,7 @@ class TwitterCloneFeatureTest
             "nsfw: 'abc' is not a valid Boolean"
           ]
         }
-        """)
+        """
+    )
   }
 }

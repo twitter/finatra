@@ -7,32 +7,26 @@ import com.twitter.inject.Mockito
 import com.twitter.inject.server.{FeatureTest, PortUtils}
 import org.scalatest.concurrent.Eventually._
 
-class DarkTrafficTestServerFeatureTest 
-  extends FeatureTest 
-  with Mockito {
+class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
 
   // receive dark traffic service
-  override val server = new EmbeddedHttpServer(
-    twitterServer = new DarkTrafficTestServer {
-      override val name = "dark-server"
-    })
+  override val server = new EmbeddedHttpServer(twitterServer = new DarkTrafficTestServer {
+    override val name = "dark-server"
+  })
 
   lazy val liveServer = new EmbeddedHttpServer(
     twitterServer = new DarkTrafficTestServer {
       override val name = "live-server"
     },
-    flags =
-      Map(
+    flags = Map(
       "http.dark.service.dest" ->
-        s"/$$/inet/${PortUtils.loopbackAddress}/${server.httpExternalPort}"))
-  
+        s"/$$/inet/${PortUtils.loopbackAddress}/${server.httpExternalPort}"
+    )
+  )
 
   // See SampleDarkTrafficFilterModule#enableSampling
   test("DarkTrafficServer#Get method is forwarded") {
-    liveServer.httpGet(
-      "/plaintext",
-      andExpect = Ok,
-      withBody = "Hello, World!")
+    liveServer.httpGet("/plaintext", andExpect = Ok, withBody = "Hello, World!")
 
     // service stats
     liveServer.assertCounter("route/plaintext/GET/status/200", 1)
@@ -71,11 +65,7 @@ class DarkTrafficTestServerFeatureTest
   }
 
   test("DarkTrafficServer#Post method not forwarded") {
-    liveServer.httpPost(
-      "/foo",
-      postBody = "",
-      andExpect = Ok,
-      withBody = "bar")
+    liveServer.httpPost("/foo", postBody = "", andExpect = Ok, withBody = "bar")
 
     // service stats
     liveServer.assertCounter("route/foo/POST/status/200", 1)
@@ -90,10 +80,7 @@ class DarkTrafficTestServerFeatureTest
   }
 
   test("DarkTrafficServer#Delete method not forwarded") {
-    liveServer.httpDelete(
-      "/delete",
-      andExpect = Ok,
-      withBody = "delete")
+    liveServer.httpDelete("/delete", andExpect = Ok, withBody = "delete")
 
     // service stats
     liveServer.assertCounter("route/delete/DELETE/status/200", 1)

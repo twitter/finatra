@@ -6,8 +6,7 @@ import com.twitter.io.{Buf, Reader}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[finatra] class JsonStreamParser @Inject()(
-  mapper: FinatraObjectMapper) {
+private[finatra] class JsonStreamParser @Inject()(mapper: FinatraObjectMapper) {
 
   def parseArray[T: Manifest](reader: Reader): AsyncStream[T] = {
     val bufs = AsyncStream.fromReader(reader)

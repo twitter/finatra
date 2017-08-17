@@ -34,8 +34,8 @@ class ResponseBuilder @Inject()(
   fileResolver: FileResolver,
   messageBodyManager: MessageBodyManager,
   statsReceiver: StatsReceiver,
-  @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean)
-  extends Logging {
+  @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean
+) extends Logging {
 
   // generates stats in the form: service/failure/[source]/[details]
   private val serviceFailureNamespace = Seq("service", "failure")
@@ -83,7 +83,8 @@ class ResponseBuilder @Inject()(
    * @param request the HTTP Request associated with this response
    * @param body    the response body, or the information needed to render the body
    */
-  def ok(request: Request, body: Any): EnrichedResponse = EnrichedResponse(Status.Ok).body(request, body)
+  def ok(request: Request, body: Any): EnrichedResponse =
+    EnrichedResponse(Status.Ok).body(request, body)
 
   def ok(body: String): EnrichedResponse = EnrichedResponse(Status.Ok).body(body)
 
@@ -170,8 +171,7 @@ class ResponseBuilder @Inject()(
   }
 
   /* Wrapper around Finagle Response which exposes a builder-like API */
-  case class EnrichedResponse(resp: Response)
-    extends ResponseProxy {
+  case class EnrichedResponse(resp: Response) extends ResponseProxy {
     override val response = resp
 
     /* Public */
@@ -231,12 +231,9 @@ class ResponseBuilder @Inject()(
     def body(request: Request, any: Any): EnrichedResponse = body(Some(request), any)
 
     def file(file: File): EnrichedResponse = {
-      body(
-        new BufferedInputStream(
-          new FileInputStream(file)))
+      body(new BufferedInputStream(new FileInputStream(file)))
 
-      contentType(
-        fileResolver.getContentType(file.getName))
+      contentType(fileResolver.getContentType(file.getName))
     }
 
     def body(b: Array[Byte]): EnrichedResponse = {
@@ -272,9 +269,7 @@ class ResponseBuilder @Inject()(
     }
 
     def contentTypeJson() = {
-      response.headerMap.set(
-        Fields.ContentType,
-        jsonContentType)
+      response.headerMap.set(Fields.ContentType, jsonContentType)
       this
     }
 
@@ -333,16 +328,12 @@ class ResponseBuilder @Inject()(
     }
 
     def contentType(mimeType: String) = {
-      response.headerMap.set(
-        Fields.ContentType,
-        fullMimeTypeValue(mimeType))
+      response.headerMap.set(Fields.ContentType, fullMimeTypeValue(mimeType))
       this
     }
 
     def contentType(mimeType: MediaType) = {
-      response.headerMap.set(
-        Fields.ContentType,
-        mediaToString(mimeType))
+      response.headerMap.set(Fields.ContentType, mediaToString(mimeType))
       this
     }
 
@@ -421,7 +412,13 @@ class ResponseBuilder @Inject()(
       request: Request,
       exception: DetailedNonRetryableSourcedException
     ): ResponseBuilder#EnrichedResponse = {
-      failureClassifier(classifier = true, request, exception.source, exception.details, exception.message)
+      failureClassifier(
+        classifier = true,
+        request,
+        exception.source,
+        exception.details,
+        exception.message
+      )
     }
 
     def failureClassifier(
@@ -459,8 +456,14 @@ class ResponseBuilder @Inject()(
         warn(s"Request Failure: $source/" + detailStrings.mkString("/") + " " + message)
         serviceFailureCounter.incr() // service/failure
         serviceFailureScoped.counter(source).incr() // service/failure/AuthService
-        serviceFailureScoped.scope(source).counter(detailStrings: _*).incr() // service/failure/AuthService/3040/Bad_signature
-        routeScopedFailure(request).scope(source).counter(detailStrings: _*).incr() // route/hello/POST/failure/AuthService/3040/Bad_signature
+        serviceFailureScoped
+          .scope(source)
+          .counter(detailStrings: _*)
+          .incr() // service/failure/AuthService/3040/Bad_signature
+        routeScopedFailure(request)
+          .scope(source)
+          .counter(detailStrings: _*)
+          .incr() // route/hello/POST/failure/AuthService/3040/Bad_signature
       }
 
       this
@@ -490,7 +493,9 @@ class ResponseBuilder @Inject()(
     }
 
     private def routeScopedFailure(request: Request): StatsReceiver = {
-      val routeInfo = RouteInfo(request).getOrElse(throw new Exception("routeScopedFailure can only be used within a HTTP request callback"))
+      val routeInfo = RouteInfo(request).getOrElse(
+        throw new Exception("routeScopedFailure can only be used within a HTTP request callback")
+      )
       statsReceiver.scope("route", routeInfo.sanitizedPath, request.method.toString(), "failure")
     }
 

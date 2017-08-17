@@ -16,16 +16,13 @@ class GreeterThriftServer extends TwitterServer {
   override def postWarmup() {
     super.postWarmup()
 
-    thriftServer = ThriftMux.server.serveIface(
-      thriftPortFlag(),
-      injector.instance[GreeterImpl])
+    thriftServer = ThriftMux.server.serveIface(thriftPortFlag(), injector.instance[GreeterImpl])
 
     info("Thrift server started on port: " + thriftPort.get)
   }
 
   onExit {
-    Await.result(
-      thriftServer.close())
+    Await.result(thriftServer.close())
   }
 
   /* Overrides */

@@ -18,18 +18,18 @@ object RetryPolicyUtils {
     start: Duration,
     multiplier: Int,
     numRetries: Int,
-    shouldRetry: PartialFunction[Try[T], Boolean]): RetryPolicy[Try[T]] = {
+    shouldRetry: PartialFunction[Try[T], Boolean]
+  ): RetryPolicy[Try[T]] = {
 
-    backoff(
-      exponential(start.toTwitterDuration, multiplier) take numRetries)(shouldRetry)
+    backoff(exponential(start.toTwitterDuration, multiplier) take numRetries)(shouldRetry)
   }
 
   def constantRetry[T](
     start: Duration,
     numRetries: Int,
-    shouldRetry: PartialFunction[Try[T], Boolean]): RetryPolicy[Try[T]] = {
+    shouldRetry: PartialFunction[Try[T], Boolean]
+  ): RetryPolicy[Try[T]] = {
 
-    backoff(
-      constant(start.toTwitterDuration) take numRetries)(shouldRetry)
+    backoff(constant(start.toTwitterDuration) take numRetries)(shouldRetry)
   }
 }

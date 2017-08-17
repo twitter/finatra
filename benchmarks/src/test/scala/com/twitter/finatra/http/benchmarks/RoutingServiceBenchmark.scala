@@ -21,7 +21,8 @@ class RoutingServiceBenchmark {
     route("/foo/"),
     route("/foo/:id"),
     route("/users/"),
-    route("/users/:id"))
+    route("/users/:id")
+  )
 
   val routingService = new RoutingService(routes)
 
@@ -38,16 +39,18 @@ class RoutingServiceBenchmark {
     routingService.apply(getRequest2)
   }
 
-  def route(path: String) = Route(
-    name = path,
-    method = Method.Get,
-    uri = path,
-    admin = false,
-    index = None,
-    callback = defaultCallback,
-    annotations = Seq(),
-    requestClass = classOf[Request],
-    responseClass = classOf[Response],
-    routeFilter = Filter.identity,
-    filter = Filter.identity)
+  def route(path: String) =
+    Route(
+      name = path,
+      method = Method.Get,
+      uri = path,
+      admin = false,
+      index = None,
+      callback = defaultCallback,
+      annotations = Seq(),
+      requestClass = classOf[Request],
+      responseClass = classOf[Response],
+      routeFilter = Filter.identity,
+      filter = Filter.identity
+    )
 }

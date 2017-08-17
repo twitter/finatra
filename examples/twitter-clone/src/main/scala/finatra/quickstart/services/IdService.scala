@@ -9,8 +9,6 @@ import javax.inject.Singleton
 class IdService {
 
   def getId(): Future[TweetId] = {
-    Future(
-      TweetId(
-        UUID.randomUUID.toString))
+    Future(TweetId(UUID.randomUUID.toString))
   }
 }

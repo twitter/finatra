@@ -3,4 +3,5 @@ create_thrift_libraries(
   sources=rglobs('*.thrift'),
   provides_java_name='finatra-thrift-java',
   provides_scala_name='finatra-thrift-scala',
+  generate_languages = ['scala', 'java', 'ruby', 'python', 'lua', 'strato']
 )

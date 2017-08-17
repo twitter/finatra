@@ -16,15 +16,22 @@ trait ThriftServer extends TwitterServer {
   addFrameworkModules(ExceptionManagerModule)
 
   protected def defaultFinatraThriftPort: String = ":9999"
-  private val thriftPortFlag = flag("thrift.port", defaultFinatraThriftPort, "External Thrift server port")
+  private val thriftPortFlag =
+    flag("thrift.port", defaultFinatraThriftPort, "External Thrift server port")
 
   protected def defaultThriftShutdownTimeout = 1.minute
-  private val thriftShutdownTimeoutFlag = flag("thrift.shutdown.time", defaultThriftShutdownTimeout, "Maximum amount of time to wait for pending requests to complete on shutdown")
+  private val thriftShutdownTimeoutFlag = flag(
+    "thrift.shutdown.time",
+    defaultThriftShutdownTimeout,
+    "Maximum amount of time to wait for pending requests to complete on shutdown"
+  )
 
   protected def defaultThriftServerName: String = "thrift"
-  private val thriftServerNameFlag = flag("thrift.name", defaultThriftServerName, "Thrift server name")
+  private val thriftServerNameFlag =
+    flag("thrift.name", defaultThriftServerName, "Thrift server name")
 
-  private val thriftAnnounceFlag = flag[String]("thrift.announce", "Address for announcing Thrift server")
+  private val thriftAnnounceFlag =
+    flag[String]("thrift.announce", "Address for announcing Thrift server")
 
   /* Private Mutable State */
 
@@ -53,18 +60,20 @@ trait ThriftServer extends TwitterServer {
     val thriftServerBuilder =
       configureThriftServer(
         ThriftMux.server
-          .withLabel(thriftServerNameFlag()))
+          .withLabel(thriftServerNameFlag())
+      )
 
-    thriftServer = router.services.service.map { service =>
-      // if we have a built Service[-Req, +Rep] we serve it
-      thriftServerBuilder.serve(thriftPortFlag(), service)
-    }.getOrElse {
-      // otherwise we serve from a ServiceIface
-      thriftServerBuilder.serveIface(thriftPortFlag(), router.services.serviceIface)
-    }
+    thriftServer = router.services.service
+      .map { service =>
+        // if we have a built Service[-Req, +Rep] we serve it
+        thriftServerBuilder.serve(thriftPortFlag(), service)
+      }
+      .getOrElse {
+        // otherwise we serve from a ServiceIface
+        thriftServerBuilder.serveIface(thriftPortFlag(), router.services.serviceIface)
+      }
     onExit {
-      Await.result(
-        thriftServer.close(thriftShutdownTimeoutFlag().fromNow))
+      Await.result(thriftServer.close(thriftShutdownTimeoutFlag().fromNow))
     }
     await(thriftServer)
     for (addr <- thriftAnnounceFlag.get) thriftServer.announce(addr)

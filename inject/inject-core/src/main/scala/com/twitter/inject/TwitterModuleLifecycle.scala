@@ -15,10 +15,10 @@ trait TwitterModuleLifecycle {
   protected[inject] def singletonStartup(injector: Injector): Unit = {}
 
   /**
-  * Invoke after external ports are bound and any clients are resolved
-  *
-  * This method should only get singleton instances from the injector.
-  */
+   * Invoke after external ports are bound and any clients are resolved
+   *
+   * This method should only get singleton instances from the injector.
+   */
   protected[inject] def singletonPostWarmupComplete(injector: Injector): Unit = {}
 
   /**

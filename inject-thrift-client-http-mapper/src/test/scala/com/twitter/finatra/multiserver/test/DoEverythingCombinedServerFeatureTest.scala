@@ -10,9 +10,8 @@ import com.twitter.util.{Await, Future}
 
 class DoEverythingCombinedServerFeatureTest extends FeatureTest {
 
-  val server = new EmbeddedHttpServer(
-    twitterServer = new DoEverythingCombinedServer)
-    with ThriftClient
+  val server = new EmbeddedHttpServer(twitterServer = new DoEverythingCombinedServer)
+  with ThriftClient
 
   lazy val client = server.thriftClient[Adder[Future]](clientId = "client123")
 
@@ -21,15 +20,11 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
   }
 
   test("ping") {
-    server.httpGet(
-      "/ping")
+    server.httpGet("/ping")
   }
 
   test("add1 http") {
-    server.httpGet(
-      "/add1?num=5",
-      andExpect = Status.Ok,
-      withBody = "6")
+    server.httpGet("/add1?num=5", andExpect = Status.Ok, withBody = "6")
   }
 
   test("add1 admin") {
@@ -38,7 +33,8 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
       routeToAdminServer = true,
       postBody = server.mapper.writeValueAsString(AdminAdd1Request(num = 5)),
       andExpect = Status.Ok,
-      withBody = "6")
+      withBody = "6"
+    )
   }
 
   test("admin foo") {

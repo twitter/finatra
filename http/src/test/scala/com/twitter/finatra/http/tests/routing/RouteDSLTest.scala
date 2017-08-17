@@ -53,13 +53,17 @@ class RouteDSLTest extends Test {
   }
 
   test("FilteredDSL composes build filters") {
-    val routeDSL = new FilteredDSL[NormalTestFilter]().filter(new TestFilter("request2" -> "yes", "response2" -> "yes"))
+    val routeDSL = new FilteredDSL[NormalTestFilter]()
+      .filter(new TestFilter("request2" -> "yes", "response2" -> "yes"))
 
     val request = Request()
 
     // Verify that we changed the default
     val filter1 = routeDSL.context.buildFilter(injector)
-    val filter2 = new NormalTestFilter() andThen new TestFilter("request2" -> "yes", "response2" -> "yes")
+    val filter2 = new NormalTestFilter() andThen new TestFilter(
+      "request2" -> "yes",
+      "response2" -> "yes"
+    )
 
     val response1 = Await.result(filter1(request, identityService))
     val response2 = Await.result(filter2(request, identityService))

@@ -8,9 +8,7 @@ import finatra.quickstart.firebase.FirebaseClient
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class TweetsService @Inject()(
-  idService: IdService,
-  firebase: FirebaseClient) {
+class TweetsService @Inject()(idService: IdService, firebase: FirebaseClient) {
 
   def save(postedTweet: TweetPostRequest): Future[Tweet] = {
     for {
@@ -23,8 +21,7 @@ class TweetsService @Inject()(
   }
 
   def getResponseTweet(tweetId: TweetId): Future[Option[TweetResponse]] = {
-    firebase.get[TweetResponse](
-      firebaseUrl(tweetId))
+    firebase.get[TweetResponse](firebaseUrl(tweetId))
   }
 
   def getTweet(tweetId: TweetId): Future[Option[Tweet]] = {
@@ -32,6 +29,6 @@ class TweetsService @Inject()(
   }
 
   private def firebaseUrl(tweetId: TweetId): String = {
-    s"/tweets/${tweetId.id }.json"
+    s"/tweets/${tweetId.id}.json"
   }
 }

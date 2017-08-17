@@ -6,9 +6,8 @@ import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.json.FinatraObjectMapper
 import javax.inject.Inject
 
-class DomainTestUserReader @Inject()(
-  mapper: FinatraObjectMapper)
-  extends MessageBodyReader[DomainTestUser] {
+class DomainTestUserReader @Inject()(mapper: FinatraObjectMapper)
+    extends MessageBodyReader[DomainTestUser] {
 
   override def parse[M: Manifest](request: Request): DomainTestUser = {
     val jsonNode = mapper.parse[JsonNode](request)
@@ -16,4 +15,3 @@ class DomainTestUserReader @Inject()(
     DomainTestUser(testUser.name)
   }
 }
-

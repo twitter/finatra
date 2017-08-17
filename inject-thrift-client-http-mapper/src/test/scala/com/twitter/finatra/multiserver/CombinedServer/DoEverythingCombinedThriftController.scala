@@ -7,10 +7,9 @@ import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class DoEverythingCombinedThriftController @Inject()(
-    adder: AdderService)
-  extends Controller
-  with Adder.BaseServiceIface {
+class DoEverythingCombinedThriftController @Inject()(adder: AdderService)
+    extends Controller
+    with Adder.BaseServiceIface {
 
   override val add1 = handle(Add1) { args: Add1.Args =>
     Future(adder.add1(args.num))

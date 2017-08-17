@@ -13,15 +13,15 @@ private[http] object Routes {
 }
 
 // optimized
-private[http] class Routes(
-  routes: Array[Route]) {
+private[http] class Routes(routes: Array[Route]) {
 
   //Assert unique paths
   {
-    val distinctRoutes = routes.toSeq.distinctBy {_.path}
+    val distinctRoutes = routes.toSeq.distinctBy { _.path }
     assert(
       routes.length == distinctRoutes.length,
-      "Found non-unique routes " + routes.diff(distinctRoutes).map(_.summary).mkString(", "))
+      "Found non-unique routes " + routes.diff(distinctRoutes).map(_.summary).mkString(", ")
+    )
   }
 
   private[this] val (constantRoutes, nonConstantRoutes) = {
@@ -41,21 +41,19 @@ private[http] class Routes(
 
   def handle(request: Request, bypassFilters: Boolean = false): Option[Future[Response]] = {
     val path = request.path // Store path since Request#path is derived
-    val secondaryPath = if (!path.endsWith("/")) path+"/" else null
+    val secondaryPath = if (!path.endsWith("/")) path + "/" else null
 
     // look for constant route matches
     val constantRouteResult = constantRouteMap.get(path)
     val secondaryConstantRouteResult = constantRouteMap.get(secondaryPath)
     if (constantRouteResult != null) {
       constantRouteResult.handleMatch(request, bypassFilters)
-    }
-    else if (secondaryPath != null && secondaryConstantRouteResult != null) {
+    } else if (secondaryPath != null && secondaryConstantRouteResult != null) {
       if (secondaryConstantRouteResult.hasOptionalTrailingSlash)
         secondaryConstantRouteResult.handleMatch(request, bypassFilters)
       else
         None
-    }
-    else {
+    } else {
       var response: Option[Future[Response]] = None
       var nonConstantRouteIdx = -1
       while (response.isEmpty && nonConstantRouteIdx < nonConstantRoutesLimit) {

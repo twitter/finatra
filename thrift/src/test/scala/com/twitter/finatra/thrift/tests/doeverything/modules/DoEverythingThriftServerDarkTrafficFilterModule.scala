@@ -5,7 +5,7 @@ import com.twitter.finatra.thrift.ThriftRequest
 import com.twitter.finatra.thrift.modules.DarkTrafficFilterModule
 
 class DoEverythingThriftServerDarkTrafficFilterModule
-  extends DarkTrafficFilterModule[DoEverything.ServiceIface]{
+    extends DarkTrafficFilterModule[DoEverything.ServiceIface] {
 
   /**
    * Function to determine if the request should be "sampled", e.g.

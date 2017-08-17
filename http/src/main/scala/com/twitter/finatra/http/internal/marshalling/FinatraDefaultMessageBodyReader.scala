@@ -16,8 +16,8 @@ private[finatra] object FinatraDefaultMessageBodyReader {
 @Singleton
 private[finatra] class FinatraDefaultMessageBodyReader @Inject()(
   injector: Injector,
-  objectMapper: FinatraObjectMapper)
-  extends DefaultMessageBodyReader {
+  objectMapper: FinatraObjectMapper
+) extends DefaultMessageBodyReader {
 
   /* Public */
 

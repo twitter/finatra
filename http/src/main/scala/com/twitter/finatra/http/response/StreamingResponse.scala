@@ -4,7 +4,7 @@ import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.inject.Logging
 import com.twitter.io.{Buf, Writer}
-import com.twitter.util.Future
+import com.twitter.util.{Closable, Future}
 
 object StreamingResponse {
 
@@ -15,13 +15,36 @@ object StreamingResponse {
   private val JsonArraySeparator = Some(Buf.Utf8(","))
   private val JsonArraySuffix = Some(Buf.Utf8("]"))
 
+  /**
+   * Construct a [[StreamingResponse]] from an `AsyncStream`.
+   *
+   * A [[StreamingResponse]] is useful for streaming data back to the client in chunks: data will
+   * be rendered to the client as it resolves from the `AsyncStream` while also utilizing the
+   * back-pressure mechanisms provide by the underlying transport, preventing unnecessary resource
+   * consumption for properly constructed `AsyncStream`s.
+   *
+   * @param toBuf Function for converting messages to a binary `Buf` representation.
+   * @param status Status code of the generated response.
+   * @param headers Headers for the generated response.
+   * @param prefix Optional first chunk of the response body. Note that a separator will not be
+   *               added between the prefix and the elements of the `AsyncStream`.
+   * @param separator Separator to be interleaved between each result of the `AsyncStream`.
+   * @param suffix Suffix to append to the end of the `AsyncStream`. Note that a separator will
+   *               not be included between the last stream chunk and the suffix.
+   * @param closeOnFinish A hook for cleaning up resources after completion of the rendering
+   *                      process. Note that this will be called regardless of whether rendering
+   *                      the body is successful.
+   * @param asyncStream The data that will represent the body of the response.
+   */
   def apply[T](
     toBuf: T => Buf,
     status: Status = Status.Ok,
     headers: Map[String, String] = Map(),
     prefix: Option[Buf] = None,
     separator: Option[Buf] = None,
-    suffix: Option[Buf] = None)(asyncStream: => AsyncStream[T]) = {
+    suffix: Option[Buf] = None,
+    closeOnFinish: Closable = Closable.nop
+  )(asyncStream: => AsyncStream[T]) = {
     new StreamingResponse[T](
       status = status,
       toBuf = toBuf,
@@ -29,48 +52,58 @@ object StreamingResponse {
       prefix = prefix,
       separator = separator,
       suffix = suffix,
-      asyncStream = () => asyncStream)
+      asyncStream = () => asyncStream,
+      closeOnFinish = closeOnFinish
+    )
   }
 
   def jsonArray[T](
     toBuf: T => Buf,
     status: Status = Status.Ok,
     headers: Map[String, String] = Map(),
-    asyncStream: => AsyncStream[T]) = {
+    closeOnFinish: Closable = Closable.nop,
+    asyncStream: => AsyncStream[T]
+  ) = {
 
     new StreamingResponse[T](
-      toBuf = toBuf ,
+      toBuf = toBuf,
       status = status,
       headers = headers,
       prefix = JsonArrayPrefix,
       separator = JsonArraySeparator,
       suffix = JsonArraySuffix,
-      asyncStream = () => asyncStream)
+      asyncStream = () => asyncStream,
+      closeOnFinish = closeOnFinish
+    )
   }
 }
 
-class StreamingResponse[T] private(
+/**
+ * Representation of a streaming HTTP response based on the `AsyncStream` construct.
+ */
+class StreamingResponse[T] private (
   toBuf: T => Buf,
   status: Status,
   headers: Map[String, String],
   prefix: Option[Buf],
   separator: Option[Buf],
   suffix: Option[Buf],
-  asyncStream: () => AsyncStream[T])
-  extends Logging {
+  asyncStream: () => AsyncStream[T],
+  closeOnFinish: Closable
+) extends Logging {
 
   def toFutureFinagleResponse: Future[Response] = {
     val response = Response()
     response.setChunked(true)
-    response.setStatusCode(status.code)
+    response.statusCode = status.code
     setHeaders(headers, response)
     val writer = response.writer
 
     /* Orphan the future which writes to our response thread */
     (for {
       _ <- writePrefix(writer)
-      bufs = asyncStream() map toBuf
-      _ <- addSeparatorIfPresent(bufs) foreachF writer.write
+      bufs = asyncStream().map(toBuf)
+      _ <- addSeparatorIfPresent(bufs).foreachF(writer.write)
       result <- writeSuffix(writer)
     } yield result) onSuccess { r =>
       debug("Success writing to chunked response")
@@ -78,36 +111,37 @@ class StreamingResponse[T] private(
       warn("Failure writing to chunked response", e)
     } ensure {
       debug("Closing chunked response")
-      response.close()
+      Closable.all(response.writer, closeOnFinish).close()
     }
 
     Future.value(response)
   }
 
-  private def writePrefix(writer: Writer) = {
-    prefix map writer.write getOrElse Future.Unit
+  private[this] def writePrefix(writer: Writer): Future[Unit] =
+    writeOption(prefix, writer)
+
+  private[this] def writeSuffix(writer: Writer): Future[Unit] =
+    writeOption(suffix, writer)
+
+  private[this] def writeOption(data: Option[Buf], writer: Writer): Future[Unit] = data match {
+    case Some(data) => writer.write(data)
+    case None => Future.Unit
   }
 
-  private def writeSuffix(writer: Writer) = {
-    suffix map writer.write getOrElse Future.Unit
-  }
-
-  private def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] = {
-    separator map { sep: Buf =>
-      addSeparator(stream, sep)
-    } getOrElse {
-      stream
+  private[this] def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] =
+    separator match {
+      case Some(sep) => addSeparator(stream, sep)
+      case None => stream
     }
-  }
 
-  private def addSeparator(stream: AsyncStream[Buf], separator: Buf): AsyncStream[Buf] = {
-    stream.take(1) ++ (stream.drop(1) map { buf =>
+  private[this] def addSeparator(stream: AsyncStream[Buf], separator: Buf): AsyncStream[Buf] = {
+    stream.take(1) ++ (stream.drop(1).map { buf =>
       separator.concat(buf)
     })
   }
 
-  private def setHeaders(headersOpt: Map[String, String], response: Response) = {
-    for((k,v) <- headers) {
+  private[this] def setHeaders(headersOpt: Map[String, String], response: Response) = {
+    for ((k, v) <- headers) {
       response.headerMap.set(k, v)
     }
   }

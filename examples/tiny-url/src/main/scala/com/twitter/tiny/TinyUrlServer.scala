@@ -16,9 +16,7 @@ class TinyUrlServer extends HttpServer {
    */
   override val disableAdminHttpServer = true
 
-  override def modules = Seq(
-    ServicesModule,
-    TinyUrlModule)
+  override def modules = Seq(ServicesModule, TinyUrlModule)
 
   override def configureHttp(router: HttpRouter) {
     router

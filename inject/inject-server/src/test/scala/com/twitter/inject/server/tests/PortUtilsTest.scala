@@ -11,6 +11,7 @@ class PortUtilsTest extends Test {
 
   test("PortUtils#getPort for Server") {
     val server = new Server {
+
       /**
        * The address to which this server is bound.
        */

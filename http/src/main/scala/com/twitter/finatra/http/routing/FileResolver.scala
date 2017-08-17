@@ -26,13 +26,14 @@ import org.apache.commons.io.FilenameUtils
 @Singleton
 class FileResolver @Inject()(
   @Flag("local.doc.root") localDocRoot: String,
-  @Flag("doc.root") docRoot: String)
-  extends Logging {
+  @Flag("doc.root") docRoot: String
+) extends Logging {
 
   // assertions -- cannot have both doc roots set
   if (localDocRoot.nonEmpty && docRoot.nonEmpty) {
     throw new java.lang.AssertionError(
-      "assertion failed: Cannot set both -local.doc.root and -doc.root flags.")
+      "assertion failed: Cannot set both -local.doc.root and -doc.root flags."
+    )
   }
 
   private val extMap = new MimetypesFileTypeMap()
@@ -65,8 +66,7 @@ class FileResolver @Inject()(
   }
 
   def getContentType(file: String) = {
-    extMap.getContentType(
-      dottedFileExtension(file))
+    extMap.getContentType(dottedFileExtension(file))
   }
 
   /* Private */
@@ -86,15 +86,14 @@ class FileResolver @Inject()(
 
   private def getLocalFileInputStream(path: String): Option[InputStream] = {
     // try absolute path first, then under local.doc.root
-    val file = if (new File(path).exists)
-      new File(path)
-    else
-      new File(localDocRoot, path)
+    val file =
+      if (new File(path).exists)
+        new File(path)
+      else
+        new File(localDocRoot, path)
 
     if (file.exists)
-      Option(
-        new BufferedInputStream(
-          new FileInputStream(file)))
+      Option(new BufferedInputStream(new FileInputStream(file)))
     else
       None
   }

@@ -18,13 +18,19 @@ class MustacheTemplateNameLookupTest extends Test {
 
   val lookup = new MustacheTemplateNameLookup()
 
-  test("MustacheTemplateNameLookup#provide the correct mustache file when supplied an annotated class") {
+  test(
+    "MustacheTemplateNameLookup#provide the correct mustache file when supplied an annotated class"
+  ) {
     lookup.getTemplateName(standardView) should be("teststandard.mustache")
   }
-  test("MustacheTemplateNameLookup#provide the correct mustache file when supplied a mustache body component with a different template") {
+  test(
+    "MustacheTemplateNameLookup#provide the correct mustache file when supplied a mustache body component with a different template"
+  ) {
     lookup.getTemplateName(componentWith) should be("testother.mustache")
   }
-  test("MustacheTemplateNameLookup#provide the correct mustache file when supplied a mustache body component without a different template") {
+  test(
+    "MustacheTemplateNameLookup#provide the correct mustache file when supplied a mustache body component without a different template"
+  ) {
     lookup.getTemplateName(componentWithout) should be("teststandard.mustache")
   }
 

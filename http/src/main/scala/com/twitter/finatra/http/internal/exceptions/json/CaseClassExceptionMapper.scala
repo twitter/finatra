@@ -7,13 +7,12 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassMappingEx
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class CaseClassExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends ExceptionMapper[CaseClassMappingException] {
+private[http] class CaseClassExceptionMapper @Inject()(response: ResponseBuilder)
+    extends ExceptionMapper[CaseClassMappingException] {
 
   override def toResponse(request: Request, e: CaseClassMappingException): Response =
     response.badRequest.json(errorsResponse(e))
 
   private def errorsResponse(e: CaseClassMappingException): ErrorsResponse =
-    ErrorsResponse(e.errors map {_.getMessage})
+    ErrorsResponse(e.errors map { _.getMessage })
 }

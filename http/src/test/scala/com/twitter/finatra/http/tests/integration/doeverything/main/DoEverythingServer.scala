@@ -7,9 +7,19 @@ import com.twitter.finatra.http.jsonpatch.{JsonPatchExceptionMapper, JsonPatchMe
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.tests.integration.doeverything.main.controllers._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
-import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{BarExceptionMapper, FooBarBazExceptionMapper, FooExceptionMapper}
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
-import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
+import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{
+  BarExceptionMapper,
+  FooBarBazExceptionMapper,
+  FooExceptionMapper
+}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
+  AppendToHeaderFilter,
+  IdentityFilter
+}
+import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{
+  DoEverythingModule,
+  DoEverythingStatsReceiverModule
+}
 import com.twitter.finatra.http.{Controller, HttpServer}
 
 object DoEverythingServerMain extends DoEverythingServer
@@ -45,12 +55,69 @@ class DoEverythingServer extends HttpServer {
       .add[IdentityFilter, IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
       .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
-      .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
-      .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
-      .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
-      .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
-      .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
-      .add[IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, IdentityFilter, DoNothingController]
+      .add[
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        DoNothingController
+      ]
+      .add[
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        DoNothingController
+      ]
+      .add[
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        DoNothingController
+      ]
+      .add[
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        DoNothingController
+      ]
+      .add[
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        DoNothingController
+      ]
+      .add[
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        IdentityFilter,
+        DoNothingController
+      ]
   }
 
   override def warmup() {

@@ -21,7 +21,8 @@ class FinagleRequestFileUpload extends FileUploadBase {
           isFormField = multipartItemStream.isFormField,
           contentType = Option(multipartItemStream.getContentType),
           filename = Option(multipartItemStream.getName),
-          headers = multipartItemStream.getHeaders)
+          headers = multipartItemStream.getHeaders
+        )
 
         multipartMap += multipartItemInMemory.fieldName -> multipartItemInMemory
       }
@@ -31,10 +32,8 @@ class FinagleRequestFileUpload extends FileUploadBase {
   }
 
   def fileItemIterator(request: Request): Option[FileItemIterator] = {
-    if(isPostOrPut(request) && isMultipart(request))
-      Some(
-        getItemIterator(
-          new FinatraRequestContext(request)))
+    if (isPostOrPut(request) && isMultipart(request))
+      Some(getItemIterator(new FinatraRequestContext(request)))
     else
       None
   }

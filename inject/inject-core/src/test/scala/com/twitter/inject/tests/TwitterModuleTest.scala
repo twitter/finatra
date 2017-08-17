@@ -11,14 +11,11 @@ class TwitterModuleTest extends Test {
     Injector(Guice.createInjector(DoEverythingModule))
 
   test("get assisted factory instance from injector") {
-    assertServiceFactory(
-      injector.instance[ComplexServiceFactory])
+    assertServiceFactory(injector.instance[ComplexServiceFactory])
 
-    assertServiceFactory(
-      injector.instance(classOf[ComplexServiceFactory]))
+    assertServiceFactory(injector.instance(classOf[ComplexServiceFactory]))
 
-    assertServiceFactory(
-      injector.instance(Key.get(classOf[ComplexServiceFactory])))
+    assertServiceFactory(injector.instance(Key.get(classOf[ComplexServiceFactory])))
   }
 
   test("get additional instances from injector") {

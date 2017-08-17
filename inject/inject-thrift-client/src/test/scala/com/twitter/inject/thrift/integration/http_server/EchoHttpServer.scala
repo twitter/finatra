@@ -8,13 +8,9 @@ import com.twitter.inject.thrift.modules.ThriftClientIdModule
 class EchoHttpServer extends HttpServer {
   override val name = "echo-http-server"
 
-  override val modules = Seq(
-    ThriftClientIdModule,
-    EchoThriftClientModule)
+  override val modules = Seq(ThriftClientIdModule, EchoThriftClientModule)
 
   override def configureHttp(router: HttpRouter) {
-    router.
-      filter[CommonFilters].
-      add[EchoHttpController]
+    router.filter[CommonFilters].add[EchoHttpController]
   }
 }

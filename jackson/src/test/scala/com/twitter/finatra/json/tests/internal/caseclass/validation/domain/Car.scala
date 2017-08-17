@@ -1,7 +1,12 @@
 package com.twitter.finatra.json.tests.internal.caseclass.validation.domain
 
 import com.twitter.finatra.json.tests.internal.CarMake
-import com.twitter.finatra.validation.{CommonMethodValidations, MethodValidation, Min, ValidationResult}
+import com.twitter.finatra.validation.{
+  CommonMethodValidations,
+  MethodValidation,
+  Min,
+  ValidationResult
+}
 import org.joda.time.DateTime
 
 case class Car(
@@ -15,20 +20,23 @@ case class Car(
   ownershipStart: DateTime,
   ownershipEnd: DateTime,
   warrantyStart: Option[DateTime],
-  warrantyEnd: Option[DateTime]) {
+  warrantyEnd: Option[DateTime]
+) {
 
   @MethodValidation
   def validateId = {
-    ValidationResult.validate(
-      id % 2 == 1,
-      "id may not be even")
+    ValidationResult.validate(id % 2 == 1, "id may not be even")
   }
 
   @MethodValidation
   def validateYearBeforeNow: ValidationResult = {
     val thisYear = new DateTime().getYear
-    val yearMoreThanOneYearInFuture: Boolean = if (year > thisYear) { (year - thisYear) > 1 } else false
-    ValidationResult.validateNot(yearMoreThanOneYearInFuture, "Model year can be at most one year newer.")
+    val yearMoreThanOneYearInFuture: Boolean =
+      if (year > thisYear) { (year - thisYear) > 1 } else false
+    ValidationResult.validateNot(
+      yearMoreThanOneYearInFuture,
+      "Model year can be at most one year newer."
+    )
   }
 
   @MethodValidation
@@ -37,7 +45,8 @@ case class Car(
       ownershipStart,
       ownershipEnd,
       "ownershipStart",
-      "ownershipEnd")
+      "ownershipEnd"
+    )
   }
 
   @MethodValidation
@@ -46,6 +55,7 @@ case class Car(
       warrantyStart,
       warrantyEnd,
       "warrantyStart",
-      "warrantyEnd")
+      "warrantyEnd"
+    )
   }
 }

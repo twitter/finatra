@@ -37,8 +37,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   def thriftClient[T: ClassTag](clientId: String = null): T = {
     self.start()
     val baseThriftClient =
-      ThriftMux.Client().
-        configured(Stats(NullStatsReceiver))
+      ThriftMux.Client().configured(Stats(NullStatsReceiver))
 
     val client = {
       if (clientId != null) {

@@ -14,19 +14,15 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     new TweetsEndpointServer,
     defaultRequestHeaders = Map("X-UserId" -> "123"),
     // Set client flags to also start on HTTPS port
-    flags = Map(
-      "https.port" -> ":0",
-      "cert.path" -> "",
-      "key.path" -> ""))
+    flags = Map("https.port" -> ":0", "cert.path" -> "", "key.path" -> "")
+  )
 
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
 
   test("get tweet 1") {
     val tweet =
-      server.httpGetJson[Map[String, Long]](
-        "/tweets/1",
-        andExpect = Status.Ok)
+      server.httpGetJson[Map[String, Long]]("/tweets/1", andExpect = Status.Ok)
 
     tweet("idonly") should equal(1) //confirm response was transformed by registered TweetMessageBodyWriter
   }
@@ -41,7 +37,8 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "tweet_msg": "hello"
       }""",
       andExpect = Status.Ok,
-      withBody = "tweet with id 5 is valid")
+      withBody = "tweet with id 5 is valid"
+    )
   }
 
   test("post tweet with missing field") {
@@ -53,7 +50,8 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "tweet_msg": "hello"
       }""",
       andExpect = Status.BadRequest,
-      withErrors = Seq("username: field is required"))
+      withErrors = Seq("username: field is required")
+    )
   }
 
   test("post tweet with field validation issue") {
@@ -66,7 +64,8 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "tweet_msg": "hello"
       }""",
       andExpect = Status.BadRequest,
-      withErrors = Seq("custom_id: [0] is not greater than or equal to 1"))
+      withErrors = Seq("custom_id: [0] is not greater than or equal to 1")
+    )
   }
 
   test("post tweet with method validation issue") {
@@ -79,7 +78,8 @@ class TweetsControllerIntegrationTest extends FeatureTest {
         "tweet_msg": "hello"
       }""",
       andExpect = Status.BadRequest,
-      withErrors = Seq("username cannot be foo"))
+      withErrors = Seq("username cannot be foo")
+    )
   }
 
   test("post streaming json") {
@@ -99,9 +99,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   }
 
   test("post streaming json without chunks") {
-    server.httpPost(
-      "/tweets/streaming",
-      """
+    server.httpPost("/tweets/streaming", """
       [1,2,3,4,5]
       """)
   }
@@ -110,8 +108,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     server.httpGet(
       "/tweets/streaming_json",
       andExpect = Status.Ok,
-      withJsonBody =
-        """
+      withJsonBody = """
           [
             {
               "id" : 1,
@@ -129,28 +126,29 @@ class TweetsControllerIntegrationTest extends FeatureTest {
               "msg" : "hey"
             }
           ]
-        """)
+        """
+    )
   }
 
   test("get streaming custom toBuf") {
-    server.httpGet(
-      "/tweets/streaming_custom_tobuf",
-      andExpect = Status.Ok,
-      withBody = "ABC")
+    server.httpGet("/tweets/streaming_custom_tobuf", andExpect = Status.Ok, withBody = "ABC")
   }
 
   test("get streaming custom toBuf with custom headers") {
     val response = server.httpGet(
       "/tweets/streaming_custom_tobuf_with_custom_headers",
       andExpect = Status.Created,
-      withBody = "ABC")
+      withBody = "ABC"
+    )
 
     response.headerMap.contains(Fields.ContentType) should equal(true)
     response.headerMap.get(Fields.ContentType).get should equal("text/event-stream;charset=UTF-8")
     response.headerMap.contains(Fields.Pragma) should equal(true)
     response.headerMap.get(Fields.Pragma).get should equal("no-cache")
     response.headerMap.contains(Fields.CacheControl) should equal(true)
-    response.headerMap.get(Fields.CacheControl).get should equal("no-cache, no-store, max-age=0, must-revalidate")
+    response.headerMap.get(Fields.CacheControl).get should equal(
+      "no-cache, no-store, max-age=0, must-revalidate"
+    )
 
   }
 
@@ -158,14 +156,12 @@ class TweetsControllerIntegrationTest extends FeatureTest {
     server.httpGet(
       "/tweets/streaming_manual_writes",
       andExpect = Status.Ok,
-      withBody = "helloworld")
+      withBody = "helloworld"
+    )
   }
 
   test("get admin yo") {
-    server.httpGet(
-      "/admin/finatra/yo",
-      andExpect = Status.Ok,
-      withBody = "yo yo")
+    server.httpGet("/admin/finatra/yo", andExpect = Status.Ok, withBody = "yo yo")
   }
 
   test("get hello in parallel") {
@@ -184,25 +180,20 @@ class TweetsControllerIntegrationTest extends FeatureTest {
   test("get admin users") {
     server.httpGet(
       "/admin/finatra/users/123",
-      withBody = "123 from data://prod, 123 from data://staging")
+      withBody = "123 from data://prod, 123 from data://staging"
+    )
   }
 
   test("get ping") {
-    server.httpGet(
-      "/admin/ping",
-      withBody = "pong")
+    server.httpGet("/admin/ping", withBody = "pong")
   }
 
   test("get health") {
-    server.httpGet(
-      "/health",
-      routeToAdminServer = true,
-      withBody = "OK\n")
+    server.httpGet("/health", routeToAdminServer = true, withBody = "OK\n")
   }
 
   test("verify max request size overridden") {
-    val registry = server.httpGetJson[JsonNode](
-      "/admin/registry.json")
+    val registry = server.httpGetJson[JsonNode]("/admin/registry.json")
 
     val maxRequestSize = registry.get("registry").get("flags").get("maxRequestSize").textValue()
     maxRequestSize should equal("10485760.bytes")
@@ -213,6 +204,7 @@ class TweetsControllerIntegrationTest extends FeatureTest {
       "/tweets/hello",
       andExpect = Status.Ok,
       withBody = "hello world",
-      suppress = true)
+      suppress = true
+    )
   }
 }

@@ -19,23 +19,30 @@ private[http] trait BaseHttpServer extends TwitterServer {
   private val httpPortFlag = flag("http.port", defaultFinatraHttpPort, "External HTTP server port")
 
   protected def defaultMaxRequestSize: StorageUnit = 5.megabytes
-  private val maxRequestSizeFlag = flag("maxRequestSize", defaultMaxRequestSize, "HTTP(s) Max Request Size")
+  private val maxRequestSizeFlag =
+    flag("maxRequestSize", defaultMaxRequestSize, "HTTP(s) Max Request Size")
 
   protected def defaultHttpsPort: String = ""
   private val httpsPortFlag = flag("https.port", defaultHttpsPort, "HTTPs Port")
 
   protected def defaultCertificatePath: String = ""
-  private val certificatePathFlag = flag("cert.path", defaultCertificatePath, "path to SSL certificate")
+  private val certificatePathFlag =
+    flag("cert.path", defaultCertificatePath, "path to SSL certificate")
 
   protected def defaultKeyPath: String = ""
   private val keyPathFlag = flag("key.path", defaultKeyPath, "path to SSL key")
 
   protected def defaultShutdownTimeout: Duration = 1.minute
-  private val shutdownTimeoutFlag = flag("shutdown.time", defaultShutdownTimeout, "Maximum amount of time to wait for pending requests to complete on shutdown")
+  private val shutdownTimeoutFlag = flag(
+    "shutdown.time",
+    defaultShutdownTimeout,
+    "Maximum amount of time to wait for pending requests to complete on shutdown"
+  )
 
   private val httpAnnounceFlag = flag[String]("http.announce", "Address for announcing HTTP server")
 
-  private val httpsAnnounceFlag = flag[String]("https.announce", "Address for announcing HTTPS server")
+  private val httpsAnnounceFlag =
+    flag[String]("https.announce", "Address for announcing HTTPS server")
 
   protected def defaultHttpServerName: String = "http"
   private val httpServerNameFlag = flag("http.name", defaultHttpServerName, "Http server name")
@@ -136,12 +143,12 @@ private[http] trait BaseHttpServer extends TwitterServer {
         configureHttpServer(
           baseHttpServer
             .withLabel(httpServerNameFlag())
-            .withStatsReceiver(injector.instance[StatsReceiver]))
+            .withStatsReceiver(injector.instance[StatsReceiver])
+        )
 
       httpServer = serverBuilder.serve(port, httpService)
       onExit {
-        Await.result(
-          httpServer.close(shutdownTimeoutFlag().fromNow))
+        Await.result(httpServer.close(shutdownTimeoutFlag().fromNow))
       }
       await(httpServer)
       for (addr <- httpAnnounceFlag.get) httpServer.announce(addr)
@@ -156,15 +163,13 @@ private[http] trait BaseHttpServer extends TwitterServer {
           baseHttpServer
             .withLabel(httpsServerNameFlag())
             .withStatsReceiver(injector.instance[StatsReceiver])
-            .withTransport.tls(
-              certificatePathFlag(),
-              keyPathFlag(),
-              None, None, None))
+            .withTransport
+            .tls(certificatePathFlag(), keyPathFlag(), None, None, None)
+        )
 
       httpsServer = serverBuilder.serve(port, httpService)
       onExit {
-        Await.result(
-          httpsServer.close(shutdownTimeoutFlag().fromNow))
+        Await.result(httpsServer.close(shutdownTimeoutFlag().fromNow))
       }
       await(httpsServer)
       for (addr <- httpsAnnounceFlag.get) httpsServer.announce(addr)

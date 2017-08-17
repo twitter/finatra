@@ -15,7 +15,11 @@ import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.util.{DefaultTimer, HashedWheelTimer}
 import com.twitter.inject.conversions.duration._
 import com.twitter.inject.thrift.AndThenService
-import com.twitter.inject.thrift.internal.filters.{IncrementCounterFilter, LatencyFilter, ThriftClientExceptionFilter}
+import com.twitter.inject.thrift.internal.filters.{
+  IncrementCounterFilter,
+  LatencyFilter,
+  ThriftClientExceptionFilter
+}
 import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.{Injector, Logging}
@@ -75,17 +79,18 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   timeoutMultiplier: Int,
   retryMultiplier: Int,
   useHighResTimerForRetries: Boolean,
-  andThenService: AndThenService)
-  extends Logging {
+  andThenService: AndThenService
+) extends Logging {
 
   private val retryTimer = {
-    if(useHighResTimerForRetries)
+    if (useHighResTimerForRetries)
       HighResTimer.Default
     else
       finagle.param.Timer.param.default.timer
   }
 
   private val scopedStatsReceiver = scopeStatsReceiver()
+
   /** @see [[com.twitter.finagle.thrift.ThriftServiceIface#statsFilter]] */
   // method invocations - incremented every time we call/invoke the method.
   /** Example scope: clnt/thrift/Adder/add1String/method/invocations */
@@ -106,128 +111,129 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
   /* Public */
 
- /**
-  * Install a [[com.twitter.finagle.Filter]]. This filter will be added to the end of the filter chain. That is, this
-  * filter will be invoked AFTER any other installed filter on a request [[Req]] and thus BEFORE any other installed
-  * filter on a response [[Rep]].
-  *
-  * @param filter the [[com.twitter.finagle.Filter]] to install.
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.Filter]]. This filter will be added to the end of the filter chain. That is, this
+   * filter will be invoked AFTER any other installed filter on a request [[Req]] and thus BEFORE any other installed
+   * filter on a response [[Rep]].
+   *
+   * @param filter the [[com.twitter.finagle.Filter]] to install.
+   * @return [[ThriftClientFilterChain]]
+   */
   def filtered(filter: Filter[Req, Rep, Req, Rep]): ThriftClientFilterChain[Req, Rep] = {
     filterChain = filterChain andThen filter
     this
   }
 
- /**
-  * Install a [[com.twitter.finagle.Filter]]. This filter will be added to the end of the filter chain. That is, this
-  * filter will be invoked AFTER any other installed filter on a request [[Req]] and thus BEFORE any other installed
-  * filter on a response [[Rep]].
-  *
-  * @tparam T the type of the filter to instantiate from the injector
-  * @return [[ThriftClientFilterChain]]
-  */
-  def filtered[T <: Filter[Req, Rep, Req, Rep] : Manifest]: ThriftClientFilterChain[Req, Rep] = {
+  /**
+   * Install a [[com.twitter.finagle.Filter]]. This filter will be added to the end of the filter chain. That is, this
+   * filter will be invoked AFTER any other installed filter on a request [[Req]] and thus BEFORE any other installed
+   * filter on a response [[Rep]].
+   *
+   * @tparam T the type of the filter to instantiate from the injector
+   * @return [[ThriftClientFilterChain]]
+   */
+  def filtered[T <: Filter[Req, Rep, Req, Rep]: Manifest]: ThriftClientFilterChain[Req, Rep] = {
     filtered(injector.instance[T])
   }
 
- /**
-  * Install a [[com.twitter.finagle.Filter]] that is agnostic to the [[ThriftMethod]] Req/Rep types. This allows for
-  * use of more general filters that do not care about the [[ThriftMethod]] input and output types.
-  *
-  * @param filter the [[com.twitter.finagle.Filter.TypeAgnostic]] to install.
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.Filter]] that is agnostic to the [[ThriftMethod]] Req/Rep types. This allows for
+   * use of more general filters that do not care about the [[ThriftMethod]] input and output types.
+   *
+   * @param filter the [[com.twitter.finagle.Filter.TypeAgnostic]] to install.
+   * @return [[ThriftClientFilterChain]]
+   */
   def withAgnosticFilter(filter: Filter.TypeAgnostic): ThriftClientFilterChain[Req, Rep] = {
     filterChain = filterChain.andThen(filter.toFilter[Req, Rep])
     this
   }
 
- /**
-  * Install a [[com.twitter.finagle.Filter.TypeAgnostic]] that is agnostic to the [[ThriftMethod]] Req/Rep types. This allows for
-  * use of more general filters that do not care about the [[ThriftMethod]] input and output types.
-  *
-  * @tparam T the type of the filter to instantiate from the injector
-  * @return [[ThriftClientFilterChain]]
-  */
-  def withAgnosticFilter[T <: Filter.TypeAgnostic : Manifest]: ThriftClientFilterChain[Req, Rep] = {
+  /**
+   * Install a [[com.twitter.finagle.Filter.TypeAgnostic]] that is agnostic to the [[ThriftMethod]] Req/Rep types. This allows for
+   * use of more general filters that do not care about the [[ThriftMethod]] input and output types.
+   *
+   * @tparam T the type of the filter to instantiate from the injector
+   * @return [[ThriftClientFilterChain]]
+   */
+  def withAgnosticFilter[T <: Filter.TypeAgnostic: Manifest]: ThriftClientFilterChain[Req, Rep] = {
     withAgnosticFilter(injector.instance[T])
   }
 
- /**
-  * Install a [[com.twitter.finagle.Filter]] specific to handling exceptions. This filter will be correctly positioned
-  * in the filter chain near the top of the stack. This filter is generally used to mutate or alter the final response
-  * [[Req]] based on a returned exception. E.g., to translate a transport-level exception from Finagle to an
-  * application-level exception.
-  *
-  * @param filter the [[com.twitter.finagle.Filter]] to install.
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.Filter]] specific to handling exceptions. This filter will be correctly positioned
+   * in the filter chain near the top of the stack. This filter is generally used to mutate or alter the final response
+   * [[Req]] based on a returned exception. E.g., to translate a transport-level exception from Finagle to an
+   * application-level exception.
+   *
+   * @param filter the [[com.twitter.finagle.Filter]] to install.
+   * @return [[ThriftClientFilterChain]]
+   */
   def withExceptionFilter(filter: Filter[Req, Rep, Req, Rep]): ThriftClientFilterChain[Req, Rep] = {
     exceptionFilterImpl = filter
     this
   }
 
- /**
-  * Install a [[com.twitter.finagle.Filter]] specific to handling exceptions. This filter will be correctly positioned
-  * in the filter chain near the top of the stack. This filter is generally used to mutate or alter the final response
-  * [[Req]] based on a returned exception. E.g., to translate a transport-level exception from Finagle to an
-  * application-level exception.
-  *
-  * @tparam T the type of the filter to instantiate from the injector
-  * @return [[ThriftClientFilterChain]]
-  */
-  def withExceptionFilter[T <: Filter[Req, Rep, Req, Rep] : Manifest]: ThriftClientFilterChain[Req, Rep] = {
+  /**
+   * Install a [[com.twitter.finagle.Filter]] specific to handling exceptions. This filter will be correctly positioned
+   * in the filter chain near the top of the stack. This filter is generally used to mutate or alter the final response
+   * [[Req]] based on a returned exception. E.g., to translate a transport-level exception from Finagle to an
+   * application-level exception.
+   *
+   * @tparam T the type of the filter to instantiate from the injector
+   * @return [[ThriftClientFilterChain]]
+   */
+  def withExceptionFilter[T <: Filter[Req, Rep, Req, Rep]: Manifest]
+    : ThriftClientFilterChain[Req, Rep] = {
     withExceptionFilter(injector.instance[T])
   }
 
- /**
-  * Install a [[com.twitter.finagle.exp.BackupRequestFilter]].
-  *
-  * @param quantile the response latency quantile at which to issue a backup request. Must be
-  *                 between 0 and 100, exclusive.
-  * @param clipDuration the range of expected durations, values above this range are clipped.
-  *                     Must be less than 1 hour.
-  * @param timer the [[com.twitter.util.Timer]] to be used in scheduling backup requests.
-  * @param history how long to remember data points when calculating quantiles.
-  * @see [[com.twitter.finagle.exp.BackupRequestFilter]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.exp.BackupRequestFilter]].
+   *
+   * @param quantile the response latency quantile at which to issue a backup request. Must be
+   *                 between 0 and 100, exclusive.
+   * @param clipDuration the range of expected durations, values above this range are clipped.
+   *                     Must be less than 1 hour.
+   * @param timer the [[com.twitter.util.Timer]] to be used in scheduling backup requests.
+   * @param history how long to remember data points when calculating quantiles.
+   * @see [[com.twitter.finagle.exp.BackupRequestFilter]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withBackupRequestFilter(
-   quantile: Int,
-   clipDuration: Duration,
-   history: Duration,
-   timer: Timer = HashedWheelTimer.Default
+    quantile: Int,
+    clipDuration: Duration,
+    history: Duration,
+    timer: Timer = HashedWheelTimer.Default
   ): ThriftClientFilterChain[Req, Rep] = {
 
-    backupRequestFilter =
-      new BackupRequestFilter[Req, Rep](
-        quantile = quantile,
-        clipDuration = clipDuration.toTwitterDuration * timeoutMultiplier,
-        timer = timer,
-        statsReceiver = scopedStatsReceiver,
-        history = history.toTwitterDuration)
+    backupRequestFilter = new BackupRequestFilter[Req, Rep](
+      quantile = quantile,
+      clipDuration = clipDuration.toTwitterDuration * timeoutMultiplier,
+      timer = timer,
+      statsReceiver = scopedStatsReceiver,
+      history = history.toTwitterDuration
+    )
     this
   }
 
- /**
-  * Install a [[com.twitter.finagle.service.RetryFilter]] configured with a [[com.twitter.finagle.service.RetryPolicy]]
-  * using constant backoffs.
-  *
-  * @param shouldRetry a PartialFunction over the both the [[Req]] and a Try-wrapped returned [[Rep]]. Only one of
-  *                    `#shouldRetry` or `#shouldRetryResponse` should be configured
-  * @param shouldRetryResponse a PartialFunction over only the Try-wrapped returned [[Rep]]. Only one of
-  *                            `#shouldRetry` or `#shouldRetryResponse` should be configured
-  * @param start how long to delay before retrying
-  * @param retries number of times to retry
-  * @param retryBudget a [[com.twitter.finagle.service.RetryBudget]]. It is highly recommended to share a single
-  *                    instance of [[com.twitter.finagle.service.RetryBudget]] between both retry and re-queue
-  *                    filters to prevent retry storms. As such, use caution here when specifying a new retryBudget
-  * @see [[https://twitter.github.io/finagle/guide/Clients.html#retries Finagle Client Retries]]
-  * @see [[com.twitter.finagle.service.RetryFilter]]
-  * @see [[com.twitter.finagle.service.RetryPolicy]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.service.RetryFilter]] configured with a [[com.twitter.finagle.service.RetryPolicy]]
+   * using constant backoffs.
+   *
+   * @param shouldRetry a PartialFunction over the both the [[Req]] and a Try-wrapped returned [[Rep]]. Only one of
+   *                    `#shouldRetry` or `#shouldRetryResponse` should be configured
+   * @param shouldRetryResponse a PartialFunction over only the Try-wrapped returned [[Rep]]. Only one of
+   *                            `#shouldRetry` or `#shouldRetryResponse` should be configured
+   * @param start how long to delay before retrying
+   * @param retries number of times to retry
+   * @param retryBudget a [[com.twitter.finagle.service.RetryBudget]]. It is highly recommended to share a single
+   *                    instance of [[com.twitter.finagle.service.RetryBudget]] between both retry and re-queue
+   *                    filters to prevent retry storms. As such, use caution here when specifying a new retryBudget
+   * @see [[https://twitter.github.io/finagle/guide/Clients.html#retries Finagle Client Retries]]
+   * @see [[com.twitter.finagle.service.RetryFilter]]
+   * @see [[com.twitter.finagle.service.RetryPolicy]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withConstantRetry(
     shouldRetry: PartialFunction[(Req, Try[Rep]), Boolean] = PartialFunction.empty,
     shouldRetryResponse: PartialFunction[Try[Rep], Boolean] = PartialFunction.empty,
@@ -240,27 +246,29 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
       constantRetryPolicy(
         delay = start.multipliedBy(retryMultiplier),
         retries = retries,
-        shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)))
+        shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)
+      )
+    )
   }
 
- /**
-  * Install a [[com.twitter.finagle.service.RetryFilter]] configured with a [[com.twitter.finagle.service.RetryPolicy]]
-  * using backoffs that grow exponentially using [[com.twitter.finagle.service.Backoff#decorrelatedJittered]]. The jittered
-  * maximum is the `start` duration * the `multiplier` value.
-  *
-  * @param shouldRetry a PartialFunction over the both the [[Req]] and a Try-wrapped returned [[Rep]]. Only one of
-  *                    `#shouldRetry` or `#shouldRetryResponse` should be configured
-  * @param shouldRetryResponse a PartialFunction over only the Try-wrapped returned [[Rep]]. Only one of
-  *                            `#shouldRetry` or `#shouldRetryResponse` should be configured
-  * @param start how long to delay before retrying
-  * @param multiplier used to create a jitter with a random distribution between `start` and 3 times the previously selected value,
-  *                   capped at `start` * `multiplier`. See: [[com.twitter.finagle.service.Backoff#decorrelatedJittered]]
-  * @param retries number of times to retry
-  *
-  * @see [[com.twitter.finagle.service.RetryFilter]]
-  * @see [[com.twitter.finagle.service.RetryPolicy]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.service.RetryFilter]] configured with a [[com.twitter.finagle.service.RetryPolicy]]
+   * using backoffs that grow exponentially using [[com.twitter.finagle.service.Backoff#decorrelatedJittered]]. The jittered
+   * maximum is the `start` duration * the `multiplier` value.
+   *
+   * @param shouldRetry a PartialFunction over the both the [[Req]] and a Try-wrapped returned [[Rep]]. Only one of
+   *                    `#shouldRetry` or `#shouldRetryResponse` should be configured
+   * @param shouldRetryResponse a PartialFunction over only the Try-wrapped returned [[Rep]]. Only one of
+   *                            `#shouldRetry` or `#shouldRetryResponse` should be configured
+   * @param start how long to delay before retrying
+   * @param multiplier used to create a jitter with a random distribution between `start` and 3 times the previously selected value,
+   *                   capped at `start` * `multiplier`. See: [[com.twitter.finagle.service.Backoff#decorrelatedJittered]]
+   * @param retries number of times to retry
+   *
+   * @see [[com.twitter.finagle.service.RetryFilter]]
+   * @see [[com.twitter.finagle.service.RetryPolicy]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withExponentialRetry(
     shouldRetry: PartialFunction[(Req, Try[Rep]), Boolean] = PartialFunction.empty,
     shouldRetryResponse: PartialFunction[Try[Rep], Boolean] = PartialFunction.empty,
@@ -274,121 +282,122 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
         start = start.multipliedBy(retryMultiplier),
         multiplier = multiplier,
         numRetries = retries,
-        shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)))
+        shouldRetry = chooseShouldRetryFunction(shouldRetry, shouldRetryResponse)
+      )
+    )
   }
 
- /**
-  * Install a [[com.twitter.finagle.service.RetryFilter]] configured with the given [[com.twitter.finagle.service.RetryPolicy]].
-  *
-  * @param retryPolicy the [[com.twitter.finagle.service.RetryPolicy]] to use
-  * @param retryMsg a [[String]] message to display before retrying thr request.
-  * @see [[com.twitter.finagle.service.RetryFilter]]
-  * @see [[com.twitter.finagle.service.RetryPolicy]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.service.RetryFilter]] configured with the given [[com.twitter.finagle.service.RetryPolicy]].
+   *
+   * @param retryPolicy the [[com.twitter.finagle.service.RetryPolicy]] to use
+   * @param retryMsg a [[String]] message to display before retrying thr request.
+   * @see [[com.twitter.finagle.service.RetryFilter]]
+   * @see [[com.twitter.finagle.service.RetryPolicy]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withRetryPolicy(
     retryPolicy: RetryPolicy[(Req, Try[Rep])],
     retryMsg: ((Req, Try[Rep]), TwitterDuration) => String = defaultRetryMsg
   ): ThriftClientFilterChain[Req, Rep] = {
 
-    retryFilter =
-      new IncrementCounterFilter[Req, Rep](invocationsCounter)
-        .andThen(
-          new RetryFilter[Req, Rep](
-            addRetryLogging(retryPolicy, retryMsg),
-            retryTimer,
-            scopedStatsReceiver,
-            budget.retryBudget))
+    retryFilter = new IncrementCounterFilter[Req, Rep](invocationsCounter)
+      .andThen(
+        new RetryFilter[Req, Rep](
+          addRetryLogging(retryPolicy, retryMsg),
+          retryTimer,
+          scopedStatsReceiver,
+          budget.retryBudget
+        )
+      )
     this
   }
 
- /**
-  * Install a [[com.twitter.finagle.service.TimeoutFilter]] configuration with the given [[org.joda.time.Duration]] timeout.
-  * This filter will be "above" and configured retry filter and thus includes retries.
-  *
-  * @param duration the [[org.joda.time.Duration]] timeout to apply to requests through the filter.
-  * @see [[com.twitter.finagle.service.TimeoutFilter]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.service.TimeoutFilter]] configuration with the given [[org.joda.time.Duration]] timeout.
+   * This filter will be "above" and configured retry filter and thus includes retries.
+   *
+   * @param duration the [[org.joda.time.Duration]] timeout to apply to requests through the filter.
+   * @see [[com.twitter.finagle.service.TimeoutFilter]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withTimeout(duration: Duration): ThriftClientFilterChain[Req, Rep] = {
     val twitterTimeout = duration.toTwitterDuration * timeoutMultiplier
 
-    timeoutFilter =
-      new TimeoutFilter[Req, Rep](
-        twitterTimeout,
-        new GlobalRequestTimeoutException(twitterTimeout),
-        DefaultTimer.twitter)
+    timeoutFilter = new TimeoutFilter[Req, Rep](
+      twitterTimeout,
+      new GlobalRequestTimeoutException(twitterTimeout),
+      DefaultTimer.twitter
+    )
     this
   }
 
- /**
-  * Install a [[com.twitter.finagle.service.TimeoutFilter]] configuration with the given [[org.joda.time.Duration]] timeout.
-  * This filter will always be "below" any configured retry filter and thus does NOT include retries.
-  *
-  * @param duration the [[org.joda.time.Duration]] timeout to apply to requests through the filter.
-  * @see [[com.twitter.finagle.service.TimeoutFilter]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.service.TimeoutFilter]] configuration with the given [[org.joda.time.Duration]] timeout.
+   * This filter will always be "below" any configured retry filter and thus does NOT include retries.
+   *
+   * @param duration the [[org.joda.time.Duration]] timeout to apply to requests through the filter.
+   * @see [[com.twitter.finagle.service.TimeoutFilter]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withRequestTimeout(duration: Duration): ThriftClientFilterChain[Req, Rep] = {
     val twitterTimeout = duration.toTwitterDuration * timeoutMultiplier
 
-    requestTimeoutFilter =
-      new TimeoutFilter[Req, Rep](
-        twitterTimeout,
-        new IndividualRequestTimeoutException(twitterTimeout),
-        DefaultTimer.twitter)
-   this
+    requestTimeoutFilter = new TimeoutFilter[Req, Rep](
+      twitterTimeout,
+      new IndividualRequestTimeoutException(twitterTimeout),
+      DefaultTimer.twitter
+    )
+    this
   }
 
-
- /**
-  * Install a [[com.twitter.finagle.filter.RequestSemaphoreFilter]] using an [[com.twitter.concurrent.AsyncSemaphore]]
-  * with an Optional `maxWaiters` as the limit on the number of waiters for permits.
-  *
-  * @param initialPermits must be positive
-  * @param maxWaiters must be non-negative if set
-  * @see [[com.twitter.finagle.filter.RequestSemaphoreFilter]]
-  * @see [[com.twitter.concurrent.AsyncSemaphore]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.finagle.filter.RequestSemaphoreFilter]] using an [[com.twitter.concurrent.AsyncSemaphore]]
+   * with an Optional `maxWaiters` as the limit on the number of waiters for permits.
+   *
+   * @param initialPermits must be positive
+   * @param maxWaiters must be non-negative if set
+   * @see [[com.twitter.finagle.filter.RequestSemaphoreFilter]]
+   * @see [[com.twitter.concurrent.AsyncSemaphore]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withConcurrencyLimit(
     initialPermits: Int,
     maxWaiters: Option[Int] = None
   ): ThriftClientFilterChain[Req, Rep] = {
-    concurrencyLimitFilter =
-      maxWaiters match {
-        case Some(waiters) =>
-          new RequestSemaphoreFilter[Req, Rep](new AsyncSemaphore(initialPermits, waiters))
-        case _ =>
-          new RequestSemaphoreFilter[Req, Rep](new AsyncSemaphore(initialPermits))
-      }
+    concurrencyLimitFilter = maxWaiters match {
+      case Some(waiters) =>
+        new RequestSemaphoreFilter[Req, Rep](new AsyncSemaphore(initialPermits, waiters))
+      case _ =>
+        new RequestSemaphoreFilter[Req, Rep](new AsyncSemaphore(initialPermits))
+    }
     this
   }
 
- /**
-  * Install a [[com.twitter.inject.thrift.internal.filters.LatencyFilter]] that tracks the "logical" (overall) latency
-  * distribution of a method invocation. This will INCLUDE any retries as it is installed at the top of the filter stack.
-  *
-  * @param statsReceiver a [[com.twitter.finagle.stats.StatsReceiver]] to track StatsFilter measurements. By default this
-  *                      will be the class-level StatsReceiver scoped accordingly.
-  * @param timeUnit this controls what granularity is used for measuring latency.  The default is milliseconds, but
-  *                 other values are valid. The choice of this changes the name of the stat attached to the given
-  *                 [[com.twitter.finagle.stats.StatsReceiver]]. For the common units, it will be "latency_ms".
-  * @see [[com.twitter.finagle.service.ResponseClassifier]]
-  * @see [[com.twitter.finagle.service.StatsFilter.DefaultExceptions]]
-  * @return [[ThriftClientFilterChain]]
-  */
+  /**
+   * Install a [[com.twitter.inject.thrift.internal.filters.LatencyFilter]] that tracks the "logical" (overall) latency
+   * distribution of a method invocation. This will INCLUDE any retries as it is installed at the top of the filter stack.
+   *
+   * @param statsReceiver a [[com.twitter.finagle.stats.StatsReceiver]] to track StatsFilter measurements. By default this
+   *                      will be the class-level StatsReceiver scoped accordingly.
+   * @param timeUnit this controls what granularity is used for measuring latency.  The default is milliseconds, but
+   *                 other values are valid. The choice of this changes the name of the stat attached to the given
+   *                 [[com.twitter.finagle.stats.StatsReceiver]]. For the common units, it will be "latency_ms".
+   * @see [[com.twitter.finagle.service.ResponseClassifier]]
+   * @see [[com.twitter.finagle.service.StatsFilter.DefaultExceptions]]
+   * @return [[ThriftClientFilterChain]]
+   */
   def withMethodLatency(
     statsReceiver: StatsReceiver = scopedStatsReceiver,
     timeUnit: TimeUnit = TimeUnit.MILLISECONDS
   ): ThriftClientFilterChain[Req, Rep] = {
 
     methodLatencyFilter =
-      new LatencyFilter[Rep, Req](
-        statsReceiver = scopedStatsReceiver,
-        timeUnit = timeUnit).asInstanceOf[Filter[Req, Rep, Req, Rep]]
+      new LatencyFilter[Rep, Req](statsReceiver = scopedStatsReceiver, timeUnit = timeUnit)
+        .asInstanceOf[Filter[Req, Rep, Req, Rep]]
     this
   }
+
   /** A parameter-less implementation with defaults */
   def withMethodLatency: ThriftClientFilterChain[Req, Rep] = {
     withMethodLatency(scopedStatsReceiver, TimeUnit.MILLISECONDS)
@@ -412,25 +421,26 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     timeUnit: TimeUnit = TimeUnit.MILLISECONDS
   ): ThriftClientFilterChain[Req, Rep] = {
 
-    requestLatencyFilter =
-      new LatencyFilter[Rep, Req](
-        statsReceiver = scopedStatsReceiver,
-        statName = "request_latency",
-        timeUnit = timeUnit).asInstanceOf[Filter[Req, Rep, Req, Rep]]
+    requestLatencyFilter = new LatencyFilter[Rep, Req](
+      statsReceiver = scopedStatsReceiver,
+      statName = "request_latency",
+      timeUnit = timeUnit
+    ).asInstanceOf[Filter[Req, Rep, Req, Rep]]
     this
   }
+
   /** A parameter-less implementation with defaults */
   def withRequestLatency: ThriftClientFilterChain[Req, Rep] = {
     withRequestLatency(scopedStatsReceiver, TimeUnit.MILLISECONDS)
   }
 
- /**
-  * After this filter chain is executed this is the [[com.twitter.finagle.Service]] to invoke. The layer of indirection
-  * is to allow for servers that wish to intercept the invocation of the bottom service.
-  *
-  * @param service the [[com.twitter.finagle.Service]] to invoke at the end of this filter chain
-  * @return a [[com.twitter.finagle.Service]] with this filter chain applied
-  */
+  /**
+   * After this filter chain is executed this is the [[com.twitter.finagle.Service]] to invoke. The layer of indirection
+   * is to allow for servers that wish to intercept the invocation of the bottom service.
+   *
+   * @param service the [[com.twitter.finagle.Service]] to invoke at the end of this filter chain
+   * @return a [[com.twitter.finagle.Service]] with this filter chain applied
+   */
   def andThen(service: Service[Req, Rep]): Service[Req, Rep] = {
     andThenService.andThen(method, this.toFilter, service)
   }
@@ -462,15 +472,17 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
    * return of false indicates we do not want to retry).
    */
   private def chooseShouldRetryFunction(
-   shouldRetry: PartialFunction[(Req, Try[Rep]), Boolean],
-   shouldRetryResponse: PartialFunction[Try[Rep], Boolean]
+    shouldRetry: PartialFunction[(Req, Try[Rep]), Boolean],
+    shouldRetryResponse: PartialFunction[Try[Rep], Boolean]
   ): PartialFunction[(Req, Try[Rep]), Boolean] = {
-    assert(shouldRetryResponse != PartialFunction.empty[Try[Rep], Boolean] | shouldRetry != PartialFunction.empty[(Req, Try[Rep]), Boolean])
+    assert(
+      shouldRetryResponse != PartialFunction
+        .empty[Try[Rep], Boolean] | shouldRetry != PartialFunction.empty[(Req, Try[Rep]), Boolean]
+    )
 
     if (shouldRetry != PartialFunction.empty[(Req, Try[Rep]), Boolean]) {
       shouldRetry
-    }
-    else {
+    } else {
       case (request, responseTry) =>
         shouldRetryResponse.applyOrElse(responseTry, AlwaysFalse)
     }
@@ -478,10 +490,13 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
   private def addRetryLogging(
     retryPolicy: RetryPolicy[(Req, Try[Rep])],
-    retryMsg: ((Req, Try[Rep]), TwitterDuration) => String): RetryPolicy[(Req, Try[Rep])] = {
+    retryMsg: ((Req, Try[Rep]), TwitterDuration) => String
+  ): RetryPolicy[(Req, Try[Rep])] = {
 
     new RetryPolicy[(Req, Try[Rep])] {
-      override def apply(result: (Req, Try[Rep])): Option[(twitter.util.Duration, RetryPolicy[(Req, Try[Rep])])] = {
+      override def apply(
+        result: (Req, Try[Rep])
+      ): Option[(twitter.util.Duration, RetryPolicy[(Req, Try[Rep])])] = {
 
         retryPolicy(result) match {
           case Some((duration, policy)) =>
@@ -503,21 +518,21 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     start: Duration,
     multiplier: Int,
     numRetries: Int,
-    shouldRetry: PartialFunction[T, Boolean]): RetryPolicy[T] = {
+    shouldRetry: PartialFunction[T, Boolean]
+  ): RetryPolicy[T] = {
 
     backoff(
-      decorrelatedJittered(
-        start.toTwitterDuration,
-        start.toTwitterDuration * multiplier) take numRetries)(shouldRetry)
+      decorrelatedJittered(start.toTwitterDuration, start.toTwitterDuration * multiplier) take numRetries
+    )(shouldRetry)
   }
 
   private def constantRetryPolicy[T](
     shouldRetry: PartialFunction[T, Boolean],
     delay: Duration,
-    retries: Int): RetryPolicy[T] = {
+    retries: Int
+  ): RetryPolicy[T] = {
 
-    backoff(
-      constant(delay.toTwitterDuration) take retries)(shouldRetry)
+    backoff(constant(delay.toTwitterDuration) take retries)(shouldRetry)
   }
 
   private[thrift] def toFilter: Filter[Req, Rep, Req, Rep] = {

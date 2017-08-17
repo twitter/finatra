@@ -5,7 +5,8 @@
 
 [Master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.10.0](https://github.com/twitter/finatra/tree/finatra-2.10.0))
 ----------------------------------------------------------
-###SBT###
+### SBT ###
+
 Run sbt from **this** project's directory, e.g.
 ```
 $ sbt run
@@ -25,7 +26,8 @@ $ sbt assembly
 $ java -jar -Dlog.service.output=hello-world.log -Dlog.access.output=access.log target/scala-2.11/hello-world-assembly-2.10.0.jar -http.port=:8888 -admin.port=:9990
 ```
 
-###Maven###
+### Maven ###
+
 ```
 mvn clean install
 ```

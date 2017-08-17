@@ -26,6 +26,4 @@ import com.twitter.inject.Test
  * @see [[com.twitter.inject.Test Finatra Test Class]]
  * @see [[com.twitter.inject.server.FeatureTestMixin Finatra FeatureTestMixin]]
  */
-abstract class FeatureTest
-  extends Test
-  with FeatureTestMixin
+abstract class FeatureTest extends Test with FeatureTestMixin

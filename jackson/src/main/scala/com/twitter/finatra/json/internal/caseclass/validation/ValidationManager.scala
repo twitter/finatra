@@ -1,12 +1,19 @@
 package com.twitter.finatra.json.internal.caseclass.validation
 
 import com.twitter.finatra.validation.ValidationResult._
-import com.twitter.finatra.validation.{MethodValidation, Validation, ValidationMessageResolver, ValidationResult, Validator}
+import com.twitter.finatra.validation.{
+  MethodValidation,
+  Validation,
+  ValidationMessageResolver,
+  ValidationResult,
+  Validator
+}
 import java.lang.annotation.Annotation
 import java.lang.reflect.Method
 import scala.collection.mutable
 
-class ValidationManager(validationMessageResolver: ValidationMessageResolver) extends CaseClassValidator {
+class ValidationManager(validationMessageResolver: ValidationMessageResolver)
+    extends CaseClassValidator {
 
   private val validatorMap = mutable.Map[Annotation, Validator[_, _]]()
 
@@ -18,7 +25,10 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) ex
    * Validate a field's value according to the field's validation annotations
    * @return Failed ValidationResults
    */
-  override def validateField[V](fieldValue: V, fieldValidationAnnotations: Seq[Annotation]): Seq[ValidationResult] = {
+  override def validateField[V](
+    fieldValue: V,
+    fieldValidationAnnotations: Seq[Annotation]
+  ): Seq[ValidationResult] = {
     for {
       annotation <- fieldValidationAnnotations
       result = isValid(fieldValue, findValidator[V](annotation))
@@ -79,7 +89,9 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) ex
     }
   }
 
-  private def getValidatedBy[A <: Annotation, V](annotationClass: Class[A]): Class[Validator[A, V]] = {
+  private def getValidatedBy[A <: Annotation, V](
+    annotationClass: Class[A]
+  ): Class[Validator[A, V]] = {
     val validationAnnotation = annotationClass.getAnnotation(classOf[Validation])
     if (validationAnnotation == null)
       throw new IllegalArgumentException("Missing annotation: " + classOf[Validation])
@@ -88,32 +100,29 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver) ex
   }
 
   private def findValidator[V](annotation: Annotation): Validator[_, V] = {
-    validatorMap.getOrElseUpdate(
-      annotation,
-      getValidator(annotation))
+    validatorMap
+      .getOrElseUpdate(annotation, getValidator(annotation))
       .asInstanceOf[Validator[_, V]]
   }
 
   private def findMethodValidations(clazz: Class[_]): Seq[Method] = {
-    methodValidationMap.getOrElseUpdate(
-      clazz,
-      getMethodValidations(clazz))
+    methodValidationMap.getOrElseUpdate(clazz, getMethodValidations(clazz))
   }
 
-  private def createValidator[A <: Annotation, V](validatorClass: Class[Validator[A, V]], annotation: A): Validator[A, V] = {
+  private def createValidator[A <: Annotation, V](
+    validatorClass: Class[Validator[A, V]],
+    annotation: A
+  ): Validator[A, V] = {
     try {
-      validatorClass.getConstructor(
-        validationMessageResolver.getClass,
-        annotation.annotationType()).
-        newInstance(validationMessageResolver, annotation)
+      validatorClass
+        .getConstructor(validationMessageResolver.getClass, annotation.annotationType())
+        .newInstance(validationMessageResolver, annotation)
     } catch {
       case e: NoSuchMethodException =>
         throw new IllegalArgumentException(
-          "Validator [%s] does not contain a two-arg constructor with parameter types: [%s, %s]".
-            format(
-              validatorClass,
-              validationMessageResolver.getClass,
-              annotation.annotationType()))
+          "Validator [%s] does not contain a two-arg constructor with parameter types: [%s, %s]"
+            .format(validatorClass, validationMessageResolver.getClass, annotation.annotationType())
+        )
     }
   }
 }

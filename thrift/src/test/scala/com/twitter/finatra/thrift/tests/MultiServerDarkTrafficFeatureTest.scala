@@ -15,9 +15,12 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
     new DoEverythingThriftServer,
     flags = Map(
       "thrift.dark.service.dest" -> s"/$$/inet/${PortUtils.loopbackAddress}/${darkDoEverythingThriftServer.thriftPort}",
-      "thrift.dark.service.clientId" -> "client123"))
+      "thrift.dark.service.clientId" -> "client123"
+    )
+  )
 
-  lazy val client123 = liveDoEverythingThriftServer.thriftClient[DoEverything[Future]](clientId = "client123")
+  lazy val client123 =
+    liveDoEverythingThriftServer.thriftClient[DoEverything[Future]](clientId = "client123")
 
   // See DoEverythingThriftServerDarkTrafficFilterModule#enableSampling
 
@@ -31,7 +34,8 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
     liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/forwarded", 1)
     liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/skipped", 0)
 
-    darkDoEverythingThriftServer.assertHealthy() // give a chance for the stat to be recorded on the dark service
+    darkDoEverythingThriftServer
+      .assertHealthy() // give a chance for the stat to be recorded on the dark service
     // "dark" service stats
     darkDoEverythingThriftServer.assertCounter("per_method_stats/magicNum/success", 1)
   }
@@ -60,7 +64,8 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
     liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/forwarded", 1)
     liveDoEverythingThriftServer.assertCounter("dark_traffic_filter/skipped", 0)
 
-    darkDoEverythingThriftServer.assertHealthy() // give a chance for the stat to be recorded on the dark service
+    darkDoEverythingThriftServer
+      .assertHealthy() // give a chance for the stat to be recorded on the dark service
     // "dark" service stats
     darkDoEverythingThriftServer.assertCounter("per_method_stats/echo/success", 1)
   }
@@ -90,7 +95,8 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
         "twenty",
         "twentyone",
         "twentytwo",
-        "twentythree")
+        "twentythree"
+      )
     ) should equal("handled")
 
     // service stats

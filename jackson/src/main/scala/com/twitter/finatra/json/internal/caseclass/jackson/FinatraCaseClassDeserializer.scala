@@ -1,6 +1,11 @@
 package com.twitter.finatra.json.internal.caseclass.jackson
 
-import com.fasterxml.jackson.core.{JsonParseException, JsonParser, JsonProcessingException, JsonToken}
+import com.fasterxml.jackson.core.{
+  JsonParseException,
+  JsonParser,
+  JsonProcessingException,
+  JsonToken
+}
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.twitter.finatra.json.internal.caseclass.exceptions._
@@ -35,14 +40,12 @@ private[finatra] class FinatraCaseClassDeserializer(
   javaType: JavaType,
   config: DeserializationConfig,
   beanDesc: BeanDescription,
-  validationProvider: ValidationProvider)
-  extends JsonDeserializer[AnyRef]
-  with Logging {
+  validationProvider: ValidationProvider
+) extends JsonDeserializer[AnyRef]
+    with Logging {
 
-  private val caseClassFields = CaseClassField.createFields(
-    javaType.getRawClass,
-    propertyNamingStrategy,
-    config.getTypeFactory)
+  private val caseClassFields =
+    CaseClassField.createFields(javaType.getRawClass, propertyNamingStrategy, config.getTypeFactory)
 
   private val numConstructorArgs = caseClassFields.size
   private val constructor = {
@@ -83,7 +86,11 @@ private[finatra] class FinatraCaseClassDeserializer(
     deserialize(jp, context, jsonNode)
   }
 
-  private def deserialize(jp: JsonParser, context: DeserializationContext, jsonNode: JsonNode): Object = {
+  private def deserialize(
+    jp: JsonParser,
+    context: DeserializationContext,
+    jsonNode: JsonNode
+  ): Object = {
     val (values, errors) = parseConstructorValues(jp, context, jsonNode)
     createAndValidate(values, errors)
   }
@@ -98,7 +105,11 @@ private[finatra] class FinatraCaseClassDeserializer(
   }
 
   // optimized
-  private def parseConstructorValues(jp: JsonParser, context: DeserializationContext, jsonNode: JsonNode): (Array[Object], ArrayBuffer[CaseClassValidationException]) = {
+  private def parseConstructorValues(
+    jp: JsonParser,
+    context: DeserializationContext,
+    jsonNode: JsonNode
+  ): (Array[Object], ArrayBuffer[CaseClassValidationException]) = {
     /* Mutable Fields */
     var constructorValuesIdx = 0
     val constructorValues = new Array[Object](numConstructorArgs)
@@ -129,26 +140,21 @@ private[finatra] class FinatraCaseClassDeserializer(
         case e: IllegalArgumentException =>
           val ex = CaseClassValidationException(
             PropertyPath.leaf(field.name),
-            Invalid(
-              e.getMessage,
-              ErrorCode.Unknown))
+            Invalid(e.getMessage, ErrorCode.Unknown)
+          )
 
           addException(field, ex)
 
         case e: InvalidFormatException =>
-          addException(
-            field,
-            invalidFormatJsonFieldParseError(field, e))
+          addException(field, invalidFormatJsonFieldParseError(field, e))
 
         case e: CaseClassMappingException =>
           addConstructorValue(field.missingValue)
-          errors ++= e.errors map {_.scoped(field)}
+          errors ++= e.errors map { _.scoped(field) }
 
         case e: JsonProcessingException =>
           // Don't include source info since it's often blank. Consider adding e.getCause.getMessage
-          addException(
-            field,
-            jsonProcessingJsonFieldParseError(field, e))
+          addException(field, jsonProcessingJsonFieldParseError(field, e))
 
         // we rethrow, to prevent leaking internal injection details in the "errors" array
         case e: JsonInjectionNotSupportedException =>
@@ -166,20 +172,27 @@ private[finatra] class FinatraCaseClassDeserializer(
   }
 
   // TODO don't leak class name details in error message
-  private def invalidFormatJsonFieldParseError(field: CaseClassField, e: InvalidFormatException): CaseClassValidationException = {
+  private def invalidFormatJsonFieldParseError(
+    field: CaseClassField,
+    e: InvalidFormatException
+  ): CaseClassValidationException = {
     CaseClassValidationException(
       PropertyPath.leaf(field.name),
       Invalid(
         s"'${e.getValue}' is not a valid ${e.getTargetType.getSimpleName}${validValuesString(e)}",
-        ErrorCode.JsonProcessingError(e)))
+        ErrorCode.JsonProcessingError(e)
+      )
+    )
   }
 
-  private def jsonProcessingJsonFieldParseError(field: CaseClassField, e: JsonProcessingException): CaseClassValidationException = {
+  private def jsonProcessingJsonFieldParseError(
+    field: CaseClassField,
+    e: JsonProcessingException
+  ): CaseClassValidationException = {
     CaseClassValidationException(
       PropertyPath.leaf(field.name),
-      Invalid(
-        JacksonUtils.errorMessage(e),
-        ErrorCode.JsonProcessingError(e)))
+      Invalid(JacksonUtils.errorMessage(e), ErrorCode.JsonProcessingError(e))
+    )
   }
 
   private def validValuesString(e: InvalidFormatException): String = {
@@ -189,7 +202,10 @@ private[finatra] class FinatraCaseClassDeserializer(
       ""
   }
 
-  private def createAndValidate(constructorValues: Array[Object], fieldErrors: Seq[CaseClassValidationException]): Object = {
+  private def createAndValidate(
+    constructorValues: Array[Object],
+    fieldErrors: Seq[CaseClassValidationException]
+  ): Object = {
     if (fieldErrors.nonEmpty) {
       throw new CaseClassMappingException(fieldErrors.toSet)
     }
@@ -203,8 +219,10 @@ private[finatra] class FinatraCaseClassDeserializer(
     try {
       constructor.newInstance(constructorValues: _*).asInstanceOf[Object]
     } catch {
-      case e@(_: InvocationTargetException | _: ExceptionInInitializerError) =>
-        warn("Add validation to avoid instantiating invalid object of type: " + javaType.getRawClass)
+      case e @ (_: InvocationTargetException | _: ExceptionInInitializerError) =>
+        warn(
+          "Add validation to avoid instantiating invalid object of type: " + javaType.getRawClass
+        )
         // propagate the underlying cause of the failed instantiation if available
         if (e.getCause == null)
           throw e
@@ -215,15 +233,15 @@ private[finatra] class FinatraCaseClassDeserializer(
 
   private def executeFieldValidations(value: Any, field: CaseClassField) = {
     for {
-      invalid@Invalid(_, _) <- validationManager.validateField(value, field.validationAnnotations)
+      invalid @ Invalid(_, _) <- validationManager.validateField(value, field.validationAnnotations)
     } yield {
-      CaseClassValidationException(PropertyPath.leaf(field.name),  invalid)
+      CaseClassValidationException(PropertyPath.leaf(field.name), invalid)
     }
   }
 
   private def executeMethodValidations(fieldErrors: Seq[CaseClassValidationException], obj: Any) {
     val methodValidationErrors = for {
-      invalid@Invalid(_, _) <- validationManager.validateObject(obj)
+      invalid @ Invalid(_, _) <- validationManager.validateObject(obj)
     } yield CaseClassValidationException(PropertyPath.empty, invalid)
 
     if (methodValidationErrors.nonEmpty) {

@@ -29,13 +29,11 @@ object DoEverythingModule extends TwitterModule {
     multiBinder.addBinding.to[OneMultiService]
     multiBinder.addBinding.to[TwoMultiService]
 
-    addTypeConverter[ClassToConvert](
-      new TypeConverter {
-        override def convert(s: String, typeLiteral: TypeLiteral[_]): AnyRef = {
-          ClassToConvert(s)
-        }
-      })
-
+    addTypeConverter[ClassToConvert](new TypeConverter {
+      override def convert(s: String, typeLiteral: TypeLiteral[_]): AnyRef = {
+        ClassToConvert(s)
+      }
+    })
 
     val properties = new Properties()
     properties.setProperty("name", "Steve")
@@ -61,5 +59,4 @@ object DoEverythingModule extends TwitterModule {
   }
 }
 
-case class ClassToConvert(
-  name: String)
+case class ClassToConvert(name: String)

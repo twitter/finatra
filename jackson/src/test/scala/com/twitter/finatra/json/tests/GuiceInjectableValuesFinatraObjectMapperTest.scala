@@ -9,9 +9,7 @@ import com.twitter.inject.{Mockito, Test}
 import java.util
 import net.codingwell.scalaguice.typeLiteral
 
-class GuiceInjectableValuesFinatraObjectMapperTest
-  extends Test
-  with Mockito {
+class GuiceInjectableValuesFinatraObjectMapperTest extends Test with Mockito {
 
   val injector = mock[Injector]
 
@@ -26,8 +24,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
   test("@Inject value should work when field not sent in json") {
     val keyString = Key.get(classOf[String])
     injector.getInstance(keyString) returns "Foo"
-    assert(parse[CaseClassInjectString](
-      """
+    assert(parse[CaseClassInjectString]("""
       {
       }
       """) == CaseClassInjectString("Foo"))
@@ -36,24 +33,21 @@ class GuiceInjectableValuesFinatraObjectMapperTest
   test("@Inject Guice Option[String] into case class Option[String]") {
     val key = Key.get(typeLiteral[Option[String]])
     injector.getInstance(key) returns Some("Foo")
-    assert(parse[CaseClassInjectOptionString](
-      """
+    assert(parse[CaseClassInjectOptionString]("""
       {
       }
       """) == CaseClassInjectOptionString(Some("Foo")))
   }
 
   test("@Inject value should use default when field not sent in json") {
-    assert(parse[CaseClassInjectStringWithDefault](
-      """
+    assert(parse[CaseClassInjectStringWithDefault]("""
       {
       }
       """) == CaseClassInjectStringWithDefault("DefaultHello"))
   }
 
   test("@Inject value should use default when field sent in json") {
-    assert(parse[CaseClassInjectStringWithDefault](
-      """
+    assert(parse[CaseClassInjectStringWithDefault]("""
       {
         "string": "123"
       }
@@ -61,8 +55,7 @@ class GuiceInjectableValuesFinatraObjectMapperTest
   }
 
   test("@Inject value should use None assumed default when field sent in json") {
-    assert(parse[CaseClassInjectOptionString](
-      """
+    assert(parse[CaseClassInjectOptionString]("""
       {
         "string": "123"
       }
@@ -80,7 +73,9 @@ class GuiceInjectableValuesFinatraObjectMapperTest
 
   test("@Inject ConfigurationException") {
     val keyString = Key.get(classOf[String])
-    injector.getInstance(keyString) throws new ConfigurationException(new util.LinkedList[Message]())
+    injector.getInstance(keyString) throws new ConfigurationException(
+      new util.LinkedList[Message]()
+    )
 
     intercept[JsonInjectException] {
       parse[CaseClassInjectString]("""

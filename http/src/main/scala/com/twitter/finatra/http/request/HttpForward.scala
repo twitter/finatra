@@ -8,9 +8,7 @@ import com.twitter.util.Future
 import javax.inject.{Singleton, Inject}
 
 @Singleton
-class HttpForward @Inject()(
-  router: HttpRouter)
-  extends Logging {
+class HttpForward @Inject()(router: HttpRouter) extends Logging {
 
   /**
    * Forwards the given [[com.twitter.finagle.http.Request]] to the given path.

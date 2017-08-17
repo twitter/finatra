@@ -8,10 +8,7 @@ import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.Future
 
-class Add2ServerFeatureTest
-  extends FeatureTest
-  with Mockito
-  with HttpMockResponses {
+class Add2ServerFeatureTest extends FeatureTest with Mockito with HttpMockResponses {
 
   val mockHttpClient = smartMock[HttpClient]
 
@@ -20,13 +17,9 @@ class Add2ServerFeatureTest
       .bind[HttpClient](mockHttpClient)
 
   test("add2") {
-    mockHttpClient.execute(any[Request]) returns(
-      Future(ok("6")),
-      Future(ok("7")))
+    mockHttpClient.execute(any[Request]) returns (Future(ok("6")),
+    Future(ok("7")))
 
-    server.httpGet(
-      "/add2?num=5",
-      andExpect = Status.Ok,
-      withBody = "7")
+    server.httpGet("/add2?num=5", andExpect = Status.Ok, withBody = "7")
   }
 }

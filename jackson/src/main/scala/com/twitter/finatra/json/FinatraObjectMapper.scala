@@ -21,16 +21,14 @@ object FinatraObjectMapper {
    */
   def create(injector: Injector = null): FinatraObjectMapper = {
     val jacksonModule = new FinatraJacksonModule()
-    new FinatraObjectMapper(
-      jacksonModule.provideScalaObjectMapper(injector))
+    new FinatraObjectMapper(jacksonModule.provideScalaObjectMapper(injector))
   }
 
   def parseMessageBody[T: Manifest](message: Message, reader: ObjectReader): T = {
     val inputStream = message.getInputStream()
     try {
       reader.readValue[T](inputStream)
-    }
-    finally {
+    } finally {
       inputStream.close()
     }
   }
@@ -42,8 +40,7 @@ object FinatraObjectMapper {
     parseMessageBody[T](response, reader)
 }
 
-case class FinatraObjectMapper(
-  objectMapper: ObjectMapper with ScalaObjectMapper) {
+case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper) {
 
   lazy val prettyObjectMapper = {
     objectMapper.writer(ArrayElementsOnNewLinesPrettyPrinter)
@@ -69,8 +66,7 @@ case class FinatraObjectMapper(
   }
 
   def parse[T: Manifest](buf: Buf): T = {
-    parse[T](
-      Buf.ByteBuffer.Shared.extract(buf))
+    parse[T](Buf.ByteBuffer.Shared.extract(buf))
   }
 
   def parse[T: Manifest](jsonNode: JsonNode): T = {
@@ -102,7 +98,7 @@ case class FinatraObjectMapper(
    See https://github.com/FasterXML/jackson-databind/blob/2.4/src/main/java/com/fasterxml/jackson/databind/ObjectMapper.java#L2773
    The wrapping occurs because CaseClassMappingException is an IOException (because we extend JsonMappingException which extends JsonProcessingException which extends IOException).
    We must extend JsonMappingException otherwise CaseClassMappingException is not properly handled when deserializing into nested case-classes
-  */
+   */
   def convert[T: Manifest](any: Any): T = {
     try {
       objectMapper.convertValue[T](any)
@@ -143,8 +139,7 @@ case class FinatraObjectMapper(
   }
 
   def writeValueAsBuf(any: Any): Buf = {
-    Buf.ByteArray.Owned(
-      objectMapper.writeValueAsBytes(any))
+    Buf.ByteArray.Owned(objectMapper.writeValueAsBytes(any))
   }
 
   // optimized

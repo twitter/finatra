@@ -11,7 +11,11 @@ import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Http, Service}
 import com.twitter.inject.PoolUtils
-import com.twitter.inject.app.{InjectionServiceWithAnnotationModule, InjectionServiceModule, StartupTimeoutException}
+import com.twitter.inject.app.{
+  InjectionServiceWithAnnotationModule,
+  InjectionServiceModule,
+  StartupTimeoutException
+}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
@@ -33,9 +37,9 @@ object EmbeddedTwitterServer {
       flags ++ Map(
         "com.twitter.server.resolverZkHosts" -> PortUtils.loopbackAddressForPort(2181),
         "com.twitter.finagle.socks.socksProxyHost" -> PortUtils.loopbackAddress,
-        "com.twitter.finagle.socks.socksProxyPort" -> "50001")
-    }
-    else {
+        "com.twitter.finagle.socks.socksProxyPort" -> "50001"
+      )
+    } else {
       flags
     }
   }
@@ -76,8 +80,8 @@ class EmbeddedTwitterServer(
   streamResponse: Boolean = false,
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
-  maxStartupTimeSeconds: Int = 60)
-  extends Matchers {
+  maxStartupTimeSeconds: Int = 60
+) extends Matchers {
 
   /* Additional Constructors */
 
@@ -87,10 +91,12 @@ class EmbeddedTwitterServer(
 
   /* Main Constructor */
 
-  require(!isSingletonObject(twitterServer),
+  require(
+    !isSingletonObject(twitterServer),
     "server must be a new instance rather than a singleton (e.g. \"new " +
       "FooServer\" instead of \"FooServerMain\" where FooServerMain is " +
-      "defined as \"object FooServerMain extends FooServer\"")
+      "defined as \"object FooServerMain extends FooServer\""
+  )
 
   if (isInjectable) {
     // overwrite com.google.inject.Stage if the underlying
@@ -119,9 +125,7 @@ class EmbeddedTwitterServer(
 
   lazy val httpAdminClient = {
     start()
-    createHttpClient(
-      "httpAdminClient",
-      httpAdminPort)
+    createHttpClient("httpAdminClient", httpAdminPort)
   }
 
   lazy val isInjectable = twitterServer.isInstanceOf[TwitterServer]
@@ -131,7 +135,8 @@ class EmbeddedTwitterServer(
     injectableServer.injector
   }
 
-  lazy val statsReceiver = if (isInjectable) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
+  lazy val statsReceiver =
+    if (isInjectable) injector.instance[StatsReceiver] else new InMemoryStatsReceiver
   lazy val inMemoryStatsReceiver = statsReceiver.asInstanceOf[InMemoryStatsReceiver]
   lazy val adminHostAndPort = PortUtils.loopbackAddressForPort(httpAdminPort)
 
@@ -147,7 +152,7 @@ class EmbeddedTwitterServer(
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
-  def bind[T : TypeTag](instance: T): EmbeddedTwitterServer = {
+  def bind[T: TypeTag](instance: T): EmbeddedTwitterServer = {
     bindInstance[T](instance)
     this
   }
@@ -164,7 +169,7 @@ class EmbeddedTwitterServer(
    *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
-  def bind[T : TypeTag, A <: Annotation : TypeTag](instance: T): EmbeddedTwitterServer = {
+  def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedTwitterServer = {
     bindInstance[T, A](instance)
     this
   }
@@ -173,8 +178,7 @@ class EmbeddedTwitterServer(
     start()
     if (_mainResult == null) {
       throw new Exception("Server needs to be started by calling EmbeddedTwitterServer#start()")
-    }
-    else {
+    } else {
       _mainResult
     }
   }
@@ -202,9 +206,7 @@ class EmbeddedTwitterServer(
       twitterServer.log.clearHandlers()
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
       try {
-        Await.all(
-          httpAdminClient.close(),
-          twitterServer.close())
+        Await.all(httpAdminClient.close(), twitterServer.close())
         mainRunnerFuturePool.executor.shutdown()
       } catch {
         case NonFatal(e) =>
@@ -247,7 +249,7 @@ class EmbeddedTwitterServer(
 
   def isHealthy: Boolean = {
     httpAdminPort != 0 &&
-      healthResponse(shouldBeHealthy = true).isReturn
+    healthResponse(shouldBeHealthy = true).isReturn
   }
 
   def httpAdminPort: Int = {
@@ -255,7 +257,11 @@ class EmbeddedTwitterServer(
   }
 
   def adminHttpServerRoutes: Seq[AdminHttpServer.Route] = {
-    val allRoutesField = FieldUtils.getField(twitterServer.getClass, "com$twitter$server$AdminHttpServer$$allRoutes", true)
+    val allRoutesField = FieldUtils.getField(
+      twitterServer.getClass,
+      "com$twitter$server$AdminHttpServer$$allRoutes",
+      true
+    )
     allRoutesField.get(twitterServer).asInstanceOf[Seq[AdminHttpServer.Route]]
   }
 
@@ -284,21 +290,23 @@ class EmbeddedTwitterServer(
 
     if (includeGauges) {
       info("\nGauges:")
-      for ((key, value) <- inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap) {
+      for ((key, value) <- inMemoryStatsReceiver.gauges.iterator.toMap
+          .mapKeys(keyStr)
+          .toSortedMap) {
         info(f"$key%-70s = ${value()}")
       }
     }
   }
 
-  def getCounter(name: String): Int = {
+  def getCounter(name: String): Long = {
     countersMap.getOrElse(name, 0)
   }
 
-  def assertCounter(name: String, expected: Int): Unit = {
+  def assertCounter(name: String, expected: Long): Unit = {
     getCounter(name) should equal(expected)
   }
 
-  def assertCounter(name: String)(callback: Int => Boolean): Unit = {
+  def assertCounter(name: String)(callback: Long => Boolean): Unit = {
     callback(getCounter(name)) should be(true)
   }
 
@@ -326,10 +334,19 @@ class EmbeddedTwitterServer(
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
     withLocation: String = null,
-    withBody: String = null): Response = {
+    withBody: String = null
+  ): Response = {
 
     val request = createApiRequest(path, Method.Get)
-    httpExecute(httpAdminClient, request, addAcceptHeader(accept, headers), suppress, andExpect, withLocation, withBody)
+    httpExecute(
+      httpAdminClient,
+      request,
+      addAcceptHeader(accept, headers),
+      suppress,
+      andExpect,
+      withLocation,
+      withBody
+    )
   }
 
   /* Protected */
@@ -341,7 +358,8 @@ class EmbeddedTwitterServer(
     suppress: Boolean = false,
     andExpect: Status = Status.Ok,
     withLocation: String = null,
-    withBody: String = null): Response = {
+    withBody: String = null
+  ): Response = {
 
     start()
 
@@ -370,11 +388,14 @@ class EmbeddedTwitterServer(
     }
 
     if (withLocation != null) {
-      assert(response.location.get.endsWith(withLocation), "\nDiffering Location\n\nExpected Location is: "
-        + withLocation
-        + " \nActual Location is: "
-        + response.location.get
-        + receivedResponseStr(response))
+      assert(
+        response.location.get.endsWith(withLocation),
+        "\nDiffering Location\n\nExpected Location is: "
+          + withLocation
+          + " \nActual Location is: "
+          + response.location.get
+          + receivedResponseStr(response)
+      )
     }
 
     response
@@ -387,7 +408,8 @@ class EmbeddedTwitterServer(
     connectTimeout: Duration = 60.seconds,
     requestTimeout: Duration = 300.seconds,
     retryPolicy: RetryPolicy[Try[Any]] = httpRetryPolicy,
-    secure: Boolean = false): Service[Request, Response] = {
+    secure: Boolean = false
+  ): Service[Request, Response] = {
 
     val host = new InetSocketAddress(PortUtils.loopbackAddress, port)
     val builder = ClientBuilder()
@@ -410,8 +432,7 @@ class EmbeddedTwitterServer(
   }
 
   protected def httpRetryPolicy: RetryPolicy[Try[Any]] = {
-    backoff(
-      constant(1.second) take 15) {
+    backoff(constant(1.second) take 15) {
       case Throw(e: ChannelClosedException) =>
         println("Retrying ChannelClosedException")
         true
@@ -427,10 +448,11 @@ class EmbeddedTwitterServer(
   }
 
   protected def createApiRequest(path: String, method: Method = Method.Get): Request = {
-    val pathToUse = if (path.startsWith("http"))
-      URI.create(path).getPath
-    else
-      path
+    val pathToUse =
+      if (path.startsWith("http"))
+        URI.create(path).getPath
+      else
+        path
 
     Request(method, pathToUse)
   }
@@ -453,31 +475,33 @@ class EmbeddedTwitterServer(
 
   protected def combineArgs(): Array[String] = {
     val flagsStr =
-      flagsAsArgs(
-        updateFlags(
-          resolveFlags(useSocksProxy, flags)))
+      flagsAsArgs(updateFlags(resolveFlags(useSocksProxy, flags)))
     ("-admin.port=" + PortUtils.ephemeralLoopback) +: (args ++ flagsStr).toArray
   }
 
-  protected[twitter] def bindInstance[T : TypeTag](instance: T): Unit = {
+  protected[twitter] def bindInstance[T: TypeTag](instance: T): Unit = {
     addInjectionServiceFrameworkOverrideModule(new InjectionServiceModule(instance))
   }
 
-  protected[twitter] def bindInstance[T : TypeTag, A <: Annotation : TypeTag](instance: T): Unit = {
-    addInjectionServiceFrameworkOverrideModule(new InjectionServiceWithAnnotationModule[T, A](instance))
+  protected[twitter] def bindInstance[T: TypeTag, A <: Annotation: TypeTag](instance: T): Unit = {
+    addInjectionServiceFrameworkOverrideModule(
+      new InjectionServiceWithAnnotationModule[T, A](instance)
+    )
   }
 
   /* Private */
 
   private def addInjectionServiceFrameworkOverrideModule(module: com.google.inject.Module): Unit = {
     if (!isInjectable) {
-      throw new IllegalStateException("Cannot call bind() with a non-injectable underlying server." )
+      throw new IllegalStateException("Cannot call bind() with a non-injectable underlying server.")
     }
     injectableServer.addFrameworkOverrideModules(module)
   }
 
   private def disableLogging = {
-    disableTestLogging || System.getProperties.keySet().contains("com.twitter.inject.test.logging.disabled")
+    disableTestLogging || System.getProperties
+      .keySet()
+      .contains("com.twitter.inject.test.logging.disabled")
   }
 
   private def keyStr(keys: Seq[String]): String = {
@@ -488,9 +512,7 @@ class EmbeddedTwitterServer(
     "\n\nReceived Response:\n" + response.encodeString()
   }
 
-  private def handleRequest(
-    request: Request,
-    client: Service[Request, Response]): Response = {
+  private def handleRequest(request: Request, client: Service[Request, Response]): Response = {
 
     val futureResponse = client(request)
     val elapsed = Stopwatch.start()
@@ -498,17 +520,16 @@ class EmbeddedTwitterServer(
       Await.result(futureResponse)
     } catch {
       case e: Throwable =>
-        println("ERROR in request: " + request + " " + e + " in " + elapsed().inUnit(MILLISECONDS) + " ms")
+        println(
+          "ERROR in request: " + request + " " + e + " in " + elapsed().inUnit(MILLISECONDS) + " ms"
+        )
         throw e
     }
   }
 
   private def printRequest(request: Request, suppress: Boolean): Unit = {
     if (!suppress) {
-      val headers = request.headerMap.mkString(
-        "[Header]\t",
-        "\n[Header]\t",
-        "")
+      val headers = request.headerMap.mkString("[Header]\t", "\n[Header]\t", "")
 
       val msg = "HTTP " + request.method + " " + request.uri + "\n" + headers
 
@@ -523,10 +544,7 @@ class EmbeddedTwitterServer(
     if (!suppress) {
       info("-" * 75)
       info("[Status]\t" + response.status)
-      info(response.headerMap.mkString(
-        "[Header]\t",
-        "\n[Header]\t",
-        ""))
+      info(response.headerMap.mkString("[Header]\t", "\n[Header]\t", ""))
     }
   }
 
@@ -534,11 +552,9 @@ class EmbeddedTwitterServer(
     if (!suppress) {
       if (response.isChunked) {
         //no-op
-      }
-      else if (response.contentString.isEmpty) {
+      } else if (response.contentString.isEmpty) {
         info("*EmptyBody*")
-      }
-      else {
+      } else {
         printNonEmptyResponseBody(response)
       }
     }
@@ -557,7 +573,8 @@ class EmbeddedTwitterServer(
 
   private def addAcceptHeader(
     accept: MediaType,
-    headers: Map[String, String]): Map[String, String] = {
+    headers: Map[String, String]
+  ): Map[String, String] = {
     if (accept != null)
       headers + (HttpHeaders.ACCEPT -> accept.toString)
     else
@@ -568,11 +585,7 @@ class EmbeddedTwitterServer(
     val expectedBody = if (shouldBeHealthy) "OK\n" else ""
 
     Try {
-      httpGetAdmin(
-        "/health",
-        andExpect = Status.Ok,
-        withBody = expectedBody,
-        suppress = !verbose)
+      httpGetAdmin("/health", andExpect = Status.Ok, withBody = expectedBody, suppress = !verbose)
     }
   }
 
@@ -595,9 +608,11 @@ class EmbeddedTwitterServer(
         twitterServer.nonExitingMain(allArgs)
       } catch {
         case e: OutOfMemoryError if e.getMessage == "PermGen space" =>
-          println("OutOfMemoryError(PermGen) in server startup. " +
-            "This is most likely due to the incorrect setting of a client " +
-            "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)")
+          println(
+            "OutOfMemoryError(PermGen) in server startup. " +
+              "This is most likely due to the incorrect setting of a client " +
+              "flag (not defined or invalid). Increase your PermGen to see the exact error message (e.g. -XX:MaxPermSize=256m)"
+          )
           e.printStackTrace()
           System.exit(-1)
         case e if !NonFatal(e) =>
@@ -627,6 +642,8 @@ class EmbeddedTwitterServer(
 
       Thread.sleep(1000)
     }
-    throw new StartupTimeoutException(s"App: $name failed to startup within $maxStartupTimeSeconds seconds.")
+    throw new StartupTimeoutException(
+      s"App: $name failed to startup within $maxStartupTimeSeconds seconds."
+    )
   }
 }

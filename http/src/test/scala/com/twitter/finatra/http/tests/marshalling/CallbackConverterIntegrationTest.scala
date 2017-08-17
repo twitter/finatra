@@ -22,8 +22,8 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
       FinatraJacksonModule,
       MustacheModule,
       DocRootModule,
-      StatsReceiverModule)
-    .create
+      StatsReceiverModule
+    ).create
 
   val callbackConverter = injector.instance[CallbackConverter]
 
@@ -31,156 +31,146 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   val okResponse = SimpleResponse(Status.Ok, "bob")
 
   test("Future Some String") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(futureSomeString),
-      withBody = "hello")
+    assertOk(callbackConverter.convertToFutureResponse(futureSomeString), withBody = "hello")
   }
 
   test("Future None String") {
     assertStatus(
       callbackConverter.convertToFutureResponse(futureNoneString),
-      expectedStatus = Status.NotFound)
+      expectedStatus = Status.NotFound
+    )
   }
 
   test("Future Some Product") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSomeProduct),
-      withBody = """{"name":"Ford"}""")
+      withBody = """{"name":"Ford"}"""
+    )
   }
 
   test("Future Some Trait") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSomeTrait),
-      withBody = """{"name":"Ford"}""")
+      withBody = """{"name":"Ford"}"""
+    )
   }
 
   test("Future String") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(futureString),
-      withBody = "bob")
+    assertOk(callbackConverter.convertToFutureResponse(futureString), withBody = "bob")
   }
 
   test("Future Response") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(futureResponse),
-      withBody = "bob")
+    assertOk(callbackConverter.convertToFutureResponse(futureResponse), withBody = "bob")
   }
 
   test("Future Some Response") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(futureSomeResponse),
-      withBody = "bob")
+    assertOk(callbackConverter.convertToFutureResponse(futureSomeResponse), withBody = "bob")
   }
 
   test("Future None Response") {
     assertStatus(
       callbackConverter.convertToFutureResponse(futureNoneResponse),
-      expectedStatus = Status.NotFound)
+      expectedStatus = Status.NotFound
+    )
   }
 
   test("Future Seq String") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(futureSeqString),
-      withBody = """["bob"]""")
+    assertOk(callbackConverter.convertToFutureResponse(futureSeqString), withBody = """["bob"]""")
   }
 
   test("Future Seq Car") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSeqCar),
-      withBody = """[{"name":"Ford"}]""")
+      withBody = """[{"name":"Ford"}]"""
+    )
   }
 
   test("Future Seq CarTrait") {
     assertOk(
       callbackConverter.convertToFutureResponse(futureSeqCarTrait),
-      withBody = """[{"name":"Ford"}]""")
+      withBody = """[{"name":"Ford"}]"""
+    )
   }
-  
-  
+
   // ScalaFuture
   test("ScalaFuture Some String") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(scalaFutureSomeString),
-      withBody = "hello")
+    assertOk(callbackConverter.convertToFutureResponse(scalaFutureSomeString), withBody = "hello")
   }
 
   test("ScalaFuture None String") {
     assertStatus(
       callbackConverter.convertToFutureResponse(scalaFutureNoneString),
-      expectedStatus = Status.NotFound)
+      expectedStatus = Status.NotFound
+    )
   }
 
   test("ScalaFuture Some Product") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSomeProduct),
-      withBody = """{"name":"Ford"}""")
+      withBody = """{"name":"Ford"}"""
+    )
   }
 
   test("ScalaFuture Some Trait") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSomeTrait),
-      withBody = """{"name":"Ford"}""")
+      withBody = """{"name":"Ford"}"""
+    )
   }
 
   test("ScalaFuture String") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(scalaFutureString),
-      withBody = "bob")
+    assertOk(callbackConverter.convertToFutureResponse(scalaFutureString), withBody = "bob")
   }
 
   test("ScalaFuture Response") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(scalaFutureResponse),
-      withBody = "bob")
+    assertOk(callbackConverter.convertToFutureResponse(scalaFutureResponse), withBody = "bob")
   }
 
   test("ScalaFuture Some Response") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(scalaFutureSomeResponse),
-      withBody = "bob")
+    assertOk(callbackConverter.convertToFutureResponse(scalaFutureSomeResponse), withBody = "bob")
   }
 
   test("ScalaFuture None Response") {
     assertStatus(
       callbackConverter.convertToFutureResponse(scalaFutureNoneResponse),
-      expectedStatus = Status.NotFound)
+      expectedStatus = Status.NotFound
+    )
   }
 
   test("ScalaFuture Seq String") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSeqString),
-      withBody = """["bob"]""")
+      withBody = """["bob"]"""
+    )
   }
 
   test("ScalaFuture Seq Car") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSeqCar),
-      withBody = """[{"name":"Ford"}]""")
+      withBody = """[{"name":"Ford"}]"""
+    )
   }
 
   test("ScalaFuture Seq CarTrait") {
     assertOk(
       callbackConverter.convertToFutureResponse(scalaFutureSeqCarTrait),
-      withBody = """[{"name":"Ford"}]""")
+      withBody = """[{"name":"Ford"}]"""
+    )
   }
 
-
   test("Object") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(objectCallback),
-      withBody = """asdf""")
+    assertOk(callbackConverter.convertToFutureResponse(objectCallback), withBody = """asdf""")
   }
 
   test("None") {
     assertStatus(
       callbackConverter.convertToFutureResponse(noneCallback),
-      expectedStatus = Status.NotFound)
+      expectedStatus = Status.NotFound
+    )
   }
 
   test("Some") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(someCallback),
-      withBody = """asdf""")
+    assertOk(callbackConverter.convertToFutureResponse(someCallback), withBody = """asdf""")
   }
 
   test("Nothing") {
@@ -198,13 +188,12 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   test("Map[String, String]") {
     assertOk(
       callbackConverter.convertToFutureResponse(stringMapCallback),
-      withBody = """{"message":"Hello, World!"}""")
+      withBody = """{"message":"Hello, World!"}"""
+    )
   }
 
   test("String") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(stringCallback),
-      withBody = "Hello, World!")
+    assertOk(callbackConverter.convertToFutureResponse(stringCallback), withBody = "Hello, World!")
   }
 
   test("AsyncStream request") {
@@ -245,9 +234,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   }
 
   test("Null") {
-    assertOk(
-      callbackConverter.convertToFutureResponse(nullCallback),
-      withBody = "")
+    assertOk(callbackConverter.convertToFutureResponse(nullCallback), withBody = "")
   }
 
   def stringMapCallback(request: Request): Map[String, String] = {
@@ -325,7 +312,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
   def futureSeqCarTrait(request: Request): Future[Seq[CarTrait]] = {
     Future(Seq(ford))
   }
-  
+
   def scalaFutureSomeString(request: Request): ScalaFuture[Option[String]] = {
     ScalaFuture.successful(Some("hello"))
   }
@@ -392,9 +379,7 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     assertOk(response, withBody)
   }
 
-  private def assertStatus(
-    convertedFunc: (Request) => Future[Response],
-    expectedStatus: Status) {
+  private def assertStatus(convertedFunc: (Request) => Future[Response], expectedStatus: Status) {
     val response = Await.result(convertedFunc(Request()))
     response.status should equal(expectedStatus)
   }

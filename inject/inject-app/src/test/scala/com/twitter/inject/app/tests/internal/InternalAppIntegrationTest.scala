@@ -7,15 +7,14 @@ import com.twitter.inject.{Test, TwitterModule}
 class InternalAppIntegrationTest extends Test {
 
   test("start app") {
-    val app = new EmbeddedApp(
-      new SampleApp {
-        addFrameworkModule(FooModule)
+    val app = new EmbeddedApp(new SampleApp {
+      addFrameworkModule(FooModule)
 
-        override protected def run(): Unit = {
-          super.run()
-          assert(injector.instance[Foo].name == "bar")
-        }
-      })
+      override protected def run(): Unit = {
+        super.run()
+        assert(injector.instance[Foo].name == "bar")
+      }
+    })
 
     app.main()
   }

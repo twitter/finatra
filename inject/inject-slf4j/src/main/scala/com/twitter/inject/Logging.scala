@@ -25,7 +25,16 @@ import scala.util.control.NonFatal
  * }
  * }
  */
-@JsonIgnoreProperties(Array("logger_name", "trace_enabled", "debug_enabled", "error_enabled", "info_enabled", "warn_enabled"))
+@JsonIgnoreProperties(
+  Array(
+    "logger_name",
+    "trace_enabled",
+    "debug_enabled",
+    "error_enabled",
+    "info_enabled",
+    "warn_enabled"
+  )
+)
 trait Logging extends com.twitter.util.logging.Logging {
 
   /**

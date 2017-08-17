@@ -1,6 +1,11 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.fasterxml.jackson.databind.{BeanProperty, DeserializationContext, InjectableValues, JavaType}
+import com.fasterxml.jackson.databind.{
+  BeanProperty,
+  DeserializationContext,
+  InjectableValues,
+  JavaType
+}
 import com.google.inject.{Injector, Key}
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.internal.marshalling.RequestInjectableValues.SeqWithSingleEmptyString
@@ -15,13 +20,11 @@ object RequestInjectableValues {
 class RequestInjectableValues(
   objectMapper: FinatraObjectMapper,
   request: Request,
-  injector: Injector)
-  extends InjectableValues {
+  injector: Injector
+) extends InjectableValues {
 
-  private val requestParamsAnnotation = Seq(
-    classOf[RouteParam],
-    classOf[QueryParam],
-    classOf[FormParam])
+  private val requestParamsAnnotation =
+    Seq(classOf[RouteParam], classOf[QueryParam], classOf[FormParam])
 
   /* Public */
 
@@ -38,7 +41,8 @@ class RequestInjectableValues(
     valueId: Object,
     ctxt: DeserializationContext,
     forProperty: BeanProperty,
-    beanInstance: Object): Object = {
+    beanInstance: Object
+  ): Object = {
 
     val fieldName = forProperty.getName
 
@@ -47,7 +51,8 @@ class RequestInjectableValues(
     } else if (hasAnnotation(forProperty, requestParamsAnnotation)) {
       if (forProperty.getType.isCollectionLikeType) {
         request.params.getAll(fieldName) match {
-          case propertyValue: Seq[String] if propertyValue.nonEmpty || request.params.contains(fieldName) =>
+          case propertyValue: Seq[String]
+              if propertyValue.nonEmpty || request.params.contains(fieldName) =>
             val value = handleEmptySeq(forProperty, propertyValue)
             val modifiedParamsValue = handleExtendedBooleans(forProperty, value)
             convert(forProperty, modifiedParamsValue)
@@ -67,17 +72,14 @@ class RequestInjectableValues(
         case None => null
       }
     } else {
-      injector.getInstance(
-        valueId.asInstanceOf[Key[_]]).asInstanceOf[Object]
+      injector.getInstance(valueId.asInstanceOf[Key[_]]).asInstanceOf[Object]
     }
   }
 
   /* Private */
 
   private def convert(forProperty: BeanProperty, propertyValue: Any): AnyRef = {
-    convert(
-      forProperty.getType,
-      propertyValue)
+    convert(forProperty.getType, propertyValue)
   }
 
   private def convert(forType: JavaType, propertyValue: Any): AnyRef = {
@@ -85,12 +87,9 @@ class RequestInjectableValues(
       if (propertyValue == "")
         None
       else
-        Option(
-          convert(forType.containedType(0), propertyValue))
+        Option(convert(forType.containedType(0), propertyValue))
     else
-      objectMapper.convert(
-        propertyValue,
-        forType)
+      objectMapper.convert(propertyValue, forType)
   }
 
   private def handleEmptySeq(forProperty: BeanProperty, propertyValue: Any): Any = {
@@ -125,14 +124,14 @@ class RequestInjectableValues(
     case _ => value
   }
 
-  private def hasAnnotation[T <: Annotation : Manifest](beanProperty: BeanProperty): Boolean = {
+  private def hasAnnotation[T <: Annotation: Manifest](beanProperty: BeanProperty): Boolean = {
     val clazz = manifest[T].runtimeClass.asInstanceOf[Class[_ <: Annotation]]
     beanProperty.getContextAnnotation(clazz) != null
   }
 
   private lazy val isSeqOfBools: (JavaType) => Boolean = { forType =>
     forType.getRawClass == classOf[Seq[_]] &&
-      forType.containedType(0).getRawClass == classOf[java.lang.Boolean]
+    forType.containedType(0).getRawClass == classOf[java.lang.Boolean]
   }
 
   private lazy val hasAnnotation: (BeanProperty, Seq[Class[_ <: Annotation]]) => Boolean = {

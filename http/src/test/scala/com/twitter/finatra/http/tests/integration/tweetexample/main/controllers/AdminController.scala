@@ -6,10 +6,8 @@ import com.twitter.finatra.http.tests.integration.tweetexample.main.services.adm
 import com.twitter.finatra.test.{Prod, Staging}
 import javax.inject.Inject
 
-class AdminController @Inject()(
-  @Prod prodUsers: UserService,
-  @Staging stagingUsers: UserService)
-  extends Controller {
+class AdminController @Inject()(@Prod prodUsers: UserService, @Staging stagingUsers: UserService)
+    extends Controller {
 
   get("/admin/finatra/yo") { request: Request =>
     "yo yo"

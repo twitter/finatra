@@ -8,10 +8,9 @@ import com.twitter.finatra.http.response.SimpleResponse
 import com.twitter.inject.Logging
 import com.twitter.util.Future
 
-private[http] class RoutingService(
-  routes: Seq[Route])
-  extends Service[Request, Response]
-  with Logging {
+private[http] class RoutingService(routes: Seq[Route])
+    extends Service[Request, Response]
+    with Logging {
 
   private val get = Routes.createForMethod(routes, Get)
   private val post = Routes.createForMethod(routes, Post)
@@ -23,7 +22,7 @@ private[http] class RoutingService(
   private val trace = Routes.createForMethod(routes, Trace)
   private val any = Routes.createForMethod(routes, AnyMethod)
 
-  private val routesStr = routes map {_.summary} mkString ", "
+  private val routesStr = routes map { _.summary } mkString ", "
 
   /* Public */
 
@@ -43,7 +42,8 @@ private[http] class RoutingService(
       case Trace => trace.handle(request, bypassFilters)
       case _ => badRequest(request.method)
     }).getOrElse {
-      any.handle(request, bypassFilters)
+      any
+        .handle(request, bypassFilters)
         .getOrElse(notFound(request))
     }
   }
@@ -52,15 +52,13 @@ private[http] class RoutingService(
 
   private def notFound(request: Request): Future[Response] = {
     debug(request + " not found in registered routes: " + routesStr)
-    Future.value(
-      SimpleResponse(
-        Status.NotFound))
+    Future.value(SimpleResponse(Status.NotFound))
   }
 
   private def badRequest(method: Method): Option[Future[Response]] = {
-    Some(Future.value(
-      SimpleResponse(
-        Status.BadRequest,
-        method.toString + " is not a valid HTTP method")))
+    Some(
+      Future
+        .value(SimpleResponse(Status.BadRequest, method.toString + " is not a valid HTTP method"))
+    )
   }
 }

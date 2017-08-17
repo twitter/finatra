@@ -16,10 +16,9 @@ private[app] object FlagsModule {
 }
 
 //TODO: Use type information in Flag instead of hardcoding java.lang.String
-private[app] class FlagsModule(
-  flagsMap: Map[String, Option[Any]])
-  extends TwitterModule
-  with Logging {
+private[app] class FlagsModule(flagsMap: Map[String, Option[Any]])
+    extends TwitterModule
+    with Logging {
 
   override def configure() {
     for ((flagName, valueOpt) <- flagsMap) {
@@ -29,10 +28,14 @@ private[app] class FlagsModule(
           debug("Binding flag: " + flagName + " = " + value)
           binder.bind(key).toInstance(value.toString)
         case None =>
-          binder.bind(key).toProvider(new Provider[Nothing] {
-            override def get() =
-              throw new IllegalArgumentException("flag without default: " + flagName + " has an unspecified value and is not eligible for @Flag injection")
-          })
+          binder
+            .bind(key)
+            .toProvider(new Provider[Nothing] {
+              override def get() =
+                throw new IllegalArgumentException(
+                  "flag without default: " + flagName + " has an unspecified value and is not eligible for @Flag injection"
+                )
+            })
       }
     }
   }

@@ -26,7 +26,7 @@ class MapsConversionsTest extends Test {
   }
 
   test("RichMap#mapKeys") {
-    Map(1 -> "a") mapKeys {_.toString} should
+    Map(1 -> "a") mapKeys { _.toString } should
       equal(Map("1" -> "a"))
   }
 
@@ -46,17 +46,17 @@ class MapsConversionsTest extends Test {
   }
 
   test("RichMap#filterValues") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b") filterValues {_ == "b"} should
+    Map(1 -> "a", 2 -> "a", 3 -> "b") filterValues { _ == "b" } should
       equal(Map(3 -> "b"))
   }
 
   test("RichMap#filterNotValues") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotValues {_ == "b"} should
+    Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotValues { _ == "b" } should
       equal(Map(1 -> "a", 2 -> "a"))
   }
 
   test("RichMap#filterNotKeys") {
-    Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotKeys {_ == 3} should
+    Map(1 -> "a", 2 -> "a", 3 -> "b") filterNotKeys { _ == 3 } should
       equal(Map(1 -> "a", 2 -> "a"))
   }
 }

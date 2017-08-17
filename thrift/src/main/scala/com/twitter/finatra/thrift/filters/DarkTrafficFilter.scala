@@ -29,14 +29,17 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
   darkServiceIface: ServiceIface,
   enableSampling: ThriftRequest[_] => Boolean,
   forwardAfterService: Boolean,
-  override val statsReceiver: StatsReceiver)
-  extends ThriftFilter
-  with AbstractDarkTrafficFilter
-  with Logging {
+  override val statsReceiver: StatsReceiver
+) extends ThriftFilter
+    with AbstractDarkTrafficFilter
+    with Logging {
 
   private val serviceIfaceClass = implicitly[ClassTag[ServiceIface]].runtimeClass
 
-  override def apply[T, Rep](request: ThriftRequest[T], service: Service[ThriftRequest[T], Rep]): Future[Rep] = {
+  override def apply[T, Rep](
+    request: ThriftRequest[T],
+    service: Service[ThriftRequest[T], Rep]
+  ): Future[Rep] = {
     if (forwardAfterService) {
       service(request).ensure {
         sendDarkRequest(request)(enableSampling, invokeMethod)
@@ -61,8 +64,7 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
    * @tparam Rep - the response type param of the service call.
    * @return a [[com.twitter.util.Future]] over the Rep type.
    */
-  private def invokeMethod[T, Rep](
-    request: ThriftRequest[T]): Future[Rep] = {
+  private def invokeMethod[T, Rep](request: ThriftRequest[T]): Future[Rep] = {
 
     val field = serviceIfaceClass.getDeclaredField(request.methodName)
     field.setAccessible(true)

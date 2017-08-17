@@ -8,10 +8,9 @@ import com.twitter.inject.Test
 class BaseHttpServerStartupIntegrationTest extends Test {
 
   test("BaseHttpServer startup") {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new BaseHttpServer {
-        override val modules = Seq(ResponseBuilderModule)
-      })
+    val server = new EmbeddedHttpServer(twitterServer = new BaseHttpServer {
+      override val modules = Seq(ResponseBuilderModule)
+    })
 
     server.start()
     server.assertHealthy()
@@ -19,11 +18,10 @@ class BaseHttpServerStartupIntegrationTest extends Test {
   }
 
   test("BaseHttpServer startup with only an http external port and no admin port") {
-    val server = new EmbeddedHttpServer(
-      twitterServer = new BaseHttpServer {
-        override val disableAdminHttpServer = true
-        override val modules = Seq(ResponseBuilderModule)
-      })
+    val server = new EmbeddedHttpServer(twitterServer = new BaseHttpServer {
+      override val disableAdminHttpServer = true
+      override val modules = Seq(ResponseBuilderModule)
+    })
 
     server.start()
     // Because we disabled the adminHttpServer we instead check the started flag.

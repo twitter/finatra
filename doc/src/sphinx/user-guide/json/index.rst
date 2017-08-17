@@ -64,7 +64,7 @@ For example,
 .. code:: scala
 
     // custom deserializer
-    class FooDeserializer extends com.fasterxml.jackson.databind.JsonDerializer[Foo] {
+    class FooDeserializer extends com.fasterxml.jackson.databind.JsonDeserializer[Foo] {
       override def deserialize(...)
     }
 

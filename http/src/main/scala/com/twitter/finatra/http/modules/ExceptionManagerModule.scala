@@ -4,7 +4,10 @@ import com.google.inject.Provides
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.internal.exceptions._
 import com.twitter.finatra.http.exceptions.ExceptionManager
-import com.twitter.finatra.http.internal.exceptions.json.{CaseClassExceptionMapper, JsonParseExceptionMapper}
+import com.twitter.finatra.http.internal.exceptions.json.{
+  CaseClassExceptionMapper,
+  JsonParseExceptionMapper
+}
 import com.twitter.inject.{Injector, TwitterModule}
 import javax.inject.Singleton
 

@@ -9,7 +9,8 @@ import com.twitter.util.{Await, Future}
 class HttpResponseFilterTest extends Test {
 
   val respFilter = new HttpResponseFilter[Request]
-  val rfc7231Regex = """^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d\d (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d\d:\d\d:\d\d GMT$"""
+  val rfc7231Regex =
+    """^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d\d (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d\d:\d\d:\d\d GMT$"""
 
   test("test response header") {
     val service = Service.mk[Request, Response] { request =>

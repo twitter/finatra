@@ -12,6 +12,29 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-2.12.0](https://github.com/twitter/finatra/tree/finatra-2.12.0) (2017-08-15)
+
+### Added
+
+* finatra-jackson: Add support for injecting a snake case FinatraObjectMapper by annotating
+  parameters with a new @SnakeCaseMapper binding annotation. ``PHAB_ID=D7798``
+
+### Changed
+
+* finatra-http: Add close hook when constructing a StreamingResponse to allow for resource
+  release without consuming an entire AsyncStream. ``PHAB_ID=D64013``
+
+* finatra-http: Unmarshalling JSON no longer consumes the body of a HTTP Request.
+  ``PHAB_ID=D74519``
+
+* finatra-inject: RetryUtil.retry has been removed because it used a blocking call
+  to Thread.sleep. Blocking Finagle threads results in poor performance and
+  RetryUtil.retryFuture should be used instead. ``PHAB_ID=D73949``
+
+### Fixed
+
+### Closed
+
 ## [finatra-2.11.0](https://github.com/twitter/finatra/tree/finatra-2.11.0) (2017-06-06)
 
 ### Added
@@ -188,8 +211,8 @@ All notable changes to this project will be documented in this file. Note that `
   ``DIFF_ID=D19822``
 
 * inject-core: Remove JUnitRunner from `c.t.inject.Test`. This was only necessary for
-  internal building with pants and is no longer required. The sbt build uses the 
-  ScalaTest runner and is thus not affected. Additionally, update specs2 to 2.4.17 and 
+  internal building with pants and is no longer required. The sbt build uses the
+  ScalaTest runner and is thus not affected. Additionally, update specs2 to 2.4.17 and
   to depend on just the `specs2-mock` dependency where needed. ``DIFF_ID=D18011``
 
 ### Fixed
@@ -203,7 +226,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 * inject-app: Fix TestInjector to properly parse flags. The TestInjector didn't
   properly handle defaulted boolean flags when defined in Modules. Updated the
-  TestInjector logic to properly parse flags. Fixes [Issue #373](https://github.com/twitter/finatra/issues/373) 
+  TestInjector logic to properly parse flags. Fixes [Issue #373](https://github.com/twitter/finatra/issues/373)
   ``RB_ID=901525``
 
 * finatra: Correctly filter published tests-javadocs and tests-sources jars for
@@ -335,8 +358,8 @@ All notable changes to this project will be documented in this file. Note that `
 ### Fixed
 
 * finatra-jackson: Test jar is missing files. Classes in the test
-  `c.t.finatra.validation` package were not properly marked for 
-  inclusion in the finatra-jackson tests jar. They've now been added. 
+  `c.t.finatra.validation` package were not properly marked for
+  inclusion in the finatra-jackson tests jar. They've now been added.
   ``RB_ID=878755``
 
 ### Closed
@@ -352,38 +375,38 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
-* finatra-http: Simplify ExceptionMapper configuration and usage. 
+* finatra-http: Simplify ExceptionMapper configuration and usage.
   We are dropping the need for a specialized DefaultExceptionMapper (which
-  was simply an ExceptionMapper[Throwable]). Instead we now allow the 
-  configuration of mappers in the ExceptionManager to be much more flexible. 
-  Previously, the framework tried to prevent a user from registering a mapper 
-  over a given exception type multiple times and specialized a "default" 
-  ExceptionMapper to invoke on an exception type of Throwable. The 
-  ExceptionManager will now accept any mapper. If a mapper is added over a 
-  type already added, the previous mapper will be overwritten. 
+  was simply an ExceptionMapper[Throwable]). Instead we now allow the
+  configuration of mappers in the ExceptionManager to be much more flexible.
+  Previously, the framework tried to prevent a user from registering a mapper
+  over a given exception type multiple times and specialized a "default"
+  ExceptionMapper to invoke on an exception type of Throwable. The
+  ExceptionManager will now accept any mapper. If a mapper is added over a
+  type already added, the previous mapper will be overwritten.
 
   The last registered mapper for an exception type wins.
 
-  The framework adds three mappers to the manager by default. If a user wants 
-  to swap out any of these defaults they simply need add their own mapper to 
-  the manager for the exception type to map. E.g., by default the framework 
+  The framework adds three mappers to the manager by default. If a user wants
+  to swap out any of these defaults they simply need add their own mapper to
+  the manager for the exception type to map. E.g., by default the framework
   will add:
-  Throwable -> 
+  Throwable ->
       com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper
-  JsonParseException -> 
+  JsonParseException ->
       com.twitter.finatra.http.internal.exceptions.json.JsonParseExceptionMapper
-  CaseClassMappingException -> 
+  CaseClassMappingException ->
       com.twitter.finatra.http.internal.exceptions.json.CaseClassExceptionMapper
 
-  The manager walks the exception type hierarchy starting at the given 
-  exceptiontype and moving up the inheritence chain until it finds mapper 
-  configured for the type. In this manner an ExceptionMapper[Throwable] will 
+  The manager walks the exception type hierarchy starting at the given
+  exceptiontype and moving up the inheritence chain until it finds mapper
+  configured for the type. In this manner an ExceptionMapper[Throwable] will
   be the last mapper invoked and performs as the "default".
 
-  Thus, to change the "default" mapper, simply adding a new mapper over the 
-  Throwable type will suffice, i.e., ExceptionMapper[Throwable] to the 
-  ExceptionManager. There  are multiple ways to add a mapper. Either through 
-  the HttpRouter: 
+  Thus, to change the "default" mapper, simply adding a new mapper over the
+  Throwable type will suffice, i.e., ExceptionMapper[Throwable] to the
+  ExceptionManager. There  are multiple ways to add a mapper. Either through
+  the HttpRouter:
 
 
     override def configureHttp(router: HttpRouter): Unit = {
@@ -410,8 +433,8 @@ All notable changes to this project will be documented in this file. Note that `
       ...)
 
 
-  This also means we can simplify the HttpServer as we no longer need to expose 
-  any "framework" module for overridding the default ExceptionMappers. So the 
+  This also means we can simplify the HttpServer as we no longer need to expose
+  any "framework" module for overridding the default ExceptionMappers. So the
   "def exceptionMapperModule" has also been removed.``RB_ID=868614``
 * finatra-http: Specify HTTP Java API consistently. ``RB_ID=868264``
 * inject-core: Clean up inject.Logging trait. Remove dead code from Logging.

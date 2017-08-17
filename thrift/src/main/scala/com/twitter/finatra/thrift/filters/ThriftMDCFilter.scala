@@ -13,7 +13,10 @@ import org.slf4j.MDC
 @Singleton
 class ThriftMDCFilter extends ThriftFilter {
 
-  override def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U] = {
+  override def apply[T, U](
+    request: ThriftRequest[T],
+    service: Service[ThriftRequest[T], U]
+  ): Future[U] = {
     MDC.put("method", request.methodName)
 
     for (id <- request.clientId) {

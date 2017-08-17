@@ -30,10 +30,13 @@ scala_library(
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
     'finatra/jackson/src/main/resources',
+    'finatra/inject/inject-slf4j/src/main/scala:scala',
+    'util/util-app/src/main/scala:scala',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
   java_sources=[
     'finatra/jackson/src/main/java'
   ],
+  strict_deps=True,
 )

@@ -11,17 +11,15 @@ import scala.collection._
 import scala.collection.mutable.ArrayBuffer
 
 object InMemoryHttpService {
-  def fromInjector[Ann <: JavaAnnotation : Manifest](injector: Injector): InMemoryHttpService = {
+  def fromInjector[Ann <: JavaAnnotation: Manifest](injector: Injector): InMemoryHttpService = {
     injector.instance[Service[Request, Response], Ann].asInstanceOf[InMemoryHttpService]
   }
 }
 
-class InMemoryHttpService
-  extends Service[Request, Response]
-  with Resettable
-  with Logging {
+class InMemoryHttpService extends Service[Request, Response] with Resettable with Logging {
 
-  private val responseMap = mutable.Map[RequestKey, ArrayBuffer[ResponseWithExpectedBody]]().withDefaultValue(ArrayBuffer())
+  private val responseMap =
+    mutable.Map[RequestKey, ArrayBuffer[ResponseWithExpectedBody]]().withDefaultValue(ArrayBuffer())
   val recordedRequests = ArrayBuffer[Request]()
   var overrideResponse: Option[Response] = None
 
@@ -40,7 +38,12 @@ class InMemoryHttpService
     mock(Get, path, andReturn, sticky)
   }
 
-  def mockPost(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
+  def mockPost(
+    path: String,
+    withBody: String = null,
+    andReturn: Response,
+    sticky: Boolean = false
+  ) {
     mock(Post, path, andReturn, sticky, Option(withBody))
   }
 
@@ -48,11 +51,16 @@ class InMemoryHttpService
     mock(Put, path, andReturn, sticky)
   }
 
-  def mock(method: Method, path: String, andReturn: Response, sticky: Boolean, withBody: Option[String] = None): Unit = {
+  def mock(
+    method: Method,
+    path: String,
+    andReturn: Response,
+    sticky: Boolean,
+    withBody: Option[String] = None
+  ): Unit = {
     val existing = responseMap(RequestKey(method, path))
     val newEntry = ResponseWithExpectedBody(andReturn, withBody, sticky = sticky)
-    responseMap(
-      RequestKey(method, path)) = existing :+ newEntry
+    responseMap(RequestKey(method, path)) = existing :+ newEntry
   }
 
   override def reset() {
@@ -86,11 +94,14 @@ class InMemoryHttpService
   }
 
   private def hasExpectedBodies(existing: ArrayBuffer[ResponseWithExpectedBody]): Boolean = {
-    existing exists {_.expectedBody.isDefined}
+    existing exists { _.expectedBody.isDefined }
   }
 
-  private def lookupPostResponseWithBody(request: Request, existing: ArrayBuffer[ResponseWithExpectedBody]): Response = {
-    val found = existing find {_.expectedBody == Some(request.contentString)} getOrElse {
+  private def lookupPostResponseWithBody(
+    request: Request,
+    existing: ArrayBuffer[ResponseWithExpectedBody]
+  ): Response = {
+    val found = existing find { _.expectedBody == Some(request.contentString) } getOrElse {
       throw new PostRequestWithIncorrectBodyException(request + " with expected body not mocked")
     }
 
@@ -101,14 +112,12 @@ class InMemoryHttpService
     found.response
   }
 
-
-  case class RequestKey(
-    method: Method,
-    path: String)
+  case class RequestKey(method: Method, path: String)
 
   case class ResponseWithExpectedBody(
     response: Response,
     expectedBody: Option[String],
-    sticky: Boolean)
+    sticky: Boolean
+  )
 
 }

@@ -10,9 +10,7 @@ import com.twitter.finatra.thrift.{ThriftFilter, ThriftServer}
 
 object DoEverythingCombinedServerMain extends DoEverythingCombinedServer
 
-class DoEverythingCombinedServer
-  extends HttpServer
-  with ThriftServer {
+class DoEverythingCombinedServer extends HttpServer with ThriftServer {
 
   flag("magicNum", "26", "Magic number")
 

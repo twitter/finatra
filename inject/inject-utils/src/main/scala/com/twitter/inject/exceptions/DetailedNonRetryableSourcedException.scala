@@ -3,11 +3,10 @@ package com.twitter.inject.exceptions
 import scala.runtime.ScalaRunTime
 import scala.util.control.NoStackTrace
 
-class DetailedNonRetryableSourcedException(
-  val message: String = "")
-  extends Exception(message)
-  with NoStackTrace
-  with NonRetryableException {
+class DetailedNonRetryableSourcedException(val message: String = "")
+    extends Exception(message)
+    with NoStackTrace
+    with NonRetryableException {
 
   /**
    * The named component responsible for causing this exception.

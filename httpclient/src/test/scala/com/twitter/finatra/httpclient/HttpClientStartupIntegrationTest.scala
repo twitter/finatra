@@ -8,13 +8,9 @@ import com.twitter.inject.app.TestInjector
 class HttpClientStartupIntegrationTest extends Test {
 
   test("startup non ssl") {
-    val injector = TestInjector(
-      modules = Seq(FinatraJacksonModule, new HttpClientModule {
-        override val dest = "flag!myservice"
-      }),
-      flags = Map(
-        "com.twitter.server.resolverMap" -> "myservice=nil!"))
-      .create
+    val injector = TestInjector(modules = Seq(FinatraJacksonModule, new HttpClientModule {
+      override val dest = "flag!myservice"
+    }), flags = Map("com.twitter.server.resolverMap" -> "myservice=nil!")).create
 
     injector.instance[HttpClient]
   }
@@ -25,9 +21,8 @@ class HttpClientStartupIntegrationTest extends Test {
         override val dest = "flag!myservice"
         override val sslHostname = Some("foo")
       }),
-      flags = Map(
-        "com.twitter.server.resolverMap" -> "myservice=nil!"))
-      .create
+      flags = Map("com.twitter.server.resolverMap" -> "myservice=nil!")
+    ).create
 
     injector.instance[HttpClient]
   }

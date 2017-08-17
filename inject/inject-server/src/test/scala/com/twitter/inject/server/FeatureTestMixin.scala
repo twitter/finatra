@@ -17,9 +17,7 @@ import org.scalatest.{Suite, SuiteMixin}
  *
  * @see [[com.twitter.inject.IntegrationTestMixin]]
  */
-trait FeatureTestMixin
-  extends SuiteMixin
-  with IntegrationTestMixin { this: Suite =>
+trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suite =>
 
   protected def server: EmbeddedTwitterServer
 
@@ -29,10 +27,12 @@ trait FeatureTestMixin
 
   override protected def beforeAll() {
     if (server.isStarted && hasBoundFields) {
-      throw new Exception("ERROR: Server started before integrationTestModule added. " +
-        "@Bind will not work unless references to the server are lazy, or within a ScalaTest " +
-        "lifecycle method or test method, or the integrationTestModule is manually added as " +
-        "an override module.")
+      throw new Exception(
+        "ERROR: Server started before integrationTestModule added. " +
+          "@Bind will not work unless references to the server are lazy, or within a ScalaTest " +
+          "lifecycle method or test method, or the integrationTestModule is manually added as " +
+          "an override module."
+      )
     }
 
     assert(server.isInjectable)

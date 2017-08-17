@@ -12,4 +12,3 @@ class NonInjectionThriftServer extends ThriftServer {
     router.add(new NonInjectionController())
   }
 }
-

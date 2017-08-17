@@ -25,15 +25,23 @@ class PathPatternTest extends Test {
     PathPattern("/store/cars/:id").extract("/store/cars/123") should equal(Some(Map("id" -> "123")))
     PathPattern("/store/cars/:id").extract("/asdf/cars/123") should equal(None)
 
-    PathPattern("/cars/:make/:model").extract("/cars/ford/explorer") should equal(Some(Map("make" -> "ford", "model" -> "explorer")))
+    PathPattern("/cars/:make/:model").extract("/cars/ford/explorer") should equal(
+      Some(Map("make" -> "ford", "model" -> "explorer"))
+    )
     PathPattern("/cars/:make/:model").extract("/cars/foo/ford/explorer") should equal(None)
 
-    PathPattern("/cars/:make/:model").extract("/cars/1-1/2") should equal(Some(Map("make" -> "1-1", "model" -> "2")))
+    PathPattern("/cars/:make/:model").extract("/cars/1-1/2") should equal(
+      Some(Map("make" -> "1-1", "model" -> "2"))
+    )
     PathPattern("/cars/:make/:model").extract("/cars/ford/") should equal(None)
     PathPattern("/cars/:make/:model").extract("/cars/ford") should equal(None)
 
-    PathPattern("/store/cars/:make/:model").extract("/store/cars/ford/explorer") should equal(Some(Map("make" -> "ford", "model" -> "explorer")))
-    PathPattern("/cars/:make/:model/:*").extract("/cars/ford/explorer/foo/bar") should equal(Some(Map("make" -> "ford", "model" -> "explorer", "*" -> "foo/bar")))
+    PathPattern("/store/cars/:make/:model").extract("/store/cars/ford/explorer") should equal(
+      Some(Map("make" -> "ford", "model" -> "explorer"))
+    )
+    PathPattern("/cars/:make/:model/:*").extract("/cars/ford/explorer/foo/bar") should equal(
+      Some(Map("make" -> "ford", "model" -> "explorer", "*" -> "foo/bar"))
+    )
   }
 
   test("non capture group syntax") {

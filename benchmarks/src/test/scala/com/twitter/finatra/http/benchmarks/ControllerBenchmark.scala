@@ -17,16 +17,16 @@ class ControllerBenchmark {
 
   val injector =
     TestInjector(
-      flags = Map(
-        "http.response.charset.enabled" -> "false"),
+      flags = Map("http.response.charset.enabled" -> "false"),
       modules = Seq(
         ExceptionManagerModule,
         MessageBodyModule,
         FinatraJacksonModule,
         MustacheModule,
         DocRootModule,
-        NullStatsReceiverModule))
-      .create
+        NullStatsReceiverModule
+      )
+    ).create
 
   val httpRouter = injector.instance[HttpRouter]
 

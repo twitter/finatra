@@ -10,8 +10,8 @@ import org.apache.commons.lang.ClassUtils
 
 private[finatra] class FinatraDefaultMessageBodyWriter @Inject()(
   @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean,
-  mapper: FinatraObjectMapper)
-  extends DefaultMessageBodyWriter {
+  mapper: FinatraObjectMapper
+) extends DefaultMessageBodyWriter {
 
   private val jsonCharset = {
     if (includeContentTypeCharset) JSON_UTF_8

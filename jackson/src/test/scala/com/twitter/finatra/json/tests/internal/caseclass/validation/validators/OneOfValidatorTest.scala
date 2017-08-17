@@ -10,9 +10,7 @@ case class OneOfExample(@OneOf(value = Array("a", "B", "c")) enumValue: String)
 case class OneOfSeqExample(@OneOf(Array("a", "B", "c")) enumValue: Seq[String])
 case class OneOfInvalidTypeExample(@OneOf(Array("a", "B", "c")) enumValue: Long)
 
-class OneOfValidatorTest
-  extends ValidatorTest
-  with GeneratorDrivenPropertyChecks {
+class OneOfValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
 
   val oneOfValues = Set("a", "B", "c")
 
@@ -27,9 +25,8 @@ class OneOfValidatorTest
 
     forAll(failValue) { value =>
       validate[OneOfExample](value) should equal(
-        Invalid(
-        errorMessage(value),
-        ErrorCode.InvalidValues(Set(value), oneOfValues)))
+        Invalid(errorMessage(value), ErrorCode.InvalidValues(Set(value), oneOfValues))
+      )
     }
   }
 
@@ -47,13 +44,13 @@ class OneOfValidatorTest
   }
 
   test("fail validation for invalid value in seq") {
-    val failValue = Gen.nonEmptyContainerOf[Seq, String](Gen.alphaStr.filter(!oneOfValues.contains(_)))
+    val failValue =
+      Gen.nonEmptyContainerOf[Seq, String](Gen.alphaStr.filter(!oneOfValues.contains(_)))
 
     forAll(failValue) { value =>
       validate[OneOfSeqExample](value) should equal(
-        Invalid(
-        errorMessage(value),
-        ErrorCode.InvalidValues(value.toSet, oneOfValues)))
+        Invalid(errorMessage(value), ErrorCode.InvalidValues(value.toSet, oneOfValues))
+      )
     }
   }
 
@@ -62,9 +59,8 @@ class OneOfValidatorTest
 
     forAll(failValue) { value =>
       validate[OneOfInvalidTypeExample](value) should equal(
-        Invalid(
-        errorMessage(value),
-        ErrorCode.InvalidValues(Set(value.toString), oneOfValues)))
+        Invalid(errorMessage(value), ErrorCode.InvalidValues(Set(value.toString), oneOfValues))
+      )
     }
   }
 
@@ -73,9 +69,6 @@ class OneOfValidatorTest
   }
 
   private def errorMessage(value: Any): String = {
-    OneOfValidator.errorMessage(
-      messageResolver,
-      oneOfValues,
-      value)
+    OneOfValidator.errorMessage(messageResolver, oneOfValues, value)
   }
 }

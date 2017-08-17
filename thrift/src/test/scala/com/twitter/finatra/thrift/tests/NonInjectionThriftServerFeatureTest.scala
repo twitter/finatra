@@ -8,8 +8,7 @@ import com.twitter.util.{Await, Future}
 
 /** Tests that we can successfully bring up and query a service without injection. */
 class NonInjectionThriftServerFeatureTest extends FeatureTest {
-  override val server = new EmbeddedThriftServer(
-    twitterServer = new NonInjectionThriftServer())
+  override val server = new EmbeddedThriftServer(twitterServer = new NonInjectionThriftServer())
 
   val client = server.thriftClient[NonInjectionService[Future]](clientId = "client")
 

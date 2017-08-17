@@ -12,7 +12,12 @@ class ValidatorTest extends Test {
   val messageResolver = new ValidationMessageResolver
   val validationManager = new ValidationManager(messageResolver)
 
-  def validate[A <: Annotation, V](clazz: Class[_], paramName: String, annotationClass: Class[A], value: V): ValidationResult = {
+  def validate[A <: Annotation, V](
+    clazz: Class[_],
+    paramName: String,
+    annotationClass: Class[A],
+    value: V
+  ): ValidationResult = {
     val annotation = getValidationAnnotation[A](clazz, paramName, annotationClass)
     validationManager.getValidator[A, V](annotation).isValid(value)
   }
@@ -26,7 +31,11 @@ class ValidatorTest extends Test {
     } yield annotation
   }
 
-  def getValidationAnnotation[A <: Annotation](clazz: Class[_], paramName: String, annotationClass: Class[A]): A = {
+  def getValidationAnnotation[A <: Annotation](
+    clazz: Class[_],
+    paramName: String,
+    annotationClass: Class[A]
+  ): A = {
     val annotations = getValidationAnnotations(clazz, paramName)
     findAnnotation(annotationClass, annotations)
   }

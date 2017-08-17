@@ -6,9 +6,7 @@ import net.codingwell.scalaguice._
 /**
  * Guice/twitter.util.Flag integrations usable from both non-private and private Guice modules
  */
-trait TwitterBaseModule
-  extends TwitterModuleFlags
-  with TwitterModuleLifecycle {
+trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
 
   /**
    * Additional modules to be composed into this module

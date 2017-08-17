@@ -7,7 +7,6 @@ import com.twitter.util.{Future, Throw, Try}
 
 class OptionHttpConversionsTest extends Test {
 
-
   test("Option[T]#valueOrNotFound when Some") {
     Some(1).valueOrNotFound("foo") should equal(1)
   }
@@ -28,46 +27,34 @@ class OptionHttpConversionsTest extends Test {
   }
 
   test("Option[T]#toFutureOrNotFound when Some") {
-    assertFuture(
-      Some(1).toFutureOrNotFound(),
-      Future(1))
+    assertFuture(Some(1).toFutureOrNotFound(), Future(1))
   }
 
   test("Option[T]#toFutureOrBadRequest when Some") {
-    assertFuture(
-      Some(1).toFutureOrBadRequest(),
-      Future(1))
+    assertFuture(Some(1).toFutureOrBadRequest(), Future(1))
   }
 
   test("Option[T]#toFutureOrServiceError when Some") {
-    assertFuture(
-      Some(1).toFutureOrServerError(),
-      Future(1))
+    assertFuture(Some(1).toFutureOrServerError(), Future(1))
   }
 
   test("Option[T]#toFutureOrForbidden when Some") {
-    assertFuture(
-      Some(1).toFutureOrForbidden(),
-      Future(1))
+    assertFuture(Some(1).toFutureOrForbidden(), Future(1))
   }
 
   test("Option[T]#toFutureOrNotFound when None") {
-    assertFailedFuture[NotFoundException](
-      None.toFutureOrNotFound())
+    assertFailedFuture[NotFoundException](None.toFutureOrNotFound())
   }
 
   test("Option[T]#toFutureOrBadRequest when None") {
-    assertFailedFuture[BadRequestException](
-      None.toFutureOrBadRequest())
+    assertFailedFuture[BadRequestException](None.toFutureOrBadRequest())
   }
 
   test("Option[T]#toFutureOrServiceError when None") {
-    assertFailedFuture[InternalServerErrorException](
-      None.toFutureOrServerError())
+    assertFailedFuture[InternalServerErrorException](None.toFutureOrServerError())
   }
 
   test("Option[T]#toFutureOrForbidden when None") {
-    assertFailedFuture[ForbiddenException](
-      None.toFutureOrForbidden())
+    assertFailedFuture[ForbiddenException](None.toFutureOrForbidden())
   }
 }

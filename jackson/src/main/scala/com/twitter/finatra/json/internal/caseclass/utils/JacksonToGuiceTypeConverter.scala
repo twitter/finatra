@@ -32,10 +32,13 @@ private[internal] object JacksonToGuiceTypeConverter {
 
     typeArguments match {
       case Seq() => toWrapper(javaType.getRawClass)
-      case args => javaType.getRawClass match {
-        case c: Class[_] if c.getEnclosingClass == null => Types.newParameterizedType(c, args.map(typeOf(_)): _*)
-        case c: Class[_] => Types.newParameterizedTypeWithOwner(c.getEnclosingClass, c, args.map(typeOf(_)): _*)
-      }
+      case args =>
+        javaType.getRawClass match {
+          case c: Class[_] if c.getEnclosingClass == null =>
+            Types.newParameterizedType(c, args.map(typeOf(_)): _*)
+          case c: Class[_] =>
+            Types.newParameterizedTypeWithOwner(c.getEnclosingClass, c, args.map(typeOf(_)): _*)
+        }
     }
   }
 }

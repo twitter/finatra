@@ -12,7 +12,8 @@ class ComplexService @Inject()(
   @Named("str2") string2: String,
   defaultInt: Int,
   @Flag("moduleDuration") duration1: Duration,
-  @Assisted name: String) {
+  @Assisted name: String
+) {
 
   def execute = {
     exampleService.doit + " " + name + " " + duration1.getMillis

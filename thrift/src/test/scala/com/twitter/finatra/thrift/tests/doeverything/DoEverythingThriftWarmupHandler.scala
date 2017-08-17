@@ -9,10 +9,7 @@ import javax.inject.{Inject, Singleton}
 import scala.reflect.ClassTag
 
 @Singleton
-class DoEverythingThriftWarmupHandler @Inject()(
-  warmup: ThriftWarmup)
-  extends Handler
-  with Logging {
+class DoEverythingThriftWarmupHandler @Inject()(warmup: ThriftWarmup) extends Handler with Logging {
 
   private val clientId = ClientId("client123")
 
@@ -20,23 +17,19 @@ class DoEverythingThriftWarmupHandler @Inject()(
     try {
       clientId.asCurrent {
         // warm up thrift service(s) here
-        warmup.send(
-          method = Echo,
-          args = Echo.Args("hello")){ result =>
-            assert(result.isReturn)
-            assertExpected(result.get(), "hello")
-          }
+        warmup.send(method = Echo, args = Echo.Args("hello")) { result =>
+          assert(result.isReturn)
+          assertExpected(result.get(), "hello")
+        }
 
-        warmup.send(
-          method = Uppercase,
-          args = Uppercase.Args("hi")){ result =>
-            assertExpected(result.get(), "HI")
-          }
+        warmup.send(method = Uppercase, args = Uppercase.Args("hi")) { result =>
+          assertExpected(result.get(), "HI")
+        }
       }
     } catch {
       case e: Throwable =>
         error(e.getMessage, e)
-    } finally{
+    } finally {
       warmup.close()
     }
     info("Warm up done.")
@@ -45,7 +38,9 @@ class DoEverythingThriftWarmupHandler @Inject()(
   /* Private */
 
   private def assertExpected[T: ClassTag](expected: T, received: T): Unit = {
-    assert(expected == received,
-      s"Warmup request assertion failed. Expected $expected, received: $received")
+    assert(
+      expected == received,
+      s"Warmup request assertion failed. Expected $expected, received: $received"
+    )
   }
 }

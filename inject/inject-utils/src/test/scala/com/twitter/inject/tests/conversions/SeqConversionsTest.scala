@@ -6,11 +6,11 @@ import com.twitter.inject.conversions.seq._
 class SeqConversionsTest extends Test {
 
   test("RichSeq#extractMap") {
-    val map = Seq("a", "and") createMap(_.size, _.toUpperCase)
+    val map = Seq("a", "and") createMap (_.size, _.toUpperCase)
     map should equal(Map(1 -> "A", 3 -> "AND"))
   }
   test("RichSeq#groupBySingle chooses last element in seq when key collision occurs") {
-    val map = Seq("a", "and", "the") groupBySingleValue {_.size}
+    val map = Seq("a", "and", "the") groupBySingleValue { _.size }
     map should equal(Map(3 -> "the", 1 -> "a"))
   }
   test("RichSeq#findItemAfter") {

@@ -10,20 +10,16 @@ import org.mockito.Matchers.anyObject
 import redis.clients.jedis.{Jedis => JedisClient}
 import scala.util.Random
 
-class TinyUrlServerFeatureTest
-  extends FeatureTest
-  with Mockito {
+class TinyUrlServerFeatureTest extends FeatureTest with Mockito {
 
   val mockJedisClient = smartMock[JedisClient]
   override val server =
     new EmbeddedHttpServer(new TinyUrlServer)
-        .bind[JedisClient](mockJedisClient)
+      .bind[JedisClient](mockJedisClient)
 
   test("Server#return shortened url") {
     mockJedisClient.get(anyObject[String]()) returns null
-    mockJedisClient.set(
-      anyObject[String](),
-      anyObject[String]()) returns "OK"
+    mockJedisClient.set(anyObject[String](), anyObject[String]()) returns "OK"
 
     val port = server.httpExternalPort
     val path =
@@ -31,67 +27,56 @@ class TinyUrlServerFeatureTest
 
     server.httpPost(
       path = "/url",
-      postBody =
-        """
+      postBody = """
           {
             "url" : "http://www.google.com"
           }
         """,
       andExpect = Created,
-      withJsonBody =
-        s"""
+      withJsonBody = s"""
           {
             "tiny_url" : "http://127.0.0.1:$port/$path"
           }
-        """)
+        """
+    )
   }
 
   test("Server#resolve shortened url") {
     mockJedisClient.get(anyObject[String]()) returns null
-    mockJedisClient.set(
-      anyObject[String](),
-      anyObject[String]()) returns "OK"
+    mockJedisClient.set(anyObject[String](), anyObject[String]()) returns "OK"
 
-    val response = server.httpPostJson[PostUrlResponse](
-      path = "/url",
-      postBody =
-        """
+    val response =
+      server.httpPostJson[PostUrlResponse](path = "/url", postBody = """
           {
             "url" : "http://www.google.com"
           }
-        """,
-      andExpect = Created)
+        """, andExpect = Created)
 
-    mockJedisClient.get(
-      anyObject[String]()) returns "http://www.google.com"
+    mockJedisClient.get(anyObject[String]()) returns "http://www.google.com"
 
     server.httpGet(
       path = response.tinyUrl.substring(response.tinyUrl.lastIndexOf("/")),
-      andExpect = MovedPermanently)
+      andExpect = MovedPermanently
+    )
   }
 
   test("Server# return BadRequest for garbage url") {
-    server.httpPost(
-      path = "/url",
-      postBody =
-        """
+    server.httpPost(path = "/url", postBody = """
           {
             "url" : "foo://-oomw384$*garbageoogle.^com"
           }
-        """,
-      andExpect = BadRequest)
+        """, andExpect = BadRequest)
   }
 
   test("Server#return NotFound for unknown tiny url") {
     val id =
       java.lang.Long.toString(
         Counter.InitialValue + math.abs(new Random(Counter.InitialValue).nextLong()),
-        EncodingRadix)
+        EncodingRadix
+      )
 
     mockJedisClient.get(anyObject[String]()) returns null
 
-    server.httpGet(
-      path = s"/$id",
-      andExpect = NotFound)
+    server.httpGet(path = s"/$id", andExpect = NotFound)
   }
 }

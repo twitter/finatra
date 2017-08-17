@@ -11,18 +11,12 @@ object StatTestUtils extends Matchers {
     statsReceiver.gauges.clear()
   }
 
-  def assertCounter(
-    statsReceiver: InMemoryStatsReceiver,
-    name: String,
-    expectedValue: Int) {
-    val actualValue = statsReceiver.counters.get(Seq(name)) getOrElse 0
+  def assertCounter(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Long) {
+    val actualValue = statsReceiver.counters.get(Seq(name)) getOrElse 0L
     actualValue should equal(expectedValue)
   }
 
-  def assertGauge(
-    statsReceiver: InMemoryStatsReceiver,
-    name: String,
-    expectedValue: Float) {
+  def assertGauge(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Float) {
     val actualValue = statsReceiver.gauges.get(Seq(name)).getOrElse(() => 0f)
     if (expectedValue != actualValue()) {
       println("Failure asserting " + name)
@@ -33,8 +27,7 @@ object StatTestUtils extends Matchers {
   def printStatsAndCounters(statsReceiver: InMemoryStatsReceiver) {
     def pretty(map: Iterator[(Seq[String], Any)]) = {
       for ((keys, value) <- map) {
-        println(
-          keys.mkString("/") + " = " + value)
+        println(keys.mkString("/") + " = " + value)
       }
     }
 
@@ -45,22 +38,24 @@ object StatTestUtils extends Matchers {
 
   def pretty(map: Iterator[(Seq[String], Any)]) = {
     for ((keys, value) <- map) {
-      println(
-        keys.mkString("/") + " = " + value)
+      println(keys.mkString("/") + " = " + value)
     }
   }
 
   def printStats(statsReceiver: InMemoryStatsReceiver) {
-    val stats = statsReceiver.stats.map { case (keys, values) =>
-      keys.mkString("/") -> values.mkString(", ")
+    val stats = statsReceiver.stats.map {
+      case (keys, values) =>
+        keys.mkString("/") -> values.mkString(", ")
     }.toSeq
 
-    val counters = statsReceiver.counters.map { case (keys, valueInt) =>
-      keys.mkString("/") -> valueInt
+    val counters = statsReceiver.counters.map {
+      case (keys, valueInt) =>
+        keys.mkString("/") -> valueInt
     }.toSeq
 
-    val gauges = statsReceiver.gauges.map { case (keys, intFunc) =>
-      keys.mkString("/") -> intFunc()
+    val gauges = statsReceiver.gauges.map {
+      case (keys, intFunc) =>
+        keys.mkString("/") -> intFunc()
     }.toSeq
 
     for ((key, value) <- (stats ++ counters ++ gauges).sortBy(_._1)) {

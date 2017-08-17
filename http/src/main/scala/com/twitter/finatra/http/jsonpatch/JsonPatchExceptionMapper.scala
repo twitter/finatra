@@ -6,9 +6,8 @@ import com.twitter.finatra.http.response.{ErrorsResponse, ResponseBuilder}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class JsonPatchExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends ExceptionMapper[JsonPatchException] {
+class JsonPatchExceptionMapper @Inject()(response: ResponseBuilder)
+    extends ExceptionMapper[JsonPatchException] {
 
   override def toResponse(request: Request, e: JsonPatchException): Response =
     response.badRequest.json(ErrorsResponse(e.getMessage))

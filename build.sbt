@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
-lazy val projectVersion = "2.11.0"
+lazy val projectVersion = "2.12.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -38,10 +38,10 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "6.45.0" + suffix
-  val scroogeVersion = "4.18.0" + suffix
-  val twitterserverVersion = "1.30.0" + suffix
-  val utilVersion = "6.45.0" + suffix
+  val finagleVersion = "7.0.0" + suffix
+  val scroogeVersion = "4.19.0" + suffix
+  val twitterserverVersion = "1.31.0" + suffix
+  val utilVersion = "7.0.0" + suffix
 
   val bijectionVersion = "0.9.5"
   val commonsCodec = "1.9"
@@ -213,7 +213,7 @@ lazy val finatraExamples =
     exampleInjectJavaServer,
     exampleWebDashboard,
     helloWorld,
-    helloWorldHeroku,
+    // helloWorldHeroku, // CSL-5015
     streamingExample,
     thriftExampleServer,
     thriftJavaExampleServer,
@@ -244,9 +244,11 @@ lazy val root = (project in file("."))
     unidocProjectFilter in (ScalaUnidoc, unidoc) := inAnyProject
       -- inProjects(benchmarks)
       /* // START EXAMPLES
-      -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer, exampleWebDashboard,
-         helloWorld, helloWorldHeroku, streamingExample,
-         thriftExampleIdl, thriftExampleServer, thriftJavaExampleIdl, thriftJavaExampleServer,
+      -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
+         exampleWebDashboard, helloWorld,
+         // helloWorldHeroku, // CSL-5015
+         streamingExample, thriftExampleIdl, thriftExampleServer,
+         thriftJavaExampleIdl, thriftJavaExampleServer,
          tinyUrl, twitterClone)
       */ // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
@@ -449,6 +451,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-thrift" % versions.finagleVersion,
       "com.twitter" %% "finagle-thriftmux" % versions.finagleVersion,
+      "com.twitter" %% "finagle-netty3" % versions.finagleVersion,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
       "com.twitter" %% "finagle-http" % versions.finagleVersion % "test")
   ).dependsOn(
@@ -734,18 +737,19 @@ lazy val userguide = (project in file("doc"))
 
 /* // START EXAMPLES
 
-lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
-  .settings(exampleServerSettings)
-  .settings(
-    name := "hello-world-heroku",
-    moduleName := "hello-world-heroku",
-    libraryDependencies ++= Seq(
-      "com.github.rlazoti" %% "finagle-metrics" % "0.0.8"
-    )
-  ).dependsOn(
-    http % "test->test;compile->compile",
-    slf4j,
-    injectCore % "test->test")
+// TODO: Re-enable when finagle-metrics is updated (CSL-5015)
+// lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
+//   .settings(exampleServerSettings)
+//   .settings(
+//     name := "hello-world-heroku",
+//     moduleName := "hello-world-heroku",
+//     libraryDependencies ++= Seq(
+//       "com.github.rlazoti" %% "finagle-metrics" % "0.0.8"
+//     )
+//   ).dependsOn(
+//     http % "test->test;compile->compile",
+//     slf4j,
+//     injectCore % "test->test")
 
 lazy val helloWorld = (project in file("examples/hello-world"))
   .settings(exampleServerSettings)

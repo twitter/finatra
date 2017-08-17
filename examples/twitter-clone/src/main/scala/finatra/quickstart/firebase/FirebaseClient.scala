@@ -6,9 +6,7 @@ import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class FirebaseClient @Inject()(
-  httpClient: HttpClient,
-  mapper: FinatraObjectMapper) {
+class FirebaseClient @Inject()(httpClient: HttpClient, mapper: FinatraObjectMapper) {
 
   /** Writes data to path */
   def put[T](path: String, any: T): Future[Unit] = {
@@ -32,4 +30,3 @@ class FirebaseClient @Inject()(
     }
   }
 }
-

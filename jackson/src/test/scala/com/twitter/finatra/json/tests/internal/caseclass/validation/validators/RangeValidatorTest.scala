@@ -12,19 +12,29 @@ case class RangeDoubleExample(@Range(min = 1, max = 50) pointValue: Double)
 case class RangeFloatExample(@Range(min = 1, max = 50) pointValue: Float)
 case class RangeBigDecimalExample(@Range(min = 1, max = 50) pointValue: BigDecimal)
 case class RangeBigIntExample(@Range(min = 1, max = 50) pointValue: BigInt)
-case class RangeLargestLongBigDecimalExample(@Range(min = 1, max = Long.MaxValue) pointValue: BigDecimal)
+case class RangeLargestLongBigDecimalExample(
+  @Range(min = 1, max = Long.MaxValue) pointValue: BigDecimal
+)
 case class RangeLargestLongBigIntExample(@Range(min = 1, max = Long.MaxValue) pointValue: BigInt)
-case class RangeSecondLargestLongBigDecimalExample(@Range(min = 1, max = Long.MaxValue - 1) pointValue: BigDecimal)
-case class RangeSecondLargestLongBigIntExample(@Range(min = 1, max = Long.MaxValue - 1) pointValue: BigInt)
-case class RangeSmallestLongBigDecimalExample(@Range(min = Long.MinValue, max = 5) pointValue: BigDecimal)
-case class RangeSecondSmallestLongBigDecimalExample(@Range(min = Long.MinValue + 1, max = 5) pointValue: BigDecimal)
+case class RangeSecondLargestLongBigDecimalExample(
+  @Range(min = 1, max = Long.MaxValue - 1) pointValue: BigDecimal
+)
+case class RangeSecondLargestLongBigIntExample(
+  @Range(min = 1, max = Long.MaxValue - 1) pointValue: BigInt
+)
+case class RangeSmallestLongBigDecimalExample(
+  @Range(min = Long.MinValue, max = 5) pointValue: BigDecimal
+)
+case class RangeSecondSmallestLongBigDecimalExample(
+  @Range(min = Long.MinValue + 1, max = 5) pointValue: BigDecimal
+)
 case class RangeSmallestLongBigIntExample(@Range(min = Long.MinValue, max = 5) pointValue: BigInt)
-case class RangeSecondSmallestLongBigIntExample(@Range(min = Long.MinValue + 1, max = 5) pointValue: BigInt)
+case class RangeSecondSmallestLongBigIntExample(
+  @Range(min = Long.MinValue + 1, max = 5) pointValue: BigInt
+)
 case class RangeInvalidTypeExample(@Range(min = 1, max = 5) pointValue: String)
 
-class RangeValidatorTest
-  extends ValidatorTest
-  with GeneratorDrivenPropertyChecks {
+class RangeValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
 
   test("pass validation for int type") {
     val passValue = Gen.choose(1, 50)
@@ -40,8 +50,7 @@ class RangeValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeIntExample](value) should equal(
-        invalid(Integer.valueOf(value)))
+      validate[RangeIntExample](value) should equal(invalid(Integer.valueOf(value)))
     }
   }
 
@@ -59,8 +68,7 @@ class RangeValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeLongExample](value) should equal(
-        invalid(java.lang.Long.valueOf(value)))
+      validate[RangeLongExample](value) should equal(invalid(java.lang.Long.valueOf(value)))
     }
   }
 
@@ -78,8 +86,7 @@ class RangeValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeDoubleExample](value) should equal(
-        invalid(java.lang.Double.valueOf(value)))
+      validate[RangeDoubleExample](value) should equal(invalid(java.lang.Double.valueOf(value)))
     }
   }
 
@@ -97,8 +104,7 @@ class RangeValidatorTest
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
 
     forAll(failValue) { value =>
-      validate[RangeFloatExample](value) should equal(
-        invalid(java.lang.Float.valueOf(value)))
+      validate[RangeFloatExample](value) should equal(invalid(java.lang.Float.valueOf(value)))
     }
   }
 
@@ -116,7 +122,7 @@ class RangeValidatorTest
     val smallerValue = Gen.choose(Float.MinValue, 0.0F)
     val largerValue = Gen.choose(51.0F, Float.MaxValue)
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
-    val failBigDecimalValue = for {value <- failValue} yield BigDecimal.decimal(value)
+    val failBigDecimalValue = for { value <- failValue } yield BigDecimal.decimal(value)
 
     forAll(failBigDecimalValue) { value =>
       validate[RangeBigDecimalExample](value) should equal(invalid(value))
@@ -137,7 +143,7 @@ class RangeValidatorTest
     val smallerValue = Gen.choose(Int.MinValue, 0)
     val largerValue = Gen.choose(51, Int.MaxValue)
     val failValue = Gen.frequency((1, smallerValue), (1, largerValue))
-    val failBigIntValue = for {value <- failValue} yield BigInt(value)
+    val failBigIntValue = for { value <- failValue } yield BigInt(value)
 
     forAll(failBigIntValue) { value =>
       validate[RangeBigIntExample](value) should equal(invalid(value))
@@ -157,7 +163,8 @@ class RangeValidatorTest
   test("fail validation for very large big decimal type") {
     val value = BigDecimal(Long.MaxValue)
     validate[RangeSecondLargestLongBigDecimalExample](value) should equal(
-      invalid(value, maxValue = Long.MaxValue - 1))
+      invalid(value, maxValue = Long.MaxValue - 1)
+    )
   }
 
   test("pass validation for very large big int type") {
@@ -173,7 +180,8 @@ class RangeValidatorTest
   test("fail validation for very large big int type") {
     val value = BigInt(Long.MaxValue)
     validate[RangeSecondLargestLongBigIntExample](value) should equal(
-      invalid(value, maxValue = Long.MaxValue - 1))
+      invalid(value, maxValue = Long.MaxValue - 1)
+    )
   }
 
   test("pass validation for very small big int type") {
@@ -189,7 +197,8 @@ class RangeValidatorTest
   test("fail validation for very small big int type") {
     val value = BigInt(Long.MinValue)
     validate[RangeSecondSmallestLongBigIntExample](value) should equal(
-      invalid(value, minValue = Long.MinValue + 1, maxValue = 5))
+      invalid(value, minValue = Long.MinValue + 1, maxValue = 5)
+    )
   }
 
   test("pass validation for very small big decimal type") {
@@ -205,43 +214,30 @@ class RangeValidatorTest
   test("fail validation for a very small big decimal type") {
     val value = BigDecimal(Long.MinValue)
     validate[RangeSecondSmallestLongBigDecimalExample](value) should equal(
-      invalid(value, minValue = Long.MinValue + 1, maxValue = 5))
+      invalid(value, minValue = Long.MinValue + 1, maxValue = 5)
+    )
   }
 
   test("fail for unsupported class type") {
     intercept[IllegalArgumentException] {
-      validate[RangeInvalidTypeExample]("strings are not supported")}
+      validate[RangeInvalidTypeExample]("strings are not supported")
+    }
   }
 
   private def validate[C: Manifest](value: Any): ValidationResult = {
     super.validate(manifest[C].runtimeClass, "pointValue", classOf[Range], value)
   }
 
-  private def errorMessage(
-    value: Number,
-    minValue: Long = 1,
-    maxValue: Long = 50): String = {
+  private def errorMessage(value: Number, minValue: Long = 1, maxValue: Long = 50): String = {
 
-    RangeValidator.errorMessage(
-      messageResolver,
-      value,
-      minValue,
-      maxValue)
+    RangeValidator.errorMessage(messageResolver, value, minValue, maxValue)
   }
 
-  private def errorCode(
-    value: Number,
-    minValue: Long = 1,
-    maxValue: Long = 50) = {
+  private def errorCode(value: Number, minValue: Long = 1, maxValue: Long = 50) = {
     ErrorCode.ValueOutOfRange(java.lang.Long.valueOf(value.longValue), minValue, maxValue)
   }
 
-  private def invalid(
-    value: Number,
-    minValue: Long = 1,
-    maxValue: Long = 50) = {
-    Invalid(
-      errorMessage(value, minValue, maxValue),
-      errorCode(value, minValue, maxValue))
+  private def invalid(value: Number, minValue: Long = 1, maxValue: Long = 50) = {
+    Invalid(errorMessage(value, minValue, maxValue), errorCode(value, minValue, maxValue))
   }
 }

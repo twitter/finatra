@@ -12,7 +12,7 @@ import scala.util.control.NonFatal
  */
 @Singleton
 private[thrift] class ThrowableExceptionMapper
-  extends AbstractFrameworkExceptionMapper[Throwable, Throwable] {
+    extends AbstractFrameworkExceptionMapper[Throwable, Throwable] {
 
   def handle(throwable: Throwable): Future[Throwable] = {
     throwable match {

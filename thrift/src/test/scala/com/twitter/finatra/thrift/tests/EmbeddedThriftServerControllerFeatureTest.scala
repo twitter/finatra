@@ -2,7 +2,11 @@ package com.twitter.finatra.thrift.tests
 
 import com.twitter.converter.thriftscala.Converter
 import com.twitter.finatra.thrift._
-import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, StatsFilter}
+import com.twitter.finatra.thrift.filters.{
+  AccessLoggingFilter,
+  ClientIdWhitelistFilter,
+  StatsFilter
+}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
@@ -42,7 +46,31 @@ class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
 
   test("more than 22 args") {
     Await.result(
-      client123.moreThanTwentyTwoArgs("one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree")
+      client123.moreThanTwentyTwoArgs(
+        "one",
+        "two",
+        "three",
+        "four",
+        "five",
+        "six",
+        "seven",
+        "eight",
+        "nine",
+        "ten",
+        "eleven",
+        "twelve",
+        "thirteen",
+        "fourteen",
+        "fifteen",
+        "sixteen",
+        "seventeen",
+        "eighteen",
+        "nineteen",
+        "twenty",
+        "twentyone",
+        "twentytwo",
+        "twentythree"
+      )
     ) should equal("foo")
   }
 }
@@ -60,9 +88,7 @@ class ConverterControllerServer extends ThriftServer {
   }
 }
 
-class ConverterController
-  extends Controller
-  with Converter.BaseServiceIface {
+class ConverterController extends Controller with Converter.BaseServiceIface {
   import com.twitter.converter.thriftscala.Converter._
 
   val uppercase = handle(Uppercase) { args: Uppercase.Args =>
@@ -72,7 +98,7 @@ class ConverterController
       Future.value(args.msg.toUpperCase)
   }
 
-  val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { args : MoreThanTwentyTwoArgs.Args =>
+  val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { args: MoreThanTwentyTwoArgs.Args =>
     Future.value("foo")
   }
 }

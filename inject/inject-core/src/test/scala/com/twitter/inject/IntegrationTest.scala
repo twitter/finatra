@@ -28,6 +28,4 @@ package com.twitter.inject
  * @see [[com.twitter.inject.Test Finatra Test Class]]
  * @see [[com.twitter.inject.IntegrationTestMixin Finatra IntegrationTestMixin]]
  */
-abstract class IntegrationTest
-  extends Test
-  with IntegrationTestMixin
+abstract class IntegrationTest extends Test with IntegrationTestMixin

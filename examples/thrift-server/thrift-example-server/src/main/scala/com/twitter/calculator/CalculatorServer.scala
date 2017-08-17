@@ -11,8 +11,7 @@ object CalculatorServerMain extends CalculatorServer
 class CalculatorServer extends ThriftServer {
   override val name = "calculator-server"
 
-  override def modules = Seq(
-    ClientIdWhitelistModule)
+  override def modules = Seq(ClientIdWhitelistModule)
 
   override def configureThrift(router: ThriftRouter) {
     router

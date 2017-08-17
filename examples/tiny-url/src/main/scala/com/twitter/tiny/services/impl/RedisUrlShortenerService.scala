@@ -11,11 +11,9 @@ object RedisUrlShortenerService {
   private[services] val KeyPrefix = "url-"
 }
 
-class RedisUrlShortenerService @Inject() (
-  client: JedisClient,
-  counter: Counter)
-  extends UrlShortenerService
-  with Logging {
+class RedisUrlShortenerService @Inject()(client: JedisClient, counter: Counter)
+    extends UrlShortenerService
+    with Logging {
 
   /**
    * Maps the given URL to a 32-radix integer based on the next value in
@@ -26,11 +24,9 @@ class RedisUrlShortenerService @Inject() (
    */
   def create(url: java.net.URL): String = {
     info(s"Creating shortened URL for: ${url.toString}")
-      // use the next value of the counter as the key in cache
+    // use the next value of the counter as the key in cache
     val nextValue = counter.next
-    client.set(
-      "%s%s".format(KeyPrefix, nextValue.toString),
-      url.toString)
+    client.set("%s%s".format(KeyPrefix, nextValue.toString), url.toString)
     java.lang.Long.toString(nextValue, EncodingRadix)
   }
 
@@ -42,8 +38,6 @@ class RedisUrlShortenerService @Inject() (
    */
   def get(id: String): Option[String] = {
     val value = java.lang.Long.valueOf(id, EncodingRadix)
-    Option(
-      client.get(
-        "%s%s".format(KeyPrefix, value.toString)))
+    Option(client.get("%s%s".format(KeyPrefix, value.toString)))
   }
 }

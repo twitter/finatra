@@ -13,14 +13,14 @@ private[http] class FinatraRequestContext(request: Request) extends RequestConte
   }
 
   override def getContentLength: Int = {
-    val contentLengthLong = request.contentLength getOrElse(
-      throw new FileUploadException("Content length must be provided."))
+    val contentLengthLong = request.contentLength getOrElse (throw new FileUploadException(
+      "Content length must be provided."
+    ))
     contentLengthLong.toInt
   }
 
   override def getContentType: String = {
-    request.contentType getOrElse(
-      throw new FileUploadException("Content type must be provided."))
+    request.contentType getOrElse (throw new FileUploadException("Content type must be provided."))
   }
 
   override def getInputStream: InputStream = {

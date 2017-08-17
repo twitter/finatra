@@ -12,7 +12,8 @@ class HttpRetryUtilsTest extends Test {
   val constantHttpSuccessPolicy = RetryPolicyUtils.constantRetry(
     start = 10.millis,
     numRetries = 4,
-    shouldRetry = ResponseUtils.Http4xxOr5xxResponses)
+    shouldRetry = ResponseUtils.Http4xxOr5xxResponses
+  )
 
   test("HTTP retry#with futures succeeds") {
     var numRuns = 0

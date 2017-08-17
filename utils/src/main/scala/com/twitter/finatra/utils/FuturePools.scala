@@ -8,13 +8,11 @@ object FuturePools {
 
   def fixedPool(name: String, size: Int): ExecutorServiceFuturePool = {
     new ExecutorServiceFuturePool(
-      Executors.newFixedThreadPool(size,
-        new NamedPoolThreadFactory(name)))
+      Executors.newFixedThreadPool(size, new NamedPoolThreadFactory(name))
+    )
   }
 
   def unboundedPool(name: String): ExecutorServiceFuturePool = {
-    new ExecutorServiceFuturePool(
-      Executors.newCachedThreadPool(
-        new NamedPoolThreadFactory(name)))
+    new ExecutorServiceFuturePool(Executors.newCachedThreadPool(new NamedPoolThreadFactory(name)))
   }
 }

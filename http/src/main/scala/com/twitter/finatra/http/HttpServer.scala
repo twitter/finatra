@@ -22,7 +22,8 @@ trait HttpServer extends BaseHttpServer {
     ExceptionManagerModule,
     jacksonModule,
     messageBodyModule,
-    mustacheModule)
+    mustacheModule
+  )
 
   /* Abstract */
 

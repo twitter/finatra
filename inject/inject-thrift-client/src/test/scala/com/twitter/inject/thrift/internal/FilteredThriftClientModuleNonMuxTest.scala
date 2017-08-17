@@ -12,12 +12,14 @@ import com.twitter.util.Future
 class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
 
   override val injector = TestInjector(
-    modules =
-      Seq(FilteredThriftClientModuleNonMux,
-        ThriftClientIdModule, StatsReceiverModule,
-        InjectorModule),
-    flags = Map("com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!"))
-    .create
+    modules = Seq(
+      FilteredThriftClientModuleNonMux,
+      ThriftClientIdModule,
+      StatsReceiverModule,
+      InjectorModule
+    ),
+    flags = Map("com.twitter.server.resolverMap" -> "greeter-thrift-service=nil!")
+  ).create
 
   lazy val greeter =
     injector.instance[Greeter[Future]](TypeUtils.asManifest[Greeter[Future]])
@@ -27,14 +29,12 @@ class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
   }
 
   object FilteredThriftClientModuleNonMux
-    extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
+      extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
     override val label = "greeter-thrift-client"
     override val dest = "flag!greeter-thrift-service"
     override val mux = false
 
-    override def filterServiceIface(
-      serviceIface: ServiceIface,
-      filter: ThriftClientFilterBuilder) = {
+    override def filterServiceIface(serviceIface: ServiceIface, filter: ThriftClientFilterBuilder) = {
 
       serviceIface
     }

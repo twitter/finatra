@@ -9,15 +9,13 @@ import com.twitter.inject.Logging
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-private[http] class JsonParseExceptionMapper @Inject()(
-  response: ResponseBuilder)
-  extends ExceptionMapper[JsonParseException]
-  with Logging {
+private[http] class JsonParseExceptionMapper @Inject()(response: ResponseBuilder)
+    extends ExceptionMapper[JsonParseException]
+    with Logging {
 
   override def toResponse(request: Request, e: JsonParseException): Response = {
     warn(e)
-    response
-      .badRequest
+    response.badRequest
       .jsonError(JacksonUtils.errorMessage(e))
   }
 }

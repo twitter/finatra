@@ -8,17 +8,15 @@ import com.twitter.util.{Future, Stopwatch}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AccessLoggingFilter[R <: Request] @Inject()(
-  logFormatter: LogFormatter[R, Response])
-  extends SimpleFilter[R, Response]
-  with Logging {
+class AccessLoggingFilter[R <: Request] @Inject()(logFormatter: LogFormatter[R, Response])
+    extends SimpleFilter[R, Response]
+    with Logging {
 
   //optimized
   override def apply(request: R, service: Service[R, Response]): Future[Response] = {
     if (!isInfoEnabled) {
       service(request)
-    }
-    else {
+    } else {
       val elapsed = Stopwatch.start()
       service(request) onSuccess { response =>
         info(logFormatter.format(request, response, elapsed()))

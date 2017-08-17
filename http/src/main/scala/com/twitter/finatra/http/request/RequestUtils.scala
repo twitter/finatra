@@ -13,12 +13,12 @@ object RequestUtils {
   def pathUrl(request: Request): String = {
     val scheme = request.headerMap.get("x-forwarded-proto") match {
       case Some(protocol) => protocol
-      case _              => "http"
+      case _ => "http"
     }
 
     val hostHeader = request.host match {
       case Some(host) => host
-      case _          => throw new BadRequestException("Host header not set")
+      case _ => throw new BadRequestException("Host header not set")
     }
 
     val pathWithTrailingSlash = if (request.path.endsWith("/")) request.path else request.path + "/"
@@ -43,9 +43,13 @@ object RequestUtils {
     val contentTypes = mediaRanges map { mediaRange =>
       ContentType.fromString(mediaRange.contentType)
     }
-    contentTypes.collectFirst(callback).getOrElse(
-      throw new NotAcceptableException(
-        CommonMediaTypes.PLAIN_TEXT_UTF_8,
-        Seq("Not Acceptable Media Type")))
+    contentTypes
+      .collectFirst(callback)
+      .getOrElse(
+        throw new NotAcceptableException(
+          CommonMediaTypes.PLAIN_TEXT_UTF_8,
+          Seq("Not Acceptable Media Type")
+        )
+      )
   }
 }

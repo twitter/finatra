@@ -12,7 +12,7 @@ target(name='tests',
 
 jvm_binary(
   name='finatra-bin',
-  main='com.twitter.benchmark.FinatraBenchmarkServerMain',
+  main='com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain',
   dependencies=[
     ':benchmark-server'
   ],
@@ -24,7 +24,7 @@ jvm_binary(
 
 jvm_binary(
   name='finagle-bin',
-  main='com.twitter.benchmark.FinagleBenchmarkServerMain',
+  main='com.twitter.finatra.http.benchmark.FinagleBenchmarkServerMain',
   dependencies=[
     ':benchmark-server'
   ],

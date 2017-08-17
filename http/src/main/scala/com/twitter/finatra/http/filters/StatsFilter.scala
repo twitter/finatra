@@ -24,7 +24,8 @@ object StatsFilter {
         requestTime = if (perEndpoint) Some(statsReceiver.stat("time")) else None,
         statusCodeTime = statsReceiver.scope("time").stat(statusCode.toString),
         statusClassTime = statsReceiver.scope("time").stat(statusClass),
-        responseSize = statsReceiver.stat("response_size"))
+        responseSize = statsReceiver.stat("response_size")
+      )
     }
   }
 
@@ -35,7 +36,8 @@ object StatsFilter {
     requestTime: Option[Stat],
     statusCodeTime: Stat,
     statusClassTime: Stat,
-    responseSize: Stat) {
+    responseSize: Stat
+  ) {
     def count(duration: Duration, response: Response): Unit = {
       requestCount.foreach { _.incr() }
       statusCodeCount.incr()
@@ -56,25 +58,20 @@ object StatsFilter {
  * with per-route stats scoped under `route/<name>/<method>`.
  */
 @Singleton
-class StatsFilter[R <: Request] @Inject()(
-  statsReceiver: StatsReceiver)
-  extends SimpleFilter[R, Response]
-  with Logging {
+class StatsFilter[R <: Request] @Inject()(statsReceiver: StatsReceiver)
+    extends SimpleFilter[R, Response]
+    with Logging {
 
   private val perRouteStats = Memoize[(RouteInfo, HttpMethod, Int), Stats] {
     case (routeInfo, method, statusCode) =>
-
-      val nameOrPath = 
+      val nameOrPath =
         if (routeInfo.name.nonEmpty)
           routeInfo.name
         else
           routeInfo.sanitizedPath
 
       val scopedStatsReceiver =
-        statsReceiver.
-          scope("route").
-          scope(nameOrPath).
-          scope(method.toString.toUpperCase)
+        statsReceiver.scope("route").scope(nameOrPath).scope(method.toString.toUpperCase)
       Stats.mk(scopedStatsReceiver, statusCode, perEndpoint = true)
   }
 
@@ -90,7 +87,10 @@ class StatsFilter[R <: Request] @Inject()(
       case Return(response) =>
         record(request, response, elapsed())
       case Throw(e) =>
-        error(s"Internal server error - please ensure ${classOf[ExceptionMappingFilter[_]].getName} is installed", e)
+        error(
+          s"Internal server error - please ensure ${classOf[ExceptionMappingFilter[_]].getName} is installed",
+          e
+        )
         record(request, SimpleResponse(Status.InternalServerError), elapsed())
     }
   }
