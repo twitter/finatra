@@ -15,6 +15,12 @@ lazy val buildSettings = Seq(
   javaOptions in Test ++= travisTestJavaOptions
 )
 
+lazy val noPublishSettings = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false
+)
+
 def travisTestJavaOptions: Seq[String] = {
   // When building on travis-ci, we want to suppress logging to error level only.
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
@@ -237,7 +243,7 @@ lazy val root = (project in file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .settings(baseSettings)
   .settings(buildSettings)
-  .settings(publishSettings)
+  .settings(noPublishSettings)
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
