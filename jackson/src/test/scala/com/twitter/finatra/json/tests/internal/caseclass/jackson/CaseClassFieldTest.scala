@@ -1,5 +1,6 @@
 package com.twitter.finatra.json.tests.internal.caseclass.jackson
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy
 import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassField
 import com.twitter.finatra.json.tests.internal.{
@@ -7,7 +8,6 @@ import com.twitter.finatra.json.tests.internal.{
   WithNonemptyJsonProperty,
   WithoutJsonPropertyAnnotation
 }
-import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.inject.Test
 
 class CaseClassFieldTest extends Test {
@@ -15,7 +15,7 @@ class CaseClassFieldTest extends Test {
   test("CaseClassField.createFields have field name foo") {
     val fields = CaseClassField.createFields(
       classOf[WithEmptyJsonProperty],
-      CamelCasePropertyNamingStrategy,
+      PropertyNamingStrategy.LOWER_CAMEL_CASE,
       TypeFactory.defaultInstance
     )
 
@@ -26,7 +26,7 @@ class CaseClassFieldTest extends Test {
   test("CaseClassField.createFields also have field name foo") {
     val fields = CaseClassField.createFields(
       classOf[WithoutJsonPropertyAnnotation],
-      CamelCasePropertyNamingStrategy,
+      PropertyNamingStrategy.LOWER_CAMEL_CASE,
       TypeFactory.defaultInstance
     )
 
@@ -37,7 +37,7 @@ class CaseClassFieldTest extends Test {
   test("CaseClassField.createFields have field name bar") {
     val fields = CaseClassField.createFields(
       classOf[WithNonemptyJsonProperty],
-      CamelCasePropertyNamingStrategy,
+      PropertyNamingStrategy.LOWER_CAMEL_CASE,
       TypeFactory.defaultInstance
     )
 

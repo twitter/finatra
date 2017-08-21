@@ -1,12 +1,18 @@
 
 # Change Log
-All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` and ``DIFF_ID=#`` correspond to associated message in commits.
+All notable changes to this project will be documented in this file. Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in commits.
 
 ## [Unreleased]
 
 ### Added
 
 ### Changed
+
+* finatra-jackson: Deprecate c.t.finatra.json.utils.CamelCasePropertyNamingStrategy.
+  This object was created to reduce ambiguity with previous releases of Jackson in which
+  the default PropertyNamingStrategy was an abstract class with a default of camel case.
+  Users are encouraged to use the Jackson PropertyNamingStrategy 
+  constants directly. ``PHAB_ID=D81707``
 
 ### Fixed
 
@@ -147,7 +153,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 * inject-core: Move Logging from grizzled-slf4j to util/util-slf4j-api.
   `c.t.inject.Logger` is now deprecated in favor of `c.t.util.logging.Logger`
-  in util. ``DIFF_ID=D29713``
+  in util. ``PHAB_ID=D29713``
 
 * finatra-httpclient: Update framework tests to FunSuite ScalaTest testing style. ``RB_ID=909526``
 
@@ -208,12 +214,12 @@ All notable changes to this project will be documented in this file. Note that `
   test helpers which mix in the recommended FunSuite. Thus it will look like your
   tests are broken as you will need to update to change to use the new "WordSpec"
   classes or changed your testing style to the recommended `FunSuite` style.
-  ``DIFF_ID=D19822``
+  ``PHAB_ID=D19822``
 
 * inject-core: Remove JUnitRunner from `c.t.inject.Test`. This was only necessary for
   internal building with pants and is no longer required. The sbt build uses the
   ScalaTest runner and is thus not affected. Additionally, update specs2 to 2.4.17 and
-  to depend on just the `specs2-mock` dependency where needed. ``DIFF_ID=D18011``
+  to depend on just the `specs2-mock` dependency where needed. ``PHAB_ID=D18011``
 
 ### Fixed
 

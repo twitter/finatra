@@ -13,7 +13,6 @@ import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.guice.GuiceInjectableValues
 import com.twitter.finatra.json.internal.caseclass.jackson.FinatraCaseClassModule
 import com.twitter.finatra.json.internal.serde.{FinatraSerDeSimpleModule, LongKeyDeserializers}
-import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 import scala.collection.JavaConverters._
@@ -53,7 +52,7 @@ class FinatraJacksonModule extends TwitterModule {
     objectMapper: ObjectMapper with ScalaObjectMapper
   ): FinatraObjectMapper = {
     val objectMapperCopy = copy(objectMapper)
-    objectMapperCopy.setPropertyNamingStrategy(CamelCasePropertyNamingStrategy)
+    objectMapperCopy.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE)
     new FinatraObjectMapper(objectMapperCopy)
   }
 
