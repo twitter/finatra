@@ -16,4 +16,5 @@ junit_tests(
   sources=globs(
     'com/twitter/inject/tests/exceptions/*.scala',
     'com/twitter/inject/tests/thrift/utils/*.scala'),
+  strict_deps=True,
 )

@@ -10,6 +10,7 @@ junit_tests(
     'finagle/finagle-http/src/main/scala',
     'finatra/http/src/main/java',
     'finatra/http/src/main/scala',
+    'finatra/http/src/test/resources',
     'finatra/http/src/test/scala:test-deps',
     'finatra/httpclient/src/main/scala',
     'finatra/inject/inject-app/src/main/scala',
@@ -26,11 +27,11 @@ junit_tests(
     'util/util-logging/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala',
-    'finatra/http/src/test/resources',
   ],
   fatal_warnings=False,
   sources=rglobs(
     'com/twitter/finatra/http/*.java',
     'com/twitter/finatra/test/*.java',
   ),
+  strict_deps=True,
 )

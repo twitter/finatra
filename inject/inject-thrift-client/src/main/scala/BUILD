@@ -20,6 +20,7 @@ scala_library(
     'finagle/finagle-thriftmux/src/main/scala',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-core/src/main/scala',
+    'finatra/inject/inject-slf4j/src/main/scala:scala',
     'finatra/inject/inject-thrift/src/main/scala',
     'finatra/inject/inject-utils/src/main/scala',
     'scrooge/scrooge-core/src/main/scala',
@@ -32,5 +33,13 @@ scala_library(
   sources=rglobs('*.scala'),
   java_sources=[
     'finatra/inject/inject-thrift-client/src/main/java'
+  ],
+  strict_deps=True,
+  exports=[
+    '3rdparty/jvm/com/github/nscala_time:nscala_time',
+    '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
+    'finagle/finagle-core/src/main/scala:scala',
+    'finatra/inject/inject-app/src/main/scala:scala',
+    'scrooge/scrooge-core/src/main/scala:scala',
   ],
 )

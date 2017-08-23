@@ -30,7 +30,9 @@ junit_tests(
     'finatra/http/src/main/java',
     'finatra/http/src/main/scala',
     'finatra/http/src/test/java',
+    'finatra/http/src/test/resources',
     'finatra/http/src/test/scala:test-deps',
+    'finatra/http/src/test/webapp',
     'finatra/httpclient/src/main/scala',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-app/src/test/scala:test-deps',
@@ -41,6 +43,7 @@ junit_tests(
     'finatra/inject/inject-request-scope/src/main/scala',
     'finatra/inject/inject-server/src/main/scala',
     'finatra/inject/inject-server/src/test/scala:test-deps',
+    'finatra/inject/inject-slf4j/src/main/scala:scala',
     'finatra/inject/inject-utils/src/main/scala',
     'finatra/jackson/src/main/scala',
     'finatra/jackson/src/test/scala:test-deps',
@@ -49,15 +52,15 @@ junit_tests(
     'twitter-server/src/main/scala',
     'util/util-app/src/main/scala',
     'util/util-core/src/main/scala',
+    'util/util-lint/src/main/scala:scala',
     'util/util-logging/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala',
-    'finatra/http/src/test/resources',
-    'finatra/http/src/test/webapp',
   ],
   sources=rglobs(
     'com/twitter/finatra/http/tests/*.scala',
-  )
+  ),
+  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -88,6 +91,7 @@ scala_library(name="test-deps",
     'finatra/inject/inject-server/src/test/scala:test-deps',
     'finatra/jackson/src/main/scala',
     'finatra/jackson/src/test/scala:test-deps',
+    'twitter-server/src/main/scala:scala',
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
   ],
@@ -95,4 +99,9 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/http/*.scala'
   ),
+  strict_deps=True,
+  exports=[
+    'finatra/http/src/main/scala',
+    'finatra/inject/inject-server/src/test/scala:test-deps',
+  ],
 )

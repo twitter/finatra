@@ -8,5 +8,9 @@ java_library(
     '3rdparty/jvm/com/google/inject:guice',
   ],
   fatal_warnings=False,
-  sources=rglobs('*.java')
+  sources=rglobs('*.java'),
+  exports=[
+    '3rdparty/jvm/com/google/inject:guice',
+  ]
+
 )

@@ -15,6 +15,7 @@ junit_tests(
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala',
     'finatra/httpclient/src/main/scala',
+    'finatra/httpclient/src/test/resources',
     'finatra/httpclient/src/test/scala:test-deps',
     'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala',
@@ -23,11 +24,11 @@ junit_tests(
     'twitter-server/src/main/scala',
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
-    'finatra/httpclient/src/test/resources',
   ],
   sources=globs(
     'com/twitter/finatra/httpclient/*.scala'
   ),
+  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -43,6 +44,7 @@ scala_library(name="test-deps",
     'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-slf4j/src/main/scala:scala',
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
   ],
@@ -50,4 +52,5 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/httpclient/test/*.scala'
   ),
+  strict_deps=True,
 )

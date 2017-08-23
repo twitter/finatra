@@ -40,6 +40,8 @@ junit_tests(
     'com/twitter/finatra/json/tests/*.scala',
     'com/twitter/finatra/json/tests/*.java',
   ),
+  strict_deps=True,
+
 )
 
 scala_library(name="test-deps",
@@ -70,4 +72,9 @@ scala_library(name="test-deps",
     'com/twitter/finatra/validation/*.scala',
     'com/twitter/finatra/validation/*.java',
   ),
+  strict_deps=True,
+  exports=[
+    'finatra/jackson/src/main/scala:scala',
+  ]
+
 )
