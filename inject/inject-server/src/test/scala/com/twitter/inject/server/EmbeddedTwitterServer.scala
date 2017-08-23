@@ -5,6 +5,7 @@ import com.google.inject.Stage
 import com.twitter.conversions.time._
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.finagle.http.{Http => _, _}
+import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
@@ -509,7 +510,7 @@ class EmbeddedTwitterServer(
   }
 
   private def receivedResponseStr(response: Response): String = {
-    "\n\nReceived Response:\n" + response.encodeString()
+    "\n\nReceived Response:\n" + HttpCodec.encodeResponseToString(response)
   }
 
   private def handleRequest(request: Request, client: Service[Request, Response]): Response = {
