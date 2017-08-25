@@ -1,6 +1,7 @@
 package com.twitter.inject.conversions
 
 import com.twitter.inject.conversions.tuple._
+import java.util.concurrent.ConcurrentHashMap
 import scala.collection.{SortedMap, immutable, mutable}
 
 object map {
@@ -100,6 +101,17 @@ object map {
       (for ((k, v) <- self) yield {
         func(k) -> v
       }).toSortedMap
+    }
+  }
+
+  implicit class RichConcurrentMap[A, B](val map: ConcurrentHashMap[A, B])
+      extends AnyVal {
+    def atomicGetOrElseUpdate(key: A, op: => B): B = {
+      map.computeIfAbsent(key, new java.util.function.Function[A, B]() {
+        override def apply(key: A): B = {
+          op
+        }
+      })
     }
   }
 }
