@@ -102,8 +102,7 @@ class StreamingResponse[T] private (
     /* Orphan the future which writes to our response thread */
     (for {
       _ <- writePrefix(writer)
-      bufs = asyncStream().map(toBuf)
-      _ <- addSeparatorIfPresent(bufs).foreachF(writer.write)
+      _ <- addSeparatorIfPresent(asyncStream().map(toBuf)) foreachF writer.write
       result <- writeSuffix(writer)
     } yield result) onSuccess { r =>
       debug("Success writing to chunked response")
@@ -128,13 +127,13 @@ class StreamingResponse[T] private (
     case None => Future.Unit
   }
 
-  private[this] def addSeparatorIfPresent(stream: AsyncStream[Buf]): AsyncStream[Buf] =
+  private[this] def addSeparatorIfPresent(stream: => AsyncStream[Buf]): AsyncStream[Buf] =
     separator match {
       case Some(sep) => addSeparator(stream, sep)
       case None => stream
     }
 
-  private[this] def addSeparator(stream: AsyncStream[Buf], separator: Buf): AsyncStream[Buf] = {
+  private[this] def addSeparator(stream: => AsyncStream[Buf], separator: Buf): AsyncStream[Buf] = {
     stream.take(1) ++ (stream.drop(1).map { buf =>
       separator.concat(buf)
     })
@@ -146,3 +145,4 @@ class StreamingResponse[T] private (
     }
   }
 }
+
