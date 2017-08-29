@@ -9,7 +9,7 @@ import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finagle.service.Backoff._
 import com.twitter.finagle.service.RetryPolicy
 import com.twitter.finagle.service.RetryPolicy._
-import com.twitter.finagle.stats.{InMemoryStatsReceiver, NullStatsReceiver, StatsReceiver}
+import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Http, Service}
 import com.twitter.inject.PoolUtils
 import com.twitter.inject.app.{
@@ -22,6 +22,7 @@ import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.inject.server.PortUtils._
 import com.twitter.server.AdminHttpServer
+import com.twitter.util.lint.{Rule, GlobalRules}
 import com.twitter.util.{Await, Duration, Future, Stopwatch, Try}
 import java.lang.annotation.Annotation
 import java.net.{InetSocketAddress, URI}
@@ -69,6 +70,7 @@ object EmbeddedTwitterServer {
  * @param disableTestLogging Disable all logging emitted from the test infrastructure.
  * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded a
  *                              [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
+ * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
@@ -81,7 +83,8 @@ class EmbeddedTwitterServer(
   streamResponse: Boolean = false,
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
-  maxStartupTimeSeconds: Int = 60
+  maxStartupTimeSeconds: Int = 60,
+  failOnLintViolation: Boolean = false
 ) extends Matchers {
 
   /* Additional Constructors */
@@ -150,7 +153,6 @@ class EmbeddedTwitterServer(
    * @param instance - to bind instance.
    * @tparam T - type of the instance to bind.
    * @return this [[EmbeddedTwitterServer]].
-   *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
   def bind[T: TypeTag](instance: T): EmbeddedTwitterServer = {
@@ -167,7 +169,6 @@ class EmbeddedTwitterServer(
    * @tparam T - type of the instance to bind.
    * @tparam A - type of the Annotation used to bind the instance.
    * @return this [[EmbeddedTwitterServer]].
-   *
    * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
    */
   def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedTwitterServer = {
@@ -414,7 +415,7 @@ class EmbeddedTwitterServer(
 
     val host = new InetSocketAddress(PortUtils.loopbackAddress, port)
     val builder = ClientBuilder()
-      .name(name)
+      .name(s"$name:$port")
       .stack(Http.client.withStreaming(streamResponse))
       .tcpConnectTimeout(tcpConnectTimeout)
       .connectTimeout(connectTimeout)
@@ -422,7 +423,7 @@ class EmbeddedTwitterServer(
       .hosts(host)
       .hostConnectionLimit(75)
       .retryPolicy(retryPolicy)
-      .reportTo(NullStatsReceiver)
+      .reportTo(inMemoryStatsReceiver)
       .failFast(false)
       .daemon(true)
 
@@ -626,16 +627,23 @@ class EmbeddedTwitterServer(
     }
   }
 
+  private def throwStartupFailedException(): Unit = {
+    println(s"\nEmbedded server $name failed to startup")
+    throw startupFailedThrowable.get
+  }
+
   private def waitForServerStarted(): Unit = {
     for (i <- 1 to maxStartupTimeSeconds) {
       info("Waiting for warmup phases to complete...")
 
       if (startupFailedThrowable.isDefined) {
-        println(s"\nEmbedded server $name failed to startup")
-        throw startupFailedThrowable.get
+        throwStartupFailedException()
       }
 
-      if ((isInjectable && injectableServer.started) || (!isInjectable && nonInjectableServerStarted)) {
+      if ((isInjectable && injectableServer.started)
+        || (!isInjectable && nonInjectableServerStarted)) {
+        checkStartupLintIssues()
+
         started = true
         logStartup()
         return
@@ -644,7 +652,34 @@ class EmbeddedTwitterServer(
       Thread.sleep(1000)
     }
     throw new StartupTimeoutException(
-      s"App: $name failed to startup within $maxStartupTimeSeconds seconds."
+      s"Embedded server: $name failed to startup within $maxStartupTimeSeconds seconds."
     )
+  }
+
+  private def checkStartupLintIssues(): Unit = {
+    val failures: Map[Rule, Seq[String]] = computeLintIssues
+    val numIssues = failures.map(_._2.size).sum
+    val issueString = if (numIssues == 1) "Issue" else "Issues"
+    if (failures.nonEmpty) {
+      println(s"Warning: $numIssues Linter $issueString Found!")
+      failures.foreach { case (rule, issues) =>
+        println(s"\t* Rule: ${rule.name} - ${rule.description}")
+        issues.foreach(issue => println(s"\t - $issue"))
+      }
+      println("After addressing these issues, consider enabling failOnLintViolation mode to prevent future issues from reaching production.")
+      if (failOnLintViolation) {
+        val e = new Exception(s"failOnLintViolation is enabled and $numIssues Linter ${issueString.toLowerCase()} found.")
+        startupFailedThrowable = Some(e)
+        throwStartupFailedException()
+      }
+    }
+  }
+
+  private def computeLintIssues: Map[Rule, Seq[String]] = {
+    val rules = GlobalRules.get.iterable.toSeq
+    rules
+      .map(rule => rule -> rule().map(_.details.replace("\n", " ").trim))
+      .filterNot(_._2.isEmpty)
+      .toMap
   }
 }

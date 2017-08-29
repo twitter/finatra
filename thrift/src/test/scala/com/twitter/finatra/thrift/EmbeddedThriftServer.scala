@@ -25,6 +25,7 @@ import scala.reflect.runtime.universe._
  * @param verbose Enable verbose logging during test runs.
  * @param disableTestLogging Disable all logging emitted from the test infrastructure.
  * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded an Exception is thrown.
+ * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  */
 class EmbeddedThriftServer(
   override val twitterServer: Ports,
@@ -36,7 +37,8 @@ class EmbeddedThriftServer(
   override val thriftPortFlag: String = "thrift.port",
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
-  maxStartupTimeSeconds: Int = 60
+  maxStartupTimeSeconds: Int = 60,
+  failOnLintViolation: Boolean = false
 ) extends EmbeddedTwitterServer(
       twitterServer,
       flags + (thriftPortFlag -> ephemeralLoopback),
@@ -46,7 +48,8 @@ class EmbeddedThriftServer(
       useSocksProxy,
       verbose = verbose,
       disableTestLogging = disableTestLogging,
-      maxStartupTimeSeconds = maxStartupTimeSeconds
+      maxStartupTimeSeconds = maxStartupTimeSeconds,
+      failOnLintViolation = failOnLintViolation
     )
     with ThriftClient {
 

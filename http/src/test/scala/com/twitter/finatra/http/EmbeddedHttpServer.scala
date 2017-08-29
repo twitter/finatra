@@ -39,6 +39,7 @@ import scala.util.control.NonFatal
  * @param disableTestLogging Disable all logging emitted from the test infrastructure.
  * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded a
  *                              [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
+ * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
  */
 class EmbeddedHttpServer(
   val twitterServer: Ports,
@@ -54,7 +55,8 @@ class EmbeddedHttpServer(
   streamResponse: Boolean = false,
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
-  maxStartupTimeSeconds: Int = 60
+  maxStartupTimeSeconds: Int = 60,
+  failOnLintViolation: Boolean = false
 ) extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
       flags = flags + (httpPortFlag -> ephemeralLoopback),
@@ -66,7 +68,8 @@ class EmbeddedHttpServer(
       streamResponse = streamResponse,
       verbose = verbose,
       disableTestLogging = disableTestLogging,
-      maxStartupTimeSeconds = maxStartupTimeSeconds
+      maxStartupTimeSeconds = maxStartupTimeSeconds,
+      failOnLintViolation = failOnLintViolation
     ) {
 
   /* Additional Constructors */

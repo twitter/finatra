@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-server: Add ability to fail embedded server startup on lint rule violation.
+  There is now a flag in the embedded servers that when set to true will fail
+  server startup if a lint rule violation is detected. This will then fail
+  the running test. ``PHAB_ID=D82399``
+
 ### Changed
 
 * finatra-jackson: Deprecate c.t.finatra.json.utils.CamelCasePropertyNamingStrategy.
