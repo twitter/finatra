@@ -75,7 +75,7 @@ lazy val versions = new {
   val servletApi = "2.5"
   val slf4j = "1.7.21"
   val snakeyaml = "1.12"
-  val specs2 = "2.4.17"
+  val specs2 = "3.9.5"
 }
 
 lazy val scalaCompilerOptions = scalacOptions ++= Seq(

@@ -6,7 +6,6 @@ import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.tiny.domain.http.PostUrlResponse
 import com.twitter.tiny.services._
-import org.mockito.Matchers.anyObject
 import redis.clients.jedis.{Jedis => JedisClient}
 import scala.util.Random
 
@@ -18,8 +17,8 @@ class TinyUrlServerFeatureTest extends FeatureTest with Mockito {
       .bind[JedisClient](mockJedisClient)
 
   test("Server#return shortened url") {
-    mockJedisClient.get(anyObject[String]()) returns null
-    mockJedisClient.set(anyObject[String](), anyObject[String]()) returns "OK"
+    mockJedisClient.get(any[String]()) returns null
+    mockJedisClient.set(any[String](), any[String]()) returns "OK"
 
     val port = server.httpExternalPort
     val path =
@@ -42,8 +41,8 @@ class TinyUrlServerFeatureTest extends FeatureTest with Mockito {
   }
 
   test("Server#resolve shortened url") {
-    mockJedisClient.get(anyObject[String]()) returns null
-    mockJedisClient.set(anyObject[String](), anyObject[String]()) returns "OK"
+    mockJedisClient.get(any[String]()) returns null
+    mockJedisClient.set(any[String](), any[String]()) returns "OK"
 
     val response =
       server.httpPostJson[PostUrlResponse](path = "/url", postBody = """
@@ -52,7 +51,7 @@ class TinyUrlServerFeatureTest extends FeatureTest with Mockito {
           }
         """, andExpect = Created)
 
-    mockJedisClient.get(anyObject[String]()) returns "http://www.google.com"
+    mockJedisClient.get(any[String]()) returns "http://www.google.com"
 
     server.httpGet(
       path = response.tinyUrl.substring(response.tinyUrl.lastIndexOf("/")),
@@ -75,7 +74,7 @@ class TinyUrlServerFeatureTest extends FeatureTest with Mockito {
         EncodingRadix
       )
 
-    mockJedisClient.get(anyObject[String]()) returns null
+    mockJedisClient.get(any[String]()) returns null
 
     server.httpGet(path = s"/$id", andExpect = NotFound)
   }
