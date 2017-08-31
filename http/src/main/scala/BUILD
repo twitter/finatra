@@ -16,7 +16,6 @@ scala_library(
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject:guice',
-    '3rdparty/jvm/com/twitter/bijection:util',
     '3rdparty/jvm/commons-fileupload',
     '3rdparty/jvm/commons-io',
     '3rdparty/jvm/commons-lang:commons-lang',

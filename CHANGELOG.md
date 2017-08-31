@@ -13,6 +13,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: No longer depend on bijection-util. ``PHAB_ID=D86640``
+
 * finatra-jackson: Deprecate c.t.finatra.json.utils.CamelCasePropertyNamingStrategy.
   This object was created to reduce ambiguity with previous releases of Jackson in which
   the default PropertyNamingStrategy was an abstract class with a default of camel case.

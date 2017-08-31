@@ -36,15 +36,6 @@ def travisTestJavaOptions: Seq[String] = {
   } else Seq.empty
 }
 
-def minorScalaVersion(fullScalaVersion: String) = {
-  val tokenizer = new java.util.StringTokenizer(fullScalaVersion, ".")
-  if (tokenizer.countTokens == 2) {
-    fullScalaVersion.substring(0, fullScalaVersion.lastIndexOf("."))
-  } else {
-    fullScalaVersion
-  }
-}
-
 lazy val versions = new {
   // When building on travis-ci, querying for the branch name via git commands
   // will return "HEAD", because travis-ci checks out a specific sha.
@@ -58,7 +49,6 @@ lazy val versions = new {
   val twitterserverVersion = "1.31.0" + suffix
   val utilVersion = "7.0.0" + suffix
 
-  val bijectionVersion = "0.9.5"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
@@ -602,7 +592,6 @@ lazy val http = project
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
-      "com.twitter" %% "bijection-util" % versions.bijectionVersion exclude("com.twitter", s"util-core_${minorScalaVersion(scalaVersion.value)}"),
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
