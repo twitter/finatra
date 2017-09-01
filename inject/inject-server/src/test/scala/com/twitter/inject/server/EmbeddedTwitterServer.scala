@@ -642,7 +642,13 @@ class EmbeddedTwitterServer(
 
       if ((isInjectable && injectableServer.started)
         || (!isInjectable && nonInjectableServerStarted)) {
-        checkStartupLintIssues()
+        /* TODO: RUN AND WARN ALWAYS
+           For now only run if failOnValidation = true until
+           we allow for a better way to isolate the server startup
+           in feature tests */
+        if (failOnLintViolation) {
+          checkStartupLintIssues()
+        }
 
         started = true
         logStartup()
@@ -661,12 +667,12 @@ class EmbeddedTwitterServer(
     val numIssues = failures.map(_._2.size).sum
     val issueString = if (numIssues == 1) "Issue" else "Issues"
     if (failures.nonEmpty) {
-      println(s"Warning: $numIssues Linter $issueString Found!")
+      info(s"Warning: $numIssues Linter $issueString Found!")
       failures.foreach { case (rule, issues) =>
-        println(s"\t* Rule: ${rule.name} - ${rule.description}")
-        issues.foreach(issue => println(s"\t - $issue"))
+        info(s"\t* Rule: ${rule.name} - ${rule.description}")
+        issues.foreach(issue => info(s"\t - $issue"))
       }
-      println("After addressing these issues, consider enabling failOnLintViolation mode to prevent future issues from reaching production.")
+      info("After addressing these issues, consider enabling failOnLintViolation mode to prevent future issues from reaching production.")
       if (failOnLintViolation) {
         val e = new Exception(s"failOnLintViolation is enabled and $numIssues Linter ${issueString.toLowerCase()} found.")
         startupFailedThrowable = Some(e)
