@@ -26,6 +26,8 @@ def travisTestJavaOptions: Seq[String] = {
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
   if (travisBuild) {
     Seq(
+      "-DSKIP_FLAKY=true",
+      "-Dsbt.log.noformat=true",
       "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
       "-Dcom.twitter.inject.test.logging.disabled",
       // Needed to avoid cryptic EOFException crashes in forked tests
@@ -33,7 +35,10 @@ def travisTestJavaOptions: Seq[String] = {
       // See https://github.com/sbt/sbt/issues/653
       // and https://github.com/travis-ci/travis-ci/issues/3775
       "-Xmx3G")
-  } else Seq.empty
+  } else {
+    Seq(
+      "-DSKIP_FLAKY=true")
+  }
 }
 
 lazy val versions = new {
