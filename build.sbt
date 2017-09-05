@@ -108,6 +108,8 @@ lazy val baseSettings = Seq(
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
   javacOptions in doc ++= Seq("-source", "1.8"),
+  // -a: print stack traces for failing asserts
+  testOptions += Tests.Argument(TestFrameworks.JUnit, "-a"),
   // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
   scalacOptions in (Compile, doc) ++= {
     if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
