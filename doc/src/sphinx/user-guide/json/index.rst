@@ -83,7 +83,7 @@ For example,
 
       override val serializationInclusion = Include.NON_EMPTY
 
-      override val propertyNamingStrategy = CamelCasePropertyNamingStrategy
+      override val propertyNamingStrategy = PropertyNamingStrategy.LOWER_CAMEL_CASE
 
       override def additionalMapperConfiguration(mapper: ObjectMapper) {
         mapper.configure(Feature.WRITE_NUMBERS_AS_STRINGS, true)

@@ -15,6 +15,8 @@ scala_library(
     'util/util-slf4j-api/src/main/scala',
   ],
   exports=[
+    '3rdparty/jvm/com/fasterxml/jackson/core:jackson-annotations',
+    'util/util-core/src/main/scala:scala',
     'util/util-slf4j-api/src/main/scala',
   ],
   excludes=[

@@ -153,7 +153,7 @@ An example of testing this endpoint:
 
     def deserializeRequest(name: String) = {
       val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
-      Request.decodeBytes(requestBytes)
+      HttpCodec.decodeBytesToRequest(requestBytes)
     }
 
     "post multipart" in {

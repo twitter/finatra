@@ -4,12 +4,12 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling._
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
+import com.twitter.inject.conversions.map._
 import java.lang.annotation.Annotation
 import java.lang.reflect.Type
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.{Inject, Singleton}
 import net.codingwell.scalaguice._
-import scala.collection.JavaConverters._
 import scala.collection.mutable
 import scala.reflect.ScalaSignature
 
@@ -25,8 +25,8 @@ class MessageBodyManager @Inject()(
   private val annotationTypeToWriter = mutable.Map[Type, MessageBodyWriter[Any]]()
 
   private val readerCache =
-    new ConcurrentHashMap[Manifest[_], Option[MessageBodyReader[Any]]]().asScala
-  private val writerCache = new ConcurrentHashMap[Any, MessageBodyWriter[Any]]().asScala
+    new ConcurrentHashMap[Manifest[_], Option[MessageBodyReader[Any]]]()
+  private val writerCache = new ConcurrentHashMap[Any, MessageBodyWriter[Any]]()
 
   /* Public (Config methods called during server startup) */
 
@@ -69,7 +69,7 @@ class MessageBodyManager @Inject()(
 
   def read[T: Manifest](request: Request): T = {
     val requestManifest = manifest[T]
-    readerCache.getOrElseUpdate(requestManifest, {
+    readerCache.atomicGetOrElseUpdate(requestManifest, {
       val objType = typeLiteral(requestManifest).getType
       classTypeToReader.get(objType) orElse findReaderBySuperType(objType)
     }) match {
@@ -91,7 +91,7 @@ class MessageBodyManager @Inject()(
   // Note: writerCache is bounded on the number of unique classes returned from controller routes */
   def writer(obj: Any): MessageBodyWriter[Any] = {
     val objClass = obj.getClass
-    writerCache.getOrElseUpdate(objClass, {
+    writerCache.atomicGetOrElseUpdate(objClass, {
       (classTypeToWriter
         .get(objClass) orElse classAnnotationToWriter(objClass)) getOrElse defaultMessageBodyWriter
     })

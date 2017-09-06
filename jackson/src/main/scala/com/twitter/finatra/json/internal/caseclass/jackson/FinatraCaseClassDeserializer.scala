@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.twitter.finatra.json.internal.caseclass.exceptions._
 import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.validation.ValidationProvider
-import com.twitter.finatra.json.utils.CamelCasePropertyNamingStrategy
 import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.ErrorCode
 import com.twitter.finatra.validation.ValidationResult._
@@ -251,7 +250,7 @@ private[finatra] class FinatraCaseClassDeserializer(
 
   private def propertyNamingStrategy = {
     if (javaType.getRawClass.isAnnotationPresent(classOf[JsonCamelCase]))
-      CamelCasePropertyNamingStrategy
+      PropertyNamingStrategy.LOWER_CAMEL_CASE
     else
       config.getPropertyNamingStrategy
   }

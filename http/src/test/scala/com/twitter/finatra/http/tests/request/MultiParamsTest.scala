@@ -2,6 +2,7 @@ package com.twitter.finatra.http.tests.request
 
 import com.twitter.finagle.http.{Method, Request}
 import com.twitter.finagle.{http => finagle}
+import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finatra.http.fileupload.MultipartItem
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.inject.Test
@@ -28,7 +29,7 @@ class MultiParamsTest extends Test with Mockito {
 
     val fileUploadFileBytes = resourceAsBytes("/multipart/dealwithit.gif")
     val requestAsBytes = resourceAsBytes("/multipart/upload.bytes")
-    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val finagleRequest = HttpCodec.decodeBytesToRequest(requestAsBytes)
 
     val expectedMultiParams = Map[String, MultipartItem](
       "type" -> MultipartItem(
@@ -68,7 +69,7 @@ class MultiParamsTest extends Test with Mockito {
   test("handle MS Surface Upload with quoted boundary") {
     val fileUploadFileBytes = resourceAsBytes("/multipart/TempProfileImageCrop.png")
     val requestAsBytes = resourceAsBytes("/multipart/ms-surface.bytes")
-    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val finagleRequest = HttpCodec.decodeBytesToRequest(requestAsBytes)
 
     val expectedMultiParams = Map[String, MultipartItem](
       "banner" -> MultipartItem(
@@ -89,7 +90,7 @@ class MultiParamsTest extends Test with Mockito {
   test("handle Iphone Upload with multiple boundaries") {
     val fileUploadFileBytes = resourceAsBytes("/multipart/image.jpg")
     val requestAsBytes = resourceAsBytes("/multipart/request-POST-iphone.bytes")
-    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val finagleRequest = HttpCodec.decodeBytesToRequest(requestAsBytes)
 
     val expectedMultiParams = Map[String, MultipartItem](
       "offset_top" -> MultipartItem(
@@ -153,7 +154,7 @@ class MultiParamsTest extends Test with Mockito {
   test("Android Upload with multiple boundaries") {
     val fileUploadFileBytes = resourceAsBytes("/multipart/kM1K5C4p")
     val requestAsBytes = resourceAsBytes("/multipart/request-POST-android.bytes")
-    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val finagleRequest = HttpCodec.decodeBytesToRequest(requestAsBytes)
 
     val expectedMultiParams = Map[String, MultipartItem](
       "banner" -> MultipartItem(
@@ -177,7 +178,7 @@ class MultiParamsTest extends Test with Mockito {
 
   test("invalid upload data") {
     val requestAsBytes = resourceAsBytes("/multipart/request-POST-android.bytes")
-    val finagleRequest = finagle.Request.decodeBytes(requestAsBytes)
+    val finagleRequest = HttpCodec.decodeBytesToRequest(requestAsBytes)
     finagleRequest.setContentType("text/html; bounfoodary=foo; charset=UTF-8\"")
 
     assertMultiParamsEmpty(finagleRequest)

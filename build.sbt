@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
-lazy val projectVersion = "2.12.0"
+lazy val projectVersion = "2.13.0"
 
 lazy val buildSettings = Seq(
   version := projectVersion,
@@ -15,11 +15,19 @@ lazy val buildSettings = Seq(
   javaOptions in Test ++= travisTestJavaOptions
 )
 
+lazy val noPublishSettings = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false
+)
+
 def travisTestJavaOptions: Seq[String] = {
   // When building on travis-ci, we want to suppress logging to error level only.
   val travisBuild = sys.env.getOrElse("TRAVIS", "false").toBoolean
   if (travisBuild) {
     Seq(
+      "-DSKIP_FLAKY=true",
+      "-Dsbt.log.noformat=true",
       "-Dorg.slf4j.simpleLogger.defaultLogLevel=error",
       "-Dcom.twitter.inject.test.logging.disabled",
       // Needed to avoid cryptic EOFException crashes in forked tests
@@ -27,7 +35,10 @@ def travisTestJavaOptions: Seq[String] = {
       // See https://github.com/sbt/sbt/issues/653
       // and https://github.com/travis-ci/travis-ci/issues/3775
       "-Xmx3G")
-  } else Seq.empty
+  } else {
+    Seq(
+      "-DSKIP_FLAKY=true")
+  }
 }
 
 lazy val versions = new {
@@ -38,12 +49,11 @@ lazy val versions = new {
   val suffix = if (branch == "master" || travisBranch == "master") "" else "-SNAPSHOT"
 
   // Use SNAPSHOT versions of Twitter libraries on non-master branches
-  val finagleVersion = "7.0.0" + suffix
-  val scroogeVersion = "4.19.0" + suffix
-  val twitterserverVersion = "1.31.0" + suffix
-  val utilVersion = "7.0.0" + suffix
+  val finagleVersion = "7.1.0" + suffix
+  val scroogeVersion = "4.20.0" + suffix
+  val twitterserverVersion = "1.32.0" + suffix
+  val utilVersion = "7.1.0" + suffix
 
-  val bijectionVersion = "0.9.5"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
@@ -98,6 +108,8 @@ lazy val baseSettings = Seq(
   scalaCompilerOptions,
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
   javacOptions in doc ++= Seq("-source", "1.8"),
+  // -a: print stack traces for failing asserts
+  testOptions += Tests.Argument(TestFrameworks.JUnit, "-a"),
   // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
   scalacOptions in (Compile, doc) ++= {
     if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
@@ -237,7 +249,7 @@ lazy val root = (project in file("."))
   .enablePlugins(ScalaUnidocPlugin)
   .settings(baseSettings)
   .settings(buildSettings)
-  .settings(publishSettings)
+  .settings(noPublishSettings)
   .settings(
     organization := "com.twitter",
     moduleName := "finatra-root",
@@ -586,8 +598,7 @@ lazy val http = project
     moduleName := "finatra-http",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
-      "com.github.spullara.mustache.java" % "compiler" % versions.mustache,
-      "com.twitter" %% "bijection-util" % versions.bijectionVersion,
+      "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
       "com.twitter" %% "finagle-exp" % versions.finagleVersion,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,

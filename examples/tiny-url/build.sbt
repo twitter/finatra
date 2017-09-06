@@ -3,13 +3,13 @@ import com.typesafe.sbt.SbtNativePackager._
 packageArchetype.java_application
 name := "tiny-url"
 organization := "com.twitter"
-version := "2.12.0"
+version := "2.13.0"
 scalaVersion := "2.12.1"
 fork in run := true
 parallelExecution in ThisBuild := false
 
 lazy val versions = new {
-  val finatra = "2.12.0"
+  val finatra = "2.13.0"
   val guice = "4.0"
   val logback = "1.1.7"
   val redis = "2.7.2"

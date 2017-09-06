@@ -8,6 +8,7 @@ import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http._
 import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
@@ -30,7 +31,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
   def deserializeRequest(name: String) = {
     val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
-    Request.decodeBytes(requestBytes)
+    HttpCodec.decodeBytesToRequest(requestBytes)
   }
 
   def counter(key: String): Long = {

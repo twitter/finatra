@@ -11,14 +11,18 @@ junit_tests(
     'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-slf4j/src/main/scala:scala',
+    'finatra/inject/inject-utils/src/main/scala:scala',
     'finatra/utils/src/main/scala',
     'finatra/utils/src/test/scala:test-deps',
     'util/util-core/src/main/scala',
+    'util/util-logging/src/main/scala:scala',
     'util/util-slf4j-api/src/main/scala',
   ],
   sources=rglobs(
     'com/twitter/finatra/tests/*.scala',
   ),
+  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -46,5 +50,10 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/modules/*.scala',
     'com/twitter/finatra/test/*.scala'
-  )
+  ),
+  strict_deps=True,
+  exports=[
+    '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
+    '3rdparty/jvm/net/codingwell:scala-guice',
+  ]
 )

@@ -1,17 +1,15 @@
 package com.twitter.finatra.http.internal.marshalling
 
-import com.twitter.bijection.Conversion._
-import com.twitter.bijection.twitter_util.TwitterExecutionContext
-import com.twitter.bijection.twitter_util.UtilBijections.twitter2ScalaFuture
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http._
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.io.Buf
-import com.twitter.util.{Future, FuturePool}
+import com.twitter.util.{FuturePool, Promise, Future}
 import javax.inject.Inject
-import scala.concurrent.{Future => ScalaFuture}
+import scala.concurrent.{Future => ScalaFuture,  ExecutionContext => ScalaExecutionContext}
+import scala.util.{Success, Failure}
 
 private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
@@ -110,16 +108,17 @@ private[http] class CallbackConverter @Inject()(
         response.headerMap.add(Fields.ContentType, responseBuilder.jsonContentType)
         Future.value(response)
     } else if (runtimeClassEq[ResponseType, ScalaFuture[_]]) {
-      implicit val ec = immediatePoolEc
-      def toTwitterFuture[A](in: ScalaFuture[A]) = in.as[Future[A]]
-
       if (isScalaFutureOption[ResponseType]) {
         val fn = (request: Request) =>
-          toTwitterFuture(requestCallback.asInstanceOf[Request => ScalaFuture[Option[_]]](request))
+          toTwitterFuture(
+            requestCallback
+              .asInstanceOf[Request => ScalaFuture[Option[_]]](request))(immediatePoolExcCtx)
         createResponseCallback(fn)
       } else {
         val fn = (request: Request) =>
-          toTwitterFuture(requestCallback.asInstanceOf[Request => ScalaFuture[_]](request))
+          toTwitterFuture(
+            requestCallback
+              .asInstanceOf[Request => ScalaFuture[_]](request))(immediatePoolExcCtx)
         createResponseCallback(fn)
       }
     } else { request: Request =>
@@ -181,9 +180,41 @@ private[http] class CallbackConverter @Inject()(
     typeArgs.head.runtimeClass == classOf[Option[_]]
   }
 
-  // Ideally, it would be up to the user to determine where next to run their code but exposing that explicitly would be very difficult
-  // just for addressing this case. By using the `c.t.util.FuturePool.immediatePool`, the user will still have control over the thread
-  // pool at least tangentially in that whatever thread satisfied the Future (Promise) is where the bijection conversion will be run
-  // (and presumably whatever comes after since we use a thread local scheduler by default).
-  private[this] val immediatePoolEc = new TwitterExecutionContext(FuturePool.immediatePool)
+  private def toTwitterFuture[A](scalaFuture: ScalaFuture[A])
+    (implicit executor: ScalaExecutionContext): Future[A] = {
+    val p = new Promise[A]()
+    scalaFuture.onComplete {
+      case Success(value) => p.setValue(value)
+      case Failure(exception) => p.setException(exception)
+    }
+    p
+  }
+
+  // Ideally, it would be up to the user to determine where next to run their code
+  // but exposing that explicitly would be very difficult just for addressing this case.
+  // By using the `c.t.util.FuturePool.immediatePool`, the user will still have control
+  // over the thread pool at least tangentially in that whatever thread satisfied the
+  // Future (Promise) is where the Future conversion will be run (and presumably whatever comes
+  // after since we use a thread local scheduler by default).
+  private[this] val immediatePoolExcCtx = new ExecutionContext(FuturePool.immediatePool)
+
+  /** ExecutionContext adapter using a FuturePool; see bijection/TwitterExecutionContext */
+  private[this] class ExecutionContext(
+   pool: FuturePool,
+   report: Throwable => Unit
+  ) extends ScalaExecutionContext {
+    def this(pool: FuturePool) = this(pool, ExecutionContext.ignore)
+    override def execute(runnable: Runnable): Unit = {
+      pool(runnable.run())
+      ()
+    }
+
+    override def reportFailure(t: Throwable): Unit = report(t)
+  }
+
+  private[this] object ExecutionContext {
+    private def ignore(throwable: Throwable): Unit = {
+      // do nothing
+    }
+  }
 }

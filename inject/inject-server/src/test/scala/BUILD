@@ -19,9 +19,11 @@ junit_tests(
     'finatra/inject/inject-core/src/test/scala:test-deps',
     'finatra/inject/inject-server/src/main/scala',
     'finatra/inject/inject-server/src/test/scala:test-deps',
+    'finatra/inject/inject-slf4j/src/main/scala:scala',
     'twitter-server/src/main/scala',
     'util/util-app/src/main/scala',
     'util/util-core/src/main/scala',
+    'util/util-lint/src/main/scala:scala',
     'util/util-logging/src/main/scala',
     'util/util-registry/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
@@ -30,6 +32,7 @@ junit_tests(
   sources=globs(
     'com/twitter/server/tests/*.scala',
     'com/twitter/inject/server/tests/*.scala'),
+  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -69,4 +72,8 @@ scala_library(name="test-deps",
   ],
   fatal_warnings=True,
   sources=globs('com/twitter/inject/server/*.scala'),
+  strict_deps=True,
+  exports=[
+    'util/util-core/src/main/scala:scala',
+  ]
 )
