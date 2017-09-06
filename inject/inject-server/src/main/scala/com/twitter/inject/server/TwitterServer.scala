@@ -134,8 +134,8 @@ trait TwitterServer
     // exit if any of the awaitables is ready
     val latch = new CountDownLatch(1)
     val awaits = awaitables.asScala
-    val task = DefaultTimer.twitter.schedule(CheckDuration) {
-      if (awaits.exists(Await.isReady(_)))
+    val task = DefaultTimer.schedule(CheckDuration) {
+      if (awaits.exists(Await.isReady))
         latch.countDown()
     }
 

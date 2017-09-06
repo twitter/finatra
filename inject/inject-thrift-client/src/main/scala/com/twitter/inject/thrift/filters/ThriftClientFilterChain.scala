@@ -327,7 +327,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     timeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
       new GlobalRequestTimeoutException(twitterTimeout),
-      DefaultTimer.twitter
+      DefaultTimer
     )
     this
   }
@@ -346,7 +346,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     requestTimeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
       new IndividualRequestTimeoutException(twitterTimeout),
-      DefaultTimer.twitter
+      DefaultTimer
     )
     this
   }

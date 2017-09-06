@@ -27,7 +27,7 @@ object FutureUtils {
     }
   }
 
-  private val timer = DefaultTimer.twitter
+  private val timer = DefaultTimer
 
   def scheduleFuture[T](offset: Duration)(func: => Future[T]): Future[T] = {
     val promise = new Promise[T]
