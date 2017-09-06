@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+
+Sitemap: http://twitter.github.io/finatra/sitemap.xml 

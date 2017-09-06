@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Introduction to Logging With Finatra &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
+    <link rel="next" title="Logback" href="logback.html" />
+    <link rel="prev" title="Example Projects" href="../getting-started/examples.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="logback.html" title="Logback"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../getting-started/examples.html" title="Example Projects"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="introduction-to-logging-with-finatra">
+<span id="logging"></span><h1>Introduction to Logging With Finatra<a class="headerlink" href="#introduction-to-logging-with-finatra" title="Permalink to this headline">¶</a></h1>
+<p>Finatra uses the <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> API for framework logging. By coupling the framework to only the
+<a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> API, application developers are free to choose their logging implementation.</p>
+<div class="admonition-from-the-slf4j-documentation admonition">
+<p class="first admonition-title">From the SLF4J documentation</p>
+<p class="last">&#8220;The Simple Logging Facade for Java serves as a simple facade or
+abstraction for various logging frameworks, such as
+java.util.logging, Logback and log4j. SLF4J allows the end-user to
+plug in the desired logging framework at deployment time.&#8221;</p>
+</div>
+<p><a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-slf4j">finatra/inject/inject-slf4j</a> provides transitively SLF4J bridges for the following logging providers:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://en.wikipedia.org/wiki/Log4j">Log4j</a></li>
+<li><a class="reference external" href="http://commons.apache.org/proper/commons-logging/">commons-logging</a></li>
+<li><a class="reference external" href="http://docs.oracle.com/javase/7/docs/api/index.html?java/util/logging/package-summary.html">java.util.logging</a>: there is a performance penalty for intercepting jul log messages, so <cite>c.t.inject.server.TwitterServer</cite> will install the <a class="reference external" href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">SLF4JBridgeHandler</a> which mitigates most of the performance penalty. Note, if you are not using the <cite>c.t.inject.server.TwitterServer</cite> or a subclass, e.g., you are building a command line application directly with <cite>c.t.inject.app.App</cite>, make sure the framework includes the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">LoggingModule</a> as a framework module.</li>
+</ul>
+<p>Since <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> is an interface, it  requires an actual logging implementation. However, you should ensure that you <strong>do not</strong> end-up with <em>multiple</em> logging implementations on your classpath, e.g., you should not have multiple SLF4J bindings (<cite>slf4j-nop</cite>, <cite>slf4j-log4j12</cite>, <cite>slf4j-jdk14</cite>, etc.) nor a <cite>java.util.logging</cite> implementation, etc. on your classpath as these are all competing implementations and since classpath order is non-deterministic this will lead to unexpected logging behavior.</p>
+<p>While there are several scala-wrappers for SLF4J, Finatra uses and exposes some additional features on top of the <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil</a> <a class="reference external" href="https://github.com/twitter/util/tree/develop/util-slf4j-api">util-slf4j-api</a> project.</p>
+<p>The main logging utility is the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-slf4j/src/main/scala/com/twitter/inject/Logging.scala">c.t.inject.Logging</a>
+trait which can be mixed into any object or class:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Logging
+
+class MyClass extends Logging {
+  def foo() = {
+    info(&quot;Calculating...&quot;)
+    &quot;bar&quot;
+  }
+}
+</pre></div>
+</div>
+<p>This trait is a wrapper with some added utility over the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala">c.t.util.logging.Logging</a>.</p>
+<p>Scala users should prefer using the logging methods of the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-slf4j/src/main/scala/com/twitter/inject/Logging.scala">c.t.inject.Logging</a> trait (as opposed to directly accessing the Logger instance) as these methods use &#8220;call-by-name&#8221; parameters.</p>
+<p>For more information see the <a class="reference external" href="https://twitter.github.io/finatra/scaladocs/index.html#com.twitter.inject.Logging">scaladocs</a> for <cite>c.t.inject.Logging</cite> or the <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-slf4j-api/README.md">util-slf4j-api README</a>.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+</ul><h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../getting-started/examples.html" title="previous chapter">Example Projects</a></li>
+      <li>Next: <a href="logback.html" title="next chapter">Logback</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

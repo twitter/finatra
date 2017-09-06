@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Binding Annotations &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
+    <link rel="next" title="Flags" href="flags.html" />
+    <link rel="prev" title="Modules" href="modules.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="flags.html" title="Flags"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="Modules"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="binding-annotations">
+<span id="binding"></span><h1>Binding Annotations<a class="headerlink" href="#binding-annotations" title="Permalink to this headline">¶</a></h1>
+<p>Occasionally, you may want multiple bound instances of the same type. For instance you may want both a <cite>FooHttpClient &lt;: HttpClient</cite> and a <cite>BarHttpClient &lt;: HttpClient</cite>.</p>
+<p>To do this we recommend creating a specific <a class="reference external" href="https://github.com/google/guice/wiki/BindingAnnotations">binding annotation</a>.</p>
+<div class="section" id="define-an-annotation">
+<h2>Define an Annotation<a class="headerlink" href="#define-an-annotation" title="Permalink to this headline">¶</a></h2>
+<p>Defining a binding annotation is a few lines of java code plus imports.
+We recommend that you put the annotation in its own <cite>.java</cite> file.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>package example.http.clients.annotations;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import com.google.inject.BindingAnnotation;
+
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@BindingAnnotation
+@Target(PARAMETER)
+@Retention(RUNTIME)
+public @interface FooClient {}
+</pre></div>
+</div>
+<p>For more information on the meta-annotations see the Google Guice
+<a class="reference external" href="https://github.com/google/guice/wiki/BindingAnnotations">documentation on Binding
+Annotations</a>.</p>
+</div>
+<div class="section" id="create-a-binding-with-the-annotation">
+<h2>Create a Binding with the Annotation<a class="headerlink" href="#create-a-binding-with-the-annotation" title="Permalink to this headline">¶</a></h2>
+<p>In your <a class="reference external" href="modules.html">Module</a> annotate the <code class="docutils literal"><span class="pre">&#64;Provides</span></code> method that provides the specific instance with the Binding Annotation, e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyHttpClientsModule extends TwitterModule {
+  val fooClientDestination = flag(&quot;foo.client.dest&quot;, &quot;Foo Client Destination&quot;)
+  val barClientDestination = flag(&quot;bar.client.dest&quot;, &quot;Bar Client Destination&quot;)
+
+  @Singleton
+  @Provides
+  @FooClient
+  def providesFooHttpClient: HttpClient = {
+    val dest = fooClientDestination.get match {
+      case Some(value) =&gt; value
+      case _ =&gt; &quot;DEFAULT&quot;
+    }
+
+    new HttpClient(dest)
+  }
+
+  @Singleton
+  @Provides
+  @BarClient
+  def providesBarHttpClient: HttpClient = {
+    val dest = barClientDestination.get match {
+      case Some(value) =&gt; value
+      case _ =&gt; &quot;DEFAULT&quot;
+    }
+    new HttpClient(dest)
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="depend-on-the-annotated-type">
+<h2>Depend on the Annotated Type<a class="headerlink" href="#depend-on-the-annotated-type" title="Permalink to this headline">¶</a></h2>
+<p>Then to depend on the annotated binding, just apply the annotation to
+the injected parameter:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyService @Inject()(
+  @FooClient fooHttpClient: HttpClient,
+  @BarClient barHttpClient: HttpClient) {
+  ...
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="benefits-over-using-named-binding-annotation">
+<h2>Benefits Over Using <a class="reference external" href="https://github.com/google/guice/wiki/BindingAnnotations#named">&#64;Named</a> Binding Annotation<a class="headerlink" href="#benefits-over-using-named-binding-annotation" title="Permalink to this headline">¶</a></h2>
+<p>You could also achieve the same behavior using the <a class="reference external" href="https://github.com/google/guice/wiki/BindingAnnotations#named">&#64;Named</a> binding annotation. However we&#8217;ve found that creating specific binding annotations avoids potential naming collisions.</p>
+<p>Additionally, being able to find all usages of the annotation by type is beneficial over a text-search for the string used in <code class="docutils literal"><span class="pre">&#64;Named</span></code>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+</ul>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Binding Annotations</a><ul>
+<li><a class="reference internal" href="#define-an-annotation">Define an Annotation</a></li>
+<li><a class="reference internal" href="#create-a-binding-with-the-annotation">Create a Binding with the Annotation</a></li>
+<li><a class="reference internal" href="#depend-on-the-annotated-type">Depend on the Annotated Type</a></li>
+<li><a class="reference internal" href="#benefits-over-using-named-binding-annotation">Benefits Over Using &#64;Named Binding Annotation</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">Modules</a></li>
+      <li>Next: <a href="flags.html" title="next chapter">Flags</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

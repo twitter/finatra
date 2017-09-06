@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Home - Finatra</title>
+    <title>Finatra 1.6.0 Released - Finatra</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
     <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
@@ -95,30 +95,79 @@
       <div id="main">
         <section class="page">
 
-          
+          <div class="row">
+  <div class="span10">
+  <h1><a href="/finatra/blog/2015/01/09/finatra-1-dot-6-0-released/">Finatra 1.6.0 Released</a></h1>
+  <p>posted&nbsp;by&nbsp;<a href="https://github.com/capotej">capotej</a>&nbsp;on&nbsp;2015-01-09 03:00:00 -0800</p>
 
-<h4>Latest news: <a href="/finatra/blog/2017/03/13/announcing-the-release-of-finatra-2-dot-9-0/">Announcing the release of Finatra 2.9.0</a></h4>
-<div class="jumbotron">
-  <h1 class="brand">Finatra&nbsp;</h1>
-  <h3>Fast, testable, Scala services built on <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle">Finagle</a>.</h3>
-  <div class="row">
-    <div class="col-md-3">
-      <br/>
-      <h4>Features:</h4>
-      <ul>
-        <li>Production use <a href="https://twitter.com">@Twitter</a></li>
-        <li>~50x faster performance<br /><font size="3">(vs. v1.6.0)</font>  </li>
-        <li>Fully Async using <a href="https://twitter.github.io/effectivescala/#Concurrency-Futures">Futures</a></li>
-        <li><a href="https://github.com/spullara/mustache.java">Mustache</a> Templates</li>
-        <li>Detailed <a href="https://twitter.github.io/twitter-server/Features.html#metrics">Metrics</a><font size="3">&nbsp;(p99, p999, etc.)</font></li>
-        <li><a href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">Profile/Debug</a> over HTTP</li>
-        <li>SSL/TLS Support</li>
-      </ul>
-      <a href="/finatra/user-guide" class="btn btn-primary btn-large">Get Started!&nbsp;»</a>
-    </div>
-    <div class="col-md-7">
-      <img src="/finatra/images/finatra_example.png" height="394px" width="670px"/>
-    </div>
+  <div class="post">
+    <h3>Last release for 1.x.x and Scala 2.9</h3>
+
+<p><p class="lead">
+As we prepare for the upcoming 2.x.x release, this will be the last 1.x.x release
+and also the last release to be published for scala 2.9.x.</p>
+
+<h3>New Finatra and Maintainer!</h3>
+
+<p><p class="lead">
+I&rsquo;m happy to announce that <a href="https://twitter.com/scosenza">Steve Cosenza</a> will be
+taking over the project for the 2.x.x release and beyond. We&rsquo;re excited to release
+the next major iteration of Finatra and share everything we&rsquo;ve learned using it in
+production at <a href="https://twitter.com">Twitter</a> over the course of a year.</p>
+
+<p><br/></p>
+
+<h3>Changelog</h3>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/d90c77dbd09fb74abacb437258f1d60bf92efd8d">d90c77</a> Can use ChannelBuffer&rsquo;s as Response</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/d73cbbf644f58ed1dd756f186b1e272e31b0ae39">d73cbb</a>, <a href="https://github.com/twitter/finatra/commit/8192716f00ae513358d1210645e4e47352be8e48">819271</a> Fix controller-specific ErrorHandler&rsquo;s</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/129184a90f4255a97e2983407b324747f8c218e4">129184</a> Fixed Heroku Deployments</p>
+
+<p><p class="lead">
+<a href="https://github.com/bpfoster/finatra/commit/04b5cbb9e71488d590eab76cffcc284685cbaa47">04b5cb</a> 2 Way SSL support</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/fcce1669c3b2e5a14d7a242db64b226f8be3b73b">fcce16</a> Quieter errors in the logs</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/33b1063d4c59d8ea82dc37f176484cde64f26bc8">33b106</a> Asset Directory browser! set com.twitter.finatra.showDirectories=true to enable</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/2edd33df0bd5a5be4d6161b7c8bd53954593939f">2edd33</a> Clean up build files, lock to twitter-server 1.7.3</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/982703ab79900d6a0e2ab7d6ff039accf0723979">982703</a> Remove scalatest dependency from jar, must now depend on it yourself</p>
+
+<p><br/></p>
+
+<h4>SBT</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="s">&quot;com.twitter&quot;</span> <span class="o">%%</span> <span class="s">&quot;finatra&quot;</span> <span class="o">%</span> <span class="s">&quot;1.6.0&quot;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>Maven</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra_2.10<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>1.6.0<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+  </div>
+
+  <div class="span2">
   </div>
 </div>
 

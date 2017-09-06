@@ -1,0 +1,296 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Modules &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
+    <link rel="next" title="Binding Annotations" href="binding_annotations.html" />
+    <link rel="prev" title="Application and Server Lifecycle" href="lifecycle.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="binding_annotations.html" title="Binding Annotations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lifecycle.html" title="Application and Server Lifecycle"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="modules">
+<span id="id1"></span><h1>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
+<p>Modules are used in conjunction with dependency injection to specify <em>how</em> to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: <a class="reference external" href="flags.html">Flags</a>).</p>
+<p>We provide the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala">c.t.inject.TwitterModule</a> base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by <a class="reference external" href="https://github.com/codingwell/scala-guice">codingwell/scala-guice</a>.</p>
+<div class="section" id="defining-modules">
+<h2>Defining Modules<a class="headerlink" href="#defining-modules" title="Permalink to this headline">¶</a></h2>
+<p>Generally, modules are only required for helping the injector instantiate classes that you don&#8217;t control. Otherwise, you would simply add the <a class="reference external" href="https://github.com/google/guice/wiki/JSR330">JSR-330</a> annotations (e.g., <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, <code class="docutils literal"><span class="pre">&#64;Singleton</span></code>) directly to the class definition.</p>
+<p>For example, if we wanted to declare an HTTP <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a> of type <cite>Service[Request, Response]</cite> as a constructor-arg to a <cite>MyService</cite> class:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyService @Inject() (
+  httpClient: Service[Request, Response]) {
+  ...
+}
+</pre></div>
+</div>
+<p>Adding the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> documents that the <cite>MyService</cite> class participates in dependency injection. Note that the <code class="docutils literal"><span class="pre">&#64;Inject</span></code> annotation can be considered &#8220;metadata&#8221;. Nothing prevents you from instantiating <cite>MyService</cite> manually
+and passing it a <cite>Service[Request, Response]</cite> instance.</p>
+<p>However, when an instance of <cite>MyService</cite> is requested to be provided by the injector, the injector will attempt to provide all constructor arguments from the object graph &#8211; instantiating classes as necessary.</p>
+<p>The injector will look for public no-arg constructors failing if it cannot find one. In this case, <cite>c.t.finagle.Service</cite> <em>does not</em> have a public no-arg constructor so the injector needs help to satisfy the <cite>MyService</cite> constructor
+(for more information on constructor injection see the Guice <a class="reference external" href="https://github.com/google/guice/wiki/Injections#constructor-injection">documentation</a>).</p>
+<p>To provide this assistance, we can create a module which defines a provider of this type to the object graph for the injector to use.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyModule1 extends TwitterModule {
+  val dest = flag(name = &quot;client.dest&quot;, default = &quot;defaultDestIfNoneProvided&quot;, help = &quot;The client dest to use.&quot;)
+  val label = flag(name = &quot;client.label&quot;, default = &quot;defaultLabelIfNoneProvided&quot;, help = &quot;The client label to use.&quot;)
+
+  @Singleton
+  @Provides
+  def providesHttpClient: Service[Request, Response] = {
+    Http.newClient(dest = dest(), label = label())
+  }
+}
+</pre></div>
+</div>
+<p>Here we define a module to construct a singleton <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a> of type <cite>Service[Request, Response]</cite> which uses <a class="reference external" href="flags.html#passing-flag-values-as-command-line-arguments">flag values provided through command line arguments</a> to set the values of <cite>label</cite> and <cite>dest</cite>.</p>
+<div class="section" id="provides">
+<h3><code class="docutils literal"><span class="pre">&#64;Provides</span></code><a class="headerlink" href="#provides" title="Permalink to this headline">¶</a></h3>
+<p>The instance is provided by a module method annotated with <code class="docutils literal"><span class="pre">&#64;Provides</span></code> (<a class="reference external" href="https://github.com/google/guice/blob/master/core/src/com/google/inject/Provides.java">source</a>) which serves as a provider of the type to the object graph.</p>
+<p>Thus for the above example, we have now provided a way for the injector to construct an instance of type <cite>Service[Request, Response]</cite> allowing the injector to satisfy construction of <cite>MyService</cite> when the <cite>MyModule1</cite> is added to the server&#8217;s list of modules.</p>
+<p>See <a class="reference external" href="#module-configuration-in-servers">Module Configuration in Severs</a>.</p>
+</div>
+<div class="section" id="using-flags-in-modules">
+<h3>Using Flags in Modules<a class="headerlink" href="#using-flags-in-modules" title="Permalink to this headline">¶</a></h3>
+<p>As seen in the example above, <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala">TwitterUtil Flags</a> can be defined inside modules.
+This allows for re-usable scoping of external configuration that can be composed into a server via the module. See the section on <a class="reference external" href="flags.html">Flags</a> for more information.</p>
+</div>
+<div class="section" id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>We recommend that you prefer using <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated methods over using the <cite>toInstance</cite> <a class="reference external" href="https://github.com/google/guice/wiki/InstanceBindings">bind DSL</a>.</li>
+<li>Modules should usually be defined as Scala <em>objects</em> as they typically contain no state and using an object makes usage of the module less verbose.</li>
+<li>Remember to add <code class="docutils literal"><span class="pre">&#64;Singleton</span></code> to your <code class="docutils literal"><span class="pre">&#64;Provides</span></code> method if you require only <strong>one</strong> instance per JVM process.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-configuration-in-servers">
+<h2>Module Configuration in Servers<a class="headerlink" href="#module-configuration-in-servers" title="Permalink to this headline">¶</a></h2>
+<p>A server can be configured with a list of modules:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Server extends HttpServer {
+  override val modules = Seq(
+    MyModule1,
+    MyModule2,
+    ClientIdModule,
+    ClientAModule,
+    ClientBModule)
+
+  ...
+}
+</pre></div>
+</div>
+<p>How explicit to be in listing the modules for your server is up to you. If you include a module that is all ready <a class="reference external" href="modules.html#modules-depending-on-other-modules">included by another module</a>, Finatra will de-dupe the module list so there is no penalty, but you may want to prefer to define your list of modules as <a class="reference external" href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a> as possible.</p>
+<p>For more information on server configuration see the <a class="reference external" href="../http/server.html">HTTP</a> or <a class="reference external" href="../thrift/server.html">Thrift</a> sections.</p>
+</div>
+<div class="section" id="module-lifecycle">
+<h2>Module Lifecycle<a class="headerlink" href="#module-lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>Modules also have hooks into the Server lifecycle through the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala">c.t.inject.TwitterModuleLifecycle</a> which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module.</p>
+<p>If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the <cite>singletonStartup</cite> method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the <cite>singletonShutdown</cite> method of your TwitterModule to close or shutdown any resources provided by the module.</p>
+<p>Additionally, there is also the <cite>TwitterModule#singletonPostWarmupComplete</cite> method which allows modules to hook into the server lifecycle after external ports have been bound, clients have been resolved, and the server is ready to accept traffic but before the <cite>App#run</cite> or <cite>Server#start</cite> callbacks are invoked.</p>
+<p>E.g,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyModule extends TwitterModule {
+
+  override def singletonStartup(injector: Injector) {
+    // initialize JVM-wide resources
+  }
+
+  override def singletonShutdown(injector: Injector) {
+    // shutdown JVM-wide resources
+  }
+
+  override def singletonPostWarmupComplete(injector: Injector) {
+    // perform functions that need to happen after we&#39;ve bound
+    // ports but before the server has started
+  }
+}
+</pre></div>
+</div>
+<p>See the <a class="reference external" href="lifecycle.html">Server Lifecycle</a> diagram for a more visual depiction of the server lifecycle.</p>
+</div>
+<div class="section" id="modules-depending-on-other-modules">
+<h2>Modules Depending on Other Modules<a class="headerlink" href="#modules-depending-on-other-modules" title="Permalink to this headline">¶</a></h2>
+<p>There may be times where you would like to reuse types bound by one module inside another module. For instance, you may have a Module which provides a type <cite>Foo</cite> and need that instance when constructing a type <cite>Bar</cite> in another module. E.g.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object FooModule extends TwitterModule {
+
+  @Singleton
+  @Provides
+  def providesFoo: Foo = {
+    new Foo(....)
+  }
+}
+</pre></div>
+</div>
+<p>How do you get access to the bound instance of Foo inside of another Module?</p>
+<p>Most often you are trying to inject the bound instance into a class as a class constructor-arg. E.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Singleton
+class MyClassFoo @Inject() (
+  foo: Foo) {
+  ...
+}
+</pre></div>
+</div>
+<p>You can do something similar in a module. However, instead of the injection point being the constructor annotated with <code class="docutils literal"><span class="pre">&#64;Inject</span></code>, it is the argument list of any <code class="docutils literal"><span class="pre">&#64;Provides</span></code>-annotated method.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object BarModule extends TwitterModule {
+  override val modules = Seq(FooModule)
+
+   @Singleton
+   @Provides
+   def providesBar(
+     foo: Foo): Bar = {
+     new Bar(foo)
+   }
+}
+</pre></div>
+</div>
+<p>What&#8217;s happening here?</p>
+<p>Firstly, we&#8217;ve defined a <cite>BarModule</cite> that overrides the <cite>modules</cite> val with a <cite>Seq</cite> of modules that includes the <cite>FooModule</cite>. This guarantees that if the <cite>FooModule</cite> is not mixed into the list of modules for a server, the <cite>BarModule</cite> ensures it will be installed since it&#8217;s declared as a dependency and thus there will be a bound instance of <cite>Foo</cite> available for use in providing an instance of <cite>Bar</cite>.</p>
+<p>Finatra will de-dupe all modules before installing, so it is OK if a module appears twice in the server configuration, though you should strive to make this the exception.</p>
+<p>Secondly, we&#8217;ve defined a method which provides a <cite>Bar</cite> instance and add an argument of type <cite>Foo</cite> which will be provided by the Injector since injection is by type and the argument list to an <code class="docutils literal"><span class="pre">&#64;Provides</span></code> annotated method in a module is an injection point.</p>
+<p>Why?</p>
+<p>Because the Injector is what calls the <cite>providesBar</cite> method. When the Injector needs to provide an instance of <cite>Bar</cite> it looks for a &#8220;provider&#8221; of <cite>Bar</cite> in the list of modules. It will thus try to supply all arguments to the function from the object graph.</p>
+<p>We could continue this through another module. For example, if we wanted to provide a <cite>Baz</cite> which needs both a <cite>Foo</cite> and a <cite>Bar</cite> instance we could define a <cite>BazModule</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object BazModule extends TwitterModule {
+  override val modules = Seq(
+    FooModule,
+    BarModule)
+
+  @Singleton
+  @Provides
+  def providesBaz(
+    foo: Foo,
+    bar: Bar): Baz = {
+    new Baz(foo, bar)
+  }
+}
+</pre></div>
+</div>
+<p>Notice that we choose to list both the <cite>FooModule</cite> and <cite>BarModule</cite> in the modules for the <cite>BazModule</cite>. Yet, since we know that the <cite>BarModule</cite> includes the <cite>FooModule</cite> we could have choosen to leave it out. The <cite>providesBaz</cite> method in the module above takes in both <cite>Foo</cite> and a <cite>Bar</cite> instances as arguments.</p>
+<p>Since it declares the two modules, we&#8217;re assured that instances of these types will be available from the injector for our <cite>providesBaz</cite> method to use.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+</ul>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Modules</a><ul>
+<li><a class="reference internal" href="#defining-modules">Defining Modules</a><ul>
+<li><a class="reference internal" href="#provides"><code class="docutils literal"><span class="pre">&#64;Provides</span></code></a></li>
+<li><a class="reference internal" href="#using-flags-in-modules">Using Flags in Modules</a></li>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-configuration-in-servers">Module Configuration in Servers</a></li>
+<li><a class="reference internal" href="#module-lifecycle">Module Lifecycle</a></li>
+<li><a class="reference internal" href="#modules-depending-on-other-modules">Modules Depending on Other Modules</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="lifecycle.html" title="previous chapter">Application and Server Lifecycle</a></li>
+      <li>Next: <a href="binding_annotations.html" title="next chapter">Binding Annotations</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

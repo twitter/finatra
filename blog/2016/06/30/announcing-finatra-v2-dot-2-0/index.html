@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Announcing Finatra Release 2.2.0! - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide/index.html">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/scaladocs/index.html">Scaladocs</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div class="row">
+  <div class="span10">
+  <h1><a href="/finatra/blog/2016/06/30/announcing-finatra-v2-dot-2-0/">Announcing Finatra Release 2.2.0!</a></h1>
+  <p>posted&nbsp;by&nbsp;<a href="https://github.com/cacoco">cacoco</a>&nbsp;on&nbsp;2016-06-30 08:58:38 -0700</p>
+
+  <div class="post">
+    <h3>Finatra <a href="https://github.com/twitter/finatra/releases/tag/finatra-2.2.0">release 2.2.0</a> is now available from <a href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20v%3A%222.2.0%22">Maven Central</a>.</h3>
+
+<p>This is our first release to support JDK 8 and Scala 2.11 <strong>only</strong>. We&rsquo;ve also added a lot of useful <a href="finatra/docs/index.html">scaladocs</a> throughout the codebase, so take a look!</p>
+
+<p>Please note that the published  <a href="https://maven.apache.org/guides/mini/guide-naming-conventions.html">groupId</a> <font color='red'><strong>for all Finatra artifacts has changed</strong></font> from <code>com.twitter.finatra</code> and <code>com.twitter.inject</code> to <strong>just</strong> <code>com.twitter</code>. You can find the published v2.2.0 artifacts <a href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20v%3A%222.2.0%22">here</a>.</p>
+
+<p>Here&rsquo;s a list of some of the major changes, updates, and fixes:</p>
+
+<ul>
+<li>The <a href="https://maven.apache.org/guides/mini/guide-naming-conventions.html">groupId</a> of both finatra and finatra/inject published artifacts has changed from <code>com.twitter.finatra</code> and <code>com.twitter.inject</code> respectively to <a href="https://github.com/twitter/finatra/commit/7f25e3c51c368f901538e38959656fbf1cf45e76">just <code>com.twitter</code></a>.</li>
+<li><a href="https://www.slf4j.org/">SLF4J</a> api has been <a href="https://github.com/twitter/finatra/commit/a174f36638919887ef052bbdd3443b1c58869b43">updated to 1.7.21</a> and examples and tests using <a href="https://logback.qos.ch/">Logback</a> have been updated to 1.1.7. It is recommended that you also update your version if you are using the <a href="https://logback.qos.ch/">Logback</a> logging implementation.</li>
+<li>The <a href="https://github.com/FasterXML/jackson-module-scala">Jackson</a> Module Scala has been updated to <a href="https://github.com/twitter/finatra/commit/bb1288a84f8fc4d98919ceb35aab35f69200167c">version 2.6.5</a>.</li>
+<li>Support for <a href="https://github.com/twitter/finatra/commit/7123ba1122cbb60c8be509205a95d2b587942360"><code>any</code> HTTP method</a> in HTTP Controllers.</li>
+<li>HTTP test utilities have been <a href="https://github.com/twitter/finatra/commit/e61e6e309c2cc892306d0f93f9d4bc4b5605b020">moved to a consistent package naming</a>. Thus utilities formerly in <code>com.twitter.finatra.http.test</code> <strong>are now packaged</strong> <code>com.twitter.finatra.http</code>. As always these test utilities are available in the <a href="https://oss.sonatype.org/#nexus-search;gav~com.twitter~finatra-http_2.11~2.2.0~~tests">finatra-http test jar</a>.</li>
+<li>The utility method for running a &ldquo;Warmup Handler&rdquo; has been <a href="https://github.com/twitter/finatra/commit/01f20ee9145b369220f0926ecafb3de523aebec6">renamed from</a> <code>com.twitter.inject.server.TwitterServer#run</code> to <code>com.twitter.inject.server.TwitterServer#handle</code>.</li>
+<li><a href="https://github.com/twitter/finatra/commit/b6e65310997c4ea3c6d24ac24cbf3f1c6395ce1d">Fixed a bug</a> in the handling of java callbacks which return a Future hidden as a <code>java.lang.Object</code> in the <a href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala"><code>com.twitter.finatra.http.internal.marshalling.CallbackConverter</code></a>.</li>
+<li>Removal of deprecated <a href="https://github.com/twitter/finatra/commit/f4334a0dc265e4b0b5cbd35ccf225f1dae109888">packages</a> and <a href="https://github.com/twitter/finatra/commit/e143bb075a1954eef605d332af7994cdbbbc38c7">code</a>.</li>
+<li>Simplified and brought consistency to the Embedded testing utilities <a href="https://github.com/twitter/finatra/commit/5915a9818851386f0416f27943766255f80d2912">constructor arguments</a>.</li>
+<li><a href="https://github.com/twitter/finatra/commit/a7650fefe3787fad7dc45af50a48bcd376ebc56f"><code>FilteredThriftClientModule</code></a> and <a href="https://github.com/twitter/finatra/commit/d0ae1d9a0e17f6b9b11edfc9765ed1f659805dc8">general thrift improvements</a> to better capture and stat exceptions.</li>
+<li><a href="https://github.com/twitter/finatra/commit/a3275378ae96b1a4d3af5f6ab81115eba247a0eb">Narrowed visibility</a> on classes and objects in <strong>internal</strong> <a href="https://github.com/twitter/finatra/tree/develop/http/src/main/scala/com/twitter/finatra/http/internal">packages</a> which are not necessarily meant to be publicly exposed. It is expected that users depend only on the &ldquo;public&rdquo; framework APIs and not internal framework implementations.</li>
+<li><a href="https://github.com/twitter/finatra/commit/b8f9b609f595ba7e6f996fd1f4c31d6933e6eb04">Re-worked</a> the server lifecycle to address confusion around naming and intent. Added scaladocs around the lifecycle to better aid in understanding of what the framework is providing on top of TwitterServer and addressed lot of testing utility issues including re-writing EmbeddedApp to make it simpler/easier to test cmd line applications (which is the central purpose of <code>com.twitter.inject.app.App</code>).</li>
+</ul>
+
+
+<p>See the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or checkout our <a href="/finatra/user-guide/index.html">User&rsquo;s Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The Finatra Team | <a href="https://groups.google.com/forum/#!forum/finatra-users">forum</a> | <a href="https://twitter.com/finatra">@finatra</a> | <a href="https://gitter.im/twitter/finatra">chat</a></p>
+
+  </div>
+
+  <div class="span2">
+  </div>
+</div>
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2017&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

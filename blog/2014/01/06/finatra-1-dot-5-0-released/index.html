@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Home - Finatra</title>
+    <title>Finatra 1.5.0 Released - Finatra</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
     <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
@@ -95,30 +95,71 @@
       <div id="main">
         <section class="page">
 
-          
+          <div class="row">
+  <div class="span10">
+  <h1><a href="/finatra/blog/2014/01/06/finatra-1-dot-5-0-released/">Finatra 1.5.0 Released</a></h1>
+  <p>posted&nbsp;by&nbsp;<a href="https://github.com/capotej">capotej</a>&nbsp;on&nbsp;2014-01-06 08:29:18 -0800</p>
 
-<h4>Latest news: <a href="/finatra/blog/2017/03/13/announcing-the-release-of-finatra-2-dot-9-0/">Announcing the release of Finatra 2.9.0</a></h4>
-<div class="jumbotron">
-  <h1 class="brand">Finatra&nbsp;</h1>
-  <h3>Fast, testable, Scala services built on <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle">Finagle</a>.</h3>
-  <div class="row">
-    <div class="col-md-3">
-      <br/>
-      <h4>Features:</h4>
-      <ul>
-        <li>Production use <a href="https://twitter.com">@Twitter</a></li>
-        <li>~50x faster performance<br /><font size="3">(vs. v1.6.0)</font>  </li>
-        <li>Fully Async using <a href="https://twitter.github.io/effectivescala/#Concurrency-Futures">Futures</a></li>
-        <li><a href="https://github.com/spullara/mustache.java">Mustache</a> Templates</li>
-        <li>Detailed <a href="https://twitter.github.io/twitter-server/Features.html#metrics">Metrics</a><font size="3">&nbsp;(p99, p999, etc.)</font></li>
-        <li><a href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">Profile/Debug</a> over HTTP</li>
-        <li>SSL/TLS Support</li>
-      </ul>
-      <a href="/finatra/user-guide" class="btn btn-primary btn-large">Get Started!&nbsp;»</a>
-    </div>
-    <div class="col-md-7">
-      <img src="/finatra/images/finatra_example.png" height="394px" width="670px"/>
-    </div>
+  <div class="post">
+    <p><p class="lead">This is the first release to be dual published for scala 2.9.x and 2.10.x, as such the <code>artifactId</code> has changed from finatra to <code>finatra_2.9.2</code> or <code>finatra_2.10</code>, respectively.</p>
+
+<h4>SBT</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="s">&quot;com.twitter&quot;</span> <span class="o">%%</span> <span class="s">&quot;finatra&quot;</span> <span class="o">%</span> <span class="s">&quot;1.5.0&quot;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>Maven</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra_2.10<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>1.5.0<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>Download</h3>
+
+<p><a href="https://github.com/twitter/finatra/archive/1.5.0a.zip">https://github.com/twitter/finatra/archive/1.5.0a.zip</a></p>
+
+<p><br></p>
+
+<h2>Header API change</h2>
+
+<p><p class="lead">
+There is a breaking change in the way <code>request.headers</code> are accessed: it now returns an <a href="http://netty.io/3.8/api/org/jboss/netty/handler/codec/http/HttpHeaders.html">HttpHeaders</a> object instead of the previous <a href="https://github.com/twitter/finagle/blob/master/finagle-http/src/main/scala/com/twitter/finagle/http/HeaderMap.scala">HeaderMap</a>, which is now located at <code>request.headerMap</code>.</p>
+
+<p><p class="lead">
+Changing all <code>request.headers</code> calls to <code>request.headerMap</code> should be sufficient. For more examples, see these commits: <a href="https://github.com/twitter/finagle/commit/6da615a1ec2bc1dfdd8e7de0716c67590afa39d3">6da615</a>, <a href="https://github.com/twitter/finatra/commit/1dd6243fbf2fea2a3a20bbe1195f78299c0bb08c">1dd624</a> and <a href="https://github.com/twitter/finatra/commit/b95119ab5b993caeaefed851c483660f3f3fa9fb">b95119</a>.</p>
+
+<p><p class="lead">
+<strong>Note</strong>: <code>render.headers</code> is not affected by this change.</p>
+
+<p><br></p>
+
+<h2>SBT Support</h2>
+
+<p><p class="lead">
+The <a href="http://github.com/capotej/finatra-example">example app</a>, <a href="https://github.com/twitter/finatra/blob/master/build.sbt">Finatra itself</a>, and the app generator are now all SBT compatible.</p>
+
+<p><br></p>
+
+<h2>Bugfixes</h2>
+
+<p><p class="lead">
+<a href="https://github.com/BenWhitehead/finatra/commit/6fc3003acf4a22bb5ee82acba6ad15b57a5a9ad3">6fc3003</a> Add Content-Length to responses.</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/12feaf27b56755446bb330ca91caf5ee0ee26fb9">12feaf</a> Upgrade to finagle 6.10/twitter-server 1.4.0, fixing <a href="https://github.com/twitter/finatra/issues/71">#71</a>.</p>
+
+  </div>
+
+  <div class="span2">
   </div>
 </div>
 

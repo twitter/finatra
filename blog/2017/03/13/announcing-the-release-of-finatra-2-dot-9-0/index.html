@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Home - Finatra</title>
+    <title>Announcing the release of Finatra 2.9.0 - Finatra</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
     <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
@@ -95,30 +95,66 @@
       <div id="main">
         <section class="page">
 
-          
+          <div class="row">
+  <div class="span10">
+  <h1><a href="/finatra/blog/2017/03/13/announcing-the-release-of-finatra-2-dot-9-0/">Announcing the release of Finatra 2.9.0</a></h1>
+  <p>posted&nbsp;by&nbsp;<a href="https://github.com/cacoco">cacoco</a>&nbsp;on&nbsp;2017-03-13 11:46:08 -0700</p>
 
-<h4>Latest news: <a href="/finatra/blog/2017/03/13/announcing-the-release-of-finatra-2-dot-9-0/">Announcing the release of Finatra 2.9.0</a></h4>
-<div class="jumbotron">
-  <h1 class="brand">Finatra&nbsp;</h1>
-  <h3>Fast, testable, Scala services built on <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle">Finagle</a>.</h3>
-  <div class="row">
-    <div class="col-md-3">
-      <br/>
-      <h4>Features:</h4>
-      <ul>
-        <li>Production use <a href="https://twitter.com">@Twitter</a></li>
-        <li>~50x faster performance<br /><font size="3">(vs. v1.6.0)</font>  </li>
-        <li>Fully Async using <a href="https://twitter.github.io/effectivescala/#Concurrency-Futures">Futures</a></li>
-        <li><a href="https://github.com/spullara/mustache.java">Mustache</a> Templates</li>
-        <li>Detailed <a href="https://twitter.github.io/twitter-server/Features.html#metrics">Metrics</a><font size="3">&nbsp;(p99, p999, etc.)</font></li>
-        <li><a href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">Profile/Debug</a> over HTTP</li>
-        <li>SSL/TLS Support</li>
-      </ul>
-      <a href="/finatra/user-guide" class="btn btn-primary btn-large">Get Started!&nbsp;»</a>
-    </div>
-    <div class="col-md-7">
-      <img src="/finatra/images/finatra_example.png" height="394px" width="670px"/>
-    </div>
+  <div class="post">
+    <h2>Finatra <a href="https://github.com/twitter/finatra/releases/tag/finatra-2.9.0">release 2.9.0</a> is available from <a href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20(a%3A%22finatra-http_2.12%22%20OR%20a%3A%22finatra-thrift_2.12%22)%20AND%20v%3A%222.9.0%22">Maven Central</a>.</h2>
+
+<p>We <strong>highly recommend</strong> looking through the <a href="https://github.com/twitter/finatra/blob/master/CHANGELOG.md#finatra-290-2017-03-10">CHANGELOG</a> for a full rundown of all the changes and fixes.</p>
+
+<h2>Major Changes</h2>
+
+<hr />
+
+<h3>Scala 2.12 Support</h3>
+
+<p>We are now cross-publishing Finatra for both <a href="https://github.com/twitter/finatra/blob/master/build.sbt#L13">Scala 2.11.8 and Scala 2.12.1</a>. A big thanks to <a href="https://github.com/jcrossley"><strong>@jcrossley</strong></a>!</p>
+
+<h3>Move from <a href="https://github.com/bmc/grizzled-slf4j">grizzled-slf4j</a> to <a href="https://github.com/twitter/util/blob/master/util-slf4j-api/README.md">util-slf4j-api</a></h3>
+
+<p>We are beginning the process of standardizing the Twitter OSS libraries on the <a href="https://www.slf4j.org/">slf4j-api</a> through the functionality provided by the <a href="https://github.com/twitter/util/blob/master/util-slf4j-api/README.md">util-slf4j-api</a> library.</p>
+
+<p>This change should be transparent to end users.</p>
+
+<h3>Improved <code>bind[T]</code> testing DSL</h3>
+
+<p>We introduced an alternative to using the <code>@Bind</code> binding annotation for binding fields in an integration test (which we call the <code>bind[T]</code> DSL) which is exposed on all the testing utilities:</p>
+
+<ul>
+<li><a href="https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala"><code>c.t.inject.app.TestInjector</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala"><code>c.t.inject.app.EmbeddedApp</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/master/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala"><code>c.t.inject.server.EmbeddedTwitterServer</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/master/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><code>c.t.finatra.http.EmbeddedHttpServer</code></a></li>
+<li><a href="https://github.com/twitter/finatra/blob/master/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><code>c.t.finatra.thrift.EmbeddedThriftServer</code></a></li>
+</ul>
+
+
+<p>While useful, using <code>@Bind</code> during testing for overriding bound instances in the object graph has several practical drawbacks that we wanted to address. Specifically, two main issues.</p>
+
+<p>First, any field that accesses the embedded server or application needs to be lazy (or defined within a test method) such that the <code>@Bind</code> mechanism has time to replace the corresponding type in the object graph on server startup. Eager access to the embedded server or application negates the ability of <code>@Bind</code> to function.</p>
+
+<p>Second, the type being bound with <code>@Bind</code> needs to <em>exactly</em> match a type in the object graph in order to replace it (otherwise you would simply be binding a new type). While a simple thing to solve, (by specifying the type on a val) it nonetheless contributes to incorrect usage. The <code>bind[T]</code> DSL is more explicit in this regards.</p>
+
+<p>In this release, we&rsquo;ve updated the <code>bind[T]</code> DSL to allow binding <a href="http://blogs.atlassian.com/2013/09/scala-types-of-a-higher-kind/">higher-kinded</a> types which should remove any roadblocks for its wider adoption. Using <code>@Bind</code> should now be considered deprecated.</p>
+
+<h4><font color='red'><strong>Important</strong></font> (or why do my tests seem broken)</h4>
+
+<p>To support the <code>bind[T]</code> DSL in the <a href="https://github.com/twitter/finatra/blob/master/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala"><code>c.t.inject.app.TestInjector</code></a> we have updated the lifecycle of the TestInjector. Previously, a <code>c.google.inject.Injector</code> was returned directly from the <code>TestInjector#apply</code> method. The concrete consequence of the change is that you must now call <code>TestInjector#create</code> to return a <code>c.google.inject.Injector</code>.</p>
+
+<p>Without adding this your tests which use a <code>TestInjector</code> may appear to be broken.</p>
+
+<hr />
+
+<p>See the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or checkout our <a href="/finatra/user-guide/index.html">User&rsquo;s Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The Finatra Team | <a href="https://groups.google.com/forum/#!forum/finatra-users">forum</a> | <a href="https://twitter.com/finatra">@finatra</a> | <a href="https://gitter.im/twitter/finatra">chat</a></p>
+
+  </div>
+
+  <div class="span2">
   </div>
 </div>
 

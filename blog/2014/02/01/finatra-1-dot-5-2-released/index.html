@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Home - Finatra</title>
+    <title>Finatra 1.5.2 Released - Finatra</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
     <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
@@ -95,30 +95,89 @@
       <div id="main">
         <section class="page">
 
-          
+          <div class="row">
+  <div class="span10">
+  <h1><a href="/finatra/blog/2014/02/01/finatra-1-dot-5-2-released/">Finatra 1.5.2 Released</a></h1>
+  <p>posted&nbsp;by&nbsp;<a href="https://github.com/capotej">capotej</a>&nbsp;on&nbsp;2014-02-01 22:11:00 -0800</p>
 
-<h4>Latest news: <a href="/finatra/blog/2017/03/13/announcing-the-release-of-finatra-2-dot-9-0/">Announcing the release of Finatra 2.9.0</a></h4>
-<div class="jumbotron">
-  <h1 class="brand">Finatra&nbsp;</h1>
-  <h3>Fast, testable, Scala services built on <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle">Finagle</a>.</h3>
-  <div class="row">
-    <div class="col-md-3">
-      <br/>
-      <h4>Features:</h4>
-      <ul>
-        <li>Production use <a href="https://twitter.com">@Twitter</a></li>
-        <li>~50x faster performance<br /><font size="3">(vs. v1.6.0)</font>  </li>
-        <li>Fully Async using <a href="https://twitter.github.io/effectivescala/#Concurrency-Futures">Futures</a></li>
-        <li><a href="https://github.com/spullara/mustache.java">Mustache</a> Templates</li>
-        <li>Detailed <a href="https://twitter.github.io/twitter-server/Features.html#metrics">Metrics</a><font size="3">&nbsp;(p99, p999, etc.)</font></li>
-        <li><a href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">Profile/Debug</a> over HTTP</li>
-        <li>SSL/TLS Support</li>
-      </ul>
-      <a href="/finatra/user-guide" class="btn btn-primary btn-large">Get Started!&nbsp;»</a>
-    </div>
-    <div class="col-md-7">
-      <img src="/finatra/images/finatra_example.png" height="394px" width="670px"/>
-    </div>
+  <div class="post">
+    <h3>Bootstrap and Bower built in</h3>
+
+<p><p class="lead">
+Finatra now generates a <a href="http://bower.io/">Bower</a> compatible app with
+<a href="http://getbootstrap.com">Bootstrap</a> out of the box:</p>
+
+<p><img src="/finatra/images/bower-screenshot.png" alt="Bower Screenshot" /></p>
+
+<h3>New Testing System</h3>
+
+<p><p class="lead">
+Write tests for just a Controller instead of an entire app:</p>
+
+<p><div class="highlight"><pre><code class="language-scala" data-lang="scala"><span class="k">class</span> <span class="nc">SampleController</span> <span class="k">extends</span> <span class="nc">Controller</span> <span class="o">{</span>
+  <span class="n">get</span><span class="o">(</span><span class="s">&quot;/testing&quot;</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">request</span> <span class="k">=&gt;</span> <span class="n">render</span><span class="o">.</span><span class="n">plain</span><span class="o">(</span><span class="s">&quot;hi&quot;</span><span class="o">).</span><span class="n">toFuture</span>
+  <span class="o">}</span>
+<span class="o">}</span></p>
+
+<p><span class="s">&quot;GET /testing&quot;</span> <span class="n">should</span> <span class="s">&quot;be 200&quot;</span> <span class="n">in</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="n">app</span> <span class="k">=</span> <span class="nc">MockApp</span><span class="o">(</span><span class="k">new</span> <span class="nc">SampleController</span><span class="o">)</span>
+  <span class="k">val</span> <span class="n">response</span> <span class="k">=</span> <span class="n">app</span><span class="o">.</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;/testing&quot;</span><span class="o">)</span></p>
+
+<p>  <span class="n">response</span><span class="o">.</span><span class="n">code</span> <span class="n">should</span> <span class="n">be</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span>
+  <span class="n">response</span><span class="o">.</span><span class="n">body</span> <span class="n">should</span> <span class="n">be</span><span class="o">(</span><span class="s">&quot;hi&quot;</span><span class="o">)</span>
+<span class="o">}</span></code></pre></div></p>
+
+<p><p class="lead">
+See the <a href="https://github.com/twitter/finatra/pull/70">Pull Request</a> for more details.</p>
+
+<p><br/></p>
+
+<h3>Changelog</h3>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/f5c52b28d9d6ca20b26b6dac5a964ae90cda45a0">f5c52b</a> Fixed bug in multipart form uploads that contain both text and file fields.</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/cbb32ac53b472d5866bdde9c9acef24ad8a7c1f9">cbb32a</a>, <a href="https://github.com/twitter/finatra/commit/2616275dd970a6ce5b018598fd8bd5a13d6069fb">261627</a> Update mustache.java to 0.8.14.</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/43b244aeca43a0f71ada196bdb21a06e56037622">43b244</a> Set Content-Length on static file responses.</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/9c64c63519058cd40b6100ac86e35c828ec3801c">9c64c6</a> New test framework with MockApp.</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/511b4fceaf75bb0c23523e5d97a494330a88ae07">511b4f</a> Generate bootstrap and bower config files for new apps.</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/807859b4181244c2dc365493866adad4284ea5c9">807859</a> Update twitter-server to 1.4.1 and finagle-stats to 6.11.1.</p>
+
+<p><br/></p>
+
+<h4>SBT</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="s">&quot;com.twitter&quot;</span> <span class="o">%%</span> <span class="s">&quot;finatra&quot;</span> <span class="o">%</span> <span class="s">&quot;1.5.2&quot;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>Maven</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra_2.10<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>1.5.2<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+  </div>
+
+  <div class="span2">
   </div>
 </div>
 

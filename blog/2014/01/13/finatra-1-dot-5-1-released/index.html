@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Home - Finatra</title>
+    <title>Finatra 1.5.1 Released - Finatra</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
     <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
@@ -95,30 +95,85 @@
       <div id="main">
         <section class="page">
 
-          
+          <div class="row">
+  <div class="span10">
+  <h1><a href="/finatra/blog/2014/01/13/finatra-1-dot-5-1-released/">Finatra 1.5.1 Released</a></h1>
+  <p>posted&nbsp;by&nbsp;<a href="https://github.com/capotej">capotej</a>&nbsp;on&nbsp;2014-01-13 08:29:18 -0800</p>
 
-<h4>Latest news: <a href="/finatra/blog/2017/03/13/announcing-the-release-of-finatra-2-dot-9-0/">Announcing the release of Finatra 2.9.0</a></h4>
-<div class="jumbotron">
-  <h1 class="brand">Finatra&nbsp;</h1>
-  <h3>Fast, testable, Scala services built on <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle">Finagle</a>.</h3>
-  <div class="row">
-    <div class="col-md-3">
-      <br/>
-      <h4>Features:</h4>
-      <ul>
-        <li>Production use <a href="https://twitter.com">@Twitter</a></li>
-        <li>~50x faster performance<br /><font size="3">(vs. v1.6.0)</font>  </li>
-        <li>Fully Async using <a href="https://twitter.github.io/effectivescala/#Concurrency-Futures">Futures</a></li>
-        <li><a href="https://github.com/spullara/mustache.java">Mustache</a> Templates</li>
-        <li>Detailed <a href="https://twitter.github.io/twitter-server/Features.html#metrics">Metrics</a><font size="3">&nbsp;(p99, p999, etc.)</font></li>
-        <li><a href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">Profile/Debug</a> over HTTP</li>
-        <li>SSL/TLS Support</li>
-      </ul>
-      <a href="/finatra/user-guide" class="btn btn-primary btn-large">Get Started!&nbsp;»</a>
-    </div>
-    <div class="col-md-7">
-      <img src="/finatra/images/finatra_example.png" height="394px" width="670px"/>
-    </div>
+  <div class="post">
+    <h3>Response internals fix</h3>
+
+<p><p class="lead">
+It is now possible to modify the response &ldquo;out of band&rdquo;, since <code>Response</code> is tied to <code>Request</code> via <code>request.response</code>. For example, in a filter:</p>
+
+<p><pre class="prettyprint">
+class ExampleFilter
+  extends SimpleFilter[Request, Response] {</p>
+
+<p>  def apply(
+    request: FinagleRequest,
+    service: Service[Request, Response])
+  ) = {
+    request.response.headers.add(&ldquo;X-Filtered&rdquo;, &ldquo;True&rdquo;)
+    service(request)
+  }</p>
+
+<p>}
+</pre></p>
+
+<p><p class="lead">
+See <a href="https://github.com/twitter/finatra/blob/1.5.1/src/test/scala/com/twitter/finatra/RequestResponseSpec.scala">RequestResponseSpec</a> for more details.</p>
+
+<p><br/></p>
+
+<h3>Changelog</h3>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/75ebe3c23678bba40cff0493b7f9806cf27de883">75ebe3</a> Correctly set Content-Length for unicode JSON responses</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/1459817858f6dea218ab7de4861b3bba14ccadbc">145981</a> Depend on finagle-stats, fixes <a href="https://github.com/twitter/finatra/issues/95">#95</a></p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/9037f13e7fce0dec361e86eb2e0fd6b5e1a5ca74">9037f1</a> Enable HTML escaping in mustache templates</p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/83fa4f8d286fb21144861303ab4e79eb3250d082">83fa4f</a> Response tied to originating Request, fixes <a href="https://github.com/twitter/finatra/issues/86">#86</a></p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/635b4dcaaf91ab6d0c39c0c9efb10ab24fa8fd36">635b4d</a> Test and fix for setting <code>logLevel</code> correctly, fixing <a href="https://github.com/twitter/finatra/issues/83">#83</a> and <a href="https://github.com/twitter/finatra/issues/84">#84</a></p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/a95d3e5c5055405958ad8295919fb828bb5748eb">a95d3e</a> Adds all Admin endpoints, fixes <a href="https://github.com/twitter/finatra/issues/74">#74</a></p>
+
+<p><p class="lead">
+<a href="https://github.com/twitter/finatra/commit/d8c2beb4dcc3c4a7439f70b14ca3dd923571e870">d8c2be</a> <code>request.routeParams</code> are now properly url decoded, fixing <a href="https://github.com/twitter/finatra/issues/68">#68</a></p>
+
+<p><br/></p>
+
+<h4>SBT</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="s">&quot;com.twitter&quot;</span> <span class="o">%%</span> <span class="s">&quot;finatra&quot;</span> <span class="o">%</span> <span class="s">&quot;1.5.1&quot;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>Maven</h4>
+
+<p><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;groupId&gt;</span>com.twitter<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;artifactId&gt;</span>finatra_2.10<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;version&gt;</span>1.5.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+  </div>
+
+  <div class="span2">
   </div>
 </div>
 

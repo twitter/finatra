@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HTTP Requests &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
+    <link rel="next" title="HTTP Responses" href="responses.html" />
+    <link rel="prev" title="Defining HTTP Controllers" href="controllers.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="responses.html" title="HTTP Responses"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="controllers.html" title="Defining HTTP Controllers"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="http-requests">
+<span id="id1"></span><h1>HTTP Requests<a class="headerlink" href="#http-requests" title="Permalink to this headline">¶</a></h1>
+<p>Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle <cite>http</cite> Request or a custom <cite>case class</cite> request object.</p>
+<div class="section" id="finagle-c-t-finagle-http-request">
+<h2>Finagle <cite>c.t.finagle.http.Request</cite><a class="headerlink" href="#finagle-c-t-finagle-http-request" title="Permalink to this headline">¶</a></h2>
+<p>This is a <a class="reference external" href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request">c.t.finagle.http.Request</a> which contains common HTTP attributes.</p>
+</div>
+<div class="section" id="custom-case-class-request-object">
+<h2>Custom case class request object<a class="headerlink" href="#custom-case-class-request-object" title="Permalink to this headline">¶</a></h2>
+<p>Custom request case classes are used for requests with a content-type of <cite>application/json</cite> and allow declarative request parsing with support for type conversions, default values, and validations.</p>
+<p>For example, suppose you want to parse a <cite>GET</cite> request with three query params: <cite>max</cite>, <cite>startDate</cite>, and <cite>verbose</cite>,</p>
+<div class="code text highlight-text"><div class="highlight"><pre><span></span>http://foo.com/users?max=10&amp;start_date=2014-05-30TZ&amp;verbose=true
+</pre></div>
+</div>
+<p>This can be modeled with the following case class:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class UsersRequest(
+  @Max(100) @QueryParam max: Int,
+  @PastDate @QueryParam startDate: Option[DateTime],
+  @QueryParam verbose: Boolean = false)
+</pre></div>
+</div>
+<p>The custom <cite>UsersRequest</cite> case class can then be used as the route callback&#8217;s input type:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/users&quot;) { request: UsersRequest =&gt;
+  request
+}
+</pre></div>
+</div>
+<p>The case class field names should match the request parameters or use the <a class="reference external" href="https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties">&#64;JsonProperty</a> annotation to specify the JSON field name in the case class (see: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L141">example</a>).</p>
+<p>A <a class="reference external" href="https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html">PropertyNamingStrategy</a> can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is
+used (defaults are set in <a class="reference external" href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">FinatraJacksonModule</a>).</p>
+<div class="section" id="required-fields">
+<h3>Required Fields<a class="headerlink" href="#required-fields" title="Permalink to this headline">¶</a></h3>
+<p><strong>Non-option fields without default values are considered required.</strong></p>
+<p>If a required field is missing, a <cite>CaseClassMappingException</cite> is thrown.</p>
+</div>
+<div class="section" id="field-annotations">
+<h3>Field Annotations<a class="headerlink" href="#field-annotations" title="Permalink to this headline">¶</a></h3>
+<p>The following field annotations specify how or where to parse a case class field out of the request:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala">&#64;RouteParam</a>  - denotes a field to be parsed from a named parameter in a given route, e.g., for a route defined as: <cite>get(&#8220;/foo/:id&#8221;)</cite></p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class FromRouteRequest(
+  @RouteParam id: String)
+</pre></div>
+</div>
+<p>would take a request with a URI of <cite>/foo/1234</cite> and set <cite>1234</cite> as the value of the <cite>id</cite> field in the <cite>FromRouteRequest</cite> case class.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala">&#64;QueryParam</a> - reads the value from the query string by a parameter named for the field. Make sure that <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code> names do not collide with
+<code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> names. Otherwise, an <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> could end up parsing an <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code>. E.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class QueryParamRequest(
+  @QueryParam foo: String)
+</pre></div>
+</div>
+<p>would set the value of the <cite>foo</cite> field in the <cite>QueryParamRequest</cite> to the result of <cite>request.param(&#8220;foo&#8221;)</cite>.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala">&#64;FormParam</a> - read the value from a form field with the field&#8217;s name from the request body.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala">&#64;Header</a> - read the value from a header field with the field&#8217;s name. You can use a Scala <a class="reference external" href="http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">&#8220;back-quote&#8221; literal</a> for the field name when special characters are involved. E.g.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Header `user-agent`: String
+</pre></div>
+</div>
+</li>
+<li><p class="first"><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala">&#64;Inject</a> - can be used to inject any Guice managed class into your case class. However, it is not necessary for &#8220;injecting&#8221; the underlying Finagle <cite>http</cite> Request into your case class. To access the underlying Finagle <cite>http</cite> Request in your custom case class, simply include a field of type <cite>c.t.finagle.http.Request</cite>, for example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class CaseClassWithRequestField(
+ @Header `user-agent`: String,
+ @QueryParam verbose: Boolean = false,
+ request: Request)
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Note:</strong> HTTP requests with a content-type of <cite>application/json</cite> sent to routes with a custom request case class callback input type will <strong>always trigger</strong> the parsing of the request body as well-formed JSON in attempt to convert the JSON into the request case class.</p>
+<p>This behavior can be disabled by annotating the case class with <code class="docutils literal"><span class="pre">&#64;JsonIgnoreBody</span></code> leaving the raw request body accessible by simply adding a member of type <cite>c.t.finagle.http.Request</cite> as mentioned above.</p>
+<p>For more specifics on how JSON parsing integrates with routing see: <a class="reference external" href="../json/routing.html">Integration with Routing</a> in the <a class="reference external" href="../json/index.html">JSON</a> documentation.</p>
+</div>
+</div>
+<div class="section" id="request-forwarding">
+<h2>Request Forwarding<a class="headerlink" href="#request-forwarding" title="Permalink to this headline">¶</a></h2>
+<p>You can forward a request to another controller. This is similar to other frameworks where forwarding will re-use the same request as opposed to issuing a redirect which will force a client to issue a new request.</p>
+<p>To forward, you need to include a <cite>c.t.finatra.http.request.HttpForward</cite> instance in your controller,
+e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyController @Inject()(
+  forward: HttpForward)
+  extends Controller {
+</pre></div>
+</div>
+<p>Then, to use in your route:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
+  forward(request, &quot;/bar&quot;)
+}
+</pre></div>
+</div>
+<p>Forwarded requests will bypass the server defined filter chain (as the requests have already passed through the filter chain) but will still pass through controller defined filters.</p>
+<p>For example, if a route is defined:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>filter[MyAwesomeFilter].get(&quot;/bar&quot;) { request: Request =&gt;
+  &quot;Hello, world.&quot;
+}
+</pre></div>
+</div>
+<p>When another controller forwards to this route, <cite>MyAwesomeFilter</cite> will be executed on the forwarded request.</p>
+</div>
+<div class="section" id="multipart-requests">
+<h2>Multipart Requests<a class="headerlink" href="#multipart-requests" title="Permalink to this headline">¶</a></h2>
+<p>Finatra has support for multi-part requests. Here&#8217;s an example of a multi-part <cite>POST</cite> controller route definition that simply returns all of the keys in the multi-part request:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>post(&quot;/multipartParamsEcho&quot;) { request: Request =&gt;
+  RequestUtils.multiParams(request).keys
+}
+</pre></div>
+</div>
+<p>An example of testing this endpoint:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>def deserializeRequest(name: String) = {
+  val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
+  HttpCodec.decodeBytesToRequest(requestBytes)
+}
+
+&quot;post multipart&quot; in {
+  val request = deserializeRequest(&quot;/multipart/request-POST-android.bytes&quot;)
+  request.uri = &quot;/multipartParamsEcho&quot;
+
+  server.httpRequest(
+    request = request,
+    suppress = true,
+    andExpect = Ok,
+    withJsonBody = &quot;&quot;&quot;[&quot;banner&quot;]&quot;&quot;&quot;)
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="json-patch-requests">
+<h2>JSON Patch Requests<a class="headerlink" href="#json-patch-requests" title="Permalink to this headline">¶</a></h2>
+<p>Finatra has support for JSON Patch requests, see <a class="reference external" href="https://tools.ietf.org/html/rfc6902">JSON Patch definition</a>.</p>
+<p>To handle JSON Patch requests, you will first need to register the <cite>JsonPatchMessageBodyReader</cite> and the <cite>JsonPatchExceptionMapper</cite> in the server. The <cite>JsonPatchMessageBodyReader</cite> is for parsing JSON Patch requests as type <cite>c.t.finatra.http.jsonpatch.JsonPatch</cite>,
+and <cite>JsonPatchExceptionMapper</cite> can convert JsonPatchExceptions to HTTP responses.</p>
+<p>See <a class="reference external" href="exceptions.html">Add an ExceptionMapper</a> for more information on exception mappers.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
+
+ override def configureHttp(router: HttpRouter): Unit = {
+   router
+     .register[JsonPatchMessageBodyReader]
+     .exceptionMapper[JsonPatchExceptionMapper]
+     .add[ExampleController]
+ }
+}
+</pre></div>
+</div>
+<p>Next, you should include a <cite>c.t.finatra.http.jsonpatch.JsonPatchOperator</cite> instance in your controller, which provides <cite>JsonPatchOperator#toJsonNode</cite> conversions and support for all JSON Patch operations.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyController @Inject()(
+  jsonPatchOperator: JsonPatchOperator
+) extends Controller {
+  ...
+
+}
+</pre></div>
+</div>
+<p>After the target data has been converted to a JsonNode, just call <cite>JsonPatchUtility.operate</cite> to apply JSON Patch operations to the target.</p>
+<p>For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>patch(&quot;/jsonPatch&quot;) { jsonPatch: JsonPatch =&gt;
+  val testCase = ExampleCaseClass(&quot;world&quot;)
+  val originalJson = jsonPatchOperator.toJsonNode[ExampleCaseClass](testCase)
+  JsonPatchUtility.operate(jsonPatch.patches, jsonPatchOperator, originalJson)
+}
+</pre></div>
+</div>
+<p>An example of testing this endpoint:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>&quot;JsonPatch&quot; in {
+  val request = RequestBuilder.patch(&quot;/jsonPatch&quot;)
+    .body(
+      &quot;&quot;&quot;[
+        |{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/fruit&quot;,&quot;value&quot;:&quot;orange&quot;},
+        |{&quot;op&quot;:&quot;remove&quot;,&quot;path&quot;:&quot;/hello&quot;},
+        |{&quot;op&quot;:&quot;copy&quot;,&quot;from&quot;:&quot;/fruit&quot;,&quot;path&quot;:&quot;/veggie&quot;},
+        |{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/veggie&quot;,&quot;value&quot;:&quot;bean&quot;},
+        |{&quot;op&quot;:&quot;move&quot;,&quot;from&quot;:&quot;/fruit&quot;,&quot;path&quot;:&quot;/food&quot;},
+        |{&quot;op&quot;:&quot;test&quot;,&quot;path&quot;:&quot;/food&quot;,&quot;value&quot;:&quot;orange&quot;}
+        |]&quot;&quot;&quot;.stripMargin,
+      contentType = Message.ContentTypeJsonPatch)
+
+  server.httpRequestJson[JsonNode](
+    request = request,
+    andExpect = Ok,
+    withJsonBody = &quot;&quot;&quot;{&quot;food&quot;:&quot;orange&quot;,&quot;veggie&quot;:&quot;bean&quot;}&quot;&quot;&quot;)
+}
+</pre></div>
+</div>
+<p>For more information and examples, see:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala">c.t.finatra.http.request.RequestUtils</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala">c.t.finatra.http.fileupload.MultipartItem</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192">c.t.finagle.http.Request#decodeBytes</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala#L568">DoEverythingController</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L332">DoEverythingServerFeatureTest</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala">MultiParamsTest</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+</ul>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HTTP Requests</a><ul>
+<li><a class="reference internal" href="#finagle-c-t-finagle-http-request">Finagle <cite>c.t.finagle.http.Request</cite></a></li>
+<li><a class="reference internal" href="#custom-case-class-request-object">Custom case class request object</a><ul>
+<li><a class="reference internal" href="#required-fields">Required Fields</a></li>
+<li><a class="reference internal" href="#field-annotations">Field Annotations</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#request-forwarding">Request Forwarding</a></li>
+<li><a class="reference internal" href="#multipart-requests">Multipart Requests</a></li>
+<li><a class="reference internal" href="#json-patch-requests">JSON Patch Requests</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="controllers.html" title="previous chapter">Defining HTTP Controllers</a></li>
+      <li>Next: <a href="responses.html" title="next chapter">HTTP Responses</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

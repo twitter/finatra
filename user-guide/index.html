@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>User’s Guide &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="#" />
+    <link rel="next" title="First Steps" href="getting-started/basics.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+  <div class=indexwrapper>
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="getting-started/basics.html" title="First Steps"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="user-s-guide">
+<h1>User&#8217;s Guide<a class="headerlink" href="#user-s-guide" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://travis-ci.org/twitter/finatra?branch=develop"><img alt="Build Status" src="https://secure.travis-ci.org/twitter/finatra.png?branch=develop" /></a> <a class="reference external" href="http://codecov.io/github/twitter/finatra?branch=develop"><img alt="Test Coverage" src="http://codecov.io/github/twitter/finatra/coverage.svg?branch=develop" /></a> <a class="reference external" href="https://github.com/twitter/finatra#status"><img alt="Project status" src="https://img.shields.io/badge/status-active-brightgreen.svg" /></a> <img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg" /> <a class="reference external" href="https://gitter.im/twitter/finatra"><img alt="Gitter" src="https://badges.gitter.im/Join%20Chat.svg" /></a></p>
+<p>Finatra builds on <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> and uses <a class="reference external" href="https://twitter.github.io/finagle/guide/">Finagle</a>, therefore it is <em>highly recommended</em> that you familiarize yourself with those frameworks before getting started.</p>
+<p>The version of Finatra documented here is <strong>version 2.x</strong>. Version 2.x is a <strong>complete rewrite</strong> over v1.x and as such many things are different.</p>
+<p>For high-level information about the changes from v1.x see the blog post <a class="reference external" href="https://blog.twitter.com/2015/finatra-20-the-fast-testable-scala-services-framework-that-powers-twitter">here</a>.</p>
+<p>Finatra at its core is agnostic to the type of service or application being created. It can be used to build anything based on <a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a>: <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala">c.t.app.App</a>.</p>
+<p>For servers, Finatra builds on top of the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html">features</a> of <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> (and <a class="reference external" href="https://twitter.github.io/finagle">Finagle</a>) by allowing you to easily define a <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html">Server</a> and controllers (a <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services">Service</a>-like abstraction) which define and handle endpoints of the Server. You can also compose <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a> either per controller, per route in a controller, or across all controllers.</p>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="getting-started/basics.html"><span class="doc">First Steps</span></a></li>
+<li><a class="reference internal" href="getting-started/framework.html"><span class="doc">Understanding the Codebase</span></a></li>
+<li><a class="reference internal" href="getting-started/lifecycle.html"><span class="doc">Application and Server Lifecycle</span></a></li>
+<li><a class="reference internal" href="getting-started/modules.html"><span class="doc">Modules</span></a></li>
+<li><a class="reference internal" href="getting-started/binding_annotations.html"><span class="doc">Binding Annotations</span></a></li>
+<li><a class="reference internal" href="getting-started/flags.html"><span class="doc">Flags</span></a></li>
+<li><a class="reference internal" href="getting-started/futures.html"><span class="doc">Future Gotchas</span></a></li>
+<li><a class="reference internal" href="getting-started/examples.html"><span class="doc">Example Projects</span></a></li>
+</ul>
+</div>
+<div class="section" id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="logging/index.html"><span class="doc">Introduction to Logging With Finatra</span></a></li>
+<li><a class="reference internal" href="logging/logback.html"><span class="doc">Logback</span></a></li>
+</ul>
+</div>
+<div class="section" id="http">
+<h2>HTTP<a class="headerlink" href="#http" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="http/server.html"><span class="doc">HTTP Server Definition</span></a></li>
+<li><a class="reference internal" href="http/controllers.html"><span class="doc">Defining HTTP Controllers</span></a></li>
+<li><a class="reference internal" href="http/requests.html"><span class="doc">HTTP Requests</span></a></li>
+<li><a class="reference internal" href="http/responses.html"><span class="doc">HTTP Responses</span></a></li>
+<li><a class="reference internal" href="http/filters.html"><span class="doc">Filtering HTTP Requests</span></a></li>
+<li><a class="reference internal" href="http/exceptions.html"><span class="doc">HTTP Exception Mapping</span></a></li>
+<li><a class="reference internal" href="http/warmup.html"><span class="doc">HTTP Server Warmup</span></a></li>
+</ul>
+</div>
+<div class="section" id="json">
+<h2>JSON<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="json/index.html"><span class="doc">Jackson Integration</span></a></li>
+<li><a class="reference internal" href="json/routing.html"><span class="doc">JSON Integration with Routing</span></a></li>
+<li><a class="reference internal" href="json/validations.html"><span class="doc">JSON Validation Framework</span></a></li>
+</ul>
+</div>
+<div class="section" id="files">
+<h2>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="files/index.html"><span class="doc">Working With Files</span></a></li>
+</ul>
+</div>
+<div class="section" id="thrift">
+<h2>Thrift<a class="headerlink" href="#thrift" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="thrift/basics.html"><span class="doc">Scrooge and Finagle</span></a></li>
+<li><a class="reference internal" href="thrift/server.html"><span class="doc">Thrift Server Definition</span></a></li>
+<li><a class="reference internal" href="thrift/controllers.html"><span class="doc">Defining Thrift Controllers</span></a></li>
+<li><a class="reference internal" href="thrift/filters.html"><span class="doc">Filtering Thrift Requests</span></a></li>
+<li><a class="reference internal" href="thrift/exceptions.html"><span class="doc">Thrift Exception Mapping</span></a></li>
+<li><a class="reference internal" href="thrift/warmup.html"><span class="doc">Thrift Server Warmup</span></a></li>
+</ul>
+</div>
+<div class="section" id="twitter-server">
+<h2>Twitter Server<a class="headerlink" href="#twitter-server" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="twitter-server/index.html"><span class="doc">TwitterServer Admin HTTP Server</span></a></li>
+</ul>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="testing/index.html"><span class="doc">Testing With Finatra</span></a></li>
+</ul>
+</div>
+<div class="section" id="v1-migration-faq">
+<h2>V1 Migration FAQ<a class="headerlink" href="#v1-migration-faq" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="v1-migration/index.html"><span class="doc">FAQ for upgrading from Finatra v1.x to v2.x</span></a></li>
+</ul>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>Finatra is an open source project that welcomes contributions from the greater community. We’re thankful for the many people who have already contributed and if you’re interested, please read the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/CONTRIBUTING.md">contributing</a> guidelines.</p>
+<p>For support feel free to follow and/or tweet at the <a class="reference external" href="https://twitter.com/finatra">&#64;finatra</a> Twitter account, post questions to the <a class="reference external" href="https://gitter.im/twitter/finatra">Gitter chat room</a>, or email the finatra-users Google group: <a class="reference external" href="mailto:finatra-users&#37;&#52;&#48;googlegroups&#46;com">finatra-users<span>&#64;</span>googlegroups<span>&#46;</span>com</a>.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </div>
+  
+  </body>
+</html>

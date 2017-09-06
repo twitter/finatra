@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Finatra release 2.8.0 is out and available! - Finatra</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
+    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
+    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+
+      .nav {
+        font-size: 16px;
+      }
+
+      section.page {
+        padding: 0px;
+      }
+
+      .parent-element {
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      .element {
+        position: relative;
+        top: 50%;
+        transform: translateY(-15%);
+      }
+
+      h1.brand {
+        font-family: &#8216;Open Sans&#8217;, sans-serif;
+        font-weight: 800;
+        font-size: 84px !important;
+      }
+
+      .anchor { padding-top: 60px; }
+
+      .no-pad-anchor .anchor { padding-top: 0px; }
+
+      .embed-video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16/9 ratio */
+        padding-top: 30px; /* IE6 workaround*/
+        height: 0;
+        overflow: hidden;
+      }
+
+      .embed-video-container iframe,
+      .embed-video-container object,
+      .embed-video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
+  </head>
+
+  <body>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/finatra/blog/archives">Blog</a></li>
+            <li><a href="/finatra/user-guide/index.html">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
+            <li><a href="/finatra/scaladocs/index.html">Scaladocs</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+
+    <div class="container">
+      <div id="main">
+        <section class="page">
+
+          <div class="row">
+  <div class="span10">
+  <h1><a href="/finatra/blog/2017/02/06/announcing-the-finatra-2-dot-8-0-release/">Finatra release 2.8.0 is out and available!</a></h1>
+  <p>posted&nbsp;by&nbsp;<a href="https://github.com/cacoco">cacoco</a>&nbsp;on&nbsp;2017-02-06 08:46:55 -0800</p>
+
+  <div class="post">
+    <h2>Finatra <a href="https://github.com/twitter/finatra/releases/tag/finatra-2.8.0">release 2.8.0</a> is available from <a href="https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20(a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22)%20AND%20v%3A%222.8.0%22">Maven Central</a>.</h2>
+
+<p>There are a lot of updates in this release.</p>
+
+<p>We <strong>highly recommend</strong> looking through the <a href="https://github.com/twitter/finatra/blob/master/CHANGELOG.md#finatra-280-2017-02-03">CHANGELOG</a> for a full rundown of all the changes and fixes.</p>
+
+<h2>Major Changes</h2>
+
+<hr />
+
+<h3><a href="http://www.scalatest.org/">ScalaTest</a> Testing Utilities</h3>
+
+<p>One of the largest impacting changes is the introduction of <a href="/finatra/user-guide/testing/index.html#test-mixins">Test Mixins</a> helpers and the long-time coming move of Finatra&rsquo;s opinionated <a href="http://www.scalatest.org/">ScalaTest</a> testing style from <a href="http://www.scalatest.org/at_a_glance/WordSpec">WordSpec</a> to <a href="http://www.scalatest.org/getting_started_with_fun_suite">FunSuite</a>.</p>
+
+<p>It is known that Twitter engineering transitioned from a mostly Rails codebase to Scala. In this transition, we originally used <a href="https://github.com/etorreborre/specs">Scala Specs</a> for most Scala projects. As we evolved the Scala codebase we moved to <a href="http://www.scalatest.org/">ScalaTest</a> and a lot of code at the time adopted the <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a> <a href="http://www.scalatest.org/">ScalaTest</a> testing style to easily <a href="http://www.scalatest.org/at_a_glance/WordSpec">convert from Specs to ScalaTest</a>.</p>
+
+<p>It was at this time that we started version 2 of the Finatra framework and thus coupled (too tightly) the Finatra testing tooling to <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a>. A short time thereafter, however, Twitter engineering settled on a recommendation of <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a>. Unfortunately, Finatra did not provide a way for users to use this <a href="http://www.scalatest.org/">ScalaTest</a> testing style.</p>
+
+<h4>Testing Changes</h4>
+
+<p>In <a href="https://github.com/twitter/finatra/blob/master/CHANGELOG.md#finatra-280-2017-02-03">this release</a> we have introduced a set of <a href="/finatra/user-guide/testing/index.html#test-mixins">Test Mixins</a> which allow users to use the Finatra test tooling and bring their own <a href="http://www.scalatest.org/">ScalaTest</a> testing style. Since the original framework test tooling was specific to <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a> you will find that functionality has now been prefixed with <code>WordSpec</code>. E.g., if you were using</p>
+
+<p><code>Test</code> it is now <a href="https://github.com/twitter/finatra/blob/master/inject/inject-core/src/test/scala/com/twitter/inject/WordSpecTest.scala"><code>WordSpecTest</code></a>,<br/>
+<code>IntegrationTest</code> is now <a href="https://github.com/twitter/finatra/blob/master/inject/inject-core/src/test/scala/com/twitter/inject/WordSpecIntegrationTest.scala"><code>WordSpecIntegrationTest</code></a>, and<br/>
+<code>FeatureTest</code> is now <a href="https://github.com/twitter/finatra/blob/master/inject/inject-server/src/test/scala/com/twitter/inject/server/WordSpecFeatureTest.scala"><code>WordSpecFeatureTest</code></a>.</p>
+
+<p>You&rsquo;ll notice that these <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a> versions are deprecated since they will be removed at a point in the future. This is because &mdash; as mentioned above &mdash; the Twitter engineering recommendation is to use <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a> (see <a href="http://www.scalatest.org/at_a_glance/FunSuite">FunSuite at a glance</a>) and we have introduced opinionated versions of the testing tools that mix in <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a>:</p>
+
+<p><a href="https://github.com/twitter/finatra/blob/master/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala"><code>c.t.inject.Test</code></a><br/>
+<a href="https://github.com/twitter/finatra/blob/master/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTest.scala"><code>c.t.inject.IntegrationTest</code></a><br/>
+<a href="https://github.com/twitter/finatra/blob/master/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala"><code>c.t.inject.server.FeatureTest</code></a></p>
+
+<h4><font color='red'><strong>Important</strong></font> (or why do my tests seem broken)</h4>
+
+<p>Therefore, when you update to <a href="https://github.com/twitter/finatra/releases/tag/finatra-2.8.0">release 2.8.0</a> it <em>may look like your tests are broken</em> as they would have been written against <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a> but the tools you are using are now written against <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a>. To remedy this situation, simply update to use the <code>WordSpec</code> prefixed versions instead as these are completely backwards compatible. Even better would be to update your tests to <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a> or create your own <a href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a> testing versions based on the <a href="/finatra/user-guide/testing/index.html#test-mixins">Test Mixins</a>.</p>
+
+<h4>Naming</h4>
+
+<p>Why didn&rsquo;t we prefix the new versions of the utilities with <code>FunSuite</code>, e.g, <code>FunSuiteTest</code>, <code>FunSuiteIntegrationTest</code>, and <code>FunSuiteFeatureTest</code>?</p>
+
+<p>The answer is two-fold.<br/>
+1. You don&rsquo;t have to use them. You can always choose to use the <a href="/finatra/user-guide/testing/index.html#test-mixins">Test Mixins</a> directly.<br/>
+2. We want the framework to express an opinion about the <a href="http://www.scalatest.org/">ScalaTest</a> testing style to use and thus prefixing them would potentially connote that we plan to support multiple ScalaTest testing styles simultaneously. Which is not true.</p>
+
+<h3>Admin Paths and Routing Changes</h3>
+
+<p>Another significant change is the new ability to expose paths that begin with <code>/admin</code> on your external interface. Finatra now allows for more flexibility in your admin routing which also includes the ability to add routes which <strong>do not begin</strong> with <code>/admin</code> to the admin interface.</p>
+
+<p>Please see the section on <a href="/finatra/user-guide/http/controllers.html#admin-paths">Admin Paths</a> in the <a href="/finatra/user-guide/index.html">User&rsquo;s Guide</a> or take a look at the <a href="https://github.com/twitter/finatra/blob/master/http/src/main/scala/com/twitter/finatra/http/internal/routing/AdminHttpRouter.scal"><code>c.t.finatra.http.internal.routing.AdminHttpRouter</code></a> for more important information on how this works.</p>
+
+<h3>Changes to Utilities</h3>
+
+<p>We have finally addressed some long-standing issues around the organization of the codebase.</p>
+
+<p>For more context, Finatra is divided into three main parts: <code>inject</code>, <code>http</code>, and <code>thrift</code>. The <code>inject</code> part of the framework contains all of the base functionality for integration of the Guice dependency injection framework with <a href="https://twitter.github.io/util/">TwitterUtil</a>&rsquo;s <a href="https://twitter.github.io/util/docs/com/twitter/app/App.html"><code>c.t.app.App</code></a> and <a href="https://twitter.github.io/twitter-server/">TwitterServer</a>&rsquo;s <code>c.t.server.TwitterServer</code> (which is just an extension of <code>c.t.app.App</code>). The <code>inject</code> layer is for concerns that span both http and thrift services.</p>
+
+<p>Modules in the <code>inject</code> part of the Finatra framework constitute the core of the framework, are in the <code>com.twitter.inject</code> package namespace, and as such only depend on each other or outside dependencies (except in testing). Everything else in the Finatra codebase is in the <code>com.twitter.finatra</code> package namespace and has dependencies on the <code>inject</code> libraries as well as other libraries. A long-term plan is to separate <code>inject</code> into its own project but we are not quite there yet. However, the changes in this release are a step in that direction.</p>
+
+<h4><font color='red'><strong>Important</strong></font> (or where has <code>WrappedValue</code> gone)</h4>
+
+<p>Unfortunately, there are things that were added to the <code>com.twitter.finatra</code> package namespace that make more sense in the core of the framework and have now been <a href="https://github.com/twitter/finatra/commit/c1d476859e9cac23679e0afe13cfbcf83f90758c">moved from <code>com.twitter.finatra</code> to the <code>com.twitter.inject</code> package namespace</a>. These were moved from <code>finatra-utils</code> to <code>inject-utils</code> and include:</p>
+
+<ul>
+<li>all conversions utilities, e.g., everything previously in <code>c.t.finatra.conversions</code> is now <code>c.t.inject.conversions</code>.</li>
+<li><code>c.t.finatra.domain.WrappedValue</code> is now <code>c.t.inject.domain.WrappedValue</code></li>
+<li><code>FutureUtils</code>, <code>RetryPolicyUtils</code>, and <code>RetryUtils</code> are now in the <code>c.t.inject.utils</code> package namespace.</li>
+</ul>
+
+
+<p>We apologize for the churn this may cause but feel it is for the betterment of the framework. Ideally, you need only do a &ldquo;search-and-replace&rdquo; to update package import statements.</p>
+
+<h2>Other Changes</h2>
+
+<hr />
+
+<p>As mentioned, there are lot of <a href="https://github.com/twitter/finatra/blob/master/CHANGELOG.md#finatra-280-2017-02-03">changes and fixes</a> in this release. Here&rsquo;s a quick rundown (for more information see the <a href="https://github.com/twitter/finatra/blob/master/CHANGELOG.md#finatra-280-2017-02-03">CHANGELOG</a>):</p>
+
+<ul>
+<li>Updated <a href="/finatra/user-guide/index.html">User&rsquo;s Guide</a>. We&rsquo;ve added more documentation and updated the layout. Please take a look!</li>
+<li>Introduced support for JSON Patch. See the <a href="/finatra/user-guide/http/requests.html#json-patch-requests">JSON Patch</a> section in the <a href="/finatra/user-guide/index.html">User&rsquo;s Guide</a> for more information.</li>
+<li>Introduced a simple DSL for easily <a href="/finatra/user-guide/http/controllers.html#route-prefixes">defining a route prefix</a> for a set of Controller routes.</li>
+<li>Support for matching <a href="/finatra/user-guide/http/controllers.html#trailing-slashes">optional trailing slashes</a> in Controller routes.</li>
+<li>More HTTP server Java support: including <a href="https://github.com/twitter/finatra/commit/8671f7969ccfa3aaea90f0565f0288726dbefad7">allowing the specification of admin routes</a> and <a href="https://github.com/twitter/finatra/commit/0d4e7ac92d5d7fad9ff3b1175efb581eba898535">better support for registering exception mappers</a>.</li>
+<li><a href="https://github.com/twitter/finatra/commit/34937784a1be0997671ffedc121301c1d3762382">Fixed</a> Github <a href="https://github.com/twitter/finatra/issues/373">issue #373</a> around the TestInjector not properly reading the default for boolean flags.</li>
+<li><a href="https://github.com/twitter/finatra/commit/b55b702bd3d20b570d798726c9259788eee973e9">Fixed</a> an IllegalArgumentException in <code>FinatraCaseClassDeserializer</code>. Thanks to <a href="https://github.com/AlexITC"><strong>@AlexITC</strong></a> for the contribution.</li>
+<li><a href="https://github.com/twitter/finatra/commit/e226beee463bf2ef620eb3792230f4c5d245fd41">Fixed</a> issue around &ldquo;injectable value&rdquo; fields of a collection type e.g., a custom case class request object field annotated with <code>@RouteParam</code>, <code>@QueryParam</code>, or <code>@FormParam</code> of a collection type, not correctly picking up default values.</li>
+<li>A <a href="https://github.com/twitter/finatra/commit/8f4820c2b20f82d64f86f898d10a73f4ac1e123e">fix</a> to correctly publish sources and javdoc jar for published Finatra test-jars.</li>
+</ul>
+
+
+<h2>Miscellanea</h2>
+
+<ul>
+<li>The <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> <a href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface</a> was moved to <a href="https://github.com/twitter/twitter-server/commit/bb18649069b0332291148ff1afc85b6c10912900">Netty4</a> in September. This change should be transparent to end-users but you may notice that you now have thread pools for both Netty3 and Netty4 (which should have no impact on your server performance) until the migration is completed. For more information about Finagle and Netty4 see the Finagle blog post <a href="https://finagle.github.io/blog/2017/02/06/finagle-loves-netty4/">here</a>.</li>
+</ul>
+
+
+<hr />
+
+<p>See the Finatra <a href="https://github.com/twitter/finatra">Github page</a> or checkout our <a href="/finatra/user-guide/index.html">User&rsquo;s Guide</a> for more information on getting started.</p>
+
+<p>&ndash; The Finatra Team | <a href="https://groups.google.com/forum/#!forum/finatra-users">forum</a> | <a href="https://twitter.com/finatra">@finatra</a> | <a href="https://gitter.im/twitter/finatra">chat</a></p>
+
+  </div>
+
+  <div class="span2">
+  </div>
+</div>
+
+
+        </section>
+      </div>
+    </div>
+
+
+    <div id="footer">
+      <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col-md-10">
+            <p>
+              Copyright &copy; 2013-2017&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+            </p></div>
+          <div class="col-md-2">
+            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
+              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
+      ga('send', 'pageview');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Understanding the Codebase &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.13.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
+    <link rel="next" title="Application and Server Lifecycle" href="lifecycle.html" />
+    <link rel="prev" title="First Steps" href="basics.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="lifecycle.html" title="Application and Server Lifecycle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="basics.html" title="First Steps"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="understanding-the-codebase">
+<span id="framework"></span><h1>Understanding the Codebase<a class="headerlink" href="#understanding-the-codebase" title="Permalink to this headline">¶</a></h1>
+<p>Finatra is divided into three main parts: <code class="docutils literal"><span class="pre">inject</span></code>, <code class="docutils literal"><span class="pre">http</span></code>, and <code class="docutils literal"><span class="pre">thrift</span></code>. The <cite>inject</cite> part of the framework contains all of the base functionality for integration of the Guice dependency injection framework with <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil</a>&#8216;s <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/App.html">c.t.app.App</a> and <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>&#8216;s <cite>c.t.server.TwitterServer</cite>.</p>
+<p>Modules in the <cite>inject</cite> portion of the Finatra framework constitute the core of the framework, are in the <code class="docutils literal"><span class="pre">com.twitter.inject</span></code> package namespace, and only depend on each other or outside dependencies (except in testing). The <cite>inject</cite> layer can be thought of as dealing with concerns that are common to the framework or that span both http and thrift services.</p>
+<p>Everything else in the Finatra codebase is in the <code class="docutils literal"><span class="pre">com.twitter.finatra</span></code> package namespace and has dependencies on the <cite>inject</cite> libraries as well as other libraries.</p>
+<div class="section" id="inject">
+<h2>Inject<a class="headerlink" href="#inject" title="Permalink to this headline">¶</a></h2>
+<p>Modules in <cite>inject</cite> include:</p>
+<ul class="simple">
+<li><cite>inject-core</cite> - core library which defines the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala">TwitterModule</a>, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/Injector.scala">Injector</a>, and the framework <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleFlags.scala">TwitterModuleFlags</a> for defining injectable <a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a> <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/Flag.scala">Flags</a>.</li>
+<li><cite>inject-modules</cite> - core library which defines framework modules.</li>
+<li><cite>inject-app</cite> - core integration with <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/App.html">c.t.app.App</a></li>
+<li><cite>inject-server</cite> - core integration with <cite>c.t.server.TwitterServer</cite>.</li>
+<li><cite>inject-slf4j</cite> - core library integration with the <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> API.</li>
+<li><cite>inject-request-scope</cite> - core library for integrating Guice&#8217;s <cite>Request Scope</cite> with <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">TwitterUtil</a> <cite>c.t.util.Future</cite>. See the <a class="reference external" href="../http/filters.html#request-scope">Request Scope</a> section for more information.</li>
+<li><cite>inject-thrift</cite> - core library for thrift utilities useful for both clients and server.</li>
+<li><cite>inject-thrift-client</cite> - core library for supporting creation of a Thrift <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a>.</li>
+<li><cite>inject-utils</cite> - core library which provides a collection of useful utilities, including implicit conversions, exceptions and futures handling and retries.</li>
+</ul>
+<div class="section" id="creating-an-injectable-app-or-twitterserver">
+<h3>Creating an injectable App or TwitterServer<a class="headerlink" href="#creating-an-injectable-app-or-twitterserver" title="Permalink to this headline">¶</a></h3>
+<p>If you simply want to create an injectable <cite>c.t.app.App</cite> or <cite>c.t.server.TwitterServer</cite>, you can directly depend on libraries in <cite>inject</cite> namely: <cite>inject-app</cite> or <cite>inject-server</cite> respectively.</p>
+<p>To use the framework to create an injectable App:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.App
+import com.twitter.inject.Logging
+
+object MyAppMain extends MyApp
+
+class MyApp
+  extends App
+  with Logging  {
+
+  override val modules = Seq(
+    MyModule1)
+
+  override protected def run(): Unit = {
+    // App logic goes here.
+  }
+}
+</pre></div>
+</div>
+<p>Similarily, to create an injectable TwitterServer:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Logging
+import com.twitter.inject.server.TwitterServer
+
+object MyTwitterServerMain extends MyTwitterServer
+
+class MyTwitterServer
+  extends TwitterServer
+  with Logging {
+
+  override val modules = Seq(
+    MyModule1)
+
+  override protected def start(): Unit = {
+    // Server logic goes here. It is important to remember to NOT BLOCK this method.
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="note">
+<h3>Note:<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h3>
+<p>It is important to remember that the Finatra framework handles the <a class="reference external" href="lifecycle.html">lifecycle</a> for you for both a <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil</a>&#8216;s <cite>c.t.app.App</cite> and a <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> <cite>c.t.server.TwitterServer</cite> (see <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L53">here</a> and <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L127">here</a>), thus you do not have access to the <cite>main</cite> method. Instead, any logic should be contained in either the <cite>c.t.inject.app.App#run</cite> or <cite>c.t.inject.server.TwitterServer#start</cite> method.</p>
+<p>See the <a class="reference external" href="lifecycle.html">Lifecycle</a> section for more information.</p>
+</div>
+</div>
+<div class="section" id="jackson">
+<h2>Jackson<a class="headerlink" href="#jackson" title="Permalink to this headline">¶</a></h2>
+<p>Finatra&#8217;s integration with <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala">jackson-module-scala</a> for JSON support. See the <a class="reference external" href="../json/index.html">Jackson Integration</a> section for more details.</p>
+</div>
+<div class="section" id="httpclient">
+<h2>HttpClient<a class="headerlink" href="#httpclient" title="Permalink to this headline">¶</a></h2>
+<p>A simple and barebones <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle Client</a> for making HTTP requests.</p>
+</div>
+<div class="section" id="http">
+<h2>HTTP<a class="headerlink" href="#http" title="Permalink to this headline">¶</a></h2>
+<p>Base library for HTTP services. See the <a class="reference external" href="../http/server.html">HTTP Server Definition</a> section for more information.</p>
+</div>
+<div class="section" id="thrift">
+<h2>Thrift<a class="headerlink" href="#thrift" title="Permalink to this headline">¶</a></h2>
+<p>Base library for Thrift services. See the <a class="reference external" href="../thrift/basics.html">Thrift Basics</a> and <a class="reference external" href="../thrift/server.html">Thrift Server Definition</a> sections for more details.</p>
+</div>
+<div class="section" id="utils">
+<h2>Utils<a class="headerlink" href="#utils" title="Permalink to this headline">¶</a></h2>
+<p>A collection of framework utilities that are specifically useful in HTTP or Thrift.</p>
+</div>
+<div class="section" id="other">
+<h2>Other<a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><cite>slf4j</cite> - provides support for bridging Logback&#8217;s <a class="reference external" href="http://logback.qos.ch/manual/mdc.html">Mapped Diagnostic Context</a> with Finagle. See <a class="reference external" href="../logging/logback.html#mapped-diagnostic-context-filter">Mapped Diagnostic Context Filter</a> section for more information.</li>
+<li><cite>inject-thrift-client-http-mapper</cite> - a library which bridges <cite>inject-thrift-client</cite> and <cite>http</cite> libraries to provide an exception mapper for mapping thrift exceptions to HTTP responses.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+</ul>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Understanding the Codebase</a><ul>
+<li><a class="reference internal" href="#inject">Inject</a><ul>
+<li><a class="reference internal" href="#creating-an-injectable-app-or-twitterserver">Creating an injectable App or TwitterServer</a></li>
+<li><a class="reference internal" href="#note">Note:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jackson">Jackson</a></li>
+<li><a class="reference internal" href="#httpclient">HttpClient</a></li>
+<li><a class="reference internal" href="#http">HTTP</a></li>
+<li><a class="reference internal" href="#thrift">Thrift</a></li>
+<li><a class="reference internal" href="#utils">Utils</a></li>
+<li><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="basics.html" title="previous chapter">First Steps</a></li>
+      <li>Next: <a href="lifecycle.html" title="next chapter">Application and Server Lifecycle</a></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>
