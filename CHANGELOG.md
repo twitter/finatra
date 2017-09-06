@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-2.13.0](https://github.com/twitter/finatra/tree/finatra-2.13.0) (2017-09-06)
+
+### Added
+
 * inject-server: Add ability to fail embedded server startup on lint rule violation.
   There is now a flag in the embedded servers that when set to true will fail
   server startup if a lint rule violation is detected. This will then fail
