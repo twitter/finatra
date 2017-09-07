@@ -7,11 +7,11 @@ import com.twitter.finagle.util.DefaultTimer
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.App
-import com.twitter.inject.logging.Slf4jBridgeUtility
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision
+import com.twitter.util.logging.Slf4jBridgeUtility
 import com.twitter.util.{Awaitable, Await, Duration}
 import java.util.concurrent.{ConcurrentLinkedQueue, CountDownLatch}
 import scala.collection.JavaConverters._

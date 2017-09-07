@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-server: Remove usage of deprecated `c.t.inject.logging.Slf4jBridgeUtility`.
+  Change usages to `c.t.util.logging.Slf4jBridgeUtility`. ``PHAB_ID=D88095``
+
 * finatra-http, inject-thrift-client: Remove netty3 specific types and dependency. 
   In finatra-http, the code using these types is deprecated and can be removed allowing 
   us to remove netty3-specific dependencies. In inject-thrift-client we can default to

@@ -26,6 +26,7 @@ scala_library(
     'util/util-lint/src/main/scala:scala',
     'util/util-logging/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
+    'util/util-slf4j-jul-bridge/src/main/scala',
     'util/util-stats/src/main/scala',
   ],
   fatal_warnings=True,
