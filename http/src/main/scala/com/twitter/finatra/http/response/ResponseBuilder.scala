@@ -2,7 +2,6 @@ package com.twitter.finatra.http.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.http._
-import com.twitter.finagle.netty3.ChannelBufferBuf
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
@@ -21,7 +20,6 @@ import java.util.function.{Function => JFunction}
 import javax.inject.Inject
 import org.apache.commons.io.FilenameUtils._
 import org.apache.commons.io.IOUtils
-import org.jboss.netty.buffer.{ChannelBuffer, ChannelBuffers}
 import org.jboss.netty.handler.codec.http.{Cookie => NettyCookie}
 import scala.runtime.BoxedUnit
 
@@ -247,19 +245,7 @@ class ResponseBuilder @Inject()(
     }
 
     def body(inputStream: InputStream): EnrichedResponse = {
-      body(
-        ChannelBufferBuf.Owned(
-          ChannelBuffers.wrappedBuffer(
-            IOUtils.toByteArray(inputStream)
-          )
-        )
-      )
-      this
-    }
-
-    @deprecated("use body(Buf)", "2015-08-20")
-    def body(channelBuffer: ChannelBuffer): EnrichedResponse = {
-      response.content = ChannelBufferBuf.Owned(channelBuffer)
+      body(IOUtils.toByteArray(inputStream))
       this
     }
 
@@ -504,7 +490,6 @@ class ResponseBuilder @Inject()(
         case null => nothing
         case buf: Buf => body(buf)
         case bytes: Array[Byte] => body(bytes)
-        case cbos: ChannelBuffer => body(ChannelBufferBuf.Owned(cbos))
         case "" => nothing
         case Unit => nothing
         case _: BoxedUnit => nothing

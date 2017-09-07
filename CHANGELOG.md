@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http, inject-thrift-client: Remove netty3 specific types and dependency. 
+  In finatra-http, the code using these types is deprecated and can be removed allowing 
+  us to remove netty3-specific dependencies. In inject-thrift-client we can default to
+  use the DefaultTimer for the backupRequestFilter method param instead of the 
+  HashedWheelTimer. ``PHAB_ID=D88025``
+
 ### Fixed
 
 ### Closed
