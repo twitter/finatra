@@ -4,7 +4,37 @@ sudo: false
 language: scala
 
 env:
-  - JAVA_OPTS="-DSKIP_FLAKY=true -Dsbt.log.noformat=true"
+  global:
+    - JAVA_OPTS="-DSKIP_FLAKY=true -Dsbt.log.noformat=true"
+
+  matrix:
+    - PROJECT=benchmarks
+    - PROJECT=http
+    - PROJECT=httpclient
+    - PROJECT=injectApp
+    - PROJECT=injectCore
+    - PROJECT=injectModules
+    - PROJECT=injectRequestScope
+    - PROJECT=injectServer
+    - PROJECT=injectThrift
+    - PROJECT=injectThriftClient
+    - PROJECT=injectThriftClientHttpMapper
+    - PROJECT=injectSlf4j
+    - PROJECT=injectUtils
+    - PROJECT=jackson
+    - PROJECT=slf4j
+    - PROJECT=thrift
+    - PROJECT=utils
+    - EXAMPLE=benchmarkServer
+    - EXAMPLE=exampleHttpJavaServer
+    - EXAMPLE=exampleInjectJavaServer
+    - EXAMPLE=exampleWebDashboard
+    - EXAMPLE=helloWorld
+    - EXAMPLE=streamingExample
+    - EXAMPLE=thriftExampleServer
+    - EXAMPLE=thriftJavaExampleServer
+    - EXAMPLE=tinyUrl
+    - EXAMPLE=twitterClone
 
 # These directories are cached to S3 at the end of the build
 cache:
@@ -37,8 +67,13 @@ before_script:
   - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
 
 script:
-  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
-  - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
+  - 'if [ ${TRAVIS_BRANCH} != "master" ]; then
+      travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
+      travis_retry ./sbt ++$TRAVIS_SCALA_VERSION "$EXAMPLE/test"
+    else
+      travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
+    fi'
 
 after_success:
+  - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
   - bash <(curl -s https://codecov.io/bash)
