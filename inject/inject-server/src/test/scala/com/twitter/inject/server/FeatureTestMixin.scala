@@ -35,8 +35,10 @@ trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suit
       )
     }
 
-    assert(server.isInjectable)
-    server.injectableServer.addFrameworkOverrideModules(integrationTestModule)
+    if (hasBoundFields) {
+      assert(server.isInjectable)
+      server.injectableServer.addFrameworkOverrideModules(integrationTestModule)
+    }
     super.beforeAll()
   }
 
