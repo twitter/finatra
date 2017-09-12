@@ -2,7 +2,9 @@ package com.twitter.finatra.thrift.tests.doeverything;
 
 import javax.inject.Inject;
 
+import com.twitter.doeverything.thriftjava.Answer;
 import com.twitter.doeverything.thriftjava.DoEverything;
+import com.twitter.doeverything.thriftjava.Question;
 import com.twitter.inject.annotations.Flag;
 import com.twitter.util.Future;
 
@@ -64,6 +66,15 @@ class DoEverythingJavaThriftController implements DoEverything.ServiceIface {
         String twentyone,
         String twentytwo,
         String twentythree) {
-        return  Future.value("handled");
+        return Future.value("handled");
+    }
+
+    @Override
+    public Future<Answer> ask(Question question) {
+        return Future.value(
+                new Answer(
+                        String.format(
+                                "The answer to the question: `%s` is 42.",
+                                question.getText())));
     }
 }

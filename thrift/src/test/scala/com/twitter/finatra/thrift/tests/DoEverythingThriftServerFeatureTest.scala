@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.doeverything.thriftscala.DoEverything
+import com.twitter.doeverything.thriftscala.{Answer, Question, DoEverything}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
 import com.twitter.finatra.thrift.thriftscala.{
@@ -142,5 +142,15 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
         "twentythree"
       )
     ) should equal("handled")
+  }
+
+  test("ask") {
+    val question = Question("What is the meaning of life?")
+    Await.result(client123.ask(question)) should equal(Answer("The answer to the question: `What is the meaning of life?` is 42."))
+  }
+
+  test("ask fail") {
+    val question = Question("fail")
+    Await.result(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
   }
 }

@@ -32,7 +32,7 @@ class FinatraThriftExceptionMapper
   def handleException(throwable: Exception): Future[ThriftException] = {
     throwable match {
       case e: TimeoutException =>
-        Future.exception(ClientError(RequestTimeout, e.getMessage))
+        Future.exception(ClientError(RequestTimeout, e.getMessage()))
       case e: ClientError =>
         Future.exception(e)
       case e: UnknownClientIdError =>
