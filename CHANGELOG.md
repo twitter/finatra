@@ -21,6 +21,9 @@ All notable changes to this project will be documented in this file. Note that `
   use the DefaultTimer for the backupRequestFilter method param instead of the 
   HashedWheelTimer. ``PHAB_ID=D88025``
 
+* inject-utils: (BREAKING API CHANGE) RichOption toFutureOrFail, toTryOrFail, and toFutureOrElse signature
+  changed to take the fail or else parameter by name.
+
 ### Fixed
 
 ### Closed
