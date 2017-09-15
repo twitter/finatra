@@ -38,6 +38,20 @@ class RouteDSLTest extends Test {
     routeDSL.context.buildFilter(injector) shouldEqual Filter.identity
   }
 
+  test("RouteDSL fails when route is not prefixed with leading slash") {
+    intercept[IllegalArgumentException] {
+      new RouteDSL {
+        get("foo") { request: Request => // <---- this should fail
+          "bar"
+        }
+
+        post("/foo") { request: Request =>
+          "another bar"
+        }
+      }
+    }
+  }
+
   // Simple test to verify that the build filter is set appropriately in a new FilteredDSL
   test("FilteredDSL sets build filter") {
     val routeDSL = new FilteredDSL[NormalTestFilter]()
@@ -72,22 +86,46 @@ class RouteDSLTest extends Test {
   }
 
   test("PrefixedDSL should update the context prefix") {
-    val routeDSL = new PrefixedDSL("v1")
+    val routeDSL = new PrefixedDSL("/v1")
 
-    routeDSL.context.prefix shouldEqual "v1"
+    routeDSL.context.prefix shouldEqual "/v1"
     routeDSL.context.buildFilter(injector) shouldEqual Filter.identity
   }
 
-  test("PrefixedDSL should chain to more prefixes") {
-    val routeDSL = new PrefixedDSL("v1").prefix("/api")
+  test("PrefixedDSL should fail with no leading slash") {
+    intercept[IllegalArgumentException] {
+      new PrefixedDSL("v1")
+    }
+  }
 
-    routeDSL.context.prefix shouldEqual "v1/api"
+  test("PrefixedDSL should chain to more prefixes") {
+    val routeDSL = new PrefixedDSL("/v1").prefix("/api")
+
+    routeDSL.context.prefix shouldEqual "/v1/api"
+  }
+
+  test("PrefixedDSL should work fine with a trailing slash and chain to more prefixes") {
+    val routeDSL = new PrefixedDSL("/v1/").prefix("/api")
+
+    routeDSL.context.prefix shouldEqual "/v1/api"
+  }
+
+  test("PrefixedDSL should work fine with a trailing slash and chain to more prefixes with trailing slashes") {
+    val routeDSL = new PrefixedDSL("/v1/").prefix("/api/")
+
+    routeDSL.context.prefix shouldEqual "/v1/api"
+  }
+
+  test("PrefixedDSL should fail when chained to more prefixes without leading slashes") {
+    intercept[IllegalArgumentException  ] {
+      new PrefixedDSL("/v1").prefix("api")
+    }
   }
 
   test("PrefixedDSL should chain to FilteredDSL") {
-    val routeDSL = new PrefixedDSL("v1").filter[NormalTestFilter]
+    val routeDSL = new PrefixedDSL("/v1").filter[NormalTestFilter]
 
-    routeDSL.context.prefix shouldEqual "v1"
+    routeDSL.context.prefix shouldEqual "/v1"
 
     val request = Request()
     val filter = routeDSL.context.buildFilter(injector)

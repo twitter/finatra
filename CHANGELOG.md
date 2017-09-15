@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Require that route URIs and prefixes begin with forward slash (/). 
+  ``PHAB_ID=D90895``
+
 * inject-utils: (BREAKING API CHANGE) RichOption toFutureOrFail, toTryOrFail, and 
   toFutureOrElse signature changed to take the fail or else parameter by name. 
   ``PHAB_ID=D89544``

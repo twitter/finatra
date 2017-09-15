@@ -279,7 +279,7 @@ For example,
 
 Things to keep in mind:
 ^^^^^^^^^^^^^^^^^^^^^^^
-
+-  Routes and Prefixes MUST begin with a forward slash (/).
 -  Routes are always added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__ **in the order defined** in the `Controller <../http/controllers.html#controllers-and-routing>`__ and are scanned in this order as well.
    This remains true even when defined within a `prefix` block. I.e., the `prefix` is merely a convenience for adding a common prefix to a set of routes. You should still be aware of the total order in which your routes are defined in a Controller.
 -  You can use the `c.t.finatra.http.RouteDSL#prefix` function multiple times in a Controller with the same or different values.
@@ -295,6 +295,7 @@ If you want to ignore trailing slashes on routes such that `/groups/1` and `grou
       response.ok(...)
     }
 
+Otherwise, the route as specified is an **exact match**. E.g., if you define `/groups/1` we will **only** match requests to `/groups/1` and **not** requests to `/groups/1/` and vice-versa.
 
 Admin Paths
 -----------
