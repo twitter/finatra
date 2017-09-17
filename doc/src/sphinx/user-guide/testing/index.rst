@@ -78,10 +78,14 @@ extend from
 which extends from
 `c.t.app.App <https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala>`__.
 
-Test Helper Classes
--------------------
+InMemoryStatsReceiver
+^^^^^^^^^^^^^^^^^^^^^
 
-.. image:: ../_static/test-classes.png
+The `EmbeddedTwitterServer <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala>`__ (and thus its subclasses: `EmbeddedHttpServer <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala>`__ and `EmbeddedThriftServer <https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala>`__) binds an instance of the `com.twitter.finagle.stats.InMemoryStatsReceiver <https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/InMemoryStatsReceiver.scala>`__ to the underlying server's object graph (if the underlying server supports injection). This will override any other bound implementation of a `c.t.finagle.stats.StatsReceiver <https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/StatsReceiver.scala>`__ in the server's object graph. 
+
+The `EmbeddedTwitterServer <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala>`__ `exposes this bound <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L142>`__ `StatsReceiver <https://github.com/twitter/util/blob/develop/util-stats/src/main/scala/com/twitter/finagle/stats/StatsReceiver.scala>`__ along with helper methods for asserting `counter <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L307>`__, `stat <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L319>`__, and `gauge <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L327>`__ values, such that you can expect behavior against the underlying server's recorded stats in tests. `Feature Tests <#feature-tests>`__ (see below) also `print all recorded stats <https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L48>`__ to stdout after each test by default.
+
+See: `c.t.finatra.multiserver.test.MultiServerFeatureTest <https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala>`__ for an example usage.
 
 Feature Tests
 ^^^^^^^^^^^^^
@@ -281,7 +285,7 @@ Working with Mocks
 provides `Specs2 <https://etorreborre.github.io/specs2/>`__ Mockito
 syntax sugar for `ScalaTest <http://www.scalatest.org/>`__.
 
-This is a drop-in replacement for `org.specs2.mock.Mockito <http://etorreborre.github.io/specs2/guide/SPECS2-3.9.1/org.specs2.guide.UseMockito.html>`__. We encourage you to not use `org.specs2.mock.Mockito` directly. Otherwise, match failures will not be propagated up as ScalaTest test failures.
+This is a drop-in replacement for `org.specs2.mock.Mockito <http://etorreborre.github.io/specs2/guide/SPECS2-3.9.1/org.specs2.guide.UseMockito.html>`__ and we encourage you to **not** use `org.specs2.mock.Mockito` directly. Otherwise, match failures will not be propagated as ScalaTest test failures.
 
 See the next few sections on how you can use mocks in testing with either `Override Modules`_ or using `Embedded Server #bind[T] <#embedded-server-bind-t>`__.
 
