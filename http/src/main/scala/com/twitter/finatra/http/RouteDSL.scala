@@ -80,19 +80,14 @@ private[http] class PrefixedDSL(prefix: String) extends RouteDSL {
 
   override private[http] val context = {
     val current = contextVar()
-    current.copy(prefix = current.prefix + canonicalize(prefix))
+    // prefixes by definition will be concatenated to a route (which MUST begin
+    // with a leading slash), thus we remove any trailing slash from a given prefix
+    current.copy(prefix = current.prefix + prefix.stripSuffix("/"))
   }
 
   def apply(fn: => Unit): Unit = withContext(context)(fn)
 
   override private[http] def contextWrapper[T](f: => T): T = withContext(context)(f)
-
-  /* deals with any trailing slash on a prefix */
-  private[this] def canonicalize(prefix: String): String = {
-    // prefixes by definition will be concatenated to a route (which MUST begin
-    // with a leading slash), thus we remove any trailing slash from a given prefix
-    if (prefix.endsWith("/")) prefix.substring(0, prefix.lastIndexOf("/")) else prefix
-  }
 }
 
 private[http] trait RouteDSL extends RouteState { self =>
