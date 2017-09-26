@@ -953,6 +953,20 @@ class FinatraObjectMapperTest extends Test with Logging {
     c.arraylist should equal(l)
   }
 
+  test("A case class with a SortedMap[String, Int]") {
+    val origCaseClass = CaseClassWithSortedMap(scala.collection.SortedMap("aggregate" -> 20))
+    val caseClassJson = generate(origCaseClass)
+    val caseClass = parse[CaseClassWithSortedMap](caseClassJson)
+    caseClass should equal(origCaseClass)
+  }
+
+  test("A case class with a Seq of Longs") {
+    val origCaseClass = CaseClassWithSeqOfLongs(Seq(10, 20, 30))
+    val caseClassJson = generate(origCaseClass)
+    val caseClass = parse[CaseClassWithSeqOfLongs](caseClassJson)
+    caseClass should equal(origCaseClass)
+  }
+
   test("seq of longs") {
     val seq = parse[Seq[Long]]("""[3,1,2]""")
     seq.sorted should equal(Seq(1L, 2L, 3L))

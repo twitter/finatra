@@ -8,6 +8,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-jackson: ScalaType's `isMap` and `isCollection` methods now check that
+  the given object's class is a subclass of `scala.collection.Map[Any, Any]` and
+  `scala.collection.Iterable[Any]`, respectively. Previously the superclasses'
+  packages were unspecified. This is a runtime behavior change.
+  ``PHAB_ID=D93104``
+
+
 * finatra-http: Require that route URIs and prefixes begin with forward slash (/). 
   ``PHAB_ID=D90895``
 
