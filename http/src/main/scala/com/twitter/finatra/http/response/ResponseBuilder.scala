@@ -2,6 +2,7 @@ package com.twitter.finatra.http.response
 
 import com.google.common.net.{HttpHeaders, MediaType}
 import com.twitter.finagle.http._
+import com.twitter.finagle.http.{MediaType => FinagleMediaType}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
@@ -345,8 +346,13 @@ class ResponseBuilder @Inject()(
         file(indexPath)
     }
 
-    def view(template: String, obj: Any) = {
-      html(MustacheBodyComponent(obj, template))
+    def view(template: String, obj: Any): EnrichedResponse = {
+      body(MustacheBodyComponent(obj, template, getContentType.getOrElse(FinagleMediaType.Html)))
+      this
+    }
+
+    def view(obj: Any): EnrichedResponse = {
+      view("", obj)
     }
 
     /* Exception Stats */
@@ -464,6 +470,10 @@ class ResponseBuilder @Inject()(
     def toFutureException[T]: Future[T] = Future.exception(toException)
 
     /* Private */
+
+    private def getContentType = {
+      response.headerMap.get(Fields.ContentType)
+    }
 
     private def hasExtension(requestPath: String) = {
       getExtension(requestPath).nonEmpty

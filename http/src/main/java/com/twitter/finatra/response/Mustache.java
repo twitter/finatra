@@ -13,4 +13,12 @@ public @interface Mustache {
      * Template name
      */
     String value();
+
+    /**
+     *
+     * The value to be set for the HTTP response's Content-Type header
+     * e.g. "text/html; charset=utf-8"
+     *      "application/json; charset=utf-8"
+     */
+    String contentType() default "text/html; charset=utf-8";
 }

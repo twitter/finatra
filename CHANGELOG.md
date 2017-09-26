@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Allow setting the content type of a Mustache view.
+  ``PHAB_ID=D91857``
+  
 ### Changed
 
 * finatra-jackson: ScalaType's `isMap` and `isCollection` methods now check that
