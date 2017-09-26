@@ -95,7 +95,7 @@ class TestInjector(
    * @tparam T - type of the instance to bind.
    * @return this [[TestInjector]].
    *
-   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
    */
   def bind[T: TypeTag](instance: T): TestInjector = {
     addInjectionServiceModule(new InjectionServiceModule[T](instance))
@@ -112,7 +112,7 @@ class TestInjector(
    * @tparam A - type of the Annotation used to bind the instance.
    * @return this [[TestInjector]].
    *
-   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
    */
   def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): TestInjector = {
     addInjectionServiceModule(new InjectionServiceWithAnnotationModule[T, A](instance))
@@ -120,10 +120,27 @@ class TestInjector(
   }
 
   /**
+   * Bind an instance of type [T] annotated with the given Annotation value
+   * to the object graph of this injector. This will REPLACE any previously
+   * bound instance of the given type bound with the given annotation.
+   *
+   * @param annotation - [[java.lang.annotation.Annotation]] instance value
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @return this [[TestInjector]].
+   *
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
+   */
+  def bind[T: TypeTag](annotation: Annotation, instance: T): TestInjector = {
+    addInjectionServiceModule(new InjectionServiceWithNamedAnnotationModule[T](annotation, instance))
+    this
+  }
+
+  /**
    * Creates a new [[com.google.inject.Injector]] from this TestInjector.
    * @return a new [[com.google.inject.Injector]].
    *
-   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
    */
   def create: Injector = {
     start()

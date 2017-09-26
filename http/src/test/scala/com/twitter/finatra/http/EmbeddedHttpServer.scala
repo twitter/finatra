@@ -160,6 +160,23 @@ class EmbeddedHttpServer(
     this
   }
 
+  /**
+   * Bind an instance of type [T] annotated with the @given Annotation value to the object
+   * graph of the underlying http server. This will REPLACE any previously bound instance of
+   * the given type bound with the given annotation.
+   *
+   * @param annotation - [[java.lang.annotation.Annotation]] instance value
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @return this [[EmbeddedHttpServer]].
+   *
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
+   */
+  override def bind[T: TypeTag](annotation: Annotation, instance: T): EmbeddedHttpServer = {
+    bindInstance[T](annotation, instance)
+    this
+  }
+
   /* Public */
 
   lazy val httpClient = {

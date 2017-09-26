@@ -69,7 +69,7 @@ class EmbeddedThriftServer(
    * @tparam T - type of the instance to bind.
    * @return this [[EmbeddedThriftServer]].
    *
-   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
    */
   override def bind[T: TypeTag](instance: T): EmbeddedThriftServer = {
     bindInstance[T](instance)
@@ -86,10 +86,27 @@ class EmbeddedThriftServer(
    * @tparam A - type of the Annotation used to bind the instance.
    * @return this [[EmbeddedThriftServer]].
    *
-   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
    */
   override def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedThriftServer = {
     bindInstance[T, A](instance)
+    this
+  }
+
+  /**
+   * Bind an instance of type [T] annotated with the given Annotation value to the object
+   * graph of the underlying thrift server. This will REPLACE any previously bound instance of
+   * the given type bound with the given annotation.
+   *
+   * @param annotation - [[java.lang.annotation.Annotation]] instance value
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @return this [[EmbeddedThriftServer]].
+   *
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
+   */
+  override def bind[T: TypeTag](annotation: Annotation, instance: T): EmbeddedThriftServer = {
+    bindInstance[T](annotation, instance)
     this
   }
 

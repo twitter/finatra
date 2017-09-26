@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra: Add support for using a `java.lang.annotation.Annotation` instance 
+  with the `#bind[T]` testing DSL. This adds a way to bind instances in tests 
+  that use the @Named binding annotation. ``PHAB_ID=D91330``
+
 * finatra-http: Allow setting the content type of a Mustache view.
   ``PHAB_ID=D91857``
   
@@ -16,7 +20,6 @@ All notable changes to this project will be documented in this file. Note that `
   `scala.collection.Iterable[Any]`, respectively. Previously the superclasses'
   packages were unspecified. This is a runtime behavior change.
   ``PHAB_ID=D93104``
-
 
 * finatra-http: Require that route URIs and prefixes begin with forward slash (/). 
   ``PHAB_ID=D90895``
