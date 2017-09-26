@@ -12,7 +12,7 @@ Startup
 
 At a high-level, the start-up lifecycle of a Finatra server looks like:
 
-.. image:: ../_static/FinatraLifecycle.png
+.. image:: ../../_static/FinatraLifecycle.png
 
 Shutdown
 --------

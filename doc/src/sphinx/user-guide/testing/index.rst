@@ -66,7 +66,7 @@ See:
 -  `c.t.finatra.thrift.EmbeddedThriftServer <https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala>`__
 
 
-.. image:: ../_static/embedded.png
+.. image:: ../../_static/embedded.png
 
 You'll notice that this hierarchy generally follows the server class
 hierarchy as
