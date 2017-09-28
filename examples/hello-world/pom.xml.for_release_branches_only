@@ -78,7 +78,7 @@
     </dependency>
     <dependency>
       <groupId>com.twitter</groupId>
-      <artifactId>inject-server_${scala.artifactVersion}/artifactId>
+      <artifactId>inject-server_${scala.artifactVersion}</artifactId>
       <scope>test</scope>
       <type>test-jar</type>
       <version>${finatra.version}</version>
