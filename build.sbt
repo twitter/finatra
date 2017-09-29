@@ -1,4 +1,3 @@
-import sbt.Keys._
 import scala.language.reflectiveCalls
 import scoverage.ScoverageKeys
 
@@ -18,7 +17,9 @@ lazy val buildSettings = Seq(
 lazy val noPublishSettings = Seq(
   publish := {},
   publishLocal := {},
-  publishArtifact := false
+  publishArtifact := false,
+  // sbt-pgp's publishSigned task needs this defined even though it is not publishing.
+  publishTo := Some(Resolver.file("Unused transient repository", file("target/unusedrepo")))
 )
 
 def travisTestJavaOptions: Seq[String] = {
