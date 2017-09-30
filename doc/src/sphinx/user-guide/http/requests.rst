@@ -10,40 +10,45 @@ Finagle `c.t.finagle.http.Request`
 
 This is a `c.t.finagle.http.Request <https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request>`__ which contains common HTTP attributes.
 
-Custom case class request object
---------------------------------
+Custom "request" case class
+---------------------------
 
-Custom request case classes are used for requests with a content-type of `application/json` and allow declarative request parsing with support for type conversions, default values, and validations.
+Custom "request" case classes can be used for declarative parsing of requests with a content-type of `application/json` with support for type conversions, default values, and `validations <../json/validations.html>`__.
 
-For example, suppose you want to parse a `GET` request with three query params: `max`, `startDate`, and `verbose`,
-
-.. code:: text
-
-    http://foo.com/users?max=10&start_date=2014-05-30TZ&verbose=true
-
-
-This can be modeled with the following case class:
-
-.. code:: scala
-
-    case class UsersRequest(
-      @Max(100) @QueryParam max: Int,
-      @PastDate @QueryParam startDate: Option[DateTime],
-      @QueryParam verbose: Boolean = false)
-
-
-The custom `UsersRequest` case class can then be used as the route callback's input type:
-
-.. code:: scala
-
-    get("/users") { request: UsersRequest =>
-      request
-    }
-
-The case class field names should match the request parameters or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__ annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L141>`__).
+The case class field names should match the request or header parameter name or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__ annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala##L177>`__ and `test case <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L135>`__).
 
 A `PropertyNamingStrategy <https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html>`__ can be configured to handle common name substitutions (e.g. snake\_case or camelCase). By default, snake\_case is
 used (defaults are set in `FinatraJacksonModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__).
+
+For example, if we have a `POST` endpoint which expects a JSON body with a `Long` `"id"` and a `String` `"name"`, we could define the following case class and Controller route:
+
+.. code:: scala
+
+  case class HiRequest(id: Long, name: String)
+
+  ...
+
+  post("/hi") { hiRequest: HiRequest =>
+    "Hello " + hiRequest.name + " with id " + hiRequest.id
+  }
+
+For the request: ``POST /hi``
+
+.. code:: json
+
+  {
+    "id": 1,
+    "name": "Bob"
+  }
+
+The incoming request body will be parsed as JSON using the configured `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__ into the `HiRequest` case class. This route would thus return:
+
+   :statuscode 200: `Hello Bob with id 1`
+
+
+More examples in the `JSON Integration with Routing <../json/routing.html#json-integration-with-routing>`__ section.
+
+For more information on configuring the `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__ see the `Jackson Integration <../json/index.html>`__ section.
 
 Required Fields
 ^^^^^^^^^^^^^^^
@@ -55,48 +60,145 @@ If a required field is missing, a `CaseClassMappingException` is thrown.
 Field Annotations
 ^^^^^^^^^^^^^^^^^
 
-The following field annotations specify how or where to parse a case class field out of the request:
+Field annotations specify how to parse a case class field member from the `c.t.finagle.http.Request`. Supported annotations:
 
-- `@RouteParam <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala>`__  - denotes a field to be parsed from a named parameter in a given route, e.g., for a route defined as: `get("/foo/:id")`
+- `@RouteParam <#routeparam>`__
+- `@QueryParam <#queryparam>`__
+- `@FormParam <#formparam>`__
+- `@Header <#header>`__
 
-  .. code:: scala
+------------
 
-      case class FromRouteRequest(
-        @RouteParam id: String)
+`@RouteParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/RouteParam.java>`__
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-  would take a request with a URI of `/foo/1234` and set `1234` as the value of the `id` field in the `FromRouteRequest` case class.
+Denotes a field to be parsed from a named parameter in a given route, e.g.,
 
-- `@QueryParam <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala>`__ - reads the value from the query string by a parameter named for the field. Make sure that ``@RouteParam`` names do not collide with
-  ``@QueryParam`` names. Otherwise, an ``@QueryParam`` could end up parsing an ``@RouteParam``. E.g.,
+.. code:: scala
 
-  .. code:: scala
+  case class FromRouteRequest(
+    @RouteParam("entity") resource: String,
+    @RouteParam id: String)
 
-      case class QueryParamRequest(
-        @QueryParam foo: String)
 
-  would set the value of the `foo` field in the `QueryParamRequest` to the result of `request.param("foo")`.
+  get("/foo/:entity/:id") { request: FromRouteRequest =>
+    s"The resource is ${request.resource} and the id = ${request.id}"
+  }
 
-- `@FormParam <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala>`__ - read the value from a form field with the field's name from the request body.
-- `@Header <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala>`__ - read the value from a header field with the field's name. You can use a Scala `"back-quote" literal <http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__ for the field name when special characters are involved. E.g.
+Given a request: ``GET /foo/users/1234``
 
-  .. code:: scala
+Using `FromRouteRequest` as an input to the route callback would parse the string "users" into the value of `FromRouteRequest#resource` and the string "1234" into the value of `FromRouteRequest#id`.
 
-      @Header `user-agent`: String
+Thus, this route would respond:
+
+   :statuscode 200: `The resource is users and the id = 1234`
+
+Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/IdAndNameRequest.scala>`__.
+
+------------
+
+`@QueryParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/QueryParam.java>`__
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Read a value from the request query string by a parameter named for the case class field or by the ``@QueryParam`` annotation value.
+
+For example, suppose you want to parse a `GET` request with three query params: `max`, `startDate`, and `verbose`, e.g.,
+
+``GET /users?max=10&start_date=2014-05-30TZ&verbose=true``
+
+This can be modeled with the following custom "request" case class which also applies `validations <../json/validations.html>`__:
+
+.. code:: scala
+
+  case class UsersRequest(
+    @Max(100) @QueryParam max: Int,
+    @PastDate @QueryParam startDate: Option[DateTime],
+    @QueryParam verbose: Boolean = false)
+
+  get("/users") { request: UsersRequest =>
+    ...
+  }
+
+The `max` value will be parsed into an `Int` and `validated to be less than or equal to 100 <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/validation/validators/MaxValidator.scala#L49>`__. The `startDate` will be parsed into an `Option[DateTime]` (meaning it could be omitted without error from the query string) and if present will be validated to be a date in the past. Lastly, the `verbose` parameter will be parsed into a `Boolean` type.
+
+You can also set the parameter name as a value in the ``@QueryParam`` annotation, e.g.
+
+.. code:: scala
+
+  case class QueryParamRequest(
+    @QueryParam foo: String,
+    @QueryParam("skip") isSkipped: Boolean)
+
+Using this case class in a route callback for a request:
+
+``GET /?foo=bar&skip=false``
+
+would parse the string "bar" into the value of `QueryParamRequest#foo` and parse the string "false" as a Boolean into the `QueryParamRequest#isSkipped` field.
+
+Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala>`__.
+
+------------
+
+`@FormParam <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/FormParam.java>`__
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Read a value from a form field with the case class field's name or as the value specified in the ``@FormParam`` annotation from the request body.
+
+Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala>`__.
+
+------------
+
+`@Header <https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/Header.java>`__
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Read a header value specified by the case class field name or by the ``@Header`` annotation value. You can use a Scala `"back-quote" literal <http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html>`__ for the field name when special characters are involved.
+
+.. code:: scala
+
+  @Header `user-agent`: String
+
+or specify the header name as a parameter to the ``@Header`` annotation, e.g.,
+
+.. code:: scala
+
+  @Header("user-agent") agent: String
+
+Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala>`__.
+
+.. admonition:: Important
+
+    Route, query, and form params are all stored in the "params" field of the incoming Finagle http request. As such, you should ensure that ``@RouteParam`` names do not collide with
+    ``@QueryParam`` names. Otherwise, an ``@QueryParam`` could end up parsing an ``@RouteParam`` or ``@FormParam`` field.
+
+    Also note that request parameters and headers are accessed `**case-insensitively** <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/ParamMap.scala#L178>`__. Thus, the annotated fields:
+
+    .. code:: scala
+
+        @Header("Accept-Charset") acceptCharset: String
+        @Header("accept-charset") acceptCharset: String
+        @Header("aCcEpT-cHaRsEt") acceptCharset: String
+        @Header `accept-charset`: String
+
+    would all retrieve **the same value** from the request headers map. The same is true for ``@RouteParam``, ``@QueryParam``, and ``@FormParam``.
+
+------------
 
 - `@Inject <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala>`__ - can be used to inject any Guice managed class into your case class. However, it is not necessary for "injecting" the underlying Finagle `http` Request into your case class. To access the underlying Finagle `http` Request in your custom case class, simply include a field of type `c.t.finagle.http.Request`, for example:
 
   .. code:: scala
 
       case class CaseClassWithRequestField(
-       @Header `user-agent`: String,
+       @Header("user-agent") agent: String,
        @QueryParam verbose: Boolean = false,
        request: Request)
 
-**Note:** HTTP requests with a content-type of `application/json` sent to routes with a custom request case class callback input type will **always trigger** the parsing of the request body as well-formed JSON in attempt to convert the JSON into the request case class.
+.. note::
 
-This behavior can be disabled by annotating the case class with ``@JsonIgnoreBody`` leaving the raw request body accessible by simply adding a member of type `c.t.finagle.http.Request` as mentioned above.
+    HTTP requests with a content-type of `application/json` sent to routes with a custom request case class callback input type will **always trigger** the parsing of the request body as well-formed JSON in attempt to convert the JSON into the request case class.
 
-For more specifics on how JSON parsing integrates with routing see: `Integration with Routing <../json/routing.html>`__ in the `JSON <../json/index.html>`__ documentation.
+    This behavior can be disabled by annotating the case class with ``@JsonIgnoreBody`` leaving the raw request body accessible by simply adding a member of type `c.t.finagle.http.Request` as mentioned above.
+
+For more specifics on how JSON parsing integrates with routing see the `JSON Integration with Routing <../json/routing.html>`__ in the `JSON <../json/index.html>`__ documentation.
 
 Request Forwarding
 ------------------
@@ -121,7 +223,6 @@ Then, to use in your route:
       forward(request, "/bar")
     }
 
-
 Forwarded requests will bypass the server defined filter chain (as the requests have already passed through the filter chain) but will still pass through controller defined filters.
 
 For example, if a route is defined:
@@ -131,7 +232,6 @@ For example, if a route is defined:
     filter[MyAwesomeFilter].get("/bar") { request: Request =>
       "Hello, world."
     }
-
 
 When another controller forwards to this route, `MyAwesomeFilter` will be executed on the forwarded request.
 

@@ -66,6 +66,11 @@ class FinatraObjectMapperTest extends Test with Logging {
      }
     """
 
+  test("get PropertyNamingStrategy") {
+    val namingStrategy = mapper.propertyNamingStrategy
+    namingStrategy should not be(null)
+  }
+
   test("simple tests#parse simple") {
     val foo = parse[SimplePerson]("""{"name": "Steve"}""")
     foo should equal(SimplePerson("Steve"))

@@ -25,7 +25,7 @@ object CaseClassValidationException {
 /**
  * An exception that bundles together a failed validation with the
  * associated field that failed the validation.
- * @param fieldPath - path to the case class field that caused the validation failure
+ * @param path - path to the case class field that caused the validation failure
  * @param reason - the validation failure
  */
 case class CaseClassValidationException(path: PropertyPath, reason: ValidationResult.Invalid)

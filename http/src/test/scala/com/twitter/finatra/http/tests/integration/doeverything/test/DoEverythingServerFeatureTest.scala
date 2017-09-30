@@ -2,6 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType
+import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.FailureFlags
 import com.twitter.finagle.http.Method._
@@ -27,7 +28,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   )
 
   val doEverythingService = server.injector.instance[DoEverythingService]
-  val namedExampleString = server.injector.instance[String]("example")
+  val namedExampleString = server.injector.instance[String](Names.named("example"))
 
   def deserializeRequest(name: String) = {
     val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
@@ -154,6 +155,21 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
   test("GET /useragent") {
     server.httpGet("/useragent", headers = Map("User-Agent" -> "Firefox"), withBody = "Firefox")
+  }
+
+  test("GET /acceptHeaders") {
+    server.httpGet(
+      "/acceptHeaders",
+      headers = Map("Accept" -> "text/plain", "Accept-Charset" -> "utf-8", "Accept-Encoding" -> "gzip, deflate"),
+      withJsonBody =
+        """
+          |{
+          |  "Accept": "text/plain",
+          |  "Accept-Charset": "utf-8",
+          |  "Accept-Charset-Again": "utf-8",
+          |  "Accept-Encoding": "gzip, deflate"
+          |}
+        """.stripMargin)
   }
 
   test("response should contain server/date headers") {
@@ -1435,6 +1451,26 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       withJsonBody = """{
         "errors" : [
           "param: queryParam is required"
+        ]
+      }"""
+    )
+  }
+
+  test("RequestWithBooleanNamedQueryParam which is set") {
+    server.httpGet(
+      "/RequestWithBooleanNamedQueryParam?foo=bar",
+      andExpect = Ok,
+      withBody = """bar"""
+    )
+  }
+
+  test("RequestWithBooleanNamedQueryParam which is passed the wrong name") {
+    server.httpGet(
+      "/RequestWithBooleanNamedQueryParam?param=bar",
+      andExpect = BadRequest,
+      withJsonBody = """{
+        "errors" : [
+          "foo: queryParam is required"
         ]
       }"""
     )

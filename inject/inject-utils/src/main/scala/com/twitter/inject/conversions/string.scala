@@ -12,6 +12,13 @@ object string {
         Some(self)
     }
 
+    def getOrElse(default : => String) = {
+      if (self == null || self.isEmpty)
+        default
+      else
+        self
+    }
+
     def ellipse(len: Int) = {
       StringUtils.abbreviate(self, len + 3) // adding 3 for the ellipses :-/
     }

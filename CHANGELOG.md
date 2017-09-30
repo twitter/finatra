@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Parameterize `@RouteParam`,`@QueryParam`,`@FormParam`, and 
+  `@Header` to allow specifying the field name to read from the params or 
+  header map. Previously these annotations only looked for values by the
+  case class field name leading to possible ugliness when defining case 
+  class fields (especially with `@Header`). ``PHAB_ID=`D94220`
+
 * finatra: Add support for using a `java.lang.annotation.Annotation` instance 
   with the `#bind[T]` testing DSL. This adds a way to bind instances in tests 
   that use the @Named binding annotation. ``PHAB_ID=D91330``

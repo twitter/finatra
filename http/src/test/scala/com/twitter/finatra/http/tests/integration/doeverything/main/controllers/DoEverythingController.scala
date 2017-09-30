@@ -126,7 +126,15 @@ class DoEverythingController @Inject()(
   }
 
   get("/useragent") { request: UserAgentRequest =>
-    request.`user-agent`
+    request.agent
+  }
+
+  get("/acceptHeaders") { request: AcceptsHeaderRequest =>
+    Map(
+      "Accept" -> request.accept,
+      "Accept-Charset" -> request.acceptCharset,
+      "Accept-Charset-Again" -> request.acceptCharsetAgain,
+      "Accept-Encoding" -> request.acceptEncoding)
   }
 
   get("/forwardCaseClass") { request: CaseClassWithRequestField =>
@@ -723,6 +731,10 @@ class DoEverythingController @Inject()(
   }
 
   get("/RequestWithBooleanQueryParam") { r: RequestWithBooleanQueryParam =>
+    r.param
+  }
+
+  get("/RequestWithBooleanNamedQueryParam") { r: RequestWithBooleanNamedQueryParam =>
     r.param
   }
 

@@ -20,6 +20,7 @@ import com.twitter.finatra.request.{QueryParam, Header, FormParam}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.inject.Logging
+import com.twitter.inject.conversions.string._
 import java.lang.annotation.Annotation
 import scala.annotation.tailrec
 import scala.language.existentials
@@ -100,11 +101,11 @@ private[finatra] case class CaseClassField(
 
   private val isOption = javaType.getRawClass == classOf[Option[_]]
   private val isString = javaType.getRawClass == classOf[String]
-  private val attributeType = findAttributeType(annotations)
+  private val AttributeInfo(attributeType, attributeName) = findAttributeInfo(name, annotations)
   private val fieldInjection = new FieldInjection(name, javaType, parentClass, annotations)
   private lazy val firstTypeParam = javaType.containedType(0)
   private lazy val requiredFieldException = CaseClassValidationException(
-    PropertyPath.leaf(name),
+    PropertyPath.leaf(attributeName),
     Invalid(s"$attributeType is required", ErrorCode.RequiredFieldMissing)
   )
 
@@ -202,25 +203,45 @@ private[finatra] case class CaseClassField(
     throw requiredFieldException
   }
 
+  private case class AttributeInfo(`type`: String, fieldName: String)
+
   @tailrec
-  private def findAttributeType(annotations: Seq[Annotation]): String = {
+  private def findAttributeInfo(
+    fieldName: String,
+    annotations: Seq[Annotation]
+  ): AttributeInfo = {
     if (annotations.isEmpty) {
-      "field"
+      AttributeInfo("field", fieldName)
     } else {
-      val found = extractAttributeType(annotations.head)
-      if (found.isDefined)
+      val found = extractAttributeInfo(fieldName, annotations.head)
+      if (found.isDefined) {
         found.get
-      else
-        findAttributeType(annotations.tail)
+      } else {
+        findAttributeInfo(fieldName, annotations.tail)
+      }
     }
   }
 
-  private def extractAttributeType(annotation: Annotation): Option[String] = {
-    annotation match {
-      case _: QueryParam => Some("queryParam")
-      case _: FormParam => Some("formParam")
-      case _: Header => Some("header")
-      case _ => None
-    }
+  private def extractAttributeInfo(
+    fieldName: String,
+    annotation: Annotation
+  ): Option[AttributeInfo] = annotation match {
+    case queryParam: QueryParam =>
+      Some(
+        AttributeInfo(
+          "queryParam",
+          queryParam.value.getOrElse(fieldName)))
+    case formParam: FormParam =>
+      Some(
+        AttributeInfo(
+          "formParam",
+          formParam.value.getOrElse(fieldName)))
+    case header: Header =>
+      Some(
+        AttributeInfo(
+          "header",
+          header.value.getOrElse(fieldName)))
+    case _ =>
+      None
   }
 }
