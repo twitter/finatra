@@ -136,7 +136,8 @@ private[finatra] class FinatraCaseClassDeserializer(
         case e: CaseClassValidationException =>
           addException(field, e)
 
-        case e: IllegalArgumentException =>
+        // don't catch just IllegalArgumentException as that hides errors from validating an incorrect type
+        case e: org.joda.time.IllegalFieldValueException =>
           val ex = CaseClassValidationException(
             PropertyPath.leaf(field.name),
             Invalid(e.getMessage, ErrorCode.Unknown)
@@ -152,7 +153,7 @@ private[finatra] class FinatraCaseClassDeserializer(
           errors ++= e.errors map { _.scoped(field) }
 
         case e: JsonProcessingException =>
-          // Don't include source info since it's often blank. Consider adding e.getCause.getMessage
+          // don't include source info since it's often blank. Consider adding e.getCause.getMessage
           addException(field, jsonProcessingJsonFieldParseError(field, e))
 
         // we rethrow, to prevent leaking internal injection details in the "errors" array

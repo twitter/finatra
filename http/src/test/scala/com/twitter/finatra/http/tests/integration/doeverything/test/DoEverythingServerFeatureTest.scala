@@ -2208,4 +2208,18 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     response.contentType should be(Some("text/html; charset=utf-8"))
   }
 
+  test("/invalidValidationRequest") {
+    server.httpPost(
+      path = "/invalidValidationRequest",
+      postBody =
+        """
+          |{
+          |  "name": "Bob Smith"
+          |}
+        """.stripMargin,
+      andExpect = InternalServerError,
+      withJsonBody = """{"errors":["internal server error"]}"""
+    )
+  }
+
 }

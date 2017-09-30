@@ -39,6 +39,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-jackson: Fix issue causing `IllegalArgumentException` from Validations to
+  be swallowed. A catch clause in the `c.t.finatra.json.internal.caseclass.jackson.FinatraCaseClassDeserializer`
+  is too broad as it catches thrown `IllegalArgumentException`s from field validations
+  when the annotation is applied to a field of the incorrect type, e.g., when `@Max` is
+  applied to a String field. ``PHAB_ID=D95306``
+
 ### Closed
 
 ## [finatra-2.13.0](https://github.com/twitter/finatra/tree/finatra-2.13.0) (2017-09-06)

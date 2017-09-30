@@ -829,6 +829,10 @@ class DoEverythingController @Inject()(
   post("/localDateRequest") { r: TestCaseClassWithLocalDate =>
     response.ok
   }
+
+  post("/invalidValidationRequest") { request: InvalidValidationRequest =>
+    response.ok
+  }
 }
 
 case class MultipleInjectableValueParams(@RouteParam @QueryParam id: String)
