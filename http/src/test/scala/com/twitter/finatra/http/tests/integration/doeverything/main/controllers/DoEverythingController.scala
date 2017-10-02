@@ -845,6 +845,16 @@ class DoEverythingController @Inject()(
   post("/invalidValidationRequest") { request: InvalidValidationRequest =>
     response.ok
   }
+
+  post("/invalidValidationRequestWithCause") { request: Request =>
+    try {
+      objectMapper.parse[InvalidValidationRequest](request.contentString)
+    } catch {
+      case e: IllegalArgumentException =>
+        // want to return the actual error ro the client for testing against this case
+        response.internalServerError(e.getMessage)
+    }
+  }
 }
 
 case class MultipleInjectableValueParams(@RouteParam @QueryParam id: String)

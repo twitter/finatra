@@ -2258,4 +2258,17 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     )
   }
 
+  test("/invalidValidationRequestWithCause") {
+    server.httpPost(
+      path = "/invalidValidationRequestWithCause",
+      postBody =
+        """
+          |{
+          |  "name": "Bob Smith"
+          |}
+        """.stripMargin,
+      andExpect = InternalServerError,
+      withBody = "Class [class java.lang.String] is not supported by class com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator"
+    )
+  }
 }
