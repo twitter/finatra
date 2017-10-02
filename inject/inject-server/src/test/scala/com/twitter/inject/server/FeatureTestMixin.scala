@@ -17,7 +17,9 @@ import org.scalatest.{Suite, SuiteMixin}
  *
  * @see [[com.twitter.inject.IntegrationTestMixin]]
  */
-trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suite =>
+trait FeatureTestMixin
+  extends SuiteMixin
+  with IntegrationTestMixin { this: Suite =>
 
   protected def server: EmbeddedTwitterServer
 

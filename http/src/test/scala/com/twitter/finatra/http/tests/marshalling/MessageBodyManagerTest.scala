@@ -5,9 +5,8 @@ import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.MessageBodyReader
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.Test
+import com.twitter.inject.{Mockito, Test}
 import com.twitter.inject.app.TestInjector
-import org.specs2.mock.Mockito
 
 class MessageBodyManagerTest extends Test with Mockito {
 

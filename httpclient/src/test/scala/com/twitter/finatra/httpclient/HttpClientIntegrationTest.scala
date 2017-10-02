@@ -21,6 +21,10 @@ class HttpClientIntegrationTest extends IntegrationTest {
 
   val httpClient = injector.instance[HttpClient]
 
+  override def afterEach(): Unit = {
+    resetResettables(inMemoryHttpService)
+  }
+
   test("execute") {
     val okResponse = Response(Status.Ok)
     inMemoryHttpService.mockGet("/foo", okResponse)

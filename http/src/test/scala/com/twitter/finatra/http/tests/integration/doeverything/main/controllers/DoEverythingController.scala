@@ -851,7 +851,7 @@ class DoEverythingController @Inject()(
       objectMapper.parse[InvalidValidationRequest](request.contentString)
     } catch {
       case e: IllegalArgumentException =>
-        // want to return the actual error ro the client for testing against this case
+        // want to return the actual error to the client for testing against this case
         response.internalServerError(e.getMessage)
     }
   }
