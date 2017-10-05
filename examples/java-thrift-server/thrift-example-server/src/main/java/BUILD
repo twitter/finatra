@@ -1,6 +1,5 @@
 java_library(
   dependencies=[
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/fasterxml/jackson:jackson-annotations',
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/javax/inject:javax.inject',

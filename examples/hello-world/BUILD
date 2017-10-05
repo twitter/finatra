@@ -15,6 +15,7 @@ jvm_binary(
   basename='finatra-hello-world',
   main='com.twitter.hello.HelloWorldServerMain',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     ':hello-world'
   ],
   excludes=[

@@ -15,6 +15,7 @@ jvm_binary(
   basename='tiny-url',
   main='com.twitter.tiny.TinyUrlServerMain',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     ':tiny-url'
   ],
   excludes=[

@@ -15,6 +15,7 @@ jvm_binary(
   basename='thrift-example-server',
   main='com.twitter.calculator.CalculatorServerMain',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     ':thrift-example-server',
   ],
   deploy_excludes=[

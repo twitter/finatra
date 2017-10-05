@@ -15,6 +15,7 @@ jvm_binary(
   basename='finatra-twitter-clone',
   main='finatra.quickstart.TwitterCloneServerMain',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     ':twitter-clone'
   ],
   excludes=[

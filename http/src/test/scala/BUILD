@@ -2,7 +2,6 @@ junit_tests(
   dependencies=[
     '//:scalac',
     '//:scalap',
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind',
     '3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda',
     '3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala',
@@ -24,6 +23,7 @@ junit_tests(
     '3rdparty/jvm/org/scala-lang/modules:scala-xml',
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     '3rdparty/jvm/org/specs2:mock',
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala',

@@ -5,6 +5,7 @@ junit_tests(
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finagle/finagle-base-http/src/main/scala',
     'finagle/finagle-http/src/main/scala',
     'finatra/examples/java-http-server/src/main/java',

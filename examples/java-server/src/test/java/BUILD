@@ -4,6 +4,7 @@ junit_tests(
     '3rdparty/jvm/junit',
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finatra/examples/java-server/src/main/java',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-app/src/test/scala:test-deps',
