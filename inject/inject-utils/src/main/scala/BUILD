@@ -20,7 +20,6 @@ scala_library(
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
   ]

@@ -33,5 +33,4 @@ scala_library(
     'com/twitter/web/dashboard/controllers/*.scala',
     'com/twitter/web/dashboard/views/*.scala',
   ),
-  strict_deps=True,
 )

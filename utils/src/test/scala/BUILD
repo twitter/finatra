@@ -22,7 +22,6 @@ junit_tests(
   sources=rglobs(
     'com/twitter/finatra/tests/*.scala',
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -51,7 +50,6 @@ scala_library(name="test-deps",
     'com/twitter/finatra/modules/*.scala',
     'com/twitter/finatra/test/*.scala'
   ),
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/net/codingwell:scala-guice',

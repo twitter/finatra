@@ -28,7 +28,6 @@ junit_tests(
   sources=globs(
     'com/twitter/finatra/httpclient/*.scala'
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -52,5 +51,4 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/httpclient/test/*.scala'
   ),
-  strict_deps=True,
 )

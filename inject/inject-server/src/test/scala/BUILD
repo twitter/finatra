@@ -32,7 +32,6 @@ junit_tests(
   sources=globs(
     'com/twitter/server/tests/*.scala',
     'com/twitter/inject/server/tests/*.scala'),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -72,7 +71,6 @@ scala_library(name="test-deps",
   ],
   fatal_warnings=True,
   sources=globs('com/twitter/inject/server/*.scala'),
-  strict_deps=True,
   exports=[
     'util/util-core/src/main/scala:scala',
   ]

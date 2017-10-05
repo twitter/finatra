@@ -24,7 +24,6 @@ junit_tests(
     'com/twitter/inject/app/tests/*.scala',
     'com/twitter/inject/app/tests/internal/*.scala'
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -52,5 +51,4 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/inject/app/*.scala',
   ),
-  strict_deps=True,
 )

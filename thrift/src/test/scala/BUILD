@@ -39,7 +39,6 @@ junit_tests(
   ],
   fatal_warnings=True,
   sources=rglobs('com/twitter/finatra/thrift/tests/*.scala'),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -64,7 +63,6 @@ scala_library(name="test-deps",
   ],
   fatal_warnings=True,
   sources=globs('com/twitter/finatra/thrift/*.scala'),
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/net/codingwell:scala-guice',
   ]

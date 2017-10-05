@@ -18,5 +18,4 @@ junit_tests(
     'com/twitter/inject/tests/*.scala',
     'com/twitter/inject/tests/conversions/*.scala',
     'com/twitter/inject/tests/exceptions/*.scala'),
-  strict_deps=True,
 )

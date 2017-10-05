@@ -33,7 +33,6 @@ scala_library(
   java_sources=[
     'finatra/inject/inject-thrift-client/src/main/java'
   ],
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',

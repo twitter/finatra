@@ -60,7 +60,6 @@ junit_tests(
   sources=rglobs(
     'com/twitter/finatra/http/tests/*.scala',
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -99,7 +98,6 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/http/*.scala'
   ),
-  strict_deps=True,
   exports=[
     'finatra/http/src/main/scala',
     'finatra/inject/inject-server/src/test/scala:test-deps',
