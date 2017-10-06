@@ -33,5 +33,4 @@ junit_tests(
     'com/twitter/finatra/http/*.java',
     'com/twitter/finatra/test/*.java',
   ),
-  strict_deps=True,
 )
