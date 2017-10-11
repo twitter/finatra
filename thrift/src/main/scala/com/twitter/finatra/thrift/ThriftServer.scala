@@ -6,10 +6,17 @@ import com.twitter.finatra.thrift.modules.ExceptionManagerModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.server.{PortUtils, TwitterServer}
-import com.twitter.util.Await
+import com.twitter.util.{Await, Duration}
 
 /** AbstractThriftServer for usage from Java */
 abstract class AbstractThriftServer extends ThriftServer
+
+private object ThriftServer {
+  /**
+   * Sentinel used to indicate no announcement.
+   */
+  val NoThriftAnnouncement: String = ""
+}
 
 trait ThriftServer extends TwitterServer {
 
@@ -19,7 +26,7 @@ trait ThriftServer extends TwitterServer {
   private val thriftPortFlag =
     flag("thrift.port", defaultFinatraThriftPort, "External Thrift server port")
 
-  protected def defaultThriftShutdownTimeout = 1.minute
+  protected def defaultThriftShutdownTimeout: Duration = 1.minute
   private val thriftShutdownTimeoutFlag = flag(
     "thrift.shutdown.time",
     defaultThriftShutdownTimeout,
@@ -30,8 +37,10 @@ trait ThriftServer extends TwitterServer {
   private val thriftServerNameFlag =
     flag("thrift.name", defaultThriftServerName, "Thrift server name")
 
+  protected def defaultThriftAnnouncement: String = ThriftServer.NoThriftAnnouncement
   private val thriftAnnounceFlag =
-    flag[String]("thrift.announce", "Address for announcing Thrift server")
+    flag[String]("thrift.announce", defaultThriftAnnouncement,
+      "Address for announcing Thrift server. Empty string indicates no announcement.")
 
   /* Private Mutable State */
 
@@ -76,13 +85,19 @@ trait ThriftServer extends TwitterServer {
       Await.result(thriftServer.close(thriftShutdownTimeoutFlag().fromNow))
     }
     await(thriftServer)
-    for (addr <- thriftAnnounceFlag.get) thriftServer.announce(addr)
-    info("thrift server started on port: " + thriftPort.get)
+
+    thriftAnnounceFlag() match {
+      case ThriftServer.NoThriftAnnouncement => // no-op
+      case addr =>
+        info(s"thrift server announced to $addr")
+        thriftServer.announce(addr)
+    }
+    info(s"thrift server started on port: ${thriftPort.get}")
   }
 
   /* Overrides */
 
-  override def thriftPort: Option[Int] = Option(thriftServer) map PortUtils.getPort
+  override def thriftPort: Option[Int] = Option(thriftServer).map(PortUtils.getPort)
 
   /* Protected */
 
