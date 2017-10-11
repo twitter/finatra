@@ -526,7 +526,6 @@ lazy val utils = project
       "joda-time" % "joda-time" % versions.jodaTime,
       "commons-io" % "commons-io" % versions.commonsIo,
       "com.github.nscala-time" %% "nscala-time" % versions.nscalaTime,
-      "com.twitter" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-http" % versions.finagleVersion,
       "com.twitter" %% "util-core" % versions.utilVersion
     ),

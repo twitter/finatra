@@ -3,7 +3,6 @@ junit_tests(
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/commons-io:commons-io',
     '3rdparty/jvm/joda-time:joda-time',
-    '3rdparty/jvm/org/apache/thrift:libthrift-0.5.0',
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
     '3rdparty/jvm/org/slf4j:slf4j-simple',

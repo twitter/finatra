@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file. Note that `
   
 ### Changed
 
+* finatra-utils: Remove deprecated `ExternalServiceExceptionMatcher`. ``PHAB_ID=D98343``
+
 * finatra-jackson: ScalaType's `isMap` and `isCollection` methods now check that
   the given object's class is a subclass of `scala.collection.Map[Any, Any]` and
   `scala.collection.Iterable[Any]`, respectively. Previously the superclasses'
