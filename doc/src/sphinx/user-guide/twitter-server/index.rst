@@ -70,7 +70,7 @@ port fails, we do not report the server as healthy in the
   Remember, that when overriding any ``@Lifecycle``-annotated method you **MUST** first call `super()` in the method to ensure
   the framework lifecycle events happen accordingly.
 
-  As with all lifecycle methods, it is important to **not performing any blocking operations** as you will prevent the server
+  As with all lifecycle methods, it is important to **not perform any blocking operations** as you will prevent the server
   from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
   `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
   See the Finatra utility: |FuturePools|_ for creating named pools.
@@ -92,7 +92,7 @@ traffic), or any other work that must be completed as part of server startup.
   Remember, that when overriding any ``@Lifecycle``-annotated method you **MUST** first call `super()` in the method to ensure
   the framework lifecycle events happen accordingly.
 
-  As with all lifecycle methods, it is important to **not performing any blocking operations** as you will prevent the server
+  As with all lifecycle methods, it is important to **not perform any blocking operations** as you will prevent the server
   from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
   `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
   See the Finatra utility: |FuturePools|_ for creating named pools.
