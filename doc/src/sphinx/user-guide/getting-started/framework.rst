@@ -43,7 +43,7 @@ Modules in `inject` include:
 Creating an injectable App or TwitterServer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-See: `Building an injectable c.t.app.App <../app/index.html>`__ or `Building an injectable c.t.server.TwitterServer <.../twitter-server/html>`__.
+See: `Building an injectable c.t.app.App <../app/index.html>`__ or `Building an injectable c.t.server.TwitterServer <.../twitter_server/html>`__.
 
 .. important::
 

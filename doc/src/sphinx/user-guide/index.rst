@@ -1,3 +1,5 @@
+.. _user_guide_index:
+
 User's Guide
 ============
 
@@ -6,7 +8,7 @@ Getting Started
 
 - :doc:`getting-started/basics`
 - :doc:`getting-started/framework`
-- :doc:`getting-started/twitter-server`
+- :doc:`getting-started/twitter_server`
 - :doc:`getting-started/lifecycle`
 - :doc:`getting-started/modules`
 - :doc:`getting-started/binding_annotations`
@@ -68,57 +70,55 @@ Testing
 
 - :doc:`testing/index`
 - :doc:`testing/embedded`
-- :doc:`testing/feature-tests`
-- :doc:`testing/integration-tests`
-- :doc:`testing/startup-tests`
+- :doc:`testing/feature_tests`
+- :doc:`testing/integration_tests`
+- :doc:`testing/startup_tests`
 - :doc:`testing/mixins`
 - :doc:`testing/mocks`
-- :doc:`testing/override-modules`
-- :doc:`testing/bind-dsl`
+- :doc:`testing/override_modules`
+- :doc:`testing/bind_dsl`
 
-.. Hidden ToC
 .. toctree::
    :maxdepth: 2
    :hidden:
 
-   getting-started/basics.rst
-   getting-started/framework.rst
-   getting-started/twitter-server.rst
-   getting-started/lifecycle.rst
-   getting-started/modules.rst
-   getting-started/binding_annotations.rst
-   getting-started/flags.rst
-   getting-started/futures.rst
-   getting-started/examples.rst
-   logging/index.rst
-   logging/logback.rst
-   app/index.rst
-   twitter-server/index.rst
-   http/server.rst
-   http/controllers.rst
-   http/requests.rst
-   http/responses.rst
-   http/filters.rst
-   http/exceptions.rst
-   http/warmup.rst
-   json/index.rst
-   json/routing.rst
-   json/validations.rst
-   files/index.rst
-   thrift/basics.rst
-   thrift/server.rst
-   thrift/controllers.rst
-   thrift/filters.rst
-   thrift/exceptions.rst
-   thrift/warmup.rst
-   twitter-server/index.rst
-   testing/index.rst
-   testing/embedded.rst
-   testing/feature-tests.rst
-   testing/integration-tests.rst
-   testing/startup-tests.rst
-   testing/mixins.rst
-   testing/mocks.rst
-   testing/override-modules.rst
-   testing/bind-dsl.rst
+   getting-started/basics
+   getting-started/framework
+   getting-started/twitter_server
+   getting-started/lifecycle
+   getting-started/modules
+   getting-started/binding_annotations
+   getting-started/flags
+   getting-started/futures
+   getting-started/examples
+   logging/index
+   logging/logback
+   app/index
+   twitter-server/index
+   http/server
+   http/controllers
+   http/requests
+   http/responses
+   http/filters
+   http/exceptions
+   http/warmup
+   json/index
+   json/routing
+   json/validations
+   files/index
+   thrift/basics
+   thrift/server
+   thrift/controllers
+   thrift/filters
+   thrift/exceptions
+   thrift/warmup
+   testing/index
+   testing/embedded
+   testing/feature_tests
+   testing/integration_tests
+   testing/startup_tests
+   testing/mixins
+   testing/mocks
+   testing/override_modules
+   testing/bind_dsl
    

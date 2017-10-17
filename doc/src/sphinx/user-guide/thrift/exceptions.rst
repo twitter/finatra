@@ -1,4 +1,4 @@
-.. _thrift-exceptions:
+.. _thrift_exceptions:
 
 Thrift Exception Mapping
 ========================

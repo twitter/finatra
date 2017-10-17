@@ -1,3 +1,5 @@
+.. _feature_tests:
+
 Feature Tests
 =============
 
@@ -99,27 +101,12 @@ More Information
 
 - :doc:`index`
 - :doc:`embedded`
-- :doc:`integration-tests`
-- :doc:`startup-tests`
+- :doc:`integration_tests`
+- :doc:`startup_tests`
 - :doc:`mixins`
 - :doc:`mocks`
-- :doc:`override-modules`
-- :doc:`bind-dsl`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   embedded.rst
-   integration-tests.rst
-   startup-tests.rst
-   mixins.rst
-   mocks.rst
-   override-modules.rst
-   bind-dsl.rst
-
+- :doc:`override_modules`
+- :doc:`bind_dsl`
 
 
 .. |c.t.inject.server.FeatureTestMixin| replace:: `c.t.inject.server.FeatureTestMixin`

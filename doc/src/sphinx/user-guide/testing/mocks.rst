@@ -1,3 +1,5 @@
+.. _mocks:
+
 Working with Mocks
 ==================
 
@@ -8,7 +10,7 @@ This is a drop-in replacement for |org.specs2.mock.Mockito|_ and we encourage yo
 |org.specs2.mock.Mockito|_ directly. Otherwise, Mockito match failures will **not propagate as ScalaTest
 test failures**.
 
-See the `Override Modules <override-modules.html>`__ or `Explicit Binding with #bind[T] <bind-dsl.html>`__
+See the `Override Modules <override_modules.html>`__ or `Explicit Binding with #bind[T] <bind_dsl.html>`__
 sections on using mocks in combination with other Finatra testing features.
 
 More Information
@@ -16,26 +18,12 @@ More Information
 
 - :doc:`index`
 - :doc:`embedded`
-- :doc:`feature-tests`
-- :doc:`integration-tests`
-- :doc:`startup-tests`
+- :doc:`feature_tests`
+- :doc:`integration_tests`
+- :doc:`startup_tests`
 - :doc:`mixins`
-- :doc:`override-modules`
-- :doc:`bind-dsl`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   embedded.rst
-   feature-tests.rst
-   integration-tests.rst
-   startup-tests.rst
-   mixins.rst
-   override-modules.rst
-   bind-dsl.rst
+- :doc:`override_modules`
+- :doc:`bind_dsl`
 
 .. |c.t.inject.Mockito| replace:: `c.t.inject.Mockito`
 .. _c.t.inject.Mockito: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala

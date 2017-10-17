@@ -1,3 +1,5 @@
+.. _bind_dsl:
+
 Explicit Binding with ``#bind[T]``
 ==================================
 
@@ -43,7 +45,7 @@ deprecated.
 TestInjector ``#bind[T]``
 -------------------------
 
-As described in the `Integration Tests <#integration-tests>`__ section you can use the `TestInjector`
+As described in the `Integration Tests <#integration_tests>`__ section you can use the `TestInjector`
 to construct a minimal object graph for testing. The `TestInjector` also supports a `bind[T]` function
 to let you easily replace bound instances in the constructed object graph with another instance, like
 a mock or stub.
@@ -79,23 +81,9 @@ More Information
 
 - :doc:`index`
 - :doc:`embedded`
-- :doc:`feature-tests`
-- :doc:`integration-tests`
-- :doc:`startup-tests`
+- :doc:`feature_tests`
+- :doc:`integration_tests`
+- :doc:`startup_tests`
 - :doc:`mocks`
 - :doc:`mixins`
-- :doc:`override-modules`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   embedded.rst
-   feature-tests.rst
-   integration-tests.rst
-   startup-tests.rst
-   mocks.rst
-   mixins.rst
-   override-modules.rst
+- :doc:`override_modules`

@@ -1,3 +1,5 @@
+.. _embedded:
+
 Embedded Servers and Apps
 =========================
 
@@ -42,7 +44,7 @@ along with helper methods for asserting `counter <https://github.com/twitter/fin
 and `gauge <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L343>`__
 values, such that you can expect behavior against the underlying server's recorded stats in tests.
 
-`Feature Tests <#feature-tests>`__ also `print all recorded stats <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L50>`__
+`Feature Tests <#feature_tests>`__ also `print all recorded stats <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L50>`__
 to stdout after each test by default.
 
 See: `c.t.finatra.multiserver.test.MultiServerFeatureTest <https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/MultiServerFeatureTest.scala>`__
@@ -52,28 +54,13 @@ More Information
 ----------------
 
 - :doc:`index`
-- :doc:`feature-tests`
-- :doc:`integration-tests`
-- :doc:`startup-tests`
+- :doc:`feature_tests`
+- :doc:`integration_tests`
+- :doc:`startup_tests`
 - :doc:`mixins`
 - :doc:`mocks`
-- :doc:`override-modules`
-- :doc:`bind-dsl`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   feature-tests.rst
-   integration-tests.rst
-   startup-tests.rst
-   mixins.rst
-   mocks.rst
-   override-modules.rst
-   bind-dsl.rst
-
+- :doc:`override_modules`
+- :doc:`bind_dsl`
 
 .. |c.t.finatra.http.HttpServer| replace:: `c.t.finatra.http.HttpServer`
 .. _c.t.finatra.http.HttpServer: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala

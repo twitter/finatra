@@ -1,7 +1,9 @@
+.. _integration_tests:
+
 Integration Tests
 =================
 
-Whereas `Feature Tests <#feature-tests>`__ start a server or app under test (thereby loading its
+Whereas `Feature Tests <#feature_tests>`__ start a server or app under test (thereby loading its
 entire object graph), integration tests generally only test across a few interfaces in the system.
 In Finatra, we provide the `c.t.inject.app.TestInjector <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala>`__
 which allows you to pass it a set of modules and flags to construct a minimal object graph.
@@ -37,7 +39,7 @@ to access instances of necessary classes to execute tests.
   `def` with a `val`.
 
 Http Tests
-^^^^^^^^^^
+----------
 
 If you are writing a test that has an HTTP server under test, you can also extend the
 |c.t.finatra.http.HttpTest|_ trait. This trait provides some common utilities for HTTP testing,
@@ -45,7 +47,7 @@ specifically utilities for constructing a |resolverMap|_ flag value for setting 
 test.
 
 Thrift Tests
-^^^^^^^^^^^^
+------------
 
 As shown above, thrift servers can be tested through a |c.t.finatra.thrift.ThriftClient|_. The
 Finatra test framework provides an easy way get access to a real `Finagle client <https://twitter.github.io/finagle/guide/Clients.html>`__
@@ -64,26 +66,12 @@ More Information
 
 - :doc:`index`
 - :doc:`embedded`
-- :doc:`feature-tests`
-- :doc:`startup-tests`
+- :doc:`feature_tests`
+- :doc:`startup_tests`
 - :doc:`mixins`
 - :doc:`mocks`
-- :doc:`override-modules`
-- :doc:`bind-dsl`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   embedded.rst
-   feature-tests.rst
-   startup-tests.rst
-   mixins.rst
-   mocks.rst
-   override-modules.rst
-   bind-dsl.rst
+- :doc:`override_modules`
+- :doc:`bind_dsl`
 
 
 .. |c.t.inject.IntegrationTestMixin| replace:: `c.t.inject.IntegrationTestMixin`

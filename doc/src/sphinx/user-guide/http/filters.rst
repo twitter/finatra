@@ -1,4 +1,4 @@
-.. _filters:
+.. _http_filters:
 
 Filtering HTTP Requests
 =======================

@@ -1,3 +1,5 @@
+.. _http_controllers:
+
 Defining HTTP Controllers
 =========================
 

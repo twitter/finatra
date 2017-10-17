@@ -1,3 +1,5 @@
+.. _app:
+
 Creating an injectable |c.t.app.App|_
 =====================================
 

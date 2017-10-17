@@ -1,4 +1,4 @@
-.. _http-exceptions:
+.. _http_exceptions:
 
 HTTP Exception Mapping
 ======================

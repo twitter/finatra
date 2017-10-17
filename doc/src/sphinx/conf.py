@@ -11,11 +11,17 @@ sys.path.append(os.path.abspath('utils'))
 import sbt_versions
 
 highlight_language = 'text'
-extensions = ['sphinx.ext.extlinks', 'includecode']
+extensions = [
+  'sphinx.ext.extlinks',
+  'sphinx.ext.autodoc',
+  'sphinx.ext.intersphinx',
+  'sphinx.ext.ifconfig',
+  'includecode'
+]
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-exclude_patterns = []
+exclude_patterns = ['_build']
 
 sys.path.append(os.path.abspath('_themes'))
 html_theme_path = ['_themes']
@@ -51,7 +57,7 @@ rst_epilog = '''
 .. _Sphinx: http://sphinx.pocoo.org/
 '''
 
-pygments_style = 'flask_theme_support.FlaskyStyle'
+pygments_style = 'sphinx'
 
 # fall back if theme is not there
 try:

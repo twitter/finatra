@@ -1,3 +1,5 @@
+.. _override_modules:
+
 Override Modules
 ================
 
@@ -79,13 +81,13 @@ parts of its object graph during testing.
 
 Note, modules used specifically for testing should be placed alongside your test code (as opposed to
 with your production code) to prevent any mistaken production usage of a test module. Also, it not always
-necessary to create a test module (see: `Explicit Binding with #bind[T] <bind-dsl.html>`__ section)
+necessary to create a test module (see: `Explicit Binding with #bind[T] <bind_dsl.html>`__ section)
 for use as an override module. However, we encourage creating a test module when the functionality
 provided by the module is re-usable across your codebase.
 
 Also note, that you can always create an override module over a mock, however it is generally preferable
 to want control over the expected mock behavior per-test and as such it's more common to keep a
-reference to a mock and use it with the `Explicit Binding with #bind[T] <bind-dsl.html>`__
+reference to a mock and use it with the `Explicit Binding with #bind[T] <bind_dsl.html>`__
 functionality in a test.
 
 More Information
@@ -93,23 +95,9 @@ More Information
 
 - :doc:`index`
 - :doc:`embedded`
-- :doc:`feature-tests`
-- :doc:`integration-tests`
-- :doc:`startup-tests`
+- :doc:`feature_tests`
+- :doc:`integration_tests`
+- :doc:`startup_tests`
 - :doc:`mocks`
 - :doc:`mixins`
-- :doc:`bind-dsl`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   embedded.rst
-   feature-tests.rst
-   integration-tests.rst
-   startup-tests.rst
-   mocks.rst
-   mixins.rst
-   bind-dsl.rst
+- :doc:`bind_dsl`

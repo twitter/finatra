@@ -1,3 +1,5 @@
+.. _startup_tests:
+
 Startup Tests
 =============
 
@@ -22,8 +24,8 @@ that could otherwise cause the server to fail to start.
 
   -  The |com.google.inject.Stage|_ SHOULD be set to `PRODUCTION` so that all singletons will be
      eagerly created at startup (`Stage.DEVELOPMENT` is set by default).
-  -  Avoid replacing any bound types (using `Explicit Binding with #bind[T] <bind-dsl.html>`__ or
-     `Override Modules <override-modules.html>`__).
+  -  Avoid replacing any bound types (using `Explicit Binding with #bind[T] <bind_dsl.html>`__ or
+     `Override Modules <override_modules.html>`__).
   -  Prevent any Finagle clients from making outbound connections during startup by setting all
      |c.t.server.resolverMap|_ entries to `nil! <https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-core/src/main/scala/com/twitter/finagle/Resolver.scala#L82>`__.
 
@@ -59,24 +61,11 @@ More Information
 
 - :doc:`index`
 - :doc:`embedded`
-- :doc:`feature-tests`
-- :doc:`integration-tests`
+- :doc:`feature_tests`
+- :doc:`integration_tests`
 - :doc:`mixins`
-- :doc:`override-modules`
-- :doc:`bind-dsl`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   embedded.rst
-   feature-tests.rst
-   integration-tests.rst
-   mixins.rst
-   override-modules.rst
-   bind-dsl.rst
+- :doc:`override_modules`
+- :doc:`bind_dsl`
 
 .. |com.google.inject.Stage| replace:: `com.google.inject.Stage`
 .. _com.google.inject.Stage: https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html

@@ -1,3 +1,5 @@
+.. _mixins:
+
 Test Mixins
 ===========
 
@@ -54,26 +56,12 @@ More Information
 
 - :doc:`index`
 - :doc:`embedded`
-- :doc:`feature-tests`
-- :doc:`integration-tests`
-- :doc:`startup-tests`
+- :doc:`feature_tests`
+- :doc:`integration_tests`
+- :doc:`startup_tests`
 - :doc:`mocks`
-- :doc:`override-modules`
-- :doc:`bind-dsl`
-
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   index.rst
-   embedded.rst
-   feature-tests.rst
-   integration-tests.rst
-   startup-tests.rst
-   mocks.rst
-   override-modules.rst
-   bind-dsl.rst
+- :doc:`override_modules`
+- :doc:`bind_dsl`
 
 .. |c.t.inject.Test| replace:: `c.t.inject.Test`
 .. _c.t.inject.Test: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala

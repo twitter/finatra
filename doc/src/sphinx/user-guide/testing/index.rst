@@ -1,6 +1,9 @@
 .. _testing:
 
-.. image:: http://imgs.xkcd.com/comics/exploits_of_a_mom.png
+.. figure:: https://imgs.xkcd.com/comics/exploits_of_a_mom.png
+   :alt: Source: https://xkcd.com
+
+   Source: https://xkcd.com
 
 Testing Features
 ================
@@ -18,7 +21,7 @@ Types of Tests
 What are we talking about when we talk about *testing*? At a high-level the philosophy of testing
 in Finatra revolves around the following definitions:
 
-- `Feature Tests <feature-tests.html>`__ - the most powerful tests enabled by Finatra. These tests
+- `Feature Tests <feature_tests.html>`__ - the most powerful tests enabled by Finatra. These tests
   allow for verification of the feature requirements of the service by exercising its external
   interface. Finatra supports both `black-box testing <https://en.wikipedia.org/wiki/Black-box_testing>`__
   and `white-box testing <https://en.wikipedia.org/wiki/White-box_testing>`__ against a locally
@@ -26,10 +29,10 @@ in Finatra revolves around the following definitions:
   mocks inserted, and internal state asserted. See an example feature test `here <https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala>`__.
 
   .. note::
-    It is worth noting that versions of these `Feature Tests <feature-tests.html>`__ could be re-used
+    It is worth noting that versions of these `Feature Tests <feature_tests.html>`__ could be re-used
     for regression testing as part of larger `system tests <https://en.wikipedia.org/wiki/System_testing>`__
     which could be run post-deploy for deploy verification and certification.
-- `Integration Tests <integration-tests>`__ - similar to `Feature Tests <feature-tests.html>`__, but
+- `Integration Tests <integration_tests>`__ - similar to `Feature Tests <feature_tests.html>`__, but
   the entire service is not started. Instead, a list of `modules <../getting-started/modules.html>`__ are loaded with method calls and
   assertions are performed at the class-level. You can see an example integration test `here <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/marshalling/CallbackConverterIntegrationTest.scala>`__.
 - `Unit Tests <https://en.wikipedia.org/wiki/Unit_testing>`__ - these are tests generally of a single
@@ -53,24 +56,11 @@ More Information
 ----------------
 
 - :doc:`embedded`
-- :doc:`feature-tests`
-- :doc:`integration-tests`
-- :doc:`startup-tests`
+- :doc:`feature_tests`
+- :doc:`integration_tests`
+- :doc:`startup_tests`
 - :doc:`mixins`
 - :doc:`mocks`
-- :doc:`override-modules`
-- :doc:`bind-dsl`
+- :doc:`override_modules`
+- :doc:`bind_dsl`
 
-.. Hidden ToC
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-
-   embedded.rst
-   feature-tests.rst
-   integration-tests.rst
-   startup-tests.rst
-   mixins.rst
-   mocks.rst
-   override-modules.rst
-   bind-dsl.rst

@@ -92,10 +92,10 @@ More Information
 
 As noted in the diagram in the `Startup <#startup>`__ section there can be a non-trivial lifecycle especially in the case of a `TwitterServer <https://github.com/twitter/twitter-server>`__.
 For more information on how to create an injectable `c.t.app.App <https://twitter.github.io/util/docs/com/twitter/app/App.html>`__ or a `c.t.server.TwitterServer <https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala>`__
-see the `Creating an injectable App <../app/index.html>`__ and `Creating an injectable TwitterServer <../twitter-server/index.html>`__ sections.
+see the `Creating an injectable App <../app/index.html>`__ and `Creating an injectable TwitterServer <../twitter_server/index.html>`__ sections.
 
 .. |c.t.inject.app.App#run| replace:: ``c.t.inject.app.App#run``
 .. _c.t.inject.app.App#run: ../app/index.html#app-run
 
 .. |c.t.inject.server.TwitterServer#start| replace:: ``c.t.inject.server.TwitterServer#start``
-.. _c.t.inject.server.TwitterServer#start: ../twitter-server/index.html#twitterserver-start
+.. _c.t.inject.server.TwitterServer#start: ../twitter_server/index.html#twitterserver-start
