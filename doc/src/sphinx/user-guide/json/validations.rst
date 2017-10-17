@@ -28,7 +28,7 @@ A method validation is a case class method annotated with ``@MethodValidation`` 
 -  For non-generic validations. ``@MethodValidation`` can be used instead of defining a reusable annotation and validator.
 -  Cross-field validations (e.g. `startDate` before `endDate`)
 
-For an example see the `Car <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/caseclass/validation/domain/Car.scala#L20>`__ test case class. Additionally, see the
+For an example see the `Car <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/caseclass/validation/domain/Car.scala#L26>`__ test case class. Additionally, see the
 `CommonMethodValidations <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/validation/CommonMethodValidations.scala>`__ for pre-defined commonly useful method validations.
 
 Validation Errors

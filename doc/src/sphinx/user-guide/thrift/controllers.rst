@@ -17,7 +17,7 @@ For Thrift Controllers we use the `BaseServiceIface` trait since we are not able
 `handle(ThriftMethod)` DSL
 --------------------------
 
-The Finatra `c.t.finatra.thrift.Controller` provides a DSL with which you can easily implement your thrift service methods via the `handle(ThriftMethod) <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L12>`__ function which takes a callback from `ThriftMethod.Args => Future[ThriftMethod.SuccessType]`.
+The Finatra `c.t.finatra.thrift.Controller` provides a DSL with which you can easily implement your thrift service methods via the `handle(ThriftMethod) <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L12>`__ function which takes a callback from `ThriftMethod.Args => Future[ThriftMethod.SuccessType]`.
 
 For example, given the following thrift IDL: `example_service.thrift`
 
@@ -69,7 +69,7 @@ Note, in the example above we implement the `ExampleService.BaseServiceIface#add
 Ensure you override using `val`
 -------------------------------
 
-You will see above that we use `override val` since the computed `ThriftMethodService <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala>`__ instance returned `is effectively constant <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L19>`__. However, you MUST override as a `val` when using the `handle(ThriftMethod)` function as using a `def` here will cause indeterminate behavior that will be hard to debug.
+You will see above that we use `override val` since the computed `ThriftMethodService <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala>`__ instance returned `is effectively constant <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L26>`__. However, you MUST override as a `val` when using the `handle(ThriftMethod)` function as using a `def` here will cause indeterminate behavior that will be hard to debug.
 
 Add the Controller to the Server
 --------------------------------

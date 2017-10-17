@@ -1,12 +1,12 @@
 User's Guide
 ============
 
-
 Getting Started
 ---------------
 
 - :doc:`getting-started/basics`
 - :doc:`getting-started/framework`
+- :doc:`getting-started/twitter-server`
 - :doc:`getting-started/lifecycle`
 - :doc:`getting-started/modules`
 - :doc:`getting-started/binding_annotations`
@@ -20,8 +20,18 @@ Logging
 - :doc:`logging/index`
 - :doc:`logging/logback`
 
-HTTP
-----
+Injectable App
+--------------
+
+- :doc:`app/index`
+
+Injectable TwitterServer
+------------------------
+
+- :doc:`twitter-server/index`
+
+HTTP Server
+-----------
 
 - :doc:`http/server`
 - :doc:`http/controllers`
@@ -43,8 +53,8 @@ Files
 
 - :doc:`files/index`
 
-Thrift
-------
+Thrift Server
+-------------
 
 - :doc:`thrift/basics`
 - :doc:`thrift/server`
@@ -53,20 +63,18 @@ Thrift
 - :doc:`thrift/exceptions`
 - :doc:`thrift/warmup`
 
-Twitter Server
---------------
-
-- :doc:`twitter-server/index`
-
 Testing
 -------
 
 - :doc:`testing/index`
-
-V1 Migration FAQ
-----------------
-
-- :doc:`v1-migration/index`
+- :doc:`testing/embedded`
+- :doc:`testing/feature-tests`
+- :doc:`testing/integration-tests`
+- :doc:`testing/startup-tests`
+- :doc:`testing/mixins`
+- :doc:`testing/mocks`
+- :doc:`testing/override-modules`
+- :doc:`testing/bind-dsl`
 
 .. Hidden ToC
 .. toctree::
@@ -75,6 +83,7 @@ V1 Migration FAQ
 
    getting-started/basics.rst
    getting-started/framework.rst
+   getting-started/twitter-server.rst
    getting-started/lifecycle.rst
    getting-started/modules.rst
    getting-started/binding_annotations.rst
@@ -83,6 +92,8 @@ V1 Migration FAQ
    getting-started/examples.rst
    logging/index.rst
    logging/logback.rst
+   app/index.rst
+   twitter-server/index.rst
    http/server.rst
    http/controllers.rst
    http/requests.rst
@@ -102,5 +113,12 @@ V1 Migration FAQ
    thrift/warmup.rst
    twitter-server/index.rst
    testing/index.rst
-   v1-migration/index.rst
+   testing/embedded.rst
+   testing/feature-tests.rst
+   testing/integration-tests.rst
+   testing/startup-tests.rst
+   testing/mixins.rst
+   testing/mocks.rst
+   testing/override-modules.rst
+   testing/bind-dsl.rst
    

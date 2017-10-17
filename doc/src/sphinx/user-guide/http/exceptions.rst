@@ -1,4 +1,4 @@
-.. _exceptions:
+.. _http-exceptions:
 
 HTTP Exception Mapping
 ======================
@@ -125,11 +125,11 @@ Override Default Behavior
 -------------------------
 
 The `ExceptionManager <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/exceptions/ExceptionManager.scala>`__ is the class that handles registration of exception mappers.
-In the example above, the `HttpRouter#exceptionMapper <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L45>`__ method is simply registering the given mapper
+In the example above, the `HttpRouter#exceptionMapper <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala#L51>`__ method is simply registering the given mapper
 with the `ExceptionManager`.
 
 The `ExceptionManager` is configured by the inclusion of the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/ExceptionManagerModule.scala>`__
-as a framework module in every `HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L22>`__.
+as a framework module in every `HttpServer <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L22>`__.
 
 If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten.
 

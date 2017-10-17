@@ -130,10 +130,10 @@ As you can see, you can choose to apply the filter either by type or provide an 
 Request Scope
 -------------
 
-Guice supports `custom scopes <https://github.com/google/guice/wiki/CustomScopes>`__ in addition to the most common `Singleton and *Unscoped* <https://github.com/google/guice/wiki/Scopes>`__. 
+`Guice <https://github.com/google/guice>`__ supports `custom scopes <https://github.com/google/guice/wiki/CustomScopes>`__ in addition to the most common `Singleton and *Unscoped* <https://github.com/google/guice/wiki/Scopes>`__.
 
 Request scopes are often used to allow injecting classes that change depending  on the incoming request (e.g. the authenticated User). Finatra provides an implementation of *RequestScoped* that works across Finagle
-non-blocking threads (`Guice's included @RequestScoped implementation <https://github.com/google/guice/wiki/Scopes#scopes>`__ uses ThreadLocals which will not work with `TwitterUtil <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ `c.t.util.Future`).
+non-blocking threads (`Guice <https://github.com/google/guice>`__'s included @RequestScoped implementation <https://github.com/google/guice/wiki/Scopes#scopes>`__ uses ThreadLocals which will not work with `TwitterUtil <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ `c.t.util.Future`).
 
 Note: fields added to the Finagle request scope will remain present in threads launched from a Finagle `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
 
@@ -214,10 +214,10 @@ Using `c.t.finagle.http.Request#ctx`
 
 Above we saw how to seed classes to the Finatra Request scope using a `Provider[T]`.
 
-However, we recommend *not* seeding with a request-scope `Provider[T]` but instead using Finagle's `c.t.finagle.http.Request#ctx <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L33>`__.
-Internally, we generally use the `Request#ctx` over `Provider[T]` even though we use Guice extensively.
+However, we recommend *not* seeding with a request-scope `Provider[T]` but instead using Finagle's `c.t.finagle.http.Request#ctx <https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L29>`__.
+Internally, we generally use the `Request#ctx` over `Provider[T]` even though we use `Guice <https://github.com/google/guice>`__ extensively.
 
-To use the `Request#ctx` technique, first create a `RecordSchema <https://github.com/twitter/util/blob/develop/util-collection/src/main/scala/com/twitter/collection/RecordSchema.scala#L6>`__ `request field <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L34>`__, a context and a filter which can set the context:
+To use the `Request#ctx` technique, first create a `RecordSchema <https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-collection/src/main/scala/com/twitter/collection/RecordSchema.scala#L6>`__ `request field <https://github.com/twitter/finagle/blob/f970bd5b0c1b3f968694dcde33b47b21869b9f0e/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala#L23>`__, a context and a filter which can set the context:
 
 .. code:: scala
 

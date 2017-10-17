@@ -15,7 +15,7 @@ Custom "request" case class
 
 Custom "request" case classes can be used for declarative parsing of requests with a content-type of `application/json` with support for type conversions, default values, and `validations <../json/validations.html>`__.
 
-The case class field names should match the request or header parameter name or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__ annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala##L177>`__ and `test case <https://github.com/twitter/finatra/blob/develop/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L135>`__).
+The case class field names should match the request or header parameter name or use the `@JsonProperty <https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties>`__ annotation to specify the JSON field name in the case class (see: `example <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L177>`__ and `test case <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L140>`__).
 
 A `PropertyNamingStrategy <https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html>`__ can be configured to handle common name substitutions (e.g. snake\_case or camelCase). By default, snake\_case is
 used (defaults are set in `FinatraJacksonModule <https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__).
@@ -119,7 +119,7 @@ This can be modeled with the following custom "request" case class which also ap
     ...
   }
 
-The `max` value will be parsed into an `Int` and `validated to be less than or equal to 100 <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/validation/validators/MaxValidator.scala#L49>`__. The `startDate` will be parsed into an `Option[DateTime]` (meaning it could be omitted without error from the query string) and if present will be validated to be a date in the past. Lastly, the `verbose` parameter will be parsed into a `Boolean` type.
+The `max` value will be parsed into an `Int` and `validated to be less than or equal to 100 <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/validation/validators/MaxValidator.scala#L49>`__. The `startDate` will be parsed into an `Option[DateTime]` (meaning it could be omitted without error from the query string) and if present will be validated to be a date in the past. Lastly, the `verbose` parameter will be parsed into a `Boolean` type.
 
 You can also set the parameter name as a value in the ``@QueryParam`` annotation, e.g.
 
@@ -170,7 +170,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
     Route, query, and form params are all stored in the "params" field of the incoming Finagle http request. As such, you should ensure that ``@RouteParam`` names do not collide with
     ``@QueryParam`` names. Otherwise, an ``@QueryParam`` could end up parsing an ``@RouteParam`` or ``@FormParam`` field.
 
-    Also note that request parameters and headers are accessed `**case-insensitively** <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/ParamMap.scala#L178>`__. Thus, the annotated fields:
+    Also note that request parameters and headers are accessed **case-insensitively**. Thus, the annotated fields:
 
     .. code:: scala
 
@@ -183,7 +183,7 @@ Code `example <https://github.com/twitter/finatra/blob/develop/http/src/test/sca
 
 ------------
 
-- `@Inject <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala>`__ - can be used to inject any Guice managed class into your case class. However, it is not necessary for "injecting" the underlying Finagle `http` Request into your case class. To access the underlying Finagle `http` Request in your custom case class, simply include a field of type `c.t.finagle.http.Request`, for example:
+- `@Inject <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala>`__ - can be used to inject any `Guice <https://github.com/google/guice>`__ managed class into your case class. However, it is not necessary for "injecting" the underlying Finagle `http` Request into your case class. To access the underlying Finagle `http` Request in your custom case class, simply include a field of type `c.t.finagle.http.Request`, for example:
 
   .. code:: scala
 
@@ -342,7 +342,6 @@ For more information and examples, see:
 
 -  `c.t.finatra.http.request.RequestUtils <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/request/RequestUtils.scala>`__
 -  `c.t.finatra.http.fileupload.MultipartItem <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/fileupload/MultipartItem.scala>`__
--  `c.t.finagle.http.Request#decodeBytes <https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Request.scala#L192>`__
--  `DoEverythingController <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala#L568>`__
--  `DoEverythingServerFeatureTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala#L332>`__
+-  `DoEverythingController <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/DoEverythingController.scala>`__
+-  `DoEverythingServerFeatureTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala>`__
 -  `MultiParamsTest <https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/request/MultiParamsTest.scala>`__

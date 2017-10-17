@@ -165,7 +165,7 @@ is meant to be somewhat generic so its API for constructing a response body acce
 If you have a `Future[T]` and want to return a `c.t.finagle.http.Response` you should either:
 
 - convert it to a `Future[Response]` or 
-- do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L139>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
+- do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
 
 To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures>`__:
 
@@ -185,7 +185,7 @@ To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <htt
 Cookies:
 --------
 
-Cookies, like Headers, are read from request and can set on the response via the `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala#L151>`__:
+Cookies, like Headers, are read from request and can set on the response via the `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__:
 
 .. code:: scala
 

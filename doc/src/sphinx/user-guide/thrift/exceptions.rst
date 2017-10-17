@@ -1,4 +1,4 @@
-.. _exceptions:
+.. _thrift-exceptions:
 
 Thrift Exception Mapping
 ========================
@@ -79,11 +79,11 @@ Override Default Behavior
 -------------------------
 
 The `ExceptionManager <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/exceptions/ExceptionManager.scala>`__ is the class that handles registration of exception mappers.
-In the example above, the `ThriftRouter#exceptionMapper <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala#L38>`__ method is simply registering the given mapper
+In the example above, the `ThriftRouter#exceptionMapper <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala#L46>`__ method is simply registering the given mapper
 with the `ExceptionManager`.
 
 The `ExceptionManager` is configured by the inclusion of the `ExceptionManagerModule <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/modules/ExceptionManagerModule.scala>`__
-as a framework module in every `ThriftServer <https://github.com/twitter/finatra/blob/b3fe5676794490ebd0cf228551de1285f2b9707e/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala#L16>`__.
+as a framework module in every `ThriftServer <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala#L23>`__.
 
 If a new mapper is added over an exception type already registered in the `ExceptionManager`, the previous mapper will be overwritten.
 

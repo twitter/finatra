@@ -5,7 +5,7 @@ Modules
 
 Modules are used in conjunction with dependency injection to specify *how* to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: `Flags <flags.html>`__).
 
-We provide the `c.t.inject.TwitterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala>`__ base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by `codingwell/scala-guice <https://github.com/codingwell/scala-guice>`__.
+We provide the `c.t.inject.TwitterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala>`__ base class which extends the capabilities of the excellent Scala extensions for Google `Guice <https://github.com/google/guice>`__ provided by `codingwell/scala-guice <https://github.com/codingwell/scala-guice>`__.
 
 Defining Modules
 ----------------
@@ -122,7 +122,7 @@ E.g,
       }
     }
 
-See the `Server Lifecycle <lifecycle.html>`__ diagram for a more visual depiction of the server lifecycle.
+See the `Application and Server Lifecycle <lifecycle.html>`__ section for more information on the application and server lifecycle.
 
 Modules Depending on Other Modules
 ----------------------------------

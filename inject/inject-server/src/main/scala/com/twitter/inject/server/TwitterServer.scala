@@ -122,6 +122,7 @@ trait TwitterServer
    *
    * Any exceptions thrown in this method will result in the server exiting.
    */
+  @Lifecycle
   protected def start(): Unit = {}
 
   /* Overrides */

@@ -14,7 +14,7 @@ Twitter's `com.twitter.util.Future` is similar to, but predates `Scala's <http:/
 
 It is important to remember that the **Finatra framework uses and expects** `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__.
 
-Finatra will `attempt to perform a bijection <https://github.com/twitter/finatra/commit/f7d617163d6981d779dca66fcc67ddd33c6aa083>`__ for you if your Controller route callback returns a ``scala.concurrent.Future``. However, note that this bijection `may not be ideal in all cases <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L183>`__ and you may wish to do the conversion yourself directly in your Controller.
+Finatra will `attempt to perform a bijection <https://github.com/twitter/finatra/commit/f7d617163d6981d779dca66fcc67ddd33c6aa083>`__ for you if your Controller route callback returns a ``scala.concurrent.Future``. However, note that this bijection `may not be ideal in all cases <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L193>`__ and you may wish to do the conversion yourself directly in your Controller.
 
 For more information on the `Twitter Bijection <https://github.com/twitter/bijection>`__ library it is highly recommended that you read the `Bijection README <https://github.com/twitter/bijection/blob/develop/README.md>`__. 
 
