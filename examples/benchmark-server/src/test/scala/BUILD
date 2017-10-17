@@ -2,7 +2,6 @@ junit_tests(
   dependencies=[
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
-    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finagle/finagle-http/src/main/scala',
     'finatra/examples/benchmark-server/src/main/scala',
     'finatra/examples/benchmark-server/src/test/resources',
