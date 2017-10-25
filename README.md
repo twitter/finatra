@@ -3,7 +3,7 @@
 [![Build Status](https://secure.travis-ci.org/twitter/finatra.png?branch=develop)](https://travis-ci.org/twitter/finatra?branch=develop)
 [![Test Coverage](https://codecov.io/github/twitter/finatra/coverage.svg?branch=develop)](https://codecov.io/github/twitter/finatra?branch=develop)
 [![Project status](https://img.shields.io/badge/status-active-brightgreen.svg)](#status)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)][maven-central]
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg)][maven-central]
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/twitter/finatra)
 
 ## Status
@@ -94,15 +94,15 @@ class ExampleServer extends ThriftServer {
 
 ## Example Projects
 
-Finatra includes working examples which highlight various features of the framework and include tests. In the [develop branch](https://github.com/twitter/finatra/tree/develop/examples) these examples are included in the root [sbt][sbt] build and are thus buildable as part of the entire project. In the [master branch](https://github.com/twitter/finatra/tree/master/examples) (or a [release branch](https://github.com/twitter/finatra/tree/finatra-2.10.0/examples)) these examples can be built using their invididual [sbt][sbt] (or [Maven][maven]) build files.
+Finatra includes working examples which highlight various features of the framework and include tests. These examples are included in the root [sbt][sbt] build and are thus buildable as part of the entire project.
 
-Please take a look through the [examples](/examples) for more detailed information on features, testing, and building with sbt (or Maven).
+Please take a look through the [examples](/examples) for more detailed information on features, testing, building, and running.
 
 ## Latest version
 
 The [master branch](https://github.com/twitter/finatra/tree/master) in Github tracks the latest stable [release](https://github.com/twitter/finatra/releases), which is currently:
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.11/badge.svg)][maven-central]
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg)][maven-central]
 
 available on Maven Central. See the [First Steps](https://twitter.github.io/finatra/user-guide/getting-started/basics.html#first-steps) section in the [User Guide][user-guide] for how to add dependencies.
 
@@ -146,6 +146,6 @@ Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/
 [local]: https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala
 [mdc]: https://logback.qos.ch/manual/mdc.html
 [maven]: https://maven.apache.org/
-[maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20%28a%3A%22finatra-http_2.11%22%20OR%20a%3A%22finatra-thrift_2.11%22%29
+[maven-central]: https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20%28a%3A%22finatra-http_2.12%22%20OR%20a%3A%22finatra-thrift_2.12%22%29
 [user-guide]: https://twitter.github.io/finatra/user-guide/index.html
 [sbt]: http://www.scala-sbt.org/

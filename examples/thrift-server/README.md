@@ -1,33 +1,31 @@
 # Finatra Thrift Server Example Application
 
-* A simple thrift server example.
-* Note: Finatra examples are built in different ways depending on the branch you are in:
+A simple thrift server example.
 
-[Master](https://github.com/twitter/finatra/tree/master) or a tagged release branch (e.g. [finatra-2.10.0](https://github.com/twitter/finatra/tree/finatra-2.10.0))
-----------------------------------------------------------
-Run sbt from **this** project's directory, e.g.
-```
-$ sbt run
-```
-Or build and run a deployable jar:
-```
-$ sbt assembly
-$ java -jar -Dlog.service.output=thrift-server.log -Dlog.access.output=access.log thrift-example-server/target/scala-2.11/thrift-example-server-assembly-2.10.0.jar -thrift.port=:9999 -admin.port=:9990
-```
+Note: All Finatra examples should be run from the base Finatra directory as they are defined as part 
+of the root project.
 
-Any other branch
-----------------
-See the [CONTRIBUTING.md](../../CONTRIBUTING.md#building-dependencies) documentation on building Finatra dependencies in order to run the examples.
+Building
+--------
 
-Run sbt from the top-level Finatra directory, e.g.
+For any branch that is not [Master](https://github.com/twitter/finatra/tree/master) or a tagged 
+[release branch](https://github.com/twitter/finatra/releases) (or a branch based on one of those 
+branches), see the [CONTRIBUTING.md](../../CONTRIBUTING.md#building-dependencies) documentation on 
+building Finatra and it's dependencies locally in order to run the examples.
+
+Running
+-------
 ```
-$ cd ../../
-$ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt thriftExampleServer/run
+[finatra] $ cd ../../
+[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt thriftExampleServer/run
 ```
 
 * Or build and run a deployable jar:
 ```
-$ ./sbt thriftExampleServer/assembly
-$ java -jar -Dlog.service.output=thrift-server.log -Dlog.access.output=access.log examples/thrift-server/thrift-example-server/target/scala-2.11/thrift-example-server-assembly-2.10.0.jar -thrift.port=:9999 -admin.port=:9990
+[finatra] $ ./sbt thriftExampleServer/assembly
+[finatra] $ java -jar -Dlog.service.output=thrift-server.log -Dlog.access.output=access.log examples/thrift-server/thrift-example-server/target/scala-2.11/thrift-example-server-assembly-X.XX.X.jar -thrift.port=:9999 -admin.port=:9990
 ```
-*Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. When not set the [logback.xml](./thrift-example-server/src/main/resources/logback.xml) is parameterized with defaults of `service.log` and `access.log`, respectively.
+*Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they 
+can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. 
+When not set the [logback.xml](./thrift-example-server/src/main/resources/logback.xml) is 
+parameterized with defaults of `service.log` and `access.log`, respectively.

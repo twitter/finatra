@@ -226,11 +226,9 @@ lazy val finatraExamples =
     exampleInjectJavaServer,
     exampleWebDashboard,
     helloWorld,
-    // helloWorldHeroku, // CSL-5015
     streamingExample,
     thriftExampleServer,
     thriftJavaExampleServer,
-    tinyUrl,
     twitterClone) ++
   // END EXAMPLES
   Seq.empty
@@ -259,10 +257,8 @@ lazy val root = (project in file("."))
       // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
          exampleWebDashboard, helloWorld,
-         // helloWorldHeroku, // CSL-5015
          streamingExample, thriftExampleIdl, thriftExampleServer,
-         thriftJavaExampleIdl, thriftJavaExampleServer,
-         tinyUrl, twitterClone)
+         thriftJavaExampleIdl, thriftJavaExampleServer, twitterClone)
       // END EXAMPLES
   ).aggregate(aggregatedProjects: _*)
 
@@ -733,20 +729,6 @@ lazy val site = (project in file("doc"))
 
 // START EXAMPLES
 
-// TODO: Re-enable when finagle-metrics is updated (CSL-5015)
-// lazy val helloWorldHeroku = (project in file("examples/hello-world-heroku"))
-//   .settings(exampleServerSettings)
-//   .settings(
-//     name := "hello-world-heroku",
-//     moduleName := "hello-world-heroku",
-//     libraryDependencies ++= Seq(
-//       "com.github.rlazoti" %% "finagle-metrics" % "0.0.8"
-//     )
-//   ).dependsOn(
-//     http % "test->test;compile->compile",
-//     slf4j,
-//     injectCore % "test->test")
-
 lazy val helloWorld = (project in file("examples/hello-world"))
   .settings(exampleServerSettings)
   .settings(
@@ -795,20 +777,6 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server"))
   ).dependsOn(
     http % "test->test;compile->compile",
     injectCore % "test->test")
-
-lazy val tinyUrl = (project in file("examples/tiny-url"))
-  .settings(exampleServerSettings)
-  .settings(
-    name := "tiny-url",
-    moduleName := "tiny-url",
-    libraryDependencies ++= Seq(
-      "redis.clients" % "jedis" % "2.7.2"
-    )
-  ).dependsOn(
-    http % "test->test;compile->compile",
-    httpclient,
-    injectCore % "test->test",
-    injectSlf4j)
 
 lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
   .settings(exampleServerSettings)
