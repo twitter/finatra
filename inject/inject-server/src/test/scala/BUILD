@@ -61,6 +61,7 @@ scala_library(name="test-deps",
     'finatra/inject/inject-core/src/test/scala:test-deps',
     'finatra/inject/inject-modules/src/test/scala:test-deps',
     'finatra/inject/inject-server/src/main/scala',
+    'finatra/inject/inject-slf4j/src/main/scala',
     'finatra/inject/inject-utils/src/main/scala',
     'twitter-server/src/main/scala',
     'util/util-app/src/main/scala',
@@ -72,6 +73,9 @@ scala_library(name="test-deps",
   fatal_warnings=True,
   sources=globs('com/twitter/inject/server/*.scala'),
   exports=[
+    'finatra/inject/inject-core/src/test/scala:test-deps',
+    'finatra/inject/inject-server/src/main/scala',
+    'finatra/inject/inject-slf4j/src/main/scala',
     'util/util-core/src/main/scala:scala',
   ]
 )

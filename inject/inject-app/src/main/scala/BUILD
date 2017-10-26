@@ -28,6 +28,7 @@ scala_library(
   exports=[
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/net/codingwell:scala-guice',
+    'util/util-slf4j-api/src/main/scala',
   ]
 
 )

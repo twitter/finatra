@@ -11,8 +11,7 @@ import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision
-import com.twitter.util.logging.Slf4jBridgeUtility
-import com.twitter.util.{Awaitable, Await, Duration}
+import com.twitter.util.{Await, Awaitable, Duration}
 import java.util.concurrent.{ConcurrentLinkedQueue, CountDownLatch}
 import scala.collection.JavaConverters._
 
@@ -32,20 +31,14 @@ abstract class AbstractTwitterServer extends TwitterServer
  *  start -- callback executed after the injector is created and all @Lifecycle methods have completed.
  */
 trait TwitterServer
-    extends App
-    with com.twitter.server.TwitterServer
-    with Ports
-    with Warmup
-    with Logging {
+  extends App
+  with com.twitter.server.TwitterServer
+  with DeprecatedLogging
+  with Ports
+  with Warmup
+  with Logging {
 
   addFrameworkModules(statsReceiverModule)
-
-  /**
-   * Attempt to install the Slf4jBridgeHandler and override the `configureLoggerFactories`
-   * method to do nothing, so that any installed bridges are not removed/replaced.
-   */
-  Slf4jBridgeUtility.attemptSlf4jBridgeHandlerInstallation()
-  override def configureLoggerFactories(): Unit = {}
 
   private val adminAnnounceFlag =
     flag[String]("admin.announce", "Address for announcing admin server")
@@ -221,4 +214,12 @@ trait TwitterServer
     }
     warmupComplete()
   }
+}
+
+@deprecated("For backwards compatibility of defined flags", "2017-10-06")
+private[server] trait DeprecatedLogging extends com.twitter.logging.Logging { self: App =>
+  @deprecated("For backwards compatibility only. Do not attempt to use this logger.", "2017-10-06")
+  override lazy val log: com.twitter.logging.Logger = com.twitter.logging.NullLogger
+
+  override def configureLoggerFactories(): Unit = {}
 }

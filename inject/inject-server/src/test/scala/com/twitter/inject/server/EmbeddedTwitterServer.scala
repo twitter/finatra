@@ -221,7 +221,6 @@ class EmbeddedTwitterServer(
 
   def close(): Unit = {
     if (!closed) {
-      twitterServer.log.clearHandlers()
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
       try {
         Await.all(httpAdminClient.close(), twitterServer.close())
@@ -484,16 +483,9 @@ class EmbeddedTwitterServer(
     info(s"AdminHttp      -> http://$adminHostAndPort/admin")
   }
 
-  protected def updateFlags(map: Map[String, String]) = {
-    if (!verbose)
-      map + ("log.level" -> "WARNING")
-    else
-      map
-  }
-
   protected def combineArgs(): Array[String] = {
     val flagsStr =
-      flagsAsArgs(updateFlags(resolveFlags(useSocksProxy, flags)))
+      flagsAsArgs(resolveFlags(useSocksProxy, flags))
     ("-admin.port=" + PortUtils.ephemeralLoopback) +: (args ++ flagsStr).toArray
   }
 
