@@ -10,20 +10,23 @@ All notable changes to this project will be documented in this file. Note that `
   use `c.t.inject.Mockito` trait in tests. Deprecate resetting of mocks and
   resettables in `c.t.inject.IntegrationTestMixin`. ``PHAB_ID=D93876``
 
-* finatra-http: Parameterize `@RouteParam`,`@QueryParam`,`@FormParam`, and 
-  `@Header` to allow specifying the field name to read from the params or 
+* finatra-http: Parameterize `@RouteParam`,`@QueryParam`,`@FormParam`, and
+  `@Header` to allow specifying the field name to read from the params or
   header map. Previously these annotations only looked for values by the
-  case class field name leading to possible ugliness when defining case 
+  case class field name leading to possible ugliness when defining case
   class fields (especially with `@Header`). ``PHAB_ID=`D94220`
 
-* finatra: Add support for using a `java.lang.annotation.Annotation` instance 
-  with the `#bind[T]` testing DSL. This adds a way to bind instances in tests 
+* finatra: Add support for using a `java.lang.annotation.Annotation` instance
+  with the `#bind[T]` testing DSL. This adds a way to bind instances in tests
   that use the @Named binding annotation. ``PHAB_ID=D91330``
 
 * finatra-http: Allow setting the content type of a Mustache view.
   ``PHAB_ID=D91857``
-  
+
 ### Changed
+
+* From now on, release versions will be based on release date in the format of
+  YY.MM.x where x is a patch number. ``PHAB_ID=D101244``
 
 * finatra-utils: Remove deprecated `ExternalServiceExceptionMatcher`. ``PHAB_ID=D98343``
 
@@ -33,20 +36,20 @@ All notable changes to this project will be documented in this file. Note that `
   packages were unspecified. This is a runtime behavior change.
   ``PHAB_ID=D93104``
 
-* finatra-http: Require that route URIs and prefixes begin with forward slash (/). 
+* finatra-http: Require that route URIs and prefixes begin with forward slash (/).
   ``PHAB_ID=D90895``
 
-* inject-utils: (BREAKING API CHANGE) RichOption toFutureOrFail, toTryOrFail, and 
-  toFutureOrElse signature changed to take the fail or else parameter by name. 
+* inject-utils: (BREAKING API CHANGE) RichOption toFutureOrFail, toTryOrFail, and
+  toFutureOrElse signature changed to take the fail or else parameter by name.
   ``PHAB_ID=D89544``
 
 * inject-server: Remove usage of deprecated `c.t.inject.logging.Slf4jBridgeUtility`.
   Change usages to `c.t.util.logging.Slf4jBridgeUtility`. ``PHAB_ID=D88095``
 
-* finatra-http, inject-thrift-client: Remove netty3 specific types and dependency. 
-  In finatra-http, the code using these types is deprecated and can be removed allowing 
+* finatra-http, inject-thrift-client: Remove netty3 specific types and dependency.
+  In finatra-http, the code using these types is deprecated and can be removed allowing
   us to remove netty3-specific dependencies. In inject-thrift-client we can default to
-  use the DefaultTimer for the backupRequestFilter method param instead of the 
+  use the DefaultTimer for the backupRequestFilter method param instead of the
   HashedWheelTimer. ``PHAB_ID=D88025``
 
 ### Fixed
@@ -75,7 +78,7 @@ All notable changes to this project will be documented in this file. Note that `
 * finatra-jackson: Deprecate c.t.finatra.json.utils.CamelCasePropertyNamingStrategy.
   This object was created to reduce ambiguity with previous releases of Jackson in which
   the default PropertyNamingStrategy was an abstract class with a default of camel case.
-  Users are encouraged to use the Jackson PropertyNamingStrategy 
+  Users are encouraged to use the Jackson PropertyNamingStrategy
   constants directly. ``PHAB_ID=D81707``
 
 ### Fixed
