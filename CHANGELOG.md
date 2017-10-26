@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-17.10.0](https://github.com/twitter/finatra/tree/finatra-17.10.0) (2017-10-26)
+
+### Added
+
 * inject-core: Remove deprecated `c.t.inject.TestMixin#resetMocks`. Properly
   use `c.t.inject.Mockito` trait in tests. Deprecate resetting of mocks and
   resettables in `c.t.inject.IntegrationTestMixin`. ``PHAB_ID=D93876``
