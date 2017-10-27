@@ -64,6 +64,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Parameterized route callback inputs fail because the lookup of a
+  corresponding `MessageBodyManager` reader lookup does not properly handle parameterized 
+  types such as collections. This change updates the `MessageBodyManager` `MessageBodyReader`
+  lookup to take into account parameterized types. This allows for a user to parse a
+  `Seq[T]`, or `Map[K, V]` as a route callback input type using the default Finatra
+  `MessageBodyReader`. ``PHAB_ID=D104277``
+
 * finatra-jackson: Fix issue causing `IllegalArgumentException` from Validations to
   be swallowed. A catch clause in the `c.t.finatra.json.internal.caseclass.jackson.FinatraCaseClassDeserializer`
   is too broad as it catches thrown `IllegalArgumentException`s from field validations
@@ -151,7 +158,7 @@ All notable changes to this project will be documented in this file. Note that `
 ### Fixed
 
 * finatra-http: Correctly return a JsonParseException when the incoming JSON is not parsable
-  as an expected custom case class request object. ``RB_ID=``
+  as an expected custom case class request object. ``RB_ID=912529``
 
 * finatra-http: Ensure underlying members are injected for AbstractControllers. ``RB_ID=911635``
 
