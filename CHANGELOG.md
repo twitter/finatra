@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* EmbeddedTwitterServer, EmbeddedHttpServer, and EmbeddedThriftServer flags 
+  and args parameters changed to call-by-name. ``PHAB_ID=`D104733`
+
 ### Fixed
 
 ### Closed

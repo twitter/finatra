@@ -70,8 +70,8 @@ object EmbeddedTwitterServer {
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
-  flags: Map[String, String] = Map(),
-  args: Seq[String] = Seq(),
+  flags: => Map[String, String] = Map(),
+  args: => Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,

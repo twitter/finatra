@@ -13,6 +13,14 @@ class MultiServerFeatureTest extends Test with HttpTest {
   val add2Server =
     new EmbeddedHttpServer(new Add2Server, flags = Map(resolverMap("add1-server", add1Server)))
 
+  override def beforeAll() = {
+    assert(!add1Server.isStarted)
+    assert(!add2Server.isStarted)
+
+    add1Server.assertHealthy()
+    add2Server.assertHealthy()
+  }
+
   override def afterAll() = {
     add1Server.close()
     add2Server.close()
