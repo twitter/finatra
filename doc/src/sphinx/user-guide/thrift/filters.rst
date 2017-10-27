@@ -1,4 +1,4 @@
-.. _thrift_filter:
+.. _thrift_filters:
 
 Filtering Thrift Requests
 =========================

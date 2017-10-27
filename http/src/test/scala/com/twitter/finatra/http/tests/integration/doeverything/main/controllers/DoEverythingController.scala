@@ -126,7 +126,15 @@ class DoEverythingController @Inject()(
   }
 
   get("/useragent") { request: UserAgentRequest =>
-    request.`user-agent`
+    request.agent
+  }
+
+  get("/acceptHeaders") { request: AcceptsHeaderRequest =>
+    Map(
+      "Accept" -> request.accept,
+      "Accept-Charset" -> request.acceptCharset,
+      "Accept-Charset-Again" -> request.acceptCharsetAgain,
+      "Accept-Encoding" -> request.acceptEncoding)
   }
 
   get("/forwardCaseClass") { request: CaseClassWithRequestField =>
@@ -726,6 +734,10 @@ class DoEverythingController @Inject()(
     r.param
   }
 
+  get("/RequestWithBooleanNamedQueryParam") { r: RequestWithBooleanNamedQueryParam =>
+    r.param
+  }
+
   get("/RequestWithOptionBooleanQueryParam") { r: RequestWithOptionBooleanQueryParam =>
     "Hi " + r.param
   }
@@ -828,6 +840,20 @@ class DoEverythingController @Inject()(
 
   post("/localDateRequest") { r: TestCaseClassWithLocalDate =>
     response.ok
+  }
+
+  post("/invalidValidationRequest") { request: InvalidValidationRequest =>
+    response.ok
+  }
+
+  post("/invalidValidationRequestWithCause") { request: Request =>
+    try {
+      objectMapper.parse[InvalidValidationRequest](request.contentString)
+    } catch {
+      case e: IllegalArgumentException =>
+        // want to return the actual error to the client for testing against this case
+        response.internalServerError(e.getMessage)
+    }
   }
 }
 

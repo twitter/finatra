@@ -22,7 +22,6 @@ If you find that you end up with a lot of flags to configure for your service an
 
 See `this thread <https://groups.google.com/forum/#!searchin/finatra-users/typesafe$20config%7Csort:relevance/finatra-users/kkZgI5dG9CY/lzDPAmUxAwAJ>`__ on using `Typesafe Config <https://github.com/typesafehub/config>`__ with Finatra and this `example repository <https://github.com/dkowis/finatra-typesafe-config>`__. 
 
-
 How To Define Flags
 -------------------
 
@@ -36,6 +35,15 @@ In Finatra, we also provide a way to override bound instances in the object grap
 --------------------
 
 ``@Flag`` is a `binding annotation <../getting-started/binding_annotations.html>`__. This annotation allows flag values to be injected into classes (and provider methods).
+
+.. important::
+   While flags support parsing into any |Flaggable[T]|_ type, it is currently only possible to `bind to String types <https://github.com/twitter/finatra/blob/31efc1d46dea436fb580f4b71f9196d15bade2e3/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/TwitterTypeConvertersModule.scala>`__ or easily
+   convertable from String types. Finatra provides `type conversions for <https://github.com/twitter/finatra/blob/31efc1d46dea436fb580f4b71f9196d15bade2e3/inject/inject-app/src/main/scala/com/twitter/inject/app/internal/TwitterTypeConvertersModule.scala>`__ `c.t.util.Duration` and 
+   `org.joda.time.Duration` as well as default conversions provided by `Guice <https://github.com/google/guice>`__ for `Numbers, Booleans, and Chars <https://github.com/google/guice/blob/55bb902701f6e0277fbfaedd735f4315213957bf/core/src/com/google/inject/internal/TypeConverterBindingProcessor.java#L43>`__. 
+
+   The reason for this limitation is that when creating the binding key for the flag value we are not able to
+   obtain enough type information to properly bind to any paramaterized type like `Seq[T]` or `Map[K, V]` as 
+   the |Flaggable[T]|_ trait does not currently carry enough type information to construct the correct binding key.
 
 Flag Definition
 ^^^^^^^^^^^^^^^
@@ -265,3 +273,7 @@ Note that usage of a `client.id` flag is just an example. In Finatra, we provide
 You'll see that this type is then expected to be bound in other modules like the `FilteredThriftClientModule <https://github.com/twitter/finatra/blob/ec8d584eb914f50f92314c740dc68fb7abb47eff/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/FilteredThriftClientModule.scala#L234>`__ which is a utility for building filtered thrift clients.
 
 The framework does not assume that you are using the `ThriftClientIdModule <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/ThriftClientIdModule.scala>`__ for providing the bound `ClientId` type thus the  `FilteredThriftClientModule <https://github.com/twitter/finatra/blob/develop/inject/inject-thrift-client/src/main/scala/com/twitter/inject/thrift/modules/FilteredThriftClientModule.scala>`__ does not specify the `ThriftClientIdModule` in it's list of modules to allow users to bind an instance of this type in any manner they choose.
+
+
+.. |Flaggable[T]| replace:: ``Flaggable[T]``
+.. _Flaggable[T]: https://github.com/twitter/util/blob/1bdeab56e49015c1f4c097ef76e47b93a079a239/util-app/src/main/scala/com/twitter/app/Flaggable.scala#L19

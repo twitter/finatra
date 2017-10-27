@@ -66,6 +66,11 @@ class FinatraObjectMapperTest extends Test with Logging {
      }
     """
 
+  test("get PropertyNamingStrategy") {
+    val namingStrategy = mapper.propertyNamingStrategy
+    namingStrategy should not be(null)
+  }
+
   test("simple tests#parse simple") {
     val foo = parse[SimplePerson]("""{"name": "Steve"}""")
     foo should equal(SimplePerson("Steve"))
@@ -951,6 +956,20 @@ class FinatraObjectMapperTest extends Test with Logging {
     l.add(1)
     l.add(2)
     c.arraylist should equal(l)
+  }
+
+  test("A case class with a SortedMap[String, Int]") {
+    val origCaseClass = CaseClassWithSortedMap(scala.collection.SortedMap("aggregate" -> 20))
+    val caseClassJson = generate(origCaseClass)
+    val caseClass = parse[CaseClassWithSortedMap](caseClassJson)
+    caseClass should equal(origCaseClass)
+  }
+
+  test("A case class with a Seq of Longs") {
+    val origCaseClass = CaseClassWithSeqOfLongs(Seq(10, 20, 30))
+    val caseClassJson = generate(origCaseClass)
+    val caseClass = parse[CaseClassWithSeqOfLongs](caseClassJson)
+    caseClass should equal(origCaseClass)
   }
 
   test("seq of longs") {

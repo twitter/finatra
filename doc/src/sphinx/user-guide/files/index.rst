@@ -65,7 +65,7 @@ File Serving Examples
 Mustache Templating
 -------------------
 
-Finatra supports the rendering of mustache templates. The framework provides a default `MustacheModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala>`__ but this is configurable. To set your own module, override the mustacheModule def in `c.t.finatra.http.HttpServer <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L91>`__, e.g.,
+Finatra supports the rendering of mustache templates. The framework provides a default `MustacheModule <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MustacheModule.scala>`__ but this is configurable. To set your own module, override the mustacheModule def in `c.t.finatra.http.HttpServer <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L63>`__, e.g.,
 
 .. code:: scala
 
@@ -120,7 +120,7 @@ Or you can manually create a response that explicitly references a template, e.g
     }
 
 
-Or you can programmatically render a template into a string using `c.t.finatra.http.marshalling.mustache.MustacheService#createString <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/mustache/MustacheService.scala#L37>`__ method. This is useful for embedding the resultant content inside a field in a response.
+Or you can programmatically render a template into a string using `c.t.finatra.http.marshalling.mustache.MustacheService#createString <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/marshalling/mustache/MustacheService.scala#L36>`__ method. This is useful for embedding the resultant content inside a field in a response.
 
 .. code:: scala
 

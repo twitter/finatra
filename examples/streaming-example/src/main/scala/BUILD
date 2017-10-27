@@ -1,6 +1,5 @@
 scala_library(
   dependencies=[
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/org/slf4j:slf4j-api',
     'finatra/examples/streaming-example/src/main/resources',
@@ -21,5 +20,4 @@ scala_library(
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  strict_deps=True,
 )

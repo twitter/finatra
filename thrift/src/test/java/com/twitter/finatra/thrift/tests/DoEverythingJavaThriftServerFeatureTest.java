@@ -9,7 +9,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.twitter.doeverything.thriftjava.Answer;
 import com.twitter.doeverything.thriftjava.DoEverything;
+import com.twitter.doeverything.thriftjava.Question;
 import com.twitter.finatra.thrift.EmbeddedThriftServer;
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingJavaThriftServer;
 import com.twitter.util.Await;
@@ -87,5 +89,17 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
             "twentyone",
             "twentytwo",
             "twentythree")));
+    }
+
+    /** test ask endpoint */
+    @Test
+    public void testAsk() throws Exception {
+        final Answer answer =
+                Await.result(
+                        THRIFT_CLIENT.ask(
+                                new Question("What is the meaning of life?")));
+        assertEquals(
+                "The answer to the question: `What is the meaning of life?` is 42.",
+                answer.getText());
     }
 }

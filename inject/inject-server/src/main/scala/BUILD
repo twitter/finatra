@@ -20,23 +20,23 @@ scala_library(
     'finatra/inject/inject-server/src/main/resources',
     'finatra/inject/inject-slf4j/src/main/scala',
     'finatra/inject/inject-utils/src/main/scala',
-    'twitter-server/src/main/scala',
+    'twitter-server/server/src/main/scala',
     'util/util-app/src/main/scala',
     'util/util-core/src/main/scala',
-    'util/util-lint/src/main/scala:scala',
-    'util/util-logging/src/main/scala',
+    'util/util-lint/src/main/scala',
+    'util/util-logging/src/main/scala', # for DeprecatedLoggingFlags trait
     'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala',
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/net/codingwell:scala-guice',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-utils/src/main/scala:scala',
-    'twitter-server/src/main/scala',
+    'twitter-server/server/src/main/scala',
     'util/util-app/src/main/scala:scala',
     'util/util-core/src/main/scala:scala',
+    'util/util-slf4j-api/src/main/scala',
   ]
 )

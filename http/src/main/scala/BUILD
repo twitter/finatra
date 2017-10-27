@@ -32,7 +32,6 @@ scala_library(
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-exp/src/main/scala',
     'finagle/finagle-http/src/main/scala',
-    'finagle/finagle-netty3/src/main/scala:scala',
     'finatra/http/src/main/java',
     'finatra/http/src/main/resources',
     'finatra/inject/inject-app/src/main/scala',
@@ -55,7 +54,6 @@ scala_library(
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     'finagle/finagle-base-http/src/main/scala:scala',

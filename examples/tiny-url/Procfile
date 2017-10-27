@@ -1,1 +1,0 @@
-web: target/universal/stage/bin/tiny-url -- -admin.port=:$PORT -http.port=:$PORT -redis.url=$REDIS_URL

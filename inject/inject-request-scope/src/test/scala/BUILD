@@ -8,6 +8,7 @@ junit_tests(
     '3rdparty/jvm/net/codingwell:scala-guice',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finagle/finagle-core/src/main/scala',
     'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala',
@@ -19,5 +20,4 @@ junit_tests(
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  strict_deps=True,
 )

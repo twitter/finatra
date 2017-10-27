@@ -15,6 +15,7 @@ jvm_binary(
   basename='streaming-example',
   main='com.twitter.streaming.StreamingServerMain',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     ':streaming-example'
   ],
   deploy_excludes=[

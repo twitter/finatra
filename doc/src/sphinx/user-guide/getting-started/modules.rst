@@ -5,7 +5,7 @@ Modules
 
 Modules are used in conjunction with dependency injection to specify *how* to instantiate an instance of a given type. They are especially useful when instantiation of an instance is dependent on some type of external configuration (see: `Flags <flags.html>`__).
 
-We provide the `c.t.inject.TwitterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala>`__ base class which extends the capabilities of the excellent Scala extensions for Google Guice provided by `codingwell/scala-guice <https://github.com/codingwell/scala-guice>`__.
+We provide the `c.t.inject.TwitterModule <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModule.scala>`__ base class which extends the capabilities of the excellent Scala extensions for Google `Guice <https://github.com/google/guice>`__ provided by `codingwell/scala-guice <https://github.com/codingwell/scala-guice>`__.
 
 Defining Modules
 ----------------
@@ -55,7 +55,6 @@ Thus for the above example, we have now provided a way for the injector to const
 
 See `Module Configuration in Severs <#module-configuration-in-servers>`__.
 
-
 Using Flags in Modules
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -95,7 +94,7 @@ For more information on server configuration see the `HTTP <../http/server.html>
 Module Lifecycle
 ----------------
 
-Modules also have hooks into the Server lifecycle through the `c.t.inject.TwitterModuleLifecycle <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala>`__ which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module.
+Modules can hook into the Server lifecycle through the `c.t.inject.TwitterModuleLifecycle <https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala>`__ which allows for a module to specify startup and shutdown functionality that is re-usable and scoped to the context of the Module.
 
 If your module provides a resource that requires one-time start-up or initialization you can do this by implementing the `singletonStartup` method in your TwitterModule. Conversely, if you want to clean up resources on graceful shutdown of the server you can implement the `singletonShutdown` method of your TwitterModule to close or shutdown any resources provided by the module.
 
@@ -122,7 +121,7 @@ E.g,
       }
     }
 
-See the `Server Lifecycle <lifecycle.html>`__ diagram for a more visual depiction of the server lifecycle.
+See the `Application and Server Lifecycle <lifecycle.html>`__ section for more information on the application and server lifecycle.
 
 Modules Depending on Other Modules
 ----------------------------------

@@ -11,6 +11,7 @@ junit_tests(
     '3rdparty/jvm/net/codingwell:scala-guice',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     '3rdparty/jvm/org/specs2:mock',
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala',
@@ -28,7 +29,6 @@ junit_tests(
   sources=globs(
     'com/twitter/finatra/httpclient/*.scala'
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -52,5 +52,4 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/finatra/httpclient/test/*.scala'
   ),
-  strict_deps=True,
 )

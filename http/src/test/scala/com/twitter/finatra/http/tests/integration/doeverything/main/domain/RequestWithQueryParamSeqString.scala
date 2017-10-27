@@ -22,6 +22,8 @@ case class RequestWithShortQueryParams(@QueryParam param: Seq[Short])
 
 case class RequestWithBooleanQueryParams(@QueryParam param: Seq[Boolean])
 
+case class RequestWithBooleanNamedQueryParam(@QueryParam("foo") param: String)
+
 case class RequestWithOptionBooleanQueryParam(@QueryParam param: Option[Boolean])
 
 case class RequestWithBooleanQueryParam(@QueryParam param: Boolean)

@@ -1,6 +1,5 @@
 scala_library(
   dependencies=[
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-core',
     '3rdparty/jvm/com/fasterxml/jackson/core:jackson-databind',
     '3rdparty/jvm/com/fasterxml/jackson/datatype:jackson-datatype-joda',
@@ -35,5 +34,4 @@ scala_library(
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  strict_deps=True,
 )

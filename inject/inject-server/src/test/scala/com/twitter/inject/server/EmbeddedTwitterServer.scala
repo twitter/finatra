@@ -12,11 +12,7 @@ import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Http, Service}
 import com.twitter.inject.PoolUtils
-import com.twitter.inject.app.{
-  InjectionServiceWithAnnotationModule,
-  InjectionServiceModule,
-  StartupTimeoutException
-}
+import com.twitter.inject.app.{InjectionServiceWithNamedAnnotationModule, InjectionServiceWithAnnotationModule, InjectionServiceModule, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
@@ -153,7 +149,8 @@ class EmbeddedTwitterServer(
    * @param instance - to bind instance.
    * @tparam T - type of the instance to bind.
    * @return this [[EmbeddedTwitterServer]].
-   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   *
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
    */
   def bind[T: TypeTag](instance: T): EmbeddedTwitterServer = {
     bindInstance[T](instance)
@@ -169,12 +166,31 @@ class EmbeddedTwitterServer(
    * @tparam T - type of the instance to bind.
    * @tparam A - type of the Annotation used to bind the instance.
    * @return this [[EmbeddedTwitterServer]].
-   * @see https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests
+   *
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
    */
   def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedTwitterServer = {
     bindInstance[T, A](instance)
     this
   }
+
+  /**
+   * Bind an instance of type [T] annotated with the given Annotation value to the object
+   * graph of the underlying server. This will REPLACE any previously bound instance of
+   * the given type bound with the given annotation.
+   *
+   * @param annotation - [[java.lang.annotation.Annotation]] instance value
+   * @param instance - to bind instance.
+   * @tparam T - type of the instance to bind.
+   * @return this [[EmbeddedTwitterServer]].
+   *
+   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
+   */
+  def bind[T: TypeTag](annotation: Annotation, instance: T): EmbeddedTwitterServer = {
+    bindInstance[T](annotation, instance)
+    this
+  }
+
 
   def mainResult: Future[Unit] = {
     start()
@@ -205,7 +221,6 @@ class EmbeddedTwitterServer(
 
   def close(): Unit = {
     if (!closed) {
-      twitterServer.log.clearHandlers()
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
       try {
         Await.all(httpAdminClient.close(), twitterServer.close())
@@ -468,16 +483,9 @@ class EmbeddedTwitterServer(
     info(s"AdminHttp      -> http://$adminHostAndPort/admin")
   }
 
-  protected def updateFlags(map: Map[String, String]) = {
-    if (!verbose)
-      map + ("log.level" -> "WARNING")
-    else
-      map
-  }
-
   protected def combineArgs(): Array[String] = {
     val flagsStr =
-      flagsAsArgs(updateFlags(resolveFlags(useSocksProxy, flags)))
+      flagsAsArgs(resolveFlags(useSocksProxy, flags))
     ("-admin.port=" + PortUtils.ephemeralLoopback) +: (args ++ flagsStr).toArray
   }
 
@@ -488,6 +496,12 @@ class EmbeddedTwitterServer(
   protected[twitter] def bindInstance[T: TypeTag, A <: Annotation: TypeTag](instance: T): Unit = {
     addInjectionServiceFrameworkOverrideModule(
       new InjectionServiceWithAnnotationModule[T, A](instance)
+    )
+  }
+
+  protected[twitter] def bindInstance[T: TypeTag](annotation: Annotation, instance: T): Unit = {
+    addInjectionServiceFrameworkOverrideModule(
+      new InjectionServiceWithNamedAnnotationModule[T](annotation, instance)
     )
   }
 

@@ -20,11 +20,11 @@ import org.scalatest._
  * the [[com.twitter.inject.Test]] abstract class.
  */
 trait TestMixin
-    extends SuiteMixin
-    with BeforeAndAfterAll
-    with BeforeAndAfterEach
-    with Matchers
-    with Logging { this: Suite =>
+  extends SuiteMixin
+  with BeforeAndAfterAll
+  with BeforeAndAfterEach
+  with Matchers
+  with Logging { this: Suite =>
 
   /* Constructor */
 
@@ -44,14 +44,6 @@ trait TestMixin
   protected def setUtcTimeZone() = {
     DateTimeZone.setDefault(DateTimeZone.UTC)
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-  }
-
-  @deprecated("Use com.twitter.inject.Mockito#reset", "since 2-22-2015")
-  protected def resetMocks(mocks: AnyRef*) {
-    for (mock <- mocks) {
-      trace("Resetting " + mock)
-      org.mockito.Mockito.reset(mock)
-    }
   }
 
   protected def resourceAsString(resource: String) = {

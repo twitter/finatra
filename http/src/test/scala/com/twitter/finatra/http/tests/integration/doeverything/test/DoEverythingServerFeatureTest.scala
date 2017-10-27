@@ -2,6 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType
+import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
 import com.twitter.finagle.FailureFlags
 import com.twitter.finagle.http.Method._
@@ -27,7 +28,7 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   )
 
   val doEverythingService = server.injector.instance[DoEverythingService]
-  val namedExampleString = server.injector.instance[String]("example")
+  val namedExampleString = server.injector.instance[String](Names.named("example"))
 
   def deserializeRequest(name: String) = {
     val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
@@ -154,6 +155,21 @@ class DoEverythingServerFeatureTest extends FeatureTest {
 
   test("GET /useragent") {
     server.httpGet("/useragent", headers = Map("User-Agent" -> "Firefox"), withBody = "Firefox")
+  }
+
+  test("GET /acceptHeaders") {
+    server.httpGet(
+      "/acceptHeaders",
+      headers = Map("Accept" -> "text/plain", "Accept-Charset" -> "utf-8", "Accept-Encoding" -> "gzip, deflate"),
+      withJsonBody =
+        """
+          |{
+          |  "Accept": "text/plain",
+          |  "Accept-Charset": "utf-8",
+          |  "Accept-Charset-Again": "utf-8",
+          |  "Accept-Encoding": "gzip, deflate"
+          |}
+        """.stripMargin)
   }
 
   test("response should contain server/date headers") {
@@ -1440,6 +1456,26 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     )
   }
 
+  test("RequestWithBooleanNamedQueryParam which is set") {
+    server.httpGet(
+      "/RequestWithBooleanNamedQueryParam?foo=bar",
+      andExpect = Ok,
+      withBody = """bar"""
+    )
+  }
+
+  test("RequestWithBooleanNamedQueryParam which is passed the wrong name") {
+    server.httpGet(
+      "/RequestWithBooleanNamedQueryParam?param=bar",
+      andExpect = BadRequest,
+      withJsonBody = """{
+        "errors" : [
+          "foo: queryParam is required"
+        ]
+      }"""
+    )
+  }
+
   test("RequestWithOptionBooleanQueryParam which is a true") {
     server.httpGet(
       "/RequestWithOptionBooleanQueryParam?param=true",
@@ -2133,4 +2169,106 @@ class DoEverythingServerFeatureTest extends FeatureTest {
     server.httpRequest(request, andExpect = Ok, withBody = s"$inMillis")
   }
 
+  test("/mustache.json") {
+    val response = server.httpRequest(
+      request = RequestBuilder.get("/mustache.json"),
+      andExpect = Ok,
+      withJsonBody = """{"name":"JSONDay"}"""
+    )
+
+    response.contentType should be(Some("application/json; charset=utf-8"))
+  }
+
+  test("/mustache-view-before.json") {
+    val response = server.httpRequest(
+      request = RequestBuilder.get("/mustache-view-before.json"),
+      andExpect = Ok,
+      withJsonBody = """{"name":"JSONDay"}"""
+    )
+
+    response.contentType should be(Some("application/json; charset=utf-8"))
+  }
+
+  test("/mustache-view-after.json") {
+    val response = server.httpRequest(
+      request = RequestBuilder.get("/mustache-view-before.json"),
+      andExpect = Ok,
+      withJsonBody = """{"name":"JSONDay"}"""
+    )
+
+    response.contentType should be(Some("application/json; charset=utf-8"))
+  }
+
+  test("/mustache-use-annotation-template-name.json") {
+    val response = server.httpRequest(
+      request = RequestBuilder.get("/mustache-use-annotation-template-name.json"),
+      andExpect = Ok,
+      withJsonBody = """{"name":"JSONDay"}"""
+    )
+
+    response.contentType should be(Some("application/json; charset=utf-8"))
+  }
+
+  test("/mustache-view-without-template-name-or-annotation.json") {
+    val response = server.httpRequest(
+      request = RequestBuilder.get("/mustache-view-without-template-name-or-annotation.json"),
+      andExpect = InternalServerError,
+      withJsonBody = """{"errors":["internal server error"]}"""
+    )
+
+    response.contentType should be(Some("application/json; charset=utf-8"))
+  }
+
+  test("/mustache.html") {
+    val response = server.httpRequest(
+      request = RequestBuilder.get("/mustache.html"),
+      andExpect = Ok,
+      withBody =
+        """<div class="nav">
+          |  <table cellpadding="0" cellspacing="0">
+          |    <tr>
+          |        <th>Name</th>
+          |        <th>Age</th>
+          |        <th>Friends</th>
+          |    </tr>
+          |    <tr>
+          |        <td>age2:42</td>
+          |        <td>name:HTMel</td>
+          |        <td>
+          |        </td>
+          |    </tr>
+          |  </table>
+          |</div>""".stripMargin
+    )
+
+    response.contentType should be(Some("text/html; charset=utf-8"))
+  }
+
+  test("/invalidValidationRequest") {
+    server.httpPost(
+      path = "/invalidValidationRequest",
+      postBody =
+        """
+          |{
+          |  "name": "Bob Smith"
+          |}
+        """.stripMargin,
+      andExpect = InternalServerError,
+      withJsonBody = """{"errors":["internal server error"]}"""
+    )
+  }
+
+  test("/invalidValidationRequestWithCause") {
+    server.httpPost(
+      path = "/invalidValidationRequestWithCause",
+      postBody =
+        """
+          |{
+          |  "name": "Bob Smith"
+          |}
+        """.stripMargin,
+      andExpect = InternalServerError,
+      withBody = "Class [class java.lang.String] is not supported by class com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator"
+    )
+  }
 }

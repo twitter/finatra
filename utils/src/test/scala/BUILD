@@ -3,9 +3,9 @@ junit_tests(
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/commons-io:commons-io',
     '3rdparty/jvm/joda-time:joda-time',
-    '3rdparty/jvm/org/apache/thrift:libthrift-0.5.0',
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala',
     'finatra/inject/inject-app/src/test/scala:test-deps',
@@ -22,7 +22,6 @@ junit_tests(
   sources=rglobs(
     'com/twitter/finatra/tests/*.scala',
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -51,7 +50,6 @@ scala_library(name="test-deps",
     'com/twitter/finatra/modules/*.scala',
     'com/twitter/finatra/test/*.scala'
   ),
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/net/codingwell:scala-guice',

@@ -1,6 +1,7 @@
 namespace java com.twitter.calculator.thriftjava
 #@namespace scala com.twitter.calculator.thriftscala
 namespace rb Calculator
+namespace go calculator
 
 include "finatra-thrift/finatra_thrift_exceptions.thrift"
 

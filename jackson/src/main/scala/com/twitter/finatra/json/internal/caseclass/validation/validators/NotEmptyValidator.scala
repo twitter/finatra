@@ -33,7 +33,7 @@ private[finatra] class NotEmptyValidator(
       case stringValue: String =>
         validationResult(stringValue)
       case _ =>
-        throw new IllegalArgumentException(s"Class [${value.getClass}}] is not supported")
+        throw new IllegalArgumentException(s"Class [${value.getClass}}] is not supported by ${this.getClass}")
     }
   }
 

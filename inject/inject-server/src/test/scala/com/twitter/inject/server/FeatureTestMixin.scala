@@ -17,7 +17,9 @@ import org.scalatest.{Suite, SuiteMixin}
  *
  * @see [[com.twitter.inject.IntegrationTestMixin]]
  */
-trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suite =>
+trait FeatureTestMixin
+  extends SuiteMixin
+  with IntegrationTestMixin { this: Suite =>
 
   protected def server: EmbeddedTwitterServer
 
@@ -35,8 +37,10 @@ trait FeatureTestMixin extends SuiteMixin with IntegrationTestMixin { this: Suit
       )
     }
 
-    assert(server.isInjectable)
-    server.injectableServer.addFrameworkOverrideModules(integrationTestModule)
+    if (hasBoundFields) {
+      assert(server.isInjectable)
+      server.injectableServer.addFrameworkOverrideModules(integrationTestModule)
+    }
     super.beforeAll()
   }
 

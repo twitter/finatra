@@ -1,14 +1,8 @@
 package com.twitter.finatra.thrift.tests.doeverything.controllers
 
 import com.twitter.conversions.time._
-import com.twitter.doeverything.thriftscala.DoEverything
-import com.twitter.doeverything.thriftscala.DoEverything.{
-  Echo,
-  Echo2,
-  MagicNum,
-  MoreThanTwentyTwoArgs,
-  Uppercase
-}
+import com.twitter.doeverything.thriftscala.{DoEverythingException, Answer, DoEverything}
+import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
 import com.twitter.finagle.{ChannelException, RequestException, RequestTimeoutException}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, FooException}
@@ -63,5 +57,15 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
   override val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) {
     args: MoreThanTwentyTwoArgs.Args =>
       Future.value("handled")
+  }
+
+  override val ask = handle(Ask) { args: Ask.Args =>
+    val question = args.question
+    if (question.text.equals("fail")) {
+      Future.exception(new DoEverythingException("This is a test."))
+    } else {
+      Future.value(
+        Answer(s"The answer to the question: `${question.text}` is 42."))
+    }
   }
 }

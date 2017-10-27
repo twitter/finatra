@@ -1,6 +1,5 @@
 junit_tests(
   dependencies=[
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
@@ -10,6 +9,7 @@ junit_tests(
     '3rdparty/jvm/net/codingwell:scala-guice',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finatra/inject/inject-app/src/main/scala',
     'finatra/inject/inject-app/src/test/scala:test-deps',
     'finatra/inject/inject-core/src/main/scala',
@@ -24,7 +24,6 @@ junit_tests(
     'com/twitter/inject/app/tests/*.scala',
     'com/twitter/inject/app/tests/internal/*.scala'
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -52,5 +51,4 @@ scala_library(name="test-deps",
   sources=globs(
     'com/twitter/inject/app/*.scala',
   ),
-  strict_deps=True,
 )

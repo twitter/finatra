@@ -14,6 +14,7 @@ jvm_binary(
   name='finatra-bin',
   main='com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     ':benchmark-server'
   ],
   excludes=[

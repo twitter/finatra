@@ -8,4 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ PARAMETER })
 @Retention(RUNTIME)
-public @interface FormParam {}
+public @interface FormParam {
+    String value() default "";
+}

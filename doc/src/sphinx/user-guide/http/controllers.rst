@@ -1,3 +1,5 @@
+.. _http_controllers:
+
 Defining HTTP Controllers
 =========================
 
@@ -251,9 +253,12 @@ This definition would produce the following routes:
     GET     /2/foo
     POST    /2/bar
 
-The input to the `c.t.finatra.http.RouteDSL#prefix` function is a String and how you determine the value of that String is entirely up to you. You could choose to hard code the value like in the
-above example, or inject it as a parameter to the Controller, e.g., by using a `flag <../getting-started/flags.html>`__ or a `Binding Annotation <../getting-started/binding_annotations.html>`__ that
-looks for a bound String type in the object graph which would allow you provide it in any manner appropriate for your use case.
+The input to the `c.t.finatra.http.RouteDSL#prefix` function is a String and how you determine the
+value of that String is entirely up to you. You could choose to hard code the value like in the
+above example, or inject it as a parameter to the Controller, e.g., by using a `flag <../getting-started/flags.html>`__
+or a `Binding Annotation <../getting-started/binding_annotations.html>`__ that looks for a bound
+String type in the object graph which would allow you provide it in any manner appropriate for your
+use case.
 
 For example,
 
@@ -277,17 +282,24 @@ For example,
         }
       }
 
-Things to keep in mind:
-^^^^^^^^^^^^^^^^^^^^^^^
+.. important::
 
--  Routes are always added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__ **in the order defined** in the `Controller <../http/controllers.html#controllers-and-routing>`__ and are scanned in this order as well.
-   This remains true even when defined within a `prefix` block. I.e., the `prefix` is merely a convenience for adding a common prefix to a set of routes. You should still be aware of the total order in which your routes are defined in a Controller.
--  You can use the `c.t.finatra.http.RouteDSL#prefix` function multiple times in a Controller with the same or different values.
+  -  Routes and Prefixes **MUST** begin with a forward slash (/).
+
+  -  Routes are always added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__
+     **in the order defined** in the `Controller <../http/controllers.html#controllers-and-routing>`__
+     and are thus matched in this order as well. This remains true even when defined within a `prefix`
+     block. I.e., the `prefix` is merely a convenience for adding a common prefix to a set of routes.
+     You should still be aware of the total order in which your routes are defined in a Controller.
+
+  -  You can use the `c.t.finatra.http.RouteDSL#prefix` function multiple times in a Controller with
+     the same or different values.
 
 Trailing Slashes
 ----------------
 
-If you want to ignore trailing slashes on routes such that `/groups/1` and `groups/1/` are treated to be equivalent, append `/?` to your route URI, e.g.,
+If you want to ignore trailing slashes on routes such that `/groups/1` and `groups/1/` are treated
+to be equivalent, append `/?` to your route URI, e.g.,
 
 .. code:: scala
 
@@ -295,6 +307,7 @@ If you want to ignore trailing slashes on routes such that `/groups/1` and `grou
       response.ok(...)
     }
 
+Otherwise, the route as specified is an **exact match**. E.g., if you define `/groups/1` we will **only** match requests to `/groups/1` and **not** requests to `/groups/1/` and vice-versa.
 
 Admin Paths
 -----------
@@ -356,7 +369,7 @@ If you do not provide a `RouteIndex` the route will not appear in the index but 
 Admin Path Routing
 ^^^^^^^^^^^^^^^^^^
 
-**Note**: only admin routes which start with `/admin/finatra/` will be routed to using the server's configured `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__. All other admin routes will be routed to by TwitterServer's `AdminHttpServer <https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108>`__ which only supports **exact path matching** and thus why only constant routes are allowed.
+**Note**: only admin routes which start with `/admin/finatra/` will be routed to using the server's configured `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__. All other admin routes will be routed to by TwitterServer's `AdminHttpServer <https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L140>`__ which only supports **exact path matching** and thus why only constant routes are allowed.
 
 Therefore any configuration defined on your server's `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__ will thus only apply to admin routes starting with `/admin/finatra`.
 And because these routes will use the Finatra `RoutingService <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala>`__ these routes cannot be included in the `TwitterServer <https://twitter.github.io/twitter-server/>`__ `HTTP Admin Interface <https://twitter.github.io/twitter-server/Admin.html>`__ index.

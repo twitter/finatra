@@ -1,5 +1,6 @@
 package com.twitter.inject.app.tests
 
+import com.google.inject.name.Names
 import com.twitter.app.GlobalFlag
 import com.twitter.finatra.tests.Prod
 import com.twitter.inject.annotations.Flag
@@ -25,6 +26,8 @@ object TestBindModule extends TwitterModule {
   override protected def configure(): Unit = {
     bind[String, Prod].toInstance("Hello, world!")
     bind[Baz].toInstance(new Baz(10))
+    bind[Baz](Names.named("five")).toInstance(new Baz(5))
+    bind[Baz](Names.named("six")).toInstance(new Baz(6))
   }
 }
 
@@ -85,6 +88,8 @@ class TestInjectorTest extends Test {
     val injector = TestInjector(modules = Seq(TestBindModule)).create
 
     assert(injector.instance[Baz].value == 10)
+    assert(injector.instance[Baz]("five").value == 5)
+    assert(injector.instance[Baz](Names.named("six")).value == 6)
     assert(injector.instance[String, Prod] == "Hello, world!")
   }
 
@@ -92,15 +97,18 @@ class TestInjectorTest extends Test {
     val injector = TestInjector(modules = Seq(TestBindModule))
       .bind[Baz](new Baz(100))
       .bind[String, Prod]("Goodbye, world!")
+      .bind[String](Names.named("foo"), "bar")
       .create
 
     assert(injector.instance[Baz].value == 100)
     assert(injector.instance[String, Prod] == "Goodbye, world!")
+    assert(injector.instance[String]("foo") == "bar")
   }
 
   test("bind fails after injector is called") {
-    val testInjector = TestInjector(modules = Seq(TestBindModule))
-      .bind[Baz](new Baz(100))
+    val testInjector =
+      TestInjector(modules = Seq(TestBindModule))
+        .bind[Baz](new Baz(100))
     val injector = testInjector.create
 
     intercept[IllegalStateException] {

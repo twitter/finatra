@@ -9,6 +9,7 @@ junit_tests(
     '3rdparty/jvm/net/codingwell:scala-guice',
     '3rdparty/jvm/org/scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finatra/inject/inject-core/src/main/scala',
     'finatra/inject/inject-core/src/test/scala:test-deps',
     'finatra/inject/inject-slf4j/src/main/scala',
@@ -20,7 +21,6 @@ junit_tests(
   sources=rglobs(
     'com/twitter/inject/tests/*.scala',
   ),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -54,7 +54,6 @@ scala_library(name="test-deps",
   java_sources=[
     'finatra/inject/inject-core/src/test/java'
   ],
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/joda-time:joda-time',

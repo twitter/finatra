@@ -15,6 +15,7 @@ jvm_binary(
   basename='java-server',
   main='com.twitter.hello.HelloWorldServerMain',
   dependencies=[
+    '3rdparty/jvm/ch/qos/logback:logback-classic',
     ':java-server'
   ],
   deploy_excludes=[

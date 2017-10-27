@@ -39,11 +39,11 @@ private[json] case class ScalaType(typeRefType: TypeRefType) {
   }
 
   def isCollection: Boolean = {
-    classOf[Iterable[Any]].isAssignableFrom(runtimeClass)
+    classOf[scala.collection.Iterable[Any]].isAssignableFrom(runtimeClass)
   }
 
   def isMap: Boolean = {
-    classOf[Map[Any, Any]].isAssignableFrom(runtimeClass)
+    classOf[scala.collection.Map[Any, Any]].isAssignableFrom(runtimeClass)
   }
 
   def isArray: Boolean = {

@@ -15,7 +15,6 @@ scala_library(
     '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-exp/src/main/scala',
-    'finagle/finagle-netty3/src/main/scala',
     'finagle/finagle-thrift/src/main/scala',
     'finagle/finagle-thriftmux/src/main/scala',
     'finatra/inject/inject-app/src/main/scala',
@@ -34,7 +33,6 @@ scala_library(
   java_sources=[
     'finatra/inject/inject-thrift-client/src/main/java'
   ],
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',

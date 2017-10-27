@@ -13,7 +13,6 @@ scala_library(
     '3rdparty/jvm/javax/inject:javax.inject',
     '3rdparty/jvm/joda-time:joda-time',
     '3rdparty/jvm/net/codingwell:scala-guice',
-    '3rdparty/jvm/org/apache/thrift:libthrift-0.5.0',
     '3rdparty/jvm/org/slf4j:slf4j-api',
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala',
@@ -29,7 +28,6 @@ scala_library(
   java_sources=[
     'finatra/utils/src/main/java',
   ],
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/net/codingwell:scala-guice',

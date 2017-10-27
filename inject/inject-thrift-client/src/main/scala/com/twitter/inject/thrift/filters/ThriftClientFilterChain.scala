@@ -12,7 +12,7 @@ import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.service._
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.util.{DefaultTimer, HashedWheelTimer}
+import com.twitter.finagle.util.DefaultTimer
 import com.twitter.inject.conversions.duration._
 import com.twitter.inject.thrift.AndThenService
 import com.twitter.inject.thrift.internal.filters.{
@@ -203,7 +203,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     quantile: Int,
     clipDuration: Duration,
     history: Duration,
-    timer: Timer = HashedWheelTimer.Default
+    timer: Timer = DefaultTimer
   ): ThriftClientFilterChain[Req, Rep] = {
 
     backupRequestFilter = new BackupRequestFilter[Req, Rep](
@@ -327,7 +327,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     timeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
       new GlobalRequestTimeoutException(twitterTimeout),
-      DefaultTimer.twitter
+      DefaultTimer
     )
     this
   }
@@ -346,7 +346,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     requestTimeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
       new IndividualRequestTimeoutException(twitterTimeout),
-      DefaultTimer.twitter
+      DefaultTimer
     )
     this
   }

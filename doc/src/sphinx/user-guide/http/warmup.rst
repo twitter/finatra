@@ -62,7 +62,7 @@ You can then run this handler in the `warmup` lifecycle method:
       }
     }
 
-The `c.t.inject.app.App#warmup <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L122>`__ lifecycle method is called before the server's external HTTP port(s) are bound and thus before the TwitterServer `Lifecycle Management <https://twitter.github.io/twitter-server/Features.html#lifecycle-management>`__ `/health` endpoint responds with `OK`.
+The `c.t.inject.app.App#warmup <https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L167>`__ lifecycle method is called before the server's external HTTP port(s) are bound and thus before the TwitterServer `Lifecycle Management <https://twitter.github.io/twitter-server/Features.html#lifecycle-management>`__ `/health` endpoint responds with `OK`.
 
 See `here <../getting-started/lifecycle.html>`__ for more information on the lifecycle of a Finatra server.
 

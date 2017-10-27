@@ -2,6 +2,7 @@ junit_tests(
   dependencies=[
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finagle/finagle-http/src/main/scala',
     'finatra/examples/streaming-example/src/main/scala',
     'finatra/examples/streaming-example/src/test/resources',
@@ -17,5 +18,4 @@ junit_tests(
   ],
   fatal_warnings=True,
   sources=rglobs('*.scala'),
-  strict_deps=True,
 )

@@ -8,6 +8,7 @@ junit_tests(
     '3rdparty/jvm/net/codingwell:scala-guice',
     '3rdparty/jvm/org/scalatest:scalatest',
     '3rdparty/jvm/org/slf4j:slf4j-api',
+    '3rdparty/jvm/org/slf4j:slf4j-simple',
     'finagle/finagle-core/src/main/scala',
     'finagle/finagle-http/src/main/scala:scala',
     'finagle/finagle-thrift/src/main/scala:scala',
@@ -38,7 +39,6 @@ junit_tests(
   ],
   fatal_warnings=True,
   sources=rglobs('com/twitter/finatra/thrift/tests/*.scala'),
-  strict_deps=True,
 )
 
 scala_library(name="test-deps",
@@ -63,7 +63,6 @@ scala_library(name="test-deps",
   ],
   fatal_warnings=True,
   sources=globs('com/twitter/finatra/thrift/*.scala'),
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/net/codingwell:scala-guice',
   ]

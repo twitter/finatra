@@ -40,7 +40,7 @@ private[finatra] class RangeValidator(
       case numberValue: Number =>
         validationResult(numberValue)
       case _ =>
-        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported")
+        throw new IllegalArgumentException(s"Class [${value.getClass}] is not supported by ${this.getClass}")
     }
   }
 

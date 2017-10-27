@@ -118,6 +118,7 @@ class DoEverythingServer extends HttpServer {
         IdentityFilter,
         DoNothingController
       ]
+      .add[MustacheController]
   }
 
   override def warmup() {

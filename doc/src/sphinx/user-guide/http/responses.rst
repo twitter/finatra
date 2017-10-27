@@ -24,8 +24,7 @@ The simplest way to return a JSON response is to return a case class in your rou
         boolValue = true)
     }
 
-
-will produce a response:
+A request to ``GET /foo`` will produce a response:
 
 ::
 
@@ -34,6 +33,9 @@ will produce a response:
     [Header]  Server -> Finatra
     [Header]  Date -> Wed, 17 Aug 2015 21:54:25 GMT
     [Header]  Content-Length -> 90
+
+.. code:: json
+
     {
       "id" : "123",
       "description" : "This is a JSON response body",
@@ -69,8 +71,8 @@ Non-Future Callback Return Types
 
 Callbacks that do not return a `c.t.util.Future <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala>`__ will have their return values wrapped in a `c.t.util.ConstFuture <https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture>`__ (which does no asynchronous work) for the purpose of satisfying types only.
 
-Don't Block
-^^^^^^^^^^^
+Don't Block (No, Seriously, Do Not Block)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you are not returning a Future from your callback and it does synchronous work or calls a blocking method, you must `avoid blocking the Finagle thread <https://twitter.github.io/scala_school/finagle.html#DontBlock>`__ by wrapping your blocking operation in a `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__ e.g.
 
@@ -92,7 +94,7 @@ If you are not returning a Future from your callback and it does synchronous wor
 More information on blocking in Finagle can be found `here <https://finagle.github.io/blog/2016/09/01/block-party/>`__.
 
 ResponseBuilder
-----------------
+---------------
 
 All HTTP Controllers have a protected `response` field of type `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__ which can be used to build a `c.t.finagle.http.Response` in your Controller route callback functions.
 
@@ -163,7 +165,7 @@ is meant to be somewhat generic so its API for constructing a response body acce
 If you have a `Future[T]` and want to return a `c.t.finagle.http.Response` you should either:
 
 - convert it to a `Future[Response]` or 
-- do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L139>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
+- do nothing and let the Finatra `CallbackConverter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala>`__ convert the  `Future[T]` to an HTTP `200 OK` with `T` as the body (as mentioned in `Future Conversion`_ section above).
 
 To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures>`__:
 
@@ -183,7 +185,7 @@ To convert a `Future[T]` to a `Future[Response]`, you would use `Future#map <htt
 Cookies:
 --------
 
-Cookies, like Headers, are read from request and can set on the response via the `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala#L151>`__:
+Cookies, like Headers, are read from request and can set on the response via the `c.t.finatra.http.response.ResponseBuilder <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala>`__:
 
 .. code:: scala
 

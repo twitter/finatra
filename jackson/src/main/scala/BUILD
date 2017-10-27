@@ -38,10 +38,10 @@ scala_library(
   java_sources=[
     'finatra/jackson/src/main/java'
   ],
-  strict_deps=True,
   exports=[
     '3rdparty/jvm/com/fasterxml/jackson/module:jackson-module-scala',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
+    '3rdparty/jvm/org/scala-lang:scalap',
   ]
 
 )

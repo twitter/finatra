@@ -1,6 +1,6 @@
 package com.twitter.finatra.json.tests.internal
 
-import com.fasterxml.jackson.annotation.{JsonValue, JsonIgnore, JsonIgnoreProperties, JsonProperty}
+import com.fasterxml.jackson.annotation.{JsonIgnore, JsonIgnoreProperties, JsonProperty, JsonValue}
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind._
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
@@ -184,6 +184,8 @@ case class CamelCaseSimplePerson(myName: String)
 case class CamelCaseSimplePersonNoAnnotation(myName: String)
 
 case class CaseClassWithMap(map: Map[String, String])
+
+case class CaseClassWithSortedMap(sortedMap: scala.collection.SortedMap[String, Int])
 
 case class CaseClassWithSetOfLongs(set: Set[Long])
 

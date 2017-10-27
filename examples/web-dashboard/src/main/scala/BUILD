@@ -1,6 +1,5 @@
 scala_library(
   dependencies=[
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject:guice',
@@ -33,5 +32,4 @@ scala_library(
     'com/twitter/web/dashboard/controllers/*.scala',
     'com/twitter/web/dashboard/views/*.scala',
   ),
-  strict_deps=True,
 )

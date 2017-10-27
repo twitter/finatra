@@ -74,9 +74,15 @@ private[http] class FilteredDSL[FilterType <: HttpFilter: Manifest] extends Rout
 }
 
 private[http] class PrefixedDSL(prefix: String) extends RouteDSL {
+  require(
+    prefix.startsWith("/"),
+    s"""Invalid prefix: "$prefix". Prefixes MUST begin with a forward slash (/).""")
+
   override private[http] val context = {
     val current = contextVar()
-    current.copy(prefix = current.prefix + prefix)
+    // prefixes by definition will be concatenated to a route (which MUST begin
+    // with a leading slash), thus we remove any trailing slash from a given prefix
+    current.copy(prefix = current.prefix + prefix.stripSuffix("/"))
   }
 
   def apply(fn: => Unit): Unit = withContext(context)(fn)
@@ -214,23 +220,29 @@ private[http] trait RouteDSL extends RouteState { self =>
     admin: Boolean,
     index: Option[RouteIndex],
     callback: RequestType => ResponseType
-  ) = contextWrapper {
-    routeBuilders += new RouteBuilder(
-      method,
-      prefixRoute(route),
-      name,
-      admin,
-      index,
-      callback,
-      annotations,
-      contextVar().copy()
-    )
+  ) = {
+    require(
+      route.startsWith("/"),
+      s"""Invalid route: "$route." Routes MUST begin with a forward slash (/).""")
+
+    contextWrapper {
+      routeBuilders += new RouteBuilder(
+        method,
+        prefixRoute(route),
+        name,
+        admin,
+        index,
+        callback,
+        annotations,
+        contextVar().copy()
+      )
+    }
   }
 
   private def prefixRoute(route: String): String = {
+    /* routes and prefixes MUST begin with a leading / */
     contextVar().prefix match {
-      case prefix if prefix.nonEmpty && prefix.startsWith("/") => s"$prefix$route"
-      case prefix if prefix.nonEmpty && !prefix.startsWith("/") => s"/$prefix$route"
+      case prefix if prefix.nonEmpty => s"$prefix$route"
       case _ => route
     }
   }

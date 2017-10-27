@@ -8,4 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ PARAMETER })
 @Retention(RUNTIME)
-public @interface Header {}
+public @interface Header {
+    String value() default "";
+}

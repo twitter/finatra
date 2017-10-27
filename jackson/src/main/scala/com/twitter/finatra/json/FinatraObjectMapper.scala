@@ -46,6 +46,10 @@ case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper
     objectMapper.writer(ArrayElementsOnNewLinesPrettyPrinter)
   }
 
+  def propertyNamingStrategy: PropertyNamingStrategy = {
+    objectMapper.getPropertyNamingStrategy
+  }
+
   def reader[T: Manifest] = {
     objectMapper.readerFor[T]
   }

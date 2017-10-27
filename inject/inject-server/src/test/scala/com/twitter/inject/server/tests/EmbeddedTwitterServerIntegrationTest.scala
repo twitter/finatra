@@ -1,5 +1,6 @@
 package com.twitter.inject.server.tests
 
+import com.google.inject.name.Names
 import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
@@ -83,11 +84,24 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
   }
 
   test("server#support bind in server") {
-    val server = new EmbeddedTwitterServer(new TwitterServer {})
-      .bind[String]("helloworld")
+    val server =
+      new EmbeddedTwitterServer(new TwitterServer {})
+        .bind[String]("helloworld")
 
     try {
       server.injector.instance[String] should be("helloworld")
+    } finally {
+      server.close()
+    }
+  }
+
+  test("server#support bind with @Named in server") {
+    val server =
+      new EmbeddedTwitterServer(new TwitterServer {})
+        .bind[String](Names.named("best"), "helloworld")
+
+    try {
+      server.injector.instance[String]("best") should be("helloworld")
     } finally {
       server.close()
     }
