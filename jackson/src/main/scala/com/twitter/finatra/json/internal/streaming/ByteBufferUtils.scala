@@ -8,7 +8,7 @@ import java.nio.ByteBuffer
 private[finatra] object ByteBufferUtils extends Logging {
 
   //TODO: Optimize/Refactor
-  def append(byteBuffer: ByteBuffer, buf: Buf): ByteBuffer = {
+  def append(byteBuffer: ByteBuffer, buf: Buf, pos: Int): ByteBuffer = {
     val byteBufferBuf = {
       val byteBufferCopy = byteBuffer.duplicate()
       byteBufferCopy.position(0)
@@ -16,7 +16,9 @@ private[finatra] object ByteBufferUtils extends Logging {
     }
 
     val combinedBufs = byteBufferBuf.concat(buf)
-    Buf.ByteBuffer.Shared.extract(combinedBufs)
+    val result = Buf.ByteBuffer.Shared.extract(combinedBufs)
+    result.position(pos)
+    result
   }
 
   def debugBuffer(byteBuffer: ByteBuffer) = {
