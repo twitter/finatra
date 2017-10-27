@@ -1,161 +1,221 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Finatra &#8212; Finatra 17.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '17.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="#" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    <title>Home - Finatra</title>
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:800">
-    <link rel="stylesheet" type="text/css" href="/finatra/javascripts/highlight/styles/idea.css">
-    <script src="/finatra/javascripts/highlight/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-        padding-bottom: 40px;
-      }
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
 
-      .nav {
-        font-size: 16px;
-      }
+  </script>
 
-      section.page {
-        padding: 0px;
-      }
-
-      .parent-element {
-        -webkit-transform-style: preserve-3d;
-        -moz-transform-style: preserve-3d;
-        transform-style: preserve-3d;
-      }
-
-      .element {
-        position: relative;
-        top: 50%;
-        transform: translateY(-15%);
-      }
-
-      h1.brand {
-        font-family: &#8216;Open Sans&#8217;, sans-serif;
-        font-weight: 800;
-        font-size: 84px !important;
-      }
-
-      .anchor { padding-top: 60px; }
-
-      .no-pad-anchor .anchor { padding-top: 0px; }
-
-      .embed-video-container {
-        position: relative;
-        padding-bottom: 56.25%; /* 16/9 ratio */
-        padding-top: 30px; /* IE6 workaround*/
-        height: 0;
-        overflow: hidden;
-      }
-
-      .embed-video-container iframe,
-      .embed-video-container object,
-      .embed-video-container embed {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
-    </style>
-    <link rel="shortcut icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
-    <link rel="icon" href="/finatra/favicon.ico?v=2" type="image/x-icon">
   </head>
+  <body role="document">
+  
+  
+  <div class=indexwrapper>
+  
 
-  <body>
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand element" href="/finatra"><img src="/finatra/images/finatra_transparent.gif" style="height:36px; width:36px"/></a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li ><a href="/finatra/blog/archives">Blog</a></li>
-            <li><a href="/finatra/user-guide/index.html">User&nbsp;Guide&nbsp;<span class="glyphicon glyphicon-info-sign" title="More Information" aria-hidden="true"></span></a></li>
-            <li><a href="/finatra/scaladocs/index.html">Scaladocs</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="/finatra/presentations">Presentations&nbsp;&&nbsp;Slides</a></li>
-            <li><a href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
-
-    <div class="container">
-      <div id="main">
-        <section class="page">
-
-          
-
-<h4>Latest news: <a href="/finatra/blog/2017/03/13/announcing-the-release-of-finatra-2-dot-9-0/">Announcing the release of Finatra 2.9.0</a></h4>
-<div class="jumbotron">
-  <h1 class="brand">Finatra&nbsp;</h1>
-  <h3>Fast, testable, Scala services built on <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle">Finagle</a>.</h3>
-  <div class="row">
-    <div class="col-md-3">
-      <br/>
-      <h4>Features:</h4>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
       <ul>
-        <li>Production use <a href="https://twitter.com">@Twitter</a></li>
-        <li>~50x faster performance<br /><font size="3">(vs. v1.6.0)</font>  </li>
-        <li>Fully Async using <a href="https://twitter.github.io/effectivescala/#Concurrency-Futures">Futures</a></li>
-        <li><a href="https://github.com/spullara/mustache.java">Mustache</a> Templates</li>
-        <li>Detailed <a href="https://twitter.github.io/twitter-server/Features.html#metrics">Metrics</a><font size="3">&nbsp;(p99, p999, etc.)</font></li>
-        <li><a href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">Profile/Debug</a> over HTTP</li>
-        <li>SSL/TLS Support</li>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="#">Finatra</a> &#187;</li> 
       </ul>
-      <a href="/finatra/user-guide" class="btn btn-primary btn-large">Get Started!&nbsp;»</a>
-    </div>
-    <div class="col-md-7">
-      <img src="/finatra/images/finatra_example.png" height="394px" width="670px"/>
-    </div>
-  </div>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="finatra">
+<h1>Finatra<a class="headerlink" href="#finatra" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://travis-ci.org/twitter/finatra?branch=develop"><img alt="Build Status" src="https://secure.travis-ci.org/twitter/finatra.png?branch=develop" /></a> <a class="reference external" href="http://codecov.io/github/twitter/finatra?branch=develop"><img alt="Test Coverage" src="http://codecov.io/github/twitter/finatra/coverage.svg?branch=develop" /></a> <a class="reference external" href="https://github.com/twitter/finatra#status"><img alt="Project status" src="https://img.shields.io/badge/status-active-brightgreen.svg" /></a> <img alt="Maven Central" src="https://maven-badges.herokuapp.com/maven-central/com.twitter/finatra-http_2.12/badge.svg" /> <a class="reference external" href="https://gitter.im/twitter/finatra"><img alt="Gitter" src="https://badges.gitter.im/Join%20Chat.svg" /></a></p>
+<p>Finatra builds on <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> and uses <a class="reference external" href="https://twitter.github.io/finagle/guide/">Finagle</a>, therefore it is <em>highly recommended</em> that you familiarize yourself with those frameworks before getting started.</p>
+<p>The version of Finatra documented here is <strong>version 2.x</strong>. Version 2.x is a <strong>complete rewrite</strong> over v1.x and as such many things are different.</p>
+<p>For high-level information about the changes from v1.x see the blog post <a class="reference external" href="https://blog.twitter.com/2015/finatra-20-the-fast-testable-scala-services-framework-that-powers-twitter">here</a>.</p>
+<p>Finatra at its core is agnostic to the type of service or application being created. It can be used to build anything based on <a class="reference external" href="https://github.com/twitter/util">TwitterUtil</a>: <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala">c.t.app.App</a>.</p>
+<p>For servers, Finatra builds on top of the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html">features</a> of <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> (and <a class="reference external" href="https://twitter.github.io/finagle">Finagle</a>) by allowing you to easily define a <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html">Server</a> and controllers (a <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#services">Service</a>-like abstraction) which define and handle endpoints of the Server. You can also compose <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html#filters">Filters</a> either per controller, per route in a controller, or across all controllers.</p>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>To get started, add a dependency on either <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> or <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a> depending if you are building an HTTP or Thrift server.</p>
+<p>E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;17.10.0&quot;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;17.10.0&quot;
+</pre>
+<p>Or similarily with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
+<pre class="literal-block">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
+  &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
+  &lt;version&gt;17.10.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
+  &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
+  &lt;version&gt;17.10.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>Note: with Maven, you <strong>must</strong> append the appropriate scala version to the artifact name (e.g., <cite>_2.12</cite>).</p>
+<p>See the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/finatra-2.2.0/examples/hello-world">hello-world</a> example for a more in-depth example.</p>
+</div>
+<div class="section" id="test-dependencies">
+<h2>Test Dependencies<a class="headerlink" href="#test-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Finatra publishes <a class="reference external" href="https://maven.apache.org/guides/mini/guide-attached-tests.html">test-jars</a> for most modules. The test-jars include re-usable utilities for use in testing (e.g., the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">EmbeddedTwitterServer</a>).</p>
+<p>To add a test-jar dependency, depend on the appropriate module with the <cite>tests</cite> classifier. Additionally, these dependencies are typically <strong>only needed</strong> in the <code class="docutils literal"><span class="pre">test</span></code> scope for your project. E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;17.10.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;17.10.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+</pre>
+<p>See the <a class="reference external" href="http://www.scala-sbt.org/">sbt</a> documentation for more information on using <a class="reference external" href="http://www.scala-sbt.org/0.13/docs/Library-Management.html">ivy configurations and classifiers</a>.</p>
+<p>And with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
+<pre class="literal-block">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
+  &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
+  &lt;scope&gt;test&lt;/scope&gt;
+  &lt;type&gt;test-jar&lt;/type&gt;
+  &lt;version&gt;17.10.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>or</p>
+<pre class="literal-block">
+&lt;dependency&gt;
+  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
+  &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
+  &lt;scope&gt;test&lt;/scope&gt;
+  &lt;type&gt;test-jar&lt;/type&gt;
+  &lt;version&gt;17.10.0&lt;/version&gt;
+&lt;/dependency&gt;
+</pre>
+<p>There is a <a class="reference external" href="https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html">downside</a> to publishing test-jars in this manner: transitive test-scoped dependencies are not resolved. Maven and sbt only resolve compile-time dependencies transitively, so you will need to specify all other required test-scoped dependencies manually.</p>
+<p>For example, the <cite>finatra-http</cite> test-jar depends on the <cite>inject-app</cite> test-jar (among others). You will have to <strong>manually add</strong> a dependency on the <cite>inject-app</cite> test-jar when using the <cite>finatra-http</cite> test-jar since the <cite>inject-app</cite> test-jar will not be resolvedtransitively.</p>
+<p>Using the <a class="reference external" href="https://github.com/jrudolph/sbt-dependency-graph">sbt-dependency-graph</a> plugin, you can list the dependencies of the <cite>finatra-http</cite> test configuration for the <cite>packageBin</cite> task:</p>
+<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ ./sbt -Dsbt.log.noformat=true http/test:packageBin::dependencyList 2&gt;&amp;1 | grep &#39;com\.twitter:finatra\|com\.twitter:inject&#39;
+[info] com.twitter:finatra-http_2.12:...
+[info] com.twitter:finatra-httpclient_2.12:...
+[info] com.twitter:finatra-jackson_2.12:...
+[info] com.twitter:finatra-slf4j_2.12:...
+[info] com.twitter:finatra-utils_2.12:...
+[info] com.twitter:inject-app_2.12:...
+[info] com.twitter:inject-core_2.12:...
+[info] com.twitter:inject-modules_2.12:...
+[info] com.twitter:inject-request-scope_2.12:...
+[info] com.twitter:inject-server_2.12:...
+[info] com.twitter:inject-slf4j_2.12:...
+[info] com.twitter:inject-utils_2.12:...
+</pre></div>
+</div>
+<p>In this case, when executing the <cite>packageBin</cite> task for <cite>finatra-http</cite> in the test configuration these dependencies are necessary. Unfortunately, this listing does not explicity state if it&#8217;s the compile-time or the test-jar version of the dependency that is necessary. However, it is safe to assume that if you want a dependency on the <cite>finatra-http</cite> test-jar you will also need to add dependencies on any test-jar from the listed dependencies as well.</p>
+<p>To continue getting started, please see the <a class="reference external" href="user-guide/index.html">Finatra User&#8217;s Guide</a>.</p>
+</div>
+<div class="section" id="useful-links">
+<h2>Useful Links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="user-guide/index.html">User&#8217;s Guide</a></li>
+<li><a class="reference external" href="https://twitter.github.io/finatra/scaladocs/index.html">Scaladocs</a></li>
+<li><a class="reference external" href="http://finagle.github.io/blog/">Finagle Blog</a></li>
+<li><a class="reference external" href="presentations/index.html">Presentations</a></li>
+<li><a class="reference external" href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+</ul>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>Finatra is an open source project that welcomes contributions from the greater community. We’re thankful for the many people who have already contributed and if you’re interested, please read the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/CONTRIBUTING.md">contributing</a> guidelines.</p>
+<p>For support feel free to follow and/or tweet at the <a class="reference external" href="https://twitter.com/finatra">&#64;finatra</a> Twitter account, post questions to the <a class="reference external" href="https://gitter.im/twitter/finatra">Gitter chat room</a>, or email the finatra-users Google group: <a class="reference external" href="mailto:finatra-users&#37;&#52;&#48;googlegroups&#46;com">finatra-users<span>&#64;</span>googlegroups<span>&#46;</span>com</a>.</p>
+</div>
 </div>
 
 
-        </section>
-      </div>
-    </div>
-
-
-    <div id="footer">
-      <div class="container">
-        <div class="row">&nbsp;</div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-          <div class="col-md-10">
-            <p>
-              Copyright &copy; 2013-2017&nbsp;Twitter - <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
-            </p></div>
-          <div class="col-md-2">
-            <p class="text-muted credit text-right"><a href="https://twitter.com/finatra" data-size="large" class="twitter-follow-button" data-show-count="false" data-lang="en">Follow @finatra</a>
-              <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script></p>
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
     </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
 
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-39101739-9', 'twitter.github.io/finatra');
-      ga('send', 'pageview');
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </div>
+  
   </body>
 </html>

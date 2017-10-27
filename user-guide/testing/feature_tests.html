@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Feature Tests &#8212; Finatra 17.10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="feature-tests">
+<span id="id1"></span><h1>Feature Tests<a class="headerlink" href="#feature-tests" title="Permalink to this headline">¶</a></h1>
+<p>If you are familiar with <a class="reference external" href="http://docs.behat.org/en/v2.5/guides/1.gherkin.html">Gherkin</a> or <a class="reference external" href="https://github.com/cucumber/cucumber/wiki/Feature-Introduction">Cucumber</a> or other similar testing languages and frameworks, then <a class="reference external" href="https://wiki.documentfoundation.org/QA/Testing/Feature_Tests">feature testing</a> will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala">FeatureTest</a> trait.</p>
+<p>We highly recommend writing feature tests for your services as they provide a very good signal of whether you have correctly implemented the features of your service. If you haven&#8217;t implemented the feature correctly, it almost doesn&#8217;t matter that you have lots of unit tests.</p>
+<div class="section" id="http-server">
+<h2>HTTP Server<a class="headerlink" href="#http-server" title="Permalink to this headline">¶</a></h2>
+<p>For example, to write a feature test for an HTTP server, extend the <cite>c.t.inject.server.FeatureTest</cite> trait. Then override the <cite>server</cite> with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.inject.server.FeatureTest
+
+class ExampleServerFeatureTest extends FeatureTest {
+  override val server = new EmbeddedHttpServer(new ExampleServer)
+
+  test(&quot;ExampleServer#perform feature&quot;) {
+      server.httpGet(
+        path = &quot;/&quot;,
+        andExpect = Status.Ok)
+        ...
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="thrift-server">
+<h2>Thrift Server<a class="headerlink" href="#thrift-server" title="Permalink to this headline">¶</a></h2>
+<p>Similarly, to write a feature test for a Thrift server and create a <a class="reference external" href="#thrift-tests">client</a> to it, extend the <cite>c.t.inject.server.FeatureTest</cite> trait, override the <cite>server</cite> with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>, and create a thrift client from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala"><cite>EmbeddedThriftServer</cite></a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.EmbeddedThriftServer
+import com.twitter.inject.server.FeatureTest
+
+class ExampleThriftServerFeatureTest extends FeatureTest {
+  override val server = new EmbeddedThriftServer(new ExampleThriftServer)
+
+  lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = &quot;client123&quot;)
+
+  test(&quot;ExampleThriftServer#return data accordingly&quot;) {
+      Await.result(client.doExample(&quot;input&quot;)) should equal(&quot;output&quot;)
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="combined-http-thrift-server">
+<h2>Combined HTTP &amp; Thrift Server<a class="headerlink" href="#combined-http-thrift-server" title="Permalink to this headline">¶</a></h2>
+<p>If you are extending both <cite>c.t.finatra.http.HttpServer</cite> <strong>and</strong> <cite>c.t.finatra.thrift.ThriftServer</cite> then you can feature test by constructing an <cite>EmbeddedHttpServer with ThriftClient</cite>, e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.inject.server.FeatureTest
+
+class ExampleCombinedServerFeatureTest extends FeatureTest {
+  override val server =
+    new EmbeddedHttpServer(new ExampleCombinedServer) with ThriftClient
+
+  lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = &quot;client123&quot;)
+
+  &quot;ExampleCombinedServer#perform feature&quot;) {
+      server.httpGet(
+        path = &quot;/&quot;,
+        andExpect = Status.Ok)
+        ...
+    }
+
+   &quot;ExampleCombinedServer#return data accordingly&quot;) {
+      Await.result(client.doExample(&quot;input&quot;)) should equal(&quot;output&quot;)
+    }
+  }
+}
+</pre></div>
+</div>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">The <cite>server</cite> is specified as a <cite>def</cite> in the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L24"><cite>c.t.inject.server.FeatureTestMixin</cite></a> trait. If you only want to start <strong>one instance of your server per test file</strong> make sure to override this <cite>def</cite> with a <cite>val</cite>.</p>
+</div>
+<p>For more advanced examples see:</p>
+<ul class="simple">
+<li>the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">DoEverythingServerFeatureTest</a>
+for an HTTP server.</li>
+<li>the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/DoEverythingThriftServerFeatureTest.scala">DoEverythingThriftServerFeatureTest</a>
+for a Thrift server.</li>
+<li>the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/DoEverythingCombinedServerFeatureTest.scala">DoEverythingCombinedServerFeatureTest</a>
+for &#8220;combined&#8221; HTTP and Thrift server.</li>
+</ul>
+</div>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="index.html"><span class="doc">Testing Features</span></a></li>
+<li><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></li>
+<li><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></li>
+<li><a class="reference internal" href="startup_tests.html"><span class="doc">Startup Tests</span></a></li>
+<li><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></li>
+<li><a class="reference internal" href="mocks.html"><span class="doc">Working with Mocks</span></a></li>
+<li><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></li>
+<li><a class="reference internal" href="bind_dsl.html"><span class="doc">Explicit Binding with #bind[T]</span></a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Feature Tests</a><ul>
+<li><a class="reference internal" href="#http-server">HTTP Server</a></li>
+<li><a class="reference internal" href="#thrift-server">Thrift Server</a></li>
+<li><a class="reference internal" href="#combined-http-thrift-server">Combined HTTP &amp; Thrift Server</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2017 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

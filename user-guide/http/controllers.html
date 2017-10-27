@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Defining HTTP Controllers &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    <title>Defining HTTP Controllers &#8212; Finatra 17.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.13.0',
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
-    <link rel="next" title="HTTP Requests" href="requests.html" />
-    <link rel="prev" title="HTTP Server Definition" href="server.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
    
   
-  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,15 +50,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="requests.html" title="HTTP Requests"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="server.html" title="HTTP Server Definition"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -70,7 +62,7 @@
           <div class="body" role="main">
             
   <div class="section" id="defining-http-controllers">
-<h1>Defining HTTP Controllers<a class="headerlink" href="#defining-http-controllers" title="Permalink to this headline">¶</a></h1>
+<span id="http-controllers"></span><h1>Defining HTTP Controllers<a class="headerlink" href="#defining-http-controllers" title="Permalink to this headline">¶</a></h1>
 <p>We now want to add the following controller to the <a class="reference external" href="server.html">server definition</a>:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import ExampleService
 import com.twitter.finagle.http.Request
@@ -271,9 +263,12 @@ GET     /2/foo
 POST    /2/bar
 </pre></div>
 </div>
-<p>The input to the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function is a String and how you determine the value of that String is entirely up to you. You could choose to hard code the value like in the
-above example, or inject it as a parameter to the Controller, e.g., by using a <a class="reference external" href="../getting-started/flags.html">flag</a> or a <a class="reference external" href="../getting-started/binding_annotations.html">Binding Annotation</a> that
-looks for a bound String type in the object graph which would allow you provide it in any manner appropriate for your use case.</p>
+<p>The input to the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function is a String and how you determine the
+value of that String is entirely up to you. You could choose to hard code the value like in the
+above example, or inject it as a parameter to the Controller, e.g., by using a <a class="reference external" href="../getting-started/flags.html">flag</a>
+or a <a class="reference external" href="../getting-started/binding_annotations.html">Binding Annotation</a> that looks for a bound
+String type in the object graph which would allow you provide it in any manner appropriate for your
+use case.</p>
 <p>For example,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyController @Inject()(
   @Flag(&quot;api.version.prefix&quot;) apiVersionPrefix: String, // value from a &quot;api.version.prefix&quot; flag
@@ -294,23 +289,30 @@ looks for a bound String type in the object graph which would allow you provide 
   }
 </pre></div>
 </div>
-<div class="section" id="things-to-keep-in-mind">
-<h3>Things to keep in mind:<a class="headerlink" href="#things-to-keep-in-mind" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Routes are always added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a> <strong>in the order defined</strong> in the <a class="reference external" href="../http/controllers.html#controllers-and-routing">Controller</a> and are scanned in this order as well.
-This remains true even when defined within a <cite>prefix</cite> block. I.e., the <cite>prefix</cite> is merely a convenience for adding a common prefix to a set of routes. You should still be aware of the total order in which your routes are defined in a Controller.</li>
-<li>You can use the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function multiple times in a Controller with the same or different values.</li>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<ul class="last simple">
+<li>Routes and Prefixes <strong>MUST</strong> begin with a forward slash (/).</li>
+<li>Routes are always added to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">c.t.finatra.http.routing.HttpRouter</a>
+<strong>in the order defined</strong> in the <a class="reference external" href="../http/controllers.html#controllers-and-routing">Controller</a>
+and are thus matched in this order as well. This remains true even when defined within a <cite>prefix</cite>
+block. I.e., the <cite>prefix</cite> is merely a convenience for adding a common prefix to a set of routes.
+You should still be aware of the total order in which your routes are defined in a Controller.</li>
+<li>You can use the <cite>c.t.finatra.http.RouteDSL#prefix</cite> function multiple times in a Controller with
+the same or different values.</li>
 </ul>
 </div>
 </div>
 <div class="section" id="trailing-slashes">
 <h2>Trailing Slashes<a class="headerlink" href="#trailing-slashes" title="Permalink to this headline">¶</a></h2>
-<p>If you want to ignore trailing slashes on routes such that <cite>/groups/1</cite> and <cite>groups/1/</cite> are treated to be equivalent, append <cite>/?</cite> to your route URI, e.g.,</p>
+<p>If you want to ignore trailing slashes on routes such that <cite>/groups/1</cite> and <cite>groups/1/</cite> are treated
+to be equivalent, append <cite>/?</cite> to your route URI, e.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/groups/:id/?&quot;) { request: Request =&gt;
   response.ok(...)
 }
 </pre></div>
 </div>
+<p>Otherwise, the route as specified is an <strong>exact match</strong>. E.g., if you define <cite>/groups/1</cite> we will <strong>only</strong> match requests to <cite>/groups/1</cite> and <strong>not</strong> requests to <cite>/groups/1/</cite> and vice-versa.</p>
 </div>
 <div class="section" id="admin-paths">
 <h2>Admin Paths<a class="headerlink" href="#admin-paths" title="Permalink to this headline">¶</a></h2>
@@ -360,7 +362,7 @@ e.g.,</p>
 <p>If you do not provide a <cite>RouteIndex</cite> the route will not appear in the index but is still reachable on the admin interface.</p>
 <div class="section" id="admin-path-routing">
 <h3>Admin Path Routing<a class="headerlink" href="#admin-path-routing" title="Permalink to this headline">¶</a></h3>
-<p><strong>Note</strong>: only admin routes which start with <cite>/admin/finatra/</cite> will be routed to using the server&#8217;s configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>. All other admin routes will be routed to by TwitterServer&#8217;s <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/AdminHttpServer.scala#L108">AdminHttpServer</a> which only supports <strong>exact path matching</strong> and thus why only constant routes are allowed.</p>
+<p><strong>Note</strong>: only admin routes which start with <cite>/admin/finatra/</cite> will be routed to using the server&#8217;s configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a>. All other admin routes will be routed to by TwitterServer&#8217;s <a class="reference external" href="https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L140">AdminHttpServer</a> which only supports <strong>exact path matching</strong> and thus why only constant routes are allowed.</p>
 <p>Therefore any configuration defined on your server&#8217;s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a> will thus only apply to admin routes starting with <cite>/admin/finatra</cite>.
 And because these routes will use the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala">RoutingService</a> these routes cannot be included in the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> <a class="reference external" href="https://twitter.github.io/twitter-server/Admin.html">HTTP Admin Interface</a> index.</p>
 </div>
@@ -373,19 +375,20 @@ And because these routes will use the Finatra <a class="reference external" href
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
             </a></p><p>
-  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
 <h3>Useful Links</h3>
 <ul>
-  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
-  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
-  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Defining HTTP Controllers</a><ul>
 <li><a class="reference internal" href="#controllers-and-routing">Controllers and Routing</a><ul>
@@ -399,10 +402,7 @@ And because these routes will use the Finatra <a class="reference external" href
 <li><a class="reference internal" href="#regular-expressions">Regular Expressions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#route-prefixes">Route Prefixes</a><ul>
-<li><a class="reference internal" href="#things-to-keep-in-mind">Things to keep in mind:</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#route-prefixes">Route Prefixes</a></li>
 <li><a class="reference internal" href="#trailing-slashes">Trailing Slashes</a></li>
 <li><a class="reference internal" href="#admin-paths">Admin Paths</a><ul>
 <li><a class="reference internal" href="#admin-path-routing">Admin Path Routing</a></li>
@@ -413,14 +413,12 @@ And because these routes will use the Finatra <a class="reference external" href
 </ul>
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="server.html" title="previous chapter">HTTP Server Definition</a></li>
-      <li>Next: <a href="requests.html" title="next chapter">HTTP Requests</a></li>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />

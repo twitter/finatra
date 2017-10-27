@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>First Steps &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    <title>Dependency Injection &#8212; Finatra 17.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.13.0',
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
-    <link rel="next" title="Understanding the Codebase" href="framework.html" />
-    <link rel="prev" title="User’s Guide" href="../index.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
    
   
-  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,15 +50,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="framework.html" title="Understanding the Codebase"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="User’s Guide"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -69,100 +61,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="first-steps">
-<span id="basics"></span><h1>First Steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h1>
-<p>To get started, add a dependency on either <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> or <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a> depending if you are building an HTTP or Thrift server.</p>
-<p>E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
-<pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;2.13.0&quot;
-</pre>
-<p>or</p>
-<pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;2.13.0&quot;
-</pre>
-<p>Or similarily with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
-<pre class="literal-block">
-&lt;dependency&gt;
-  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
-  &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
-  &lt;version&gt;2.13.0&lt;/version&gt;
-&lt;/dependency&gt;
-</pre>
-<p>or</p>
-<pre class="literal-block">
-&lt;dependency&gt;
-  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
-  &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
-  &lt;version&gt;2.13.0&lt;/version&gt;
-&lt;/dependency&gt;
-</pre>
-<p>Note: with Maven, you <strong>must</strong> append the appropriate scala version to the artifact name (e.g., <cite>_2.12</cite>).</p>
-<p>See the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/finatra-2.2.0/examples/hello-world">hello-world</a> example for a more in-depth example.</p>
-<div class="section" id="test-dependencies">
-<h2>Test Dependencies<a class="headerlink" href="#test-dependencies" title="Permalink to this headline">¶</a></h2>
-<p>Finatra publishes <a class="reference external" href="https://maven.apache.org/guides/mini/guide-attached-tests.html">test-jars</a> for most modules. The test-jars include re-usable utilities for use in testing (e.g., the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">EmbeddedTwitterServer</a>).</p>
-<p>To add a test-jar dependency, depend on the appropriate module with the <cite>tests</cite> classifier. Additionally, these dependencies are typically <strong>only needed</strong> in the <code class="docutils literal"><span class="pre">test</span></code> scope for your project. E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
-<pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;2.13.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
-</pre>
-<p>or</p>
-<pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;2.13.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
-</pre>
-<p>See the <a class="reference external" href="http://www.scala-sbt.org/">sbt</a> documentation for more information on using <a class="reference external" href="http://www.scala-sbt.org/0.13/docs/Library-Management.html">ivy configurations and classifiers</a>.</p>
-<p>And with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
-<pre class="literal-block">
-&lt;dependency&gt;
-  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
-  &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
-  &lt;type&gt;test-jar&lt;/type&gt;
-  &lt;version&gt;2.13.0&lt;/version&gt;
-&lt;/dependency&gt;
-</pre>
-<p>or</p>
-<pre class="literal-block">
-&lt;dependency&gt;
-  &lt;groupId&gt;com.twitter&lt;/groupId&gt;
-  &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
-  &lt;scope&gt;test&lt;/scope&gt;
-  &lt;type&gt;test-jar&lt;/type&gt;
-  &lt;version&gt;2.13.0&lt;/version&gt;
-&lt;/dependency&gt;
-</pre>
-<p>There is a <a class="reference external" href="https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html">downside</a> to publishing test-jars in this manner: transitive test-scoped dependencies are not resolved. Maven and sbt only resolve compile-time dependencies transitively, so you will need to specify all other required test-scoped dependencies manually.</p>
-<p>For example, the <cite>finatra-http</cite> test-jar depends on the <cite>inject-app</cite> test-jar (among others). You will have to <strong>manually add</strong> a dependency on the <cite>inject-app</cite> test-jar when using the <cite>finatra-http</cite> test-jar since the <cite>inject-app</cite> test-jar will not be resolvedtransitively.</p>
-<p>Using the <a class="reference external" href="https://github.com/jrudolph/sbt-dependency-graph">sbt-dependency-graph</a> plugin, you can list the dependencies of the <cite>finatra-http</cite> test configuration for the <cite>packageBin</cite> task:</p>
-<div class="code bash highlight-text"><div class="highlight"><pre><span></span>$ ./sbt -Dsbt.log.noformat=true http/test:packageBin::dependencyList 2&gt;&amp;1 | grep &#39;com\.twitter:finatra\|com\.twitter:inject&#39;
-[info] com.twitter:finatra-http_2.12:...
-[info] com.twitter:finatra-httpclient_2.12:...
-[info] com.twitter:finatra-jackson_2.12:...
-[info] com.twitter:finatra-slf4j_2.12:...
-[info] com.twitter:finatra-utils_2.12:...
-[info] com.twitter:inject-app_2.12:...
-[info] com.twitter:inject-core_2.12:...
-[info] com.twitter:inject-modules_2.12:...
-[info] com.twitter:inject-request-scope_2.12:...
-[info] com.twitter:inject-server_2.12:...
-[info] com.twitter:inject-slf4j_2.12:...
-[info] com.twitter:inject-utils_2.12:...
-</pre></div>
-</div>
-<p>In this case, when executing the <cite>packageBin</cite> task for <cite>finatra-http</cite> in the test configuration these dependencies are necessary. Unfortunately, this listing does not explicity state if it&#8217;s the compile-time or the test-jar version of the dependency that is necessary. However, it is safe to assume that if you want a dependency on the <cite>finatra-http</cite> test-jar you will also need to add dependencies on any test-jar from the listed dependencies as well.</p>
-</div>
-<div class="section" id="lightbend-activator">
-<h2><a class="reference external" href="https://www.lightbend.com/activator/download">Lightbend Activator</a><a class="headerlink" href="#lightbend-activator" title="Permalink to this headline">¶</a></h2>
-<p>Finatra also has Lightbend Activator <a class="reference external" href="https://www.lightbend.com/activator/templates#filter:finatra%20v2.x">templates</a> for project generation:</p>
-<ul class="simple">
-<li><a class="reference external" href="https://github.com/twitter/finatra-activator-http-seed">HTTP template</a> - instructions <a class="reference external" href="https://www.lightbend.com/activator/template/finatra-http-seed">here</a>.</li>
-<li><a class="reference external" href="https://github.com/twitter/finatra-activator-thrift-seed">Thrift template</a> - instructions <a class="reference external" href="https://www.lightbend.com/activator/template/finatra-thrift-seed">here</a>.</li>
-</ul>
-<p>See the Lightbend Activator <a class="reference external" href="https://www.lightbend.com/activator/docs">documentation</a> for information how to use these templates with the activator application.</p>
-</div>
-<div class="section" id="dependency-injection">
-<h2>Dependency Injection<a class="headerlink" href="#dependency-injection" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="dependency-injection">
+<span id="basics"></span><h1>Dependency Injection<a class="headerlink" href="#dependency-injection" title="Permalink to this headline">¶</a></h1>
 <p>Finatra internally uses the Google <a class="reference external" href="https://github.com/google/guice">Guice</a> dependency injection library extensively which is also available for service writers if they choose to use dependency injection.</p>
-<p><strong>NOTE: You are not required to use Guice dependency injection when using Finatra</strong>. Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection. However, you will not be able to take full-advantage of Finatra&#8217;s <a class="reference external" href="../testing/index.html">testing</a> features.</p>
+<div class="admonition attention">
+<p class="first admonition-title">Attention</p>
+<p class="last">You are <strong>not required</strong> to use <a class="reference external" href="https://github.com/google/guice">Guice</a> dependency injection when using Finatra.
+Creating servers, wiring in controllers and applying filters can all be done without using any dependency injection.
+However, you will not be able to take full-advantage of Finatra&#8217;s <a class="reference external" href="../testing/index.html">testing</a> features.</p>
+</div>
 <p>An example of Finatra&#8217;s dependency-injection integration is adding controllers to Finatra&#8217;s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala">HttpRouter</a> <em>by type</em>:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>class Server extends HttpServer {
   override def configureHttp(router: HttpRouter) {
@@ -171,7 +78,7 @@
 }
 </pre></div>
 </div>
-<p>As mentioned, it is also possible to do this without using Guice, simply instantiate your controller and add the instance to the router:</p>
+<p>As mentioned, it is also possible to do this without using <a class="reference external" href="https://github.com/google/guice">Guice</a>, simply instantiate your controller and add the instance to the router:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>class NonDIServer extends HttpServer {
   val myController = new MyController(...)
 
@@ -182,7 +89,6 @@
 </pre></div>
 </div>
 </div>
-</div>
 
 
           </div>
@@ -190,37 +96,26 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
             </a></p><p>
-  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
 <h3>Useful Links</h3>
 <ul>
-  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
-  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
-  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
-</ul>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">First Steps</a><ul>
-<li><a class="reference internal" href="#test-dependencies">Test Dependencies</a></li>
-<li><a class="reference internal" href="#lightbend-activator">Lightbend Activator</a></li>
-<li><a class="reference internal" href="#dependency-injection">Dependency Injection</a></li>
-</ul>
-</li>
-</ul>
-<h3>Related Topics</h3>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul><h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../index.html" title="previous chapter">User&#8217;s Guide</a></li>
-      <li>Next: <a href="framework.html" title="next chapter">Understanding the Codebase</a></li>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />

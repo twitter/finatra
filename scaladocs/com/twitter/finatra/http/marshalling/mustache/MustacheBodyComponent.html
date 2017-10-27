@@ -214,7 +214,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">MustacheBodyComponent</span><span class="params">(<span name="data">data: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+        <span class="name">MustacheBodyComponent</span><span class="params">(<span name="data">data: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="templateName">templateName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contentType">contentType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="../MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
       </span>
       </h4>
 
@@ -270,9 +270,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(data:Any,template:String):com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent"></a><a id="&lt;init&gt;:MustacheBodyComponent"></a>
+      <a id="&lt;init&gt;(data:Any,templateName:String,contentType:String):com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent"></a><a id="&lt;init&gt;:MustacheBodyComponent"></a>
       <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/http/marshalling/mustache/MustacheBodyComponent.html#&lt;init&gt;(data:Any,template:String):com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent" title="Permalink">
+      <a href="../../../../../../com/twitter/finatra/http/marshalling/mustache/MustacheBodyComponent.html#&lt;init&gt;(data:Any,templateName:String,contentType:String):com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -281,7 +281,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">MustacheBodyComponent</span><span class="params">(<span name="data">data: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
+        <span class="name">MustacheBodyComponent</span><span class="params">(<span name="data">data: <a href="http://www.scala-lang.org/api/2.12.1/index.html#scala.Any" class="extype" target="_top">Any</a></span>, <span name="templateName">templateName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="contentType">contentType: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -384,6 +384,22 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent#contentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="contentType:String"></a>
+      <span class="permalink">
+      <a href="../../../../../../com/twitter/finatra/http/marshalling/mustache/MustacheBodyComponent.html#contentType:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contentType</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
     </li><li name="com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent#data" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="data:Any"></a>
       <span class="permalink">
@@ -534,10 +550,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent#template" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="template:String"></a>
+    </li><li name="com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent#templateName" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="templateName:String"></a>
       <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/http/marshalling/mustache/MustacheBodyComponent.html#template:String" title="Permalink">
+      <a href="../../../../../../com/twitter/finatra/http/marshalling/mustache/MustacheBodyComponent.html#templateName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -546,7 +562,7 @@
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">template</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+        <span class="name">templateName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       

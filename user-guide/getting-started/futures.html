@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Future Gotchas &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    <title>Future Gotchas &#8212; Finatra 17.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.13.0',
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
-    <link rel="next" title="Example Projects" href="examples.html" />
-    <link rel="prev" title="Flags" href="flags.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
    
   
-  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,15 +50,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="examples.html" title="Example Projects"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="flags.html" title="Flags"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -78,7 +70,7 @@
 <a class="reference external" href="http://www.scala-lang.org/api/current/index.html#scala.concurrent.Future">scala.concurrent.Future</a> (introduced in Scala 2.10 and later backported to Scala 2.9.3) and is
 <strong>not compatible</strong> without using a <a class="reference external" href="https://twitter.github.io/util/guide/util-cookbook/futures.html#conversions-between-twitter-s-future-and-scala-s-future">Bijection</a> to transform one into the other.</p>
 <p>It is important to remember that the <strong>Finatra framework uses and expects</strong> <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a>.</p>
-<p>Finatra will <a class="reference external" href="https://github.com/twitter/finatra/commit/f7d617163d6981d779dca66fcc67ddd33c6aa083">attempt to perform a bijection</a> for you if your Controller route callback returns a <code class="docutils literal"><span class="pre">scala.concurrent.Future</span></code>. However, note that this bijection <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L183">may not be ideal in all cases</a> and you may wish to do the conversion yourself directly in your Controller.</p>
+<p>Finatra will <a class="reference external" href="https://github.com/twitter/finatra/commit/f7d617163d6981d779dca66fcc67ddd33c6aa083">attempt to perform a bijection</a> for you if your Controller route callback returns a <code class="docutils literal"><span class="pre">scala.concurrent.Future</span></code>. However, note that this bijection <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L193">may not be ideal in all cases</a> and you may wish to do the conversion yourself directly in your Controller.</p>
 <p>For more information on the <a class="reference external" href="https://github.com/twitter/bijection">Twitter Bijection</a> library it is highly recommended that you read the <a class="reference external" href="https://github.com/twitter/bijection/blob/develop/README.md">Bijection README</a>.</p>
 <p>For more information on converting between <code class="docutils literal"><span class="pre">c.t.util.Future</span></code> and <code class="docutils literal"><span class="pre">scala.concurrent.Future</span></code> see this <a class="reference external" href="https://twitter.github.io/util/guide/util-cookbook/futures.html#conversions-between-twitter-s-future-and-scala-s-future">documentation</a> from the <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil project</a> (which includes a simple example).</p>
 </div>
@@ -90,19 +82,20 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
             </a></p><p>
-  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
 <h3>Useful Links</h3>
 <ul>
-  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
-  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
-  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Future Gotchas</a><ul>
 <li><a class="reference internal" href="#c-t-util-future-vs-scala-concurrent-future"><code class="docutils literal"><span class="pre">c.t.util.Future</span></code> vs. <code class="docutils literal"><span class="pre">scala.concurrent.Future</span></code></a></li>
@@ -111,14 +104,12 @@
 </ul>
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="flags.html" title="previous chapter">Flags</a></li>
-      <li>Next: <a href="examples.html" title="next chapter">Example Projects</a></li>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />

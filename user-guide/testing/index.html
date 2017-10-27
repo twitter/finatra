@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Testing With Finatra &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    <title>Testing Features &#8212; Finatra 17.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.13.0',
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
-    <link rel="next" title="FAQ for upgrading from Finatra v1.x to v2.x" href="../v1-migration/index.html" />
-    <link rel="prev" title="TwitterServer Admin HTTP Server" href="../twitter-server/index.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
    
   
-  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,15 +50,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../v1-migration/index.html" title="FAQ for upgrading from Finatra v1.x to v2.x"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../twitter-server/index.html" title="TwitterServer Admin HTTP Server"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -69,394 +61,69 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <img alt="http://imgs.xkcd.com/comics/exploits_of_a_mom.png" id="testing" src="http://imgs.xkcd.com/comics/exploits_of_a_mom.png" />
-<div class="section" id="testing-with-finatra">
-<h1>Testing With Finatra<a class="headerlink" href="#testing-with-finatra" title="Permalink to this headline">¶</a></h1>
+  <div class="figure" id="id1">
+<span id="testing"></span><img alt="Source: https://xkcd.com" src="https://imgs.xkcd.com/comics/exploits_of_a_mom.png" />
+<p class="caption"><span class="caption-text">Source: <a class="reference external" href="https://xkcd.com">https://xkcd.com</a></span></p>
+</div>
+<div class="section" id="testing-features">
+<h1>Testing Features<a class="headerlink" href="#testing-features" title="Permalink to this headline">¶</a></h1>
 <p>Finatra provides the following testing features:</p>
 <ul class="simple">
 <li>the ability to start a locally running server, issue requests, and assert responses.</li>
-<li>the ability to easily replace class implementations throughout the object graph.</li>
-<li>the ability to retrieve classes in the object graph to perform assertions on them.</li>
+<li>the ability to easily replace class instances throughout the object graph.</li>
+<li>the ability to retrieve instances in the object graph to perform assertions on them.</li>
 <li>the ability to write powerful tests without deploying test code to production.</li>
 </ul>
 <div class="section" id="types-of-tests">
 <h2>Types of Tests<a class="headerlink" href="#types-of-tests" title="Permalink to this headline">¶</a></h2>
-<p>What are we talking about when we talk about <em>testing</em>? At a high-level
-the philosophy of testing in Finatra revolves around the following
-definitions:</p>
-<ul class="simple">
-<li><a class="reference internal" href="#feature-tests">Feature Tests</a> - the most powerful tests enabled
-by Finatra. These tests allow you to verify feature requirements of
-the service by exercising its external interface. Finatra supports
-both “black-box testing” and “white-box testing” against a locally
-running version of your server. You can selectively swap out certain
-classes, insert mocks, and perform assertions on internal state. It’s
-worth noting that we sometimes re-use these tests for regression
-testing in larger “System Tests” that run post-release on live
-services. Take a look at an example feature test
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala">here</a>.</li>
-<li><a class="reference internal" href="#integration-tests">Integration Tests</a> - similar to feature
-tests, but the entire service is not started. Instead, a list of
-<a class="reference external" href="../getting-started/modules.html">modules</a> are loaded
-and then method calls and assertions are performed at the
-class-level. You can see an example integration test
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/marshalling/CallbackConverterIntegrationTest.scala">here</a>.</li>
-<li>Unit Tests - these are tests of a single class and since constructor
-injection is used throughout the framework, Finatra stays out of your
-way.</li>
+<p>What are we talking about when we talk about <em>testing</em>? At a high-level the philosophy of testing
+in Finatra revolves around the following definitions:</p>
+<ul>
+<li><p class="first"><a class="reference external" href="feature_tests.html">Feature Tests</a> - the most powerful tests enabled by Finatra. These tests
+allow for verification of the feature requirements of the service by exercising its external
+interface. Finatra supports both <a class="reference external" href="https://en.wikipedia.org/wiki/Black-box_testing">black-box testing</a>
+and <a class="reference external" href="https://en.wikipedia.org/wiki/White-box_testing">white-box testing</a> against a locally
+running version of a server. Classes can be selectively swapped out with dummy implementations or
+mocks inserted, and internal state asserted. See an example feature test <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/test/scala/com/twitter/hello/HelloWorldFeatureTest.scala">here</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is worth noting that versions of these <a class="reference external" href="feature_tests.html">Feature Tests</a> could be re-used
+for regression testing as part of larger <a class="reference external" href="https://en.wikipedia.org/wiki/System_testing">system tests</a>
+which could be run post-deploy for deploy verification and certification.</p>
+</div>
+</li>
+<li><p class="first"><a class="reference external" href="integration_tests">Integration Tests</a> - similar to <a class="reference external" href="feature_tests.html">Feature Tests</a>, but
+the entire service is not started. Instead, a list of <a class="reference external" href="../getting-started/modules.html">modules</a> are loaded with method calls and
+assertions are performed at the class-level. You can see an example integration test <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/marshalling/CallbackConverterIntegrationTest.scala">here</a>.</p>
+</li>
+<li><p class="first"><a class="reference external" href="https://en.wikipedia.org/wiki/Unit_testing">Unit Tests</a> - these are tests generally of a single
+class and since constructor injection is used throughout the framework, Finatra stays out of your
+way.</p>
+</li>
 </ul>
 </div>
 <div class="section" id="scalatest">
 <h2><a class="reference external" href="http://www.scalatest.org/">ScalaTest</a><a class="headerlink" href="#scalatest" title="Permalink to this headline">¶</a></h2>
 <p>The Finatra testing framework is in transition from the <a class="reference external" href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a>
 ScalaTest <a class="reference external" href="http://www.scalatest.org/user_guide/selecting_a_style">testing style</a> to <a class="reference external" href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a>
-for framework testing and to facilitate the types of testing outlined above we have several testing traits to aid in creating simple andpowerful tests.</p>
+for framework testing and to facilitate the types of testing outlined above we have several testing
+traits to aid in creating simple and powerful tests.</p>
 <p>For more information on <a class="reference external" href="http://www.scalatest.org/">ScalaTest</a>, see the <a class="reference external" href="http://www.scalatest.org/user_guide">ScalaTest User Guide</a>.</p>
 <p>To make use of another ScalaTest test style, such as <a class="reference external" href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec">FunSpec</a>
-or others, see <a class="reference internal" href="#test-mixins">Test Mixins</a>.</p>
+or others, see <a class="reference external" href="mixin.html">Test Mixins</a>.</p>
 </div>
-<div class="section" id="embedded-servers-and-apps">
-<h2>Embedded Servers and Apps<a class="headerlink" href="#embedded-servers-and-apps" title="Permalink to this headline">¶</a></h2>
-<p>Finatra provides a way to run an embedded version of your service or app running locally on ephemeral ports. This allows you to run <em>actual</em> requests against an <em>actual</em> version of your server when testing. Embedding is an especially powerful way of running and testing your application through an IDE, e.g., like <a class="reference external" href="https://www.jetbrains.com/idea/">IntelliJ</a>.</p>
-<p>The embedded utilities are also useful for testing and debugging your code when prototyping. If your service or API makes calls to other services, instead of mocking out or overriding those dependencies with dummy implementations you can always write a test using an Embedded version of your server which talks to <em>real</em> downstream services (of course you&#8217;d never want to commit a test like this to your source repository, especially if you run any type of <a class="reference external" href="https://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a> system). You&#8217;ll be able to run this test normally through the test runner of an IDE which would allow you to easily set breakpoints and step-through code for debugging. As opposed to needing to build and run your service locally and attach a remote debugger.</p>
-<p>See:</p>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/EmbeddedApp.scala">c.t.inject.app.EmbeddedApp</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">c.t.inject.server.EmbeddedTwitterServer</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala">c.t.finatra.http.EmbeddedHttpServer</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/EmbeddedThriftServer.scala">c.t.finatra.thrift.EmbeddedThriftServer</a></li>
+<li><a class="reference internal" href="embedded.html"><span class="doc">Embedded Servers and Apps</span></a></li>
+<li><a class="reference internal" href="feature_tests.html"><span class="doc">Feature Tests</span></a></li>
+<li><a class="reference internal" href="integration_tests.html"><span class="doc">Integration Tests</span></a></li>
+<li><a class="reference internal" href="startup_tests.html"><span class="doc">Startup Tests</span></a></li>
+<li><a class="reference internal" href="mixins.html"><span class="doc">Test Mixins</span></a></li>
+<li><a class="reference internal" href="mocks.html"><span class="doc">Working with Mocks</span></a></li>
+<li><a class="reference internal" href="override_modules.html"><span class="doc">Override Modules</span></a></li>
+<li><a class="reference internal" href="bind_dsl.html"><span class="doc">Explicit Binding with #bind[T]</span></a></li>
 </ul>
-<img alt="../_images/embedded.png" src="../_images/embedded.png" />
-<p>You&#8217;ll notice that this hierarchy generally follows the server class
-hierarchy as
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala">c.t.finatra.http.HttpServer</a>
-and
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala">c.t.finatra.thrift.ThriftServer</a>
-extend from
-<a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/TwitterServer.scala">c.t.server.TwitterServer</a>
-which extends from
-<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala">c.t.app.App</a>.</p>
-</div>
-<div class="section" id="test-helper-classes">
-<h2>Test Helper Classes<a class="headerlink" href="#test-helper-classes" title="Permalink to this headline">¶</a></h2>
-<img alt="../_images/test-classes.png" src="../_images/test-classes.png" />
-<div class="section" id="feature-tests">
-<h3>Feature Tests<a class="headerlink" href="#feature-tests" title="Permalink to this headline">¶</a></h3>
-<p>If you are familiar with <a class="reference external" href="http://docs.behat.org/en/v2.5/guides/1.gherkin.html">Gherkin</a> or <a class="reference external" href="https://github.com/cucumber/cucumber/wiki/Feature-Introduction">Cucumber</a> or other similar testing languages and frameworks, then <a class="reference external" href="https://wiki.documentfoundation.org/QA/Testing/Feature_Tests">feature testing</a> will feel somewhat familiar. In Finatra, a feature test always consists of an app or a server under test. See the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala">FeatureTest</a> trait.</p>
-<p>We highly recommend writing feature tests for your services as they provide a very good signal of whether you have correctly implemented the features of your service. If you haven&#8217;t implemented the feature correctly, it almost doesn&#8217;t matter that you have lots of unit tests.</p>
-<p>For example, to write a feature test for an HTTP server, extend the <cite>c.t.inject.server.FeatureTest</cite> trait. Then override the <cite>server</cite> with an instance of your <a class="reference external" href="#embedded-servers-and-apps">EmbeddedHttpServer</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
-
-class ExampleServerFeatureTest extends FeatureTest {
-  override val server = new EmbeddedHttpServer(new ExampleServer)
-
-  test(&quot;ExampleServer#perform feature&quot;) {
-      server.httpGet(
-        path = &quot;/&quot;,
-        andExpect = Status.Ok)
-        ...
-    }
-  }
-}
-</pre></div>
-</div>
-<p>Similarly, to write a feature test for a Thrift server and create a <a class="reference external" href="#thrift-tests">client</a> to it,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.EmbeddedThriftServer
-import com.twitter.inject.server.FeatureTest
-
-class ExampleThriftServerFeatureTest extends FeatureTest {
-  override val server = new EmbeddedThriftServer(new ExampleThriftServer)
-
-  lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = &quot;client123&quot;)
-
-  test(&quot;ExampleThriftServer#return data accordingly&quot;) {
-      Await.result(client.doExample(&quot;input&quot;)) should equal(&quot;output&quot;)
-    }
-  }
-}
-</pre></div>
-</div>
-<p>If you are extending both <cite>c.t.finatra.http.HttpServer</cite> <strong>and</strong> <cite>c.t.finatra.thrift.ThriftServer</cite> then you can feature test by constructing an <cite>EmbeddedHttpServer with ThriftClient</cite>, e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
-
-class ExampleCombinedServerFeatureTest extends FeatureTest {
-  override val server =
-    new EmbeddedHttpServer(new ExampleCombinedServer) with ThriftClient
-
-  lazy val client = server.thriftClient[ExampleThrift[Future]](clientId = &quot;client123&quot;)
-
-  &quot;ExampleCombinedServer#perform feature&quot;) {
-      server.httpGet(
-        path = &quot;/&quot;,
-        andExpect = Status.Ok)
-        ...
-    }
-
-   &quot;ExampleCombinedServer#return data accordingly&quot;) {
-      Await.result(client.doExample(&quot;input&quot;)) should equal(&quot;output&quot;)
-    }
-  }
-}
-</pre></div>
-</div>
-<div class="section" id="notes">
-<h4>Notes:<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h4>
-<p>The <cite>server</cite> is specified as a <cite>def</cite> in <cite>c.t.inject.server.FeatureTestMixin</cite> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala#L11">trait</a>.</p>
-<p>If you only want to start <strong>one instance of your server per test file</strong> make sure to override this <cite>def</cite> with a <cite>val</cite>.</p>
-<p>For more advanced examples see:</p>
-<ul class="simple">
-<li>the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/test/DoEverythingServerFeatureTest.scala">DoEverythingServerFeatureTest</a>
-for an HTTP server.</li>
-<li>the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/tests/DoEverythingThriftServerFeatureTest.scala">DoEverythingThriftServerFeatureTest</a>
-for a Thrift server.</li>
-<li>the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject-thrift-client-http-mapper/src/test/scala/com/twitter/finatra/multiserver/test/DoEverythingCombinedServerFeatureTest.scala">DoEverythingCombinedServerFeatureTest</a>
-for &#8220;combined&#8221; HTTP and Thrift server.</li>
-</ul>
-</div>
-</div>
-<div class="section" id="integration-tests">
-<h3>Integration Tests<a class="headerlink" href="#integration-tests" title="Permalink to this headline">¶</a></h3>
-<p>Whereas feature tests start the server or app under test thus loading the entire object graph, integration tests generally only test across
-a few interfaces in the system. In Finatra, we provide the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala">c.t.inject.app.TestInjector</a>  which allows you to pass it a set of modules and flags to construct a minimal object graph.</p>
-<p>To write an integration test, extend the <cite>c.t.inject.IntegrationTest</cite> trait. Then override the <cite>injector</cite> val with your constructed instance of <cite>c.t.inject.app.TestInjector</cite>. You&#8217;ll then be able to access instances of necessary classes to execute tests.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
-
-class ExampleIntegrationTest extends IntegrationTest {
-  override val injector =
-    TestInjector(
-      flags =
-        Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
-      modules =
-        Seq(ExampleModule))
-      .create
-
-  test(&quot;MyTest#perform feature&quot;) {
-    val exampleThingy = injector.instance[ExampleThingy]
-    ...
-  }
-}
-</pre></div>
-</div>
-<div class="section" id="note">
-<h4>Note:<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h4>
-<p>The <cite>injector</cite> is specified as a <cite>def</cite> the in <cite>c.t.inject.IntegrationTestMixin</cite> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTestMixin.scala#L15">trait</a>. If you only want to start <strong>one instance of your injector per test file</strong> make sure to override this <cite>def</cite> with a <cite>val</cite>.</p>
-</div>
-</div>
-<div class="section" id="http-tests">
-<h3>Http Tests<a class="headerlink" href="#http-tests" title="Permalink to this headline">¶</a></h3>
-<p>If you are writing a test that has an HTTP server under test, you can also extend the <cite>c.t.finatra.http.HttpTest</cite> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/HttpTest.scala">trait</a>. This trait provides some common utilities for HTTP testing, specifically
-utilities for constructing a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/FlagResolver.scala#L9">resolverMap</a> flag value for setting on your server under test.</p>
-</div>
-<div class="section" id="thrift-tests">
-<h3>Thrift Tests<a class="headerlink" href="#thrift-tests" title="Permalink to this headline">¶</a></h3>
-<p>As shown above, thrift servers can be tested through a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala">c.t.finatra.thrift.ThriftClient</a>. The Finatra test framework provides an easy way get access to a real <a class="reference external" href="https://twitter.github.io/finagle/guide/Clients.html">Finagle client</a> for making calls to your running server in a test.</p>
-<p>In the case here, creating a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftClient.scala">c.t.finatra.thrift.ThriftClient</a> requires the thrift service type <cite>T</cite>. This type is expected to be the trait subclass of <cite>c.t.scrooge.ThriftService</cite> in the form of <cite>YourService[+MM[_]]</cite>.</p>
-<p>Additionally, your test can also extend the <cite>c.t.finatra.thrift.ThriftTest</cite> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/test/scala/com/twitter/finatra/thrift/ThriftTest.scala">trait</a> which provides a utility specifically for constructing a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/src/main/scala/com/twitter/server/FlagResolver.scala#L9">resolverMap</a> flag value for setting on your server under test.</p>
-</div>
-</div>
-<div class="section" id="test-mixins">
-<h2>Test Mixins<a class="headerlink" href="#test-mixins" title="Permalink to this headline">¶</a></h2>
-<p>Twitter&#8217;s recommended ScalaTest test style is <a class="reference external" href="http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite">FunSuite</a>.</p>
-<p>You can use this ScalaTest test style by extending either</p>
-<ul class="simple">
-<li><cite>c.t.inject.Test</cite>, or</li>
-<li><cite>c.t.inject.IntegrationTest</cite>, or</li>
-<li><cite>c.t.inject.server.FeatureTest</cite>.</li>
-</ul>
-<p>There are also deprecated versions which mix-in the <a class="reference external" href="http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec">WordSpec</a> testing style:</p>
-<ul class="simple">
-<li><cite>c.t.inject.WordSpecTest</cite>,</li>
-<li><cite>c.t.inject.WordSpecIntegrationTest</cite>, and</li>
-<li><cite>c.t.inject.server.WordSpecFeatureTest</cite>.</li>
-</ul>
-<p>However, you are free to choose a ScalaTest testing style that suits your team by using the test mixin companion classes directly and mix in your preferred ScalaTest style:</p>
-<ul class="simple">
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/TestMixin.scala">c.t.inject.TestMixin</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/IntegrationTestMixin.scala">c.t.inject.IntegrationTestMixin</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTestMixin.scala">c.t.inject.server.FeatureTestMixin</a></li>
-</ul>
-<p>An example of using the <cite>c.t.inject.server.FeatureTestMixin</cite> with the <cite>FunSpec</cite> ScalaTest test style:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Stage
-import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTestMixin
-import org.scalatest.FunSpec
-
-class SampleApiStartupTest
-  extends FunSpec
-  with FeatureTestMixin {
-
-  override val server = new EmbeddedHttpServer(
-    twitterServer = new SampleApiServer,
-    stage = Stage.PRODUCTION,
-    flags = Map(
-      &quot;foo.flag&quot; -&gt; &quot;bar&quot;
-    )
-  )
-
-  describe(&quot;Sample Server&quot;) {
-    it(&quot;should startup&quot;) {
-      server.assertHealthy()
-    }
-  }
-}
-</pre></div>
-</div>
-</div>
-<div class="section" id="working-with-mocks">
-<h2>Working with Mocks<a class="headerlink" href="#working-with-mocks" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Mockito.scala">c.t.inject.Mockito</a>
-provides <a class="reference external" href="https://etorreborre.github.io/specs2/">Specs2</a> Mockito
-syntax sugar for <a class="reference external" href="http://www.scalatest.org/">ScalaTest</a>.</p>
-<p>This is a drop-in replacement for <a class="reference external" href="http://etorreborre.github.io/specs2/guide/SPECS2-3.9.1/org.specs2.guide.UseMockito.html">org.specs2.mock.Mockito</a>. We encourage you to not use <cite>org.specs2.mock.Mockito</cite> directly. Otherwise, match failures will not be propagated up as ScalaTest test failures.</p>
-<p>See the next few sections on how you can use mocks in testing with either <a class="reference internal" href="#override-modules">Override Modules</a> or using <a class="reference external" href="#embedded-server-bind-t">Embedded Server #bind[T]</a>.</p>
-</div>
-<div class="section" id="override-modules">
-<h2>Override Modules<a class="headerlink" href="#override-modules" title="Permalink to this headline">¶</a></h2>
-<p>For basic information on Modules in Finatra, see <a class="reference external" href="../getting-started/modules.html">Modules</a>.</p>
-<p>Defining a module is generally used to tell Guice <em>how</em> to instantiate an object to be provided to the object graph. When testing, however, we may want to provide an alternative instance of a type to the object graph. For instance, instead of making network calls to an external service through a real client we want to instead use a mock version of the client. Or load an in-memory implementation to which we can keep a reference in order to make assertions on its internal state. In these cases we can compose a server with a collection of override modules that selectively replace bound instances.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
-  twitterServer = new ExampleServer {
-    override def overrideModules = Seq(OverrideSomeBehaviorModule)
-  },
-  ...
-</pre></div>
-</div>
-<p>For instance if you have a controller which takes in a type of <cite>ServiceA</cite>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyController(serviceA: ServiceA) extends Controller {
-  get(&quot;/:id&quot;) { request: Request =&gt;
-    serviceA.lookupInformation(request.params(&quot;id&quot;))
-  }
-}
-</pre></div>
-</div>
-<p>With a <a class="reference external" href="../getting-started/modules.html">Module</a> that provides the implementation of <cite>ServiceA</cite> to the injector:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object MyServiceAModule extends TwitterModule {
-  val key = flag(&quot;key&quot;, &quot;defaultkey&quot;, &quot;The key to use.&quot;)
-
-  @Singleton
-  @Provides
-  def providesServiceA: ServiceA = {
-    new ServiceA(key())
-  }
-}
-</pre></div>
-</div>
-<p>In order to test, you may want to use a mock or stub version of <cite>ServiceA</cite> in your controller instead of the real version. You could do this by writing a re-usable module for testing and compose it into the server when testing by including it as an override module.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object StubServiceAModule extends TwitterModule {
-  @Singleton
-  @Provides
-  def providesServiceA: ServiceA = {
-    new StubServiceA(&quot;fake&quot;)
-  }
-}
-</pre></div>
-</div>
-<p>And in your test, add this stub module as a override module:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override val server = new EmbeddedHttpServer(
-  twitterServer = new MyGreatServer {
-    override def overrideModules = Seq(StubServiceAModule)
-  },
-  ...
-</pre></div>
-</div>
-<p>An &#8220;override module&#8221; does what it sounds like. It overrides any bound instance in the object graph with the version it provides. As seen above, the <cite>StubServiceAModule</cite> provided a version of <cite>ServiceA</cite> that happens to be a stub. In this manner the main server does not need to change and we can replace parts of its object graph during testing.</p>
-<p>Note, modules used specifically for testing should be placed alongside your test code (as opposed to in your production code) to prevent any mistaken production usage of a test module. Also, it not always necessary to create a test module (see: <a class="reference external" href="#embedded-server-bind-t">Embedded Server #bind[T]</a> section) for use as an override module. However, we encourage creating a test module when the functionality provided by the module is re-usable across your codebase.</p>
-<p>Also note, that you can always create an override module over a mock, however it is generally preferable to want control over the expected mock behavior per-test and as such it&#8217;s more common to keep a reference to a mock and use it with the <a class="reference external" href="#embedded-server-bind-t">embedded server #bind[T]</a> functionality in a test.</p>
-</div>
-<div class="section" id="embedded-server-bind-t">
-<h2>Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#embedded-server-bind-t" title="Permalink to this headline">¶</a></h2>
-<p>In the cases where we&#8217;d like to easily replace a bound instance with another instance in our tests (e.g., like with a mock or a simple stub implementation), we do not need to create a specific module for testing to compose into our server as an override module. Instead we can use the <cite>bind[T]</cite> function on the embedded server, eg. <a class="reference external" href="https://github.com/twitter/finatra/blob/92bfb74ecf7b299adb6602847ca9daa89895f3af/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L138">c.t.inject.server.EmbeddedTwitterServer#bind</a>.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
-import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.Mockito
-
-class ExampleFeatureTest
-  extends FeatureTest
-  with Mockito
-  with HttpTest {
-
-  val mockDownstreamServiceClient = smartMock[DownstreamServiceClient]
-  val mockIdService = smartMock[IdService]
-
-  override val server =
-    new EmbeddedHttpServer(new ExampleServer)
-    .bind[DownstreamServiceClient](mockDownstreamServiceClient)
-    .bind[IdService](mockIdService)
-
-  test(&quot;service test&quot;) {
-    /* Mock GET Request performed by DownstreamServiceClient */
-    mockDownstreamServiceClient.get(&quot;/tweets/123.json&quot;)(manifest[FooResponse]) returns Future(None)
-    ...
-  }
-</pre></div>
-</div>
-<p>For a complete example, see the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/examples/twitter-clone/src/test/scala/finatra/quickstart/TwitterCloneFeatureTest.scala">TwitterCloneFeatureTest</a>.</p>
-<p>Using <code class="docutils literal"><span class="pre">&#64;Bind</span></code> (the <cite>com.google.inject.testing.fieldbinder.Bind</cite> annotation) is to be considered deprecated.</p>
-</div>
-<div class="section" id="testinjector-bind-t">
-<h2>TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code><a class="headerlink" href="#testinjector-bind-t" title="Permalink to this headline">¶</a></h2>
-<p>As described in the <a class="reference external" href="#integration-tests">Integration Tests</a> section you can use the <cite>TestInjector</cite> to construct a minimal object graph for testing. The <cite>TestInjector</cite> also supports a <cite>bind[T]</cite> function to let you easily replace bound instances in the constructed object graph with another instance, like a mock or stub.</p>
-<p>E.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.IntegrationTest
-
-class ExampleIntegrationTest extends IntegrationTest {
-  val mockIdService = smartMock[IdService]
-
-  override val injector =
-    TestInjector(
-      flags =
-        Map(&quot;foo.flag&quot; -&gt; &quot;meaningfulValue&quot;),
-      modules =
-        Seq(ExampleModule, IdServiceModule))
-      .bind[IdService](mockIdService)
-      .create
-
-  test(&quot;MyTest#perform feature&quot;) {
-    ...
-  }
-}
-</pre></div>
-</div>
-<p>In this example, the bound <cite>IdService</cite> would be replaced with the <cite>mockIdService</cite>. For a more complete example, see the
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/darktraffic/test/DarkTrafficCanonicalResourceHeaderTest.scala">DarkTrafficCanonicalResourceHeaderTest</a>.</p>
-</div>
-<div class="section" id="startup-tests">
-<h2>Startup Tests<a class="headerlink" href="#startup-tests" title="Permalink to this headline">¶</a></h2>
-<p>By default the Finatra embedded testing infrastructure sets the <cite>Guice</cite> <a class="reference external" href="https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html">com.google.inject.Stage</a> to <cite>DEVELOPMENT</cite>. For testing we choose the trade-off of a fast start-up time for the embedded server at the expense of some runtime performance as classes are lazily loaded when accessed by the test features.</p>
-<p>However, this also means that if you have mis-configured dependencies (e.g., you attempt to inject a type that the injector cannot construct because it either has no no-arg constructor nor was it provided by a module) you may not run into this error during testing as dependencies are satisfied lazily by default.</p>
-<p>As such, we recommend creating a simple test &#8211; a <cite>StartupTest</cite> to check that your service can start up and report itself as healthy. This checks the correctness of the dependency graph, catching errors that could otherwise cause the server to fail to start.</p>
-<p>A <cite>StartupTest</cite> should mimic production as closely as possible. Therefore, you should</p>
-<ul class="simple">
-<li>set the <a class="reference external" href="https://google.github.io/guice/api-docs/4.0/javadoc/com/google/inject/Stage.html">com.google.inject.Stage</a> to <cite>PRODUCTION</cite> so that all singletons will be eagerly created at startup (integration/feature tests run in <cite>Stage.DEVELOPMENT</cite> by default).</li>
-<li>avoid using <a class="reference external" href="#embedded-server-bind-t">embedded server #bind[T]</a> or <a class="reference internal" href="#override-modules">Override Modules</a> to replace bound types.</li>
-<li>prevent Finagle clients from making outbound connections during startup tests by setting any <cite>c.t.server.resolverMap</cite> entries to <cite>nil!</cite>.</li>
-</ul>
-<p>For example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Stage
-import com.twitter.finatra.http.EmbeddedHttpServer
-import com.twitter.inject.server.FeatureTest
-
-class MyServiceStartupTest extends FeatureTest {
-  val server = new EmbeddedHttpServer(
-    stage = Stage.PRODUCTION,
-    twitterServer = new SampleApiServer,
-    flags = Map(
-      &quot;com.twitter.server.resolverMap&quot; -&gt; &quot;some-thrift-service=nil!&quot;
-    ))
-
-  test(&quot;SampleApiServer#startup&quot;) {
-    server.assertHealthy()
-  }
-}
-</pre></div>
-</div>
-<p><strong>Note:</strong> this works for either <cite>EmbeddedHttpServer</cite> or <cite>EmbeddedThriftServer</cite> as <cite>assertHealthy()</cite> is defined on the super class <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala#L144">EmbeddedTwitterServer</a>.</p>
 </div>
 </div>
 
@@ -466,56 +133,36 @@ class MyServiceStartupTest extends FeatureTest {
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
             </a></p><p>
-  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
 <h3>Useful Links</h3>
 <ul>
-  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
-  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
-  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Testing With Finatra</a><ul>
+<li><a class="reference internal" href="#">Testing Features</a><ul>
 <li><a class="reference internal" href="#types-of-tests">Types of Tests</a></li>
 <li><a class="reference internal" href="#scalatest">ScalaTest</a></li>
-<li><a class="reference internal" href="#embedded-servers-and-apps">Embedded Servers and Apps</a></li>
-<li><a class="reference internal" href="#test-helper-classes">Test Helper Classes</a><ul>
-<li><a class="reference internal" href="#feature-tests">Feature Tests</a><ul>
-<li><a class="reference internal" href="#notes">Notes:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#integration-tests">Integration Tests</a><ul>
-<li><a class="reference internal" href="#note">Note:</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#http-tests">Http Tests</a></li>
-<li><a class="reference internal" href="#thrift-tests">Thrift Tests</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#test-mixins">Test Mixins</a></li>
-<li><a class="reference internal" href="#working-with-mocks">Working with Mocks</a></li>
-<li><a class="reference internal" href="#override-modules">Override Modules</a></li>
-<li><a class="reference internal" href="#embedded-server-bind-t">Embedded Server <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
-<li><a class="reference internal" href="#testinjector-bind-t">TestInjector <code class="docutils literal"><span class="pre">#bind[T]</span></code></a></li>
-<li><a class="reference internal" href="#startup-tests">Startup Tests</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>
 </ul>
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../twitter-server/index.html" title="previous chapter">TwitterServer Admin HTTP Server</a></li>
-      <li>Next: <a href="../v1-migration/index.html" title="next chapter">FAQ for upgrading from Finatra v1.x to v2.x</a></li>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />

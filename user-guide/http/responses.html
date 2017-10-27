@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Responses &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    <title>HTTP Responses &#8212; Finatra 17.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.13.0',
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
-    <link rel="next" title="Filtering HTTP Requests" href="filters.html" />
-    <link rel="prev" title="HTTP Requests" href="requests.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
    
   
-  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,15 +50,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="filters.html" title="Filtering HTTP Requests"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="requests.html" title="HTTP Requests"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -89,13 +81,15 @@ get(&quot;/foo&quot;) { request: Request =&gt;
 }
 </pre></div>
 </div>
-<p>will produce a response:</p>
+<p>A request to <code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foo</span></code> will produce a response:</p>
 <div class="highlight-text"><div class="highlight"><pre><span></span>[Status]  Status(200)
 [Header]  Content-Type -&gt; application/json; charset=utf-8
 [Header]  Server -&gt; Finatra
 [Header]  Date -&gt; Wed, 17 Aug 2015 21:54:25 GMT
 [Header]  Content-Length -&gt; 90
-{
+</pre></div>
+</div>
+<div class="code json highlight-text"><div class="highlight"><pre><span></span>{
   &quot;id&quot; : &quot;123&quot;,
   &quot;description&quot; : &quot;This is a JSON response body&quot;,
   &quot;long_value&quot; : 1,
@@ -126,8 +120,8 @@ this will no longer be the default behavior, depending.</p>
 <h3>Non-Future Callback Return Types<a class="headerlink" href="#non-future-callback-return-types" title="Permalink to this headline">¶</a></h3>
 <p>Callbacks that do not return a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala">c.t.util.Future</a> will have their return values wrapped in a <a class="reference external" href="https://twitter.github.io/util/docs/index.html#com.twitter.util.ConstFuture">c.t.util.ConstFuture</a> (which does no asynchronous work) for the purpose of satisfying types only.</p>
 </div>
-<div class="section" id="don-t-block">
-<h3>Don&#8217;t Block<a class="headerlink" href="#don-t-block" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="don-t-block-no-seriously-do-not-block">
+<h3>Don&#8217;t Block (No, Seriously, Do Not Block)<a class="headerlink" href="#don-t-block-no-seriously-do-not-block" title="Permalink to this headline">¶</a></h3>
 <p>If you are not returning a Future from your callback and it does synchronous work or calls a blocking method, you must <a class="reference external" href="https://twitter.github.io/scala_school/finagle.html#DontBlock">avoid blocking the Finagle thread</a> by wrapping your blocking operation in a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a> e.g.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.utils.FuturePools
 
@@ -209,7 +203,7 @@ is meant to be somewhat generic so its API for constructing a response body acce
 <p>If you have a <cite>Future[T]</cite> and want to return a <cite>c.t.finagle.http.Response</cite> you should either:</p>
 <ul class="simple">
 <li>convert it to a <cite>Future[Response]</cite> or</li>
-<li>do nothing and let the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala#L139">CallbackConverter</a> convert the  <cite>Future[T]</cite> to an HTTP <cite>200 OK</cite> with <cite>T</cite> as the body (as mentioned in <a class="reference internal" href="#future-conversion">Future Conversion</a> section above).</li>
+<li>do nothing and let the Finatra <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/CallbackConverter.scala">CallbackConverter</a> convert the  <cite>Future[T]</cite> to an HTTP <cite>200 OK</cite> with <cite>T</cite> as the body (as mentioned in <a class="reference internal" href="#future-conversion">Future Conversion</a> section above).</li>
 </ul>
 <p>To convert a <cite>Future[T]</cite> to a <cite>Future[Response]</cite>, you would use <a class="reference external" href="https://twitter.github.io/effectivescala/#Twitter's%20standard%20libraries-Futures">Future#map</a>:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/foo&quot;) { request: Request =&gt;
@@ -227,7 +221,7 @@ is meant to be somewhat generic so its API for constructing a response body acce
 </div>
 <div class="section" id="cookies">
 <h2>Cookies:<a class="headerlink" href="#cookies" title="Permalink to this headline">¶</a></h2>
-<p>Cookies, like Headers, are read from request and can set on the response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala#L151">c.t.finatra.http.response.ResponseBuilder</a>:</p>
+<p>Cookies, like Headers, are read from request and can set on the response via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala">c.t.finatra.http.response.ResponseBuilder</a>:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>get(&quot;/&quot;) { request =&gt;
   val loggedIn = request.cookies.getValue(&quot;loggedIn&quot;).getOrElse(&quot;false&quot;)
   response.ok.
@@ -296,26 +290,27 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
             </a></p><p>
-  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
 <h3>Useful Links</h3>
 <ul>
-  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
-  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
-  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HTTP Responses</a><ul>
 <li><a class="reference internal" href="#json-responses">JSON responses</a></li>
 <li><a class="reference internal" href="#future-conversion">Future Conversion</a><ul>
 <li><a class="reference internal" href="#conversion-rules">Conversion Rules</a></li>
 <li><a class="reference internal" href="#non-future-callback-return-types">Non-Future Callback Return Types</a></li>
-<li><a class="reference internal" href="#don-t-block">Don&#8217;t Block</a></li>
+<li><a class="reference internal" href="#don-t-block-no-seriously-do-not-block">Don&#8217;t Block (No, Seriously, Do Not Block)</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#responsebuilder">ResponseBuilder</a><ul>
@@ -330,14 +325,12 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
 </ul>
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="requests.html" title="previous chapter">HTTP Requests</a></li>
-      <li>Next: <a href="filters.html" title="next chapter">Filtering HTTP Requests</a></li>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />

@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>TwitterServer Admin HTTP Server &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    <title>Creating an injectable TwitterServer &#8212; Finatra 17.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.13.0',
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
-    <link rel="next" title="Testing With Finatra" href="../testing/index.html" />
-    <link rel="prev" title="Thrift Server Warmup" href="../thrift/warmup.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
    
   
-  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,15 +50,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../testing/index.html" title="Testing With Finatra"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../thrift/warmup.html" title="Thrift Server Warmup"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -69,29 +61,107 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="twitterserver-admin-http-server">
-<span id="twitter-server"></span><h1>TwitterServer Admin HTTP Server<a class="headerlink" href="#twitterserver-admin-http-server" title="Permalink to this headline">¶</a></h1>
-<p>All Finatra servers are <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>-based servers and thus it helps to understand some basics of a <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>.</p>
-<div class="section" id="http-admin-interface">
-<h2>HTTP Admin Interface<a class="headerlink" href="#http-admin-interface" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>-based servers have the option to start an <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a> bound to a port configurable via the <cite>-admin.port</cite> flag. If you want to serve an external interface this will be bound to a <em>separate</em> port configurable via either the <cite>-http.port</cite>, <cite>-https.port</cite> or <cite>-thrift.port</cite> flags, depending.</p>
-<p>For more information on using and setting command-line flags see <a class="reference external" href="../getting-started/flags.html#passing-flag-values-as-command-line-arguments">Flags</a>.</p>
-</div>
-<div class="section" id="disabling-the-twitterserver-adminhttpserver">
-<h2>Disabling the TwitterServer AdminHttpServer<a class="headerlink" href="#disabling-the-twitterserver-adminhttpserver" title="Permalink to this headline">¶</a></h2>
-<p>Some deployment environments such as <a class="reference external" href="https://www.heroku.com/">Heroku</a>, <a class="reference external" href="https://www.appfog.com/">AppFog</a>, and <a class="reference external" href="https://www.openshift.com">OpenShift</a> only allow a single port to be used when deploying an application.</p>
-<p>In these cases, you can programmatically disable the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">HTTP Admin Interface</a>:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
-  override val disableAdminHttpServer = true
-  ...
+  <div class="section" id="creating-an-injectable-twitterserver">
+<h1>Creating an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a><a class="headerlink" href="#creating-an-injectable-twitterserver" title="Permalink to this headline">¶</a></h1>
+<p>To create an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.server.TwitterServer</span></code></a>, first depend on the <cite>inject-server</cite> library. Then
+use the <a class="reference external" href="../getting-started/framework.html#inject">inject framework</a> to create an injectable
+TwitterServer. Finatra provides an injectable version of the <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.server.TwitterServer</span></code></a> trait:
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a>.</p>
+<p>Extending the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a> trait creates an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a>.</p>
+<p>This allows for the use of <a class="reference external" href="../getting-started/basics.html#dependency-injection">dependency injection</a>
+in a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a> with support for <a class="reference external" href="../getting-started/modules.html">modules</a> which allows
+for <a class="reference external" href="../testing/index.html#types-of-tests">powerful feature testing</a> of the server.</p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Logging
+import com.twitter.inject.server.TwitterServer
+
+object MyTwitterServerMain extends MyTwitterServer
+
+class MyTwitterServer
+  extends TwitterServer
+  with Logging {
+
+  override val modules = Seq(
+    MyModule1)
+
+  @Lifecycle
+  override protected def postWarmup(): Unit = {
+    super.postWarmup()
+
+    // Bind any external interfaces here, register them to be closed on server exit, and add them
+    // to the list of awaitables that the server will block on by call the this.await(Awaitable*) method.
+
+    // It is important to remember to NOT BLOCK this method.
+  }
+
+  override protected def start(): Unit = {
+    // Any additional server startup logic to perform after the server is reported healthy goes here.
+
+    // It is important to remember to NOT BLOCK this method.
+  }
 }
 </pre></div>
 </div>
-<div class="section" id="note">
-<h3>Note:<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h3>
-<p>Since the <cite>-admin.port</cite> flag is currently still required to have a value by <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a> you should set the <cite>-admin.port</cite> and your external interface port e.g., <cite>-http.port</cite> flags to the <strong>same value</strong> when disabling the TwitterServer AdminHttpServer.</p>
-<p>For a working example of disabling the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#http-admin-interface">HTTP Admin Interface</a>, see the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/examples/hello-world-heroku">Heroku hello-world example</a>.</p>
+<p>The two points of entry to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a> are the <code class="docutils literal"><span class="pre">#postWarmup</span></code> and <code class="docutils literal"><span class="pre">#start</span></code> methods.</p>
 </div>
+<div class="section" id="twitterserver-postwarmup">
+<h2><cite>TwitterServer#postWarmup</cite><a class="headerlink" href="#twitterserver-postwarmup" title="Permalink to this headline">¶</a></h2>
+<p>If you look at the <a class="reference external" href="../getting-started/lifecycle.html#startup">Startup Lifecycle</a> you will see that <code class="docutils literal"><span class="pre">postWarmup</span></code> is executed
+after server warmup has been performed and thus after <a class="reference external" href="../getting-started/lifecycle.html#application-and-server-lifecycle">object promotion and initial garbage collection</a>,
+but before reporting that the server is healthy (via the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface#lifecycle-management">HTTP Admin Interface</a>
+<code class="docutils literal"><span class="pre">/health</span></code> endpoint).</p>
+<p>In the <a class="reference external" href="../http/server.html"><code class="docutils literal"><span class="pre">HttpServer</span></code></a> and <a class="reference external" href="../thrift/server.html"><code class="docutils literal"><span class="pre">ThriftServer</span></code></a> traits the framework will bind any external interfaces and
+perform announcing of the server in <cite>postWarmup</cite> <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code> method. External interface binding and
+announcing is done at this point in the lifecycle such that if binding the external interface to a
+port fails, we do not report the server as healthy in the
+<a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface#lifecycle-management">HTTP Admin Interface</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Put any logic to happen before the server is announced as &#8220;healthy&#8221; in the <code class="docutils literal"><span class="pre">postWarmup</span></code> lifecycle method. Typically, this
+is any binding of an external interface but could be any logic that must be done to present the server as &#8220;healthy&#8221;.</p>
+<p>Remember, that when overriding any <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call <cite>super()</cite> in the method to ensure
+the framework lifecycle events happen accordingly.</p>
+<p class="last">As with all lifecycle methods, it is important to <strong>not perform any blocking operations</strong> as you will prevent the server
+from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.
+See the Finatra utility: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala"><code class="docutils literal"><span class="pre">FuturePools</span></code></a> for creating named pools.</p>
+</div>
+<p>Any exception thrown from this method will fail the server startup.</p>
+</div>
+<div class="section" id="twitterserver-start">
+<h2><cite>TwitterServer#start</cite><a class="headerlink" href="#twitterserver-start" title="Permalink to this headline">¶</a></h2>
+<p>Any logic to be run after the server is reported as healthy, bound to an external interface and fully started is placed in the
+<code class="docutils literal"><span class="pre">#start</span></code> method. This is typically starting long live background processes, starting a processor for incoming data from an
+external interface (e.g., it should only be started once the external interface has been successfully bound to port and is accepting
+traffic), or any other work that must be completed as part of server startup.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Put any work to happen after the server is bound to an external port and announced as healthy in the <code class="docutils literal"><span class="pre">start</span></code> lifecycle method.</p>
+<p>Remember, that when overriding any <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call <cite>super()</cite> in the method to ensure
+the framework lifecycle events happen accordingly.</p>
+<p class="last">As with all lifecycle methods, it is important to <strong>not perform any blocking operations</strong> as you will prevent the server
+from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.
+See the Finatra utility: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala"><code class="docutils literal"><span class="pre">FuturePools</span></code></a> for creating named pools.</p>
+</div>
+<p>Any exception thrown from this method will fail the server startup.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Users should prefer using the <a class="reference external" href="../http/server.html"><code class="docutils literal"><span class="pre">HttpServer</span></code></a> or <a class="reference external" href="../thrift/server.html"><code class="docutils literal"><span class="pre">ThriftServer</span></code></a> traits from <a class="reference external" href="../http/server.html"><cite>finatra-http</cite></a> and
+<a class="reference external" href="../thrift/server.html"><cite>finatra-thrift</cite></a> respectively, for serving HTTP or Thrift external interfaces over overriding
+lifecycle methods.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>For details see the <a class="reference external" href="../testing/index.html">Testing with Finatra</a> section and the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples">examples</a> for detailed examples with tests.</p>
+</div>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<p>For more information on the server lifecycle see the <a class="reference external" href="../getting-started/lifecycle.html">Application and Server Lifecycle</a> section
+which contains details around the order of lifecycle events during <a class="reference external" href="../getting-started/lifecycle.html#startup">startup</a> and
+considerations during <a class="reference external" href="../getting-started/lifecycle.html#shutdown">shutdown</a>.</p>
 </div>
 </div>
 
@@ -101,39 +171,38 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
             </a></p><p>
-  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
 <h3>Useful Links</h3>
 <ul>
-  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
-  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
-  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">TwitterServer Admin HTTP Server</a><ul>
-<li><a class="reference internal" href="#http-admin-interface">HTTP Admin Interface</a></li>
-<li><a class="reference internal" href="#disabling-the-twitterserver-adminhttpserver">Disabling the TwitterServer AdminHttpServer</a><ul>
-<li><a class="reference internal" href="#note">Note:</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Creating an injectable <cite>TwitterServer</cite></a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#twitterserver-postwarmup"><cite>TwitterServer#postWarmup</cite></a></li>
+<li><a class="reference internal" href="#twitterserver-start"><cite>TwitterServer#start</cite></a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>
 </ul>
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../thrift/warmup.html" title="previous chapter">Thrift Server Warmup</a></li>
-      <li>Next: <a href="../testing/index.html" title="next chapter">Testing With Finatra</a></li>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />

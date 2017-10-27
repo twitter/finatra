@@ -175,10 +175,10 @@ handle exceptions">
                         </a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="FinatraThriftExceptionMapper.html" title="A generic com.twitter.finatra.thrift.exceptions.ExceptionMapper over the Exception
-exception type."></a>
-                        <a href="FinatraThriftExceptionMapper.html" title="A generic com.twitter.finatra.thrift.exceptions.ExceptionMapper over the Exception
-exception type.">
+                        <a class="class" href="FinatraThriftExceptionMapper.html" title="A generic com.twitter.finatra.thrift.exceptions.ExceptionMapper over the
+java.lang.Exception exception type."></a>
+                        <a href="FinatraThriftExceptionMapper.html" title="A generic com.twitter.finatra.thrift.exceptions.ExceptionMapper over the
+java.lang.Exception exception type.">
                           FinatraThriftExceptionMapper
                         </a>
                       </li><li name="com.twitter.finatra.thrift.filters" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -388,20 +388,56 @@ ExceptionMapper[Throwable] which will be the root exception mapper.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A generic com.twitter.finatra.thrift.exceptions.ExceptionMapper over the Exception
-exception type." href="FinatraThriftExceptionMapper.html">
+        <a title="A generic com.twitter.finatra.thrift.exceptions.ExceptionMapper over the
+java.lang.Exception exception type." href="FinatraThriftExceptionMapper.html">
               <span class="name">FinatraThriftExceptionMapper</span>
             </a><span class="result"> extends <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="scala.Exception">Exception</span>, <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span>] with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      <p class="shortcomment cmt">A generic <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">com.twitter.finatra.thrift.exceptions.ExceptionMapper</a> over the <span class="extype" name="Exception">Exception</span>
-exception type.</p><div class="fullcomment"><div class="comment cmt"><p>A generic <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">com.twitter.finatra.thrift.exceptions.ExceptionMapper</a> over the <span class="extype" name="Exception">Exception</span>
-exception type. This mapper attempts to translate other exceptions to known finatra-thrift
-exceptions.</p><p>We recommend for users to register this mapper in their scala Servers.</p><p>Note: this is only applicable in scala since it is using thriftscala exceptions
+      <p class="shortcomment cmt">A generic <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">com.twitter.finatra.thrift.exceptions.ExceptionMapper</a> over the
+<span class="extype" name="java.lang.Exception">java.lang.Exception</span> exception type.</p><div class="fullcomment"><div class="comment cmt"><p>A generic <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">com.twitter.finatra.thrift.exceptions.ExceptionMapper</a> over the
+<span class="extype" name="java.lang.Exception">java.lang.Exception</span> exception type. This mapper attempts to translate other
+exceptions to declared <code>finatra-thrift/finatra_thrift_exception.thrift</code> exceptions.</p><p>If you include the <code>finatra-thrift/finatra_thrift_exception.thrift</code> file in your
+thrift service IDL and declare any of your service methods to throw one or more of the defined
+thrift exceptions, i.e.,</p><pre>finatra_thrift_exceptions.ClientError
+finatra_thrift_exceptions.NoClientIdError
+finatra_thrift_exceptions.ServerError
+finatra_thrift_exceptions.UnknownClientIdError</pre><p>using the FinatraThriftExceptionMapper will translate any <span class="extype" name="Throwable">Throwable</span> into
+one of the finatra_thrift_exceptions where appropriate for responding to the
+client.</p><p>Exceptions returned from a thrift service which are not declared in the thrift
+IDL are returned as a generic <code>TApplicationException</code>.</p><h3>Usage</h3><p>In your <code>myservice.thrift</code>, include the <code>finatra-thrift/finatra_thrift_exception.thrift</code> thrift IDL:</p><pre>namespace java com.my_org.myservice.thriftjava
+#@namespace scala com.my_org.myservice.thriftscala
+
+include <span class="lit">"finatra-thrift/finatra_thrift_exceptions.thrift"</span></pre><p>Then in your MyService definition, declare methods to throw finatra_thrift_exceptions:</p><pre>service MyService {
+
+  string function1(
+    <span class="num">1</span>: string msg
+  ) throws (
+    <span class="num">1</span>: finatra_thrift_exceptions.ServerError serverError,
+    <span class="num">2</span>: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
+    <span class="num">3</span>: finatra_thrift_exceptions.NoClientIdError noClientIdError
+  )</pre><p>Adding this ExceptionMapper into your server will thus translate any of the handled
+exceptions into a form that will serialize appropriately to the client.</p><p>Note, you can also mix usage with your own declared exception(s), e.g.,</p><pre>exception MyServiceException {
+  <span class="num">1</span>: string message
+}</pre><p>Then in your MyService definition,</p><pre>service MyService {
+
+  string function1(
+    <span class="num">1</span>: string msg
+  ) throws (
+    <span class="num">1</span>: finatra_thrift_exceptions.ServerError serverError,
+    <span class="num">2</span>: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
+    <span class="num">3</span>: finatra_thrift_exceptions.NoClientIdError noClientIdError
+    <span class="num">4</span>: MyServiceException myServiceException
+  )</pre><p>You could then register an additional <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a> to translate <span class="extype" name="Throwable">Throwable</span>s
+into <code>MyServiceException</code> as desired or return the exception directly from implemented
+methods.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>This is only applicable in scala since the FinatraThriftExceptionMapper uses
+scala generated classes for the exceptions. We recommend for users including the
+<code>finatra-thrift/finatra_thrift_exception.thrift</code> register this mapper in their
+scala Servers.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Protocols.html#using-finagle-thrift" target="_blank">Using Finagle Thrift</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/thrift/exceptions.html" target="_blank">Finatra Thrift Exception Mapping</a></p></span><span class="cmt"><p>src/main/thrift/finatra-thrift/finatra_thrift_exception.thrift</p></span></dd></dl></div>
     </li></ol>
             </div>
 

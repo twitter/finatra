@@ -6,32 +6,30 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Application and Server Lifecycle &#8212; Finatra User&#39;s Guide 2.13.0 documentation</title>
+    <title>Application and Server Lifecycle &#8212; Finatra 17.10.0 documentation</title>
     
-    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
-        VERSION:     '2.13.0',
+        URL_ROOT:    '../../',
+        VERSION:     '17.10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="shortcut icon" href="../_static/favicon.ico"/>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="top" title="Finatra User&#39;s Guide 2.13.0 documentation" href="../index.html" />
-    <link rel="next" title="Modules" href="modules.html" />
-    <link rel="prev" title="Understanding the Codebase" href="framework.html" />
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 17.10.0 documentation" href="../../index.html" />
    
   
-  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -52,15 +50,9 @@
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
+          <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="modules.html" title="Modules"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="framework.html" title="Understanding the Codebase"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Finatra</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -71,18 +63,77 @@
             
   <div class="section" id="application-and-server-lifecycle">
 <span id="lifecycle"></span><h1>Application and Server Lifecycle<a class="headerlink" href="#application-and-server-lifecycle" title="Permalink to this headline">¶</a></h1>
-<p>Finatra manages the lifecycle of your <a class="reference external" href="https://twitter.github.io/util/">TwitterUtil</a> <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/App.html">c.t.app.App</a> or <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a> <cite>c.t.server.TwitterServer</cite> for you and provides methods which can be implemented for running or starting core logic. This is to ensure that flag parsing and module installation to build the object graph happens in the correct order for the application or server.</p>
-<p>Thus you do not have access to the <cite>main</cite> method. Instead, any logic should be contained in either the <cite>c.t.inject.app.App#run</cite> or <cite>c.t.inject.server.TwitterServer#start</cite> method, respectively.</p>
+<p>Finatra establishes an ordered lifecycle when creating a <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/App.html">c.t.app.App</a> or
+a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala">c.t.server.TwitterServer</a>
+and provides methods which can be implemented for running or starting core logic.</p>
+<p>This is done for several reasons:</p>
+<ul class="simple">
+<li>To ensure that flag parsing and module installation to build the object graph is done in the correct
+order such that the injector is properly configured for use before a user attempts attempts to access flags.</li>
+<li>Ensure that object promotion and garbage collection is properly handled <em>before</em> accepting traffic to a server.</li>
+<li>Expose any external interface <em>before</em> reporting a server is &#8220;healthy&#8221;. Otherwise a server may
+report it is healthy before binding to a port — which may fail. Depending on how monitoring is
+configured (typically done by monitoring the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>
+<a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#lifecycle-management">/health</a> endpoint
+on some frequency) it could be some interval before the server is recognized as unhealthy when in
+fact it did not start properly as it could not bind to a port.</li>
+</ul>
+<p>Thus you do not have access to the <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L24">app</a>
+or <a class="reference external" href="https://twitter.github.io/twitter-server/#getting-started">server</a> <cite>main</cite> method. Instead, any
+logic should be contained in overriding an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method or in the app or server
+callbacks <a class="reference external" href="../app/index.html#app-run"><code class="docutils literal"><span class="pre">c.t.inject.app.App#run</span></code></a> or <a class="reference external" href="../twitter_server/index.html#twitterserver-start"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer#start</span></code></a> methods, respectively.</p>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p>If you override an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call <cite>super()</cite> in the method to ensure that framework lifecycle events happen accordingly.</p>
+<p class="last">With all lifecycle methods, it is important to <strong>not performing any blocking operations</strong> as you will prevent the server from starting.</p>
+</div>
 <div class="section" id="startup">
 <h2>Startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h2>
 <p>At a high-level, the start-up lifecycle of a Finatra server looks like:</p>
-<img alt="../_images/FinatraLifecycle.png" src="../_images/FinatraLifecycle.png" />
+<img alt="../../_images/FinatraLifecycle.png" src="../../_images/FinatraLifecycle.png" />
 </div>
 <div class="section" id="shutdown">
 <h2>Shutdown<a class="headerlink" href="#shutdown" title="Permalink to this headline">¶</a></h2>
-<p>Upon <em>graceful</em> shutdown, all registered <cite>onExit {...}</cite> blocks are executed. See <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala#L69">c.t.util.App#exits</a>).</p>
-<p>This includes closing the external interface(s), the admin interface, and firing the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L25">c.t.inject.TwitterModuleLifecycle#singletonShutdown</a>
-function on all installed modules.</p>
+<p>Upon <em>graceful</em> shutdown, all registered <cite>onExit {...}</cite> blocks are executed. See <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L72">c.t.app.App#exits</a>).</p>
+<p>This includes closing the <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a> <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>, firing the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L29">TwitterModuleLifecycle#singletonShutdown</a>
+on all installed modules, and for extensions of the <a class="reference external" href="../http/server.html">HttpServer</a> or <a class="reference external" href="../thrift/server.html">ThriftServer</a> traits closing any external interfaces.</p>
+<div class="admonition-important admonition">
+<p class="first admonition-title">Important</p>
+<p>Note that the order of execution for all registered <cite>onExit {...}</cite> blocks is not guaranteed. Thus it is, up to implementors to enforce any desired ordering.</p>
+<p>For example, you have code which is reading from a queue (via a &#8220;listener&#8221;), transforming the data, and then publishing (via a &#8220;publisher&#8221;) to another queue.
+When main application is exiting you most likely want to close the &#8220;listener&#8221; first to ensure that you transform and publish all available data before closing the &#8220;publisher&#8221;.</p>
+<p>Assuming, that the <cite>close()</cite> method of both returns <cite>Future[Unit]</cite>, e.g. like <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala">c.t.util.Closable</a>,
+a way of doing this could be:</p>
+<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+   Await.result(listener.close())
+   Await.result(publisher.close())
+}
+</pre></div>
+</div>
+<p>In the example code above, we simply await on the close of the &#8220;listener&#8221; first and then the &#8220;publisher&#8221; thus ensuring that the &#8220;listener&#8221;
+will close before the &#8220;publisher&#8221;.</p>
+<p>This is instead of registering separate <cite>onExit {...}</cite> blocks for each:</p>
+<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+   Await.result(listener.close())
+}
+
+onExit {
+   Await.result(publisher.close())
+}
+</pre></div>
+</div>
+<p class="last">Which in this example, would possibly close the &#8220;publisher&#8221; before the &#8220;listener&#8221; meaning that the server would still be reading data but unable to publish it.</p>
+</div>
+</div>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p>Modules provide hooks into the Lifecycle as well that allow instances being provided to the object graph to be plugged into the overall application or server lifecycle. See the <a class="reference external" href="../getting-started/modules.html#module-lifecycle">Module Lifecycle</a> section for more information.</p>
+</div>
+<div class="section" id="more-information">
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<p>As noted in the diagram in the <a class="reference external" href="#startup">Startup</a> section there can be a non-trivial lifecycle especially in the case of a <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>.
+For more information on how to create an injectable <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/App.html">c.t.app.App</a> or a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala">c.t.server.TwitterServer</a>
+see the <a class="reference external" href="../app/index.html">Creating an injectable App</a> and <a class="reference external" href="../twitter_server/index.html">Creating an injectable TwitterServer</a> sections.</p>
 </div>
 </div>
 
@@ -92,36 +143,37 @@ function on all installed modules.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="../index.html">
-              <img class="logo" src="../_static/finatra_logo.png" alt="Logo"/>
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
             </a></p><p>
-  Finatra is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
 </p>
 
 <h3>Useful Links</h3>
 <ul>
-  <li><a href="https://twitter.github.io/finatra/">Site&nbsp;&amp;&nbsp;Blog</a></li>
-  <li><a href="https://github.com/twitter/finatra">Github&nbsp;Repository</a></li>
-  <li><a href="https://github.com/twitter/finatra/issues">Issues</a></li>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
 </ul>
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Application and Server Lifecycle</a><ul>
 <li><a class="reference internal" href="#startup">Startup</a></li>
 <li><a class="reference internal" href="#shutdown">Shutdown</a></li>
+<li><a class="reference internal" href="#modules">Modules</a></li>
+<li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>
 </li>
 </ul>
 <h3>Related Topics</h3>
 <ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="framework.html" title="previous chapter">Understanding the Codebase</a></li>
-      <li>Next: <a href="modules.html" title="next chapter">Modules</a></li>
+  <li><a href="../../index.html">Documentation overview</a><ul>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
+    <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
