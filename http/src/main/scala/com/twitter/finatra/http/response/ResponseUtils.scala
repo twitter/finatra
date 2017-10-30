@@ -1,4 +1,4 @@
-package com.twitter.finatra.utils
+package com.twitter.finatra.http.response
 
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finagle.http.Status._

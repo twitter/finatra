@@ -1,7 +1,7 @@
 package com.twitter.finatra.tests.utils
 
 import com.twitter.finagle.http.{Response, Status, Version}
-import com.twitter.finatra.utils.ResponseUtils
+import com.twitter.finatra.http.response.ResponseUtils
 import com.twitter.inject.Test
 
 class ResponseUtilsTest extends Test {

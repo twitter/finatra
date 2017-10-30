@@ -1,7 +1,7 @@
 package finatra.quickstart.modules
 
 import com.twitter.finatra.httpclient.modules.HttpClientModule
-import com.twitter.finatra.utils.ResponseUtils._
+import com.twitter.finatra.http.response.ResponseUtils._
 import com.twitter.inject.conversions.time._
 import com.twitter.inject.utils.RetryPolicyUtils._
 

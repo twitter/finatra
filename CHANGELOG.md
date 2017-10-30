@@ -38,6 +38,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+
+* finatra-utils: Move `ResponseUtils` to finatra/http. ``PHAB_ID=D103507``
+
 * From now on, release versions will be based on release date in the format of
   YY.MM.x where x is a patch number. ``PHAB_ID=D101244``
 

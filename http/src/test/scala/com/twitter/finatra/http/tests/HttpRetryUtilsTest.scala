@@ -1,11 +1,11 @@
-package com.twitter.finatra.tests.utils
+package com.twitter.finatra.http.tests
 
-import com.twitter.finagle.http.{Status, Response}
-import com.twitter.finatra.utils.ResponseUtils
+import com.twitter.finagle.http.{Response, Status}
+import com.twitter.finatra.http.response.ResponseUtils
 import com.twitter.inject.Test
 import com.twitter.inject.conversions.time._
 import com.twitter.inject.utils.{RetryPolicyUtils, RetryUtils}
-import com.twitter.util.{Future, Await}
+import com.twitter.util.{Await, Future}
 
 class HttpRetryUtilsTest extends Test {
 
