@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
-* EmbeddedTwitterServer, EmbeddedHttpServer, and EmbeddedThriftServer flags 
+* EmbeddedTwitterServer, EmbeddedHttpServer, and EmbeddedThriftServer flags
   and args parameters changed to call-by-name. ``PHAB_ID=`D104733`
 
 ### Fixed
@@ -34,7 +34,7 @@ All notable changes to this project will be documented in this file. Note that `
   that use the @Named binding annotation. ``PHAB_ID=D91330``
 
 * finatra-http: Allow setting the content type of a Mustache view.
-  ``PHAB_ID=D91857``
+  ``PHAB_ID=D91949``
 
 ### Changed
 
@@ -68,7 +68,7 @@ All notable changes to this project will be documented in this file. Note that `
 ### Fixed
 
 * finatra-http: Parameterized route callback inputs fail because the lookup of a
-  corresponding `MessageBodyManager` reader lookup does not properly handle parameterized 
+  corresponding `MessageBodyManager` reader lookup does not properly handle parameterized
   types such as collections. This change updates the `MessageBodyManager` `MessageBodyReader`
   lookup to take into account parameterized types. This allows for a user to parse a
   `Seq[T]`, or `Map[K, V]` as a route callback input type using the default Finatra
