@@ -8,7 +8,7 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.exceptions.HttpResponseException
 import com.twitter.finatra.http.internal.marshalling.MessageBodyManager
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
-import com.twitter.finatra.http.routing.FileResolver
+import com.twitter.finatra.utils.FileResolver
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Flag

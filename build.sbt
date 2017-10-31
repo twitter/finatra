@@ -530,7 +530,7 @@ lazy val utils = project
       previous.filter(mappingContainsAnyPath(_, utilsTestJarSources))
     }
   ).dependsOn(
-    injectApp % "test->test",
+    injectApp % "test->test;compile->compile",
     injectCore % "test->test",
     injectServer % "test->test",
     injectUtils)

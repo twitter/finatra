@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Move `FileResolver` to finatra/utils. ``PHAB_ID=D103536``
 
 * finatra-utils: Move `ResponseUtils` to finatra/http. ``PHAB_ID=D103507``
 

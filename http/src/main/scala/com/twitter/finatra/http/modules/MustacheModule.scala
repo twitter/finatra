@@ -3,7 +3,7 @@ package com.twitter.finatra.http.modules
 import com.github.mustachejava.{DefaultMustacheFactory, Mustache, MustacheFactory}
 import com.google.inject.Provides
 import com.twitter.finatra.http.internal.marshalling.mustache.ScalaObjectHandler
-import com.twitter.finatra.http.routing.FileResolver
+import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.TwitterModule
 import com.twitter.inject.annotations.Flag
 import java.io._

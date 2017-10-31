@@ -1,4 +1,4 @@
-package com.twitter.finatra.http.routing
+package com.twitter.finatra.utils
 
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Flag
