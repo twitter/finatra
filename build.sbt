@@ -10,7 +10,7 @@ lazy val buildSettings = Seq(
   version := releaseVersion,
   scalaVersion := "2.12.1",
   crossScalaVersions := Seq("2.11.11", "2.12.1"),
-  ivyScala := ivyScala.value.map(_.copy(overrideScalaVersion = true)),
+  scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   fork in Test := true,
   javaOptions in Test ++= travisTestJavaOptions
 )
@@ -160,7 +160,7 @@ lazy val publishSettings = Seq(
   resourceGenerators in Compile += Def.task {
     val dir = (resourceManaged in Compile).value
     val file = dir / "com" / "twitter" / name.value / "build.properties"
-    val buildRev = Process("git" :: "rev-parse" :: "HEAD" :: Nil).!!.trim
+    val buildRev = scala.sys.process.Process("git" :: "rev-parse" :: "HEAD" :: Nil).!!.trim
     val buildName = new java.text.SimpleDateFormat("yyyyMMdd-HHmmss").format(new java.util.Date)
     val contents = s"name=${name.value}\nversion=${version.value}\nbuild_revision=$buildRev\nbuild_name=$buildName"
     IO.write(file, contents)
