@@ -7,6 +7,8 @@ import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.inject.Test
 import com.twitter.io.Buf
 import com.twitter.util.Await
+import com.twitter.finatra.json.tests.internal.FooClass
+import com.twitter.finatra.json.tests.internal.CaseClassWithSeqBooleans
 
 class StreamingTest extends Test {
 
@@ -42,6 +44,47 @@ class StreamingTest extends Test {
     )
   }
 
+  test("bufs to json with some bigger objects") {
+    assertParsedSimpleObjects(
+      AsyncStream(Buf.Utf8("[{ \"id\":\"John\" }"),
+          Buf.Utf8(",{ \"id\":\"Tom\" },{ \"id\":\"An\" },"),
+          Buf.Utf8("{ \"id\":\"Jean\" }]")),
+      expectedInputStr = "[{ \"id\":\"John\" },{ \"id\":\"Tom\" },{ \"id\":\"An\" },{ \"id\":\"Jean\" }]",
+      expected = AsyncStream(FooClass("John"), FooClass("Tom"), FooClass("An"), FooClass("Jean"))
+    )
+  }
+
+  test("bufs to json with some complex objects") {
+    assertParsedComplexObjects(
+      AsyncStream(Buf.Utf8("[{ \"foos\":[true,false,true] }"),
+          Buf.Utf8(",{ \"foos\": [true,false,true] },"),
+          Buf.Utf8("{ \"foos\":[false] }]")),
+      expectedInputStr = "[{ \"foos\":[true,false,true] },{ \"foos\": [true,false,true] },{ \"foos\":[false] }]",
+      expected = AsyncStream(CaseClassWithSeqBooleans(Seq(true,false,true)),
+          CaseClassWithSeqBooleans(Seq(true,false,true)), CaseClassWithSeqBooleans(Seq(false)))
+    )
+  }
+
+  test("bufs to json with some bigger objects and an escape character") {
+    assertParsedSimpleObjects(
+      AsyncStream(Buf.Utf8("[{ \"id\":\"John\" }"),
+          Buf.Utf8(",{ \"id\":\"\\\"Tom\" },{ \"id\":\"An\" },"),
+          Buf.Utf8("{ \"id\":\"Jean\" }]")),
+      expectedInputStr = "[{ \"id\":\"John\" },{ \"id\":\"\\\"Tom\" },{ \"id\":\"An\" },{ \"id\":\"Jean\" }]",
+      expected = AsyncStream(FooClass("John"), FooClass("\"Tom"), FooClass("An"), FooClass("Jean"))
+    )
+  }
+
+  test("bufs to json with some bigger objects but with json object split over 2 bufs") {
+    assertParsedSimpleObjects(
+      AsyncStream(Buf.Utf8("[{ \"id\":\"John\" }"),
+          Buf.Utf8(",{ \"id\":\"Tom\" },{ \"id\""),
+          Buf.Utf8(":\"An\" },{ \"id\":\"Jean\" }]")),
+      expectedInputStr = "[{ \"id\":\"John\" },{ \"id\":\"Tom\" },{ \"id\":\"An\" },{ \"id\":\"Jean\" }]",
+      expected = AsyncStream(FooClass("John"), FooClass("Tom"), FooClass("An"), FooClass("Jean"))
+    )
+  }
+
   test("parse request") {
     val jsonStr = "[1,2]"
     val request = Request(Method.Post, "/")
@@ -74,4 +117,27 @@ class StreamingTest extends Test {
     val parser = new JsonStreamParser(FinatraObjectMapper.create())
     Await.result(parser.parseArray[Int](bufs).toSeq) should equal(Await.result(expected.toSeq()))
   }
+
+  private def assertParsedSimpleObjects(
+    bufs: AsyncStream[Buf],
+    expectedInputStr: String,
+    expected: AsyncStream[FooClass]
+  ): Unit = {
+
+    readString(bufs) should equal(expectedInputStr)
+    val parser = new JsonStreamParser(FinatraObjectMapper.create())
+    Await.result(parser.parseArray[FooClass](bufs).toSeq) should equal(Await.result(expected.toSeq()))
+  }
+
+  private def assertParsedComplexObjects(
+    bufs: AsyncStream[Buf],
+    expectedInputStr: String,
+    expected: AsyncStream[CaseClassWithSeqBooleans]
+  ): Unit = {
+
+    readString(bufs) should equal(expectedInputStr)
+    val parser = new JsonStreamParser(FinatraObjectMapper.create())
+    Await.result(parser.parseArray[CaseClassWithSeqBooleans](bufs).toSeq) should equal(Await.result(expected.toSeq()))
+  }
+
 }
