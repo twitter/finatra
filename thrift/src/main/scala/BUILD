@@ -34,7 +34,7 @@ scala_library(
     'finatra/utils/src/main/java',
     'finatra/utils/src/main/scala',
     'scrooge/scrooge-core/src/main/scala',
-    'twitter-server/src/main/scala',
+    'twitter-server/server/src/main/scala',
     'util/util-app/src/main/scala',
     'util/util-core/src/main/scala',
     'util/util-lint/src/main/scala:scala',

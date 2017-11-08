@@ -23,7 +23,7 @@ junit_tests(
     'finatra/inject/inject-core/src/test/scala:test-deps',
     'finatra/inject/inject-request-scope/src/main/scala',
     'finatra/jackson/src/main/scala',
-    'twitter-server/src/main/scala',
+    'twitter-server/server/src/main/scala',
     'util/util-core/src/main/scala',
     'util/util-slf4j-api/src/main/scala',
     'util/util-stats/src/main/scala',

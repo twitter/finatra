@@ -19,7 +19,7 @@ scala_library(
     'finatra/inject/inject-slf4j/src/main/scala:scala',
     'finatra/inject/inject-thrift-client/src/main/scala',
     'finatra/inject/inject-utils/src/main/scala',
-    'twitter-server/src/main/scala',
+    'twitter-server/server/src/main/scala',
     'util/util-app/src/main/scala',
     'util/util-core/src/main/scala',
     'util/util-lint/src/main/scala:scala',
