@@ -19,7 +19,7 @@ cd $savedir
 ./sbt clean
 
 echo 'making site...' 1>&2
-./sbt --warn site/make-site
+./sbt --warn site/makeSite
 echo 'copying site to finatra/gh-pages...' 1>&2
 cp -r $savedir/doc/target/site/ /tmp/finatra-github/ >/dev/null 2>&1
 
