@@ -1,5 +1,6 @@
 package com.twitter.inject
 
+import com.twitter.conversions.time._
 import com.twitter.util.{Await, Future}
 import java.util.TimeZone
 import org.apache.commons.io.IOUtils
@@ -32,7 +33,7 @@ trait TestMixin
 
   /* Overrides */
 
-  override protected def afterAll() = {
+  override protected def afterAll(): Unit = {
     super.afterAll()
     pool.executor.shutdown()
   }
@@ -41,16 +42,16 @@ trait TestMixin
 
   protected lazy val pool = PoolUtils.newUnboundedPool("Test " + getClass.getSimpleName)
 
-  protected def setUtcTimeZone() = {
+  protected def setUtcTimeZone(): Unit = {
     DateTimeZone.setDefault(DateTimeZone.UTC)
     TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
   }
 
-  protected def resourceAsString(resource: String) = {
+  protected def resourceAsString(resource: String): String = {
     IOUtils.toString(getClass.getResourceAsStream(resource))
   }
 
-  protected def sleep(duration: Duration, verbose: Boolean = false) {
+  protected def sleep(duration: Duration, verbose: Boolean = false): Unit = {
     if (verbose) {
       println("Starting sleep for " + duration)
     }
@@ -62,21 +63,21 @@ trait TestMixin
     }
   }
 
-  protected def assertFuture[A](result: Future[A], expected: Future[A]) {
-    val resultVal = Await.result(result)
-    val expectedVal = Await.result(expected)
+  protected def assertFuture[A](result: Future[A], expected: Future[A]): Unit = {
+    val resultVal = Await.result(result, 5.seconds)
+    val expectedVal = Await.result(expected, 5.seconds)
     resultVal should equal(expectedVal)
   }
 
-  protected def assertFutureValue[A](result: Future[A], expected: A) {
-    val resultVal = Await.result(result)
-    val expectedVal = Await.result(Future.value(expected))
+  protected def assertFutureValue[A](result: Future[A], expected: A): Unit =  {
+    val resultVal = Await.result(result, 5.seconds)
+    val expectedVal = Await.result(Future.value(expected), 5.seconds)
     resultVal should equal(expectedVal)
   }
 
   protected def assertFailedFuture[T <: Throwable: Manifest](result: Future[_]): T = {
     try {
-      Await.result(result)
+      Await.result(result, 5.seconds)
       fail("Expected exception " + manifest[T].runtimeClass + " never thrown")
     } catch {
       case e: Throwable =>
@@ -87,7 +88,7 @@ trait TestMixin
     }
   }
 
-  protected def bytes(str: String) = {
+  protected def bytes(str: String): Array[Byte] = {
     str.getBytes("UTF-8")
   }
 }
