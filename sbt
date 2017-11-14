@@ -40,4 +40,4 @@ java -ea                          \
   -server                         \
   -jar $sbtjar "$@"
 
-  stty echo
+stty echo || true
