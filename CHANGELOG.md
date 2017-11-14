@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* inject-server: Ensure EmbeddedTwitterServer has started before trying to
+  close httpAdminClient. ``PHAB_ID=D111294``
+
 ### Closed
 
 ## [finatra-17.10.0](https://github.com/twitter/finatra/tree/finatra-17.10.0) (2017-10-26)
