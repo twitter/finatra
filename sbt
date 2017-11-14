@@ -39,3 +39,5 @@ java -ea                          \
   -Xmx2G                          \
   -server                         \
   -jar $sbtjar "$@"
+
+  stty echo
