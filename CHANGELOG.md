@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+### Fixed
+
+### Closed
+
+## [finatra-17.11.0](https://github.com/twitter/finatra/tree/finatra-17.11.0) (2017-11-15)
+
+### Added
+
+### Changed
+
 * EmbeddedTwitterServer, EmbeddedHttpServer, and EmbeddedThriftServer flags
   and args parameters changed to call-by-name. ``PHAB_ID=`D104733`
 
