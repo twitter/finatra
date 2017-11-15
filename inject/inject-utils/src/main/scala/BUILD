@@ -5,7 +5,6 @@ scala_library(
     repo = artifactory,
   ),
   dependencies=[
-    '3rdparty/jvm/com/fasterxml/jackson:jackson-annotations',
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/commons-lang',
     '3rdparty/jvm/joda-time:joda-time',

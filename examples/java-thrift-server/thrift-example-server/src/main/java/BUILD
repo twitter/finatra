@@ -1,6 +1,5 @@
 java_library(
   dependencies=[
-    '3rdparty/jvm/com/fasterxml/jackson:jackson-annotations',
     '3rdparty/jvm/com/google/inject:guice',
     '3rdparty/jvm/javax/inject:javax.inject',
     '3rdparty/jvm/org/apache/thrift:libthrift-0.5.0',
