@@ -8,6 +8,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-sever: Do not use the `c.t.inject.server.EmbeddedTwitterServer` 
+  `InMemoryStatsReceiver` for embedded http clients. The http client stats are
+  emitted with the server under test stats which can be confusing, thus we now 
+  create a new `InMemoryStatsReceiver` when creating an embedded http client. 
+  ``PHAB_ID=D112024``
+
 ### Fixed
 
 ### Closed
