@@ -1,8 +1,8 @@
 package com.twitter.finatra.thrift.tests.inheritance
 
 import com.twitter.conversions.time._
-import com.twitter.finagle.Filter.TypeAgnostic
 import com.twitter.finagle.{Filter, ListeningServer, NullServer, Service, ThriftMux}
+import com.twitter.finatra.thrift.tests.ReqRepServicePerEndpointTest._
 import com.twitter.inject.server.{PortUtils, Ports}
 import com.twitter.io.Buf
 import com.twitter.scrooge.{HeaderMap, Request, Response}
@@ -32,49 +32,35 @@ case class InheritanceService(
       echo = filter.toFilter.andThen(echo))
 }
 
-class InheritanceThriftTwitterServer extends com.twitter.server.TwitterServer with Ports {
-  override val name = "inheritance-thrift-twitterserver"
-
+class InheritanceThriftTwitterServer(clientRequestHeaderKey: String) extends com.twitter.server.TwitterServer with Ports {
   private[this] val thriftPortFlag = flag("thrift.port", ":9999", "External Thrift server port")
   private[this] var thriftServer: ListeningServer = NullServer
 
   private[this] val logger = Logger(getClass.getName)
 
-  private def printHeaders(headers: HeaderMap, filter: Boolean = true): String = {
-    val filtered = if (filter) {
-      headers.toMap.filterKeys(key => !key.startsWith("com.twitter.finagle"))
-    } else {
-      headers.toMap.filterKeys(_ => true)
+  private def logRequestHeaders(headerMap: HeaderMap, assertClientRequestHeaderKey: Boolean = false): Unit = {
+    val headers = filteredHeaders(headerMap)
+    if (headers.nonEmpty) {
+      logger.info(s"Received request headers: ${printHeaders(headers)}")
+      if (assertClientRequestHeaderKey) assert(headerMap.contains(clientRequestHeaderKey))
     }
-    filtered.mapValues(values => values.map(Buf.Utf8.unapply(_).get)).toString()
   }
 
-  private[this] val service = InheritanceService(
+  private val service = InheritanceService(
     ping = Service.mk[Request[Ping.Args], Response[Ping.SuccessType]] { request: Request[Ping.Args] =>
-      logger.info(s"Received request headers: ${ printHeaders(request.headers) }")
+      logRequestHeaders(request.headers, assertClientRequestHeaderKey = true)
       Future
-        .value(Response(Map("com.twitter.doeverything.thriftscala.doeverything.ping" -> Seq(Buf.Utf8("response"))), "pong"))
+        .value(Response(Map("com.twitter.serviceb.thriftscala.serviceb.ping" -> Seq(Buf.Utf8("response"))), "pong"))
     },
     echo = Service.mk[Request[Echo.Args], Response[Echo.SuccessType]] { request: Request[Echo.Args] =>
-      logger.info(s"Received request headers: ${printHeaders(request.headers)}")
-      assert(request.headers.contains("com.twitter.client123.foo"))
+      logRequestHeaders(request.headers)
       Future
-        .value(Response(Map("com.twitter.doeverything.thriftscala.doeverything.echo" -> Seq(Buf.Utf8("response"))), request.args.msg))
+        .value(Response(Map("com.twitter.servicea.thriftscala.servicea.echo" -> Seq(Buf.Utf8("response"))), request.args.msg))
     }
   )
 
-  private val serverSideLoggingFilter = new TypeAgnostic {
-    def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = {
-      new Filter[Req, Rep, Req, Rep] {
-        def apply(
-          request: Req,
-          service: Service[Req, Rep]
-        ): Future[Rep] = {
-          logger.info("SERVER-SIDE FILTER")
-          service(request)
-        }
-      }
-    }
+  private val serverSideLoggingFilter = loggingFilter {
+    logger.info("SERVER-SIDE FILTER")
   }
 
   def main(): Unit = {
