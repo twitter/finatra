@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Finatra &#8212; Finatra 17.10.0 documentation</title>
+    <title>Finatra &#8212; Finatra 17.11.0 documentation</title>
     
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '17.10.0',
+        VERSION:     '17.11.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,8 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Finatra 17.10.0 documentation" href="#" />
+    <link rel="top" title="Finatra 17.11.0 documentation" href="#" />
+    <link rel="next" title="User’s Guide" href="user-guide/index.html" />
    
   
   <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
@@ -54,6 +55,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="user-guide/index.html" title="User’s Guide"
+             accesskey="N">next</a> |</li>
         <li class="nav-item nav-item-0"><a href="#">Finatra</a> &#187;</li> 
       </ul>
     </div>  
@@ -76,18 +80,18 @@
 <p>To get started, add a dependency on either <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> or <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a> depending if you are building an HTTP or Thrift server.</p>
 <p>E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;17.10.0&quot;
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;17.11.0&quot;
 </pre>
 <p>or</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;17.10.0&quot;
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;17.11.0&quot;
 </pre>
 <p>Or similarily with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
 <pre class="literal-block">
 &lt;dependency&gt;
   &lt;groupId&gt;com.twitter&lt;/groupId&gt;
   &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
-  &lt;version&gt;17.10.0&lt;/version&gt;
+  &lt;version&gt;17.11.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>or</p>
@@ -95,7 +99,7 @@
 &lt;dependency&gt;
   &lt;groupId&gt;com.twitter&lt;/groupId&gt;
   &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
-  &lt;version&gt;17.10.0&lt;/version&gt;
+  &lt;version&gt;17.11.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>Note: with Maven, you <strong>must</strong> append the appropriate scala version to the artifact name (e.g., <cite>_2.12</cite>).</p>
@@ -106,11 +110,11 @@
 <p>Finatra publishes <a class="reference external" href="https://maven.apache.org/guides/mini/guide-attached-tests.html">test-jars</a> for most modules. The test-jars include re-usable utilities for use in testing (e.g., the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">EmbeddedTwitterServer</a>).</p>
 <p>To add a test-jar dependency, depend on the appropriate module with the <cite>tests</cite> classifier. Additionally, these dependencies are typically <strong>only needed</strong> in the <code class="docutils literal"><span class="pre">test</span></code> scope for your project. E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;17.10.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;17.11.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
 </pre>
 <p>or</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;17.10.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;17.11.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
 </pre>
 <p>See the <a class="reference external" href="http://www.scala-sbt.org/">sbt</a> documentation for more information on using <a class="reference external" href="http://www.scala-sbt.org/0.13/docs/Library-Management.html">ivy configurations and classifiers</a>.</p>
 <p>And with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
@@ -120,7 +124,7 @@
   &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
   &lt;scope&gt;test&lt;/scope&gt;
   &lt;type&gt;test-jar&lt;/type&gt;
-  &lt;version&gt;17.10.0&lt;/version&gt;
+  &lt;version&gt;17.11.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>or</p>
@@ -130,7 +134,7 @@
   &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
   &lt;scope&gt;test&lt;/scope&gt;
   &lt;type&gt;test-jar&lt;/type&gt;
-  &lt;version&gt;17.10.0&lt;/version&gt;
+  &lt;version&gt;17.11.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>There is a <a class="reference external" href="https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html">downside</a> to publishing test-jars in this manner: transitive test-scoped dependencies are not resolved. Maven and sbt only resolve compile-time dependencies transitively, so you will need to specify all other required test-scoped dependencies manually.</p>
@@ -156,13 +160,31 @@
 </div>
 <div class="section" id="useful-links">
 <h2>Useful Links<a class="headerlink" href="#useful-links" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference external" href="user-guide/index.html">User&#8217;s Guide</a></li>
-<li><a class="reference external" href="https://twitter.github.io/finatra/scaladocs/index.html">Scaladocs</a></li>
-<li><a class="reference external" href="http://finagle.github.io/blog/">Finagle Blog</a></li>
-<li><a class="reference external" href="presentations/index.html">Presentations</a></li>
-<li><a class="reference external" href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/index.html">User&#8217;s Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#getting-started">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#injectable-app">Injectable App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#injectable-twitterserver">Injectable TwitterServer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#http-server">HTTP Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#json">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#files">Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#thrift-server">Thrift Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user-guide/index.html#testing">Testing</a></li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://twitter.github.io/finatra/scaladocs/index.html">Scaladocs</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://finagle.github.io/blog/">Finagle Blog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="presentations/index.html">Finatra Presentations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="presentations/index.html#october-2015">October 2015</a></li>
+<li class="toctree-l2"><a class="reference internal" href="presentations/index.html#august-2015">August 2015</a></li>
+<li class="toctree-l2"><a class="reference internal" href="presentations/index.html#april-2015">April 2015</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://groups.google.com/forum/#!forum/finatra-users">Forum</a></li>
+</ul>
+</div>
 </div>
 <div class="section" id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>

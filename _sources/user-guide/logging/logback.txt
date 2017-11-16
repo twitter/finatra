@@ -46,9 +46,7 @@ Examples
 
 See the
 `logback.xml <https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/main/resources/logback.xml>`__
-and
-`logback-test.xml <https://github.com/twitter/finatra/blob/develop/examples/hello-world/src/test/resources/logback-test.xml>`__
-configuration files in the
+configuration file in the
 `hello-world <https://github.com/twitter/finatra/tree/develop/examples/hello-world>`__
 example project for example Logback configurations.
 
