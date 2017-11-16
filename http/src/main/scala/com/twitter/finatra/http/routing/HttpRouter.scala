@@ -336,7 +336,7 @@ class HttpRouter @Inject()(
       route.path.startsWith(FinatraAdminPrefix) || route.admin
     }
     assertAdminRoutes(adminRoutes)
-    RoutesByType(external = externalRoutes.toSeq, admin = adminRoutes.toSeq)
+    RoutesByType(external = externalRoutes, admin = adminRoutes)
   }
 
   // non-constant routes MUST start with /admin/finatra
