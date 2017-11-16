@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-thrift: Add tests for new Scrooge `ReqRepServicePerEndpoint` 
+  functionalty. ``PHAB_ID=D107397``
+
 ### Changed
 
 * inject-sever: Do not use the `c.t.inject.server.EmbeddedTwitterServer` 
