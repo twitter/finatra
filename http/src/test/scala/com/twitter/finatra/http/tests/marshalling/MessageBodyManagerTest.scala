@@ -34,6 +34,12 @@ class MessageBodyManagerTest extends Test with Mockito {
   test("parse father impl with father MBR") {
     messageBodyManager.read[Son](request) should equal(Son("Son"))
   }
+
+  test("parse map with MBR not supported") {
+    intercept[IllegalArgumentException] {
+      messageBodyManager.add[MapIntDoubleMessageBodyReader]()
+    }
+  }
 }
 
 case class Car2(name: String)
@@ -64,4 +70,8 @@ class FatherMessageBodyReader extends MessageBodyReader[Father] {
       throw new RuntimeException("FAIL")
     }
   }
+}
+
+class MapIntDoubleMessageBodyReader extends MessageBodyReader[Map[Int, Double]] {
+  def parse[M: Manifest](request: Request): Map[Int, Double] = Map(1 -> 0.0, 2 -> 3.14, 3 -> 0.577)
 }

@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.routing
 
-import com.twitter.finatra.http.routing.FileResolver
+import com.twitter.finatra.utils.FileResolver
 import com.twitter.inject.Test
 
 class FileResolverTest extends Test {

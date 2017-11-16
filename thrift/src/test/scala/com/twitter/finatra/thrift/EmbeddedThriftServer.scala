@@ -29,8 +29,8 @@ import scala.reflect.runtime.universe._
  */
 class EmbeddedThriftServer(
   override val twitterServer: Ports,
-  flags: Map[String, String] = Map(),
-  args: Seq[String] = Seq(),
+  flags: => Map[String, String] = Map(),
+  args: => Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,

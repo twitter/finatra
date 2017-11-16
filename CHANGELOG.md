@@ -12,6 +12,22 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-17.11.0](https://github.com/twitter/finatra/tree/finatra-17.11.0) (2017-11-15)
+
+### Added
+
+### Changed
+
+* EmbeddedTwitterServer, EmbeddedHttpServer, and EmbeddedThriftServer flags
+  and args parameters changed to call-by-name. ``PHAB_ID=`D104733`
+
+### Fixed
+
+* inject-server: Ensure EmbeddedTwitterServer has started before trying to
+  close httpAdminClient. ``PHAB_ID=D111294``
+
+### Closed
+
 ## [finatra-17.10.0](https://github.com/twitter/finatra/tree/finatra-17.10.0) (2017-10-26)
 
 ### Added
@@ -31,9 +47,13 @@ All notable changes to this project will be documented in this file. Note that `
   that use the @Named binding annotation. ``PHAB_ID=D91330``
 
 * finatra-http: Allow setting the content type of a Mustache view.
-  ``PHAB_ID=D91857``
+  ``PHAB_ID=D91949``
 
 ### Changed
+
+* finatra-http: Move `FileResolver` to finatra/utils. ``PHAB_ID=D103536``
+
+* finatra-utils: Move `ResponseUtils` to finatra/http. ``PHAB_ID=D103507``
 
 * From now on, release versions will be based on release date in the format of
   YY.MM.x where x is a patch number. ``PHAB_ID=D101244``
@@ -63,6 +83,13 @@ All notable changes to this project will be documented in this file. Note that `
   HashedWheelTimer. ``PHAB_ID=D88025``
 
 ### Fixed
+
+* finatra-http: Parameterized route callback inputs fail because the lookup of a
+  corresponding `MessageBodyManager` reader lookup does not properly handle parameterized
+  types such as collections. This change updates the `MessageBodyManager` `MessageBodyReader`
+  lookup to take into account parameterized types. This allows for a user to parse a
+  `Seq[T]`, or `Map[K, V]` as a route callback input type using the default Finatra
+  `MessageBodyReader`. ``PHAB_ID=D104277``
 
 * finatra-jackson: Fix issue causing `IllegalArgumentException` from Validations to
   be swallowed. A catch clause in the `c.t.finatra.json.internal.caseclass.jackson.FinatraCaseClassDeserializer`
@@ -151,7 +178,7 @@ All notable changes to this project will be documented in this file. Note that `
 ### Fixed
 
 * finatra-http: Correctly return a JsonParseException when the incoming JSON is not parsable
-  as an expected custom case class request object. ``RB_ID=``
+  as an expected custom case class request object. ``RB_ID=912529``
 
 * finatra-http: Ensure underlying members are injected for AbstractControllers. ``RB_ID=911635``
 

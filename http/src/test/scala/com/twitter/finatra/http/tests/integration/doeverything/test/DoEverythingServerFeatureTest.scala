@@ -2271,4 +2271,41 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       withBody = "Class [class java.lang.String] is not supported by class com.twitter.finatra.json.internal.caseclass.validation.validators.MaxValidator"
     )
   }
+
+  test("POST /seq") {
+    server.httpPost(
+      "/seq",
+      """
+          ["foo", "bar", "baz"]
+      """,
+      andExpect = Ok)
+  }
+
+  test("POST /map") {
+    server.httpPost(
+      "/map",
+      """
+          {"foo": "bar", "baz": "bubble"}
+      """,
+      andExpect = Ok)
+  }
+
+  test("POST /seq2") {
+    server.httpPost(
+      "/seq2",
+      """
+          ["foo", "bar", "baz"]
+      """,
+      andExpect = Ok)
+  }
+
+  test("POST /seqCaseClass") {
+    server.httpPost(
+      "/seqCaseClass",
+      """
+          [{"name": "a"}, {"name": "b"}, {"name": "c"}]
+      """,
+      andExpect = BadRequest,
+      withJsonBody = """{"errors":["name: size [1] is not between 2 and 20"]}""")
+  }
 }

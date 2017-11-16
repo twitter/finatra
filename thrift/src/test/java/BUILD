@@ -1,6 +1,5 @@
 junit_tests(
   dependencies=[
-    '3rdparty/jvm/com/fasterxml/jackson:jackson-annotations',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',
     '3rdparty/jvm/com/google/inject/extensions:guice-testlib',
@@ -28,7 +27,7 @@ junit_tests(
     'finatra/utils/src/main/java',
     'finatra/utils/src/main/scala',
     'scrooge/scrooge-core/src/main/scala',
-    'twitter-server/src/main/scala',
+    'twitter-server/server/src/main/scala',
     'util/util-app/src/main/scala',
     'util/util-core/src/main/scala',
     'util/util-lint/src/main/scala',

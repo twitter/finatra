@@ -855,6 +855,22 @@ class DoEverythingController @Inject()(
         response.internalServerError(e.getMessage)
     }
   }
+
+  post("/seq") { r: Seq[String] =>
+    r
+  }
+
+  post("/map") { r: Map[String, String] =>
+    r
+  }
+
+  post("/seq2") { r: Request =>
+    objectMapper.parse[Seq[String]](r.contentString)
+  }
+
+  post("/seqCaseClass") { r: Seq[TestUser] =>
+    r
+  }
 }
 
 case class MultipleInjectableValueParams(@RouteParam @QueryParam id: String)

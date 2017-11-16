@@ -5,7 +5,6 @@ scala_library(
     repo = artifactory,
   ),
   dependencies=[
-    '3rdparty/jvm/com/fasterxml/jackson:jackson-annotations',
     '3rdparty/jvm/com/google/guava:guava',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     '3rdparty/jvm/com/google/inject/extensions:guice-multibindings',

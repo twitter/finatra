@@ -1,31 +1,30 @@
 #!/bin/bash
 
-sbtver=0.13.15
+sbtver=1.0.3
 sbtjar=sbt-launch.jar
-sbtsha128=61bfa3f5791325235f6d7cc37a7e7f6bfeb83531
+sbtsha128=f55b2016e6cace9af7ac4a667dc0092572811cfb
 
-sbtrepo="http://repo.typesafe.com/typesafe/ivy-releases/org.scala-sbt/sbt-launch/$sbtver/$sbtjar"
+sbtrepo="https://repo1.maven.org/maven2/org/scala-sbt/sbt-launch"
 
 if [ ! -f $sbtjar ]; then
-  echo "downloading $PWD/$sbtjar from $sbtrepo" 1>&2
-  if ! curl --location --silent --fail --remote-name $sbtrepo > $sbtjar; then
+  echo "downloading $PWD/$sbtjar" 1>&2
+  if ! curl --location --silent --fail --remote-name $sbtrepo/$sbtver/$sbtjar; then
     exit 1
   fi
 fi
 
 checksum=`openssl dgst -sha1 $sbtjar | awk '{ print $2 }'`
 if [ "$checksum" != $sbtsha128 ]; then
-  echo "[error] Bad $PWD/$sbtjar. Delete $PWD/$sbtjar and run $0 again."
+  echo "bad $PWD/$sbtjar.  delete $PWD/$sbtjar and run $0 again."
   exit 1
 fi
-
-javaVersion=`java -version 2>&1 | grep "java version" | awk '{print $3}' | tr -d \"`
 
 [ -f ~/.sbtconfig ] && . ~/.sbtconfig
 
 java -ea                          \
   $SBT_OPTS                       \
   $JAVA_OPTS                      \
+  -Djava.net.preferIPv4Stack=true \
   -XX:+AggressiveOpts             \
   -XX:+UseParNewGC                \
   -XX:+UseConcMarkSweepGC         \
@@ -35,7 +34,10 @@ java -ea                          \
   -XX:SurvivorRatio=128           \
   -XX:MaxTenuringThreshold=0      \
   -XX:-EliminateAutoBox           \
+  -Xss8M                          \
   -Xms512M                        \
-  -Xmx1280M                       \
+  -Xmx2G                          \
   -server                         \
   -jar $sbtjar "$@"
+
+stty echo || true

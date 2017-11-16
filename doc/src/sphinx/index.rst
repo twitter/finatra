@@ -126,11 +126,13 @@ To continue getting started, please see the `Finatra User's Guide <user-guide/in
 Useful Links
 ------------
 
-- `User's Guide <user-guide/index.html>`__
-- `Scaladocs <https://twitter.github.io/finatra/scaladocs/index.html>`__
-- `Finagle Blog <http://finagle.github.io/blog/>`__
-- `Presentations <presentations/index.html>`__
-- `Forum <https://groups.google.com/forum/#!forum/finatra-users>`__
+.. toctree::
+
+  user-guide/index
+  Scaladocs <https://twitter.github.io/finatra/scaladocs/index.html>
+  Finagle Blog <https://finagle.github.io/blog/>
+  presentations/index
+  Forum <https://groups.google.com/forum/#!forum/finatra-users>
 
 Contributing
 ------------

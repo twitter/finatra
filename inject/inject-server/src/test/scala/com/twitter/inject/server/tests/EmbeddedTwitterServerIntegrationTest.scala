@@ -1,13 +1,15 @@
 package com.twitter.inject.server.tests
 
+import com.google.inject.{Provides, Stage}
 import com.google.inject.name.Names
 import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.inject.server.{EmbeddedTwitterServer, TwitterServer}
 import com.twitter.inject.{Logging, Test, TwitterModule}
-import com.twitter.util.{Future, Await}
-import com.twitter.util.lint.{Rules, RulesImpl, GlobalRules, Rule, Issue, Category}
+import com.twitter.util.{Await, Future}
+import com.twitter.util.lint.{Category, GlobalRules, Issue, Rule, Rules, RulesImpl}
 import com.twitter.util.registry.{GlobalRegistry, SimpleRegistry}
+import javax.inject.Singleton
 import org.apache.commons.lang.RandomStringUtils
 
 class EmbeddedTwitterServerIntegrationTest extends Test {
@@ -116,6 +118,28 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
       }
       e.getMessage.contains("Error parsing flag \"foo.bar\": flag undefined") should be(true)
     } finally {
+      server.close()
+    }
+  }
+
+  test("server#injector error") {
+    val server = new EmbeddedTwitterServer(
+      stage = Stage.PRODUCTION,
+      twitterServer = new TwitterServer {
+        override val modules = Seq(new TwitterModule() {
+          @Provides
+          @Singleton
+          def providesFoo: Integer = {
+            throw new Exception("Yikes")
+          }
+        })
+      }).bind[String]("helloworld")
+    try {
+      val e = intercept[Exception] {
+        server.injector.instance[String] should be("helloworld")
+      }
+      e.getCause.getMessage should be("Yikes")
+    } finally{
       server.close()
     }
   }

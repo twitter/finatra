@@ -43,7 +43,7 @@ scala_library(
     'finatra/jackson/src/main/scala',
     'finatra/utils/src/main/java',
     'finatra/utils/src/main/scala',
-    'twitter-server/src/main/scala',
+    'twitter-server/server/src/main/scala',
     'util/util-app/src/main/scala',
     'util/util-collection/src/main/scala',
     'util/util-core/src/main/scala',

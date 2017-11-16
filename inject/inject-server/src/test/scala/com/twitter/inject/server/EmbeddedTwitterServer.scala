@@ -12,13 +12,13 @@ import com.twitter.finagle.service.RetryPolicy._
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.finagle.{ChannelClosedException, Http, Service}
 import com.twitter.inject.PoolUtils
-import com.twitter.inject.app.{InjectionServiceWithNamedAnnotationModule, InjectionServiceWithAnnotationModule, InjectionServiceModule, StartupTimeoutException}
+import com.twitter.inject.app.{InjectionServiceModule, InjectionServiceWithAnnotationModule, InjectionServiceWithNamedAnnotationModule, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.EmbeddedTwitterServer._
 import com.twitter.inject.server.PortUtils._
 import com.twitter.server.AdminHttpServer
-import com.twitter.util.lint.{Rule, GlobalRules}
+import com.twitter.util.lint.{GlobalRules, Rule}
 import com.twitter.util.{Await, Duration, Future, Stopwatch, Try}
 import java.lang.annotation.Annotation
 import java.net.{InetSocketAddress, URI}
@@ -70,8 +70,8 @@ object EmbeddedTwitterServer {
  */
 class EmbeddedTwitterServer(
   twitterServer: com.twitter.server.TwitterServer,
-  flags: Map[String, String] = Map(),
-  args: Seq[String] = Seq(),
+  flags: => Map[String, String] = Map(),
+  args: => Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,
@@ -223,7 +223,8 @@ class EmbeddedTwitterServer(
     if (!closed) {
       infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
       try {
-        Await.all(httpAdminClient.close(), twitterServer.close())
+        val adminClientCloseFuture = if (started) httpAdminClient.close() else Future.Done
+        Await.all(adminClientCloseFuture, twitterServer.close())
         mainRunnerFuturePool.executor.shutdown()
       } catch {
         case NonFatal(e) =>

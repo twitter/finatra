@@ -218,8 +218,8 @@ trait TwitterServer
 
 @deprecated("For backwards compatibility of defined flags", "2017-10-06")
 private[server] trait DeprecatedLogging extends com.twitter.logging.Logging { self: App =>
-  @deprecated("For backwards compatibility only. Do not attempt to use this logger.", "2017-10-06")
-  override lazy val log: com.twitter.logging.Logger = com.twitter.logging.NullLogger
+  @deprecated("For backwards compatibility only.", "2017-10-06")
+  override lazy val log: com.twitter.logging.Logger = com.twitter.logging.Logger(name)
 
   override def configureLoggerFactories(): Unit = {}
 }

@@ -43,8 +43,8 @@ import scala.util.control.NonFatal
  */
 class EmbeddedHttpServer(
   val twitterServer: Ports,
-  flags: Map[String, String] = Map(),
-  args: Seq[String] = Seq(),
+  flags: => Map[String, String] = Map(),
+  args: => Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,

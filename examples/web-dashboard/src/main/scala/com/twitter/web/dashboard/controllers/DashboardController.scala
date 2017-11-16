@@ -836,7 +836,7 @@ class DashboardController extends Controller {
 
   /**
    * An example of how to serve files or an index. If the path param of "*" matches the name/path
-   * of a file that can be resolved by the [[com.twitter.finatra.http.routing.FileResolver]]
+   * of a file that can be resolved by the [[com.twitter.finatra.utils.FileResolver]]
    * then the file will be returned. Otherwise the file at 'indexPath' (in this case 'index.html')
    * will be returned. This is useful for building "single-page" web applications.
    *

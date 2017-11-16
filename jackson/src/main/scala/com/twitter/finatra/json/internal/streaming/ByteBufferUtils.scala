@@ -7,8 +7,16 @@ import java.nio.ByteBuffer
 
 private[finatra] object ByteBufferUtils extends Logging {
 
+  /**
+   * Append a [[Buf]] to a [[ByteBuffer]]
+   * @param byteBuffer [[ByteBuffer]] to which to append
+   * @param buf [[Buf]] to append
+   * @param position Sets the underlying buffer's position. If the mark is defined and larger than the
+   *        new position then it is discarded.
+   * @return Owned [[ByteBuffer]] with the appended [[Buf]] at the given position
+   */
   //TODO: Optimize/Refactor
-  def append(byteBuffer: ByteBuffer, buf: Buf): ByteBuffer = {
+  def append(byteBuffer: ByteBuffer, buf: Buf, position: Int): ByteBuffer = {
     val byteBufferBuf = {
       val byteBufferCopy = byteBuffer.duplicate()
       byteBufferCopy.position(0)
@@ -16,7 +24,9 @@ private[finatra] object ByteBufferUtils extends Logging {
     }
 
     val combinedBufs = byteBufferBuf.concat(buf)
-    Buf.ByteBuffer.Shared.extract(combinedBufs)
+    val result = Buf.ByteBuffer.Shared.extract(combinedBufs)
+    result.position(position)
+    result
   }
 
   def debugBuffer(byteBuffer: ByteBuffer) = {

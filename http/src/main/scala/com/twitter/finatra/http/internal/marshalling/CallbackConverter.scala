@@ -6,10 +6,10 @@ import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
 import com.twitter.io.Buf
-import com.twitter.util.{FuturePool, Promise, Future}
+import com.twitter.util.{Future, FuturePool, Promise}
 import javax.inject.Inject
-import scala.concurrent.{Future => ScalaFuture,  ExecutionContext => ScalaExecutionContext}
-import scala.util.{Success, Failure}
+import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => ScalaFuture}
+import scala.util.{Failure, Success}
 
 private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
@@ -20,8 +20,6 @@ private[http] class CallbackConverter @Inject()(
 
   /* Public */
 
-  // Note we use Manifest here as we support Scala 2.10 and reflection is not thread-safe in 2.10 (precluding the use
-  // of typeTag and/or classTag). See: http://docs.scala-lang.org/overviews/reflection/thread-safety.html
   def convertToFutureResponse[RequestType: Manifest, ResponseType: Manifest](
     callback: RequestType => ResponseType
   ): Request => Future[Response] = {
