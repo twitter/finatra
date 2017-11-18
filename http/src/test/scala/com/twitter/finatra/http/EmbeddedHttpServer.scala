@@ -925,6 +925,7 @@ class EmbeddedHttpServer(
    *
    * @param path - URI of the request
    * @param params - a Seq of [[com.twitter.finagle.http.FormElement]] to send in the request
+   * @param multipart - if this form post is a multi-part request, true by default
    * @param routeToAdminServer - force the request to the admin interface of the embedded server, false by default.
    * @param headers - additional headers that should be passed with the request
    * @param andExpect - expected [[com.twitter.finagle.http.Status]] value
@@ -937,6 +938,7 @@ class EmbeddedHttpServer(
   def httpMultipartFormPost(
     path: String,
     params: Seq[FormElement],
+    multipart: Boolean = true,
     routeToAdminServer: Boolean = false,
     headers: Map[String, String] = Map.empty,
     andExpect: Status = Status.Ok,
@@ -948,7 +950,7 @@ class EmbeddedHttpServer(
     formPost(
       path = path,
       params = params,
-      multipart = true,
+      multipart = multipart,
       routeToAdminServer = routeToAdminServer,
       headers = headers,
       andExpect = andExpect,

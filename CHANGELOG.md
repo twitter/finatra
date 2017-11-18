@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: add a `multipart = true` arg to
+  `EmbeddedHttpServer.httpMultipartFormPost`
+  ``PHAB_ID=D113151`
 * inject-sever: Do not use the `c.t.inject.server.EmbeddedTwitterServer` 
   `InMemoryStatsReceiver` for embedded http clients. The http client stats are
   emitted with the server under test stats which can be confusing, thus we now 
