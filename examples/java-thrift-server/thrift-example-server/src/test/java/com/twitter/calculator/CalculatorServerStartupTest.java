@@ -1,6 +1,7 @@
 package com.twitter.calculator;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
+
 import com.google.inject.Stage;
 
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class CalculatorServerStartupTest {
     private EmbeddedThriftServer server =
         new EmbeddedThriftServer(
             new CalculatorServer(),
-            ImmutableMap.of(),
+            Collections.emptyMap(),
             Stage.PRODUCTION);
 
     /** Test server startup */

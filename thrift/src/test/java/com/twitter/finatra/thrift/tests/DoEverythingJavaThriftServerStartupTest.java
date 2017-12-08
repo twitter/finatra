@@ -1,6 +1,7 @@
 package com.twitter.finatra.thrift.tests;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
+
 import com.google.inject.Stage;
 
 import org.junit.Test;
@@ -13,7 +14,7 @@ public class DoEverythingJavaThriftServerStartupTest {
     private EmbeddedThriftServer server =
         new EmbeddedThriftServer(
             new DoEverythingJavaThriftServer(),
-            ImmutableMap.of(),
+            Collections.emptyMap(),
             Stage.PRODUCTION);
 
     /** Test server startup */

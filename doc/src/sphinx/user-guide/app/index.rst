@@ -55,8 +55,8 @@ Java Example
 .. code:: java
 
   import java.util.Collection;
+  import java.util.Collections;
 
-  import com.google.common.collect.ImmutableList;
   import com.google.inject.Module;
 
   import com.twitter.inject.app.AbstractApp;
@@ -65,7 +65,7 @@ Java Example
 
       @Override
       public Collection<Module> javaModules() {
-          return ImmutableList.<Module>of(
+          return Collections.<Module>singletonList(
                   MyModule1$.MODULE$);
       }
 

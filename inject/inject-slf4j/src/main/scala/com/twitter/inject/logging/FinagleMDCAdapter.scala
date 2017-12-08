@@ -1,15 +1,14 @@
 package com.twitter.inject.logging
 
-import com.google.common.collect.ImmutableMap
 import com.twitter.util.Local
-import java.util.{HashMap => JHashMap, Map => JMap}
+import java.util.{Collections, HashMap => JHashMap, Map => JMap}
 import org.slf4j.spi.MDCAdapter
 
 final class FinagleMDCAdapter extends MDCAdapter {
 
   private[this] val local = new Local[JMap[String, String]]
 
-  override def put(key: String, value: String) {
+  def put(key: String, value: String): Unit = {
     if (key == null) {
       throw new IllegalArgumentException("key cannot be null")
     }
@@ -18,29 +17,29 @@ final class FinagleMDCAdapter extends MDCAdapter {
     map.put(key, value)
   }
 
-  override def get(key: String): String = {
+  def get(key: String): String = {
     (for (map <- local()) yield {
       map.get(key)
     }).orNull
   }
 
-  override def remove(key: String) {
+  def remove(key: String): Unit = {
     for (map <- local()) {
       map.remove(key)
     }
   }
 
-  override def clear() {
+  def clear(): Unit = {
     local.clear()
   }
 
-  override def getCopyOfContextMap: JMap[String, String] = {
+  def getCopyOfContextMap: JMap[String, String] = {
     (for (map <- local()) yield {
       new JHashMap[String, String](map)
     }).orNull
   }
 
-  override def setContextMap(contextMap: JMap[String, String]) {
+  def setContextMap(contextMap: JMap[String, String]): Unit = {
     val copiedMap = new JHashMap[String, String](contextMap)
     local.update(copiedMap)
   }
@@ -61,7 +60,7 @@ final class FinagleMDCAdapter extends MDCAdapter {
   private[twitter] def getPropertyContextMap: JMap[String, String] = {
     local() match {
       case Some(map) => map
-      case _ => ImmutableMap.of()
+      case _ => Collections.emptyMap()
     }
   }
 }

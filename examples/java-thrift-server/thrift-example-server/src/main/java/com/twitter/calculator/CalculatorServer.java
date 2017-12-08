@@ -1,8 +1,8 @@
 package com.twitter.calculator;
 
 import java.util.Collection;
+import java.util.Collections;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
 import com.twitter.calculator.thriftjava.Calculator;
@@ -24,7 +24,7 @@ class CalculatorServer extends AbstractThriftServer {
 
     @Override
     public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(
+        return Collections.singletonList(
             ClientIdWhitelistModule$.MODULE$);
     }
 

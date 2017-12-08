@@ -1,6 +1,7 @@
 package com.twitter.hello.server;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
+
 import com.google.inject.Stage;
 
 import org.junit.AfterClass;
@@ -19,7 +20,7 @@ public class HelloWorldServerFeatureTest extends Assert {
     private static final EmbeddedHttpServer SERVER =
         new EmbeddedHttpServer(
             new HelloWorldServer(),
-            ImmutableMap.of(),
+            Collections.emptyMap(),
             Stage.DEVELOPMENT);
 
     @BeforeClass
