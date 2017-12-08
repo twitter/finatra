@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-17.12.0](https://github.com/twitter/finatra/tree/finatra-17.12.0) (2017-12-08)
+
+### Added
+
 * finatra-thrift: Add tests for new Scrooge `ReqRepServicePerEndpoint` 
   functionalty. ``PHAB_ID=D107397``
 
