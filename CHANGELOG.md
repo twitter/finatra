@@ -12,6 +12,28 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-17.12.0](https://github.com/twitter/finatra/tree/finatra-17.12.0) (2017-12-08)
+
+### Added
+
+* finatra-thrift: Add tests for new Scrooge `ReqRepServicePerEndpoint` 
+  functionalty. ``PHAB_ID=D107397``
+
+### Changed
+
+* finatra-http: add a `multipart = true` arg to
+  `EmbeddedHttpServer.httpMultipartFormPost`
+  ``PHAB_ID=D113151`
+* inject-sever: Do not use the `c.t.inject.server.EmbeddedTwitterServer` 
+  `InMemoryStatsReceiver` for embedded http clients. The http client stats are
+  emitted with the server under test stats which can be confusing, thus we now 
+  create a new `InMemoryStatsReceiver` when creating an embedded http client. 
+  ``PHAB_ID=D112024``
+
+### Fixed
+
+### Closed
+
 ## [finatra-17.11.0](https://github.com/twitter/finatra/tree/finatra-17.11.0) (2017-11-15)
 
 ### Added

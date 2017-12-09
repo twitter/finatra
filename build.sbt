@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "17.11.0"
+val releaseVersion = "17.12.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -493,6 +493,7 @@ lazy val benchmarks = project
   .settings(
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-simple" % versions.slf4j % "test"))
+  .settings(noPublishSettings)
   .dependsOn(
     http,
     injectRequestScope,
@@ -722,6 +723,7 @@ lazy val site = (project in file("doc"))
 
 lazy val helloWorld = (project in file("examples/hello-world"))
   .settings(exampleServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "hello-world",
     moduleName := "hello-world"
@@ -732,6 +734,7 @@ lazy val helloWorld = (project in file("examples/hello-world"))
 
 lazy val streamingExample = (project in file("examples/streaming-example"))
   .settings(exampleServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "streaming-example",
     moduleName := "streaming-example",
@@ -745,6 +748,7 @@ lazy val streamingExample = (project in file("examples/streaming-example"))
 
 lazy val twitterClone = (project in file("examples/twitter-clone"))
   .settings(exampleServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "twitter-clone",
     moduleName := "twitter-clone",
@@ -757,6 +761,7 @@ lazy val twitterClone = (project in file("examples/twitter-clone"))
 
 lazy val benchmarkServer = (project in file("examples/benchmark-server"))
   .settings(baseServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "benchmark-server",
     moduleName := "benchmark-server",
@@ -771,6 +776,7 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server"))
 
 lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
   .settings(exampleServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "java-http-server",
     moduleName := "java-http-server",
@@ -785,6 +791,7 @@ lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
 
 lazy val exampleInjectJavaServer = (project in file("examples/java-server"))
   .settings(exampleServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "java-server",
     moduleName := "java-server",
@@ -799,6 +806,7 @@ lazy val exampleInjectJavaServer = (project in file("examples/java-server"))
 
 lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-example-idl"))
   .settings(baseServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "thrift-example-idl",
     moduleName := "thrift-example-idl",
@@ -810,6 +818,7 @@ lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-exam
 
 lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-example-server"))
   .settings(exampleServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "thrift-example-server",
     moduleName := "thrift-example-server",
@@ -824,6 +833,7 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
 
 lazy val thriftJavaExampleIdl = (project in file("examples/java-thrift-server/thrift-example-idl"))
   .settings(baseServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "java-thrift-example-idl",
     moduleName := "java-thrift-example-idl",
@@ -836,6 +846,7 @@ lazy val thriftJavaExampleIdl = (project in file("examples/java-thrift-server/th
 
 lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server/thrift-example-server"))
   .settings(exampleServerSettings)
+  .settings(noPublishSettings)
   .settings(
     name := "java-thrift-example-server",
     moduleName := "java-thrift-example-server"
@@ -847,9 +858,10 @@ lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server
     injectServer % "test->test",
     injectSlf4j)
 
-lazy val exampleWebDashboard = (project in file("examples/web-dashboard")).
-  settings(exampleServerSettings).
-  settings(
+lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
+  .settings(exampleServerSettings)
+  .settings(noPublishSettings)
+    .settings(
     name := "web-dashboard",
     moduleName := "web-dashboard",
     unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"

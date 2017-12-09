@@ -439,7 +439,7 @@ class EmbeddedTwitterServer(
       .hosts(host)
       .hostConnectionLimit(75)
       .retryPolicy(retryPolicy)
-      .reportTo(inMemoryStatsReceiver)
+      .reportTo(new InMemoryStatsReceiver)
       .failFast(false)
       .daemon(true)
 

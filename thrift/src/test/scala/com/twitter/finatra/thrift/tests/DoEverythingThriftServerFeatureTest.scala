@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.doeverything.thriftscala.{Answer, Question, DoEverything}
+import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
 import com.twitter.finatra.thrift.thriftscala.{
