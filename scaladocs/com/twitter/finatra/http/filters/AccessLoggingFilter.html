@@ -151,8 +151,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">AccessLoggingFilter</a>
+                        <a class="class" href="" title="Provides a standard &quot;Access Log&quot; -- a list of all requests through this Filter."></a>
+                        <a href="" title="Provides a standard &quot;Access Log&quot; -- a list of all requests through this Filter.">AccessLoggingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="CommonFilters.html" title="A typical collection of filters for a Finatra Http service."></a>
@@ -209,10 +209,15 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Provides a standard &quot;Access Log&quot; -- a list of all requests through this Filter.</p><p>NOTE: This Filter should occur as early in the Filter chain as possible.
+Typically, this Filter is provided by the <a href="../modules/AccessLogModule$.html" class="extype" name="com.twitter.finatra.http.modules.AccessLogModule">com.twitter.finatra.http.modules.AccessLogModule</a>
+which provides an implementation for the <span class="extype" name="LogFormatter">LogFormatter</span> param as an instance of
+<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/filter/CommonLogFormatter.html" class="extype" name="com.twitter.finagle.http.filter.CommonLogFormatter">com.twitter.finagle.http.filter.CommonLogFormatter</a>.</p><p>This Filter is included in the Finatra <a href="CommonFilters.html" class="extype" name="com.twitter.finatra.http.filters.CommonFilters">com.twitter.finatra.http.filters.CommonFilters</a>.</p><p>Usage: To use, create a logger (with your preferred logging implementation) over this class
+which is configured to write to a specific file (usually named, <code>access.log</code>).
+</p></div><dl class="paramcmts block"><dt class="tparam">R</dt><dd class="cmt"><p>- &quot;Request&quot; type param which must be a subtype of <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl><div class="toggleContainer block">
+        </dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/filter/CommonLogFormatter.html" class="extype" name="com.twitter.finagle.http.filter.CommonLogFormatter">com.twitter.finagle.http.filter.CommonLogFormatter</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/filter/LogFormatter.html" class="extype" name="com.twitter.finagle.filter.LogFormatter">com.twitter.finagle.filter.LogFormatter</a></p></span><span class="cmt"><p><a href="../modules/AccessLogModule$.html" class="extype" name="com.twitter.finatra.http.modules.AccessLogModule">com.twitter.finatra.http.modules.AccessLogModule</a></p></span><span class="cmt"><p><a href="CommonFilters.html" class="extype" name="com.twitter.finatra.http.filters.CommonFilters">com.twitter.finatra.http.filters.CommonFilters</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -277,7 +282,7 @@
         <span class="name">AccessLoggingFilter</span><span class="params">(<span name="logFormatter">logFormatter: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/filter/LogFormatter.html#com.twitter.finagle.filter.LogFormatter" class="extype" name="com.twitter.finagle.filter.LogFormatter">LogFormatter</a>[<span class="extype" name="com.twitter.finatra.http.filters.AccessLoggingFilter.R">R</span>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>)</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">logFormatter</dt><dd class="cmt"><p>an instance of <span class="extype" name="LogFormatter">LogFormatter</span> which specifies how log lines should be formatted.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Inject</span><span class="args">()</span>
               
         </dd></dl></div>
