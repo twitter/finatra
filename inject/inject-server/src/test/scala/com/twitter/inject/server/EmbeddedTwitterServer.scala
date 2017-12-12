@@ -1,6 +1,6 @@
 package com.twitter.inject.server
 
-import com.google.common.net.{HttpHeaders, MediaType}
+import com.google.common.net.MediaType
 import com.google.inject.Stage
 import com.twitter.conversions.time._
 import com.twitter.finagle.builder.ClientBuilder
@@ -593,7 +593,7 @@ class EmbeddedTwitterServer(
     headers: Map[String, String]
   ): Map[String, String] = {
     if (accept != null)
-      headers + (HttpHeaders.ACCEPT -> accept.toString)
+      headers + (Fields.Accept -> accept.toString)
     else
       headers
   }

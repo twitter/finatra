@@ -1,7 +1,7 @@
 package com.twitter.finatra.http
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.google.common.net.{HttpHeaders => CommonHttpHeaders, MediaType}
+import com.google.common.net.MediaType
 import com.google.inject.Stage
 import com.twitter.finagle.http.{Method, Status, _}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
@@ -347,8 +347,8 @@ class EmbeddedHttpServer(
 
     val request = createApiRequest(path, Method.Post)
     request.setContentString(postBody)
-    request.headerMap.set(CommonHttpHeaders.CONTENT_LENGTH, request.content.length.toString)
-    request.headerMap.set(CommonHttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.set(Fields.ContentLength, request.content.length.toString)
+    request.headerMap.set(Fields.ContentType, contentType)
 
     jsonAwareHttpExecute(
       request,
@@ -465,8 +465,8 @@ class EmbeddedHttpServer(
 
     val request = createApiRequest(path, Method.Put)
     request.setContentString(putBody)
-    request.headerMap.set(CommonHttpHeaders.CONTENT_LENGTH, request.content.length.toString)
-    request.headerMap.set(CommonHttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.set(Fields.ContentLength, request.content.length.toString)
+    request.headerMap.set(Fields.ContentType, contentType)
 
     jsonAwareHttpExecute(
       request,
@@ -584,8 +584,8 @@ class EmbeddedHttpServer(
     val request = createApiRequest(path, Method.Delete)
     if (deleteBody != null) {
       request.setContentString(deleteBody)
-      request.headerMap.set(CommonHttpHeaders.CONTENT_LENGTH, request.content.length.toString)
-      request.headerMap.set(CommonHttpHeaders.CONTENT_TYPE, contentType)
+      request.headerMap.set(Fields.ContentLength, request.content.length.toString)
+      request.headerMap.set(Fields.ContentType, contentType)
     }
 
     jsonAwareHttpExecute(
@@ -752,8 +752,8 @@ class EmbeddedHttpServer(
 
     val request = createApiRequest(path, Method.Patch)
     request.setContentString(patchBody)
-    request.headerMap.set(CommonHttpHeaders.CONTENT_LENGTH, request.content.length.toString)
-    request.headerMap.set(CommonHttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.set(Fields.ContentLength, request.content.length.toString)
+    request.headerMap.set(Fields.ContentType, contentType)
 
     jsonAwareHttpExecute(
       request,
@@ -1172,7 +1172,7 @@ class EmbeddedHttpServer(
     headers: Map[String, String]
   ): Map[String, String] = {
     if (accept != null)
-      headers + (CommonHttpHeaders.ACCEPT -> accept.toString)
+      headers + (Fields.Accept -> accept.toString)
     else
       headers
   }

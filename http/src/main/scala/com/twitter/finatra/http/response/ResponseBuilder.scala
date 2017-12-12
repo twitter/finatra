@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.response
 
-import com.google.common.net.{HttpHeaders, MediaType}
+import com.google.common.net.MediaType
 import com.twitter.finagle.http._
 import com.twitter.finagle.http.{MediaType => FinagleMediaType}
 import com.twitter.finagle.stats.StatsReceiver
@@ -265,18 +265,18 @@ class ResponseBuilder @Inject()(
     }
 
     def plain(any: Any): EnrichedResponse = {
-      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.PLAIN_TEXT_UTF_8))
+      response.headerMap.set(Fields.ContentType, mediaToString(MediaType.PLAIN_TEXT_UTF_8))
       body(any)
     }
 
     def html(html: String) = {
-      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.HTML_UTF_8))
+      response.headerMap.set(Fields.ContentType, mediaToString(MediaType.HTML_UTF_8))
       body(html)
       this
     }
 
     def html(any: Any) = {
-      response.headerMap.set(HttpHeaders.CONTENT_TYPE, mediaToString(MediaType.HTML_UTF_8))
+      response.headerMap.set(Fields.ContentType, mediaToString(MediaType.HTML_UTF_8))
       body(any)
       this
     }
