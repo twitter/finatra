@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ## [Unreleased]
 
+* finatra-jackson: Added support to finatra/jackson for deserializing `com.twitter.util.Duration` instances from
+  their String representations. ``PHAB_ID=D122366``
+
 ### Added
 
 ### Changed
