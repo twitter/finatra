@@ -24,7 +24,7 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
       .filtered(muxCtxtsFilter.toFilter)
       .configured(Stats(NullStatsReceiver))
       .withClientId(TestClientId)
-      .reqRepServicePerEndpoint[DoEverything.ReqRepServicePerEndpoint](
+      .servicePerEndpoint[DoEverything.ReqRepServicePerEndpoint](
         PortUtils.loopbackAddressForPort(server.thriftPort),
         "client123")
 
@@ -121,7 +121,7 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     // use ServicePerEndpoint which has the 'muxCtxtsFilter' ThriftMux client filter
     val reqRepMethodPerEndpoint: DoEverything[Future] =
       ThriftMux.client
-        .reqRepMethodPerEndpoint(reqRepServicePerEndpoint)
+        .methodPerEndpoint(reqRepServicePerEndpoint)
 
     val f: Future[String] =
       reqRepMethodPerEndpoint.magicNum()

@@ -26,7 +26,7 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
       .filtered(muxCtxtsFilter.toFilter)
       .configured(Stats(NullStatsReceiver))
       .withClientId(ClientId("client123"))
-      .reqRepServicePerEndpoint[ServiceB.ReqRepServicePerEndpoint](
+      .servicePerEndpoint[ServiceB.ReqRepServicePerEndpoint](
         PortUtils.loopbackAddressForPort(server.thriftPort), "client123")
 
   /* test that copy works for client */
@@ -120,7 +120,7 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     // use ServicePerEndpoint which has the 'muxCtxtsFilter' ThriftMux client filter
     val reqRepMethodPerEndpoint: ServiceB[Future] =
       ThriftMux.client
-        .reqRepMethodPerEndpoint(reqRepServicePerEndpoint)
+        .methodPerEndpoint(reqRepServicePerEndpoint)
 
     val f: Future[String] =
       reqRepMethodPerEndpoint.echo("Hello, World.")
