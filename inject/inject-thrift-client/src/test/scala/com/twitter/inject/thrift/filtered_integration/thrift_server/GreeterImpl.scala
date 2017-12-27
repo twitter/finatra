@@ -11,6 +11,7 @@ import javax.inject.Singleton
 class GreeterImpl extends Greeter[Future] with Logging {
 
   private val hiNumCalled = new AtomicInteger(0)
+  private val helloNumCalled = new AtomicInteger(0)
   private val byeNumCalled = new AtomicInteger(0)
 
   /* Public */
@@ -23,11 +24,24 @@ class GreeterImpl extends Greeter[Future] with Logging {
     if (numCalled == 1)
       Future.exception(new IllegalArgumentException)
     else if (numCalled == 2)
-      Future.exception(new InvalidOperation(what = 123, why = "woops"))
+      Future.exception(new InvalidOperation(what = 123, why = "whoops"))
     else if (numCalled == 3)
       Future.value("ERROR")
     else
       Future.value(s"Hi $name")
+  }
+
+  override def hello(name: String): Future[String] = {
+    val numCalled = helloNumCalled.incrementAndGet()
+    info(s"Hello called with message: " + name)
+    assertClientId("greeter-http-service")
+
+    if (numCalled == 1)
+      Future.exception(new IllegalArgumentException)
+    else if (numCalled == 2)
+      Future.exception(new InvalidOperation(what = 123, why = "whoops"))
+    else
+      Future.value(s"Hello $name")
   }
 
   override def bye(name: String, age: Int): Future[ByeResponse] = {

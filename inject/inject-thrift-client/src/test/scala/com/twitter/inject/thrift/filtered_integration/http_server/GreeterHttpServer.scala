@@ -8,7 +8,7 @@ import com.twitter.inject.thrift.modules.ThriftClientIdModule
 class GreeterHttpServer extends HttpServer {
   override val name = "greeter-server"
 
-  override val modules = Seq(ThriftClientIdModule, GreeterThriftClientModule)
+  override val modules = Seq(ThriftClientIdModule, GreeterFilteredThriftClientModule)
 
   override def configureHttp(router: HttpRouter) {
     router.filter[CommonFilters].add[GreeterHttpController]

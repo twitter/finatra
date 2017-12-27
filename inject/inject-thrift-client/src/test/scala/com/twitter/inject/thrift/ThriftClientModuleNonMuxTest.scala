@@ -1,10 +1,10 @@
-package com.twitter.inject.thrift.internal
+package com.twitter.inject.thrift
 
 import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.inject.Test
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
-import com.twitter.inject.thrift.modules.{ThriftClientModule, ThriftClientIdModule}
+import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftClientModule}
 
 class ThriftClientModuleNonMuxTest extends Test {
 
