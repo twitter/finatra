@@ -9,6 +9,11 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-thrift: Add support for building all types of Finagle Thrift clients to 
+  the underlying embedded TwitterServer with the `c.t.finatra.thrift.ThriftClient`
+  test utility. See: https://twitter.github.io/scrooge/Finagle.html#creating-a-client
+  ``PHAB_ID=D123915``
+
 ### Changed
 
 ### Fixed

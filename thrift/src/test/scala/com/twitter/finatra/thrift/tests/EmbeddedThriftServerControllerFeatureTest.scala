@@ -1,26 +1,75 @@
 package com.twitter.finatra.thrift.tests
 
+import com.twitter.conversions.time._
 import com.twitter.converter.thriftscala.Converter
+import com.twitter.converter.thriftscala.Converter.Uppercase
+import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift._
-import com.twitter.finatra.thrift.filters.{
-  AccessLoggingFilter,
-  ClientIdWhitelistFilter,
-  StatsFilter
-}
+import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
+import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, ExceptionMappingFilter, StatsFilter}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
-import com.twitter.finatra.thrift.tests.doeverything.filters.ExceptionTranslationFilter
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
+import com.twitter.io.Buf
+import com.twitter.scrooge
 import com.twitter.util.{Await, Future}
 
 class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(new ConverterControllerServer)
 
-  val client123 = server.thriftClient[Converter[Future]](clientId = "client123")
+  /* Higher-kinded interface type */
+  val client123: Converter[Future] =
+    server.thriftClient[Converter[Future]](clientId = "client123")
+  /* Method-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id1 */
+  val methodPerEndpointClient123: Converter.MethodPerEndpoint =
+    server.thriftClient[Converter.MethodPerEndpoint](clientId = "client123")
+  /* Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id2 */
+  val servicePerEndpoint123: Converter.ServicePerEndpoint =
+    server.servicePerEndpoint[Converter.ServicePerEndpoint](clientId = "client123")
+  /* Req/Rep Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id3 */
+  val reqRepServicePerEndpoint123: Converter.ReqRepServicePerEndpoint =
+    server.servicePerEndpoint[Converter.ReqRepServicePerEndpoint](clientId = "client123")
 
   test("success") {
-    Await.result(client123.uppercase("Hi")) should equal("HI")
+    await(client123.uppercase("Hi")) should equal("HI")
+    await(methodPerEndpointClient123.uppercase("Hi")) should equal("HI")
+
+    val filter = new Filter[
+      Converter.Uppercase.Args,
+      Converter.Uppercase.SuccessType,
+      Converter.Uppercase.Args,
+      Converter.Uppercase.SuccessType] {
+      override def apply(
+        request: Uppercase.Args,
+        service: Service[Uppercase.Args, String]
+      ): Future[String] = {
+        if (request.msg == "hello") {
+          service(Converter.Uppercase.Args("goodbye"))
+        } else service(request)
+      }
+    }
+    val service = filter.andThen(servicePerEndpoint123.uppercase)
+    await(service(Converter.Uppercase.Args("hello"))) should equal("GOODBYE")
+
+    val filter2 = new Filter[
+      scrooge.Request[Converter.Uppercase.Args],
+      scrooge.Response[Converter.Uppercase.SuccessType],
+      scrooge.Request[Converter.Uppercase.Args],
+      scrooge.Response[Converter.Uppercase.SuccessType]] {
+      override def apply(
+        request: scrooge.Request[Converter.Uppercase.Args],
+        service: Service[scrooge.Request[Converter.Uppercase.Args], scrooge.Response[Converter.Uppercase.SuccessType]]
+      ): Future[scrooge.Response[Converter.Uppercase.SuccessType]] = {
+        val filteredRequest: scrooge.Request[Converter.Uppercase.Args] =
+          scrooge.Request(
+            Map("com.twitter.test.header" -> Seq(Buf.Utf8("foo"))),
+            request.args)
+        service(filteredRequest)
+      }
+    }
+    val service2 = filter2.andThen(reqRepServicePerEndpoint123.uppercase)
+    await(service2(scrooge.Request(Converter.Uppercase.Args("hello")))).value should equal("HELLO")
   }
 
   test("failure") {
@@ -45,7 +94,7 @@ class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
   }
 
   test("more than 22 args") {
-    Await.result(
+    await(
       client123.moreThanTwentyTwoArgs(
         "one",
         "two",
@@ -73,6 +122,10 @@ class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
       )
     ) should equal("foo")
   }
+
+  private def await[T](f: Future[T]): T = {
+    Await.result(f, 2.seconds)
+  }
 }
 
 class ConverterControllerServer extends ThriftServer {
@@ -82,8 +135,9 @@ class ConverterControllerServer extends ThriftServer {
     router
       .filter(classOf[AccessLoggingFilter])
       .filter[StatsFilter]
-      .filter[ExceptionTranslationFilter]
+      .filter[ExceptionMappingFilter]
       .filter[ClientIdWhitelistFilter]
+      .exceptionMapper[FinatraThriftExceptionMapper]
       .add[ConverterController]
   }
 }
@@ -98,7 +152,7 @@ class ConverterController extends Controller with Converter.BaseServiceIface {
       Future.value(args.msg.toUpperCase)
   }
 
-  val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { args: MoreThanTwentyTwoArgs.Args =>
+  val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { _: MoreThanTwentyTwoArgs.Args =>
     Future.value("foo")
   }
 }

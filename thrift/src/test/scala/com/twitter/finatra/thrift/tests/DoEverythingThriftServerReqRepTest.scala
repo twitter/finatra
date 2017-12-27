@@ -3,8 +3,6 @@ package com.twitter.finatra.thrift.tests
 import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.doeverything.thriftscala.DoEverything.{Echo, MagicNum, Uppercase}
 import com.twitter.finagle.ThriftMux
-import com.twitter.finagle.param.Stats
-import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftTwitterServer
 import com.twitter.inject.server.PortUtils
@@ -20,20 +18,21 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
   private val muxCtxtsFilter = muxContextsFilter
 
   private val reqRepServicePerEndpoint: DoEverything.ReqRepServicePerEndpoint =
-    ThriftMux.client
+    server
+      .thriftMuxClient(TestClientIdString)
       .filtered(muxCtxtsFilter.toFilter)
-      .configured(Stats(NullStatsReceiver))
-      .withClientId(TestClientId)
       .servicePerEndpoint[DoEverything.ReqRepServicePerEndpoint](
-        PortUtils.loopbackAddressForPort(server.thriftPort),
-        "client123")
+        server.thriftHostAndPort,
+        "client123"
+      )
 
   /* test that copy works for client */
   private val filteredReqRepServicePerEndpoint: DoEverything.ReqRepServicePerEndpoint =
     reqRepServicePerEndpoint
       .withUppercase(
-        uppercase = specificMethodLoggingFilter.andThen(reqRepServicePerEndpoint.uppercase))
-    .filtered(globalLoggingFilter)
+        uppercase = specificMethodLoggingFilter.andThen(reqRepServicePerEndpoint.uppercase)
+      )
+      .filtered(globalLoggingFilter)
 
   override def beforeAll(): Unit = {
     server.start()
@@ -53,8 +52,10 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
         headers = Map(
           TestClientRequestHeaderKey -> Seq(Buf.Utf8("bar")),
           "com.twitter.client123.another.header" -> Seq(Buf.Utf8("foo")),
-          "com.twitter.finagle.Retries" -> Seq(Buf.Utf8( "5"))), // set a header that finagle already broadcast to ensure that we collect and don't blow up.
-        args = Uppercase.Args("Hi"))
+          "com.twitter.finagle.Retries" -> Seq(Buf.Utf8("5"))
+        ), // set a header that finagle already broadcast to ensure that we collect and don't blow up.
+        args = Uppercase.Args("Hi")
+      )
     val f: Future[Response[Uppercase.SuccessType]] =
       reqRepServicePerEndpoint.uppercase(request)
     val response = await(f)
@@ -105,8 +106,10 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
       Request(
         headers = Map(
           TestClientRequestHeaderKey -> Seq(Buf.Utf8("bar")),
-          "com.twitter.client123.another.header" -> Seq(Buf.Utf8("foo"))),
-        args = Echo.Args("Hello, World."))
+          "com.twitter.client123.another.header" -> Seq(Buf.Utf8("foo"))
+        ),
+        args = Echo.Args("Hello, World.")
+      )
     val f: Future[Response[Echo.SuccessType]] =
       filteredReqRepServicePerEndpoint.echo(request)
     val response = await(f)
@@ -139,9 +142,10 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     val methodPerEndpoint: DoEverything.MethodPerEndpoint =
       ThriftMux.client
         .filtered(muxCtxtsFilter.toFilter)
-        .newIface[DoEverything.MethodPerEndpoint](
+        .build[DoEverything.MethodPerEndpoint](
           PortUtils.loopbackAddressForPort(server.thriftPort),
-          "client123")
+          "client123"
+        )
 
     val f: Future[MagicNum.SuccessType] =
       methodPerEndpoint.magicNum()

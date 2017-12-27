@@ -1,17 +1,31 @@
 package com.twitter.finatra.thrift
 
 import com.twitter.finagle.ThriftMux
-import com.twitter.finagle.param.Stats
 import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finagle.thrift.ClientId
-import com.twitter.inject.server.PortUtils._
+import com.twitter.finagle.thrift.service.{
+  Filterable,
+  MethodPerEndpointBuilder,
+  ServicePerEndpointBuilder
+}
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import scala.reflect.ClassTag
 
 trait ThriftClient { self: EmbeddedTwitterServer =>
 
+  /* Abstract */
+
+  /**
+   * Underlying Embedded TwitterServer exposed as a [[com.twitter.inject.server.Ports]]
+   * @return the underlying TwitterServer as a [[com.twitter.inject.server.Ports]].
+   */
   def twitterServer: Ports
 
+  /**
+   * The expected flag that sets the external port for serving the underlying Thrift service.
+   * @return a String representing the Thrift port flag.
+   * @see [[com.twitter.app.Flag]]
+   */
   def thriftPortFlag: String = "thrift.port"
 
   /* Overrides */
@@ -27,24 +41,120 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
 
   /* Public */
 
-  lazy val externalThriftHostAndPort = PortUtils.loopbackAddressForPort(thriftExternalPort)
+  /**
+   * The base ThriftMux.Client to the underlying Embedded TwitterServer.
+   */
+  def thriftMuxClient(clientId: String): ThriftMux.Client = {
+    self.start()
+    if (clientId != null && clientId.nonEmpty) {
+      ThriftMux.client
+        .withStatsReceiver(NullStatsReceiver)
+        .withClientId(ClientId(clientId))
+    } else {
+      ThriftMux.client
+        .withStatsReceiver(NullStatsReceiver)
+    }
+  }
 
+  def thriftMuxClient: ThriftMux.Client = thriftMuxClient(null)
+
+  /**
+   * Host and bound external Thrift port combination as a String, e.g., 127.0.0.1:9990.
+   */
+  lazy val externalThriftHostAndPort: String = PortUtils.loopbackAddressForPort(thriftExternalPort)
+
+  /**
+   * Bound external Thrift port for the Embedded TwitterServer.
+   * @return the bound external port on which the Embedded TwitterServer is serving the Thrift service.
+   */
   def thriftExternalPort: Int = {
     self.start()
     twitterServer.thriftPort.get
   }
 
-  def thriftClient[T: ClassTag](clientId: String = null): T = {
-    self.start()
-    val baseThriftClient =
-      ThriftMux.Client().configured(Stats(NullStatsReceiver))
+  /**
+   * Builds a Thrift client to the EmbeddedTwitterServer in the form of the higher-kinded client type
+   * or the method-per-endpoint type, e.g.,
+   *
+   * {{{
+   *   val client: MyService[Future] =
+   *    server.thriftClient[MyService[Future]](clientId = "client123")
+   *
+   *   ... or ...
+   *
+   *   val client: MyService.MethodPerEndpoint =
+   *    server.thriftClient[MyService.MethodPerEndpoint](clientId = "client123")
+   * }}}
+   *
+   * @param clientId the client Id to use in creating the thrift client.
+   *
+   * @return a Finagle Thrift client in the given form.
+   * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
+   */
+  def thriftClient[ThriftService: ClassTag](
+    clientId: String = null
+  ): ThriftService = {
+    thriftMuxClient(clientId)
+      .build[ThriftService](externalThriftHostAndPort)
+  }
 
-    val client = {
-      if (clientId != null) {
-        baseThriftClient.withClientId(ClientId(clientId))
-      } else baseThriftClient
-    }
+  /**
+   * Builds a Thrift client to the EmbeddedTwitterServer in the form of a service-per-endpoint or a
+   * "Req/Rep" service-per-endpoint.
+   *
+   * {{{
+   *   val client: MyService.ServicePerEndpoint =
+   *    server.servicePerEndpoint[MyService.ServicePerEndpoint](clientId = "client123")
+   *
+   *   ... or ...
+   *
+   *   val client: [MyService.ReqRepServicePerEndpoint =
+   *    server.servicePerEndpoint[MyService.ReqRepServicePerEndpoint](clientId = "client123")
+   * }}}
+   *
+   * @param clientId the client Id to use in creating the thrift client.
+   *
+   * @return a Finagle Thrift client in the given form.
+   * @see [[com.twitter.finagle.thrift.ThriftRichClient.servicePerEndpoint]]
+   * @see [[https://twitter.github.io/scrooge/Finagle.html#id2 Scrooge Finagle Integration - ServicePerEndpoint]]
+   * @see [[https://twitter.github.io/scrooge/Finagle.html#id3 Scrooge Finagle Integration - ReqRepServicePerEndpoint]]
+   */
+  def servicePerEndpoint[ServicePerEndpoint <: Filterable[ServicePerEndpoint]](
+    clientId: String = null
+  )(
+    implicit builder: ServicePerEndpointBuilder[ServicePerEndpoint]
+  ): ServicePerEndpoint = {
+    val label = if (clientId != null) clientId else ""
+    thriftMuxClient(clientId)
+      .servicePerEndpoint[ServicePerEndpoint](externalThriftHostAndPort, label)
+  }
 
-    client.newIface[T](loopbackAddressForPort(thriftExternalPort))
+  /**
+   * Builds a Thrift client to the EmbeddedTwitterServer in the form of a method-per-endpoint given
+   * a service per endpoint. Converts the given service-per-endpoint to a method-per-endpoint interface.
+   *
+   * {{{
+   *
+   *  val servicePerEndpoint = MyService.ServicePerEndpoint =
+   *    server.servicePerEndpoint[MyService.ServicePerEndpoint](clientId = "client123")
+   *  val client = server.methodPerEndpoint[MyService.ServicePerEndpoint, MyService.MethodPerEndpoint](servicePerEndpoint)
+   * }}}
+   *
+   * This is useful if you want to be able to filter calls to the Thrift service but only want to
+   * expose or interact with the RPC-style (method-per-endpoint) client interface.
+   *
+   * @param servicePerEndpoint the service-per-endpoint to convert to a method-per-endpoint.
+   *
+   * @return a Finagle Thrift client in the form of a method-per-endpoint.
+   * @see [[com.twitter.finagle.thrift.ThriftRichClient.methodPerEndpoint]]
+   * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
+   */
+  def methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](
+    servicePerEndpoint: ServicePerEndpoint
+  )(
+    implicit builder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
+  ): MethodPerEndpoint = {
+    thriftMuxClient
+      .methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](servicePerEndpoint)
   }
 }

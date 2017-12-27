@@ -643,7 +643,7 @@ class EmbeddedTwitterServer(
   }
 
   private def throwStartupFailedException(): Unit = {
-    println(s"\nEmbedded server $name failed to startup")
+    println(s"\nEmbedded server $name failed to startup: ${startupFailedThrowable.get.getMessage}")
     throw startupFailedThrowable.get
   }
 

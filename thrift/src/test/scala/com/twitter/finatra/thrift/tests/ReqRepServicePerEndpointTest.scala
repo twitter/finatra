@@ -24,7 +24,7 @@ object ReqRepServicePerEndpointTest {
     }).mkString(", ")
   }
 
-  def loggingFilter(fn: => Unit) = new TypeAgnostic {
+  def loggingFilter(fn: => Unit): Filter.TypeAgnostic = new TypeAgnostic {
     def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = {
       new Filter[Req, Rep, Req, Rep] {
         def apply(
@@ -39,34 +39,36 @@ object ReqRepServicePerEndpointTest {
 }
 
 abstract class ReqRepServicePerEndpointTest extends Test {
-  protected val TestClientId: ClientId = ClientId("client123")
+  protected val TestClientIdString: String = "client123"
+  protected val TestClientId: ClientId = ClientId(TestClientIdString)
   protected val TestClientRequestHeaderKey = "com.twitter.client123.header"
 
   protected class MuxContextsFilter {
     private var _contexts: Seq[(Buf, Buf)] = Seq.empty
 
-    def toFilter: Filter[mux.Request, mux.Response, mux.Request, mux.Response] = new Filter[mux.Request, mux.Response, mux.Request, mux.Response] {
-      def apply(
-        request: mux.Request,
-        service: Service[mux.Request, mux.Response]
-      ): Future[mux.Response] = {
-        for (response <- service(request)) yield {
-          _contexts = response.contexts
-          response
+    def toFilter: Filter[mux.Request, mux.Response, mux.Request, mux.Response] =
+      new Filter[mux.Request, mux.Response, mux.Request, mux.Response] {
+        def apply(
+          request: mux.Request,
+          service: Service[mux.Request, mux.Response]
+        ): Future[mux.Response] = {
+          for (response <- service(request)) yield {
+            _contexts = response.contexts
+            response
+          }
         }
       }
-    }
 
     def contexts: Seq[(Buf, Buf)] = _contexts
 
-    def clear():Unit = synchronized {
+    def clear(): Unit = synchronized {
       _contexts = Seq.empty
     }
   }
 
   protected def muxContextsFilter = new MuxContextsFilter
 
-  protected val specificMethodLoggingFilter = new TypeAgnostic {
+  protected val specificMethodLoggingFilter: Filter.TypeAgnostic = new TypeAgnostic {
     def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = {
       new Filter[Req, Rep, Req, Rep] {
         def apply(
@@ -80,7 +82,7 @@ abstract class ReqRepServicePerEndpointTest extends Test {
     }
   }
 
-  protected val globalLoggingFilter = new TypeAgnostic {
+  protected val globalLoggingFilter: Filter.TypeAgnostic = new TypeAgnostic {
     def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = {
       new Filter[Req, Rep, Req, Rep] {
         def apply(

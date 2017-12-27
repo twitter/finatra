@@ -50,8 +50,7 @@ class EmbeddedThriftServer(
       disableTestLogging = disableTestLogging,
       maxStartupTimeSeconds = maxStartupTimeSeconds,
       failOnLintViolation = failOnLintViolation
-    )
-    with ThriftClient {
+    ) with ThriftClient {
 
   /* Additional Constructors */
 
