@@ -133,11 +133,20 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * Builds a Thrift client to the EmbeddedTwitterServer in the form of a method-per-endpoint given
    * a service per endpoint. Converts the given service-per-endpoint to a method-per-endpoint interface.
    *
+   * Note: This currently only supports returning a "method-per-endpoint" in the higher-kinded type form
+   * as Scrooge only generates a MethodPerEndpointBuilder over that type. Therefore, you cannot use this
+   * to generate a client in the form of `MyService.MethodPerEndpoint` that wraps a (potentially filtered)
+   * `MyService.ServicePerEndpoint`, only a `MyService[Future]`.
+   *
+   * While these are semantically equivalent, there are differences when it comes to some testing
+   * features that have trouble dealing with higher-kinded types (like mocking).
+   *
    * {{{
    *
    *  val servicePerEndpoint = MyService.ServicePerEndpoint =
    *    server.servicePerEndpoint[MyService.ServicePerEndpoint](clientId = "client123")
-   *  val client = server.methodPerEndpoint[MyService.ServicePerEndpoint, MyService.MethodPerEndpoint](servicePerEndpoint)
+   *  val client: MyService[Future] =
+   *    server.methodPerEndpoint[MyService.ServicePerEndpoint, MyService[Future]](servicePerEndpoint)
    * }}}
    *
    * This is useful if you want to be able to filter calls to the Thrift service but only want to
