@@ -6,7 +6,8 @@ import com.twitter.finagle.thrift.ClientId
 import com.twitter.finagle.thrift.service.{
   Filterable,
   MethodPerEndpointBuilder,
-  ServicePerEndpointBuilder
+  ServicePerEndpointBuilder,
+  ThriftServiceBuilder
 }
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
 import scala.reflect.ClassTag
@@ -130,23 +131,15 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   }
 
   /**
-   * Builds a Thrift client to the EmbeddedTwitterServer in the form of a method-per-endpoint given
-   * a service per endpoint. Converts the given service-per-endpoint to a method-per-endpoint interface.
-   *
-   * Note: This currently only supports returning a "method-per-endpoint" in the higher-kinded type form
-   * as Scrooge only generates a MethodPerEndpointBuilder over that type. Therefore, you cannot use this
-   * to generate a client in the form of `MyService.MethodPerEndpoint` that wraps a (potentially filtered)
-   * `MyService.ServicePerEndpoint`, only a `MyService[Future]`.
-   *
-   * While these are semantically equivalent, there are differences when it comes to some testing
-   * features that have trouble dealing with higher-kinded types (like mocking).
+   * Builds a Thrift client to the EmbeddedTwitterServer in the form of a `MethodPerEndpoint` which
+   * wraps a given `ServicePerEndpoint`. Converts the `ServicePerEndpoint` to a
+   * `MethodPerEndpoint` interface, e.g., `MyService.MethodPerEndpoint`.
    *
    * {{{
-   *
    *  val servicePerEndpoint = MyService.ServicePerEndpoint =
    *    server.servicePerEndpoint[MyService.ServicePerEndpoint](clientId = "client123")
-   *  val client: MyService[Future] =
-   *    server.methodPerEndpoint[MyService.ServicePerEndpoint, MyService[Future]](servicePerEndpoint)
+   *  val client: MyService.MethodPerEndpoint =
+   *    server.methodPerEndpoint[MyService.ServicePerEndpoint, MyService.MethodPerEndpoint](servicePerEndpoint)
    * }}}
    *
    * This is useful if you want to be able to filter calls to the Thrift service but only want to
@@ -154,7 +147,8 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    *
    * @param servicePerEndpoint the service-per-endpoint to convert to a method-per-endpoint.
    *
-   * @return a Finagle Thrift client in the form of a method-per-endpoint.
+   * @return a Finagle Thrift client in the `MyService.MethodPerEndpoint` form of a
+   *         method-per-endpoint.
    * @see [[com.twitter.finagle.thrift.ThriftRichClient.methodPerEndpoint]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
    */
@@ -165,5 +159,42 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   ): MethodPerEndpoint = {
     thriftMuxClient
       .methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](servicePerEndpoint)
+  }
+
+  /**
+   * Builds a Thrift client to the EmbeddedTwitterServer in the higher-kinded form of a
+   * method-per-endpoint which wraps a given `ServicePerEndpoint`. Converts the `ServicePerEndpoint`
+   * to a higher-kinded method-per-endpoint interface, e.g., `MyService[Future]`.
+   *
+   * Note: While `MyService.MethodPerEndpoint` and `MyService[Future]` are semantically equivalent,
+   * there are differences when it comes to some testing features that have trouble dealing with
+   * higher-kinded types (like mocking).
+   *
+   * Users should prefer to use [[ThriftClient.methodPerEndpoint]] which generates a client
+   * in the form of `MyService.MethodPerEndpoint` over this higher-kinded form.
+   *
+   * {{{
+   *  val servicePerEndpoint = MyService.ServicePerEndpoint =
+   *    server.servicePerEndpoint[MyService.ServicePerEndpoint](clientId = "client123")
+   *  val client: MyService[Future] =
+   *    server.thriftClient[MyService.ServicePerEndpoint, MyService[Future]](servicePerEndpoint)
+   * }}}
+   *
+   * This is useful if you want to be able to filter calls to the Thrift service but only want to
+   * expose or interact with the RPC-style (method-per-endpoint) client interface.
+   *
+   * @param servicePerEndpoint the service-per-endpoint to convert to a method-per-endpoint.
+   *
+   * @return a Finagle Thrift client in the higher-kinded form of a method-per-endpoint.
+   * @see [[com.twitter.finagle.thrift.ThriftRichClient.thriftService]]
+   * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
+   */
+  @deprecated("Use #methodPerEndpoint", "2018-01-12")
+  def thriftClient[ServicePerEndpoint, ThriftService](
+    servicePerEndpoint: ServicePerEndpoint
+  )(
+    implicit builder: ThriftServiceBuilder[ServicePerEndpoint, ThriftService]
+  ): ThriftService = {
+    thriftMuxClient.thriftService[ServicePerEndpoint, ThriftService](servicePerEndpoint)
   }
 }

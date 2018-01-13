@@ -31,10 +31,12 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   /* Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id2 */
   val servicePerEndpoint123: DoEverything.ServicePerEndpoint =
     server.servicePerEndpoint[DoEverything.ServicePerEndpoint](clientId = "client123")
-  /* Method-Per-Endpoint type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1
-   * NOTE: this is the higher-kinded type as that is currently the only builder-type Scrooge generates */
+  /* Higher-kinded interface type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val anotherMethodPerEndpointClient123: DoEverything[Future] =
-    server.methodPerEndpoint[DoEverything.ServicePerEndpoint, DoEverything[Future]](servicePerEndpoint123)
+    server.thriftClient[DoEverything.ServicePerEndpoint, DoEverything[Future]](servicePerEndpoint123)
+  /* Another Method-Per-Endpoint type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
+  val yetAnotherMethodPerEndpointClient123: DoEverything.MethodPerEndpoint =
+    server.methodPerEndpoint[DoEverything.ServicePerEndpoint, DoEverything.MethodPerEndpoint](servicePerEndpoint123)
   /* Req/Rep Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id3 */
   val reqRepServicePerEndpoint123: DoEverything.ReqRepServicePerEndpoint =
     server.servicePerEndpoint[DoEverything.ReqRepServicePerEndpoint](clientId = "client123")
@@ -43,6 +45,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     await(client123.uppercase("Hi")) should equal("HI")
     await(methodPerEndpointClient123.uppercase("Hi")) should equal("HI")
     await(anotherMethodPerEndpointClient123.uppercase("Hi")) should equal("HI")
+    await(yetAnotherMethodPerEndpointClient123.uppercase("Hi")) should equal("HI")
 
     val filter = new Filter[
       DoEverything.Uppercase.Args,
