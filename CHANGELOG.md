@@ -4,9 +4,6 @@ All notable changes to this project will be documented in this file. Note that `
 
 ## [Unreleased]
 
-* finatra-jackson: Added support to finatra/jackson for deserializing `com.twitter.util.Duration` instances from
-  their String representations. ``PHAB_ID=D122366``
-
 ### Added
 
 * finatra-thrift: Add support for building all types of Finagle Thrift clients to 
@@ -14,7 +11,13 @@ All notable changes to this project will be documented in this file. Note that `
   test utility. See: https://twitter.github.io/scrooge/Finagle.html#creating-a-client
   ``PHAB_ID=D123915``
 
+* finatra-jackson: Added support to finatra/jackson for deserializing `com.twitter.util.Duration` 
+  instances from their String representations. ``PHAB_ID=D122366``
+
 ### Changed
+
+* finatra-http: Change visibility of internal class `c.t.finatra.http.internal.marshalling.RequestInjectableValues`
+  to be correctly specified as private to the `http` package. ``PHAB_ID=D127975``
 
 ### Fixed
 

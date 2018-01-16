@@ -1,7 +1,6 @@
 package com.twitter.finatra.http.fileupload
 
 import com.twitter.finagle.http.{Method, Request}
-import com.twitter.finatra.http.internal.marshalling.FinatraRequestContext
 import org.apache.commons.fileupload.{FileItemFactory, FileItemIterator, FileUploadBase}
 import org.apache.commons.io.IOUtils
 import scala.collection.mutable
@@ -33,7 +32,7 @@ class FinagleRequestFileUpload extends FileUploadBase {
 
   def fileItemIterator(request: Request): Option[FileItemIterator] = {
     if (isPostOrPut(request) && isMultipart(request))
-      Some(getItemIterator(new FinatraRequestContext(request)))
+      Some(getItemIterator(new RequestContext(request)))
     else
       None
   }

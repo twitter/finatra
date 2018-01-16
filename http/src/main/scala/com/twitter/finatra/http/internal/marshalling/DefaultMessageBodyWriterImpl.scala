@@ -8,7 +8,7 @@ import com.twitter.inject.annotations.Flag
 import javax.inject.Inject
 import org.apache.commons.lang.ClassUtils
 
-private[finatra] class FinatraDefaultMessageBodyWriter @Inject()(
+private[finatra] class DefaultMessageBodyWriterImpl @Inject()(
   @Flag("http.response.charset.enabled") includeContentTypeCharset: Boolean,
   mapper: FinatraObjectMapper
 ) extends DefaultMessageBodyWriter {

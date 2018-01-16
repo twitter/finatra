@@ -12,7 +12,7 @@ object RequestInjectableValues {
   val SeqWithSingleEmptyString = Seq("")
 }
 
-class RequestInjectableValues(
+private[http] class RequestInjectableValues(
   objectMapper: FinatraObjectMapper,
   request: Request,
   injector: Injector
