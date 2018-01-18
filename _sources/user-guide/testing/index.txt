@@ -50,7 +50,7 @@ traits to aid in creating simple and powerful tests.
 For more information on `ScalaTest <http://www.scalatest.org/>`__, see the `ScalaTest User Guide <http://www.scalatest.org/user_guide>`__.
 
 To make use of another ScalaTest test style, such as `FunSpec <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec>`__ 
-or others, see `Test Mixins <mixin.html>`__.
+or others, see `Test Mixins <mixins.html>`__.
 
 More Information
 ----------------

@@ -199,12 +199,12 @@
       
     </li><li class="current-entities indented6">
                         <span class="separator"></span>
-                        <a class="class" href="MessageBodyManager.html" title=""></a>
-                        <a href="MessageBodyManager.html" title="">MessageBodyManager</a>
+                        <a class="class" href="MessageBodyManager.html" title="Manages registration of message body components."></a>
+                        <a href="MessageBodyManager.html" title="Manages registration of message body components.">MessageBodyManager</a>
                       </li><li class="current-entities indented6">
+                        <span class="separator"></span>
                         <a class="object" href="RequestInjectableValues$.html" title=""></a>
-                        <a class="class" href="RequestInjectableValues.html" title=""></a>
-                        <a href="RequestInjectableValues.html" title="">RequestInjectableValues</a>
+                        <a href="RequestInjectableValues$.html" title="">RequestInjectableValues</a>
                       </li>
               </ul>
             </div>
@@ -280,29 +280,23 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="MessageBodyManager.html"><span class="name">MessageBodyManager</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+        <a title="Manages registration of message body components." href="MessageBodyManager.html"><span class="name">MessageBodyManager</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Manages registration of message body components.</p><div class="fullcomment"><div class="comment cmt"><p>Manages registration of message body components. I.e., components that specify how to parse
+an incoming Finagle HTTP request body into a model object (&quot;message body reader&quot;) and how to
+render a given type as a response (&quot;message body writer&quot;).</p><p>A default implementation for both a reader and a writer is necessary in order to specify the
+behavior to invoke when a reader or writer is not found for a requested type <code>T</code>. The framework
+binds two default implementations: <code>DefaultMessageBodyReader</code> and <code>DefaultMessageBodyWriter</code> via
+the <a href="../../modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a>.</p><p>These defaults are overridable by providing a customized <code>MessageBodyModule</code> in your
+<a href="../../HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">com.twitter.finatra.http.HttpServer</a> by overriding the
+<a href="../../HttpServer.html#messageBodyModule:com.google.inject.Module" class="extmbr" name="com.twitter.finatra.http.HttpServer#messageBodyModule">com.twitter.finatra.http.HttpServer.messageBodyModule</a>.</p><p>When the MessageBodyManager is obtained from the injector (which is configured with the framework
+<a href="../../modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a> the framework default implementations for
+the reader and writer will be provided accordingly (along with the configured server injector).
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.marshalling.RequestInjectableValues" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="RequestInjectableValuesextendsInjectableValues"></a><a id="RequestInjectableValues:RequestInjectableValues"></a>
-      <span class="permalink">
-      <a href="../../../../../../com/twitter/finatra/http/internal/marshalling/index.html#RequestInjectableValuesextendsInjectableValues" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="RequestInjectableValues.html"><span class="name">RequestInjectableValues</span></a><span class="result"> extends <span class="extype" name="com.fasterxml.jackson.databind.InjectableValues">InjectableValues</span></span>
-      </span>
-      
-      
+        </dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 

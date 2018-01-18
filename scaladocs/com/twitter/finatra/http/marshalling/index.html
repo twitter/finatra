@@ -279,24 +279,24 @@
       
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="DefaultMessageBodyReader.html" title=""></a>
-                        <a href="DefaultMessageBodyReader.html" title="">DefaultMessageBodyReader</a>
+                        <a class="trait" href="DefaultMessageBodyReader.html" title="Marker trait denoting the default MessageBodyReader for the HTTP server."></a>
+                        <a href="DefaultMessageBodyReader.html" title="Marker trait denoting the default MessageBodyReader for the HTTP server.">DefaultMessageBodyReader</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="DefaultMessageBodyWriter.html" title=""></a>
-                        <a href="DefaultMessageBodyWriter.html" title="">DefaultMessageBodyWriter</a>
+                        <a class="trait" href="DefaultMessageBodyWriter.html" title="A marker trait denoting the default MessageBodyWriter for the HTTP server."></a>
+                        <a href="DefaultMessageBodyWriter.html" title="A marker trait denoting the default MessageBodyWriter for the HTTP server.">DefaultMessageBodyWriter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="MessageBodyComponent.html" title="Marker trait for MessageBodyReader's and MessageBodyWriter's"></a>
-                        <a href="MessageBodyComponent.html" title="Marker trait for MessageBodyReader's and MessageBodyWriter's">MessageBodyComponent</a>
+                        <a class="trait" href="MessageBodyComponent.html" title="Marker trait for MessageBodyReaders and MessageBodyWriters"></a>
+                        <a href="MessageBodyComponent.html" title="Marker trait for MessageBodyReaders and MessageBodyWriters">MessageBodyComponent</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="MessageBodyReader.html" title=""></a>
-                        <a href="MessageBodyReader.html" title="">MessageBodyReader</a>
+                        <a class="trait" href="MessageBodyReader.html" title="MessageBodyReader transforms an HTTP Request into an object."></a>
+                        <a href="MessageBodyReader.html" title="MessageBodyReader transforms an HTTP Request into an object.">MessageBodyReader</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="MessageBodyWriter.html" title="MessageBodyWriter's transform objects into HTTP Responses"></a>
-                        <a href="MessageBodyWriter.html" title="MessageBodyWriter's transform objects into HTTP Responses">MessageBodyWriter</a>
+                        <a class="trait" href="MessageBodyWriter.html" title="MessageBodyWriter transforms an object into an HTTP Response."></a>
+                        <a href="MessageBodyWriter.html" title="MessageBodyWriter transforms an object into an HTTP Response.">MessageBodyWriter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="WriterResponse.html" title=""></a>
@@ -404,7 +404,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="DefaultMessageBodyReaderextendsAnyRef"></a><a id="DefaultMessageBodyReader:DefaultMessageBodyReader"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/marshalling/index.html#DefaultMessageBodyReaderextendsAnyRef" title="Permalink">
@@ -416,11 +416,29 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="DefaultMessageBodyReader.html"><span class="name">DefaultMessageBodyReader</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+        <a title="Marker trait denoting the default MessageBodyReader for the HTTP server." href="DefaultMessageBodyReader.html"><span class="name">DefaultMessageBodyReader</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Marker trait denoting the default <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> for the HTTP server.</p><div class="fullcomment"><div class="comment cmt"><p>Marker trait denoting the default <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> for the HTTP server. This default
+<a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> is invoked when the <span class="extype" name="com.twitter.finatra.http.internal.marshalling.CallbackConverter">com.twitter.finatra.http.internal.marshalling.CallbackConverter</span>
+cannot find a suitable <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> to convert the incoming Finagle request into the
+route callback input type. E.g., given a defined route in a Controller:</p><pre>get(<span class="lit">"/"</span>) { request: T <span class="kw">=&gt;</span>
+   ...
+}</pre><p>The <span class="extype" name="com.twitter.finatra.http.internal.marshalling.CallbackConverter">com.twitter.finatra.http.internal.marshalling.CallbackConverter</span> attempts to locate a
+<a href="../internal/marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.internal.marshalling.MessageBodyManager">com.twitter.finatra.http.internal.marshalling.MessageBodyManager</a> which can parse a Finagle
+request into the input type <code>T</code>. If one is not found, this default is invoked.</p><p>The framework binds <span class="extype" name="com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl">com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl</span>
+as an overridable implementation via the <a href="../modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a>.</p><p>To override this implementation, provide a customized <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> by
+overriding <a href="../HttpServer.html#messageBodyModule:com.google.inject.Module" class="extmbr" name="com.twitter.finatra.http.HttpServer#messageBodyModule">com.twitter.finatra.http.HttpServer.messageBodyModule</a>, e.g.,</p><pre><span class="kw">class</span> MyServer <span class="kw">extends</span> HttpServer {
+   ...
+   <span class="kw">override</span> <span class="kw">val</span> messageBodyModule = MyCustomMessageBodyModule
+}</pre><p>The framework default <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> will attempt to convert the incoming request body using
+the server's configured <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a> and is the basis for
+the framework's <a href="https://twitter.github.io/finatra/user-guide/json/routing.html#requests" target="_blank">JSON Integration with Routing</a>.</p><p>The <a href="DefaultMessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.DefaultMessageBodyReader">DefaultMessageBodyReader</a> trait differs from the <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> trait in that the
+default is not parameterized to a specific type but instead defines a generic <code>parse[T]</code> function
+which can generate a type T from a given request. A <a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> is expected to only
+ever generate a single type <code>T</code> from it's <code>parse[T]</code> implementation.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/json/routing.html#requests" target="_blank">https://twitter.github.io/finatra/user-guide/json/routing.html#requests</a></p></span><span class="cmt"><p><a href="../HttpServer.html#messageBodyModule:com.google.inject.Module" class="extmbr" name="com.twitter.finatra.http.HttpServer#messageBodyModule">com.twitter.finatra.http.HttpServer.messageBodyModule</a></p></span><span class="cmt"><p><a href="../modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a></p></span><span class="cmt"><p><a href="../internal/marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.internal.marshalling.MessageBodyManager">com.twitter.finatra.http.internal.marshalling.MessageBodyManager</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl">com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.marshalling.DefaultMessageBodyWriter" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="DefaultMessageBodyWriterextendsMessageBodyWriter[Any]"></a><a id="DefaultMessageBodyWriter:DefaultMessageBodyWriter"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/marshalling/index.html#DefaultMessageBodyWriterextendsMessageBodyWriter[Any]" title="Permalink">
@@ -432,10 +450,22 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="DefaultMessageBodyWriter.html"><span class="name">DefaultMessageBodyWriter</span></a><span class="result"> extends <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a>[<a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a>]</span>
+        <a title="A marker trait denoting the default MessageBodyWriter for the HTTP server." href="DefaultMessageBodyWriter.html"><span class="name">DefaultMessageBodyWriter</span></a><span class="result"> extends <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a>[<a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a>]</span>
       </span>
       
-      
+      <p class="shortcomment cmt">A marker trait denoting the default <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> for the HTTP server.</p><div class="fullcomment"><div class="comment cmt"><p>A marker trait denoting the default <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> for the HTTP server. This default
+<a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> is invoked by either the <span class="extype" name="com.twitter.finatra.http.internal.marshalling.CallbackConverter">com.twitter.finatra.http.internal.marshalling.CallbackConverter</span>
+(by invoking the <a href="../response/ResponseBuilder.html" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder">com.twitter.finatra.http.response.ResponseBuilder</a>) or
+<span class="extype" name="com.twitter.finatra.http.response.ResponseBuilder#write">com.twitter.finatra.http.response.ResponseBuilder#write</span> directly to return a suitable
+response for a given return type.</p><p>The framework binds <span class="extype" name="com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl">com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl</span>
+as an overridable implementation via the <a href="../modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a>.
+To override this implementation, provide a customized <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> by
+overriding <a href="../HttpServer.html#messageBodyModule:com.google.inject.Module" class="extmbr" name="com.twitter.finatra.http.HttpServer#messageBodyModule">com.twitter.finatra.http.HttpServer.messageBodyModule</a>, e.g.,</p><pre><span class="kw">class</span> MyServer <span class="kw">extends</span> HttpServer {
+   ...
+   <span class="kw">override</span> <span class="kw">val</span> messageBodyModule = MyCustomMessageBodyModule
+}</pre><p>The framework default <a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> will attempt to convert the outgoing type <code>T</code> to a JSON
+response using the server's configured <a href="../../json/FinatraObjectMapper.html" class="extype" name="com.twitter.finatra.json.FinatraObjectMapper">com.twitter.finatra.json.FinatraObjectMapper</a>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/json/routing.html#responses" target="_blank">https://twitter.github.io/finatra/user-guide/json/routing.html#responses</a></p></span><span class="cmt"><p><a href="../HttpServer.html#messageBodyModule:com.google.inject.Module" class="extmbr" name="com.twitter.finatra.http.HttpServer#messageBodyModule">com.twitter.finatra.http.HttpServer.messageBodyModule</a></p></span><span class="cmt"><p><a href="../modules/MessageBodyModule$.html" class="extype" name="com.twitter.finatra.http.modules.MessageBodyModule">com.twitter.finatra.http.modules.MessageBodyModule</a></p></span><span class="cmt"><p><a href="../internal/marshalling/MessageBodyManager.html" class="extype" name="com.twitter.finatra.http.internal.marshalling.MessageBodyManager">com.twitter.finatra.http.internal.marshalling.MessageBodyManager</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl">com.twitter.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.marshalling.MessageBodyComponent" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MessageBodyComponentextendsAnyRef"></a><a id="MessageBodyComponent:MessageBodyComponent"></a>
       <span class="permalink">
@@ -448,10 +478,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="Marker trait for MessageBodyReader's and MessageBodyWriter's" href="MessageBodyComponent.html"><span class="name">MessageBodyComponent</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+        <a title="Marker trait for MessageBodyReaders and MessageBodyWriters" href="MessageBodyComponent.html"><span class="name">MessageBodyComponent</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
       </span>
       
-      <p class="shortcomment cmt">Marker trait for MessageBodyReader's and MessageBodyWriter's</p>
+      <p class="shortcomment cmt">Marker trait for MessageBodyReaders and MessageBodyWriters</p>
     </li><li name="com.twitter.finatra.http.marshalling.MessageBodyReader" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MessageBodyReader[T]extendsMessageBodyComponent"></a><a id="MessageBodyReader[T]:MessageBodyReader[T]"></a>
       <span class="permalink">
@@ -464,10 +494,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="" href="MessageBodyReader.html"><span class="name">MessageBodyReader</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>
+        <a title="MessageBodyReader transforms an HTTP Request into an object." href="MessageBodyReader.html"><span class="name">MessageBodyReader</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt"><a href="MessageBodyReader.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyReader">MessageBodyReader</a> transforms an HTTP Request into an object.</p>
     </li><li name="com.twitter.finatra.http.marshalling.MessageBodyWriter" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="MessageBodyWriter[T]extendsMessageBodyComponent"></a><a id="MessageBodyWriter[T]:MessageBodyWriter[T]"></a>
       <span class="permalink">
@@ -480,11 +510,10 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="MessageBodyWriter's transform objects into HTTP Responses" href="MessageBodyWriter.html"><span class="name">MessageBodyWriter</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>
+        <a title="MessageBodyWriter transforms an object into an HTTP Response." href="MessageBodyWriter.html"><span class="name">MessageBodyWriter</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="MessageBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyComponent">MessageBodyComponent</a></span>
       </span>
       
-      <p class="shortcomment cmt">MessageBodyWriter's transform objects into HTTP Responses
-</p>
+      <p class="shortcomment cmt"><a href="MessageBodyWriter.html" class="extype" name="com.twitter.finatra.http.marshalling.MessageBodyWriter">MessageBodyWriter</a> transforms an object into an HTTP Response.</p>
     </li><li name="com.twitter.finatra.http.marshalling.WriterResponse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="WriterResponseextendsProductwithSerializable"></a><a id="WriterResponse:WriterResponse"></a>
       <span class="permalink">

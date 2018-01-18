@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Message Body Components &#8212; Finatra 18.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '18.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 18.1.0 documentation" href="../../index.html" />
+    <link rel="up" title="User’s Guide" href="../index.html" />
+    <link rel="next" title="Filtering HTTP Requests" href="filters.html" />
+    <link rel="prev" title="HTTP Responses" href="responses.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="filters.html" title="Filtering HTTP Requests"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="responses.html" title="HTTP Responses"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="message-body-components">
+<span id="http-message-body"></span><h1>Message Body Components<a class="headerlink" href="#message-body-components" title="Permalink to this headline">¶</a></h1>
+<p>Message body components specify how to parse an incoming Finagle
+<a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala">HTTP request</a>
+into a model or domain object (&#8220;message body reader&#8221;) and how to transform a given  type <cite>T</cite> into a
+Finagle <a class="reference external" href="https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala">HTTP response</a>
+(&#8220;message body writer&#8221;).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Classes in <em>internal</em> packages (i.e., <cite>com.twitter.finatra.http.internal</cite>) are not expected to be used directly and no guarantee is
+given as to the stability of their interfaces. Please do not use these classes directly.</p>
+</div>
+<div class="section" id="message-body-readers">
+<h2>Message Body Readers<a class="headerlink" href="#message-body-readers" title="Permalink to this headline">¶</a></h2>
+<p>Message body readers can be registered through the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala"><cite>HttpRouter</cite></a> much like adding a
+<a class="reference external" href="controllers.html">Controller</a> or a <a class="reference external" href="filters.html">Filter</a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+import ExampleController
+import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.{Controller, HttpServer}
+
+object ExampleServerMain extends ExampleServer
+
+class ExampleServer extends HttpServer {
+
+  override val modules = Seq(
+    DoEverythingModule)
+
+  override def configureHttp(router: HttpRouter): Unit = {
+    router
+      .add[ExampleController]
+      .register[MyModelObjectMessageBodyReader]
+  }
+}
+</pre></div>
+</div>
+<p>Message body readers are used to convert an incoming Finagle HTTP request into a type <cite>T</cite> which is
+specified as the input type for a route callback.</p>
+<p>E.g., a controller with a route specified:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
+
+class ExampleController extends Controller {
+
+  get(&quot;/&quot;) { model: MyModelObject =&gt;
+    ...
+  }
+</pre></div>
+</div>
+<p>will trigger the framework to search for a registered message body reader that can convert the incoming
+Finagle HTTP request to <cite>MyModelObject</cite>. If a message body reader for the <cite>MyModelObject</cite> type
+cannot be found the <cite>DefaultMessageBodyReader</cite> implementation configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a>
+will be used.</p>
+<div class="section" id="defaultmessagebodyreader">
+<h3><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala"><code class="docutils literal"><span class="pre">DefaultMessageBodyReader</span></code></a><a class="headerlink" href="#defaultmessagebodyreader" title="Permalink to this headline">¶</a></h3>
+<p>The framework provides a default message body reader implementation: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala"><cite>c.t.finatra.http.internal.marshalling.DefaultMessageBodyReaderImpl</cite></a>
+which is invoked when a more specific message body reader cannot be found to convert an incoming
+Finagle HTTP request.</p>
+<p>The <cite>DefaultMessageBodyReaderImpl</cite> parses an incoming Finagle HTTP request
+<a class="reference external" href="https://github.com/twitter/finagle/blob/f61b6f99c7d108b458d5adcb9891ff6ddda7f125/finagle-base-http/src/main/scala/com/twitter/finagle/http/Message.scala#L440">body</a>
+as JSON, marshalling it into the given callback input type using the <a class="reference external" href="https://github.com/twitter/finatra/blob/712edf91c0361fd9907deaef06e0bd61384f6a7e/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L81">HttpServer</a>
+<a class="reference external" href="../json/index.html#configuration">configured</a> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a>
+and is the basis of the <a class="reference external" href="../json/routing.html">JSON integration with routing</a>.</p>
+<p>This default behavior is overridable. See the <cite>c.t.finatra.http.modules.MessageBodyModule</cite>
+<a class="reference external" href="#c-t-finatra-http-modules-messagebodymodule">section</a> for more information on how to
+provide a different <cite>DefaultMessageBodyReader</cite> implementation.</p>
+</div>
+</div>
+<div class="section" id="message-body-writers">
+<h2>Message Body Writers<a class="headerlink" href="#message-body-writers" title="Permalink to this headline">¶</a></h2>
+<p>Like message body readers, writers can be registered through the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala"><cite>HttpRouter</cite></a> &#8211; again like adding
+a <a class="reference external" href="controllers.html">Controller</a> or a <a class="reference external" href="filters.html">Filter</a>.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+import ExampleController
+import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.{Controller, HttpServer}
+
+object ExampleServerMain extends ExampleServer
+
+class ExampleServer extends HttpServer {
+
+ override val modules = Seq(
+   DoEverythingModule)
+
+ override def configureHttp(router: HttpRouter): Unit = {
+   router
+     .add[ExampleController]
+     .register[MyModelObjectMessageBodyReader]
+     .register[MyModelObjectMessageBodyWriter]
+ }
+}
+</pre></div>
+</div>
+<p>Message body writers are used to specify conversion from a type <cite>T</cite> to a Finagle HTTP response. This
+can be for the purpose of informing the framework how to render the return type of a route callback
+or how to render a type passed as a body to a function in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/ResponseBuilder.scala"><cite>c.t.finatra.http.response.ResponseBuilder</cite></a>.</p>
+<p>E.g., a controller with a route specified:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+
+class ExampleController extends Controller {
+
+  get(&quot;/&quot;) { request: Request =&gt;
+    ...
+    MyRenderableObjectType(
+      id = &quot;1&quot;,
+      name = &quot;John Doe&quot;,
+      description = &quot;A renderable return&quot;)
+  }
+</pre></div>
+</div>
+<p>will trigger the framework to search for a registered message body writer that can convert the
+<cite>MyRenderableObjectType</cite> type into a Finagle HTTP response. If a message body writer for the
+<cite>MyRenderableObjectType</cite> type cannot be found the <cite>DefaultMessageBodyWriter</cite> implementation
+configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> will be used.</p>
+<div class="section" id="defaultmessagebodywriter">
+<h3><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala"><code class="docutils literal"><span class="pre">DefaultMessageBodyWriter</span></code></a><a class="headerlink" href="#defaultmessagebodywriter" title="Permalink to this headline">¶</a></h3>
+<p>The framework provides a default message body writer implementation: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyWriterImpl.scala"><cite>c.t.finatra.http.internal.marshalling.DefaultMessageBodyWriterImpl</cite></a>
+which is invoked when a more specific message body writer cannot be found to convert given type <cite>T</cite>
+into a Finagle HTTP response.</p>
+<p>The <cite>DefaultMessageBodyWriterImpl</cite> converts any non-primitive type to a <cite>application/json</cite> content-type
+response and a JSON representation of the type using the <a class="reference external" href="https://github.com/twitter/finatra/blob/712edf91c0361fd9907deaef06e0bd61384f6a7e/http/src/main/scala/com/twitter/finatra/http/HttpServer.scala#L81">HttpServer</a>
+<a class="reference external" href="../json/index.html#configuration">configured</a> <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a>
+to convert the type to JSON.</p>
+<p>For primitive and <a class="reference external" href="https://commons.apache.org/proper/commons-lang/javadocs/api-2.6/org/apache/commons/lang/ClassUtils.html#wrapperToPrimitive(java.lang.Class)">wrapper</a>
+types, the default writer implementation will render a <cite>plain/text</cite> content-type response using the
+type&#8217;s <cite>toString</cite> value.</p>
+<p>This default behavior is overridable. See the <cite>c.t.finatra.http.modules.MessageBodyModule</cite>
+<a class="reference external" href="#c-t-finatra-http-modules-messagebodymodule">section</a> for more information on how to
+provide a different <cite>DefaultMessageBodyWriter</cite> implementation.</p>
+</div>
+</div>
+<div class="section" id="messagebodymanager">
+<h2><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a><a class="headerlink" href="#messagebodymanager" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> registers message body components. Generally, you will not need to interact
+directly with the manager as a DSL for registration of components is provided by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala"><cite>HttpRouter</cite></a>
+(which uses the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> underneath).</p>
+</div>
+<div class="section" id="c-t-finatra-http-modules-messagebodymodule">
+<h2><cite>c.t.finatra.http.modules.MessageBodyModule</cite><a class="headerlink" href="#c-t-finatra-http-modules-messagebodymodule" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyReader.scala"><code class="docutils literal"><span class="pre">DefaultMessageBodyReader</span></code></a>, and the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/DefaultMessageBodyWriter.scala"><code class="docutils literal"><span class="pre">DefaultMessageBodyWriter</span></code></a> are provided by the framework
+via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala"><cite>c.t.finatra.http.modules.MessageBodyModule</cite></a>.</p>
+<p>To override the framework defaults, create a <a class="reference external" href="../getting-started/modules.html">TwitterModule</a>
+which provides customized implementations for the default reader and writer.</p>
+<p>Set this module by overriding the <cite>protected def messageBodyModule</cite> in your server.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
+
+  override def messageBodyModule = MyCustomMessageBodyModule
+
+  override def configureHttp(router: HttpRouter): Unit = {
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>If your module is defined as a class, you would pass an instance of the
+class, e.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def messageBodyModule = new MyCustomMessageBodyModule
+</pre></div>
+</div>
+<p>See <a class="reference external" href="server.html#framework-modules">Framework Modules</a> for more information.</p>
+</div>
+<div class="section" id="mustache-support">
+<h2><a class="reference external" href="https://mustache.github.io/">Mustache</a> Support<a class="headerlink" href="#mustache-support" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://mustache.github.io/">Mustache</a> support is provided through a combination of the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/modules/MessageBodyModule.scala"><cite>c.t.finatra.http.modules.MessageBodyModule</cite></a> and a specific <a class="reference external" href="https://mustache.github.io/">Mustache</a>
+message body writer.</p>
+<p>Finatra provides the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheMessageBodyWriter.scala"><cite>c.t.finatra.http.internal.marshalling.mustache.MustacheMessageBodyWriter</cite></a> which
+transforms either a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala"><cite>c.t.finatra.http.marshalling.MessageBodyComponent</cite></a> or an object annotated with
+the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/response/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation. The transformation is performed using a referenced
+<a class="reference external" href="https://mustache.github.io/">Mustache</a> template specified by either the component configuration
+or as a parameter configured in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/response/Mustache.java"><code class="docutils literal"><span class="pre">&#64;Mustache</span></code></a> annotation.</p>
+<p>See the <a class="reference external" href="https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L54"><cite>MessageBodyManager#addByAnnotation</cite></a> and <a class="reference external" href="https://github.com/twitter/finatra/blob/6e09e95b95b20d2599a6210dfa0ce4c82dbe636b/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala#L60"><cite>MessageBodyManager#addByComponentType</cite></a> methods
+for  adding an annotated <a class="reference external" href="https://mustache.github.io/">Mustache</a> view to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a>
+and adding a <cite>MessageBodyComponent</cite> by type to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/MessageBodyManager.scala"><cite>MessageBodyManager</cite></a> which will instantiate an
+instance of the type via the injector.</p>
+<p>For examples of how to use the Finatra <a class="reference external" href="https://mustache.github.io/">Mustache</a> support, please
+see the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples/web-dashboard"><cite>web-dashboard</cite></a> example and the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/controllers/MustacheController.scala"><cite>MustacheController</cite></a> used in integration tests.</p>
+<p>To better understand how <a class="reference external" href="https://mustache.github.io/">Mustache</a> templates are found, please see
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/mustache/MustacheTemplateLookup.scala"><cite>MustacheTemplateLookup</cite></a> and the corresponding <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/internal/marshalling/mustache/MustacheTemplateLookupTest.scala"><cite>MustacheTemplateLookupTest</cite></a>.</p>
+<p>For more information on referencing files in Finatra, see the
+<a class="reference external" href="../files/index.html">Working with Files</a> section.</p>
+<span class="target" id="c-t-finatra-http-modules-mustachemodule"></span></div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Message Body Components</a><ul>
+<li><a class="reference internal" href="#message-body-readers">Message Body Readers</a><ul>
+<li><a class="reference internal" href="#defaultmessagebodyreader"><code class="docutils literal"><span class="pre">DefaultMessageBodyReader</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#message-body-writers">Message Body Writers</a><ul>
+<li><a class="reference internal" href="#defaultmessagebodywriter"><code class="docutils literal"><span class="pre">DefaultMessageBodyWriter</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#messagebodymanager"><cite>MessageBodyManager</cite></a></li>
+<li><a class="reference internal" href="#c-t-finatra-http-modules-messagebodymodule"><cite>c.t.finatra.http.modules.MessageBodyModule</cite></a></li>
+<li><a class="reference internal" href="#mustache-support">Mustache Support</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+      <li>Previous: <a href="responses.html" title="previous chapter">HTTP Responses</a></li>
+      <li>Next: <a href="filters.html" title="next chapter">Filtering HTTP Requests</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2018 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

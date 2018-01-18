@@ -273,7 +273,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="EnrichedResponseextendsResponseProxywithProductwithSerializable"></a><a id="EnrichedResponse:EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder.html#EnrichedResponseextendsResponseProxywithProductwithSerializable" title="Permalink">
@@ -285,10 +285,13 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ResponseBuilder$EnrichedResponse.html"><span class="name">EnrichedResponse</span></a><span class="params">(<span name="resp">resp: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>)</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html#com.twitter.finagle.http.ResponseProxy" class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="A wrapper around a com.twitter.finagle.http.Response which exposes a builder-like API for creating responses." href="ResponseBuilder$EnrichedResponse.html"><span class="name">EnrichedResponse</span></a><span class="params">(<span name="underlying">underlying: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>)</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html#com.twitter.finagle.http.ResponseProxy" class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">A wrapper around a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> which exposes a
+builder-like API for creating responses.</p><div class="fullcomment"><div class="comment cmt"><p>A wrapper around a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> which exposes a
+builder-like API for creating responses.
+</p></div><dl class="paramcmts block"><dt class="param">underlying</dt><dd class="cmt"><p>the underlying <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -910,6 +913,22 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder#htmlContentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="htmlContentType:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder.html#htmlContentType:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">htmlContentType</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -1508,8 +1527,8 @@
       </span>
       
       <p class="shortcomment cmt">Returns an <code>Ok</code> response with a written body, potentially based on values
-contained within the <code>Request</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an <code>Ok</code> response with a written body, potentially based on values
-contained within the <code>Request</code>.
+contained within the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns an <code>Ok</code> response with a written body, potentially based on values
+contained within the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a>.
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the HTTP Request associated with this response</p></dd><dt class="param">body</dt><dd class="cmt"><p>the response body, or the information needed to render the body</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This version is useful when the <code>body</code> parameter requires custom
       message body rendering and values in the <code>Request</code> are required for
       decision making.</p></span></dd></dl></div>

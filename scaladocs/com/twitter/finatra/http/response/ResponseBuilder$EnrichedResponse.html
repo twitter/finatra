@@ -167,8 +167,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.http.response">response</a></dd></dl></div>
     </li><li class="current-entities indented6">
                         <a class="object" href="ResponseBuilder$EnrichedResponse$.html" title=""></a>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">EnrichedResponse</a>
+                        <a class="class" href="" title="A wrapper around a com.twitter.finagle.http.Response which exposes a builder-like API for creating responses."></a>
+                        <a href="" title="A wrapper around a com.twitter.finagle.http.Response which exposes a builder-like API for creating responses.">EnrichedResponse</a>
                       </li>
               </ul>
             </div>
@@ -194,12 +194,14 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">EnrichedResponse</span><span class="params">(<span name="resp">resp: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>)</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html#com.twitter.finagle.http.ResponseProxy" class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name">EnrichedResponse</span><span class="params">(<span name="underlying">underlying: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>)</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/ResponseProxy.html#com.twitter.finagle.http.ResponseProxy" class="extype" name="com.twitter.finagle.http.ResponseProxy">ResponseProxy</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A wrapper around a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> which exposes a
+builder-like API for creating responses.
+</p></div><dl class="paramcmts block"><dt class="param">underlying</dt><dd class="cmt"><p>the underlying <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -249,10 +251,10 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(resp:com.twitter.finagle.http.Response):ResponseBuilder.this.EnrichedResponse"></a><a id="&lt;init&gt;:EnrichedResponse"></a>
+              <ol><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(underlying:com.twitter.finagle.http.Response):ResponseBuilder.this.EnrichedResponse"></a><a id="&lt;init&gt;:EnrichedResponse"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#&lt;init&gt;(resp:com.twitter.finagle.http.Response):ResponseBuilder.this.EnrichedResponse" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#&lt;init&gt;(underlying:com.twitter.finagle.http.Response):ResponseBuilder.this.EnrichedResponse" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -261,10 +263,10 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">EnrichedResponse</span><span class="params">(<span name="resp">resp: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>)</span>
+        <span class="name">EnrichedResponse</span><span class="params">(<span name="underlying">underlying: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>)</span>
       </span>
       
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">underlying</dt><dd class="cmt"><p>the underlying <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -499,7 +501,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="body(buffer:com.twitter.io.Buf):ResponseBuilder.this.EnrichedResponse"></a><a id="body(Buf):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#body(buffer:com.twitter.io.Buf):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -514,8 +516,9 @@
         <span class="name">body</span><span class="params">(<span name="buffer">buffer: <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html#com.twitter.io.Buf" class="extype" name="com.twitter.io.Buf">Buf</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response with the given <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> set as the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> set as the response body.
+</p></div><dl class="paramcmts block"><dt class="param">buffer</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> to set as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given <a href="https://twitter.github.io/util/docs/com/twitter/io/Buf.html" class="extype" name="com.twitter.io.Buf">com.twitter.io.Buf</a> set as the response body.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="body(inputStream:java.io.InputStream):ResponseBuilder.this.EnrichedResponse"></a><a id="body(InputStream):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#body(inputStream:java.io.InputStream):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -530,8 +533,11 @@
         <span class="name">body</span><span class="params">(<span name="inputStream">inputStream: <span class="extype" name="java.io.InputStream">InputStream</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response with the given InputStream written as bytes as the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given InputStream written as bytes as the response body.
+</p></div><dl class="paramcmts block"><dt class="param">inputStream</dt><dd class="cmt"><p>the InputStream to write as bytes as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given InputStream written as an Array[Byte] as the
+        response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>this fully buffers the InputStream as an Array[Byte] and copies it as the
+      response body. The given input stream is closed after writing the response body.</p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="body(bodyStr:String):ResponseBuilder.this.EnrichedResponse"></a><a id="body(String):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#body(bodyStr:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -546,8 +552,9 @@
         <span class="name">body</span><span class="params">(<span name="bodyStr">bodyStr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response with the given String written as the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given String written as the response body.
+</p></div><dl class="paramcmts block"><dt class="param">bodyStr</dt><dd class="cmt"><p>the String to write as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given String written as the response body.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="body(b:Array[Byte]):ResponseBuilder.this.EnrichedResponse"></a><a id="body(Array[Byte]):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#body(b:Array[Byte]):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -562,7 +569,8 @@
         <span class="name">body</span><span class="params">(<span name="b">b: <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.4/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given Array[Byte] written as the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given Array[Byte] written as the response body.
+</p></div><dl class="paramcmts block"><dt class="param">b</dt><dd class="cmt"><p>bytes to write as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given Array[Byte] written as the response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>this uses <span class="extype" name="com.twitter.io.Buf.ByteArray.Owned">com.twitter.io.Buf.ByteArray.Owned</span> to set the response content.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.io.Buf.ByteArray.Owned">com.twitter.io.Buf.ByteArray.Owned</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="body(request:com.twitter.finagle.http.Request,any:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="body(Request,Any):EnrichedResponse"></a>
       <span class="permalink">
@@ -578,13 +586,13 @@
         <span class="name">body</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="any">any: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      <p class="shortcomment cmt">Returns a response with a written body, potentially based on values
-contained within the <code>Request</code>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a response with a written body, potentially based on values
-contained within the <code>Request</code>.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the HTTP Request associated with this response</p></dd><dt class="param">any</dt><dd class="cmt"><p>the body, or the information needed to render the body</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This version is useful when the <code>any</code> parameter requires custom
+      <p class="shortcomment cmt">Return a response with a written body potentially based on values
+contained within the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with a written body potentially based on values
+contained within the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a>.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> associated with this response.</p></dd><dt class="param">any</dt><dd class="cmt"><p>the body, or the information needed to render the body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given object written as the response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This version is useful when the <code>any</code> parameter requires custom
       message body rendering and values in the <code>Request</code> are required for
       decision making.</p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#body" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="body(any:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="body(Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#body(any:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -599,7 +607,9 @@ contained within the <code>Request</code>.
         <span class="name">body</span><span class="params">(<span name="any">any: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given object as the written response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given object as the written response body. The object is
+pattern-matched to set the body and content type appropriately.
+</p></div><dl class="paramcmts block"><dt class="param">any</dt><dd class="cmt"><p>the body, or the information needed to render the body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given object written as the response body.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#cacheControl" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="cacheControl:Option[String]"></a>
       <span class="permalink">
@@ -870,10 +880,10 @@ contained within the <code>Request</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#contentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contentType(mimeType:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse"></a><a id="contentType(MediaType):EnrichedResponse"></a>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#contentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="contentType(mediaType:String):ResponseBuilder.this.EnrichedResponse"></a><a id="contentType(String):EnrichedResponse"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#contentType(mimeType:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#contentType(mediaType:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -882,26 +892,13 @@ contained within the <code>Request</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">contentType</span><span class="params">(<span name="mimeType">mimeType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">contentType</span><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#contentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="contentType(mimeType:String):ResponseBuilder.this.EnrichedResponse"></a><a id="contentType(String):EnrichedResponse"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#contentType(mimeType:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">contentType</span><span class="params">(<span name="mimeType">mimeType: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
-      </span>
-      
-      
+      <p class="shortcomment cmt">Set the &quot;Content-Type&quot; response header field of this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> to the
+given String.</p><div class="fullcomment"><div class="comment cmt"><p>Set the &quot;Content-Type&quot; response header field of this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> to the
+given String.
+</p></div><dl class="paramcmts block"><dt class="param">mediaType</dt><dd class="cmt"><p>the String to set a the header value.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the &quot;Content-Type&quot; response header field set to given media type.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#contentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contentType:Option[String]"></a>
       <span class="permalink">
@@ -918,7 +915,7 @@ contained within the <code>Request</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#contentTypeJson" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#contentTypeJson" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contentTypeJson():ResponseBuilder.this.EnrichedResponse"></a><a id="contentTypeJson():EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#contentTypeJson():ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -933,7 +930,8 @@ contained within the <code>Request</code>.
         <span class="name">contentTypeJson</span><span class="params">()</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Set the &quot;Content-Type&quot; header field for this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> to &quot;application/json&quot;.</p><div class="fullcomment"><div class="comment cmt"><p>Set the &quot;Content-Type&quot; header field for this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> to &quot;application/json&quot;.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a the response header &quot;Content-Type&quot; field set
+        to &quot;application/json&quot;.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#contentType_=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="contentType_=(value:String):Unit"></a><a id="contentType_=(String):Unit"></a>
       <span class="permalink">
@@ -966,7 +964,7 @@ contained within the <code>Request</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#cookie" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#cookie" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="cookie(c:com.twitter.finagle.http.Cookie):ResponseBuilder.this.EnrichedResponse"></a><a id="cookie(Cookie):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#cookie(c:com.twitter.finagle.http.Cookie):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -981,11 +979,12 @@ contained within the <code>Request</code>.
         <span class="name">cookie</span><span class="params">(<span name="c">c: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html#com.twitter.finagle.http.Cookie" class="extype" name="com.twitter.finagle.http.Cookie">Cookie</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#cookie" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="cookie(k:String,v:String):ResponseBuilder.this.EnrichedResponse"></a><a id="cookie(String,String):EnrichedResponse"></a>
+      <p class="shortcomment cmt">Set the given <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> on the returned Response.</p><div class="fullcomment"><div class="comment cmt"><p>Set the given <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> on the returned Response.
+</p></div><dl class="paramcmts block"><dt class="param">c</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> to set.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a created Cookie of name with value.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/HTTP_cookie" target="_blank">HTTP Cookie</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#cookie" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="cookie(name:String,value:String):ResponseBuilder.this.EnrichedResponse"></a><a id="cookie(String,String):EnrichedResponse"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#cookie(k:String,v:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#cookie(name:String,value:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -994,10 +993,13 @@ contained within the <code>Request</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">cookie</span><span class="params">(<span name="k">k: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
+        <span class="name">cookie</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Set a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> with the given name and value on
+the returned Response.</p><div class="fullcomment"><div class="comment cmt"><p>Set a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> with the given name and value on
+the returned Response.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> name</p></dd><dt class="param">value</dt><dd class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> value</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a created <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Cookie.html" class="extype" name="com.twitter.finagle.http.Cookie">com.twitter.finagle.http.Cookie</a> of name with value.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/HTTP_cookie#Structure" target="_blank">HTTP Cookie Structure</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Response.Proxy#cookies" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="cookies:com.twitter.finagle.http.CookieMap"></a><a id="cookies:CookieMap"></a>
       <span class="permalink">
@@ -1175,9 +1177,9 @@ contained within the <code>Request</code>.
       
       <p class="shortcomment cmt">Helper method for returning responses that are the result of a &quot;service-level&quot; failure.</p><div class="fullcomment"><div class="comment cmt"><p>Helper method for returning responses that are the result of a &quot;service-level&quot; failure. This is most commonly
 useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> implementation. E.g.,
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>- The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>- Details about this exception suitable for stats. Each element will be converted into a string.
+</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>Details about this exception suitable for stats. Each element will be converted into a string.
                Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
-               as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>- Details about this exception to be logged when this exception occurs. Typically logDetails
+               as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>Details about this exception to be logged when this exception occurs. Typically logDetails
                contains the unbounded details of the exception that you are not able to stat such as an
                actual tweet ID (see above)</p></dd><dt>returns</dt><dd class="cmt"><p>this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="#failureClassifier(classifier:=&gt;Boolean,request:com.twitter.finagle.http.Request,source:String,details:Seq[Any],message:String):com.twitter.finatra.http.response.ResponseBuilder#EnrichedResponse" class="extmbr" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#failureClassifier">EnrichedResponse#failureClassifier</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#failureClassifier" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1197,9 +1199,9 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
       
       <p class="shortcomment cmt">Helper method for returning responses that are the result of a &quot;service-level&quot; failure.</p><div class="fullcomment"><div class="comment cmt"><p>Helper method for returning responses that are the result of a &quot;service-level&quot; failure. This is most commonly
 useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> implementation.
-</p></div><dl class="paramcmts block"><dt class="param">classifier</dt><dd class="cmt"><p>- if the failure should be &quot;classified&quot;, e.g. logged and stat'd accordingly</p></dd><dt class="param">request</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>- The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>- Details about this exception suitable for stats. Each element will be converted into a string.
+</p></div><dl class="paramcmts block"><dt class="param">classifier</dt><dd class="cmt"><p>if the failure should be &quot;classified&quot;, e.g. logged and stat'd accordingly</p></dd><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> that triggered the failure</p></dd><dt class="param">source</dt><dd class="cmt"><p>The named component responsible for causing this failure.</p></dd><dt class="param">details</dt><dd class="cmt"><p>Details about this exception suitable for stats. Each element will be converted into a string.
                   Note: Each element must have a bounded set of values (e.g. You can stat the type of a tweet
-                  as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>- Details about this exception to be logged when this exception occurs. Typically logDetails
+                  as &quot;protected&quot; or &quot;unprotected&quot;, but you can't include the actual tweet id &quot;696081566032723968&quot;).</p></dd><dt class="param">message</dt><dd class="cmt"><p>Details about this exception to be logged when this exception occurs. Typically logDetails
                   contains the unbounded details of the exception that you are not able to stat such as an
                   actual tweet ID (see above)</p></dd><dt>returns</dt><dd class="cmt"><p>this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#failureClassifier" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
@@ -1218,10 +1220,10 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
       </span>
       
       
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#file" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="file(file:String):com.twitter.finagle.http.Response"></a><a id="file(String):Response"></a>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#file" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="file(file:String):ResponseBuilder.this.EnrichedResponse"></a><a id="file(String):EnrichedResponse"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#file(file:String):com.twitter.finagle.http.Response" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#file(file:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1230,11 +1232,16 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">file</span><span class="params">(<span name="file">file: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>
+        <span class="name">file</span><span class="params">(<span name="file">file: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#file" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response resolving the given file path to a <span class="extype" name="java.io.File">java.io.File</span> using the configured
+<a href="../../utils/FileResolver.html" class="extype" name="com.twitter.finatra.utils.FileResolver">com.twitter.finatra.utils.FileResolver</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response resolving the given file path to a <span class="extype" name="java.io.File">java.io.File</span> using the configured
+<a href="../../utils/FileResolver.html" class="extype" name="com.twitter.finatra.utils.FileResolver">com.twitter.finatra.utils.FileResolver</a>. The resolved <span class="extype" name="java.io.File">java.io.File</span> is set as bytes as
+the response body. The file contents are fully buffered and copied to an Array[Byte] before being
+written as the response body.
+</p></div><dl class="paramcmts block"><dt class="param">file</dt><dd class="cmt"><p>the file String to resolve as a <span class="extype" name="java.io.File">java.io.File</span> to write as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given file written as an Array[Byte] as the response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The resolved file is closed after writing the response body.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../utils/FileResolver.html" class="extype" name="com.twitter.finatra.utils.FileResolver">com.twitter.finatra.utils.FileResolver</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#file" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="file(file:java.io.File):ResponseBuilder.this.EnrichedResponse"></a><a id="file(File):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#file(file:java.io.File):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1249,11 +1256,14 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
         <span class="name">file</span><span class="params">(<span name="file">file: <span class="extype" name="java.io.File">File</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given <span class="extype" name="java.io.File">java.io.File</span> bytes as the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given <span class="extype" name="java.io.File">java.io.File</span> bytes as the response body. The file
+contents are fully buffered and copied to an Array[Byte] before being written as the response
+body.
+</p></div><dl class="paramcmts block"><dt class="param">file</dt><dd class="cmt"><p>the <span class="extype" name="java.io.File">java.io.File</span> to write as the response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given file written as an Array[Byte] as the response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>The given <span class="extype" name="java.io.File">java.io.File</span> is closed after writing the response body.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#fileOrIndex" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="fileOrIndex(filePath:String,indexPath:String):com.twitter.finagle.http.Response"></a><a id="fileOrIndex(String,String):Response"></a>
+      <a id="fileOrIndex(filePath:String,indexPath:String):ResponseBuilder.this.EnrichedResponse"></a><a id="fileOrIndex(String,String):EnrichedResponse"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#fileOrIndex(filePath:String,indexPath:String):com.twitter.finagle.http.Response" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#fileOrIndex(filePath:String,indexPath:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1262,13 +1272,15 @@ useful in an <a href="../exceptions/ExceptionMapper.html" class="extype" name="c
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">fileOrIndex</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indexPath">indexPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>
+        <span class="name">fileOrIndex</span><span class="params">(<span name="filePath">filePath: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="indexPath">indexPath: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
       <p class="shortcomment cmt">Return the file (only if it's an existing file w/ an extension), otherwise return the index.</p><div class="fullcomment"><div class="comment cmt"><p>Return the file (only if it's an existing file w/ an extension), otherwise return the index.
 Note: This functionality is useful for &quot;single-page&quot; UI frameworks (e.g. AngularJS)
 that perform client side routing.
-</p></div></div>
+</p></div><dl class="paramcmts block"><dt class="param">filePath</dt><dd class="cmt"><p>the file path to resolve and return</p></dd><dt class="param">indexPath</dt><dd class="cmt"><p>the index path to use when the file at the given filePath does not exist or
+                 does not specify an extension.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the resolved file or index written as an Array[Byte] as the
+        response body.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="EnrichedResponse.file(file:">String)</span></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
@@ -1390,23 +1402,7 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#header" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="header(k:String,v:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse"></a><a id="header(String,MediaType):EnrichedResponse"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#header(k:String,v:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">header</span><span class="params">(<span name="k">k: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
-      </span>
-      
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#header" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#header" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="header(k:String,v:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="header(String,Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#header(k:String,v:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1421,7 +1417,8 @@ that perform client side routing.
         <span class="name">header</span><span class="params">(<span name="k">k: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given response header key/value set.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given response header key/value set.</p></div><dl class="paramcmts block"><dt class="param">k</dt><dd class="cmt"><p>the response header key to set.</p></dd><dt class="param">v</dt><dd class="cmt"><p>the response header object to set. This method calls <code>toString</code> on this parameter
+        to compute the String value.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given response header field to the given value.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Response.Proxy#headerMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="headerMap:com.twitter.finagle.http.HeaderMap"></a><a id="headerMap:HeaderMap"></a>
       <span class="permalink">
@@ -1438,7 +1435,7 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#headers" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#headers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="headers(entries:(String,Any)*):ResponseBuilder.this.EnrichedResponse"></a><a id="headers((String,Any)*):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#headers(entries:(String,Any)*):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1453,8 +1450,9 @@ that perform client side routing.
         <span class="name">headers</span><span class="params">(<span name="entries">entries: (<span class="extype" name="scala.Predef.String">String</span>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a>)*</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#headers" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response with the given response headers set.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given response headers set.
+</p></div><dl class="paramcmts block"><dt class="param">entries</dt><dd class="cmt"><p>the sequence of Tuple2 response header key/values to set.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with each response header field set to its tupled value.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#headers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="headers(map:Map[String,String]):ResponseBuilder.this.EnrichedResponse"></a><a id="headers(Map[String,String]):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#headers(map:Map[String,String]):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1469,7 +1467,8 @@ that perform client side routing.
         <span class="name">headers</span><span class="params">(<span name="map">map: <span class="extype" name="scala.Predef.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given response headers set.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given response headers set.
+</p></div><dl class="paramcmts block"><dt class="param">map</dt><dd class="cmt"><p>the map of response header key/values to set.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with each response header field set to its mapped value.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#host" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="host(value:String):Message.this.type"></a><a id="host(String):EnrichedResponse.this.type"></a>
       <span class="permalink">
@@ -1518,7 +1517,7 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#html" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#html" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="html(any:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="html(Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#html(any:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1533,8 +1532,13 @@ that perform client side routing.
         <span class="name">html</span><span class="params">(<span name="any">any: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#html" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response with the given object written as a HTML response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given object written as a HTML response body. Sets
+the &quot;Content-Type&quot; header field for this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> to &quot;text/html&quot;. The
+object is pattern-matched to set the response body appropriately.
+</p></div><dl class="paramcmts block"><dt class="param">any</dt><dd class="cmt"><p>the object to write as an HTML response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given object written as an HTML response body.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>the content type can be overridden depending on if there is a registered
+      <span class="extype" name="MessageBodyManager">MessageBodyManager</span> for the given object type that specifies a different
+      content type than &quot;text/html&quot;.</p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#html" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="html(html:String):ResponseBuilder.this.EnrichedResponse"></a><a id="html(String):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#html(html:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1549,7 +1553,9 @@ that perform client side routing.
         <span class="name">html</span><span class="params">(<span name="html">html: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given String written as a HTML response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given String written as a HTML response body. Sets
+the &quot;Content-Type&quot; header field for this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> to &quot;text/html&quot;.
+</p></div><dl class="paramcmts block"><dt class="param">html</dt><dd class="cmt"><p>the String to write as an HTML response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given String written as an HTML response body.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Response.Proxy#isChunked" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isChunked:Boolean"></a>
       <span class="permalink">
@@ -1630,7 +1636,7 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#json" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#json" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="json(obj:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="json(Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#json(obj:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1645,8 +1651,12 @@ that perform client side routing.
         <span class="name">json</span><span class="params">(<span name="obj">obj: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#jsonError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a JSON-formatted body from the given object.</p><div class="fullcomment"><div class="comment cmt"><p>Return a JSON-formatted body from the given object. Note when either String or Array[Byte]
+data is passed the data is set as the response body unmodified, i.e., assumes the data is
+already JSON formatted).</p><p>The purpose of this method is to convert an object into a JSON-formatted body via the
+defined ObjectMapper.</p><p>Sets the response &quot;Content-Type&quot; header to &quot;application/json&quot;
+</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>object to convert into a JSON-formatted body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a JSON body.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#jsonError" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="jsonError(message:String):ResponseBuilder.this.EnrichedResponse"></a><a id="jsonError(String):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#jsonError(message:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1661,8 +1671,9 @@ that perform client side routing.
         <span class="name">jsonError</span><span class="params">(<span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#jsonError" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body based on the given string.</p><div class="fullcomment"><div class="comment cmt"><p>Create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body based on the given string.
+</p></div><dl class="paramcmts block"><dt class="param">message</dt><dd class="cmt"><p>string message over which to create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a>.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#jsonError" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="jsonError:ResponseBuilder.this.EnrichedResponse"></a><a id="jsonError:EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#jsonError:ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1677,7 +1688,10 @@ that perform client side routing.
         <span class="name">jsonError</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body based on
+this response's current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html" class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Create a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body based on
+this response's current <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html" class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</a>.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a JSON-formatted <a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a> response body.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Status.html" class="extype" name="com.twitter.finagle.http.Status">com.twitter.finagle.http.Status</a></p></span><span class="cmt"><p><a href="ErrorsResponse.html" class="extype" name="com.twitter.finatra.http.response.ErrorsResponse">ErrorsResponse</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#keepAlive" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="keepAlive:Boolean"></a>
       <span class="permalink">
@@ -1774,7 +1788,7 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#location" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#location" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="location(uri:String):ResponseBuilder.this.EnrichedResponse"></a><a id="location(String):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#location(uri:String):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1789,8 +1803,9 @@ that perform client side routing.
         <span class="name">location</span><span class="params">(<span name="uri">uri: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#location" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response with the &quot;Location&quot; response header field set to the given URI value.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the &quot;Location&quot; response header field set to the given URI value.
+</p></div><dl class="paramcmts block"><dt class="param">uri</dt><dd class="cmt"><p>the String value to set as the header value.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a set &quot;Location&quot; response header.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#location" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="location(uri:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="location(Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#location(uri:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1805,7 +1820,9 @@ that perform client side routing.
         <span class="name">location</span><span class="params">(<span name="uri">uri: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the &quot;Location&quot; response header field set to the given URI value.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the &quot;Location&quot; response header field set to the given URI value.
+</p></div><dl class="paramcmts block"><dt class="param">uri</dt><dd class="cmt"><p>the value to set as the header value. This method calls <code>toString</code> on
+           this parameter to compute the String value.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with a set &quot;Location&quot; response header.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Message#location" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="location:Option[String]"></a>
       <span class="permalink">
@@ -1886,7 +1903,7 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#nothing" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#nothing" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nothing:ResponseBuilder.this.EnrichedResponse"></a><a id="nothing:EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#nothing:ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1901,7 +1918,7 @@ that perform client side routing.
         <span class="name">nothing</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return the currently built <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> as-is.</p><div class="fullcomment"><div class="comment cmt"><p>Return the currently built <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> as-is.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a>.</p></dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
@@ -1940,7 +1957,7 @@ that perform client side routing.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#plain" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#plain" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="plain(any:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="plain(Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#plain(any:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -1955,7 +1972,9 @@ that perform client side routing.
         <span class="name">plain</span><span class="params">(<span name="any">any: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given object written as a plaintext response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given object written as a plaintext response body. Sets
+the &quot;Content-Type&quot; header field for this <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> to &quot;text/plain&quot;.
+</p></div><dl class="paramcmts block"><dt class="param">any</dt><dd class="cmt"><p>the object to write as a plaintext response body.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given object written as a plaintext response body.</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Response.Proxy#reader" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="reader:com.twitter.io.Reader"></a><a id="reader:Reader"></a>
       <span class="permalink">
@@ -2020,22 +2039,6 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#resp" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="resp:com.twitter.finagle.http.Response"></a><a id="resp:Response"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#resp:com.twitter.finagle.http.Response" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">resp</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>
-      </span>
-      
-      
     </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#response" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="response:com.twitter.finagle.http.Response"></a><a id="response:Response"></a>
       <span class="permalink">
@@ -2372,6 +2375,22 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Response → AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#underlying" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="underlying:com.twitter.finagle.http.Response"></a><a id="underlying:Response"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#underlying:com.twitter.finagle.http.Response" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">underlying</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>
+      </span>
+      
+      
     </li><li name="com.twitter.finagle.http.Message#userAgent" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="userAgent:Option[String]"></a>
       <span class="permalink">
@@ -2452,7 +2471,7 @@ that perform client side routing.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Proxy → Message</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#view" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#view" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="view(obj:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="view(Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#view(obj:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -2467,8 +2486,12 @@ that perform client side routing.
         <span class="name">view</span><span class="params">(<span name="obj">obj: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
-    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#view" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">Return a response with the given Mustache object data rendered and written as
+the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given Mustache object data rendered and written as
+the response body.
+</p></div><dl class="paramcmts block"><dt class="param">obj</dt><dd class="cmt"><p>object data to render.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given Mustache template object written as the
+        response body.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../marshalling/mustache/MustacheBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent">com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#view" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="view(template:String,obj:Any):ResponseBuilder.this.EnrichedResponse"></a><a id="view(String,Any):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#view(template:String,obj:Any):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -2483,7 +2506,11 @@ that perform client side routing.
         <span class="name">view</span><span class="params">(<span name="template">template: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="obj">obj: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Return a response with the given Mustache template and object data rendered and written as
+the response body.</p><div class="fullcomment"><div class="comment cmt"><p>Return a response with the given Mustache template and object data rendered and written as
+the response body.
+</p></div><dl class="paramcmts block"><dt class="param">template</dt><dd class="cmt"><p>the template name to render.</p></dd><dt class="param">obj</dt><dd class="cmt"><p>the data to render.</p></dd><dt>returns</dt><dd class="cmt"><p>an <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a> with the given Mustache template object written as the
+        response body.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="../marshalling/mustache/MustacheBodyComponent.html" class="extype" name="com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent">com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent</a></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
@@ -2782,7 +2809,26 @@ that perform client side routing.
 
         <div class="values members">
               <h3>Deprecated Value Members</h3>
-              <ol><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#cookie" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#contentType" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="contentType(mediaType:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse"></a><a id="contentType(MediaType):EnrichedResponse"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#contentType(mediaType:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2017-12-12) Use contentType(mediaType: String) using a String representation of the MediaType">contentType</span><span class="params">(<span name="mediaType">mediaType: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2017-12-12)</i> Use contentType(mediaType: String) using a String representation of the MediaType</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#cookie" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="cookie(c:org.jboss.netty.handler.codec.http.Cookie):ResponseBuilder.this.EnrichedResponse"></a><a id="cookie(Cookie):EnrichedResponse"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#cookie(c:org.jboss.netty.handler.codec.http.Cookie):ResponseBuilder.this.EnrichedResponse" title="Permalink">
@@ -2820,6 +2866,25 @@ that perform client side routing.
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version Use <a href="#statusCode(value:Int):Response.this.type" class="extmbr" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#statusCode">statusCode</a> instead)</i> 2017-02-17</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse#header" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="header(k:String,v:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse"></a><a id="header(String,MediaType):EnrichedResponse"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/ResponseBuilder$EnrichedResponse.html#header(k:String,v:com.google.common.net.MediaType):ResponseBuilder.this.EnrichedResponse" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2017-12-12) Use header(key: String, v: Any) using a String representation  of the MediaType">header</span><span class="params">(<span name="k">k: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="v">v: <span class="extype" name="com.google.common.net.MediaType">MediaType</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.http.response.ResponseBuilder.EnrichedResponse">EnrichedResponse</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2017-12-12)</i> Use header(key: String, v: Any) using a String representation  of the MediaType</p></dd></dl></div>
     </li><li name="com.twitter.finagle.http.Response#setStatusCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setStatusCode(value:Int):Unit"></a><a id="setStatusCode(Int):Unit"></a>
       <span class="permalink">
