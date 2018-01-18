@@ -1,6 +1,7 @@
 package com.twitter.hello.server;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Collections;
+
 import com.google.inject.Stage;
 
 import org.junit.Test;
@@ -12,7 +13,7 @@ public class HelloWorldServerStartupTest {
     private EmbeddedHttpServer server =
         new EmbeddedHttpServer(
             new HelloWorldServer(),
-            ImmutableMap.of(),
+            Collections.emptyMap(),
             Stage.PRODUCTION);
 
     @Test

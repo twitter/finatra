@@ -34,7 +34,9 @@ import com.twitter.inject.{Logging, Test}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.conversions.time._
 import com.twitter.io.Buf
+import com.twitter.util.Duration
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
+import java.util.concurrent.TimeUnit
 import org.apache.commons.lang.RandomStringUtils
 import org.joda.time.{DateTime, DateTimeZone}
 
@@ -68,7 +70,7 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   test("get PropertyNamingStrategy") {
     val namingStrategy = mapper.propertyNamingStrategy
-    namingStrategy should not be(null)
+    namingStrategy should not be (null)
   }
 
   test("simple tests#parse simple") {
@@ -378,6 +380,28 @@ class FinatraObjectMapperTest extends Test with Logging {
         """date_time4: field cannot be empty""",
         """date_time: error parsing 'today' into an ISO 8601 datetime"""
       )
+    )
+  }
+
+  test("TwitterUtilDuration serialize") {
+    val serialized = mapper.writeValueAsString(
+      CaseClassWithTwitterUtilDuration(Duration.fromTimeUnit(3L, TimeUnit.HOURS))
+    )
+    serialized should equal("""{"duration":"3.hours"}""")
+  }
+
+  test("TwitterUtilDuration deserialize") {
+    parse[CaseClassWithTwitterUtilDuration]("""{
+        "duration": "3.hours"
+      }""") should equal(
+      CaseClassWithTwitterUtilDuration(Duration.fromTimeUnit(3L, TimeUnit.HOURS))
+    )
+  }
+
+  test("TwitterUtilDuration deserialize invalid") {
+    assertJsonParse[CaseClassWithTwitterUtilDuration](
+      """{"duration": "3.unknowns"}""",
+      withErrors = Seq("duration: Invalid unit: unknowns")
     )
   }
 

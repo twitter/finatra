@@ -1,6 +1,6 @@
 package com.twitter.inject.server
 
-import com.google.common.net.{HttpHeaders, MediaType}
+import com.google.common.net.MediaType
 import com.google.inject.Stage
 import com.twitter.conversions.time._
 import com.twitter.finagle.builder.ClientBuilder
@@ -593,7 +593,7 @@ class EmbeddedTwitterServer(
     headers: Map[String, String]
   ): Map[String, String] = {
     if (accept != null)
-      headers + (HttpHeaders.ACCEPT -> accept.toString)
+      headers + (Fields.Accept -> accept.toString)
     else
       headers
   }
@@ -643,7 +643,7 @@ class EmbeddedTwitterServer(
   }
 
   private def throwStartupFailedException(): Unit = {
-    println(s"\nEmbedded server $name failed to startup")
+    println(s"\nEmbedded server $name failed to startup: ${startupFailedThrowable.get.getMessage}")
     throw startupFailedThrowable.get
   }
 

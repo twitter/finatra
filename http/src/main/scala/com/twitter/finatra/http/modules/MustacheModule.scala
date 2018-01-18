@@ -13,7 +13,8 @@ object MustacheModule extends TwitterModule {
 
   private val templatesDir =
     flag("mustache.templates.dir", "templates", "templates resource directory")
-  override def modules = Seq(DocRootModule)
+
+  override def modules = Seq(DocRootModule, MessageBodyModule)
 
   @Provides
   @Singleton

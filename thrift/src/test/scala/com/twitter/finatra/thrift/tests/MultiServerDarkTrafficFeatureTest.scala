@@ -1,5 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
+import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.thrift.{ThriftTest, EmbeddedThriftServer}
@@ -25,7 +26,7 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
   // See DoEverythingThriftServerDarkTrafficFilterModule#enableSampling
 
   test("magicNum is forwarded") {
-    Await.result(client123.magicNum()) should equal("26")
+    await(client123.magicNum()) should equal("26")
 
     // service stats
     liveDoEverythingThriftServer.assertCounter("per_method_stats/magicNum/success", 1)
@@ -41,7 +42,7 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
   }
 
   test("uppercase not forwarded") {
-    Await.result(client123.uppercase("hello")) should equal("HELLO")
+    await(client123.uppercase("hello")) should equal("HELLO")
 
     // service stats
     liveDoEverythingThriftServer.assertCounter("per_method_stats/uppercase/success", 1)
@@ -55,7 +56,7 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
   }
 
   test("echo is forwarded") {
-    Await.result(client123.echo("words")) should equal("words")
+    await(client123.echo("words")) should equal("words")
 
     // service stats
     liveDoEverythingThriftServer.assertCounter("per_method_stats/echo/success", 1)
@@ -71,7 +72,7 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
   }
 
   test("moreThanTwentyTwoArgs is not forwarded") {
-    Await.result(
+    await(
       client123.moreThanTwentyTwoArgs(
         "one",
         "two",
@@ -118,5 +119,9 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
   override def afterAll(): Unit = {
     darkDoEverythingThriftServer.close()
     liveDoEverythingThriftServer.close()
+  }
+
+  private def await[T](f: Future[T]): T = {
+    Await.result(f, 2.seconds)
   }
 }

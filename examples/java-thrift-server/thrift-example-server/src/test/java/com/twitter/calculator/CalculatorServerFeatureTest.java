@@ -1,8 +1,9 @@
 package com.twitter.calculator;
 
+import java.util.Collections;
+
 import scala.reflect.ClassTag$;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Stage;
 
 import org.junit.AfterClass;
@@ -18,7 +19,7 @@ public class CalculatorServerFeatureTest extends Assert {
     private static final EmbeddedThriftServer SERVER =
         new EmbeddedThriftServer(
             new CalculatorServer(),
-            ImmutableMap.of(),
+            Collections.emptyMap(),
             Stage.DEVELOPMENT);
     private static final Calculator.ServiceIface THRIFT_CLIENT =
         SERVER.thriftClient(

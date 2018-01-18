@@ -1,7 +1,6 @@
 package com.twitter.finatra.httpclient
 
-import com.google.common.net.HttpHeaders
-import com.twitter.finagle.http.{Message, Method, Request, RequestProxy}
+import com.twitter.finagle.http.{Fields, Message, Method, Request, RequestProxy}
 import java.nio.charset.StandardCharsets.UTF_8
 import org.apache.commons.io.IOUtils
 
@@ -77,15 +76,15 @@ class RequestBuilder(override val request: Request) extends RequestProxy {
     this
   }
 
-  def chunked = {
+  def chunked: RequestBuilder = {
     request.setChunked(true)
     this
   }
 
   def body(string: String, contentType: String = Message.ContentTypeJson): RequestBuilder = {
     request.setContentString(string)
-    request.headerMap.set(HttpHeaders.CONTENT_LENGTH, string.getBytes(UTF_8).length.toString)
-    request.headerMap.set(HttpHeaders.CONTENT_TYPE, contentType)
+    request.headerMap.set(Fields.ContentLength, string.getBytes(UTF_8).length.toString)
+    request.headerMap.set(Fields.ContentType, contentType)
     this
   }
 

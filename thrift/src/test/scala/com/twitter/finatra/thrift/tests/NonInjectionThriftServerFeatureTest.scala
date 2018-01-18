@@ -1,5 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
+import com.twitter.conversions.time._
 import com.twitter.noninjection.thriftscala.NonInjectionService
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.noninjection.NonInjectionThriftServer
@@ -13,6 +14,6 @@ class NonInjectionThriftServerFeatureTest extends FeatureTest {
   val client = server.thriftClient[NonInjectionService[Future]](clientId = "client")
 
   test("success") {
-    Await.result(client.echo("Hi")) should equal("Hi")
+    Await.result(client.echo("Hi"), 2.seconds) should equal("Hi")
   }
 }

@@ -12,12 +12,36 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.1.0](https://github.com/twitter/finatra/tree/finatra-18.1.0) (2018-01-17)
+
+### Added
+
+* finatra-thrift: Add support for building all types of Finagle Thrift clients to 
+  the underlying embedded TwitterServer with the `c.t.finatra.thrift.ThriftClient`
+  test utility. See: https://twitter.github.io/scrooge/Finagle.html#creating-a-client
+  ``PHAB_ID=D123915``
+
+* finatra-jackson: Added support to finatra/jackson for deserializing `com.twitter.util.Duration` 
+  instances from their String representations. ``PHAB_ID=D122366``
+
+### Changed
+
+* finatra-http: Change visibility of internal class `c.t.finatra.http.internal.marshalling.RequestInjectableValues`
+  to be correctly specified as private to the `http` package. ``PHAB_ID=D127975``
+
+### Fixed
+
+* finatra-http: Ensure we close resources in the `ResponseBuilder`. Addresses 
+  [#440](https://github.com/twitter/finatra/issues/440). ``PHAB_ID=D120779``
+
+### Closed
+
 ## [finatra-17.12.0](https://github.com/twitter/finatra/tree/finatra-17.12.0) (2017-12-08)
 
 ### Added
 
 * finatra-thrift: Add tests for new Scrooge `ReqRepServicePerEndpoint` 
-  functionalty. ``PHAB_ID=D107397``
+  functionality. ``PHAB_ID=D107397``
 
 ### Changed
 

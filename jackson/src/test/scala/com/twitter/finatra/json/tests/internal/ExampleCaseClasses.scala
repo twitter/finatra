@@ -10,6 +10,7 @@ import com.twitter.finatra.response.JsonCamelCase
 import com.twitter.finatra.validation.{InvalidValidationInternal, Min, NotEmpty, ValidationResult}
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
+import com.twitter.{util => ctu}
 import javax.inject.{Inject, Named}
 import org.joda.time.DateTime
 import scala.annotation.meta.param
@@ -261,6 +262,8 @@ case class CaseClassWithIntAndDateTime(
   dateTime4: DateTime,
   @NotEmpty dateTime5: Option[DateTime]
 )
+
+case class CaseClassWithTwitterUtilDuration(duration: ctu.Duration)
 
 case class ClassWithFooClassInject(@Inject fooClass: FooClass)
 

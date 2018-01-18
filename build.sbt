@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "17.12.0"
+val releaseVersion = "18.1.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -374,6 +374,7 @@ lazy val injectServer = (project in file("inject/inject-server"))
     moduleName := "inject-server",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*Ports.*;.*FinagleBuildRevision.*",
     libraryDependencies ++= Seq(
+      "com.google.guava" % "guava" % versions.guava % "test",
       "com.twitter" %% "finagle-stats" % versions.twLibVersion,
       "com.twitter" %% "twitter-server" % versions.twLibVersion
     ),
@@ -404,7 +405,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*LoggerModule.*;.*Slf4jBridgeUtility.*",
     libraryDependencies ++= Seq(
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
-      "com.google.guava" % "guava" % versions.guava,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
       "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
@@ -589,6 +589,7 @@ lazy val http = project
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*ScalaObjectHandler.*;.*NonValidatingHttpHeadersResponse.*;com\\.twitter\\.finatra\\..*package.*;.*ThriftExceptionMapper.*;.*HttpResponseExceptionMapper.*;.*HttpResponseException.*",
     libraryDependencies ++= Seq(
       "com.github.spullara.mustache.java" % "compiler" % versions.mustache exclude("com.google.guava", "guava"),
+      "com.google.guava" % "guava" % versions.guava,
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
@@ -861,9 +862,12 @@ lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server
 lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
   .settings(exampleServerSettings)
   .settings(noPublishSettings)
-    .settings(
+  .settings(
     name := "web-dashboard",
     moduleName := "web-dashboard",
+    libraryDependencies ++= Seq(
+      "com.google.guava" % "guava" % versions.guava
+    ),
     unmanagedResourceDirectories in Compile += baseDirectory.value / "src" / "main" / "webapp"
   ).dependsOn(
     http % "test->test;compile->compile",

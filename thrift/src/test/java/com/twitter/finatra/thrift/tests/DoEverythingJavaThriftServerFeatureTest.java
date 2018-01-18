@@ -1,8 +1,9 @@
 package com.twitter.finatra.thrift.tests;
 
+import java.util.Collections;
+
 import scala.reflect.ClassTag$;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Stage;
 
 import org.junit.AfterClass;
@@ -21,7 +22,7 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
     private static final EmbeddedThriftServer SERVER =
         new EmbeddedThriftServer(
             new DoEverythingJavaThriftServer(),
-            ImmutableMap.of("magicNum", "57"),
+            Collections.singletonMap("magicNum", "57"),
             Stage.DEVELOPMENT);
     private static final DoEverything.ServiceIface THRIFT_CLIENT =
             SERVER.thriftClient(

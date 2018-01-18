@@ -26,6 +26,13 @@ service Greeter {
   ) throws (1:InvalidOperation invalidOperation)
 
   /**
+   * Say hello
+   */
+  string hello(
+    1: string name
+  ) throws (1:InvalidOperation invalidOperation)
+
+  /**
    * Say bye
    */
   ByeResponse bye(

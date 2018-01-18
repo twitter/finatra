@@ -1,6 +1,8 @@
 package com.twitter.finatra.thrift.tests
 
+import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
+import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
 import com.twitter.finatra.thrift.thriftscala.{
@@ -10,6 +12,8 @@ import com.twitter.finatra.thrift.thriftscala.{
   UnknownClientIdError
 }
 import com.twitter.inject.server.FeatureTest
+import com.twitter.io.Buf
+import com.twitter.scrooge
 import com.twitter.util.{Await, Future}
 import org.apache.thrift.TApplicationException
 
@@ -19,10 +23,68 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     flags = Map("magicNum" -> "57")
   )
 
+  /* Higher-kinded interface type */
   val client123 = server.thriftClient[DoEverything[Future]](clientId = "client123")
+  /* Method-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id1 */
+  val methodPerEndpointClient123: DoEverything.MethodPerEndpoint =
+    server.thriftClient[DoEverything.MethodPerEndpoint](clientId = "client123")
+  /* Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id2 */
+  val servicePerEndpoint123: DoEverything.ServicePerEndpoint =
+    server.servicePerEndpoint[DoEverything.ServicePerEndpoint](clientId = "client123")
+  /* Higher-kinded interface type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
+  val anotherMethodPerEndpointClient123: DoEverything[Future] =
+    server.thriftClient[DoEverything.ServicePerEndpoint, DoEverything[Future]](servicePerEndpoint123)
+  /* Another Method-Per-Endpoint type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
+  val yetAnotherMethodPerEndpointClient123: DoEverything.MethodPerEndpoint =
+    server.methodPerEndpoint[DoEverything.ServicePerEndpoint, DoEverything.MethodPerEndpoint](servicePerEndpoint123)
+  /* Req/Rep Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id3 */
+  val reqRepServicePerEndpoint123: DoEverything.ReqRepServicePerEndpoint =
+    server.servicePerEndpoint[DoEverything.ReqRepServicePerEndpoint](clientId = "client123")
 
   test("success") {
-    Await.result(client123.uppercase("Hi")) should equal("HI")
+    await(client123.uppercase("Hi")) should equal("HI")
+    await(methodPerEndpointClient123.uppercase("Hi")) should equal("HI")
+    await(anotherMethodPerEndpointClient123.uppercase("Hi")) should equal("HI")
+    await(yetAnotherMethodPerEndpointClient123.uppercase("Hi")) should equal("HI")
+
+    val filter = new Filter[
+      DoEverything.Uppercase.Args,
+      DoEverything.Uppercase.SuccessType,
+      DoEverything.Uppercase.Args,
+      DoEverything.Uppercase.SuccessType
+    ] {
+      override def apply(
+        request: DoEverything.Uppercase.Args,
+        service: Service[DoEverything.Uppercase.Args, String]
+      ): Future[String] = {
+        if (request.msg == "hello") {
+          service(DoEverything.Uppercase.Args("goodbye"))
+        } else service(request)
+      }
+    }
+    val service = filter.andThen(servicePerEndpoint123.uppercase)
+    await(service(DoEverything.Uppercase.Args("hello"))) should equal("GOODBYE")
+
+    val filter2 = new Filter[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
+      DoEverything.Uppercase.SuccessType
+    ], scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
+      DoEverything.Uppercase.SuccessType
+    ]] {
+      override def apply(
+        request: scrooge.Request[DoEverything.Uppercase.Args],
+        service: Service[scrooge.Request[DoEverything.Uppercase.Args], scrooge.Response[
+          DoEverything.Uppercase.SuccessType
+        ]]
+      ): Future[scrooge.Response[DoEverything.Uppercase.SuccessType]] = {
+        val filteredRequest: scrooge.Request[DoEverything.Uppercase.Args] =
+          scrooge.Request(Map("com.twitter.test.header" -> Seq(Buf.Utf8("foo"))), request.args)
+        service(filteredRequest)
+      }
+    }
+    val service2 = filter2.andThen(reqRepServicePerEndpoint123.uppercase)
+    await(service2(scrooge.Request(DoEverything.Uppercase.Args("hello")))).value should equal(
+      "HELLO"
+    )
   }
 
   test("failure") {
@@ -33,7 +95,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   }
 
   test("magicNum") {
-    Await.result(client123.magicNum()) should equal("57")
+    await(client123.magicNum()) should equal("57")
   }
 
   test("blacklist") {
@@ -88,11 +150,11 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   // should be caught by BarExceptionMapper
   test("BarException mapping") {
-    Await.result(client123.echo2("barException")) should equal("BarException caught")
+    await(client123.echo2("barException")) should equal("BarException caught")
   }
   // should be caught by FooExceptionMapper
   test("FooException mapping") {
-    Await.result(client123.echo2("fooException")) should equal("FooException caught")
+    await(client123.echo2("fooException")) should equal("FooException caught")
   }
 
   test("ThriftException#UnhandledSourcedException mapping") {
@@ -115,7 +177,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   }
 
   test("more than 22 args") {
-    Await.result(
+    await(
       client123.moreThanTwentyTwoArgs(
         "one",
         "two",
@@ -146,11 +208,17 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   test("ask") {
     val question = Question("What is the meaning of life?")
-    Await.result(client123.ask(question)) should equal(Answer("The answer to the question: `What is the meaning of life?` is 42."))
+    await(client123.ask(question)) should equal(
+      Answer("The answer to the question: `What is the meaning of life?` is 42.")
+    )
   }
 
   test("ask fail") {
     val question = Question("fail")
-    Await.result(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+  }
+
+  private def await[T](f: Future[T]): T = {
+    Await.result(f, 2.seconds)
   }
 }

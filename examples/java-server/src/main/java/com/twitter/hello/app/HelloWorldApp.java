@@ -1,8 +1,8 @@
 package com.twitter.hello.app;
 
 import java.util.Collection;
+import java.util.Collections;
 
-import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
 import com.twitter.hello.HelloService;
@@ -13,7 +13,7 @@ public class HelloWorldApp extends AbstractApp {
 
     @Override
     public Collection<Module> javaModules() {
-        return ImmutableList.<Module>of(
+        return Collections.singletonList(
                 LoggerModule$.MODULE$);
     }
 

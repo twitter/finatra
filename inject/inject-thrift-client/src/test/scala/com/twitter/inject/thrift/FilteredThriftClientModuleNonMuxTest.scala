@@ -1,12 +1,11 @@
-package com.twitter.inject.thrift.internal
+package com.twitter.inject.thrift
 
 import com.twitter.greeter.thriftscala.Greeter
-import com.twitter.greeter.thriftscala.Greeter.ServiceIface
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
-import com.twitter.inject.thrift.modules.{ThriftClientIdModule, FilteredThriftClientModule}
-import com.twitter.inject.{TypeUtils, InjectorModule, IntegrationTest}
+import com.twitter.inject.thrift.modules.{FilteredThriftClientModule, ThriftClientIdModule}
+import com.twitter.inject.{InjectorModule, IntegrationTest, TypeUtils}
 import com.twitter.util.Future
 
 class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
@@ -29,13 +28,15 @@ class FilteredThriftClientModuleNonMuxTest extends IntegrationTest {
   }
 
   object FilteredThriftClientModuleNonMux
-      extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
+    extends FilteredThriftClientModule[Greeter[Future], Greeter.ServiceIface] {
     override val label = "greeter-thrift-client"
     override val dest = "flag!greeter-thrift-service"
     override val mux = false
 
-    override def filterServiceIface(serviceIface: ServiceIface, filter: ThriftClientFilterBuilder) = {
-
+    override def filterServiceIface(
+      serviceIface: Greeter.ServiceIface,
+      filter: ThriftClientFilterBuilder
+    ): Greeter.ServiceIface = {
       serviceIface
     }
   }

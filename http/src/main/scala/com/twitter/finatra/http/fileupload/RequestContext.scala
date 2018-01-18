@@ -1,12 +1,11 @@
-package com.twitter.finatra.http.internal.marshalling
+package com.twitter.finatra.http.fileupload
 
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.http.fileupload.FileUploadException
 import com.twitter.io.BufInputStream
 import java.io.InputStream
-import org.apache.commons.fileupload.RequestContext
 
-private[http] class FinatraRequestContext(request: Request) extends RequestContext {
+private[fileupload] class RequestContext(request: Request)
+  extends org.apache.commons.fileupload.RequestContext {
 
   override def getCharacterEncoding: String = {
     request.charset.orNull

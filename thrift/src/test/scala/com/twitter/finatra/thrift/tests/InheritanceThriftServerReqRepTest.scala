@@ -1,9 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.finagle.ThriftMux
-import com.twitter.finagle.param.Stats
-import com.twitter.finagle.stats.NullStatsReceiver
-import com.twitter.finagle.thrift.ClientId
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.inheritance.InheritanceThriftTwitterServer
 import com.twitter.inject.server.PortUtils
@@ -22,20 +19,17 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
   private val muxCtxtsFilter = muxContextsFilter
 
   private val reqRepServicePerEndpoint: ServiceB.ReqRepServicePerEndpoint =
-    ThriftMux.client
+    server
+      .thriftMuxClient(TestClientIdString)
       .filtered(muxCtxtsFilter.toFilter)
-      .configured(Stats(NullStatsReceiver))
-      .withClientId(ClientId("client123"))
-      .reqRepServicePerEndpoint[ServiceB.ReqRepServicePerEndpoint](
-        PortUtils.loopbackAddressForPort(server.thriftPort), "client123")
+      .servicePerEndpoint[ServiceB.ReqRepServicePerEndpoint](server.thriftHostAndPort, "client123")
 
   /* test that copy works for client */
   private val filteredReqRepServicePerEndpoint: ServiceB.ReqRepServicePerEndpoint =
     reqRepServicePerEndpoint
-      .withPing(
-        ping = specificMethodLoggingFilter.andThen(reqRepServicePerEndpoint.ping))
+      .withPing(ping = specificMethodLoggingFilter.andThen(reqRepServicePerEndpoint.ping))
       .withEcho(reqRepServicePerEndpoint.echo)
-    .filtered(globalLoggingFilter)
+      .filtered(globalLoggingFilter)
 
   override def beforeAll(): Unit = {
     server.start()
@@ -75,8 +69,10 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
       Request(
         headers = Map(
           TestClientRequestHeaderKey -> Seq(Buf.Utf8("bar")),
-          "com.twitter.finagle.Retries" ->  Seq(Buf.Utf8("5"))), // set a header that finagle already broadcast to ensure that we collect and don't blow up.
-        args = Ping.Args())
+          "com.twitter.finagle.Retries" -> Seq(Buf.Utf8("5"))
+        ), // set a header that finagle already broadcast to ensure that we collect and don't blow up.
+        args = Ping.Args()
+      )
     val f: Future[Response[Ping.SuccessType]] =
       filteredReqRepServicePerEndpoint.ping(request)
     val response = await(f)
@@ -91,7 +87,8 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     val request: Request[Echo.Args] =
       Request(
         headers = Map(TestClientRequestHeaderKey -> Seq(Buf.Utf8("bar"))),
-        args = Echo.Args("Hello, World."))
+        args = Echo.Args("Hello, World.")
+      )
     val f: Future[Response[Echo.SuccessType]] =
       reqRepServicePerEndpoint.echo(request)
     val response = await(f)
@@ -120,7 +117,7 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     // use ServicePerEndpoint which has the 'muxCtxtsFilter' ThriftMux client filter
     val reqRepMethodPerEndpoint: ServiceB[Future] =
       ThriftMux.client
-        .reqRepMethodPerEndpoint(reqRepServicePerEndpoint)
+        .methodPerEndpoint(reqRepServicePerEndpoint)
 
     val f: Future[String] =
       reqRepMethodPerEndpoint.echo("Hello, World.")
@@ -138,9 +135,10 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
     val methodPerEndpointClient123: ServiceB.MethodPerEndpoint =
       ThriftMux.client
         .filtered(muxCtxtsFilter.toFilter)
-        .newIface[ServiceB.MethodPerEndpoint](
+        .build[ServiceB.MethodPerEndpoint](
           PortUtils.loopbackAddressForPort(server.thriftPort),
-          "client123")
+          "client123"
+        )
 
     val f: Future[Echo.SuccessType] =
       methodPerEndpointClient123.echo("Hello, World.")
