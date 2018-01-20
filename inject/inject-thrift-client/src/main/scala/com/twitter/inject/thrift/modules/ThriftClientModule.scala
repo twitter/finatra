@@ -13,7 +13,7 @@ import com.twitter.util.Duration
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
-@deprecated("Use the com.twitter.inject.thrift.modules.FilteredThriftClientModule", "2016-06-23")
+@deprecated("Use the com.twitter.inject.thrift.modules.ServicePerEndpointModule", "2018-01-12")
 abstract class ThriftClientModule[T: ClassTag] extends TwitterModule with time.Implicits {
 
   /**

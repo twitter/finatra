@@ -446,7 +446,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*LatencyFilter.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,

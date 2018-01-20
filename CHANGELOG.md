@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-thrift-client: Add `c.t.inject.thrift.modules.ServicePerEndpointModule` for
+  building ThriftMux clients using the `thriftmux.MethodBuilder`. ``PHAB_ID=D128196``
+
 ### Changed
 
 ### Fixed

@@ -70,6 +70,7 @@ import org.joda.time.Duration
  * @see [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder]]
  * @see [[com.twitter.finagle.thrift.ThriftServiceIface]]
  */
+@deprecated("Use ServicePerEndpointModule and ThriftMethodBuilder", "2018-01-12")
 class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   injector: Injector,
   statsReceiver: StatsReceiver,
