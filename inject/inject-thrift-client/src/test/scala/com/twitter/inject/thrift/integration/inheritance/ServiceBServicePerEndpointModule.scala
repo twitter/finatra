@@ -25,11 +25,11 @@ object ServiceBServicePerEndpointModule
           .withRetryForClassifier(PossiblyRetryableExceptions)
           .withAgnosticFilter(new MethodLoggingTypeAgnosticFilter())
           .filtered[EchoFilter]
-          .service
-      )
+          .service)
       .withPing(
         builder.method(ServiceB.Ping)
           .filtered(new PingFilter)
-          .withRetryDisabled.service)
+          .withRetryDisabled
+          .service)
   }
 }

@@ -69,8 +69,7 @@ class InheritanceServicePerEndpointModuleFeatureTest
     server.assertCounter("clnt/serviceB-thrift-client/ServiceB/ping/failures", 0)
     /* assert MethodBuilder stats exist */
     server.getStat("clnt/serviceB-thrift-client/ping/logical/request_latency_ms") should not be Seq()
-    // TODO: CSL-5842
-    // server.getStat("clnt/serviceB-thrift-client/ping/retries") should be(Seq(0.0))
+    // retries are disabled, thus no "clnt/serviceB-thrift-client/ping/retries" stat
     /* assert MethodBuilder counters */
     server.assertCounter("clnt/serviceB-thrift-client/ping/logical/requests", 1)
     server.assertCounter("clnt/serviceB-thrift-client/ping/logical/success", 1)
