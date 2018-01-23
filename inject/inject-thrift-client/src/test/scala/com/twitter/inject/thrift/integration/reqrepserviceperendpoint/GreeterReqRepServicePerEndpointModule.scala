@@ -1,6 +1,7 @@
 package com.twitter.inject.thrift.integration.reqrepserviceperendpoint
 
 import com.google.inject.Module
+import com.twitter.conversions.percent._
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
@@ -34,6 +35,7 @@ class GreeterReqRepServicePerEndpointModule(
           // method type-specific filter
           .filtered(new HiHeadersFilter(requestHeaderKey))
           .withRetryForClassifier(PossiblyRetryableExceptions)
+          .idempotent(1.percent)
           .service
       )
       .withHello(

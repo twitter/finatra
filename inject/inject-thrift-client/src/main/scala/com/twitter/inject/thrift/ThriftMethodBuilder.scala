@@ -123,6 +123,30 @@ final class ThriftMethodBuilder[ServicePerEndpoint <: Filterable[ServicePerEndpo
   }
 
   /**
+   * @see [[com.twitter.finagle.thriftmux.MethodBuilder.idempotent(maxExtraLoad: Double)]]
+   */
+  def idempotent(maxExtraLoad: Double): this.type = {
+    methodBuilder = methodBuilder.idempotent(maxExtraLoad)
+    this
+  }
+
+  /**
+   * @see [[com.twitter.finagle.thriftmux.MethodBuilder.idempotent(maxExtraLoad: Tunable[Double])]]
+   */
+  def idempotent(maxExtraLoad: Tunable[Double]): this.type = {
+    methodBuilder = methodBuilder.idempotent(maxExtraLoad)
+    this
+  }
+
+ /**
+  * @see [[com.twitter.finagle.thriftmux.MethodBuilder.nonIdempotent]]
+  */
+  def nonIdempotent: this.type = {
+    methodBuilder = methodBuilder.nonIdempotent
+    this
+  }
+
+  /**
    * Install a [[com.twitter.finagle.Filter]]. This filter will be added to the end of the filter chain. That is, this
    * filter will be invoked AFTER any other installed filter on a request [[Req]] and thus BEFORE any other installed
    * filter on a response [[Rep]].

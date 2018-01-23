@@ -29,6 +29,7 @@ object ServiceBServicePerEndpointModule
       .withPing(
         builder.method(ServiceB.Ping)
           .filtered(new PingFilter)
+          .nonIdempotent
           .withRetryDisabled
           .service)
   }
