@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-thrift-client: Add methods to `c.t.inject.thrift.filters.ThriftClientFilterChain` to allow
+  Tunable timeouts and request timeouts. ``PHAB_ID=D128506``
+
 * inject-thrift-client: Add `idempotent` and `nonIdempotent` methods to
   `c.t.inject.thrift.ThriftMethodBuilder`, which can be used to configure retries and the sending of
   backup requests. ``PHAB_ID=D129959``
