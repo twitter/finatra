@@ -4,7 +4,7 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.thrift.ClientId
-import com.twitter.finagle.{ListeningServer, ThriftMux}
+import com.twitter.finagle.{ListeningServer, ServiceClosedException, ThriftMux}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer, HttpTest}
@@ -103,6 +103,9 @@ object DoEverythingThriftClientModuleFeatureTest {
 }
 
 class DoEverythingThriftClientModuleFeatureTest extends Test with HttpTest {
+
+  private val clientIdString = "echo-http-service"
+
   val thriftServer =
     new EmbeddedThriftServer(
       twitterServer = new EchoThriftServer)
@@ -116,7 +119,7 @@ class DoEverythingThriftClientModuleFeatureTest extends Test with HttpTest {
       }
     },
     args = Seq(
-      "-thrift.clientId=echo-http-service",
+      s"-thrift.clientId=$clientIdString",
       resolverMap("thrift-echo-service" -> thriftServer.thriftHostAndPort)
     )
   )
@@ -182,5 +185,20 @@ class DoEverythingThriftClientModuleFeatureTest extends Test with HttpTest {
     httpServer2.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
     httpServer2.assertStat("route/config/POST/response_size", Seq(1, 1))
     httpServer2.assertStat("route/echo/GET/response_size", Seq(9))
+  }
+
+  test("EchoThriftServer#echo 3 times") {
+    val thriftClient = thriftServer
+      .thriftClient[EchoService[Future]](clientIdString)
+
+    Await.result(thriftClient.setTimesToEcho(2), 5.seconds)
+    Await.result(thriftClient.setTimesToEcho(3), 5.seconds)
+
+    assert(Await.result(thriftClient.echo("Bob"), 5.seconds) == "BobBobBob")
+
+    Await.result(thriftClient.asClosable.close(), 5.seconds)
+    intercept[ServiceClosedException] {
+      Await.result(thriftClient.echo("Bob"), 5.seconds)
+    }
   }
 }
