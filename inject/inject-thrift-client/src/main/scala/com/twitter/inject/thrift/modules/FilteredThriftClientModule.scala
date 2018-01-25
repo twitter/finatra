@@ -63,7 +63,7 @@ object FilteredThriftClientModule {
  * @see [[https://finagle.github.io/blog/2015/09/10/services-per-endpoint-in-scrooge/ Services-per-endpoint in Scrooge]]
  * @see [[https://twitter.github.io/scrooge/Finagle.html#creating-a-client Finagle Clients]]
  */
-@deprecated("Use the com.twitter.inject.thrift.modules.ServicePerEndpointModule", "2018-01-08")
+@deprecated("Use the com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule", "2018-01-08")
 abstract class FilteredThriftClientModule[
   FutureIface <: ThriftService: ClassTag,
   ServiceIface <: ThriftServiceIface.Filterable[ServiceIface]: ClassTag

@@ -3,22 +3,20 @@ package com.twitter.inject.thrift
 import com.twitter.conversions.time._
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Status._
-import com.twitter.finagle.thrift.ClientId
-import com.twitter.finagle.{ListeningServer, ServiceClosedException, ThriftMux}
-import com.twitter.finatra.http.filters.CommonFilters
-import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer, HttpTest}
+import com.twitter.finagle.ServiceClosedException
+import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
-import com.twitter.inject.server.{PortUtils, TwitterServer}
+import com.twitter.inject.server.FeatureTest
 import com.twitter.inject.thrift.DoEverythingThriftClientModuleFeatureTest._
-import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftClientModule}
-import com.twitter.inject.{Logging, Test}
+import com.twitter.inject.thrift.integration.basic.{EchoThriftClientModule1, EchoThriftClientModule2, EchoThriftClientModule3, MyEchoService}
+import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 import com.twitter.test.thriftscala.EchoService
 import com.twitter.util.{Await, Future}
-import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.{Inject, Singleton}
 
 object DoEverythingThriftClientModuleFeatureTest {
+  @Singleton class EchoServiceFuture @Inject()(val service: EchoService[Future])
+
   class EchoHttpController1 @Inject()(echoThriftService: EchoService[Future]) extends Controller {
     get("/echo") { request: Request =>
       val msg = request.params("msg")
@@ -30,7 +28,9 @@ object DoEverythingThriftClientModuleFeatureTest {
     }
   }
 
-  class EchoHttpController2 @Inject()(echoThriftService: EchoService.FutureIface) extends Controller {
+  /* Testing deprecated code for coverage */
+  class EchoHttpController2 @Inject()(echoThriftService: EchoService.FutureIface)
+      extends Controller {
     get("/echo") { request: Request =>
       val msg = request.params("msg")
       echoThriftService.echo(msg)
@@ -41,111 +41,69 @@ object DoEverythingThriftClientModuleFeatureTest {
     }
   }
 
-  object EchoThriftClientModule1
-    extends ThriftClientModule[EchoService[Future]] {
-    override val label = "echo-service"
-    override val dest = "flag!thrift-echo-service"
-  }
-
-  object EchoThriftClientModule2
-    extends ThriftClientModule[EchoService.FutureIface] {
-    override val label = "echo-service"
-    override val dest = "flag!thrift-echo-service"
-  }
-
-  @Singleton
-  class MyEchoService extends EchoService[Future] with Logging {
-    private val timesToEcho = new AtomicInteger(1)
-
-    /* Public */
-    override def echo(msg: String): Future[String] = {
-      info("echo " + msg)
-      assertClientId("echo-http-service")
-      Future.value(msg * timesToEcho.get)
+  class EchoHttpController3 @Inject()(echoThriftService: EchoService.MethodPerEndpoint)
+      extends Controller {
+    get("/echo") { request: Request =>
+      val msg = request.params("msg")
+      echoThriftService.echo(msg)
     }
-    override def setTimesToEcho(times: Int): Future[Int] = {
-      info("setTimesToEcho " + times)
-      assertClientId("echo-http-service")
-      timesToEcho.set(times) //mutation
-      Future(times)
+    post("/config") { request: Request =>
+      val timesToEcho = request.params("timesToEcho").toInt
+      echoThriftService.setTimesToEcho(timesToEcho)
     }
-
-    /* Private */
-    private def assertClientId(name: String): Unit = {
-      assert(ClientId.current.contains(ClientId(name)), "Invalid Client ID: " + ClientId.current)
-    }
-  }
-
-  class EchoThriftServer extends TwitterServer {
-    private val thriftPortFlag = flag("thrift.port", ":0", "External Thrift server port")
-    private val thriftShutdownTimeout = flag(
-      "thrift.shutdown.time",
-      1.minute,
-      "Maximum amount of time to wait for pending requests to complete on shutdown"
-    )
-    /* Private Mutable State */
-    private var thriftServer: ListeningServer = _
-
-    /* Lifecycle */
-    override def postWarmup() {
-      super.postWarmup()
-      thriftServer = ThriftMux.server.serveIface(thriftPortFlag(), injector.instance[MyEchoService])
-      info("Thrift server started on port: " + thriftPort.get)
-    }
-
-    onExit {
-      Await.result(thriftServer.close(thriftShutdownTimeout().fromNow))
-    }
-
-    /* Overrides */
-    override def thriftPort = Option(thriftServer) map PortUtils.getPort
   }
 }
 
-class DoEverythingThriftClientModuleFeatureTest extends Test with HttpTest {
+class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTest {
+  override val printStats = false
 
   private val clientIdString = "echo-http-service"
 
-  val thriftServer =
-    new EmbeddedThriftServer(
-      twitterServer = new EchoThriftServer)
+  override val server =
+    new EmbeddedThriftServer(twitterServer = new TestThriftServer(new MyEchoService))
 
-  val httpServer1 = new EmbeddedHttpServer(
-    twitterServer = new HttpServer {
-      override val name = "echo-http-server1"
-      override val modules = Seq(ThriftClientIdModule, EchoThriftClientModule1)
-      override def configureHttp(router: HttpRouter) {
-        router.filter[CommonFilters].add[EchoHttpController1]
-      }
-    },
+  private val httpServer1 = new EmbeddedHttpServer(
+    twitterServer =
+      new TestHttpServer[EchoHttpController1]("echo-http-server1", EchoThriftClientModule1),
     args = Seq(
       s"-thrift.clientId=$clientIdString",
-      resolverMap("thrift-echo-service" -> thriftServer.thriftHostAndPort)
+      resolverMap("thrift-echo-service" -> server.thriftHostAndPort)
     )
   )
 
-  val httpServer2 = new EmbeddedHttpServer(
-    twitterServer = new HttpServer {
-      override val name = "echo-http-server2"
-      override val modules = Seq(ThriftClientIdModule, EchoThriftClientModule2)
-      override def configureHttp(router: HttpRouter) {
-        router.filter[CommonFilters].add[EchoHttpController2]
-      }
-    },
+  private val httpServer2 = new EmbeddedHttpServer(
+    twitterServer =
+      new TestHttpServer[EchoHttpController2]("echo-http-server2", EchoThriftClientModule2),
     args = Seq(
-      "-thrift.clientId=echo-http-service",
-      resolverMap("thrift-echo-service" -> thriftServer.thriftHostAndPort)
+      s"-thrift.clientId=$clientIdString",
+      resolverMap("thrift-echo-service" -> server.thriftHostAndPort)
+    )
+  )
+
+  private val httpServer3 = new EmbeddedHttpServer(
+    twitterServer =
+      new TestHttpServer[EchoHttpController3]("echo-http-server3", EchoThriftClientModule3),
+    args = Seq(
+      s"-thrift.clientId=$clientIdString",
+      resolverMap("thrift-echo-service" -> server.thriftHostAndPort)
     )
   )
 
   override def afterAll(): Unit = {
-    thriftServer.close()
     httpServer1.close()
     httpServer2.close()
+    httpServer3.close()
     super.afterAll()
   }
 
+  private def await[T](f: Future[T]): T = {
+    Await.result(f, 5.seconds)
+  }
+
   // test EchoService[Future]
+  test("EchoService[Future] is available from the injector") {
+    httpServer1.injector.instance[EchoServiceFuture].service should not be null
+  }
   test("EchoHttpServer1#echo 3 times") {
     httpServer1.httpPost(
       path = "/config?timesToEcho=2",
@@ -167,6 +125,9 @@ class DoEverythingThriftClientModuleFeatureTest extends Test with HttpTest {
   }
 
   // test EchoService.FutureIface
+  test("EchoService.FutureIface is available from the injector") {
+    httpServer2.injector.instance[EchoService.FutureIface] should not be null
+  }
   test("EchoHttpServer2#echo 3 times") {
     httpServer2.httpPost(
       path = "/config?timesToEcho=2",
@@ -187,18 +148,42 @@ class DoEverythingThriftClientModuleFeatureTest extends Test with HttpTest {
     httpServer2.assertStat("route/echo/GET/response_size", Seq(9))
   }
 
-  test("EchoThriftServer#echo 3 times") {
-    val thriftClient = thriftServer
+  // test EchoService.MethodPerEndpoint
+  test("EchoService.MethodPerEndpoint is available from the injector") {
+    httpServer3.injector.instance[EchoService.MethodPerEndpoint] should not be null
+  }
+  test("EchoHttpServer3#echo 3 times") {
+    httpServer3.httpPost(
+      path = "/config?timesToEcho=2",
+      postBody = "",
+      andExpect = Ok,
+      withBody = "2"
+    )
+
+    httpServer3.httpPost(
+      path = "/config?timesToEcho=3",
+      postBody = "",
+      andExpect = Ok,
+      withBody = "3"
+    )
+
+    httpServer3.httpGet(path = "/echo?msg=Bob", andExpect = Ok, withBody = "BobBobBob")
+    httpServer3.assertStat("route/config/POST/response_size", Seq(1, 1))
+    httpServer3.assertStat("route/echo/GET/response_size", Seq(9))
+  }
+
+  test("ThriftClient#asClosable") {
+    val thriftClient = server
       .thriftClient[EchoService[Future]](clientIdString)
 
-    Await.result(thriftClient.setTimesToEcho(2), 5.seconds)
-    Await.result(thriftClient.setTimesToEcho(3), 5.seconds)
+    await(thriftClient.setTimesToEcho(2))
+    await(thriftClient.setTimesToEcho(3))
 
-    assert(Await.result(thriftClient.echo("Bob"), 5.seconds) == "BobBobBob")
+    assertFutureValue(thriftClient.echo("Bob"), "BobBobBob")
 
-    Await.result(thriftClient.asClosable.close(), 5.seconds)
+    await(thriftClient.asClosable.close())
     intercept[ServiceClosedException] {
-      Await.result(thriftClient.echo("Bob"), 5.seconds)
+      await(thriftClient.echo("Bob"))
     }
   }
 }

@@ -8,7 +8,7 @@ import com.twitter.inject.thrift.integration.TestThriftServer
 import com.twitter.inject.thrift.integration.inheritance.{ServiceBHttpServer, ServiceBThriftService}
 import com.twitter.serviceB.thriftscala.ServiceB
 
-class InheritanceServicePerEndpointModuleFeatureTest
+class InheritanceThriftMethodBuilderClientModuleFeatureTest
   extends FeatureTest
   with HttpTest {
   override val printStats = false

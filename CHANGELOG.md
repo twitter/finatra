@@ -18,6 +18,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-thrift-client: Un-deprecate `c.t.inject.thrift.modules.ThriftClientModule`
+  and update for parity with `ServicePerEndpointModule` in regards to ThriftMux
+  client configuration. Update documentation. Rename `ServicePerEndpointModule` to
+  the more descriptive and consistently named `ThriftMethodBuilderClientModule`. 
+  ``PHAB_ID=D129891``
+
 ### Fixed
 
 ### Closed

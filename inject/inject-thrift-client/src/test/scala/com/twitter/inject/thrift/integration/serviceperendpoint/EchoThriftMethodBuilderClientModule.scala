@@ -3,11 +3,11 @@ package com.twitter.inject.thrift.integration.serviceperendpoint
 import com.google.inject.Module
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.integration.filters.{MethodLoggingTypeAgnosticFilter, SetTimesEchoTypeAgnosticFilter}
-import com.twitter.inject.thrift.modules.{ServicePerEndpointModule, ThriftClientIdModule}
+import com.twitter.inject.thrift.modules.{PossiblyRetryableExceptions, ThriftClientIdModule, ThriftMethodBuilderClientModule}
 import com.twitter.test.thriftscala.EchoService
 
-object EchoServicePerEndpointModule
-  extends ServicePerEndpointModule[EchoService.ServicePerEndpoint, EchoService.MethodPerEndpoint] {
+object EchoThriftMethodBuilderClientModule
+  extends ThriftMethodBuilderClientModule[EchoService.ServicePerEndpoint, EchoService.MethodPerEndpoint] {
 
   override val modules: Seq[Module] = Seq(ThriftClientIdModule)
 

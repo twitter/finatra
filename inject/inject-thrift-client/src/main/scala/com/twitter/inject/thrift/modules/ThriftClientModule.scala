@@ -1,65 +1,69 @@
 package com.twitter.inject.thrift.modules
 
-import com.github.nscala_time.time
 import com.google.inject.Provides
 import com.twitter.finagle._
-import com.twitter.finagle.factory.TimeoutFactory
-import com.twitter.finagle.param.Stats
-import com.twitter.finagle.service.TimeoutFilter
+import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.TwitterModule
-import com.twitter.util.Duration
+import com.twitter.util.{Duration, Monitor, NullMonitor}
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
-@deprecated("Use the com.twitter.inject.thrift.modules.ServicePerEndpointModule", "2018-01-12")
-abstract class ThriftClientModule[T: ClassTag] extends TwitterModule with time.Implicits {
+/**
+ * A [[TwitterModule]] allows users to configure a Finagle `ThriftMux` client and does NOT
+ * provide ability to filter or configure per-method Scrooge-generated interfaces. The client
+ * interface can be expressed as a `MethodPerEndpoint` or higher-kinded interface.
+ *
+ * Provides bindings for a Scrooge-generated `MethodPerEndpoint` or higher-kinded interface.
+ *
+ * See the [[ThriftMethodBuilderClientModule]] for building a `ThriftMux` client that allows for filtering
+ * and configuration per-method of the Scrooge-generated interface.
+ *
+ * @note This [[TwitterModule]] expects a [[com.twitter.finagle.thrift.ClientId]] to be bound to
+ *       the object graph but does not assume how it is done. A [[com.twitter.finagle.thrift.ClientId]]
+ *       can be bound by including the [[ThriftClientIdModule]] in your server configuration.
+ *
+ * @tparam ThriftService A Scrooge-generated `MethodPerEndpoint` or the higher-kinded type of the
+ *                       Scrooge-generated service, e.g., `MyService[Future]`.
+ * @see [[com.twitter.finagle.thrift.ThriftRichClient.build(dest: String, label: String)]]
+ * @see [[https://twitter.github.io/finagle/guide/Clients.html Finagle Clients]]
+ * @see [[https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux What is ThriftMux?]]
+ */
+abstract class ThriftClientModule[ThriftService: ClassTag]
+  extends TwitterModule
+  with ThriftClientModuleTrait {
 
-  /**
-   * Name of client for use in metrics
-   */
-  val label: String
+  protected def sessionAcquisitionTimeout: Duration = Duration.Top
 
-  /**
-   * Destination of client
-   */
-  val dest: String
+  protected def requestTimeout: Duration = Duration.Top
 
-  /**
-   * Enable thrift mux for this connection.
-   *
-   * Note: Both server and client must have mux enabled otherwise
-   * a nondescript ChannelClosedException will be seen.
-   *
-   * What is ThriftMux?
-   * https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
-   */
-  def mux: Boolean = true
+  protected def retryBudget: Budget = Budget.default
 
-  def requestTimeout: Duration = Duration.Top
+  protected def monitor: Monitor = NullMonitor
 
-  def connectTimeout: Duration = Duration.Top
+  protected def configureThriftMuxClient(
+    client: ThriftMux.Client
+  ): ThriftMux.Client = client
 
   @Singleton
   @Provides
-  def providesClient(clientId: ClientId, statsReceiver: StatsReceiver): T = {
-    val labelAndDest = s"$label=$dest"
+  final def providesThriftClient(
+    clientId: ClientId,
+    statsReceiver: StatsReceiver
+  ): ThriftService = {
+    val clientStatsReceiver = statsReceiver.scope("clnt")
 
-    if (mux) {
-      ThriftMux.client
-        .configured(TimeoutFilter.Param(requestTimeout))
-        .configured(TimeoutFactory.Param(connectTimeout))
-        .configured(Stats(statsReceiver.scope("clnt")))
+    configureThriftMuxClient(
+      ThriftMux.client.withSession
+        .acquisitionTimeout(sessionAcquisitionTimeout)
+        .withRequestTimeout(requestTimeout)
+        .withStatsReceiver(clientStatsReceiver)
         .withClientId(clientId)
-        .newIface[T](labelAndDest)
-    } else {
-      Thrift.client
-        .configured(TimeoutFilter.Param(requestTimeout))
-        .configured(TimeoutFactory.Param(connectTimeout))
-        .configured(Stats(statsReceiver.scope("clnt")))
-        .withClientId(clientId)
-        .newIface[T](labelAndDest)
-    }
+        .withMonitor(monitor)
+        .withLabel(label)
+        .withRetryBudget(retryBudget.retryBudget)
+        .withRetryBackoff(retryBudget.requeueBackoffs)
+    ).build[ThriftService](dest, label)
   }
 }

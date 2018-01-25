@@ -8,7 +8,7 @@ import com.twitter.inject.thrift.modules.ThriftClientIdModule
 
 class ServiceBHttpServer extends HttpServer {
   override val modules: Seq[Module] =
-    Seq(ThriftClientIdModule, ServiceBServicePerEndpointModule)
+    Seq(ThriftClientIdModule, ServiceBThriftMethodBuilderClientModule)
 
   override def configureHttp(router: HttpRouter) {
     router

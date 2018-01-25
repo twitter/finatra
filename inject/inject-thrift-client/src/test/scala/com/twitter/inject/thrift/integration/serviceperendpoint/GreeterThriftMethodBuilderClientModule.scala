@@ -1,64 +1,48 @@
-package com.twitter.inject.thrift.integration.reqrepserviceperendpoint
+package com.twitter.inject.thrift.integration.serviceperendpoint
 
 import com.google.inject.Module
-import com.twitter.conversions.percent._
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
+import com.twitter.greeter.thriftscala.Greeter.Bye
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.integration.filters.{HiLoggingTypeAgnosticFilter, MethodLoggingTypeAgnosticFilter}
-import com.twitter.inject.thrift.modules.{ServicePerEndpointModule, ThriftClientIdModule}
-import com.twitter.util.tunable.Tunable
-import com.twitter.util.{Duration, Return, Throw}
+import com.twitter.inject.thrift.modules.{PossiblyRetryableExceptions, ThriftClientIdModule, ThriftMethodBuilderClientModule}
+import com.twitter.util.{Return, Throw}
 import scala.util.control.NonFatal
 
-class GreeterReqRepServicePerEndpointModule(
-  requestHeaderKey: String,
-  timeoutPerRequestTunable: Tunable[Duration]
-) extends ServicePerEndpointModule[Greeter.ReqRepServicePerEndpoint, Greeter.MethodPerEndpoint] {
+object GreeterThriftMethodBuilderClientModule
+  extends ThriftMethodBuilderClientModule[Greeter.ServicePerEndpoint, Greeter.MethodPerEndpoint] {
 
   override val modules: Seq[Module] = Seq(ThriftClientIdModule)
 
   override val dest = "flag!greeter-thrift-service"
   override val label = "greeter-thrift-client"
 
-  override protected def configureServicePerEndpoint(
-    builder: ThriftMethodBuilderFactory[Greeter.ReqRepServicePerEndpoint],
-    servicePerEndpoint: Greeter.ReqRepServicePerEndpoint
-  ): Greeter.ReqRepServicePerEndpoint = {
+  override def configureServicePerEndpoint(
+    builder: ThriftMethodBuilderFactory[Greeter.ServicePerEndpoint],
+    servicePerEndpoint: Greeter.ServicePerEndpoint
+  ): Greeter.ServicePerEndpoint = {
+
     servicePerEndpoint
       .withHi(
-        builder
-          .method(Greeter.Hi)
-          .withTimeoutPerRequest(timeoutPerRequestTunable)
+        builder.method[Greeter.Hi.Args, Greeter.Hi.SuccessType](Greeter.Hi)
           // method type-agnostic filter
-          .withAgnosticFilter(new HiLoggingTypeAgnosticFilter)
-          // method type-specific filter
-          .filtered(new HiHeadersFilter(requestHeaderKey))
+          .withAgnosticFilter[HiLoggingTypeAgnosticFilter]
           .withRetryForClassifier(PossiblyRetryableExceptions)
-          .idempotent(1.percent)
-          .service
-      )
+          .service)
       .withHello(
-        builder
-          .method(Greeter.Hello)
+        builder.method(Greeter.Hello)
           // method type-specific filter
-          .filtered(new HelloHeadersFilter(requestHeaderKey))
-          // method type-specific filter
-          .filtered[HelloFilter]
+          .filtered(new HelloFilter)
           .withRetryForClassifier(ByeResponseClassification)
-          .service
-      )
+          .service)
       .withBye(
-        builder
-          .method(Greeter.Bye)
-          // method type-specific filter
-          .filtered(new ByeHeadersFilter(requestHeaderKey))
+        builder.method[Bye.Args, Bye.SuccessType](Greeter.Bye)
           // method type-specific filter
           .filtered[ByeFilter]
           .withRetryForClassifier(PossiblyRetryableExceptions)
-          .service
-      )
-      // global filter
+          .service)
+      // global (type-agnostic) filter
       .filtered(new MethodLoggingTypeAgnosticFilter())
   }
 

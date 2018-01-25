@@ -37,6 +37,8 @@ scala_library(
     '3rdparty/jvm/com/github/nscala_time:nscala_time',
     '3rdparty/jvm/com/google/inject/extensions:guice-assistedinject',
     'finagle/finagle-core/src/main/scala:scala',
+    'finagle/finagle-thrift/src/main/scala',
+    'finagle/finagle-thriftmux/src/main/scala',
     'finatra/inject/inject-app/src/main/scala:scala',
     'scrooge/scrooge-core/src/main/scala:scala',
   ],
