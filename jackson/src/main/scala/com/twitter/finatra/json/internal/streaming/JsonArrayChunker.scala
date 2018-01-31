@@ -72,7 +72,7 @@ private[finatra] class JsonArrayChunker extends Logging {
         parsingState = InsideString
       }
       // If the double quote wasn't escaped then this is the end of a string.
-      else if (in.get(in.position - 2) != '\\') {
+      else if (in.get(in.position() - 2) != '\\') {
         debug("State = Parsing")
         parsingState = Normal
       }
@@ -83,7 +83,7 @@ private[finatra] class JsonArrayChunker extends Logging {
   private def extractBuf(): Buf = {
     val copy = byteBuffer.duplicate()
     copy.position(0)
-    copy.limit(byteBuffer.position - 1)
+    copy.limit(byteBuffer.position() - 1)
     val copyBuf = Buf.ByteBuffer.Shared(copy)
 
     byteBuffer = byteBuffer.slice()
