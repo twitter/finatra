@@ -1,9 +1,10 @@
 package com.twitter.inject.thrift.integration.serviceperendpoint
 
 import com.google.inject.Module
+import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.integration.filters.{MethodLoggingTypeAgnosticFilter, SetTimesEchoTypeAgnosticFilter}
-import com.twitter.inject.thrift.modules.{PossiblyRetryableExceptions, ThriftClientIdModule, ThriftMethodBuilderClientModule}
+import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftMethodBuilderClientModule}
 import com.twitter.test.thriftscala.EchoService
 
 object EchoThriftMethodBuilderClientModule
@@ -24,13 +25,13 @@ object EchoThriftMethodBuilderClientModule
         builder.method[EchoService.Echo.Args, EchoService.Echo.SuccessType](EchoService.Echo)
           // method type-specific filter
           .filtered[EchoFilter]
-          .withRetryForClassifier(PossiblyRetryableExceptions)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .service)
       .withSetTimesToEcho(
         builder.method(EchoService.SetTimesToEcho)
           // method type-agnostic filter
           .withAgnosticFilter(new SetTimesEchoTypeAgnosticFilter())
-          .withRetryForClassifier(PossiblyRetryableExceptions)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .service)
       // global (type-agnostic) filter
       .filtered(new MethodLoggingTypeAgnosticFilter())

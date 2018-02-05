@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-thrift: Update `c.t.inject.thrift.PossibleRetryable` to specify a ResponseClassifier
+  and update usages in inject-thrift-client to use it. ``PHAB_ID=D134328``
+
 * inject-thrift-client: Un-deprecate `c.t.inject.thrift.modules.ThriftClientModule`
   and update for parity with `ServicePerEndpointModule` in regards to ThriftMux
   client configuration. Update documentation. Rename `ServicePerEndpointModule` to

@@ -1,12 +1,8 @@
 package com.twitter.inject.exceptions
 
 import com.twitter.finagle.mux.ClientDiscardedRequestException
-import com.twitter.finagle.{
-  BackupRequestLost,
-  CancelledConnectionException,
-  CancelledRequestException,
-  Failure
-}
+import com.twitter.finagle.{BackupRequestLost, CancelledConnectionException, CancelledRequestException, Failure, service => ctfs}
+import com.twitter.finagle.service.{ReqRep, ResponseClass}
 import com.twitter.util.{Return, Throw, Try}
 import scala.util.control.NonFatal
 
@@ -21,23 +17,37 @@ import scala.util.control.NonFatal
  */
 object PossiblyRetryable {
 
+  /**
+   * Partial function which can be used to determine if a request is possibly
+   * retryable.
+   */
   val PossiblyRetryableExceptions: PartialFunction[Try[_], Boolean] = {
     case Return(_) => false
     case Throw(t) => possiblyRetryable(t)
   }
 
+  /**
+   * A [[com.twitter.finagle.service.ResponseClassifier]] which uses the
+   * [[PossiblyRetryableExceptions]] partial function to classify responses as
+   * retryable.
+   */
+  val ResponseClassifier: ctfs.ResponseClassifier =
+    ctfs.ResponseClassifier.named("PossiblyRetryableExceptions") {
+      case ReqRep(_, Throw(t)) if PossiblyRetryable.possiblyRetryable(t) =>
+        ResponseClass.RetryableFailure
+      case ReqRep(_, Throw(_)) =>
+        ResponseClass.NonRetryableFailure
+      case ReqRep(_, Return(_)) =>
+        ResponseClass.Success
+    }
+
   def apply(t: Throwable): Boolean = {
     PossiblyRetryable.possiblyRetryable(t)
   }
 
-  def unapply(t: Throwable): Option[Throwable] = {
-    if (apply(t))
-      Some(t)
-    else
-      None
-  }
+  def unapply(t: Throwable): Option[Throwable] = Some(t).filter(apply)
 
-  // TODO: RetryableWriteException's are automatically retried by Finagle (how many times?), so we should avoid retrying again here
+  // TODO: RetryableWriteException's are automatically retried by Finagle, so we should avoid retrying again here
   def possiblyRetryable(t: Throwable): Boolean = {
     !isCancellation(t) &&
     !t.isInstanceOf[NonRetryableException] &&
@@ -49,7 +59,7 @@ object PossiblyRetryable {
     case _: CancelledRequestException => true
     case _: CancelledConnectionException => true
     case _: ClientDiscardedRequestException => true
-    case f: Failure if f.isFlagged(Failure.Interrupted) => true
+    case f: Failure if f.isFlagged(Failure.Interrupted) || f.isFlagged(Failure.Ignorable) => true
     case f: Failure if f.cause.isDefined => isCancellation(f.cause.get)
     case _ => false
   }

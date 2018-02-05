@@ -4,9 +4,10 @@ import com.google.inject.Module
 import com.twitter.conversions.percent._
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
 import com.twitter.greeter.thriftscala.{Greeter, InvalidOperation}
+import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.integration.filters.{HiLoggingTypeAgnosticFilter, MethodLoggingTypeAgnosticFilter}
-import com.twitter.inject.thrift.modules.{PossiblyRetryableExceptions, ThriftMethodBuilderClientModule, ThriftClientIdModule}
+import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftMethodBuilderClientModule}
 import com.twitter.util.tunable.Tunable
 import com.twitter.util.{Duration, Return, Throw}
 import scala.util.control.NonFatal
@@ -34,7 +35,7 @@ class GreeterReqRepThriftMethodBuilderClientModule(
           .withAgnosticFilter(new HiLoggingTypeAgnosticFilter)
           // method type-specific filter
           .filtered(new HiHeadersFilter(requestHeaderKey))
-          .withRetryForClassifier(PossiblyRetryableExceptions)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .idempotent(1.percent)
           .service
       )
@@ -55,7 +56,7 @@ class GreeterReqRepThriftMethodBuilderClientModule(
           .filtered(new ByeHeadersFilter(requestHeaderKey))
           // method type-specific filter
           .filtered[ByeFilter]
-          .withRetryForClassifier(PossiblyRetryableExceptions)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .service
       )
       // global filter

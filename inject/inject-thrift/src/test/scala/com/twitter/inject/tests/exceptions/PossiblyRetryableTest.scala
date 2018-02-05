@@ -24,6 +24,7 @@ class PossiblyRetryableTest extends Test {
     assertIsCancellation(new CancelledRequestException)
     assertIsCancellation(new CancelledConnectionException(new Exception("cause")))
     assertIsCancellation(ClientDiscardedRequestException("cause"))
+    assertIsCancellation(Failure("int", Failure.Ignorable))
     assertIsCancellation(Failure("int", Failure.Interrupted))
     assertIsCancellation(Failure.rejected("", new CancelledRequestException))
   }
