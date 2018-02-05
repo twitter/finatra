@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-18.2.0](https://github.com/twitter/finatra/tree/finatra-18.2.0) (2018-02-05)
+
+### Added
+
 * inject-thrift-client: Add methods to `c.t.inject.thrift.filters.ThriftClientFilterChain` to allow
   Tunable timeouts and request timeouts. ``PHAB_ID=D128506``
 
