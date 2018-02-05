@@ -12,11 +12,14 @@ at least one example which also uses [Maven](http://maven.apache.org).
 
 ## Building and Running
 
-### `develop` branch
+### To Build
 If you want to build/run the examples from the `develop` branch you will need to
 make sure to follow the instructions in the
 [CONTRIBUTING.md](../CONTRIBUTING.md) documentation for building SNAPSHOT
 versions of Finatra Twitter OSS dependencies along with building Finatra itself.
+
+This is because in the `develop` branch the examples depend on `SNAPSHOT` versions
+of the Twitter OSS libraries which you will need to build locally.
 
 To accomplish this easily:
 
@@ -28,7 +31,10 @@ This commands differs from the [CONTRIBUTING.md](../CONTRIBUTING.md) documentati
 that it will also *include* building and publishing Finatra locally from the Finatra
 `develop` branch.
 
-### `master` or a release branch
+In the `master` branch, you should be able run the examples without building any dependencies 
+as `master` uses the released versions of the Twitter OSS dependencies.
+
+### To Run
 Follow the instructions in the project's `README.md` for how to run the server.
 
 ## More information

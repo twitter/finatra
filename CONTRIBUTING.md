@@ -27,13 +27,7 @@ locally if you are in master or a release branch.
 Finatra is built using [sbt][sbt]. When building please use the included
 [`./sbt`](https://github.com/twitter/finatra/blob/develop/sbt) script which
 provides a thin wrapper over [sbt][sbt] and correctly sets memory and other
-settings. 
-
-This is true for building all of Finatra *except* when in [master][master-branch] 
-(or any release tag) and building the `finatra/examples`. In [master][master-branch] 
-(and all release tags), the examples are defined such that they are able to be 
-built with your locally installed [sbt][sbt] since they are defined with their own 
-`build.sbt` files and use released Twitter OSS dependencies.
+settings.
 
 If you have any questions or run into any problems, please create an issue here,
 tweet at us [@finatra](https://twitter.com/finatra), or email the
