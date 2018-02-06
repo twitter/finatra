@@ -66,6 +66,11 @@ Thrift Server
 - :doc:`thrift/exceptions`
 - :doc:`thrift/warmup`
 
+Clients
+-------
+
+- :doc:`thrift/clients`
+
 Testing
 -------
 
@@ -114,6 +119,7 @@ Testing
    thrift/filters
    thrift/exceptions
    thrift/warmup
+   thrift/clients
    testing/index
    testing/embedded
    testing/feature_tests

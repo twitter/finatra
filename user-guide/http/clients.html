@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example Projects &#8212; Finatra 18.2.0 documentation</title>
+    <title>Communicate with an HTTP Service &#8212; Finatra 18.2.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -27,9 +27,6 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="top" title="Finatra 18.2.0 documentation" href="../../index.html" />
-    <link rel="up" title="User’s Guide" href="../index.html" />
-    <link rel="next" title="Introduction to Logging With Finatra" href="../logging/index.html" />
-    <link rel="prev" title="Future Gotchas" href="futures.html" />
    
   
   <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
@@ -55,14 +52,7 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../logging/index.html" title="Introduction to Logging With Finatra"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="futures.html" title="Future Gotchas"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -71,34 +61,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="example-projects">
-<span id="examples"></span><h1>Example Projects<a class="headerlink" href="#example-projects" title="Permalink to this headline">¶</a></h1>
-<p>Finatra includes a <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples">collection of example applications and servers</a>.</p>
-<div class="section" id="details">
-<h2>Details<a class="headerlink" href="#details" title="Permalink to this headline">¶</a></h2>
-<p>For detailed information see the README.md within each example project. Every project builds with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a> and at
-least one example also uses <a class="reference external" href="http://maven.apache.org">Maven</a>.</p>
-</div>
-<div class="section" id="building-and-running">
-<h2>Building and Running<a class="headerlink" href="#building-and-running" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="develop-branch">
-<h3><cite>develop</cite> branch<a class="headerlink" href="#develop-branch" title="Permalink to this headline">¶</a></h3>
-<p>If you want to build or run the examples from the <cite>develop</cite> branch (or a branch created from the <cite>develop</cite> branch) you will need to make sure to follow the instructions in the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/CONTRIBUTING.md">CONTRIBUTING.md</a> documentation for building SNAPSHOT versions of the necessary Twitter OSS dependencies along with building Finatra itself.</p>
-<p>You can use the <a class="reference external" href="https://github.com/twitter/dodo">Dodo</a> project builder to accomplish this easily:</p>
-<div class="code bash highlight-text"><div class="highlight"><pre><span></span>curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test --include finatra
-</pre></div>
-</div>
-<p>This commands differs from the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/CONTRIBUTING.md">CONTRIBUTING.md</a> documentation in that it will also <em>include</em> building and publishing Finatra locally from the Finatra <cite>develop</cite> branch.</p>
-</div>
-<div class="section" id="master-or-a-release-branch">
-<h3><cite>master</cite> or a release branch<a class="headerlink" href="#master-or-a-release-branch" title="Permalink to this headline">¶</a></h3>
-<p>Follow the instructions in the project’s <cite>README.md</cite> for how to build or run the code.</p>
-</div>
-</div>
-<div class="section" id="more-information">
-<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
-<p>For more information please feel free to browse the examples <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples">source code</a> (tests are an especially good source of information and examples).</p>
-</div>
+  <div class="section" id="communicate-with-an-http-service">
+<span id="http-clients"></span><h1>Communicate with an HTTP Service<a class="headerlink" href="#communicate-with-an-http-service" title="Permalink to this headline">¶</a></h1>
+<p><em>COMING SOON</em></p>
 </div>
 
 
@@ -119,27 +84,9 @@ least one example also uses <a class="reference external" href="http://maven.apa
   <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
   <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
   <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
-</ul>
-  <h3><a href="../../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Example Projects</a><ul>
-<li><a class="reference internal" href="#details">Details</a></li>
-<li><a class="reference internal" href="#building-and-running">Building and Running</a><ul>
-<li><a class="reference internal" href="#develop-branch"><cite>develop</cite> branch</a></li>
-<li><a class="reference internal" href="#master-or-a-release-branch"><cite>master</cite> or a release branch</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#more-information">More information</a></li>
-</ul>
-</li>
-</ul>
-<h3>Related Topics</h3>
+</ul><h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">User&#8217;s Guide</a><ul>
-      <li>Previous: <a href="futures.html" title="previous chapter">Future Gotchas</a></li>
-      <li>Next: <a href="../logging/index.html" title="next chapter">Introduction to Logging With Finatra</a></li>
-  </ul></li>
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none">

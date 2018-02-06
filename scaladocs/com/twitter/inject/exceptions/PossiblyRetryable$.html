@@ -283,7 +283,7 @@ to be retried.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#PossiblyRetryableExceptions" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#PossiblyRetryableExceptions" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="PossiblyRetryableExceptions:PartialFunction[com.twitter.util.Try[_],Boolean]"></a><a id="PossiblyRetryableExceptions:PartialFunction[Try[_],Boolean]"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/inject/exceptions/PossiblyRetryable$.html#PossiblyRetryableExceptions:PartialFunction[com.twitter.util.Try[_],Boolean]" title="Permalink">
@@ -298,7 +298,30 @@ to be retried.
         <span class="name">PossiblyRetryableExceptions</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<a href="https://twitter.github.io/util/docs/com/twitter/util/Try.html#com.twitter.util.Try" class="extype" name="com.twitter.util.Try">Try</a>[_], <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a>]</span>
       </span>
       
+      <p class="shortcomment cmt">Partial function which can be used to determine if a request is possibly
+retryable.</p><div class="fullcomment"><div class="comment cmt"><p>Partial function which can be used to determine if a request is possibly
+retryable. &quot;Possibly&quot; retryable means the returned exception is <b>not</b>
+a cancellation, does <b>not</b> represent an exception of failure that should
+not be tried and lastly is non-fatal.
+</p></div></div>
+    </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#ResponseClassifier" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ResponseClassifier:com.twitter.finagle.service.ResponseClassifier"></a><a id="ResponseClassifier:ResponseClassifier"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/exceptions/PossiblyRetryable$.html#ResponseClassifier:com.twitter.finagle.service.ResponseClassifier" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ResponseClassifier</span><span class="result">: <span class="extype" name="com.twitter.finagle.service.ResponseClassifier">ResponseClassifier</span></span>
+      </span>
       
+      <p class="shortcomment cmt">A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/index.html#ResponseClassifier=PartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]" class="extype" name="com.twitter.finagle.service">com.twitter.finagle.service.ResponseClassifier</a> which uses the
+<a href="#PossiblyRetryableExceptions:PartialFunction[com.twitter.util.Try[_],Boolean]" class="extmbr" name="com.twitter.inject.exceptions.PossiblyRetryable#PossiblyRetryableExceptions">PossiblyRetryableExceptions</a> partial function to classify responses as
+retryable.</p>
     </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="apply(t:Throwable):Boolean"></a><a id="apply(Throwable):Boolean"></a>
       <span class="permalink">
@@ -447,22 +470,6 @@ to be retried.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#isCancellation" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="isCancellation(t:Throwable):Boolean"></a><a id="isCancellation(Throwable):Boolean"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/exceptions/PossiblyRetryable$.html#isCancellation(t:Throwable):Boolean" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">isCancellation</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
-      </span>
-      
-      
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -533,7 +540,7 @@ to be retried.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#possiblyRetryable" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.exceptions.PossiblyRetryable#possiblyRetryable" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="possiblyRetryable(t:Throwable):Boolean"></a><a id="possiblyRetryable(Throwable):Boolean"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/inject/exceptions/PossiblyRetryable$.html#possiblyRetryable(t:Throwable):Boolean" title="Permalink">
@@ -548,7 +555,10 @@ to be retried.
         <span class="name">possiblyRetryable</span><span class="params">(<span name="t">t: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">A <span class="extype" name="Throwable">Throwable</span> is &quot;possibly&quot; retryable if:</p><div class="fullcomment"><div class="comment cmt"><p>A <span class="extype" name="Throwable">Throwable</span> is &quot;possibly&quot; retryable if:</p><ol class="lowerAlpha"><li>it is not a cancellation
+ b. it is not an exception or failure which should not be retried
+ c. is a non-fatal exception</li></ol></div><dl class="paramcmts block"><dt class="param">t</dt><dd class="cmt"><p>the <span class="extype" name="Throwable">Throwable</span> to inspect</p></dd><dt>returns</dt><dd class="cmt"><p>true if the <span class="extype" name="Throwable">Throwable</span> represents an Exception or Failure which is possibly
+        retryable, false otherwise.</p></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

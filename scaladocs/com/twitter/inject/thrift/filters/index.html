@@ -228,7 +228,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.inject.thrift.filters.ThriftClientFilterBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.inject.thrift.filters.ThriftClientFilterBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ThriftClientFilterBuilderextendsAnyRef"></a><a id="ThriftClientFilterBuilder:ThriftClientFilterBuilder"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/inject/thrift/filters/index.html#ThriftClientFilterBuilderextendsAnyRef" title="Permalink">
@@ -240,10 +240,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ThriftClientFilterBuilder.html"><span class="name">ThriftClientFilterBuilder</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+        <a title="" href="ThriftClientFilterBuilder.html"><span class="name deprecated" title="Deprecated: (Since version 2018-01-12) Use ThriftMethodBuilderClientModule and ThriftMethodBuilder">ThriftClientFilterBuilder</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
       </span>
       
-      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-01-12)</i> Use ThriftMethodBuilderClientModule and ThriftMethodBuilder</p></dd></dl></div>
     </li><li name="com.twitter.inject.thrift.filters.ThriftClientFilterChain" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ThriftClientFilterChain[Req&lt;:com.twitter.scrooge.ThriftStruct,Rep]extendsLogging"></a><a id="ThriftClientFilterChain[Req&lt;:ThriftStruct,Rep]:ThriftClientFilterChain[Req,Rep]"></a>
       <span class="permalink">
@@ -256,12 +259,12 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A com.twitter.finagle.Filter chain builder which provides helper functions for installing and configuring common filters." href="ThriftClientFilterChain.html"><span class="name">ThriftClientFilterChain</span></a><span class="tparams">[<span name="Req">Req &lt;: <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span></span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="A com.twitter.finagle.Filter chain builder which provides helper functions for installing and configuring common filters." href="ThriftClientFilterChain.html"><span class="name deprecated" title="Deprecated: (Since version 2018-01-12) Use ThriftMethodBuilderClientModule and ThriftMethodBuilder">ThriftClientFilterChain</span></a><span class="tparams">[<span name="Req">Req &lt;: <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span></span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="../../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
       <p class="shortcomment cmt">A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> chain builder which provides helper functions for installing and
 configuring common filters.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> chain builder which provides helper functions for installing and
-configuring common filters.</p><p>Filters configured via the helper methods, e.g., <a href="ThriftClientFilterChain.html#withRetryPolicy(retryPolicy:com.twitter.finagle.service.RetryPolicy[(Req,com.twitter.util.Try[Rep])],retryMsg:((Req,com.twitter.util.Try[Rep]),com.twitter.util.Duration)=&gt;String):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withRetryPolicy">withRetryPolicy</a>, <a href="ThriftClientFilterChain.html#withBackupRequestFilter(quantile:Int,clipDuration:org.joda.time.Duration,history:org.joda.time.Duration,timer:com.twitter.util.Timer):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withBackupRequestFilter">withBackupRequestFilter</a>, <a href="ThriftClientFilterChain.html#withTimeout(duration:org.joda.time.Duration):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withTimeout">withTimeout</a>, <a href="ThriftClientFilterChain.html#withRequestTimeout(duration:org.joda.time.Duration):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withRequestTimeout">withRequestTimeout</a>,
+configuring common filters.</p><p>Filters configured via the helper methods, e.g., <a href="ThriftClientFilterChain.html#withRetryPolicy(retryPolicy:com.twitter.finagle.service.RetryPolicy[(Req,com.twitter.util.Try[Rep])],retryMsg:((Req,com.twitter.util.Try[Rep]),com.twitter.util.Duration)=&gt;String):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withRetryPolicy">withRetryPolicy</a>, <a href="ThriftClientFilterChain.html#withBackupRequestFilter(quantile:Int,clipDuration:org.joda.time.Duration,history:org.joda.time.Duration,timer:com.twitter.util.Timer):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withBackupRequestFilter">withBackupRequestFilter</a>, <a href="ThriftClientFilterChain.html#withTimeout(duration:com.twitter.util.tunable.Tunable[org.joda.time.Duration]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withTimeout">withTimeout</a>, <a href="ThriftClientFilterChain.html#withRequestTimeout(duration:com.twitter.util.tunable.Tunable[org.joda.time.Duration]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withRequestTimeout">withRequestTimeout</a>,
 <a href="ThriftClientFilterChain.html#withMethodLatency:com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withMethodLatency">withMethodLatency</a>, <a href="ThriftClientFilterChain.html#withExceptionFilter[T&lt;:com.twitter.finagle.Filter[Req,Rep,Req,Rep]](implicitevidence$3:Manifest[T]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withExceptionFilter">withExceptionFilter</a>, will be composed in a specific order, (from top-down, assuming requests/responses
 enter and exit through the top):</p><p>+------------------------+
 | latencyFilter          |
@@ -280,7 +283,10 @@ enter and exit through the top):</p><p>+------------------------+
 +------------------------+
 | filterChain            |
 +------------------------+</p><p>where, the <code>filterChain</code> is the chain of filters added in the order of calls to <a href="ThriftClientFilterChain.html#filtered[T&lt;:com.twitter.finagle.Filter[Req,Rep,Req,Rep]](implicitevidence$1:Manifest[T]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#filtered">filtered</a>.
-</p></div><dl class="paramcmts block"><dt class="tparam">Req</dt><dd class="cmt"><p>Request type for this filter chain</p></dd><dt class="tparam">Rep</dt><dd class="cmt"><p>Response type for this filter chain</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftServiceIface$.html" class="extype" name="com.twitter.finagle.thrift.ThriftServiceIface">com.twitter.finagle.thrift.ThriftServiceIface</a></p></span><span class="cmt"><p><a href="ThriftClientFilterBuilder.html" class="extype" name="com.twitter.inject.thrift.filters.ThriftClientFilterBuilder">com.twitter.inject.thrift.filters.ThriftClientFilterBuilder</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">Req</dt><dd class="cmt"><p>Request type for this filter chain</p></dd><dt class="tparam">Rep</dt><dd class="cmt"><p>Response type for this filter chain</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-01-12)</i> Use ThriftMethodBuilderClientModule and ThriftMethodBuilder</p></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftServiceIface$.html" class="extype" name="com.twitter.finagle.thrift.ThriftServiceIface">com.twitter.finagle.thrift.ThriftServiceIface</a></p></span><span class="cmt"><p><a href="ThriftClientFilterBuilder.html" class="extype" name="com.twitter.inject.thrift.filters.ThriftClientFilterBuilder">com.twitter.inject.thrift.filters.ThriftClientFilterBuilder</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 

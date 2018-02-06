@@ -341,6 +341,14 @@
                         <span class="separator"></span>
                         <a class="class" href="ThriftClientExceptionSource.html" title=""></a>
                         <a href="ThriftClientExceptionSource.html" title="">ThriftClientExceptionSource</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="class" href="ThriftMethodBuilder.html" title="Provides ThriftMethod-specific MethodBuilder functionality."></a>
+                        <a href="ThriftMethodBuilder.html" title="Provides ThriftMethod-specific MethodBuilder functionality.">ThriftMethodBuilder</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="class" href="ThriftMethodBuilderFactory.html" title="A builder for configuring a Finagle Service representation of a ThriftMethod."></a>
+                        <a href="ThriftMethodBuilderFactory.html" title="A builder for configuring a Finagle Service representation of a ThriftMethod.">ThriftMethodBuilderFactory</a>
                       </li><li name="com.twitter.inject.utils" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="utils"></a><a id="utils:utils"></a>
       <span class="permalink">
@@ -460,6 +468,49 @@
       </span>
       
       
+    </li><li name="com.twitter.inject.thrift.ThriftMethodBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ThriftMethodBuilder[ServicePerEndpoint&lt;:com.twitter.finagle.thrift.service.Filterable[ServicePerEndpoint],Req,Rep]extendsAnyRef"></a><a id="ThriftMethodBuilder[ServicePerEndpoint&lt;:Filterable[ServicePerEndpoint],Req,Rep]:ThriftMethodBuilder[ServicePerEndpoint,Req,Rep]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/thrift/index.html#ThriftMethodBuilder[ServicePerEndpoint&lt;:com.twitter.finagle.thrift.service.Filterable[ServicePerEndpoint],Req,Rep]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides ThriftMethod-specific MethodBuilder functionality." href="ThriftMethodBuilder.html"><span class="name">ThriftMethodBuilder</span></a><span class="tparams">[<span name="ServicePerEndpoint">ServicePerEndpoint &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilder.ServicePerEndpoint">ServicePerEndpoint</span>]</span>, <span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Provides <code>ThriftMethod</code>-specific <span class="extype" name="MethodBuilder">MethodBuilder</span> functionality.</p>
+    </li><li name="com.twitter.inject.thrift.ThriftMethodBuilderFactory" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ThriftMethodBuilderFactory[ServicePerEndpoint&lt;:com.twitter.finagle.thrift.service.Filterable[ServicePerEndpoint]]extendsAnyRef"></a><a id="ThriftMethodBuilderFactory[ServicePerEndpoint&lt;:Filterable[ServicePerEndpoint]]:ThriftMethodBuilderFactory[ServicePerEndpoint]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/thrift/index.html#ThriftMethodBuilderFactory[ServicePerEndpoint&lt;:com.twitter.finagle.thrift.service.Filterable[ServicePerEndpoint]]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A builder for configuring a Finagle Service representation of a ThriftMethod." href="ThriftMethodBuilderFactory.html"><span class="name">ThriftMethodBuilderFactory</span></a><span class="tparams">[<span name="ServicePerEndpoint">ServicePerEndpoint &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilderFactory.ServicePerEndpoint">ServicePerEndpoint</span>]</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A builder for configuring a Finagle <span class="extype" name="Service">Service</span> representation of a ThriftMethod.</p><div class="fullcomment"><div class="comment cmt"><p>A builder for configuring a Finagle <span class="extype" name="Service">Service</span> representation of a ThriftMethod. See:
+<a href="https://twitter.github.io/scrooge/Finagle.html#id2" target="_blank">ServicePerEndpoint Client</a> for more information.</p><p>Filter ordering:</p><pre>           Request              Response
+             |                    A
+             |                    |
+             V                    |
++------------------------------------------------+
+|           ThriftMethodBuilder filters          |
++------------------------------------------------+
+|              MethodBuilder filters             |
++------------------------------------------------+
+|                  Method Service                |
++------------------------------------------------+</pre></div></div>
     </li></ol>
             </div>
 

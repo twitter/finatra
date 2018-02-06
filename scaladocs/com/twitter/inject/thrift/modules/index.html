@@ -179,12 +179,16 @@
                         <a href="FilteredThriftClientModule.html" title="Provides a FutureIface in the form of RemoteService[Future] for making calls to a remote service.">FilteredThriftClientModule</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ThriftClientIdModule$.html" title=""></a>
-                        <a class="class" href="ThriftClientIdModule.html" title=""></a>
-                        <a href="ThriftClientIdModule.html" title="">ThriftClientIdModule</a>
+                        <a class="class" href="ThriftClientIdModule.html" title="Provides a com.twitter.finagle.thrift.ClientId binding with a value configurable via a com.twitter.app.Flag."></a>
+                        <a href="ThriftClientIdModule.html" title="Provides a com.twitter.finagle.thrift.ClientId binding with a value configurable via a com.twitter.app.Flag.">ThriftClientIdModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ThriftClientModule.html" title=""></a>
-                        <a href="ThriftClientModule.html" title="">ThriftClientModule</a>
+                        <a class="class" href="ThriftClientModule.html" title="A TwitterModule allows users to configure a Finagle ThriftMux client and does NOT provide ability to filter or configure per-method Scrooge-generated interfaces."></a>
+                        <a href="ThriftClientModule.html" title="A TwitterModule allows users to configure a Finagle ThriftMux client and does NOT provide ability to filter or configure per-method Scrooge-generated interfaces.">ThriftClientModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="ThriftMethodBuilderClientModule.html" title="A TwitterModule which allows for configuration of a ThriftMux client."></a>
+                        <a href="ThriftMethodBuilderClientModule.html" title="A TwitterModule which allows for configuration of a ThriftMux client.">ThriftMethodBuilderClientModule</a>
                       </li><li name="com.twitter.inject.thrift.utils" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="utils"></a><a id="utils:utils"></a>
       <span class="permalink">
@@ -264,7 +268,75 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.inject.thrift.modules.FilteredThriftClientModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+              <ol><li name="com.twitter.inject.thrift.modules.ThriftClientIdModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ThriftClientIdModuleextendsTwitterModule"></a><a id="ThriftClientIdModule:ThriftClientIdModule"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#ThriftClientIdModuleextendsTwitterModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Provides a com.twitter.finagle.thrift.ClientId binding with a value configurable via a com.twitter.app.Flag." href="ThriftClientIdModule.html"><span class="name">ThriftClientIdModule</span></a><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Provides a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a> binding with a value
+configurable via a <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a> binding with a value
+configurable via a <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html" class="extype" name="com.twitter.app.Flag">com.twitter.app.Flag</a>.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/getting-started/flags.html" target="_blank">Flags</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.ThriftClientModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ThriftClientModule[ThriftService]extendsTwitterModulewithThriftClientModuleTrait"></a><a id="ThriftClientModule[ThriftService]:ThriftClientModule[ThriftService]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#ThriftClientModule[ThriftService]extendsTwitterModulewithThriftClientModuleTrait" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A TwitterModule allows users to configure a Finagle ThriftMux client and does NOT provide ability to filter or configure per-method Scrooge-generated interfaces." href="ThriftClientModule.html"><span class="name">ThriftClientModule</span></a><span class="tparams">[<span name="ThriftService">ThriftService</span>]</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait">ThriftClientModuleTrait</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> allows users to configure a Finagle <code>ThriftMux</code> client and does NOT
+provide ability to filter or configure per-method Scrooge-generated interfaces.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> allows users to configure a Finagle <code>ThriftMux</code> client and does NOT
+provide ability to filter or configure per-method Scrooge-generated interfaces. The client
+interface can be expressed as a <code>MethodPerEndpoint</code> or higher-kinded interface.</p><p>Provides bindings for a Scrooge-generated <code>MethodPerEndpoint</code> or higher-kinded interface.</p><p>See the <a href="ThriftMethodBuilderClientModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule">ThriftMethodBuilderClientModule</a> for building a <code>ThriftMux</code> client that allows for filtering
+and configuration per-method of the Scrooge-generated interface.
+</p></div><dl class="paramcmts block"><dt class="tparam">ThriftService</dt><dd class="cmt"><p>A Scrooge-generated <code>MethodPerEndpoint</code> or the higher-kinded type of the
+                      Scrooge-generated service, e.g., <code>MyService[Future]</code>.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> expects a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a> to be bound to
+      the object graph but does not assume how it is done. A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a>
+      can be bound by including the <a href="ThriftClientIdModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientIdModule">ThriftClientIdModule</a> in your server configuration.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux" target="_blank">What is ThriftMux?</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html" target="_blank">Finagle Clients</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thrift.ThriftRichClient.build(dest:">String, label: String)</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="ThriftMethodBuilderClientModule[ServicePerEndpoint&lt;:com.twitter.finagle.thrift.service.Filterable[ServicePerEndpoint],MethodPerEndpoint]extendsTwitterModulewithThriftClientModuleTrait"></a><a id="ThriftMethodBuilderClientModule[ServicePerEndpoint&lt;:Filterable[ServicePerEndpoint],MethodPerEndpoint]:ThriftMethodBuilderClientModule[ServicePerEndpoint,MethodPerEndpoint]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#ThriftMethodBuilderClientModule[ServicePerEndpoint&lt;:com.twitter.finagle.thrift.service.Filterable[ServicePerEndpoint],MethodPerEndpoint]extendsTwitterModulewithThriftClientModuleTrait" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="A TwitterModule which allows for configuration of a ThriftMux client." href="ThriftMethodBuilderClientModule.html"><span class="name">ThriftMethodBuilderClientModule</span></a><span class="tparams">[<span name="ServicePerEndpoint">ServicePerEndpoint &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule.ServicePerEndpoint">ServicePerEndpoint</span>]</span>, <span name="MethodPerEndpoint">MethodPerEndpoint</span>]</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModuleTrait">ThriftClientModuleTrait</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which allows for configuration of a <code>ThriftMux</code> client.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> which allows for configuration of a <code>ThriftMux</code> client. The client interface
+can be expressed as a <code>service-per-endpoint</code> or a <code>MethodPerEndpoint</code>.</p><p>Provides bindings for a Scrooge-generated <code>service-per-endpoint</code> and <code>MethodPerEndpoint</code>. The
+<code>MethodPerEndpoint</code> is constructed via the <span class="extype" name="MethodPerEndpointBuilder">MethodPerEndpointBuilder</span> and is thus implemented
+as a thin wrapper over the <code>service-per-endpoint</code>.</p><p>This <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> allows users to configure and filter a Scrooge-generated <code>service-per-endpoint</code>
+per-method which can then be used directly or can be wrapped by a <code>MethodPerEndpoint</code>.
+</p></div><dl class="paramcmts block"><dt class="tparam">ServicePerEndpoint</dt><dd class="cmt"><p>A Scrooge-generated ServicePerEndpoint</p></dd><dt class="tparam">MethodPerEndpoint</dt><dd class="cmt"><p>A Scrooge-generated MethodPerEndpoint</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> expects a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a> to be bound to
+      the object graph but does not assume how it is done. A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a>
+      can be bound by including the <a href="ThriftClientIdModule.html" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientIdModule">ThriftClientIdModule</a> in your server configuration.</p></span>, <span class="cmt"><p>When applying filters, filter order matters. The order in which filters are applied
+      is the order in which requests will flow through to the service and the opposite of the
+      order in which responses return. See the <a href="../ThriftMethodBuilderFactory.html" class="extype" name="com.twitter.inject.thrift.ThriftMethodBuilderFactory">ThriftMethodBuilderFactory</a> for more information.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux" target="_blank">What is ThriftMux?</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Clients.html" target="_blank">Finagle Clients</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#id3" target="_blank">ReqRepServicePerEndpoint</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#id2" target="_blank">ServicePerEndpoint</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#id1" target="_blank">MethodPerEndpoint</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.thrift.modules.FilteredThriftClientModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
       <a id="FilteredThriftClientModule[FutureIface&lt;:com.twitter.scrooge.ThriftService,ServiceIface&lt;:com.twitter.finagle.thrift.ThriftServiceIface.Filterable[ServiceIface]]extendsTwitterModulewithImplicits"></a><a id="FilteredThriftClientModule[FutureIface&lt;:ThriftService,ServiceIface&lt;:Filterable[ServiceIface]]:FilteredThriftClientModule[FutureIface,ServiceIface]"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/inject/thrift/modules/index.html#FilteredThriftClientModule[FutureIface&lt;:com.twitter.scrooge.ThriftService,ServiceIface&lt;:com.twitter.finagle.thrift.ThriftServiceIface.Filterable[ServiceIface]]extendsTwitterModulewithImplicits" title="Permalink">
@@ -276,7 +348,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Provides a FutureIface in the form of RemoteService[Future] for making calls to a remote service." href="FilteredThriftClientModule.html"><span class="name">FilteredThriftClientModule</span></a><span class="tparams">[<span name="FutureIface">FutureIface &lt;: <span class="extype" name="com.twitter.scrooge.ThriftService">ThriftService</span></span>, <span name="ServiceIface">ServiceIface &lt;: <span class="extype" name="com.twitter.finagle.thrift.ThriftServiceIface.Filterable">Filterable</span>[<span class="extype" name="com.twitter.inject.thrift.modules.FilteredThriftClientModule.ServiceIface">ServiceIface</span>]</span>]</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.github.nscala_time.time.Implicits">Implicits</span></span>
+        <a title="Provides a FutureIface in the form of RemoteService[Future] for making calls to a remote service." href="FilteredThriftClientModule.html"><span class="name deprecated" title="Deprecated: (Since version 2018-01-08) Use the com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule">FilteredThriftClientModule</span></a><span class="tparams">[<span name="FutureIface">FutureIface &lt;: <span class="extype" name="com.twitter.scrooge.ThriftService">ThriftService</span></span>, <span name="ServiceIface">ServiceIface &lt;: <span class="extype" name="com.twitter.finagle.thrift.ThriftServiceIface.Filterable">Filterable</span>[<span class="extype" name="com.twitter.inject.thrift.modules.FilteredThriftClientModule.ServiceIface">ServiceIface</span>]</span>]</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.github.nscala_time.time.Implicits">Implicits</span></span>
       </span>
       
       <p class="shortcomment cmt">Provides a <span class="extype" name="FutureIface">FutureIface</span> in the form of <code>RemoteService[Future]</code> for making calls to a remote service.</p><div class="fullcomment"><div class="comment cmt"><p>Provides a <span class="extype" name="FutureIface">FutureIface</span> in the form of <code>RemoteService[Future]</code> for making calls to a remote service. The <span class="extype" name="FutureIface">FutureIface</span>
@@ -300,42 +372,10 @@ the functionally equivalent <code>RemoteService.FutureIface</code>.</p><p>To pro
        .filtered(new MyFilter)
        .filtered[MyOtherFilter]
        .andThen(serviceIface.fetchBlob))
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#creating-a-client" target="_blank">Finagle Clients</a></p></span><span class="cmt"><p><a href="https://finagle.github.io/blog/2015/09/10/services-per-endpoint-in-scrooge/" target="_blank">Services-per-endpoint in Scrooge</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/MethodIfaceBuilder.html" class="extype" name="com.twitter.finagle.thrift.MethodIfaceBuilder">com.twitter.finagle.thrift.MethodIfaceBuilder</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.inject.thrift.modules.ThriftClientIdModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="ThriftClientIdModuleextendsTwitterModule"></a><a id="ThriftClientIdModule:ThriftClientIdModule"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#ThriftClientIdModuleextendsTwitterModule" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="ThriftClientIdModule.html"><span class="name">ThriftClientIdModule</span></a><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.thrift.modules.ThriftClientModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="ThriftClientModule[T]extendsTwitterModulewithImplicits"></a><a id="ThriftClientModule[T]:ThriftClientModule[T]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#ThriftClientModule[T]extendsTwitterModulewithImplicits" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">abstract </span>
-        <span class="kind">class</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="ThriftClientModule.html"><span class="name deprecated" title="Deprecated: (Since version 2016-06-23) Use the com.twitter.inject.thrift.modules.FilteredThriftClientModule">ThriftClientModule</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a> with <span class="extype" name="com.github.nscala_time.time.Implicits">Implicits</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               
-        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2016-06-23)</i> Use the com.twitter.inject.thrift.modules.FilteredThriftClientModule</p></dd></dl></div>
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-01-08)</i> Use the com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule</p></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/scrooge/Finagle.html#creating-a-client" target="_blank">Finagle Clients</a></p></span><span class="cmt"><p><a href="https://finagle.github.io/blog/2015/09/10/services-per-endpoint-in-scrooge/" target="_blank">Services-per-endpoint in Scrooge</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/MethodIfaceBuilder.html" class="extype" name="com.twitter.finagle.thrift.MethodIfaceBuilder">com.twitter.finagle.thrift.MethodIfaceBuilder</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 
@@ -357,22 +397,6 @@ the functionally equivalent <code>RemoteService.FutureIface</code>.</p><p>To pro
       </span>
       <span class="symbol">
         <a title="" href="AndThenServiceModule$.html"><span class="name">AndThenServiceModule</span></a><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
-      </span>
-      
-      
-    </li><li name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="FilteredThriftClientFlagsModule"></a><a id="FilteredThriftClientFlagsModule:FilteredThriftClientFlagsModule"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#FilteredThriftClientFlagsModule" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="FilteredThriftClientFlagsModule$.html"><span class="name">FilteredThriftClientFlagsModule</span></a><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
       </span>
       
       
@@ -414,7 +438,29 @@ the functionally equivalent <code>RemoteService.FutureIface</code>.</p><p>To pro
 
         
 
-        
+        <div class="values members">
+              <h3>Deprecated Value Members</h3>
+              <ol><li name="com.twitter.inject.thrift.modules.FilteredThriftClientFlagsModule" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="FilteredThriftClientFlagsModule"></a><a id="FilteredThriftClientFlagsModule:FilteredThriftClientFlagsModule"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/index.html#FilteredThriftClientFlagsModule" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="FilteredThriftClientFlagsModule$.html"><span class="name deprecated" title="Deprecated: (Since version 2018-01-08) No replacement. Timeouts can be manipulated with Tunables">FilteredThriftClientFlagsModule</span></a><span class="result"> extends <a href="../../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-01-08)</i> No replacement. Timeouts can be manipulated with Tunables</p></dd></dl></div>
+    </li></ol>
+            </div>
         </div>
 
         <div id="inheritedMembers">

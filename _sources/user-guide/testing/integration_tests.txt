@@ -3,7 +3,11 @@
 Integration Tests
 =================
 
-Whereas `Feature Tests <#feature_tests>`__ start a server or app under test (thereby loading its
+.. note:: If you are calling an |c.t.util.Await|_ function on a |c.t.util.Future|_ return type in a
+    test, it is generally considered good practice to ensure that your |c.t.util.Await|_ call
+    includes a timeout duration, e.g., |c.t.util.Await#ready|_.
+
+Whereas `Feature Tests <feature_tests.html>`__ start a server or app under test (thereby loading its
 entire object graph), integration tests generally only test across a few interfaces in the system.
 In Finatra, we provide the `c.t.inject.app.TestInjector <https://github.com/twitter/finatra/blob/develop/inject/inject-app/src/test/scala/com/twitter/inject/app/TestInjector.scala>`__
 which allows you to pass it a set of modules and flags to construct a minimal object graph.
@@ -53,9 +57,8 @@ As shown above, thrift servers can be tested through a |c.t.finatra.thrift.Thrif
 Finatra test framework provides an easy way get access to a real `Finagle client <https://twitter.github.io/finagle/guide/Clients.html>`__
 for making calls to your running server in a test.
 
-In the case here, creating a |c.t.finatra.thrift.ThriftClient|_ requires the thrift service type
-`T`. This type is expected to be the trait subclass of `c.t.scrooge.ThriftService` in the form of
-`YourService[+MM[_]]`.
+See the `Feature Tests - Thrift Server <feature_tests.html#thrift-server>`__ section for more
+information on creating a Finagle Thrift client.
 
 Additionally, your test can also extend the |c.t.finatra.thrift.ThriftTest|_ trait which provides a
 utility specifically for constructing a |resolverMap|_ flag value for setting on your server under
@@ -88,3 +91,13 @@ More Information
 
 .. |resolverMap| replace:: `resolverMap`
 .. _resolverMap: https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/FlagResolver.scala#L9>
+
+.. |c.t.util.Await| replace:: `c.t.util.Await`
+.. _c.t.util.Await: https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L77
+
+.. |c.t.util.Future| replace:: `c.t.util.Future`
+.. _c.t.util.Future: https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Future.scala
+
+.. |c.t.util.Await#ready| replace:: `c.t.util.Await#ready`
+.. _c.t.util.Await#ready: https://github.com/twitter/util/blob/54f314d1f4b37d302f685e99b1ac416e48532a04/util-core/src/main/scala/com/twitter/util/Awaitable.scala#L127
+
