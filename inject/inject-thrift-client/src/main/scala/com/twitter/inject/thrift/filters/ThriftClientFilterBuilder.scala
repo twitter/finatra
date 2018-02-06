@@ -6,6 +6,7 @@ import com.twitter.inject.Injector
 import com.twitter.inject.thrift.AndThenService
 import com.twitter.scrooge.ThriftMethod
 
+@deprecated("Use ThriftMethodBuilderClientModule and ThriftMethodBuilder", "2018-01-12")
 class ThriftClientFilterBuilder(
   timeoutMultiplier: Int,
   retryMultiplier: Int,

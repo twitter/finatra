@@ -24,6 +24,7 @@ import com.twitter.inject.thrift.utils.ThriftMethodUtils
 import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftStruct}
+import com.twitter.util.tunable.Tunable
 import com.twitter.util.{Timer, Try, Duration => TwitterDuration}
 import java.util.concurrent.TimeUnit
 import org.joda.time.Duration
@@ -70,6 +71,7 @@ import org.joda.time.Duration
  * @see [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder]]
  * @see [[com.twitter.finagle.thrift.ThriftServiceIface]]
  */
+@deprecated("Use ThriftMethodBuilderClientModule and ThriftMethodBuilder", "2018-01-12")
 class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   injector: Injector,
   statsReceiver: StatsReceiver,
@@ -333,6 +335,26 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   }
 
   /**
+   * Install a [[com.twitter.finagle.service.TimeoutFilter]] configuration with the given tunable timeout.
+   * This filter will be "above" any configured retry filter and thus includes retries.
+   *
+   * @param duration the Tunable[Duration] ([[org.joda.time.Duration]]) timeout to apply to requests through the filter.
+   * @see [[com.twitter.finagle.service.TimeoutFilter]]
+   * @return [[ThriftClientFilterChain]]
+   */
+  def withTimeout(duration: Tunable[Duration]): ThriftClientFilterChain[Req, Rep] = {
+    val exceptionFn = (duration: TwitterDuration) =>
+      new GlobalRequestTimeoutException(duration * timeoutMultiplier)
+
+    timeoutFilter = new TimeoutFilter[Req, Rep](
+      duration.map(d => d.toTwitterDuration),
+      exceptionFn,
+      DefaultTimer
+    )
+    this
+  }
+
+  /**
    * Install a [[com.twitter.finagle.service.TimeoutFilter]] configuration with the given [[org.joda.time.Duration]] timeout.
    * This filter will always be "below" any configured retry filter and thus does NOT include retries.
    *
@@ -346,6 +368,26 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
     requestTimeoutFilter = new TimeoutFilter[Req, Rep](
       twitterTimeout,
       new IndividualRequestTimeoutException(twitterTimeout),
+      DefaultTimer
+    )
+    this
+  }
+
+  /**
+   * Install a [[com.twitter.finagle.service.TimeoutFilter]] configuration with the given tunable timeout.
+   * This filter will always be "below" any configured retry filter and thus does NOT include retries.
+   *
+   * @param duration the Tunable[Duration] ([[org.joda.time.Duration]]) timeout to apply to requests through the filter.
+   * @see [[com.twitter.finagle.service.TimeoutFilter]]
+   * @return [[ThriftClientFilterChain]]
+   */
+  def withRequestTimeout(duration: Tunable[Duration]): ThriftClientFilterChain[Req, Rep] = {
+    val exceptionFn = (duration: TwitterDuration) =>
+      new IndividualRequestTimeoutException(duration * timeoutMultiplier)
+
+    requestTimeoutFilter = new TimeoutFilter[Req, Rep](
+      duration.map(d => d.toTwitterDuration),
+      exceptionFn,
       DefaultTimer
     )
     this

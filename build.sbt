@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.1.0"
+val releaseVersion = "18.2.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -446,7 +446,7 @@ lazy val injectThriftClient = (project in file("inject/inject-thrift-client"))
   .settings(
     name := "inject-thrift-client",
     moduleName := "inject-thrift-client",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*;.*LatencyFilter.*",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-thrift" % versions.twLibVersion,

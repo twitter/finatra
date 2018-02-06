@@ -36,7 +36,7 @@ private[finatra] object ByteBufferUtils extends Logging {
       val buf = Buf.ByteBuffer.Shared(copy)
       val str = buf.utf8str
 
-      debug(s"byteBuffer: $str pos: ${byteBuffer.position}")
+      debug(s"byteBuffer: $str pos: ${byteBuffer.position()}")
     }
   }
 }

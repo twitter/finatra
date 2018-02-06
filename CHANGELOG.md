@@ -12,6 +12,35 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.2.0](https://github.com/twitter/finatra/tree/finatra-18.2.0) (2018-02-05)
+
+### Added
+
+* inject-thrift-client: Add methods to `c.t.inject.thrift.filters.ThriftClientFilterChain` to allow
+  Tunable timeouts and request timeouts. ``PHAB_ID=D128506``
+
+* inject-thrift-client: Add `idempotent` and `nonIdempotent` methods to
+  `c.t.inject.thrift.ThriftMethodBuilder`, which can be used to configure retries and the sending of
+  backup requests. ``PHAB_ID=D129959``
+
+* inject-thrift-client: Add `c.t.inject.thrift.modules.ServicePerEndpointModule` for
+  building ThriftMux clients using the `thriftmux.MethodBuilder`. ``PHAB_ID=D128196``
+
+### Changed
+
+* inject-thrift: Update `c.t.inject.thrift.PossibleRetryable` to specify a ResponseClassifier
+  and update usages in inject-thrift-client to use it. ``PHAB_ID=D134328``
+
+* inject-thrift-client: Un-deprecate `c.t.inject.thrift.modules.ThriftClientModule`
+  and update for parity with `ServicePerEndpointModule` in regards to ThriftMux
+  client configuration. Update documentation. Rename `ServicePerEndpointModule` to
+  the more descriptive and consistently named `ThriftMethodBuilderClientModule`. 
+  ``PHAB_ID=D129891``
+
+### Fixed
+
+### Closed
+
 ## [finatra-18.1.0](https://github.com/twitter/finatra/tree/finatra-18.1.0) (2018-01-17)
 
 ### Added

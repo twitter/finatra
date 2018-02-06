@@ -3,10 +3,10 @@ package com.twitter.inject.thrift.internal.filters
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.inject.exceptions.PossiblyRetryable._
 import com.twitter.inject.thrift.ThriftClientException
-import com.twitter.scrooge.{ThriftMethod, ThriftStruct}
+import com.twitter.scrooge.ThriftMethod
 import com.twitter.util._
 
-private[thrift] class ThriftClientExceptionFilter[Req <: ThriftStruct, Rep](
+private[thrift] final class ThriftClientExceptionFilter[Req, Rep](
   clientLabel: String,
   method: ThriftMethod
 ) extends SimpleFilter[Req, Rep] {

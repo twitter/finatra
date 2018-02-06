@@ -121,3 +121,8 @@ For example:
 
 
 For more information on `Finagle <https://github.com/twitter/finagle>`__ server configuration see the documentation `here <https://twitter.github.io/finagle/guide/Configuration.html>`__; specifically the server documentation `here <https://twitter.github.io/finagle/guide/Servers.html>`__.
+
+Testing
+-------
+
+For information on testing a Thrift server see the Thrift Server `Feature Tests <../testing/feature_tests.html#thrift-server>`__ section.

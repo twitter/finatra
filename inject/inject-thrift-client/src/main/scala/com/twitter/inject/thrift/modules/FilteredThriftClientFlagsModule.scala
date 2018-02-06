@@ -2,6 +2,7 @@ package com.twitter.inject.thrift.modules
 
 import com.twitter.inject.TwitterModule
 
+@deprecated("No replacement. Timeouts can be manipulated with Tunables", "2018-01-08")
 object FilteredThriftClientFlagsModule extends TwitterModule {
   flag(
     "timeout.multiplier",
