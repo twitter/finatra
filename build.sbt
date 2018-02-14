@@ -768,7 +768,6 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server"))
     moduleName := "benchmark-server",
     mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain"),
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-netty3" % versions.twLibVersion,
       "org.slf4j" % "slf4j-nop" % versions.slf4j
     )
   ).dependsOn(
