@@ -63,6 +63,7 @@ trait App extends com.twitter.app.App with Logging {
 
     onExit {
       installedModules.shutdown()
+      installedModules.close()
     }
 
     /* Lifecycle is complete, mark the server as started. */

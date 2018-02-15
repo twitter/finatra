@@ -13,6 +13,11 @@ class InheritanceServerFeatureTest extends FeatureTest {
 
   val client123 = server.thriftClient[ServiceB[Future]](clientId = "client123")
 
+  override protected def afterAll(): Unit = {
+    Await.result(client123.asClosable.close(), 2.seconds)
+    super.afterAll()
+  }
+
   test("ServiceB#ping") {
     Await.result(client123.ping(), 2.seconds) should equal("pong")
   }

@@ -68,8 +68,8 @@ from the |EmbeddedThriftServer|_.
       }
     }
 
-Client Interface Types
-~~~~~~~~~~~~~~~~~~~~~~
+Thrift Client Interface Types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As mentioned in the Scrooge `Finagle Integration <https://twitter.github.io/scrooge/Finagle.html>`__
 documentation, users have three API choices for building an interface to a Finagle Thrift client —
@@ -88,7 +88,7 @@ method:
 
 Users can also choose to create a `service-per-endpoint` Thrift client interface by calling the
 |c.t.finatra.thrift.ThriftClient#servicePerEndpoint[T]|_ with either the ``ServicePerEndpoint`` or
-``ReqReServicePerEndpoint`` type. E.g.,
+``ReqRepServicePerEndpoint`` type. E.g.,
 
 .. code:: scala
 
@@ -123,6 +123,40 @@ For example:
 
 See the `Communicate with a Thrift Service <../thrift/clients.html>`__ section for more information
 on Thrift clients.
+
+Closing the Test Client Interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It is considered a best practice to close any created test Thrift client interface to ensure that any
+opened resources are closed.
+
+For instance, if you are instantiating a single Thrift client interface for all of your tests, you
+could close the client in the ScalaTest `afterAll` lifecycle block. E.g.,
+
+.. code:: scala
+
+    import com.example.thriftscala.ExampleThrift
+    import com.twitter.conversions.time._
+    import com.twitter.finatra.thrift.EmbeddedThriftServer
+    import com.twitter.inject.server.FeatureTest
+    import com.twitter.util.Await
+
+    class ExampleThriftServerFeatureTest extends FeatureTest {
+      override val server = new EmbeddedThriftServer(new ExampleThriftServer)
+
+      lazy val client: ExampleThrift.ServicePerEndpoint =
+        server.servicePerEndpoint[ExampleThrift.ServicePerEndpoint](clientId = "client123")
+
+      ...
+
+      override protected def afterAll(): Unit = {
+        Await.result(client.asClosable.close(), 2.seconds)
+        super.afterAll()
+      }
+
+Note that the above example sets a `timeout` of `2.seconds` on awaiting the close of the test Thrift
+client interface. You can and should adjust this value -- either up or down -- as appropriate for
+your testing.
 
 Combined HTTP & Thrift Server
 -----------------------------

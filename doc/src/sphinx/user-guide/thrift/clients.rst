@@ -147,7 +147,7 @@ To configure per-method semantics, override and provide an implementation for th
       override val dest: String = "flag!myservice-thrift-service"
       override val label: String = "myservice-thrift-client"
 
-      override def configureServicePerEndpoint(
+      override protected def configureServicePerEndpoint(
         injector: Injector,
         builder: ThriftMethodBuilderFactory[MyService.ServicePerEndpoint],
         servicePerEndpoint: MyService.ServicePerEndpoint
@@ -203,7 +203,7 @@ Finagle Filters to a ``ServicePerEndpoint``:
       override val dest: String = "flag!myservice-thrift-service"
       override val label: String = "myservice-thrift-client"
 
-      override def configureServicePerEndpoint(
+      override protected def configureServicePerEndpoint(
         injector: Injector,
         builder: ThriftMethodBuilderFactory[MyService.ServicePerEndpoint],
         servicePerEndpoint: MyService.ServicePerEndpoint

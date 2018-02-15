@@ -6,7 +6,7 @@ import com.twitter.finagle.service.Retries.Budget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.TwitterModule
-import com.twitter.util.{Duration, Monitor, NullMonitor}
+import com.twitter.util.{Await, Duration, Monitor, NullMonitor}
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
@@ -54,7 +54,7 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
   ): ThriftService = {
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
-    configureThriftMuxClient(
+    val thriftService = configureThriftMuxClient(
       ThriftMux.client.withSession
         .acquisitionTimeout(sessionAcquisitionTimeout)
         .withRequestTimeout(requestTimeout)
@@ -65,5 +65,12 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
         .withRetryBudget(retryBudget.retryBudget)
         .withRetryBackoff(retryBudget.requeueBackoffs)
     ).build[ThriftService](dest, label)
+
+    closeOnExit {
+      val closable = asClosable(thriftService)
+      Await.result(
+        closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
+    }
+    thriftService
   }
 }

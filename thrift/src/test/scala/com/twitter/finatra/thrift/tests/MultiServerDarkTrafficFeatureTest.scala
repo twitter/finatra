@@ -117,8 +117,10 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
   }
 
   override def afterAll(): Unit = {
+    await(client123.asClosable.close())
     darkDoEverythingThriftServer.close()
     liveDoEverythingThriftServer.close()
+    super.afterAll()
   }
 
   private def await[T](f: Future[T]): T = {

@@ -16,7 +16,7 @@ object ServiceBThriftMethodBuilderClientModule
   override val dest = "flag!serviceB-thrift-service"
   override val label = "serviceB-thrift-client"
 
-  override def configureServicePerEndpoint(
+  override protected def configureServicePerEndpoint(
     builder: ThriftMethodBuilderFactory[ServiceB.ServicePerEndpoint],
     servicePerEndpoint: ServiceB.ServicePerEndpoint
   ): ServiceB.ServicePerEndpoint = {

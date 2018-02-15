@@ -15,7 +15,7 @@ object EchoThriftMethodBuilderClientModule
   override val dest = "flag!echo-thrift-service"
   override val label = "echo-thrift-client"
 
-  override def configureServicePerEndpoint(
+  override protected def configureServicePerEndpoint(
     builder: ThriftMethodBuilderFactory[EchoService.ServicePerEndpoint],
     servicePerEndpoint: EchoService.ServicePerEndpoint
   ): EchoService.ServicePerEndpoint = {

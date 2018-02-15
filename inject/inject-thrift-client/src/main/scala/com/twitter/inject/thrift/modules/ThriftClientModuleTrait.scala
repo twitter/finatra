@@ -1,10 +1,13 @@
 package com.twitter.inject.thrift.modules
 
+import com.twitter.conversions.time._
 import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.service.Retries.Budget
-import com.twitter.util.{Duration, Monitor}
+import com.twitter.inject.Logging
+import com.twitter.scrooge.ThriftService
+import com.twitter.util.{Closable, Duration, Monitor}
 
-private[inject] trait ThriftClientModuleTrait {
+private[inject] trait ThriftClientModuleTrait extends Logging {
 
   /**
    * ThriftMux client label.
@@ -17,6 +20,25 @@ private[inject] trait ThriftClientModuleTrait {
    * @see [[https://twitter.github.io/finagle/guide/Names.html Names and Naming in Finagle]]
    */
   def dest: String
+
+  /**
+   * Default amount of time to wait for any [[Closable]] being registered in a `closeOnExit` block.
+   * Note that this timeout is advisory, as it attempts to give the close function some leeway, for
+   * example to drain clients or finish up other tasks.
+   *
+   * @return a [[com.twitter.util.Duration]]
+   * @see [[com.twitter.util.Closable.close(after: Duration)]]
+   */
+  protected def defaultClosableGracePeriod: Duration = 1.second
+
+  /**
+   * Default amount of time to block in [[com.twitter.util.Awaitable.result(timeout: Duration)]] on
+   * a [[Closable]] to close that is registered in a `closeOnExit` block.
+   *
+   * @return a [[com.twitter.util.Duration]]
+   * @see [[com.twitter.util.Awaitable.result(timeout: Duration)]]
+   */
+  protected def defaultClosableAwaitPeriod: Duration = 2.seconds
 
   /**
    * Configures the session acquisition `timeout` of this client (default: unbounded).
@@ -76,4 +98,36 @@ private[inject] trait ThriftClientModuleTrait {
   protected def configureThriftMuxClient(
     client: ThriftMux.Client
   ): ThriftMux.Client
+
+  /* Private */
+
+  private[modules] def asClosable(thriftService: Any): Closable = {
+    thriftService match {
+      case closable: Closable => closable
+      case _ =>
+        val asClosableMethodOpt =
+          thriftService
+            .getClass
+            .getDeclaredMethods
+            .find(_.getName == ThriftService.AsClosableMethodName)
+        asClosableMethodOpt match {
+          case Some(method) =>
+            try {
+              method.invoke(thriftService).asInstanceOf[Closable]
+            } catch {
+              case _: java.lang.ClassCastException =>
+                warn(
+                  s"Unable to cast result of ${ThriftService.AsClosableMethodName} invocation to a ${Closable.getClass.getName
+                    .dropRight(1)} type."
+                )
+                Closable.nop
+            }
+          case _ =>
+            warn(
+              s"${ThriftService.AsClosableMethodName} not found for instance: ${thriftService.getClass.getName}"
+            )
+            Closable.nop
+        }
+    }
+  }
 }
