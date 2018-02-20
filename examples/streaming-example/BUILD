@@ -1,25 +1,26 @@
 target(
-  dependencies=[
-    'finatra/examples/streaming-example/src/main/scala'
-  ]
+    dependencies = [
+        "finatra/examples/streaming-example/src/main/scala",
+    ],
 )
 
-target(name='tests',
-  dependencies=[
-    'finatra/examples/streaming-example/src/test/scala'
-  ]
+target(
+    name = "tests",
+    dependencies = [
+        "finatra/examples/streaming-example/src/test/scala",
+    ],
 )
 
 jvm_binary(
-  name='bin',
-  basename='streaming-example',
-  main='com.twitter.streaming.StreamingServerMain',
-  dependencies=[
-    '3rdparty/jvm/ch/qos/logback:logback-classic',
-    ':streaming-example'
-  ],
-  deploy_excludes=[
-    exclude('org.slf4j', 'slf4j-jdk14'),
-    exclude('log4j', 'log4j')
-  ]
+    name = "bin",
+    basename = "streaming-example",
+    main = "com.twitter.streaming.StreamingServerMain",
+    dependencies = [
+        ":streaming-example",
+        "3rdparty/jvm/ch/qos/logback:logback-classic",
+    ],
+    deploy_excludes = [
+        exclude("org.slf4j", "slf4j-jdk14"),
+        exclude("log4j", "log4j"),
+    ],
 )

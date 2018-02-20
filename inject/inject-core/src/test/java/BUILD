@@ -1,7 +1,7 @@
 java_library(
-  dependencies=[
-    '3rdparty/jvm/com/google/inject:guice',
-  ],
-  fatal_warnings=False,
-  sources=rglobs('*.java')
+    sources = rglobs("*.java"),
+    fatal_warnings = False,
+    dependencies = [
+        "3rdparty/jvm/com/google/inject:guice",
+    ],
 )

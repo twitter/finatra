@@ -1,12 +1,12 @@
 java_library(
-  provides = artifact(
-    org = 'com.twitter.inject',
-    name = 'inject-request-scope-java',
-    repo = artifactory,
-  ),
-  dependencies=[
-    '3rdparty/jvm/com/google/inject:guice',
-  ],
-  fatal_warnings=False,
-  sources=rglobs('*.java'),
+    sources = rglobs("*.java"),
+    fatal_warnings = False,
+    provides = artifact(
+        org = "com.twitter.inject",
+        name = "inject-request-scope-java",
+        repo = artifactory,
+    ),
+    dependencies = [
+        "3rdparty/jvm/com/google/inject:guice",
+    ],
 )
