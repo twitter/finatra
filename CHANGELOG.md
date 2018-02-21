@@ -10,6 +10,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* inject-thrift-client: Convert non-camel case `ThriftMethod` names, e.g., "get_tweets" to
+  camelCase, e.g., "getTweets" for reflection lookup on generated `ServicePerEndpoint` interface in
+  `c.t.inject.thrift.ThriftMethodBuilder`. ``PHAB_ID=D138499``
+
 ### Closed
 
 ## [finatra-18.2.0](https://github.com/twitter/finatra/tree/finatra-18.2.0) (2018-02-05)
