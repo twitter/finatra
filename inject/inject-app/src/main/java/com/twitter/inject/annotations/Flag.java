@@ -9,15 +9,16 @@ import com.google.inject.BindingAnnotation;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Annotates fields parsed from TwitterServer flags.
+ * Annotates parsed flags.
+ *
+ * @see <a href="https://twitter.github.io/finatra/user-guide/getting-started/flags.html#flag-annotation"></a>
+ * @see <a href="https://twitter.github.io/finatra/user-guide/getting-started/flags.html"></a>
  */
 @Retention(RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @BindingAnnotation
 public @interface Flag {
 
-    /**
-     * Name of flag
-     */
+    /** Name of the flag */
     String value();
 }

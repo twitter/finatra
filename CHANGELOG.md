@@ -6,7 +6,14 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-app: Add `c.t.inject.annotations.Flags#named` for getting an implementation of an `@Flag`
+  annotation. This is useful when trying to get or bind an instance of an `@Flag` annotated type.
+  ``PHAB_ID=D140831``
+
 ### Changed
+
+* inject-app: `c.t.inject.annotations.FlagImpl` is no longer public and should not be used directly. 
+  Use `c.t.inject.annotations.Flags#named` instead. ``PHAB_ID=D140831``
 
 ### Fixed
 

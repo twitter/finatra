@@ -3,7 +3,7 @@ package com.twitter.inject.app.tests
 import com.google.inject.name.Names
 import com.twitter.app.GlobalFlag
 import com.twitter.finatra.tests.Prod
-import com.twitter.inject.annotations.Flag
+import com.twitter.inject.annotations.{Flag, Flags}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Test, TwitterModule}
 import javax.inject.Inject
@@ -23,11 +23,14 @@ object BooleanFlagModule extends TwitterModule {
 }
 
 object TestBindModule extends TwitterModule {
+  flag[Boolean]("bool", false, "default is false")
+
   override protected def configure(): Unit = {
     bind[String, Prod].toInstance("Hello, world!")
     bind[Baz].toInstance(new Baz(10))
     bind[Baz](Names.named("five")).toInstance(new Baz(5))
     bind[Baz](Names.named("six")).toInstance(new Baz(6))
+    bind[Boolean](Flags.named("bool")).toInstance(true)
   }
 }
 
@@ -57,16 +60,15 @@ class TestInjectorTest extends Test {
 
   test("default boolean flags properly") {
     val injector = TestInjector(BooleanFlagModule).create
-    val foo = injector.instance[Foo]
-    assert(!foo.bar)
+    injector.instance[Foo].bar should be(false)
+    injector.instance[Boolean](Flags.named("x")) should be(false)
   }
 
   test("default global flags properly") {
-    val injector = TestInjector().create
-    val bar = injector.instance[Bar]
-    assert(!bar.booleanGlobalFlag)
-    assert(bar.stringGlobalFlag == "foo")
-    assert(bar.mapGlobalFlag == Map.empty)
+    val bar = TestInjector().create.instance[Bar]
+    bar.booleanGlobalFlag should be(false)
+    bar.stringGlobalFlag should equal("foo")
+    bar.mapGlobalFlag should equal(Map.empty)
   }
 
   test("set global flags values properly") {
@@ -79,18 +81,18 @@ class TestInjectorTest extends Test {
       )
     ).create
     val bar = injector.instance[Bar]
-    assert(bar.booleanGlobalFlag)
-    assert(bar.stringGlobalFlag == "bar")
-    assert(bar.mapGlobalFlag == Map("key1" -> "foo", "key2" -> "bar"))
+    bar.booleanGlobalFlag should be(true)
+    bar.stringGlobalFlag should equal("bar")
+    bar.mapGlobalFlag should equal(Map("key1" -> "foo", "key2" -> "bar"))
   }
 
   test("module defaults") {
     val injector = TestInjector(modules = Seq(TestBindModule)).create
 
-    assert(injector.instance[Baz].value == 10)
-    assert(injector.instance[Baz]("five").value == 5)
-    assert(injector.instance[Baz](Names.named("six")).value == 6)
-    assert(injector.instance[String, Prod] == "Hello, world!")
+    injector.instance[Baz].value should equal(10)
+    injector.instance[Baz]("five").value should equal(5)
+    injector.instance[Baz](Names.named("six")).value should equal(6)
+    injector.instance[String, Prod] should equal("Hello, world!")
   }
 
   test("bind") {
@@ -100,9 +102,10 @@ class TestInjectorTest extends Test {
       .bind[String](Names.named("foo"), "bar")
       .create
 
-    assert(injector.instance[Baz].value == 100)
-    assert(injector.instance[String, Prod] == "Goodbye, world!")
-    assert(injector.instance[String]("foo") == "bar")
+    injector.instance[Baz].value should equal(100)
+    injector.instance[String, Prod] should equal("Goodbye, world!")
+    injector.instance[String]("foo") should equal("bar")
+    injector.instance[Boolean](Flags.named("bool")) should be(true)
   }
 
   test("bind fails after injector is called") {
@@ -114,7 +117,7 @@ class TestInjectorTest extends Test {
     intercept[IllegalStateException] {
       testInjector.bind[String, Prod]("Goodbye, world!")
     }
-    assert(injector.instance[Baz].value == 100)
-    assert(injector.instance[String, Prod] == "Hello, world!")
+    injector.instance[Baz].value should equal(100)
+    injector.instance[String, Prod] should equal("Hello, world!")
   }
 }
