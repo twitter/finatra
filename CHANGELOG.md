@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-server: Add `c.t.inject.server.TwitterServer#setup` lifecycle callback method. This is
+  run at the end of the `postInjectorStartup` phase as is primarily intended as a way for 
+  servers to start pub-sub components on which the server depends. User should prefer this method
+  over overidding the `c.t.inject.server.TwitterServer#postWarmup` @Lifecycle-annotated method as
+  the callback does not require a call its super implementation for the server to correctly start
+  and is ideally less error-prone to use. ``PHAB_ID=D135827``
+
 * inject-app: Add `c.t.inject.annotations.Flags#named` for getting an implementation of an `@Flag`
   annotation. This is useful when trying to get or bind an instance of an `@Flag` annotated type.
   ``PHAB_ID=D140831``

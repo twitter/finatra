@@ -150,7 +150,7 @@ trait App extends com.twitter.app.App with Logging {
   }
 
   /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
-  protected[inject] def loadModules() = {
+  protected[inject] def loadModules(): InstalledModules = {
     InstalledModules.create(
       flags = flag.getAll(includeGlobal = false).toSeq,
       modules = requiredModules,
