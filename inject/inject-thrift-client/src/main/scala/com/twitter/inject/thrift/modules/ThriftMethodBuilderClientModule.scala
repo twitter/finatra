@@ -130,7 +130,7 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
         injector,
         methodBuilder
       ),
-      servicePerEndpoint = thriftMuxClient.servicePerEndpoint(dest, label)
+      servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint]
     )
 
     closeOnExit {

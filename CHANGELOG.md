@@ -10,6 +10,11 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* inject-thrift-client: Fix for duplicate stack client registration. The
+  `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule` was incorrectly calling the
+  `ThriftMux.client` twice. Once to create a MethodBuilder and once to create a ServicePerEndpoint.
+  Now, the ServicePerEndpoint is obtained from the configured MethodBuilder. ``PHAB_ID=D141304``
+
 * inject-thrift-client: Convert non-camel case `ThriftMethod` names, e.g., "get_tweets" to
   camelCase, e.g., "getTweets" for reflection lookup on generated `ServicePerEndpoint` interface in
   `c.t.inject.thrift.ThriftMethodBuilder`. ``PHAB_ID=D138499``
