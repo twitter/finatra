@@ -13,7 +13,7 @@ scala_library(
         "3rdparty/jvm/net/codingwell:scala-guice",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-http/src/main/scala",
-        "finagle/finagle-zipkin/src/main/scala",
+        "finagle/finagle-zipkin-scribe/src/main/scala",
         "finatra/examples/web-dashboard/src/main/resources",
         "finatra/examples/web-dashboard/src/main/webapp",
         "finatra/http/src/main/java",
