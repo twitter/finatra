@@ -4,7 +4,6 @@ import com.twitter
 import com.twitter.concurrent.AsyncSemaphore
 import com.twitter.finagle
 import com.twitter.finagle._
-import com.twitter.finagle.exp.BackupRequestFilter
 import com.twitter.finagle.filter.RequestSemaphoreFilter
 import com.twitter.finagle.param.HighResTimer
 import com.twitter.finagle.service.Backoff._
@@ -25,7 +24,7 @@ import com.twitter.inject.utils.ExceptionUtils._
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftStruct}
 import com.twitter.util.tunable.Tunable
-import com.twitter.util.{Timer, Try, Duration => TwitterDuration}
+import com.twitter.util.{Try, Duration => TwitterDuration}
 import java.util.concurrent.TimeUnit
 import org.joda.time.Duration
 
@@ -33,7 +32,7 @@ import org.joda.time.Duration
  * A [[com.twitter.finagle.Filter]] chain builder which provides helper functions for installing and
  * configuring common filters.
  *
- * Filters configured via the helper methods, e.g., [[withRetryPolicy]], [[withBackupRequestFilter]], [[withTimeout]], [[withRequestTimeout]],
+ * Filters configured via the helper methods, e.g., [[withRetryPolicy]], [[withTimeout]], [[withRequestTimeout]],
  * [[withMethodLatency]], [[withExceptionFilter]], will be composed in a specific order, (from top-down, assuming requests/responses
  * enter and exit through the top):
  *
@@ -41,8 +40,6 @@ import org.joda.time.Duration
  * | latencyFilter          |
  * +------------------------+
  * | exceptionFilter        |
- * +------------------------+
- * | backupRequestFilter    |
  * +------------------------+
  * | timeoutFilter          |
  * +------------------------+
@@ -104,7 +101,6 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   protected var methodLatencyFilter: Filter[Req, Rep, Req, Rep] = Filter.identity
   protected var exceptionFilterImpl: Filter[Req, Rep, Req, Rep] =
     new ThriftClientExceptionFilter[Req, Rep](clientLabel, method)
-  protected var backupRequestFilter: Filter[Req, Rep, Req, Rep] = Filter.identity
   protected var timeoutFilter: Filter[Req, Rep, Req, Rep] = Filter.identity
   protected var retryFilter: Filter[Req, Rep, Req, Rep] = Filter.identity
   protected var requestLatencyFilter: Filter[Req, Rep, Req, Rep] = Filter.identity
@@ -187,35 +183,6 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   def withExceptionFilter[T <: Filter[Req, Rep, Req, Rep]: Manifest]
     : ThriftClientFilterChain[Req, Rep] = {
     withExceptionFilter(injector.instance[T])
-  }
-
-  /**
-   * Install a [[com.twitter.finagle.exp.BackupRequestFilter]].
-   *
-   * @param quantile the response latency quantile at which to issue a backup request. Must be
-   *                 between 0 and 100, exclusive.
-   * @param clipDuration the range of expected durations, values above this range are clipped.
-   *                     Must be less than 1 hour.
-   * @param timer the [[com.twitter.util.Timer]] to be used in scheduling backup requests.
-   * @param history how long to remember data points when calculating quantiles.
-   * @see [[com.twitter.finagle.exp.BackupRequestFilter]]
-   * @return [[ThriftClientFilterChain]]
-   */
-  def withBackupRequestFilter(
-    quantile: Int,
-    clipDuration: Duration,
-    history: Duration,
-    timer: Timer = DefaultTimer
-  ): ThriftClientFilterChain[Req, Rep] = {
-
-    backupRequestFilter = new BackupRequestFilter[Req, Rep](
-      quantile = quantile,
-      clipDuration = clipDuration.toTwitterDuration * timeoutMultiplier,
-      timer = timer,
-      statsReceiver = scopedStatsReceiver,
-      history = history.toTwitterDuration
-    )
-    this
   }
 
   /**
@@ -580,7 +547,6 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
   private[thrift] def toFilter: Filter[Req, Rep, Req, Rep] = {
     methodLatencyFilter
       .andThen(exceptionFilterImpl)
-      .andThen(backupRequestFilter)
       .andThen(timeoutFilter)
       .andThen(retryFilter)
       .andThen(requestTimeoutFilter)

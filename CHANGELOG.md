@@ -19,6 +19,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-thrift-client: Removed `withBackupRequestFilter` method on deprecated 
+  `c.t.inject.thrift.filters.ThriftClientFilterChain`. Instead of
+  `c.t.inject.thrift.modules.FilteredThriftClientModule`, use
+  `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule` and use the `idempotent` method on
+  `c.t.inject.thrift.ThriftMethodBuilder` to configure backup requests. ``PHAB_ID=D142049``.
+
 * inject-app: `c.t.inject.annotations.FlagImpl` is no longer public and should not be used directly. 
   Use `c.t.inject.annotations.Flags#named` instead. ``PHAB_ID=D140831``
 
