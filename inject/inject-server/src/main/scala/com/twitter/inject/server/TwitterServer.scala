@@ -10,6 +10,7 @@ import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.internal.FinagleBuildRevision
+import com.twitter.util.lint.{Category, GlobalRules, Issue, Rule}
 import com.twitter.util.{Await, Awaitable}
 import java.util.concurrent.ConcurrentLinkedQueue
 import scala.collection.JavaConverters._
@@ -130,7 +131,7 @@ trait TwitterServer
 
   /**
    * Utility to run a [[com.twitter.inject.utils.Handler]]. This is generally used for running
-   * a warmup handler in #warmup.
+   * a warmup handler in [[TwitterServer.warmup]].
    *
    * @tparam T - type parameter with upper-bound of [[com.twitter.inject.utils.Handler]]
    * @see [[com.twitter.inject.utils.Handler]]
@@ -139,49 +140,6 @@ trait TwitterServer
     injector.instance[T].handle()
   }
 
-  /**
-   * Callback method which is executed specifically in the `postInjectorStartup` lifecycle
-   * phase of this server.
-   *
-   * This is AFTER the injector is created but BEFORE server warmup has been performed.
-   *
-   * This method is thus suitable for starting and awaiting on PubSub publishers or subscribers.
-   *
-   * The server is NOT signaled to be started until AFTER this method has executed
-   * thus it is imperative that this method is NOT BLOCKED as it will cause the server to not
-   * complete startup.
-   *
-   * This method can be used to start long-lived processes that run in
-   * separate threads from the main() thread. It is expected that you manage
-   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
-   *
-   * If you override this method to instantiate any [[com.twitter.util.Awaitable]] it is expected
-   * that you add the [[com.twitter.util.Awaitable]] to the list of `Awaitables` using the
-   * [[await[T <: Awaitable[_]](awaitable: T): Unit]] function if you want the server to exit
-   * when the [[com.twitter.util.Awaitable]] exits.
-   *
-   * Any exceptions thrown in this method will result in the server exiting.
-   */
-  protected def setup(): Unit = {}
-
-  /**
-   * Callback method which is executed after the injector is created and all
-   * lifecycle methods have fully completed. It is NOT expected that
-   * you block in this method as you will prevent completion
-   * of the server lifecycle.
-   *
-   * The server is signaled as STARTED prior to the execution of this
-   * callback as all lifecycle methods have successfully completed and the
-   * admin and any external interfaces have started.
-   *
-   * This method can be used to start long-lived processes that run in
-   * separate threads from the main() thread. It is expected that you manage
-   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
-   *
-   * Any exceptions thrown in this method will result in the server exiting.
-   */
-  protected def start(): Unit = {}
-
   /* Overrides */
 
   override final def main(): Unit = {
@@ -189,13 +147,6 @@ trait TwitterServer
 
     info("Startup complete, server ready.")
     Awaiter.any(awaitables.asScala, period = 1.second)
-  }
-
-  /**
-   * @see [[com.twitter.inject.server.TwitterServer#start]]
-   */
-  override final protected def run(): Unit = {
-    start()
   }
 
   /**
@@ -229,6 +180,57 @@ trait TwitterServer
 
     // run any setup logic
     setup()
+  }
+
+  /**
+   * Callback method which is executed specifically in the `postInjectorStartup` lifecycle
+   * phase of this server.
+   *
+   * This is AFTER the injector is created but BEFORE server warmup has been performed.
+   *
+   * This method is thus suitable for starting and awaiting on PubSub publishers or subscribers.
+   *
+   * The server is NOT signaled to be started until AFTER this method has executed
+   * thus it is imperative that this method is NOT BLOCKED as it will cause the server to not
+   * complete startup.
+   *
+   * This method can be used to start long-lived processes that run in
+   * separate threads from the main() thread. It is expected that you manage
+   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
+   *
+   * If you override this method to instantiate any [[com.twitter.util.Awaitable]] it is expected
+   * that you add the [[com.twitter.util.Awaitable]] to the list of `Awaitables` using the
+   * [[await[T <: Awaitable[_]](awaitable: T): Unit]] function if you want the server to exit
+   * when the [[com.twitter.util.Awaitable]] exits.
+   *
+   * Any exceptions thrown in this method will result in the server exiting.
+   */
+  protected def setup(): Unit = {}
+
+  /**
+   * Callback method run before [[TwitterServer.postWarmup]], used for performing warm up of this server.
+   * Override, but do not call `super.warmup()` as you will trigger a lint rule violation.
+   *
+   * Any exceptions thrown in this method will result in the app exiting.
+   *
+   * @see [[https://twitter.github.io/finatra/user-guide/http/warmup.html HTTP Server Warmup]]
+   * @see [[https://twitter.github.io/finatra/user-guide/thrift/warmup.html Thrift Server Warmup]]
+   */
+  override protected def warmup(): Unit = {
+    // If this method is not overridden with an implementation,
+    // emit a lint rule violation to warn users that they SHOULD
+    // provide a warmup implementation.
+    GlobalRules.get.add(
+      Rule(
+        Category.Performance,
+        "No server warm up detected",
+        "It is highly recommended that services perform some type of warm up of their " +
+          "external interfaces to mitigate any impact on success rate upon accepting traffic " +
+          "after server startup."
+      ) {
+        Seq(Issue("No warm up implementation detected."))
+      }
+    )
   }
 
   /**
@@ -299,6 +301,31 @@ trait TwitterServer
     }
     warmupComplete()
   }
+
+  /**
+   * @see [[com.twitter.inject.server.TwitterServer#start]]
+   */
+  override final protected def run(): Unit = {
+    start()
+  }
+
+  /**
+   * Callback method which is executed after the injector is created and all
+   * lifecycle methods have fully completed but before awaiting on any Awaitables.
+   * It is NOT expected that you block in this method as you will prevent completion
+   * of the server lifecycle.
+   *
+   * The server is signaled as STARTED prior to the execution of this
+   * callback as all lifecycle methods have successfully completed and the
+   * admin and any external interfaces have started.
+   *
+   * This method can be used to start long-lived processes that run in
+   * separate threads from the main() thread. It is expected that you manage
+   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
+   *
+   * Any exceptions thrown in this method will result in the server exiting.
+   */
+  protected def start(): Unit = {}
 }
 
 @deprecated("For backwards compatibility of defined flags", "2017-10-06")

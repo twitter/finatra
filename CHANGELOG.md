@@ -6,10 +6,14 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-server: Add a lint rule in `c.t.inject.server.TwitterServer#warmup`. If a server does not
+  override the default implementation of `TwitterServer#warmup` a lint rule violation will appear
+  on the lint page of the HTTP admin interface. ``PHAB_ID=D141267``
+
 * inject-server: Add `c.t.inject.server.TwitterServer#setup` lifecycle callback method. This is
-  run at the end of the `postInjectorStartup` phase as is primarily intended as a way for 
-  servers to start pub-sub components on which the server depends. User should prefer this method
-  over overidding the `c.t.inject.server.TwitterServer#postWarmup` @Lifecycle-annotated method as
+  run at the end of the `postInjectorStartup` phase and is primarily intended as a way for
+  servers to start pub-sub components on which the server depends. Users should prefer this method
+  over overriding the `c.t.inject.server.TwitterServer#postWarmup` @Lifecycle-annotated method as
   the callback does not require a call its super implementation for the server to correctly start
   and is ideally less error-prone to use. ``PHAB_ID=D135827``
 
@@ -19,13 +23,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
-* inject-thrift-client: Removed `withBackupRequestFilter` method on deprecated 
+* inject-thrift-client: Removed `withBackupRequestFilter` method on deprecated
   `c.t.inject.thrift.filters.ThriftClientFilterChain`. Instead of
   `c.t.inject.thrift.modules.FilteredThriftClientModule`, use
   `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule` and use the `idempotent` method on
   `c.t.inject.thrift.ThriftMethodBuilder` to configure backup requests. ``PHAB_ID=D142049``.
 
-* inject-app: `c.t.inject.annotations.FlagImpl` is no longer public and should not be used directly. 
+* inject-app: `c.t.inject.annotations.FlagImpl` is no longer public and should not be used directly.
   Use `c.t.inject.annotations.Flags#named` instead. ``PHAB_ID=D140831``
 
 ### Fixed

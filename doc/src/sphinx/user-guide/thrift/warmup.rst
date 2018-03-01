@@ -25,7 +25,7 @@ For example, if we wanted to run an initial call through our Thrift service we c
       /* Should be a ClientId that is white-listed to your service. */
       private val clientId = ClientId("client123")
 
-      override def handle() = {
+      override def handle(): Unit = {
         try {
             clientId.asCurrent {
               warmup.send(
@@ -80,7 +80,7 @@ You can then run this handler in the `warmup` lifecycle method:
           .add[ExampleThriftController]
       }
 
-      override def warmup() {
+      override protected def warmup(): Unit = {
         handle[ExampleThriftWarmupHandler]()
       }
     }
