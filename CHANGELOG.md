@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-18.3.0](https://github.com/twitter/finatra/tree/finatra-18.3.0) (2018-03-05)
+
+### Added
+
 * inject-server: Add a lint rule in `c.t.inject.server.TwitterServer#warmup`. If a server does not
   override the default implementation of `TwitterServer#warmup` a lint rule violation will appear
   on the lint page of the HTTP admin interface. ``PHAB_ID=D141267``
