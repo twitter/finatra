@@ -20,7 +20,7 @@ class TwitterCloneServer extends HttpServer {
       .add[TweetsController]
   }
 
-  override def warmup() {
+  override protected def warmup(): Unit = {
     handle[TwitterCloneWarmupHandler]()
   }
 }

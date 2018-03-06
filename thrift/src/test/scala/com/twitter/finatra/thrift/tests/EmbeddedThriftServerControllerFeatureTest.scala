@@ -6,16 +6,54 @@ import com.twitter.converter.thriftscala.Converter.Uppercase
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
-import com.twitter.finatra.thrift.filters.{AccessLoggingFilter, ClientIdWhitelistFilter, ExceptionMappingFilter, StatsFilter}
+import com.twitter.finatra.thrift.filters.{
+  AccessLoggingFilter,
+  ClientIdWhitelistFilter,
+  ExceptionMappingFilter,
+  StatsFilter
+}
 import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.finatra.thrift.tests.EmbeddedThriftServerControllerFeatureTest._
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import com.twitter.scrooge
 import com.twitter.util.{Await, Future}
 
-class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
+object EmbeddedThriftServerControllerFeatureTest {
+
+  class ConverterControllerServer extends ThriftServer {
+    override val modules = Seq(ClientIdWhitelistModule)
+
+    override def configureThrift(router: ThriftRouter): Unit = {
+      router
+        .filter(classOf[AccessLoggingFilter])
+        .filter[StatsFilter]
+        .filter[ExceptionMappingFilter]
+        .filter[ClientIdWhitelistFilter]
+        .exceptionMapper[FinatraThriftExceptionMapper]
+        .add[ConverterController]
+    }
+  }
+
+  class ConverterController extends Controller with Converter.BaseServiceIface {
+    import com.twitter.converter.thriftscala.Converter._
+
+    val uppercase = handle(Uppercase) { args: Uppercase.Args =>
+      if (args.msg == "fail")
+        Future.exception(new Exception("oops"))
+      else
+        Future.value(args.msg.toUpperCase)
+    }
+
+    val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { _: MoreThanTwentyTwoArgs.Args =>
+      Future.value("foo")
+    }
+  }
+}
+
+class EmbeddedThriftServerControllerFeatureTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(new ConverterControllerServer)
 
   /* Higher-kinded interface type */
@@ -31,6 +69,19 @@ class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
   val reqRepServicePerEndpoint123: Converter.ReqRepServicePerEndpoint =
     server.servicePerEndpoint[Converter.ReqRepServicePerEndpoint](clientId = "client123")
 
+  override protected def afterAll(): Unit = {
+    Await.all(
+      Seq(
+        client123.asClosable.close(),
+        methodPerEndpointClient123.asClosable.close(),
+        servicePerEndpoint123.asClosable.close(),
+        reqRepServicePerEndpoint123.asClosable.close()
+      ),
+      2.seconds
+    )
+    super.afterAll()
+  }
+
   test("success") {
     await(client123.uppercase("Hi")) should equal("HI")
     await(methodPerEndpointClient123.uppercase("Hi")) should equal("HI")
@@ -39,7 +90,8 @@ class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
       Converter.Uppercase.Args,
       Converter.Uppercase.SuccessType,
       Converter.Uppercase.Args,
-      Converter.Uppercase.SuccessType] {
+      Converter.Uppercase.SuccessType
+    ] {
       override def apply(
         request: Uppercase.Args,
         service: Service[Uppercase.Args, String]
@@ -52,22 +104,23 @@ class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
     val service = filter.andThen(servicePerEndpoint123.uppercase)
     await(service(Converter.Uppercase.Args("hello"))) should equal("GOODBYE")
 
-    val filter2 = new Filter[
-      scrooge.Request[Converter.Uppercase.Args],
-      scrooge.Response[Converter.Uppercase.SuccessType],
-      scrooge.Request[Converter.Uppercase.Args],
-      scrooge.Response[Converter.Uppercase.SuccessType]] {
-      override def apply(
-        request: scrooge.Request[Converter.Uppercase.Args],
-        service: Service[scrooge.Request[Converter.Uppercase.Args], scrooge.Response[Converter.Uppercase.SuccessType]]
-      ): Future[scrooge.Response[Converter.Uppercase.SuccessType]] = {
-        val filteredRequest: scrooge.Request[Converter.Uppercase.Args] =
-          scrooge.Request(
-            Map("com.twitter.test.header" -> Seq(Buf.Utf8("foo"))),
-            request.args)
-        service(filteredRequest)
+    val filter2 =
+      new Filter[scrooge.Request[Converter.Uppercase.Args], scrooge.Response[
+        Converter.Uppercase.SuccessType
+      ], scrooge.Request[Converter.Uppercase.Args], scrooge.Response[
+        Converter.Uppercase.SuccessType
+      ]] {
+        override def apply(
+          request: scrooge.Request[Converter.Uppercase.Args],
+          service: Service[scrooge.Request[Converter.Uppercase.Args], scrooge.Response[
+            Converter.Uppercase.SuccessType
+          ]]
+        ): Future[scrooge.Response[Converter.Uppercase.SuccessType]] = {
+          val filteredRequest: scrooge.Request[Converter.Uppercase.Args] =
+            scrooge.Request(Map("com.twitter.test.header" -> Seq(Buf.Utf8("foo"))), request.args)
+          service(filteredRequest)
+        }
       }
-    }
     val service2 = filter2.andThen(reqRepServicePerEndpoint123.uppercase)
     await(service2(scrooge.Request(Converter.Uppercase.Args("hello")))).value should equal("HELLO")
   }
@@ -125,34 +178,5 @@ class EmbeddedThriftServerControllerIntegrationTest extends FeatureTest {
 
   private def await[T](f: Future[T]): T = {
     Await.result(f, 2.seconds)
-  }
-}
-
-class ConverterControllerServer extends ThriftServer {
-  override val modules = Seq(ClientIdWhitelistModule)
-
-  override def configureThrift(router: ThriftRouter): Unit = {
-    router
-      .filter(classOf[AccessLoggingFilter])
-      .filter[StatsFilter]
-      .filter[ExceptionMappingFilter]
-      .filter[ClientIdWhitelistFilter]
-      .exceptionMapper[FinatraThriftExceptionMapper]
-      .add[ConverterController]
-  }
-}
-
-class ConverterController extends Controller with Converter.BaseServiceIface {
-  import com.twitter.converter.thriftscala.Converter._
-
-  val uppercase = handle(Uppercase) { args: Uppercase.Args =>
-    if (args.msg == "fail")
-      Future.exception(new Exception("oops"))
-    else
-      Future.value(args.msg.toUpperCase)
-  }
-
-  val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) { _: MoreThanTwentyTwoArgs.Args =>
-    Future.value("foo")
   }
 }

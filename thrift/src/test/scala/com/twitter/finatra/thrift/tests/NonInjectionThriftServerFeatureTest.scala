@@ -13,6 +13,11 @@ class NonInjectionThriftServerFeatureTest extends FeatureTest {
 
   val client = server.thriftClient[NonInjectionService[Future]](clientId = "client")
 
+  override def afterAll(): Unit = {
+    Await.result(client.asClosable.close(), 2.seconds)
+    super.afterAll()
+  }
+
   test("success") {
     Await.result(client.echo("Hi"), 2.seconds) should equal("Hi")
   }

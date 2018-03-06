@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.tests.integration.doeverything.main
 
+import com.google.inject.Module
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.CommonFilters
@@ -7,19 +8,9 @@ import com.twitter.finatra.http.jsonpatch.{JsonPatchExceptionMapper, JsonPatchMe
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.tests.integration.doeverything.main.controllers._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.DomainTestUserReader
-import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{
-  BarExceptionMapper,
-  FooBarBazExceptionMapper,
-  FooExceptionMapper
-}
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
-  AppendToHeaderFilter,
-  IdentityFilter
-}
-import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{
-  DoEverythingModule,
-  DoEverythingStatsReceiverModule
-}
+import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{BarExceptionMapper, FooBarBazExceptionMapper, FooExceptionMapper}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
+import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
 import com.twitter.finatra.http.{Controller, HttpServer}
 
 object DoEverythingServerMain extends DoEverythingServer
@@ -28,7 +19,7 @@ class DoEverythingServer extends HttpServer {
 
   override val name = "example-server"
 
-  override def statsReceiverModule = DoEverythingStatsReceiverModule
+  override def statsReceiverModule: Module = DoEverythingStatsReceiverModule
 
   flag("magicNum", "26", "Magic number")
 
@@ -121,7 +112,7 @@ class DoEverythingServer extends HttpServer {
       .add[MustacheController]
   }
 
-  override def warmup() {
+  override protected def warmup(): Unit = {
     handle[DoEverythingWarmupHandler]()
   }
 }

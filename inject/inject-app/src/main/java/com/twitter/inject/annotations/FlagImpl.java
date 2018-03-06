@@ -3,8 +3,15 @@ package com.twitter.inject.annotations;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
-/* Pattern copied from com.google.inject.name.NamedImpl */
-public class FlagImpl implements Flag, Serializable {
+/**
+ * Do not use this class directly. Use {@link Flags#named(String)}.
+ *
+ * Pattern copied from com.google.inject.name.NamedImpl.
+ * @see <a href="https://github.com/google/guice/blob/master/core/src/com/google/inject/name/NamedImpl.java"></a>
+ * @see Flags
+ * @see Flag
+ */
+class FlagImpl implements Flag, Serializable {
     private final String value;
 
     public FlagImpl(String value) {

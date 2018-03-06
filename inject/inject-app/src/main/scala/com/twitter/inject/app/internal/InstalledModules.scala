@@ -70,8 +70,8 @@ private[app] object InstalledModules {
 private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceModule])
     extends Logging {
 
-  def postInjectorStartup() {
-    modules foreach {
+  def postInjectorStartup(): Unit = {
+    modules.foreach {
       case injectModule: TwitterModuleLifecycle =>
         try {
           injectModule.singletonStartup(injector)
@@ -85,7 +85,7 @@ private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceM
   }
 
   def postWarmupComplete(): Unit = {
-    modules foreach {
+    modules.foreach {
       case injectModule: TwitterModuleLifecycle =>
         try {
           injectModule.singletonPostWarmupComplete(injector)
@@ -99,14 +99,28 @@ private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceM
   }
 
   // Note: We don't rethrow so that all modules have a chance to shutdown
-  def shutdown() {
-    modules foreach {
+  def shutdown(): Unit = {
+    modules.foreach {
       case injectModule: TwitterModuleLifecycle =>
         try {
           injectModule.singletonShutdown(injector)
         } catch {
           case e: Throwable =>
-            error("Shutdown method error in " + injectModule, e)
+            warn("Shutdown method error in " + injectModule, e)
+        }
+      case _ =>
+    }
+  }
+
+  // Note: We don't rethrow so that all modules have a chance to invoke close()
+  def close(): Unit = {
+    modules.foreach {
+      case injectModule: TwitterModuleLifecycle =>
+        try {
+          injectModule.close()
+        } catch {
+          case e: Throwable =>
+            warn("Close method error in " + injectModule, e)
         }
       case _ =>
     }

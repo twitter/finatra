@@ -63,6 +63,7 @@ trait App extends com.twitter.app.App with Logging {
 
     onExit {
       installedModules.shutdown()
+      installedModules.close()
     }
 
     /* Lifecycle is complete, mark the server as started. */
@@ -82,21 +83,6 @@ trait App extends com.twitter.app.App with Logging {
   }
 
   /* Protected */
-
-  /**
-   * Callback method executed after the injector is created and all
-   * lifecycle methods have fully completed.
-   *
-   * The app is signaled as STARTED prior to the execution of this
-   * callback as all lifecycle methods have successfully completed.
-   *
-   * This method can be used to start long-lived processes that run in
-   * separate threads from the main() thread. It is expected that you manage
-   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
-   *
-   * Any exceptions thrown in this method will result in the app exiting.
-   */
-  protected def run(): Unit = {}
 
   /** Production modules */
   protected def modules: Seq[Module] = Seq()
@@ -149,7 +135,7 @@ trait App extends com.twitter.app.App with Logging {
   }
 
   /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
-  protected[inject] def loadModules() = {
+  protected[inject] def loadModules(): InstalledModules = {
     InstalledModules.create(
       flags = flag.getAll(includeGlobal = false).toSeq,
       modules = requiredModules,
@@ -162,8 +148,7 @@ trait App extends com.twitter.app.App with Logging {
   @Lifecycle
   protected def postInjectorStartup(): Unit = {}
 
-  /** Warmup method to be called before postWarmup */
-  @Lifecycle
+  /** Callback method run before postWarmup */
   protected def warmup(): Unit = {}
 
   /** Method to be called after successful warmup but before application initialization */
@@ -177,6 +162,21 @@ trait App extends com.twitter.app.App with Logging {
   /** Method to be be called after port warmup */
   @Lifecycle
   protected def afterPostWarmup(): Unit = {}
+
+  /**
+   * Callback method executed after the injector is created and all
+   * lifecycle methods have fully completed.
+   *
+   * The app is signaled as STARTED prior to the execution of this
+   * callback as all lifecycle methods have successfully completed.
+   *
+   * This method can be used to start long-lived processes that run in
+   * separate threads from the main() thread. It is expected that you manage
+   * these threads manually, e.g., by using a [[com.twitter.util.FuturePool]].
+   *
+   * Any exceptions thrown in this method will result in the app exiting.
+   */
+  protected def run(): Unit = {}
 
   /* Private */
 

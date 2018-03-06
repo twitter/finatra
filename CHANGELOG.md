@@ -12,6 +12,53 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.3.0](https://github.com/twitter/finatra/tree/finatra-18.3.0) (2018-03-05)
+
+### Added
+
+* inject-server: Add a lint rule in `c.t.inject.server.TwitterServer#warmup`. If a server does not
+  override the default implementation of `TwitterServer#warmup` a lint rule violation will appear
+  on the lint page of the HTTP admin interface. ``PHAB_ID=D141267``
+
+* inject-server: Add `c.t.inject.server.TwitterServer#setup` lifecycle callback method. This is
+  run at the end of the `postInjectorStartup` phase and is primarily intended as a way for
+  servers to start pub-sub components on which the server depends. Users should prefer this method
+  over overriding the `c.t.inject.server.TwitterServer#postWarmup` @Lifecycle-annotated method as
+  the callback does not require a call its super implementation for the server to correctly start
+  and is ideally less error-prone to use. ``PHAB_ID=D135827``
+
+* inject-app: Add `c.t.inject.annotations.Flags#named` for getting an implementation of an `@Flag`
+  annotation. This is useful when trying to get or bind an instance of an `@Flag` annotated type.
+  ``PHAB_ID=D140831``
+
+### Changed
+
+* finatra-http: `ReaderDiscarded` failures writing in `c.t.f.http.StreamingResponse` now only log
+  at the info level without a stack trace, while other failures log at the error level with
+  a stacktrace. ``PHAB_ID=D141453``
+
+* inject-thrift-client: Removed `withBackupRequestFilter` method on deprecated
+  `c.t.inject.thrift.filters.ThriftClientFilterChain`. Instead of
+  `c.t.inject.thrift.modules.FilteredThriftClientModule`, use
+  `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule` and use the `idempotent` method on
+  `c.t.inject.thrift.ThriftMethodBuilder` to configure backup requests. ``PHAB_ID=D142049``.
+
+* inject-app: `c.t.inject.annotations.FlagImpl` is no longer public and should not be used directly.
+  Use `c.t.inject.annotations.Flags#named` instead. ``PHAB_ID=D140831``
+
+### Fixed
+
+* inject-thrift-client: Fix for duplicate stack client registration. The
+  `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule` was incorrectly calling the
+  `ThriftMux.client` twice. Once to create a MethodBuilder and once to create a ServicePerEndpoint.
+  Now, the ServicePerEndpoint is obtained from the configured MethodBuilder. ``PHAB_ID=D141304``
+
+* inject-thrift-client: Convert non-camel case `ThriftMethod` names, e.g., "get_tweets" to
+  camelCase, e.g., "getTweets" for reflection lookup on generated `ServicePerEndpoint` interface in
+  `c.t.inject.thrift.ThriftMethodBuilder`. ``PHAB_ID=D138499``
+
+### Closed
+
 ## [finatra-18.2.0](https://github.com/twitter/finatra/tree/finatra-18.2.0) (2018-02-05)
 
 ### Added

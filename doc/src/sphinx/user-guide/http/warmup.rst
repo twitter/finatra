@@ -19,7 +19,7 @@ For example, if we wanted to run an initial call through our HTTP service we cou
       httpWarmup: HttpWarmup)
       extends Handler {
 
-      override def handle() = {
+      override def handle(): Unit = {
         httpWarmup.send(
           get("/ping"))
       }
@@ -57,7 +57,7 @@ You can then run this handler in the `warmup` lifecycle method:
           .exceptionMapper[MalformedURLExceptionMapper]
       }
 
-      override def warmup() {
+      override protected def warmup(): Unit = {
         handle[ExampleWarmupHandler]()
       }
     }

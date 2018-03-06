@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.2.0"
+val releaseVersion = "18.3.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -768,7 +768,6 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server"))
     moduleName := "benchmark-server",
     mainClass in Compile := Some("com.twitter.finatra.http.benchmark.FinatraBenchmarkServerMain"),
     libraryDependencies ++= Seq(
-      "com.twitter" %% "finagle-netty3" % versions.twLibVersion,
       "org.slf4j" % "slf4j-nop" % versions.slf4j
     )
   ).dependsOn(

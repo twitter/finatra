@@ -8,7 +8,7 @@ import com.twitter.finagle.thrift.service.{Filterable, MethodPerEndpointBuilder,
 import com.twitter.finagle.{ThriftMux, thriftmux}
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.util.{Duration, Monitor, NullMonitor}
+import com.twitter.util.{Await, Duration, Monitor, NullMonitor}
 import javax.inject.Singleton
 
 /**
@@ -83,10 +83,12 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
    * Configure the ServicePerEndpoint. This is done by using the given [[ThriftMethodBuilderFactory]]
    * to configure a [[com.twitter.inject.thrift.ThriftMethodBuilder]] for a given ThriftMethod. E.g.,
    *
+   * {{{
    *      servicePerEndpoint
    *        .withFetchBlob(
    *          builder.method(FetchBlob)
    *          ...
+   * }}}
    *
    * Subclasses of this module MAY provide an implementation of `configureServicePerEndpoint` which
    * specifies configuration of a `ServicePerEndpoint` interface per-method of the interface.
@@ -123,13 +125,20 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
     val methodBuilder =
       configureMethodBuilder(thriftMuxClient.methodBuilder(dest))
 
-    configureServicePerEndpoint(
+    val configuredServicePerEndpoint = configureServicePerEndpoint(
       builder = new ThriftMethodBuilderFactory[ServicePerEndpoint](
         injector,
         methodBuilder
       ),
-      servicePerEndpoint = thriftMuxClient.servicePerEndpoint(dest, label)
+      servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint]
     )
+
+    closeOnExit {
+      val closable = asClosable(configuredServicePerEndpoint)
+      Await.result(
+        closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
+    }
+    configuredServicePerEndpoint
   }
 
   /* Private */

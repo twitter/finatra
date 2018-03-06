@@ -19,7 +19,7 @@ object GreeterThriftMethodBuilderClientModule
   override val dest = "flag!greeter-thrift-service"
   override val label = "greeter-thrift-client"
 
-  override def configureServicePerEndpoint(
+  override protected def configureServicePerEndpoint(
     builder: ThriftMethodBuilderFactory[Greeter.ServicePerEndpoint],
     servicePerEndpoint: Greeter.ServicePerEndpoint
   ): Greeter.ServicePerEndpoint = {

@@ -4,6 +4,7 @@ import com.twitter.finagle.service.ResponseClassifier
 import com.twitter.finagle.thrift.service.{Filterable, ReqRepServicePerEndpointBuilder, ServicePerEndpointBuilder}
 import com.twitter.finagle.thriftmux.MethodBuilder
 import com.twitter.finagle.{Filter, Service}
+import com.twitter.inject.conversions.string._
 import com.twitter.inject.Injector
 import com.twitter.inject.thrift.internal.filters.ThriftClientExceptionFilter
 import com.twitter.scrooge.ThriftMethod
@@ -261,8 +262,11 @@ final class ThriftMethodBuilder[ServicePerEndpoint <: Filterable[ServicePerEndpo
   private[this] def findMethodService[I <: Filterable[I]](
     implementation: I
   ): Service[Req, Rep] = {
-    val methodOpt = implementation.getClass.getDeclaredMethods
-      .find(_.getName == method.name)
+    val methodOpt =
+      implementation
+        .getClass
+        .getDeclaredMethods
+        .find(_.getName == method.name.camelify) // converts a snake_case ThriftMethod.name to camelCase for reflection method lookup
     methodOpt match {
       case Some(serviceMethod) =>
         serviceMethod

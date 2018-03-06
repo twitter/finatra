@@ -1,17 +1,12 @@
 package com.twitter.inject.thrift
 
+import com.twitter.finagle.client.ClientRegistry
 import com.twitter.finagle.http.Status.Ok
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.greeter.thriftscala.Greeter
 import com.twitter.inject.server.FeatureTest
-import com.twitter.inject.thrift.integration.serviceperendpoint.{
-  EchoThriftMethodBuilderClientModule,
-  EchoThriftService,
-  GreeterThriftMethodBuilderClientModule,
-  GreeterThriftService,
-  ServicePerEndpointHttpController
-}
+import com.twitter.inject.thrift.integration.serviceperendpoint.{EchoThriftMethodBuilderClientModule, EchoThriftService, GreeterThriftMethodBuilderClientModule, GreeterThriftService, ServicePerEndpointHttpController}
 import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 import com.twitter.test.thriftscala.EchoService
 
@@ -49,6 +44,12 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     greeterThriftServer.close()
     echoThriftServer.close()
     super.afterAll()
+  }
+
+  test("Assert client stack registry entries") {
+    // should only be one per thriftmethodbuilderclientmodule
+    ClientRegistry.registrants.count(_.name == GreeterThriftMethodBuilderClientModule.label) should equal(1)
+    ClientRegistry.registrants.count(_.name == EchoThriftMethodBuilderClientModule.label) should equal(1)
   }
 
   test("Greeter.ServicePerEndpoint is available from the injector") {

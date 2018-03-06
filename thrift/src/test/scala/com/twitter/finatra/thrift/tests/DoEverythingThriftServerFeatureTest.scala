@@ -33,13 +33,32 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     server.servicePerEndpoint[DoEverything.ServicePerEndpoint](clientId = "client123")
   /* Higher-kinded interface type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val anotherMethodPerEndpointClient123: DoEverything[Future] =
-    server.thriftClient[DoEverything.ServicePerEndpoint, DoEverything[Future]](servicePerEndpoint123)
+    server.thriftClient[DoEverything.ServicePerEndpoint, DoEverything[Future]](
+      servicePerEndpoint123
+    )
   /* Another Method-Per-Endpoint type wrapping a Service-per-endpoint: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val yetAnotherMethodPerEndpointClient123: DoEverything.MethodPerEndpoint =
-    server.methodPerEndpoint[DoEverything.ServicePerEndpoint, DoEverything.MethodPerEndpoint](servicePerEndpoint123)
+    server.methodPerEndpoint[DoEverything.ServicePerEndpoint, DoEverything.MethodPerEndpoint](
+      servicePerEndpoint123
+    )
   /* Req/Rep Service-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id3 */
   val reqRepServicePerEndpoint123: DoEverything.ReqRepServicePerEndpoint =
     server.servicePerEndpoint[DoEverything.ReqRepServicePerEndpoint](clientId = "client123")
+
+  override protected def afterAll(): Unit = {
+    Await.all(
+      Seq(
+        client123.asClosable.close(),
+        methodPerEndpointClient123.asClosable.close(),
+        servicePerEndpoint123.asClosable.close(),
+        anotherMethodPerEndpointClient123.asClosable.close(),
+        yetAnotherMethodPerEndpointClient123.asClosable.close(),
+        reqRepServicePerEndpoint123.asClosable.close()
+      ),
+      2.seconds
+    )
+    super.afterAll()
+  }
 
   test("success") {
     await(client123.uppercase("Hi")) should equal("HI")

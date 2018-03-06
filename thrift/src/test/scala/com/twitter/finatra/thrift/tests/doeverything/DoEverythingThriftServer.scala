@@ -47,7 +47,7 @@ class DoEverythingThriftServer extends ThriftServer {
       .add[DoEverythingThriftController]
   }
 
-  override def warmup() {
+  override protected def warmup(): Unit = {
     handle[DoEverythingThriftWarmupHandler]()
   }
 }

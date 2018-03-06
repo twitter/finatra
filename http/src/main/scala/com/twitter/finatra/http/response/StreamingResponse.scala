@@ -3,8 +3,11 @@ package com.twitter.finatra.http.response
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.inject.Logging
+import com.twitter.io.Reader.ReaderDiscarded
 import com.twitter.io.{Buf, Writer}
-import com.twitter.util.{Closable, Future}
+import com.twitter.util.{Closable, Duration, Future}
+
+import scala.util.control.NonFatal
 
 object StreamingResponse {
 
@@ -89,7 +92,8 @@ class StreamingResponse[T] private (
   separator: Option[Buf],
   suffix: Option[Buf],
   asyncStream: () => AsyncStream[T],
-  closeOnFinish: Closable
+  closeOnFinish: Closable,
+  closeGracePeriod: Duration = Duration.Zero
 ) extends Logging {
 
   def toFutureFinagleResponse: Future[Response] = {
@@ -104,13 +108,16 @@ class StreamingResponse[T] private (
       _ <- writePrefix(writer)
       _ <- addSeparatorIfPresent(asyncStream().map(toBuf)).foreachF(writer.write)
       result <- writeSuffix(writer)
-    } yield result) onSuccess { r =>
+    } yield result).onSuccess { _ =>
       debug("Success writing to chunked response")
-    } onFailure { e =>
-      warn("Failure writing to chunked response", e)
-    } ensure {
+    }.onFailure {
+      case e: ReaderDiscarded =>
+        info(s"Failure writing to chunked response: ${e.getMessage}")
+      case NonFatal(e) =>
+        error("Unexpected failure writing to chunked response", e)
+    }.ensure {
       debug("Closing chunked response")
-      Closable.all(response.writer, closeOnFinish).close()
+      Closable.all(response.writer, closeOnFinish).close(closeGracePeriod)
     }
 
     Future.value(response)
