@@ -23,6 +23,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: `ReaderDiscarded` failures writing in `c.t.f.http.StreamingResponse` now only log
+  at the info level without a stack trace, while other failures log at the error level with
+  a stacktrace. ``PHAB_ID=D141453``
+
 * inject-thrift-client: Removed `withBackupRequestFilter` method on deprecated
   `c.t.inject.thrift.filters.ThriftClientFilterChain`. Instead of
   `c.t.inject.thrift.modules.FilteredThriftClientModule`, use

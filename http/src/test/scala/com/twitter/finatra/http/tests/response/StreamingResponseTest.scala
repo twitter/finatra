@@ -5,6 +5,7 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.response.StreamingResponse
 import com.twitter.inject.Test
+import com.twitter.io.Reader.ReaderDiscarded
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Await, Awaitable, Closable, Future, Time}
 
@@ -35,6 +36,31 @@ class StreamingResponseTest extends Test {
     val response = fromStream(closable, stream)
     await(burnLoop(response.reader))
     assert(closable.closed)
+  }
+
+  private def failWriteWith(t: Throwable): Unit = {
+    val stream = infiniteStream(Buf.Utf8("foo"))
+    val closable = new TestClosable
+
+    val response = fromStream(closable, stream)
+    response.writer.fail(t)
+    val thrownException = intercept[Throwable] {
+      await(burnLoop(response.reader))
+    }
+    assert(thrownException == t)
+    assert(closable.closed)
+  }
+
+  private def infiniteStream[T](item: T): AsyncStream[T] = {
+    item +:: infiniteStream(item)
+  }
+
+  test("write failures with ReaderDiscarded") {
+    failWriteWith(new ReaderDiscarded)
+  }
+
+  test("write failures with other exception") {
+    failWriteWith(new RuntimeException("unexpected exception"))
   }
 
   test("closes the Closable on successful completion of a successful AsyncStream") {
