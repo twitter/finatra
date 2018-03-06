@@ -693,7 +693,9 @@ enable our health endpoint.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
-        </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.inject.app.App#afterPostwarmup">com.twitter.inject.app.App#afterPostwarmup</span></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#warmupComplete():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#warmupComplete</a></p></span></dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
+of the server lifecycle.</p></span>, <span class="cmt"><p>You MUST call <code>super.afterPostWarmup()</code> in any overridden definition of this
+method. Failure to do so may cause your server to not completely startup.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.inject.app.App#afterPostwarmup">com.twitter.inject.app.App#afterPostwarmup</span></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#warmupComplete():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#warmupComplete</a></p></span></dd></dl></div>
     </li><li name="com.twitter.app.App#allowUndefinedFlags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="allowUndefinedFlags:Boolean"></a>
       <span class="permalink">
@@ -843,7 +845,9 @@ enable our health endpoint.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
-        </dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../inject/app/App.html#beforePostWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#beforePostWarmup">com.twitter.inject.app.App#beforePostWarmup</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#prebindWarmup():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#prebindWarmup</a></p></span></dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
+of the server lifecycle.</p></span>, <span class="cmt"><p>You MUST call <code>super.beforePostWarmup()</code> in any overridden definition of this
+method. Failure to do so may cause your server to not completely startup.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../inject/app/App.html#beforePostWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#beforePostWarmup">com.twitter.inject.app.App#beforePostWarmup</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#prebindWarmup():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#prebindWarmup</a></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -1558,6 +1562,22 @@ Note: Disabling the admin server allows services to be deployed into environment
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exitOnError(reason:String,details:=&gt;String):Unit"></a><a id="exitOnError(String,⇒String):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServer.html#exitOnError(reason:String,details:=&gt;String):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exitOnError</span><span class="params">(<span name="reason">reason: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="details">details: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
+    </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(reason:String):Unit"></a><a id="exitOnError(String):Unit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#exitOnError(reason:String):Unit" title="Permalink">
@@ -1678,7 +1698,7 @@ Note: Disabling the admin server allows services to be deployed into environment
       </span>
       
       <p class="shortcomment cmt">Utility to run a <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Utility to run a <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>. This is generally used for running
-a warmup handler in #warmup.
+a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#warmup">TwitterServer.warmup</a>.
 </p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type parameter with upper-bound of <a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../inject/utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a></p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#handlers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handlers:List[()=&gt;com.twitter.logging.Handler]"></a><a id="handlers:List[()⇒Handler]"></a>
@@ -2487,10 +2507,13 @@ If you think you need this in your main server you are most likely doing somethi
         <span class="name">postInjectorStartup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <p class="shortcomment cmt">Method to be called after injector creation</p><div class="fullcomment"><div class="comment cmt"><p>Method to be called after injector creation</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">After creation of the Injector.</p><div class="fullcomment"><div class="comment cmt"><p>After creation of the Injector. Before any other lifecycle methods.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
-        </dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
+of the server lifecycle.</p></span>, <span class="cmt"><p>You MUST call <code>super.postInjectorStartup()</code> in any overridden definition of this
+method. Failure to do so may cause your server to not completely startup.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#postWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postWarmup():Unit"></a>
       <span class="permalink">
@@ -2512,12 +2535,13 @@ instantiate any awaitable it is expected that you add the Awaitable (or
 <span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.</p><div class="fullcomment"><div class="comment cmt"><p>If you override this method to create and bind any external interface or to
 instantiate any awaitable it is expected that you add the Awaitable (or
 <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
-<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.</p><p>It is NOT expected that you block in this method as you will prevent completion
-of the server lifecycle.
+<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
-        </dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
+of the server lifecycle.</p></span>, <span class="cmt"><p>You MUST call <code>super.postWarmup()</code> in any overridden definition of this
+method. Failure to do so may cause your server to not completely startup.</p></span></dd></dl></div>
     </li><li name="com.twitter.app.App#postmain" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postmain(f:=&gt;Unit):Unit"></a><a id="postmain(⇒Unit):Unit"></a>
       <span class="permalink">
@@ -2678,6 +2702,32 @@ of the server lifecycle.
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../inject/server/TwitterServer.html#start():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#start">com.twitter.inject.server.TwitterServer#start</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#setup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setup():Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServer.html#setup():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Callback method which is executed specifically in the <code>postInjectorStartup</code> lifecycle
+phase of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method which is executed specifically in the <code>postInjectorStartup</code> lifecycle
+phase of this server.</p><p>This is AFTER the injector is created but BEFORE server warmup has been performed.</p><p>This method is thus suitable for starting and awaiting on PubSub publishers or subscribers.</p><p>The server is NOT signaled to be started until AFTER this method has executed
+thus it is imperative that this method is NOT BLOCKED as it will cause the server to not
+complete startup.</p><p>This method can be used to start long-lived processes that run in
+separate threads from the main() thread. It is expected that you manage
+these threads manually, e.g., by using a <a href="https://twitter.github.io/util/docs/com/twitter/util/FuturePool.html" class="extype" name="com.twitter.util.FuturePool">com.twitter.util.FuturePool</a>.</p><p>If you override this method to instantiate any <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a> it is expected
+that you add the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a> to the list of <code>Awaitables</code> using the
+<span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function if you want the server to exit
+when the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html" class="extype" name="com.twitter.util.Awaitable">com.twitter.util.Awaitable</a> exits.</p><p>Any exceptions thrown in this method will result in the server exiting.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd></dl></div>
     </li><li name="com.twitter.app.App#shutdownTimer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="shutdownTimer:com.twitter.util.Timer"></a><a id="shutdownTimer:Timer"></a>
       <span class="permalink">
@@ -2709,19 +2759,16 @@ of the server lifecycle.
         <span class="name">start</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <p class="shortcomment cmt">Callback method executed after the injector is created and all
-lifecycle methods have fully completed.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method executed after the injector is created and all
-lifecycle methods have fully completed. It is NOT expected that
-you block in this method as you will prevent completion
+      <p class="shortcomment cmt">Callback method which is executed after the injector is created and all
+lifecycle methods have fully completed but before awaiting on any Awaitables.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method which is executed after the injector is created and all
+lifecycle methods have fully completed but before awaiting on any Awaitables.
+It is NOT expected that you block in this method as you will prevent completion
 of the server lifecycle.</p><p>The server is signaled as STARTED prior to the execution of this
 callback as all lifecycle methods have successfully completed and the
 admin and any external interfaces have started.</p><p>This method can be used to start long-lived processes that run in
 separate threads from the main() thread. It is expected that you manage
 these threads manually, e.g., by using a <a href="https://twitter.github.io/util/docs/com/twitter/util/FuturePool.html" class="extype" name="com.twitter.util.FuturePool">com.twitter.util.FuturePool</a>.</p><p>Any exceptions thrown in this method will result in the server exiting.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
-              
-        </dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></dd></dl></div>
     </li><li name="com.twitter.server.Stats#statsReceiver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="statsReceiver:com.twitter.finagle.stats.StatsReceiver"></a><a id="statsReceiver:StatsReceiver"></a>
       <span class="permalink">
@@ -2987,7 +3034,7 @@ Set to true if you wish to stream parse requests using request.reader.read
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.app.App#warmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.TwitterServer#warmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmup():Unit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/http/HttpServer.html#warmup():Unit" title="Permalink">
@@ -3002,10 +3049,9 @@ Set to true if you wish to stream parse requests using request.reader.read
         <span class="name">warmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <p class="shortcomment cmt">Warmup method to be called before postWarmup</p><div class="fullcomment"><div class="comment cmt"><p>Warmup method to be called before postWarmup</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <p class="shortcomment cmt">Callback method run before <a href="../../inject/server/TwitterServer.html#postWarmup():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#postWarmup">TwitterServer.postWarmup</a>, used for performing warm up of this server.</p><div class="fullcomment"><div class="comment cmt"><p>Callback method run before <a href="../../inject/server/TwitterServer.html#postWarmup():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#postWarmup">TwitterServer.postWarmup</a>, used for performing warm up of this server.
+Override, but do not call <code>super.warmup()</code> as you will trigger a lint rule violation.</p><p>Any exceptions thrown in this method will result in the app exiting.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/thrift/warmup.html" target="_blank">Thrift Server Warmup</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/http/warmup.html" target="_blank">HTTP Server Warmup</a></p></span></dd></dl></div>
     </li><li name="com.twitter.server.Lifecycle.Warmup#warmupComplete" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmupComplete():Unit"></a>
       <span class="permalink">

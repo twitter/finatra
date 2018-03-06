@@ -791,6 +791,22 @@ is overriding the default methods using a val instead of a def
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exitOnError(reason:String,details:=&gt;String):Unit"></a><a id="exitOnError(String,⇒String):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/app/AbstractApp.html#exitOnError(reason:String,details:=&gt;String):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exitOnError</span><span class="params">(<span name="reason">reason: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="details">details: ⇒ <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
+    </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(reason:String):Unit"></a><a id="exitOnError(String):Unit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/inject/app/AbstractApp.html#exitOnError(reason:String):Unit" title="Permalink">
@@ -1803,10 +1819,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
         <span class="name">warmup</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <p class="shortcomment cmt">Warmup method to be called before postWarmup</p><div class="fullcomment"><div class="comment cmt"><p>Warmup method to be called before postWarmup</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
-                <span class="name">@<a href="../annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
-              
-        </dd></dl></div>
+      <p class="shortcomment cmt">Callback method run before postWarmup</p><div class="fullcomment"><div class="comment cmt"><p>Callback method run before postWarmup</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="warn(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">

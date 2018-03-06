@@ -419,11 +419,83 @@
         <a title="A com.twitter.server.TwitterServer that supports injection and com.twitter.inject.TwitterModule modules." href="TwitterServer.html"><span class="name">TwitterServer</span></a><span class="result"> extends <a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a> with <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">server.TwitterServer</a> with <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span> with <a href="Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a> with <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span> with <a href="../Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      <p class="shortcomment cmt">A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> modules.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> modules.</p><p>To use, override the appropriate @Lifecycle and callback method(s). Make sure when overriding @Lifecycle methods
-to call the super implementation, otherwise critical lifecycle set-up  may not occur causing your server to either
-function improperly or outright fail.</p><p>Typically, you will only need to interact with the following methods:</p><p> postWarmup -- create and bind any external interface(s). See <a href="../app/App.html#postWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#postWarmup">com.twitter.inject.app.App#postWarmup</a>
- start -- callback executed after the injector is created and all @Lifecycle methods have completed.
-</p></div></div>
+      <p class="shortcomment cmt">A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a>
+modules.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a> that supports injection and <a href="../TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a>
+modules.</p><p>To use, override the appropriate @Lifecycle and callback method(s). Make sure when overriding</p><pre>@Lifecycle</pre><p> methods to call the super implementation, otherwise critical lifecycle set-up  may not
+occur causing your server to either function improperly or outright fail.</p><p>If you are extending this trait, to implement your server, override the start() function, e.g.,</p><pre><span class="kw">import</span> com.twitter.inject.server.TwitterServer
+
+<span class="kw">object</span> MyServerMain <span class="kw">extends</span> MyServer
+
+<span class="kw">class</span> MyServer <span class="kw">extends</span> TwitterServer {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> start(): <span class="std">Unit</span> = {
+     <span class="cmt">// YOUR CODE HERE</span>
+
+     await(someAwaitable)
+  }
+}</pre><p>Note, you do not need to await on the <code>adminHttpServer</code> as this is done for you by the framework.</p><p>Server Lifecycle:
++-------------------------------------------------------------------------+
+| Life Cycle Method             | Ancillary Function(s)                   |
++-------------------------------------------------------------------------+
+| loadModules()                 |                                         |
++-------------------------------------------------------------------------+
+| modules.postInjectorStartup() | foreach.singletonStartup()              |
++-------------------------------------------------------------------------+
+| postInjectorStartup()         | resolveFinagleClientsOnStartup(),       |
+|                               | FinagleBuildRevision.register(),        |
+|                               | setup()                                 |
++-------------------------------------------------------------------------+
+| warmup()                      |                                         |
++-------------------------------------------------------------------------+
+| beforePostWarmup()            | LifeCycle.Warmup.prebindWarmup()        |
++-------------------------------------------------------------------------+
+| postWarmup() (binds ext ports)| disable or announce admin server        |
++-------------------------------------------------------------------------+
+| afterpostwarmup()             | LifeCycle.Warmup.warmupComplete()       |
++-------------------------------------------------------------------------+
+| setAppStarted()               |                                         |
++-------------------------------------------------------------------------+
+| run()                         | start()                                 |
++-------------------------------------------------------------------------+
+| Await on awaitables                                                     |
++-------------------------------------------------------------------------+
+@Lifecycle
+}}}
+occur causing your server to either function improperly or outright fail.</p><p>If you are extending this trait, to implement your server, override the start() function, e.g.,</p><pre><span class="kw">import</span> com.twitter.inject.server.TwitterServer
+
+<span class="kw">object</span> MyServerMain <span class="kw">extends</span> MyServer
+
+<span class="kw">class</span> MyServer <span class="kw">extends</span> TwitterServer {
+  <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> start(): <span class="std">Unit</span> = {
+     <span class="cmt">// YOUR CODE HERE</span>
+
+     await(someAwaitable)
+  }
+}</pre><p>Note, you do not need to await on the <code>adminHttpServer</code> as this is done for you by the framework.</p><p>Server Lifecycle:
++-------------------------------------------------------------------------+
+| Life Cycle Method             | Ancillary Function(s)                   |
++-------------------------------------------------------------------------+
+| loadModules()                 |                                         |
++-------------------------------------------------------------------------+
+| modules.postInjectorStartup() | foreach.singletonStartup()              |
++-------------------------------------------------------------------------+
+| postInjectorStartup()         | resolveFinagleClientsOnStartup(),       |
+|                               | FinagleBuildRevision.register(),        |
+|                               | setup()                                 |
++-------------------------------------------------------------------------+
+| warmup()                      |                                         |
++-------------------------------------------------------------------------+
+| beforePostWarmup()            | LifeCycle.Warmup.prebindWarmup()        |
++-------------------------------------------------------------------------+
+| postWarmup() (binds ext ports)| disable or announce admin server        |
++-------------------------------------------------------------------------+
+| afterpostwarmup()             | LifeCycle.Warmup.warmupComplete()       |
++-------------------------------------------------------------------------+
+| setAppStarted()               |                                         |
++-------------------------------------------------------------------------+
+| run()                         | start()                                 |
++-------------------------------------------------------------------------+
+| Await on awaitables                                                     |
++-------------------------------------------------------------------------+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/twitter-server/index.html" target="_blank">Creating an Injectable TwitterServer</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 

@@ -139,8 +139,8 @@
                         <a href="ExceptionUtils$.html" title="">ExceptionUtils</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="object" href="" title=""></a>
-                        <a href="" title="">FutureUtils</a>
+                        <a class="object" href="FutureUtils$.html" title=""></a>
+                        <a href="FutureUtils$.html" title="">FutureUtils</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="trait" href="Handler.html" title=""></a>
@@ -155,8 +155,8 @@
                         <a href="RetryUtils$.html" title="">RetryUtils</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="object" href="StringUtils$.html" title=""></a>
-                        <a href="StringUtils$.html" title="">StringUtils</a>
+                        <a class="object" href="" title=""></a>
+                        <a href="" title="">StringUtils</a>
                       </li>
               </ul>
             </div>
@@ -166,8 +166,8 @@
       <div id="definition">
         <div class="big-circle object">o</div>
         <p id="owner"><a href="../../../index.html" class="extype" name="com">com</a>.<a href="../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../index.html" class="extype" name="com.twitter.inject">inject</a>.<a href="index.html" class="extype" name="com.twitter.inject.utils">utils</a></p>
-        <h1>FutureUtils<span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html" title="Permalink">
+        <h1>StringUtils<span class="permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -180,7 +180,7 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">FutureUtils</span>
+        <span class="name">StringUtils</span>
       </span>
       </h4>
 
@@ -215,7 +215,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.inject.utils.FutureUtils"><span>FutureUtils</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.inject.utils.StringUtils"><span>StringUtils</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -245,7 +245,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -261,7 +261,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html###():Int" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -277,7 +277,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -293,7 +293,7 @@
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -306,10 +306,35 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.twitter.inject.utils.StringUtils#camelify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="camelify(name:String):String"></a><a id="camelify(String):String"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#camelify(name:String):String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">camelify</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Turn a string of format &quot;foo_bar&quot; into camelCase with the first letter in lower case: &quot;fooBar&quot;</p><div class="fullcomment"><div class="comment cmt"><p>Turn a string of format &quot;foo_bar&quot; into camelCase with the first letter in lower case: &quot;fooBar&quot;</p><p>This function is especially used to camelCase method names.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the String to camelCase</p></dd><dt>returns</dt><dd class="cmt"><p>the camelCased string</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Camel case may start with a capital letter (called &quot;Pascal Case&quot; or &quot;Upper Camel Case&quot;) or,
+      especially often in programming languages, with a lowercase letter. In this code's
+      perspective, PascalCase means the first char is capitalized while camelCase means the first
+      char is lowercased. In general both can be considered equivalent although by definition
+      &quot;CamelCase&quot; is a valid camel-cased word. Hence, PascalCase can be considered to be a
+      subset of camelCase.
+Copied from the Lift Framework:
+https://github.com/lift/framework/blob/master/core/util/src/main/scala/net/liftweb/util/StringHelpers.scala
+Apache 2.0 License: https://github.com/lift/framework/blob/master/LICENSE.txt</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#clone():Object" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -330,27 +355,10 @@
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.utils.FutureUtils#collectMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="collectMap[A,B](seq:Seq[A])(func:A=&gt;com.twitter.util.Future[B]):com.twitter.util.Future[Seq[B]]"></a><a id="collectMap[A,B](Seq[A])((A)⇒Future[B]):Future[Seq[B]]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#collectMap[A,B](seq:Seq[A])(func:A=&gt;com.twitter.util.Future[B]):com.twitter.util.Future[Seq[B]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">collectMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="seq">seq: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.collectMap.A">A</span>]</span>)</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.inject.utils.FutureUtils.collectMap.A">A</span>) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.collectMap.B">B</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.collectMap.B">B</span>]]</span>
-      </span>
-      
-      <p class="shortcomment cmt">Note: Ordering of results is NOT preserved
-</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -366,7 +374,7 @@
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -379,26 +387,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.inject.utils.FutureUtils#exceptionsToFailedFuture" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="exceptionsToFailedFuture[T](func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]"></a><a id="exceptionsToFailedFuture[T](⇒Future[T]):Future[T]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#exceptionsToFailedFuture[T](func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">exceptionsToFailedFuture</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="func">func: ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.exceptionsToFailedFuture.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.exceptionsToFailedFuture.T">T</span>]</span>
-      </span>
-      
-      
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#finalize():Unit" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -420,7 +412,7 @@
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -439,7 +431,7 @@
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#hashCode():Int" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -458,7 +450,7 @@
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -474,7 +466,7 @@
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -490,7 +482,7 @@
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#notify():Unit" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -509,7 +501,7 @@
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -525,10 +517,10 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.utils.FutureUtils#scheduleFuture" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="scheduleFuture[T](offset:com.twitter.util.Duration)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]"></a><a id="scheduleFuture[T](Duration)(⇒Future[T]):Future[T]"></a>
+    </li><li name="com.twitter.inject.utils.StringUtils#pascalify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="pascalify(name:String):String"></a><a id="pascalify(String):String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#scheduleFuture[T](offset:com.twitter.util.Duration)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#pascalify(name:String):String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -537,14 +529,25 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">scheduleFuture</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="offset">offset: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="params">(<span name="func">func: ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.scheduleFuture.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.scheduleFuture.T">T</span>]</span>
+        <span class="name">pascalify</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
-    </li><li name="com.twitter.inject.utils.FutureUtils#sequentialMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="sequentialMap[A,B](seq:Seq[A])(func:A=&gt;com.twitter.util.Future[B]):com.twitter.util.Future[Seq[B]]"></a><a id="sequentialMap[A,B](Seq[A])((A)⇒Future[B]):Future[Seq[B]]"></a>
+      <p class="shortcomment cmt">Turns a string of format &quot;foo_bar&quot; into PascalCase &quot;FooBar&quot;
+</p><div class="fullcomment"><div class="comment cmt"><p>Turns a string of format &quot;foo_bar&quot; into PascalCase &quot;FooBar&quot;
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the String to PascalCase</p></dd><dt>returns</dt><dd class="cmt"><p>the PascalCased string</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>Camel case may start with a capital letter (called &quot;Pascal Case&quot; or &quot;Upper Camel Case&quot;) or,
+      especially often in programming languages, with a lowercase letter. In this code's
+      perspective, PascalCase means the first char is capitalized while camelCase means the first
+      char is lowercased. In general both can be considered equivalent although by definition
+      &quot;CamelCase&quot; is a valid camel-cased word. Hence, PascalCase can be considered to be a
+      subset of camelCase.
+Copied from the &quot;lift&quot; framework:
+https://github.com/lift/framework/blob/master/core/util/src/main/scala/net/liftweb/util/StringHelpers.scala
+Apache 2.0 License: https://github.com/lift/framework/blob/master/LICENSE.txt
+Functional code courtesy of Jamie Webb (j@jmawebb.cjb.net) 2006/11/28</p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.utils.StringUtils#snakify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="snakify(name:String):String"></a><a id="snakify(String):String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#sequentialMap[A,B](seq:Seq[A])(func:A=&gt;com.twitter.util.Future[B]):com.twitter.util.Future[Seq[B]]" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#snakify(name:String):String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -553,15 +556,18 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">sequentialMap</span><span class="tparams">[<span name="A">A</span>, <span name="B">B</span>]</span><span class="params">(<span name="seq">seq: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.sequentialMap.A">A</span>]</span>)</span><span class="params">(<span name="func">func: (<span class="extype" name="com.twitter.inject.utils.FutureUtils.sequentialMap.A">A</span>) ⇒ <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.sequentialMap.B">B</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.inject.utils.FutureUtils.sequentialMap.B">B</span>]]</span>
+        <span class="name">snakify</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Note: Ordering of results is preserved
-</p>
+      <p class="shortcomment cmt">Turn a string of format &quot;FooBar&quot; into snake case &quot;foo_bar&quot;
+</p><div class="fullcomment"><div class="comment cmt"><p>Turn a string of format &quot;FooBar&quot; into snake case &quot;foo_bar&quot;
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the underscored string</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>snakify is not reversible, ie. in general the following will _not_ be true:</p><pre>s == camelify(snakify(s))</pre><p>Copied from the Lift Framework:
+https://github.com/lift/framework/blob/master/core/util/src/main/scala/net/liftweb/util/StringHelpers.scala
+Apache 2.0 License: https://github.com/lift/framework/blob/master/LICENSE.txt</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -577,7 +583,7 @@
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#toString():String" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -593,7 +599,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#wait():Unit" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -615,7 +621,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -637,7 +643,7 @@
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/inject/utils/FutureUtils$.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../com/twitter/inject/utils/StringUtils$.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>

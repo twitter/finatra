@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Application and Server Lifecycle &#8212; Finatra 18.2.0 documentation</title>
+    <title>Application and Server Lifecycle &#8212; Finatra 18.3.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.2.0',
+        VERSION:     '18.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.2.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.3.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Modules" href="modules.html" />
     <link rel="prev" title="TwitterServer Basics" href="twitter_server.html" />
@@ -78,9 +78,11 @@ a <a class="reference external" href="https://github.com/twitter/twitter-server/
 and provides methods which can be implemented for running or starting core logic.</p>
 <p>This is done for several reasons:</p>
 <ul class="simple">
-<li>To ensure that flag parsing and module installation to build the object graph is done in the correct
-order such that the injector is properly configured for use before a user attempts attempts to access flags.</li>
-<li>Ensure that object promotion and garbage collection is properly handled <em>before</em> accepting traffic to a server.</li>
+<li>To ensure that <a class="reference external" href="./flags.html">flag</a> parsing and <a class="reference external" href="./modules.html">module</a> installation to
+build the object graph is done in the correct order such that the injector is properly configured
+before a user attempts attempts to access flags.</li>
+<li>Ensure that object promotion and garbage collection is properly handled <em>before</em> accepting traffic
+to a server.</li>
 <li>Expose any external interface <em>before</em> reporting a server is &#8220;healthy&#8221;. Otherwise a server may
 report it is healthy before binding to a port — which may fail. Depending on how monitoring is
 configured (typically done by monitoring the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>
@@ -88,15 +90,18 @@ configured (typically done by monitoring the <a class="reference external" href=
 on some frequency) it could be some interval before the server is recognized as unhealthy when in
 fact it did not start properly as it could not bind to a port.</li>
 </ul>
-<p>Thus you do not have access to the <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L24">app</a>
-or <a class="reference external" href="https://twitter.github.io/twitter-server/#getting-started">server</a> <cite>main</cite> method. Instead, any
-logic should be contained in overriding an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method or in the app or server
-callbacks <a class="reference external" href="../app/index.html#app-run"><code class="docutils literal"><span class="pre">c.t.inject.app.App#run</span></code></a> or <a class="reference external" href="../twitter_server/index.html#twitterserver-start"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer#start</span></code></a> methods, respectively.</p>
+<p>Thus you do not have access to the <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L24">App</a>
+or <a class="reference external" href="https://github.com/twitter/twitter-server/blob/5fea9c2a6220ab9bbdb449c99c946e2aef322e7d/server/src/main/scala/com/twitter/server/TwitterServer.scala#L93">TwitterServer</a>
+<cite>main</cite> method. Instead, any logic should be contained in overriding an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated
+method or in the application or server callbacks.</p>
 <div class="admonition caution">
 <p class="first admonition-title">Caution</p>
-<p>If you override an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call <cite>super()</cite> in the method to ensure that framework lifecycle events happen accordingly.</p>
-<p class="last">With all lifecycle methods, it is important to <strong>not performing any blocking operations</strong> as you will prevent the server from starting.</p>
+<p class="last">If you override an <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call
+<cite>super.lifecycleMethod()</cite> in your override to ensure that framework lifecycle events happen
+accordingly.</p>
 </div>
+<p>See the <a class="reference external" href="../app/index.html">Creating an injectable App</a> and
+<a class="reference external" href="../twitter-server/index.html">Creating an injectable TwitterServer</a> sections for more information.</p>
 <div class="section" id="startup">
 <h2>Startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h2>
 <p>At a high-level, the start-up lifecycle of a Finatra server looks like:</p>
@@ -104,46 +109,151 @@ callbacks <a class="reference external" href="../app/index.html#app-run"><code c
 </div>
 <div class="section" id="shutdown">
 <h2>Shutdown<a class="headerlink" href="#shutdown" title="Permalink to this headline">¶</a></h2>
-<p>Upon <em>graceful</em> shutdown, all registered <cite>onExit {...}</cite> blocks are executed. See <a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L72">c.t.app.App#exits</a>).</p>
-<p>This includes closing the <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a> <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>, firing the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-core/src/main/scala/com/twitter/inject/TwitterModuleLifecycle.scala#L29">TwitterModuleLifecycle#singletonShutdown</a>
-on all installed modules, and for extensions of the <a class="reference external" href="../http/server.html">HttpServer</a> or <a class="reference external" href="../thrift/server.html">ThriftServer</a> traits closing any external interfaces.</p>
+<p>Upon <em>graceful</em> shutdown of an application or a server, all registered <cite>onExit</cite>, <cite>closeOnExit</cite>, and
+<cite>closeOnExitLast</cite> blocks are executed. See
+<a class="reference external" href="https://github.com/twitter/util/blob/9fa550a269d2287b24e94921a352ba954f9f4bfb/util-app/src/main/scala/com/twitter/app/App.scala#L72">c.t.app.App#exits</a>
+and <a class="reference external" href="https://github.com/twitter/util/blob/bf47b55ff45a31bbd541f66257f2244df5c35f5b/util-app/src/main/scala/com/twitter/app/App.scala#L86">c.t.app.App#lastExits</a>.</p>
+<p>For a server, this includes closing the <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>
+<a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface">HTTP Admin Interface</a>
+and shutting down and closing all installed modules. For extensions of the
+<a class="reference external" href="../http/server.html">HttpServer</a> or <a class="reference external" href="../thrift/server.html">ThriftServer</a> traits this also
+includes closing any external interfaces.</p>
 <div class="admonition-important admonition">
 <p class="first admonition-title">Important</p>
-<p>Note that the order of execution for all registered <cite>onExit {...}</cite> blocks is not guaranteed. Thus it is, up to implementors to enforce any desired ordering.</p>
-<p>For example, you have code which is reading from a queue (via a &#8220;listener&#8221;), transforming the data, and then publishing (via a &#8220;publisher&#8221;) to another queue.
-When main application is exiting you most likely want to close the &#8220;listener&#8221; first to ensure that you transform and publish all available data before closing the &#8220;publisher&#8221;.</p>
-<p>Assuming, that the <cite>close()</cite> method of both returns <cite>Future[Unit]</cite>, e.g. like <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala">c.t.util.Closable</a>,
+<p class="last">Note that the order of execution for all registered <cite>onExit</cite> and <cite>closeOnExit</cite> blocks is not
+guaranteed as they are executed on graceful shutdown roughly in parallel. Thus it is up to
+implementors to enforce any desired ordering.</p>
+</div>
+<p>For example, you have code which is reading from a queue (via a &#8220;subscriber&#8221;), transforming the
+data, and then publishing (via a &#8220;publisher&#8221;) to another queue. When the main application is exiting
+you most likely want to close the &#8220;subscriber&#8221; first to ensure that you transform and publish all
+available data before closing the &#8220;publisher&#8221;.</p>
+<p>Assuming, that both objects are a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> type, a simple way to close them would be:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit(subscriber)
+closeOnExit(publisher)
+</pre></div>
+</div>
+<p>However, the &#8220;subscriber&#8221; and the &#8220;publisher&#8221; would close roughly in parallel
+which could lead to data inconsistencies in your server if the &#8220;subscriber&#8221; is still reading before
+the &#8220;publisher&#8221; has closed.</p>
+<div class="section" id="ordering-onexit-and-closeonexit-functions">
+<h3>Ordering <cite>onExit</cite> and <cite>closeOnExit</cite> functions?<a class="headerlink" href="#ordering-onexit-and-closeonexit-functions" title="Permalink to this headline">¶</a></h3>
+<p>Assuming, that the <cite>#close()</cite> method of both returns <cite>Future[Unit]</cite>, e.g. like a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a>,
 a way of doing this could be:</p>
-<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>onExit {
-   Await.result(listener.close())
-   Await.result(publisher.close())
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+  Await.result(subscriber.close(defaultCloseGracePeriod))
+  Await.result(publisher.close(defaultCloseGracePeriod))
 }
 </pre></div>
 </div>
-<p>In the example code above, we simply await on the close of the &#8220;listener&#8221; first and then the &#8220;publisher&#8221; thus ensuring that the &#8220;listener&#8221;
-will close before the &#8220;publisher&#8221;.</p>
-<p>This is instead of registering separate <cite>onExit {...}</cite> blocks for each:</p>
-<div class="code Scala highlight-text"><div class="highlight"><pre><span></span>onExit {
-   Await.result(listener.close())
+<p>where the <cite>defaultCloseGracePeriod</cite> is the <a class="reference external" href="https://github.com/twitter/util/blob/bf47b55ff45a31bbd541f66257f2244df5c35f5b/util-app/src/main/scala/com/twitter/app/App.scala#L110">c.t.app.App#defaultCloseGracePeriod</a>
+function.</p>
+<p>In the above example we simply await on the <cite>#close()</cite> of the &#8220;subscriber&#8221; first and then the
+<cite>#close()</cite> of the &#8220;publisher&#8221; thus ensuring that the &#8220;subscriber&#8221; will close before the &#8220;publisher&#8221;.</p>
+<p>However, we are not providing a timeout to the <cite>Await.result</cite>, which we should ideally do as
+well since we do not want to accidentally block our server shutdown if the <cite>defaultCloseGracePeriod</cite>
+is set to something high or infinite (e.g., <a class="reference external" href="https://github.com/twitter/util/blob/bf47b55ff45a31bbd541f66257f2244df5c35f5b/util-core/src/main/scala/com/twitter/util/Time.scala#L302">Time.Top</a>).</p>
+<p>But if we don&#8217;t know the configured value of the  <cite>defaultCloseGracePeriod</cite> this makes things
+complicated. We could just hardcode a value for the Await, or not use the <cite>defaultCloseGracePeriod</cite>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+  Await.result(subscriber.close(defaultCloseGracePeriod), 5.seconds)
+  Await.result(publisher.close(defaultCloseGracePeriod), 5.seconds)
 }
 
+...
+
 onExit {
-   Await.result(publisher.close())
+  Await.result(subscriber.close(4.seconds), 5.seconds)
+  Await.result(publisher.close(4.seconds), 5.seconds)
 }
 </pre></div>
 </div>
-<p class="last">Which in this example, would possibly close the &#8220;publisher&#8221; before the &#8220;listener&#8221; meaning that the server would still be reading data but unable to publish it.</p>
+<p>However, this is obviously not ideal and there is an easier way. You can enforce the ordering of closing Closables
+by using <cite>closeOnExitLast</cite>.</p>
+<p>A <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> passed to <cite>closeOnExitLast</cite> will be closed <em>after</em> all <cite>onExit</cite> and
+<cite>closeOnExit</cite> functions are executed. E.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit(subscriber)
+closeOnExitLast(publisher)
+</pre></div>
+</div>
+<p>In this code the &#8220;publisher&#8221; is guaranteed be closed <strong>after</strong> the &#8220;subscriber&#8221;.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All the exit functions: <cite>onExit</cite>, <cite>closeOnExit</cite>, and <cite>closeOnExitLast</cite> use the
+<cite>defaultCloseGracePeriod</cite> as their close &#8220;deadline&#8221; and will raise a <cite>TimeoutException</cite> if
+all the <cite>exits</cite> (collected <cite>onExit</cite>, <cite>closeOnExit</cite> functions) do not close within the deadline.
+And if the <cite>lastExits</cite> (collected <cite>closeOnExitLast</cite> functions) do not close within the deadline.</p>
+</div>
+<p>If you have multiple <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> objects you want to close in parallel and one you want to
+close after all the others, you could do:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit(subscriberA)
+closeOnExit(subscriberB)
+closeOnExit(subscriberC)
+closeOnExitLast(publisher)
+</pre></div>
+</div>
+<p>The &#8220;publisher&#8221; is guaranteed be closed <strong>after</strong> the closing of &#8220;subscriberA&#8221;, &#8220;subscriberB&#8221;, and
+&#8220;subscriberC&#8221;.</p>
+</div>
+<div class="section" id="what-to-do-if-you-don-t-have-a-c-t-util-closable">
+<h3>What to do if you don&#8217;t have a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a>?<a class="headerlink" href="#what-to-do-if-you-don-t-have-a-c-t-util-closable" title="Permalink to this headline">¶</a></h3>
+<p>You can simply use the <cite>onExit</cite> block to perform any shutdown logic, or you can wrap a function in
+a <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Closable.scala"><cite>c.t.util.Closable</cite></a> to be passed to <cite>closeOnExit</cite> or <cite>closeOnExitLast</cite>.</p>
+<p>For example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>onExit {
+   DatabaseConnection.drain()
+   Await.result(someFutureOperation, 2.seconds)
+}
+
+closeOnExit {
+  Closable.make { deadline =&gt;
+   prepWork.start()
+   anotherFutureOperation
+  }
+}
+
+closeOnExitLast {
+  Closable.make { deadline =&gt;
+    queue.blockingStop(deadline)
+    Future.Unit
+  }
+}
+</pre></div>
+</div>
+<p>You can also wrap multiple functions in a Closable:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>closeOnExit {
+   Closable.make { deadline =&gt;
+     database.drain()
+     fileCleanUp.do()
+     pushData(deadline)
+     Future.Unit
+   }
+}
+</pre></div>
+</div>
+<p>Again the code in <cite>onExit</cite> and <cite>closeOnExit</cite> will be run in parallel and guaranteed to close
+before the functions in <cite>closeOnExitLast</cite>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Multiple <cite>closeOnExitLast</cite> Closables will be closed in parallel with each other but
+<strong>after</strong> all <cite>onExit</cite> and <cite>closeOnExit</cite> functions have closed.</p>
+</div>
 </div>
 </div>
 <div class="section" id="modules">
 <h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
-<p>Modules provide hooks into the Lifecycle as well that allow instances being provided to the object graph to be plugged into the overall application or server lifecycle. See the <a class="reference external" href="../getting-started/modules.html#module-lifecycle">Module Lifecycle</a> section for more information.</p>
+<p>Modules provide hooks into the Lifecycle as well that allow instances being provided to the object
+graph to be plugged into the overall application or server lifecycle. See the
+<a class="reference external" href="../getting-started/modules.html#module-lifecycle">Module Lifecycle</a> section for more information.</p>
 </div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
-<p>As noted in the diagram in the <a class="reference external" href="#startup">Startup</a> section there can be a non-trivial lifecycle especially in the case of a <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>.
-For more information on how to create an injectable <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/App.html">c.t.app.App</a> or a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala">c.t.server.TwitterServer</a>
-see the <a class="reference external" href="../app/index.html">Creating an injectable App</a> and <a class="reference external" href="../twitter_server/index.html">Creating an injectable TwitterServer</a> sections.</p>
+<p>As noted in the diagram in the <a class="reference external" href="#startup">Startup</a> section the lifecycle or an application can be
+non-trivial &#8211; especially in the case of a <a class="reference external" href="https://github.com/twitter/twitter-server">TwitterServer</a>.</p>
+<p>For more information on how to create an injectable <a class="reference external" href="https://twitter.github.io/util/docs/com/twitter/app/App.html">c.t.app.App</a>
+or a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala">c.t.server.TwitterServer</a>
+see the <a class="reference external" href="../app/index.html">Creating an injectable App</a> and
+<a class="reference external" href="../twitter-server/index.html">Creating an injectable TwitterServer</a> sections.</p>
 </div>
 </div>
 
@@ -170,7 +280,11 @@ see the <a class="reference external" href="../app/index.html">Creating an injec
   <ul>
 <li><a class="reference internal" href="#">Application and Server Lifecycle</a><ul>
 <li><a class="reference internal" href="#startup">Startup</a></li>
-<li><a class="reference internal" href="#shutdown">Shutdown</a></li>
+<li><a class="reference internal" href="#shutdown">Shutdown</a><ul>
+<li><a class="reference internal" href="#ordering-onexit-and-closeonexit-functions">Ordering <cite>onExit</cite> and <cite>closeOnExit</cite> functions?</a></li>
+<li><a class="reference internal" href="#what-to-do-if-you-don-t-have-a-c-t-util-closable">What to do if you don&#8217;t have a <cite>c.t.util.Closable</cite>?</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#modules">Modules</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Creating an injectable TwitterServer &#8212; Finatra 18.2.0 documentation</title>
+    <title>Creating an injectable TwitterServer &#8212; Finatra 18.3.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.2.0',
+        VERSION:     '18.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.2.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.3.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Server Definition" href="../http/server.html" />
     <link rel="prev" title="Creating an injectable util-app App" href="../app/index.html" />
@@ -72,17 +72,44 @@
           <div class="body" role="main">
             
   <div class="section" id="creating-an-injectable-twitterserver">
-<h1>Creating an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a><a class="headerlink" href="#creating-an-injectable-twitterserver" title="Permalink to this headline">¶</a></h1>
-<p>To create an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.server.TwitterServer</span></code></a>, first depend on the <cite>inject-server</cite> library. Then
-use the <a class="reference external" href="../getting-started/framework.html#inject">inject framework</a> to create an injectable
-TwitterServer. Finatra provides an injectable version of the <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.server.TwitterServer</span></code></a> trait:
-<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a>.</p>
-<p>Extending the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a> trait creates an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a>.</p>
-<p>This allows for the use of <a class="reference external" href="../getting-started/basics.html#dependency-injection">dependency injection</a>
-in a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a> with support for <a class="reference external" href="../getting-started/modules.html">modules</a> which allows
-for <a class="reference external" href="../testing/index.html#types-of-tests">powerful feature testing</a> of the server.</p>
-<div class="section" id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<span id="injectable-twitter-server"></span><h1>Creating an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a><a class="headerlink" href="#creating-an-injectable-twitterserver" title="Permalink to this headline">¶</a></h1>
+<p>To create an injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.server.TwitterServer</span></code></a>, first depend on the <cite>inject-server</cite> library. We
+also recommend using <a class="reference external" href="http://logback.qos.ch/">Logback</a> as your
+<a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g.,</p>
+<p>with sbt:</p>
+<pre class="literal-block">
+&quot;com.twitter&quot; %% &quot;inject-server&quot; % &quot;18.3.0&quot;,
+&quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,
+</pre>
+<p>For more information on logging with Finatra see:
+<a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
+<p>Create a new class which extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a>:</p>
+<div class="section" id="basic-example">
+<h2>Basic Example<a class="headerlink" href="#basic-example" title="Permalink to this headline">¶</a></h2>
+<p>An example of a simple injectable <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a>:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.server.TwitterServer
+
+object MyServerMain extends MyServer
+
+class MyServer extends TwitterServer {
+
+  override protected def start(): Unit = {
+    // It is important to remember to NOT BLOCK this method.
+    ...
+  }
+}
+</pre></div>
+</div>
+<p>This will use the <a class="reference external" href="../getting-started/framework.html#inject">inject framework</a> to create an
+injectable <cite>TwitterServer</cite>. Finatra provides <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a> as an injectable
+version of the <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.server.TwitterServer</span></code></a> trait.</p>
+<p>Specifically, this allows for the use of <a class="reference external" href="../getting-started/basics.html#dependency-injection">dependency injection</a>
+in a <a class="reference external" href="https://github.com/twitter/twitter-server/blob/develop/server/src/main/scala/com/twitter/server/TwitterServer.scala"><cite>TwitterServer</cite></a> with support for <a class="reference external" href="../getting-started/modules.html">Modules</a> allowing for
+<a class="reference external" href="../testing/index.html#types-of-tests">powerful feature testing</a> of the server.</p>
+</div>
+<div class="section" id="advanced-example">
+<h2>Advanced Example<a class="headerlink" href="#advanced-example" title="Permalink to this headline">¶</a></h2>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.inject.Logging
 import com.twitter.inject.server.TwitterServer
 
@@ -95,83 +122,124 @@ class MyTwitterServer
   override val modules = Seq(
     MyModule1)
 
+  override protected def setup(): Unit = {
+    // Create/start a pub-sub component and add it to the list of Awaitables, e.g., await(component)
+    // It is important to remember to NOT BLOCK this method
+    ...
+  }
+
+  override protected def warmup(): Unit = {
+    handle[MyWarmupHandler]()
+  }
+
   @Lifecycle
   override protected def postWarmup(): Unit = {
     super.postWarmup()
 
-    // Bind any external interfaces here, register them to be closed on server exit, and add them
-    // to the list of awaitables that the server will block on by call the this.await(Awaitable*) method.
-
-    // It is important to remember to NOT BLOCK this method.
+    // It is important to remember to NOT BLOCK this method and to call SUPER.
+    ...
   }
 
   override protected def start(): Unit = {
-    // Any additional server startup logic to perform after the server is reported healthy goes here.
-
-    // It is important to remember to NOT BLOCK this method.
+    // It is important to remember to NOT BLOCK this method
+    ...
   }
 }
 </pre></div>
 </div>
-<p>The two points of entry to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a> are the <code class="docutils literal"><span class="pre">#postWarmup</span></code> and <code class="docutils literal"><span class="pre">#start</span></code> methods.</p>
 </div>
-<div class="section" id="twitterserver-postwarmup">
-<h2><cite>TwitterServer#postWarmup</cite><a class="headerlink" href="#twitterserver-postwarmup" title="Permalink to this headline">¶</a></h2>
-<p>If you look at the <a class="reference external" href="../getting-started/lifecycle.html#startup">Startup Lifecycle</a> you will see that <code class="docutils literal"><span class="pre">postWarmup</span></code> is executed
-after server warmup has been performed and thus after <a class="reference external" href="../getting-started/lifecycle.html#application-and-server-lifecycle">object promotion and initial garbage collection</a>,
-but before reporting that the server is healthy (via the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface#lifecycle-management">HTTP Admin Interface</a>
-<code class="docutils literal"><span class="pre">/health</span></code> endpoint).</p>
-<p>In the <a class="reference external" href="../http/server.html"><code class="docutils literal"><span class="pre">HttpServer</span></code></a> and <a class="reference external" href="../thrift/server.html"><code class="docutils literal"><span class="pre">ThriftServer</span></code></a> traits the framework will bind any external interfaces and
-perform announcing of the server in <cite>postWarmup</cite> <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code> method. External interface binding and
-announcing is done at this point in the lifecycle such that if binding the external interface to a
-port fails, we do not report the server as healthy in the
-<a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface#lifecycle-management">HTTP Admin Interface</a>.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>Put any logic to happen before the server is announced as &#8220;healthy&#8221; in the <code class="docutils literal"><span class="pre">postWarmup</span></code> lifecycle method. Typically, this
-is any binding of an external interface but could be any logic that must be done to present the server as &#8220;healthy&#8221;.</p>
-<p>Remember, that when overriding any <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call <cite>super()</cite> in the method to ensure
-the framework lifecycle events happen accordingly.</p>
-<p class="last">As with all lifecycle methods, it is important to <strong>not perform any blocking operations</strong> as you will prevent the server
-from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
-<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.
-See the Finatra utility: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala"><code class="docutils literal"><span class="pre">FuturePools</span></code></a> for creating named pools.</p>
+<div class="section" id="overriding-server-lifecycle-functions">
+<h2>Overriding Server Lifecycle Functions<a class="headerlink" href="#overriding-server-lifecycle-functions" title="Permalink to this headline">¶</a></h2>
+<p>You can hook into the server startup lifecycle by overriding <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated methods or
+provided lifecycle callbacks.</p>
+<div class="section" id="lifecycle-annotated-methods">
+<h3><code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated Methods<a class="headerlink" href="#lifecycle-annotated-methods" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><cite>postInjectorStartup</cite> - after creation and initialization of the Injector.</li>
+<li><cite>beforePostWarmup</cite> - this phase <a class="reference external" href="https://github.com/twitter/twitter-server/blob/5096d7ae20006114707a5124ca895744509b3d75/server/src/main/scala/com/twitter/server/Lifecycle.scala#L93">performs object promotion</a>
+before the binding of any external interface (which typically means the server will start
+accepting traffic) occurs in <cite>postWarmup</cite></li>
+<li><cite>postWarmup</cite> - the framework binds the external HTTP interface.</li>
+<li><cite>afterPostWarmup</cite> - signal the server is healthy, via
+<a class="reference external" href="https://github.com/twitter/twitter-server/blob/5096d7ae20006114707a5124ca895744509b3d75/server/src/main/scala/com/twitter/server/Lifecycle.scala#L100">Lifecycle.Warmup.warmupComplete</a>.</li>
+</ul>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">When overriding a server <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call
+<cite>super.lifecycleMethod()</cite> in your overridden implementation to ensure that the server correctly
+completes the startup process.</p>
 </div>
+</div>
+<div class="section" id="lifecycle-callbacks">
+<h3>Lifecycle Callbacks<a class="headerlink" href="#lifecycle-callbacks" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><cite>setup()</cite> - called at the end of the <cite>postInjectorStartup()</cite> phase.</li>
+<li><cite>warmup()</cite> - allows for user-defined server warmup.</li>
+<li><cite>start()</cite> - called at the end of the server <cite>main</cite> before awaiting on any Awaitables.</li>
+</ul>
+<p>The main points of entry to the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer</span></code></a> are the lifecycle callbacks:
+<code class="docutils literal"><span class="pre">#setup</span></code>, <code class="docutils literal"><span class="pre">#warmup</span></code>, and <code class="docutils literal"><span class="pre">#start</span></code>.</p>
+</div>
+</div>
+<div class="section" id="twitterserver-setup">
+<h2><cite>TwitterServer#setup</cite><a class="headerlink" href="#twitterserver-setup" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>#setup()</cite> lifecycle callback method is executed at the end of the
+<cite>TwitterServer#postInjectorStartup</cite> <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method
+(see: <a class="reference external" href="../getting-started/lifecycle.html#startup">Startup Lifecycle</a>). That is, after the creation
+of the Injector but before server warmup has been performed allowing for anything created or started
+in this callback to be used in warmup and for instances to be promoted to old gen during object
+promotion in the <cite>beforePostWarmup</cite> lifecycle phase.</p>
+<p>Note: in the <a class="reference external" href="../http/server.html"><code class="docutils literal"><span class="pre">HttpServer</span></code></a> and <a class="reference external" href="../thrift/server.html"><code class="docutils literal"><span class="pre">ThriftServer</span></code></a> traits from <a class="reference external" href="../http/server.html"><cite>finatra-http</cite></a> and <a class="reference external" href="../thrift/server.html"><cite>finatra-thrift</cite></a>
+respectively, routing is configured in the <cite>postInjectorStartup</cite> lifecycle phase. However any logic
+in the <cite>#setup</cite> callback will executed <strong>after</strong> all installed modules have started (see:
+<a class="reference external" href="../getting-started/modules.html#module-lifecycle">TwitterModule Lifecycle</a>) and <strong>before</strong>
+<cite>HttpRouter</cite> or <cite>ThriftRouter</cite> configuration.</p>
+<div class="section" id="what-goes-here">
+<h3>What Goes Here?<a class="headerlink" href="#what-goes-here" title="Permalink to this headline">¶</a></h3>
+<p>Any logic to execute before object promotion and before the server warmup is performed. This is thus
+before any external interface has been bound and thus before the server is announced as &#8220;healthy&#8221;.</p>
 <p>Any exception thrown from this method will fail the server startup.</p>
+<p>When overriding any lifecycle methods and callbacks, it is important to <strong>not perform any blocking
+operations</strong> as you will prevent the server from properly starting. If there is blocking work that
+must be done, it is strongly recommended that you perform this work in a
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.</p>
+<p>See the Finatra utility: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala"><code class="docutils literal"><span class="pre">FuturePools</span></code></a> for creating named pools.</p>
+</div>
+</div>
+<div class="section" id="twitterserver-warmup">
+<h2><cite>TwitterServer#warmup</cite><a class="headerlink" href="#twitterserver-warmup" title="Permalink to this headline">¶</a></h2>
+<p>For detailed information see <a class="reference external" href="../http/warmup.html">HTTP Server Warmup</a>, or
+<a class="reference external" href="../thrift/warmup.html">Thrift Server Warmup</a>.</p>
 </div>
 <div class="section" id="twitterserver-start">
 <h2><cite>TwitterServer#start</cite><a class="headerlink" href="#twitterserver-start" title="Permalink to this headline">¶</a></h2>
-<p>Any logic to be run after the server is reported as healthy, bound to an external interface and fully started is placed in the
-<code class="docutils literal"><span class="pre">#start</span></code> method. This is typically starting long live background processes, starting a processor for incoming data from an
-external interface (e.g., it should only be started once the external interface has been successfully bound to port and is accepting
-traffic), or any other work that must be completed as part of server startup.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>Put any work to happen after the server is bound to an external port and announced as healthy in the <code class="docutils literal"><span class="pre">start</span></code> lifecycle method.</p>
-<p>Remember, that when overriding any <code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated method you <strong>MUST</strong> first call <cite>super()</cite> in the method to ensure
-the framework lifecycle events happen accordingly.</p>
-<p class="last">As with all lifecycle methods, it is important to <strong>not perform any blocking operations</strong> as you will prevent the server
-from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
-<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.
-See the Finatra utility: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala"><code class="docutils literal"><span class="pre">FuturePools</span></code></a> for creating named pools.</p>
-</div>
+<p>Any logic to be run after the server is reported as healthy, bound to an external interface, and
+before awaiting on any Awaitables is placed in the <cite>#start()</cite> method. This is typically starting
+long live background processes, starting any processor that should only be started once the
+external interface has been successfully bound to port and is accepting traffic, or any other work
+that must be completed aspart of server startup.</p>
+<div class="section" id="id1">
+<h3>What Goes Here?<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Work to happen after the server is bound to any external port, has performed warmup, object promotion,
+and is announced as &#8220;healthy&#8221;.</p>
 <p>Any exception thrown from this method will fail the server startup.</p>
-<div class="admonition important">
-<p class="first admonition-title">Important</p>
-<p class="last">Users should prefer using the <a class="reference external" href="../http/server.html"><code class="docutils literal"><span class="pre">HttpServer</span></code></a> or <a class="reference external" href="../thrift/server.html"><code class="docutils literal"><span class="pre">ThriftServer</span></code></a> traits from <a class="reference external" href="../http/server.html"><cite>finatra-http</cite></a> and
-<a class="reference external" href="../thrift/server.html"><cite>finatra-thrift</cite></a> respectively, for serving HTTP or Thrift external interfaces over overriding
-lifecycle methods.</p>
+<p>When overriding any lifecycle methods and callbacks, it is important to <strong>not perform any blocking
+operations</strong> in your override as you will prevent the server from properly starting. If there is
+blocking work that must be done, it is strongly recommended that you perform this work in a
+<a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.</p>
+<p>See the Finatra utility: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala"><code class="docutils literal"><span class="pre">FuturePools</span></code></a> for creating named pools.</p>
 </div>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<p>For details see the <a class="reference external" href="../testing/index.html">Testing with Finatra</a> section and the Finatra <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples">examples</a> for detailed examples with tests.</p>
+<p>For details see the <a class="reference external" href="../testing/index.html">Testing with Finatra</a> section and the Finatra
+<a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples">examples</a> for detailed examples with tests.</p>
 </div>
 <div class="section" id="more-information">
 <h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
-<p>For more information on the server lifecycle see the <a class="reference external" href="../getting-started/lifecycle.html">Application and Server Lifecycle</a> section
-which contains details around the order of lifecycle events during <a class="reference external" href="../getting-started/lifecycle.html#startup">startup</a> and
-considerations during <a class="reference external" href="../getting-started/lifecycle.html#shutdown">shutdown</a>.</p>
+<p>For more information on the server lifecycle see the <a class="reference external" href="../getting-started/lifecycle.html">Application and Server Lifecycle</a>
+section which contains details around the order of lifecycle events during <a class="reference external" href="../getting-started/lifecycle.html#startup">startup</a>
+and considerations during <a class="reference external" href="../getting-started/lifecycle.html#shutdown">shutdown</a>.</p>
 </div>
 </div>
 
@@ -197,9 +265,22 @@ considerations during <a class="reference external" href="../getting-started/lif
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Creating an injectable <cite>TwitterServer</cite></a><ul>
-<li><a class="reference internal" href="#example">Example</a></li>
-<li><a class="reference internal" href="#twitterserver-postwarmup"><cite>TwitterServer#postWarmup</cite></a></li>
-<li><a class="reference internal" href="#twitterserver-start"><cite>TwitterServer#start</cite></a></li>
+<li><a class="reference internal" href="#basic-example">Basic Example</a></li>
+<li><a class="reference internal" href="#advanced-example">Advanced Example</a></li>
+<li><a class="reference internal" href="#overriding-server-lifecycle-functions">Overriding Server Lifecycle Functions</a><ul>
+<li><a class="reference internal" href="#lifecycle-annotated-methods"><code class="docutils literal"><span class="pre">&#64;Lifecycle</span></code>-annotated Methods</a></li>
+<li><a class="reference internal" href="#lifecycle-callbacks">Lifecycle Callbacks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#twitterserver-setup"><cite>TwitterServer#setup</cite></a><ul>
+<li><a class="reference internal" href="#what-goes-here">What Goes Here?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#twitterserver-warmup"><cite>TwitterServer#warmup</cite></a></li>
+<li><a class="reference internal" href="#twitterserver-start"><cite>TwitterServer#start</cite></a><ul>
+<li><a class="reference internal" href="#id1">What Goes Here?</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#testing">Testing</a></li>
 <li><a class="reference internal" href="#more-information">More Information</a></li>
 </ul>

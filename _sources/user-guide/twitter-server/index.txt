@@ -1,121 +1,197 @@
+.. _injectable_twitter_server:
+
 Creating an injectable |TwitterServer|_
 =======================================
 
-To create an injectable |c.t.server.TwitterServer|_, first depend on the `inject-server` library. Then
-use the `inject framework <../getting-started/framework.html#inject>`__ to create an injectable
-TwitterServer. Finatra provides an injectable version of the |c.t.server.TwitterServer|_ trait:
-|c.t.inject.server.TwitterServer|_.
+To create an injectable |c.t.server.TwitterServer|_, first depend on the `inject-server` library. We
+also recommend using `Logback <http://logback.qos.ch/>`__ as your
+`SLF4J <http://www.slf4j.org/manual.html>`__ implementation. E.g.,
 
-Extending the |c.t.inject.server.TwitterServer|_ trait creates an injectable |TwitterServer|_.
+with sbt:
 
-This allows for the use of `dependency injection <../getting-started/basics.html#dependency-injection>`__
-in a |TwitterServer|_ with support for `modules <../getting-started/modules.html>`__ which allows
-for `powerful feature testing <../testing/index.html#types-of-tests>`__ of the server.
+.. parsed-literal::
 
-Example
--------
+    "com.twitter" %% "inject-server" % "\ |release|\ ",
+    "ch.qos.logback" % "logback-classic" % versions.logback,
+
+For more information on logging with Finatra see:
+`Introduction to Logging With Finatra <../logging/index.html#introduction-to-logging-with-finatra>`__.
+
+Create a new class which extends |c.t.inject.server.TwitterServer|_:
+
+Basic Example
+-------------
+
+An example of a simple injectable |TwitterServer|_:
 
 .. code:: scala
 
-	import com.twitter.inject.Logging
-	import com.twitter.inject.server.TwitterServer
+    import com.twitter.inject.server.TwitterServer
 
-	object MyTwitterServerMain extends MyTwitterServer
+    object MyServerMain extends MyServer
 
-	class MyTwitterServer
-	  extends TwitterServer
-	  with Logging {
+    class MyServer extends TwitterServer {
 
-	  override val modules = Seq(
-	    MyModule1)
+      override protected def start(): Unit = {
+        // It is important to remember to NOT BLOCK this method.
+        ...
+      }
+    }
 
-	  @Lifecycle
-	  override protected def postWarmup(): Unit = {
-	    super.postWarmup()
+This will use the `inject framework <../getting-started/framework.html#inject>`__ to create an
+injectable `TwitterServer`. Finatra provides |c.t.inject.server.TwitterServer|_ as an injectable
+version of the `TwitterServer <https://twitter.github.io/twitter-server/>`__
+|c.t.server.TwitterServer|_ trait.
 
-	    // Bind any external interfaces here, register them to be closed on server exit, and add them
-	    // to the list of awaitables that the server will block on by call the this.await(Awaitable*) method.
+Specifically, this allows for the use of `dependency injection <../getting-started/basics.html#dependency-injection>`__
+in a |TwitterServer|_ with support for `Modules <../getting-started/modules.html>`__ allowing for
+`powerful feature testing <../testing/index.html#types-of-tests>`__ of the server.
 
-	    // It is important to remember to NOT BLOCK this method.
-	  }
+Advanced Example
+----------------
 
-	  override protected def start(): Unit = {
-	    // Any additional server startup logic to perform after the server is reported healthy goes here.
+.. code:: scala
 
-	    // It is important to remember to NOT BLOCK this method.
-	  }
-	}
+    import com.twitter.inject.Logging
+    import com.twitter.inject.server.TwitterServer
 
-The two points of entry to the |c.t.inject.server.TwitterServer|_ are the ``#postWarmup`` and ``#start`` methods.
+    object MyTwitterServerMain extends MyTwitterServer
 
-`TwitterServer#postWarmup`
---------------------------
+    class MyTwitterServer
+      extends TwitterServer
+      with Logging {
 
-If you look at the `Startup Lifecycle <../getting-started/lifecycle.html#startup>`__ you will see that ``postWarmup`` is executed
-after server warmup has been performed and thus after `object promotion and initial garbage collection <../getting-started/lifecycle.html#application-and-server-lifecycle>`__,
-but before reporting that the server is healthy (via the `HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#admin-http-interface#lifecycle-management>`__
-``/health`` endpoint).
+      override val modules = Seq(
+        MyModule1)
 
-In the |HttpServer|_ and |ThriftServer|_ traits the framework will bind any external interfaces and
-perform announcing of the server in `postWarmup` ``@Lifecycle`` method. External interface binding and
-announcing is done at this point in the lifecycle such that if binding the external interface to a
-port fails, we do not report the server as healthy in the
-`HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#admin-http-interface#lifecycle-management>`__.
+      override protected def setup(): Unit = {
+        // Create/start a pub-sub component and add it to the list of Awaitables, e.g., await(component)
+        // It is important to remember to NOT BLOCK this method
+        ...
+      }
 
-.. note::
+      override protected def warmup(): Unit = {
+        handle[MyWarmupHandler]()
+      }
 
-  Put any logic to happen before the server is announced as "healthy" in the ``postWarmup`` lifecycle method. Typically, this
-  is any binding of an external interface but could be any logic that must be done to present the server as "healthy".
+      @Lifecycle
+      override protected def postWarmup(): Unit = {
+        super.postWarmup()
 
-  Remember, that when overriding any ``@Lifecycle``-annotated method you **MUST** first call `super()` in the method to ensure
-  the framework lifecycle events happen accordingly.
+        // It is important to remember to NOT BLOCK this method and to call SUPER.
+        ...
+      }
 
-  As with all lifecycle methods, it is important to **not perform any blocking operations** as you will prevent the server
-  from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
-  `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
-  See the Finatra utility: |FuturePools|_ for creating named pools.
+      override protected def start(): Unit = {
+        // It is important to remember to NOT BLOCK this method
+        ...
+      }
+    }
+
+Overriding Server Lifecycle Functions
+-------------------------------------
+
+You can hook into the server startup lifecycle by overriding ``@Lifecycle``-annotated methods or
+provided lifecycle callbacks.
+
+``@Lifecycle``-annotated Methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- `postInjectorStartup` - after creation and initialization of the Injector.
+- `beforePostWarmup` - this phase `performs object promotion <https://github.com/twitter/twitter-server/blob/5096d7ae20006114707a5124ca895744509b3d75/server/src/main/scala/com/twitter/server/Lifecycle.scala#L93>`__
+  before the binding of any external interface (which typically means the server will start
+  accepting traffic) occurs in `postWarmup`
+- `postWarmup` - the framework binds the external HTTP interface.
+- `afterPostWarmup` - signal the server is healthy, via
+  `Lifecycle.Warmup.warmupComplete <https://github.com/twitter/twitter-server/blob/5096d7ae20006114707a5124ca895744509b3d75/server/src/main/scala/com/twitter/server/Lifecycle.scala#L100>`__.
+
+.. caution:: When overriding a server ``@Lifecycle``-annotated method you **MUST** first call
+    `super.lifecycleMethod()` in your overridden implementation to ensure that the server correctly
+    completes the startup process.
+
+Lifecycle Callbacks
+^^^^^^^^^^^^^^^^^^^
+
+- `setup()` - called at the end of the `postInjectorStartup()` phase.
+- `warmup()` - allows for user-defined server warmup.
+- `start()` - called at the end of the server `main` before awaiting on any Awaitables.
+
+The main points of entry to the |c.t.inject.server.TwitterServer|_ are the lifecycle callbacks:
+``#setup``, ``#warmup``, and ``#start``.
+
+`TwitterServer#setup`
+---------------------
+
+The `#setup()` lifecycle callback method is executed at the end of the
+`TwitterServer#postInjectorStartup` ``@Lifecycle``-annotated method
+(see: `Startup Lifecycle <../getting-started/lifecycle.html#startup>`__). That is, after the creation
+of the Injector but before server warmup has been performed allowing for anything created or started
+in this callback to be used in warmup and for instances to be promoted to old gen during object
+promotion in the `beforePostWarmup` lifecycle phase.
+
+Note: in the |HttpServer|_ and |ThriftServer|_ traits from |finatra-http|_ and |finatra-thrift|_
+respectively, routing is configured in the `postInjectorStartup` lifecycle phase. However any logic
+in the `#setup` callback will executed **after** all installed modules have started (see:
+`TwitterModule Lifecycle <../getting-started/modules.html#module-lifecycle>`__) and **before**
+`HttpRouter` or `ThriftRouter` configuration.
+
+What Goes Here?
+^^^^^^^^^^^^^^^
+
+Any logic to execute before object promotion and before the server warmup is performed. This is thus
+before any external interface has been bound and thus before the server is announced as "healthy".
 
 Any exception thrown from this method will fail the server startup.
+
+When overriding any lifecycle methods and callbacks, it is important to **not perform any blocking
+operations** as you will prevent the server from properly starting. If there is blocking work that
+must be done, it is strongly recommended that you perform this work in a
+`FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
+
+See the Finatra utility: |FuturePools|_ for creating named pools.
+
+`TwitterServer#warmup`
+----------------------
+
+For detailed information see `HTTP Server Warmup <../http/warmup.html>`__, or
+`Thrift Server Warmup <../thrift/warmup.html>`__.
 
 `TwitterServer#start`
 ---------------------
 
-Any logic to be run after the server is reported as healthy, bound to an external interface and fully started is placed in the
-``#start`` method. This is typically starting long live background processes, starting a processor for incoming data from an
-external interface (e.g., it should only be started once the external interface has been successfully bound to port and is accepting
-traffic), or any other work that must be completed as part of server startup.
+Any logic to be run after the server is reported as healthy, bound to an external interface, and
+before awaiting on any Awaitables is placed in the `#start()` method. This is typically starting
+long live background processes, starting any processor that should only be started once the
+external interface has been successfully bound to port and is accepting traffic, or any other work
+that must be completed aspart of server startup.
 
-.. note::
+What Goes Here?
+^^^^^^^^^^^^^^^
 
-  Put any work to happen after the server is bound to an external port and announced as healthy in the ``start`` lifecycle method.
-
-  Remember, that when overriding any ``@Lifecycle``-annotated method you **MUST** first call `super()` in the method to ensure
-  the framework lifecycle events happen accordingly.
-
-  As with all lifecycle methods, it is important to **not perform any blocking operations** as you will prevent the server
-  from starting. If there is blocking work that must be done, it is strongly recommended that you perform this work in a
-  `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
-  See the Finatra utility: |FuturePools|_ for creating named pools.
+Work to happen after the server is bound to any external port, has performed warmup, object promotion,
+and is announced as "healthy".
 
 Any exception thrown from this method will fail the server startup.
 
-.. important::
+When overriding any lifecycle methods and callbacks, it is important to **not perform any blocking
+operations** in your override as you will prevent the server from properly starting. If there is
+blocking work that must be done, it is strongly recommended that you perform this work in a
+`FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
 
-  Users should prefer using the |HttpServer|_ or |ThriftServer|_ traits from |finatra-http|_ and
-  |finatra-thrift|_ respectively, for serving HTTP or Thrift external interfaces over overriding
-  lifecycle methods.
+See the Finatra utility: |FuturePools|_ for creating named pools.
 
 Testing
 -------
 
-For details see the `Testing with Finatra <../testing/index.html>`__ section and the Finatra `examples <https://github.com/twitter/finatra/tree/develop/examples>`__ for detailed examples with tests.
+For details see the `Testing with Finatra <../testing/index.html>`__ section and the Finatra
+`examples <https://github.com/twitter/finatra/tree/develop/examples>`__ for detailed examples with tests.
 
 More Information
 ----------------
 
-For more information on the server lifecycle see the `Application and Server Lifecycle <../getting-started/lifecycle.html>`__ section
-which contains details around the order of lifecycle events during `startup <../getting-started/lifecycle.html#startup>`__ and
-considerations during `shutdown <../getting-started/lifecycle.html#shutdown>`__.
+For more information on the server lifecycle see the `Application and Server Lifecycle <../getting-started/lifecycle.html>`__
+section which contains details around the order of lifecycle events during `startup <../getting-started/lifecycle.html#startup>`__
+and considerations during `shutdown <../getting-started/lifecycle.html#shutdown>`__.
 
 .. |c.t.inject.server.TwitterServer| replace:: ``c.t.inject.server.TwitterServer``
 .. _c.t.inject.server.TwitterServer: https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala
