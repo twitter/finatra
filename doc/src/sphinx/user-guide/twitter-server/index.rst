@@ -163,7 +163,7 @@ Any logic to be run after the server is reported as healthy, bound to an externa
 before awaiting on any `Awaitables` is placed in the `#start()` method. This is typically starting
 long live background processes, starting any processor that should only be started once the
 external interface has been successfully bound to port and is accepting traffic, or any other work
-that must be completed as part of server startup. See the `Awaiting Awaitables <>`__ section for
+that must be completed as part of server startup. See the `Awaiting Awaitables <#awaiting-awaitables>`__ section for
 more information.
 
 What Goes Here?
