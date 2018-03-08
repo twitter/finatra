@@ -120,11 +120,24 @@ trait TwitterServer
   /** Resolve all Finagle clients before warmup method called */
   protected def resolveFinagleClientsOnStartup: Boolean = true
 
+  /**
+   * Callback to register an [[Awaitable]] instance for the server to await (block) on.
+   *
+   * All registered [[Awaitable]] instances are entangled by the server such that if any
+   * registered [[Awaitable]] exits it will trigger all registered [[Awaitable]] instances to exit.
+   * @param awaitable an [[Awaitable]] instance to register.
+   * @see [[https://twitter.github.io/finatra/user-guide/twitter-server/index.html#awaiting-awaitables Awaiting Awaitables]]
+   */
   protected def await[T <: Awaitable[_]](awaitable: T): Unit = {
     assert(awaitable != null, "Cannot call #await() on null Awaitable.")
     this.awaitables.add(awaitable)
   }
 
+  /**
+   * Callback to register multiple [[Awaitable]] instances for the server to await (block) on.
+   * @param awaitables vararg list of [[Awaitable]] instances to register.
+   * @see [[TwitterServer.await(awaitable: Awaitable)]]
+   */
   protected def await(awaitables: Awaitable[_]*): Unit = {
     awaitables.foreach(await)
   }

@@ -160,10 +160,11 @@ For detailed information see `HTTP Server Warmup <../http/warmup.html>`__, or
 ---------------------
 
 Any logic to be run after the server is reported as healthy, bound to an external interface, and
-before awaiting on any Awaitables is placed in the `#start()` method. This is typically starting
+before awaiting on any `Awaitables` is placed in the `#start()` method. This is typically starting
 long live background processes, starting any processor that should only be started once the
 external interface has been successfully bound to port and is accepting traffic, or any other work
-that must be completed aspart of server startup.
+that must be completed as part of server startup. See the `Awaiting Awaitables <>`__ section for
+more information.
 
 What Goes Here?
 ^^^^^^^^^^^^^^^
@@ -179,6 +180,38 @@ blocking work that must be done, it is strongly recommended that you perform thi
 `FuturePool <https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala>`__.
 
 See the Finatra utility: |FuturePools|_ for creating named pools.
+
+Awaiting `Awaitables`
+---------------------
+
+If you have long-lived processes which your server starts that you want to ensure exit when the server
+exits or trigger the server to exit if the process exits, you should register them as an |c.t.util.Awaitable|_
+using the |c.t.inject.server.TwitterServer#await|_ callback function.
+
+The purpose of using this callback is to `entangle <https://en.wikipedia.org/wiki/Quantum_entanglement>`__
+all the `Awaitables` within your server such that if any of the `Awaitables` exit, the entire
+server process exits. For example, when starting a regular HTTP or Thrift server, you have two
+`ListeningServers <https://github.com/twitter/finagle/blob/d2a415b05f57be76dc26aba67bb3e834a0db5d38/finagle-core/src/main/scala/com/twitter/finagle/Server.scala#L13>`__
+in process: the TwitterServer |HTTP Admin Interface|_ and the started external server. If you await
+(block) on one of the servers and not the other, you can get into a case where the server not being
+awaited exits but the process continues to wait on the other server to satisfy the blocking `Awaitable`
+and thus does not exit.
+
+Why is this bad?
+^^^^^^^^^^^^^^^^
+
+As an example, if you await on just the external interface, the TwitterServer |HTTP Admin Interface|_
+may exit because of an error, causing health checking and metrics reporting to fail but your server
+process would remain running until killed. Conversely, if you await on just the |HTTP Admin Interface|_
+the external server may exit but the admin interface continues to report itself as healthy.
+
+Register `Awaitables`
+^^^^^^^^^^^^^^^^^^^^^
+
+The way to ensure that the exiting of a single `Awaitable` triggers exiting of any other `Awaitable`
+is to register each `Awaitable` with the server using the |c.t.inject.server.TwitterServer#await|_
+callback function. As the last step of the server startup lifecycle, the server will `entangle <https://en.wikipedia.org/wiki/Quantum_entanglement>`__
+all given `Awaitables`.
 
 Testing
 -------
@@ -216,3 +249,12 @@ and considerations during `shutdown <../getting-started/lifecycle.html#shutdown>
 
 .. |finatra-thrift| replace:: `finatra-thrift`
 .. _finatra-thrift: ../thrift/server.html
+
+.. |c.t.util.Awaitable| replace:: ``c.t.util.Awaitable``
+.. _c.t.util.Awaitable: https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Awaitable.scala
+
+.. |c.t.inject.server.TwitterServer#await| replace:: ``c.t.inject.server.TwitterServer#await``
+.. _c.t.inject.server.TwitterServer#await: https://github.com/twitter/finatra/blob/4d662426584d3811fe87f1cd976166e4f2465131/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L123
+
+.. |HTTP Admin Interface| replace:: `HTTP Admin Interface`
+.. _HTTP Admin Interface: https://twitter.github.io/twitter-server/Features.html#admin-http-interface>
