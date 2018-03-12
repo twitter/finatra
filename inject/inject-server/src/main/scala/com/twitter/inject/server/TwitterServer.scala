@@ -130,6 +130,7 @@ trait TwitterServer
    */
   protected def await[T <: Awaitable[_]](awaitable: T): Unit = {
     assert(awaitable != null, "Cannot call #await() on null Awaitable.")
+    debug(s"Adding ${awaitable.getClass.getName} to list of Awaitables")
     this.awaitables.add(awaitable)
   }
 
@@ -158,8 +159,9 @@ trait TwitterServer
   override final def main(): Unit = {
     super.main() // Call inject.App.main() to create Injector
 
-    info("Startup complete, server ready.")
+    info("Startup complete, server awaiting.")
     Awaiter.any(awaitables.asScala, period = 1.second)
+    info("Awaited awaitables have exited, server done.")
   }
 
   /**
@@ -310,7 +312,7 @@ trait TwitterServer
     super.afterPostWarmup()
 
     if (!disableAdminHttpServer) {
-      info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
+      info("admin http server started on port " + PortUtils.getPort(adminHttpServer))
     }
     warmupComplete()
   }
