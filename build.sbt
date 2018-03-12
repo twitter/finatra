@@ -196,6 +196,24 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
     "ch.qos.logback" % "logback-classic" % versions.logback)
 )
 
+lazy val baseClientSettings = baseSettings ++ buildSettings ++ publishSettings ++ Seq(
+  organization := "com.twitter",
+  publishArtifact := false,
+  publishLocal := {},
+  publish := {},
+  assemblyMergeStrategy in assembly := {
+    case "BUILD" => MergeStrategy.discard
+    case "META-INF/io.netty.versions.properties" => MergeStrategy.last
+    case other => MergeStrategy.defaultMergeStrategy(other)
+  }
+)
+
+lazy val exampleClientSettings = baseClientSettings ++ Seq(
+  libraryDependencies ++= Seq(
+    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test",
+    "ch.qos.logback" % "logback-classic" % versions.logback)
+)
+
 lazy val finatraModules = Seq[sbt.ProjectReference](
   benchmarks,
   http,
@@ -218,6 +236,7 @@ lazy val finatraExamples =
   // START EXAMPLES
   Seq[sbt.ProjectReference](
     benchmarkServer,
+    finatraClient,
     exampleHttpJavaServer,
     exampleInjectJavaServer,
     exampleWebDashboard,
@@ -773,6 +792,17 @@ lazy val benchmarkServer = (project in file("examples/benchmark-server"))
   ).dependsOn(
     http % "test->test;compile->compile",
     injectCore % "test->test")
+
+lazy val finatraClient = (project in file("examples/FinatraClient"))
+  .settings(exampleClientSettings)
+  .settings(noPublishSettings)
+  .settings(
+    name := "finatra-client",
+    moduleName := "finatra-client"
+  ).dependsOn(
+    http % "test->test;compile->compile",
+    injectCore % "test->test",
+    injectSlf4j)
 
 lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
   .settings(exampleServerSettings)
