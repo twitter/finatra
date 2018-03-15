@@ -61,7 +61,7 @@ lazy val versions = new {
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val junit = "4.12"
-  val libThrift = "0.5.0-7"
+  val libThrift = "0.10.0"
   val logback = "1.1.7"
   val mockito = "1.9.5"
   val mustache = "0.8.18"
@@ -432,7 +432,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
     moduleName := "inject-thrift",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
-      "com.twitter" % "libthrift" % versions.libThrift,
+      "org.apache.thrift" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "scrooge-core" % versions.twLibVersion,
