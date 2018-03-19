@@ -90,6 +90,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * @param clientId the client Id to use in creating the thrift client.
    *
    * @return a Finagle Thrift client in the given form.
+   * @see [[com.twitter.finagle.ThriftMux.Client.build(dest: String)]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
    */
   def thriftClient[ThriftService: ClassTag](
@@ -116,7 +117,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * @param clientId the client Id to use in creating the thrift client.
    *
    * @return a Finagle Thrift client in the given form.
-   * @see [[com.twitter.finagle.thrift.ThriftRichClient.servicePerEndpoint]]
+   * @see [[com.twitter.finagle.ThriftMux.Client.servicePerEndpoint]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id2 Scrooge Finagle Integration - ServicePerEndpoint]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id3 Scrooge Finagle Integration - ReqRepServicePerEndpoint]]
    */
@@ -149,7 +150,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    *
    * @return a Finagle Thrift client in the `MyService.MethodPerEndpoint` form of a
    *         method-per-endpoint.
-   * @see [[com.twitter.finagle.thrift.ThriftRichClient.methodPerEndpoint]]
+   * @see [[com.twitter.finagle.ThriftMux.Client.methodPerEndpoint]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
    */
   def methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](
@@ -157,7 +158,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   )(
     implicit builder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
   ): MethodPerEndpoint = {
-    thriftMuxClient
+    ThriftMux.Client
       .methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](servicePerEndpoint)
   }
 
@@ -186,7 +187,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * @param servicePerEndpoint the service-per-endpoint to convert to a method-per-endpoint.
    *
    * @return a Finagle Thrift client in the higher-kinded form of a method-per-endpoint.
-   * @see [[com.twitter.finagle.thrift.ThriftRichClient.thriftService]]
+   * @see [[com.twitter.finagle.ThriftMux.Client.thriftService]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
    */
   @deprecated("Use #methodPerEndpoint", "2018-01-12")
@@ -195,6 +196,6 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   )(
     implicit builder: ThriftServiceBuilder[ServicePerEndpoint, ThriftService]
   ): ThriftService = {
-    thriftMuxClient.thriftService[ServicePerEndpoint, ThriftService](servicePerEndpoint)
+    ThriftMux.Client.thriftService[ServicePerEndpoint, ThriftService](servicePerEndpoint)
   }
 }

@@ -108,8 +108,7 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   final def providesMethodPerEndpoint(
     servicePerEndpoint: ServicePerEndpoint
   ): MethodPerEndpoint = {
-    assert(thriftMuxClient != null, "Unexpected order of initialization.")
-    thriftMuxClient
+    ThriftMux.Client
       .methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](servicePerEndpoint)
   }
 
