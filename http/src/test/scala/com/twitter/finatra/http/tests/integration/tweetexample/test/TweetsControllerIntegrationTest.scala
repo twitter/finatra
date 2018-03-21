@@ -8,17 +8,26 @@ import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
 
+import scala.collection.mutable
+
 class TweetsControllerIntegrationTest extends FeatureTest {
+
+  val onWriteLog: mutable.ArrayBuffer[String] = new mutable.ArrayBuffer[String]()
 
   override val server = new EmbeddedHttpServer(
     new TweetsEndpointServer,
     defaultRequestHeaders = Map("X-UserId" -> "123"),
     // Set client flags to also start on HTTPS port
     flags = Map("https.port" -> ":0", "cert.path" -> "", "key.path" -> "")
-  )
+  ).bind[mutable.ArrayBuffer[String]](onWriteLog)
 
   lazy val streamingJsonHelper =
     new StreamingJsonTestHelper(server.mapper)
+
+  override def beforeEach(): Unit = {
+    super.beforeEach()
+    onWriteLog.clear()
+  }
 
   test("get tweet 1") {
     val tweet =
@@ -132,6 +141,15 @@ class TweetsControllerIntegrationTest extends FeatureTest {
 
   test("get streaming custom toBuf") {
     server.httpGet("/tweets/streaming_custom_tobuf", andExpect = Status.Ok, withBody = "ABC")
+  }
+
+  test("get streaming with transformer") {
+    server.httpGet("/tweets/streaming_with_transformer", andExpect = Status.Ok, withBody = "abc")
+  }
+
+  test("get streaming with onWrite") {
+    server.httpGet("/tweets/streaming_with_onWrite", andExpect = Status.Ok, withBody = "ABC")
+    assert(onWriteLog == Seq("a", "b", "c"))
   }
 
   test("get streaming custom toBuf with custom headers") {

@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Created a new API into `c.t.f.h.response.StreamingResponse` which permits passing
+  a `transformer` which is an `AsynStream[T] => AsyncStream[(U, Buf)]` for serialization purposes,
+  as well as two callbacks -- `onDisconnect`, called when the stream is disconnected, and `onWrite`,
+  which is a `respond` side-effecting callback to every individual write to the stream. 
+  ``PHAB_ID=D147925``
+
 ### Changed
 
 ### Fixed
