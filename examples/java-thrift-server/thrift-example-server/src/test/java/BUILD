@@ -5,7 +5,7 @@ junit_tests(
         "3rdparty/jvm/com/google/guava",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",
-        "3rdparty/jvm/org/apache/thrift:libthrift-0.5.0",
+        "3rdparty/jvm/org/apache/thrift:libthrift",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "3rdparty/jvm/org/slf4j:slf4j-simple",

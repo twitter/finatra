@@ -4,7 +4,7 @@ java_library(
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/javax/inject:javax.inject",
-        "3rdparty/jvm/org/apache/thrift:libthrift-0.5.0",
+        "3rdparty/jvm/org/apache/thrift:libthrift",
         "3rdparty/jvm/org/slf4j:slf4j-api",
         "finagle/finagle-core/src/main/scala",
         "finagle/finagle-http/src/main/scala",
