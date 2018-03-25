@@ -26,8 +26,6 @@ class DoEverythingWarmupHandler @Inject()(warmup: HttpWarmup) extends Handler wi
       case e: Throwable =>
         // we don't want failed warmup to prevent the server from starting
         error(e.getMessage, e)
-    } finally {
-      warmup.close()
     }
     info("Warm up done.")
   }

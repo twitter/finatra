@@ -61,10 +61,8 @@ trait App extends com.twitter.app.App with Logging {
     afterPostWarmup()
     installedModules.postWarmupComplete()
 
-    onExit {
-      installedModules.shutdown()
-      installedModules.close()
-    }
+    /* Register close and shutdown of InstalledModules */
+    registerInstalledModulesExits()
 
     /* Lifecycle is complete, mark the server as started. */
     setAppStarted(true)
@@ -179,6 +177,14 @@ trait App extends com.twitter.app.App with Logging {
   protected def run(): Unit = {}
 
   /* Private */
+
+  // Closing will be performing in parallel
+  private[this] def registerInstalledModulesExits(): Unit = {
+    val funcs = installedModules.shutdown() ++ installedModules.close()
+    funcs.foreach { fn =>
+      onExit(fn.apply())
+    }
+  }
 
   private def setAppStarted(value: Boolean): Unit = {
     started = value

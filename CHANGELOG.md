@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-server: Capture errors on close of the underlying TwitterServer. The embedded
+  testing utilities can now capture and report on an exception that occurs during close 
+  of the underlying TwitterServer. `EmbeddedTwitterServer#assertCleanShutdown` inspects 
+  for any Throwable captured from closing the underlying server which it will then throw.
+  ``PHAB_ID=D148946``
+
 * finatra-http: Created a new API into `c.t.f.h.response.StreamingResponse` which permits passing
   a `transformer` which is an `AsynStream[T] => AsyncStream[(U, Buf)]` for serialization purposes,
   as well as two callbacks -- `onDisconnect`, called when the stream is disconnected, and `onWrite`,
@@ -13,6 +19,12 @@ All notable changes to this project will be documented in this file. Note that `
   ``PHAB_ID=D147925``
 
 ### Changed
+
+* inject-server: Move HTTP-related concerns out of the embedded testing utilities into
+  specific HTTP "clients". The exposed `httpAdminClient` in the `EmbeddedTwitterServer`
+  and the `httpClient` and `httpsClient` in the `EmbeddedHttpServer` are no longer just
+  Finagle Services from Request to Response, but actual objects. The underlying Finagle
+  `Service[Request, Response]` can be accessed via `Client.service`. ``PHAB_ID=D148946``
 
 ### Fixed
 

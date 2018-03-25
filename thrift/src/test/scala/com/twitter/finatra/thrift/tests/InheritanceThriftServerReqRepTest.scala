@@ -136,7 +136,7 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
       ThriftMux.client
         .filtered(muxCtxtsFilter.toFilter)
         .build[ServiceB.MethodPerEndpoint](
-          PortUtils.loopbackAddressForPort(server.thriftPort),
+          PortUtils.loopbackAddressForPort(server.thriftPort()),
           "client123"
         )
 

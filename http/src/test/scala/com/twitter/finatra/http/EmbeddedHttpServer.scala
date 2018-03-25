@@ -4,15 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType
 import com.google.inject.Stage
 import com.twitter.finagle.http.{Method, Status, _}
-import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
+import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
-import com.twitter.inject.server.PortUtils.{ephemeralLoopback, loopbackAddressForPort}
-import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
-import com.twitter.util.{Future, Await, Memoize, Try}
+import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.inject.server.{EmbeddedHttpClient, EmbeddedTwitterServer, PortUtils, Ports, info}
+import com.twitter.inject.server.PortUtils.ephemeralLoopback
+import com.twitter.util.{Duration, Memoize}
 import java.lang.annotation.Annotation
-import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe._
-import scala.util.control.NonFatal
+import scala.collection.JavaConverters._
 
 /**
  *
@@ -40,23 +40,26 @@ import scala.util.control.NonFatal
  * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded a
  *                              [[com.twitter.inject.app.StartupTimeoutException]] is thrown.
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
+ * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
+ *                         `defaultGracePeriod` when closing the underlying server.
  */
 class EmbeddedHttpServer(
-  val twitterServer: Ports,
+  override val twitterServer: Ports,
   flags: => Map[String, String] = Map(),
   args: => Seq[String] = Seq(),
   waitForWarmup: Boolean = true,
   stage: Stage = Stage.DEVELOPMENT,
   useSocksProxy: Boolean = false,
-  defaultRequestHeaders: Map[String, String] = Map(),
+  override val defaultRequestHeaders: Map[String, String] = Map(),
   defaultHttpSecure: Boolean = false,
-  mapperOverride: Option[FinatraObjectMapper] = None,
-  httpPortFlag: String = "http.port",
-  streamResponse: Boolean = false,
+  override val mapperOverride: Option[FinatraObjectMapper] = None,
+  override val httpPortFlag: String = "http.port",
+  override val streamResponse: Boolean = false,
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60,
-  failOnLintViolation: Boolean = false
+  failOnLintViolation: Boolean = false,
+  closeGracePeriod: Option[Duration] = None
 ) extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
       flags = flags + (httpPortFlag -> ephemeralLoopback),
@@ -69,65 +72,37 @@ class EmbeddedHttpServer(
       verbose = verbose,
       disableTestLogging = disableTestLogging,
       maxStartupTimeSeconds = maxStartupTimeSeconds,
-      failOnLintViolation = failOnLintViolation
-    ) {
+      failOnLintViolation = failOnLintViolation,
+      closeGracePeriod = closeGracePeriod
+    )
+  with ExternalHttpClient {
 
   /* Additional Constructors */
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) = {
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
-  }
 
   /* Overrides */
 
-  override protected def logStartup() {
+  /** Logs the external http and/or https host and port of the underlying EmbeddedHttpServer */
+  override protected[twitter] def logStartup(): Unit = {
     super.logStartup()
-    info(s"ExternalHttp   -> http://$externalHttpHostAndPort")
-  }
-
-  override protected def printNonEmptyResponseBody(response: Response): Unit = {
-    try {
-      info(mapper.writePrettyString(response.getContentString()))
-    } catch {
-      case e: Exception =>
-        info(response.contentString)
-    }
-    info("")
-  }
-
-  override protected def prettyRequestBody(request: Request): String = {
-    val printableBody = request.contentString.replaceAll("[\\p{Cntrl}&&[^\n\t\r]]", "?") //replace non-printable characters
-
-    Try {
-      mapper.writePrettyString(printableBody)
-    } getOrElse {
-      printableBody
+    info(s"ExternalHttp   -> http://$externalHttpHostAndPort", disableLogging)
+    if (twitterServer.httpsExternalPort.isDefined) {
+      info(s"ExternalHttps  -> https://$externalHttpsHostAndPort", disableLogging)
     }
   }
 
-  override def close(): Unit = {
-    if (!closed) {
-      super.close()
+  /* Public */
 
-      val awaitables: scala.collection.mutable.Seq[Future[Unit]] =
-        scala.collection.mutable.Seq.empty
+  /** A `host:post` String of the loopback and external "http" port for the underlying embedded HttpServer */
+  def externalHttpHostAndPort: String = {
+    PortUtils.loopbackAddressForPort(httpExternalPort())
+  }
 
-      if (twitterServer.httpExternalPort.isDefined) {
-        awaitables :+ httpClient.close()
-      }
-      if (twitterServer.httpsExternalPort.isDefined) {
-        awaitables :+ httpsClient.close()
-      }
-      try {
-        Await.all(awaitables: _*)
-      } catch {
-        case NonFatal(e) =>
-          info(s"Error while closing ${this.getClass.getSimpleName}: $e")
-          e.printStackTrace()
-      }
-
-      closed = true
-    }
+  /** A `host:post` String of the loopback and external "https" port for the underlying embedded HttpServer */
+  def externalHttpsHostAndPort: String = {
+    PortUtils.loopbackAddressForPort(httpsExternalPort())
   }
 
   /**
@@ -177,33 +152,10 @@ class EmbeddedHttpServer(
     this
   }
 
-  /* Public */
-
-  lazy val httpClient = {
-    createHttpClient("httpClient", httpExternalPort)
-  }
-
-  lazy val httpsClient = {
-    createHttpClient("httpsClient", httpsExternalPort, secure = true)
-  }
-
-  lazy val mapper = mapperOverride getOrElse injector.instance[FinatraObjectMapper]
-
-  lazy val httpExternalPort = {
-    start()
-    twitterServer.httpExternalPort.getOrElse(throw new Exception("External HTTP port not bound"))
-  }
-
-  lazy val httpsExternalPort = {
-    start()
-    twitterServer.httpsExternalPort.getOrElse(throw new Exception("External HTTPs port not bound"))
-  }
-
-  lazy val externalHttpHostAndPort = PortUtils.loopbackAddressForPort(httpExternalPort)
-  lazy val externalHttpsHostAndPort = PortUtils.loopbackAddressForPort(httpsExternalPort)
-
   /**
    * Performs a GET request against the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
    * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
@@ -255,6 +207,8 @@ class EmbeddedHttpServer(
    * Performs a GET request to the embedded server serializing the normalized
    * response#contentString into an instance of type [[ResponseType]].
    *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
+   *
    * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
@@ -305,11 +259,18 @@ class EmbeddedHttpServer(
         withJsonBodyNormalizer = withJsonBodyNormalizer
       )
 
-    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
+    jsonParseWithNormalizer(
+      response,
+      normalizeJsonParsedReturnValue,
+      mapper,
+      withJsonBodyNormalizer
+    )
   }
 
   /**
    * Performs a POST request to the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
    * @param postBody - body of the POST request
@@ -369,6 +330,8 @@ class EmbeddedHttpServer(
    * Performs a POST request to the embedded server serializing the normalized
    * response#contentString into an instance of type [[ResponseType]].
    *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
+   *
    * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param postBody - body of the POST request
@@ -423,11 +386,19 @@ class EmbeddedHttpServer(
       routeToAdminServer,
       secure
     )
-    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
+
+    jsonParseWithNormalizer(
+      response,
+      normalizeJsonParsedReturnValue,
+      mapper,
+      withJsonBodyNormalizer
+    )
   }
 
   /**
    * Performs a PUT request to the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
    * @param putBody - the body of the PUT request
@@ -487,6 +458,8 @@ class EmbeddedHttpServer(
    * Performs a PUT request to the embedded server serializing the normalized
    * response#contentString into an instance of type [[ResponseType]].
    *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
+   *
    * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param putBody - the body of the PUT request
@@ -541,11 +514,19 @@ class EmbeddedHttpServer(
       routeToAdminServer,
       secure
     )
-    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
+
+    jsonParseWithNormalizer(
+      response,
+      normalizeJsonParsedReturnValue,
+      mapper,
+      withJsonBodyNormalizer
+    )
   }
 
   /**
    * Performs a DELETE request to the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
    * @param deleteBody - the body of the DELETE request
@@ -607,6 +588,8 @@ class EmbeddedHttpServer(
    * Performs a DELETE request to the embedded server serializing the normalized
    * response#contentString into an instance of type [[ResponseType]].
    *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
+   *
    * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param deleteBody - the body of the DELETE request
@@ -661,11 +644,19 @@ class EmbeddedHttpServer(
       routeToAdminServer,
       secure
     )
-    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
+
+    jsonParseWithNormalizer(
+      response,
+      normalizeJsonParsedReturnValue,
+      mapper,
+      withJsonBodyNormalizer
+    )
   }
 
   /**
    * Performs a OPTIONS request to the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
    * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
@@ -715,6 +706,8 @@ class EmbeddedHttpServer(
 
   /**
    * Performs a PATCH request to the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
    * @param patchBody - the body of the PATCH request
@@ -774,6 +767,8 @@ class EmbeddedHttpServer(
    * Performs a PATCH request to the embedded server serializing the normalized
    * response#contentString into an instance of type [[ResponseType]].
    *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
+   *
    * @see [[com.twitter.finatra.json.FinatraObjectMapper]]#parse[T: Manifest](string: String)
    * @param path - URI of the request
    * @param patchBody - the body of the PATCH request
@@ -828,11 +823,19 @@ class EmbeddedHttpServer(
       routeToAdminServer,
       secure
     )
-    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
+
+    jsonParseWithNormalizer(
+      response,
+      normalizeJsonParsedReturnValue,
+      mapper,
+      withJsonBodyNormalizer
+    )
   }
 
   /**
    * Performs a HEAD request to the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param path - URI of the request
    * @param accept - add request Accept header with the given [[com.google.common.net.MediaType]]
@@ -883,6 +886,8 @@ class EmbeddedHttpServer(
   /**
    * Performs a form POST request to the embedded server.
    *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
+   *
    * @param path - URI of the request
    * @param params - a Map[String,String] of form params to send in the request
    * @param multipart - if this form post is a multi-part request, false by default
@@ -923,6 +928,8 @@ class EmbeddedHttpServer(
   /**
    * Performs a multi-part form POST request to the embedded server.
    *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
+   *
    * @param path - URI of the request
    * @param params - a Seq of [[com.twitter.finagle.http.FormElement]] to send in the request
    * @param multipart - if this form post is a multi-part request, true by default
@@ -961,7 +968,20 @@ class EmbeddedHttpServer(
   }
 
   /**
+   * For Java compatibility.
+   *
+   * @note Added to support tests from Java code which would need to manually set all arguments with default values
+   * @param request a [[com.twitter.finagle.http.Request]] to send to the embedded HttpServer
+   * @return the resultant [[com.twitter.finagle.http.Response]] returned from the embedded HttpServer
+   */
+  def httpRequest(request: Request): Response = {
+    httpRequest(request, suppress = false)
+  }
+
+  /**
    * Sends the given [[com.twitter.finagle.http.Request]] to the embedded server.
+   *
+   * @note Java users: see the more Java-friendly [[httpRequest(request: Request)]].
    *
    * @param request - built [[com.twitter.finagle.http.Request]] to send to the embedded server
    * @param suppress - suppress http client logging
@@ -1002,12 +1022,6 @@ class EmbeddedHttpServer(
       routeToAdminServer,
       secure = secure.getOrElse(defaultHttpSecure)
     )
-  }
-
-  // Note: Added to support tests from Java code which would need to manually set all arguments with default values
-  def httpRequest(request: Request): Response = {
-
-    httpRequest(request, suppress = false)
   }
 
   /**
@@ -1059,7 +1073,13 @@ class EmbeddedHttpServer(
       routeToAdminServer,
       secure
     )
-    jsonParseWithNormalizer(response, withJsonBodyNormalizer, normalizeJsonParsedReturnValue)
+
+    jsonParseWithNormalizer(
+      response,
+      normalizeJsonParsedReturnValue,
+      mapper,
+      withJsonBodyNormalizer
+    )
   }
 
   /* Private */
@@ -1076,7 +1096,7 @@ class EmbeddedHttpServer(
     secure: Option[Boolean]
   ): Response = {
     val request = RequestBuilder()
-      .url(normalizeURL(path))
+      .url(EmbeddedHttpClient.normalizeURL(path))
       .addHeaders(headers)
       .add(params)
       .buildFormPost(multipart = multipart)
@@ -1105,101 +1125,55 @@ class EmbeddedHttpServer(
     secure: Boolean
   ): Response = {
 
-    val (client, port) = chooseHttpClient(request.method, request.path, routeToAdminServer, secure)
-    request.headerMap.set("Host", loopbackAddressForPort(port))
-
-    val response =
-      httpExecute(client, request, headers, suppress, andExpect, withLocation, withBody)
-
-    if (withJsonBody != null) {
-      if (!withJsonBody.isEmpty)
-        JsonDiff.jsonDiff(
-          response.contentString,
-          withJsonBody,
-          withJsonBodyNormalizer,
-          verbose = false
-        )
-      else
-        response.contentString should equal("")
+    if (routeToAdminServer || matchesAdminRoute(request.method, request.path)) {
+      httpAdminClient(
+        request,
+        headers,
+        suppress,
+        andExpect,
+        withLocation,
+        withBody
+      )
+    } else if (secure) {
+      httpsClient(
+        request,
+        headers,
+        suppress,
+        andExpect,
+        withLocation,
+        withBody,
+        withJsonBody,
+        withJsonBodyNormalizer,
+        withErrors
+      )
+    } else {
+      httpClient(
+        request,
+        headers,
+        suppress,
+        andExpect,
+        withLocation,
+        withBody,
+        withJsonBody,
+        withJsonBodyNormalizer,
+        withErrors
+      )
     }
-
-    if (withErrors != null) {
-      JsonDiff.jsonDiff(response.contentString, Map("errors" -> withErrors), withJsonBodyNormalizer)
-    }
-
-    response
-  }
-
-  private def normalizeURL(path: String) = {
-    if (path.startsWith("http://"))
-      path
-    else
-      "http://localhost:8080%s".format(path)
-  }
-
-  private def paramsToElements(params: Map[String, String]): Seq[SimpleElement] = {
-    params.map { case (k, v) => SimpleElement(k, v) }.toSeq
-  }
-
-  private def chooseHttpClient(
-    method: Method,
-    path: String,
-    routeToAdmin: Boolean,
-    secure: Boolean
-  ) = {
-    if (routeToAdmin || matchesAdminRoute(method, path))
-      (httpAdminClient, httpAdminPort)
-    else if (secure)
-      (httpsClient, twitterServer.httpsExternalPort.get)
-    else
-      (httpClient, twitterServer.httpExternalPort.get)
   }
 
   private def matchesAdminRoute(method: Method, path: String): Boolean = {
     path.startsWith(HttpRouter.FinatraAdminPrefix) ||
-    adminHttpRouteMatchesPath(method -> path)
+      adminHttpRouteMatchesPath(method -> path)
   }
 
-  private val adminHttpRouteMatchesPath: ((Method, String)) => Boolean =
+  private[this] val adminHttpRouteMatchesPath: ((Method, String)) => Boolean =
     Memoize {
       case (method, path) =>
         adminHttpServerRoutes
           .exists(route => route.method == method && route.path == path)
     }
 
-  private def addAcceptHeader(
-    accept: MediaType,
-    headers: Map[String, String]
-  ): Map[String, String] = {
-    if (accept != null)
-      headers + (Fields.Accept -> accept.toString)
-    else
-      headers
+  private def paramsToElements(params: Map[String, String]): Seq[SimpleElement] = {
+    params.map { case (k, v) => SimpleElement(k, v) }.toSeq
   }
-
-  private def jsonParseWithNormalizer[T: Manifest](
-    response: Response,
-    normalizer: JsonNode => JsonNode,
-    normalizeParsedJsonNode: Boolean
-  ) = {
-    val jsonNode = {
-      val parsedJsonNode = mapper.parse[JsonNode](response.contentString)
-
-      if (normalizer != null && normalizeParsedJsonNode)
-        normalizer(parsedJsonNode)
-      else
-        parsedJsonNode
-    }
-
-    try {
-      mapper.parse[T](jsonNode)
-    } catch {
-      case e: Exception =>
-        println(
-          s"Json parsing error $e trying to parse response $response with body " + response.contentString
-        )
-        throw e
-    }
-  }
-
 }

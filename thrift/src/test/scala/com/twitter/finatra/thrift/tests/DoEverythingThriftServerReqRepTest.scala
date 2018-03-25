@@ -143,7 +143,7 @@ class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
       ThriftMux.client
         .filtered(muxCtxtsFilter.toFilter)
         .build[DoEverything.MethodPerEndpoint](
-          PortUtils.loopbackAddressForPort(server.thriftPort),
+          PortUtils.loopbackAddressForPort(server.thriftPort()),
           "client123"
         )
 

@@ -5,6 +5,7 @@ import com.google.inject.{Module => GuiceModule, _}
 import com.twitter.app.Flag
 import com.twitter.inject.{TwitterBaseModule, TwitterModuleLifecycle, Injector, Logging}
 import scala.collection.JavaConverters._
+import scala.PartialFunction.condOpt
 
 private[app] object InstalledModules {
 
@@ -41,11 +42,7 @@ private[app] object InstalledModules {
 
   /* Private */
 
-  /**
-   * Recursively capture all flags in the [[com.google.inject.Module]] object hierarchy.
-   *
-   * Note: We will not (cannot?) traverse through a normal Guice AbstractModule, to find 'installed' [[com.google.inject.Module]]s
-   */
+  /** Recursively capture all flags in the [[com.google.inject.Module]] object hierarchy. */
   private[app] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {
     (modules collect {
       case injectModule: TwitterBaseModule =>
@@ -98,31 +95,37 @@ private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceM
     }
   }
 
-  // Note: We don't rethrow so that all modules have a chance to shutdown
-  def shutdown(): Unit = {
-    modules.foreach {
-      case injectModule: TwitterModuleLifecycle =>
-        try {
-          injectModule.singletonShutdown(injector)
-        } catch {
-          case e: Throwable =>
-            warn("Shutdown method error in " + injectModule, e)
-        }
-      case _ =>
-    }
+  /**
+   * Collect shutdown `ExitFunctions` for [[com.google.inject.Module]] instances
+   * which implement the [[TwitterModuleLifecycle]]
+   */
+  def shutdown(): Seq[ExitFunction] = {
+    condOptModules(modules)(_.singletonShutdown(injector))
   }
 
-  // Note: We don't rethrow so that all modules have a chance to invoke close()
-  def close(): Unit = {
-    modules.foreach {
+  /**
+   * Collect close  `ExitFunctions` for [[com.google.inject.Module]] instances which
+   * implement the [[TwitterModuleLifecycle]]
+   */
+  def close(): Seq[ExitFunction] = {
+    condOptModules(modules)(_.close())
+  }
+
+  /* Private */
+
+  /**
+   * Iterates through the list of Modules to match only instances of TwitterModuleLifecycle
+   * on which to create an `ExitFunction` over the passed in TwitterModuleLifecycle function.
+   * @see [[scala.PartialFunction.condOpt]]
+   */
+  private[this] def condOptModules(
+    modules: Seq[GuiceModule]
+  )(
+    fn: (TwitterModuleLifecycle) => Unit
+  ): Seq[ExitFunction] = modules.flatMap { module =>
+    condOpt(module) {
       case injectModule: TwitterModuleLifecycle =>
-        try {
-          injectModule.close()
-        } catch {
-          case e: Throwable =>
-            warn("Close method error in " + injectModule, e)
-        }
-      case _ =>
+        () => fn(injectModule)
     }
   }
 }

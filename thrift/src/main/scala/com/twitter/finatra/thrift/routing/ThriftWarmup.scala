@@ -1,17 +1,13 @@
 package com.twitter.finatra.thrift.routing
 
 import com.twitter.finatra.thrift.internal.ThriftMethodService
-import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
 import com.twitter.inject.thrift.utils.ThriftMethodUtils._
 import com.twitter.scrooge.ThriftMethod
-import com.twitter.util.{Await, Try}
+import com.twitter.util.{Await, Future, Try}
 import javax.inject.Inject
 
 class ThriftWarmup @Inject()(router: ThriftRouter) extends Logging {
-
-  /* Use a FuturePool to avoid getting a ConstFuture from Future.apply(...) */
-  private val pool = FuturePools.fixedPool("Thrift Warmup", 1)
 
   /* Public */
 
@@ -31,7 +27,7 @@ class ThriftWarmup @Inject()(router: ThriftRouter) extends Logging {
     responseCallback: Try[M#SuccessType] => Unit = unitFunction _
   ): Unit = {
 
-    for (i <- 1 to times) {
+    for (_ <- 1 to times) {
       time(s"Warmup ${prettyStr(method)} completed in %sms.") {
         val response = executeRequest(method, args)
         responseCallback(response)
@@ -39,21 +35,18 @@ class ThriftWarmup @Inject()(router: ThriftRouter) extends Logging {
     }
   }
 
-  def close(): Unit = {
-    pool.executor.shutdownNow()
-  }
+  @deprecated("This is now a no-op.", "2018-03-20")
+  def close(): Unit = {}
 
   /* Private */
 
   private def executeRequest[M <: ThriftMethod](method: M, args: M#Args): Try[M#SuccessType] = {
+    Try { Await.result(routeRequest(method, args)) }
+  }
 
-    val response = pool {
-      info(s"Warmup ${prettyStr(method)}")
-      val service = router.methods(method).asInstanceOf[ThriftMethodService[M#Args, M#SuccessType]]
-      service(args)
-    }.flatten
-
-    Try { Await.result(response) }
+  private def routeRequest[M <: ThriftMethod](method: M, args: M#Args): Future[M#SuccessType] = {
+    val service = router.methods(method).asInstanceOf[ThriftMethodService[M#Args, M#SuccessType]]
+    service(args)
   }
 
   /**
@@ -62,5 +55,5 @@ class ThriftWarmup @Inject()(router: ThriftRouter) extends Logging {
    * @param a - [[AnyRef]]
    * @return Unit
    */
-  private def unitFunction(a: AnyRef): Unit = ()
+  private[this] def unitFunction(a: AnyRef): Unit = ()
 }

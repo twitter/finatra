@@ -9,7 +9,7 @@ import com.twitter.finagle.thrift.service.{
   ServicePerEndpointBuilder,
   ThriftServiceBuilder
 }
-import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
+import com.twitter.inject.server.{EmbeddedTwitterServer, info, PortUtils, Ports}
 import scala.reflect.ClassTag
 
 trait ThriftClient { self: EmbeddedTwitterServer =>
@@ -31,12 +31,22 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
 
   /* Overrides */
 
-  override protected def logStartup() {
+  /** Logs the external thrift host and port of the underlying embedded TwitterServer */
+  override protected[twitter] def logStartup(): Unit = {
     self.logStartup()
-    info(s"ExternalThrift -> thrift://$externalThriftHostAndPort\n")
+    info(s"ExternalThrift -> thrift://$externalThriftHostAndPort\n", disableLogging)
   }
 
-  override protected def combineArgs(): Array[String] = {
+  /**
+   * Adds the [[thriftPortFlag]] with a value pointing to the ephemeral loopback address to
+   * the list of flags to be passed to the underlying server.
+   * @see [[PortUtils.ephemeralLoopback]]
+   *
+   * @note this flag is also added in the EmbeddedThriftServer constructor but needs to be added
+   * here for when this trait is mixed into an EmbeddedTwitterServer or an EmbeddedHttpServer.
+   * The flags are de-duped prior to starting the underlying server.
+   */
+  override protected[twitter] def combineArgs(): Array[String] = {
     s"-$thriftPortFlag=${PortUtils.ephemeralLoopback}" +: self.combineArgs
   }
 

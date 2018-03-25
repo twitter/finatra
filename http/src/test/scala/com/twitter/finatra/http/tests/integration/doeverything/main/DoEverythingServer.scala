@@ -17,7 +17,7 @@ object DoEverythingServerMain extends DoEverythingServer
 
 class DoEverythingServer extends HttpServer {
 
-  override val name = "example-server"
+  override val name = "doeverything-server"
 
   override def statsReceiverModule: Module = DoEverythingStatsReceiverModule
 

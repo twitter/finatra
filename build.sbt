@@ -363,9 +363,13 @@ lazy val injectApp = (project in file("inject/inject-app"))
     injectCore % "test->test;compile->compile")
 
 lazy val injectServerTestJarSources =
-  Seq("com/twitter/inject/server/EmbeddedTwitterServer",
+  Seq(
+    "com/twitter/inject/server/AdminHttpClient",
+    "com/twitter/inject/server/EmbeddedHttpClient",
+    "com/twitter/inject/server/EmbeddedTwitterServer",
     "com/twitter/inject/server/FeatureTest",
     "com/twitter/inject/server/FeatureTestMixin",
+    "com/twitter/inject/server/package",
     "com/twitter/inject/server/WordSpecFeatureTest")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
@@ -577,9 +581,12 @@ lazy val jackson = project
     injectUtils)
 
 lazy val httpTestJarSources =
-  Seq("com/twitter/finatra/http/EmbeddedHttpServer",
+  Seq(
+    "com/twitter/finatra/http/EmbeddedHttpServer",
+    "com/twitter/finatra/http/ExternalHttpClient",
     "com/twitter/finatra/http/HttpMockResponses",
     "com/twitter/finatra/http/HttpTest",
+    "com/twitter/finatra/http/JsonAwareEmbeddedHttpClient",
     "com/twitter/finatra/http/StreamingJsonTestHelper")
 lazy val http = project
   .settings(projectSettings)

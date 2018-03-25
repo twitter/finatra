@@ -1,11 +1,12 @@
 package com.twitter.finatra.thrift
 
 import com.google.inject.Stage
-import com.twitter.inject.server.PortUtils._
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
+import com.twitter.inject.server.PortUtils._
+import com.twitter.util.Duration
 import java.lang.annotation.Annotation
-import scala.collection.JavaConverters._
 import scala.reflect.runtime.universe._
+import scala.collection.JavaConverters._
 
 /**
  * EmbeddedThriftServer allows a [[com.twitter.server.TwitterServer]] serving thrift endpoints to be started
@@ -26,6 +27,8 @@ import scala.reflect.runtime.universe._
  * @param disableTestLogging Disable all logging emitted from the test infrastructure.
  * @param maxStartupTimeSeconds Maximum seconds to wait for embedded server to start. If exceeded an Exception is thrown.
  * @param failOnLintViolation If server startup should fail due (and thus the test) to a detected lint rule issue after startup.
+ * @param closeGracePeriod An Optional grace period to use instead of the underlying server's
+ *                         `defaultGracePeriod` when closing the underlying server.
  */
 class EmbeddedThriftServer(
   override val twitterServer: Ports,
@@ -38,7 +41,8 @@ class EmbeddedThriftServer(
   verbose: Boolean = false,
   disableTestLogging: Boolean = false,
   maxStartupTimeSeconds: Int = 60,
-  failOnLintViolation: Boolean = false
+  failOnLintViolation: Boolean = false,
+  closeGracePeriod: Option[Duration] = None
 ) extends EmbeddedTwitterServer(
       twitterServer,
       flags + (thriftPortFlag -> ephemeralLoopback),
@@ -49,16 +53,28 @@ class EmbeddedThriftServer(
       verbose = verbose,
       disableTestLogging = disableTestLogging,
       maxStartupTimeSeconds = maxStartupTimeSeconds,
-      failOnLintViolation = failOnLintViolation
-    ) with ThriftClient {
+      failOnLintViolation = failOnLintViolation,
+      closeGracePeriod = closeGracePeriod
+    )
+    with ThriftClient {
 
   /* Additional Constructors */
 
-  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) = {
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
+
+  /* Public */
+
+  /** The assigned external "thrift" port for the underlying embedded ThriftServer */
+  def thriftPort(): Int = {
+    start()
+    twitterServer.thriftPort.get
   }
 
-  /* Overrides */
+  /** A `host:post` String of the loopback and external "thrift" port for the underlying embedded ThriftServer */
+  def thriftHostAndPort: String = {
+    PortUtils.loopbackAddressForPort(thriftPort())
+  }
 
   /**
    * Bind an instance of type [T] to the object graph of the underlying thrift server.
@@ -107,16 +123,5 @@ class EmbeddedThriftServer(
   override def bind[T: TypeTag](annotation: Annotation, instance: T): EmbeddedThriftServer = {
     bindInstance[T](annotation, instance)
     this
-  }
-
-  /* Public */
-
-  def thriftPort: Int = {
-    start()
-    twitterServer.thriftPort.get
-  }
-
-  def thriftHostAndPort: String = {
-    PortUtils.loopbackAddressForPort(thriftPort)
   }
 }

@@ -3,6 +3,7 @@ package com.twitter.inject.server
 import com.twitter.inject.{Injector, IntegrationTestMixin}
 import com.twitter.util.{Await, Future}
 import org.scalatest.{Suite, SuiteMixin}
+import scala.util.control.NonFatal
 
 /**
  * Testing trait which extends the [[com.twitter.inject.IntegrationTestMixin]] to provide
@@ -59,6 +60,12 @@ trait FeatureTestMixin
       super.afterAll()
     } finally {
       server.close()
+      try {
+        server.assertCleanShutdown()
+      } catch {
+        case NonFatal(e) =>
+          error(e.getMessage, e)
+      }
     }
   }
 

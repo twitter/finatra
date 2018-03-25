@@ -102,5 +102,6 @@ scala_library(
     exports = [
         "finatra/http/src/main/scala",
         "finatra/inject/inject-server/src/test/scala:test-deps",
+        "finatra/jackson/src/main/scala",
     ],
 )
