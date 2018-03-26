@@ -2,7 +2,7 @@ package com.twitter.inject.thrift.modules
 
 import com.google.inject.Provides
 import com.twitter.finagle._
-import com.twitter.finagle.service.Retries.Budget
+import com.twitter.finagle.service.RetryBudget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.inject.TwitterModule
@@ -38,7 +38,7 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
 
   protected def requestTimeout: Duration = Duration.Top
 
-  protected def retryBudget: Budget = Budget.default
+  protected def retryBudget: RetryBudget = RetryBudget()
 
   protected def monitor: Monitor = NullMonitor
 
@@ -62,8 +62,7 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
         .withClientId(clientId)
         .withMonitor(monitor)
         .withLabel(label)
-        .withRetryBudget(retryBudget.retryBudget)
-        .withRetryBackoff(retryBudget.requeueBackoffs)
+        .withRetryBudget(retryBudget)
     ).build[ThriftService](dest, label)
 
     closeOnExit {

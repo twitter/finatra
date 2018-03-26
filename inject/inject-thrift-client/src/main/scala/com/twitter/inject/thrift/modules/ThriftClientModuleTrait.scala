@@ -2,7 +2,7 @@ package com.twitter.inject.thrift.modules
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.ThriftMux
-import com.twitter.finagle.service.Retries.Budget
+import com.twitter.finagle.service.RetryBudget
 import com.twitter.inject.Logging
 import com.twitter.scrooge.ThriftService
 import com.twitter.util.{Closable, Duration, Monitor}
@@ -66,7 +66,7 @@ private[inject] trait ThriftClientModuleTrait extends Logging {
    * @return a default [[com.twitter.finagle.service.RetryBudget]]
    * @see [[https://twitter.github.io/finagle/guide/Clients.html#retries]]
    */
-  protected def retryBudget: Budget
+  protected def retryBudget: RetryBudget
 
   /**
    * Function to add a user-defined Monitor. A [[com.twitter.finagle.util.DefaultMonitor]] will be

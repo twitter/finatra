@@ -20,6 +20,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-thrift-client: The "retryBudget" in the `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule`
+  should be a `RetryBudget` and not the generic `Budget` configuration Param. Updated the type.
+  ``PHAB_ID=D151938``
+
 * inject-server: Move HTTP-related concerns out of the embedded testing utilities into
   specific HTTP "clients". The exposed `httpAdminClient` in the `EmbeddedTwitterServer`
   and the `httpClient` and `httpsClient` in the `EmbeddedHttpServer` are no longer just

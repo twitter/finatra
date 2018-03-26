@@ -1,10 +1,14 @@
 package com.twitter.inject.thrift.modules
 
 import com.google.inject.Provides
-import com.twitter.finagle.service.Retries.Budget
+import com.twitter.finagle.service.RetryBudget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
-import com.twitter.finagle.thrift.service.{Filterable, MethodPerEndpointBuilder, ServicePerEndpointBuilder}
+import com.twitter.finagle.thrift.service.{
+  Filterable,
+  MethodPerEndpointBuilder,
+  ServicePerEndpointBuilder
+}
 import com.twitter.finagle.{ThriftMux, thriftmux}
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.{Injector, TwitterModule}
@@ -42,13 +46,13 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   implicit servicePerEndpointBuilder: ServicePerEndpointBuilder[ServicePerEndpoint],
   methodPerEndpointBuilder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
 ) extends TwitterModule
-  with ThriftClientModuleTrait {
+    with ThriftClientModuleTrait {
 
   protected def sessionAcquisitionTimeout: Duration = Duration.Top
 
   protected def requestTimeout: Duration = Duration.Top
 
-  protected def retryBudget: Budget = Budget.default
+  protected def retryBudget: RetryBudget = RetryBudget()
 
   protected def monitor: Monitor = NullMonitor
 
@@ -134,8 +138,7 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
 
     closeOnExit {
       val closable = asClosable(configuredServicePerEndpoint)
-      Await.result(
-        closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
+      Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
     }
     configuredServicePerEndpoint
   }
@@ -162,8 +165,7 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
         .withClientId(clientId)
         .withMonitor(monitor)
         .withLabel(label)
-        .withRetryBudget(retryBudget.retryBudget)
-        .withRetryBackoff(retryBudget.requeueBackoffs)
+        .withRetryBudget(retryBudget)
     )
   }
 }
