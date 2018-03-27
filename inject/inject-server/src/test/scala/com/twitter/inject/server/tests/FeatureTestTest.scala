@@ -6,7 +6,7 @@ class FeatureTestTest extends FeatureTest {
 
   override val server =
     new EmbeddedTwitterServer(new TwitterServer {})
-      .bind[String]("helloworld")
+      .bind[String].toInstance("helloworld")
 
   test("feature test") {
     server.injector.instance[String] should be("helloworld")

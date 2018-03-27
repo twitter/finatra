@@ -1,11 +1,9 @@
 package com.twitter.inject.app
 
 import com.google.inject.{Module, Stage}
-import com.twitter.app.{FlagUsageError, FlagParseException, Flags, Flag}
+import com.twitter.app.{Flag, FlagParseException, FlagUsageError, Flags}
 import com.twitter.inject.Injector
 import com.twitter.inject.app.internal.InstalledModules
-import java.lang.annotation.Annotation
-import scala.reflect.runtime.universe._
 
 /**
  * A [[com.google.inject.Injector]] usable for testing. This injector can be used for
@@ -23,8 +21,11 @@ object TestInjector {
 
   /* Public */
 
+  /** Create a new TestInjector */
+  def apply: TestInjector = apply(modules = Seq())
+
   /**
-   * Creates a new TestInjector over the given list of [[com.google.inject.Module]]
+   * Create a new TestInjector over the given list of [[com.google.inject.Module]]
    *
    * @param modules - a variable list of [[com.google.inject.Module]]
    * @return a new [[TestInjector]]
@@ -36,7 +37,7 @@ object TestInjector {
   }
 
   /**
-   * Creates a new TestInjector with the specified params.
+   * Create a new TestInjector with the specified params.
    *
    * @param modules - a list of [[com.google.inject.Module]]
    * @param flags - a String Map of flag arguments to set on the injector, default is empty.
@@ -52,7 +53,6 @@ object TestInjector {
     overrideModules: Seq[Module] = Seq.empty,
     stage: Stage = Stage.DEVELOPMENT
   ): TestInjector = {
-
     new TestInjector(modules, flags, overrideModules, stage)
   }
 }
@@ -73,78 +73,48 @@ class TestInjector(
   flags: Map[String, String] = Map.empty,
   overrideModules: Seq[Module] = Seq.empty,
   stage: Stage = Stage.DEVELOPMENT
-) {
+) extends BindDSL {
 
-  /* Mutable state */
-  private[this] var overrides: Seq[Module] = overrideModules
-  private[this] var starting = false
-  private[this] var started = false
-
-  private[this] var underlying: Injector = _
+  /* Fields */
 
   private[this] val flag: Flags =
     new Flags(this.getClass.getSimpleName, includeGlobal = true, failFastUntilParsed = true)
 
+  /* Mutable state */
+
+  private[this] var overrides: Seq[Module] = overrideModules
+  private[this] var starting = false
+  private[this] var started = false
+  private[this] var underlying: Injector = _
+
   /* Public */
-
-  /**
-   * Bind an instance of type [T] to the object graph of this injector. This will
-   * REPLACE any previously bound instance of the given type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @return this [[TestInjector]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
-   */
-  def bind[T: TypeTag](instance: T): TestInjector = {
-    addInjectionServiceModule(new InjectionServiceModule[T](instance))
-    this
-  }
-
-  /**
-   * Bind an instance of type [T] annotated with Annotation type [A] to the object
-   * graph of this injector. This will REPLACE any previously bound instance of
-   * the given type bound with the given annotation type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @tparam A - type of the Annotation used to bind the instance.
-   * @return this [[TestInjector]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
-   */
-  def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): TestInjector = {
-    addInjectionServiceModule(new InjectionServiceWithAnnotationModule[T, A](instance))
-    this
-  }
-
-  /**
-   * Bind an instance of type [T] annotated with the given Annotation value
-   * to the object graph of this injector. This will REPLACE any previously
-   * bound instance of the given type bound with the given annotation.
-   *
-   * @param annotation - [[java.lang.annotation.Annotation]] instance value
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @return this [[TestInjector]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
-   */
-  def bind[T: TypeTag](annotation: Annotation, instance: T): TestInjector = {
-    addInjectionServiceModule(new InjectionServiceWithNamedAnnotationModule[T](annotation, instance))
-    this
-  }
 
   /**
    * Creates a new [[com.google.inject.Injector]] from this TestInjector.
    * @return a new [[com.google.inject.Injector]].
+   *
+   * @note Java users: see the more Java-friendly [[TestInjector.newInstance()]] method.
    *
    * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#integration-tests Integration Tests]]
    */
   def create: Injector = {
     start()
     underlying
+  }
+
+  /** For Java compatibility */
+  def newInstance(): Injector = {
+    start()
+    underlying
+  }
+
+  /* Protected */
+
+  override final protected def addInjectionServiceModule(module: Module): Unit = {
+    if (started) {
+      throw new IllegalStateException("Cannot call bind() on a started TestInjector.")
+    }
+    overrides = overrides :+ module
   }
 
   /* Private */
@@ -171,13 +141,6 @@ class TestInjector(
     }
   }
 
-  private[this] def addInjectionServiceModule(module: Module): Unit = {
-    if (started) {
-      throw new IllegalStateException("Cannot call bind() on a started TestInjector.")
-    }
-    overrides = overrides :+ module
-  }
-
   private[this] def parseFlags(
     flag: Flags,
     flags: Map[String, String],
@@ -194,5 +157,4 @@ class TestInjector(
       case _ => // nothing
     }
   }
-
 }

@@ -20,6 +20,63 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-app: Update and improve the test `#bind[T]` DSL. The testing `#bind[T]` DSL is lacking in 
+  its ability to be used from Java and we would like to revise the API to be more expressive such
+  that it also includes binding from a Type to a Type. Due to wanting to also support the ability 
+  to bind a Type to a Type, the DSL has been re-worked to more closely match the actual Guice 
+  binding DSL.
+  
+  For Scala users the `#bind[T]` DSL now looks as follows:
+  ```
+    bind[T].to[U <: T]
+    bind[T].to[Class[U <: T]]
+    bind[T].toInstance(T)
+    
+    bind[T].annotatedWith[Ann].to[U <: T]
+    bind[T].annotatedWith[Ann].to[Class[U <: T]]
+    bind[T].annotatedWith[Ann].toInstance(T)
+    
+    bind[T].annotatedWith[Class[Ann]].to[U <: T]
+    bind[T].annotatedWith[Class[Ann]].to[Class[U <: T]]
+    bind[T].annotatedWith[Class[Ann]].toInstance(T)
+    
+    bind[T].annotatedWith(Annotation).to[U <: T]
+    bind[T].annotatedWith(Annotation).to[Class[U <: T]]
+    bind[T].annotatedWith(Annotation).toInstance(T)
+    
+    bindClass(Class[T]).to[T]
+    bindClass(Class[T]).to[Class[U <: T]]
+    bindClass(Class[T]).toInstance(T)
+    
+    bindClass(Class[T]).annotatedWith[Class[Ann]].to[T]
+    bindClass(Class[T]).annotatedWith[Class[Ann]].[Class[U <: T]]
+    bindClass(Class[T]).annotatedWith[Class[Ann]].toInstance(T)
+    
+    bindClass(Class[T]).annotatedWith(Annotation).to[T]
+    bindClass(Class[T]).annotatedWith(Annotation).[Class[U <: T]]
+    bindClass(Class[T]).annotatedWith(Annotation).toInstance(T)
+  ```
+  
+  For Java users, there are more Java-friendly methods:
+  ```
+    bindClass(Class[T], T)
+    bindClass(Class[T], Annotation, T)
+    bindClass(Class[T], Class[Annotation], T)
+    
+    bindClass(Class[T], Class[U <: T])
+    bindClass(Class[T],  Annotation, Class[U <: T])
+    bindClass(Class[T], Class[Annotation], Class[U <: T])
+  ```
+  
+  Additionally, these changes highlighted the lack of Java-support in the `TwitterModule` for 
+  creating injectable Flags. Thus `c.t.inject.TwitterModuleFlags` has been updated to also provide 
+  Java-friendly flag creation methods:
+  ```
+    protected def createFlag[T](name: String, default: T, help: String, flggble: Flaggable[T]): Flag[T]
+    protected def createMandatoryFlag[T](name: String, help: String, usage: String, flggble: Flaggable[T]): Flag[T]
+  ```
+  ``PHAB_ID=D149252``
+
 * inject-thrift-client: The "retryBudget" in the `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule`
   should be a `RetryBudget` and not the generic `Budget` configuration Param. Updated the type.
   ``PHAB_ID=D151938``

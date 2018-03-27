@@ -1,10 +1,11 @@
 package com.twitter.calculator;
 
 import java.util.Collection;
-import java.util.Collections;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
+import com.twitter.calculator.modules.ModeModule;
 import com.twitter.calculator.thriftjava.Calculator;
 import com.twitter.finatra.thrift.AbstractThriftServer;
 import com.twitter.finatra.thrift.filters.AccessLoggingFilter;
@@ -19,13 +20,10 @@ import com.twitter.finatra.thrift.routing.ThriftRouter;
 class CalculatorServer extends AbstractThriftServer {
 
     @Override
-    public void configureLoggerFactories() {
-    }
-
-    @Override
     public Collection<Module> javaModules() {
-        return Collections.singletonList(
-            ClientIdWhitelistModule$.MODULE$);
+        return ImmutableList.<Module>of(
+            ClientIdWhitelistModule$.MODULE$,
+            new ModeModule());
     }
 
     @Override

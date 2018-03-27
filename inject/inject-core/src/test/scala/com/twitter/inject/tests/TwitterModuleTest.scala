@@ -1,7 +1,6 @@
 package com.twitter.inject.tests
 
 import com.google.inject.{Guice, Key}
-import com.twitter.finatra.tests.Prod
 import com.twitter.inject.tests.module.{ClassToConvert, ComplexServiceFactory, DoEverythingModule}
 import com.twitter.inject.{Injector, Test}
 

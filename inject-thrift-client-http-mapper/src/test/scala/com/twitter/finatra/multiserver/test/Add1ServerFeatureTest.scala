@@ -14,7 +14,7 @@ class Add1ServerFeatureTest extends FeatureTest with Mockito {
 
   override val server =
     new EmbeddedHttpServer(new Add1Server)
-      .bind[Adder[Future]](adderFuture)
+      .bind[Adder[Future]].toInstance(adderFuture)
 
   test("add1") {
     adderFuture.add1(5) returns Future(6)

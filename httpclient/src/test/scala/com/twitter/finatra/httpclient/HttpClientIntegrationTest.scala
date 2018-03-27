@@ -16,7 +16,7 @@ class HttpClientIntegrationTest extends IntegrationTest {
 
   override val injector: Injector =
     TestInjector(modules = Seq(MyHttpClientModule, FinatraJacksonModule))
-      .bind[Service[Request, Response]](inMemoryHttpService)
+      .bind[Service[Request, Response]].toInstance(inMemoryHttpService)
       .create
 
   val httpClient = injector.instance[HttpClient]

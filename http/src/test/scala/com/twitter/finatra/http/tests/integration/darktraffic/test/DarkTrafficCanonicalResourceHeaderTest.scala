@@ -20,7 +20,9 @@ class DarkTrafficCanonicalResourceHeaderTest extends FeatureTest with Mockito {
 
   // receive dark traffic service
   override val server = new EmbeddedHttpServer(twitterServer = new DarkTrafficTestServer)
-    .bind[Option[Service[Request, Response]], DarkTrafficService](darkTrafficService)
+    .bind[Option[Service[Request, Response]]]
+      .annotatedWith[DarkTrafficService]
+      .toInstance(darkTrafficService)
 
   // Canonical-Resource header is used by Diffy Proxy
   test("has 'Canonical-Resource' header correctly set") {

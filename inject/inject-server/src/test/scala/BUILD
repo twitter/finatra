@@ -75,6 +75,7 @@ scala_library(
         "util/util-stats/src/main/scala",
     ],
     exports = [
+        "finatra/inject/inject-app/src/test/scala:test-deps",
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/inject/inject-server/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",

@@ -3,18 +3,16 @@ package com.twitter.inject.server
 import com.google.inject.Stage
 import com.twitter.finagle.stats.{InMemoryStatsReceiver, StatsReceiver}
 import com.twitter.inject.{Injector, PoolUtils}
-import com.twitter.inject.app.{InjectionServiceModule, InjectionServiceWithAnnotationModule, InjectionServiceWithNamedAnnotationModule, StartupTimeoutException}
+import com.twitter.inject.app.{BindDSL, StartupTimeoutException}
 import com.twitter.inject.conversions.map._
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 import com.twitter.inject.server.PortUtils.getPort
-import com.twitter.util.{Await, Closable, Duration, ExecutorServiceFuturePool, Future}
 import com.twitter.util.lint.{GlobalRules, Rule}
-import java.lang.annotation.Annotation
+import com.twitter.util.{Await, Closable, Duration, ExecutorServiceFuturePool, Future}
 import java.util.concurrent.ConcurrentLinkedQueue
 import org.scalatest.Matchers
-import scala.collection.SortedMap
 import scala.collection.JavaConverters._
-import scala.reflect.runtime.universe._
+import scala.collection.SortedMap
 import scala.util.control.NonFatal
 
 object EmbeddedTwitterServer {
@@ -102,6 +100,7 @@ class EmbeddedTwitterServer(
   failOnLintViolation: Boolean = false,
   closeGracePeriod: Option[Duration] = None
 ) extends AdminHttpClient(twitterServer, verbose)
+  with BindDSL
   with Matchers {
 
   import EmbeddedTwitterServer._
@@ -164,55 +163,6 @@ class EmbeddedTwitterServer(
   lazy val adminHostAndPort: String = PortUtils.loopbackAddressForPort(httpAdminPort())
 
   /* Public */
-
-  /**
-   * Bind an instance of type [T] to the object graph of the underlying server.
-   * This will REPLACE any previously bound instance of the given type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @return this [[EmbeddedTwitterServer]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  def bind[T: TypeTag](instance: T): EmbeddedTwitterServer = {
-    bindInstance[T](instance)
-    this
-  }
-
-  /**
-   * Bind an instance of type [T] annotated with Annotation type [A] to the object
-   * graph of the underlying server. This will REPLACE any previously bound instance of
-   * the given type bound with the given annotation type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @tparam A - type of the Annotation used to bind the instance.
-   * @return this [[EmbeddedTwitterServer]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedTwitterServer = {
-    bindInstance[T, A](instance)
-    this
-  }
-
-  /**
-   * Bind an instance of type [T] annotated with the given Annotation value to the object
-   * graph of the underlying server. This will REPLACE any previously bound instance of
-   * the given type bound with the given annotation.
-   *
-   * @param annotation - [[java.lang.annotation.Annotation]] instance value
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @return this [[EmbeddedTwitterServer]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  def bind[T: TypeTag](annotation: Annotation, instance: T): EmbeddedTwitterServer = {
-    bindInstance[T](annotation, instance)
-    this
-  }
 
   /**
    * Returns the result of running the `nonExitingMain` of the underlying TwitterServer in
@@ -418,35 +368,6 @@ class EmbeddedTwitterServer(
 
   /* Protected */
 
-  /** Log that the underlying embedded TwitterServer has started and the location of the AdminHttpInterface */
-  protected[twitter] def logStartup(): Unit = {
-    infoBanner("Server Started: " + name)
-    info(s"AdminHttp      -> http://$adminHostAndPort/admin")
-  }
-
-  /** Combine the flags Map with the args String to create an argument list for the underlying embedded TwitterServer main */
-  protected[twitter] def combineArgs(): Array[String] = {
-    val flagsStr =
-      flagsAsArgs(resolveFlags(useSocksProxy, flags))
-    ("-admin.port=" + PortUtils.ephemeralLoopback) +: (args ++ flagsStr).toArray
-  }
-
-  protected def bindInstance[T: TypeTag](instance: T): Unit = {
-    addInjectionServiceFrameworkOverrideModule(new InjectionServiceModule(instance))
-  }
-
-  protected def bindInstance[T: TypeTag, A <: Annotation: TypeTag](instance: T): Unit = {
-    addInjectionServiceFrameworkOverrideModule(
-      new InjectionServiceWithAnnotationModule[T, A](instance)
-    )
-  }
-
-  protected def bindInstance[T: TypeTag](annotation: Annotation, instance: T): Unit = {
-    addInjectionServiceFrameworkOverrideModule(
-      new InjectionServiceWithNamedAnnotationModule[T](annotation, instance)
-    )
-  }
-
   /** Add the given [[Closable]] to the list of closables to be closed when the EmbeddedTwitterServer is closed */
   protected def closeOnExit(closable: Closable): Unit = {
     this.closables.add(closable)
@@ -460,18 +381,31 @@ class EmbeddedTwitterServer(
 
   protected def nonInjectableServerStarted(): Boolean = isHealthy
 
+  /** Log that the underlying embedded TwitterServer has started and the location of the AdminHttpInterface */
+  protected[twitter] def logStartup(): Unit = {
+    infoBanner("Server Started: " + name)
+    info(s"AdminHttp      -> http://$adminHostAndPort/admin")
+  }
+
+  /** Combine the flags Map with the args String to create an argument list for the underlying embedded TwitterServer main */
+  protected[twitter] def combineArgs(): Array[String] = {
+    val flagsStr =
+      flagsAsArgs(resolveFlags(useSocksProxy, flags))
+    ("-admin.port=" + PortUtils.ephemeralLoopback) +: (args ++ flagsStr).toArray
+  }
+
+  override final protected def addInjectionServiceModule(module: com.google.inject.Module): Unit = {
+    if (!isInjectable) {
+      throw new IllegalStateException("Cannot call bind() with a non-injectable underlying server.")
+    }
+    injectableServer.addFrameworkOverrideModules(module)
+  }
+
   /* Private */
 
   /* StatsReceiver key utility */
   private def keyStr(keys: Seq[String]): String = {
     keys.mkString("/")
-  }
-
-  private def addInjectionServiceFrameworkOverrideModule(module: com.google.inject.Module): Unit = {
-    if (!isInjectable) {
-      throw new IllegalStateException("Cannot call bind() with a non-injectable underlying server.")
-    }
-    injectableServer.addFrameworkOverrideModules(module)
   }
 
   private def flagsAsArgs(flags: Map[String, String]): Iterable[String] = {

@@ -81,14 +81,14 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
   test("server#fail if bind on a non-injectable server") {
     intercept[IllegalStateException] {
       new EmbeddedTwitterServer(new NonInjectableServer)
-        .bind[String]("hello!")
+        .bind[String].toInstance("hello!")
     }
   }
 
   test("server#support bind in server") {
     val server =
       new EmbeddedTwitterServer(new TwitterServer {})
-        .bind[String]("helloworld")
+        .bind[String].toInstance("helloworld")
 
     try {
       server.injector.instance[String] should be("helloworld")
@@ -100,7 +100,9 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
   test("server#support bind with @Named in server") {
     val server =
       new EmbeddedTwitterServer(new TwitterServer {})
-        .bind[String](Names.named("best"), "helloworld")
+        .bind[String]
+          .annotatedWith(Names.named("best"))
+          .toInstance("helloworld")
 
     try {
       server.injector.instance[String]("best") should be("helloworld")
@@ -133,7 +135,7 @@ class EmbeddedTwitterServerIntegrationTest extends Test {
             throw new Exception("Yikes")
           }
         })
-      }).bind[String]("helloworld")
+      }).bind[String].toInstance("helloworld")
     try {
       val e = intercept[Exception] {
         server.injector.instance[String] should be("helloworld")

@@ -2,7 +2,6 @@ package com.twitter.inject.app.tests
 
 import com.google.inject.name.Names
 import com.twitter.app.GlobalFlag
-import com.twitter.finatra.tests.Prod
 import com.twitter.inject.annotations.{Flag, Flags}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.{Test, TwitterModule}
@@ -26,7 +25,7 @@ object TestBindModule extends TwitterModule {
   flag[Boolean]("bool", false, "default is false")
 
   override protected def configure(): Unit = {
-    bind[String, Prod].toInstance("Hello, world!")
+    bind[String, Up].toInstance("Hello, world!")
     bind[Baz].toInstance(new Baz(10))
     bind[Baz](Names.named("five")).toInstance(new Baz(5))
     bind[Baz](Names.named("six")).toInstance(new Baz(6))
@@ -34,7 +33,7 @@ object TestBindModule extends TwitterModule {
   }
 }
 
-class Foo @Inject()(@Flag("x") x: Boolean) {
+class FooWithInject @Inject()(@Flag("x") x: Boolean) {
   def bar = x
 }
 
@@ -43,6 +42,56 @@ class Bar {
   val booleanGlobalFlag = testBooleanGlobalFlag()
   val stringGlobalFlag = testStringGlobalFlag()
   val mapGlobalFlag = testMapGlobalFlag()
+}
+
+trait TestTrait {
+  def foobar(): String
+}
+
+class TestTraitImpl1 extends TestTrait {
+  def foobar(): String = {
+    this.getClass.getSimpleName
+  }
+}
+
+class TestTraitImpl2 extends TestTrait {
+  def foobar(): String = {
+    this.getClass.getSimpleName
+  }
+}
+
+class FortyTwo extends Number {
+  private[this] val int = 42
+  override def intValue(): Int = int
+
+  override def floatValue(): Float = int.toFloat
+
+  override def doubleValue(): Double = int.toDouble
+
+  override def longValue(): Long = int.toLong
+}
+
+class ThirtyThree extends Number {
+  private[this] val int = 33
+  override def intValue(): Int = int
+
+  override def floatValue(): Float = int.toFloat
+
+  override def doubleValue(): Double = int.toDouble
+
+  override def longValue(): Long = int.toLong
+}
+
+trait Processor {
+  def process: String
+}
+
+class ProcessorA extends Processor {
+  def process: String = this.getClass.getSimpleName
+}
+
+class ProcessorB extends Processor {
+  def process: String = this.getClass.getSimpleName
 }
 
 class Baz(val value: Int)
@@ -60,7 +109,7 @@ class TestInjectorTest extends Test {
 
   test("default boolean flags properly") {
     val injector = TestInjector(BooleanFlagModule).create
-    injector.instance[Foo].bar should be(false)
+    injector.instance[FooWithInject].bar should be(false)
     injector.instance[Boolean](Flags.named("x")) should be(false)
   }
 
@@ -92,20 +141,127 @@ class TestInjectorTest extends Test {
     injector.instance[Baz].value should equal(10)
     injector.instance[Baz]("five").value should equal(5)
     injector.instance[Baz](Names.named("six")).value should equal(6)
-    injector.instance[String, Prod] should equal("Hello, world!")
+    injector.instance[String, Up] should equal("Hello, world!")
   }
 
-  test("bind") {
+  test("bind deprecated") {
     val injector = TestInjector(modules = Seq(TestBindModule))
       .bind[Baz](new Baz(100))
-      .bind[String, Prod]("Goodbye, world!")
+      .bind[String, Up]("Goodbye, world!")
       .bind[String](Names.named("foo"), "bar")
+      .bind[String](Flags.named("cat.flag"), "Kat")
       .create
 
     injector.instance[Baz].value should equal(100)
-    injector.instance[String, Prod] should equal("Goodbye, world!")
+    injector.instance[String, Up] should equal("Goodbye, world!")
     injector.instance[String]("foo") should equal("bar")
-    injector.instance[Boolean](Flags.named("bool")) should be(true)
+    injector.instance[String](Names.named("foo")) should equal("bar")
+    injector.instance[String](Flags.named("cat.flag")) should be("Kat")
+  }
+
+  test("bind") {
+    // bind[T] to [T]
+    // bind[T] to (clazz)
+    // bind[T] toInstance (instance)
+
+    // bind[T] annotatedWith [T] to [T]
+    // bind[T] annotatedWith (clazz) to [T]
+    // bind[T] annotatedWith (annotation) to [T]
+
+    // bind[T] annotatedWith [T] to (clazz)
+    // bind[T] annotatedWith (clazz) to (clazz)
+    // bind[T] annotatedWith (annotation) to (clazz)
+
+    // bind[T] annotatedWith [T] toInstance (instance)
+    // bind[T] annotatedWith (clazz) toInstance (instance)
+    // bind[T] annotatedWith (annotation) toInstance (instance)
+    val injector = TestInjector(modules = Seq(TestBindModule))
+      .bind[TestTrait].to[TestTraitImpl1]
+      .bind[Processor].to(classOf[ProcessorA])
+      .bind[Baz].toInstance(new Baz(100))
+
+      .bind[TestTrait].annotatedWith[Up].to[TestTraitImpl2]
+      .bind[Number].annotatedWith(classOf[Down]).to[FortyTwo]
+      .bind[Processor].annotatedWith(Flags.named("process.impl")).to[ProcessorB]
+
+      .bind[TestTrait].annotatedWith[Down].to(classOf[TestTraitImpl1])
+      .bind[Processor].annotatedWith(classOf[Up]).to(classOf[ProcessorA])
+      .bind[Number].annotatedWith(Flags.named("magicNumber")).to(classOf[ThirtyThree])
+
+      .bind[String].annotatedWith[Down].toInstance("Goodbye, world!")
+      .bind[String].annotatedWith(classOf[Up]).toInstance("Very important Up String")
+      .bind[String].annotatedWith(Flags.named("cat.flag")).toInstance("Kat")
+      .create
+
+    injector.instance[TestTrait].foobar() should be("TestTraitImpl1")
+    injector.instance[Processor].process should be("ProcessorA")
+    injector.instance[Baz].value should equal(100)
+
+    injector.instance[TestTrait, Up].foobar() should be("TestTraitImpl2")
+    injector.instance[Number](classOf[Down]).intValue() should equal(42)
+    injector.instance[Number, Down].intValue() should equal(42)
+    injector.instance[Processor](Flags.named("process.impl")).process should be("ProcessorB")
+
+    injector.instance[TestTrait, Down].foobar() should be("TestTraitImpl1")
+    injector.instance[Processor](classOf[Up]).process should be("ProcessorA")
+    injector.instance[Processor, Up].process should be("ProcessorA")
+    injector.instance[Number](Flags.named("magicNumber")).intValue() should equal(33)
+
+    injector.instance[String, Down] should equal("Goodbye, world!")
+    injector.instance[String](classOf[Up]) should equal("Very important Up String")
+    injector.instance[String, Up] should equal("Very important Up String")
+    injector.instance[String](Flags.named("cat.flag")) should be("Kat")
+  }
+
+  test("bindClass") {
+    // bindClass to [T] -- is this a legit case?
+    // bindClass to (clazz)
+    // bindClass toInstance (instance)
+
+    // bindClass annotatedWith (clazz) to [T] -- is this a legit case?
+    // bindClass annotatedWith (annotation) to [T] -- is this a legit case?
+
+    // bindClass annotatedWith (clazz) to (clazz)
+    // bindClass annotatedWith (annotation) to (clazz)
+
+    // bindClass annotatedWith (clazz) toInstance (instance)
+    // bindClass annotatedWith (annotation) toInstance (instance)
+    val injector = TestInjector(modules = Seq(TestBindModule))
+      .bindClass(classOf[TestTrait]).to[TestTraitImpl2]
+      .bindClass(classOf[Processor]).to(classOf[ProcessorA])
+      .bindClass(classOf[Double], 3.14d)
+
+      .bindClass(classOf[Processor]).annotatedWith(classOf[Up]).to[ProcessorB]
+      .bindClass(classOf[Number]).annotatedWith(Flags.named("forty.two")).to[FortyTwo]
+
+      .bindClass(classOf[TestTrait]).annotatedWith(classOf[Up]).to[TestTraitImpl1]
+      .bindClass(classOf[Number]).annotatedWith(Flags.named("thirty.three")).to(classOf[ThirtyThree])
+
+      .bindClass(classOf[String]).annotatedWith(classOf[Down]).toInstance("Lorem ipsum")
+      .bindClass(classOf[String]).annotatedWith(Flags.named("dog.flag")).toInstance("Fido")
+      .create
+
+    injector.instance[TestTrait].foobar() should be("TestTraitImpl2")
+    injector.instance(classOf[TestTrait]).foobar() should be("TestTraitImpl2")
+    injector.instance[Processor].process should be("ProcessorA")
+    injector.instance(classOf[Processor]).process should be("ProcessorA")
+    injector.instance[Double] should equal(3.14d)
+    injector.instance(classOf[Double]) should equal(3.14d)
+
+    injector.instance[Processor, Up].process should be("ProcessorB")
+    injector.instance(classOf[Processor], Annotations.up()).process should be("ProcessorB")
+    injector.instance[Number](Flags.named("forty.two")).intValue() should equal(42)
+    injector.instance(classOf[Number], Flags.named("forty.two")).intValue() should equal(42)
+
+    injector.instance(classOf[TestTrait], Annotations.up()).foobar() should be("TestTraitImpl1")
+    injector.instance[TestTrait](Annotations.up()).foobar() should be("TestTraitImpl1")
+    injector.instance(classOf[Number], Flags.named("thirty.three")).intValue() should equal(33)
+    injector.instance[Number](Flags.named("thirty.three")).intValue() should equal(33)
+
+    injector.instance[String](Annotations.down()) should be("Lorem ipsum")
+    injector.instance(classOf[String], Annotations.down()) should be("Lorem ipsum")
+    injector.instance[String](Flags.named("dog.flag")) should be("Fido")
+    injector.instance(classOf[String], Flags.named("dog.flag")) should be("Fido")
   }
 
   test("bind fails after injector is called") {
@@ -115,9 +271,9 @@ class TestInjectorTest extends Test {
     val injector = testInjector.create
 
     intercept[IllegalStateException] {
-      testInjector.bind[String, Prod]("Goodbye, world!")
+      testInjector.bind[String, Up]("Goodbye, world!")
     }
     injector.instance[Baz].value should equal(100)
-    injector.instance[String, Prod] should equal("Hello, world!")
+    injector.instance[String, Up] should equal("Hello, world!")
   }
 }
