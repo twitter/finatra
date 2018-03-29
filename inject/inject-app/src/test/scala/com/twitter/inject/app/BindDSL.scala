@@ -1,7 +1,10 @@
 package com.twitter.inject.app
 
 import com.google.inject.Module
+import com.twitter.inject.TwitterModule
+import com.twitter.inject.TypeUtils.asManifest
 import java.lang.annotation.Annotation
+import net.codingwell.scalaguice.typeLiteral
 import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
 
@@ -22,7 +25,11 @@ private[twitter] trait BindDSL { self =>
    */
   @deprecated("Use bind[T].toInstance(T)", "2018-03-17")
   def bind[T: TypeTag](instance: T): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule0[T](instance))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(asManifest[T]).toInstance(instance)
+      }
+    })
     self
   }
 
@@ -38,7 +45,11 @@ private[twitter] trait BindDSL { self =>
    */
   @deprecated("Use bind[T].annotatedWith[Ann].toInstance(T)", "2018-03-17")
   def bind[T: TypeTag, Ann <: Annotation: TypeTag](instance: T): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule8[T, Ann](instance))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(asManifest[T], asManifest[Ann]).toInstance(instance)
+      }
+    })
     self
   }
 
@@ -55,7 +66,11 @@ private[twitter] trait BindDSL { self =>
    */
   @deprecated("Use bind[T].annotatedWith(annotation).toInstance(T)", "2018-03-17")
   def bind[T: TypeTag](annotation: Annotation, instance: T): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule9[T](annotation, instance))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(asManifest[T]).annotatedWith(annotation).toInstance(instance)
+      }
+    })
     self
   }
 
@@ -104,37 +119,61 @@ private[twitter] trait BindDSL { self =>
 
   /** For Java Compatibility */
   def bindClass[T](clazz: Class[T], instance: T): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule1(clazz, instance))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(clazz).toInstance(instance)
+      }
+    })
     self
   }
 
   /** For Java Compatibility */
   def bindClass[T](clazz: Class[T], annotation: Annotation, instance: T): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule3(clazz, annotation, instance))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(clazz).annotatedWith(annotation).toInstance(instance)
+      }
+    })
     self
   }
 
   /** For Java Compatibility */
   def bindClass[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann], instance: T): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule13(clazz, annotationClazz, instance))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(clazz).annotatedWith(annotationClazz).toInstance(instance)
+      }
+    })
     self
   }
 
   /** For Java Compatibility */
   def bindClass[T, U <: T](clazz: Class[T], instanceClazz: Class[U]): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule2(clazz, instanceClazz))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(clazz).to(instanceClazz)
+      }
+    })
     self
   }
 
   /** For Java Compatibility */
   def bindClass[T, U <: T](clazz: Class[T], annotation: Annotation, instanceClazz: Class[U]): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule4(clazz, annotation, instanceClazz))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(clazz).annotatedWith(annotation).to(instanceClazz)
+      }
+    })
     self
   }
 
   /** For Java Compatibility */
   def bindClass[T, Ann <: Annotation, U <: T](clazz: Class[T], annotationClazz: Class[Ann], instanceClazz: Class[U]): self.type = {
-    addInjectionServiceModule(new InjectionServiceModule14(clazz, annotationClazz, instanceClazz))
+    addInjectionServiceModule(new TwitterModule {
+      override def configure(): Unit = {
+        bind(clazz).annotatedWith(annotationClazz).to(instanceClazz)
+      }
+    })
     self
   }
 
@@ -142,17 +181,29 @@ private[twitter] trait BindDSL { self =>
 
   private[app] class TypeDSL[T: TypeTag] {
     def toInstance(instance: T): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule0(instance))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).toInstance(instance)
+        }
+      })
       self
     }
 
     def to[U <: T: TypeTag]: self.type = {
-      addInjectionServiceModule(new InjectionServiceModule5[T, U])
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).to(asManifest[U])
+        }
+      })
       self
     }
 
     def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule10[T, U](instanceClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).to(instanceClazz)
+        }
+      })
       self
     }
 
@@ -165,68 +216,116 @@ private[twitter] trait BindDSL { self =>
 
   private[app] class TypeAnnotationDSL[T: TypeTag, Ann <: Annotation: TypeTag] extends TypeDSL[T] {
     override def toInstance(instance: T): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule8[T, Ann](instance))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T], asManifest[Ann]).toInstance(instance)
+        }
+      })
       self
     }
 
     override def to[U <: T: TypeTag]: self.type = {
-      addInjectionServiceModule(new InjectionServiceModule6[T, Ann, U])
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(asManifest[Ann]).to(asManifest[U])
+        }
+      })
       self
     }
 
     override def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule11[T, Ann, U](instanceClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(asManifest[Ann]).to(instanceClazz)
+        }
+      })
       self
     }
   }
 
   private[app] class TypeAnnotationClassDSL[T: TypeTag, Ann <: Annotation](annotationClazz: Class[Ann]) extends TypeDSL[T] {
     override def toInstance(instance: T): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule15(annotationClazz, instance))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(annotationClazz).toInstance(instance)
+        }
+      })
       self
     }
 
     override def to[U <: T: TypeTag]: self.type = {
-      addInjectionServiceModule(new InjectionServiceModule16[T, Ann, U](annotationClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(annotationClazz).to(asManifest[U])
+        }
+      })
       self
     }
 
     override def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule17[T, Ann, U](annotationClazz, instanceClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(annotationClazz).to(instanceClazz)
+        }
+      })
       self
     }
   }
 
   private[app] class TypeWithNamedAnnotationDSL[T: TypeTag](annotation: Annotation) extends TypeDSL[T] {
     override def toInstance(instance: T): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule9[T](annotation, instance))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(annotation).toInstance(instance)
+        }
+      })
       self
     }
 
     override def to[U <: T: TypeTag]: self.type = {
-      addInjectionServiceModule(new InjectionServiceModule7[T, U](annotation))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(annotation).to(asManifest[U])
+        }
+      })
       self
     }
 
     override def to[U <: T: TypeTag](instanceClazz: Class[U]): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule12[T, U](annotation, instanceClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(asManifest[T]).annotatedWith(annotation).to(instanceClazz)
+        }
+      })
       self
     }
   }
 
   private[app] class ClassDSL[T](clazz: Class[T]) {
     def toInstance(instance: T): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule1(clazz, instance))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).toInstance(instance)
+        }
+      })
       self
     }
 
     def to[U <: T : TypeTag : ClassTag]: self.type = {
-      addInjectionServiceModule(new InjectionServiceModule18[T, U](clazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).to(typeLiteral[U](asManifest[U]))
+        }
+      })
       self
     }
 
     def to[U <: T](instanceClazz: Class[U]): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule2(clazz, instanceClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).to(instanceClazz)
+        }
+      })
       self
     }
 
@@ -237,35 +336,59 @@ private[twitter] trait BindDSL { self =>
 
   private[app] class ClassAnnotationDSL[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]) extends ClassDSL(clazz) {
     override def toInstance(instance: T): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule13[T, Ann](clazz, annotationClazz, instance))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).annotatedWith(annotationClazz).toInstance(instance)
+        }
+      })
       self
     }
 
     override def to[U <: T : TypeTag : ClassTag]: self.type = {
-      addInjectionServiceModule(new InjectionServiceModule20[T, Ann, U](clazz, annotationClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).annotatedWith(annotationClazz).to(typeLiteral[U](asManifest[U]))
+        }
+      })
       self
     }
 
     override def to[U <: T](instanceClazz: Class[U]): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule14[T, Ann, U](clazz, annotationClazz, instanceClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).annotatedWith(annotationClazz).to(instanceClazz)
+        }
+      })
       self
     }
   }
 
   private[app] class ClassWithNamedAnnotationDSL[T](clazz: Class[T], annotation: Annotation) extends ClassDSL(clazz) {
     override def toInstance(instance: T): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule3(clazz, annotation, instance))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).annotatedWith(annotation).toInstance(instance)
+        }
+      })
       self
     }
 
     override def to[U <: T : TypeTag : ClassTag]: self.type = {
-      addInjectionServiceModule(new InjectionServiceModule19[T, U](clazz, annotation))
+      addInjectionServiceModule(new  TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).annotatedWith(annotation).to(typeLiteral[U](asManifest[U]))
+        }
+      })
       self
     }
 
 
     override def to[U <: T](instanceClazz: Class[U]): self.type = {
-      addInjectionServiceModule(new InjectionServiceModule4(clazz, annotation, instanceClazz))
+      addInjectionServiceModule(new TwitterModule {
+        override def configure(): Unit = {
+          bind(clazz).annotatedWith(annotation).to(instanceClazz)
+        }
+      })
       self
     }
   }

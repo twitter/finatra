@@ -333,7 +333,6 @@ lazy val injectAppTestJarSources =
   Seq("com/twitter/inject/app/Banner",
     "com/twitter/inject/app/BindDSL",
     "com/twitter/inject/app/EmbeddedApp",
-    "com/twitter/inject/app/modules",
     "com/twitter/inject/app/InjectionServiceModule",
     "com/twitter/inject/app/InjectionServiceWithAnnotationModule",
     "com/twitter/inject/app/StartupTimeoutException",
