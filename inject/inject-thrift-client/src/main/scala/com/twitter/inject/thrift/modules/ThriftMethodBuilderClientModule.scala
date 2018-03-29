@@ -57,6 +57,7 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   protected def monitor: Monitor = NullMonitor
 
   protected def configureThriftMuxClient(
+    injector: Injector,
     client: ThriftMux.Client
   ): ThriftMux.Client = client
 
@@ -123,18 +124,15 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): ServicePerEndpoint = {
-    createThriftMuxClient(clientId, statsReceiver)
+    createThriftMuxClient(injector, clientId, statsReceiver)
 
     val methodBuilder =
       configureMethodBuilder(thriftMuxClient.methodBuilder(dest))
 
-    val configuredServicePerEndpoint = configureServicePerEndpoint(
-      builder = new ThriftMethodBuilderFactory[ServicePerEndpoint](
-        injector,
-        methodBuilder
-      ),
-      servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint]
-    )
+    val configuredServicePerEndpoint =
+      configureServicePerEndpoint(
+        builder = new ThriftMethodBuilderFactory[ServicePerEndpoint](injector, methodBuilder),
+        servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint])
 
     closeOnExit {
       val closable = asClosable(configuredServicePerEndpoint)
@@ -152,20 +150,21 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   // Thus we use mutation to create and configure a ThriftMux.Client.
   private[this] var thriftMuxClient: ThriftMux.Client = _
   private[this] def createThriftMuxClient(
+    injector: Injector,
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): Unit = {
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
-    thriftMuxClient = configureThriftMuxClient(
-      ThriftMux.client.withSession
-        .acquisitionTimeout(sessionAcquisitionTimeout)
-        .withRequestTimeout(requestTimeout)
-        .withStatsReceiver(clientStatsReceiver)
-        .withClientId(clientId)
-        .withMonitor(monitor)
-        .withLabel(label)
-        .withRetryBudget(retryBudget)
-    )
+    thriftMuxClient =
+      configureThriftMuxClient(injector,
+        ThriftMux.client.withSession
+          .acquisitionTimeout(sessionAcquisitionTimeout)
+          .withRequestTimeout(requestTimeout)
+          .withStatsReceiver(clientStatsReceiver)
+          .withClientId(clientId)
+          .withMonitor(monitor)
+          .withLabel(label)
+          .withRetryBudget(retryBudget))
   }
 }
