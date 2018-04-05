@@ -5,6 +5,7 @@ import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.integration.filters.MethodLoggingTypeAgnosticFilter
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftMethodBuilderClientModule}
+import com.twitter.inject.Injector
 import com.twitter.serviceA.thriftscala.ServiceA
 import com.twitter.serviceB.thriftscala.ServiceB
 
@@ -17,6 +18,7 @@ object ServiceBThriftMethodBuilderClientModule
   override val label = "serviceB-thrift-client"
 
   override protected def configureServicePerEndpoint(
+    injector: Injector,
     builder: ThriftMethodBuilderFactory[ServiceB.ServicePerEndpoint],
     servicePerEndpoint: ServiceB.ServicePerEndpoint
   ): ServiceB.ServicePerEndpoint = {

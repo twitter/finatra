@@ -8,6 +8,7 @@ import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.integration.filters.{HiLoggingTypeAgnosticFilter, MethodLoggingTypeAgnosticFilter}
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftMethodBuilderClientModule}
+import com.twitter.inject.Injector
 import com.twitter.util.tunable.Tunable
 import com.twitter.util.{Duration, Return, Throw}
 import scala.util.control.NonFatal
@@ -23,6 +24,7 @@ class GreeterReqRepThriftMethodBuilderClientModule(
   override val label = "greeter-thrift-client"
 
   override protected def configureServicePerEndpoint(
+    injector: Injector,
     builder: ThriftMethodBuilderFactory[Greeter.ReqRepServicePerEndpoint],
     servicePerEndpoint: Greeter.ReqRepServicePerEndpoint
   ): Greeter.ReqRepServicePerEndpoint = {

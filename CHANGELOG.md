@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-thrift-client: Update `configureServicePerEndpoint` and
+  `configureMethodBuilder` in `ThriftMethodBuilderClientModule` to also pass a 
+  `c.t.inject.Injector` instance which allows users to use bound instances from
+  the object graph when providing further `thriftmux.MethodBuilder` or
+  `ThriftMethodBuilderFactory` configuration.
+  ``PHAB_ID=D155451``
+
 * inject-thrift-client: Update `configureThriftMuxClient` in `ThriftClientModuleTrait` to
   also pass a `c.t.inject.Injector` instance which allows users to use bound instances
   from the object graph when providing further `ThriftMux.client` configuration.

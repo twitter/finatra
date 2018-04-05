@@ -76,11 +76,13 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
    * Note: any configuration here will be applied to all methods unless explicitly overridden. However,
    * also note that filters are cumulative. Thus filters added here will be present in any final configuration.
    *
+   * @param injector a [[com.twitter.inject.Injector]] instance
    * @param methodBuilder the [[thriftmux.MethodBuilder]] to configure.
    * @return a configured MethodBuilder which will be used as the starting point for any per-method
    *         configuration.
    */
   protected def configureMethodBuilder(
+    injector: Injector,
     methodBuilder: thriftmux.MethodBuilder
   ): thriftmux.MethodBuilder = methodBuilder
 
@@ -98,12 +100,14 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
    * Subclasses of this module MAY provide an implementation of `configureServicePerEndpoint` which
    * specifies configuration of a `ServicePerEndpoint` interface per-method of the interface.
    *
+   * @param injector a [[com.twitter.inject.Injector]] instance
    * @param builder a [[ThriftMethodBuilderFactory]] for creating a [[com.twitter.inject.thrift.ThriftMethodBuilder]].
    * @param servicePerEndpoint the [[ServicePerEndpoint]] to configure.
    * @return a per-method filtered [[ServicePerEndpoint]]
    * @see [[com.twitter.inject.thrift.ThriftMethodBuilder]]
    */
   protected def configureServicePerEndpoint(
+    injector: Injector,
     builder: ThriftMethodBuilderFactory[ServicePerEndpoint],
     servicePerEndpoint: ServicePerEndpoint
   ): ServicePerEndpoint = servicePerEndpoint
@@ -127,10 +131,11 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
     createThriftMuxClient(injector, clientId, statsReceiver)
 
     val methodBuilder =
-      configureMethodBuilder(thriftMuxClient.methodBuilder(dest))
+      configureMethodBuilder(injector, thriftMuxClient.methodBuilder(dest))
 
     val configuredServicePerEndpoint =
       configureServicePerEndpoint(
+        injector,
         builder = new ThriftMethodBuilderFactory[ServicePerEndpoint](injector, methodBuilder),
         servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint])
 
