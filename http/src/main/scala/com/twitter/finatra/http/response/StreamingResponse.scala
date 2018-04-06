@@ -19,23 +19,23 @@ object StreamingResponse {
   private val JsonArraySuffix = Some(Buf.Utf8("]"))
 
   /**
-    * Construct a [[StreamingResponse]] from an `AsyncStream` and an `AsyncStream[T] => AsyncStream[(U, Buf)]`
-    *
-    * A [[StreamingResponse]] is useful for streaming data back to the client in chunks: data will
-    * be rendered to the client as it resolves from the `AsyncStream` while also utilizing the
-    * back-pressure mechanisms provide by the underlying transport, preventing unnecessary resource
-    * consumption for properly constructed `AsyncStream`s.
-    *
-    * @param streamTransformer Function which converts AsyncStream[T] to AsyncStream[(U, Buf)]
-    * @param status Status code of the generated response.
-    * @param headers Headers for the generated response.
-    * @param onDisconnect A hook to clean up resources upon disconnection, either normally or exceptionally.
-    * @param closeGracePeriod The grace period provided to close the Response.writer.
-    * @param asyncStream The data that will represent the body of the response.
-    * @tparam T The incoming type.
-    * @tparam U An auxillary type passed to onWrite which may be helpful when executing the onWrite callback.
-    *
-    */
+   * Construct a [[StreamingResponse]] from an `AsyncStream` and an `AsyncStream[T] => AsyncStream[(U, Buf)]`
+   *
+   * A [[StreamingResponse]] is useful for streaming data back to the client in chunks: data will
+   * be rendered to the client as it resolves from the `AsyncStream` while also utilizing the
+   * back-pressure mechanisms provide by the underlying transport, preventing unnecessary resource
+   * consumption for properly constructed `AsyncStream`s.
+   *
+   * @param streamTransformer Function which converts AsyncStream[T] to AsyncStream[(U, Buf)]
+   * @param status Status code of the generated response.
+   * @param headers Headers for the generated response.
+   * @param onDisconnect A hook to clean up resources upon disconnection, either normally or exceptionally.
+   * @param closeGracePeriod The grace period provided to close the Response.writer.
+   * @param asyncStream The data that will represent the body of the response.
+   * @tparam T The incoming type.
+   * @tparam U An auxiliary type passed to onWrite which may be helpful when executing the onWrite callback.
+   *
+   */
   def apply[T, U](
     streamTransformer: AsyncStream[T] => AsyncStream[(U, Buf)],
     status: Status,
@@ -85,10 +85,10 @@ object StreamingResponse {
 
     val chainedTransformers: AsyncStream[T] => AsyncStream[(Unit, Buf)] = {
       (StreamingResponseUtils.toBufTransformer(toBuf) _)
-          .andThen(StreamingResponseUtils.separatorTransformer(separator) _)
-          .andThen(StreamingResponseUtils.prefixTransformer(prefix) _)
-          .andThen(StreamingResponseUtils.suffixTransformer(suffix) _)
-          .andThen(StreamingResponseUtils.tupleTransformer(()) _)
+        .andThen(StreamingResponseUtils.separatorTransformer(separator))
+        .andThen(StreamingResponseUtils.prefixTransformer(prefix))
+        .andThen(StreamingResponseUtils.suffixTransformer(suffix))
+        .andThen(StreamingResponseUtils.tupleTransformer(()))
     }
 
     def onDisconnect(): Unit = {
@@ -124,8 +124,9 @@ object StreamingResponse {
       prefix = JsonArrayPrefix,
       separator = JsonArraySeparator,
       suffix = JsonArraySuffix,
-      closeOnFinish = closeOnFinish) {
-        asyncStream
+      closeOnFinish = closeOnFinish
+    ) {
+      asyncStream
     }
   }
 }
@@ -138,8 +139,19 @@ class StreamingResponse[T, U] private (
   onWrite: (U, Buf) => Try[Unit] => Unit,
   onDisconnect: () => Unit,
   closeGracePeriod: Duration
-) extends Logging
-{
+) extends Logging {
+
+  private[this] val writerRespondFn: (Try[Unit] => Unit) = {
+    case Return(_) =>
+      debug("Success writing to chunked response")
+    case Throw(e) =>
+      e match {
+        case _: ReaderDiscarded =>
+          info(s"Failure writing to chunked response: ${e.getMessage}")
+        case NonFatal(nf) =>
+          error("Unexpected failure writing to chunked response", nf)
+      }
+  }
 
   def toFutureFinagleResponse: Future[Response] = {
     val response = Response()
@@ -149,35 +161,30 @@ class StreamingResponse[T, U] private (
     val writer = response.writer
 
     /* Orphan the future which writes to our response thread */
-    write(writer).onSuccess { _ =>
-      debug("Success writing to chunked response")
-    }.onFailure {
-      case e: ReaderDiscarded =>
-        info(s"Failure writing to chunked response: ${e.getMessage}")
-      case NonFatal(e) =>
-        error("Unexpected failure writing to chunked response", e)
-    }.ensure {
-      debug("Closing chunked response")
-      response.writer
-        .close(closeGracePeriod)
-        .ensure {
-          onDisconnect()
-        }
-    }
+    write(writer)
+      .respond(writerRespondFn)
+      .ensure {
+        debug("Closing chunked response")
+        response.writer
+          .close(closeGracePeriod)
+          .ensure {
+            onDisconnect()
+          }
+      }
 
     Future.value(response)
   }
 
   private[this] def write(writer: Writer): Future[Unit] = {
-    streamTransformer(asyncStream).foreachF { case (item, buf) =>
-      writer.write(buf).respond(onWrite(item, buf))
+    streamTransformer(asyncStream).foreachF {
+      case (item, buf) =>
+        writer.write(buf).respond(onWrite(item, buf))
     }
   }
 
-  private[this] def setHeaders(headersOpt: Map[String, String], response: Response) = {
+  private[this] def setHeaders(headersOpt: Map[String, String], response: Response): Unit = {
     for ((k, v) <- headers) {
       response.headerMap.set(k, v)
     }
   }
 }
-

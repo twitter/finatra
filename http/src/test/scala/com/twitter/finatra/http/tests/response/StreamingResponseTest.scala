@@ -62,7 +62,7 @@ class StreamingResponseTest extends Test {
   }
 
   test("write failures with other exception") {
-    failWriteWith(new RuntimeException("unexpected exception"))
+    failWriteWith(new RuntimeException("FORCED EXCEPTION"))
   }
 
   test("closes the Closable on successful completion of a successful AsyncStream") {

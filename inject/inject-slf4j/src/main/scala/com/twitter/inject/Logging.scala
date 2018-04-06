@@ -1,29 +1,33 @@
 package com.twitter.inject
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.twitter.util.{Future, Stopwatch}
+import com.twitter.util.{Future, Return, Stopwatch, Throw}
 import scala.util.control.NonFatal
 
 /**
  * Mix this trait into a class/object to get helpful logging methods.
  *
- * Note: This trait simply adds several methods to the [[com.twitter.util.logging.Logging]] trait.
+ * @note This trait simply adds several methods to the [[com.twitter.util.logging.Logging]] trait.
  *
  * The methods below are used as so:
  *
- * //Before
- * def foo = {
- * val result = 4 + 5
- * debugResult("Foo returned " + result)
- * result
- * }
+ * Before:
+ * {{{
+ *  def foo = {
+ *    val result = 4 + 5
+ *    debugFutureResult("Foo returned " + result)
+ *    result
+ *  }
+ * }}}
  *
- * //After
- * def foo = {
- * debugResult("Foo returned %s") {
- * 4 + 5
- * }
- * }
+ * After:
+ * {{{
+ *  def foo = {
+ *    debugFutureResult("Foo returned %s") {
+ *      4 + 5
+ *    }
+ *  }
+ * }}}
  */
 @JsonIgnoreProperties(
   Array(
@@ -45,10 +49,11 @@ trait Logging extends com.twitter.util.logging.Logging {
    * @return Result of func
    */
   protected def debugFutureResult[T](msg: String)(func: => Future[T]): Future[T] = {
-    func onSuccess { result =>
-      debug(msg.format(result))
-    } onFailure { e =>
-      debug(msg.format(e))
+    func.respond {
+      case Return(result) =>
+        debug(msg.format(result))
+      case Throw(e) =>
+        debug(msg.format(e))
     }
   }
 
