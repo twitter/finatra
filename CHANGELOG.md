@@ -6,8 +6,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-http: Added the ability for requests to have a maximum forward depth to
+  `c.t.finatra.http.routing.HttpRouter`, which prevents requests from being forwarded
+  an infinite number of times. By default the maximum forward depth is 5.
+  ``PHAB_ID=D154737``
+
 * inject-thrift-client: Update `configureServicePerEndpoint` and
-  `configureMethodBuilder` in `ThriftMethodBuilderClientModule` to also pass a 
+  `configureMethodBuilder` in `ThriftMethodBuilderClientModule` to also pass a
   `c.t.inject.Injector` instance which allows users to use bound instances from
   the object graph when providing further `thriftmux.MethodBuilder` or
   `ThriftMethodBuilderFactory` configuration.
