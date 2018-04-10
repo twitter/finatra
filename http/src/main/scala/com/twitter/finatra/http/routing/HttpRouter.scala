@@ -31,6 +31,7 @@ class HttpRouter @Inject()(
 ) extends Logging {
 
   /* Mutable State */
+  private[finatra] var maxRequestForwardingDepth: Int = 5
   private[finatra] var globalBeforeRouteMatchingFilter: HttpFilter = Filter.identity
   private[finatra] var globalFilter: HttpFilter = Filter.identity
   private[finatra] val routes = ArrayBuffer[Route]()
@@ -47,6 +48,18 @@ class HttpRouter @Inject()(
   }
 
   /* Public */
+
+  /**
+   * Allows maximum forwarding depth for a given [[com.twitter.finagle.http.Request]]
+   * to be changed
+   * @note This maximum forwarding depth is only enforced by finatra services
+   * @param depth the max number of times a given request can be forwarded
+   */
+  def withMaxRequestForwardingDepth(depth: Int): HttpRouter = {
+    require(depth > 0, s"Maximum request forwarding depth: $depth, must be greater than zero.")
+    maxRequestForwardingDepth = depth
+    this
+  }
 
   def exceptionMapper[T <: ExceptionMapper[_]: Manifest]: HttpRouter = {
     exceptionManager.add[T]

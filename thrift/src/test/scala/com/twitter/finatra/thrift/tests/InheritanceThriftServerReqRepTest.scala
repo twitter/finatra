@@ -116,7 +116,7 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
   test("echo[Future]") {
     // use ServicePerEndpoint which has the 'muxCtxtsFilter' ThriftMux client filter
     val reqRepMethodPerEndpoint: ServiceB[Future] =
-      ThriftMux.client
+      ThriftMux.Client
         .methodPerEndpoint(reqRepServicePerEndpoint)
 
     val f: Future[String] =
@@ -136,7 +136,7 @@ class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
       ThriftMux.client
         .filtered(muxCtxtsFilter.toFilter)
         .build[ServiceB.MethodPerEndpoint](
-          PortUtils.loopbackAddressForPort(server.thriftPort),
+          PortUtils.loopbackAddressForPort(server.thriftPort()),
           "client123"
         )
 

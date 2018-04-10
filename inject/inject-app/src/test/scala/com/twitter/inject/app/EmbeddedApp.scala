@@ -1,8 +1,7 @@
 package com.twitter.inject.app
 
-import com.twitter.inject.Logging
-import java.lang.annotation.Annotation
-import scala.reflect.runtime.universe._
+import com.google.inject.Module
+import com.twitter.inject.{Injector, Logging}
 
 /**
  * EmbeddedApp allow's a [[com.twitter.inject.app.App]] to be integration and
@@ -10,75 +9,41 @@ import scala.reflect.runtime.universe._
  *
  * @param app The [[com.twitter.inject.app.App]] to be started for testing
  */
-class EmbeddedApp(app: com.twitter.inject.app.App) extends Logging {
+class EmbeddedApp(app: com.twitter.inject.app.App) extends BindDSL with Logging {
 
-  /**
-   * Bind an instance of type [T] to the object graph of the underlying app.
-   * This will REPLACE any previously bound instance of the given type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @return this [[EmbeddedApp]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  def bind[T: TypeTag](instance: T): EmbeddedApp = {
-    app.addFrameworkOverrideModules(new InjectionServiceModule[T](instance))
-    this
-  }
+  /** Note the Injector is ONLY available AFTER app.main() has been called */
+  lazy val injector: Injector = app.injector
 
-  /**
-   * Bind an instance of type [T] annotated with Annotation type [A] to the object
-   * graph of the underlying app. This will REPLACE any previously bound instance of
-   * the given type bound with the given annotation type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @tparam A - type of the Annotation used to bind the instance.
-   * @return this [[EmbeddedApp]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  def bind[T: TypeTag, A <: Annotation: TypeTag](instance: T): EmbeddedApp = {
-    app.addFrameworkOverrideModules(new InjectionServiceWithAnnotationModule[T, A](instance))
-    this
-  }
+  def underlying: com.twitter.inject.app.App = app
 
-  /**
-   * Bind an instance of type [T] annotated with the given Annotation value to the object
-   * graph of the underlying app. This will REPLACE any previously bound instance of
-   * the given type bound with the given annotation.
-   *
-   * @param annotation - [[java.lang.annotation.Annotation]] instance value
-   * @param instance - to bind instance.
-   * @tparam T - type of the instance to bind.
-   * @return this [[EmbeddedApp]].
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  def bind[T: TypeTag](annotation: Annotation, instance: T): EmbeddedApp = {
-    app.addFrameworkOverrideModules(new InjectionServiceWithNamedAnnotationModule[T](annotation, instance))
-    this
-  }
-
+  /** Run the underlying App main with the given `Map[String, Any]` passed as application flags */
   def main(flags: Map[String, Any]): Unit = {
     val stringArgs = flagsAsArgs(flags)
     info("Calling main with args: " + stringArgs.mkString(" "))
     app.nonExitingMain(stringArgs.toArray)
   }
 
+  /** Run the underlying App main with the given sequence of tuples passed as application flags */
   def main(flags: (String, Any)*): Unit = {
     main(flags.toMap)
   }
 
+  /** Convenience to run the underlying App main with no arguments */
   def main(): Unit = {
     main(Map[String, Any]())
   }
 
+  /** Run the underlying App main with the given `Map[String, Any]` and sequence of String concatenated and passed as application flags */
   def main(flags: Map[String, Any], args: Seq[String]): Unit = {
     val stringArgs = flagsAsArgs(flags) ++ args
     info("Calling main with args: " + stringArgs.mkString(" "))
     app.nonExitingMain(stringArgs.toArray)
+  }
+
+  /* Protected */
+
+  override final protected def addInjectionServiceModule(module: Module): Unit = {
+    app.addFrameworkOverrideModules(module)
   }
 
   /* Private */

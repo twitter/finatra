@@ -1,10 +1,14 @@
 package com.twitter.inject.thrift.modules
 
 import com.google.inject.Provides
-import com.twitter.finagle.service.Retries.Budget
+import com.twitter.finagle.service.RetryBudget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
-import com.twitter.finagle.thrift.service.{Filterable, MethodPerEndpointBuilder, ServicePerEndpointBuilder}
+import com.twitter.finagle.thrift.service.{
+  Filterable,
+  MethodPerEndpointBuilder,
+  ServicePerEndpointBuilder
+}
 import com.twitter.finagle.{ThriftMux, thriftmux}
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.{Injector, TwitterModule}
@@ -42,17 +46,18 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   implicit servicePerEndpointBuilder: ServicePerEndpointBuilder[ServicePerEndpoint],
   methodPerEndpointBuilder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
 ) extends TwitterModule
-  with ThriftClientModuleTrait {
+    with ThriftClientModuleTrait {
 
   protected def sessionAcquisitionTimeout: Duration = Duration.Top
 
   protected def requestTimeout: Duration = Duration.Top
 
-  protected def retryBudget: Budget = Budget.default
+  protected def retryBudget: RetryBudget = RetryBudget()
 
   protected def monitor: Monitor = NullMonitor
 
   protected def configureThriftMuxClient(
+    injector: Injector,
     client: ThriftMux.Client
   ): ThriftMux.Client = client
 
@@ -71,11 +76,13 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
    * Note: any configuration here will be applied to all methods unless explicitly overridden. However,
    * also note that filters are cumulative. Thus filters added here will be present in any final configuration.
    *
+   * @param injector a [[com.twitter.inject.Injector]] instance
    * @param methodBuilder the [[thriftmux.MethodBuilder]] to configure.
    * @return a configured MethodBuilder which will be used as the starting point for any per-method
    *         configuration.
    */
   protected def configureMethodBuilder(
+    injector: Injector,
     methodBuilder: thriftmux.MethodBuilder
   ): thriftmux.MethodBuilder = methodBuilder
 
@@ -93,12 +100,14 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
    * Subclasses of this module MAY provide an implementation of `configureServicePerEndpoint` which
    * specifies configuration of a `ServicePerEndpoint` interface per-method of the interface.
    *
+   * @param injector a [[com.twitter.inject.Injector]] instance
    * @param builder a [[ThriftMethodBuilderFactory]] for creating a [[com.twitter.inject.thrift.ThriftMethodBuilder]].
    * @param servicePerEndpoint the [[ServicePerEndpoint]] to configure.
    * @return a per-method filtered [[ServicePerEndpoint]]
    * @see [[com.twitter.inject.thrift.ThriftMethodBuilder]]
    */
   protected def configureServicePerEndpoint(
+    injector: Injector,
     builder: ThriftMethodBuilderFactory[ServicePerEndpoint],
     servicePerEndpoint: ServicePerEndpoint
   ): ServicePerEndpoint = servicePerEndpoint
@@ -108,8 +117,7 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   final def providesMethodPerEndpoint(
     servicePerEndpoint: ServicePerEndpoint
   ): MethodPerEndpoint = {
-    assert(thriftMuxClient != null, "Unexpected order of initialization.")
-    thriftMuxClient
+    ThriftMux.Client
       .methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](servicePerEndpoint)
   }
 
@@ -120,23 +128,20 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): ServicePerEndpoint = {
-    createThriftMuxClient(clientId, statsReceiver)
+    createThriftMuxClient(injector, clientId, statsReceiver)
 
     val methodBuilder =
-      configureMethodBuilder(thriftMuxClient.methodBuilder(dest))
+      configureMethodBuilder(injector, thriftMuxClient.methodBuilder(dest))
 
-    val configuredServicePerEndpoint = configureServicePerEndpoint(
-      builder = new ThriftMethodBuilderFactory[ServicePerEndpoint](
+    val configuredServicePerEndpoint =
+      configureServicePerEndpoint(
         injector,
-        methodBuilder
-      ),
-      servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint]
-    )
+        builder = new ThriftMethodBuilderFactory[ServicePerEndpoint](injector, methodBuilder),
+        servicePerEndpoint = methodBuilder.servicePerEndpoint[ServicePerEndpoint])
 
     closeOnExit {
       val closable = asClosable(configuredServicePerEndpoint)
-      Await.result(
-        closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
+      Await.result(closable.close(defaultClosableGracePeriod), defaultClosableAwaitPeriod)
     }
     configuredServicePerEndpoint
   }
@@ -150,21 +155,21 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
   // Thus we use mutation to create and configure a ThriftMux.Client.
   private[this] var thriftMuxClient: ThriftMux.Client = _
   private[this] def createThriftMuxClient(
+    injector: Injector,
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): Unit = {
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
-    thriftMuxClient = configureThriftMuxClient(
-      ThriftMux.client.withSession
-        .acquisitionTimeout(sessionAcquisitionTimeout)
-        .withRequestTimeout(requestTimeout)
-        .withStatsReceiver(clientStatsReceiver)
-        .withClientId(clientId)
-        .withMonitor(monitor)
-        .withLabel(label)
-        .withRetryBudget(retryBudget.retryBudget)
-        .withRetryBackoff(retryBudget.requeueBackoffs)
-    )
+    thriftMuxClient =
+      configureThriftMuxClient(injector,
+        ThriftMux.client.withSession
+          .acquisitionTimeout(sessionAcquisitionTimeout)
+          .withRequestTimeout(requestTimeout)
+          .withStatsReceiver(clientStatsReceiver)
+          .withClientId(clientId)
+          .withMonitor(monitor)
+          .withLabel(label)
+          .withRetryBudget(retryBudget))
   }
 }

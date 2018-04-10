@@ -12,6 +12,112 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.4.0](https://github.com/twitter/finatra/tree/finatra-18.4.0) (2018-04-10)
+
+### Added
+
+* finatra-http: Added the ability for requests to have a maximum forward depth to
+  `c.t.finatra.http.routing.HttpRouter`, which prevents requests from being forwarded
+  an infinite number of times. By default the maximum forward depth is 5.
+  ``PHAB_ID=D154737``
+
+* inject-thrift-client: Update `configureServicePerEndpoint` and
+  `configureMethodBuilder` in `ThriftMethodBuilderClientModule` to also pass a
+  `c.t.inject.Injector` instance which allows users to use bound instances from
+  the object graph when providing further `thriftmux.MethodBuilder` or
+  `ThriftMethodBuilderFactory` configuration.
+  ``PHAB_ID=D155451``
+
+* inject-thrift-client: Update `configureThriftMuxClient` in `ThriftClientModuleTrait` to
+  also pass a `c.t.inject.Injector` instance which allows users to use bound instances
+  from the object graph when providing further `ThriftMux.client` configuration.
+  ``PHAB_ID=D152973``
+
+* inject-server: Capture errors on close of the underlying TwitterServer. The embedded
+  testing utilities can now capture and report on an exception that occurs during close 
+  of the underlying TwitterServer. `EmbeddedTwitterServer#assertCleanShutdown` inspects 
+  for any Throwable captured from closing the underlying server which it will then throw.
+  ``PHAB_ID=D148946``
+
+* finatra-http: Created a new API into `c.t.f.h.response.StreamingResponse` which permits passing
+  a `transformer` which is an `AsynStream[T] => AsyncStream[(U, Buf)]` for serialization purposes,
+  as well as two callbacks -- `onDisconnect`, called when the stream is disconnected, and `onWrite`,
+  which is a `respond` side-effecting callback to every individual write to the stream. 
+  ``PHAB_ID=D147925``
+
+### Changed
+
+* inject-app: Update and improve the test `#bind[T]` DSL. The testing `#bind[T]` DSL is lacking in 
+  its ability to be used from Java and we would like to revise the API to be more expressive such
+  that it also includes binding from a Type to a Type. Due to wanting to also support the ability 
+  to bind a Type to a Type, the DSL has been re-worked to more closely match the actual Guice 
+  binding DSL.
+  
+  For Scala users the `#bind[T]` DSL now looks as follows:
+  ```
+    bind[T].to[U <: T]
+    bind[T].to[Class[U <: T]]
+    bind[T].toInstance(T)
+    
+    bind[T].annotatedWith[Ann].to[U <: T]
+    bind[T].annotatedWith[Ann].to[Class[U <: T]]
+    bind[T].annotatedWith[Ann].toInstance(T)
+    
+    bind[T].annotatedWith[Class[Ann]].to[U <: T]
+    bind[T].annotatedWith[Class[Ann]].to[Class[U <: T]]
+    bind[T].annotatedWith[Class[Ann]].toInstance(T)
+    
+    bind[T].annotatedWith(Annotation).to[U <: T]
+    bind[T].annotatedWith(Annotation).to[Class[U <: T]]
+    bind[T].annotatedWith(Annotation).toInstance(T)
+    
+    bindClass(Class[T]).to[T]
+    bindClass(Class[T]).to[Class[U <: T]]
+    bindClass(Class[T]).toInstance(T)
+    
+    bindClass(Class[T]).annotatedWith[Class[Ann]].to[T]
+    bindClass(Class[T]).annotatedWith[Class[Ann]].[Class[U <: T]]
+    bindClass(Class[T]).annotatedWith[Class[Ann]].toInstance(T)
+    
+    bindClass(Class[T]).annotatedWith(Annotation).to[T]
+    bindClass(Class[T]).annotatedWith(Annotation).[Class[U <: T]]
+    bindClass(Class[T]).annotatedWith(Annotation).toInstance(T)
+  ```
+  
+  For Java users, there are more Java-friendly methods:
+  ```
+    bindClass(Class[T], T)
+    bindClass(Class[T], Annotation, T)
+    bindClass(Class[T], Class[Annotation], T)
+    
+    bindClass(Class[T], Class[U <: T])
+    bindClass(Class[T],  Annotation, Class[U <: T])
+    bindClass(Class[T], Class[Annotation], Class[U <: T])
+  ```
+  
+  Additionally, these changes highlighted the lack of Java-support in the `TwitterModule` for 
+  creating injectable Flags. Thus `c.t.inject.TwitterModuleFlags` has been updated to also provide 
+  Java-friendly flag creation methods:
+  ```
+    protected def createFlag[T](name: String, default: T, help: String, flggble: Flaggable[T]): Flag[T]
+    protected def createMandatoryFlag[T](name: String, help: String, usage: String, flggble: Flaggable[T]): Flag[T]
+  ```
+  ``PHAB_ID=D149252``
+
+* inject-thrift-client: The "retryBudget" in the `c.t.inject.thrift.modules.ThriftMethodBuilderClientModule`
+  should be a `RetryBudget` and not the generic `Budget` configuration Param. Updated the type.
+  ``PHAB_ID=D151938``
+
+* inject-server: Move HTTP-related concerns out of the embedded testing utilities into
+  specific HTTP "clients". The exposed `httpAdminClient` in the `EmbeddedTwitterServer`
+  and the `httpClient` and `httpsClient` in the `EmbeddedHttpServer` are no longer just
+  Finagle Services from Request to Response, but actual objects. The underlying Finagle
+  `Service[Request, Response]` can be accessed via `Client.service`. ``PHAB_ID=D148946``
+
+### Fixed
+
+### Closed
+
 ## [finatra-18.3.0](https://github.com/twitter/finatra/tree/finatra-18.3.0) (2018-03-05)
 
 ### Added

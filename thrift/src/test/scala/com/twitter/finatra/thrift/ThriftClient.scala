@@ -9,7 +9,7 @@ import com.twitter.finagle.thrift.service.{
   ServicePerEndpointBuilder,
   ThriftServiceBuilder
 }
-import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports}
+import com.twitter.inject.server.{EmbeddedTwitterServer, info, PortUtils, Ports}
 import scala.reflect.ClassTag
 
 trait ThriftClient { self: EmbeddedTwitterServer =>
@@ -31,12 +31,22 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
 
   /* Overrides */
 
-  override protected def logStartup() {
+  /** Logs the external thrift host and port of the underlying embedded TwitterServer */
+  override protected[twitter] def logStartup(): Unit = {
     self.logStartup()
-    info(s"ExternalThrift -> thrift://$externalThriftHostAndPort\n")
+    info(s"ExternalThrift -> thrift://$externalThriftHostAndPort\n", disableLogging)
   }
 
-  override protected def combineArgs(): Array[String] = {
+  /**
+   * Adds the [[thriftPortFlag]] with a value pointing to the ephemeral loopback address to
+   * the list of flags to be passed to the underlying server.
+   * @see [[PortUtils.ephemeralLoopback]]
+   *
+   * @note this flag is also added in the EmbeddedThriftServer constructor but needs to be added
+   * here for when this trait is mixed into an EmbeddedTwitterServer or an EmbeddedHttpServer.
+   * The flags are de-duped prior to starting the underlying server.
+   */
+  override protected[twitter] def combineArgs(): Array[String] = {
     s"-$thriftPortFlag=${PortUtils.ephemeralLoopback}" +: self.combineArgs
   }
 
@@ -90,6 +100,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * @param clientId the client Id to use in creating the thrift client.
    *
    * @return a Finagle Thrift client in the given form.
+   * @see [[com.twitter.finagle.ThriftMux.Client.build(dest: String)]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
    */
   def thriftClient[ThriftService: ClassTag](
@@ -116,7 +127,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * @param clientId the client Id to use in creating the thrift client.
    *
    * @return a Finagle Thrift client in the given form.
-   * @see [[com.twitter.finagle.thrift.ThriftRichClient.servicePerEndpoint]]
+   * @see [[com.twitter.finagle.ThriftMux.Client.servicePerEndpoint]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id2 Scrooge Finagle Integration - ServicePerEndpoint]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id3 Scrooge Finagle Integration - ReqRepServicePerEndpoint]]
    */
@@ -149,7 +160,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    *
    * @return a Finagle Thrift client in the `MyService.MethodPerEndpoint` form of a
    *         method-per-endpoint.
-   * @see [[com.twitter.finagle.thrift.ThriftRichClient.methodPerEndpoint]]
+   * @see [[com.twitter.finagle.ThriftMux.Client.methodPerEndpoint]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
    */
   def methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](
@@ -157,7 +168,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   )(
     implicit builder: MethodPerEndpointBuilder[ServicePerEndpoint, MethodPerEndpoint]
   ): MethodPerEndpoint = {
-    thriftMuxClient
+    ThriftMux.Client
       .methodPerEndpoint[ServicePerEndpoint, MethodPerEndpoint](servicePerEndpoint)
   }
 
@@ -186,7 +197,7 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
    * @param servicePerEndpoint the service-per-endpoint to convert to a method-per-endpoint.
    *
    * @return a Finagle Thrift client in the higher-kinded form of a method-per-endpoint.
-   * @see [[com.twitter.finagle.thrift.ThriftRichClient.thriftService]]
+   * @see [[com.twitter.finagle.ThriftMux.Client.thriftService]]
    * @see [[https://twitter.github.io/scrooge/Finagle.html#id1 Scrooge Finagle Integration - MethodPerEndpoint]]
    */
   @deprecated("Use #methodPerEndpoint", "2018-01-12")
@@ -195,6 +206,6 @@ trait ThriftClient { self: EmbeddedTwitterServer =>
   )(
     implicit builder: ThriftServiceBuilder[ServicePerEndpoint, ThriftService]
   ): ThriftService = {
-    thriftMuxClient.thriftService[ServicePerEndpoint, ThriftService](servicePerEndpoint)
+    ThriftMux.Client.thriftService[ServicePerEndpoint, ThriftService](servicePerEndpoint)
   }
 }

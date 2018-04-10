@@ -1,7 +1,7 @@
 package com.twitter.inject
 
 import com.twitter.conversions.time._
-import com.twitter.util.{Await, Future}
+import com.twitter.util.{Await, ExecutorServiceFuturePool, Future}
 import java.util.TimeZone
 import org.apache.commons.io.IOUtils
 import org.joda.time.{DateTimeZone, Duration}
@@ -35,12 +35,19 @@ trait TestMixin
 
   override protected def afterAll(): Unit = {
     super.afterAll()
-    pool.executor.shutdown()
+    try {
+      pool.executor.shutdown()
+    } catch {
+      case t: Throwable =>
+        println(s"Unable to shutdown ${"Test " + getClass.getSimpleName} future pool executor. $t")
+        t.printStackTrace()
+    }
   }
 
   /* Protected */
 
-  protected lazy val pool = PoolUtils.newUnboundedPool("Test " + getClass.getSimpleName)
+  protected lazy val pool: ExecutorServiceFuturePool =
+    PoolUtils.newUnboundedPool("Test " + getClass.getSimpleName)
 
   protected def setUtcTimeZone(): Unit = {
     DateTimeZone.setDefault(DateTimeZone.UTC)
@@ -69,7 +76,7 @@ trait TestMixin
     resultVal should equal(expectedVal)
   }
 
-  protected def assertFutureValue[A](result: Future[A], expected: A): Unit =  {
+  protected def assertFutureValue[A](result: Future[A], expected: A): Unit = {
     val resultVal = Await.result(result, 5.seconds)
     val expectedVal = Await.result(Future.value(expected), 5.seconds)
     resultVal should equal(expectedVal)

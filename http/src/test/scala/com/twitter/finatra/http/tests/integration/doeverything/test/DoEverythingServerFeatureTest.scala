@@ -30,16 +30,16 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   val doEverythingService = server.injector.instance[DoEverythingService]
   val namedExampleString = server.injector.instance[String](Names.named("example"))
 
-  def deserializeRequest(name: String) = {
+  private def deserializeRequest(name: String) = {
     val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))
     HttpCodec.decodeBytesToRequest(requestBytes)
   }
 
-  def counter(key: String): Long = {
+  private def counter(key: String): Long = {
     server.inMemoryStatsReceiver.counter(key.split("/"): _*)()
   }
 
-  def stat(key: String): Seq[Float] = {
+  private def stat(key: String): Seq[Float] = {
     server.inMemoryStatsReceiver.stat(key.split("/"): _*)()
   }
 
@@ -1654,11 +1654,11 @@ class DoEverythingServerFeatureTest extends FeatureTest {
   }
 
   test("ports") {
-    server.httpExternalPort should be > 0
+    server.httpExternalPort() should be > 0
 
     // no https server configured
     intercept[Exception] {
-      server.httpsExternalPort
+      server.httpsExternalPort()
     }
   }
 

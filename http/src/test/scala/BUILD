@@ -23,7 +23,7 @@ junit_tests(
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/joda-time",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "3rdparty/jvm/org/apache/thrift:libthrift-0.5.0",
+        "3rdparty/jvm/org/apache/thrift:libthrift",
         "3rdparty/jvm/org/scala-lang/modules:scala-xml",
         "3rdparty/jvm/org/scalatest",
         "3rdparty/jvm/org/slf4j:slf4j-api",
@@ -102,5 +102,6 @@ scala_library(
     exports = [
         "finatra/http/src/main/scala",
         "finatra/inject/inject-server/src/test/scala:test-deps",
+        "finatra/jackson/src/main/scala",
     ],
 )

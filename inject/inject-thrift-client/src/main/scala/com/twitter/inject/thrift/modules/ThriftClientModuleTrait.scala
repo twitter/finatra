@@ -2,8 +2,8 @@ package com.twitter.inject.thrift.modules
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.ThriftMux
-import com.twitter.finagle.service.Retries.Budget
-import com.twitter.inject.Logging
+import com.twitter.finagle.service.RetryBudget
+import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.ThriftService
 import com.twitter.util.{Closable, Duration, Monitor}
 
@@ -66,7 +66,7 @@ private[inject] trait ThriftClientModuleTrait extends Logging {
    * @return a default [[com.twitter.finagle.service.RetryBudget]]
    * @see [[https://twitter.github.io/finagle/guide/Clients.html#retries]]
    */
-  protected def retryBudget: Budget
+  protected def retryBudget: RetryBudget
 
   /**
    * Function to add a user-defined Monitor. A [[com.twitter.finagle.util.DefaultMonitor]] will be
@@ -88,14 +88,18 @@ private[inject] trait ThriftClientModuleTrait extends Logging {
    *       .withStatsReceiver(someOtherScopedStatsReceiver)
    *       .withMonitor(myAwesomeMonitor)
    *       .withTracer(notTheDefaultTracer)
+   *       .withClientId(injector.instance[ClientId])
    *       .withResponseClassifier(ThriftResponseClassifier.ThriftExceptionsAsFailures)
    *   }
    *}}}
    *
+   * @param injector the [[com.twitter.inject.Injector]] which can be used to help configure the
+   *                 given [[com.twitter.finagle.ThriftMux.Client]].
    * @param client the [[com.twitter.finagle.ThriftMux.Client]] to configure.
    * @return a configured [[ThriftMux.Client]].
    */
   protected def configureThriftMuxClient(
+    injector: Injector,
     client: ThriftMux.Client
   ): ThriftMux.Client
 
@@ -117,8 +121,8 @@ private[inject] trait ThriftClientModuleTrait extends Logging {
             } catch {
               case _: java.lang.ClassCastException =>
                 warn(
-                  s"Unable to cast result of ${ThriftService.AsClosableMethodName} invocation to a ${Closable.getClass.getName
-                    .dropRight(1)} type."
+                  s"Unable to cast result of ${ThriftService.AsClosableMethodName} invocation to a " +
+                    s"${Closable.getClass.getName.dropRight(1)} type."
                 )
                 Closable.nop
             }

@@ -14,7 +14,7 @@ class Add2ServerFeatureTest extends FeatureTest with Mockito with HttpMockRespon
 
   override val server =
     new EmbeddedHttpServer(new Add2Server)
-      .bind[HttpClient](mockHttpClient)
+      .bind[HttpClient].toInstance(mockHttpClient)
 
   test("add2") {
     mockHttpClient.execute(any[Request]) returns (Future(ok("6")),

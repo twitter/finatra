@@ -1,15 +1,15 @@
-package com.twitter.finatra.tests;
+package com.twitter.inject.app.tests;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import com.google.inject.BindingAnnotation;
 
-import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@BindingAnnotation
-@Target(PARAMETER)
 @Retention(RUNTIME)
-public @interface Prod {
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
+@BindingAnnotation
+public @interface Up {
 }

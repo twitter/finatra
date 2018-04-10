@@ -16,7 +16,7 @@ case class Injector(underlying: UnderlyingInjector) {
    * inject your dependencies ahead of time via annotating your constructor
    * with `@Inject`.
    *
-   * @tparam T - type of the bound instance to return from the object graph.
+   * @tparam T type of the bound instance to return from the object graph.
    *
    * @return bound instance of type [[T]].
    */
@@ -24,14 +24,14 @@ case class Injector(underlying: UnderlyingInjector) {
 
   /**
    * Returns the appropriate instance for the given key constructed from the
-   * passed type [[T]] and given `java.lang.annotation.Annotation` type [[Ann]].
+   * passed type [[T]] and given [[java.lang.annotation.Annotation]] type [[Ann]].
    *
    * When feasible, avoid using this method in favor of having the Injector
    * inject your dependencies ahead of time via annotating your constructor
    * with `@Inject`.
    *
-   * @tparam T - type of the bound instance to return from the object graph.
-   * @tparam Ann - type of the annotation used to disambiguate the bound type [[T]].
+   * @tparam T type of the bound instance to return from the object graph.
+   * @tparam Ann type of the annotation used to disambiguate the bound type [[T]].
    *
    * @return bound instance of type [[T]] annotated with annotation type [[Ann]].
    */
@@ -43,20 +43,38 @@ case class Injector(underlying: UnderlyingInjector) {
 
   /**
    * Returns the appropriate instance for the given key constructed from the
-   * passed type [[T]] and given `java.lang.annotation.Annotation` annotation.
+   * passed type [[T]] and given [[java.lang.annotation.Annotation]] annotation.
    *
    * When feasible, avoid using this method in favor of having the Injector
    * inject your dependencies ahead of time via annotating your constructor
    * with `@Inject`.
    *
-   * @param annotation - `java.lang.annotation.Annotation` instance used to
-   *                     disambiguate the bound type [[T]].
-   * @tparam T - type of the bound instance to return from the object graph.
+   * @param annotation [[java.lang.annotation.Annotation]] instance used to
+   *                    disambiguate the bound type [[T]].
+   * @tparam T type of the bound instance to return from the object graph.
    *
    * @return bound instance of type [[T]] annotated with annotation.
    */
   def instance[T: Manifest](annotation: Annotation): T = {
     val key = Key.get(typeLiteral[T], annotation)
+    underlying.getInstance(key)
+  }
+
+  /**
+   * Returns the appropriate instance for the given key constructed from the
+   * passed type [[T]] and given [[java.lang.annotation.Annotation]] class.
+   *
+   * When feasible, avoid using this method in favor of having the Injector
+   * inject your dependencies ahead of time via annotating your constructor
+   * with `@Inject`.
+   *
+   * @param annotationClazz class of [[java.lang.annotation.Annotation]] used
+   *                        to disambiguate the bound type [[T]].
+   * @tparam T type of the bound instance to return from the object graph.
+   * @return bound instance of type [[T]] annotated with annotation class.
+   */
+  def instance[T: Manifest](annotationClazz: Class[_ <: Annotation]): T = {
+    val key = Key.get(typeLiteral[T], annotationClazz)
     underlying.getInstance(key)
   }
 
@@ -69,8 +87,8 @@ case class Injector(underlying: UnderlyingInjector) {
    * inject your dependencies ahead of time via annotating your constructor
    * with `@Inject`.
    *
-   * @param name - String value of `@Named` annotation.
-   * @tparam T - type of the bound instance to return from the object graph.
+   * @param name String value of `@Named` annotation.
+   * @tparam T type of the bound instance to return from the object graph.
    *
    * @return bound instance of type [[T]] annotated with `@Named(name)`.
    *
@@ -90,12 +108,52 @@ case class Injector(underlying: UnderlyingInjector) {
    * inject your dependencies ahead of time via annotating your constructor
    * with `@Inject`.
    *
-   * @param clazz - the class of type [[T]] of the bound instance to return from the object graph.
-   * @tparam T - type of the bound instance to return from the object graph.
+   * @param clazz the class of type [[T]] of the bound instance to return
+   *              from the object graph.
+   * @tparam T type of the bound instance to return from the object graph.
    *
    * @return bound instance of type [[T]].
    */
   def instance[T](clazz: Class[T]): T = underlying.getInstance(clazz)
+
+  /**
+   * Returns the appropriate instance for the given key constructed from the
+   * passed class and given [[java.lang.annotation.Annotation]] annotation.
+   *
+   * When feasible, avoid using this method, in favor of having the Injector
+   * inject your dependencies ahead of time via annotating your constructor
+   * with `@Inject`.
+   *
+   * @param clazz the class of type [[T]] of the bound instance to return from
+   *              the object graph.
+   * @param annotation [[java.lang.annotation.Annotation]] instance used to
+   *                  disambiguate the bound type [[T]].
+   * @tparam T type of the bound instance to return from the object graph.
+   *
+   * @return bound instance of type [[T]].
+   */
+  def instance[T](clazz: Class[T], annotation: Annotation): T = {
+    val key = Key.get(clazz, annotation)
+    underlying.getInstance(key)
+  }
+
+  /**
+   * Returns the appropriate instance for the given key constructed from the
+   * passed class and given [[java.lang.annotation.Annotation]] class.
+   *
+   * @param clazz the class of type [[T]] of the bound instance to return from
+   *              the object graph.
+   * @param annotationClazz [[java.lang.annotation.Annotation]] class used to
+   *                        disambiguate the bound type [[T]].
+   * @tparam T type of the bound instance to return from the object graph.
+   * @tparam Ann type of the annotation class used to disambiguate the bound type [[T]].
+   *
+   * @return bound instance of type [[T]].
+   */
+  def instance[T, Ann <: Annotation](clazz: Class[T], annotationClazz: Class[Ann]): T = {
+    val key = Key.get(clazz, annotationClazz)
+    underlying.getInstance(key)
+  }
 
   /**
    * Returns the appropriate instance for the given injection key.
@@ -104,11 +162,11 @@ case class Injector(underlying: UnderlyingInjector) {
    * inject your dependencies ahead of time via annotating your constructor
    * with `@Inject`.
    *
-   * @param key - `com.google.inject.Key` binding key of the bound instance to return
+   * @param key [[com.google.inject.Key]] binding key of the bound instance to return
    *              from the object graph.
-   * @tparam T - type of the bound instance to return from the object graph.
+   * @tparam T type of the bound instance to return from the object graph.
    *
-   * @return bound instance of type [[T]] represented by `com.google.inject.Key` key.
+   * @return bound instance of type [[T]] represented by [[com.google.inject.Key]] key.
    *
    * @see [[https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/Key.html com.google.inject.Key]]
    */

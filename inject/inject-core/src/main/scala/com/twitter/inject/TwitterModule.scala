@@ -20,7 +20,7 @@ abstract class TwitterModule extends AbstractModule with TwitterBaseModule with 
 
   override protected def install(module: Module): Unit = {
     module match {
-      case twitterModule: TwitterModule =>
+      case _: TwitterModule =>
         throw new Exception(
           "Install not supported for TwitterModules. Please use 'override val modules = Seq(module1, module2, ...)'"
         )

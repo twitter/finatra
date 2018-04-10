@@ -29,8 +29,6 @@ class DoEverythingThriftWarmupHandler @Inject()(warmup: ThriftWarmup) extends Ha
     } catch {
       case e: Throwable =>
         error(e.getMessage, e)
-    } finally {
-      warmup.close()
     }
     info("Warm up done.")
   }

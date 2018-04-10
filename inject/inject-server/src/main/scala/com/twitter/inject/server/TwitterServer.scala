@@ -120,11 +120,25 @@ trait TwitterServer
   /** Resolve all Finagle clients before warmup method called */
   protected def resolveFinagleClientsOnStartup: Boolean = true
 
+  /**
+   * Callback to register an [[Awaitable]] instance for the server to await (block) on.
+   *
+   * All registered [[Awaitable]] instances are entangled by the server such that if any
+   * registered [[Awaitable]] exits it will trigger all registered [[Awaitable]] instances to exit.
+   * @param awaitable an [[Awaitable]] instance to register.
+   * @see [[https://twitter.github.io/finatra/user-guide/twitter-server/index.html#awaiting-awaitables Awaiting Awaitables]]
+   */
   protected def await[T <: Awaitable[_]](awaitable: T): Unit = {
     assert(awaitable != null, "Cannot call #await() on null Awaitable.")
+    debug(s"Adding ${awaitable.getClass.getName} to list of Awaitables")
     this.awaitables.add(awaitable)
   }
 
+  /**
+   * Callback to register multiple [[Awaitable]] instances for the server to await (block) on.
+   * @param awaitables vararg list of [[Awaitable]] instances to register.
+   * @see [[TwitterServer.await(awaitable: Awaitable)]]
+   */
   protected def await(awaitables: Awaitable[_]*): Unit = {
     awaitables.foreach(await)
   }
@@ -145,8 +159,9 @@ trait TwitterServer
   override final def main(): Unit = {
     super.main() // Call inject.App.main() to create Injector
 
-    info("Startup complete, server ready.")
+    info("Startup complete, server awaiting.")
     Awaiter.any(awaitables.asScala, period = 1.second)
+    info("Awaited awaitables have exited, server done.")
   }
 
   /**
@@ -297,7 +312,7 @@ trait TwitterServer
     super.afterPostWarmup()
 
     if (!disableAdminHttpServer) {
-      info("Enabling health endpoint on port " + PortUtils.getPort(adminHttpServer))
+      info("admin http server started on port " + PortUtils.getPort(adminHttpServer))
     }
     warmupComplete()
   }

@@ -20,8 +20,8 @@ class TwitterCloneFeatureTest extends FeatureTest with Mockito {
 
   override val server =
     new EmbeddedHttpServer(new TwitterCloneServer)
-      .bind[FirebaseClient](firebaseClient)
-      .bind[IdService](idService)
+      .bind[FirebaseClient].toInstance(firebaseClient)
+      .bind[IdService].toInstance(idService)
 
   test("tweet creation") {
     idService.getId returns Future(TweetId("123"))

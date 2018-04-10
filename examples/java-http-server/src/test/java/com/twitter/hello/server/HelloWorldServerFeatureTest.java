@@ -14,14 +14,22 @@ import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
 import com.twitter.finatra.http.EmbeddedHttpServer;
 import com.twitter.finatra.httpclient.RequestBuilder;
+import com.twitter.inject.annotations.Flags;
 
 public class HelloWorldServerFeatureTest extends Assert {
 
-    private static final EmbeddedHttpServer SERVER =
-        new EmbeddedHttpServer(
+    private static final EmbeddedHttpServer SERVER = setup();
+
+    private static EmbeddedHttpServer setup() {
+        EmbeddedHttpServer server = new EmbeddedHttpServer(
             new HelloWorldServer(),
             Collections.emptyMap(),
             Stage.DEVELOPMENT);
+
+        server.bindClass(Integer.class, Flags.named("magic.number"), 42);
+        server.bindClass(Integer.class, Flags.named("module.magic.number"), 9999);
+        return server;
+    }
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -69,5 +77,32 @@ public class HelloWorldServerFeatureTest extends Assert {
         Response response = SERVER.httpRequest(request);
         assertEquals(Status.InternalServerError(), response.status());
         assertEquals("error processing request", response.contentString());
+    }
+
+    /** test magicNum endpoint */
+    @Test
+    public void testMagicNumEndpoint() {
+        Request request = RequestBuilder.get("/magicNum");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("42", response.contentString());
+    }
+
+    /** test moduleMagicNum endpoint */
+    @Test
+    public void testModuleMagicNumEndpoint() {
+        Request request = RequestBuilder.get("/moduleMagicNum");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("9999", response.contentString());
+    }
+
+    /** test moduleMagicFloatNum endpoint; no override binding */
+    @Test
+    public void testModuleMagicFloatingNumEndpoint() {
+        Request request = RequestBuilder.get("/moduleMagicFloatNum");
+        Response response = SERVER.httpRequest(request);
+        assertEquals(Status.Ok(), response.status());
+        assertEquals("3.1459", response.contentString());
     }
 }

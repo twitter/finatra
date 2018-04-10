@@ -72,7 +72,7 @@ extends |c.t.inject.thrift.modules.ThriftMethodBuilderClientModule|_:
 
 .. code:: scala
 
-    import com.twitter.finagle.Budget
+    import com.twitter.finagle.service.RetryBudget
     import com.twitter.inject.thrift.modules.ThriftMethodBuilderClientModule
     import com.twitter.myservice.thriftscala.MyService
     import com.twitter.util.{Duration, Monitor}
@@ -87,7 +87,7 @@ extends |c.t.inject.thrift.modules.ThriftMethodBuilderClientModule|_:
 
       override val sessionAcquisitionTimeout: Duration = ???
       override val requestTimeout: Duration = ???
-      override val retryBudget: Budget = ???
+      override val retryBudget: RetryBudget = ???
       override val monitor: Monitor = ???
     }
 
@@ -316,7 +316,7 @@ The |ThriftClientModule|_ intends to allow users to easily configure common para
 
 .. code:: scala
 
-    import com.twitter.finagle.Budget
+    import com.twitter.finagle.service.RetryBudget
     import com.twitter.inject.Injector
     import com.twitter.inject.thrift.ThriftMethodBuilderFactory
     import com.twitter.inject.thrift.modules.ThriftClientModule
@@ -333,7 +333,7 @@ The |ThriftClientModule|_ intends to allow users to easily configure common para
 
       override val requestTimeout: Duration = ???
 
-      override val retryBudget: Budget = ???
+      override val retryBudget: RetryBudget = ???
 
       override val monitor: Monitor = ???
 

@@ -16,36 +16,42 @@ import com.twitter.util.Await;
 
 public class CalculatorServerFeatureTest extends Assert {
 
-    private static final EmbeddedThriftServer SERVER =
-        new EmbeddedThriftServer(
-            new CalculatorServer(),
-            Collections.emptyMap(),
-            Stage.DEVELOPMENT);
-    private static final Calculator.ServiceIface THRIFT_CLIENT =
-        SERVER.thriftClient(
-            "client123",
-            ClassTag$.MODULE$.apply(Calculator.ServiceIface.class));
+  private static final EmbeddedThriftServer SERVER = setup();
+  private static final Calculator.ServiceIface THRIFT_CLIENT =
+      SERVER.thriftClient(
+          "client123",
+          ClassTag$.MODULE$.apply(Calculator.ServiceIface.class));
 
-    @AfterClass
-    public static void tearDown() throws Exception {
-        SERVER.close();
-    }
+  public static EmbeddedThriftServer setup() {
+      EmbeddedThriftServer server =
+          new EmbeddedThriftServer(
+              new CalculatorServer(),
+              Collections.emptyMap(),
+              Stage.DEVELOPMENT);
+      server.bindClass(Mode.class, Mode.ReversePolarNotation);
+      return server;
+  }
 
-    /** test increment endpoint */
-    @Test
-    public void testIncrementEndpoint() throws Exception {
-        assertEquals(4, Await.<Integer>result(THRIFT_CLIENT.increment(3)).intValue());
-    }
+  @AfterClass
+  public static void tearDown() throws Exception {
+      SERVER.close();
+  }
 
-    /** test add numbers endpoint */
-    @Test
-    public void testAddNumbersEndpoint() throws Exception {
-        assertEquals(10, Await.<Integer>result(THRIFT_CLIENT.addNumbers(3, 7)).intValue());
-    }
+  /** test increment endpoint */
+  @Test
+  public void testIncrementEndpoint() throws Exception {
+      assertEquals(4, Await.<Integer>result(THRIFT_CLIENT.increment(3)).intValue());
+  }
 
-    /** test add strings endpoint */
-    @Test
-    public void testAddStringsEndpoint() throws Exception {
-        assertEquals("10", Await.result(THRIFT_CLIENT.addStrings("3", "7")));
-    }
+  /** test add numbers endpoint */
+  @Test
+  public void testAddNumbersEndpoint() throws Exception {
+      assertEquals(10, Await.<Integer>result(THRIFT_CLIENT.addNumbers(3, 7)).intValue());
+  }
+
+  /** test add strings endpoint */
+  @Test
+  public void testAddStringsEndpoint() throws Exception {
+      assertEquals("10", Await.result(THRIFT_CLIENT.addStrings("3", "7")));
+  }
 }

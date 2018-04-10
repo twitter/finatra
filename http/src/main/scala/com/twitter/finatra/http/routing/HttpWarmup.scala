@@ -3,7 +3,6 @@ package com.twitter.finatra.http.routing
 import com.twitter.finagle.http
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.utils.FuturePools
 import com.twitter.inject.Logging
 import com.twitter.util.{Await, Future}
 import javax.inject.Inject
@@ -11,9 +10,6 @@ import javax.inject.Inject
 class HttpWarmup @Inject()(router: HttpRouter, mapper: FinatraObjectMapper) extends Logging {
 
   private val userAgent = "http-warmup-client"
-
-  /* Use a FuturePool to avoid getting a ConstFuture from Future.apply(...) */
-  private val pool = FuturePools.fixedPool("HTTP Warmup", 1)
 
   /* Public */
 
@@ -34,28 +30,24 @@ class HttpWarmup @Inject()(router: HttpRouter, mapper: FinatraObjectMapper) exte
     forceRouteToAdminHttpMuxers: Boolean = false,
     times: Int = 1,
     responseCallback: Response => Unit = identity _
-  ) {
+  ): Unit = {
 
-    for (i <- 1 to times) {
-      val response = executeRequest(request, forceRouteToAdminHttpMuxers)
-      responseCallback(response)
-      info("Warmup " + request + " complete with " + response.status)
+    for (_ <- 1 to times) {
+      infoResult("%s") {
+        val response = executeRequest(request, forceRouteToAdminHttpMuxers)
+        responseCallback(response)
+        s"Warmup $request completed with ${response.status}"
+      }
     }
   }
 
-  def close() = {
-    pool.executor.shutdownNow()
-  }
+  @deprecated("This is now a no-op.", "2018-03-20")
+  def close(): Unit = {}
 
   /* Private */
 
   private def executeRequest(request: Request, forceRouteToHttpMuxer: Boolean): Response = {
-    val response = pool {
-      info("Warmup " + request)
-      routeRequest(request, forceRouteToHttpMuxer)
-    }.flatten
-
-    Await.result(response)
+    Await.result(routeRequest(request, forceRouteToHttpMuxer))
   }
 
   private def routeRequest(request: Request, forceRouteToHttpMuxer: Boolean): Future[Response] = {

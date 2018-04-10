@@ -24,7 +24,7 @@ scala_library(
         "3rdparty/jvm/io/netty",
         "3rdparty/jvm/javax/inject:javax.inject",
         "3rdparty/jvm/net/codingwell:scala-guice",
-        "3rdparty/jvm/org/apache/thrift:libthrift-0.5.0",
+        "3rdparty/jvm/org/apache/thrift:libthrift",
         "3rdparty/jvm/org/scala-lang/modules:scala-parser-combinators",
         "3rdparty/jvm/org/slf4j:jcl-over-slf4j",
         "3rdparty/jvm/org/slf4j:jul-to-slf4j",

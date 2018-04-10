@@ -5,6 +5,7 @@ import com.twitter.inject.exceptions.PossiblyRetryable
 import com.twitter.inject.thrift.ThriftMethodBuilderFactory
 import com.twitter.inject.thrift.integration.filters.{MethodLoggingTypeAgnosticFilter, SetTimesEchoTypeAgnosticFilter}
 import com.twitter.inject.thrift.modules.{ThriftClientIdModule, ThriftMethodBuilderClientModule}
+import com.twitter.inject.Injector
 import com.twitter.test.thriftscala.EchoService
 
 object EchoThriftMethodBuilderClientModule
@@ -16,6 +17,7 @@ object EchoThriftMethodBuilderClientModule
   override val label = "echo-thrift-client"
 
   override protected def configureServicePerEndpoint(
+    injector: Injector,
     builder: ThriftMethodBuilderFactory[EchoService.ServicePerEndpoint],
     servicePerEndpoint: EchoService.ServicePerEndpoint
   ): EchoService.ServicePerEndpoint = {

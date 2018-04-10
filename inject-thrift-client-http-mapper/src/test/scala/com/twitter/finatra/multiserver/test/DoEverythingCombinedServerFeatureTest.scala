@@ -10,7 +10,10 @@ import com.twitter.util.{Await, Future}
 
 class DoEverythingCombinedServerFeatureTest extends FeatureTest {
 
-  val server = new EmbeddedHttpServer(twitterServer = new DoEverythingCombinedServer)
+  val server = new EmbeddedHttpServer(
+    twitterServer = new DoEverythingCombinedServer,
+    flags = Map("https.port" -> ":0") // for testing `EmbeddedHttpServer.logStartup` method
+  )
   with ThriftClient
 
   lazy val client = server.thriftClient[Adder[Future]](clientId = "client123")

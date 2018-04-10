@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.3.0"
+val releaseVersion = "18.4.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -61,7 +61,7 @@ lazy val versions = new {
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val junit = "4.12"
-  val libThrift = "0.5.0-7"
+  val libThrift = "0.10.0"
   val logback = "1.1.7"
   val mockito = "1.9.5"
   val mustache = "0.8.18"
@@ -106,7 +106,7 @@ lazy val baseSettings = Seq(
   javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-Xlint:unchecked"),
   javacOptions in doc ++= Seq("-source", "1.8"),
   // -a: print stack traces for failing asserts
-  testOptions += Tests.Argument(TestFrameworks.JUnit, "-a"),
+  testOptions += Tests.Argument(TestFrameworks.JUnit, "-a", "-v"),
   // broken in 2.12 due to: https://issues.scala-lang.org/browse/SI-10134
   scalacOptions in (Compile, doc) ++= {
     if (scalaVersion.value.startsWith("2.12")) Seq("-no-java-comments")
@@ -331,8 +331,8 @@ lazy val injectModules = (project in file("inject/inject-modules"))
 
 lazy val injectAppTestJarSources =
   Seq("com/twitter/inject/app/Banner",
+    "com/twitter/inject/app/BindDSL",
     "com/twitter/inject/app/EmbeddedApp",
-    "com/twitter/inject/app/modules",
     "com/twitter/inject/app/InjectionServiceModule",
     "com/twitter/inject/app/InjectionServiceWithAnnotationModule",
     "com/twitter/inject/app/StartupTimeoutException",
@@ -343,7 +343,8 @@ lazy val injectApp = (project in file("inject/inject-app"))
     name := "inject-app",
     moduleName := "inject-app",
     libraryDependencies ++= Seq(
-      "com.twitter" %% "util-core" % versions.twLibVersion
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.novocode" % "junit-interface" % "0.11" % Test
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in Test := true,
@@ -360,12 +361,17 @@ lazy val injectApp = (project in file("inject/inject-app"))
       previous.filter(mappingContainsAnyPath(_, injectAppTestJarSources))
     }
   ).dependsOn(
-    injectCore % "test->test;compile->compile")
+    injectCore % "test->test;compile->compile",
+    injectModules % "test")
 
 lazy val injectServerTestJarSources =
-  Seq("com/twitter/inject/server/EmbeddedTwitterServer",
+  Seq(
+    "com/twitter/inject/server/AdminHttpClient",
+    "com/twitter/inject/server/EmbeddedHttpClient",
+    "com/twitter/inject/server/EmbeddedTwitterServer",
     "com/twitter/inject/server/FeatureTest",
     "com/twitter/inject/server/FeatureTestMixin",
+    "com/twitter/inject/server/package",
     "com/twitter/inject/server/WordSpecFeatureTest")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
@@ -432,7 +438,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
     moduleName := "inject-thrift",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
-      "com.twitter" % "libthrift" % versions.libThrift,
+      "org.apache.thrift" % "libthrift" % versions.libThrift,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "scrooge-core" % versions.twLibVersion,
@@ -577,9 +583,12 @@ lazy val jackson = project
     injectUtils)
 
 lazy val httpTestJarSources =
-  Seq("com/twitter/finatra/http/EmbeddedHttpServer",
+  Seq(
+    "com/twitter/finatra/http/EmbeddedHttpServer",
+    "com/twitter/finatra/http/ExternalHttpClient",
     "com/twitter/finatra/http/HttpMockResponses",
     "com/twitter/finatra/http/HttpTest",
+    "com/twitter/finatra/http/JsonAwareEmbeddedHttpClient",
     "com/twitter/finatra/http/StreamingJsonTestHelper")
 lazy val http = project
   .settings(projectSettings)
@@ -594,7 +603,7 @@ lazy val http = project
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
       "javax.servlet" % "servlet-api" % versions.servletApi,
-      "junit" % "junit" % versions.junit % "test"
+      "com.novocode" % "junit-interface" % "0.11" % Test
     ),
     unmanagedResourceDirectories in Test += baseDirectory(
       _ / "src" / "test" / "webapp"
@@ -671,7 +680,7 @@ lazy val thrift = project
       "com.twitter" %% "finagle-thriftmux" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "javax.inject" % "javax.inject" % "1",
-      "junit" % "junit" % versions.junit % "test",
+      "com.novocode" % "junit-interface" % "0.11" % Test,
       "org.yaml" % "snakeyaml" % versions.snakeyaml
     ),
     scroogePublishThrift in Compile := true,
@@ -849,7 +858,10 @@ lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server
   .settings(noPublishSettings)
   .settings(
     name := "java-thrift-example-server",
-    moduleName := "java-thrift-example-server"
+    moduleName := "java-thrift-example-server",
+    libraryDependencies ++= Seq(
+      "com.novocode" % "junit-interface" % "0.11" % Test
+    )
   ).dependsOn(
     thriftJavaExampleIdl,
     thrift % "test->test;compile->compile",

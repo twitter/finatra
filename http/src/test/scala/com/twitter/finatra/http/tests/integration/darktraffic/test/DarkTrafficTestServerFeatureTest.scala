@@ -20,7 +20,7 @@ class DarkTrafficTestServerFeatureTest extends FeatureTest with Mockito {
     },
     flags = Map(
       "http.dark.service.dest" ->
-        s"/$$/inet/${PortUtils.loopbackAddress}/${server.httpExternalPort}"
+        s"/$$/inet/${PortUtils.loopbackAddress}/${server.httpExternalPort()}"
     )
   )
 

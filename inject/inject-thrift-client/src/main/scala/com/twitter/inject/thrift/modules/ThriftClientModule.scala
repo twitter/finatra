@@ -2,10 +2,10 @@ package com.twitter.inject.thrift.modules
 
 import com.google.inject.Provides
 import com.twitter.finagle._
-import com.twitter.finagle.service.Retries.Budget
+import com.twitter.finagle.service.RetryBudget
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.thrift.ClientId
-import com.twitter.inject.TwitterModule
+import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.util.{Await, Duration, Monitor, NullMonitor}
 import javax.inject.Singleton
 import scala.reflect.ClassTag
@@ -38,33 +38,36 @@ abstract class ThriftClientModule[ThriftService: ClassTag]
 
   protected def requestTimeout: Duration = Duration.Top
 
-  protected def retryBudget: Budget = Budget.default
+  protected def retryBudget: RetryBudget = RetryBudget()
 
   protected def monitor: Monitor = NullMonitor
 
   protected def configureThriftMuxClient(
+    injector: Injector,
     client: ThriftMux.Client
   ): ThriftMux.Client = client
 
   @Singleton
   @Provides
   final def providesThriftClient(
+    injector: Injector,
     clientId: ClientId,
     statsReceiver: StatsReceiver
   ): ThriftService = {
     val clientStatsReceiver = statsReceiver.scope("clnt")
 
-    val thriftService = configureThriftMuxClient(
-      ThriftMux.client.withSession
-        .acquisitionTimeout(sessionAcquisitionTimeout)
-        .withRequestTimeout(requestTimeout)
-        .withStatsReceiver(clientStatsReceiver)
-        .withClientId(clientId)
-        .withMonitor(monitor)
-        .withLabel(label)
-        .withRetryBudget(retryBudget.retryBudget)
-        .withRetryBackoff(retryBudget.requeueBackoffs)
-    ).build[ThriftService](dest, label)
+    val thriftService =
+      configureThriftMuxClient(
+        injector,
+        ThriftMux.client.withSession
+          .acquisitionTimeout(sessionAcquisitionTimeout)
+          .withRequestTimeout(requestTimeout)
+          .withStatsReceiver(clientStatsReceiver)
+          .withClientId(clientId)
+          .withMonitor(monitor)
+          .withLabel(label)
+          .withRetryBudget(retryBudget)
+      ).build[ThriftService](dest, label)
 
     closeOnExit {
       val closable = asClosable(thriftService)

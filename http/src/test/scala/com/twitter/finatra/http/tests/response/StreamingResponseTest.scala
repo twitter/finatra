@@ -2,12 +2,14 @@ package com.twitter.finatra.http.tests.response
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.conversions.time._
-import com.twitter.finagle.http.Response
+import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.http.response.StreamingResponse
 import com.twitter.inject.Test
 import com.twitter.io.Reader.ReaderDiscarded
 import com.twitter.io.{Buf, Reader}
-import com.twitter.util.{Await, Awaitable, Closable, Future, Time}
+import com.twitter.util._
+
+import scala.collection.mutable
 
 class StreamingResponseTest extends Test {
 
@@ -60,7 +62,7 @@ class StreamingResponseTest extends Test {
   }
 
   test("write failures with other exception") {
-    failWriteWith(new RuntimeException("unexpected exception"))
+    failWriteWith(new RuntimeException("FORCED EXCEPTION"))
   }
 
   test("closes the Closable on successful completion of a successful AsyncStream") {
@@ -72,6 +74,35 @@ class StreamingResponseTest extends Test {
     ).foreach { stream =>
       assertClosableClosed(stream)
     }
+  }
+
+  test("runs the responder after the writes succeed") {
+    val stream = AsyncStream.fromSeq(Seq("first item", "second item"))
+    val results: mutable.ArrayBuffer[String] = mutable.ArrayBuffer.empty
+
+    def transformer(stream: AsyncStream[String]): AsyncStream[(String, Buf)] = {
+      def toBuf(item: String) = Buf.Utf8(item)
+
+      stream.map(item => (item, toBuf(item)))
+    }
+
+    def responder(item: String, b: Buf)(t: Try[Unit]): Unit = {
+      results += item
+    }
+
+    val streamingResponse = StreamingResponse[String, String](
+      transformer,
+      Status.Ok,
+      Map.empty,
+      responder,
+      () => (),
+      Duration.Zero
+    )(stream)
+
+    val response = await(streamingResponse.toFutureFinagleResponse)
+    await(burnLoop(response.reader))
+
+    assert(results == Seq("first item", "second item"))
   }
 
   test("closes the Closable if the stream throws an exception") {

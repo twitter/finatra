@@ -71,8 +71,8 @@ private[http] class CallbackConverter @Inject()(
       streamingResponse.toFutureFinagleResponse
     } else if (runtimeClassEq[ResponseType, Future[_]]) { request: Request =>
       requestCallback(request).asInstanceOf[Future[_]].map(createHttpResponse(request))
-    } else if (runtimeClassEq[ResponseType, StreamingResponse[_]]) { request: Request =>
-      requestCallback(request).asInstanceOf[StreamingResponse[_]].toFutureFinagleResponse
+    } else if (runtimeClassEq[ResponseType, StreamingResponse[_, _]]) { request: Request =>
+      requestCallback(request).asInstanceOf[StreamingResponse[_, _]].toFutureFinagleResponse
     } else if (manifest[ResponseType] == manifest[Response]) { request: Request =>
       Future(requestCallback(request).asInstanceOf[Response])
     } else if (runtimeClassEq[ResponseType, Option[_]]) { request: Request =>
