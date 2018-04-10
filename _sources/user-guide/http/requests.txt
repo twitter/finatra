@@ -235,6 +235,19 @@ For example, if a route is defined:
 
 When another controller forwards to this route, `MyAwesomeFilter` will be executed on the forwarded request.
 
+.. important::
+    By default Finatra sets a maximum forward depth of 5. This value is configurable by setting the `HttpRouter#withMaxRequestForwardingDepth`. This helps prevent a given request from being forwarded in an infinite loop.
+
+    In the example below, the server has been setup to allow a request to forward a maximum of 10 times.
+
+    .. code:: scala
+
+        override def configureHttp(router: HttpRouter) {
+          router
+            .withMaxRequestForwardingDepth(10)
+            .add[MyController]
+        }
+
 Multipart Requests
 ------------------
 

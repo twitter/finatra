@@ -150,7 +150,7 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a></dd></dl></div>
     </li><li class="current-entities indented5">
-                        <span class="separator"></span>
+                        <a class="object" href="HttpForward$.html" title=""></a>
                         <a class="class" href="" title=""></a>
                         <a href="" title="">HttpForward</a>
                       </li><li class="current-entities indented5">
@@ -172,14 +172,16 @@
           <div id="content">
             <body class="class type">
       <div id="definition">
-        <div class="big-circle class">c</div>
+        <a href="HttpForward$.html" title="See companion object"><div class="big-circle class-companion-object">c</div></a>
         <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a>.<a href="index.html" class="extype" name="com.twitter.finatra.http.request">request</a></p>
-        <h1>HttpForward<span class="permalink">
+        <h1><a href="HttpForward$.html" title="See companion object">HttpForward</a><span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/request/HttpForward.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="HttpForward$.html" title="See companion object">object HttpForward</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
@@ -342,7 +344,8 @@
 </p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a> to forward.</p></dd><dt class="param">path</dt><dd class="cmt"><p>the path of the route to which to forward</p></dd><dt>returns</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> from the
         &quot;forwarded-to&quot; route.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>if the <a href="../filters/StatsFilter.html" class="extype" name="com.twitter.finatra.http.filters.StatsFilter">com.twitter.finatra.http.filters.StatsFilter</a> is included
 in the server filter chain, any per-route stats will be reported as the
-&quot;forwarded-to&quot; route as the stats are written on the response path.</p></span></dd></dl></div>
+&quot;forwarded-to&quot; route as the stats are written on the response path.</p></span>, <span class="cmt"><p>There is a maximum depth as specified by
+      <span class="extype" name="HttpRouter.withMaxRequestForwardingDepth(depth:">Int)</span>.</p></span></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">

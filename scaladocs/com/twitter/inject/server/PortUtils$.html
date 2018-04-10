@@ -139,8 +139,8 @@
                         <a href="AbstractTwitterServer.html" title="AbstractTwitterServer for usage from Java">AbstractTwitterServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="object" href="" title=""></a>
-                        <a href="" title="">PortUtils</a>
+                        <a class="object" href="" title="Utilities for formatting Integer ports and SocketAddresses."></a>
+                        <a href="" title="Utilities for formatting Integer ports and SocketAddresses.">PortUtils</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="trait" href="Ports.html" title=""></a>
@@ -177,7 +177,8 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Utilities for formatting Integer ports and SocketAddresses.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -337,7 +338,7 @@
         <span class="name">ephemeralLoopback</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Returns a <code>host:port</code> String which is the loopback address and the emphemeral port :0</p>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -426,7 +427,7 @@
         <span class="name">getPort</span><span class="params">(<span name="server">server: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/builder/Server.html#com.twitter.finagle.builder.Server" class="extype" name="com.twitter.finagle.builder.Server">Server</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Returns the Integer representation of the given <span class="extype" name="BuilderServer">BuilderServer</span></p>
     </li><li name="com.twitter.inject.server.PortUtils#getPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getPort(socketAddress:java.net.SocketAddress):Int"></a><a id="getPort(SocketAddress):Int"></a>
       <span class="permalink">
@@ -442,7 +443,7 @@
         <span class="name">getPort</span><span class="params">(<span name="socketAddress">socketAddress: <span class="extype" name="java.net.SocketAddress">SocketAddress</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Returns the Integer representation of the given <span class="extype" name="SocketAddress">SocketAddress</span></p>
     </li><li name="com.twitter.inject.server.PortUtils#getPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getPort(server:com.twitter.finagle.ListeningServer):Int"></a><a id="getPort(ListeningServer):Int"></a>
       <span class="permalink">
@@ -458,7 +459,7 @@
         <span class="name">getPort</span><span class="params">(<span name="server">server: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html#com.twitter.finagle.ListeningServer" class="extype" name="com.twitter.finagle.ListeningServer">ListeningServer</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Returns the Integer representation of the bound address for the given <span class="extype" name="ListeningServer">ListeningServer</span></p>
     </li><li name="com.twitter.inject.server.PortUtils#getSocketAddress" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="getSocketAddress(server:com.twitter.finagle.builder.Server):java.net.SocketAddress"></a><a id="getSocketAddress(Server):SocketAddress"></a>
       <span class="permalink">
@@ -474,7 +475,7 @@
         <span class="name">getSocketAddress</span><span class="params">(<span name="server">server: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/builder/Server.html#com.twitter.finagle.builder.Server" class="extype" name="com.twitter.finagle.builder.Server">Server</a></span>)</span><span class="result">: <span class="extype" name="java.net.SocketAddress">SocketAddress</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Returns the bound address of the given <span class="extype" name="BuilderServer">BuilderServer</span></p>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -510,7 +511,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="com.twitter.inject.server.PortUtils#loopbackAddress" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.PortUtils#loopbackAddress" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loopbackAddress:String"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/inject/server/PortUtils$.html#loopbackAddress:String" title="Permalink">
@@ -522,10 +523,11 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">loopbackAddress</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">loopbackAddress</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Returns the loopback Inet Address.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the loopback Inet Address.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="java.net.InetAddress.getLoopbackAddress">java.net.InetAddress.getLoopbackAddress</span></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.PortUtils#loopbackAddressForPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="loopbackAddressForPort(port:Int):String"></a><a id="loopbackAddressForPort(Int):String"></a>
       <span class="permalink">
@@ -541,7 +543,7 @@
         <span class="name">loopbackAddressForPort</span><span class="params">(<span name="port">port: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Returns a <code>host:port</code> String for the loopback address and the given port.</p>
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -596,7 +598,7 @@
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.inject.server.PortUtils#parseAddr" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.PortUtils#parseAddr" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="parseAddr(addrStr:String):java.net.InetSocketAddress"></a><a id="parseAddr(String):InetSocketAddress"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/inject/server/PortUtils$.html#parseAddr(addrStr:String):java.net.InetSocketAddress" title="Permalink">
@@ -611,7 +613,7 @@
         <span class="name">parseAddr</span><span class="params">(<span name="addrStr">addrStr: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="java.net.InetSocketAddress">InetSocketAddress</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Parses the given String as an InetSocketAddress using <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html" class="extype" name="com.twitter.app.Flaggable">com.twitter.app.Flaggable</a></p><div class="fullcomment"><div class="comment cmt"><p>Parses the given String as an InetSocketAddress using <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html" class="extype" name="com.twitter.app.Flaggable">com.twitter.app.Flaggable</a></p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.app.Flaggable.ofInetSocketAddress">com.twitter.app.Flaggable.ofInetSocketAddress</span></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

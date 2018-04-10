@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Creating an injectable TwitterServer &#8212; Finatra 18.3.0 documentation</title>
+    <title>Creating an injectable TwitterServer &#8212; Finatra 18.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.3.0',
+        VERSION:     '18.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Server Definition" href="../http/server.html" />
     <link rel="prev" title="Creating an injectable util-app App" href="../app/index.html" />
@@ -78,7 +78,7 @@ also recommend using <a class="reference external" href="http://logback.qos.ch/"
 <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g.,</p>
 <p>with sbt:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;inject-server&quot; % &quot;18.3.0&quot;,
+&quot;com.twitter&quot; %% &quot;inject-server&quot; % &quot;18.4.0&quot;,
 &quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,
 </pre>
 <p>For more information on logging with Finatra see:
@@ -214,10 +214,11 @@ must be done, it is strongly recommended that you perform this work in a
 <div class="section" id="twitterserver-start">
 <h2><cite>TwitterServer#start</cite><a class="headerlink" href="#twitterserver-start" title="Permalink to this headline">¶</a></h2>
 <p>Any logic to be run after the server is reported as healthy, bound to an external interface, and
-before awaiting on any Awaitables is placed in the <cite>#start()</cite> method. This is typically starting
+before awaiting on any <cite>Awaitables</cite> is placed in the <cite>#start()</cite> method. This is typically starting
 long live background processes, starting any processor that should only be started once the
 external interface has been successfully bound to port and is accepting traffic, or any other work
-that must be completed aspart of server startup.</p>
+that must be completed as part of server startup. See the <a class="reference external" href="#awaiting-awaitables">Awaiting Awaitables</a> section for
+more information.</p>
 <div class="section" id="id1">
 <h3>What Goes Here?<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Work to happen after the server is bound to any external port, has performed warmup, object promotion,
@@ -228,6 +229,34 @@ operations</strong> in your override as you will prevent the server from properl
 blocking work that must be done, it is strongly recommended that you perform this work in a
 <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/FuturePool.scala">FuturePool</a>.</p>
 <p>See the Finatra utility: <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/utils/src/main/scala/com/twitter/finatra/utils/FuturePools.scala"><code class="docutils literal"><span class="pre">FuturePools</span></code></a> for creating named pools.</p>
+</div>
+</div>
+<div class="section" id="awaiting-awaitables">
+<h2>Awaiting <cite>Awaitables</cite><a class="headerlink" href="#awaiting-awaitables" title="Permalink to this headline">¶</a></h2>
+<p>If you have long-lived processes which your server starts that you want to ensure exit when the server
+exits or trigger the server to exit if the process exits, you should register them as an <a class="reference external" href="https://github.com/twitter/util/blob/develop/util-core/src/main/scala/com/twitter/util/Awaitable.scala"><code class="docutils literal"><span class="pre">c.t.util.Awaitable</span></code></a>
+using the <a class="reference external" href="https://github.com/twitter/finatra/blob/4d662426584d3811fe87f1cd976166e4f2465131/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L123"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer#await</span></code></a> callback function.</p>
+<p>The purpose of using this callback is to <a class="reference external" href="https://en.wikipedia.org/wiki/Quantum_entanglement">entangle</a>
+all the <cite>Awaitables</cite> within your server such that if any of the <cite>Awaitables</cite> exit, the entire
+server process exits. For example, when starting a regular HTTP or Thrift server, you have two
+<a class="reference external" href="https://github.com/twitter/finagle/blob/d2a415b05f57be76dc26aba67bb3e834a0db5d38/finagle-core/src/main/scala/com/twitter/finagle/Server.scala#L13">ListeningServers</a>
+in process: the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface&gt;"><cite>HTTP Admin Interface</cite></a> and the started external server. If you await
+(block) on one of the servers and not the other, you can get into a case where the server not being
+awaited exits but the process continues to wait on the other server to satisfy the blocking <cite>Awaitable</cite>
+and thus does not exit.</p>
+<div class="section" id="why-is-this-bad">
+<h3>Why is this bad?<a class="headerlink" href="#why-is-this-bad" title="Permalink to this headline">¶</a></h3>
+<p>As an example, if you await on just the external interface, the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface&gt;"><cite>HTTP Admin Interface</cite></a>
+may exit because of an error, causing health checking and metrics reporting to fail but your server
+process would remain running until killed. Conversely, if you await on just the <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#admin-http-interface&gt;"><cite>HTTP Admin Interface</cite></a>
+the external server may exit but the admin interface continues to report itself as healthy.</p>
+</div>
+<div class="section" id="register-awaitables">
+<h3>Register <cite>Awaitables</cite><a class="headerlink" href="#register-awaitables" title="Permalink to this headline">¶</a></h3>
+<p>The way to ensure that the exiting of a single <cite>Awaitable</cite> triggers exiting of any other <cite>Awaitable</cite>
+is to register each <cite>Awaitable</cite> with the server using the <a class="reference external" href="https://github.com/twitter/finatra/blob/4d662426584d3811fe87f1cd976166e4f2465131/inject/inject-server/src/main/scala/com/twitter/inject/server/TwitterServer.scala#L123"><code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer#await</span></code></a>
+callback function. As the last step of the server startup lifecycle, the server will <a class="reference external" href="https://en.wikipedia.org/wiki/Quantum_entanglement">entangle</a>
+all given <cite>Awaitables</cite>.</p>
 </div>
 </div>
 <div class="section" id="testing">
@@ -279,6 +308,11 @@ and considerations during <a class="reference external" href="../getting-started
 <li><a class="reference internal" href="#twitterserver-warmup"><cite>TwitterServer#warmup</cite></a></li>
 <li><a class="reference internal" href="#twitterserver-start"><cite>TwitterServer#start</cite></a><ul>
 <li><a class="reference internal" href="#id1">What Goes Here?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#awaiting-awaitables">Awaiting <cite>Awaitables</cite></a><ul>
+<li><a class="reference internal" href="#why-is-this-bad">Why is this bad?</a></li>
+<li><a class="reference internal" href="#register-awaitables">Register <cite>Awaitables</cite></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#testing">Testing</a></li>

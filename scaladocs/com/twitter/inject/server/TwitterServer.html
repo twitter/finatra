@@ -139,8 +139,8 @@
                         <a href="AbstractTwitterServer.html" title="AbstractTwitterServer for usage from Java">AbstractTwitterServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="object" href="PortUtils$.html" title=""></a>
-                        <a href="PortUtils$.html" title="">PortUtils</a>
+                        <a class="object" href="PortUtils$.html" title="Utilities for formatting Integer ports and SocketAddresses."></a>
+                        <a href="PortUtils$.html" title="Utilities for formatting Integer ports and SocketAddresses.">PortUtils</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="trait" href="Ports.html" title=""></a>
@@ -646,7 +646,7 @@ method. Failure to do so may cause your server to not completely startup.</p></s
         <span class="name">await</span><span class="params">(<span name="awaitables">awaitables: <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[_]*</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Callback to register multiple <span class="extype" name="Awaitable">Awaitable</span> instances for the server to await (block) on.</p><div class="fullcomment"><div class="comment cmt"><p>Callback to register multiple <span class="extype" name="Awaitable">Awaitable</span> instances for the server to await (block) on.</p></div><dl class="paramcmts block"><dt class="param">awaitables</dt><dd class="cmt"><p>vararg list of <span class="extype" name="Awaitable">Awaitable</span> instances to register.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="TwitterServer.await(awaitable:">Awaitable)</span></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#await" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit"></a><a id="await[T&lt;:Awaitable[_]](T):Unit"></a>
       <span class="permalink">
@@ -662,7 +662,8 @@ method. Failure to do so may cause your server to not completely startup.</p></s
         <span class="name">await</span><span class="tparams">[<span name="T">T &lt;: <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[_]</span>]</span><span class="params">(<span name="awaitable">awaitable: <span class="extype" name="com.twitter.inject.server.TwitterServer.await.T">T</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Callback to register an <span class="extype" name="Awaitable">Awaitable</span> instance for the server to await (block) on.</p><div class="fullcomment"><div class="comment cmt"><p>Callback to register an <span class="extype" name="Awaitable">Awaitable</span> instance for the server to await (block) on.</p><p>All registered <span class="extype" name="Awaitable">Awaitable</span> instances are entangled by the server such that if any
+registered <span class="extype" name="Awaitable">Awaitable</span> exits it will trigger all registered <span class="extype" name="Awaitable">Awaitable</span> instances to exit.</p></div><dl class="paramcmts block"><dt class="param">awaitable</dt><dd class="cmt"><p>an <span class="extype" name="Awaitable">Awaitable</span> instance to register.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finatra/user-guide/twitter-server/index.html#awaiting-awaitables" target="_blank">Awaiting Awaitables</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#beforePostWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="beforePostWarmup():Unit"></a>
       <span class="permalink">
@@ -1223,6 +1224,22 @@ Note: Disabling the admin server allows services to be deployed into environment
       </span>
       <span class="symbol">
         <span class="name">exitOnError</span><span class="params">(<span name="reason">reason: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
+    </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exitOnError(throwable:Throwable):Unit"></a><a id="exitOnError(Throwable):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/server/TwitterServer.html#exitOnError(throwable:Throwable):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">exitOnError</span><span class="params">(<span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
@@ -1820,6 +1837,22 @@ If you think you need this in your main server you are most likely doing somethi
       </span>
       
       <p class="shortcomment cmt">ONLY INTENDED FOR USE BY THE FRAMEWORK.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE BY THE FRAMEWORK.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+    </li><li name="com.twitter.app.App#loadServiceBindings" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]"></a><a id="loadServiceBindings:Seq[Binding[_]]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/server/TwitterServer.html#loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">loadServiceBindings</span><span class="result">: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="com.twitter.app.LoadService.Binding">Binding</span>[_]]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">

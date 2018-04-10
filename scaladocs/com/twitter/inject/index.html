@@ -459,21 +459,21 @@
         <a title="Mix this trait into a class/object to get helpful logging methods." href="Logging.html"><span class="name">Logging</span></a><span class="result"> extends <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">util.logging.Logging</a></span>
       </span>
       
-      <p class="shortcomment cmt">Mix this trait into a class/object to get helpful logging methods.</p><div class="fullcomment"><div class="comment cmt"><p>Mix this trait into a class/object to get helpful logging methods.</p><p>Note: This trait simply adds several methods to the <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html" class="extype" name="com.twitter.util.logging.Logging">com.twitter.util.logging.Logging</a> trait.</p><p>The methods below are used as so:</p><p>//Before
-def foo = {
-val result = 4 + 5
-debugResult(&quot;Foo returned &quot; + result)
-result
-}</p><p>//After
-def foo = {
-debugResult(&quot;Foo returned %s&quot;) {
-4 + 5
-}
-}
+      <p class="shortcomment cmt">Mix this trait into a class/object to get helpful logging methods.</p><div class="fullcomment"><div class="comment cmt"><p>Mix this trait into a class/object to get helpful logging methods.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@JsonIgnoreProperties</span><span class="args">()</span>
               
-        </dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>This trait simply adds several methods to the <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html" class="extype" name="com.twitter.util.logging.Logging">com.twitter.util.logging.Logging</a> trait.
+The methods below are used as so:
+Before:</p><pre><span class="kw">def</span> foo = {
+  <span class="kw">val</span> result = <span class="num">4</span> + <span class="num">5</span>
+  debugFutureResult(<span class="lit">"Foo returned "</span> + result)
+  result
+}</pre><p>After:</p><pre><span class="kw">def</span> foo = {
+  debugFutureResult(<span class="lit">"Foo returned %s"</span>) {
+    <span class="num">4</span> + <span class="num">5</span>
+  }
+}</pre></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterBaseModule" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="TwitterBaseModuleextendsTwitterModuleFlagswithTwitterModuleLifecycle"></a><a id="TwitterBaseModule:TwitterBaseModule"></a>
       <span class="permalink">

@@ -793,9 +793,9 @@ the application <code>onExit</code> function to be executed on graceful shutdown
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractModule → Module</dd></dl></div>
     </li><li name="com.twitter.inject.thrift.modules.ThriftClientModule#configureThriftMuxClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="configureThriftMuxClient(client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client"></a><a id="configureThriftMuxClient(Client):Client"></a>
+      <a id="configureThriftMuxClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client"></a><a id="configureThriftMuxClient(Injector,Client):Client"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#configureThriftMuxClient(client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client" title="Permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#configureThriftMuxClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -804,7 +804,7 @@ the application <code>onExit</code> function to be executed on graceful shutdown
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">configureThriftMuxClient</span><span class="params">(<span name="client">client: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>
+        <span class="name">configureThriftMuxClient</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>
       </span>
       
       <p class="shortcomment cmt">This method allows for further configuration of the ThriftMux client for parameters not exposed by
@@ -815,8 +815,10 @@ this module or for overriding defaults provided herein, e.g.,</p><pre><span clas
     .withStatsReceiver(someOtherScopedStatsReceiver)
     .withMonitor(myAwesomeMonitor)
     .withTracer(notTheDefaultTracer)
+    .withClientId(injector.instance[ClientId])
     .withResponseClassifier(ThriftResponseClassifier.ThriftExceptionsAsFailures)
-}</pre></div><dl class="paramcmts block"><dt class="param">client</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$$Client.html" class="extype" name="com.twitter.finagle.ThriftMux.Client">com.twitter.finagle.ThriftMux.Client</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured <span class="extype" name="ThriftMux.Client">ThriftMux.Client</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModule">ThriftClientModule</a> → ThriftClientModuleTrait</dd></dl></div>
+}</pre></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> which can be used to help configure the
+                given <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$$Client.html" class="extype" name="com.twitter.finagle.ThriftMux.Client">com.twitter.finagle.ThriftMux.Client</a>.</p></dd><dt class="param">client</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$$Client.html" class="extype" name="com.twitter.finagle.ThriftMux.Client">com.twitter.finagle.ThriftMux.Client</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured <span class="extype" name="ThriftMux.Client">ThriftMux.Client</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModule">ThriftClientModule</a> → ThriftClientModuleTrait</dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#convertToTypes" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="convertToTypes(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeConverter):Unit"></a><a id="convertToTypes(Matcher[_&gt;:TypeLiteral[_]],TypeConverter):Unit"></a>
       <span class="permalink">
@@ -833,6 +835,24 @@ this module or for overriding defaults provided herein, e.g.,</p><pre><span clas
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModuleFlags#createFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createFlag[T](String,T,String,Flaggable[T]):Flag[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="com.twitter.inject.TwitterModuleFlags.createFlag.T">T</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="flaggable">flaggable: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createFlag.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly method for creating a named <span class="extype" name="Flag">Flag</span>.
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterBaseModule#createKey" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createKey[T](implicitevidence$1:Manifest[T]):com.google.inject.Key[T]"></a><a id="createKey[T](Manifest[T]):Key[T]"></a>
       <span class="permalink">
@@ -849,6 +869,24 @@ this module or for overriding defaults provided herein, e.g.,</p><pre><span clas
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></dd></dl></div>
+    </li><li name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="createMandatoryFlag[T](String,String,String,Flaggable[T]):Flag[T]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createMandatoryFlag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="usage">usage: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="flaggable">flaggable: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createMandatoryFlag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.createMandatoryFlag.T">T</span>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>.</p><div class="fullcomment"><div class="comment cmt"><p>A Java-friendly way to create a &quot;mandatory&quot; <span class="extype" name="Flag">Flag</span>. &quot;Mandatory&quot; flags MUST have a value
+provided as an application argument (as they have no default value to be used).
+</p></div><dl class="paramcmts block"><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">usage</dt><dd class="cmt"><p>a string describing the type of the <span class="extype" name="Flag">Flag</span>, i.e.: Integer.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModule#createMultiBinder" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="createMultiBinder[MultiBindType](implicitevidence$12:Manifest[MultiBindType]):net.codingwell.scalaguice.ScalaMultibinder[MultiBindType]"></a><a id="createMultiBinder[MultiBindType](Manifest[MultiBindType]):ScalaMultibinder[MultiBindType]"></a>
       <span class="permalink">
@@ -1165,7 +1203,10 @@ example to drain clients or finish up other tasks.
         <span class="name">flag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+      <p class="shortcomment cmt">Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
+a value provided as an application argument (as they have no default value to be used).</p><div class="fullcomment"><div class="comment cmt"><p>Create a &quot;mandatory&quot; flag and add it to this Module's flags list.&quot;Mandatory&quot; flags MUST have
+a value provided as an application argument (as they have no default value to be used).
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="../../TwitterModuleFlags.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createFlag">createFlag</a> or <a href="../../TwitterModuleFlags.html#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag[T](name:String,default:T,help:String)(implicitevidence$1:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]"></a><a id="flag[T](String,T,String)(Flaggable[T]):Flag[T]"></a>
       <span class="permalink">
@@ -1181,7 +1222,9 @@ example to drain clients or finish up other tasks.
         <span class="name">flag</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="name">name: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="default">default: <span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span></span>, <span name="help">help: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flaggable.html#com.twitter.app.Flaggable" class="extype" name="com.twitter.app.Flaggable">Flaggable</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="com.twitter.inject.TwitterModuleFlags.flag.T">T</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">Create a flag and add it to the modules flags list</p><div class="fullcomment"><div class="comment cmt"><p>Create a flag and add it to the modules flags list</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
+      <p class="shortcomment cmt">Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.</p><div class="fullcomment"><div class="comment cmt"><p>Create a <span class="extype" name="Flag">Flag</span> and add it to this Module's flags list.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>must be a <span class="extype" name="Flaggable">Flaggable</span> type.</p></dd><dt class="param">name</dt><dd class="cmt"><p>the name of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt class="param">default</dt><dd class="cmt"><p>a default value for the <span class="extype" name="Flag">Flag</span> when no value is given as an application
+               argument.</p></dd><dt class="param">help</dt><dd class="cmt"><p>the help text explaining the purpose of the <span class="extype" name="Flag">Flag</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>the created <span class="extype" name="Flag">Flag</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd><dt>Note</dt><dd><span class="cmt"><p>Java users: see the more Java-friendly <a href="../../TwitterModuleFlags.html#createFlag[T](name:String,default:T,help:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createFlag">createFlag</a> or <a href="../../TwitterModuleFlags.html#createMandatoryFlag[T](name:String,help:String,usage:String,flaggable:com.twitter.app.Flaggable[T]):com.twitter.app.Flag[T]" class="extmbr" name="com.twitter.inject.TwitterModuleFlags#createMandatoryFlag">createMandatoryFlag</a>.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.TwitterModuleFlags#flags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flags:scala.collection.mutable.ArrayBuffer[com.twitter.app.Flag[_]]"></a><a id="flags:ArrayBuffer[Flag[_]]"></a>
       <span class="permalink">
@@ -1731,9 +1774,9 @@ handled by a user-defined monitor are propagated to the <a href="https://twitter
               
         </dd></dl></div>
     </li><li name="com.twitter.inject.thrift.modules.ThriftClientModule#providesThriftClient" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="providesThriftClient(clientId:com.twitter.finagle.thrift.ClientId,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ThriftService"></a><a id="providesThriftClient(ClientId,StatsReceiver):ThriftService"></a>
+      <a id="providesThriftClient(injector:com.twitter.inject.Injector,clientId:com.twitter.finagle.thrift.ClientId,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ThriftService"></a><a id="providesThriftClient(Injector,ClientId,StatsReceiver):ThriftService"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#providesThriftClient(clientId:com.twitter.finagle.thrift.ClientId,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ThriftService" title="Permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#providesThriftClient(injector:com.twitter.inject.Injector,clientId:com.twitter.finagle.thrift.ClientId,statsReceiver:com.twitter.finagle.stats.StatsReceiver):ThriftService" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1742,7 +1785,7 @@ handled by a user-defined monitor are propagated to the <a href="https://twitter
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">providesThriftClient</span><span class="params">(<span name="clientId">clientId: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModule.ThriftService">ThriftService</span></span>
+        <span class="name">providesThriftClient</span><span class="params">(<span name="injector">injector: <a href="../../Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="clientId">clientId: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.thrift.modules.ThriftClientModule.ThriftService">ThriftService</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -1837,9 +1880,9 @@ This will set *all* requests to *every* method to have the same total timeout.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
     </li><li name="com.twitter.inject.thrift.modules.ThriftClientModule#retryBudget" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="retryBudget:com.twitter.finagle.service.Retries.Budget"></a><a id="retryBudget:Budget"></a>
+      <a id="retryBudget:com.twitter.finagle.service.RetryBudget"></a><a id="retryBudget:RetryBudget"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#retryBudget:com.twitter.finagle.service.Retries.Budget" title="Permalink">
+      <a href="../../../../../com/twitter/inject/thrift/modules/ThriftClientModule.html#retryBudget:com.twitter.finagle.service.RetryBudget" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1848,7 +1891,7 @@ This will set *all* requests to *every* method to have the same total timeout.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">retryBudget</span><span class="result">: <span class="extype" name="com.twitter.finagle.service.Retries.Budget">Budget</span></span>
+        <span class="name">retryBudget</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html#com.twitter.finagle.service.RetryBudget" class="extype" name="com.twitter.finagle.service.RetryBudget">RetryBudget</a></span>
       </span>
       
       <p class="shortcomment cmt">Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/RetryBudget.html" class="extype" name="com.twitter.finagle.service.RetryBudget">com.twitter.finagle.service.RetryBudget</a>. It is highly recommended that budgets

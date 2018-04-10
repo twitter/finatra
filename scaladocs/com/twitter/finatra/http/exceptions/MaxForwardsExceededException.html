@@ -167,8 +167,8 @@
                         <a href="DefaultExceptionMapper.html" title="">DefaultExceptionMapper</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions."></a>
-                        <a href="" title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions.">ExceptionManager</a>
+                        <a class="class" href="ExceptionManager.html" title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions."></a>
+                        <a href="ExceptionManager.html" title="A class to register com.twitter.finatra.http.exceptions.ExceptionMappers and handle exceptions.">ExceptionManager</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="trait" href="ExceptionMapper.html" title="An ExceptionMapper converts a T-typed throwable to an HTTP response."></a>
@@ -195,8 +195,8 @@
                         <a href="InternalServerErrorException.html" title="">InternalServerErrorException</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="MaxForwardsExceededException.html" title=""></a>
-                        <a href="MaxForwardsExceededException.html" title="">MaxForwardsExceededException</a>
+                        <a class="class" href="" title=""></a>
+                        <a href="" title="">MaxForwardsExceededException</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="NotAcceptableException$.html" title=""></a>
                         <a class="class" href="NotAcceptableException.html" title=""></a>
@@ -218,8 +218,8 @@
       <div id="definition">
         <div class="big-circle class">c</div>
         <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.http">http</a>.<a href="index.html" class="extype" name="com.twitter.finatra.http.exceptions">exceptions</a></p>
-        <h1>ExceptionManager<span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html" title="Permalink">
+        <h1>MaxForwardsExceededException<span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -232,35 +232,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ExceptionManager</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+        <span class="name">MaxForwardsExceededException</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A class to register <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a>s
-and handle exceptions.</p><p>Given an exception, the ExceptionManager will find an
-<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> to handle
-that particular class of exceptions. If the mapper for that exception
-isn't registered, the ExceptionManager will try the exception's parent class,
-and so on, until it reaches the Throwable class. The framework registers a &quot;root&quot;
-exception mapper over Throwable which will eventually be invoked. Users are
-free to register their own ExceptionMapper[Throwable] which overrides the
-&quot;root&quot; exception mapper.
-</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
-                <span class="name">@Singleton</span><span class="args">()</span>
-              
-        </dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper">com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper</span>
-Note: When searching for the parent exception mapper, it would be nice
-to traverse the entire class linearization so it works for
-traits/mixins too [1]. Unfortunately, implementing this would require
-a lot more reflection and it might not be threadsafe [2]. Doing it in
-Scala 2.11 might be easier and safer.
-[1] http://stackoverflow.com/questions/15623498/handy-ways-to-show-linearization-of-a-class
-[2] http://docs.scala-lang.org/overviews/reflection/thread-safety.html</p></span></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
         </div></div>
         
 
@@ -286,7 +267,7 @@ Scala 2.11 might be easier and safer.
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.http.exceptions.ExceptionManager"><span>ExceptionManager</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.http.exceptions.MaxForwardsExceededException"><span>MaxForwardsExceededException</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -306,10 +287,10 @@ Scala 2.11 might be easier and safer.
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="com.twitter.finatra.http.exceptions.ExceptionManager#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.http.exceptions.ExceptionManager"></a><a id="&lt;init&gt;:ExceptionManager"></a>
+              <ol><li name="com.twitter.finatra.http.exceptions.MaxForwardsExceededException#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(maxDepth:Int):com.twitter.finatra.http.exceptions.MaxForwardsExceededException"></a><a id="&lt;init&gt;:MaxForwardsExceededException"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#&lt;init&gt;(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.http.exceptions.ExceptionManager" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#&lt;init&gt;(maxDepth:Int):com.twitter.finatra.http.exceptions.MaxForwardsExceededException" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -318,7 +299,7 @@ Scala 2.11 might be easier and safer.
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ExceptionManager</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span>
+        <span class="name">MaxForwardsExceededException</span><span class="params">(<span name="maxDepth">maxDepth: <a href="http://www.scala-lang.org/api/2.12.4/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a></span>)</span>
       </span>
       
       
@@ -335,7 +316,7 @@ Scala 2.11 might be easier and safer.
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -351,7 +332,7 @@ Scala 2.11 might be easier and safer.
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html###():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -367,7 +348,7 @@ Scala 2.11 might be easier and safer.
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -380,67 +361,26 @@ Scala 2.11 might be easier and safer.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.exceptions.ExceptionManager#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add[T&lt;:com.twitter.finatra.http.exceptions.ExceptionMapper[_]](implicitevidence$2:Manifest[T]):Unit"></a><a id="add[T&lt;:ExceptionMapper[_]](Manifest[T]):Unit"></a>
+    </li><li name="java.lang.Throwable#addSuppressed" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="addSuppressed(x$1:Throwable):Unit"></a><a id="addSuppressed(Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#add[T&lt;:com.twitter.finatra.http.exceptions.ExceptionMapper[_]](implicitevidence$2:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#addSuppressed(x$1:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier"></span>
+        <span class="modifier">final </span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">add</span><span class="tparams">[<span name="T">T &lt;: <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[_]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.exceptions.ExceptionManager.add.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">addSuppressed</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Throwable">Throwable</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <p class="shortcomment cmt">Add a <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> by type <span class="extype" name="T">T</span>
-</p><div class="fullcomment"><div class="comment cmt"><p>Add a <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> by type <span class="extype" name="T">T</span>
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- ExceptionMapper type T which should subclass <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a></p></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.exceptions.ExceptionManager#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add(collection:com.twitter.finatra.http.exceptions.ExceptionMapperCollection):Unit"></a><a id="add(ExceptionMapperCollection):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#add(collection:com.twitter.finatra.http.exceptions.ExceptionMapperCollection):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="params">(<span name="collection">collection: <a href="ExceptionMapperCollection.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapperCollection">ExceptionMapperCollection</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Add a collection of <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> as defined by a
-<a href="ExceptionMapperCollection.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapperCollection">com.twitter.finatra.http.exceptions.ExceptionMapperCollection</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Add a collection of <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> as defined by a
-<a href="ExceptionMapperCollection.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapperCollection">com.twitter.finatra.http.exceptions.ExceptionMapperCollection</a>. The collection is iterated
-over and each mapper contained therein is added. If a mapper has already been added for the given
-type T in ExceptionMapper[T], it will be replaced.
-</p></div><dl class="paramcmts block"><dt class="param">collection</dt><dd class="cmt"><p>- <a href="ExceptionMapperCollection.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapperCollection">com.twitter.finatra.http.exceptions.ExceptionMapperCollection</a> to add.</p></dd></dl></div>
-    </li><li name="com.twitter.finatra.http.exceptions.ExceptionManager#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add[T&lt;:Throwable](mapper:com.twitter.finatra.http.exceptions.ExceptionMapper[T])(implicitevidence$1:Manifest[T]):Unit"></a><a id="add[T&lt;:Throwable](ExceptionMapper[T])(Manifest[T]):Unit"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#add[T&lt;:Throwable](mapper:com.twitter.finatra.http.exceptions.ExceptionMapper[T])(implicitevidence$1:Manifest[T]):Unit" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="params">(<span name="mapper">mapper: <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="com.twitter.finatra.http.exceptions.ExceptionManager.add.T">T</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.http.exceptions.ExceptionManager.add.T">T</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Add a <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> over type <span class="extype" name="T">T</span> to the manager.</p><div class="fullcomment"><div class="comment cmt"><p>Add a <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> over type <span class="extype" name="T">T</span> to the manager.
-If a mapper has already been added for the given <span class="extype" name="T">T</span>, it will be replaced.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- exception class type which should subclass <span class="extype" name="java.lang.Throwable">java.lang.Throwable</span></p></dd><dt class="param">mapper</dt><dd class="cmt"><p>- <a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> to add</p></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -456,7 +396,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#clone():Object" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -480,7 +420,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -496,7 +436,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -509,10 +449,26 @@ If a mapper has already been added for the given <span class="extype" name="T">T
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="java.lang.Throwable#fillInStackTrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="fillInStackTrace():Throwable"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#fillInStackTrace():Throwable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">fillInStackTrace</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#finalize():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -531,10 +487,26 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="java.lang.Throwable#getCause" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getCause():Throwable"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#getCause():Throwable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getCause</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -550,10 +522,74 @@ If a mapper has already been added for the given <span class="extype" name="T">T
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="java.lang.Throwable#getLocalizedMessage" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getLocalizedMessage():String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#getLocalizedMessage():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getLocalizedMessage</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.exceptions.MaxForwardsExceededException#getMessage" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getMessage():String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#getMessage():String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getMessage</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.http.exceptions.MaxForwardsExceededException">MaxForwardsExceededException</a> → Throwable</dd></dl></div>
+    </li><li name="java.lang.Throwable#getStackTrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getStackTrace():Array[StackTraceElement]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#getStackTrace():Array[StackTraceElement]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getStackTrace</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
+    </li><li name="java.lang.Throwable#getSuppressed" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="getSuppressed():Array[Throwable]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#getSuppressed():Array[Throwable]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getSuppressed</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.Throwable">Throwable</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#hashCode():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -569,10 +605,26 @@ If a mapper has already been added for the given <span class="extype" name="T">T
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="java.lang.Throwable#initCause" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="initCause(x$1:Throwable):Throwable"></a><a id="initCause(Throwable):Throwable"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#initCause(x$1:Throwable):Throwable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initCause</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.lang.Throwable">Throwable</span></span>)</span><span class="result">: <span class="extype" name="java.lang.Throwable">Throwable</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -588,7 +640,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -604,7 +656,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#notify():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -623,7 +675,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -639,10 +691,74 @@ If a mapper has already been added for the given <span class="extype" name="T">T
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="java.lang.Throwable#printStackTrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="printStackTrace(x$1:java.io.PrintWriter):Unit"></a><a id="printStackTrace(PrintWriter):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#printStackTrace(x$1:java.io.PrintWriter):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.io.PrintWriter">PrintWriter</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
+    </li><li name="java.lang.Throwable#printStackTrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="printStackTrace(x$1:java.io.PrintStream):Unit"></a><a id="printStackTrace(PrintStream):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#printStackTrace(x$1:java.io.PrintStream):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="java.io.PrintStream">PrintStream</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
+    </li><li name="java.lang.Throwable#printStackTrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="printStackTrace():Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#printStackTrace():Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">printStackTrace</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
+    </li><li name="java.lang.Throwable#setStackTrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="setStackTrace(x$1:Array[StackTraceElement]):Unit"></a><a id="setStackTrace(Array[StackTraceElement]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#setStackTrace(x$1:Array[StackTraceElement]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">setStackTrace</span><span class="params">(<span name="arg0">arg0: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="java.lang.StackTraceElement">StackTraceElement</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -655,29 +771,10 @@ If a mapper has already been added for the given <span class="extype" name="T">T
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.exceptions.ExceptionManager#toResponse" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toResponse(request:com.twitter.finagle.http.Request,throwable:Throwable):com.twitter.finagle.http.Response"></a><a id="toResponse(Request,Throwable):Response"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#toResponse(request:com.twitter.finagle.http.Request,throwable:Throwable):com.twitter.finagle.http.Response" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">toResponse</span><span class="params">(<span name="request">request: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>, <span name="throwable">throwable: <span class="extype" name="scala.Throwable">Throwable</span></span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Returns a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> as computed by the matching
-<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> to the given throwable.</p><div class="fullcomment"><div class="comment cmt"><p>Returns a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a> as computed by the matching
-<a href="ExceptionMapper.html" class="extype" name="com.twitter.finatra.http.exceptions.ExceptionMapper">com.twitter.finatra.http.exceptions.ExceptionMapper</a> to the given throwable.
-</p></div><dl class="paramcmts block"><dt class="param">request</dt><dd class="cmt"><p>- a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html" class="extype" name="com.twitter.finagle.http.Request">com.twitter.finagle.http.Request</a></p></dd><dt class="param">throwable</dt><dd class="cmt"><p>- <span class="extype" name="java.lang.Throwable">java.lang.Throwable</span> to match against registered ExceptionMappers.</p></dd><dt>returns</dt><dd class="cmt"><p>a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html" class="extype" name="com.twitter.finagle.http.Response">com.twitter.finagle.http.Response</a></p></dd></dl></div>
-    </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="java.lang.Throwable#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#toString():String" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -689,11 +786,11 @@ If a mapper has already been added for the given <span class="extype" name="T">T
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable → AnyRef → Any</dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#wait():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -715,7 +812,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -737,7 +834,7 @@ If a mapper has already been added for the given <span class="extype" name="T">T
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/http/exceptions/ExceptionManager.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/http/exceptions/MaxForwardsExceededException.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -768,7 +865,13 @@ If a mapper has already been added for the given <span class="extype" name="T">T
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="scala.AnyRef">
+        <div class="parent" name="java.lang.Exception">
+              <h3>Inherited from <span class="extype" name="java.lang.Exception">Exception</span></h3>
+            </div><div class="parent" name="java.lang.Throwable">
+              <h3>Inherited from <span class="extype" name="java.lang.Throwable">Throwable</span></h3>
+            </div><div class="parent" name="java.io.Serializable">
+              <h3>Inherited from <span class="extype" name="java.io.Serializable">Serializable</span></h3>
+            </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></h3>

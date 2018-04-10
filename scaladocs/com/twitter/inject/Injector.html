@@ -600,8 +600,52 @@
       <p class="shortcomment cmt">Returns the appropriate instance for the given injection key.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given injection key.</p><p>When feasible, avoid using this method in favor of having the Injector
 inject your dependencies ahead of time via annotating your constructor
 with <code>@Inject</code>.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type of the bound instance to return from the object graph.</p></dd><dt class="param">key</dt><dd class="cmt"><p>- <code>com.google.inject.Key</code> binding key of the bound instance to return
-             from the object graph.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> represented by <code>com.google.inject.Key</code> key.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/Key.html" target="_blank">com.google.inject.Key</a></p></span></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">key</dt><dd class="cmt"><p><span class="extype" name="com.google.inject.Key">com.google.inject.Key</span> binding key of the bound instance to return
+             from the object graph.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> represented by <span class="extype" name="com.google.inject.Key">com.google.inject.Key</span> key.</p></dd></dl><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/Key.html" target="_blank">com.google.inject.Key</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="instance[T,Ann&lt;:java.lang.annotation.Annotation](clazz:Class[T],annotationClazz:Class[Ann]):T"></a><a id="instance[T,Ann&lt;:Annotation](Class[T],Class[Ann]):T"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T,Ann&lt;:java.lang.annotation.Annotation](clazz:Class[T],annotationClazz:Class[Ann]):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>, <span name="Ann">Ann &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>, <span name="annotationClazz">annotationClazz: <span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="com.twitter.inject.Injector.instance.Ann">Ann</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
+passed class and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> class.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given key constructed from the
+passed class and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> class.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="tparam">Ann</dt><dd class="cmt"><p>type of the annotation class used to disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt class="param">clazz</dt><dd class="cmt"><p>the class of type <span class="extype" name="T">T</span> of the bound instance to return from
+             the object graph.</p></dd><dt class="param">annotationClazz</dt><dd class="cmt"><p><span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> class used to
+                       disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span>.</p></dd></dl></div>
+    </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="instance[T](clazz:Class[T],annotation:java.lang.annotation.Annotation):T"></a><a id="instance[T](Class[T],Annotation):T"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T](clazz:Class[T],annotation:java.lang.annotation.Annotation):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>, <span name="annotation">annotation: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
+passed class and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given key constructed from the
+passed class and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> annotation.</p><p>When feasible, avoid using this method, in favor of having the Injector
+inject your dependencies ahead of time via annotating your constructor
+with <code>@Inject</code>.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">clazz</dt><dd class="cmt"><p>the class of type <span class="extype" name="T">T</span> of the bound instance to return from
+             the object graph.</p></dd><dt class="param">annotation</dt><dd class="cmt"><p><span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> instance used to
+                 disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span>.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="instance[T](clazz:Class[T]):T"></a><a id="instance[T](Class[T]):T"></a>
       <span class="permalink">
@@ -620,7 +664,30 @@ with <code>@Inject</code>.
       <p class="shortcomment cmt">Returns the appropriate instance for the given injection type.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given injection type.</p><p>When feasible, avoid using this method, in favor of having the Injector
 inject your dependencies ahead of time via annotating your constructor
 with <code>@Inject</code>.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type of the bound instance to return from the object graph.</p></dd><dt class="param">clazz</dt><dd class="cmt"><p>- the class of type <span class="extype" name="T">T</span> of the bound instance to return from the object graph.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span>.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">clazz</dt><dd class="cmt"><p>the class of type <span class="extype" name="T">T</span> of the bound instance to return
+             from the object graph.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span>.</p></dd></dl></div>
+    </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="instance[T](annotationClazz:Class[_&lt;:java.lang.annotation.Annotation])(implicitevidence$5:Manifest[T]):T"></a><a id="instance[T](Class[_&lt;:Annotation])(Manifest[T]):T"></a>
+      <span class="permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T](annotationClazz:Class[_&lt;:java.lang.annotation.Annotation])(implicitevidence$5:Manifest[T]):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">instance</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="annotationClazz">annotationClazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span>]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.inject.Injector.instance.T">T</span>]</span>)</span><span class="result">: <span class="extype" name="com.twitter.inject.Injector.instance.T">T</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
+passed type <span class="extype" name="T">T</span> and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> class.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given key constructed from the
+passed type <span class="extype" name="T">T</span> and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> class.</p><p>When feasible, avoid using this method in favor of having the Injector
+inject your dependencies ahead of time via annotating your constructor
+with <code>@Inject</code>.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">annotationClazz</dt><dd class="cmt"><p>class of <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> used
+                       to disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation class.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="instance[T](annotation:java.lang.annotation.Annotation)(implicitevidence$4:Manifest[T]):T"></a><a id="instance[T](Annotation)(Manifest[T]):T"></a>
       <span class="permalink">
@@ -637,12 +704,12 @@ with <code>@Inject</code>.
       </span>
       
       <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
-passed type <span class="extype" name="T">T</span> and given <code>java.lang.annotation.Annotation</code> annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given key constructed from the
-passed type <span class="extype" name="T">T</span> and given <code>java.lang.annotation.Annotation</code> annotation.</p><p>When feasible, avoid using this method in favor of having the Injector
+passed type <span class="extype" name="T">T</span> and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> annotation.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given key constructed from the
+passed type <span class="extype" name="T">T</span> and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> annotation.</p><p>When feasible, avoid using this method in favor of having the Injector
 inject your dependencies ahead of time via annotating your constructor
 with <code>@Inject</code>.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type of the bound instance to return from the object graph.</p></dd><dt class="param">annotation</dt><dd class="cmt"><p>- <code>java.lang.annotation.Annotation</code> instance used to
-                    disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">annotation</dt><dd class="cmt"><p><span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> instance used to
+                   disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="instance[T,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$2:Manifest[T],implicitevidence$3:Manifest[Ann]):T"></a><a id="instance[T,Ann&lt;:Annotation](Manifest[T],Manifest[Ann]):T"></a>
       <span class="permalink">
@@ -659,11 +726,11 @@ with <code>@Inject</code>.
       </span>
       
       <p class="shortcomment cmt">Returns the appropriate instance for the given key constructed from the
-passed type <span class="extype" name="T">T</span> and given <code>java.lang.annotation.Annotation</code> type <span class="extype" name="Ann">Ann</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given key constructed from the
-passed type <span class="extype" name="T">T</span> and given <code>java.lang.annotation.Annotation</code> type <span class="extype" name="Ann">Ann</span>.</p><p>When feasible, avoid using this method in favor of having the Injector
+passed type <span class="extype" name="T">T</span> and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> type <span class="extype" name="Ann">Ann</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Returns the appropriate instance for the given key constructed from the
+passed type <span class="extype" name="T">T</span> and given <span class="extype" name="java.lang.annotation.Annotation">java.lang.annotation.Annotation</span> type <span class="extype" name="Ann">Ann</span>.</p><p>When feasible, avoid using this method in favor of having the Injector
 inject your dependencies ahead of time via annotating your constructor
 with <code>@Inject</code>.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type of the bound instance to return from the object graph.</p></dd><dt class="tparam">Ann</dt><dd class="cmt"><p>- type of the annotation used to disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation type <span class="extype" name="Ann">Ann</span>.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="tparam">Ann</dt><dd class="cmt"><p>type of the annotation used to disambiguate the bound type <span class="extype" name="T">T</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with annotation type <span class="extype" name="Ann">Ann</span>.</p></dd></dl></div>
     </li><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="instance[T](implicitevidence$1:Manifest[T]):T"></a><a id="instance[T](Manifest[T]):T"></a>
       <span class="permalink">
@@ -684,7 +751,7 @@ passed type <span class="extype" name="T">T</span>.</p><div class="fullcomment">
 passed type <span class="extype" name="T">T</span>.</p><p>When feasible, avoid using this method in favor of having the Injector
 inject your dependencies ahead of time via annotating your constructor
 with <code>@Inject</code>.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type of the bound instance to return from the object graph.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span>.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span>.</p></dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -864,9 +931,9 @@ with <code>@Inject</code>.
         <div class="values members">
               <h3>Deprecated Value Members</h3>
               <ol><li name="com.twitter.inject.Injector#instance" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="instance[T](name:String)(implicitevidence$5:Manifest[T]):T"></a><a id="instance[T](String)(Manifest[T]):T"></a>
+      <a id="instance[T](name:String)(implicitevidence$6:Manifest[T]):T"></a><a id="instance[T](String)(Manifest[T]):T"></a>
       <span class="permalink">
-      <a href="../../../com/twitter/inject/Injector.html#instance[T](name:String)(implicitevidence$5:Manifest[T]):T" title="Permalink">
+      <a href="../../../com/twitter/inject/Injector.html#instance[T](name:String)(implicitevidence$6:Manifest[T]):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -885,7 +952,7 @@ passed type <span class="extype" name="T">T</span> and given String name which i
 value of a @Named annotation.</p><p>When feasible, avoid using this method in favor of having the Injector
 inject your dependencies ahead of time via annotating your constructor
 with <code>@Inject</code>.
-</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>- type of the bound instance to return from the object graph.</p></dd><dt class="param">name</dt><dd class="cmt"><p>- String value of <code>@Named</code> annotation.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with <code>@Named(name)</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>type of the bound instance to return from the object graph.</p></dd><dt class="param">name</dt><dd class="cmt"><p>String value of <code>@Named</code> annotation.</p></dd><dt>returns</dt><dd class="cmt"><p>bound instance of type <span class="extype" name="T">T</span> annotated with <code>@Named(name)</code>.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2017-09-25)</i> Users should prefer injector.instance[T](java.lang.annotation.Annotation</p></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://google.github.io/guice/api-docs/latest/javadoc/com/google/inject/name/Named.html" target="_blank">com.google.inject.name.Named</a></p></span></dd></dl></div>

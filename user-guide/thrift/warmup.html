@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Thrift Server Warmup &#8212; Finatra 18.3.0 documentation</title>
+    <title>Thrift Server Warmup &#8212; Finatra 18.4.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.3.0',
+        VERSION:     '18.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.3.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.4.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Communicate with a Thrift Service" href="clients.html" />
     <link rel="prev" title="Thrift Exception Mapping" href="exceptions.html" />
@@ -73,11 +73,62 @@
             
   <div class="section" id="thrift-server-warmup">
 <span id="thrift-warmup"></span><h1>Thrift Server Warmup<a class="headerlink" href="#thrift-server-warmup" title="Permalink to this headline">¶</a></h1>
-<p>There may be occasions where we want to exercise specific code paths before accepting traffic to the server (e.g., for triggering JIT in the JVM).
-In this case you can implement a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala">c.t.inject.utils.Handler</a> and your handler should be constructed with a <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftWarmup.scala">c.t.finatra.thrift.routing.ThriftWarmup</a> instance.</p>
-<p>For example, if we wanted to run an initial call through our Thrift service we could create the following handler:</p>
+<p>There may be occasions where we want to exercise specific code paths before accepting traffic to the
+server (e.g., for triggering JIT in the JVM). We can do this via server warmup.</p>
+<div class="section" id="warmup">
+<h2>Warmup<a class="headerlink" href="#warmup" title="Permalink to this headline">¶</a></h2>
+<p>Finatra provides a <cite>warmup</cite> lifecycle callback function which will be executed in the correct phase
+of server startup, i.e, before the server&#8217;s external Thrift port is bound and thus before the
+TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#lifecycle-management">Lifecycle Management</a>
+<cite>/health</cite> endpoint responds with <cite>OK</cite>.</p>
+<p>See <a class="reference external" href="../getting-started/lifecycle.html">here</a> for more information on the lifecycle of a Finatra
+server.</p>
+<p>To perform warmup, simply override this callback method and implement your logic. E.g.,</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
+import com.twitter.finatra.thrift.ThriftServer
+import com.twitter.finatra.thrift.routing.ThriftRouter
+import com.twitter.finatra.thrift.filters._
+
+object ExampleServerMain extends ExampleServer
+
+class ExampleServer extends ThriftServer {
+
+  override val modules = Seq(
+    DoEverythingModule)
+
+  override def configureThrift(router: ThriftRouter): Unit = {
+    router
+      .filter[LoggingMDCFilter]
+      .filter[TraceIdMDCFilter]
+      .filter[ThriftMDCFilter]
+      .filter[AccessLoggingFilter]
+      .filter[StatsFilter]
+      .add[ExampleThriftController]
+  }
+
+  override protected def warmup(): Unit = {
+    // YOUR WARMUP LOGIC HERE &lt;----------------------------------------------
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="c-t-finatra-thrift-routing-thriftwarmup">
+<h2><cite>c.t.finatra.thrift.routing.ThriftWarmup</cite><a class="headerlink" href="#c-t-finatra-thrift-routing-thriftwarmup" title="Permalink to this headline">¶</a></h2>
+<p>Finatra provides a utility, <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftWarmup.scala">c.t.finatra.thrift.routing.ThriftWarmup</a>
+which will route requests to underlying service implementation configured by the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/ad4b1fb37d13ae7b27aae50b885fa4ecfd0ed105/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala#L35">ThriftRouter</a>.</p>
+<p>The most common way to use the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftWarmup.scala">c.t.finatra.thrift.routing.ThriftWarmup</a>
+is via a constructor-arg to an implementation of a
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala">c.t.inject.utils.Handler</a>.</p>
+<p>The Finatra <cite>c.t.inject.serverTwitterServer</cite> provides a <cite>#handle[T &lt;: Handler: Manifest]</cite> utility
+which simply instantiates a given <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-utils/src/main/scala/com/twitter/inject/utils/Handler.scala">c.t.inject.utils.Handler</a>
+via the injector and invokes its <cite>#handle()</cite> function.</p>
+<p>Combining the above, if we wanted to run an initial call through our Thrift service we could create
+the following handler:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import ExampleThriftController
 import com.twitter.example.thriftscala.ExampleService.Add1
+import com.twitter.finatra.thrift.routing.ThriftWarmup
 import com.twitter.inject.Logging
 import com.twitter.inject.utils.Handler
 import com.twitter.util.{Await, Return, Throw, Try}
@@ -109,18 +160,25 @@ class ExampleThriftWarmupHandler @Inject()(
         // this is important if your service will call downstream services
         // during warmup that could be temporarily down or unavailable.
         // We don&#39;t want that unavailability to cause our server to fail
-        // warm-up and prevent the server from starting. So we simply log
-        // the error message here.
+        // warm-up and thus prevent the server from starting. So we simply
+        // log the error message here.
         error(e.getMessage, e)
-    } finally {
-      warmup.close()
     }
     info(&quot;Warm-up done.&quot;)
   }
 }
 </pre></div>
 </div>
-<p>You can then run this handler in the <cite>warmup</cite> lifecycle method:</p>
+<p>The handler above simply tries to call the <cite>Add1</cite> endpoint of the server.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">As noted above, be careful about exceptions which occur from calling endpoints on your service
+during warmup. Exceptions which escape the handler will potentially stop your server from
+starting and thus, you most likely <strong>do not</strong> want an exception from a warmup call to propagate out
+of the handler.</p>
+</div>
+<p>You would then run this handler in <cite>warmup()</cite> lifecycle callback E.g.,</p>
+<p>E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
@@ -144,16 +202,17 @@ class ExampleServer extends ThriftServer {
   }
 
   override protected def warmup(): Unit = {
-    handle[ExampleThriftWarmupHandler]()
+    handle[ExampleThriftWarmupHandler]() &lt;----------------------------------------------
   }
 }
 </pre></div>
 </div>
-<p>The <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/inject/inject-app/src/main/scala/com/twitter/inject/app/App.scala#L167">c.t.inject.app.App#warmup</a> lifecycle method is called before the server&#8217;s external Thrift port is bound and thus before the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#lifecycle-management">Lifecycle Management</a> <cite>/health</cite> endpoint responds with <cite>OK</cite>.</p>
-<p>See <a class="reference external" href="../getting-started/lifecycle.html">here</a> for more information on the lifecycle of a Finatra server.</p>
+</div>
 <div class="section" id="more-information">
 <h2>More information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
-<p>For more information, we encourage you to take a look at the full <a class="reference external" href="https://github.com/twitter/finatra/tree/master/examples">finatra/examples</a> in the <a class="reference external" href="https://github.com/twitter/finatra">github</a> source.</p>
+<p>For more information, we encourage you to take a look at the full
+<a class="reference external" href="https://github.com/twitter/finatra/tree/master/examples">finatra/examples</a> in the
+<a class="reference external" href="https://github.com/twitter/finatra">github</a> source.</p>
 </div>
 </div>
 
@@ -179,6 +238,8 @@ class ExampleServer extends ThriftServer {
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Thrift Server Warmup</a><ul>
+<li><a class="reference internal" href="#warmup">Warmup</a></li>
+<li><a class="reference internal" href="#c-t-finatra-thrift-routing-thriftwarmup"><cite>c.t.finatra.thrift.routing.ThriftWarmup</cite></a></li>
 <li><a class="reference internal" href="#more-information">More information</a></li>
 </ul>
 </li>
