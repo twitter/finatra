@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-18.4.0](https://github.com/twitter/finatra/tree/finatra-18.4.0) (2018-04-10)
+
+### Added
+
 * finatra-http: Added the ability for requests to have a maximum forward depth to
   `c.t.finatra.http.routing.HttpRouter`, which prevents requests from being forwarded
   an infinite number of times. By default the maximum forward depth is 5.
