@@ -1,12 +1,12 @@
 package com.twitter.finatra.http.internal.routing
 
-import com.twitter.finagle.http.{Method, HttpMuxer}
+import com.twitter.finagle.http.{HttpMuxer, Method}
 import com.twitter.finatra.http._
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.inject.Logging
 import com.twitter.server.AdminHttpServer
 import com.twitter.server.AdminHttpServer._
-import com.twitter.util.lint.{Issue, Category, Rule, GlobalRules}
+import com.twitter.util.lint.{Category, GlobalRules, Issue, Rule}
 
 private[http] object AdminHttpRouter extends Logging {
 
@@ -63,11 +63,19 @@ private[http] object AdminHttpRouter extends Logging {
     )
 
     // Add constant routes to admin index
-    server.addAdminRoutes(toAdminHttpServerRoutes(adminIndexRoutes, router))
+    server
+      .addAdminRoutes(
+        toAdminHttpServerRoutes(adminIndexRoutes, router)
+          .map(AdminHttpServer.Route.isolate)
+      )
 
     // Add rich handler for all other routes
     if (adminRichHandlerRoutes.nonEmpty) {
-      HttpMuxer.addRichHandler(HttpRouter.FinatraAdminPrefix, router.services.adminService)
+      HttpMuxer
+        .addRichHandler(
+          HttpRouter.FinatraAdminPrefix,
+          AdminHttpServer.Route.isolate(router.services.adminService)
+        )
     }
   }
 

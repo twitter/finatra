@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Updated `c.t.finatra.http.AdminHttpServer` to isolate routes added to the
+  admin. ``PHAB_ID=D157818``
+
 ### Fixed
 
 ### Closed
