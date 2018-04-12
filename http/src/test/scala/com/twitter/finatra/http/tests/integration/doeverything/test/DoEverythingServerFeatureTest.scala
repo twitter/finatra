@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType
 import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
-import com.twitter.finagle.FailureFlags
+import com.twitter.finagle.{Failure, FailureFlags}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http._
@@ -13,19 +13,51 @@ import com.twitter.finagle.http.codec.HttpCodec
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
-import com.twitter.finatra.httpclient.RequestBuilder
+import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.finatra.json.JsonDiff._
+import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
+import com.twitter.{logging => ctl}
+import com.twitter.util.Future
+import java.net.{ConnectException, InetSocketAddress, SocketAddress}
 import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
 
-class DoEverythingServerFeatureTest extends FeatureTest {
+object DoEverythingServerFeatureTest {
+  private val TestFailureRemoteAddr: SocketAddress = new InetSocketAddress("localhost", 1234)
+
+  private val ConnectionFailedFailure =
+    Failure(
+      why = "Connection refused: localhost/127.0.0.1:1234 at remote address: localhost/127.0.0.1:1234. Remote Info: Not Available",
+      cause =
+        new com.twitter.finagle.ConnectionFailedException(
+          Some(new TestConnectException(new ConnectException(), TestFailureRemoteAddr)),
+          Some(TestFailureRemoteAddr)) {
+          override def logLevel: ctl.Level = ctl.Level.INFO
+        },
+      flags = 8
+    )
+
+  private class TestConnectException(
+    exception: ConnectException,
+    remoteAddress: SocketAddress)
+    extends ConnectException(exception.getMessage + ": " + remoteAddress) {
+    initCause(exception)
+    setStackTrace(exception.getStackTrace)
+
+    override def fillInStackTrace(): Throwable = this
+  }
+}
+
+class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
+
+  val httpClient: HttpClient = smartMock[HttpClient]
 
   override val server = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer
-  )
+  ).bind[HttpClient].toInstance(httpClient)
 
   val doEverythingService = server.injector.instance[DoEverythingService]
   val namedExampleString = server.injector.instance[String](Names.named("example"))
@@ -2308,4 +2340,15 @@ class DoEverythingServerFeatureTest extends FeatureTest {
       andExpect = BadRequest,
       withJsonBody = """{"errors":["name: size [1] is not between 2 and 20"]}""")
   }
+
+  test("GET /httpclient") {
+    import DoEverythingServerFeatureTest.ConnectionFailedFailure
+
+    httpClient.execute(any[Request]).returns(Future.exception(ConnectionFailedFailure))
+
+    server.httpGet(
+      "/httpclient",
+      andExpect = Status.InternalServerError)
+  }
 }
+

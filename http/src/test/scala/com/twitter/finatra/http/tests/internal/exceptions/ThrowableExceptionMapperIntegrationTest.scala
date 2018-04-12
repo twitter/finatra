@@ -6,12 +6,12 @@ import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.exceptions._
 import com.twitter.finatra.http.modules.{MessageBodyModule, MustacheModule}
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.IntegrationTest
+import com.twitter.inject.{Injector, IntegrationTest}
 import com.twitter.inject.app.TestInjector
 import com.twitter.inject.modules.InMemoryStatsReceiverModule
 
 class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
-  override val injector =
+  override val injector: Injector =
     TestInjector(
       MessageBodyModule,
       FinatraJacksonModule,
@@ -23,7 +23,7 @@ class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
     val failureExceptionMapper = injector.instance[FailureExceptionMapper]
     val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
 
-    val failure = Failure(new CancelledRequestException)
+    val failure = Failure.wrap(new CancelledRequestException)
 
     val e = intercept[CancelledRequestException] {
       failureExceptionMapper.toResponse(request, failure)
@@ -38,7 +38,7 @@ class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
     val failureExceptionMapper = injector.instance[FailureExceptionMapper]
     val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
 
-    val failure = Failure(Failure(new CancelledRequestException))
+    val failure = Failure.wrap(Failure.wrap(new CancelledRequestException))
 
     val e = intercept[CancelledRequestException] {
       failureExceptionMapper.toResponse(request, failure).status
