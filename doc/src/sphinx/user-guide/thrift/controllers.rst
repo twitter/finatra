@@ -14,6 +14,10 @@ A *Thrift Controller* is an implementation of your thrift service. To create the
 
 For Thrift Controllers we use the `BaseServiceIface` trait since we are not able to extend the `ServiceIface` case class.
 
+.. note::
+
+   The generated `BaseServiceIface` was deprecated on 2017-11-07, but Finatra still only supports `BaseServiceIface` and it is safe to ignore the deprecation warning until Finatra supports `ServicePerEndpoint`.
+
 `handle(ThriftMethod)` DSL
 --------------------------
 
