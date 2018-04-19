@@ -26,8 +26,8 @@ class HttpNackFilter[R <: Request] @Inject()(statsReceiver: StatsReceiver)
 
   def apply(req: R, service: Service[R, Response]): Future[Response] = {
     service(req).rescue {
-      case RetryableNack(_) => RetryableHttpNackException
-      case NonRetryableNack(_) => NonRetryableHttpNackException
+      case RetryableNack() => RetryableHttpNackException
+      case NonRetryableNack() => NonRetryableHttpNackException
     }
   }
 }
