@@ -474,7 +474,6 @@ lazy val injectUtils = (project in file("inject/inject-utils"))
     moduleName := "inject-utils",
     libraryDependencies ++= Seq(
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
-      "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "commons-lang" % "commons-lang" % versions.commonsLang
     )

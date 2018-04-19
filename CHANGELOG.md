@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-utils: Remove deprecated `c.t.inject.RootMonitor`. ``PHAB_ID=D161036``
+
 * finatra-http: Updated `c.t.finatra.http.AdminHttpServer` to isolate routes added to the
   admin. ``PHAB_ID=D157818``
 
