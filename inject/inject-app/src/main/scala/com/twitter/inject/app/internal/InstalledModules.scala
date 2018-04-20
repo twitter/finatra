@@ -3,7 +3,7 @@ package com.twitter.inject.app.internal
 import com.google.inject.util.Modules
 import com.google.inject.{Module => GuiceModule, _}
 import com.twitter.app.Flag
-import com.twitter.inject.{TwitterBaseModule, TwitterModuleLifecycle, Injector, Logging}
+import com.twitter.inject.{Injector, Logging, TwitterBaseModule, TwitterModuleLifecycle}
 import scala.collection.JavaConverters._
 import scala.PartialFunction.condOpt
 
@@ -33,10 +33,15 @@ private[app] object InstalledModules {
     val combinedModule =
       Modules.`override`(allNonOverrideModules.asJava).`with`(allOverrideModules.asJava)
 
+    /* De-dupe all the modules using a java.util.IdentityHashMap with the modules as keys */
+    val identityHashMap = new java.util.IdentityHashMap[GuiceModule, Boolean]()
+    (allNonOverrideModules ++ allOverrideModules).foreach { module =>
+      if (!identityHashMap.containsKey(module)) identityHashMap.put(module, true)
+    }
+
     new InstalledModules(
       injector = Injector(Guice.createInjector(stage, combinedModule)),
-      modules =
-        allNonOverrideModules ++ allOverrideModules
+      modules = identityHashMap.keySet().asScala.toSeq
     )
   }
 
@@ -125,7 +130,8 @@ private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceM
   ): Seq[ExitFunction] = modules.flatMap { module =>
     condOpt(module) {
       case injectModule: TwitterModuleLifecycle =>
-        () => fn(injectModule)
+        () =>
+          fn(injectModule)
     }
   }
 }

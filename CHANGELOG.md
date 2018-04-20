@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* inject-app: Ensure that installed modules are de-duped before creating injector. 
+  ``PHAB_ID=D160955``
+
 ### Closed
 
 ## [finatra-18.4.0](https://github.com/twitter/finatra/tree/finatra-18.4.0) (2018-04-10)
