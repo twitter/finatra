@@ -33,19 +33,28 @@ private[app] object InstalledModules {
     val combinedModule =
       Modules.`override`(allNonOverrideModules.asJava).`with`(allOverrideModules.asJava)
 
-    /* De-dupe all the modules using a java.util.IdentityHashMap with the modules as keys */
-    val identityHashMap = new java.util.IdentityHashMap[GuiceModule, Boolean]()
-    (allNonOverrideModules ++ allOverrideModules).foreach { module =>
-      if (!identityHashMap.containsKey(module)) identityHashMap.put(module, true)
-    }
-
     new InstalledModules(
       injector = Injector(Guice.createInjector(stage, combinedModule)),
-      modules = identityHashMap.keySet().asScala.toSeq
+      modules = dedupeModules(allNonOverrideModules ++ allOverrideModules)
     )
   }
 
   /* Private */
+
+  // exposed for testing
+  private[app] def dedupeModules(modules: Seq[GuiceModule]): Seq[GuiceModule] = {
+    // De-dupe all the modules using a java.util.IdentityHashMap with the modules as keys
+    // to filter out modules already seen. We use `filter` because it's stable, and
+    // the order of module initialization may be important.
+    val identityHashMap = new java.util.IdentityHashMap[GuiceModule, Boolean]()
+    modules.filter { module =>
+      if (identityHashMap.containsKey(module)) false
+      else {
+        identityHashMap.put(module, true)
+        true
+      }
+    }
+  }
 
   /** Recursively capture all flags in the [[com.google.inject.Module]] object hierarchy. */
   private[app] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {

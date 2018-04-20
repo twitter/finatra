@@ -35,4 +35,14 @@ class InstalledModulesTest extends Test {
     stateMap.internals.size should be(1)
     stateMap.internals("key") should be(1)
   }
+
+  test("Modules are deduped in a stable order") {
+    val modules = (0 until 10).map { i =>
+      new TestModuleClass(s"instance$i", 0)
+    }
+
+    val deduped = InstalledModules.dedupeModules(
+      modules.zip(modules).flatMap { case (one, two) => Seq(one, two) })
+    deduped should equal(modules)
+  }
 }
