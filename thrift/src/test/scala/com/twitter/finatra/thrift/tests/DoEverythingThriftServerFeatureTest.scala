@@ -2,15 +2,12 @@ package com.twitter.finatra.thrift.tests
 
 import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
+import com.twitter.finagle.tracing.Trace
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
-import com.twitter.finatra.thrift.thriftscala.{
-  ClientError,
-  NoClientIdError,
-  ServerError,
-  UnknownClientIdError
-}
+import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
+import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
 import com.twitter.scrooge
@@ -235,6 +232,30 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
   test("ask fail") {
     val question = Question("fail")
     await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+  }
+
+  test("MDC filtering") {
+    val traceId = Trace.nextId
+    val response = await {
+      Trace.letId(traceId) {
+        client123.uppercase("Hi")
+      }
+    }
+
+    response should equal("HI")
+
+    val MDC = server.injector.instance[DoEverythingThriftController].getStoredMDC
+    MDC should not be None
+    MDC.get.size should equal(3)
+
+    MDC.get("method") should not be null
+    MDC.get("method") should be("uppercase")
+
+    MDC.get("clientId") should not be null
+    MDC.get("clientId") should be("client123")
+
+    MDC.get("traceId") should not be null
+    MDC.get("traceId") should be(traceId.traceId.toString())
   }
 
   private def await[T](f: Future[T]): T = {

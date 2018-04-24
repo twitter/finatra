@@ -1,7 +1,7 @@
 package com.twitter.finatra.thrift.tests.doeverything.controllers
 
 import com.twitter.conversions.time._
-import com.twitter.doeverything.thriftscala.{DoEverythingException, Answer, DoEverything}
+import com.twitter.doeverything.thriftscala.{Answer, DoEverything, DoEverythingException}
 import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
 import com.twitter.finagle.{ChannelException, RequestException, RequestTimeoutException}
 import com.twitter.finatra.thrift.Controller
@@ -9,14 +9,22 @@ import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, F
 import com.twitter.finatra.thrift.thriftscala.{ClientError, UnknownClientIdError}
 import com.twitter.finatra.thrift.thriftscala.ClientErrorCause.BadRequest
 import com.twitter.inject.annotations.Flag
+import com.twitter.inject.logging.FinagleMDCAdapter
 import com.twitter.util.Future
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
+import org.slf4j.MDC
+import scala.collection.JavaConverters._
 
+@Singleton
 class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: String)
     extends Controller
     with DoEverything.BaseServiceIface {
 
+  private[this] var storedMDC: Option[Map[String, String]] = None
+
   override val uppercase = handle(Uppercase) { args: Uppercase.Args =>
+    storeForTesting()
+    info("In uppercase method.")
     if (args.msg == "fail") {
       Future.exception(new Exception("oops"))
     } else {
@@ -67,5 +75,17 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
       Future.value(
         Answer(s"The answer to the question: `${question.text}` is 42."))
     }
+  }
+
+  def getStoredMDC: Option[Map[String, String]] = this.storedMDC
+
+  private def storeForTesting(): Unit = {
+    this.storedMDC = Some(
+      MDC.getMDCAdapter
+        .asInstanceOf[FinagleMDCAdapter]
+        .getPropertyContextMap
+        .asScala
+        .toMap
+    )
   }
 }

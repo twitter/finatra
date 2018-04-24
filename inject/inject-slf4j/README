@@ -1,9 +1,29 @@
 Overview
 ========
 
-The Finatra framework uses the slf4j-api for logging. By coupling the framework to only slf4j application developers
-can choose the logging implementation. This module provides a thin scala-wrapper trait (c.t.inject.Logging) over the
-util-slf4j-api c.t.util.logging.Logging trait and provides a [Mapped Diagnostic Context (MDC)](https://logback.qos.ch/manual/mdc.html)
-integration with slf4j and [Finagle](https://github.com/twitter/finagle) via util Locals.
+The Finatra framework uses the [SLF4J API](https://www.slf4j.org/) for logging. By coupling the
+framework to only SLF4J application developers can choose the logging implementation.
+
+
+`c.t.inject.Logging` Trait
+--------------------------
+
+The inject-slf4j library provides a thin trait: `c.t.inject.Logging` over the util-slf4j-api [`c.t.util.logging.Logging`](https://github.com/twitter/util/blob/develop/util-slf4j-api/src/main/scala/com/twitter/util/logging/Logging.scala)
+trait, which adds a few more utilities and makes the logging trait safe for inclusion mixed into a
+case class which is serialized to JSON.
+
+
+SLF4J Mapped Diagnostic Context Support
+---------------------------------------
+
+The library also provides a [Mapped Diagnostic Context (MDC)](https://www.slf4j.org/manual.html#mdc)
+integration with SLF4J and [Finagle](https://github.com/twitter/finagle) via util LocalContexts.
 
 See https://twitter.github.io/finatra/user-guide/logging/index.html for more information.
+
+Note
+----
+
+Tests for the inject-slf4j library are located in the inject-core library due to the need for the
+tests to use the testing utilities of inject-core and the fact that inject-core depends on
+inject-slf4j which would create a circular dependency.
