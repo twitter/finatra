@@ -17,7 +17,7 @@ jvm_binary(
     main = "com.twitter.hello.server.HelloWorldServerMain",
     dependencies = [
         ":java-http-server",
-        "3rdparty/jvm/ch/qos/logback:logback-classic",
+        "twitter-server/logback-classic/src/main/scala",
     ],
     deploy_excludes = [
         exclude("org.slf4j", "slf4j-jdk14"),

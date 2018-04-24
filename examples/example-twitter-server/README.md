@@ -1,6 +1,6 @@
-# Finatra Streaming Example
+# TwitterServer Example
 
-A simple HTTP server which streams responses.
+A simple TwitterServer modeling a Publisher/Subscriber example.
 
 Note: All Finatra examples should be run from the base Finatra directory as they are defined as part 
 of the root project.
@@ -17,11 +17,11 @@ Running
 -------
 ```
 [finatra] $ cd ../../
-[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt streamingExample/run
+[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt exampleTwitterServer/run
 ```
 * Then browse the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
-[finatra] $ ./sbt streamingExample/assembly
-[finatra] $ java -jar examples/streaming-example/target/scala-2.XX/streaming-example-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
+[finatra] $ ./sbt exampleTwitterServer/assembly
+[finatra] $ java -jar examples/example-twitter-server/target/scala-2.XX/example-twitter-server-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
 ```

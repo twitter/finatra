@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* examples: Add external TwitterServer example. ``PHAB_ID=D161204``
+
 ### Changed
 
 * inject-utils: Remove deprecated `c.t.inject.RootMonitor`. ``PHAB_ID=D161036``

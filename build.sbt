@@ -191,9 +191,12 @@ lazy val baseServerSettings = baseSettings ++ buildSettings ++ publishSettings +
 )
 
 lazy val exampleServerSettings = baseServerSettings ++ Seq(
+  fork in run := true,
+  javaOptions in Test ++= Seq("-Dlog.service.output=/dev/stdout", "-Dlog.access.output=/dev/stdout", "-Dlog_level=INFO"),
   libraryDependencies ++= Seq(
-    "org.slf4j" % "slf4j-simple" % versions.slf4j % "test",
-    "ch.qos.logback" % "logback-classic" % versions.logback)
+    "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
+    "ch.qos.logback" % "logback-classic" % versions.logback
+  )
 )
 
 lazy val finatraModules = Seq[sbt.ProjectReference](
@@ -220,6 +223,7 @@ lazy val finatraExamples =
     benchmarkServer,
     exampleHttpJavaServer,
     exampleInjectJavaServer,
+    exampleTwitterServer,
     exampleWebDashboard,
     helloWorld,
     streamingExample,
@@ -247,7 +251,7 @@ lazy val root = (project in file("."))
       -- inProjects(benchmarks)
       // START EXAMPLES
       -- inProjects(benchmarkServer, exampleHttpJavaServer, exampleInjectJavaServer,
-         exampleWebDashboard, helloWorld,
+         exampleTwitterServer, exampleWebDashboard, helloWorld,
          streamingExample, thriftExampleIdl, thriftExampleServer,
          thriftJavaExampleIdl, thriftJavaExampleServer, twitterClone)
       // END EXAMPLES
@@ -885,4 +889,14 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
     injectCore % "test->test",
     injectSlf4j)
 
+lazy val exampleTwitterServer = (project in file("examples/example-twitter-server"))
+  .settings(exampleServerSettings)
+  .settings(noPublishSettings)
+  .settings(
+    name := "example-twitter-server",
+    moduleName := "example-twitter-server"
+    ).dependsOn(
+      injectServer % "test->test;compile->compile",
+      injectSlf4j,
+      utils)
 // END EXAMPLES
