@@ -1,6 +1,11 @@
 package com.twitter.finatra.httpclientv2
 
 import com.twitter.finagle.Http
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.service.{RetryBudget, RetryFilter, RetryPolicy}
+import com.twitter.finagle.stats.LoadedStatsReceiver
+import com.twitter.finagle.util.DefaultTimer
+import com.twitter.util.Try
 
 object HttpClientBuilder {
   def create(): HttpClientBuilder = {
@@ -14,17 +19,26 @@ object HttpClientBuilder {
 
 class HttpClientBuilder(client: Http.Client) {
 
-  def hostname: String = ""
-  def retryPolicy: Option[RetryPolicy[Try[Response]]] = None
-  def defaultHeaders: Map[String, String] = Map()
+  var hostname: String = ""
+  var retryPolicyOptions: Option[RetryPolicy[(Request, Try[Response])]] = None
+  var defaultHeaders: Map[String, String] = Map()
+  var budget: RetryBudget = RetryBudget()
+  var policy: RetryPolicy[(Request, Try[Response])]
 
   def setHostname(name: String): HttpClientBuilder = {
     this.hostname = hostname
     this
   }
 
-  def setRetryPolicy(retryPolicy: retryOption[RetryPolicy[Try[Response]]]): HttpClientBuilder = {
-    this.retryPolicy = retryPolicy
+  def setRetryBudget(retryBudget: RetryBudget): HttpClientBuilder = {
+    client = client.withRetryBudget(retryBudget)
+    budget = retryBudget
+    this
+  }
+
+  def setRetryPolicy(policy: RetryPolicy[(Request,Try[Response])]): HttpClientBuilder = {
+    this.retryPolicyOptions = Some(policy)
+    this.policy = policy
     this
   }
 
@@ -44,7 +58,21 @@ class HttpClientBuilder(client: Http.Client) {
   }
 
   def newClient(dest: String): HttpClient = {
+
+
     val service = client.newService(dest)
-    new HttpClient(hostname = hostname, httpService = service, retryPolicy = retryPolicy, defaultHeaders = defaultHeaders)
+
+    val filteredService = retryPolicyOptions match {
+      case Some(policy) =>
+        new RetryFilter(
+          retryPolicy = policy,
+          timer = DefaultTimer,
+          statsReceiver = LoadedStatsReceiver,
+          retryBudget = budget).andThen(service)
+      case _ =>
+        service
+    }
+
+    new HttpClient(hostname = hostname, httpService = filteredService, retryPolicy = retryPolicyOptions, defaultHeaders = defaultHeaders)
   }
 }
