@@ -46,7 +46,14 @@ class HttpClientBuilder(client: Http.Client) {
   }
 
   def newClient(dest: String): HttpClient = {
-    val service = client.withTls(sslHostname).withResponseClassifier(classifier).newService(dest)
+    if (sslHostname.nonEmpty) {
+      client = client.withTls(sslHostname)
+    }
+    if (classifier.nonEmpty) {
+      client = client.withResponseClassifier(classifier)
+    }
+
+    val service = client.newService(dest)
     new HttpClient(hostname = hostname, httpService = service, retryPolicy = retryPolicy, defaultHeaders = defaultHeaders)
   }
 }
