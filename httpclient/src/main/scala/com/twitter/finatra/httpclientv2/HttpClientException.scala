@@ -1,4 +1,4 @@
-package com.twitter.finatra.httpclient
+package com.twitter.finatra.httpclientv2
 
 import scala.util.control.NoStackTrace
 import com.twitter.finagle.http.Status

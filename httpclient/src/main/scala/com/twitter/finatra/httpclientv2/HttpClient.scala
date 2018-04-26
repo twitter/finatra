@@ -1,4 +1,4 @@
-package com.twitter.finatra.httpclient
+package com.twitter.finatra.httpclientv2
 
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
@@ -21,7 +21,7 @@ import com.twitter.util.{Future, Try}
 class HttpClient(
   hostname: String = "",
   httpService: Service[Request, Response],
-  retryPolicy: Option[RetryPolicy[Try[Response]]] = None,
+  retryPolicy: Option[RetryPolicy[(Request, Try[Response])]] = None,
   defaultHeaders: Map[String, String] = Map(),
 ) extends Logging {
 

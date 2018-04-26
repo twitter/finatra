@@ -1,8 +1,8 @@
 package com.twitter.finatra.httpclientv2
 
-import com.twitter.finagle.Http
+import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finagle.service.{RetryBudget, RetryFilter, RetryPolicy}
+import com.twitter.finagle.service.{ResponseClassifier, RetryBudget, RetryFilter, RetryPolicy}
 import com.twitter.finagle.stats.LoadedStatsReceiver
 import com.twitter.finagle.util.DefaultTimer
 import com.twitter.util.Try
@@ -20,49 +20,49 @@ object HttpClientBuilder {
 class HttpClientBuilder(client: Http.Client) {
 
   var hostname: String = ""
-  var retryPolicyOptions: Option[RetryPolicy[(Request, Try[Response])]] = None
-  var defaultHeaders: Map[String, String] = Map()
+  var retryPolicy: Option[RetryPolicy[(Request, Try[Response])]] = None
   var budget: RetryBudget = RetryBudget()
   var policy: RetryPolicy[(Request, Try[Response])]
+  var defaultHeaders: Map[String, String] = Map()
+  var sslHostname: String = ""
+  var classifier: ResponseClassifier = None
 
-  def setHostname(name: String): HttpClientBuilder = {
+  def withHostname(name: String): HttpClientBuilder = {
     this.hostname = hostname
     this
   }
 
-  def setRetryBudget(retryBudget: RetryBudget): HttpClientBuilder = {
-    client = client.withRetryBudget(retryBudget)
+  def withRetryBudget(retryBudget: RetryBudget): HttpClientBuilder = {
     budget = retryBudget
     this
   }
 
-  def setRetryPolicy(policy: RetryPolicy[(Request,Try[Response])]): HttpClientBuilder = {
-    this.retryPolicyOptions = Some(policy)
+  def withRetryPolicy(policy: RetryPolicy[(Request,Try[Response])]): HttpClientBuilder = {
+    this.retryPolicy = Some(policy)
     this.policy = policy
     this
   }
 
-  def setDefaultHeaders(defaultHeaders: Map[String, String] = Map()): HttpClientBuilder = {
+  def withDefaultHeaders(defaultHeaders: Map[String, String] = Map()): HttpClientBuilder = {
     this.defaultHeaders = defaultHeaders
     this
   }
 
-  def setTls(sslHostname: String): HttpClientBuilder = {
-    client = client.withTls(sslHostname)
+  def withTls(sslHostname: String): HttpClientBuilder = {
+    this.sslHostname = sslHostname
     this
   }
 
-  def setResponseClassifier(classifier: Service.ResponseClassifier): HttpClientBuilder = {
-    client = client.withResponseClassifier()
+  def withResponseClassifier(classifier: ResponseClassifier): HttpClientBuilder = {
+    this.classifier = classifier
     this
   }
 
   def newClient(dest: String): HttpClient = {
+    val service = client.withTls(sslHostname).withRetryBudget(budget).withResponseClassifier(classifier).newService(dest)
 
 
-    val service = client.newService(dest)
-
-    val filteredService = retryPolicyOptions match {
+    val filteredService = retryPolicy match {
       case Some(policy) =>
         new RetryFilter(
           retryPolicy = policy,
@@ -73,6 +73,6 @@ class HttpClientBuilder(client: Http.Client) {
         service
     }
 
-    new HttpClient(hostname = hostname, httpService = filteredService, retryPolicy = retryPolicyOptions, defaultHeaders = defaultHeaders)
+    new HttpClient(hostname = hostname, httpService = filteredService, retryPolicy = retryPolicy, defaultHeaders = defaultHeaders)
   }
 }

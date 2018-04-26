@@ -1,4 +1,4 @@
-package com.twitter.finatra.httpclient.modules
+package com.twitter.finatra.httpclientv2.modules
 
 import com.google.inject.Provides
 import com.twitter.finagle.Service
@@ -9,6 +9,8 @@ import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.TwitterModule
 import com.twitter.util.Try
 import javax.inject.Singleton
+
+import com.twitter.finatra.httpclientv2.HttpClientBuilder
 
 abstract class HttpClientModule extends TwitterModule {
 

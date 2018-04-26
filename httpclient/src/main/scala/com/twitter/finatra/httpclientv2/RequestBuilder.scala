@@ -1,4 +1,4 @@
-package com.twitter.finatra.httpclient
+package com.twitter.finatra.httpclientv2
 
 import com.twitter.finagle.http.{Fields, Message, Method, Request, RequestProxy}
 import java.nio.charset.StandardCharsets.UTF_8
