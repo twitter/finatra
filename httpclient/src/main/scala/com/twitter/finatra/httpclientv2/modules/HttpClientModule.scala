@@ -1,11 +1,9 @@
 package com.twitter.finatra.httpclientv2.modules
 
 import com.google.inject.Provides
-import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
-import com.twitter.finagle.service.RetryPolicy
-import com.twitter.finatra.httpclient.{HttpClient, RichHttpClient}
-import com.twitter.finatra.json.FinatraObjectMapper
+import com.twitter.finagle.service.{ResponseClassifier, RetryPolicy}
+import com.twitter.finatra.httpclientv2.{HttpClient}
 import com.twitter.inject.TwitterModule
 import com.twitter.util.Try
 import javax.inject.Singleton
@@ -16,19 +14,25 @@ abstract class HttpClientModule extends TwitterModule {
 
   def dest: String
 
-  // override and set to a non-empty value if the dest requires a Host header
+  def classifier: ResponseClassifier = ResponseClassifier.Default
+
   def hostname: String = ""
 
-  def retryPolicy: Option[RetryPolicy[Try[Response]]] = None
+  def retryPolicy: RetryPolicy[(Request, Try[Response])] = ???
 
   def defaultHeaders: Map[String, String] = Map()
 
-  def sslHostname: Option[String] = None
+  def sslHostname: String = ""
 
   @Singleton
   @Provides
   def provideHttpClient(): HttpClient = {
-    return HttpClientBuilder.create()
+    HttpClientBuilder.create()
+      .withHostname(hostname)
+      .withRetryPolicy(retryPolicy)
+      .withDefaultHeaders(defaultHeaders)
+      .withTls(sslHostname)
+      .withResponseClassifier(classifier).newClient(dest)
   }
 
 

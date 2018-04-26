@@ -3,9 +3,7 @@ package com.twitter.finatra.httpclientv2
 import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.service.RetryPolicy
-import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.Logging
-import com.twitter.inject.conversions.future._
 import com.twitter.inject.utils.RetryUtils
 import com.twitter.util.{Future, Try}
 
@@ -32,10 +30,7 @@ class HttpClient(
     setHeaders(request)
     setHostname(request)
 
-    retryPolicy match {
-      case Some(policy) => RetryUtils.retryFuture(policy)(httpService(request))
-      case _ => httpService(request)
-    }
+    httpService(request)
   }
 
   /* Private */

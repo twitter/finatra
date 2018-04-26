@@ -22,10 +22,10 @@ class HttpClientBuilder(client: Http.Client) {
   var hostname: String = ""
   var retryPolicy: Option[RetryPolicy[(Request, Try[Response])]] = None
   var budget: RetryBudget = RetryBudget()
-  var policy: RetryPolicy[(Request, Try[Response])]
+  var policy: RetryPolicy[(Request, Try[Response])] = ???
   var defaultHeaders: Map[String, String] = Map()
   var sslHostname: String = ""
-  var classifier: ResponseClassifier = None
+  var classifier: ResponseClassifier = ResponseClassifier.Default
 
   def withHostname(name: String): HttpClientBuilder = {
     this.hostname = hostname
@@ -59,9 +59,26 @@ class HttpClientBuilder(client: Http.Client) {
   }
 
   def newClient(dest: String): HttpClient = {
-    val service = client.withTls(sslHostname).withRetryBudget(budget).withResponseClassifier(classifier).newService(dest)
+    val service = buildService(dest)
 
+    new HttpClient(hostname = hostname, httpService = service, retryPolicy = retryPolicy, defaultHeaders = defaultHeaders)
+  }
 
+  private def buildService(dest: String): Service[Request, Response] ={
+    var configuredClient = client
+    configuredClient = configuredClient
+      .withRetryBudget(budget)
+      .withResponseClassifier(classifier)
+
+    if (sslHostname.nonEmpty) {
+      configuredClient = configuredClient.withTls(sslHostname)
+    }
+    val service = configuredClient.newService(dest)
+    val filteredService = setFilteredService(service)
+    filteredService
+  }
+
+  private def setFilteredService(service: Service[Request, Response]): Service[Request, Response] ={
     val filteredService = retryPolicy match {
       case Some(policy) =>
         new RetryFilter(
@@ -72,7 +89,6 @@ class HttpClientBuilder(client: Http.Client) {
       case _ =>
         service
     }
-
-    new HttpClient(hostname = hostname, httpService = filteredService, retryPolicy = retryPolicy, defaultHeaders = defaultHeaders)
+    filteredService
   }
 }
