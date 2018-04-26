@@ -14,11 +14,11 @@ object HttpClientBuilder {
 
 class HttpClientBuilder(client: Http.Client) {
 
-  def hostname: String = ""
-  def retryPolicy: Option[RetryPolicy[Try[Response]]] = None
-  def defaultHeaders: Map[String, String] = Map()
-  def sslHostname: String = ""
-  def classifier: Service.ResponseClassifier = None
+  var hostname: String = ""
+  var retryPolicy: Option[RetryPolicy[Try[Response]]] = None
+  var defaultHeaders: Map[String, String] = Map()
+  var sslHostname: String = ""
+  var classifier: Service.ResponseClassifier = None
 
   def withHostname(name: String): HttpClientBuilder = {
     this.hostname = hostname
