@@ -10,7 +10,7 @@ class HttpServerAdminRouteTest extends Test {
 
   test("Server#not allow conflicting admin routes") {
     val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter) = {
+      override protected def configureHttp(router: HttpRouter): Unit = {
         router.add(new Controller {
           get("/healthy", name = "Health", admin = true) { request: Request =>
             response.ok("OK\n")
@@ -39,7 +39,7 @@ class HttpServerAdminRouteTest extends Test {
 
   test("Server#properly add routes to admin index") {
     val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter) = {
+      override protected def configureHttp(router: HttpRouter): Unit = {
         router.add(new Controller {
           get(
             "/admin/finatra/stuff/:id",
@@ -89,6 +89,18 @@ class HttpServerAdminRouteTest extends Test {
           ) { request: Request =>
             response.ok("roger.")
           }
+
+          get("/admin/threadName", admin = true) {
+            request: Request =>
+              info("in /admin/threadName")
+              response.ok(Thread.currentThread.getName)
+          }
+
+          get("/admin/finatra/threadName", admin = true) {
+            request: Request =>
+              info("in /admin/finatra/threadName")
+              response.ok(Thread.currentThread.getName)
+          }
         })
       }
     })
@@ -134,6 +146,9 @@ class HttpServerAdminRouteTest extends Test {
 
       // A handler should show up on the HttpMuxer
       HttpMuxer.patterns.contains("/admin/finatra/") should be(true)
+
+      server.httpGet("/admin/threadName", andExpect = Status.Ok, withBody = "AdminFuturePool-1")
+      server.httpGet("/admin/finatra/threadName", andExpect = Status.Ok, withBody = "AdminFuturePool-1")
     } finally {
       server.close()
     }
@@ -143,7 +158,7 @@ class HttpServerAdminRouteTest extends Test {
     // if we only add non-constant routes to the admin there should still be a handler
     // registered on the HttpMuxer
     val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter) = {
+      override protected def configureHttp(router: HttpRouter): Unit = {
         router.add(new Controller {
           get("/admin/finatra/prefix/resource/:id") { request: Request =>
             response.ok.json(request.params("id"))
@@ -164,7 +179,7 @@ class HttpServerAdminRouteTest extends Test {
 
   test("Server#Non-constant admin route does not start") {
     val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter) = {
+      override protected def configureHttp(router: HttpRouter): Unit = {
         router.add(new Controller {
           get("/prefix/resource/:id", admin = true) { request: Request =>
             response.ok.json(request.params("id"))
@@ -185,7 +200,7 @@ class HttpServerAdminRouteTest extends Test {
 
   test("Server#Similar paths but differing Http Methods") {
     val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override protected def configureHttp(router: HttpRouter) = {
+      override protected def configureHttp(router: HttpRouter): Unit = {
         router.add(new Controller {
 
           post("/foo/bar") { request: Request =>

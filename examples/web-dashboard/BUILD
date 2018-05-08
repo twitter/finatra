@@ -10,7 +10,7 @@ jvm_binary(
     main = "com.twitter.web.dashboard.ServerMain",
     dependencies = [
         ":web-dashboard",
-        "3rdparty/jvm/ch/qos/logback:logback-classic",
+        "twitter-server/logback-classic/src/main/scala",
     ],
     excludes = [
         exclude("org.slf4j", "slf4j-jdk14"),

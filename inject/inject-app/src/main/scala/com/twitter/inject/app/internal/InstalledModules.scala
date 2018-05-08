@@ -3,7 +3,7 @@ package com.twitter.inject.app.internal
 import com.google.inject.util.Modules
 import com.google.inject.{Module => GuiceModule, _}
 import com.twitter.app.Flag
-import com.twitter.inject.{TwitterBaseModule, TwitterModuleLifecycle, Injector, Logging}
+import com.twitter.inject.{Injector, Logging, TwitterBaseModule, TwitterModuleLifecycle}
 import scala.collection.JavaConverters._
 import scala.PartialFunction.condOpt
 
@@ -35,12 +35,26 @@ private[app] object InstalledModules {
 
     new InstalledModules(
       injector = Injector(Guice.createInjector(stage, combinedModule)),
-      modules =
-        allNonOverrideModules ++ allOverrideModules
+      modules = dedupeModules(allNonOverrideModules ++ allOverrideModules)
     )
   }
 
   /* Private */
+
+  // exposed for testing
+  private[app] def dedupeModules(modules: Seq[GuiceModule]): Seq[GuiceModule] = {
+    // De-dupe all the modules using a java.util.IdentityHashMap with the modules as keys
+    // to filter out modules already seen. We use `filter` because it's stable, and
+    // the order of module initialization may be important.
+    val identityHashMap = new java.util.IdentityHashMap[GuiceModule, Boolean]()
+    modules.filter { module =>
+      if (identityHashMap.containsKey(module)) false
+      else {
+        identityHashMap.put(module, true)
+        true
+      }
+    }
+  }
 
   /** Recursively capture all flags in the [[com.google.inject.Module]] object hierarchy. */
   private[app] def findModuleFlags(modules: Seq[GuiceModule]): Seq[Flag[_]] = {
@@ -125,7 +139,8 @@ private[app] case class InstalledModules(injector: Injector, modules: Seq[GuiceM
   ): Seq[ExitFunction] = modules.flatMap { module =>
     condOpt(module) {
       case injectModule: TwitterModuleLifecycle =>
-        () => fn(injectModule)
+        () =>
+          fn(injectModule)
     }
   }
 }

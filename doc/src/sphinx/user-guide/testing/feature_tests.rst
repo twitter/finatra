@@ -26,17 +26,18 @@ trait. Then override the `server` definition with an instance of your |EmbeddedH
 .. code:: scala
 
     import com.twitter.finatra.http.EmbeddedHttpServer
+    import com.twitter.finagle.http.Status
     import com.twitter.inject.server.FeatureTest
 
     class ExampleServerFeatureTest extends FeatureTest {
       override val server = new EmbeddedHttpServer(new ExampleServer)
 
       test("ExampleServer#perform feature") {
-          server.httpGet(
-            path = "/",
-            andExpect = Status.Ok)
-            ...
-        }
+        server.httpGet(
+          path = "/",
+          andExpect = Status.Ok)
+
+        ???
       }
     }
 

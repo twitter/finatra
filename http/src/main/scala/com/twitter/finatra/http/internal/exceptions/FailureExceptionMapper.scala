@@ -1,10 +1,12 @@
 package com.twitter.finatra.http.internal.exceptions
 
 import com.twitter.finagle.Failure
+import com.twitter.finagle.Failure.Wrapped
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
 import com.twitter.finatra.http.response.ResponseBuilder
 import com.twitter.inject.Logging
+import com.twitter.{logging => ctl}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
@@ -19,25 +21,55 @@ private[http] class FailureExceptionMapper @Inject()(response: ResponseBuilder)
     response: ResponseBuilder,
     exception: Failure
   ): Response = {
-    unwrapFailure(exception, MaxDepth) match {
-      case cause: Failure =>
-        error("Unhandled Exception", exception)
-        unhandledExceptionResponse(request, response, exception)
-      case cause =>
-        throw cause
+    if (!exception.isFlagged(Wrapped)) {
+      exception.cause match {
+        case Some(cause: Throwable) =>
+          error("Unhandled Exception", cause) // always log the Throwable cause in error
+          unhandledExceptionResponse(request, response, cause)
+        case _ =>
+          logFailure(exception)
+          unhandledExceptionResponse(request, response, exception)
+      }
+    } else {
+      unwrapFailure(exception, MaxDepth) match {
+        case _: Failure =>
+          logFailure(exception)
+          unhandledExceptionResponse(request, response, exception)
+        case cause =>
+          throw cause
+      }
     }
   }
 
   /* Private */
 
   private def unwrapFailure(failure: Failure, depth: Int): Throwable = {
-    if (depth == 0)
+    if (depth == 0) {
       failure
-    else
+    } else {
       failure.cause match {
         case Some(inner: Failure) => unwrapFailure(inner, depth - 1)
         case Some(cause) => cause
         case None => failure
       }
+    }
+  }
+
+  private[this] def logFailure(failure: Failure): Unit = {
+    val message = "Unhandled Failure"
+    failure.logLevel match {
+      case ctl.Level.ALL | ctl.Level.TRACE =>
+        trace(message, failure)
+      case ctl.Level.INFO =>
+        info(message, failure)
+      case ctl.Level.WARNING =>
+        warn(message, failure)
+      case ctl.Level.ERROR | ctl.Level.CRITICAL | ctl.Level.FATAL =>
+        error(message, failure)
+      case ctl.Level.DEBUG =>
+        debug(message, failure)
+      case _ =>
+        // do nothing
+    }
   }
 }

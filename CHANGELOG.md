@@ -12,6 +12,65 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.5.0](https://github.com/twitter/finatra/tree/finatra-18.5.0) (2018-05-07)
+
+### Added
+
+* examples: Add external TwitterServer example. ``PHAB_ID=D161204``
+
+### Changed
+
+* inject-utils: Remove deprecated `c.t.inject.RootMonitor`. ``PHAB_ID=D161036``
+
+* finatra-http: Updated `c.t.finatra.http.AdminHttpServer` to isolate routes added to the
+  admin. ``PHAB_ID=D157818``
+
+### Fixed
+
+* inject-slf4j, finatra-http: Fix `c.t.inject.logging.FinagleMDCAdapter` to initialize 
+  properly. We were lazily initializing the backing `java.util.Map` of the `FinagleMDCAdapter`
+  which could cause values to disappear when the map was not created eagerly enough. Typical
+  usage would add one of the MDC logging filters to the top of the request filter chain which would 
+  put a value into the MDC thus creating the backing `java.util.Map` early in the request chain. 
+  However, if a filter which puts to the MDC was not included and the first put happened in a 
+  Future closure the map state would be lost upon exiting the closure.
+  
+  This change updates how the MDC mapping is stored to move from a `Local` to a `LocalContext` 
+  and introduces new ergonomics for using/initializing the framework MDC integration.
+  
+  Initialization of the MDC integration should now go through the `c.t.inject.logging.MDCInitializer` 
+  (that is users are not expected to need to interact directly with the `FinagleMDCAdapter`). E.g., 
+  to initialize the MDC:
+  
+  ```
+  com.twitter.inject.logging.MDCInitializer.init()
+  ```
+  
+  This will initialize the `org.slf4j.MDC` and swap out the default `org.slf4j.spi.MDCAdapter` with 
+  an instance of the `c.t.inject.logging.FinagleMDCAdapter` allowing for reading/writing MDC values 
+  across Future boundaries.
+  
+  Then to start the scoping of an MDC context, use `c.t.inject.logging.MDCInitializer#let`:
+  
+  ```
+  com.twitter.inject.logging.MDCInitializer.let {
+    // operations which set and read MDC values
+    ???
+  }
+  ```
+  
+  Typically, this is done in a Filter wrapping the execution of the service in the Filter's apply, 
+  For example, the framework provides this initialization and scoping in both the 
+  `c.t.finatra.http.filters.LoggingMDCFilter` and the `c.t.finatra.thrift.filters.LoggingMDCFilter`.
+  
+  Simply including these at the top of the request filter chain for a service will allow MDC 
+  integration to function properly. ``PHAB_ID=D159536``
+
+* inject-app: Ensure that installed modules are de-duped before creating injector. 
+  ``PHAB_ID=D160955``
+
+### Closed
+
 ## [finatra-18.4.0](https://github.com/twitter/finatra/tree/finatra-18.4.0) (2018-04-10)
 
 ### Added

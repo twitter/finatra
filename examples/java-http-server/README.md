@@ -13,7 +13,7 @@ Building
 For any branch that is not [Master](https://github.com/twitter/finatra/tree/master) or a tagged 
 [release branch](https://github.com/twitter/finatra/releases) (or a branch based on one of those 
 branches), see the [CONTRIBUTING.md](../../CONTRIBUTING.md#building-dependencies) documentation on 
-building Finatra and it's dependencies locally in order to run the examples.
+building Finatra and its dependencies locally in order to run the examples.
 
 Running
 -------

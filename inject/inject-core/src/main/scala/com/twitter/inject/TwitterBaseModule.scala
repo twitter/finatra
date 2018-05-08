@@ -24,7 +24,7 @@ trait TwitterBaseModule extends TwitterModuleFlags with TwitterModuleLifecycle {
    */
   protected[inject] def frameworkModules: Seq[Module] = Seq()
 
-  protected def createKey[T: Manifest] = {
+  protected def createKey[T: Manifest]: Key[T] = {
     Key.get(typeLiteral[T])
   }
 }

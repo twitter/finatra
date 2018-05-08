@@ -1,19 +1,21 @@
 package com.twitter.finatra.thrift.filters
 
 import com.twitter.finagle.Service
-import com.twitter.finatra.thrift.{ThriftRequest, ThriftFilter}
+import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
+import com.twitter.inject.logging.MDCInitializer
+import com.twitter.util.Future
 import javax.inject.Singleton
-import org.slf4j.{FinagleMDCInitializer, MDC}
 
 @Singleton
 class LoggingMDCFilter extends ThriftFilter {
 
-  /* Initialize Finagle MDC adapter which overrides the standard one */
-  FinagleMDCInitializer.init()
+  /* Initialize MDC adapter which overrides the standard one */
+  MDCInitializer.init()
 
-  override def apply[T, Rep](request: ThriftRequest[T], service: Service[ThriftRequest[T], Rep]) = {
-    service(request).ensure {
-      MDC.clear()
-    }
+  override def apply[T, Rep](
+    request: ThriftRequest[T],
+    service: Service[ThriftRequest[T], Rep]
+  ): Future[Rep] = {
+    MDCInitializer.let(service(request))
   }
 }

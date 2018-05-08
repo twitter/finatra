@@ -13,6 +13,7 @@ scala_library(
         "3rdparty/jvm/org/slf4j:jul-to-slf4j",
         "3rdparty/jvm/org/slf4j:log4j-over-slf4j",
         "3rdparty/jvm/org/slf4j:slf4j-api",
+        "finagle/finagle-core/src/main/scala",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
     ],

@@ -1,20 +1,17 @@
 package com.twitter.finatra.http.filters
 
-import com.twitter.finagle.{SimpleFilter, Service}
+import com.twitter.finagle.{Service, SimpleFilter}
+import com.twitter.inject.logging.MDCInitializer
 import com.twitter.util.Future
 import javax.inject.Singleton
-import org.slf4j.{FinagleMDCInitializer, MDC}
 
 @Singleton
 class LoggingMDCFilter[Req, Rep] extends SimpleFilter[Req, Rep] {
 
-  /* Initialize Finagle MDC adapter which overrides the standard one */
-  FinagleMDCInitializer.init()
+  /* Initialize MDC adapter which overrides the standard one */
+  MDCInitializer.init()
 
   override def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
-    service(request).ensure {
-      MDC.clear()
-    }
+    MDCInitializer.let(service(request))
   }
-
 }

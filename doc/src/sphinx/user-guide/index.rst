@@ -20,6 +20,7 @@ Logging
 -------
 
 - :doc:`logging/index`
+- :doc:`logging/mdc`
 - :doc:`logging/logback`
 
 Injectable App
@@ -98,6 +99,7 @@ Testing
    getting-started/futures
    getting-started/examples
    logging/index
+   logging/mdc
    logging/logback
    app/index
    twitter-server/index

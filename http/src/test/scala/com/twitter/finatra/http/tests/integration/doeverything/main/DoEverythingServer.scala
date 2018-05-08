@@ -12,6 +12,7 @@ import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions.{
 import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, IdentityFilter}
 import com.twitter.finatra.http.tests.integration.doeverything.main.modules.{DoEverythingModule, DoEverythingStatsReceiverModule}
 import com.twitter.finatra.http.{Controller, HttpServer}
+import com.twitter.finatra.httpclient.modules.HttpClientModule
 
 object DoEverythingServerMain extends DoEverythingServer
 
@@ -23,7 +24,12 @@ class DoEverythingServer extends HttpServer {
 
   flag("magicNum", "26", "Magic number")
 
-  override val modules = Seq(DoEverythingModule)
+  override val modules = Seq(
+    DoEverythingModule,
+    new HttpClientModule {
+      override val dest = "localhost:1234"
+    }
+  )
 
   override def configureHttp(router: HttpRouter) {
     router

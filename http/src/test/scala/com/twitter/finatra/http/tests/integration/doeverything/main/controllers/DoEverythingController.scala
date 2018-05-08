@@ -11,19 +11,12 @@ import com.twitter.finatra.http.request.{HttpForward, RequestUtils}
 import com.twitter.finatra.http.response._
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain._
 import com.twitter.finatra.http.tests.integration.doeverything.main.exceptions._
-import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{
-  AppendToHeaderFilter,
-  ForbiddenFilter,
-  IdentityFilter
-}
+import com.twitter.finatra.http.tests.integration.doeverything.main.filters.{AppendToHeaderFilter, ForbiddenFilter, IdentityFilter}
 import com.twitter.finatra.http.tests.integration.doeverything.main.jsonpatch._
-import com.twitter.finatra.http.tests.integration.doeverything.main.services.{
-  ComplexServiceFactory,
-  DoEverythingService,
-  MultiService
-}
+import com.twitter.finatra.http.tests.integration.doeverything.main.services.{ComplexServiceFactory, DoEverythingService, MultiService}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestCaseClassWithLocalDate
+import com.twitter.finatra.httpclient.{HttpClient, RequestBuilder}
 import com.twitter.finatra.request.{QueryParam, RouteParam}
 import com.twitter.inject.annotations.Flag
 import com.twitter.util.Future
@@ -45,11 +38,17 @@ class DoEverythingController @Inject()(
   @CamelCaseMapper camelCaseObjectMapper: FinatraObjectMapper,
   jsonPatchOperator: JsonPatchOperator,
   forward: HttpForward,
-  mustacheService: MustacheService
+  mustacheService: MustacheService,
+  httpClient: HttpClient
 ) extends Controller {
 
   private val flakyCount = new AtomicInteger()
   private val helloWorldText = "Hello, World!"
+
+  get("/httpclient") { _: Request =>
+    val request = RequestBuilder.get("/search?&q=sports")
+    httpClient.execute(request)
+  }
 
   get("/example/routing/always") { request: Request =>
     response.ok.body("always response")
