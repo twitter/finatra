@@ -135,8 +135,12 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.inject">inject</a></dd></dl></div>
     </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">FinagleMDCAdapter</a>
+                        <a class="class" href="" title="Implementation of the org.slf4j.spi.MDCAdapter which stores the backing map as a com.twitter.finagle.context.LocalContext via a com.twitter.finagle.context.Contexts.local."></a>
+                        <a href="" title="Implementation of the org.slf4j.spi.MDCAdapter which stores the backing map as a com.twitter.finagle.context.LocalContext via a com.twitter.finagle.context.Contexts.local.">FinagleMDCAdapter</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="object" href="MDCInitializer$.html" title="Local contexts helpers for the framework SLF4J MDC integration FinagleMDCAdapter."></a>
+                        <a href="MDCInitializer$.html" title="Local contexts helpers for the framework SLF4J MDC integration FinagleMDCAdapter.">MDCInitializer</a>
                       </li>
               </ul>
             </div>
@@ -165,7 +169,11 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Implementation of the <span class="extype" name="org.slf4j.spi.MDCAdapter">org.slf4j.spi.MDCAdapter</span> which stores the backing map as a
+<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/context/LocalContext.html" class="extype" name="com.twitter.finagle.context.LocalContext">com.twitter.finagle.context.LocalContext</a> via a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/context/Contexts$.html#local:com.twitter.finagle.context.LocalContext" class="extype" name="com.twitter.finagle.context.Contexts">com.twitter.finagle.context.Contexts.local</a>.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>if access to the org.slf4j.MDC is done without first calling <a href="MDCInitializer$.html#let[R](map:java.util.HashMap[String,String])(fn:=&gt;R):R" class="extmbr" name="com.twitter.inject.logging.MDCInitializer#let">com.twitter.inject.logging.MDCInitializer.let</a>
+      these operations are all effectively no-ops.</p></span>, <span class="cmt"><p>Users are not expected to interact with this MDCAdapter directly. Users should use the
+      framework MDC API, via <a href="MDCInitializer$.html" class="extype" name="com.twitter.inject.logging.MDCInitializer">com.twitter.inject.logging.MDCInitializer</a>.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/context/LocalContext.html" class="extype" name="com.twitter.finagle.context.LocalContext">com.twitter.finagle.context.LocalContext</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/context/Contexts$.html#local:com.twitter.finagle.context.LocalContext" class="extype" name="com.twitter.finagle.context.Contexts">com.twitter.finagle.context.Contexts.local</a></p></span><span class="cmt"><p><a href="MDCInitializer$.html" class="extype" name="com.twitter.inject.logging.MDCInitializer">com.twitter.inject.logging.MDCInitializer</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -320,7 +328,8 @@
         <span class="name">clear</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd></dl></div>
+      <p class="shortcomment cmt">Clear all entries in the MDC.</p><div class="fullcomment"><div class="comment cmt"><p>Clear all entries in the MDC.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="org.slf4j.spi.MDCAdapter#clear">org.slf4j.spi.MDCAdapter#clear</span></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -414,7 +423,8 @@
         <span class="name">get</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd></dl></div>
+      <p class="shortcomment cmt">Get the context identified by the key parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Get the context identified by the key parameter. The key parameter cannot be null.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the string value identified by the key parameter.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="org.slf4j.spi.MDCAdapter#get">org.slf4j.spi.MDCAdapter#get</span></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
@@ -449,7 +459,9 @@
         <span class="name">getCopyOfContextMap</span><span class="params">()</span><span class="result">: <span class="extype" name="java.util.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd></dl></div>
+      <p class="shortcomment cmt">Return a copy of the current thread's context map, with keys and values of type String.</p><div class="fullcomment"><div class="comment cmt"><p>Return a copy of the current thread's context map, with keys and values of type String.
+Returned value may be null.
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>A copy of the current thread's context map. May be null.</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="org.slf4j.spi.MDCAdapter#getCopyOfContextMap">org.slf4j.spi.MDCAdapter#getCopyOfContextMap</span></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
@@ -554,7 +566,11 @@
         <span class="name">put</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="value">value: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd></dl></div>
+      <p class="shortcomment cmt">Put a context value (the val parameter) as identified with the key parameter into the current
+thread's context map.</p><div class="fullcomment"><div class="comment cmt"><p>Put a context value (the val parameter) as identified with the key parameter into the current
+thread's context map. The key parameter cannot be null. The val parameter can be null only if
+the underlying implementation supports it.</p><p>If the current thread does not have a context map it is created as a side effect of this call.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="org.slf4j.spi.MDCAdapter#put">org.slf4j.spi.MDCAdapter#put</span></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.logging.FinagleMDCAdapter#remove" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="remove(key:String):Unit"></a><a id="remove(String):Unit"></a>
       <span class="permalink">
@@ -570,7 +586,9 @@
         <span class="name">remove</span><span class="params">(<span name="key">key: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd></dl></div>
+      <p class="shortcomment cmt">Remove the the context identified by the key parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Remove the the context identified by the key parameter. The key parameter cannot be null.
+This method does nothing if there is no previous value associated with key.
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="org.slf4j.spi.MDCAdapter#remove">org.slf4j.spi.MDCAdapter#remove</span></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.logging.FinagleMDCAdapter#setContextMap" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setContextMap(contextMap:java.util.Map[String,String]):Unit"></a><a id="setContextMap(Map[String,String]):Unit"></a>
       <span class="permalink">
@@ -586,7 +604,11 @@
         <span class="name">setContextMap</span><span class="params">(<span name="contextMap">contextMap: <span class="extype" name="java.util.Map">Map</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd></dl></div>
+      <p class="shortcomment cmt">Set the current thread's context map by first clearing any existing map and then copying the
+map passed as parameter.</p><div class="fullcomment"><div class="comment cmt"><p>Set the current thread's context map by first clearing any existing map and then copying the
+map passed as parameter. The context map parameter must only contain keys and values of type
+String.
+</p></div><dl class="paramcmts block"><dt class="param">contextMap</dt><dd class="cmt"><p>must contain only keys and values of type String</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.inject.logging.FinagleMDCAdapter">FinagleMDCAdapter</a> → MDCAdapter</dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="org.slf4j.spi.MDCAdapter#setContextMap">org.slf4j.spi.MDCAdapter#setContextMap</span></p></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

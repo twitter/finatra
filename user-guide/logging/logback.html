@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Logback &#8212; Finatra 18.4.0 documentation</title>
+    <title>Logback &#8212; Finatra 18.5.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.4.0',
+        VERSION:     '18.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,10 +26,10 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.4.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.5.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Creating an injectable util-app App" href="../app/index.html" />
-    <link rel="prev" title="Introduction to Logging With Finatra" href="index.html" />
+    <link rel="prev" title="Mapped Diagnostic Context (MDC) Support" href="mdc.html" />
    
   
   <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
@@ -59,7 +59,7 @@
           <a href="../app/index.html" title="Creating an injectable util-app App"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Introduction to Logging With Finatra"
+          <a href="mdc.html" title="Mapped Diagnostic Context (MDC) Support"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
@@ -73,11 +73,14 @@
             
   <div class="section" id="logback">
 <span id="id1"></span><h1>Logback<a class="headerlink" href="#logback" title="Permalink to this headline">¶</a></h1>
-<p>We highly recommend using <a class="reference external" href="http://logback.qos.ch/">Logback</a> as an SLF4J binding (logging implementation).</p>
+<p>We highly recommend using <a class="reference external" href="http://logback.qos.ch/">Logback</a> as an SLF4J binding (logging
+implementation).</p>
 <div class="admonition-from-the-logback-documentation admonition">
 <p class="first admonition-title">From the Logback documentation</p>
 <p>Logback is intended as a successor to the popular log4j project, picking up where log4j leaves off.</p>
-<p class="last">Logback&#8217;s architecture is sufficiently generic so as to apply under different circumstances. At present time, logback is divided into three modules, logback-core, logback-classic and logback-access.</p>
+<p class="last">Logback&#8217;s architecture is sufficiently generic so as to apply under different circumstances. At
+present time, logback is divided into three modules, logback-core, logback-classic and
+logback-access.</p>
 </div>
 <p>See Logback&#8217;s documentation on <a class="reference external" href="https://logback.qos.ch/reasonsToSwitch.html">reasons to switch from Log4j</a>.</p>
 <p>If you choose to use Logback, just include a jar dependency on <cite>ch.qos.logback:logback-classic</cite>.</p>
@@ -86,7 +89,7 @@
 </pre></div>
 </div>
 <p>Where, <cite>VERSION</cite> represents the version of Logback you want to use.</p>
-<p>Similarily, with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
+<p>Similarly, with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
 <div class="code xml highlight-text"><div class="highlight"><pre><span></span>&lt;dependency&gt;
   &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
   &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
@@ -94,10 +97,25 @@
 &lt;/dependency&gt;
 </pre></div>
 </div>
-<p>This will provide the <cite>logback-classic</cite> SLF4J implementation which when used in addition to the logging bridges provided transitively through the <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-slf4j">finatra/inject-slf4j</a> module will configure your SLF4J logging implementation and <a class="reference external" href="https://www.slf4j.org/legacy.html">correctly bridge all other legacy APIs</a>.</p>
+<p>This will provide the <cite>logback-classic</cite> SLF4J implementation. And when used in addition to the
+logging bridges provided transitively through the <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-slf4j">finatra/inject-slf4j</a>
+module will configure your SLF4J logging implementation and <a class="reference external" href="https://www.slf4j.org/legacy.html">correctly bridge all other legacy
+APIs</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>To configure dynamic changing log levels with <a class="reference external" href="https://twitter.github.io/twitter-server/">TwitterServer</a>,
+be sure to <em>also</em> include a dependency on the TwitterServer Logback library.</p>
+<p>With <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>&quot;com.twitter&quot; % &quot;twitter-server-logback-classic&quot; % VERSION
+</pre></div>
+</div>
+<p class="last">See the TwitterServer <a class="reference external" href="https://twitter.github.io/twitter-server/Features.html#dynamically-change-log-levels">documentation</a>
+for more information on configuration for dynamically changing log levels.</p>
+</div>
 <div class="section" id="logback-configuration">
 <h2>Logback Configuration<a class="headerlink" href="#logback-configuration" title="Permalink to this headline">¶</a></h2>
-<p>See the <a class="reference external" href="http://logback.qos.ch/manual/configuration.html">Logback documentation on configuration</a> for detailed information on configuring Logback logging.</p>
+<p>See the Logback documentation on <a class="reference external" href="http://logback.qos.ch/manual/configuration.html">configuration</a>
+for detailed information on configuring Logback logging.</p>
 <div class="section" id="examples">
 <h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>See the
@@ -117,20 +135,23 @@ runtime as a Java system property, e.g.,</p>
 <div class="code bash highlight-text"><div class="highlight"><pre><span></span>-Dlog.service.output=myservice.log
 </pre></div>
 </div>
-<p>If a value is not provided the inlined default will be used, i.e., what is on the other side of the <cite>:-</cite>, e.g., <cite>access.log</cite> or <cite>service.log</cite>.</p>
+<p>If a value is not provided the inlined default will be used, i.e., what is on the other side of the
+<cite>:-</cite>, e.g., <cite>access.log</cite> or <cite>service.log</cite>.</p>
 <p>More information about Logback&#8217;s variable substitution may be found <a class="reference external" href="http://logback.qos.ch/manual/configuration.html#variableSubstitution">here</a>.</p>
 </div>
 </div>
 <div class="section" id="rerouting-java-util-logging">
 <h2>Rerouting <cite>java.util.logging</cite><a class="headerlink" href="#rerouting-java-util-logging" title="Permalink to this headline">¶</a></h2>
-<p>Additional configuration is necessary to reroute the <cite>java.util.logging</cite> system. The reason is that the <cite>jul-to-slf4j</cite> bridge cannot replace classes in the <cite>java.util.logging</cite> package to do the redirection statically as it does for the other bridge implementations. Instead, it has to register a handler on the root logger and listen for logging statements like any other handler. It will then redirect those logging statements appropriately. This redirection is accomplished via SLF4J&#8217;s <cite>SLF4JBridgeHandler</cite> [<a class="reference external" href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">documentation</a>]. <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-modules">finatra/inject-modules</a> provides a module for initializing this bridge handler via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">LoggerModule</a>. This module is added by the framework to Http and Thrift servers by default.</p>
-</div>
-<div class="section" id="mapped-diagnostic-context-filter">
-<h2>Mapped Diagnostic Context Filter<a class="headerlink" href="#mapped-diagnostic-context-filter" title="Permalink to this headline">¶</a></h2>
-<p>Finatra offers an integration with Logback&#8217;s <a class="reference external" href="http://logback.qos.ch/manual/mdc.html">Mapped Diagnostic Context</a> (MDC) for consistent logging of useful information. For example, the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/examples/hello-world/src/main/resources/logback.xml#L25">hello-world configuration</a> references the contextual key &#8220;traceId&#8221; which will be logged with every statement sent to the appender. It is the responsibility of the application to populate the MDC with this contextual information. In this case, the &#8220;traceId&#8221; is added by including either the http <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a> or thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/TraceIdMDCFilter.scala">TraceIdMDCLoggingFilter</a>.</p>
-<p>In order to use the Mapped Diagnostic Context, an application must first initialize the MDC <a class="reference external" href="https://twitter.github.io/finagle/">Finagle</a> adapter provided by Finatra. This initialization is provided by including either the http <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/LoggingMDCFilter.scala">LoggingMDCFilter</a> or thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/LoggingMDCFilter.scala">LoggingMDCFilter</a> in your filter chain.</p>
-<p>Make sure to place the <cite>LoggingMDCFilter</cite> before any other filters which will add MDC entries or expect MDC entries to be present.</p>
-<p>See <a class="reference external" href="http://logback.qos.ch/manual/mdc.html">Logback&#8217;s documentation</a> for more information the MDC functionality.</p>
+<p>Additional configuration is necessary to reroute the <cite>java.util.logging</cite> system. The reason is that
+the <cite>jul-to-slf4j</cite> bridge cannot replace classes in the <cite>java.util.logging</cite> package to do the
+redirection statically as it does for the other bridge implementations. Instead, it has to register
+a handler on the root logger and listen for logging statements like any other handler. It will then
+redirect those logging statements appropriately. This redirection is accomplished via SLF4J&#8217;s
+<cite>SLF4JBridgeHandler</cite> [<a class="reference external" href="http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html">documentation</a>].
+<a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-modules">finatra/inject-modules</a>
+provides a module for initializing this bridge handler via the
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-modules/src/main/scala/com/twitter/inject/modules/LoggerModule.scala">LoggerModule</a>.
+This module is added by the framework to Http and Thrift servers by default.</p>
 </div>
 </div>
 
@@ -161,7 +182,6 @@ runtime as a Java system property, e.g.,</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#rerouting-java-util-logging">Rerouting <cite>java.util.logging</cite></a></li>
-<li><a class="reference internal" href="#mapped-diagnostic-context-filter">Mapped Diagnostic Context Filter</a></li>
 </ul>
 </li>
 </ul>
@@ -169,7 +189,7 @@ runtime as a Java system property, e.g.,</p>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
   <li><a href="../index.html">User&#8217;s Guide</a><ul>
-      <li>Previous: <a href="index.html" title="previous chapter">Introduction to Logging With Finatra</a></li>
+      <li>Previous: <a href="mdc.html" title="previous chapter">Mapped Diagnostic Context (MDC) Support</a></li>
       <li>Next: <a href="../app/index.html" title="next chapter">Creating an injectable <cite>util-app App</cite></a></li>
   </ul></li>
   </ul></li>

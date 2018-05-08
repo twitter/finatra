@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Feature Tests &#8212; Finatra 18.4.0 documentation</title>
+    <title>Feature Tests &#8212; Finatra 18.5.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.4.0',
+        VERSION:     '18.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.4.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.5.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Integration Tests" href="integration_tests.html" />
     <link rel="prev" title="Embedded Servers and Apps" href="embedded.html" />
@@ -92,17 +92,18 @@ feature correctly, it almost doesn&#8217;t matter that you have lots of unit tes
 <p>For example, to write a feature test for an HTTP server, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/FeatureTest.scala&gt;"><cite>c.t.inject.server.FeatureTest</cite></a>
 trait. Then override the <cite>server</cite> definition with an instance of your <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/EmbeddedHttpServer.scala"><cite>EmbeddedHttpServer</cite></a>.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.EmbeddedHttpServer
+import com.twitter.finagle.http.Status
 import com.twitter.inject.server.FeatureTest
 
 class ExampleServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedHttpServer(new ExampleServer)
 
   test(&quot;ExampleServer#perform feature&quot;) {
-      server.httpGet(
-        path = &quot;/&quot;,
-        andExpect = Status.Ok)
-        ...
-    }
+    server.httpGet(
+      path = &quot;/&quot;,
+      andExpect = Status.Ok)
+
+    ???
   }
 }
 </pre></div>

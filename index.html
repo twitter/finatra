@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Finatra &#8212; Finatra 18.4.0 documentation</title>
+    <title>Finatra &#8212; Finatra 18.5.0 documentation</title>
     
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '18.4.0',
+        VERSION:     '18.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Finatra 18.4.0 documentation" href="#" />
+    <link rel="top" title="Finatra 18.5.0 documentation" href="#" />
     <link rel="next" title="User’s Guide" href="user-guide/index.html" />
    
   
@@ -80,18 +80,18 @@
 <p>To get started, add a dependency on either <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-http_2.12%22">finatra-http</a> or <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a> depending if you are building an HTTP or Thrift server.</p>
 <p>E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;18.4.0&quot;
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;18.5.0&quot;
 </pre>
 <p>or</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;18.4.0&quot;
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;18.5.0&quot;
 </pre>
 <p>Or similarily with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
 <pre class="literal-block">
 &lt;dependency&gt;
   &lt;groupId&gt;com.twitter&lt;/groupId&gt;
   &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
-  &lt;version&gt;18.4.0&lt;/version&gt;
+  &lt;version&gt;18.5.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>or</p>
@@ -99,7 +99,7 @@
 &lt;dependency&gt;
   &lt;groupId&gt;com.twitter&lt;/groupId&gt;
   &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
-  &lt;version&gt;18.4.0&lt;/version&gt;
+  &lt;version&gt;18.5.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>Note: with Maven, you <strong>must</strong> append the appropriate scala version to the artifact name (e.g., <cite>_2.12</cite>).</p>
@@ -110,11 +110,11 @@
 <p>Finatra publishes <a class="reference external" href="https://maven.apache.org/guides/mini/guide-attached-tests.html">test-jars</a> for most modules. The test-jars include re-usable utilities for use in testing (e.g., the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/inject/inject-server/src/test/scala/com/twitter/inject/server/EmbeddedTwitterServer.scala">EmbeddedTwitterServer</a>).</p>
 <p>To add a test-jar dependency, depend on the appropriate module with the <cite>tests</cite> classifier. Additionally, these dependencies are typically <strong>only needed</strong> in the <code class="docutils literal"><span class="pre">test</span></code> scope for your project. E.g., with <a class="reference external" href="http://www.scala-sbt.org/">sbt</a>:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;18.4.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+&quot;com.twitter&quot; %% &quot;finatra-http&quot; % &quot;18.5.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
 </pre>
 <p>or</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;18.4.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;18.5.0&quot; % &quot;test&quot; classifier &quot;tests&quot;
 </pre>
 <p>See the <a class="reference external" href="http://www.scala-sbt.org/">sbt</a> documentation for more information on using <a class="reference external" href="http://www.scala-sbt.org/0.13/docs/Library-Management.html">ivy configurations and classifiers</a>.</p>
 <p>And with <a class="reference external" href="http://maven.apache.org/">Maven</a>:</p>
@@ -124,7 +124,7 @@
   &lt;artifactId&gt;finatra-http_2.12&lt;/artifactId&gt;
   &lt;scope&gt;test&lt;/scope&gt;
   &lt;type&gt;test-jar&lt;/type&gt;
-  &lt;version&gt;18.4.0&lt;/version&gt;
+  &lt;version&gt;18.5.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>or</p>
@@ -134,7 +134,7 @@
   &lt;artifactId&gt;finatra-thrift_2.12&lt;/artifactId&gt;
   &lt;scope&gt;test&lt;/scope&gt;
   &lt;type&gt;test-jar&lt;/type&gt;
-  &lt;version&gt;18.4.0&lt;/version&gt;
+  &lt;version&gt;18.5.0&lt;/version&gt;
 &lt;/dependency&gt;
 </pre>
 <p>There is a <a class="reference external" href="https://maven.apache.org/plugins/maven-jar-plugin/examples/create-test-jar.html">downside</a> to publishing test-jars in this manner: transitive test-scoped dependencies are not resolved. Maven and sbt only resolve compile-time dependencies transitively, so you will need to specify all other required test-scoped dependencies manually.</p>
