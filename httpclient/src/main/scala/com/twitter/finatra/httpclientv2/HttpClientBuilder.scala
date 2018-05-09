@@ -17,6 +17,7 @@ object HttpClientBuilder {
   }
 }
 
+
 class HttpClientBuilder(client: Http.Client) {
 
   var hostname: String = ""
@@ -27,32 +28,57 @@ class HttpClientBuilder(client: Http.Client) {
   var sslHostname: String = ""
   var classifier: ResponseClassifier = ResponseClassifier.Default
 
+  /**
+    * Sets hostname
+    * @param name hostname that will be used for host header
+    */
   def withHostname(name: String): HttpClientBuilder = {
     this.hostname = hostname
     this
   }
 
+  /**
+    * Sets retry budget
+    * @param retryBudget Amount of times that the client will retry on request
+    * @return
+    */
   def withRetryBudget(retryBudget: RetryBudget): HttpClientBuilder = {
     budget = retryBudget
     this
   }
 
+  /**
+    * Sets retry policy
+    * @param policy optional retry policy if service fails to get succesful response
+    */
   def withRetryPolicy(policy: RetryPolicy[(Request,Try[Response])]): HttpClientBuilder = {
     this.retryPolicy = Some(policy)
     this.policy = policy
     this
   }
 
+  /**
+    * Sets default headers
+    * @param defaultHeaders default headers that sent to server
+    */
   def withDefaultHeaders(defaultHeaders: Map[String, String] = Map()): HttpClientBuilder = {
     this.defaultHeaders = defaultHeaders
     this
   }
 
+  /**
+    * Sets HTTPs hostname
+    * @param sslHostname host name if using HTTPS
+    */
   def withTls(sslHostname: String): HttpClientBuilder = {
     this.sslHostname = sslHostname
     this
   }
 
+  /**
+    * Sets response classifier
+    * @param classifier optional classifier that can be set to handle certain HTTP status codes
+    */
   def withResponseClassifier(classifier: ResponseClassifier): HttpClientBuilder = {
     this.classifier = classifier
     this
