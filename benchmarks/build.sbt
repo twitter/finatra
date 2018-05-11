@@ -1,10 +1,20 @@
+import scala.language.reflectiveCalls
+
+lazy val versions = new {
+  val slf4j = "1.7.21"
+}
+
 name := "finatra-benchmarks"
 
 moduleName := "finatra-benchmarks"
 
 libraryDependencies ++= Seq(
-  "org.slf4j" % "slf4j-simple" % "1.7.21"
+  "org.slf4j" % "slf4j-simple" % versions.slf4j
 )
+
+excludeDependencies += "org.slf4j" % "jcl-over-slf4j"
+excludeDependencies += "org.slf4j" % "jul-to-slf4j"
+excludeDependencies += "org.slf4j" % "log4j-over-slf4j"
 
 sourceDirectory in Jmh := (sourceDirectory in Test).value
 classDirectory in Jmh := (classDirectory in Test).value

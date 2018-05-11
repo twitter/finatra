@@ -1,18 +1,20 @@
 package com.twitter.finatra.http.benchmarks
 
-import com.twitter.finagle.Filter
+import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.http.internal.routing.{Route, RoutingService}
 import com.twitter.inject.requestscope.{FinagleRequestScope, FinagleRequestScopeFilter}
 import com.twitter.util.Future
 import org.openjdk.jmh.annotations._
 
+/**
+ * ./sbt 'project benchmarks' 'jmh:run FinagleRequestScopeBenchmark'
+ */
 @State(Scope.Thread)
-class FinagleRequestScopeBenchmark {
-
-  def defaultCallback(request: Request) = {
-    Future.value(Response())
-  }
+class FinagleRequestScopeBenchmark
+  extends StdBenchAnnotations
+  with HttpBenchmark {
 
   val route = Route(
     name = "groups",
@@ -28,21 +30,20 @@ class FinagleRequestScopeBenchmark {
     filter = Filter.identity
   )
 
-  val routingController = new RoutingService(routes = Seq(route))
+  val routingController: RoutingService = new RoutingService(routes = Seq(route))
 
-  val getRequest = Request("/groups/")
+  val getRequest: Request = Request("/groups/")
 
-  val finagleRequestScope = new FinagleRequestScope()
+  val finagleRequestScope: FinagleRequestScope = new FinagleRequestScope()
 
-  val finagleRequestScopeFilter =
+  val finagleRequestScopeFilter: FinagleRequestScopeFilter[Request, Response] =
     new FinagleRequestScopeFilter[Request, Response](finagleRequestScope)
 
-  val filtersAndService =
-    finagleRequestScopeFilter andThen
-      routingController
+  val filtersAndService: Service[Request, Response] =
+    finagleRequestScopeFilter.andThen(routingController)
 
   @Benchmark
-  def timeServiceWithRequestScopeFilter() = {
+  def timeServiceWithRequestScopeFilter(): Future[Response] = {
     filtersAndService.apply(getRequest)
   }
 }
