@@ -95,11 +95,13 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
           .withStatsReceiver(statsReceiver)
           .withClientId(clientId)
           .withMonitor(monitor)
+          .withPerEndpointStats
       } else {
         Thrift.client
           .withStatsReceiver(statsReceiver)
           .withClientId(clientId)
           .withMonitor(monitor)
+          .withPerEndpointStats
       }
 
     thriftClient
