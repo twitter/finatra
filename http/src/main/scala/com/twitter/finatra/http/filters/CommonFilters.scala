@@ -5,12 +5,15 @@ import com.twitter.finatra.filters.MergedFilter
 import javax.inject.{Inject, Singleton}
 
 /**
- * A typical collection of filters for a Finatra Http service. Ordering of
- * filters is important.
+ * A typical collection of Filters for HTTP services. Ordering of Filters is important.
  *
- * HttpNackFilter converts Finagle's nacks into HttpExceptions. This must come
- * below the ExceptionMappingFilter or else that will convert them to generic
- * 500s.
+ * @note Filter ordering is determined by the implementation of [[MergedFilter]] and can be
+ *       read as Requests enter the top Filter and progress down, Responses traverse in the
+ *       opposite manner from the bottom up.
+ *
+ * @note [[HttpNackFilter]] converts Finagle's nacks into `HttpNackExceptions`. This Filter MUST
+ *      come "below" the [[ExceptionMappingFilter]] otherwise the `HttpNackExceptions` will not be
+ *      properly converted into a meaningful HTTP response.
  */
 @Singleton
 class CommonFilters @Inject()(

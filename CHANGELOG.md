@@ -10,6 +10,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Change exceptions emitted from `c.t.f.http.filter.HttpNackFilter` to not extend
+  from `HttpException` and add a specific mapper over `HttpNackException` such that Nack 
+  exceptions are handled distinctly from HttpExceptions and thus more specifically. Handling of
+  Nack exceptions should not be conflated with handling of the more generic `HttpExceptions` and
+  it should be clear if a new mapper is desired that it is specifically for changing how Nack
+  exceptions are handled. ``PHAB_ID=D172456``
+
 ### Closed
 
 ## [finatra-18.5.0](https://github.com/twitter/finatra/tree/finatra-18.5.0) (2018-05-07)

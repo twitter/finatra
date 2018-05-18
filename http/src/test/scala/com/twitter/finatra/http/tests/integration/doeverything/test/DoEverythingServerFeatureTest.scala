@@ -59,8 +59,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     twitterServer = new DoEverythingServer
   ).bind[HttpClient].toInstance(httpClient)
 
-  val doEverythingService = server.injector.instance[DoEverythingService]
-  val namedExampleString = server.injector.instance[String](Names.named("example"))
+  val doEverythingService: DoEverythingService = server.injector.instance[DoEverythingService]
+  val namedExampleString: String = server.injector.instance[String](Names.named("example"))
 
   private def deserializeRequest(name: String) = {
     val requestBytes = IOUtils.toByteArray(getClass.getResourceAsStream(name))

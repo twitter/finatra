@@ -30,6 +30,7 @@ private[http] object ExceptionManagerModule extends TwitterModule {
     manager.add[CaseClassExceptionMapper]
     manager.add[FailureExceptionMapper]
     manager.add[HttpExceptionMapper]
+    manager.add[HttpNackExceptionMapper]
     manager.add[HttpResponseExceptionMapper]
     manager.add[JsonParseExceptionMapper]
     manager.add[ThriftExceptionMapper]
