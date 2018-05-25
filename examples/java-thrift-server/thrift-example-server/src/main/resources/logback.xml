@@ -55,13 +55,13 @@
   <property name="async_queue_size" value="${queue.size:-1024}"/>
   <property name="async_max_flush_time" value="${max.flush.time:-0}"/>
 
-  <appender name="ASYNC-SERVICE" class="ch.qos.logback.classic.AsyncAppender">
+  <appender name="ASYNC-SERVICE" class="com.twitter.inject.logback.AsyncAppender">
     <queueSize>${async_queue_size}</queueSize>
     <maxFlushTime>${async_max_flush_time}</maxFlushTime>
     <appender-ref ref="SERVICE"/>
   </appender>
 
-  <appender name="ASYNC-ACCESS" class="ch.qos.logback.classic.AsyncAppender">
+  <appender name="ASYNC-ACCESS" class="com.twitter.inject.logback.AsyncAppender">
     <queueSize>${async_queue_size}</queueSize>
     <maxFlushTime>${async_max_flush_time}</maxFlushTime>
     <appender-ref ref="ACCESS"/>

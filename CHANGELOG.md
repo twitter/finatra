@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* finatra-inject/inject-logback: Add an `c.t.inject.logback.AsyncAppender` to
+  provide metrics about the underlying queue. ``PHAB_ID=D173278``
+
 ### Changed
 
 ### Fixed

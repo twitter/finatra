@@ -22,6 +22,7 @@ Logging
 - :doc:`logging/index`
 - :doc:`logging/mdc`
 - :doc:`logging/logback`
+- :doc:`logging/asyncappender`
 
 Injectable App
 --------------
