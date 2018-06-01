@@ -30,8 +30,7 @@ If you find that you end up with a lot of Flags to configure for your service an
 system provides no relief -- there are still alternatives to moving external configuration into code.
 
 See `this thread <https://groups.google.com/forum/#!searchin/finatra-users/typesafe$20config%7Csort:relevance/finatra-users/kkZgI5dG9CY/lzDPAmUxAwAJ>`__
-on using `Typesafe Config <https://github.com/typesafehub/config>`__ with Finatra and this
-`example repository <https://github.com/dkowis/finatra-typesafe-config>`__.
+on using `Lightbend Config <https://github.com/lightbend/config>`__ with Finatra.
 
 How To Define Flags
 -------------------
