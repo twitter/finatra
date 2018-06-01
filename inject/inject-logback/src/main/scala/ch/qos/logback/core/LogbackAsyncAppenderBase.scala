@@ -1,15 +1,18 @@
 package ch.qos.logback.core
 
-import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.classic.AsyncAppender
+import ch.qos.logback.classic.spi.ILoggingEvent
 import com.twitter.concurrent.Once
 import com.twitter.finagle.stats.{
+  Gauge,
   LoadedStatsReceiver,
   StatsReceiver,
   Verbosity,
   VerbosityAdjustingStatsReceiver
 }
-import com.twitter.util.registry.GlobalRegistry
+import com.twitter.util.registry.{GlobalRegistry, Registry}
+import java.util.concurrent.ConcurrentLinkedQueue
+import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
 
 /**
@@ -20,8 +23,13 @@ import scala.util.control.NonFatal
  * @note Users are not expected to use this class directly, but instead should use the
  *       [[com.twitter.inject.logback.AsyncAppender]]
  */
-abstract class LogbackAsyncAppenderBase(statsReceiver: StatsReceiver) extends AsyncAppender {
+abstract class LogbackAsyncAppenderBase(
+  statsReceiver: StatsReceiver
+) extends AsyncAppender {
+
   def this() = this(LoadedStatsReceiver)
+
+  private[this] val gauges: ConcurrentLinkedQueue[Gauge] = new ConcurrentLinkedQueue()
 
   /** Lazy since this.getName() is not set until post-construction */
   private[this] lazy val scopedStatsReceiver: StatsReceiver =
@@ -31,52 +39,74 @@ abstract class LogbackAsyncAppenderBase(statsReceiver: StatsReceiver) extends As
     )
 
   private[this] val exportRegistryEntries = Once {
-    val appenderName: String = this.getName.toLowerCase()
+    val appenderName: String = this.getName
+    val registry: Registry = GlobalRegistry.get
+    val libraryKey = Seq("library", "logback", sanitize(appenderName))
 
-    GlobalRegistry.get.put(
-      Seq("library", "logback", appenderName, "max_queue_size"),
+    registry.put(
+      libraryKey :+ "max_queue_size",
       this.getQueueSize.toString
     )
 
-    GlobalRegistry.get.put(
-      Seq("library", "logback", appenderName, "discarding_threshold"),
+    registry.put(
+      libraryKey :+ "discarding_threshold",
       this.getDiscardingThreshold.toString
     )
 
-    GlobalRegistry.get.put(
-      Seq("library", "logback", appenderName, "include_caller_data"),
+    registry.put(
+      libraryKey :+ "include_caller_data",
       this.isIncludeCallerData.toString
     )
 
-    GlobalRegistry.get.put(
-      Seq("library", "logback", appenderName, "max_flush_time"),
+    registry.put(
+      libraryKey :+ "max_flush_time",
       this.getMaxFlushTime.toString
     )
 
-    GlobalRegistry.get.put(
-      Seq("library", "logback", appenderName, "never_block"),
+    registry.put(
+      libraryKey :+ "never_block",
       this.isNeverBlock.toString
     )
+
+    registry.put(
+      libraryKey ++ Seq("appenders"),
+      this.aai // ch.qos.logback.core.spi.AppenderAttachableImpl
+        .iteratorForAppenders()
+        .asScala
+        .map(appender => sanitize(appender.getName)).mkString(","))
   }
 
   /* Overrides */
 
   override def start(): Unit = {
-    scopedStatsReceiver.provideGauge("discard/threshold")(
-      this.getDiscardingThreshold
-    )
-    scopedStatsReceiver.provideGauge("queue_size")(
-      this.getQueueSize
-    )
-    scopedStatsReceiver.provideGauge("max_flush_time")(
-      this.getMaxFlushTime
-    )
-    scopedStatsReceiver.provideGauge("current_queue_size")(
-      this.getNumberOfElementsInQueue
-    )
-
     super.start()
+
+    gauges.add(
+      scopedStatsReceiver.addGauge("discard/threshold") {
+        this.getDiscardingThreshold
+      }
+    )
+    gauges.add(
+      scopedStatsReceiver.addGauge("queue_size") {
+        this.getQueueSize
+      }
+    )
+    gauges.add(
+      scopedStatsReceiver.addGauge("max_flush_time") {
+        this.getMaxFlushTime
+      }
+    )
+    gauges.add(
+      scopedStatsReceiver.addGauge("current_queue_size") {
+        this.getNumberOfElementsInQueue
+      }
+    )
     exportRegistryEntries()
+  }
+
+  override def stop(): Unit = {
+    gauges.asScala.foreach(_.remove())
+    super.stop()
   }
 
   override def append(eventObject: ILoggingEvent): Unit = {
@@ -89,6 +119,8 @@ abstract class LogbackAsyncAppenderBase(statsReceiver: StatsReceiver) extends As
       this.put(eventObject)
     }
   }
+
+  /* Private */
 
   private[this] def isQueueBelowDiscardingThreshold: Boolean =
     this.blockingQueue.remainingCapacity < this.getDiscardingThreshold
@@ -112,4 +144,12 @@ abstract class LogbackAsyncAppenderBase(statsReceiver: StatsReceiver) extends As
       }
     }
   }
+
+  /* sanitize registry keys into snake_case JSON */
+  private[this] def sanitize(key: String): String =
+    key
+      .filter(char => char > 31 && char < 127)
+      .toLowerCase
+      .replaceAll("-", "_")
+      .replaceAll(" ", "_")
 }

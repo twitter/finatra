@@ -1,5 +1,8 @@
 scala_library(
-    sources = rglobs("*.scala"),
+    sources = globs(
+        "ch/qos/logback/core/*.scala",
+        "com/twitter/inject/logback/*.scala",
+    ),
     fatal_warnings = True,
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-classic",
