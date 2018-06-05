@@ -13,6 +13,13 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Fail startup for incorrect Controller callback functions. Controller route callback
+  functions that do not specify an input parameter or specify an incorrect input parameter should
+  fail server startup but were not correctly detected when building routes in the `CallbackConverter`.
+  The route building logic has been patched to correctly detect these routes which would fail at
+  runtime to ensure we fail fast at server startup (and can thus be caught by StartupTests).
+  ``PHAB_ID=D178330``
+
 * finatra-http: Change exceptions emitted from `c.t.f.http.filter.HttpNackFilter` to not extend
   from `HttpException` and add a specific mapper over `HttpNackException` such that Nack 
   exceptions are handled distinctly from HttpExceptions and thus more specifically. Handling of

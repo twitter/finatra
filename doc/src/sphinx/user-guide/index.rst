@@ -102,6 +102,7 @@ Testing
    logging/index
    logging/mdc
    logging/logback
+   logging/asyncappender
    app/index
    twitter-server/index
    http/server

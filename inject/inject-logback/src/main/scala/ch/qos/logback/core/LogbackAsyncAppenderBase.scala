@@ -83,22 +83,22 @@ abstract class LogbackAsyncAppenderBase(
 
     gauges.add(
       scopedStatsReceiver.addGauge("discard/threshold") {
-        this.getDiscardingThreshold
+        this.getDiscardingThreshold.toFloat
       }
     )
     gauges.add(
       scopedStatsReceiver.addGauge("queue_size") {
-        this.getQueueSize
+        this.getQueueSize.toFloat
       }
     )
     gauges.add(
       scopedStatsReceiver.addGauge("max_flush_time") {
-        this.getMaxFlushTime
+        this.getMaxFlushTime.toFloat
       }
     )
     gauges.add(
       scopedStatsReceiver.addGauge("current_queue_size") {
-        this.getNumberOfElementsInQueue
+        this.getNumberOfElementsInQueue.toFloat
       }
     )
     exportRegistryEntries()

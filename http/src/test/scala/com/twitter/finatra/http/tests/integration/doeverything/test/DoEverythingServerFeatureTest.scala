@@ -54,7 +54,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
 
   val httpClient: HttpClient = smartMock[HttpClient]
 
-  override val server = new EmbeddedHttpServer(
+  override val server: EmbeddedHttpServer = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
     twitterServer = new DoEverythingServer
   ).bind[HttpClient].toInstance(httpClient)
