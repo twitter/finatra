@@ -362,8 +362,12 @@ lazy val injectApp = (project in file("inject/inject-app"))
     name := "inject-app",
     moduleName := "inject-app",
     libraryDependencies ++= Seq(
+      "com.novocode" % "junit-interface" % "0.11" % Test,
       "com.twitter" %% "util-core" % versions.twLibVersion,
-      "com.novocode" % "junit-interface" % "0.11" % Test
+      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "slf4j-api" % versions.slf4j
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in Test := true,
@@ -401,7 +405,11 @@ lazy val injectServer = (project in file("inject/inject-server"))
     libraryDependencies ++= Seq(
       "com.google.guava" % "guava" % versions.guava % Test,
       "com.twitter" %% "finagle-stats" % versions.twLibVersion,
-      "com.twitter" %% "twitter-server" % versions.twLibVersion
+      "com.twitter" %% "twitter-server" % versions.twLibVersion,
+      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "slf4j-api" % versions.slf4j
     ),
     publishArtifact in Test := true,
     mappings in (Test, packageBin) := {
@@ -432,9 +440,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
-      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
-      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
-      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
       "org.slf4j" % "slf4j-api" % versions.slf4j)
   )
 

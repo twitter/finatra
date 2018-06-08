@@ -11,6 +11,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* inject-slf4j: Move the SLF4J API logging bridges from `inject-slf4j` to `inject-app`
+  and `inject-server`. This allows code in the inject framework to be mostly useful in
+  environments where having the bridges on the classpath causes issues. ``PHAB_ID=D179652``
+
 ### Fixed
 
 * finatra-http: Fail startup for incorrect Controller callback functions. Controller route callback
