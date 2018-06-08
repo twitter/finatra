@@ -6,6 +6,7 @@ import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.app.App
+import com.twitter.inject.internal.modules.LibraryModule
 import com.twitter.inject.modules.StatsReceiverModule
 import com.twitter.inject.utils.Handler
 import com.twitter.server.Lifecycle.Warmup
@@ -80,7 +81,10 @@ trait TwitterServer
   with Warmup
   with Logging {
 
-  addFrameworkModules(statsReceiverModule)
+  addFrameworkModules(
+    statsReceiverModule,
+    new LibraryModule(libraryName)
+  )
 
   private val adminAnnounceFlag =
     flag[String]("admin.announce", "Address for announcing admin server")
@@ -102,7 +106,7 @@ trait TwitterServer
    *
    * @return library name to register in the Library registry.
    */
-  override protected val libraryName: String = "finatra"
+  override protected def libraryName: String = "finatra"
 
   /**
    * If true, the Twitter-Server admin server will be disabled.

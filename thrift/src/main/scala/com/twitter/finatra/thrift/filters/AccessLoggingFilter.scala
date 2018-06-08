@@ -34,7 +34,7 @@ class AccessLoggingFilter extends ThriftFilter with Logging {
   private def prelog[T](start: Time, request: ThriftRequest[T]): String = {
     val elapsed = (Time.now - start).inMilliseconds
     val startStr = DateFormat.format(start.toDate)
-    val clientIdStr = request.clientId map { _.name } getOrElse "-"
+    val clientIdStr = request.clientId.map(_.name).getOrElse("-")
     s"$clientIdStr $startStr '${request.methodName}' $elapsed"
   }
 }

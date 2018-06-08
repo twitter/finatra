@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import com.google.inject.Stage;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -39,6 +40,12 @@ public class HelloWorldServerFeatureTest extends Assert {
     @AfterClass
     public static void tearDown() throws Exception {
         SERVER.close();
+    }
+
+    @After
+    public void printStats() throws Exception {
+        SERVER.printStats(true);
+        SERVER.clearStats();
     }
 
     /** test hello endpoint */

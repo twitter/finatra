@@ -7,9 +7,8 @@ import java.util.{HashMap => JMap}
 
 private[http] object Routes {
 
-  def createForMethod(routes: Seq[Route], method: Method) = {
+  def createForMethod(routes: Seq[Route], method: Method): Routes =
     new Routes((routes filter { _.method == method }).toArray)
-  }
 }
 
 // optimized

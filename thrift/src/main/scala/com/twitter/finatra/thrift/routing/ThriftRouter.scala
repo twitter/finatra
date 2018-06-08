@@ -1,22 +1,26 @@
 package com.twitter.finatra.thrift.routing
 
-import com.twitter.finagle.{Thrift, ThriftMux, Service}
 import com.twitter.finagle.stats.StatsReceiver
+import com.twitter.finagle.{Service, Thrift, ThriftMux}
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
-import com.twitter.finatra.thrift.internal.{
-  ThriftMethodService,
-  ThriftRequestUnwrapFilter,
-  ThriftRequestWrapFilter
-}
-import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Services}
-import com.twitter.inject.{Injector, Logging}
+import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Services, Registrar}
+import com.twitter.finatra.thrift.internal.{ThriftMethodService, ThriftRequestUnwrapFilter, ThriftRequestWrapFilter}
 import com.twitter.inject.TypeUtils._
+import com.twitter.inject.internal.LibraryRegistry
+import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.{ThriftMethod, ThriftService, ToThriftService}
 import java.lang.annotation.{Annotation => JavaAnnotation}
+import java.lang.reflect.Method
 import javax.inject.{Inject, Singleton}
 import org.apache.thrift.protocol.TProtocolFactory
 import scala.collection.mutable.{Map => MutableMap}
+import scala.reflect.ClassTag
+
+private object ThriftRouter {
+  val url: String =
+    "https://twitter.github.io/finatra/user-guide/thrift/controllers.html#handle-thriftmethod-dsl"
+}
 
 @Singleton
 class ThriftRouter @Inject()(
@@ -144,17 +148,21 @@ class ThriftRouter @Inject()(
    */
   def add(controller: Controller with ToThriftService): ThriftRouter = {
     add {
-      for (m <- controller.methods) {
-        m.setFilter(filterChain)
-        methods += (m.method -> m)
+      if (controller.methods.isEmpty) {
+        error(s"${controller.getClass.getName} contains no visible methods. For more details see: ${ThriftRouter.url}")
+      } else {
+        for (m <- controller.methods) {
+          m.setFilter(filterChain)
+          methods += (m.method -> m)
+        }
+        info(
+          "Adding methods\n" + controller.methods
+            .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
+            .mkString("\n")
+        )
       }
-      info(
-        "Adding methods\n" + controller.methods
-          .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
-          .mkString("\n")
-      )
-      if (controller.methods.isEmpty)
-        error(s"${controller.getClass.getCanonicalName} contains no methods!")
+      registerMethods(methods.toMap.values.toSeq)
+      registerGlobalFilter(filterChain)
       filteredThriftService = controller.toThriftService
     }
     this
@@ -176,9 +184,11 @@ class ThriftRouter @Inject()(
   }
 
   /**
-   * Add controller used for all requests for usage from Java
+   * Add controller used for all requests for usage from Java.
    *
    * [[ThriftRouter]] only supports a single controller, so `add` may only be called once.
+   *
+   * @note We do not apply filters per-method but instead all filters are applied across the service.
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
@@ -201,11 +211,18 @@ class ThriftRouter @Inject()(
           .newInstance(instance.asInstanceOf[Object], protocolFactory)
           .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
+      val methods: Array[Method] = controller.getDeclaredMethods
       info(
-        "Adding methods\n" + controller.getDeclaredMethods
-          .map(method => s"${controller.getSimpleName}.${method.getName}")
-          .mkString("\n")
+        "Adding methods\n" +
+          methods
+            .map(
+              method => s"${controller.getSimpleName}.${method.getName}"
+            )
+            .mkString("\n")
       )
+
+      registerGlobalFilter(filterChain)
+      registerMethods(ClassTag(service), methods.toSeq)
       filteredService = Some(
         new ThriftRequestWrapFilter[Array[Byte], Array[Byte]](controller.getSimpleName)
           .andThen(filterChain.toFilter[Array[Byte], Array[Byte]])
@@ -218,7 +235,29 @@ class ThriftRouter @Inject()(
 
   /* Private */
 
-  private def add(f: => Unit): Unit = {
+  private[this] def registerMethods(service: ClassTag[_], methods: Seq[Method]): Unit =
+    methods.foreach(getRegistrar.register(service, _))
+
+  private[this] def registerMethods(methods: Seq[ThriftMethodService[_, _]]): Unit =
+    methods.foreach(getRegistrar.register)
+
+  private[this] def registerGlobalFilter(filter: ThriftFilter): Unit = {
+    if (filter ne ThriftFilter.Identity) {
+      injector
+        .instance[LibraryRegistry]
+        .withSection("thrift")
+        .put("filters", filter.toString)
+    }
+  }
+
+  private[this] def getRegistrar: Registrar =
+    new Registrar(
+      injector
+        .instance[LibraryRegistry]
+        .withSection("thrift", "methods")
+    )
+
+  private[this] def add(f: => Unit): Unit = {
     assert(
       !done,
       "ThriftRouter#add cannot be called multiple times, as we don't currently support serving multiple thrift services."

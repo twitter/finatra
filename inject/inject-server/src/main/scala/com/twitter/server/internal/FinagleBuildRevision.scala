@@ -12,7 +12,7 @@ object FinagleBuildRevision extends Logging {
       case "?" =>
         warn("Unable to resolve Finagle revision.")
       case revision =>
-        info(s"Resolved Finagle build revision: (rev=$revision)")
+        debug(s"Resolved Finagle build revision: (rev=$revision)")
         injector.instance[StatsReceiver].scope("finagle").provideGauge("build/revision") {
           convertBuildRevision(revision).toFloat
         }

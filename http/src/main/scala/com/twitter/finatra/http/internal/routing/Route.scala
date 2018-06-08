@@ -1,13 +1,14 @@
 package com.twitter.finatra.http.internal.routing
 
-import com.twitter.finagle.{Filter, Service}
 import com.twitter.finagle.http.{Method, Request, Response, RouteIndex}
+import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.http.contexts.RouteInfo
 import com.twitter.finatra.http.internal.request.RequestWithRouteParams
 import com.twitter.finatra.http.internal.routing.Route._
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
 import scala.language.existentials
+import scala.reflect.ClassTag
 
 private[http] object Route {
   val OptionalTrailingSlashIdentifier = "/?"
@@ -22,13 +23,13 @@ private[http] case class Route(
   index: Option[RouteIndex],
   callback: Request => Future[Response],
   annotations: Seq[Annotation] = Seq(),
-  requestClass: Class[_],
-  responseClass: Class[_],
-  routeFilter: Filter[Request, Response, Request, Response],
-  filter: Filter[Request, Response, Request, Response]
+  requestClass: ClassTag[_],
+  responseClass: ClassTag[_],
+  routeFilter: Filter[Request, Response, Request, Response], // specific filter chain defined for this route
+  filter: Filter[Request, Response, Request, Response] // global filter chain to apply to this route
 ) {
 
-  val path = normalizeUriToPath(uri)
+  val path: String = normalizeUriToPath(uri)
 
   private[this] val pattern = PathPattern(path)
   private[this] val routeInfo = RouteInfo(name, path)
@@ -50,6 +51,7 @@ private[http] case class Route(
 
   val summary: String = f"$method%-7s $uri"
 
+  /** Prepends the incoming Filter to the contained Filter chain */
   def withFilter(filter: Filter[Request, Response, Request, Response]): Route = {
     this.copy(filter = filter.andThen(this.filter))
   }

@@ -4,6 +4,8 @@ import java.util.Collections;
 
 import scala.reflect.ClassTag$;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Stage;
 
 import org.junit.AfterClass;
@@ -13,6 +15,8 @@ import org.junit.Test;
 import com.twitter.doeverything.thriftjava.Answer;
 import com.twitter.doeverything.thriftjava.DoEverything;
 import com.twitter.doeverything.thriftjava.Question;
+import com.twitter.finagle.http.Response;
+import com.twitter.finagle.http.Status;
 import com.twitter.finatra.thrift.EmbeddedThriftServer;
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingJavaThriftServer;
 import com.twitter.util.Await;
@@ -32,6 +36,34 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
     @AfterClass
     public static void tearDown() throws Exception {
         SERVER.close();
+    }
+
+    /** Test that methods are correctly added to the Registry */
+    @Test
+    public void testRegistryEntries() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Response response = SERVER.httpGetAdmin(
+            "/admin/registry.json",
+            null,
+            null,
+            true,
+            Status.Ok(),
+            null,
+            null);
+        JsonNode json = objectMapper.readValue(response.getContentString(), JsonNode.class);
+        JsonNode thriftNode = json.path("registry").path("library").path("finatra").path("thrift");
+        JsonNode filters = thriftNode.get("filters");
+        assertEquals(
+            "com.twitter.finatra.thrift.filters.LoggingMDCFilter"
+                + ".andThen(com.twitter.finatra.thrift.filters.TraceIdMDCFilter)"
+                + ".andThen(com.twitter.finatra.thrift.filters.ThriftMDCFilter)"
+                + ".andThen(com.twitter.finatra.thrift.filters.AccessLoggingFilter)"
+                + ".andThen(com.twitter.finatra.thrift.filters.StatsFilter)",
+            filters.asText());
+        JsonNode methods = thriftNode.get("methods");
+
+        assertEquals(6, methods.size());
     }
 
     /** test uppercase endpoint */

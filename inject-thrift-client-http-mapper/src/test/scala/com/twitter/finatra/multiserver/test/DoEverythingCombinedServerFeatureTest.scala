@@ -7,16 +7,18 @@ import com.twitter.finatra.multiserver.CombinedServer.{AdminAdd1Request, DoEvery
 import com.twitter.finatra.thrift.ThriftClient
 import com.twitter.inject.server.FeatureTest
 import com.twitter.util.{Await, Future}
+import scala.util.parsing.json.JSON
 
 class DoEverythingCombinedServerFeatureTest extends FeatureTest {
 
   val server = new EmbeddedHttpServer(
     twitterServer = new DoEverythingCombinedServer,
+    disableTestLogging = true,
     flags = Map("https.port" -> ":0") // for testing `EmbeddedHttpServer.logStartup` method
   )
   with ThriftClient
 
-  lazy val client = server.thriftClient[Adder[Future]](clientId = "client123")
+  lazy val client: Adder[Future] = server.thriftClient[Adder[Future]](clientId = "client123")
 
   test("bind thrift external port") {
     server.thriftExternalPort should not be 0
@@ -28,6 +30,39 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
 
   test("add1 http") {
     server.httpGet("/add1?num=5", andExpect = Status.Ok, withBody = "6")
+  }
+
+  test("GET /admin/registry.json") {
+    val response = server.httpGetAdmin(
+      "/admin/registry.json",
+      andExpect = Status.Ok)
+
+    val json: Map[String, Any] =
+      JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+
+    val registry = json("registry").asInstanceOf[Map[String, Any]]
+    registry.contains("library") should be(true)
+    registry("library").asInstanceOf[Map[String, String]].contains("finatra") should be(true)
+
+    val finatra = registry("library")
+      .asInstanceOf[Map[String, Any]]("finatra")
+      .asInstanceOf[Map[String, Any]]
+
+    finatra.contains("http") should be(true)
+    val http = finatra("http").asInstanceOf[Map[String, Any]]
+    http.contains("filters") should be(true)
+    http.contains("routes") should be(true)
+
+    val routes = http("routes").asInstanceOf[Map[String, Any]]
+    routes.size should be > 0
+
+    finatra.contains("thrift") should be(true)
+    val thrift = finatra("thrift").asInstanceOf[Map[String, Any]]
+    thrift.contains("filters") should be(true)
+    thrift.contains("methods") should be(true)
+
+    val methods = thrift("methods").asInstanceOf[Map[String, Any]]
+    methods.size should be > 0
   }
 
   test("add1 admin") {

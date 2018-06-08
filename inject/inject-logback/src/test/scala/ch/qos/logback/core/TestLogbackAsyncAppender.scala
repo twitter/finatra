@@ -17,6 +17,9 @@ class TestLogbackAsyncAppender(
 
   override def start(): Unit = {
     super.start()
-    if (stopAsyncWorkerThread) worker.stop()
+    if (stopAsyncWorkerThread) {
+      worker.interrupt()
+      worker.stop()
+    }
   }
 }

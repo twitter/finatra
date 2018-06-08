@@ -10,7 +10,7 @@ import com.twitter.finagle.stats.{
   Verbosity,
   VerbosityAdjustingStatsReceiver
 }
-import com.twitter.util.registry.{GlobalRegistry, Registry}
+import com.twitter.inject.internal.{Library, LibraryRegistry}
 import java.util.concurrent.ConcurrentLinkedQueue
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
@@ -29,51 +29,52 @@ abstract class LogbackAsyncAppenderBase(
 
   def this() = this(LoadedStatsReceiver)
 
+  private[this] val libraryName = "logback"
   private[this] val gauges: ConcurrentLinkedQueue[Gauge] = new ConcurrentLinkedQueue()
 
   /** Lazy since this.getName() is not set until post-construction */
   private[this] lazy val scopedStatsReceiver: StatsReceiver =
     new VerbosityAdjustingStatsReceiver(
-      statsReceiver.scope("logback", "appender", this.getName.toLowerCase()),
+      statsReceiver.scope(libraryName, "appender", this.getName.toLowerCase()),
       Verbosity.Debug
     )
 
   private[this] val exportRegistryEntries = Once {
-    val appenderName: String = this.getName
-    val registry: Registry = GlobalRegistry.get
-    val libraryKey = Seq("library", "logback", sanitize(appenderName))
+    val registry = new LibraryRegistry(Library(libraryName), Seq(this.getName))
 
     registry.put(
-      libraryKey :+ "max_queue_size",
+      "max_queue_size",
       this.getQueueSize.toString
     )
 
     registry.put(
-      libraryKey :+ "discarding_threshold",
+      "discarding_threshold",
       this.getDiscardingThreshold.toString
     )
 
     registry.put(
-      libraryKey :+ "include_caller_data",
+      "include_caller_data",
       this.isIncludeCallerData.toString
     )
 
     registry.put(
-      libraryKey :+ "max_flush_time",
+      "max_flush_time",
       this.getMaxFlushTime.toString
     )
 
     registry.put(
-      libraryKey :+ "never_block",
+      "never_block",
       this.isNeverBlock.toString
     )
 
     registry.put(
-      libraryKey ++ Seq("appenders"),
+      Seq("appenders"),
       this.aai // ch.qos.logback.core.spi.AppenderAttachableImpl
         .iteratorForAppenders()
         .asScala
-        .map(appender => sanitize(appender.getName)).mkString(","))
+        .map(appender => appender.getName)
+        .mkString(",")
+    )
   }
 
   /* Overrides */
@@ -144,12 +145,4 @@ abstract class LogbackAsyncAppenderBase(
       }
     }
   }
-
-  /* sanitize registry keys into snake_case JSON */
-  private[this] def sanitize(key: String): String =
-    key
-      .filter(char => char > 31 && char < 127)
-      .toLowerCase
-      .replaceAll("-", "_")
-      .replaceAll(" ", "_")
 }

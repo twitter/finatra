@@ -7,7 +7,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 class DoEverythingCombinedController @Inject()(adder: AdderService) extends Controller {
 
-  get("/ping") { request: Request =>
+  get("/ping") { _: Request =>
     "pong"
   }
 
@@ -22,7 +22,7 @@ class DoEverythingCombinedController @Inject()(adder: AdderService) extends Cont
   }
 
   get("/admin/foo", admin = true, index = Some(RouteIndex(alias = "Foo", group = "Finatra"))) {
-    request: Request =>
+    _: Request =>
       "Bar"
   }
 

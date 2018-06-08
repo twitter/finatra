@@ -6,9 +6,11 @@ import com.twitter.util.Future
 class MergedFilter[Req, Resp](filters: Filter[Req, Resp, Req, Resp]*)
     extends Filter[Req, Resp, Req, Resp] {
 
-  private val CombinedFilter = filters reduceLeft { _ andThen _ }
+  private val combinedFilter = filters.reduceLeft { _ andThen _ }
 
   def apply(request: Req, service: Service[Req, Resp]): Future[Resp] = {
-    CombinedFilter(request, service)
+    combinedFilter(request, service)
   }
+
+  override def toString: String = combinedFilter.toString
 }

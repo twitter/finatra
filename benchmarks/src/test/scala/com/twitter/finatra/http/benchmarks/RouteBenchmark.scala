@@ -6,6 +6,7 @@ import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.util.Future
 import org.openjdk.jmh.annotations._
+import scala.reflect.classTag
 
 /**
  * ./sbt 'project benchmarks' 'jmh:run RouteBenchmark'
@@ -23,8 +24,8 @@ class RouteBenchmark
     index = None,
     callback = defaultCallback,
     annotations = Seq(),
-    requestClass = classOf[Request],
-    responseClass = classOf[Response],
+    requestClass = classTag[Request],
+    responseClass = classTag[Response],
     routeFilter = Filter.identity,
     filter = Filter.identity
   )
@@ -37,8 +38,8 @@ class RouteBenchmark
     index = None,
     callback = defaultCallback,
     annotations = Seq(),
-    requestClass = classOf[Request],
-    responseClass = classOf[Response],
+    requestClass = classTag[Request],
+    responseClass = classTag[Response],
     routeFilter = Filter.identity,
     filter = Filter.identity
   )

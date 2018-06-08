@@ -200,11 +200,13 @@ private[twitter] class EmbeddedHttpClient private[twitter] (
 
   // Deletes request headers with null values in map.
   private def addOrRemoveHeaders(request: Request, headers: Map[String, String]): Unit = {
-    for ((key, value) <- headers) {
-      if (value == null) {
-        request.headerMap.remove(key)
-      } else {
-        request.headerMap.set(key, value)
+    if (headers != null && headers.nonEmpty) {
+      for ((key, value) <- headers) {
+        if (value == null) {
+          request.headerMap.remove(key)
+        } else {
+          request.headerMap.set(key, value)
+        }
       }
     }
   }

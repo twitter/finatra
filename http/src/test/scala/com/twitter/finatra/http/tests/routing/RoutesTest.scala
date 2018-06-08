@@ -7,6 +7,7 @@ import com.twitter.finatra.http.internal.routing.{Route, Routes}
 import com.twitter.inject.Test
 import com.twitter.util.Future
 import org.scalatest.OptionValues
+import scala.reflect.classTag
 
 class RoutesTest extends Test with OptionValues {
 
@@ -135,7 +136,7 @@ class RoutesTest extends Test with OptionValues {
     RouteInfo(request).value should be(RouteInfo("my_endpoint", "/groups/"))
   }
 
-  def defaultCallback(request: Request) = {
+  def defaultCallback(request: Request): Future[Response] = {
     Future(Response())
   }
 
@@ -148,8 +149,8 @@ class RoutesTest extends Test with OptionValues {
       index = None,
       callback = defaultCallback,
       annotations = Seq(),
-      requestClass = classOf[Request],
-      responseClass = classOf[Response],
+      requestClass = classTag[Request],
+      responseClass = classTag[Response],
       routeFilter = Filter.identity,
       filter = Filter.identity
     )

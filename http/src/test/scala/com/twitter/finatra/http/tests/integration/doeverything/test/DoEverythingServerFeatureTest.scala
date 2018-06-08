@@ -23,6 +23,7 @@ import com.twitter.util.Future
 import java.net.{ConnectException, InetSocketAddress, SocketAddress}
 import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
+import scala.util.parsing.json.JSON
 
 object DoEverythingServerFeatureTest {
   private val TestFailureRemoteAddr: SocketAddress = new InetSocketAddress("localhost", 1234)
@@ -56,7 +57,8 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
 
   override val server: EmbeddedHttpServer = new EmbeddedHttpServer(
     args = Array("-magicNum=1", "-moduleMagicNum=2"),
-    twitterServer = new DoEverythingServer
+    twitterServer = new DoEverythingServer,
+    disableTestLogging = true
   ).bind[HttpClient].toInstance(httpClient)
 
   val doEverythingService: DoEverythingService = server.injector.instance[DoEverythingService]
@@ -97,6 +99,31 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       andExpect = Status.Ok,
       withBody = "on the external interface"
     )
+  }
+
+  test("GET /admin/registry.json") {
+    val response = server.httpGetAdmin(
+      "/admin/registry.json",
+      andExpect = Status.Ok)
+
+    val json: Map[String, Any] =
+      JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+
+    val registry = json("registry").asInstanceOf[Map[String, Any]]
+    registry.contains("library") should be(true)
+    registry("library").asInstanceOf[Map[String, String]].contains("finatra") should be(true)
+
+    val finatra = registry("library")
+      .asInstanceOf[Map[String, Any]]("finatra")
+      .asInstanceOf[Map[String, Any]]
+    finatra.contains("http") should be(true)
+
+    val http = finatra("http").asInstanceOf[Map[String, Any]]
+    http.contains("filters") should be(true)
+    http.contains("routes") should be(true)
+
+    val routes = http("routes").asInstanceOf[Map[String, Any]]
+    routes.size should be > 0
   }
 
   test("GET /admin/external/filtered") {

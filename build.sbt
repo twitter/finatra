@@ -196,6 +196,10 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
   libraryDependencies ++= Seq(
     "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
     "ch.qos.logback" % "logback-classic" % versions.logback
+  ),
+  excludeDependencies ++= Seq(
+    // commons-logging is replaced by jcl-over-slf4j
+    ExclusionRule("commons-logging", "commons-logging")
   )
 )
 
@@ -310,6 +314,7 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
   .settings(
     name := "inject-logback",
     moduleName := "inject-logback",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*AsyncAppender.*",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       "ch.qos.logback" % "logback-classic" % versions.logback,
@@ -318,7 +323,8 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
       "com.twitter" %% "util-core" % versions.twLibVersion,
       "com.twitter" %% "util-registry" % versions.twLibVersion
     )
-  )
+  ).dependsOn(
+    injectCore)
 
 lazy val injectModulesTestJarSources =
   Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
