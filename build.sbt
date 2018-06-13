@@ -314,17 +314,18 @@ lazy val injectLogback = (project in file("inject/inject-logback"))
   .settings(
     name := "inject-logback",
     moduleName := "inject-logback",
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*AsyncAppender.*",
     libraryDependencies ++= Seq(
       "org.slf4j" % "slf4j-api" % versions.slf4j,
       "ch.qos.logback" % "logback-classic" % versions.logback,
       "ch.qos.logback" % "logback-core" % versions.logback,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "util-core" % versions.twLibVersion,
-      "com.twitter" %% "util-registry" % versions.twLibVersion
+      "com.twitter" %% "util-registry" % versions.twLibVersion,
+      "com.twitter" %% "util-stats" % versions.twLibVersion
     )
   ).dependsOn(
-    injectCore)
+    injectCore % "test->test;compile->compile",
+    http % "test->test;test->compile")
 
 lazy val injectModulesTestJarSources =
   Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
