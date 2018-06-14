@@ -56,7 +56,7 @@ private[finatra] class JsonArrayChunker extends Logging {
 
   /* Private */
 
-  private def decodeByteAndUpdateState(c: Byte, in: ByteBuffer) {
+  private def decodeByteAndUpdateState(c: Byte, in: ByteBuffer): Unit = {
     debug("decode '" + c.toChar + "'")
     if ((c == '{' || c == '[') && !insideString) {
       openBraces += 1

@@ -44,7 +44,7 @@ class FinagleRequestScope extends Scope {
    * Start the 'request scope'
    * TODO (#474): assert local().isEmpty
    */
-  def enter() {
+  def enter(): Unit = {
     local.update(new JHashMap[Key[_], AnyRef]())
   }
 
@@ -54,7 +54,7 @@ class FinagleRequestScope extends Scope {
    * @param value Value to seed/add into the request scope
    * @param overwrite Whether to overwrite an existing value already in the request scope (defaults to false)
    */
-  def seed[T <: AnyRef: Manifest](value: T, overwrite: Boolean = false) {
+  def seed[T <: AnyRef: Manifest](value: T, overwrite: Boolean = false): Unit = {
     seed(Key.get(typeLiteral[T]), value, overwrite = overwrite)
   }
 
@@ -65,7 +65,7 @@ class FinagleRequestScope extends Scope {
    * @param value Value to seed/add into the request scope
    * @param overwrite Whether to overwrite an existing value already in the request scope (defaults to false)
    */
-  def seed[T <: AnyRef](key: Key[T], value: T, overwrite: Boolean) {
+  def seed[T <: AnyRef](key: Key[T], value: T, overwrite: Boolean): Unit = {
     val scopedObjects = getScopedObjectMap(key)
 
     if (!overwrite) {
@@ -80,7 +80,7 @@ class FinagleRequestScope extends Scope {
   }
 
   /** Exit the 'request scope' */
-  def exit() {
+  def exit(): Unit = {
     assert(local().isDefined, "No FinagleRequestScope in progress")
     local.clear()
   }

@@ -28,7 +28,7 @@ trait FeatureTestMixin
 
   def printStats = true
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     if (server.isStarted && hasBoundFields) {
       throw new Exception(
         "ERROR: Server started before integrationTestModule added. " +
@@ -45,7 +45,7 @@ trait FeatureTestMixin
     super.beforeAll()
   }
 
-  override protected def afterEach() {
+  override protected def afterEach(): Unit = {
     super.afterEach()
     if (server.isInjectable) {
       if (printStats) {
@@ -55,7 +55,7 @@ trait FeatureTestMixin
     }
   }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     try {
       super.afterAll()
     } finally {

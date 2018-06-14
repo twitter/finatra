@@ -27,7 +27,7 @@ object RetryUtils extends Logging {
 
   /* Private */
 
-  private def retryMsg[T](sleepTime: Duration, result: Try[T], suppress: Boolean) {
+  private def retryMsg[T](sleepTime: Duration, result: Try[T], suppress: Boolean): Unit = {
     if (!suppress) {
       warn("Retrying " + result + " after " + sleepTime)
     }

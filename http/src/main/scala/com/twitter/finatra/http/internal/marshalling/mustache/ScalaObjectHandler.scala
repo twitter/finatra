@@ -41,9 +41,9 @@ import scala.runtime.BoxedUnit
 class ScalaObjectHandler extends ReflectionObjectHandler {
 
   // Allow any method or field
-  override def checkMethod(member: Method) {}
+  override def checkMethod(member: Method): Unit = {}
 
-  override def checkField(member: Field) {}
+  override def checkField(member: Field): Unit = {}
 
   override def coerce(value: AnyRef) = {
     value match {

@@ -126,7 +126,7 @@ case class FinatraObjectMapper(objectMapper: ObjectMapper with ScalaObjectMapper
     objectMapper.writeValueAsBytes(any)
   }
 
-  def writeValue(any: Any, outputStream: OutputStream) {
+  def writeValue(any: Any, outputStream: OutputStream): Unit = {
     objectMapper.writeValue(outputStream, any)
   }
 

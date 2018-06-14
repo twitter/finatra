@@ -8,7 +8,7 @@ import org.joda.time.Duration
 private[finatra] object DurationMillisSerializer
     extends StdSerializer[Duration](classOf[Duration]) {
 
-  override def serialize(value: Duration, jgen: JsonGenerator, provider: SerializerProvider) {
+  override def serialize(value: Duration, jgen: JsonGenerator, provider: SerializerProvider): Unit = {
     jgen.writeNumber(value.getMillis)
   }
 }
