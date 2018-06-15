@@ -120,7 +120,7 @@ private[http] trait BaseHttpServer extends TwitterServer {
   /* Lifecycle */
 
   @Lifecycle
-  override protected def postWarmup() {
+  override protected def postWarmup(): Unit = {
     super.postWarmup()
 
     startHttpServer()
@@ -147,7 +147,7 @@ private[http] trait BaseHttpServer extends TwitterServer {
     port().toOption.map(PortUtils.parseAddr)
   }
 
-  private def startHttpServer() {
+  private def startHttpServer(): Unit = {
     for (port <- parsePort(httpPortFlag)) {
       val serverBuilder =
         configureHttpServer(
@@ -171,7 +171,7 @@ private[http] trait BaseHttpServer extends TwitterServer {
     }
   }
 
-  private def startHttpsServer() {
+  private def startHttpsServer(): Unit = {
     for (port <- parsePort(httpsPortFlag)) {
       val serverBuilder =
         configureHttpsServer(

@@ -2,6 +2,7 @@ package com.twitter.finatra.http.internal.marshalling
 
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http._
+import com.twitter.finatra.http.internal.marshalling.CallbackConverter.url
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
@@ -10,6 +11,11 @@ import com.twitter.util.{Future, FuturePool, Promise}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => ScalaFuture}
 import scala.util.{Failure, Success}
+
+private object CallbackConverter {
+  val url = "https://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing"
+}
+
 
 private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
@@ -40,12 +46,13 @@ private[http] class CallbackConverter @Inject()(
       request: Request =>
         val asyncStream = jsonStreamParser.parseArray(request.reader)(asyncStreamTypeParam)
         callback(asyncStream.asInstanceOf[RequestType])
-    } else if (runtimeClassEq[RequestType, Int]) {
-      // NOTE: "empty" route callbacks that return a String are inferred as a RequestType of
-      // Int by Scala because StringOps.apply is a function of Int => Char.
+    } else if (runtimeClassEq[RequestType, Int] || runtimeClassEq[RequestType, String]) {
+      // NOTE: callback functions with no input param which return a String are inferred as a RequestType of
+      // `Int` by Scala because `StringOps.apply` is a function of Int => Char, other return types
+      // infer a `RequestType` of `String`.
       throw new Exception(
-        "Routes with empty (with no parameter) route callbacks or route callbacks with a parameter of type Int are not allowed. " +
-          "Please specify a parameter in your route callback of the appropriate type."
+        s"Improper callback function RequestType: ${manifest[RequestType].runtimeClass}. Controller routes defined with a callback function that has no input parameter or with an incorrectly specified input parameter type are not allowed. " +
+          s"Please specify an input parameter in your route callback function of the appropriate type. For more details see: $url"
       )
     } else { request: Request =>
       val callbackInput = messageBodyManager.read[RequestType](request)

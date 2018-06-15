@@ -1,18 +1,14 @@
 package com.twitter.finatra.http.routing
 
 import com.twitter.finagle.Filter
-import com.twitter.finatra.http.exceptions.{
-  AbstractExceptionMapper,
-  ExceptionManager,
-  ExceptionMapper,
-  ExceptionMapperCollection
-}
+import com.twitter.finatra.http.exceptions.{AbstractExceptionMapper, ExceptionManager, ExceptionMapper, ExceptionMapperCollection}
 import com.twitter.finatra.http.internal.marshalling.{CallbackConverter, MessageBodyManager}
-import com.twitter.finatra.http.internal.routing.{Route, RoutesByType, RoutingService, Services}
+import com.twitter.finatra.http.internal.routing.{Route, Registrar, RoutesByType, RoutingService, Services}
 import com.twitter.finatra.http.marshalling.MessageBodyComponent
 import com.twitter.finatra.http.routing.HttpRouter._
 import com.twitter.finatra.http.{AbstractController, Controller, HttpFilter}
 import com.twitter.inject.TypeUtils._
+import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.{Inject, Singleton}
@@ -329,18 +325,48 @@ class HttpRouter @Inject()(
   }
 
   private def addRoutes(controller: Controller): HttpRouter = {
-    routes ++= buildRoutes(controller).map(_.withFilter(globalFilter))
+    routes ++= buildRoutes(controller)
     this
   }
 
   private def addRoutes(filter: HttpFilter, controller: Controller): HttpRouter = {
-    val routesWithFilter = buildRoutes(controller).map(_.withFilter(globalFilter.andThen(filter)))
-    routes ++= routesWithFilter
+    routes ++= buildRoutes(controller, Some(filter))
     this
   }
 
-  private def buildRoutes(controller: Controller): Seq[Route] = {
-    controller.routeBuilders.map(_.build(callbackConverter, injector))
+  private[this] def buildRoutes(
+    controller: Controller,
+    filter: Option[HttpFilter] = None
+  ): Seq[Route] = {
+    val routes = filter match {
+      case Some(controllerFilter) =>
+        controller.routeBuilders.map(
+          _.build(callbackConverter, injector).withFilter(controllerFilter)
+        )
+      case _ =>
+        controller.routeBuilders.map(_.build(callbackConverter, injector))
+    }
+
+    registerRoutes(routes)
+    registerGlobalFilter(globalFilter)
+    routes.map(_.withFilter(globalFilter))
+  }
+
+  private[this] def registerGlobalFilter(filter: HttpFilter): Unit = {
+    if (filter ne Filter.identity) {
+      injector
+        .instance[LibraryRegistry]
+        .withSection("http")
+        .put(Seq("filters"), filter.toString)
+    }
+  }
+
+  private[this] def registerRoutes(routes: Seq[Route]): Unit = {
+    val registrar = new Registrar(
+      injector
+        .instance[LibraryRegistry]
+        .withSection("http", "routes"))
+    routes.foreach(registrar.register)
   }
 
   private[finatra] def partitionRoutesByType(): RoutesByType = {
@@ -353,7 +379,7 @@ class HttpRouter @Inject()(
   }
 
   // non-constant routes MUST start with /admin/finatra
-  private def assertAdminRoutes(routes: ArrayBuffer[Route]): Unit = {
+  private[this] def assertAdminRoutes(routes: ArrayBuffer[Route]): Unit = {
     val message = "Error adding route: %s. Non-constant admin interface routes must start with prefix: " + HttpRouter.FinatraAdminPrefix
 
     for (route <- routes) {

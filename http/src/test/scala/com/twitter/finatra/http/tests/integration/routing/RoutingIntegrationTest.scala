@@ -14,13 +14,15 @@ import org.scalatest.Matchers
 class RoutingIntegrationTest extends Test {
 
   test("Provide RouteInfo in a global filter") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override def configureHttp(router: HttpRouter) {
-        router
-          .filter[CheckRouteInfoFilter]
-          .add[NullController]
-      }
-    })
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter) {
+          router
+            .filter[CheckRouteInfoFilter]
+            .add[NullController]
+        }
+      },
+      disableTestLogging = true)
 
     try {
       server.httpGet("/foo", andExpect = Status.Ok)
@@ -30,14 +32,16 @@ class RoutingIntegrationTest extends Test {
   }
 
   test("Support global filter beforeRouting true") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override def configureHttp(router: HttpRouter) {
-        router
-          .filter[NoRouteInfoFilter](beforeRouting = true)
-          .filter[CheckRouteInfoFilter]
-          .add[NullController]
-      }
-    })
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter) {
+          router
+            .filter[NoRouteInfoFilter](beforeRouting = true)
+            .filter[CheckRouteInfoFilter]
+            .add[NullController]
+        }
+      },
+      disableTestLogging = true)
 
     try {
       server.httpGet("/foo", andExpect = Status.Ok)
@@ -49,13 +53,15 @@ class RoutingIntegrationTest extends Test {
   test("Support global filter beforeRouting false") {
     // NOTE: you SHOULD NOT need to do this, just
     // call the no-argument version of router#filter
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override def configureHttp(router: HttpRouter) {
-        router
-          .filter[CheckRouteInfoFilter](beforeRouting = false)
-          .add[NullController]
-      }
-    })
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter) {
+          router
+            .filter[CheckRouteInfoFilter](beforeRouting = false)
+            .add[NullController]
+        }
+      },
+      disableTestLogging = true)
 
     try {
       server.httpGet("/foo", andExpect = Status.Ok)
@@ -65,12 +71,14 @@ class RoutingIntegrationTest extends Test {
   }
 
   test("Provide RouteInfo in a per-controller filter") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override def configureHttp(router: HttpRouter) {
-        router
-          .add[CheckRouteInfoFilter, NullController]
-      }
-    })
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter) {
+          router
+            .add[CheckRouteInfoFilter, NullController]
+        }
+      },
+      disableTestLogging = true)
 
     try {
       server.httpGet("/foo", andExpect = Status.Ok)
@@ -80,13 +88,15 @@ class RoutingIntegrationTest extends Test {
   }
 
   test("Fail if adding a filter after adding a controller") {
-    val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override def configureHttp(router: HttpRouter) {
-        router
-          .add[NullController]
-          .filter[CheckRouteInfoFilter]
-      }
-    })
+    val server = new EmbeddedHttpServer(
+      twitterServer = new HttpServer {
+        override def configureHttp(router: HttpRouter) {
+          router
+            .add[NullController]
+            .filter[CheckRouteInfoFilter]
+        }
+      },
+      disableTestLogging = true)
 
     try {
       intercept[AssertionError] {
@@ -103,7 +113,8 @@ class RoutingIntegrationTest extends Test {
         override def configureHttp(router: HttpRouter): Unit = {
           router.add[AmazingController]
         }
-      }
+      },
+      disableTestLogging = true
     )
 
     try {

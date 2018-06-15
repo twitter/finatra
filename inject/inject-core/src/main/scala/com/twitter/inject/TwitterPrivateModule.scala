@@ -14,5 +14,5 @@ abstract class TwitterPrivateModule
   /* Overrides */
 
   // Provide default configure method so Module's using only @Provider don't need an empty configure method
-  override protected def configure() {}
+  override protected def configure(): Unit = {}
 }

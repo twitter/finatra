@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.integration.mdc.test
 
 import com.twitter.finagle.http.{Request, Response, Status}
-import com.twitter.finagle.tracing.{SpanId, Trace, TraceId}
+import com.twitter.finagle.tracing.Trace
 import com.twitter.finatra.http.filters.{LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.tests.integration.mdc.main.LoggingMDCTestController

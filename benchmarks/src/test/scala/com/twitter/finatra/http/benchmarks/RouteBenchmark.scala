@@ -2,16 +2,19 @@ package com.twitter.finatra.http.benchmarks
 
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.util.Future
 import org.openjdk.jmh.annotations._
+import scala.reflect.classTag
 
+/**
+ * ./sbt 'project benchmarks' 'jmh:run RouteBenchmark'
+ */
 @State(Scope.Thread)
-class RouteBenchmark {
-
-  def defaultCallback(request: Request) = {
-    Future(Response())
-  }
+class RouteBenchmark
+  extends StdBenchAnnotations
+  with HttpBenchmark {
 
   val route = Route(
     name = "groups",
@@ -21,8 +24,8 @@ class RouteBenchmark {
     index = None,
     callback = defaultCallback,
     annotations = Seq(),
-    requestClass = classOf[Request],
-    responseClass = classOf[Response],
+    requestClass = classTag[Request],
+    responseClass = classTag[Response],
     routeFilter = Filter.identity,
     filter = Filter.identity
   )
@@ -35,25 +38,25 @@ class RouteBenchmark {
     index = None,
     callback = defaultCallback,
     annotations = Seq(),
-    requestClass = classOf[Request],
-    responseClass = classOf[Response],
+    requestClass = classTag[Request],
+    responseClass = classTag[Response],
     routeFilter = Filter.identity,
     filter = Filter.identity
   )
 
-  val postGroupsPath = "/groups/"
-  val postGroupsRequest = Request(Method.Post, postGroupsPath)
+  val postGroupsPath: String = "/groups/"
+  val postGroupsRequest: Request = Request(Method.Post, postGroupsPath)
 
-  val postGroups123Path = postGroupsPath + "123"
-  val postGroups123Request = Request(Method.Post, postGroups123Path)
+  val postGroups123Path: String = postGroupsPath + "123"
+  val postGroups123Request: Request = Request(Method.Post, postGroups123Path)
 
   @Benchmark
-  def testRoute() = {
+  def testRoute(): Option[Future[Response]] = {
     route.handle(postGroupsRequest, postGroupsPath, bypassFilters = false)
   }
 
   @Benchmark
-  def testRouteWithPathParams() = {
+  def testRouteWithPathParams(): Option[Future[Response]] = {
     routeWithPathParams.handle(postGroups123Request, postGroups123Path, bypassFilters = false)
   }
 }

@@ -23,11 +23,11 @@ class ValidationMessageResolver {
     properties
   }
 
-  private def loadBaseProperties(properties: Properties) {
+  private def loadBaseProperties(properties: Properties): Unit = {
     properties.load(getClass.getResourceAsStream("/com/twitter/finatra/json/validation.properties"))
   }
 
-  private def loadPropertiesFromClasspath(properties: Properties) {
+  private def loadPropertiesFromClasspath(properties: Properties): Unit = {
     val validationPropertiesUrl = getClass.getResource("/validation.properties")
     if (validationPropertiesUrl != null) {
       properties.load(validationPropertiesUrl.openStream())

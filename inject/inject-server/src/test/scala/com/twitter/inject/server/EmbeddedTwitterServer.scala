@@ -259,26 +259,26 @@ class EmbeddedTwitterServer(
    */
   def close(after: Duration): Unit = {
     if (!closed) {
-      infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name)
+      infoBanner(s"Closing ${this.getClass.getSimpleName}: " + name, disableLogging)
       try {
         val underlyingClosable = Closable.make { deadline =>
-          info(s"Closing underlying TwitterServer: $name")
+          info(s"Closing underlying TwitterServer: $name", disableLogging)
           twitterServer.close(deadline)
         }
         closables.add(underlyingClosable)
         Await.result(Future.collect(closables.asScala.toIndexedSeq.map(_.close(after))))
       } catch {
         case NonFatal(e) =>
-          info(s"Error while closing ${this.getClass.getSimpleName}: ${e.getMessage}\n")
+          info(s"Error while closing ${this.getClass.getSimpleName}: ${e.getMessage}\n", disableLogging)
           e.printStackTrace()
           shutdownFailure = Some(e)
       } finally {
         try {
-          info(s"Shutting down Future Pool: $FuturePoolName")
+          info(s"Shutting down Future Pool: $FuturePoolName", disableLogging)
           futurePool.executor.shutdown()
         } catch {
           case t: Throwable =>
-            info(s"Unable to shutdown $FuturePoolName future pool executor. $t")
+            info(s"Unable to shutdown $FuturePoolName future pool executor. $t", disableLogging)
             t.printStackTrace()
         }
         closed = true
@@ -315,24 +315,24 @@ class EmbeddedTwitterServer(
     inMemoryStatsReceiver.gauges.iterator.toMap.mapKeys(keyStr).toSortedMap
 
   def printStats(includeGauges: Boolean = true): Unit = {
-    infoBanner(name + " Stats")
+    infoBanner(name + " Stats", disableLogging)
     for ((key, values) <- statsMap) {
       val avg = values.sum / values.size
       val valuesStr = values.mkString("[", ", ", "]")
-      info(f"$key%-70s = $avg = $valuesStr")
+      info(f"$key%-70s = $avg = $valuesStr", disableLogging)
     }
 
-    info("\nCounters:")
+    info("\nCounters:", disableLogging)
     for ((key, value) <- countersMap) {
-      info(f"$key%-70s = $value")
+      info(f"$key%-70s = $value", disableLogging)
     }
 
     if (includeGauges) {
-      info("\nGauges:")
+      info("\nGauges:", disableLogging)
       for ((key, value) <- inMemoryStatsReceiver.gauges.iterator.toMap
           .mapKeys(keyStr)
           .toSortedMap) {
-        info(f"$key%-70s = ${value()}")
+        info(f"$key%-70s = ${value()}", disableLogging)
       }
     }
   }
@@ -383,8 +383,8 @@ class EmbeddedTwitterServer(
 
   /** Log that the underlying embedded TwitterServer has started and the location of the AdminHttpInterface */
   protected[twitter] def logStartup(): Unit = {
-    infoBanner("Server Started: " + name)
-    info(s"AdminHttp      -> http://$adminHostAndPort/admin")
+    infoBanner("Server Started: " + name, disableLogging)
+    info(s"AdminHttp      -> http://$adminHostAndPort/admin", disableLogging)
   }
 
   /** Combine the flags Map with the args String to create an argument list for the underlying embedded TwitterServer main */
@@ -415,7 +415,7 @@ class EmbeddedTwitterServer(
   private def runNonExitingMain(): Unit = {
     // we call distinct here b/c port flag args can potentially be added multiple times
     val allArgs = combineArgs().distinct
-    info("\nStarting " + name + " with args: " + allArgs.mkString(" "))
+    info("\nStarting " + name + " with args: " + allArgs.mkString(" "), disableLogging)
 
     _mainResult = futurePool {
       try {
@@ -446,7 +446,7 @@ class EmbeddedTwitterServer(
 
   private def waitForServerStarted(): Unit = {
     for (_ <- 1 to maxStartupTimeSeconds) {
-      info("Waiting for warmup phases to complete...")
+      info("Waiting for warmup phases to complete...", disableLogging)
 
       if (startupFailedThrowable.isDefined) {
         throwStartupFailedException()
@@ -479,14 +479,15 @@ class EmbeddedTwitterServer(
     val numIssues = failures.map(_._2.size).sum
     val issueString = if (numIssues == 1) "Issue" else "Issues"
     if (failures.nonEmpty) {
-      info(s"Warning: $numIssues Linter $issueString Found!")
+      info(s"Warning: $numIssues Linter $issueString Found!", disableLogging)
       failures.foreach {
         case (rule, issues) =>
-          info(s"\t* Rule: ${rule.name} - ${rule.description}")
-          issues.foreach(issue => info(s"\t - $issue"))
+          info(s"\t* Rule: ${rule.name} - ${rule.description}", disableLogging)
+          issues.foreach(issue => info(s"\t - $issue", disableLogging))
       }
       info(
-        "After addressing these issues, consider enabling failOnLintViolation mode to prevent future issues from reaching production."
+        "After addressing these issues, consider enabling failOnLintViolation mode to prevent future issues from reaching production.",
+        disableLogging
       )
       if (failOnLintViolation) {
         val e = new Exception(

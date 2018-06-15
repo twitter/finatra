@@ -12,5 +12,5 @@ abstract class Controller extends RouteDSL with Logging {
   @Inject private var responseBuilder: ResponseBuilder = _
 
   /* Protected */
-  protected def response = responseBuilder
+  protected def response: ResponseBuilder = responseBuilder
 }

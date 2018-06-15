@@ -27,7 +27,7 @@ For instance, if you want to map a `java.lang.ClassCastException` to a `ThriftEx
   @Singleton
   class ClassCastExceptionMapper extends ExceptionMapper[ClassCastException, ClientError] {
 
-    def handle(throwable: ClassCastException): Future[ClientError] = {
+    def handleException(throwable: ClassCastException): Future[ClientError] = {
       Future.exception(ClientError(BadRequest, throwable.getMessage))
     }
   }

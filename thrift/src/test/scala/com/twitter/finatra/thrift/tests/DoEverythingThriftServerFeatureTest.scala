@@ -2,6 +2,7 @@ package com.twitter.finatra.thrift.tests
 
 import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
+import com.twitter.finagle.http.Status
 import com.twitter.finagle.tracing.Trace
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
@@ -13,15 +14,17 @@ import com.twitter.io.Buf
 import com.twitter.scrooge
 import com.twitter.util.{Await, Future}
 import org.apache.thrift.TApplicationException
+import scala.util.parsing.json.JSON
 
 class DoEverythingThriftServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(
     twitterServer = new DoEverythingThriftServer,
+    disableTestLogging = true,
     flags = Map("magicNum" -> "57")
   )
 
   /* Higher-kinded interface type */
-  val client123 = server.thriftClient[DoEverything[Future]](clientId = "client123")
+  val client123: DoEverything[Future] = server.thriftClient[DoEverything[Future]](clientId = "client123")
   /* Method-Per-Endpoint type: https://twitter.github.io/scrooge/Finagle.html#id1 */
   val methodPerEndpointClient123: DoEverything.MethodPerEndpoint =
     server.thriftClient[DoEverything.MethodPerEndpoint](clientId = "client123")
@@ -256,6 +259,31 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
     MDC.get("traceId") should not be null
     MDC.get("traceId") should be(traceId.traceId.toString())
+  }
+
+  test("GET /admin/registry.json") {
+    val response = server.httpGetAdmin(
+      "/admin/registry.json",
+      andExpect = Status.Ok)
+
+    val json: Map[String, Any] =
+      JSON.parseFull(response.contentString).get.asInstanceOf[Map[String, Any]]
+
+    val registry = json("registry").asInstanceOf[Map[String, Any]]
+    registry.contains("library") should be(true)
+    registry("library").asInstanceOf[Map[String, String]].contains("finatra") should be(true)
+
+    val finatra = registry("library")
+      .asInstanceOf[Map[String, Any]]("finatra")
+      .asInstanceOf[Map[String, Any]]
+
+    finatra.contains("thrift") should be(true)
+    val thrift = finatra("thrift").asInstanceOf[Map[String, Any]]
+    thrift.contains("filters") should be(true)
+    thrift.contains("methods") should be(true)
+
+    val methods = thrift("methods").asInstanceOf[Map[String, Any]]
+    methods.size should be > 0
   }
 
   private def await[T](f: Future[T]): T = {

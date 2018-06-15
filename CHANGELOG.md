@@ -12,6 +12,40 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.6.0](https://github.com/twitter/finatra/tree/finatra-18.6.0) (2018-06-14)
+
+### Added
+
+* finatra: Add HTTP route, Thrift method, and Filter information to the Library 
+  registry. ``PHAB_ID=D177583``
+
+* finatra-inject/inject-logback: Add an `c.t.inject.logback.AsyncAppender` to
+  provide metrics about the underlying queue. ``PHAB_ID=D173278``
+
+### Changed
+
+* inject-slf4j: Move the SLF4J API logging bridges from `inject-slf4j` to `inject-app`
+  and `inject-server`. This allows code in the inject framework to be mostly useful in
+  environments where having the bridges on the classpath causes issues. ``PHAB_ID=D179652``
+
+### Fixed
+
+* finatra-http: Fail startup for incorrect Controller callback functions. Controller route callback
+  functions that do not specify an input parameter or specify an incorrect input parameter should
+  fail server startup but were not correctly detected when building routes in the `CallbackConverter`.
+  The route building logic has been patched to correctly detect these routes which would fail at
+  runtime to ensure we fail fast at server startup (and can thus be caught by StartupTests).
+  ``PHAB_ID=D178330``
+
+* finatra-http: Change exceptions emitted from `c.t.f.http.filter.HttpNackFilter` to not extend
+  from `HttpException` and add a specific mapper over `HttpNackException` such that Nack 
+  exceptions are handled distinctly from HttpExceptions and thus more specifically. Handling of
+  Nack exceptions should not be conflated with handling of the more generic `HttpExceptions` and
+  it should be clear if a new mapper is desired that it is specifically for changing how Nack
+  exceptions are handled. ``PHAB_ID=D172456``
+
+### Closed
+
 ## [finatra-18.5.0](https://github.com/twitter/finatra/tree/finatra-18.5.0) (2018-05-07)
 
 ### Added

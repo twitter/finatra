@@ -59,27 +59,65 @@ Here we are adding *by type* allowing the framework to handle class instantiatio
 Controllers and Routing
 -----------------------
 
-Routes are defined in a `Sinatra <http://www.sinatrarb.com/>`__-style syntax which consists of an HTTP method, a URL matching pattern and an associated callback function. The callback function can accept either a `c.t.finagle.http.Request <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__ or a custom case-class that declaratively represents the request you wish to accept. In addition, the callback can return any type that can be converted into a `c.t.finagle.http.Response <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala>`__.
+Routes are defined in a `Sinatra <http://www.sinatrarb.com/>`__-style syntax which consists of an
+HTTP method, a URL matching pattern and an associated callback function. The callback function can
+accept a `c.t.finagle.http.Request <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__,
+a `custom request case class <requests.html#custom-request-case-class>`__ (which declaratively
+represents the parsed request body as JSON), or a type parsed by a registered
+`Message Body Reader <message_body.html#message-body-readers>`__. See `HTTP Requests <requests.html>`__
+for more information.
 
-When Finatra receives an HTTP request, it will scan all registered controllers **in the order they are added** and dispatch the request to the **first matching** route starting from the top of each controller then invoking the matching route's associated callback function.
+The callback can return any type that can be converted into a `c.t.finagle.http.Response <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Response.scala>`__.
+See `HTTP Responses <responses.html>`__ for more information.
 
-That is, routes are matched in the order they are added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__. Thus if you are creating routes with overlapping URIs it is recommended to list the routes in order starting with the "most specific" to the least specific.
+.. important::
 
-In general, however, it is recommended to that you follow `REST <https://en.wikipedia.org/wiki/Representational_state_transfer>`__ conventions if possible, i.e., when deciding which routes to group into a particular controller, group routes related to a single resource into one controller.
+    Controller route callback functions **MUST** specify an input type of either a
+    `c.t.finagle.http.Request <https://github.com/twitter/finagle/blob/develop/finagle-base-http/src/main/scala/com/twitter/finagle/http/Request.scala>`__,
+    a `custom request case class <requests.html#custom-request-case-class>`__ or a type parsed by a
+    registered `Message Body Reader <message_body.html#message-body-readers>`__.
+
+    Failure to specify a correct input type in the callback function will prevent your server from
+    starting properly. See the `Http Requests <requests.html>`__ section for more information.
+
+Route Ordering
+^^^^^^^^^^^^^^
+
+When Finatra receives an HTTP request, it will scan all registered controllers **in the order they
+are added** and dispatch the request to the **first matching** route starting from the top of each
+controller then invoking the matching route's associated callback function.
+
+That is, routes are matched in the order they are added to the `c.t.finatra.http.routing.HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__.
+Thus if you are creating routes with overlapping URIs it is recommended to list the routes in order
+starting with the "most specific" to the least specific.
+
+In general, however, it is recommended to that you follow `REST <https://en.wikipedia.org/wiki/Representational_state_transfer>`__
+conventions if possible, i.e., when deciding which routes to group into a particular controller,
+group routes related to a single resource into one controller.
 
 Per-Route Stats
 ^^^^^^^^^^^^^^^
 
-The per-route stating provided by Finatra in the `c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__ works best when the above convention is followed.
+The per-route stating provided by Finatra in the `c.t.finatra.http.filters.StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
+works best when the above convention is followed.
 
 .. code:: scala
 
+    import com.twitter.finagle.http.Request
+    import com.twitter.finatra.http.Controller
+
     class GroupsController extends Controller {
-      get("/groups/:id") { ... }
+      get("/groups/:id") { request: Request =>
+        ???
+      }
 
-      post("/groups") { ... }
+      post("/groups") { request: Request =>
+        ???
+      }
 
-      delete("/groups/:id") { ... }
+      delete("/groups/:id") { request: Request =>
+        ???
+      }
     }
 
 
@@ -96,12 +134,21 @@ Alternatively, each route can be assigned a name which will then be used to crea
 
 .. code:: scala
 
+    import com.twitter.finagle.http.Request
+    import com.twitter.finatra.http.Controller
+
     class GroupsController extends Controller {
-      get("/groups/:id", name = "group_by_id") { ... }
+      get("/groups/:id", name = "group_by_id") { request: Request =>
+        ???
+      }
 
-      post("/groups", name = "create_group") { ... }
+      post("/groups", name = "create_group") { request: Request =>
+        ???
+      }
 
-      delete("/groups/:id", name = "delete_group") { ... }
+      delete("/groups/:id", name = "delete_group") { request: Request =>
+        ???
+      }
     }
 
 
@@ -124,13 +171,17 @@ Route patterns may include named parameters. E.g., a defined variable in the rou
 
 .. code:: scala
 
+    import com.twitter.finagle.http.Request
+
     get("/users/:id") { request: Request =>
       "You looked up " + request.params("id")
     }
 
-In the above example, `:id` is considered a "named parameter" of the route and will capture the value in its position in the incoming request URI.
+In the above example, `:id` is considered a "named parameter" of the route and will capture the
+value in its position in the incoming request URI.
 
-As shown, the incoming value from the request can be obtained from the request parameters map, e.g. `request.params("id")`.
+As shown, the incoming value from the request can be obtained from the request parameters map, e.g.
+`request.params("id")`.
 
 For example, both of the following requests will match the above defined route:
 
@@ -166,24 +217,33 @@ Which would produce responses like the following:
 
 As `request.params("id")` would capture `1234` in the first request and `5678` in the second.
 
-**Note:** *Both query params and route params are stored in the parameters map of the request.* If a route parameter and a query parameter have the same name, the route parameter always wins.
+.. important::
 
-Therefore, you should ensure your route parameter names do not collide with any query parameter names that you plan to read from the request.
+    **Both query params and route params are stored in the parameters map of the request.** If
+    a *route* parameter and a *query* parameter have the same name, **the route parameter always wins**.
+
+    Therefore, you should ensure your route parameter names do not collide with any query parameter
+    names that you plan to read from the request.
 
 Constant Routes
 ^^^^^^^^^^^^^^^
 
-A "constant route" is any defined route which *does not* specify a `named parameter <#named-parameters>`__ in its route path. Routing is optimized to do a simple lookup against a "constant route" map whereas
-`named parameter <#named-parameters>`__ routes are tried in their defined order for a route which will handle the request.
+A "constant route" is any defined route which *does not* specify a `named parameter <#named-parameters>`__
+in its route path. Routing is optimized to do a simple lookup against a "constant route" map whereas
+`named parameter <#named-parameters>`__ routes are tried in their defined order for a route which
+will handle the request.
 
 Wildcard Parameter
 ^^^^^^^^^^^^^^^^^^
 
-Routes can also contain the wildcard pattern as a `named parameter <#named-parameters>`__, `:*`. The wildcard can only appear once at the end of a pattern and it will capture *all text in its place*.
+Routes can also contain the wildcard pattern as a `named parameter <#named-parameters>`__, `:*`. The
+wildcard can only appear once at the end of a pattern and it will capture *all text in its place*.
 
 For example,
 
 .. code:: scala
+
+    import com.twitter.finagle.http.Request
 
     get("/files/:*") { request: Request =>
       request.params("*")
@@ -221,10 +281,15 @@ Regular expressions are no longer allowed in string defined paths (since v2).
 Route Prefixes
 --------------
 
-Finatra provides a simple DSL for adding a common prefix to a set of routes within a Controller. For instance, if you have a group of routes within a controller that should all have a common prefix
-you can define them by making use of the `c.t.finatra.http.RouteDSL#prefix` function available in any subclass of `c.t.finatra.http.Controller`, e.g.,
+Finatra provides a simple DSL for adding a common prefix to a set of routes within a Controller. For
+instance, if you have a group of routes within a controller that should all have a common prefix
+you can define them by making use of the `c.t.finatra.http.RouteDSL#prefix` function available in
+any subclass of `c.t.finatra.http.Controller`, e.g.,
 
 .. code:: scala
+
+    import com.twitter.finagle.http.Request
+    import com.twitter.finatra.http.Controller
 
     class MyController extends Controller {
 
@@ -264,6 +329,10 @@ For example,
 
 .. code:: scala
 
+    import com.twitter.finagle.http.Request
+    import com.twitter.finatra.http.Controller
+    import com.twitter.inject.annotations
+
     class MyController @Inject()(
       @Flag("api.version.prefix") apiVersionPrefix: String, // value from a "api.version.prefix" flag
       @VersionPrefix otherVersionPrefix otherApiVersionPrefix: String // value from a String bound with annotation: @VersionPrefix
@@ -272,13 +341,13 @@ For example,
 
       prefix(apiVersionPrefix) {
         get("/foo") { request: Request =>
-          ...
+          ???
         }
       }
 
       prefix(otherVersionPrefix) {
         get("/bar") { request: Request =>
-          ...
+          ???
         }
       }
 
@@ -303,22 +372,31 @@ to be equivalent, append `/?` to your route URI, e.g.,
 
 .. code:: scala
 
+    import com.twitter.finagle.http.Request
+
     get("/groups/:id/?") { request: Request =>
-      response.ok(...)
+      response.ok("response body here")
     }
 
-Otherwise, the route as specified is an **exact match**. E.g., if you define `/groups/1` we will **only** match requests to `/groups/1` and **not** requests to `/groups/1/` and vice-versa.
+Otherwise, the route as specified is an **exact match**. E.g., if you define `/groups/1` we will
+**only** match requests to `/groups/1` and **not** requests to `/groups/1/` and vice-versa.
 
 Admin Paths
 -----------
 
-All `TwitterServer <https://twitter.github.io/twitter-server/>`__-based servers have an `HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#admin-http-interface>`__ which includes a variety of tools for diagnostics, profiling, and more. This admin interface **should not** be exposed outside your data center DMZ.
+All `TwitterServer <https://twitter.github.io/twitter-server/>`__-based servers have an `HTTP Admin Interface <https://twitter.github.io/twitter-server/Features.html#admin-http-interface>`__
+which includes a variety of tools for diagnostics, profiling, and more. This admin interface
+**should not** be exposed outside your data center DMZ.
 
-Any route path starting with `/admin/finatra/` will be included by default on the server's admin interface (accessible via the server's admin port). Other paths can be included on the server's admin interface by setting `admin = true` when defining the route.
+Any route path starting with `/admin/finatra/` will be included by default on the server's admin
+interface (accessible via the server's admin port). Other paths can be included on the server's
+admin interface by setting `admin = true` when defining the route.
 
 These routes **MUST** be `constant routes`_, e.g., routes that do not define `named parameters <#named-parameters>`__.
 
 .. code:: scala
+
+    import com.twitter.finagle.http.Request
 
     get("/admin/finatra/users/") { request: Request =>
       userDatabase.getAllUsers(
@@ -326,31 +404,36 @@ These routes **MUST** be `constant routes`_, e.g., routes that do not define `na
     }
 
     get("/admin/display/", admin = true) { request: Request =>
-      response.ok(...)
+      response.ok("response body here")
     }
 
     post("/special/route/", admin = true) { request: Request =>
-      ...
+      ???
     }
 
     // cannot be added to admin index as it uses a named parameter (:id) in the route path
     get("/admin/client/:id", admin = true) { request: Request =>
-      response.ok(...)
+      response.ok("response body here")
     }
 
-Some admin routes can additionally be listed in the `TwitterServer <https://twitter.github.io/twitter-server/>`__ `HTTP Admin Interface index <https://twitter.github.io/twitter-server/Admin.html>`__.
+Some admin routes can additionally be listed in the `TwitterServer <https://twitter.github.io/twitter-server/>`__
+`HTTP Admin Interface index <https://twitter.github.io/twitter-server/Admin.html>`__.
 
-To expose your route in the `TwitterServer <https://twitter.github.io/twitter-server/>`__ `HTTP Admin Interface index <https://twitter.github.io/twitter-server/Admin.html>`__, the route path:
+To expose your route in the `TwitterServer <https://twitter.github.io/twitter-server/>`__
+`HTTP Admin Interface index <https://twitter.github.io/twitter-server/Admin.html>`__, the route path:
 
 -  **MUST** be a `constant path <#constant-routes>`__.
 -  **MUST** start with `/admin/`.
 -  **MUST NOT** start with `/admin/finatra/`.
 -  **MUST** be an HTTP method `GET` or `POST` route.
 
-When defining the route in a Controller, in addition to setting `admin = true` you must also provide a `RouteIndex <https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Route.scala>`__,
+When defining the route in a Controller, in addition to setting `admin = true` you must also provide
+a `RouteIndex <https://github.com/twitter/finagle/blob/develop/finagle-http/src/main/scala/com/twitter/finagle/http/Route.scala>`__,
 e.g.,
 
 .. code:: scala
+
+    import com.twitter.finagle.http.Request
 
     get("/admin/client_id.json",
       admin = true,
@@ -362,14 +445,23 @@ e.g.,
     }
 
 
-The route will appear in the left-rail of the `TwitterServer <https://twitter.github.io/twitter-server/>`__ `HTTP Admin Interface <https://twitter.github.io/twitter-server/Admin.html>`__ under the heading specified by the `RouteIndex#group` indexed by `RouteIndex#alias` or the route's path.
+The route will appear in the left-rail of the `TwitterServer <https://twitter.github.io/twitter-server/>`__
+`HTTP Admin Interface <https://twitter.github.io/twitter-server/Admin.html>`__ under the heading
+specified by the `RouteIndex#group` indexed by `RouteIndex#alias` or the route's path.
 
-If you do not provide a `RouteIndex` the route will not appear in the index but is still reachable on the admin interface.
+If you do not provide a `RouteIndex` the route will not appear in the index but is still reachable
+on the admin interface.
 
 Admin Path Routing
 ^^^^^^^^^^^^^^^^^^
 
-**Note**: only admin routes which start with `/admin/finatra/` will be routed to using the server's configured `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__. All other admin routes will be routed to by TwitterServer's `AdminHttpServer <https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L140>`__ which only supports **exact path matching** and thus why only constant routes are allowed.
+**Note**: only admin routes which start with `/admin/finatra/` will be routed to using the server's
+configured `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__.
+All other admin routes will be routed to by TwitterServer's `AdminHttpServer <https://github.com/twitter/twitter-server/blob/15e35a3a3070c50168ff55fd83a2dff28b09795c/server/src/main/scala/com/twitter/server/AdminHttpServer.scala#L140>`__
+which only supports **exact path matching** and thus why only constant routes are allowed.
 
-Therefore any configuration defined on your server's `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__ will thus only apply to admin routes starting with `/admin/finatra`.
-And because these routes will use the Finatra `RoutingService <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala>`__ these routes cannot be included in the `TwitterServer <https://twitter.github.io/twitter-server/>`__ `HTTP Admin Interface <https://twitter.github.io/twitter-server/Admin.html>`__ index.
+Therefore any configuration defined on your server's `HttpRouter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/routing/HttpRouter.scala>`__
+will thus only apply to admin routes starting with `/admin/finatra`. And because these routes will
+use the Finatra `RoutingService <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/routing/RoutingService.scala>`__
+these routes cannot be included in the `TwitterServer <https://twitter.github.io/twitter-server/>`__
+`HTTP Admin Interface <https://twitter.github.io/twitter-server/Admin.html>`__ index.

@@ -5,6 +5,7 @@ import com.twitter.finatra.http.internal.marshalling.CallbackConverter
 import com.twitter.finatra.http.internal.routing.Route
 import com.twitter.inject.Injector
 import java.lang.annotation.Annotation
+import scala.reflect.classTag
 
 private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
   method: HttpMethod,
@@ -26,8 +27,8 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
       index = index,
       callback = callbackConverter.convertToFutureResponse(callback),
       annotations = annotations,
-      requestClass = manifest[RequestType].runtimeClass,
-      responseClass = manifest[ResponseType].runtimeClass,
+      requestClass = classTag[RequestType],
+      responseClass = classTag[ResponseType],
       routeFilter = routeDsl.buildFilter(injector),
       filter = routeDsl.buildFilter(injector)
     )

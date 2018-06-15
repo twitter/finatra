@@ -22,6 +22,7 @@ Logging
 - :doc:`logging/index`
 - :doc:`logging/mdc`
 - :doc:`logging/logback`
+- :doc:`logging/asyncappender`
 
 Injectable App
 --------------
@@ -101,6 +102,7 @@ Testing
    logging/index
    logging/mdc
    logging/logback
+   logging/asyncappender
    app/index
    twitter-server/index
    http/server

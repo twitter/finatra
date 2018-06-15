@@ -7,7 +7,7 @@ import com.twitter.util.Duration
 
 private[finatra] object TwitterUtilDurationStringSerializer
     extends StdSerializer[Duration](classOf[Duration]) {
-  override def serialize(value: Duration, jgen: JsonGenerator, provider: SerializerProvider) {
+  override def serialize(value: Duration, jgen: JsonGenerator, provider: SerializerProvider): Unit = {
     jgen.writeString(value.toString)
   }
 }

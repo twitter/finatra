@@ -147,8 +147,8 @@ class HttpServerAdminRouteTest extends Test {
       // A handler should show up on the HttpMuxer
       HttpMuxer.patterns.contains("/admin/finatra/") should be(true)
 
-      server.httpGet("/admin/threadName", andExpect = Status.Ok, withBody = "AdminFuturePool-1")
-      server.httpGet("/admin/finatra/threadName", andExpect = Status.Ok, withBody = "AdminFuturePool-1")
+      server.httpGet("/admin/threadName", andExpect = Status.Ok).getContentString() should startWith("AdminFuturePool")
+      server.httpGet("/admin/finatra/threadName", andExpect = Status.Ok).getContentString() should startWith("AdminFuturePool")
     } finally {
       server.close()
     }

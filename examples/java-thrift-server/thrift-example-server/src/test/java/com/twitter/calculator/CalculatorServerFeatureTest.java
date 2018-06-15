@@ -6,6 +6,7 @@ import scala.reflect.ClassTag$;
 
 import com.google.inject.Stage;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,6 +36,12 @@ public class CalculatorServerFeatureTest extends Assert {
   @AfterClass
   public static void tearDown() throws Exception {
       SERVER.close();
+  }
+
+  @After
+  public void printStats() throws Exception {
+      SERVER.printStats(true);
+      SERVER.clearStats();
   }
 
   /** test increment endpoint */

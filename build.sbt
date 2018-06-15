@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.5.0"
+val releaseVersion = "18.6.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -196,6 +196,10 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
   libraryDependencies ++= Seq(
     "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
     "ch.qos.logback" % "logback-classic" % versions.logback
+  ),
+  excludeDependencies ++= Seq(
+    // commons-logging is replaced by jcl-over-slf4j
+    ExclusionRule("commons-logging", "commons-logging")
   )
 )
 
@@ -305,6 +309,24 @@ lazy val injectCore = (project in file("inject/inject-core"))
   ).dependsOn(
     injectSlf4j)
 
+lazy val injectLogback = (project in file("inject/inject-logback"))
+  .settings(projectSettings)
+  .settings(
+    name := "inject-logback",
+    moduleName := "inject-logback",
+    libraryDependencies ++= Seq(
+      "org.slf4j" % "slf4j-api" % versions.slf4j,
+      "ch.qos.logback" % "logback-classic" % versions.logback,
+      "ch.qos.logback" % "logback-core" % versions.logback,
+      "com.twitter" %% "finagle-core" % versions.twLibVersion,
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "com.twitter" %% "util-registry" % versions.twLibVersion,
+      "com.twitter" %% "util-stats" % versions.twLibVersion
+    )
+  ).dependsOn(
+    injectCore % "test->test;compile->compile",
+    http % "test->test;test->compile")
+
 lazy val injectModulesTestJarSources =
   Seq("com/twitter/inject/modules/InMemoryStatsReceiverModule")
 lazy val injectModules = (project in file("inject/inject-modules"))
@@ -347,8 +369,12 @@ lazy val injectApp = (project in file("inject/inject-app"))
     name := "inject-app",
     moduleName := "inject-app",
     libraryDependencies ++= Seq(
+      "com.novocode" % "junit-interface" % "0.11" % Test,
       "com.twitter" %% "util-core" % versions.twLibVersion,
-      "com.novocode" % "junit-interface" % "0.11" % Test
+      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "slf4j-api" % versions.slf4j
     ),
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*TypeConverter.*",
     publishArtifact in Test := true,
@@ -386,7 +412,11 @@ lazy val injectServer = (project in file("inject/inject-server"))
     libraryDependencies ++= Seq(
       "com.google.guava" % "guava" % versions.guava % Test,
       "com.twitter" %% "finagle-stats" % versions.twLibVersion,
-      "com.twitter" %% "twitter-server" % versions.twLibVersion
+      "com.twitter" %% "twitter-server" % versions.twLibVersion,
+      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
+      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
+      "org.slf4j" % "slf4j-api" % versions.slf4j
     ),
     publishArtifact in Test := true,
     mappings in (Test, packageBin) := {
@@ -417,9 +447,6 @@ lazy val injectSlf4j = (project in file("inject/inject-slf4j"))
       "com.fasterxml.jackson.core" % "jackson-annotations" % versions.jackson,
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "util-slf4j-api" % versions.twLibVersion,
-      "org.slf4j" % "jcl-over-slf4j" % versions.slf4j,
-      "org.slf4j" % "jul-to-slf4j" % versions.slf4j,
-      "org.slf4j" % "log4j-over-slf4j" % versions.slf4j,
       "org.slf4j" % "slf4j-api" % versions.slf4j)
   )
 
@@ -743,7 +770,8 @@ lazy val helloWorld = (project in file("examples/hello-world"))
   ).dependsOn(
     http % "test->test;compile->compile",
     injectCore % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val streamingExample = (project in file("examples/streaming-example"))
   .settings(exampleServerSettings)
@@ -757,7 +785,8 @@ lazy val streamingExample = (project in file("examples/streaming-example"))
   ).dependsOn(
     http % "test->test;compile->compile",
     injectCore % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val twitterClone = (project in file("examples/twitter-clone"))
   .settings(exampleServerSettings)
@@ -770,7 +799,8 @@ lazy val twitterClone = (project in file("examples/twitter-clone"))
     http % "test->test;compile->compile",
     httpclient,
     injectCore % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val benchmarkServer = (project in file("examples/benchmark-server"))
   .settings(baseServerSettings)
@@ -799,7 +829,8 @@ lazy val exampleHttpJavaServer = (project in file("examples/java-http-server"))
     http % "test->test;compile->compile",
     httpclient,
     injectCore % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val exampleInjectJavaServer = (project in file("examples/java-server"))
   .settings(exampleServerSettings)
@@ -814,7 +845,8 @@ lazy val exampleInjectJavaServer = (project in file("examples/java-server"))
     injectServer % "test->test;compile->compile",
     injectCore % "test->test",
     injectApp % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val thriftExampleIdl = (project in file("examples/thrift-server/thrift-example-idl"))
   .settings(baseServerSettings)
@@ -841,7 +873,8 @@ lazy val thriftExampleServer = (project in file("examples/thrift-server/thrift-e
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val thriftJavaExampleIdl = (project in file("examples/java-thrift-server/thrift-example-idl"))
   .settings(baseServerSettings)
@@ -871,7 +904,8 @@ lazy val thriftJavaExampleServer = (project in file("examples/java-thrift-server
     injectApp % "test->test",
     injectCore % "test->test",
     injectServer % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
   .settings(exampleServerSettings)
@@ -887,7 +921,8 @@ lazy val exampleWebDashboard = (project in file("examples/web-dashboard"))
     http % "test->test;compile->compile",
     httpclient,
     injectCore % "test->test",
-    injectSlf4j)
+    injectSlf4j,
+    injectLogback)
 
 lazy val exampleTwitterServer = (project in file("examples/example-twitter-server"))
   .settings(exampleServerSettings)
@@ -898,5 +933,6 @@ lazy val exampleTwitterServer = (project in file("examples/example-twitter-serve
     ).dependsOn(
       injectServer % "test->test;compile->compile",
       injectSlf4j,
-      utils)
+      utils,
+      injectLogback)
 // END EXAMPLES

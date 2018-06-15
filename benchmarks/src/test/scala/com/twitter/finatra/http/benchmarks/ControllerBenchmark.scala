@@ -1,24 +1,31 @@
 package com.twitter.finatra.http.benchmarks
 
+import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.{NullStatsReceiver, StatsReceiver}
+import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.http.Controller
 import com.twitter.finatra.http.filters.HttpResponseFilter
 import com.twitter.finatra.http.modules._
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.modules.FinatraJacksonModule
-import com.twitter.inject.TwitterModule
+import com.twitter.inject.{Injector, TwitterModule}
 import com.twitter.inject.app.TestInjector
+import com.twitter.inject.internal.modules.LibraryModule
 import com.twitter.util.Future
 import org.openjdk.jmh.annotations.{Benchmark, Scope, State}
 
+/**
+ * ./sbt 'project benchmarks' 'jmh:run ControllerBenchmark'
+ */
 @State(Scope.Thread)
-class ControllerBenchmark {
+class ControllerBenchmark extends StdBenchAnnotations {
 
-  val injector =
+  val injector: Injector =
     TestInjector(
       flags = Map("http.response.charset.enabled" -> "false"),
       modules = Seq(
+        new LibraryModule("finatra"),
         ExceptionManagerModule,
         MessageBodyModule,
         FinatraJacksonModule,
@@ -28,9 +35,8 @@ class ControllerBenchmark {
       )
     ).create
 
-  val httpRouter = injector.instance[HttpRouter]
-
-  val httpService =
+  val httpRouter: HttpRouter = injector.instance[HttpRouter]
+  val httpService: Service[Request, Response] =
     httpRouter
       .filter[HttpResponseFilter[Request]]
       .add[PlaintextAndJsonController]
@@ -55,7 +61,7 @@ class PlaintextAndJsonController extends Controller {
     helloWorldResponseText
   }
 
-  get("/json") { request: Request =>
+  get("/json") { _: Request =>
     Map("message" -> "Hello, World!")
   }
 }

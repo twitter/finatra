@@ -171,5 +171,6 @@ abstract class ThriftMethodBuilderClientModule[ServicePerEndpoint <: Filterable[
           .withMonitor(monitor)
           .withLabel(label)
           .withRetryBudget(retryBudget))
+          .withPerEndpointStats
   }
 }

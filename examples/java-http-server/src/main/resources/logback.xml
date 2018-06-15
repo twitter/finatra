@@ -29,7 +29,7 @@
   <!-- Primary Async Appenders -->
   <!-- ===================================================== -->
 
-  <appender name="ASYNC-SERVICE" class="ch.qos.logback.classic.AsyncAppender">
+  <appender name="ASYNC-SERVICE" class="com.twitter.inject.logback.AsyncAppender">
     <queueSize>${queue.size:-1024}</queueSize>
     <maxFlushTime>${max.flush.time:-0}</maxFlushTime>
     <appender-ref ref="SERVICE"/>

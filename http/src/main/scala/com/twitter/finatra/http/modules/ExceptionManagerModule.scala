@@ -23,13 +23,14 @@ private[http] object ExceptionManagerModule extends TwitterModule {
   }
 
   /** Add default Framework Exception Mappers */
-  override def singletonStartup(injector: Injector) {
+  override def singletonStartup(injector: Injector): Unit = {
     val manager = injector.instance[ExceptionManager]
 
     manager.add[CancelledRequestExceptionMapper]
     manager.add[CaseClassExceptionMapper]
     manager.add[FailureExceptionMapper]
     manager.add[HttpExceptionMapper]
+    manager.add[HttpNackExceptionMapper]
     manager.add[HttpResponseExceptionMapper]
     manager.add[JsonParseExceptionMapper]
     manager.add[ThriftExceptionMapper]

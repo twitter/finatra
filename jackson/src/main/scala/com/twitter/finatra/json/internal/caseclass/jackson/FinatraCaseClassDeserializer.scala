@@ -94,7 +94,7 @@ private[finatra] class FinatraCaseClassDeserializer(
     createAndValidate(values, errors)
   }
 
-  private def incrementParserToFirstField(jp: JsonParser, ctxt: DeserializationContext) {
+  private def incrementParserToFirstField(jp: JsonParser, ctxt: DeserializationContext): Unit = {
     if (jp.getCurrentToken == JsonToken.START_OBJECT) {
       jp.nextToken()
     }
@@ -114,11 +114,11 @@ private[finatra] class FinatraCaseClassDeserializer(
     val constructorValues = new Array[Object](numConstructorArgs)
     val errors = ArrayBuffer[CaseClassValidationException]()
 
-    def addConstructorValue(value: Object) {
+    def addConstructorValue(value: Object): Unit = {
       constructorValues(constructorValuesIdx) = value //mutation
       constructorValuesIdx += 1 //mutation
     }
-    def addException(field: CaseClassField, e: CaseClassValidationException) {
+    def addException(field: CaseClassField, e: CaseClassValidationException): Unit = {
       addConstructorValue(field.missingValue)
       errors += e //mutation
     }
@@ -239,7 +239,7 @@ private[finatra] class FinatraCaseClassDeserializer(
     }
   }
 
-  private def executeMethodValidations(fieldErrors: Seq[CaseClassValidationException], obj: Any) {
+  private def executeMethodValidations(fieldErrors: Seq[CaseClassValidationException], obj: Any): Unit = {
     val methodValidationErrors = for {
       invalid @ Invalid(_, _) <- validationManager.validateObject(obj)
     } yield CaseClassValidationException(PropertyPath.empty, invalid)
@@ -257,7 +257,7 @@ private[finatra] class FinatraCaseClassDeserializer(
   }
 
   //optimized
-  private[this] def append[T](buffer: ArrayBuffer[T], seqToAppend: Seq[T]) {
+  private[this] def append[T](buffer: ArrayBuffer[T], seqToAppend: Seq[T]): Unit = {
     if (seqToAppend.nonEmpty) {
       buffer ++= seqToAppend
     }

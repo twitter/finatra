@@ -255,6 +255,7 @@ abstract class FilteredThriftClientModule[
             .withMonitor(monitor)
             .withRetryBudget(budget.retryBudget)
             .withRetryBackoff(budget.requeueBackoffs)
+            .withPerEndpointStats
         )
       } else {
         configureNonThriftMuxClient(
@@ -265,6 +266,7 @@ abstract class FilteredThriftClientModule[
             .withMonitor(monitor)
             .withRetryBudget(budget.retryBudget)
             .withRetryBackoff(budget.requeueBackoffs)
+            .withPerEndpointStats
         )
       }
 

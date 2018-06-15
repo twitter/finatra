@@ -2,18 +2,21 @@ package com.twitter.finatra.http.benchmarks
 
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.{Method, Request, Response}
+import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.http.internal.routing.{Route, RoutingService}
 import com.twitter.util.Future
 import org.openjdk.jmh.annotations._
+import scala.reflect.classTag
 
+/**
+ * ./sbt 'project benchmarks' 'jmh:run RoutingServiceBenchmark'
+ */
 @State(Scope.Thread)
-class RoutingServiceBenchmark {
+class RoutingServiceBenchmark
+  extends StdBenchAnnotations
+  with HttpBenchmark {
 
-  def defaultCallback(request: Request) = {
-    Future.value(Response())
-  }
-
-  val routes = Seq(
+  val routes: Seq[Route] = Seq(
     route("/groups/"),
     route("/groups/:id"),
     route("/tasks/"),
@@ -24,18 +27,17 @@ class RoutingServiceBenchmark {
     route("/users/:id")
   )
 
-  val routingService = new RoutingService(routes)
-
-  val getRequest1 = Request("/users/")
-  val getRequest2 = Request("/users/123")
+  val routingService: RoutingService = new RoutingService(routes)
+  val getRequest1: Request = Request("/users/")
+  val getRequest2: Request = Request("/users/123")
 
   @Benchmark
-  def timeOldLastConstant() = {
+  def timeOldLastConstant(): Future[Response] = {
     routingService.apply(getRequest1)
   }
 
   @Benchmark
-  def timeOldLastNonConstant() = {
+  def timeOldLastNonConstant(): Future[Response] = {
     routingService.apply(getRequest2)
   }
 
@@ -48,8 +50,8 @@ class RoutingServiceBenchmark {
       index = None,
       callback = defaultCallback,
       annotations = Seq(),
-      requestClass = classOf[Request],
-      responseClass = classOf[Response],
+      requestClass = classTag[Request],
+      responseClass = classTag[Response],
       routeFilter = Filter.identity,
       filter = Filter.identity
     )

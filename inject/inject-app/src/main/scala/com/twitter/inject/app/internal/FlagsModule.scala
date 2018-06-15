@@ -35,7 +35,7 @@ private[app] class FlagsModule(flagsMap: Map[String, Option[Any]])
    * @see [[TwitterTypeConvertersModule]]
    * @see [[https://github.com/google/guice/blob/master/core/src/com/google/inject/internal/TypeConverterBindingProcessor.java Guice Default Type Conversions]]
    */
-  override def configure() {
+  override def configure(): Unit = {
     for ((flagName, valueOpt) <- flagsMap) {
       val key: Key[String] = Flags.key(flagName)
       valueOpt match {

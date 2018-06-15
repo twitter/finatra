@@ -33,12 +33,12 @@ trait IntegrationTestMixin
   @deprecated("Use #bind[T] DSL instead.", "2017-03-01")
   protected val integrationTestModule: Module = BoundFieldModule.of(this)
 
-  override protected def beforeAll() {
+  override protected def beforeAll(): Unit = {
     super.beforeAll()
     injector.underlying.injectMembers(this)
   }
 
-  override protected def afterEach() {
+  override protected def afterEach(): Unit = {
     super.afterEach()
 
     if (resetBindings) {

@@ -7,6 +7,7 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.{ThriftFilter, ThriftServer}
+import com.twitter.util.Duration
 
 object DoEverythingCombinedServerMain extends DoEverythingCombinedServer
 
@@ -18,16 +19,16 @@ class DoEverythingCombinedServer extends HttpServer with ThriftServer {
 
   override val failfastOnFlagsNotParsed = false
 
-  override val defaultShutdownTimeout = 30.seconds
-  override val defaultThriftShutdownTimeout = 45.seconds
+  override val defaultShutdownTimeout: Duration = 30.seconds
+  override val defaultThriftShutdownTimeout: Duration = 45.seconds
 
-  override protected def configureHttp(router: HttpRouter) = {
+  override protected def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[CommonFilters]
       .add[DoEverythingCombinedController]
   }
 
-  override protected def configureThrift(router: ThriftRouter) {
+  override protected def configureThrift(router: ThriftRouter): Unit = {
     router
       .filter[LoggingMDCFilter]
       .filter[TraceIdMDCFilter]

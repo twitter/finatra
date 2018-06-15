@@ -2,6 +2,7 @@ package com.twitter.finatra.json.benchmarks
 
 import com.fasterxml.jackson.datatype.joda.JodaModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.benchmarks.domain.{TestDemographic, TestFormat}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
@@ -10,8 +11,11 @@ import java.io.ByteArrayInputStream
 import org.joda.time.DateTime
 import org.openjdk.jmh.annotations._
 
+/**
+ * ./sbt 'project benchmarks' 'jmh:run JsonBenchmark'
+ */
 @State(Scope.Thread)
-class JsonBenchmark {
+class JsonBenchmark extends StdBenchAnnotations {
 
   val json = """
       {
@@ -32,13 +36,13 @@ class JsonBenchmark {
 
   val bytes = json.getBytes("UTF-8")
 
-  val finatraObjectMapper = {
+  val finatraObjectMapper: FinatraObjectMapper = {
     val mapperModule = new FinatraJacksonModule()
     val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
     new FinatraObjectMapper(scalaObjectMapper)
   }
 
-  val jacksonScalaModuleObjectMapper = {
+  val jacksonScalaModuleObjectMapper: FinatraObjectMapper = {
     val mapperModule = new FinatraJacksonModule() {
 
       // omit FinatraCaseClassModule
@@ -48,14 +52,15 @@ class JsonBenchmark {
     val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
     new FinatraObjectMapper(scalaObjectMapper)
   }
+
   @Benchmark
-  def finatraCustomCaseClassDeserializer() = {
+  def finatraCustomCaseClassDeserializer(): TestTask = {
     val is = new ByteArrayInputStream(bytes)
     finatraObjectMapper.parse[TestTask](is)
   }
 
   @Benchmark
-  def jacksonScalaModuleCaseClassDeserializer() = {
+  def jacksonScalaModuleCaseClassDeserializer(): TestTask = {
     val is = new ByteArrayInputStream(bytes)
     jacksonScalaModuleObjectMapper.parse[TestTask](is)
   }
