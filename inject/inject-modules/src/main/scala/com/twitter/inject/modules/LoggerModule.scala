@@ -11,7 +11,7 @@ import com.twitter.util
  */
 object LoggerModule extends TwitterModule {
 
-  override def singletonStartup(injector: Injector) {
+  override def singletonStartup(injector: Injector): Unit = {
     util.logging.Slf4jBridgeUtility.attemptSlf4jBridgeHandlerInstallation()
   }
 }

@@ -20,7 +20,7 @@ object FinagleMDCInitializer {
    * @note Prefer using [[com.twitter.inject.logging.MDCInitializer.init()]]
    * @see [[com.twitter.inject.logging.MDCInitializer.init()]]
    */
-  def init() {
+  def init(): Unit = {
     MDC.getMDCAdapter // Make sure default MDC static initializer has run
     MDC.mdcAdapter = new FinagleMDCAdapter // Swap in the Finagle adapter
   }

@@ -1,21 +1,21 @@
 package com.twitter.inject.logback
 
-import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.classic.layout.TTLLLayout
 import ch.qos.logback.classic.{BasicConfigurator, Level, LoggerContext}
-import ch.qos.logback.core.util.StatusPrinter
-import ch.qos.logback.core.{LogbackAsyncAppenderBase, TestLogbackAsyncAppender}
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.encoder.LayoutWrappingEncoder
+import ch.qos.logback.core.{ConsoleAppender, LogbackAsyncAppenderBase, TestLogbackAsyncAppender}
 import com.twitter.finagle.http.{Request, Status}
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.{Controller, EmbeddedHttpServer, HttpServer}
-import com.twitter.inject.logback.AppendTestHttpServerFeatureTest._
 import com.twitter.inject.{Logging, Test}
+import java.util.concurrent.LinkedBlockingQueue
 import org.slf4j.LoggerFactory
 import scala.collection.JavaConverters._
 import scala.util.parsing.json.JSON
 
-object AppendTestHttpServerFeatureTest {
-
+private object AppendTestHttpServerFeatureTest {
   class TestConfigurator(
     inMemoryStatsReceiver: InMemoryStatsReceiver,
     asyncAppender: LogbackAsyncAppenderBase
@@ -31,13 +31,10 @@ object AppendTestHttpServerFeatureTest {
       val rootLogger = lc.getLogger("ROOT")
       rootLogger.setLevel(Level.ALL)
       rootLogger.addAppender(asyncAppender)
-
-      StatusPrinter.print(lc)
     }
   }
 
   class AppendTestHttpServer extends HttpServer with Logging {
-
     override protected def configureHttp(router: HttpRouter): Unit = {
       router.add(new Controller {
         get("/log_events") { _: Request =>
@@ -62,7 +59,8 @@ object AppendTestHttpServerFeatureTest {
   }
 }
 
-class AppendTestHttpServerFeatureTest extends Test with LoggingTest {
+class AppendTestHttpServerFeatureTest extends Test {
+  import AppendTestHttpServerFeatureTest._
 
   test("Assert Registry entries correctly added") {
     val server = new EmbeddedHttpServer(
@@ -70,10 +68,9 @@ class AppendTestHttpServerFeatureTest extends Test with LoggingTest {
       disableTestLogging = true
     )
 
-    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     val inMemoryStatsReceiver: InMemoryStatsReceiver = server.inMemoryStatsReceiver
-
-    testWithAsyncAppender(inMemoryStatsReceiver, loggerCtx) { appender: TestLogbackAsyncAppender =>
+    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
+    testWithAppender(inMemoryStatsReceiver, loggerCtx) { appender: TestLogbackAsyncAppender =>
       server.assertHealthy()
 
       val response = server.httpGetAdmin("/admin/registry.json", andExpect = Status.Ok)
@@ -91,14 +88,14 @@ class AppendTestHttpServerFeatureTest extends Test with LoggingTest {
         logback(appender.getName.toLowerCase).asInstanceOf[Map[String, String]]
 
       testAppenderEntry.size should be(6)
-      testAppenderEntry("max_flush_time") should be("0")
+      testAppenderEntry("max_flush_time") should be("5")
       testAppenderEntry("include_caller_data") should be("false")
       testAppenderEntry("max_queue_size") should be("1")
       testAppenderEntry("never_block") should be("false")
       val appenders = appender.iteratorForAppenders().asScala.toSeq
       testAppenderEntry("appenders") should be(appenders.map(_.getName).mkString(","))
       testAppenderEntry("discarding_threshold") should be("2")
-    } {
+
       server.close()
     }
   }
@@ -109,10 +106,9 @@ class AppendTestHttpServerFeatureTest extends Test with LoggingTest {
       disableTestLogging = true
     )
 
-    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     val inMemoryStatsReceiver: InMemoryStatsReceiver = server.inMemoryStatsReceiver
-
-    testWithAsyncAppender(inMemoryStatsReceiver, loggerCtx) { appender: TestLogbackAsyncAppender =>
+    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
+    testWithAppender(inMemoryStatsReceiver, loggerCtx) { appender: TestLogbackAsyncAppender =>
       val appenderStatName = appender.getName.toLowerCase
 
       server.assertHealthy()
@@ -124,12 +120,12 @@ class AppendTestHttpServerFeatureTest extends Test with LoggingTest {
       server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/warn", 0)
       server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/error", 0)
 
-      server.assertGauge(s"logback/appender/$appenderStatName/discard/threshold", 2)
-      server.assertGauge(s"logback/appender/$appenderStatName/max_flush_time", 0)
-      server.assertGauge(s"logback/appender/$appenderStatName/queue_size", 1)
-    } {
-      server.close()
+      server.assertGauge(s"logback/appender/$appenderStatName/discard/threshold", appender.getDiscardingThreshold)
+      server.assertGauge(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
+      server.assertGauge(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
     }
+
+    server.close()
   }
 
   test("Assert ERROR AND WARN events are discarded when neverBlock is true") {
@@ -138,16 +134,15 @@ class AppendTestHttpServerFeatureTest extends Test with LoggingTest {
       disableTestLogging = true
     )
 
-    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     val inMemoryStatsReceiver: InMemoryStatsReceiver = server.inMemoryStatsReceiver
+    val loggerCtx: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     val consoleAppenderQueue = new java.util.concurrent.LinkedBlockingQueue[ILoggingEvent](1)
 
-    testWithAsyncAppender(
+    testWithAppender(
       inMemoryStatsReceiver,
       loggerCtx,
       Some(consoleAppenderQueue),
-      neverBlock = true,
-      stopAsyncWorkerThread = true
+      neverBlock = true
     ) { appender: TestLogbackAsyncAppender =>
       val appenderStatName = appender.getName.toLowerCase
 
@@ -160,14 +155,99 @@ class AppendTestHttpServerFeatureTest extends Test with LoggingTest {
       server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/info", 5)
       server.assertCounter(s"logback/appender/$appenderStatName/events/discarded/trace", 5)
 
-      server.assertGauge(s"logback/appender/$appenderStatName/discard/threshold", 2)
-      server.assertGauge(s"logback/appender/$appenderStatName/max_flush_time", 0)
-      server.assertGauge(s"logback/appender/$appenderStatName/queue_size", 1)
+      server.assertGauge(s"logback/appender/$appenderStatName/discard/threshold", appender.getDiscardingThreshold)
+      server.assertGauge(s"logback/appender/$appenderStatName/max_flush_time", appender.getMaxFlushTime)
+      server.assertGauge(s"logback/appender/$appenderStatName/queue_size", appender.getQueueSize)
 
       // no events make it to the unit test console appender
       consoleAppenderQueue.size() should equal(0)
-    } {
-      server.close()
     }
+
+    server.close()
+  }
+
+  protected def testWithAppender(
+    inMemoryStatsReceiver: InMemoryStatsReceiver,
+    loggerCtx: LoggerContext,
+    consoleAppenderQueueOpt: Option[LinkedBlockingQueue[ILoggingEvent]] = None,
+    neverBlock: Boolean = false
+  )(fn: (TestLogbackAsyncAppender) => Unit): Unit = {
+
+    /* Stop the current LoggerContext */
+    loggerCtx.stop()
+
+    val consoleAppender = getConsoleAppender(loggerCtx, consoleAppenderQueueOpt)
+    val asyncAppender: TestLogbackAsyncAppender =
+      getAsyncAppender(
+        loggerCtx,
+        inMemoryStatsReceiver,
+        consoleAppender,
+        neverBlock
+      )
+
+    consoleAppender.start()
+    asyncAppender.start()
+
+    setupLoggingConfiguration(loggerCtx, asyncAppender, inMemoryStatsReceiver)
+    loggerCtx.start()
+
+    try {
+      fn(asyncAppender)
+    } finally {
+      consoleAppender.stop()
+      asyncAppender.stop()
+      loggerCtx.stop()
+    }
+  }
+
+  private[this] def setupLoggingConfiguration(
+    loggerCtx: LoggerContext,
+    asyncAppender: LogbackAsyncAppenderBase,
+    inMemoryStatsReceiver: InMemoryStatsReceiver
+  ): Unit = {
+    val configurator = new TestConfigurator(inMemoryStatsReceiver, asyncAppender)
+    configurator.configure(loggerCtx)
+  }
+
+  private[this] def getConsoleAppender(
+    loggerCtx: LoggerContext,
+    queueOpt: Option[java.util.concurrent.BlockingQueue[ILoggingEvent]] = None
+  ): ConsoleAppender[ILoggingEvent] = {
+
+    val consoleAppender: ConsoleAppender[ILoggingEvent] = queueOpt match {
+      case Some(queue) =>
+        new TestConsoleAppender(queue)
+      case _ =>
+        new ConsoleAppender()
+    }
+    consoleAppender.setContext(loggerCtx)
+    consoleAppender.setName("console")
+    val encoder = new LayoutWrappingEncoder[ILoggingEvent]
+    encoder.setContext(loggerCtx)
+    val layout = new TTLLLayout
+    layout.setContext(loggerCtx)
+    layout.start()
+    encoder.setLayout(layout)
+    consoleAppender.setEncoder(encoder)
+    consoleAppender
+  }
+
+  private[this] def getAsyncAppender(
+    loggerCtx: LoggerContext,
+    inMemoryStatsReceiver: InMemoryStatsReceiver,
+    consoleAppender: ConsoleAppender[ILoggingEvent],
+    neverBlock: Boolean = false
+  ): TestLogbackAsyncAppender = {
+
+    /* if neverBlock is true, we want to stop the async worker thread for testing */
+    val appender = new TestLogbackAsyncAppender(inMemoryStatsReceiver, stopAsyncWorkerThread = neverBlock)
+    appender.setQueueSize(1)
+    appender.setDiscardingThreshold(appender.getQueueSize * 2)
+    appender.setMaxFlushTime(5) // in millis
+    appender.setNeverBlock(neverBlock)
+    appender.setContext(loggerCtx)
+    appender.setName("TestAsyncAppender")
+    appender.addAppender(consoleAppender)
+    appender
   }
 }

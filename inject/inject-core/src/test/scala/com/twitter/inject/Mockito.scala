@@ -20,7 +20,7 @@ trait Mockito extends org.specs2.mock.Mockito with ScalaTestExpectations with Lo
     meq(manifest[T])
   }
 
-  protected def reset(mocks: AnyRef*) {
+  protected def reset(mocks: AnyRef*): Unit = {
     for (mock <- mocks) {
       trace("Resetting " + mock)
       org.mockito.Mockito.reset(mock)

@@ -7,7 +7,7 @@ import com.twitter.inject.TwitterModule
 
 object AccessLogModule extends TwitterModule {
 
-  override def configure() {
+  override def configure(): Unit = {
     bindSingleton[LogFormatter[Request, Response]].to[CommonLogFormatter]
   }
 }

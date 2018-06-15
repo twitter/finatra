@@ -103,7 +103,7 @@ class FinatraJacksonModule extends TwitterModule {
 
   protected def numbersAsStrings: Boolean = false
 
-  protected def defaultMapperConfiguration(mapper: ObjectMapper) {
+  protected def defaultMapperConfiguration(mapper: ObjectMapper): Unit = {
     /* Serialization Config */
     mapper.setSerializationInclusion(serializationInclusion)
     for ((feature, state) <- serializationConfig) {
@@ -138,7 +138,7 @@ class FinatraJacksonModule extends TwitterModule {
 
   protected def additionalJacksonModules: Seq[JacksonModule] = Seq()
 
-  protected def additionalMapperConfiguration(mapper: ObjectMapper) {}
+  protected def additionalMapperConfiguration(mapper: ObjectMapper): Unit = {}
 
   protected def copy(objectMapper: ObjectMapper with ScalaObjectMapper) = {
     ObjectMapperCopier.copy(objectMapper)

@@ -6,7 +6,7 @@ import org.joda.time.Duration
 
 private[app] object TwitterTypeConvertersModule extends TwitterModule {
 
-  override def configure() {
+  override def configure(): Unit = {
     addTypeConverter[Duration](JodatimeDurationTypeConverter)
     addTypeConverter[TwitterDuration](TwitterDurationTypeConverter)
   }

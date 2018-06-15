@@ -11,7 +11,7 @@ object JsonDiff {
     expectedJson: Any,
     normalizer: JsonNode => JsonNode = null,
     verbose: Boolean = true
-  ) {
+  ): Unit = {
     assertJsonNodesSame(
       jsonDiffResultOpt = JsonDiffUtil.jsonDiff[T](receivedJson, expectedJson, normalizer),
       verbose = verbose

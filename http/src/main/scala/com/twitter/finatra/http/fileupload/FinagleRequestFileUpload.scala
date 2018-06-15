@@ -37,7 +37,7 @@ class FinagleRequestFileUpload extends FileUploadBase {
       None
   }
 
-  override def setFileItemFactory(factory: FileItemFactory) {
+  override def setFileItemFactory(factory: FileItemFactory): Unit = {
     throw new UnsupportedOperationException("FileItemFactory is not supported.")
   }
 

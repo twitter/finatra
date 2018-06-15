@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-18.6.0](https://github.com/twitter/finatra/tree/finatra-18.6.0) (2018-06-14)
+
+### Added
+
 * finatra: Add HTTP route, Thrift method, and Filter information to the Library 
   registry. ``PHAB_ID=D177583``
 

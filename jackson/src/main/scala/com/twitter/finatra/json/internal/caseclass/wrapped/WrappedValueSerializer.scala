@@ -12,7 +12,7 @@ private[finatra] object WrappedValueSerializer
     wrappedValue: WrappedValue[_],
     jgen: JsonGenerator,
     provider: SerializerProvider
-  ) {
+  ): Unit = {
     jgen.writeObject(wrappedValue.onlyValue)
   }
 }
