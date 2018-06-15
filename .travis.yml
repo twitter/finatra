@@ -25,7 +25,6 @@ env:
     - PROJECT=jackson
     - PROJECT=thrift
     - PROJECT=utils
-    # examples
     - PROJECT=benchmarkServer
     - PROJECT=exampleHttpJavaServer
     - PROJECT=exampleInjectJavaServer
