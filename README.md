@@ -15,8 +15,6 @@ and is being actively developed and maintained.
 
 Finatra is a lightweight framework for building fast, testable, scala applications on top of [TwitterServer][twitter-server] and [Finagle][finagle]. Finatra provides an easy-to-use API for creating and [testing](https://twitter.github.io/finatra/user-guide/testing/index.html) [Finagle servers](https://twitter.github.io/finagle/guide/Servers.html) and [apps](https://twitter.github.io/util/docs/#com.twitter.app.App) as well as powerful JSON support, modern logging via [SLF4J][slf4j], [Finagle client](https://twitter.github.io/finagle/guide/Clients.html) utilities, and more.
 
-Adding text to trigger a TravisCI build!
-
 ## Getting involved
 
 * Website: [https://twitter.github.io/finatra/](https://twitter.github.io/finatra/)
