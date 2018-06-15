@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Requests &#8212; Finatra 18.5.0 documentation</title>
+    <title>HTTP Requests &#8212; Finatra 18.6.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.5.0',
+        VERSION:     '18.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.5.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.6.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="HTTP Responses" href="responses.html" />
     <link rel="prev" title="Defining HTTP Controllers" href="controllers.html" />
@@ -73,18 +73,29 @@
             
   <div class="section" id="http-requests">
 <span id="id1"></span><h1>HTTP Requests<a class="headerlink" href="#http-requests" title="Permalink to this headline">¶</a></h1>
-<p>Each route has a callback which is executed when the route matches a request. Callbacks require explicit input types and Finatra will then try to convert the incoming request into the specified input type. Finatra supports two request types: a Finagle <cite>http</cite> Request or a custom <cite>case class</cite> request object.</p>
+<p>Each Finatra <a class="reference external" href="controllers.html">HTTP Controller</a> route has a callback function which is executed
+when the defined route matches an incoming request URI. Callbacks require explicit input types and
+Finatra will try to convert the incoming request into the specified input type. Finatra supports three
+callback function input types: <a class="reference external" href="#finagle-c-t-finagle-http-request">a Finagle HTTP Request</a>, a
+custom <a class="reference external" href="#custom-request-case-class">request case class</a>, or a type parsable by a
+<a class="reference external" href="#message-body-components">message body reader</a>. Each are detailed below.</p>
 <div class="section" id="finagle-c-t-finagle-http-request">
 <h2>Finagle <cite>c.t.finagle.http.Request</cite><a class="headerlink" href="#finagle-c-t-finagle-http-request" title="Permalink to this headline">¶</a></h2>
-<p>This is a <a class="reference external" href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request">c.t.finagle.http.Request</a> which contains common HTTP attributes.</p>
+<p>This is a <a class="reference external" href="https://twitter.github.io/finagle/docs/index.html#com.twitter.finagle.http.Request">c.t.finagle.http.Request</a>
+which contains common HTTP attributes.</p>
 </div>
 <div class="section" id="custom-request-case-class">
 <h2>Custom &#8220;request&#8221; case class<a class="headerlink" href="#custom-request-case-class" title="Permalink to this headline">¶</a></h2>
-<p>Custom &#8220;request&#8221; case classes can be used for declarative parsing of requests with a content-type of <cite>application/json</cite> with support for type conversions, default values, and <a class="reference external" href="../json/validations.html">validations</a>.</p>
-<p>The case class field names should match the request or header parameter name or use the <a class="reference external" href="https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties">&#64;JsonProperty</a> annotation to specify the JSON field name in the case class (see: <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L177">example</a> and <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L140">test case</a>).</p>
-<p>A <a class="reference external" href="https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html">PropertyNamingStrategy</a> can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default, snake_case is
-used (defaults are set in <a class="reference external" href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">FinatraJacksonModule</a>).</p>
-<p>For example, if we have a <cite>POST</cite> endpoint which expects a JSON body with a <cite>Long</cite> <cite>&#8220;id&#8221;</cite> and a <cite>String</cite> <cite>&#8220;name&#8221;</cite>, we could define the following case class and Controller route:</p>
+<p>Custom &#8220;request&#8221; case classes can be used for declarative parsing of requests with a content-type of
+<cite>application/json</cite> with support for type conversions, default values, and <a class="reference external" href="../json/validations.html">validations</a>.</p>
+<p>The case class field names should match the request or header parameter name or use the <a class="reference external" href="https://github.com/FasterXML/jackson-annotations#annotations-for-renaming-properties">&#64;JsonProperty</a>
+annotation to specify the JSON field name in the case class (see: <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/internal/ExampleCaseClasses.scala#L177">example</a>
+and <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/test/scala/com/twitter/finatra/json/tests/FinatraObjectMapperTest.scala#L140">test case</a>).</p>
+<p>A <a class="reference external" href="https://fasterxml.github.io/jackson-databind/javadoc/2.3.0/com/fasterxml/jackson/databind/PropertyNamingStrategy.html">PropertyNamingStrategy</a>
+can be configured to handle common name substitutions (e.g. snake_case or camelCase). By default,
+snake_case is used (defaults are set in <a class="reference external" href="https://github.com/twitter/finatra/tree/master/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">FinatraJacksonModule</a>).</p>
+<p>For example, if we have a <cite>POST</cite> endpoint which expects a JSON body with a <cite>Long</cite> <cite>&#8220;id&#8221;</cite> and a
+<cite>String</cite> <cite>&#8220;name&#8221;</cite>, we could define the following case class and Controller route:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class HiRequest(id: Long, name: String)
 
 ...
@@ -101,7 +112,8 @@ post(&quot;/hi&quot;) { hiRequest: HiRequest =&gt;
 }
 </pre></div>
 </div>
-<p>The incoming request body will be parsed as JSON using the configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a> into the <cite>HiRequest</cite> case class. This route would thus return:</p>
+<p>The incoming request body will be parsed as JSON using the configured <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a>
+into the <cite>HiRequest</cite> case class. This route would thus return:</p>
 <blockquote>
 <div><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -112,8 +124,10 @@ post(&quot;/hi&quot;) { hiRequest: HiRequest =&gt;
 </tbody>
 </table>
 </div></blockquote>
-<p>More examples in the <a class="reference external" href="../json/routing.html#json-integration-with-routing">JSON Integration with Routing</a> section.</p>
-<p>For more information on configuring the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a> see the <a class="reference external" href="../json/index.html">Jackson Integration</a> section.</p>
+<p>More examples in the <a class="reference external" href="../json/routing.html#json-integration-with-routing">JSON Integration with Routing</a>
+section.</p>
+<p>For more information on configuring the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a>
+see the <a class="reference external" href="../json/index.html">Jackson Integration</a> section.</p>
 <div class="section" id="required-fields">
 <h3>Required Fields<a class="headerlink" href="#required-fields" title="Permalink to this headline">¶</a></h3>
 <p><strong>Non-option fields without default values are considered required.</strong></p>
@@ -121,12 +135,14 @@ post(&quot;/hi&quot;) { hiRequest: HiRequest =&gt;
 </div>
 <div class="section" id="field-annotations">
 <h3>Field Annotations<a class="headerlink" href="#field-annotations" title="Permalink to this headline">¶</a></h3>
-<p>Field annotations specify how to parse a case class field member from the <cite>c.t.finagle.http.Request</cite>. Supported annotations:</p>
+<p>Field annotations give signal as to how the framework should parse a case class field member from
+the <cite>c.t.finagle.http.Request</cite>. Supported annotations:</p>
 <ul class="simple">
 <li><a class="reference external" href="#routeparam">&#64;RouteParam</a></li>
 <li><a class="reference external" href="#queryparam">&#64;QueryParam</a></li>
 <li><a class="reference external" href="#formparam">&#64;FormParam</a></li>
 <li><a class="reference external" href="#header">&#64;Header</a></li>
+<li><a class="reference external" href="#inject">&#64;Inject</a></li>
 </ul>
 <hr class="docutils" />
 <div class="section" id="routeparam">
@@ -143,7 +159,8 @@ get(&quot;/foo/:entity/:id&quot;) { request: FromRouteRequest =&gt;
 </pre></div>
 </div>
 <p>Given a request: <code class="docutils literal"><span class="pre">GET</span> <span class="pre">/foo/users/1234</span></code></p>
-<p>Using <cite>FromRouteRequest</cite> as an input to the route callback would parse the string &#8220;users&#8221; into the value of <cite>FromRouteRequest#resource</cite> and the string &#8220;1234&#8221; into the value of <cite>FromRouteRequest#id</cite>.</p>
+<p>Using <cite>FromRouteRequest</cite> as an input to the route callback would parse the string &#8220;users&#8221; into the
+value of <cite>FromRouteRequest#resource</cite> and the string &#8220;1234&#8221; into the value of <cite>FromRouteRequest#id</cite>.</p>
 <p>Thus, this route would respond:</p>
 <blockquote>
 <div><table class="docutils field-list" frame="void" rules="none">
@@ -160,21 +177,28 @@ get(&quot;/foo/:entity/:id&quot;) { request: FromRouteRequest =&gt;
 <hr class="docutils" />
 <div class="section" id="queryparam">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/QueryParam.java">&#64;QueryParam</a><a class="headerlink" href="#queryparam" title="Permalink to this headline">¶</a></h4>
-<p>Read a value from the request query string by a parameter named for the case class field or by the <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> annotation value.</p>
-<p>For example, suppose you want to parse a <cite>GET</cite> request with three query params: <cite>max</cite>, <cite>startDate</cite>, and <cite>verbose</cite>, e.g.,</p>
+<p>Read a value from the request query string by a parameter named for the case class field or by the
+<code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> annotation value.</p>
+<p>For example, suppose you want to parse a <cite>GET</cite> request with three query params: <cite>max</cite>, <cite>startDate</cite>,
+and <cite>verbose</cite>, e.g.,</p>
 <p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/users?max=10&amp;start_date=2014-05-30TZ&amp;verbose=true</span></code></p>
-<p>This can be modeled with the following custom &#8220;request&#8221; case class which also applies <a class="reference external" href="../json/validations.html">validations</a>:</p>
+<p>This can be modeled with the following custom &#8220;request&#8221; case class which also applies
+<a class="reference external" href="../json/validations.html">validations</a>:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class UsersRequest(
   @Max(100) @QueryParam max: Int,
   @PastDate @QueryParam startDate: Option[DateTime],
   @QueryParam verbose: Boolean = false)
 
 get(&quot;/users&quot;) { request: UsersRequest =&gt;
-  ...
+  ???
 }
 </pre></div>
 </div>
-<p>The <cite>max</cite> value will be parsed into an <cite>Int</cite> and <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/validation/validators/MaxValidator.scala#L49">validated to be less than or equal to 100</a>. The <cite>startDate</cite> will be parsed into an <cite>Option[DateTime]</cite> (meaning it could be omitted without error from the query string) and if present will be validated to be a date in the past. Lastly, the <cite>verbose</cite> parameter will be parsed into a <cite>Boolean</cite> type.</p>
+<p>The <cite>max</cite> value will be parsed into an <cite>Int</cite> and <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/validation/validators/MaxValidator.scala#L49">validated to be less than or equal to
+100</a>.
+The <cite>startDate</cite> will be parsed into an <cite>Option[DateTime]</cite> (meaning it could be omitted without error
+from the query string) and if present will be validated to be a date in the past. Lastly, the
+<cite>verbose</cite> parameter will be parsed into a <cite>Boolean</cite> type.</p>
 <p>You can also set the parameter name as a value in the <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> annotation, e.g.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class QueryParamRequest(
   @QueryParam foo: String,
@@ -183,19 +207,23 @@ get(&quot;/users&quot;) { request: UsersRequest =&gt;
 </div>
 <p>Using this case class in a route callback for a request:</p>
 <p><code class="docutils literal"><span class="pre">GET</span> <span class="pre">/?foo=bar&amp;skip=false</span></code></p>
-<p>would parse the string &#8220;bar&#8221; into the value of <cite>QueryParamRequest#foo</cite> and parse the string &#8220;false&#8221; as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
+<p>would parse the string &#8220;bar&#8221; into the value of <cite>QueryParamRequest#foo</cite> and parse the string &#8220;false&#8221;
+as a Boolean into the <cite>QueryParamRequest#isSkipped</cite> field.</p>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithQueryParamSeqString.scala">example</a>.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="formparam">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/FormParam.java">&#64;FormParam</a><a class="headerlink" href="#formparam" title="Permalink to this headline">¶</a></h4>
-<p>Read a value from a form field with the case class field&#8217;s name or as the value specified in the <code class="docutils literal"><span class="pre">&#64;FormParam</span></code> annotation from the request body.</p>
+<p>Read a value from a form field with the case class field&#8217;s name or as the value specified in the
+<code class="docutils literal"><span class="pre">&#64;FormParam</span></code> annotation from the request body.</p>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/FormPostRequest.scala">example</a>.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="header">
 <h4><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/java/com/twitter/finatra/request/Header.java">&#64;Header</a><a class="headerlink" href="#header" title="Permalink to this headline">¶</a></h4>
-<p>Read a header value specified by the case class field name or by the <code class="docutils literal"><span class="pre">&#64;Header</span></code> annotation value. You can use a Scala <a class="reference external" href="http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">&#8220;back-quote&#8221; literal</a> for the field name when special characters are involved.</p>
+<p>Read a header value specified by the case class field name or by the <code class="docutils literal"><span class="pre">&#64;Header</span></code> annotation value.
+You can use a Scala <a class="reference external" href="http://www.scala-lang.org/files/archive/spec/2.11/01-lexical-syntax.html">&#8220;back-quote&#8221; literal</a>
+for the field name when special characters are involved.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Header `user-agent`: String
 </pre></div>
 </div>
@@ -204,45 +232,83 @@ get(&quot;/users&quot;) { request: UsersRequest =&gt;
 </pre></div>
 </div>
 <p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/CreateUserRequest.scala">example</a>.</p>
-<div class="admonition-important admonition">
+<div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p>Route, query, and form params are all stored in the &#8220;params&#8221; field of the incoming Finagle http request. As such, you should ensure that <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code> names do not collide with
-<code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> names. Otherwise, an <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> could end up parsing an <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code> or <code class="docutils literal"><span class="pre">&#64;FormParam</span></code> field.</p>
-<p>Also note that request parameters and headers are accessed <strong>case-insensitively</strong>. Thus, the annotated fields:</p>
+<p>Route, query, and form params are all stored in the &#8220;params&#8221; field of the incoming Finagle http
+request. As such, you should ensure that <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code> names do not collide with <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code>
+names. Otherwise, an <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code> could end up parsing an <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code> or <code class="docutils literal"><span class="pre">&#64;FormParam</span></code>
+field.</p>
+<p>Also note that request parameters and headers are accessed <strong>case-insensitively</strong>. Thus, the
+annotated fields:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>@Header(&quot;Accept-Charset&quot;) acceptCharset: String
 @Header(&quot;accept-charset&quot;) acceptCharset: String
 @Header(&quot;aCcEpT-cHaRsEt&quot;) acceptCharset: String
 @Header `accept-charset`: String
 </pre></div>
 </div>
-<p class="last">would all retrieve <strong>the same value</strong> from the request headers map. The same is true for <code class="docutils literal"><span class="pre">&#64;RouteParam</span></code>, <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code>, and <code class="docutils literal"><span class="pre">&#64;FormParam</span></code>.</p>
+<p class="last">would all retrieve <strong>the same value</strong> from the request headers map. The same is true for
+<code class="docutils literal"><span class="pre">&#64;RouteParam</span></code>, <code class="docutils literal"><span class="pre">&#64;QueryParam</span></code>, and <code class="docutils literal"><span class="pre">&#64;FormParam</span></code>.</p>
+</div>
 </div>
 <hr class="docutils" />
-<ul>
-<li><p class="first"><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala">&#64;Inject</a> - can be used to inject any <a class="reference external" href="https://github.com/google/guice">Guice</a> managed class into your case class. However, it is not necessary for &#8220;injecting&#8221; the underlying Finagle <cite>http</cite> Request into your case class. To access the underlying Finagle <cite>http</cite> Request in your custom case class, simply include a field of type <cite>c.t.finagle.http.Request</cite>, for example:</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class CaseClassWithRequestField(
+<div class="section" id="inject">
+<h4>&#64;Inject<a class="headerlink" href="#inject" title="Permalink to this headline">¶</a></h4>
+<p>Can be used to inject any <a class="reference external" href="https://github.com/google/guice">Guice</a> managed class into your case
+class.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class InjectedFieldCaseClass(
+  @Inject defaultOptString: Option[String],
+  @Inject foo Foo)
+</pre></div>
+</div>
+<p>Note, however, it is not necessary to &#8220;inject&#8221; the underlying Finagle <cite>http</cite> Request into your
+case class. To access the underlying Finagle HTTP Request in your custom case class, simply
+include a field of type <cite>c.t.finagle.http.Request</cite> and the framework will properly inject the
+incoming request into your custom case class, for example:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+
+case class CaseClassWithRequestField(
  @Header(&quot;user-agent&quot;) agent: String,
  @QueryParam verbose: Boolean = false,
  request: Request)
 </pre></div>
 </div>
-</li>
-</ul>
+<p>Code <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/test/scala/com/twitter/finatra/http/tests/integration/doeverything/main/domain/RequestWithInjections.scala">example</a>.</p>
+<hr class="docutils" />
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p>HTTP requests with a content-type of <cite>application/json</cite> sent to routes with a custom request case class callback input type will <strong>always trigger</strong> the parsing of the request body as well-formed JSON in attempt to convert the JSON into the request case class.</p>
-<p class="last">This behavior can be disabled by annotating the case class with <code class="docutils literal"><span class="pre">&#64;JsonIgnoreBody</span></code> leaving the raw request body accessible by simply adding a member of type <cite>c.t.finagle.http.Request</cite> as mentioned above.</p>
+<p>HTTP requests with a content-type of <cite>application/json</cite> sent to routes with a custom request
+case class callback input type will <strong>always trigger</strong> the parsing of the request body as
+well-formed JSON in attempt to convert the JSON into the request case class.</p>
+<p class="last">This behavior can be disabled by annotating the case class with <code class="docutils literal"><span class="pre">&#64;JsonIgnoreBody</span></code> leaving the
+raw request body accessible by simply adding a member of type <cite>c.t.finagle.http.Request</cite> as
+mentioned above.</p>
 </div>
-<p>For more specifics on how JSON parsing integrates with routing see the <a class="reference external" href="../json/routing.html">JSON Integration with Routing</a> in the <a class="reference external" href="../json/index.html">JSON</a> documentation.</p>
+<p>For more specifics on how JSON parsing integrates with routing see the
+<a class="reference external" href="../json/routing.html">JSON Integration with Routing</a> in the <a class="reference external" href="../json/index.html">JSON</a> documentation.</p>
 </div>
 </div>
+</div>
+<div class="section" id="message-body-components">
+<h2>Message Body Components<a class="headerlink" href="#message-body-components" title="Permalink to this headline">¶</a></h2>
+<p>Finatra also provides a way to specify how to parse the request into a callback function input via a
+<a class="reference external" href="message_body.html#message-body-readers">Message Body Reader</a>. Similar to <a class="reference external" href="#custom-request-case-class">custom request case
+classes</a> (which are implemented with a framework
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/internal/marshalling/DefaultMessageBodyReaderImpl.scala">default message body reader</a>),
+these objects allow for customized parsing the full incoming <cite>c.t.finagle.http.Request</cite> into a
+specific type. For more information, see the <a class="reference external" href="message_body.html#message-body-readers">Message Body Readers</a>
+section.</p>
 </div>
 <div class="section" id="request-forwarding">
 <h2>Request Forwarding<a class="headerlink" href="#request-forwarding" title="Permalink to this headline">¶</a></h2>
-<p>You can forward a request to another controller. This is similar to other frameworks where forwarding will re-use the same request as opposed to issuing a redirect which will force a client to issue a new request.</p>
+<p>You can forward a request to another controller. This is similar to other frameworks where
+forwarding will re-use the same request as opposed to issuing a redirect which will force a client
+to issue a new request.</p>
 <p>To forward, you need to include a <cite>c.t.finatra.http.request.HttpForward</cite> instance in your controller,
 e.g.,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyController @Inject()(
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.http.Request
+import com.twitter.finatra.http.Controller
+
+class MyController @Inject()(
   forward: HttpForward)
   extends Controller {
 </pre></div>
@@ -253,17 +319,21 @@ e.g.,</p>
 }
 </pre></div>
 </div>
-<p>Forwarded requests will bypass the server defined filter chain (as the requests have already passed through the filter chain) but will still pass through controller defined filters.</p>
+<p>Forwarded requests will bypass the server defined filter chain (as the requests have already passed
+through the filter chain) but will still pass through controller defined filters.</p>
 <p>For example, if a route is defined:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>filter[MyAwesomeFilter].get(&quot;/bar&quot;) { request: Request =&gt;
   &quot;Hello, world.&quot;
 }
 </pre></div>
 </div>
-<p>When another controller forwards to this route, <cite>MyAwesomeFilter</cite> will be executed on the forwarded request.</p>
+<p>When another controller forwards to this route, <cite>MyAwesomeFilter</cite> will be executed on the forwarded
+request.</p>
 <div class="admonition important">
 <p class="first admonition-title">Important</p>
-<p>By default Finatra sets a maximum forward depth of 5. This value is configurable by setting the <cite>HttpRouter#withMaxRequestForwardingDepth</cite>. This helps prevent a given request from being forwarded in an infinite loop.</p>
+<p>By default Finatra sets a maximum forward depth of 5. This value is configurable by setting the
+<cite>HttpRouter#withMaxRequestForwardingDepth</cite>. This helps prevent a given request from being
+forwarded in an infinite loop.</p>
 <p>In the example below, the server has been setup to allow a request to forward a maximum of 10 times.</p>
 <div class="code scala last highlight-text"><div class="highlight"><pre><span></span>override def configureHttp(router: HttpRouter) {
   router
@@ -276,7 +346,8 @@ e.g.,</p>
 </div>
 <div class="section" id="multipart-requests">
 <h2>Multipart Requests<a class="headerlink" href="#multipart-requests" title="Permalink to this headline">¶</a></h2>
-<p>Finatra has support for multi-part requests. Here&#8217;s an example of a multi-part <cite>POST</cite> controller route definition that simply returns all of the keys in the multi-part request:</p>
+<p>Finatra has support for multi-part requests. Here&#8217;s an example of a multi-part <cite>POST</cite> controller
+route definition that simply returns all of the keys in the multi-part request:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>post(&quot;/multipartParamsEcho&quot;) { request: Request =&gt;
   RequestUtils.multiParams(request).keys
 }
@@ -304,10 +375,15 @@ e.g.,</p>
 <div class="section" id="json-patch-requests">
 <h2>JSON Patch Requests<a class="headerlink" href="#json-patch-requests" title="Permalink to this headline">¶</a></h2>
 <p>Finatra has support for JSON Patch requests, see <a class="reference external" href="https://tools.ietf.org/html/rfc6902">JSON Patch definition</a>.</p>
-<p>To handle JSON Patch requests, you will first need to register the <cite>JsonPatchMessageBodyReader</cite> and the <cite>JsonPatchExceptionMapper</cite> in the server. The <cite>JsonPatchMessageBodyReader</cite> is for parsing JSON Patch requests as type <cite>c.t.finatra.http.jsonpatch.JsonPatch</cite>,
-and <cite>JsonPatchExceptionMapper</cite> can convert JsonPatchExceptions to HTTP responses.</p>
+<p>To handle JSON Patch requests, you will first need to register the <cite>JsonPatchMessageBodyReader</cite> and
+the <cite>JsonPatchExceptionMapper</cite> in the server. The <cite>JsonPatchMessageBodyReader</cite> is for parsing JSON
+Patch requests as type <cite>c.t.finatra.http.jsonpatch.JsonPatch</cite>, and <cite>JsonPatchExceptionMapper</cite> can
+convert JsonPatchExceptions to HTTP responses.</p>
 <p>See <a class="reference external" href="exceptions.html">Add an ExceptionMapper</a> for more information on exception mappers.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleServer extends HttpServer {
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.HttpServer
+import com.twitter.finatra.http.routing.HttpRouter
+
+class ExampleServer extends HttpServer {
 
  override def configureHttp(router: HttpRouter): Unit = {
    router
@@ -318,16 +394,19 @@ and <cite>JsonPatchExceptionMapper</cite> can convert JsonPatchExceptions to HTT
 }
 </pre></div>
 </div>
-<p>Next, you should include a <cite>c.t.finatra.http.jsonpatch.JsonPatchOperator</cite> instance in your controller, which provides <cite>JsonPatchOperator#toJsonNode</cite> conversions and support for all JSON Patch operations.</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>class MyController @Inject()(
+<p>Next, you should include a <cite>c.t.finatra.http.jsonpatch.JsonPatchOperator</cite> instance in your controller,
+which provides <cite>JsonPatchOperator#toJsonNode</cite> conversions and support for all JSON Patch operations.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.http.Controller
+
+class MyController @Inject()(
   jsonPatchOperator: JsonPatchOperator
 ) extends Controller {
-  ...
-
+  ???
 }
 </pre></div>
 </div>
-<p>After the target data has been converted to a JsonNode, just call <cite>JsonPatchUtility.operate</cite> to apply JSON Patch operations to the target.</p>
+<p>After the target data has been converted to a JsonNode, just call <cite>JsonPatchUtility.operate</cite> to apply
+JSON Patch operations to the target.</p>
 <p>For example:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>patch(&quot;/jsonPatch&quot;) { jsonPatch: JsonPatch =&gt;
   val testCase = ExampleCaseClass(&quot;world&quot;)
@@ -398,10 +477,12 @@ and <cite>JsonPatchExceptionMapper</cite> can convert JsonPatchExceptions to HTT
 <li><a class="reference internal" href="#queryparam">&#64;QueryParam</a></li>
 <li><a class="reference internal" href="#formparam">&#64;FormParam</a></li>
 <li><a class="reference internal" href="#header">&#64;Header</a></li>
+<li><a class="reference internal" href="#inject">&#64;Inject</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#message-body-components">Message Body Components</a></li>
 <li><a class="reference internal" href="#request-forwarding">Request Forwarding</a></li>
 <li><a class="reference internal" href="#multipart-requests">Multipart Requests</a></li>
 <li><a class="reference internal" href="#json-patch-requests">JSON Patch Requests</a></li>

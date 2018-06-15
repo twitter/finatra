@@ -2196,7 +2196,7 @@ If you think you need this in your main server you are most likely doing somethi
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">libraryName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
@@ -2525,6 +2525,22 @@ If you think you need this in your main server you are most likely doing somethi
       <p class="shortcomment cmt">ONLY INTENDED FOR USE IN TESTING.</p><div class="fullcomment"><div class="comment cmt"><p>ONLY INTENDED FOR USE IN TESTING.</p><p>Override modules which redefine production bindings (only use overrideModules during testing)
 If you think you need this in your main server you are most likely doing something incorrectly.
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd></dl></div>
+    </li><li name="com.twitter.app.App#parseArgs" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="parseArgs(args:Array[String]):Unit"></a><a id="parseArgs(Array[String]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServer.html#parseArgs(args:Array[String]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parseArgs</span><span class="params">(<span name="args">args: <span class="extype" name="scala.Array">Array</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
     </li><li name="com.twitter.finatra.http.HttpServer#postInjectorStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postInjectorStartup():Unit"></a>
       <span class="permalink">
@@ -2855,6 +2871,22 @@ Set to true if you wish to stream parse requests using request.reader.read
 </p><div class="fullcomment"><div class="comment cmt"><p>If false, the underlying Netty pipeline collects HttpChunks into the body of each Request
 Set to true if you wish to stream parse requests using request.reader.read
 </p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
+    </li><li name="com.twitter.server.TwitterServer#suppressGracefulShutdownErrors" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="suppressGracefulShutdownErrors:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/HttpServer.html#suppressGracefulShutdownErrors:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">suppressGracefulShutdownErrors</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TwitterServer → App</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">

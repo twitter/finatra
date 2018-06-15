@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Custom Logback AsyncAppender &#8212; Finatra 18.6.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '18.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="top" title="Finatra 18.6.0 documentation" href="../../index.html" />
+    <link rel="up" title="User’s Guide" href="../index.html" />
+    <link rel="next" title="Creating an injectable util-app App" href="../app/index.html" />
+    <link rel="prev" title="Logback" href="logback.html" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-39101739-4', 'twitter.github.io');
+    ga('send', 'pageview');
+
+  </script>
+
+  </head>
+  <body role="document">
+  
+  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../app/index.html" title="Creating an injectable util-app App"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="logback.html" title="Logback"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Finatra</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">User&#8217;s Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="custom-logback-asyncappender">
+<span id="asyncappender"></span><h1>Custom Logback AsyncAppender<a class="headerlink" href="#custom-logback-asyncappender" title="Permalink to this headline">¶</a></h1>
+<p>Finatra provides a custom <a class="reference external" href="https://logback.qos.ch/">Logback</a> <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-logback/src/main/scala/com/twitter/inject/logback/AsyncAppender.scala">AsyncAppender</a>
+in <cite>inject-logback</cite> to provide metrics about the underlying queue and discarded log events.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>To use the Finatra <cite>AsyncAppender</cite> first define all appenders that will log (i.e., Console or
+RollingFile appenders) and wrap them in the custom <cite>AsyncAppender</cite>. For more guidance, see the <a class="reference external" href="https://logback.qos.ch/documentation.html">Logback
+documentation</a>. There are also <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/examples">examples</a> that use <cite>logback.xml</cite> files.</p>
+</div>
+<div class="section" id="metrics">
+<h2>Metrics<a class="headerlink" href="#metrics" title="Permalink to this headline">¶</a></h2>
+<p>This <a class="reference external" href="https://github.com/twitter/finatra/tree/develop/inject/inject-logback/src/main/scala/com/twitter/inject/logback/AsyncAppender.scala">AsyncAppender</a> adds four gauges to track values at a
+given point in time and counters to keep track of dropped Logback events <strong>per</strong> AsyncAppender. The
+gauges track:</p>
+<ul class="simple">
+<li>Current queue size</li>
+<li><a class="reference external" href="https://logback.qos.ch/manual/appenders.html#asyncDiscardingThreshold">Discarding threshold</a></li>
+<li><a class="reference external" href="https://logback.qos.ch/manual/appenders.html#asyncMaxFlushTime">Max flush time</a></li>
+<li><a class="reference external" href="https://logback.qos.ch/manual/appenders.html#asyncQueueSize">Maximum queue size</a></li>
+</ul>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;logback/appender/async-service/current_queue_size&quot;</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="nt">&quot;logback/appender/async-service/discard/threshold&quot;</span> <span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+  <span class="nt">&quot;logback/appender/async-service/max_flush_time&quot;</span> <span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+  <span class="nt">&quot;logback/appender/async-service/queue_size&quot;</span> <span class="p">:</span> <span class="mf">256.0</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The counters track the number of discarded events by log level. The appender follows the standard
+Logback AsyncAppender functionality for discarding events with the only addition being the
+introduction of metrics.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">All the appender metrics are of Debug <a class="reference external" href="https://twitter.github.io/util/guide/util-stats/basics.html#verbosity-levels">verbosity</a>
+and thus must explicitly be enabled. See the <a class="reference external" href="#enabling-metrics">next</a> section for information
+on enabling the custom Logback AsyncAppender metrics.</p>
+</div>
+</div>
+<div class="section" id="enabling-metrics">
+<h2>Enabling Metrics<a class="headerlink" href="#enabling-metrics" title="Permalink to this headline">¶</a></h2>
+<p>Enabling the custom Logback AsyncAppender metrics requires changing the <a class="reference external" href="https://twitter.github.io/util/guide/util-stats/basics.html#verbosity-levels">verbosity</a> of the metrics via a Finagle <a class="reference external" href="https://twitter.github.io/finagle/guide/Configuration.html">Tunable</a>.</p>
+<p>Users need to create a JSON file and place it in the <cite>src/main/resources</cite> folder in
+<cite>com/twitter/tunables/finagle/instances.json</cite> to whitelist the Logback metrics.
+To whitelist all Logback metrics the JSON file could contain the following:</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nt">&quot;tunables&quot;</span><span class="p">:</span>
+  <span class="p">[</span>
+     <span class="p">{</span>
+        <span class="nt">&quot;id&quot;</span> <span class="p">:</span> <span class="s2">&quot;com.twitter.finagle.stats.verbose&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;value&quot;</span> <span class="p">:</span> <span class="s2">&quot;logback/*&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;java.lang.String&quot;</span>
+     <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="registry">
+<h2>Registry<a class="headerlink" href="#registry" title="Permalink to this headline">¶</a></h2>
+<p>The configuration of each AsyncAppender will be added to the registry such that it can viewed
+without accessing the statically defined configuration. Different AsyncAppenders will registered
+in the registry by their defined name.</p>
+<div class="highlight-json"><div class="highlight"><pre><span></span>&quot;library&quot; : {
+  &quot;logback&quot; : {
+    &quot;async-service&quot; : {
+      &quot;never_block&quot; : &quot;false&quot;,
+      &quot;discarding_threshold&quot; : &quot;20&quot;,
+      &quot;include_caller_data&quot; : &quot;false&quot;,
+      &quot;max_flush_time&quot; : &quot;0&quot;,
+      &quot;max_queue_size&quot; : &quot;256&quot;,
+      &quot;appenders&quot;: &quot;console&quot;
+    }
+  },
+  ...
+}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/finatra_logo.png" alt="Logo"/>
+            </a></p><p>
+  <a href="https://github.com/twitter/finatra">Finatra</a> is a Scala services framework built on top of <a href="https://twitter.github.io/twitter-server/">TwitterServer</a> and <a href="https://twitter.github.io/finagle/">Finagle</a>.
+</p>
+
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="https://twitter.github.io/finatra/user-guide">User's&nbsp;Guide</a></li>
+  <li><a href="https://finagle.github.io/blog/">Finagle&nbsp;Blog</a></li>
+  <li><a href="https://github.com/twitter/finatra">Finatra&nbsp;on&nbsp;Github</a></li>
+  <li><a href="https://github.com/twitter/finatra/issues">Github&nbsp;Issues</a></li>
+</ul>
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Custom Logback AsyncAppender</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#metrics">Metrics</a></li>
+<li><a class="reference internal" href="#enabling-metrics">Enabling Metrics</a></li>
+<li><a class="reference internal" href="#registry">Registry</a></li>
+</ul>
+</li>
+</ul>
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">User&#8217;s Guide</a><ul>
+      <li>Previous: <a href="logback.html" title="previous chapter">Logback</a></li>
+      <li>Next: <a href="../app/index.html" title="next chapter">Creating an injectable <cite>util-app App</cite></a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Search the contents of this site.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  
+    <div class="github-fork-ribbon-wrapper right fixed" style="width: 150px;height: 150px;position: fixed;overflow: hidden;top: 0;z-index: 9999;pointer-events: none;right: 0;"><div class="github-fork-ribbon" style="position: absolute;padding: 2px 0;background-color: #900;background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));-webkit-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);-moz-box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.5);z-index: 9999;pointer-events: auto;top: 42px;right: -43px;-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);-ms-transform: rotate(45deg);-o-transform: rotate(45deg);transform: rotate(45deg);"><a target="_blank" href="https://github.com/twitter/finatra" style="font: 700 13px &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif;color: #fff;text-decoration: none;text-shadow: 0 -1px rgba(0, 0, 0, 0.5);text-align: center;width: 200px;line-height: 20px;display: inline-block;padding: 2px 0;border-width: 1px 0;border-style: dotted;border-color: rgba(255, 255, 255, 0.7);">Fork me on GitHub</a></div></div>
+  
+
+  <div class="footer">
+    &copy; Copyright 2013-2018 Twitter, Inc.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
+  
+  </body>
+</html>

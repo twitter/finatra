@@ -219,16 +219,16 @@
                         <a href="AccessLoggingFilter.html" title="Provides a standard &quot;Access Log&quot; -- a list of all requests through this Filter.">AccessLoggingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="CommonFilters.html" title="A typical collection of filters for a Finatra Http service."></a>
-                        <a href="CommonFilters.html" title="A typical collection of filters for a Finatra Http service.">CommonFilters</a>
+                        <a class="class" href="CommonFilters.html" title="A typical collection of Filters for HTTP services."></a>
+                        <a href="CommonFilters.html" title="A typical collection of Filters for HTTP services.">CommonFilters</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="ExceptionMappingFilter.html" title="Filter which converts exceptions into HTTP responses."></a>
                         <a href="ExceptionMappingFilter.html" title="Filter which converts exceptions into HTTP responses.">ExceptionMappingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="HttpNackFilter.html" title="Finatra's exception handling/mapping conflicts with Finagle's internal signaling mechanisms."></a>
-                        <a href="HttpNackFilter.html" title="Finatra's exception handling/mapping conflicts with Finagle's internal signaling mechanisms.">HttpNackFilter</a>
+                        <a class="class" href="HttpNackFilter.html" title="This Filter converts Finagle nacks into HttpNackExceptions to be handled by a registered ExceptionMapper[HttpNackException]."></a>
+                        <a href="HttpNackFilter.html" title="This Filter converts Finagle nacks into HttpNackExceptions to be handled by a registered ExceptionMapper[HttpNackException].">HttpNackFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="HttpResponseFilter.html" title="HttpResponseFilter does the following: - sets the 'Server' and 'Date' response headers - turns a 'partial' Location header into a full URL"></a>
@@ -458,17 +458,18 @@ that writes to a specific file (usually named, <code>access.log</code>).
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="A typical collection of filters for a Finatra Http service." href="CommonFilters.html"><span class="name">CommonFilters</span></a><span class="result"> extends <a href="../../filters/MergedFilter.html" class="extype" name="com.twitter.finatra.filters.MergedFilter">MergedFilter</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
+        <a title="A typical collection of Filters for HTTP services." href="CommonFilters.html"><span class="name">CommonFilters</span></a><span class="result"> extends <a href="../../filters/MergedFilter.html" class="extype" name="com.twitter.finatra.filters.MergedFilter">MergedFilter</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
       </span>
       
-      <p class="shortcomment cmt">A typical collection of filters for a Finatra Http service.</p><div class="fullcomment"><div class="comment cmt"><p>A typical collection of filters for a Finatra Http service. Ordering of
-filters is important.</p><p>HttpNackFilter converts Finagle's nacks into HttpExceptions. This must come
-below the ExceptionMappingFilter or else that will convert them to generic
-500s.
+      <p class="shortcomment cmt">A typical collection of Filters for HTTP services.</p><div class="fullcomment"><div class="comment cmt"><p>A typical collection of Filters for HTTP services. Ordering of Filters is important.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p><a href="HttpNackFilter.html" class="extype" name="com.twitter.finatra.http.filters.HttpNackFilter">HttpNackFilter</a> converts Finagle's nacks into <code>HttpNackExceptions</code>. This Filter MUST
+     come &quot;below&quot; the <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.http.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> otherwise the <code>HttpNackExceptions</code> will not be
+     properly converted into a meaningful HTTP response.</p></span>, <span class="cmt"><p>Filter ordering is determined by the implementation of <span class="extype" name="MergedFilter">MergedFilter</span> and can be
+      read as Requests enter the top Filter and progress down, Responses traverse in the
+      opposite manner from the bottom up.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.filters.ExceptionMappingFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ExceptionMappingFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]"></a><a id="ExceptionMappingFilter[R&lt;:Request]:ExceptionMappingFilter[R]"></a>
       <span class="permalink">
@@ -502,18 +503,17 @@ NOTE: Should be as close to the start of the filter chain as possible.
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="Finatra's exception handling/mapping conflicts with Finagle's internal signaling mechanisms." href="HttpNackFilter.html"><span class="name">HttpNackFilter</span></a><span class="tparams">[<span name="R">R &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.HttpNackFilter.R">R</span>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
+        <a title="This Filter converts Finagle nacks into HttpNackExceptions to be handled by a registered ExceptionMapper[HttpNackException]." href="HttpNackFilter.html"><span class="name">HttpNackFilter</span></a><span class="tparams">[<span name="R">R &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Request.html#com.twitter.finagle.http.Request" class="extype" name="com.twitter.finagle.http.Request">Request</a></span>]</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SimpleFilter.html#com.twitter.finagle.SimpleFilter" class="extype" name="com.twitter.finagle.SimpleFilter">SimpleFilter</a>[<span class="extype" name="com.twitter.finatra.http.filters.HttpNackFilter.R">R</span>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/Response.html#com.twitter.finagle.http.Response" class="extype" name="com.twitter.finagle.http.Response">Response</a>]</span>
       </span>
       
-      <p class="shortcomment cmt">Finatra's exception handling/mapping conflicts with Finagle's internal
-signaling mechanisms.</p><div class="fullcomment"><div class="comment cmt"><p>Finatra's exception handling/mapping conflicts with Finagle's internal
-signaling mechanisms. This filter converts Finagle nack exceptions into
-Finatra's HttpExceptions which can be handled appropriately by the
-ExceptionMapper
+      <p class="shortcomment cmt">This Filter converts Finagle nacks into <span class="extype" name="HttpNackException">HttpNackException</span>s to be handled by
+a registered <code>ExceptionMapper[HttpNackException]</code>.</p><div class="fullcomment"><div class="comment cmt"><p>This Filter converts Finagle nacks into <span class="extype" name="HttpNackException">HttpNackException</span>s to be handled by
+a registered <code>ExceptionMapper[HttpNackException]</code>. A &quot;nack&quot; is a Negative ACKnowledgement.
+Responding with a nack is one way a service may exert back pressure.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl></div>
+        </dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/guide/Glossary.html?highlight=nack" target="_blank">Finagle NACK</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/http/filter/HttpNackFilter$.html" class="extype" name="com.twitter.finagle.http.filter.HttpNackFilter">Finagle HttpNackFilter</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.http.internal.exceptions.HttpNackExceptionMapper">com.twitter.finatra.http.internal.exceptions.HttpNackExceptionMapper</span></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.http.filters.HttpResponseFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="HttpResponseFilter[R&lt;:com.twitter.finagle.http.Request]extendsSimpleFilter[R,com.twitter.finagle.http.Response]"></a><a id="HttpResponseFilter[R&lt;:Request]:HttpResponseFilter[R]"></a>
       <span class="permalink">

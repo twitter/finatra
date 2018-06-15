@@ -155,16 +155,16 @@
                         <a href="AccessLoggingFilter.html" title="Provides a standard &quot;Access Log&quot; -- a list of all requests through this Filter.">AccessLoggingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title="A typical collection of filters for a Finatra Http service."></a>
-                        <a href="" title="A typical collection of filters for a Finatra Http service.">CommonFilters</a>
+                        <a class="class" href="" title="A typical collection of Filters for HTTP services."></a>
+                        <a href="" title="A typical collection of Filters for HTTP services.">CommonFilters</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="ExceptionMappingFilter.html" title="Filter which converts exceptions into HTTP responses."></a>
                         <a href="ExceptionMappingFilter.html" title="Filter which converts exceptions into HTTP responses.">ExceptionMappingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="HttpNackFilter.html" title="Finatra's exception handling/mapping conflicts with Finagle's internal signaling mechanisms."></a>
-                        <a href="HttpNackFilter.html" title="Finatra's exception handling/mapping conflicts with Finagle's internal signaling mechanisms.">HttpNackFilter</a>
+                        <a class="class" href="HttpNackFilter.html" title="This Filter converts Finagle nacks into HttpNackExceptions to be handled by a registered ExceptionMapper[HttpNackException]."></a>
+                        <a href="HttpNackFilter.html" title="This Filter converts Finagle nacks into HttpNackExceptions to be handled by a registered ExceptionMapper[HttpNackException].">HttpNackFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="HttpResponseFilter.html" title="HttpResponseFilter does the following: - sets the 'Server' and 'Date' response headers - turns a 'partial' Location header into a full URL"></a>
@@ -209,14 +209,15 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A typical collection of filters for a Finatra Http service. Ordering of
-filters is important.</p><p>HttpNackFilter converts Finagle's nacks into HttpExceptions. This must come
-below the ExceptionMappingFilter or else that will convert them to generic
-500s.
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A typical collection of Filters for HTTP services. Ordering of Filters is important.
 </p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl><div class="toggleContainer block">
+        </dd><dt>Note</dt><dd><span class="cmt"><p><a href="HttpNackFilter.html" class="extype" name="com.twitter.finatra.http.filters.HttpNackFilter">HttpNackFilter</a> converts Finagle's nacks into <code>HttpNackExceptions</code>. This Filter MUST
+     come &quot;below&quot; the <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.http.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> otherwise the <code>HttpNackExceptions</code> will not be
+     properly converted into a meaningful HTTP response.</p></span>, <span class="cmt"><p>Filter ordering is determined by the implementation of <span class="extype" name="MergedFilter">MergedFilter</span> and can be
+      read as Requests enter the top Filter and progress down, Responses traverse in the
+      opposite manner from the bottom up.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -676,7 +677,7 @@ below the ExceptionMappingFilter or else that will convert them to generic
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="scala.Function2#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.filters.MergedFilter#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/http/filters/CommonFilters.html#toString():String" title="Permalink">
@@ -688,10 +689,10 @@ below the ExceptionMappingFilter or else that will convert them to generic
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Function2 → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../filters/MergedFilter.html" class="extype" name="com.twitter.finatra.filters.MergedFilter">MergedFilter</a> → Filter → Function2 → AnyRef → Any</dd></dl></div>
     </li><li name="scala.Function2#tupled" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="tupled:((T1,T2))=&gt;R"></a><a id="tupled:((Request,Service[Request,Response]))⇒Future[Response]"></a>
       <span class="permalink">
