@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+* inject-utils: Add 'toLoggable' implicit from Array[Byte] to String. ``PHAB_ID=D182262``
+
 ### Changed
 
 ### Fixed
@@ -16,7 +18,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
-* finatra: Add HTTP route, Thrift method, and Filter information to the Library 
+* finatra: Add HTTP route, Thrift method, and Filter information to the Library
   registry. ``PHAB_ID=D177583``
 
 * finatra-inject/inject-logback: Add an `c.t.inject.logback.AsyncAppender` to
