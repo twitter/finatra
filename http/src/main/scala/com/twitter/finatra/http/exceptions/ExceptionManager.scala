@@ -13,6 +13,7 @@ import javax.inject.Singleton
 import net.codingwell.scalaguice.typeLiteral
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
+import scala.util.control.NonFatal
 
 /**
  * A class to register [[com.twitter.finatra.http.exceptions.ExceptionMapper]]s
@@ -89,7 +90,13 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
    */
   def toResponse(request: Request, throwable: Throwable): Response = {
     val mapper = getMapper(throwable.getClass)
-    val response = mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
+    val response =
+      try {
+        mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
+      } catch {
+        case NonFatal(t) if t != throwable =>
+          toResponse(request, t)
+      }
     RouteInfo(request).foreach { info =>
       statException(info, request, throwable, response)
     }

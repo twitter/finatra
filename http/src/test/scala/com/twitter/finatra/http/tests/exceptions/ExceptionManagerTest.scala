@@ -35,6 +35,7 @@ class ExceptionManagerTest extends Test {
   exceptionManager.add[UnauthorizedException1Mapper]
   exceptionManager.add[FirstExceptionMapper]
   exceptionManager.add[SecondExceptionMapper]
+  exceptionManager.add[RaiseInnerExceptionMapper]
 
   val exceptionMapperCollection = new ExceptionMapperCollection {
     add[TestRootExceptionMapper]
@@ -43,6 +44,7 @@ class ExceptionManagerTest extends Test {
     add[UnauthorizedException1Mapper]
     add[FirstExceptionMapper]
     add[SecondExceptionMapper]
+    add[RaiseInnerExceptionMapper]
   }
   collectionExceptionManager
     .add(exceptionMapperCollection)
@@ -88,6 +90,14 @@ class ExceptionManagerTest extends Test {
     testException(new ExceptionForDupMapper, Status.BadRequest)
     testException(new ExceptionForDupMapper, Status.BadRequest, collectionExceptionManager)
   }
+
+  test("catch exceptions thrown by the mapper") {
+    testException(new RaiseInnerException(new UnregisteredException), Status.InternalServerError)
+    testException(
+      new RaiseInnerException(new UnregisteredException),
+      Status.InternalServerError,
+      collectionExceptionManager)
+  }
 }
 
 class UnregisteredException extends Exception
@@ -97,6 +107,7 @@ class ForbiddenException2 extends ForbiddenException1
 class UnauthorizedException extends Exception
 class UnauthorizedException1 extends UnauthorizedException
 class ExceptionForDupMapper extends Exception
+case class RaiseInnerException(cause: Exception) extends Exception
 
 class TestRootExceptionMapper extends ExceptionMapper[Throwable] {
   def toResponse(request: Request, throwable: Throwable): Response = {
@@ -128,5 +139,11 @@ class FirstExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
 class SecondExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
   def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
     SimpleResponse(Status.BadRequest)
+  }
+}
+
+class RaiseInnerExceptionMapper extends ExceptionMapper[RaiseInnerException] {
+  def toResponse(request: Request, throwable: RaiseInnerException): Response = {
+    throw throwable.cause
   }
 }
