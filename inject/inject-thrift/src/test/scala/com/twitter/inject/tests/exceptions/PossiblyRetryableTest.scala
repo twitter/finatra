@@ -23,7 +23,7 @@ class PossiblyRetryableTest extends Test {
     assertIsCancellation(BackupRequestLost)
     assertIsCancellation(new CancelledRequestException)
     assertIsCancellation(new CancelledConnectionException(new Exception("cause")))
-    assertIsCancellation(ClientDiscardedRequestException("cause"))
+    assertIsCancellation(new ClientDiscardedRequestException("cause"))
     assertIsCancellation(Failure("int", Failure.Interrupted))
     assertIsCancellation(Failure.rejected("", new CancelledRequestException))
   }
