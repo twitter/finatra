@@ -73,11 +73,11 @@ class PossiblyRetryableTest extends Test {
     )
   }
 
-  private def assertIsCancellation(e: Throwable) {
+  private def assertIsCancellation(e: Throwable): Unit = {
     PossiblyRetryable.isCancellation(e) should be(true)
   }
 
-  private def assertIsNonRetryable(e: Throwable) {
+  private def assertIsNonRetryable(e: Throwable): Unit = {
     PossiblyRetryable.isNonRetryable(e) should be(true)
   }
 }

@@ -67,7 +67,7 @@ class PlaintextAndJsonController extends Controller {
 }
 
 object NullStatsReceiverModule extends TwitterModule {
-  override def configure() {
+  override def configure(): Unit = {
     bindSingleton[StatsReceiver].toInstance(NullStatsReceiver)
   }
 }

@@ -210,25 +210,25 @@ class MultiParamsTest extends Test with Mockito {
   private def assertMultiParams(
     finagleRequest: Request,
     expectedMultiParams: Map[String, MultipartItem]
-  ) {
+  ): Unit = {
     multipartParamsEquals(RequestUtils.multiParams(finagleRequest), expectedMultiParams)
   }
 
-  private def assertMultiParamsEmpty(finagleRequest: Request) {
+  private def assertMultiParamsEmpty(finagleRequest: Request): Unit = {
     RequestUtils.multiParams(finagleRequest).size should be(0)
   }
 
   private def multipartParamsEquals(
     actual: Map[String, MultipartItem],
     expected: Map[String, MultipartItem]
-  ) {
+  ): Unit = {
     actual.size should equal(expected.size)
     for ((actualName, actualMultiParam) <- actual) {
       multipartItemEquals(actualMultiParam, expected(actualName))
     }
   }
 
-  private def multipartItemEquals(actual: MultipartItem, expected: MultipartItem) {
+  private def multipartItemEquals(actual: MultipartItem, expected: MultipartItem): Unit = {
     actual.fieldName should equal(expected.fieldName)
     actual.isFormField should equal(expected.isFormField)
     actual.contentType should equal(expected.contentType)

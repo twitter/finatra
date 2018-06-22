@@ -41,18 +41,18 @@ class InMemoryHttpServiceTest extends Test with Mockito {
     }
   }
 
-  def assertPost(path: String, body: String, response: Response) {
+  def assertPost(path: String, body: String, response: Response): Unit = {
     val request = Request(Method.Post, path)
     request.setContentString(body)
     assertResponse(request, response)
   }
 
-  def assertGet(path: String, body: String = "", response: Response) {
+  def assertGet(path: String, body: String = "", response: Response): Unit = {
     val request = Request(Method.Get, path)
     assertResponse(request, response)
   }
 
-  def assertResponse(request: Request, expectedResponse: Response) {
+  def assertResponse(request: Request, expectedResponse: Response): Unit = {
     val response = Await.result(inMemoryHttpService(request))
     if (response != expectedResponse) {
       fail(response + " does not equal expected " + expectedResponse)

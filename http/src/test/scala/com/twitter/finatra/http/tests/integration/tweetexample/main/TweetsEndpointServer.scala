@@ -30,7 +30,7 @@ class TweetsEndpointServer extends HttpServer {
 
   override val modules = Seq(TweetsEndpointServerModule, AdminModule)
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .register[TweetMessageBodyWriter]
       .register[TweetMessageBodyReader]

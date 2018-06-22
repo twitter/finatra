@@ -10,10 +10,10 @@ class FutureUtilsTest extends Test {
   val ActionLog = new ConcurrentLinkedQueue[String]
   val TestFuturePool = FuturePool(Executors.newFixedThreadPool(4))
 
-  override def beforeEach {
+  override def beforeEach: Unit = {
     ActionLog.clear()
   }
-  
+
   test("FutureUtils#sequentialMap") {
     assertFuture(
       FutureUtils.sequentialMap(Seq(1, 2, 3))(mockSvcCall),

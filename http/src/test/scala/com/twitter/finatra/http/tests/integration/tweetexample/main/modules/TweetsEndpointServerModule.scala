@@ -8,7 +8,7 @@ import com.twitter.inject.TwitterModule
 
 object TweetsEndpointServerModule extends TwitterModule {
 
-  override def configure() {
+  override def configure(): Unit = {
     bindSingleton[TweetsRepository].to[MyTweetsRepository]
   }
 }

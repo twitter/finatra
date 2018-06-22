@@ -10,7 +10,7 @@ class ServiceBHttpServer extends HttpServer {
   override val modules: Seq[Module] =
     Seq(ThriftClientIdModule, ServiceBThriftMethodBuilderClientModule)
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[CommonFilters]
       .add[ServiceBHttpController]

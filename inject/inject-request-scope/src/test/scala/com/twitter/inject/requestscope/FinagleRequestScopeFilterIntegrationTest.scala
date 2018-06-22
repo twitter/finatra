@@ -22,7 +22,7 @@ class FinagleRequestScopeFilterIntegrationTest extends Test {
 }
 
 object MyTestRequestScopeModule extends TwitterModule with RequestScopeBinding {
-  override protected def configure() {
+  override protected def configure(): Unit = {
     bindRequestScope[TestUser]
   }
 }

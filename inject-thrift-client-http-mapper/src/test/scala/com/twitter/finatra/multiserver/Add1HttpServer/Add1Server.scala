@@ -10,7 +10,7 @@ class Add1Server extends HttpServer {
   override val modules =
     Seq(ThriftClientIdModule, AdderThriftClientModule)
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .exceptionMapper[ThriftClientExceptionMapper]
       .filter[CommonFilters]

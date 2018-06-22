@@ -199,7 +199,7 @@ class StartupIntegrationTest extends Test {
 
 class FailFastServer extends TwitterServer {
   override val modules = Seq(new AbstractModule {
-    def configure() {
+    def configure(): Unit = {
       throw new StartupTestException("guice module exception")
     }
   })
@@ -213,7 +213,7 @@ class SimpleHttpTwitterServer extends TwitterServer {}
 
 class ServerWithTwitterModuleInstall extends TwitterServer {
   override val modules = Seq(new TwitterModule {
-    override def configure() {
+    override def configure(): Unit = {
       install(new TwitterModule {})
     }
   })
@@ -221,7 +221,7 @@ class ServerWithTwitterModuleInstall extends TwitterServer {
 
 class ServerWithModuleInstall extends TwitterServer {
   override val modules = Seq(new TwitterModule {
-    override def configure() {
+    override def configure(): Unit = {
       install(new AbstractModule {
         override def configure(): Unit = {}
       })
@@ -234,7 +234,7 @@ class PremainErrorBaseTwitterServer extends BaseTwitterServer with Ports with Wa
     throw new StartupTestException("premain exception")
   }
 
-  def main() {
+  def main(): Unit = {
     warmupComplete()
     throw new StartupTestException("shouldn't get here")
   }
@@ -249,7 +249,7 @@ class ServerPremainException extends TwitterServer {
 class StartupTestException(msg: String) extends Exception(msg)
 
 class ExtendedBaseTwitterServer extends BaseTwitterServer {
-  def main() {
+  def main(): Unit = {
     Await.ready(adminHttpServer)
   }
 }
@@ -329,7 +329,7 @@ class FatalErrorOnExitTwitterServer extends TwitterServer {
 }
 
 class FatalOnExitBaseTwitterServer extends BaseTwitterServer with Ports with Warmup {
-  def main() {
+  def main(): Unit = {
     onExit {
       throw new InterruptedException("FORCED FATAL EXCEPTION in main")
     }

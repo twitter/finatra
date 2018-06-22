@@ -31,7 +31,7 @@ class DoEverythingServer extends HttpServer {
     }
   )
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .register[JsonPatchMessageBodyReader]
       .register[DomainTestUserReader]

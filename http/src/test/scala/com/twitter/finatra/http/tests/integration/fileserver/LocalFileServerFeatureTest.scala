@@ -65,7 +65,7 @@ class LocalFileServerFeatureTest extends Test {
   ) = {
 
     val server = new EmbeddedHttpServer(twitterServer = new HttpServer {
-      override def configureHttp(router: HttpRouter) {
+      override def configureHttp(router: HttpRouter): Unit = {
         router
           .filter[CommonFilters]
           .add(controller)

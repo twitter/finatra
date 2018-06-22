@@ -44,7 +44,7 @@ class DoEverythingReqRepThriftMethodBuilderClientModuleFeatureTest
     )
   )
 
-  override def afterAll() {
+  override def afterAll(): Unit = {
     greeterThriftServer.close()
     super.afterAll()
   }
