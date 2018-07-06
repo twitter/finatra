@@ -41,7 +41,6 @@ import scala.util.control.NonFatal
  */
 @Singleton
 class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
-
   private val mappers = new ConcurrentHashMap[Type, ExceptionMapper[_]]().asScala
 
   /* Public */
@@ -94,27 +93,33 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
       try {
         mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
       } catch {
-        case NonFatal(t) if t != throwable =>
+        case NonFatal(t) if t.getClass != throwable.getClass =>
           toResponse(request, t)
       }
-    RouteInfo(request).foreach { info =>
-      statException(info, request, throwable, response)
-    }
+
+    statException(RouteInfo(request), request, throwable, response)
     response
   }
 
   /* Private */
 
   private def statException(
-    routeInfo: RouteInfo,
+    routeInfo: Option[RouteInfo],
     request: Request,
     throwable: Throwable,
     response: Response
   ): Unit = {
+    val path: String = routeInfo match {
+      case Some(info) =>
+        info.sanitizedPath
+      case _ =>
+        RouteInfo.sanitize(request.path)
+    }
+
     statsReceiver
       .counter(
         "route",
-        routeInfo.sanitizedPath,
+        path,
         request.method.toString,
         "status",
         response.status.code.toString,

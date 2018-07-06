@@ -12,6 +12,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
+* finatra-http: Fix infinite loop introduced by `PHAB D180166`. Fix underlying issue of the
+  `ResponseBuilder` requiring a stored `RouteInfo` for classifying exceptions for stating.
+  ``PHAB_ID=D189504``
+
 * finatra-http: Fix FailureExceptionMapper handling of wrapped exceptions. Unwrap cause for all
   `c.t.finagle.Failure` exceptions, regardless of flags and add a try-catch to `ExceptionManager`
   to remap exceptions thrown by `ExceptionMapper`s ``PHAB_ID=D180166``

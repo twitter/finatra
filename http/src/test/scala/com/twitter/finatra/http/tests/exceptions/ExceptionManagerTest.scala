@@ -21,14 +21,14 @@ class ExceptionManagerTest extends Test {
   lazy val collectionExceptionManager =
     new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
 
-  def randomUri = {
+  def randomUri: String = {
     val version = s"${RandomStringUtils.randomNumeric(1)}.${RandomStringUtils.randomNumeric(1)}"
     val pathPart1 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
     val pathPart2 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
     s"/$version/$pathPart1/resource/$pathPart2"
   }
 
-  val exceptionManager = newExceptionManager
+  val exceptionManager: ExceptionManager = newExceptionManager
   exceptionManager.add[TestRootExceptionMapper]
   exceptionManager.add[ForbiddenExceptionMapper]
   exceptionManager.add(new UnauthorizedExceptionMapper)
@@ -37,7 +37,7 @@ class ExceptionManagerTest extends Test {
   exceptionManager.add[SecondExceptionMapper]
   exceptionManager.add[RaiseInnerExceptionMapper]
 
-  val exceptionMapperCollection = new ExceptionMapperCollection {
+  val exceptionMapperCollection: ExceptionMapperCollection = new ExceptionMapperCollection {
     add[TestRootExceptionMapper]
     add[ForbiddenExceptionMapper]
     add[UnauthorizedExceptionMapper]
@@ -92,9 +92,9 @@ class ExceptionManagerTest extends Test {
   }
 
   test("catch exceptions thrown by the mapper") {
-    testException(new RaiseInnerException(new UnregisteredException), Status.InternalServerError)
+    testException(RaiseInnerException(new UnregisteredException), Status.InternalServerError)
     testException(
-      new RaiseInnerException(new UnregisteredException),
+      RaiseInnerException(new UnregisteredException),
       Status.InternalServerError,
       collectionExceptionManager)
   }

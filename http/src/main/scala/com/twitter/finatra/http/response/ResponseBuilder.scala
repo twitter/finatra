@@ -60,9 +60,9 @@ class ResponseBuilder @Inject()(
     }
   }
 
-  val plainTextContentType = fullMimeTypeValue(MediaType.PlainText)
-  val jsonContentType = fullMimeTypeValue(MediaType.Json)
-  val htmlContentType = fullMimeTypeValue(MediaType.Html)
+  val plainTextContentType: String = fullMimeTypeValue(MediaType.PlainText)
+  val jsonContentType: String = fullMimeTypeValue(MediaType.Json)
+  val htmlContentType: String = fullMimeTypeValue(MediaType.Html)
 
   /* Status Codes */
 
@@ -95,73 +95,73 @@ class ResponseBuilder @Inject()(
 
   def notAcceptable(body: Any): EnrichedResponse = EnrichedResponse(Status.NotAcceptable).body(body)
 
-  def created = EnrichedResponse(Status.Created)
+  def created: EnrichedResponse = EnrichedResponse(Status.Created)
 
-  def created(body: Any) = EnrichedResponse(Status.Created).body(body)
+  def created(body: Any): EnrichedResponse = EnrichedResponse(Status.Created).body(body)
 
-  def accepted = EnrichedResponse(Status.Accepted)
+  def accepted: EnrichedResponse = EnrichedResponse(Status.Accepted)
 
-  def accepted(body: Any) = EnrichedResponse(Status.Accepted).body(body)
+  def accepted(body: Any): EnrichedResponse = EnrichedResponse(Status.Accepted).body(body)
 
-  def movedPermanently = EnrichedResponse(Status.MovedPermanently)
+  def movedPermanently: EnrichedResponse = EnrichedResponse(Status.MovedPermanently)
 
-  def movedPermanently(body: Any) = EnrichedResponse(Status.MovedPermanently).body(body)
+  def movedPermanently(body: Any): EnrichedResponse = EnrichedResponse(Status.MovedPermanently).body(body)
 
-  def found = EnrichedResponse(Status.Found)
+  def found: EnrichedResponse = EnrichedResponse(Status.Found)
 
-  def notModified = EnrichedResponse(Status.NotModified)
+  def notModified: EnrichedResponse = EnrichedResponse(Status.NotModified)
 
-  def temporaryRedirect = EnrichedResponse(Status.TemporaryRedirect)
+  def temporaryRedirect: EnrichedResponse = EnrichedResponse(Status.TemporaryRedirect)
 
-  def methodNotAllowed = EnrichedResponse(Status.MethodNotAllowed)
+  def methodNotAllowed: EnrichedResponse = EnrichedResponse(Status.MethodNotAllowed)
 
-  def badGateway = EnrichedResponse(Status.BadGateway)
+  def badGateway: EnrichedResponse = EnrichedResponse(Status.BadGateway)
 
-  def badRequest = EnrichedResponse(Status.BadRequest)
+  def badRequest: EnrichedResponse = EnrichedResponse(Status.BadRequest)
 
-  def badRequest(body: Any) = EnrichedResponse(Status.BadRequest).body(body)
+  def badRequest(body: Any): EnrichedResponse = EnrichedResponse(Status.BadRequest).body(body)
 
-  def conflict = EnrichedResponse(Status.Conflict)
+  def conflict: EnrichedResponse = EnrichedResponse(Status.Conflict)
 
-  def conflict(body: Any) = EnrichedResponse(Status.Conflict).body(body)
+  def conflict(body: Any): EnrichedResponse = EnrichedResponse(Status.Conflict).body(body)
 
-  def unauthorized = EnrichedResponse(Status.Unauthorized)
+  def unauthorized: EnrichedResponse = EnrichedResponse(Status.Unauthorized)
 
-  def unauthorized(body: Any) = EnrichedResponse(Status.Unauthorized).body(body)
+  def unauthorized(body: Any): EnrichedResponse = EnrichedResponse(Status.Unauthorized).body(body)
 
-  def forbidden = EnrichedResponse(Status.Forbidden)
+  def forbidden: EnrichedResponse = EnrichedResponse(Status.Forbidden)
 
-  def forbidden(body: Any) = EnrichedResponse(Status.Forbidden).body(body)
+  def forbidden(body: Any): EnrichedResponse = EnrichedResponse(Status.Forbidden).body(body)
 
-  def notFound = EnrichedResponse(Status.NotFound)
+  def notFound: EnrichedResponse = EnrichedResponse(Status.NotFound)
 
-  def notFound(body: String) = EnrichedResponse(Status.NotFound).plain(body)
+  def notFound(body: String): EnrichedResponse = EnrichedResponse(Status.NotFound).plain(body)
 
-  def notFound(body: Any) = EnrichedResponse(Status.NotFound).body(body)
+  def notFound(body: Any): EnrichedResponse = EnrichedResponse(Status.NotFound).body(body)
 
-  def preconditionFailed = EnrichedResponse(Status.PreconditionFailed)
+  def preconditionFailed: EnrichedResponse = EnrichedResponse(Status.PreconditionFailed)
 
-  def preconditionFailed(body: Any) = EnrichedResponse(Status.PreconditionFailed).body(body)
+  def preconditionFailed(body: Any): EnrichedResponse = EnrichedResponse(Status.PreconditionFailed).body(body)
 
-  def requestEntityTooLarge = EnrichedResponse(Status.RequestEntityTooLarge)
+  def requestEntityTooLarge: EnrichedResponse = EnrichedResponse(Status.RequestEntityTooLarge)
 
-  def requestEntityTooLarge(body: Any) = EnrichedResponse(Status.RequestEntityTooLarge).body(body)
+  def requestEntityTooLarge(body: Any): EnrichedResponse = EnrichedResponse(Status.RequestEntityTooLarge).body(body)
 
-  def gone = EnrichedResponse(Status.Gone)
+  def gone: EnrichedResponse = EnrichedResponse(Status.Gone)
 
-  def gone(body: Any) = EnrichedResponse(Status.Gone).body(body)
+  def gone(body: Any): EnrichedResponse = EnrichedResponse(Status.Gone).body(body)
 
-  def internalServerError = EnrichedResponse(Status.InternalServerError)
+  def internalServerError: EnrichedResponse = EnrichedResponse(Status.InternalServerError)
 
-  def internalServerError(body: Any) = EnrichedResponse(Status.InternalServerError).body(body)
+  def internalServerError(body: Any): EnrichedResponse = EnrichedResponse(Status.InternalServerError).body(body)
 
-  def notImplemented = EnrichedResponse(Status.NotImplemented)
+  def notImplemented: EnrichedResponse = EnrichedResponse(Status.NotImplemented)
 
-  def serviceUnavailable = EnrichedResponse(Status.ServiceUnavailable)
+  def serviceUnavailable: EnrichedResponse = EnrichedResponse(Status.ServiceUnavailable)
 
-  def clientClosed = EnrichedResponse(Status.ClientClosedRequest)
+  def clientClosed: EnrichedResponse = EnrichedResponse(Status.ClientClosedRequest)
 
-  def create(response: Response) = new EnrichedResponse(response)
+  def create(response: Response): EnrichedResponse = new EnrichedResponse(response)
 
   private def fullMimeTypeValue(mimeType: String): String = {
     mimeTypeCache.computeIfAbsent(mimeType, whenMimeTypeAbsent)
@@ -647,7 +647,7 @@ class ResponseBuilder @Inject()(
      *                   as "protected" or "unprotected", but you can't include the actual tweet id "696081566032723968").
      * @param message    Details about this exception to be logged when this exception occurs. Typically logDetails
      *                   contains the unbounded details of the exception that you are not able to stat such as an
-     *                   actual tweet ID (see above)
+     *                   actual tweet ID (see above).
      * @return this [[EnrichedResponse]]
      */
     def failureClassifier(
@@ -666,10 +666,18 @@ class ResponseBuilder @Inject()(
           .scope(source)
           .counter(detailStrings: _*)
           .incr() // service/failure/AuthService/3040/Bad_signature
-        routeScopedFailure(request)
-          .scope(source)
-          .counter(detailStrings: _*)
-          .incr() // route/hello/POST/failure/AuthService/3040/Bad_signature
+        RouteInfo(request) match {
+          case Some(info) =>
+            // route/hello/POST/failure/AuthService/3040/Bad_signature
+            statsReceiver
+              .scope("route", info.sanitizedPath, request.method.toString(), "failure")
+              .scope(source)
+              .counter(detailStrings: _*)
+              .incr()
+          case _ =>
+            // No stored RouteInfo. Note: the com.twitter.finatra.http.exceptions.ExceptionManager
+            // will always stat failure details for a request.
+        }
       }
 
       this
@@ -701,13 +709,6 @@ class ResponseBuilder @Inject()(
     @deprecated("To be removed with guava usage.", "2017-12-12")
     private def mediaToString(mediaType: GuavaMediaType): String = {
       mediaTypeCache.computeIfAbsent(mediaType, whenMediaTypeAbsent)
-    }
-
-    private def routeScopedFailure(request: Request): StatsReceiver = {
-      val routeInfo = RouteInfo(request).getOrElse(
-        throw new Exception("routeScopedFailure can only be used within a HTTP request callback")
-      )
-      statsReceiver.scope("route", routeInfo.sanitizedPath, request.method.toString(), "failure")
     }
 
     private def body(request: Option[Request], any: Any): EnrichedResponse = {

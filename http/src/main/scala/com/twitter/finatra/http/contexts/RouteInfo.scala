@@ -14,13 +14,16 @@ object RouteInfo {
   def apply(request: Request): Option[RouteInfo] = {
     request.ctx(field)
   }
+
+  def sanitize(path: String): String = {
+    RouteInfo.SanitizeRegexp.replaceAllIn(
+      RouteInfo.SlashRegexp.replaceAllIn(target = path.stripPrefix("/").stripSuffix("/"), replacement = "_"),
+      "")
+  }
 }
 
 case class RouteInfo(name: String, path: String) {
+  import RouteInfo._
 
-  val sanitizedPath = {
-    val noSlashes = RouteInfo.SlashRegexp
-      .replaceAllIn(target = path.stripPrefix("/").stripSuffix("/"), replacement = "_")
-    RouteInfo.SanitizeRegexp.replaceAllIn(noSlashes, "")
-  }
+  val sanitizedPath: String = sanitize(path)
 }

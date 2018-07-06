@@ -5,7 +5,6 @@ import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.{Controller, HttpServer}
 import com.twitter.inject.Test
-import com.twitter.util.Future
 
 class HttpServerStartupIntegrationTest extends Test {
 
