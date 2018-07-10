@@ -6,6 +6,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Closed
+
+## [finatra-18.7.0](https://github.com/twitter/finatra/tree/finatra-18.7.0) (2018-07-10)
+
+### Added
+
 * inject-utils: Add 'toLoggable' implicit from Array[Byte] to String. ``PHAB_ID=D182262``
 
 ### Changed
