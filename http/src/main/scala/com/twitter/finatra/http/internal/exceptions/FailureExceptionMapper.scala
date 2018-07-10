@@ -1,7 +1,6 @@
 package com.twitter.finatra.http.internal.exceptions
 
 import com.twitter.finagle.Failure
-import com.twitter.finagle.Failure.Wrapped
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.internal.exceptions.ThrowableExceptionMapper._
 import com.twitter.finatra.http.response.ResponseBuilder
@@ -20,26 +19,15 @@ private[http] class FailureExceptionMapper @Inject()(response: ResponseBuilder)
     request: Request,
     response: ResponseBuilder,
     exception: Failure
-  ): Response = {
-    if (!exception.isFlagged(Wrapped)) {
-      exception.cause match {
-        case Some(cause: Throwable) =>
-          error("Unhandled Exception", cause) // always log the Throwable cause in error
-          unhandledExceptionResponse(request, response, cause)
-        case _ =>
-          logFailure(exception)
-          unhandledExceptionResponse(request, response, exception)
-      }
-    } else {
-      unwrapFailure(exception, MaxDepth) match {
-        case _: Failure =>
-          logFailure(exception)
-          unhandledExceptionResponse(request, response, exception)
-        case cause =>
-          throw cause
-      }
+  ): Response =
+    unwrapFailure(exception, MaxDepth) match {
+      case _: Failure =>
+        logFailure(exception)
+        unhandledExceptionResponse(request, response, exception)
+      case cause: Throwable =>
+        // Re-raise the cause so that it can get mapped correctly
+        throw cause
     }
-  }
 
   /* Private */
 

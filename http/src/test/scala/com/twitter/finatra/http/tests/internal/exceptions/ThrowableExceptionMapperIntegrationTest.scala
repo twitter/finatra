@@ -38,6 +38,21 @@ class ThrowableExceptionMapperIntegrationTest extends IntegrationTest {
     val failureExceptionMapper = injector.instance[FailureExceptionMapper]
     val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
 
+    val failure = Failure(Failure(new CancelledRequestException))
+
+    val e = intercept[CancelledRequestException] {
+      failureExceptionMapper.toResponse(request, failure).status
+    }
+
+    cancelledRequestExceptionMapper.toResponse(request, e).status should be(
+      Status.ClientClosedRequest
+    )
+  }
+
+  test("ThrowableExceptionMapper#unwrap wrapped Failure") {
+    val failureExceptionMapper = injector.instance[FailureExceptionMapper]
+    val cancelledRequestExceptionMapper = injector.instance[CancelledRequestExceptionMapper]
+
     val failure = Failure.wrap(Failure.wrap(new CancelledRequestException))
 
     val e = intercept[CancelledRequestException] {

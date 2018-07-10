@@ -13,6 +13,7 @@ import javax.inject.Singleton
 import net.codingwell.scalaguice.typeLiteral
 import scala.annotation.tailrec
 import scala.collection.JavaConverters._
+import scala.util.control.NonFatal
 
 /**
  * A class to register [[com.twitter.finatra.http.exceptions.ExceptionMapper]]s
@@ -40,7 +41,6 @@ import scala.collection.JavaConverters._
  */
 @Singleton
 class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
-
   private val mappers = new ConcurrentHashMap[Type, ExceptionMapper[_]]().asScala
 
   /* Public */
@@ -89,25 +89,37 @@ class ExceptionManager(injector: Injector, statsReceiver: StatsReceiver) {
    */
   def toResponse(request: Request, throwable: Throwable): Response = {
     val mapper = getMapper(throwable.getClass)
-    val response = mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
-    RouteInfo(request).foreach { info =>
-      statException(info, request, throwable, response)
-    }
+    val response =
+      try {
+        mapper.asInstanceOf[ExceptionMapper[Throwable]].toResponse(request, throwable)
+      } catch {
+        case NonFatal(t) if t.getClass != throwable.getClass =>
+          toResponse(request, t)
+      }
+
+    statException(RouteInfo(request), request, throwable, response)
     response
   }
 
   /* Private */
 
   private def statException(
-    routeInfo: RouteInfo,
+    routeInfo: Option[RouteInfo],
     request: Request,
     throwable: Throwable,
     response: Response
   ): Unit = {
+    val path: String = routeInfo match {
+      case Some(info) =>
+        info.sanitizedPath
+      case _ =>
+        RouteInfo.sanitize(request.path)
+    }
+
     statsReceiver
       .counter(
         "route",
-        routeInfo.sanitizedPath,
+        path,
         request.method.toString,
         "status",
         response.status.code.toString,

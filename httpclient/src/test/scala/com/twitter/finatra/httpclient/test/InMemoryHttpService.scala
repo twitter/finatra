@@ -34,7 +34,7 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
 
   /* Mock Support */
 
-  def mockGet(path: String, andReturn: Response, sticky: Boolean = false) {
+  def mockGet(path: String, andReturn: Response, sticky: Boolean = false): Unit = {
     mock(Get, path, andReturn, sticky)
   }
 
@@ -43,11 +43,11 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
     withBody: String = null,
     andReturn: Response,
     sticky: Boolean = false
-  ) {
+  ): Unit = {
     mock(Post, path, andReturn, sticky, Option(withBody))
   }
 
-  def mockPut(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false) {
+  def mockPut(path: String, withBody: String = null, andReturn: Response, sticky: Boolean = false): Unit = {
     mock(Put, path, andReturn, sticky)
   }
 
@@ -63,13 +63,13 @@ class InMemoryHttpService extends Service[Request, Response] with Resettable wit
     responseMap(RequestKey(method, path)) = existing :+ newEntry
   }
 
-  override def reset() {
+  override def reset(): Unit = {
     responseMap.clear()
     recordedRequests.clear()
     overrideResponse = None
   }
 
-  def printRequests() {
+  def printRequests(): Unit = {
     Banner.banner("Requests")
     for (request <- recordedRequests) {
       println(request + " " + request.contentString)

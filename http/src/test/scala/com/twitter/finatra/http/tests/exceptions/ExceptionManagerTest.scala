@@ -21,28 +21,30 @@ class ExceptionManagerTest extends Test {
   lazy val collectionExceptionManager =
     new ExceptionManager(TestInjector().create, new InMemoryStatsReceiver)
 
-  def randomUri = {
+  def randomUri: String = {
     val version = s"${RandomStringUtils.randomNumeric(1)}.${RandomStringUtils.randomNumeric(1)}"
     val pathPart1 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
     val pathPart2 = RandomStringUtils.randomAlphabetic(5).toLowerCase()
     s"/$version/$pathPart1/resource/$pathPart2"
   }
 
-  val exceptionManager = newExceptionManager
+  val exceptionManager: ExceptionManager = newExceptionManager
   exceptionManager.add[TestRootExceptionMapper]
   exceptionManager.add[ForbiddenExceptionMapper]
   exceptionManager.add(new UnauthorizedExceptionMapper)
   exceptionManager.add[UnauthorizedException1Mapper]
   exceptionManager.add[FirstExceptionMapper]
   exceptionManager.add[SecondExceptionMapper]
+  exceptionManager.add[RaiseInnerExceptionMapper]
 
-  val exceptionMapperCollection = new ExceptionMapperCollection {
+  val exceptionMapperCollection: ExceptionMapperCollection = new ExceptionMapperCollection {
     add[TestRootExceptionMapper]
     add[ForbiddenExceptionMapper]
     add[UnauthorizedExceptionMapper]
     add[UnauthorizedException1Mapper]
     add[FirstExceptionMapper]
     add[SecondExceptionMapper]
+    add[RaiseInnerExceptionMapper]
   }
   collectionExceptionManager
     .add(exceptionMapperCollection)
@@ -88,6 +90,14 @@ class ExceptionManagerTest extends Test {
     testException(new ExceptionForDupMapper, Status.BadRequest)
     testException(new ExceptionForDupMapper, Status.BadRequest, collectionExceptionManager)
   }
+
+  test("catch exceptions thrown by the mapper") {
+    testException(RaiseInnerException(new UnregisteredException), Status.InternalServerError)
+    testException(
+      RaiseInnerException(new UnregisteredException),
+      Status.InternalServerError,
+      collectionExceptionManager)
+  }
 }
 
 class UnregisteredException extends Exception
@@ -97,6 +107,7 @@ class ForbiddenException2 extends ForbiddenException1
 class UnauthorizedException extends Exception
 class UnauthorizedException1 extends UnauthorizedException
 class ExceptionForDupMapper extends Exception
+case class RaiseInnerException(cause: Exception) extends Exception
 
 class TestRootExceptionMapper extends ExceptionMapper[Throwable] {
   def toResponse(request: Request, throwable: Throwable): Response = {
@@ -128,5 +139,11 @@ class FirstExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
 class SecondExceptionMapper extends ExceptionMapper[ExceptionForDupMapper] {
   def toResponse(request: Request, throwable: ExceptionForDupMapper): Response = {
     SimpleResponse(Status.BadRequest)
+  }
+}
+
+class RaiseInnerExceptionMapper extends ExceptionMapper[RaiseInnerException] {
+  def toResponse(request: Request, throwable: RaiseInnerException): Response = {
+    throw throwable.cause
   }
 }

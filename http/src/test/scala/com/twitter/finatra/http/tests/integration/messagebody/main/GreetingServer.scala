@@ -9,7 +9,7 @@ object GreetingServerMain extends GreetingServer
 
 class GreetingServer extends HttpServer {
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .register[GreetingMessageBodyWriter]
       .add[GreetingController]

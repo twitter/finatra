@@ -12,7 +12,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Default of 5 with infinite loop error on 6th call") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add(new ForwarderHelperController(injector.instance[HttpForward]))
             .add(new MaxForwardController(injector.instance[HttpForward]))
@@ -31,7 +31,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Default of 5 forwards with one request") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add(new ForwarderHelperController(injector.instance[HttpForward]))
             .add(new MaxForwardController(injector.instance[HttpForward]))
@@ -50,7 +50,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Default of 5 with 5 requests") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
            .add(new ForwarderHelperController(5, injector.instance[HttpForward]))
            .add(new MaxForwardController(5, injector.instance[HttpForward]))
@@ -70,7 +70,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Custom max of 15 with infinite loop error on 16th call") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add(new ForwarderHelperController(injector.instance[HttpForward]))
             .add(new MaxForwardController(injector.instance[HttpForward]))
@@ -90,7 +90,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Custom max of 15 with one request") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add(new ForwarderHelperController(injector.instance[HttpForward]))
             .add(new MaxForwardController(injector.instance[HttpForward]))
@@ -110,7 +110,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Custom max of 15 with 15 requests") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add(new ForwarderHelperController(15, injector.instance[HttpForward]))
             .add(new MaxForwardController(15, injector.instance[HttpForward]))
@@ -134,7 +134,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Negative max forwards prevents server startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add(new ForwarderHelperController(injector.instance[HttpForward]))
             .add(new MaxForwardController(injector.instance[HttpForward]))
@@ -154,7 +154,7 @@ class MaxRequestFowardingDepthTest extends Test {
   test("Zero max forwards prevents server startup") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add(new ForwarderHelperController(injector.instance[HttpForward]))
             .add(new MaxForwardController(injector.instance[HttpForward]))

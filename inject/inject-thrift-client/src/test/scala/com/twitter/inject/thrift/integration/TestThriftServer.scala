@@ -18,7 +18,7 @@ class TestThriftServer(service: ThriftService) extends TwitterServer {
   private var thriftServer: ListeningServer = _
 
   /* Lifecycle */
-  override def postWarmup() {
+  override def postWarmup(): Unit = {
     super.postWarmup()
     thriftServer = ThriftMux.server.serveIface(thriftPortFlag(), service)
     info("Thrift server started on port: " + thriftPort.get)

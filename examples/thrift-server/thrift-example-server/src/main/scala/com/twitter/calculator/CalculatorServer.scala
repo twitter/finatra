@@ -13,7 +13,7 @@ class CalculatorServer extends ThriftServer {
 
   override def modules = Seq(ClientIdWhitelistModule)
 
-  override def configureThrift(router: ThriftRouter) {
+  override def configureThrift(router: ThriftRouter): Unit = {
     router
       .filter[LoggingMDCFilter]
       .filter[TraceIdMDCFilter]

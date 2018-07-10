@@ -4,7 +4,7 @@ import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.routing.HttpRouter
 
 class Add1Server extends HttpServer {
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .add[Add1Controller]
   }

@@ -10,7 +10,7 @@ object ServerMain extends Server
 class Server extends HttpServer {
   override val name = "dashboard"
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[CommonFilters]
       .add[DashboardController]

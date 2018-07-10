@@ -23,7 +23,7 @@ class PossiblyRetryableTest extends Test {
     assertIsCancellation(BackupRequestLost)
     assertIsCancellation(new CancelledRequestException)
     assertIsCancellation(new CancelledConnectionException(new Exception("cause")))
-    assertIsCancellation(ClientDiscardedRequestException("cause"))
+    assertIsCancellation(new ClientDiscardedRequestException("cause"))
     assertIsCancellation(Failure("int", Failure.Interrupted))
     assertIsCancellation(Failure.rejected("", new CancelledRequestException))
   }
@@ -73,11 +73,11 @@ class PossiblyRetryableTest extends Test {
     )
   }
 
-  private def assertIsCancellation(e: Throwable) {
+  private def assertIsCancellation(e: Throwable): Unit = {
     PossiblyRetryable.isCancellation(e) should be(true)
   }
 
-  private def assertIsNonRetryable(e: Throwable) {
+  private def assertIsNonRetryable(e: Throwable): Unit = {
     PossiblyRetryable.isNonRetryable(e) should be(true)
   }
 }

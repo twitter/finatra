@@ -7,7 +7,7 @@ import com.twitter.finatra.thrift.routing.ThriftRouter
 class AdderThriftServer extends ThriftServer {
   override val name = "adder-thrift-server"
 
-  override def configureThrift(router: ThriftRouter) {
+  override def configureThrift(router: ThriftRouter): Unit = {
     router
       .filter[LoggingMDCFilter]
       .filter[TraceIdMDCFilter]

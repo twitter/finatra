@@ -1313,7 +1313,7 @@ class FinatraObjectMapperTest extends Test with Logging {
     mapper.writeValueAsString(any)
   }
 
-  private def assertJson[T: Manifest](obj: T, expected: String) {
+  private def assertJson[T: Manifest](obj: T, expected: String): Unit = {
     val json = generate(obj)
     JsonDiff.jsonDiff(json, expected)
     parse[T](json) should equal(obj)

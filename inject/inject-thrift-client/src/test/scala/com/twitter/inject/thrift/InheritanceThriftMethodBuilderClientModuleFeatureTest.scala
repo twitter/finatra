@@ -30,7 +30,7 @@ class InheritanceThriftMethodBuilderClientModuleFeatureTest
     )
   )
 
-  override def afterAll() {
+  override def afterAll(): Unit = {
     thriftServer.close()
     super.afterAll()
   }

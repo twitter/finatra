@@ -12,7 +12,7 @@ class PortsTest extends Test {
       override def thriftPort = Some(9991)
     }
 
-  override protected def afterAll() {
+  override protected def afterAll(): Unit = {
     try {
       super.afterAll()
     } finally {

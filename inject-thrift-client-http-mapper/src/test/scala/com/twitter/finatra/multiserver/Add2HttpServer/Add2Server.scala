@@ -7,7 +7,7 @@ import com.twitter.finatra.http.routing.HttpRouter
 class Add2Server extends HttpServer {
   override val modules = Seq(Add1HttpClientModule)
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[CommonFilters]
       .add[Add2Controller]

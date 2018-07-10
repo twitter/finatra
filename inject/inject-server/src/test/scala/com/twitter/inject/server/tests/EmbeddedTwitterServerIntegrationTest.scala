@@ -293,7 +293,7 @@ class NonInjectableServer extends com.twitter.server.TwitterServer with Logging 
     }
   }
 
-  def main() {
+  def main(): Unit = {
     val server = Http.serve(":8888", service)
     onExit {
       server.close()

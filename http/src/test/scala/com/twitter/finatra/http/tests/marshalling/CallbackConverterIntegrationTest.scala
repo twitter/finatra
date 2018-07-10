@@ -369,17 +369,17 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     AsyncStream(1, 2, 3)
   }
 
-  private def assertOk(response: Response, expectedBody: String) {
+  private def assertOk(response: Response, expectedBody: String): Unit = {
     response.status should equal(Status.Ok)
     response.contentString should equal(expectedBody)
   }
 
-  private def assertOk(convertedFunc: (Request) => Future[Response], withBody: String) {
+  private def assertOk(convertedFunc: (Request) => Future[Response], withBody: String): Unit = {
     val response = Await.result(convertedFunc(Request()))
     assertOk(response, withBody)
   }
 
-  private def assertStatus(convertedFunc: (Request) => Future[Response], expectedStatus: Status) {
+  private def assertStatus(convertedFunc: (Request) => Future[Response], expectedStatus: Status): Unit = {
     val response = Await.result(convertedFunc(Request()))
     response.status should equal(expectedStatus)
   }

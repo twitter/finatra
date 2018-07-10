@@ -9,7 +9,7 @@ object StreamingServerMain extends StreamingServer
 class StreamingServer extends HttpServer {
   override def streamRequest = true
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[CommonFilters]
       .add[StreamingController]

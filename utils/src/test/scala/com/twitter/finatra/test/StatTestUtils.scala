@@ -5,18 +5,18 @@ import org.scalatest.Matchers
 
 object StatTestUtils extends Matchers {
 
-  def clear(statsReceiver: InMemoryStatsReceiver) {
+  def clear(statsReceiver: InMemoryStatsReceiver): Unit = {
     statsReceiver.counters.clear()
     statsReceiver.stats.clear()
     statsReceiver.gauges.clear()
   }
 
-  def assertCounter(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Long) {
+  def assertCounter(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Long): Unit = {
     val actualValue = statsReceiver.counters.get(Seq(name)) getOrElse 0L
     actualValue should equal(expectedValue)
   }
 
-  def assertGauge(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Float) {
+  def assertGauge(statsReceiver: InMemoryStatsReceiver, name: String, expectedValue: Float): Unit = {
     val actualValue = statsReceiver.gauges.get(Seq(name)).getOrElse(() => 0f)
     if (expectedValue != actualValue()) {
       println("Failure asserting " + name)
@@ -24,7 +24,7 @@ object StatTestUtils extends Matchers {
     }
   }
 
-  def printStatsAndCounters(statsReceiver: InMemoryStatsReceiver) {
+  def printStatsAndCounters(statsReceiver: InMemoryStatsReceiver): Unit = {
     def pretty(map: Iterator[(Seq[String], Any)]) = {
       for ((keys, value) <- map) {
         println(keys.mkString("/") + " = " + value)
@@ -42,7 +42,7 @@ object StatTestUtils extends Matchers {
     }
   }
 
-  def printStats(statsReceiver: InMemoryStatsReceiver) {
+  def printStats(statsReceiver: InMemoryStatsReceiver): Unit = {
     val stats = statsReceiver.stats.map {
       case (keys, values) =>
         keys.mkString("/") -> values.mkString(", ")

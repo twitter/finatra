@@ -18,7 +18,7 @@ object DoEverythingModule extends TwitterModule {
   flag("moduleMagicNum", "30", "Module Magic number")
   flag("moduleDuration", 5.seconds, "Module duration")
 
-  override protected def configure() {
+  override protected def configure(): Unit = {
     bindSingleton[String](Names.named("str1")).toInstance("string1")
     bind[String](Names.named("str2")).toInstance("string2")
 
@@ -35,11 +35,11 @@ object DoEverythingModule extends TwitterModule {
     multiBinder.addBinding.to[TwoMultiService]
   }
 
-  override def singletonStartup(injector: Injector) {
+  override def singletonStartup(injector: Injector): Unit = {
     assert(injector.instance[String, Prod] == "prod string")
   }
 
-  override def singletonShutdown(injector: Injector) {
+  override def singletonShutdown(injector: Injector): Unit = {
     info("shutdown")
   }
 

@@ -16,7 +16,7 @@ class RoutingIntegrationTest extends Test {
   test("Provide RouteInfo in a global filter") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .filter[CheckRouteInfoFilter]
             .add[NullController]
@@ -34,7 +34,7 @@ class RoutingIntegrationTest extends Test {
   test("Support global filter beforeRouting true") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .filter[NoRouteInfoFilter](beforeRouting = true)
             .filter[CheckRouteInfoFilter]
@@ -55,7 +55,7 @@ class RoutingIntegrationTest extends Test {
     // call the no-argument version of router#filter
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .filter[CheckRouteInfoFilter](beforeRouting = false)
             .add[NullController]
@@ -73,7 +73,7 @@ class RoutingIntegrationTest extends Test {
   test("Provide RouteInfo in a per-controller filter") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add[CheckRouteInfoFilter, NullController]
         }
@@ -90,7 +90,7 @@ class RoutingIntegrationTest extends Test {
   test("Fail if adding a filter after adding a controller") {
     val server = new EmbeddedHttpServer(
       twitterServer = new HttpServer {
-        override def configureHttp(router: HttpRouter) {
+        override def configureHttp(router: HttpRouter): Unit = {
           router
             .add[NullController]
             .filter[CheckRouteInfoFilter]

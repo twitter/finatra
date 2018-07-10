@@ -12,11 +12,31 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.7.0](https://github.com/twitter/finatra/tree/finatra-18.7.0) (2018-07-10)
+
+### Added
+
+* inject-utils: Add 'toLoggable' implicit from Array[Byte] to String. ``PHAB_ID=D182262``
+
+### Changed
+
+### Fixed
+
+* finatra-http: Fix infinite loop introduced by `PHAB D180166`. Fix underlying issue of the
+  `ResponseBuilder` requiring a stored `RouteInfo` for classifying exceptions for stating.
+  ``PHAB_ID=D189504``
+
+* finatra-http: Fix FailureExceptionMapper handling of wrapped exceptions. Unwrap cause for all
+  `c.t.finagle.Failure` exceptions, regardless of flags and add a try-catch to `ExceptionManager`
+  to remap exceptions thrown by `ExceptionMapper`s ``PHAB_ID=D180166``
+
+### Closed
+
 ## [finatra-18.6.0](https://github.com/twitter/finatra/tree/finatra-18.6.0) (2018-06-14)
 
 ### Added
 
-* finatra: Add HTTP route, Thrift method, and Filter information to the Library 
+* finatra: Add HTTP route, Thrift method, and Filter information to the Library
   registry. ``PHAB_ID=D177583``
 
 * finatra-inject/inject-logback: Add an `c.t.inject.logback.AsyncAppender` to
@@ -38,7 +58,7 @@ All notable changes to this project will be documented in this file. Note that `
   ``PHAB_ID=D178330``
 
 * finatra-http: Change exceptions emitted from `c.t.f.http.filter.HttpNackFilter` to not extend
-  from `HttpException` and add a specific mapper over `HttpNackException` such that Nack 
+  from `HttpException` and add a specific mapper over `HttpNackException` such that Nack
   exceptions are handled distinctly from HttpExceptions and thus more specifically. Handling of
   Nack exceptions should not be conflated with handling of the more generic `HttpExceptions` and
   it should be clear if a new mapper is desired that it is specifically for changing how Nack
@@ -61,46 +81,46 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
-* inject-slf4j, finatra-http: Fix `c.t.inject.logging.FinagleMDCAdapter` to initialize 
+* inject-slf4j, finatra-http: Fix `c.t.inject.logging.FinagleMDCAdapter` to initialize
   properly. We were lazily initializing the backing `java.util.Map` of the `FinagleMDCAdapter`
   which could cause values to disappear when the map was not created eagerly enough. Typical
-  usage would add one of the MDC logging filters to the top of the request filter chain which would 
-  put a value into the MDC thus creating the backing `java.util.Map` early in the request chain. 
-  However, if a filter which puts to the MDC was not included and the first put happened in a 
+  usage would add one of the MDC logging filters to the top of the request filter chain which would
+  put a value into the MDC thus creating the backing `java.util.Map` early in the request chain.
+  However, if a filter which puts to the MDC was not included and the first put happened in a
   Future closure the map state would be lost upon exiting the closure.
-  
-  This change updates how the MDC mapping is stored to move from a `Local` to a `LocalContext` 
+
+  This change updates how the MDC mapping is stored to move from a `Local` to a `LocalContext`
   and introduces new ergonomics for using/initializing the framework MDC integration.
-  
-  Initialization of the MDC integration should now go through the `c.t.inject.logging.MDCInitializer` 
-  (that is users are not expected to need to interact directly with the `FinagleMDCAdapter`). E.g., 
+
+  Initialization of the MDC integration should now go through the `c.t.inject.logging.MDCInitializer`
+  (that is users are not expected to need to interact directly with the `FinagleMDCAdapter`). E.g.,
   to initialize the MDC:
-  
+
   ```
   com.twitter.inject.logging.MDCInitializer.init()
   ```
-  
-  This will initialize the `org.slf4j.MDC` and swap out the default `org.slf4j.spi.MDCAdapter` with 
-  an instance of the `c.t.inject.logging.FinagleMDCAdapter` allowing for reading/writing MDC values 
+
+  This will initialize the `org.slf4j.MDC` and swap out the default `org.slf4j.spi.MDCAdapter` with
+  an instance of the `c.t.inject.logging.FinagleMDCAdapter` allowing for reading/writing MDC values
   across Future boundaries.
-  
+
   Then to start the scoping of an MDC context, use `c.t.inject.logging.MDCInitializer#let`:
-  
+
   ```
   com.twitter.inject.logging.MDCInitializer.let {
     // operations which set and read MDC values
     ???
   }
   ```
-  
-  Typically, this is done in a Filter wrapping the execution of the service in the Filter's apply, 
-  For example, the framework provides this initialization and scoping in both the 
+
+  Typically, this is done in a Filter wrapping the execution of the service in the Filter's apply,
+  For example, the framework provides this initialization and scoping in both the
   `c.t.finatra.http.filters.LoggingMDCFilter` and the `c.t.finatra.thrift.filters.LoggingMDCFilter`.
-  
-  Simply including these at the top of the request filter chain for a service will allow MDC 
+
+  Simply including these at the top of the request filter chain for a service will allow MDC
   integration to function properly. ``PHAB_ID=D159536``
 
-* inject-app: Ensure that installed modules are de-duped before creating injector. 
+* inject-app: Ensure that installed modules are de-duped before creating injector.
   ``PHAB_ID=D160955``
 
 ### Closed
@@ -127,69 +147,69 @@ All notable changes to this project will be documented in this file. Note that `
   ``PHAB_ID=D152973``
 
 * inject-server: Capture errors on close of the underlying TwitterServer. The embedded
-  testing utilities can now capture and report on an exception that occurs during close 
-  of the underlying TwitterServer. `EmbeddedTwitterServer#assertCleanShutdown` inspects 
+  testing utilities can now capture and report on an exception that occurs during close
+  of the underlying TwitterServer. `EmbeddedTwitterServer#assertCleanShutdown` inspects
   for any Throwable captured from closing the underlying server which it will then throw.
   ``PHAB_ID=D148946``
 
 * finatra-http: Created a new API into `c.t.f.h.response.StreamingResponse` which permits passing
   a `transformer` which is an `AsynStream[T] => AsyncStream[(U, Buf)]` for serialization purposes,
   as well as two callbacks -- `onDisconnect`, called when the stream is disconnected, and `onWrite`,
-  which is a `respond` side-effecting callback to every individual write to the stream. 
+  which is a `respond` side-effecting callback to every individual write to the stream.
   ``PHAB_ID=D147925``
 
 ### Changed
 
-* inject-app: Update and improve the test `#bind[T]` DSL. The testing `#bind[T]` DSL is lacking in 
+* inject-app: Update and improve the test `#bind[T]` DSL. The testing `#bind[T]` DSL is lacking in
   its ability to be used from Java and we would like to revise the API to be more expressive such
-  that it also includes binding from a Type to a Type. Due to wanting to also support the ability 
-  to bind a Type to a Type, the DSL has been re-worked to more closely match the actual Guice 
+  that it also includes binding from a Type to a Type. Due to wanting to also support the ability
+  to bind a Type to a Type, the DSL has been re-worked to more closely match the actual Guice
   binding DSL.
-  
+
   For Scala users the `#bind[T]` DSL now looks as follows:
   ```
     bind[T].to[U <: T]
     bind[T].to[Class[U <: T]]
     bind[T].toInstance(T)
-    
+
     bind[T].annotatedWith[Ann].to[U <: T]
     bind[T].annotatedWith[Ann].to[Class[U <: T]]
     bind[T].annotatedWith[Ann].toInstance(T)
-    
+
     bind[T].annotatedWith[Class[Ann]].to[U <: T]
     bind[T].annotatedWith[Class[Ann]].to[Class[U <: T]]
     bind[T].annotatedWith[Class[Ann]].toInstance(T)
-    
+
     bind[T].annotatedWith(Annotation).to[U <: T]
     bind[T].annotatedWith(Annotation).to[Class[U <: T]]
     bind[T].annotatedWith(Annotation).toInstance(T)
-    
+
     bindClass(Class[T]).to[T]
     bindClass(Class[T]).to[Class[U <: T]]
     bindClass(Class[T]).toInstance(T)
-    
+
     bindClass(Class[T]).annotatedWith[Class[Ann]].to[T]
     bindClass(Class[T]).annotatedWith[Class[Ann]].[Class[U <: T]]
     bindClass(Class[T]).annotatedWith[Class[Ann]].toInstance(T)
-    
+
     bindClass(Class[T]).annotatedWith(Annotation).to[T]
     bindClass(Class[T]).annotatedWith(Annotation).[Class[U <: T]]
     bindClass(Class[T]).annotatedWith(Annotation).toInstance(T)
   ```
-  
+
   For Java users, there are more Java-friendly methods:
   ```
     bindClass(Class[T], T)
     bindClass(Class[T], Annotation, T)
     bindClass(Class[T], Class[Annotation], T)
-    
+
     bindClass(Class[T], Class[U <: T])
     bindClass(Class[T],  Annotation, Class[U <: T])
     bindClass(Class[T], Class[Annotation], Class[U <: T])
   ```
-  
-  Additionally, these changes highlighted the lack of Java-support in the `TwitterModule` for 
-  creating injectable Flags. Thus `c.t.inject.TwitterModuleFlags` has been updated to also provide 
+
+  Additionally, these changes highlighted the lack of Java-support in the `TwitterModule` for
+  creating injectable Flags. Thus `c.t.inject.TwitterModuleFlags` has been updated to also provide
   Java-friendly flag creation methods:
   ```
     protected def createFlag[T](name: String, default: T, help: String, flggble: Flaggable[T]): Flag[T]
@@ -280,7 +300,7 @@ All notable changes to this project will be documented in this file. Note that `
 * inject-thrift-client: Un-deprecate `c.t.inject.thrift.modules.ThriftClientModule`
   and update for parity with `ServicePerEndpointModule` in regards to ThriftMux
   client configuration. Update documentation. Rename `ServicePerEndpointModule` to
-  the more descriptive and consistently named `ThriftMethodBuilderClientModule`. 
+  the more descriptive and consistently named `ThriftMethodBuilderClientModule`.
   ``PHAB_ID=D129891``
 
 ### Fixed
@@ -291,12 +311,12 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
-* finatra-thrift: Add support for building all types of Finagle Thrift clients to 
+* finatra-thrift: Add support for building all types of Finagle Thrift clients to
   the underlying embedded TwitterServer with the `c.t.finatra.thrift.ThriftClient`
   test utility. See: https://twitter.github.io/scrooge/Finagle.html#creating-a-client
   ``PHAB_ID=D123915``
 
-* finatra-jackson: Added support to finatra/jackson for deserializing `com.twitter.util.Duration` 
+* finatra-jackson: Added support to finatra/jackson for deserializing `com.twitter.util.Duration`
   instances from their String representations. ``PHAB_ID=D122366``
 
 ### Changed
@@ -306,7 +326,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Fixed
 
-* finatra-http: Ensure we close resources in the `ResponseBuilder`. Addresses 
+* finatra-http: Ensure we close resources in the `ResponseBuilder`. Addresses
   [#440](https://github.com/twitter/finatra/issues/440). ``PHAB_ID=D120779``
 
 ### Closed
@@ -315,7 +335,7 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Added
 
-* finatra-thrift: Add tests for new Scrooge `ReqRepServicePerEndpoint` 
+* finatra-thrift: Add tests for new Scrooge `ReqRepServicePerEndpoint`
   functionality. ``PHAB_ID=D107397``
 
 ### Changed
@@ -323,10 +343,10 @@ All notable changes to this project will be documented in this file. Note that `
 * finatra-http: add a `multipart = true` arg to
   `EmbeddedHttpServer.httpMultipartFormPost`
   ``PHAB_ID=D113151`
-* inject-sever: Do not use the `c.t.inject.server.EmbeddedTwitterServer` 
+* inject-sever: Do not use the `c.t.inject.server.EmbeddedTwitterServer`
   `InMemoryStatsReceiver` for embedded http clients. The http client stats are
-  emitted with the server under test stats which can be confusing, thus we now 
-  create a new `InMemoryStatsReceiver` when creating an embedded http client. 
+  emitted with the server under test stats which can be confusing, thus we now
+  create a new `InMemoryStatsReceiver` when creating an embedded http client.
   ``PHAB_ID=D112024``
 
 ### Fixed

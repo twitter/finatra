@@ -83,7 +83,7 @@ class TestUserRequestScopeFilter @Inject()(requestScope: FinagleRequestScope)
 /* ==================================================== */
 /* Request Scope Filter Module */
 object TestUserRequestScopeFilterModule extends TwitterModule with RequestScopeBinding {
-  override protected def configure() {
+  override protected def configure(): Unit = {
     bindRequestScope[TestUser]
   }
 }
@@ -127,7 +127,7 @@ class FuturePooledController @Inject()(testUserProvider: Provider[TestUser]) ext
 class PooledServer extends HttpServer {
   override def modules = Seq(TestUserRequestScopeFilterModule)
 
-  override def configureHttp(router: HttpRouter) {
+  override def configureHttp(router: HttpRouter): Unit = {
     router
       .filter[ExceptionMappingFilter[Request]]
       .filter[FinagleRequestScopeFilter[Request, Response]]
