@@ -10,7 +10,6 @@ junit_tests(
         "finagle/finagle-base-http/src/main/scala",
         "finagle/finagle-http/src/main/scala",
         "finatra/examples/java-http-server/src/main/java",
-        "finatra/examples/java-http-server/src/test/resources",
         "finatra/http/src/main/scala",
         "finatra/http/src/test/scala:test-deps",
         "finatra/httpclient/src/main/scala",

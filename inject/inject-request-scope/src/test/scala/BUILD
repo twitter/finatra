@@ -16,7 +16,6 @@ junit_tests(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",
         "finatra/inject/inject-request-scope/src/main/scala",
-        "finatra/inject/inject-request-scope/src/test/resources",
         "util/util-core/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
     ],
