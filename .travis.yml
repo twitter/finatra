@@ -33,9 +33,7 @@ env:
     - PROJECT=exampleWebDashboard
     - PROJECT=helloWorld
     - PROJECT=streamingExample
-    - PROJECT=thriftExampleIdl
     - PROJECT=thriftExampleServer
-    - PROJECT=thriftJavaExampleIdl
     - PROJECT=thriftJavaExampleServer
     - PROJECT=twitterClone
 
