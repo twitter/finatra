@@ -37,13 +37,13 @@ object GreeterThriftMethodBuilderClientModule
         builder.method(Greeter.Hello)
           // method type-specific filter
           .filtered(new HelloFilter)
-          .withRetryForClassifier(ByeResponseClassification)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .service)
       .withBye(
         builder.method[Bye.Args, Bye.SuccessType](Greeter.Bye)
           // method type-specific filter
           .filtered[ByeFilter]
-          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
+          .withRetryForClassifier(ByeResponseClassification)
           .service)
       // global (type-agnostic) filter
       .filtered(new MethodLoggingTypeAgnosticFilter())

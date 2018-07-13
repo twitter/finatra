@@ -48,7 +48,7 @@ class GreeterReqRepThriftMethodBuilderClientModule(
           .filtered(new HelloHeadersFilter(requestHeaderKey))
           // method type-specific filter
           .filtered[HelloFilter]
-          .withRetryForClassifier(ByeResponseClassification)
+          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
           .service
       )
       .withBye(
@@ -58,7 +58,7 @@ class GreeterReqRepThriftMethodBuilderClientModule(
           .filtered(new ByeHeadersFilter(requestHeaderKey))
           // method type-specific filter
           .filtered[ByeFilter]
-          .withRetryForClassifier(PossiblyRetryable.ResponseClassifier)
+          .withRetryForClassifier(ByeResponseClassification)
           .service
       )
       // global filter
