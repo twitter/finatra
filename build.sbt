@@ -196,10 +196,6 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
   libraryDependencies ++= Seq(
     "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
     "ch.qos.logback" % "logback-classic" % versions.logback
-  ),
-  excludeDependencies ++= Seq(
-    // commons-logging is replaced by jcl-over-slf4j
-    ExclusionRule("commons-logging", "commons-logging")
   )
 )
 
@@ -469,7 +465,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
     moduleName := "inject-thrift",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % versions.libThrift,
+      "org.apache.thrift" % "libthrift" % versions.libThrift exclude("commons-logging", "commons-logging"),
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "scrooge-core" % versions.twLibVersion,
