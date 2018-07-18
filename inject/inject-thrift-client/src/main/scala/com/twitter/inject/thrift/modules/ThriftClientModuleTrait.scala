@@ -4,7 +4,7 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.service.RetryBudget
 import com.twitter.inject.{Injector, Logging}
-import com.twitter.scrooge.ThriftService
+import com.twitter.scrooge.AsClosableMethodName
 import com.twitter.util.{Closable, Duration, Monitor}
 
 private[inject] trait ThriftClientModuleTrait extends Logging {
@@ -113,7 +113,7 @@ private[inject] trait ThriftClientModuleTrait extends Logging {
           thriftService
             .getClass
             .getDeclaredMethods
-            .find(_.getName == ThriftService.AsClosableMethodName)
+            .find(_.getName == AsClosableMethodName)
         asClosableMethodOpt match {
           case Some(method) =>
             try {
@@ -121,14 +121,14 @@ private[inject] trait ThriftClientModuleTrait extends Logging {
             } catch {
               case _: java.lang.ClassCastException =>
                 warn(
-                  s"Unable to cast result of ${ThriftService.AsClosableMethodName} invocation to a " +
+                  s"Unable to cast result of ${AsClosableMethodName} invocation to a " +
                     s"${Closable.getClass.getName.dropRight(1)} type."
                 )
                 Closable.nop
             }
           case _ =>
             warn(
-              s"${ThriftService.AsClosableMethodName} not found for instance: ${thriftService.getClass.getName}"
+              s"${AsClosableMethodName} not found for instance: ${thriftService.getClass.getName}"
             )
             Closable.nop
         }

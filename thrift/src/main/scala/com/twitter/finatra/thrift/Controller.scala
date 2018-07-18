@@ -1,9 +1,10 @@
 package com.twitter.finatra.thrift
 
 import com.twitter.finagle.Service
+import com.twitter.finagle.thrift.ToThriftService
 import com.twitter.finatra.thrift.internal.ThriftMethodService
 import com.twitter.inject.Logging
-import com.twitter.scrooge.{ThriftMethod, ToThriftService}
+import com.twitter.scrooge.ThriftMethod
 import scala.collection.mutable.ListBuffer
 
 trait Controller extends Logging { self: ToThriftService =>

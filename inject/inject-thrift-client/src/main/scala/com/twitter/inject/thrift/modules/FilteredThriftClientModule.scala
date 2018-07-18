@@ -10,6 +10,7 @@ import com.twitter.finagle.thrift.{
   ClientId,
   MethodIfaceBuilder,
   ServiceIfaceBuilder,
+  ThriftService,
   ThriftServiceIface
 }
 import com.twitter.inject.annotations.Flag
@@ -19,7 +20,6 @@ import com.twitter.inject.thrift.filters.ThriftClientFilterBuilder
 import com.twitter.inject.thrift.modules.FilteredThriftClientModule.MaxDuration
 import com.twitter.inject.thrift.{AndThenService, NonFiltered}
 import com.twitter.inject.{Injector, TwitterModule}
-import com.twitter.scrooge.ThriftService
 import com.twitter.util.{Monitor, NullMonitor, Try, Duration => TwitterDuration}
 import javax.inject.Singleton
 import org.joda.time.Duration
