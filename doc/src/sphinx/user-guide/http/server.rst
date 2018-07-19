@@ -88,7 +88,7 @@ For example, instead of setting the `-http.port` flag, you can override the foll
 
     class ExampleServer extends HttpServer {
 
-      override val defaultFinatraHttpPort: String = ":8080"
+      override val defaultHttpPort: String = ":8080"
 
       override def configureHttp(router: HttpRouter): Unit = {
         ...

@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: Rename `defaultFinatraHttpPort` to `defaultHttpPort`. ``PHAB_ID=D193578``
+
 * finatra-utils: Remove deprecated `c.t.f.utils.Handler`. ``PHAB_ID=D192288``
 
 ### Fixed

@@ -22,8 +22,8 @@ private object BaseHttpServer {
 
 private[http] trait BaseHttpServer extends TwitterServer {
 
-  protected def defaultFinatraHttpPort: String = ":8888"
-  private val httpPortFlag = flag("http.port", defaultFinatraHttpPort, "External HTTP server port")
+  protected def defaultHttpPort: String = ":8888"
+  private val httpPortFlag = flag("http.port", defaultHttpPort, "External HTTP server port")
 
   protected def defaultMaxRequestSize: StorageUnit = 5.megabytes
   private val maxRequestSizeFlag =
