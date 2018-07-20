@@ -103,6 +103,11 @@ class EmbeddedHttpServer(
     PortUtils.loopbackAddressForPort(httpsExternalPort())
   }
 
+  /** Supplements an absolute path URI with the http scheme and authority */
+  def fullHttpURI(path: String) = {
+    s"http://$externalHttpHostAndPort$path"
+  }
+
   /* Public */
 
   /**

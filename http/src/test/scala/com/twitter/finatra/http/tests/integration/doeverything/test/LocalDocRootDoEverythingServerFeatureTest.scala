@@ -1,11 +1,11 @@
 package com.twitter.finatra.http.tests.integration.doeverything.test
 
 import com.twitter.finagle.http.Status._
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.integration.doeverything.test.DocRootLocalFilesystemTestUtility
+import com.twitter.finatra.http.marshalling.mustache.MustacheService
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.TestUserView
-import com.twitter.finatra.http.marshalling.mustache.MustacheService
-import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.test.LocalFilesystemTestUtils._
 import com.twitter.inject.server.FeatureTest
 import java.io.{File, FileWriter}
@@ -82,7 +82,7 @@ class LocalDocRootDoEverythingServerFeatureTest
       withBody = "age2:18\nname2:bob\nuser1\nuser2\n"
     )
 
-    response.location should equal(Some("/foo/1"))
+    response.location should equal(Some(server.fullHttpURI("/foo/1")))
   }
 
   test("DoEverythingServer#formPostViewFromBuilderCreatedHtml") {
@@ -93,7 +93,7 @@ class LocalDocRootDoEverythingServerFeatureTest
       withBody = "age:18\nname:bob\nuser1\nuser2\n"
     )
 
-    response.location should equal(Some("/foo/1"))
+    response.location should equal(Some(server.fullHttpURI("/foo/1")))
   }
 
   test("DoEverythingServer#testfile") {

@@ -34,6 +34,9 @@ All notable changes to this project will be documented in this file. Note that `
   `c.t.finagle.Failure` exceptions, regardless of flags and add a try-catch to `ExceptionManager`
   to remap exceptions thrown by `ExceptionMapper`s ``PHAB_ID=D180166``
 
+* finatra-http: (BREAKING API CHANGE) Fix HttpResponseFilter to properly respect URI schema 
+  during location header overwriting``PHAB_ID=D191448``
+
 ### Closed
 
 ## [finatra-18.6.0](https://github.com/twitter/finatra/tree/finatra-18.6.0) (2018-06-14)
