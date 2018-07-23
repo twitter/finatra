@@ -7,8 +7,7 @@ import com.twitter.finagle.http.{Method, Status, _}
 import com.twitter.finatra.http.JsonAwareEmbeddedHttpClient.jsonParseWithNormalizer
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.inject.server.PortUtils.ephemeralLoopback
-import com.twitter.inject.server.{EmbeddedHttpClient, EmbeddedTwitterServer, PortUtils, Ports, info}
+import com.twitter.inject.server.{EmbeddedHttpClient, EmbeddedTwitterServer, Ports}
 import com.twitter.util.{Duration, Memoize}
 import scala.collection.JavaConverters._
 
@@ -60,7 +59,7 @@ class EmbeddedHttpServer(
   closeGracePeriod: Option[Duration] = None
 ) extends EmbeddedTwitterServer(
       twitterServer = twitterServer,
-      flags = flags + (httpPortFlag -> ephemeralLoopback),
+      flags = flags,
       args = args,
       waitForWarmup = waitForWarmup,
       stage = stage,
@@ -79,34 +78,6 @@ class EmbeddedHttpServer(
 
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
-
-  /* Overrides */
-
-  /** Logs the external http and/or https host and port of the underlying EmbeddedHttpServer */
-  override protected[twitter] def logStartup(): Unit = {
-    super.logStartup()
-    info(s"ExternalHttp   -> http://$externalHttpHostAndPort", disableLogging)
-    if (twitterServer.httpsExternalPort.isDefined) {
-      info(s"ExternalHttps  -> https://$externalHttpsHostAndPort", disableLogging)
-    }
-  }
-
-  /* Public */
-
-  /** A `host:post` String of the loopback and external "http" port for the underlying embedded HttpServer */
-  def externalHttpHostAndPort: String = {
-    PortUtils.loopbackAddressForPort(httpExternalPort())
-  }
-
-  /** A `host:post` String of the loopback and external "https" port for the underlying embedded HttpServer */
-  def externalHttpsHostAndPort: String = {
-    PortUtils.loopbackAddressForPort(httpsExternalPort())
-  }
-
-  /** Supplements an absolute path URI with the http scheme and authority */
-  def fullHttpURI(path: String) = {
-    s"http://$externalHttpHostAndPort$path"
-  }
 
   /* Public */
 

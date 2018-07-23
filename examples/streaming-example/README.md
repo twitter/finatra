@@ -17,7 +17,7 @@ Running
 -------
 ```
 [finatra] $ cd ../../
-[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt streamingExample/run
+[finatra] $ ./sbt "project streamingExample" "run -http.port=:8888 -admin.port=:9990"
 ```
 * Then browse the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:

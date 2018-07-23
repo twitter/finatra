@@ -62,9 +62,104 @@ A more complete example includes adding Modules, a Controller, and Filters.
       }
     }
 
-
 Simplistically, a server can be thought of as a collection of `controllers <controllers.html>`__ composed with `filters <filters.html>`__.
 Additionally, a server can define `modules <../getting-started/modules.html>`__ for providing instances to the object graph and how to `map exceptions <../http/exceptions.html>`__ to HTTP responses.
+
+Creating an HTTPS Server
+------------------------
+
+Finatra provides a default for the `defaultHttpPort` of `":8888"` which means that Finatra will
+always attempt to start a non-ssl HTTP server on port `8888` if no other configuration is done. The
+framework allows for users to specify starting an HTTPS server, either additionally or instead.
+
+An HTTPS server can be started by passing in a value for the `-https.port` flag or overriding the
+`defaultHttpsPort` with a non-empty value. To configure the underlying Finagle `c.t.finagle.Http.Server`
+transport correctly, override the `configureHttpsServer` method in your HttpServer definition. E.g.,
+
+.. code:: scala
+
+    import com.twitter.finagle.Http
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
+    object ExampleHttpsServerMain extends ExampleHttpsServer
+
+    class ExampleHttpsServer extends HttpServer {
+
+      override val defaultHttpsPort: String = ":443"
+
+      // HTTP server configuration
+      override def configureHttpServer(server: Http.Server): Http.Server = {
+        server
+          .withResponseClassifier(???)
+          .withMaxInitialLineSize(???)
+      }
+
+      // HTTPS server configuration
+      override def configureHttpsServer(server: Http.Server): Http.Server = {
+        server
+          .withResponseClassifier(???)
+          .withMaxInitialLineSize(???)
+          .withTransport.tls(???)
+      }
+
+      override def configureHttp(router: HttpRouter): Unit = {
+        router
+          .add[ExampleController]
+      }
+    }
+
+For convenience, a `Tls <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/Tls.scala>`__
+trait is provided which encapsulates standard `TLS <https://en.wikipedia.org/wiki/Transport_Layer_Security>`__
+configuration for an HTTPS server. Thus you can also do:
+
+.. code:: scala
+
+    import com.twitter.finagle.Http
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
+    object ExampleHttpsServerMain extends ExampleHttpsServer
+
+    class ExampleHttpsServer
+      extends HttpServer
+      with Tls {
+
+      override val defaultHttpsPort: String = ":443"
+
+      override def configureHttp(router: HttpRouter): Unit = {
+        router
+          .add[ExampleController]
+      }
+    }
+
+Disabling the Default HTTP Server
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As mentioned, the above configuration will still attempt to start a non-ssl HTTP server. To disable
+the non-ssl HTTP server, override the `defaultHttpPort` value to an empty String (and do not
+pass a value for the `-http.port` flag), e.g.,
+
+.. code:: scala
+
+    import com.twitter.finagle.Http
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
+    object ExampleHttpsServerMain extends ExampleHttpsServer
+
+    class ExampleHttpsServer
+      extends HttpServer
+      with Tls {
+
+      override val defaultHttpPort: String = "" // disable the default HTTP port
+      override val defaultHttpsPort: String = ":443"
+
+      override def configureHttp(router: HttpRouter): Unit = {
+        router
+          .add[ExampleController]
+      }
+    }
 
 Naming Convention
 -----------------

@@ -17,18 +17,13 @@ Running
 -------
 ```
 [finatra] $ cd ../../
-[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt exampleWebDashboard/run
+[finatra] $ ./sbt "project exampleWebDashboard" "run -http.port=:8888  -admin.port=:9990"
 ```
-
 * Then browse the external UI: [http://localhost:8888](http://localhost:8888)
 * Or browse to a specific-endpoint: [http://localhost:8888/ping](http://localhost:8888/ping)
 * Or view the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
 [finatra] $ ./sbt exampleWebDashboard/assembly
-[finatra] $ java -jar -Dlog.service.output=web-dashboard.log -Dlog.access.output=access.log examples/web-dashboard/target/scala-X.XX/web-dashboard-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
+[finatra] $ java -jar examples/web-dashboard/target/scala-X.XX/web-dashboard-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
 ```
-*Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they 
-can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. 
-When not set the [logback.xml](./src/main/resources/logback.xml) is parameterized with defaults of 
-`service.log` and `access.log`, respectively.

@@ -1,13 +1,19 @@
 <configuration>
   <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
+  <!-- JUL/JDK14 to Logback bridge -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+    <resetJUL>true</resetJUL>
+  </contextListener>
+
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>%date %.-3level %-25logger{0} %msg%n</pattern>
     </encoder>
   </appender>
 
-  <root level="${log_level:-info}">
+  <root level="info">
     <appender-ref ref="STDOUT"/>
   </root>
 </configuration>
+

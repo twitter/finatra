@@ -1,6 +1,6 @@
 # Finatra Java Server and Java Application Examples
 
-A simple "Hello World" HTTP server and application both written in Java.
+A simple "Hello World" TwitterServer and application both written in Java.
 
 Note: All Finatra examples should be run from the base Finatra directory as they are defined as part 
 of the root project.
@@ -13,19 +13,22 @@ For any branch that is not [Master](https://github.com/twitter/finatra/tree/mast
 branches), see the [CONTRIBUTING.md](../../CONTRIBUTING.md#building-dependencies) documentation on 
 building Finatra and its dependencies locally in order to run the examples.
 
-Running
--------
+Running the [TwitterServer](https://twitter.github.io/twitter-server/)
+----------------------------------------------------------------------
 ```
 [finatra] $ cd ../../
-[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt exampleInjectJavaServer/run
+[finatra] $ ./sbt "project exampleInjectJavaServer" "runMain com.twitter.hello.server.HelloWorldServerMain -admin.port=:9990"
 ```
-
+* Then browse the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
 [finatra] $ ./sbt exampleInjectJavaServer/assembly
-[finatra] $ java -jar -Dlog.service.output=java-server.log examples/java-server/target/scala-2.XX/java-server-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
+[finatra] $ java -jar examples/java-server/target/scala-2.XX/java-server-assembly-X.XX.X.jar -admin.port=:9990
 ```
-*Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they 
-can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. 
-When not set the [logback.xml](./src/main/resources/logback.xml) is parameterized with defaults of 
-`service.log` and `access.log`, respectively.
+
+Running the [Application](https://github.com/twitter/util/blob/develop/util-app/src/main/scala/com/twitter/app/App.scala)
+-------------------------------------------------------------------------------------------------------------------------
+```
+[finatra] $ cd ../../
+[finatra] $ ./sbt "project exampleInjectJavaServer" "runMain com.twitter.hello.app.HelloWorldAppMain"
+```

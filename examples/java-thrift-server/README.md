@@ -17,15 +17,11 @@ Running
 -------
 ```
 [finatra] $ cd ../../
-[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt thriftJavaExampleServer/run
+[finatra] $ ./sbt "project thriftJavaExampleServer" "run -thrift.port=:9999 -admin.port=:9990"
 ```
-
+* Then browse the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
 [finatra] $ ./sbt thriftJavaExampleServer/assembly
-[finatra] $ java -jar -Dlog.service.output=java-thrift-server.log -Dlog.access.output=access.log examples/java-thrift-server/thrift-example-server/target/scala-2.XX/thrift-example-server-assembly-X.XX.X.jar -thrift.port=:9999 -admin.port=:9990
+[finatra] $ java -jar examples/java-thrift-server/thrift-example-server/target/scala-2.XX/thrift-example-server-assembly-X.XX.X.jar -thrift.port=:9999 -admin.port=:9990
 ```
-*Note*: adding the java args `-Dlog.service.output` and `-Dlog.access.output` is optional and they 
-can be set to any location on disk or to `/dev/stdout` or `/dev/stderr` for capturing log output. 
-When not set the [logback.xml](./thrift-example-server/src/main/resources/logback.xml) is 
-parameterized with defaults of `service.log` and `access.log`, respectively.

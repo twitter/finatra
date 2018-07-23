@@ -196,6 +196,14 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
   libraryDependencies ++= Seq(
     "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
     "ch.qos.logback" % "logback-classic" % versions.logback
+  ),
+  excludeDependencies in Test ++= Seq(
+    ExclusionRule("com.twitter", "twitter-server-logback-classic"),
+    ExclusionRule("ch.qos.logback", "logback-classic")
+  ),
+  excludeDependencies ++= Seq(
+    // commons-logging is replaced by jcl-over-slf4j
+    ExclusionRule("commons-logging", "commons-logging")
   )
 )
 
