@@ -8,6 +8,16 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+### Fixed
+
+### Closed
+
+## [finatra-18.8.0](https://github.com/twitter/finatra/tree/finatra-18.8.0) (2018-08-06)
+
+### Added
+
+### Changed
+
 * finatra-http: (BREAKING API CHANGE) Typical TLS Configuration for an HTTPS server has been moved
   into a trait, `c.t.finatra.http.Tls` which also defines the relevant flags (and overridable
   defaults) for specifying the SSL cert and key paths. Users can choose to mix this trait into their
