@@ -2,8 +2,8 @@ package com.twitter.inject.thrift.integration
 
 import com.twitter.conversions.time._
 import com.twitter.finagle.{ListeningServer, ThriftMux}
+import com.twitter.finagle.thrift.ThriftService
 import com.twitter.inject.server.{PortUtils, TwitterServer}
-import com.twitter.scrooge.ThriftService
 import com.twitter.util.Await
 
 class TestThriftServer(service: ThriftService) extends TwitterServer {

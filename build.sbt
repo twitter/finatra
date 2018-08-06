@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.7.0"
+val releaseVersion = "18.8.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -196,6 +196,10 @@ lazy val exampleServerSettings = baseServerSettings ++ Seq(
   libraryDependencies ++= Seq(
     "com.twitter" %% "twitter-server-logback-classic" % versions.twLibVersion,
     "ch.qos.logback" % "logback-classic" % versions.logback
+  ),
+  excludeDependencies in Test ++= Seq(
+    ExclusionRule("com.twitter", "twitter-server-logback-classic"),
+    ExclusionRule("ch.qos.logback", "logback-classic")
   ),
   excludeDependencies ++= Seq(
     // commons-logging is replaced by jcl-over-slf4j
@@ -469,7 +473,7 @@ lazy val injectThrift = (project in file("inject/inject-thrift"))
     moduleName := "inject-thrift",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*\\.thriftscala.*;.*\\.thriftjava.*",
     libraryDependencies ++= Seq(
-      "org.apache.thrift" % "libthrift" % versions.libThrift,
+      "org.apache.thrift" % "libthrift" % versions.libThrift exclude("commons-logging", "commons-logging"),
       "com.twitter" %% "finagle-core" % versions.twLibVersion,
       "com.twitter" %% "finagle-mux" % versions.twLibVersion,
       "com.twitter" %% "scrooge-core" % versions.twLibVersion,

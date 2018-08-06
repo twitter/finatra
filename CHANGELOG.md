@@ -12,6 +12,38 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Closed
 
+## [finatra-18.8.0](https://github.com/twitter/finatra/tree/finatra-18.8.0) (2018-08-06)
+
+### Added
+
+### Changed
+
+* finatra-http: (BREAKING API CHANGE) Typical TLS Configuration for an HTTPS server has been moved
+  into a trait, `c.t.finatra.http.Tls` which also defines the relevant flags (and overridable
+  defaults) for specifying the SSL cert and key paths. Users can choose to mix this trait into their
+  `c.t.finatra.http.HttpServer` classes in order to specify an HTTPS server. Users who wish to maintain
+  the current HTTPS functionality SHOULD mix in the Tls trait to their HttpServer: e.g.,
+  ```
+  class FooService extends HttpServer with Tls {
+    ...
+  }
+  ```
+
+  Additionally, TLS transport configuration for the underlying Finagle `c.t.finagle.Http.Server` is
+  no longer done by default when creating and running an HTTPS server. This is to allow for more
+  flexible configuration on the underlying `c.t.finagle.Http.Server` when setting up TLS. Thus it is
+  recommended that users ensure to either mix in the provided Tls trait or provide the correct
+  `c.t.finagle.Http.Server` transport configuration via the `configureHttpsServer` method.
+  ``PHAB_ID=D193579``
+
+* finatra-http: Rename `defaultFinatraHttpPort` to `defaultHttpPort`. ``PHAB_ID=D193578``
+
+* finatra-utils: Remove deprecated `c.t.f.utils.Handler`. ``PHAB_ID=D192288``
+
+### Fixed
+
+### Closed
+
 ## [finatra-18.7.0](https://github.com/twitter/finatra/tree/finatra-18.7.0) (2018-07-10)
 
 ### Added
@@ -29,6 +61,9 @@ All notable changes to this project will be documented in this file. Note that `
 * finatra-http: Fix FailureExceptionMapper handling of wrapped exceptions. Unwrap cause for all
   `c.t.finagle.Failure` exceptions, regardless of flags and add a try-catch to `ExceptionManager`
   to remap exceptions thrown by `ExceptionMapper`s ``PHAB_ID=D180166``
+
+* finatra-http: (BREAKING API CHANGE) Fix HttpResponseFilter to properly respect URI schema 
+  during location header overwriting``PHAB_ID=D191448``
 
 ### Closed
 

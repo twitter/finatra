@@ -17,11 +17,11 @@ Running
 -------
 ```
 [finatra] $ cd ../../
-[finatra] $ JAVA_OPTS="-Dlog.service.output=/dev/stdout -Dlog.access.output=/dev/stdout" ./sbt exampleTwitterServer/run
+[finatra] $ ./sbt "project exampleTwitterServer" "run -admin.port=:9990"
 ```
 * Then browse the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
 * Or build and run a deployable jar:
 ```
 [finatra] $ ./sbt exampleTwitterServer/assembly
-[finatra] $ java -jar examples/example-twitter-server/target/scala-2.XX/example-twitter-server-assembly-X.XX.X.jar -http.port=:8888 -admin.port=:9990
+[finatra] $ java -jar examples/example-twitter-server/target/scala-2.XX/example-twitter-server-assembly-X.XX.X.jar -admin.port=:9990
 ```

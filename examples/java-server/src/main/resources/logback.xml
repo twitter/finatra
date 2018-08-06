@@ -1,51 +1,18 @@
 <configuration>
   <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
 
-  <!-- ===================================================== -->
-  <!-- Common Config -->
-  <!-- ===================================================== -->
-
   <!-- JUL/JDK14 to Logback bridge -->
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
     <resetJUL>true</resetJUL>
   </contextListener>
 
-  <!-- Service Log (Rollover every 50MB, max 11 logs) -->
-  <appender name="SERVICE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${log.service.output:-service.log}</file>
-    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${log.service.output:-service.log}.%i</fileNamePattern>
-      <minIndex>1</minIndex>
-      <maxIndex>10</maxIndex>
-    </rollingPolicy>
-    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <maxFileSize>50MB</maxFileSize>
-    </triggeringPolicy>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%date %.-3level %-16X{traceId} %-25logger{0} %msg%n</pattern>
+      <pattern>%date %.-3level %-25logger{0} %msg%n</pattern>
     </encoder>
   </appender>
 
-  <!-- ===================================================== -->
-  <!-- Primary Async Appenders -->
-  <!-- ===================================================== -->
-
-  <appender name="ASYNC-SERVICE" class="com.twitter.inject.logback.AsyncAppender">
-    <queueSize>${queue.size:-1024}</queueSize>
-    <maxFlushTime>${max.flush.time:-0}</maxFlushTime>
-    <appender-ref ref="SERVICE"/>
-  </appender>
-
-  <!-- ===================================================== -->
-  <!-- Package Config -->
-  <!-- ===================================================== -->
-
-  <!-- Per-Package Config -->
-  <logger name="com.twitter" level="info"/>
-
-  <!-- Root Config -->
-  <root level="${log_level:-INFO}">
-    <appender-ref ref="ASYNC-SERVICE"/>
+  <root level="info">
+    <appender-ref ref="STDOUT"/>
   </root>
-
 </configuration>

@@ -2,7 +2,7 @@ package com.twitter.finatra.http
 
 import com.twitter.conversions.time._
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.inject.server.{EmbeddedTwitterServer, info, Ports}
+import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
 import com.twitter.util.Closable
 import net.codingwell.scalaguice.typeLiteral
 import scala.collection.JavaConverters._
@@ -26,7 +26,44 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
   /** Provide an override to the underlying server's mapper */
   def mapperOverride: Option[FinatraObjectMapper]
 
+  /* Overrides */
+
+  /** Logs the external http and/or https host and port of the underlying EmbeddedHttpServer */
+  override protected[twitter] def logStartup(): Unit = {
+    self.logStartup()
+    if (twitterServer.httpExternalPort.isDefined) {
+      info(s"ExternalHttp   -> http://$externalHttpHostAndPort", disableLogging)
+    }
+    if (twitterServer.httpsExternalPort.isDefined) {
+      info(s"ExternalHttps  -> https://$externalHttpsHostAndPort", disableLogging)
+    }
+  }
+
+  /**
+   * Adds the [[httpPortFlag]] with a value pointing to the ephemeral loopback address to
+   * the list of flags to be passed to the underlying server.
+   * @see [[PortUtils.ephemeralLoopback]].
+   */
+  override protected[twitter] def combineArgs(): Array[String] = {
+    s"-$httpPortFlag=${PortUtils.ephemeralLoopback}" +: self.combineArgs
+  }
+
   /* Public */
+
+  /** A `host:post` String of the loopback and external "http" port for the underlying embedded HttpServer */
+  lazy val externalHttpHostAndPort: String = {
+    PortUtils.loopbackAddressForPort(httpExternalPort())
+  }
+
+  /** A `host:post` String of the loopback and external "https" port for the underlying embedded HttpServer */
+  lazy val externalHttpsHostAndPort: String = {
+    PortUtils.loopbackAddressForPort(httpsExternalPort())
+  }
+
+  /** Supplements an absolute path URI with the http scheme and authority */
+  def fullHttpURI(path: String): String = {
+    s"http://$externalHttpHostAndPort$path"
+  }
 
   /** The assigned external "http" port for the underlying embedded HttpServer */
   def httpExternalPort(): Int = {

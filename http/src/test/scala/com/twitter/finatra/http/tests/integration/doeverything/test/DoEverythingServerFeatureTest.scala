@@ -4,12 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.google.common.net.MediaType
 import com.google.inject.name.Names
 import com.google.inject.{Key, TypeLiteral}
-import com.twitter.finagle.{Failure, FailureFlags}
 import com.twitter.finagle.http.Method._
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.http._
-import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finagle.http.codec.HttpCodec
+import com.twitter.finagle.{Failure, FailureFlags}
+import com.twitter.finatra.http.EmbeddedHttpServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.DoEverythingServer
 import com.twitter.finatra.http.tests.integration.doeverything.main.domain.SomethingStreamedResponse
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.DoEverythingService
@@ -18,8 +18,8 @@ import com.twitter.finatra.json.JsonDiff._
 import com.twitter.inject.Mockito
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
-import com.twitter.{logging => ctl}
 import com.twitter.util.Future
+import com.twitter.{logging => ctl}
 import java.net.{ConnectException, InetSocketAddress, SocketAddress}
 import org.apache.commons.io.IOUtils
 import org.scalatest.exceptions.TestFailedException
@@ -494,7 +494,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       withBody = "age2:18\nname2:bob\nuser1\nuser2\n"
     )
 
-    response.location should equal(Some("/foo/1"))
+    response.location should equal(Some(server.fullHttpURI("/foo/1")))
   }
 
   test("POST /formPostViewFromBuilderCreatedHtml") {
@@ -505,7 +505,7 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
       withBody = "age:18\nname:bob\nuser1\nuser2\n"
     )
 
-    response.location should equal(Some("/foo/1"))
+    response.location should equal(Some(server.fullHttpURI("/foo/1")))
   }
 
   test("POST user with injected group_id from route param") {

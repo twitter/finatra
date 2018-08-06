@@ -5,7 +5,8 @@ import com.twitter.finagle.{
   BackupRequestLost,
   CancelledConnectionException,
   CancelledRequestException,
-  Failure
+  Failure,
+  FailureFlags
 }
 import com.twitter.inject.Test
 import com.twitter.inject.exceptions.PossiblyRetryable
@@ -24,13 +25,13 @@ class PossiblyRetryableTest extends Test {
     assertIsCancellation(new CancelledRequestException)
     assertIsCancellation(new CancelledConnectionException(new Exception("cause")))
     assertIsCancellation(new ClientDiscardedRequestException("cause"))
-    assertIsCancellation(Failure("int", Failure.Interrupted))
+    assertIsCancellation(Failure("int", FailureFlags.Interrupted))
     assertIsCancellation(Failure.rejected("", new CancelledRequestException))
   }
 
   test("test isNonRetryable") {
     assertIsNonRetryable(BackupRequestLost)
-    assertIsNonRetryable(Failure("int", Failure.Ignorable))
+    assertIsNonRetryable(Failure("int", FailureFlags.Ignorable))
   }
 
   test("test apply") {

@@ -22,22 +22,15 @@ private object BaseHttpServer {
 
 private[http] trait BaseHttpServer extends TwitterServer {
 
-  protected def defaultFinatraHttpPort: String = ":8888"
-  private val httpPortFlag = flag("http.port", defaultFinatraHttpPort, "External HTTP server port")
+  protected def defaultHttpPort: String = ":8888"
+  private val httpPortFlag = flag("http.port", defaultHttpPort, "External HTTP server port")
 
   protected def defaultMaxRequestSize: StorageUnit = 5.megabytes
   private val maxRequestSizeFlag =
     flag("maxRequestSize", defaultMaxRequestSize, "HTTP(s) Max Request Size")
 
   protected def defaultHttpsPort: String = ""
-  private val httpsPortFlag = flag("https.port", defaultHttpsPort, "HTTPs Port")
-
-  protected def defaultCertificatePath: String = ""
-  private val certificatePathFlag =
-    flag("cert.path", defaultCertificatePath, "path to SSL certificate")
-
-  protected def defaultKeyPath: String = ""
-  private val keyPathFlag = flag("key.path", defaultKeyPath, "path to SSL key")
+  private val httpsPortFlag = flag("https.port", defaultHttpsPort, "External HTTPS server port")
 
   protected def defaultShutdownTimeout: Duration = 1.minute
   private val shutdownTimeoutFlag = flag(
@@ -88,12 +81,13 @@ private[http] trait BaseHttpServer extends TwitterServer {
    * this trait or for overriding defaults provided herein, e.g.,
    *
    * override def configureHttpServer(server: Http.Server): Http.Server = {
-   *   server
-   *     .withResponseClassifier(...)
-   *     .withMaxInitialLineSize(2048)
+   *  server
+   *    .withResponseClassifier(...)
+   *    .withMaxInitialLineSize(2048)
    * }
    *
    * @param server - the [[com.twitter.finagle.Http.Server]] to configure.
+   *
    * @return a configured Http.Server.
    */
   protected def configureHttpServer(server: Http.Server): Http.Server = {
@@ -105,12 +99,14 @@ private[http] trait BaseHttpServer extends TwitterServer {
    * this trait or for overriding defaults provided herein, e.g.,
    *
    * override def configureHttpsServer(server: Http.Server): Http.Server = {
-   *   server
-   *     .withResponseClassifier(...)
-   *     .withMaxInitialLineSize(2048)
+   *  server
+   *    .withResponseClassifier(...)
+   *    .withMaxInitialLineSize(2048)
+   *    .withTransport.tls(....)
    * }
    *
    * @param server - the [[com.twitter.finagle.Http.Server]] to configure.
+   *
    * @return a configured Http.Server.
    */
   protected def configureHttpsServer(server: Http.Server): Http.Server = {
@@ -167,7 +163,7 @@ private[http] trait BaseHttpServer extends TwitterServer {
           info(s"http server announced to $addr")
           httpServer.announce(addr)
       }
-      info(s"http server started on port: ${httpExternalPort.get}")
+      info(s"http server started on port: $port")
     }
   }
 
@@ -178,8 +174,6 @@ private[http] trait BaseHttpServer extends TwitterServer {
           baseHttpServer
             .withLabel(httpsServerNameFlag())
             .withStatsReceiver(injector.instance[StatsReceiver])
-            .withTransport
-            .tls(certificatePathFlag(), keyPathFlag(), None, None, None)
         )
 
       httpsServer = serverBuilder.serve(port, httpService)
@@ -189,9 +183,11 @@ private[http] trait BaseHttpServer extends TwitterServer {
       await(httpsServer)
       httpsAnnounceFlag() match {
         case BaseHttpServer.NoHttpAnnouncement => // no-op
-        case addr => httpsServer.announce(addr)
+        case addr =>
+          info(s"https server announced to $addr")
+          httpsServer.announce(addr)
       }
-      info("https server started on port: " + httpsExternalPort)
+      info(s"https server started on port: $port")
     }
   }
 }

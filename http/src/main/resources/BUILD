@@ -1,3 +1,3 @@
 resources(
-    sources = globs("META-INF/*", "*.xml"),
+    sources = globs("META-INF/*"),
 )

@@ -17,7 +17,7 @@ Running
 -------
 ```
 [finatra] $ cd ../../
-[finatra] $ ./sbt benchmarkServer/run
+[finatra] $ ./sbt "project benchmarkServer" "run -http.port=:8888 -admin.port=:9990"
 ```
 * Then browse to: [http://localhost:8888/json](http://localhost:8888/json)
 * Or view the [twitter-server admin interface](https://twitter.github.io/twitter-server/Features.html#admin-http-interface): [http://localhost:9990/admin](http://localhost:9990/admin)
@@ -33,7 +33,6 @@ Run Local Benchmark
 To run an example benchmarking, you can run the [local_benchmark.sh](./local_benchmark.sh) 
 script. Note, results will vary based on your machine performance. Again, from the base 
 Finatra directory:
-
 ```
 [finatra] $ ./examples/benchmark-server/local_benchmark.sh
 ...

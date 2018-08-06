@@ -22,7 +22,6 @@ junit_tests(
         "finatra/http/src/test/scala:test-deps",
         "finatra/httpclient/src/main/scala",
         "finatra/inject-thrift-client-http-mapper/src/main/scala",
-        "finatra/inject-thrift-client-http-mapper/src/test/resources",
         "finatra/inject-thrift-client-http-mapper/src/test/thrift:thrift-scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",

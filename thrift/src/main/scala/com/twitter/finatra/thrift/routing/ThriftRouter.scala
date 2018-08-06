@@ -2,6 +2,7 @@ package com.twitter.finatra.thrift.routing
 
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{Service, Thrift, ThriftMux}
+import com.twitter.finagle.thrift.{ThriftService, ToThriftService}
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Services, Registrar}
@@ -9,7 +10,7 @@ import com.twitter.finatra.thrift.internal.{ThriftMethodService, ThriftRequestUn
 import com.twitter.inject.TypeUtils._
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging}
-import com.twitter.scrooge.{ThriftMethod, ThriftService, ToThriftService}
+import com.twitter.scrooge.ThriftMethod
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import java.lang.reflect.Method
 import javax.inject.{Inject, Singleton}

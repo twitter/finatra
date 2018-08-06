@@ -5,7 +5,9 @@ import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.request.RequestUtils
-import com.twitter.util.{ScheduledThreadPoolTimer, Future}
+import com.twitter.inject.Logging
+import com.twitter.util.{Future, Return, ScheduledThreadPoolTimer, Throw, Try}
+import java.net.URI
 import java.util.{Locale, TimeZone}
 import javax.inject.Singleton
 import org.apache.commons.lang.time.FastDateFormat
@@ -16,7 +18,7 @@ import org.apache.commons.lang.time.FastDateFormat
  * - turns a 'partial' Location header into a full URL
  */
 @Singleton
-class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
+class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] with Logging {
 
   // optimized
   private val dateFormat = FastDateFormat.getInstance(
@@ -64,11 +66,20 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] {
     dateFormat.format(System.currentTimeMillis())
   }
 
-  private def updateLocationHeader(request: R, response: Response) = {
+  private def updateLocationHeader(request: R, response: Response): Unit = {
     for (existingLocation <- response.location) {
-      if (!existingLocation.startsWith("http") && !existingLocation.startsWith("/")) {
-        response.headerMap
-          .set(HttpHeaders.Location, RequestUtils.pathUrl(request) + existingLocation)
+      Try(new URI(existingLocation)) match {
+        case Throw(e) =>
+          warn(
+            s"Response location header value $existingLocation is not a valid URI. ${e.getMessage}"
+          )
+        case Return(uri) if uri.getScheme == null =>
+          response.headerMap.set(
+            HttpHeaders.Location,
+            RequestUtils.normalizedURIWithoutScheme(uri, request)
+          )
+        case _ =>
+        // don't modify
       }
     }
   }
