@@ -175,7 +175,7 @@ class StreamingResponse[T, U] private (
     Future.value(response)
   }
 
-  private[this] def write(writer: Writer): Future[Unit] = {
+  private[this] def write(writer: Writer[Buf]): Future[Unit] = {
     streamTransformer(asyncStream).foreachF {
       case (item, buf) =>
         writer.write(buf).respond(onWrite(item, buf))

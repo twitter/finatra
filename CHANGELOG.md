@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file. Note that `
 
 ### Changed
 
+* finatra-http: (BREAKING API CHANGE) `c.t.io.Reader` and `c.t.io.Writer` are now abstracted over
+  the type they produce/consume (`Reader[A]` and `Writer[A]`) and are no longer fixed to `Buf`.
+  ``PHAB_ID=D195638``
+
 ### Fixed
 
 ### Closed

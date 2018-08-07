@@ -8,7 +8,7 @@ import javax.inject.{Inject, Singleton}
 @Singleton
 private[finatra] class JsonStreamParser @Inject()(mapper: FinatraObjectMapper) {
 
-  def parseArray[T: Manifest](reader: Reader): AsyncStream[T] = {
+  def parseArray[T: Manifest](reader: Reader[Buf]): AsyncStream[T] = {
     val bufs = AsyncStream.fromReader(reader)
     parseArray[T](bufs)
   }
