@@ -381,6 +381,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="JavaCallback.html" title=""></a>
                         <a href="JavaCallback.html" title="">JavaCallback</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="Tls.html" title="A helper trait for serving HTTPS requests with standard TLS."></a>
+                        <a href="Tls.html" title="A helper trait for serving HTTPS requests with standard TLS.">Tls</a>
                       </li><li name="com.twitter.finatra.httpclient" visbl="pub" class="indented4 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpclient"></a><a id="httpclient:httpclient"></a>
       <span class="permalink">
@@ -669,6 +673,34 @@
       </span>
       
       
+    </li><li name="com.twitter.finatra.http.Tls" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="TlsextendsAnyRef"></a><a id="Tls:Tls"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/index.html#TlsextendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a title="A helper trait for serving HTTPS requests with standard TLS." href="Tls.html"><span class="name">Tls</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A helper trait for serving HTTPS requests with standard TLS.</p><div class="fullcomment"><div class="comment cmt"><p>A helper trait for serving HTTPS requests with standard TLS. To use,
+mix into an <a href="HttpServer.html" class="extype" name="com.twitter.finatra.http.HttpServer">HttpServer</a> and pass the <code>cert.path</code> and <code>key.path</code> flags
+or set the defaults accordingly.</p><pre><span class="kw">object</span> MyServiceMain <span class="kw">extends</span> MyService
+
+<span class="kw">class</span> MyService <span class="kw">extends</span> HttpServer <span class="kw">with</span> Tls {
+   <span class="kw">override</span> <span class="kw">val</span> defaultCertificatePath = <span class="lit">"/path/to/cert"</span>
+
+   <span class="kw">override</span> <span class="kw">protected</span> <span class="kw">def</span> configureHttp(router: HttpRouter): <span class="std">Unit</span> = {
+      ...
+   }
+}</pre><p>To further specify or change the <span class="extype" name="Http.Server">Http.Server</span> configuration, override the <a href="Tls.html#configureHttpsServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" class="extmbr" name="com.twitter.finatra.http.Tls#configureHttpsServer">Tls#configureHttpsServer</a>
+method.
+</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p><a href="https://en.wikipedia.org/wiki/Transport_Layer_Security" target="_blank">TLS</a></p></span></dd></dl></div>
     </li></ol>
             </div>
 

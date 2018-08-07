@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HTTP Responses &#8212; Finatra 18.7.0 documentation</title>
+    <title>HTTP Responses &#8212; Finatra 18.8.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.7.0',
+        VERSION:     '18.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.7.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.8.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Message Body Components" href="message_body.html" />
     <link rel="prev" title="HTTP Requests" href="requests.html" />
@@ -288,8 +288,9 @@ get(&quot;/ServiceUnavailable&quot;) { request: Request =&gt;
 </div>
 <p>which can be used:</p>
 <ul class="simple">
-<li>if the URI starts with &#8220;http&#8221; or &#8220;/&#8221; then the URI is placed in the Location header unchanged.</li>
-<li><cite>response.location(&#8220;123&#8221;)</cite> will get turned into the correct full URL by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">HttpResponseFilter</a> (e.g. <cite>http://host.com/users/123</cite>).</li>
+<li>if the URI has a valid scheme then the URI is placed in the Location header unchanged.</li>
+<li><cite>response.location(&#8220;/users/123&#8221;)</cite> will get turned into the correct full URI by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/HttpResponseFilter.scala">HttpResponseFilter</a> (e.g. <cite>http://host.com/users/123</cite>) according to rules defined in the <a class="reference external" href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier#Generic_syntax">URI specification</a></li>
+<li>The scheme is assumed to be <cite>http</cite> when rewritten unless otherwise specified in the <cite>&#8220;x-forwarded-proto&#8221;</cite> header in the request.</li>
 </ul>
 </div>
 </div>

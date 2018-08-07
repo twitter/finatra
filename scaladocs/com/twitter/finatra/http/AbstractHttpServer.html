@@ -349,6 +349,10 @@
                         <span class="separator"></span>
                         <a class="trait" href="JavaCallback.html" title=""></a>
                         <a href="JavaCallback.html" title="">JavaCallback</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="Tls.html" title="A helper trait for serving HTTPS requests with standard TLS."></a>
+                        <a href="Tls.html" title="A helper trait for serving HTTPS requests with standard TLS.">Tls</a>
                       </li>
               </ul>
             </div>
@@ -1017,9 +1021,9 @@ method. Failure to do so may cause your server to not completely startup.</p></s
       <p class="shortcomment cmt">This method allows for further configuration of the http server for parameters not exposed by
 this trait or for overriding defaults provided herein, e.g.,</p><div class="fullcomment"><div class="comment cmt"><p>This method allows for further configuration of the http server for parameters not exposed by
 this trait or for overriding defaults provided herein, e.g.,</p><p>override def configureHttpServer(server: Http.Server): Http.Server = {
-  server
-    .withResponseClassifier(...)
-    .withMaxInitialLineSize(2048)
+ server
+   .withResponseClassifier(...)
+   .withMaxInitialLineSize(2048)
 }
 </p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
     </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#configureHttpsServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1040,9 +1044,10 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
       <p class="shortcomment cmt">This method allows for further configuration of the https server for parameters not exposed by
 this trait or for overriding defaults provided herein, e.g.,</p><div class="fullcomment"><div class="comment cmt"><p>This method allows for further configuration of the https server for parameters not exposed by
 this trait or for overriding defaults provided herein, e.g.,</p><p>override def configureHttpsServer(server: Http.Server): Http.Server = {
-  server
-    .withResponseClassifier(...)
-    .withMaxInitialLineSize(2048)
+ server
+   .withResponseClassifier(...)
+   .withMaxInitialLineSize(2048)
+   .withTransport.tls(....)
 }
 </p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Http$$Server.html" class="extype" name="com.twitter.finagle.Http.Server">com.twitter.finagle.Http.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured Http.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
     </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -1190,22 +1195,6 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultCertificatePath" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="defaultCertificatePath:String"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultCertificatePath:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">defaultCertificatePath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
     </li><li name="com.twitter.app.App#defaultCloseGracePeriod" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultCloseGracePeriod:com.twitter.util.Duration"></a><a id="defaultCloseGracePeriod:Duration"></a>
       <span class="permalink">
@@ -1222,22 +1211,6 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultFinatraHttpPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="defaultFinatraHttpPort:String"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultFinatraHttpPort:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">defaultFinatraHttpPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
     </li><li name="com.twitter.logging.Logging#defaultFormatter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultFormatter:com.twitter.logging.Formatter"></a><a id="defaultFormatter:Formatter"></a>
       <span class="permalink">
@@ -1267,6 +1240,22 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
       </span>
       <span class="symbol">
         <span class="name">defaultHttpAnnouncement</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
+    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultHttpPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultHttpPort:String"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultHttpPort:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultHttpPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
@@ -1331,22 +1320,6 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
       </span>
       <span class="symbol">
         <span class="name">defaultHttpsServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
-    </li><li name="com.twitter.finatra.http.internal.server.BaseHttpServer#defaultKeyPath" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="defaultKeyPath:String"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/http/AbstractHttpServer.html#defaultKeyPath:String" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">defaultKeyPath</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseHttpServer</dd></dl></div>
