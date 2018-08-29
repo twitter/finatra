@@ -430,13 +430,13 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("Injection when using FinatraObjectMapper.create#Inject not found field") {
-    intercept[JsonInjectionNotSupportedException] {
+    intercept[CaseClassMappingException] {
       parse[ClassWithFooClassInject]("""{}""")
     }
   }
 
   test("Injection when using FinatraObjectMapper.create#Inject request field") {
-    intercept[JsonInjectionNotSupportedException] {
+    intercept[CaseClassMappingException] {
       parse[ClassWithQueryParamDateTimeInject]("""{}""")
     }
   }
@@ -589,25 +589,16 @@ class FinatraObjectMapperTest extends Test with Logging {
     }
   }
 
-  // Using Arrays of non-wrapped types that extend AnyVal (Integer, Long, Boolean, etc) in case
-  // classes is not recommended and bypasses both Jackson's and Finatra's null checking as
-  // demonstrated here:
-  test(
-    "Arrays of types extending AnyVal (inconsistent corner case)#" +
-      "Deserialize null -> 0 when CaseClassWithArrayLong with null array element"
-  ) {
-    val obj = parse[CaseClassWithArrayLong]("""{"array": [null]}""")
-    val expected = CaseClassWithArrayLong(array = Array(0L))
-    obj.array should equal(expected.array)
+  test("fail when CaseClassWithArrayLong with null field in object") {
+    intercept[CaseClassMappingException] {
+      parse[CaseClassWithArrayLong]("""{"array": [null]}""")
+    }
   }
 
-  test(
-    "Arrays of types extending AnyVal (inconsistent corner case)#" +
-      "Deserialize null -> false when CaseClassWithArrayBoolean with null array element"
-  ) {
-    val obj = parse[CaseClassWithArrayBoolean]("""{"array": [null]}""")
-    val expected = CaseClassWithArrayBoolean(array = Array(false))
-    obj.array should equal(expected.array)
+  test("fail when CaseClassWithArrayBoolean with null field in object") {
+    intercept[CaseClassMappingException] {
+      parse[CaseClassWithArrayBoolean]("""{"array": [null]}""")
+    }
   }
 
   // ========================================================

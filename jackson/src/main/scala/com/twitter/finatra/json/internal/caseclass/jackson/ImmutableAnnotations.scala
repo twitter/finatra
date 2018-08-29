@@ -16,4 +16,19 @@ private[json] case class ImmutableAnnotations(annotations: Seq[Annotation]) exte
   override def size(): Int = {
     annotationsMap.size
   }
+
+  override def has(clazz: Class[_]): Boolean = {
+    annotationsMap.get(clazz.asInstanceOf[Class[_ <: Annotation]]) != null
+  }
+
+  override def hasOneOf(clazzes: Array[Class[_ <: Annotation]]): Boolean = {
+    var i = 0
+    while (i < clazzes.length) {
+      if (has(clazzes(i))) {
+        return true
+      }
+      i += 1
+    }
+    false
+  }
 }

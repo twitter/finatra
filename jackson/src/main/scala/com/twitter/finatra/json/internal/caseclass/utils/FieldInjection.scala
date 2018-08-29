@@ -50,10 +50,17 @@ private[json] class FieldInjection(
     new ValueInjector(
       new PropertyName(name),
       javaType,
-      ImmutableAnnotations(annotations),
       /* mutator = */ null,
       /* valueId = */ null
-    )
+    ) {
+      // ValueInjector no longer supports passing contextAnnotations as an
+      // argument as of jackson 2.9.x
+      // https://github.com/FasterXML/jackson-databind/commit/76381c528c9b75265e8b93bf6bb4532e4aa8e957#diff-dbcd29e987f27d95f964a674963a9066R24
+      private[this] val contextAnnotations = ImmutableAnnotations(annotations)
+      override def getContextAnnotation[A <: Annotation](acls: Class[A]): A = {
+        contextAnnotations.get[A](acls)
+      }
+    }
   }
 
   /* Public */
