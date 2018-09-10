@@ -108,7 +108,7 @@ available on Maven Central. See the [First Steps](https://twitter.github.io/fina
 
 Releases are done on an approximately monthly schedule. While
 [semver](http://semver.org/) is not followed, the
-[changelogs](CHANGELOG.md) are detailed and include sections on public API
+[changelogs](CHANGELOG.rst) are detailed and include sections on public API
 breaks and changes in runtime behavior.
 
 ## Development version

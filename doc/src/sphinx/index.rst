@@ -133,6 +133,7 @@ Useful Links
   Finagle Blog <https://finagle.github.io/blog/>
   presentations/index
   Forum <https://groups.google.com/forum/#!forum/finatra-users>
+  Changelog
 
 Contributing
 ------------
