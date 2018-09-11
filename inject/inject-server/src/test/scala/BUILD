@@ -4,7 +4,6 @@ junit_tests(
         "com/twitter/inject/server/tests/*.scala",
     ),
     fatal_warnings = True,
-    known_to_fail = "CSL-6953",
     dependencies = [
         ":test-deps",
         "3rdparty/jvm/com/google/inject:guice",

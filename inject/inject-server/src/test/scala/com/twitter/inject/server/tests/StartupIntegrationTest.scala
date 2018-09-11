@@ -2,13 +2,14 @@ package com.twitter.inject.server.tests
 
 import com.google.inject.AbstractModule
 import com.twitter.app.CloseException
+import com.twitter.conversions.time._
 import com.twitter.finagle.http.Status
 import com.twitter.inject.app.App
 import com.twitter.inject.server.{EmbeddedTwitterServer, Ports, TwitterServer}
 import com.twitter.inject.{Injector, Test, TwitterModule}
 import com.twitter.server.Lifecycle.Warmup
 import com.twitter.server.{TwitterServer => BaseTwitterServer}
-import com.twitter.util.{Await, Closable, Future}
+import com.twitter.util.{Await, Closable, Duration, Future}
 import com.twitter.util.registry.GlobalRegistry
 import scala.util.parsing.json.JSON
 
@@ -206,12 +207,16 @@ class FailFastServer extends TwitterServer {
 }
 
 class SimpleTwitterServer extends TwitterServer {
+  /* ensure enough time to close resources */
+  override val defaultCloseGracePeriod: Duration = 15.seconds
   override val modules = Seq()
 }
 
 class SimpleHttpTwitterServer extends TwitterServer {}
 
 class ServerWithTwitterModuleInstall extends TwitterServer {
+  /* ensure enough time to close resources */
+  override val defaultCloseGracePeriod: Duration = 15.seconds
   override val modules = Seq(new TwitterModule {
     override def configure(): Unit = {
       install(new TwitterModule {})
@@ -220,6 +225,8 @@ class ServerWithTwitterModuleInstall extends TwitterServer {
 }
 
 class ServerWithModuleInstall extends TwitterServer {
+  /* ensure enough time to close resources */
+  override val defaultCloseGracePeriod: Duration = 15.seconds
   override val modules = Seq(new TwitterModule {
     override def configure(): Unit = {
       install(new AbstractModule {
@@ -249,6 +256,8 @@ class ServerPremainException extends TwitterServer {
 class StartupTestException(msg: String) extends Exception(msg)
 
 class ExtendedBaseTwitterServer extends BaseTwitterServer {
+  /* ensure enough time to close resources */
+  override val defaultCloseGracePeriod: Duration = 15.seconds
   def main(): Unit = {
     Await.ready(adminHttpServer)
   }
