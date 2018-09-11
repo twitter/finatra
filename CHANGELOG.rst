@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file.
 Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message
 in commits.
 
-[Unreleased]
-------------
+Unreleased
+----------
 
 Added
 ~~~~~
@@ -29,8 +29,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-18.8.0 <https://github.com/twitter/finatra/tree/finatra-18.8.0>`__ (2018-08-06)
-----------------------------------------------------------------------------------------
+18.8.0
+------
 
 Added
 ~~~~~
@@ -74,8 +74,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-18.7.0 <https://github.com/twitter/finatra/tree/finatra-18.7.0>`__ (2018-07-10)
-----------------------------------------------------------------------------------------
+18.7.0
+------
 
 Added
 ~~~~~
@@ -109,8 +109,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-18.6.0 <https://github.com/twitter/finatra/tree/finatra-18.6.0>`__ (2018-06-14)
-----------------------------------------------------------------------------------------
+18.6.0
+------
 
 Added
 ~~~~~
@@ -163,8 +163,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-18.5.0 <https://github.com/twitter/finatra/tree/finatra-18.5.0>`__ (2018-05-07)
-----------------------------------------------------------------------------------------
+18.5.0
+------
 
 Added
 ~~~~~
@@ -240,8 +240,8 @@ Then to start the scoping of an MDC context, use
 Closed
 ~~~~~~
 
-`finatra-18.4.0 <https://github.com/twitter/finatra/tree/finatra-18.4.0>`__ (2018-04-10)
-----------------------------------------------------------------------------------------
+18.4.0
+------
 
 Added
 ~~~~~
@@ -385,8 +385,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-18.3.0 <https://github.com/twitter/finatra/tree/finatra-18.3.0>`__ (2018-03-05)
-----------------------------------------------------------------------------------------
+18.3.0
+------
 
 Added
 ~~~~~
@@ -459,8 +459,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-18.2.0 <https://github.com/twitter/finatra/tree/finatra-18.2.0>`__ (2018-02-05)
-----------------------------------------------------------------------------------------
+18.2.0
+------
 
 Added
 ~~~~~
@@ -504,8 +504,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-18.1.0 <https://github.com/twitter/finatra/tree/finatra-18.1.0>`__ (2018-01-17)
-----------------------------------------------------------------------------------------
+18.1.0
+------
 
 Added
 ~~~~~
@@ -541,8 +541,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-17.12.0 <https://github.com/twitter/finatra/tree/finatra-17.12.0>`__ (2017-12-08)
-------------------------------------------------------------------------------------------
+17.12.0
+-------
 
 Added
 ~~~~~
@@ -573,8 +573,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-17.11.0 <https://github.com/twitter/finatra/tree/finatra-17.11.0>`__ (2017-11-15)
-------------------------------------------------------------------------------------------
+17.11.0
+-------
 
 Added
 ~~~~~
@@ -597,8 +597,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-17.10.0 <https://github.com/twitter/finatra/tree/finatra-17.10.0>`__ (2017-10-26)
-------------------------------------------------------------------------------------------
+17.10.0
+-------
 
 Added
 ~~~~~
@@ -708,8 +708,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.13.0 <https://github.com/twitter/finatra/tree/finatra-2.13.0>`__ (2017-09-06)
-----------------------------------------------------------------------------------------
+2.13.0
+------
 
 Added
 ~~~~~
@@ -742,8 +742,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.12.0 <https://github.com/twitter/finatra/tree/finatra-2.12.0>`__ (2017-08-15)
-----------------------------------------------------------------------------------------
+2.12.0
+------
 
 Added
 ~~~~~
@@ -776,8 +776,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.11.0 <https://github.com/twitter/finatra/tree/finatra-2.11.0>`__ (2017-06-06)
-----------------------------------------------------------------------------------------
+2.11.0
+------
 
 Added
 ~~~~~
@@ -795,8 +795,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.10.0 <https://github.com/twitter/finatra/tree/finatra-2.10.0>`__ (2017-04-20)
-----------------------------------------------------------------------------------------
+2.10.0
+------
 
 Added
 ~~~~~
@@ -841,8 +841,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.9.0 <https://github.com/twitter/finatra/tree/finatra-2.9.0>`__ (2017-03-10)
---------------------------------------------------------------------------------------
+2.9.0
+-----
 
 Added
 ~~~~~
@@ -957,8 +957,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.8.0 <https://github.com/twitter/finatra/tree/finatra-2.8.0>`__ (2017-02-03)
---------------------------------------------------------------------------------------
+2.8.0
+-----
 
 Added
 ~~~~~
@@ -1073,8 +1073,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.7.0 <https://github.com/twitter/finatra/tree/finatra-2.7.0>`__ (2016-12-20)
---------------------------------------------------------------------------------------
+2.7.0
+-----
 
 Added
 ~~~~~
@@ -1103,8 +1103,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.6.0 <https://github.com/twitter/finatra/tree/finatra-2.6.0>`__ (2016-11-22)
---------------------------------------------------------------------------------------
+2.6.0
+-----
 
 Added
 ~~~~~
@@ -1200,8 +1200,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.5.0 <https://github.com/twitter/finatra/tree/finatra-2.5.0>`__ (2016-10-10)
---------------------------------------------------------------------------------------
+2.5.0
+-----
 
 Added
 ~~~~~
@@ -1264,8 +1264,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.4.0 <https://github.com/twitter/finatra/tree/finatra-2.4.0>`__ (2016-09-07)
---------------------------------------------------------------------------------------
+2.4.0
+-----
 
 Added
 ~~~~~
@@ -1372,8 +1372,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.3.0 <https://github.com/twitter/finatra/tree/finatra-2.3.0>`__ (2016-08-25)
---------------------------------------------------------------------------------------
+2.3.0
+-----
 
 Added
 ~~~~~
@@ -1406,8 +1406,8 @@ Fixed
 Closed
 ~~~~~~
 
-`finatra-2.2.0 <https://github.com/twitter/finatra/tree/finatra-2.2.0>`__ (2016-07-07)
---------------------------------------------------------------------------------------
+2.2.0
+-----
 
 Added
 ~~~~~
@@ -1557,8 +1557,8 @@ Closed
 -  `PR-324 <https://github.com/twitter/finatra/pull/324>`__.
    ``RB_ID=838215``
 
-`finatra-2.1.6 <https://github.com/twitter/finatra/tree/finatra-2.1.6>`__ (2016-04-26)
---------------------------------------------------------------------------------------
+2.1.6
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/v2.1.5...finatra-2.1.6>`__
@@ -1637,13 +1637,13 @@ Fixed
 Changelog <https://github.com/twitter/finatra/compare/v2.1.3...v2.1.4>`__
 
 Fixed
------
+~~~~~
 
 -  Some Scaladoc links are broken on twitter.github.io/finatra `Github
    Issue 298 <https://github.com/twitter/finatra/issues/298>`__
 
 Closed
-------
+~~~~~~
 
 -  LoggingMDCFilter lacks documentation `Github Issue
    303 <https://github.com/twitter/finatra/issues/303>`__
@@ -1661,7 +1661,7 @@ Closed
 Changelog <https://github.com/twitter/finatra/compare/v2.1.2...v2.1.3>`__
 
 Closed
-------
+~~~~~~
 
 -  Is it possible to have different modules listen in different ports?
    `Github Issue 295 <https://github.com/twitter/finatra/issues/295>`__
@@ -1691,13 +1691,13 @@ Closed
 Changelog <https://github.com/twitter/finatra/compare/v2.1.1...v2.1.2>`__
 
 Fixed
------
+~~~~~
 
 -  Missing Scaladoc `Github Issue
    279 <https://github.com/twitter/finatra/issues/279>`__
 
 Closed
-------
+~~~~~~
 
 -  Finatra + Protobuf `Github Issue
    277 <https://github.com/twitter/finatra/issues/277>`__
@@ -1722,7 +1722,7 @@ Closed
 Changelog <https://github.com/twitter/finatra/compare/v2.1.0...v2.1.1>`__
 
 Closed
-------
+~~~~~~
 
 -  Update Startup Test on doc `Github Issue
    261 <https://github.com/twitter/finatra/issues/261>`__
@@ -1764,7 +1764,7 @@ Changelog <https://github.com/twitter/finatra/compare/v2.0.1...v2.1.0>`__
 Changelog <https://github.com/twitter/finatra/compare/v2.0.0...v2.0.1>`__
 
 Closed
-------
+~~~~~~
 
 -  Split code into packages/modules `Github Issue
    254 <https://github.com/twitter/finatra/issues/254>`__
@@ -1792,7 +1792,7 @@ Closed
 Changelog <https://github.com/twitter/finatra/compare/v2.0.0.M2...v2.0.0>`__
 
 Closed
-------
+~~~~~~
 
 -  Singleton classes `Github Issue
    236 <https://github.com/twitter/finatra/issues/236>`__
@@ -1892,7 +1892,7 @@ Closed
 Changelog <https://github.com/twitter/finatra/compare/v2.0.0.M1...v2.0.0.M2>`__
 
 Closed
-------
+~~~~~~
 
 -  Issue with POST request `Github Issue
    214 <https://github.com/twitter/finatra/issues/214>`__
@@ -2018,7 +2018,7 @@ Closed
 Changelog <https://github.com/twitter/finatra/compare/1.6.0...v2.0.0.M1>`__
 
 Closed
-------
+~~~~~~
 
 -  UNRESOLVED DEPENDENCIES `Github Issue
    199 <https://github.com/twitter/finatra/issues/199>`__
@@ -2035,14 +2035,14 @@ Closed
    200 <https://github.com/twitter/finatra/pull/200>`__
    (`cacoco <https://github.com/cacoco>`__)
 
-`1.6.0 <https://github.com/twitter/finatra/tree/1.6.0>`__ (2015-01-08)
-----------------------------------------------------------------------
+1.6.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.5.4...1.6.0>`__
 
 Closed
-------
+~~~~~~
 
 -  Finatra 1.5.4 with finagle-stats 6.22.0 throws an exception `Github
    Issue 184 <https://github.com/twitter/finatra/issues/184>`__
@@ -2159,14 +2159,14 @@ Closed
    126 <https://github.com/twitter/finatra/pull/126>`__
    (`Xorlev <https://github.com/Xorlev>`__)
 
-`1.5.4 <https://github.com/twitter/finatra/tree/1.5.4>`__ (2014-07-07)
-----------------------------------------------------------------------
+1.5.4
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.5.3...1.5.4>`__
 
 Closed
-------
+~~~~~~
 
 -  Could add support for Windows? `Github Issue
    145 <https://github.com/twitter/finatra/issues/145>`__
@@ -2202,14 +2202,14 @@ Closed
    `Github Issue 135 <https://github.com/twitter/finatra/pull/135>`__
    (`manjuraj <https://github.com/manjuraj>`__)
 
-`1.5.3 <https://github.com/twitter/finatra/tree/1.5.3>`__ (2014-04-16)
-----------------------------------------------------------------------
+1.5.3
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.5.2...1.5.3>`__
 
 Closed
-------
+~~~~~~
 
 -  Response body truncated `Github Issue
    120 <https://github.com/twitter/finatra/issues/120>`__
@@ -2244,14 +2244,14 @@ Closed
    115 <https://github.com/twitter/finatra/pull/115>`__
    (`murz <https://github.com/murz>`__)
 
-`1.5.2 <https://github.com/twitter/finatra/tree/1.5.2>`__ (2014-02-03)
-----------------------------------------------------------------------
+1.5.2
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.5.1...1.5.2>`__
 
 Closed
-------
+~~~~~~
 
 -  multipart/form-data regression `Github Issue
    101 <https://github.com/twitter/finatra/issues/101>`__
@@ -2273,14 +2273,14 @@ Closed
    `Github Issue 99 <https://github.com/twitter/finatra/pull/99>`__
    (`armandocanals <https://github.com/armandocanals>`__)
 
-`1.5.1 <https://github.com/twitter/finatra/tree/1.5.1>`__ (2014-01-13)
-----------------------------------------------------------------------
+1.5.1
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.5.0a...1.5.1>`__
 
 Closed
-------
+~~~~~~
 
 -  1.7.x `Github Issue
    96 <https://github.com/twitter/finatra/issues/96>`__
@@ -2319,26 +2319,26 @@ Closed
    92 <https://github.com/twitter/finatra/pull/92>`__
    (`zuercher <https://github.com/zuercher>`__)
 
-`1.5.0a <https://github.com/twitter/finatra/tree/1.5.0a>`__ (2014-01-08)
-------------------------------------------------------------------------
+1.5.0a
+------
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.5.0...1.5.0a>`__
 
 Closed
-------
+~~~~~~
 
 -  0 deprecation/warnings `Github Issue
    17 <https://github.com/twitter/finatra/issues/17>`__
 
-`1.5.0 <https://github.com/twitter/finatra/tree/1.5.0>`__ (2014-01-07)
-----------------------------------------------------------------------
+1.5.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.4.1...1.5.0>`__
 
 Closed
-------
+~~~~~~
 
 -  filters for select routes only `Github Issue
    85 <https://github.com/twitter/finatra/issues/85>`__
@@ -2365,14 +2365,14 @@ Closed
    `Github Issue 76 <https://github.com/twitter/finatra/pull/76>`__
    (`pcalcado <https://github.com/pcalcado>`__)
 
-`finatra-1.4.1 <https://github.com/twitter/finatra/tree/finatra-1.4.1>`__ (2013-11-13)
---------------------------------------------------------------------------------------
+1.4.1
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.4.0...finatra-1.4.1>`__
 
 Closed
-------
+~~~~~~
 
 -  1.4.1 `Github Issue
    72 <https://github.com/twitter/finatra/issues/72>`__
@@ -2396,14 +2396,14 @@ Closed
    64 <https://github.com/twitter/finatra/pull/64>`__
    (`pranjaltech <https://github.com/pranjaltech>`__)
 
-`1.4.0 <https://github.com/twitter/finatra/tree/1.4.0>`__ (2013-10-14)
-----------------------------------------------------------------------
+1.4.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.4.0...1.4.0>`__
 
 Closed
-------
+~~~~~~
 
 -  port back apache's multiupload handler `Github Issue
    43 <https://github.com/twitter/finatra/issues/43>`__
@@ -2417,38 +2417,38 @@ Closed
 -  Add public/ dir in src/main/resources as new docroot `Github Issue
    39 <https://github.com/twitter/finatra/issues/39>`__
 
-`finatra-1.4.0 <https://github.com/twitter/finatra/tree/finatra-1.4.0>`__ (2013-10-14)
---------------------------------------------------------------------------------------
+1.4.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.3.9...finatra-1.4.0>`__
 
-`1.3.9 <https://github.com/twitter/finatra/tree/1.3.9>`__ (2013-10-14)
-----------------------------------------------------------------------
+1.3.9
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.9...1.3.9>`__
 
-`finatra-1.3.9 <https://github.com/twitter/finatra/tree/finatra-1.3.9>`__ (2013-10-14)
---------------------------------------------------------------------------------------
+1.3.9
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.3.8...finatra-1.3.9>`__
 
-`1.3.8 <https://github.com/twitter/finatra/tree/1.3.8>`__ (2013-09-22)
-----------------------------------------------------------------------
+1.3.8
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.8...1.3.8>`__
 
-`finatra-1.3.8 <https://github.com/twitter/finatra/tree/finatra-1.3.8>`__ (2013-09-22)
---------------------------------------------------------------------------------------
+1.3.8
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/1.3.7...finatra-1.3.8>`__
 
 Closed
-------
+~~~~~~
 
 -  Make mustache factory use baseTemplatePath local docroot and template
    path `Github Issue
@@ -2461,26 +2461,26 @@ Closed
    57 <https://github.com/twitter/finatra/pull/57>`__
    (`yuzeh <https://github.com/yuzeh>`__)
 
-`1.3.7 <https://github.com/twitter/finatra/tree/1.3.7>`__ (2013-07-20)
-----------------------------------------------------------------------
+1.3.7
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.7...1.3.7>`__
 
-`finatra-1.3.7 <https://github.com/twitter/finatra/tree/finatra-1.3.7>`__ (2013-07-20)
---------------------------------------------------------------------------------------
+1.3.7
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.4...finatra-1.3.7>`__
 
-`finatra-1.3.4 <https://github.com/twitter/finatra/tree/finatra-1.3.4>`__ (2013-07-20)
---------------------------------------------------------------------------------------
+1.3.4
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.3...finatra-1.3.4>`__
 
 Closed
-------
+~~~~~~
 
 -  handle param routing for static file handling `Github Issue
    55 <https://github.com/twitter/finatra/issues/55>`__
@@ -2512,8 +2512,8 @@ Closed
    50 <https://github.com/twitter/finatra/pull/50>`__
    (`twoism <https://github.com/twoism>`__)
 
-`finatra-1.3.3 <https://github.com/twitter/finatra/tree/finatra-1.3.3>`__ (2013-06-14)
---------------------------------------------------------------------------------------
+1.3.3
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.2...finatra-1.3.3>`__
@@ -2524,8 +2524,8 @@ Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.2...finatra-1.
    `Github Issue 47 <https://github.com/twitter/finatra/pull/47>`__
    (`bmdhacks <https://github.com/bmdhacks>`__)
 
-`finatra-1.3.2 <https://github.com/twitter/finatra/tree/finatra-1.3.2>`__ (2013-06-13)
---------------------------------------------------------------------------------------
+1.3.2
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.1...finatra-1.3.2>`__
@@ -2540,32 +2540,32 @@ Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.1...finatra-1.
    40 <https://github.com/twitter/finatra/pull/40>`__
    (`sprsquish <https://github.com/sprsquish>`__)
 
-`finatra-1.3.1 <https://github.com/twitter/finatra/tree/finatra-1.3.1>`__ (2013-03-12)
---------------------------------------------------------------------------------------
+1.3.1
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.3.0...finatra-1.3.1>`__
 
 Closed
-------
+~~~~~~
 
 -  ./finatra update-readme no longer works `Github Issue
    34 <https://github.com/twitter/finatra/issues/34>`__
 
-`finatra-1.3.0 <https://github.com/twitter/finatra/tree/finatra-1.3.0>`__ (2013-03-10)
---------------------------------------------------------------------------------------
+1.3.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.2.2...finatra-1.3.0>`__
 
-`finatra-1.2.2 <https://github.com/twitter/finatra/tree/finatra-1.2.2>`__ (2013-03-10)
---------------------------------------------------------------------------------------
+1.2.2
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.2.0...finatra-1.2.2>`__
 
 Closed
-------
+~~~~~~
 
 -  ./finatra generator doesnt work on linux `Github Issue
    24 <https://github.com/twitter/finatra/issues/24>`__
@@ -2585,20 +2585,20 @@ Closed
    35 <https://github.com/twitter/finatra/pull/35>`__
    (`morria <https://github.com/morria>`__)
 
-`finatra-1.2.0 <https://github.com/twitter/finatra/tree/finatra-1.2.0>`__ (2013-01-22)
---------------------------------------------------------------------------------------
+1.2.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.1.1...finatra-1.2.0>`__
 
-`finatra-1.1.1 <https://github.com/twitter/finatra/tree/finatra-1.1.1>`__ (2012-12-06)
---------------------------------------------------------------------------------------
+1.1.1
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.1.0...finatra-1.1.1>`__
 
 Closed
-------
+~~~~~~
 
 -  Custom error handlers `Github Issue
    29 <https://github.com/twitter/finatra/issues/29>`__
@@ -2609,44 +2609,44 @@ Closed
    31 <https://github.com/twitter/finatra/pull/31>`__
    (`hontent <https://github.com/hontent>`__)
 
-`finatra-1.1.0 <https://github.com/twitter/finatra/tree/finatra-1.1.0>`__ (2012-11-20)
---------------------------------------------------------------------------------------
+1.1.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.0.3...finatra-1.1.0>`__
 
 Closed
-------
+~~~~~~
 
 -  Publish to Maven Central `Github Issue
    23 <https://github.com/twitter/finatra/issues/23>`__
 
-`finatra-1.0.3 <https://github.com/twitter/finatra/tree/finatra-1.0.3>`__ (2012-11-13)
---------------------------------------------------------------------------------------
+1.0.3
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.0.2...finatra-1.0.3>`__
 
-`finatra-1.0.2 <https://github.com/twitter/finatra/tree/finatra-1.0.2>`__ (2012-11-13)
---------------------------------------------------------------------------------------
+1.0.2
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.0.1...finatra-1.0.2>`__
 
 Closed
-------
+~~~~~~
 
 -  Serve static files `Github Issue
    28 <https://github.com/twitter/finatra/issues/28>`__
 
-`finatra-1.0.1 <https://github.com/twitter/finatra/tree/finatra-1.0.1>`__ (2012-11-11)
---------------------------------------------------------------------------------------
+1.0.1
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-1.0.0...finatra-1.0.1>`__
 
 Closed
-------
+~~~~~~
 
 -  Unable to retrieve post parameters `Github Issue
    26 <https://github.com/twitter/finatra/issues/26>`__
@@ -2661,26 +2661,26 @@ Closed
    25 <https://github.com/twitter/finatra/pull/25>`__
    (`mairbek <https://github.com/mairbek>`__)
 
-`finatra-1.0.0 <https://github.com/twitter/finatra/tree/finatra-1.0.0>`__ (2012-11-08)
---------------------------------------------------------------------------------------
+1.0.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.3.4...finatra-1.0.0>`__
 
 Closed
-------
+~~~~~~
 
 -  an config `Github Issue
    12 <https://github.com/twitter/finatra/issues/12>`__
 
-`finatra-0.3.4 <https://github.com/twitter/finatra/tree/finatra-0.3.4>`__ (2012-11-07)
---------------------------------------------------------------------------------------
+0.3.4
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.3.3...finatra-0.3.4>`__
 
 Closed
-------
+~~~~~~
 
 -  do a perf review `Github Issue
    13 <https://github.com/twitter/finatra/issues/13>`__
@@ -2688,20 +2688,20 @@ Closed
 -  update docs `Github Issue
    8 <https://github.com/twitter/finatra/issues/8>`__
 
-`finatra-0.3.3 <https://github.com/twitter/finatra/tree/finatra-0.3.3>`__ (2012-11-05)
---------------------------------------------------------------------------------------
+0.3.3
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.3.2...finatra-0.3.3>`__
 
-`finatra-0.3.2 <https://github.com/twitter/finatra/tree/finatra-0.3.2>`__ (2012-11-04)
---------------------------------------------------------------------------------------
+0.3.2
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.2.4...finatra-0.3.2>`__
 
 Closed
-------
+~~~~~~
 
 -  allow insertion of userland filters into the finagle stack `Github
    Issue 15 <https://github.com/twitter/finatra/issues/15>`__
@@ -2709,8 +2709,8 @@ Closed
 -  bubble up view/mustache errors `Github Issue
    14 <https://github.com/twitter/finatra/issues/14>`__
 
-`finatra-0.2.4 <https://github.com/twitter/finatra/tree/finatra-0.2.4>`__ (2012-08-18)
---------------------------------------------------------------------------------------
+0.2.4
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.2.3...finatra-0.2.4>`__
@@ -2721,8 +2721,8 @@ Changelog <https://github.com/twitter/finatra/compare/finatra-0.2.3...finatra-0.
    21 <https://github.com/twitter/finatra/pull/21>`__
    (`franklinhu <https://github.com/franklinhu>`__)
 
-`finatra-0.2.3 <https://github.com/twitter/finatra/tree/finatra-0.2.3>`__ (2012-08-08)
---------------------------------------------------------------------------------------
+0.2.3
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.2.1...finatra-0.2.3>`__
@@ -2733,8 +2733,8 @@ Changelog <https://github.com/twitter/finatra/compare/finatra-0.2.1...finatra-0.
    20 <https://github.com/twitter/finatra/pull/20>`__
    (`franklinhu <https://github.com/franklinhu>`__)
 
-`finatra-0.2.1 <https://github.com/twitter/finatra/tree/finatra-0.2.1>`__ (2012-07-20)
---------------------------------------------------------------------------------------
+0.2.1
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.2.0...finatra-0.2.1>`__
@@ -2745,14 +2745,14 @@ Changelog <https://github.com/twitter/finatra/compare/finatra-0.2.0...finatra-0.
    `Github Issue 19 <https://github.com/twitter/finatra/pull/19>`__
    (`franklinhu <https://github.com/franklinhu>`__)
 
-`finatra-0.2.0 <https://github.com/twitter/finatra/tree/finatra-0.2.0>`__ (2012-07-20)
---------------------------------------------------------------------------------------
+0.2.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.10...finatra-0.2.0>`__
 
 Closed
-------
+~~~~~~
 
 -  regexed routes `Github Issue
    11 <https://github.com/twitter/finatra/issues/11>`__
@@ -2766,26 +2766,26 @@ Closed
    18 <https://github.com/twitter/finatra/pull/18>`__
    (`caniszczyk <https://github.com/caniszczyk>`__)
 
-`finatra-0.1.10 <https://github.com/twitter/finatra/tree/finatra-0.1.10>`__ (2012-07-14)
-----------------------------------------------------------------------------------------
+0.1.10
+------
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.9...finatra-0.1.10>`__
 
-`finatra-0.1.9 <https://github.com/twitter/finatra/tree/finatra-0.1.9>`__ (2012-07-14)
---------------------------------------------------------------------------------------
+0.1.9
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.8...finatra-0.1.9>`__
 
-`finatra-0.1.8 <https://github.com/twitter/finatra/tree/finatra-0.1.8>`__ (2012-07-14)
---------------------------------------------------------------------------------------
+0.1.8
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.7...finatra-0.1.8>`__
 
 Closed
-------
+~~~~~~
 
 -  mvn package doesnt fully package `Github Issue
    16 <https://github.com/twitter/finatra/issues/16>`__
@@ -2796,68 +2796,68 @@ Closed
 -  verify heroku uploads works `Github Issue
    6 <https://github.com/twitter/finatra/issues/6>`__
 
-`finatra-0.1.7 <https://github.com/twitter/finatra/tree/finatra-0.1.7>`__ (2012-07-13)
---------------------------------------------------------------------------------------
+0.1.7
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.6...finatra-0.1.7>`__
 
-`finatra-0.1.6 <https://github.com/twitter/finatra/tree/finatra-0.1.6>`__ (2012-07-13)
---------------------------------------------------------------------------------------
+0.1.6
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.5...finatra-0.1.6>`__
 
 Closed
-------
+~~~~~~
 
 -  unbreak file upload/form support `Github Issue
    10 <https://github.com/twitter/finatra/issues/10>`__
 
-`finatra-0.1.5 <https://github.com/twitter/finatra/tree/finatra-0.1.5>`__ (2012-07-13)
---------------------------------------------------------------------------------------
+0.1.5
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.3...finatra-0.1.5>`__
 
 Closed
-------
+~~~~~~
 
 -  add logging `Github Issue
    4 <https://github.com/twitter/finatra/issues/4>`__
 
-`finatra-0.1.3 <https://github.com/twitter/finatra/tree/finatra-0.1.3>`__ (2012-07-13)
---------------------------------------------------------------------------------------
+0.1.3
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.2...finatra-0.1.3>`__
 
-`finatra-0.1.2 <https://github.com/twitter/finatra/tree/finatra-0.1.2>`__ (2012-07-13)
---------------------------------------------------------------------------------------
+0.1.2
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.1...finatra-0.1.2>`__
 
 Closed
-------
+~~~~~~
 
 -  unbreak cookie support `Github Issue
    9 <https://github.com/twitter/finatra/issues/9>`__
 
-`finatra-0.1.1 <https://github.com/twitter/finatra/tree/finatra-0.1.1>`__ (2012-07-13)
---------------------------------------------------------------------------------------
+0.1.1
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.1.0...finatra-0.1.1>`__
 
-`finatra-0.1.0 <https://github.com/twitter/finatra/tree/finatra-0.1.0>`__ (2012-07-12)
---------------------------------------------------------------------------------------
+0.1.0
+-----
 
 `Full
 Changelog <https://github.com/twitter/finatra/compare/finatra-0.0.1...finatra-0.1.0>`__
 
-`finatra-0.0.1 <https://github.com/twitter/finatra/tree/finatra-0.0.1>`__ (2012-07-12)
---------------------------------------------------------------------------------------
+0.0.1
+-----
 
 **Merged pull requests:**
 
