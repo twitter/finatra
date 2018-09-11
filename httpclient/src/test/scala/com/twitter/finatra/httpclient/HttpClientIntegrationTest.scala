@@ -62,7 +62,7 @@ class HttpClientIntegrationTest extends IntegrationTest {
     val e = intercept[HttpClientException] {
       Await.result(httpClient.executeJson[Int](request))
     }
-    assert(e.getMessage.contains("com.fasterxml.jackson.databind.JsonMappingException"))
+    assert(e.getMessage.contains("com.fasterxml.jackson.databind.exc.MismatchedInputException"))
   }
 
   test("get") {

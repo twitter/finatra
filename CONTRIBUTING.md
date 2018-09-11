@@ -55,7 +55,7 @@ please scan this list and see which apply. It's okay if something is missed;
 the maintainers will help out during code review.
 
 1. Include [tests](CONTRIBUTING.md#testing).
-1. Update the [changelog](CHANGELOG.md) for new features, API breakages, runtime behavior changes,
+1. Update the [changelog](CHANGELOG.rst) for new features, API breakages, runtime behavior changes,
    deprecations, and bug fixes.
 1. All public APIs should have [Scaladoc][scaladoc].
 1. When adding a constructor to an existing class or arguments to an existing
@@ -91,8 +91,8 @@ compatibility can be kept by adding a forwarding method. Note that we
 avoid adding default arguments because this is not a compatible change
 for our Java users.  However, when the benefits outweigh the costs, we
 are willing to break APIs. The break should be noted in the Breaking
-API Changes section of the [changelog](CHANGELOG.md). Note that changes to
-non-public APIs will not be called out in the [changelog](CHANGELOG.md).
+API Changes section of the [changelog](CHANGELOG.rst). Note that changes to
+non-public APIs will not be called out in the [changelog](CHANGELOG.rst).
 
 ## Java
 

@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.8.0"
+val releaseVersion = "18.9.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -57,7 +57,7 @@ lazy val versions = new {
   val commonsLang = "2.6"
   val guava = "19.0"
   val guice = "4.0"
-  val jackson = "2.8.4"
+  val jackson = "2.9.6"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val junit = "4.12"

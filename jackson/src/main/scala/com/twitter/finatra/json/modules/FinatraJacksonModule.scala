@@ -105,7 +105,11 @@ class FinatraJacksonModule extends TwitterModule {
 
   protected def defaultMapperConfiguration(mapper: ObjectMapper): Unit = {
     /* Serialization Config */
-    mapper.setSerializationInclusion(serializationInclusion)
+    mapper.setDefaultPropertyInclusion(
+      JsonInclude.Value.construct(serializationInclusion, serializationInclusion))
+    mapper.configOverride(classOf[Option[_]])
+      .setIncludeAsProperty(
+        JsonInclude.Value.construct(serializationInclusion, Include.ALWAYS))
     for ((feature, state) <- serializationConfig) {
       mapper.configure(feature, state)
     }

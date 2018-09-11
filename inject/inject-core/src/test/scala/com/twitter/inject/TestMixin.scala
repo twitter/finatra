@@ -78,8 +78,7 @@ trait TestMixin
 
   protected def assertFutureValue[A](result: Future[A], expected: A): Unit = {
     val resultVal = Await.result(result, 5.seconds)
-    val expectedVal = Await.result(Future.value(expected), 5.seconds)
-    resultVal should equal(expectedVal)
+    resultVal should equal(expected)
   }
 
   protected def assertFailedFuture[T <: Throwable: Manifest](result: Future[_]): T = {
