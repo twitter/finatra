@@ -151,8 +151,8 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <a class="object" href="ClientError$.html" title=""></a>
-                        <a class="class" href="ClientError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ClientError.apply for construction if you don't need to specify passthrough fields."></a>
-                        <a href="ClientError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ClientError.apply for construction if you don't need to specify passthrough fields.">ClientError</a>
+                        <a class="class" href="ClientError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ClientError.apply for construction if you don't need to specify passthrough or flags."></a>
+                        <a href="ClientError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ClientError.apply for construction if you don't need to specify passthrough or flags.">ClientError</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ClientErrorCause$.html" title=""></a>
                         <a class="trait" href="ClientErrorCause.html" title=""></a>
@@ -171,20 +171,20 @@
                         <a href="EmptyExceptionsService$FinagleService.html" title="To generate Exceptions, scrooge uses finagle-core, which pants does not provide to thrift libraries which do not define services (structs-only definitions generally do not need finagle).">EmptyExceptionsService$FinagleService</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="NoClientIdError$.html" title=""></a>
-                        <a class="class" href="NoClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.NoClientIdError.apply for construction if you don't need to specify passthrough fields."></a>
-                        <a href="NoClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.NoClientIdError.apply for construction if you don't need to specify passthrough fields.">NoClientIdError</a>
+                        <a class="class" href="NoClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.NoClientIdError.apply for construction if you don't need to specify passthrough or flags."></a>
+                        <a href="NoClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.NoClientIdError.apply for construction if you don't need to specify passthrough or flags.">NoClientIdError</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ServerError$.html" title=""></a>
-                        <a class="class" href="" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ServerError.apply for construction if you don't need to specify passthrough fields."></a>
-                        <a href="" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ServerError.apply for construction if you don't need to specify passthrough fields.">ServerError</a>
+                        <a class="class" href="" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ServerError.apply for construction if you don't need to specify passthrough or flags."></a>
+                        <a href="" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.ServerError.apply for construction if you don't need to specify passthrough or flags.">ServerError</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="ServerErrorCause$.html" title=""></a>
                         <a class="trait" href="ServerErrorCause.html" title=""></a>
                         <a href="ServerErrorCause.html" title="">ServerErrorCause</a>
                       </li><li class="current-entities indented5">
                         <a class="object" href="UnknownClientIdError$.html" title=""></a>
-                        <a class="class" href="UnknownClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.UnknownClientIdError.apply for construction if you don't need to specify passthrough fields."></a>
-                        <a href="UnknownClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.UnknownClientIdError.apply for construction if you don't need to specify passthrough fields.">UnknownClientIdError</a>
+                        <a class="class" href="UnknownClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.UnknownClientIdError.apply for construction if you don't need to specify passthrough or flags."></a>
+                        <a href="UnknownClientIdError.html" title="Prefer the companion object's com.twitter.finatra.thrift.thriftscala.UnknownClientIdError.apply for construction if you don't need to specify passthrough or flags.">UnknownClientIdError</a>
                       </li>
               </ul>
             </div>
@@ -210,18 +210,19 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ServerError</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SourcedException.html#com.twitter.finagle.SourcedException" class="extype" name="com.twitter.finagle.SourcedException">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Product2.html#scala.Product2" class="extype" name="scala.Product2">Product2</a>[<a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="com.twitter.scrooge.ValidatingThriftStruct">ValidatingThriftStruct</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>] with <span class="extype" name="java.io.Serializable">Serializable</span></span>
+        <span class="name">ServerError</span><span class="result"> extends <span class="extype" name="scala.Exception">Exception</span> with <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SourcedException.html#com.twitter.finagle.SourcedException" class="extype" name="com.twitter.finagle.SourcedException">SourcedException</a> with <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span> with <a href="http://www.scala-lang.org/api/2.12.4/scala/Product2.html#scala.Product2" class="extype" name="scala.Product2">Product2</a>[<a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>] with <span class="extype" name="com.twitter.scrooge.ValidatingThriftStruct">ValidatingThriftStruct</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>] with <span class="extype" name="java.io.Serializable">Serializable</span> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/FailureFlags.html#com.twitter.finagle.FailureFlags" class="extype" name="com.twitter.finagle.FailureFlags">FailureFlags</a>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>]</span>
       </span>
       </h4>
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Prefer the companion object's <a href="ServerError$.html#apply(errorCause:com.twitter.finatra.thrift.thriftscala.ServerErrorCause,message:String):com.twitter.finatra.thrift.thriftscala.ServerError" class="extmbr" name="com.twitter.finatra.thrift.thriftscala.ServerError#apply">com.twitter.finatra.thrift.thriftscala.ServerError.apply</a>
-for construction if you don't need to specify passthrough fields.
+for construction if you don't need to specify passthrough or
+flags.
 </p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.scrooge.ValidatingThriftStruct">ValidatingThriftStruct</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>], <span class="extype" name="com.twitter.scrooge.HasThriftStructCodec3">HasThriftStructCodec3</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>], <a href="http://www.scala-lang.org/api/2.12.4/scala/Product2.html#scala.Product2" class="extype" name="scala.Product2">Product2</a>[<a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>], <a href="http://www.scala-lang.org/api/2.12.4/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="http://www.scala-lang.org/api/2.12.4/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SourcedException.html#com.twitter.finagle.SourcedException" class="extype" name="com.twitter.finagle.SourcedException">SourcedException</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/HasRemoteInfo.html#com.twitter.finagle.HasRemoteInfo" class="extype" name="com.twitter.finagle.HasRemoteInfo">HasRemoteInfo</a>, <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/FailureFlags.html#com.twitter.finagle.FailureFlags" class="extype" name="com.twitter.finagle.FailureFlags">FailureFlags</a>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>], <span class="extype" name="com.twitter.scrooge.ValidatingThriftStruct">ValidatingThriftStruct</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>], <span class="extype" name="com.twitter.scrooge.HasThriftStructCodec3">HasThriftStructCodec3</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>], <a href="http://www.scala-lang.org/api/2.12.4/scala/Product2.html#scala.Product2" class="extype" name="scala.Product2">Product2</a>[<a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a>, <span class="extype" name="scala.Predef.String">String</span>], <a href="http://www.scala-lang.org/api/2.12.4/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a>, <a href="http://www.scala-lang.org/api/2.12.4/scala/Equals.html#scala.Equals" class="extype" name="scala.Equals">Equals</a>, <span class="extype" name="com.twitter.scrooge.ThriftStruct">ThriftStruct</span>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/SourcedException.html#com.twitter.finagle.SourcedException" class="extype" name="com.twitter.finagle.SourcedException">SourcedException</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/HasRemoteInfo.html#com.twitter.finagle.HasRemoteInfo" class="extype" name="com.twitter.finagle.HasRemoteInfo">HasRemoteInfo</a>, <span class="extype" name="com.twitter.scrooge.ThriftException">ThriftException</span>, <span class="extype" name="java.lang.Exception">Exception</span>, <span class="extype" name="java.lang.Throwable">Throwable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.AnyRef" class="extype" name="scala.collection.immutable.List">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/List.html#scala.Any" class="extype" name="scala.collection.immutable.List">Any</a></div>
         </div></div>
         
 
@@ -247,7 +248,7 @@ for construction if you don't need to specify passthrough fields.
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.thrift.thriftscala.ServerError"><span>ServerError</span></li><li class="in" name="com.twitter.scrooge.ValidatingThriftStruct"><span>ValidatingThriftStruct</span></li><li class="in" name="com.twitter.scrooge.HasThriftStructCodec3"><span>HasThriftStructCodec3</span></li><li class="in" name="scala.Product2"><span>Product2</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.twitter.scrooge.ThriftStruct"><span>ThriftStruct</span></li><li class="in" name="com.twitter.finagle.SourcedException"><span>SourcedException</span></li><li class="in" name="com.twitter.finagle.HasRemoteInfo"><span>HasRemoteInfo</span></li><li class="in" name="com.twitter.scrooge.ThriftException"><span>ThriftException</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.thrift.thriftscala.ServerError"><span>ServerError</span></li><li class="in" name="com.twitter.finagle.FailureFlags"><span>FailureFlags</span></li><li class="in" name="com.twitter.scrooge.ValidatingThriftStruct"><span>ValidatingThriftStruct</span></li><li class="in" name="com.twitter.scrooge.HasThriftStructCodec3"><span>HasThriftStructCodec3</span></li><li class="in" name="scala.Product2"><span>Product2</span></li><li class="in" name="scala.Product"><span>Product</span></li><li class="in" name="scala.Equals"><span>Equals</span></li><li class="in" name="com.twitter.scrooge.ThriftStruct"><span>ThriftStruct</span></li><li class="in" name="com.twitter.finagle.SourcedException"><span>SourcedException</span></li><li class="in" name="com.twitter.finagle.HasRemoteInfo"><span>HasRemoteInfo</span></li><li class="in" name="com.twitter.scrooge.ThriftException"><span>ThriftException</span></li><li class="in" name="java.lang.Exception"><span>Exception</span></li><li class="in" name="java.lang.Throwable"><span>Throwable</span></li><li class="in" name="java.io.Serializable"><span>Serializable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -296,6 +297,22 @@ for construction if you don't need to specify passthrough fields.
       </span>
       <span class="symbol">
         <span class="name">ServerError</span><span class="params">(<span name="errorCause">errorCause: <a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a></span>, <span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="_passthroughFields">_passthroughFields: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/Map.html#scala.collection.immutable.Map" class="extype" name="scala.collection.immutable.Map">Map</a>[<a href="http://www.scala-lang.org/api/2.12.4/scala/Short.html#scala.Short" class="extype" name="scala.Short">Short</a>, <span class="extype" name="com.twitter.scrooge.TFieldBlob">TFieldBlob</span>]</span>)</span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.thrift.thriftscala.ServerError#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(errorCause:com.twitter.finatra.thrift.thriftscala.ServerErrorCause,message:String,_passthroughFields:scala.collection.immutable.Map[Short,com.twitter.scrooge.TFieldBlob],flags:Long):com.twitter.finatra.thrift.thriftscala.ServerError"></a><a id="&lt;init&gt;:ServerError"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/ServerError.html#&lt;init&gt;(errorCause:com.twitter.finatra.thrift.thriftscala.ServerErrorCause,message:String,_passthroughFields:scala.collection.immutable.Map[Short,com.twitter.scrooge.TFieldBlob],flags:Long):com.twitter.finatra.thrift.thriftscala.ServerError" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ServerError</span><span class="params">(<span name="errorCause">errorCause: <a href="ServerErrorCause.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerErrorCause">ServerErrorCause</a></span>, <span name="message">message: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="_passthroughFields">_passthroughFields: <a href="http://www.scala-lang.org/api/2.12.4/scala/collection/immutable/Map.html#scala.collection.immutable.Map" class="extype" name="scala.collection.immutable.Map">Map</a>[<a href="http://www.scala-lang.org/api/2.12.4/scala/Short.html#scala.Short" class="extype" name="scala.Short">Short</a>, <span class="extype" name="com.twitter.scrooge.TFieldBlob">TFieldBlob</span>]</span>, <span name="flags">flags: <a href="http://www.scala-lang.org/api/2.12.4/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span>
       </span>
       
       
@@ -453,6 +470,38 @@ for construction if you don't need to specify passthrough fields.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.twitter.finagle.FailureFlags#asNonRetryable" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asNonRetryable:T"></a><a id="asNonRetryable:ServerError"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/ServerError.html#asNonRetryable:T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asNonRetryable</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FailureFlags</dd></dl></div>
+    </li><li name="com.twitter.finagle.FailureFlags#asRejected" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="asRejected:T"></a><a id="asRejected:ServerError"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/ServerError.html#asRejected:T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asRejected</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FailureFlags</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.thriftscala.ServerError#canEqual" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="canEqual(other:Any):Boolean"></a><a id="canEqual(Any):Boolean"></a>
       <span class="permalink">
@@ -509,6 +558,22 @@ for construction if you don't need to specify passthrough fields.
       </span>
       
       
+    </li><li name="com.twitter.finatra.thrift.thriftscala.ServerError#copyWithFlags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="copyWithFlags(flags:Long):com.twitter.finatra.thrift.thriftscala.ServerError"></a><a id="copyWithFlags(Long):ServerError"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/ServerError.html#copyWithFlags(flags:Long):com.twitter.finatra.thrift.thriftscala.ServerError" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">copyWithFlags</span><span class="params">(<span name="flags">flags: <a href="http://www.scala-lang.org/api/2.12.4/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a> → FailureFlags</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -611,6 +676,22 @@ for construction if you don't need to specify passthrough fields.
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.thriftscala.ServerError#flags" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="flags:Long"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/ServerError.html#flags:Long" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">flags</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a> → FailureFlags</dd></dl></div>
     </li><li name="java.lang.Throwable#getCause" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getCause():Throwable"></a>
       <span class="permalink">
@@ -777,6 +858,22 @@ is known and not optional and set to None, then the field is serialized and retu
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Throwable</dd></dl></div>
+    </li><li name="com.twitter.finagle.FailureFlags#isFlagged" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isFlagged(which:Long):Boolean"></a><a id="isFlagged(Long):Boolean"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/ServerError.html#isFlagged(which:Long):Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isFlagged</span><span class="params">(<span name="which">which: <a href="http://www.scala-lang.org/api/2.12.4/scala/Long.html#scala.Long" class="extype" name="scala.Long">Long</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.4/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>FailureFlags</dd></dl></div>
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
@@ -1239,7 +1336,9 @@ from the passthroughFields map, if present.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.scrooge.ValidatingThriftStruct">
+        <div class="parent" name="com.twitter.finagle.FailureFlags">
+              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/FailureFlags.html#com.twitter.finagle.FailureFlags" class="extype" name="com.twitter.finagle.FailureFlags">FailureFlags</a>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>]</h3>
+            </div><div class="parent" name="com.twitter.scrooge.ValidatingThriftStruct">
               <h3>Inherited from <span class="extype" name="com.twitter.scrooge.ValidatingThriftStruct">ValidatingThriftStruct</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>]</h3>
             </div><div class="parent" name="com.twitter.scrooge.HasThriftStructCodec3">
               <h3>Inherited from <span class="extype" name="com.twitter.scrooge.HasThriftStructCodec3">HasThriftStructCodec3</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.ServerError">ServerError</a>]</h3>
