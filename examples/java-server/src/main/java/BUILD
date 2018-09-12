@@ -1,6 +1,6 @@
 java_library(
     sources = rglobs("*.java"),
-    fatal_warnings = False,
+    compiler_option_sets = {},
     dependencies = [
         "3rdparty/jvm/com/google/guava",
         "3rdparty/jvm/com/google/inject:guice",

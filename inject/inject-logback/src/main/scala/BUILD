@@ -3,7 +3,7 @@ scala_library(
         "ch/qos/logback/core/*.scala",
         "com/twitter/inject/logback/*.scala",
     ),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "3rdparty/jvm/ch/qos/logback:logback-classic",
         "3rdparty/jvm/ch/qos/logback:logback-core",

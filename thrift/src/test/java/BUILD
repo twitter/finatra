@@ -3,7 +3,7 @@ junit_tests(
         "com/twitter/finatra/thrift/tests/*.java",
         "com/twitter/finatra/thrift/tests/doeverything/*.java",
     ),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",

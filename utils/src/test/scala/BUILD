@@ -30,7 +30,7 @@ scala_library(
         "com/twitter/finatra/modules/*.scala",
         "com/twitter/finatra/test/*.scala",
     ),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-utils-tests",

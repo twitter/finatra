@@ -36,7 +36,7 @@ scala_library(
     sources = globs(
         "com/twitter/finatra/httpclient/test/*.scala",
     ),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-httpclient-tests",
