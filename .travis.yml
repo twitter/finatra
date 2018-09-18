@@ -69,7 +69,6 @@ before_script:
   - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
 
 script:
-  - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
 
 after_success:  # note this is run per job in the matrix but only the last run is kept by codecov.io.
