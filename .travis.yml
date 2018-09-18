@@ -65,6 +65,9 @@ notifications:
   slack:
     secure: e3EryTvX8zFOFZzFJT9gXx7Hmi+1uBypAfgTZ20vJzKkq8GbcNjrAPyCNR39lGeB4Toij3ygvUiQFmsUy1neH0krVQ70TAZUVx06oZJh0urR5/E3wN/y5Zx09uywXZf1daBVZ26kBVO53kF8pkYXGI2sczofIXj25LRV0w7G22I=
 
+before_script: 
+  - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
+
 stages:
   - dodo
   - test
@@ -76,7 +79,6 @@ jobs:
       scala: 2.11.12
       script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
     - stage: test
-      before_script: unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
       script: 
         - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
         - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
