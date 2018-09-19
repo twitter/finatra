@@ -1,5 +1,5 @@
-# container-based build
-sudo: false
+dist: trusty
+sudo: required
 
 language: scala
 
@@ -63,7 +63,6 @@ notifications:
 before_script:
   # default $SBT_OPTS is irrelevant to sbt launcher
   - unset SBT_OPTS
-  - curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
   - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
 
 script:
@@ -73,3 +72,12 @@ script:
 after_success:
   - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
   - bash <(curl -s https://codecov.io/bash)
+
+stages:
+  - dodo
+  - test
+
+jobs:
+  include:
+    - stage: dodo
+      script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
