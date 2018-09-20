@@ -72,6 +72,7 @@ jobs:
     - stage: test
       before_script:
         - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
+        - rm -fr $HOME/.ivy2/cache/com.twitter # force re-resolution
         - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
       script: travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
       after_success:
