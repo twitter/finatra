@@ -73,8 +73,9 @@ jobs:
       before_script:
         - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
         - rm -fr $HOME/.ivy2/cache/com.twitter # force re-resolution
+      script:
         - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
-      script: travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
+        - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
       after_success:
         - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
         - bash <(curl -s https://codecov.io/bash)
