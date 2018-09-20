@@ -21,6 +21,7 @@ class FinagleRequestScopeBenchmark
     name = "groups",
     method = Method.Get,
     uri = "/groups/",
+    clazz = this.getClass,
     admin = false,
     index = None,
     callback = defaultCallback,

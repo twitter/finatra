@@ -9,6 +9,7 @@ private[http] class Registrar(registry: LibraryRegistry) {
   def register(route: Route): Unit = {
     val name = if (route.name.isEmpty) route.path else route.name
 
+    registry.put(Seq(name, "class"), route.clazz.getName)
     registry.put(Seq(name, "path"), route.path)
     registry.put(Seq(name, "constant"), route.constantRoute.toString)
 

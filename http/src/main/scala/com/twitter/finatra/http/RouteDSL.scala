@@ -65,8 +65,8 @@ private[http] class FilteredDSL[FilterType <: HttpFilter: Manifest] extends Rout
   def apply(fn: => Unit): Unit = withContext(context)(fn)
 
   protected def getBuildFilterFunc(
-    currentFunc: (Injector) => HttpFilter
-  ): (Injector) => HttpFilter = { (injector: Injector) =>
+    currentFunc: Injector => HttpFilter
+  ): Injector => HttpFilter = { injector: Injector =>
     currentFunc(injector).andThen(injector.instance[FilterType])
   }
 
@@ -230,6 +230,7 @@ private[http] trait RouteDSL extends RouteState { self =>
         method,
         prefixRoute(route),
         name,
+        this.getClass,
         admin,
         index,
         callback,

@@ -8,10 +8,12 @@ import scala.reflect.ClassTag
 /** Performs registration of Thrift domain entities in a LibraryRegistry */
 private[thrift] class Registrar(registry: LibraryRegistry) {
 
-  def register(thriftMethodService: ThriftMethodService[_, _]): Unit = {
+  def register(clazz: Class[_], thriftMethodService: ThriftMethodService[_, _]): Unit = {
     registry.put(
       Seq(thriftMethodService.method.name, "service_name"),
       thriftMethodService.method.serviceName)
+    registry.put(
+      Seq(thriftMethodService.method.name, "class"), clazz.getName)
     registry.put(
       Seq(thriftMethodService.method.name, "args_codec"),
       thriftMethodService.method.argsCodec.getClass.getName)
@@ -26,9 +28,11 @@ private[thrift] class Registrar(registry: LibraryRegistry) {
     }
   }
 
-  def register(service: ClassTag[_], method: Method): Unit = {
+  def register(clazz: Class[_], service: ClassTag[_], method: Method): Unit = {
     registry.put(
       Seq(method.getName, "service_name"), service.toString)
+    registry.put(
+      Seq(method.getName, "class"), clazz.getName)
     if (method.getParameterTypes.nonEmpty) {
       registry.put(
         Seq(method.getName, "args"),

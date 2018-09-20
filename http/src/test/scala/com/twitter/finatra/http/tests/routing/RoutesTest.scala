@@ -145,6 +145,7 @@ class RoutesTest extends Test with OptionValues {
       name = "my_endpoint",
       method = method,
       uri = path,
+      clazz = this.getClass,
       admin = false,
       index = None,
       callback = defaultCallback,

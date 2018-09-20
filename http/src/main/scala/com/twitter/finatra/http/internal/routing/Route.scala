@@ -19,6 +19,7 @@ private[http] case class Route(
   name: String,
   method: Method,
   uri: String,
+  clazz: Class[_],
   admin: Boolean,
   index: Option[RouteIndex],
   callback: Request => Future[Response],
