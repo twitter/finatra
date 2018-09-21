@@ -66,11 +66,12 @@ stages:
 
 jobs:
   include:
-    - before_script: travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update                # uses the default stage name "test"
-    - script: travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport   # stage name not required, will continue to use "test"
-    - script: ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate                                 # stage name not required, will continue to use "test"
-    - after_success: bash <(curl -s https://codecov.io/bash)                                  # stage name not required, will continue to use "test"
     - stage: dodo
       script: unset SBT_OPTS
       script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
+    - stage: test
+      before_script: travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
+      script: travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
+      script: ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
+      after_success: bash <(curl -s https://codecov.io/bash)
 
