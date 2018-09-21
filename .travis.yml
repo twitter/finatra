@@ -65,9 +65,9 @@ before_script:
 
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage "$PROJECT/test" coverageReport
-  - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
 
-after_success: 
+after_success:
+  - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
   - bash <(curl -s https://codecov.io/bash)
 
 stages:
@@ -77,6 +77,5 @@ stages:
 jobs:
   include:
     - stage: dodo
-      script: unset PROJECT
       script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
       scala: 2.12.6
