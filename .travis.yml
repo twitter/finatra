@@ -61,7 +61,7 @@ notifications:
     secure: e3EryTvX8zFOFZzFJT9gXx7Hmi+1uBypAfgTZ20vJzKkq8GbcNjrAPyCNR39lGeB4Toij3ygvUiQFmsUy1neH0krVQ70TAZUVx06oZJh0urR5/E3wN/y5Zx09uywXZf1daBVZ26kBVO53kF8pkYXGI2sczofIXj25LRV0w7G22I=
 
 before_script:
-  - unset SBT_OPTS
+  - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt lancher
 
 script:
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage "$PROJECT/test" coverageReport
@@ -78,4 +78,3 @@ jobs:
   include:
     - stage: dodo
       script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
-      scala: 2.12.6
