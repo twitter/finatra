@@ -61,15 +61,20 @@ notifications:
     secure: e3EryTvX8zFOFZzFJT9gXx7Hmi+1uBypAfgTZ20vJzKkq8GbcNjrAPyCNR39lGeB4Toij3ygvUiQFmsUy1neH0krVQ70TAZUVx06oZJh0urR5/E3wN/y5Zx09uywXZf1daBVZ26kBVO53kF8pkYXGI2sczofIXj25LRV0w7G22I=
 
 before_script:
-  # default $SBT_OPTS is irrelevant to sbt launcher
-  - unset SBT_OPTS
-  - curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
-  - travis_retry ./sbt --error ++$TRAVIS_SCALA_VERSION update
+  - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
 
 script:
-  # run for all environments
-  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION coverage "$PROJECT/test" coverageReport
+  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage "$PROJECT/test" coverageReport
 
 after_success:
   - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
   - bash <(curl -s https://codecov.io/bash)
+
+stages:
+  - dodo
+  - test
+
+jobs:
+  include:
+    - stage: dodo
+      script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
