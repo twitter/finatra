@@ -67,7 +67,7 @@ scala_library(
     sources = globs(
         "com/twitter/finatra/http/*.scala",
     ),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
         name = "finatra-http-tests",

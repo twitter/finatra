@@ -2,7 +2,7 @@ junit_tests(
     sources = rglobs(
         "com/twitter/inject/app/tests/*.java",
     ),
-    fatal_warnings = False,
+    compiler_option_sets = {},
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",

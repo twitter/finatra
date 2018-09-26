@@ -3,7 +3,7 @@ junit_tests(
         "com/twitter/finatra/http/*.java",
         "com/twitter/finatra/test/*.java",
     ),
-    fatal_warnings = False,
+    compiler_option_sets = {},
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/junit",

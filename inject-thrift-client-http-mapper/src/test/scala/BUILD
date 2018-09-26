@@ -1,6 +1,6 @@
 junit_tests(
     sources = rglobs("*.scala"),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "3rdparty/jvm/com/github/nscala_time",
         "3rdparty/jvm/com/google/inject:guice",

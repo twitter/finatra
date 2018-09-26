@@ -1,6 +1,7 @@
 package com.twitter.finatra.thrift.tests;
 
 import java.util.Collections;
+import java.util.Map;
 
 import scala.reflect.ClassTag$;
 
@@ -40,6 +41,7 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
 
     /** Test that methods are correctly added to the Registry */
     @Test
+    @SuppressWarnings("unchecked")
     public void testRegistryEntries() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -64,6 +66,14 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
         JsonNode methods = thriftNode.get("methods");
 
         assertTrue(methods.size() > 0);
+
+        Map<String, Object> methodsAsMap = objectMapper.convertValue(methods, Map.class);
+
+        for (Map.Entry<String, Object> entry : methodsAsMap.entrySet()) {
+            Map<String, Object> data = (Map<String, Object>) entry.getValue();
+            assertTrue(data.containsKey("service_name"));
+            assertTrue(data.containsKey("class"));
+        }
     }
 
     /** test uppercase endpoint */

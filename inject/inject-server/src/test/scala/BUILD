@@ -3,7 +3,7 @@ junit_tests(
         "com/twitter/server/tests/*.scala",
         "com/twitter/inject/server/tests/*.scala",
     ),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         ":test-deps",
         "3rdparty/jvm/com/google/inject:guice",
@@ -38,7 +38,7 @@ junit_tests(
 scala_library(
     name = "test-deps",
     sources = globs("com/twitter/inject/server/*.scala"),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     provides = scala_artifact(
         org = "com.twitter",
         name = "inject-server-tests",

@@ -8,6 +8,15 @@ in commits.
 Unreleased
 ----------
 
+18.9.1
+-------
+
+Changed
+~~~~~~~
+
+- | http/thrift: Update Library registry route information to include controller
+    class name. ``PHAB_ID=D216425``
+
 18.9.0
 ------
 

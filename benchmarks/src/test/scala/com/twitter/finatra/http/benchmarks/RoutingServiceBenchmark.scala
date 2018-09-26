@@ -46,6 +46,7 @@ class RoutingServiceBenchmark
       name = path,
       method = Method.Get,
       uri = path,
+      clazz = this.getClass,
       admin = false,
       index = None,
       callback = defaultCallback,

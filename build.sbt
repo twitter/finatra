@@ -4,12 +4,12 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.9.0"
+val releaseVersion = "18.9.1"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
-  scalaVersion := "2.12.4",
-  crossScalaVersions := Seq("2.11.11", "2.12.4"),
+  scalaVersion := "2.12.6",
+  crossScalaVersions := Seq("2.11.12", "2.12.6"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   fork in Test := true,
   javaOptions in Test ++= travisTestJavaOptions
@@ -213,13 +213,14 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   httpclient,
   injectApp,
   injectCore,
+  injectLogback,  
   injectModules,
   injectRequestScope,
   injectServer,
+  injectSlf4j,
   injectThrift,
   injectThriftClient,
   injectThriftClientHttpMapper,
-  injectSlf4j,
   injectUtils,
   jackson,
   thrift,

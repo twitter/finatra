@@ -1,6 +1,6 @@
 scala_library(
     sources = rglobs("*.scala"),
-    fatal_warnings = True,
+    compiler_option_sets = {"fatal_warnings"},
     dependencies = [
         "3rdparty/jvm/com/google/inject:guice",
         "finatra/examples/example-twitter-server/src/main/resources",

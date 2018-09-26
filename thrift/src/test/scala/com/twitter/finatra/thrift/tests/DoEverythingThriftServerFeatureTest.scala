@@ -284,6 +284,13 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
     val methods = thrift("methods").asInstanceOf[Map[String, Any]]
     methods.size should be > 0
+
+    methods.foreach { case (_, data) =>
+      data.isInstanceOf[Map[_, _]] should be(true)
+      val methodJsonInformation = data.asInstanceOf[Map[String, Any]]
+      methodJsonInformation.contains("service_name") should be(true)
+      methodJsonInformation.contains("class") should be(true)
+    }
   }
 
   private def await[T](f: Future[T]): T = {

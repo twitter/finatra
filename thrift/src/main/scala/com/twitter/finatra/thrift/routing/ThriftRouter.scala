@@ -162,7 +162,7 @@ class ThriftRouter @Inject()(
             .mkString("\n")
         )
       }
-      registerMethods(methods.toMap.values.toSeq)
+      registerMethods(controller.getClass, methods.toMap.values.toSeq)
       registerGlobalFilter(filterChain)
       filteredThriftService = controller.toThriftService
     }
@@ -223,7 +223,7 @@ class ThriftRouter @Inject()(
       )
 
       registerGlobalFilter(filterChain)
-      registerMethods(ClassTag(service), methods.toSeq)
+      registerMethods(controller, ClassTag(service), methods.toSeq)
       filteredService = Some(
         new ThriftRequestWrapFilter[Array[Byte], Array[Byte]](controller.getSimpleName)
           .andThen(filterChain.toFilter[Array[Byte], Array[Byte]])
@@ -236,11 +236,11 @@ class ThriftRouter @Inject()(
 
   /* Private */
 
-  private[this] def registerMethods(service: ClassTag[_], methods: Seq[Method]): Unit =
-    methods.foreach(getRegistrar.register(service, _))
+  private[this] def registerMethods(clazz: Class[_], service: ClassTag[_], methods: Seq[Method]): Unit =
+    methods.foreach(getRegistrar.register(clazz, service, _))
 
-  private[this] def registerMethods(methods: Seq[ThriftMethodService[_, _]]): Unit =
-    methods.foreach(getRegistrar.register)
+  private[this] def registerMethods(clazz: Class[_], methods: Seq[ThriftMethodService[_, _]]): Unit =
+    methods.foreach(getRegistrar.register(clazz, _))
 
   private[this] def registerGlobalFilter(filter: ThriftFilter): Unit = {
     if (filter ne ThriftFilter.Identity) {
