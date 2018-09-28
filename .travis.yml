@@ -40,14 +40,15 @@ env:
 # These directories are cached to S3 at the end of the build
 cache:
   directories:
-   - $HOME/.ivy2
-   - $HOME/.sbt/boot/scala-$TRAVIS_SCALA_VERSION
+   - $HOME/.ivy2/cache
+   - $HOME/.ivy2/local/com.twitter
+   - $HOME/.sbt
    - $HOME/.dodo
 
 before_cache:
-  # Tricks to avoid unnecessary cache updates
-  - find $HOME/.ivy2 -name "ivydata-*.properties" -delete
-  - find $HOME/.sbt -name "*.lock" -delete
+  # Cleanup the cached directories to avoid unnecessary cache updates
+  - find $HOME/.ivy2/cache  -name "ivydata-*.properties" -delete
+  - find $HOME/.sbt         -name "*.lock"               -delete
 
 scala:
   - 2.11.12
@@ -65,7 +66,7 @@ notifications:
 before_script:
   - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
 
-script:
+script: # we define this here in the implicit test build stage as this is the only way the matrix expansion for PROJECT works properly
   - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage "$PROJECT/test" coverageReport
 
 after_success:
@@ -79,4 +80,14 @@ stages:
 jobs:
   include:
     - stage: dodo
-      script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test finatra
+      scala: 2.11.12 # need to set this explicitly
+      script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test --scala-version 2.11.12 finatra
+      env: 
+        - matrix: ignore
+      after_success: skip
+    - stage: dodo
+      scala: 2.12.6 # need to set this explicitly
+      script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test --scala-version 2.12.6 finatra
+      env: 
+        - matrix: ignore
+      after_success: skip
