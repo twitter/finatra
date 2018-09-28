@@ -13,6 +13,8 @@ Unreleased
 
 Changed
 ~~~~~~~
+- | finatra-thrift: Allow java classes to extend ThriftFilter via 
+	AbstractThriftFilter. ``PHAB_ID=D221534`` 
 
 - | http/thrift: Update Library registry route information to include controller
     class name. ``PHAB_ID=D216425``

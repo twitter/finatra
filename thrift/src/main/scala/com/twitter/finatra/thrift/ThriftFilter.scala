@@ -11,9 +11,14 @@ object ThriftFilter {
   }
 }
 
+/** AbstractThriftFilter for Java usage. */
+abstract class AbstractThriftFilter extends ThriftFilter
+
 /**
  * A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T.  Such filters
  * can operate on any ThriftRequest.
+ *
+ * Java classes can extend ThriftFilter using AbstractThriftFilter. See above.
  *
  * TODO: Deprecate in favor of [[Filter.TypeAgnostic]]
  */
