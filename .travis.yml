@@ -8,38 +8,7 @@ git:
   quiet: true
 
 env:
-  global:
-    - JAVA_OPTS="-DSKIP_FLAKY=true -Dsbt.log.noformat=true"
-
-  matrix:
-    - PROJECT=benchmarks
-    - PROJECT=http
-    - PROJECT=httpclient
-    - PROJECT=injectApp
-    - PROJECT=injectCore
-    - PROJECT=injectLogback
-    - PROJECT=injectModules
-    - PROJECT=injectRequestScope
-    - PROJECT=injectServer
-    - PROJECT=injectSlf4j
-    - PROJECT=injectThrift
-    - PROJECT=injectThriftClient
-    - PROJECT=injectThriftClientHttpMapper
-    - PROJECT=injectUtils
-    - PROJECT=jackson
-    - PROJECT=thrift
-    - PROJECT=utils
-    # examples
-    - PROJECT=benchmarkServer
-    - PROJECT=exampleHttpJavaServer
-    - PROJECT=exampleInjectJavaServer
-    - PROJECT=exampleTwitterServer
-    - PROJECT=exampleWebDashboard
-    - PROJECT=helloWorld
-    - PROJECT=streamingExample
-    - PROJECT=thriftExampleServer
-    - PROJECT=thriftJavaExampleServer
-    - PROJECT=twitterClone
+  - JAVA_OPTS="-DSKIP_FLAKY=true -Dsbt.log.noformat=true"
 
 # These directories are cached to S3 at the end of the build
 cache:
@@ -69,29 +38,11 @@ notifications:
 
 before_script:
   - unset SBT_OPTS # default $SBT_OPTS is irrelevant to sbt launcher
+  - curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test --scala-version $TRAVIS_SCALA_VERSION finatra
 
-script: # we define this here in the implicit test build stage as this is the only way the matrix expansion for PROJECT works properly
-  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage "$PROJECT/test" coverageReport
+script:
+  - travis_retry ./sbt ++$TRAVIS_SCALA_VERSION clean coverage test coverageReport
 
 after_success:
   - ./sbt ++$TRAVIS_SCALA_VERSION coverageAggregate
   - bash <(curl -s https://codecov.io/bash)
-
-stages:
-  - dodo
-  - test
-
-jobs:
-  include:
-    - stage: dodo
-      scala: 2.11.12 # need to set this explicitly
-      script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test --scala-version 2.11.12 finatra
-      env: 
-        - matrix: ignore
-      after_success: skip
-    - stage: dodo
-      scala: 2.12.6 # need to set this explicitly
-      script: curl -s https://raw.githubusercontent.com/twitter/dodo/develop/bin/build | bash -s -- --no-test --scala-version 2.12.6 finatra
-      env: 
-        - matrix: ignore
-      after_success: skip
