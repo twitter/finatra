@@ -22,9 +22,9 @@ trait ThriftServer extends TwitterServer {
 
   addFrameworkModules(ExceptionManagerModule)
 
-  protected def defaultFinatraThriftPort: String = ":9999"
+  protected def defaultThriftPort: String = ":9999"
   private val thriftPortFlag =
-    flag("thrift.port", defaultFinatraThriftPort, "External Thrift server port")
+    flag("thrift.port", defaultThriftPort, "External Thrift server port")
 
   protected def defaultThriftShutdownTimeout: Duration = 1.minute
   private val thriftShutdownTimeoutFlag = flag(

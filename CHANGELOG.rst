@@ -8,6 +8,9 @@ in commits.
 Unreleased
 ----------
 
+- | finatra-thrift: Rename defaultFinatraThriftPort to defaultThriftPort.
+    ``PHAB_ID=D224735``
+
 18.9.1
 -------
 

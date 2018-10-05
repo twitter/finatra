@@ -83,7 +83,7 @@ For example, instead of setting the `-thrift.port` flag, you can override the fo
 
     class ExampleServer extends ThriftServer {
 
-      override val defaultFinatraThriftPort: String = ":9090"
+      override val defaultThriftPort: String = ":9090"
 
       override def configureThrift(router: ThriftRouter): Unit = {
         ...
