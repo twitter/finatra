@@ -8,19 +8,29 @@ in commits.
 Unreleased
 ----------
 
-- | finatra-thrift: Rename defaultFinatraThriftPort to defaultThriftPort.
+Changed
+~~~~~~~
+
+- finatra-thrift: (BREAKING API CHANGE) Update `c.t.finatra.thrift.routing.ThriftRouter` API
+  for adding Java Thrift controllers. The `service: Class[_]` was rendered unnecessary some time
+  ago but not removed from the API signature. Because this parameter is useless and it shadows
+  another variable inside of the code we remove it from the signature altogether
+  rather than deprecating the API. ``PHAB_ID=D224336``
+
+- | finatra-thrift: Rename `defaultFinatraThriftPort` to `defaultThriftPort`.
     ``PHAB_ID=D224735``
 
 18.9.1
--------
+------
 
 Changed
 ~~~~~~~
-- | finatra-thrift: Allow java classes to extend ThriftFilter via 
-	AbstractThriftFilter. ``PHAB_ID=D221534`` 
 
-- | http/thrift: Update Library registry route information to include controller
-    class name. ``PHAB_ID=D216425``
+- finatra-thrift: Allow java classes to extend ThriftFilter via
+  AbstractThriftFilter. ``PHAB_ID=D221534``
+
+- http/thrift: Update Library registry route information to include controller
+  class name. ``PHAB_ID=D216425``
 
 18.9.0
 ------

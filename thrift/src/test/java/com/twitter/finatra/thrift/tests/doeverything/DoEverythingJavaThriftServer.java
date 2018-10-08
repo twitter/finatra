@@ -2,7 +2,6 @@ package com.twitter.finatra.thrift.tests.doeverything;
 
 import com.twitter.app.Flag;
 import com.twitter.app.Flaggable;
-import com.twitter.doeverything.thriftjava.DoEverything;
 import com.twitter.finagle.ThriftMux;
 import com.twitter.finagle.tracing.NullTracer$;
 import com.twitter.finatra.thrift.AbstractThriftServer;
@@ -41,8 +40,7 @@ public class DoEverythingJavaThriftServer extends AbstractThriftServer {
             .filter(ThriftMDCFilter.class)
             .filter(AccessLoggingFilter.class)
             .filter(StatsFilter.class)
-            .add(DoEverythingJavaThriftController.class,
-                    DoEverything.Service.class);
+            .add(DoEverythingJavaThriftController.class);
     }
 
 }

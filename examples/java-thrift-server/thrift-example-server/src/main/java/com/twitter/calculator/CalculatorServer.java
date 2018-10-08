@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.Module;
 
 import com.twitter.calculator.modules.ModeModule;
-import com.twitter.calculator.thriftjava.Calculator;
 import com.twitter.finatra.thrift.AbstractThriftServer;
 import com.twitter.finatra.thrift.filters.AccessLoggingFilter;
 import com.twitter.finatra.thrift.filters.ClientIdWhitelistFilter;
@@ -35,7 +34,6 @@ class CalculatorServer extends AbstractThriftServer {
             .filter(AccessLoggingFilter.class)
             .filter(StatsFilter.class)
             .filter(ClientIdWhitelistFilter.class)
-            .add(CalculatorController.class,
-                Calculator.Service.class);
+            .add(CalculatorController.class);
     }
 }
