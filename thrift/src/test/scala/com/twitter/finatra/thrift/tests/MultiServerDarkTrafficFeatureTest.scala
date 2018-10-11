@@ -9,10 +9,12 @@ import com.twitter.inject.Test
 import com.twitter.inject.server.PortUtils
 import com.twitter.util.{Await, Future}
 
-class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
+class MultiServerDarkTrafficFeatureTest
+  extends Test
+  with ThriftTest {
 
-  val darkDoEverythingThriftServer = new EmbeddedThriftServer(new DoEverythingThriftServer)
-  val liveDoEverythingThriftServer = new EmbeddedThriftServer(
+  private[this] val darkDoEverythingThriftServer = new EmbeddedThriftServer(new DoEverythingThriftServer)
+  private[this] val liveDoEverythingThriftServer = new EmbeddedThriftServer(
     new DoEverythingThriftServer,
     flags = Map(
       "thrift.dark.service.dest" -> s"/$$/inet/${PortUtils.loopbackAddress}/${darkDoEverythingThriftServer.thriftPort()}",
@@ -20,7 +22,7 @@ class MultiServerDarkTrafficFeatureTest extends Test with ThriftTest {
     )
   )
 
-  lazy val client123 =
+  private[this] lazy val client123: DoEverything[Future] =
     liveDoEverythingThriftServer.thriftClient[DoEverything[Future]](clientId = "client123")
 
   // See DoEverythingThriftServerDarkTrafficFilterModule#enableSampling

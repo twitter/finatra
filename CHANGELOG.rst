@@ -11,6 +11,17 @@ Unreleased
 Changed
 ~~~~~~~
 
+- finatra-http|finatra-thrift: (BREAKING API CHANGE) Update the `DarkTrafficFilterModule` in both
+  HTTP and Thrift to allow for specifying further configuration of the underlying Finagle client.
+  This allows users the ability to set Finagle client concerns like ResponseClassification or other
+  configuration not expressed by the DarkTrafficFilterModule's API.
+
+  Additionally, the Thrift `DarkTrafficFilterModule` has been updated to be ThriftMux only. For more
+  information on mux see: `What is ThriftMux <https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux>`__.
+
+  We also update the `enableSampling` method to accept a `c.t.inject.Injector` to aid in the
+  decision-making for if a given request should be "sampled" by the filter. ``PHAB_ID=D225897``
+
 - finatra-thrift: (BREAKING API CHANGE) Update `c.t.finatra.thrift.routing.ThriftRouter` API
   for adding Java Thrift controllers. The `service: Class[_]` was rendered unnecessary some time
   ago but not removed from the API signature. Because this parameter is useless and it shadows

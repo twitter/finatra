@@ -1,36 +1,58 @@
 package com.twitter.finatra.http.tests.integration.darktraffic.test
 
-import com.twitter.finagle.Service
-import com.twitter.finagle.http.{Response, Request}
 import com.twitter.finagle.http.Status._
-import com.twitter.finatra.annotations.DarkTrafficService
-import com.twitter.finatra.http.{HttpHeaders, EmbeddedHttpServer}
-import com.twitter.finatra.http.tests.integration.darktraffic.main.DarkTrafficTestServer
-import com.twitter.inject.Mockito
-import com.twitter.inject.server.FeatureTest
+import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.{Filter, Service}
+import com.twitter.finatra.http.routing.HttpRouter
+import com.twitter.finatra.http.tests.integration.darktraffic.main.{
+  DarkTrafficTestController,
+  DarkTrafficTestServer
+}
+import com.twitter.finatra.http.{EmbeddedHttpServer, HttpHeaders, HttpServer, HttpTest}
+import com.twitter.inject.Test
 import com.twitter.util.Future
-import org.mockito.ArgumentCaptor
 
-class DarkTrafficCanonicalResourceHeaderTest extends FeatureTest with Mockito {
+class DarkTrafficCanonicalResourceHeaderTest
+  extends Test
+  with HttpTest {
 
-  val darkTrafficService: Option[Service[Request, Response]] = Some(
-    smartMock[Service[Request, Response]]
+  private[this] val assertCanonicalResourceHeaderFilter =
+    new Filter[Request, Response, Request, Response] {
+      def apply(request: Request, service: Service[Request, Response]): Future[Response] = {
+        request.headerMap(HttpHeaders.CanonicalResource) should be(
+          s"${request.method.toString}_${request.uri}"
+        )
+        service(request)
+      }
+    }
+
+  // receive dark traffic server
+  private[this] val receiveDarkTrafficServer = new EmbeddedHttpServer(
+    twitterServer = new HttpServer {
+      override val name = "receiveDarkTrafficServer"
+      override protected def configureHttp(router: HttpRouter): Unit =
+        router
+          .filter(assertCanonicalResourceHeaderFilter)
+          .add[DarkTrafficTestController]
+    }
   )
-  darkTrafficService.get.apply(any[Request]).returns(Future.value(smartMock[Response]))
 
-  // receive dark traffic service
-  override val server = new EmbeddedHttpServer(twitterServer = new DarkTrafficTestServer)
-    .bind[Option[Service[Request, Response]]]
-      .annotatedWith[DarkTrafficService]
-      .toInstance(darkTrafficService)
+  // send dark traffic server
+  private[this] val sendDarkTrafficServer = new EmbeddedHttpServer(
+    twitterServer = new DarkTrafficTestServer {
+      override val name = "sendDarkTrafficServer"
+    },
+    flags = Map("http.dark.service.dest" -> receiveDarkTrafficServer.externalHttpHostAndPort)
+  )
+
+  override protected def afterAll(): Unit = {
+    receiveDarkTrafficServer.close()
+    sendDarkTrafficServer.close()
+    super.afterAll()
+  }
 
   // Canonical-Resource header is used by Diffy Proxy
   test("has 'Canonical-Resource' header correctly set") {
-    server.httpGet("/plaintext", withBody = "Hello, World!", andExpect = Ok)
-
-    val captor = ArgumentCaptor.forClass(classOf[Request])
-    there was one(darkTrafficService.get).apply(captor.capture())
-    val request = captor.getValue
-    request.headerMap(HttpHeaders.CanonicalResource) should be("GET_/plaintext")
+    sendDarkTrafficServer.httpGet("/plaintext", withBody = "Hello, World!", andExpect = Ok)
   }
 }

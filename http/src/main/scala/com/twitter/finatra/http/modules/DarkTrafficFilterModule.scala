@@ -2,23 +2,23 @@ package com.twitter.finatra.http.modules
 
 import com.google.inject.{Provides, Singleton}
 import com.twitter.finagle.exp.DarkTrafficFilter
-import com.twitter.finagle.{Filter, Http, Service}
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.annotations.{
-  CanonicalResourceFilter,
-  DarkTrafficFilterType,
-  DarkTrafficService
-}
+import com.twitter.finagle.{Filter, Http, Service}
+import com.twitter.finatra.annotations.{CanonicalResourceFilter, DarkTrafficFilterType, DarkTrafficService}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.contexts.RouteInfo
-import com.twitter.inject.TwitterModule
-import com.twitter.util.Duration
+import com.twitter.inject.{Injector, TwitterModule}
 
 abstract class DarkTrafficFilterModule extends TwitterModule {
 
   private val destFlag =
     flag[String]("http.dark.service.dest", "Resolvable name/dest of dark traffic service")
+
+  /**
+   * Name of dark service client for use in metrics.
+   */
+  protected val label: String = "service"
 
   /**
    * Forward the dark request after the service has processed the request
@@ -29,61 +29,63 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
   /**
    * Function to determine if the request should be "sampled", e.g.
    * sent to the dark service.
+   *
+   * @param injector the [[com.twitter.inject.Injector]] for use in determining if a given request
+   *                 should be forwarded or not.
    */
-  def enableSampling: Request => Boolean
+  def enableSampling(injector: Injector): Request => Boolean
 
   /**
-   * Name of dark service client for use in metrics.
+   * Override to specify further configuration of the Finagle [[Http.Client]].
+   *
+   * @param injector the [[com.twitter.inject.Injector]] for use in configuring the underlying client.
+   * @param client   the default configured [[Http.Client]].
+   *
+   * @return a configured instance of the [[Http.Client]]
    */
-  protected val label: String = "service"
-
-  /**
-   * Timeouts of the dark service client
-   */
-  protected val acquisitionTimeout: Duration
-  protected val requestTimeout: Duration
+  protected def configureHttpClient(
+    injector: Injector,
+    client: Http.Client
+  ): Http.Client = client
 
   @Provides
   @Singleton
   @DarkTrafficFilterType
-  def provideDarkTrafficFilter(
+  final def provideDarkTrafficFilter(
+    injector: Injector,
     statsReceiver: StatsReceiver,
     @CanonicalResourceFilter canonicalResourceFilter: Filter[Request, Response, Request, Response],
-    @DarkTrafficService darkService: Option[Service[Request, Response]]
+    @DarkTrafficService service: Option[Service[Request, Response]]
   ): Filter[Request, Response, Request, Response] = {
-
-    darkService match {
-      case Some(service) =>
-        val filteredDarkService = canonicalResourceFilter.andThen(service)
+    service match {
+      case Some(svc) =>
+        val filteredDarkService = canonicalResourceFilter.andThen(svc)
         new DarkTrafficFilter[Request, Response](
           filteredDarkService,
-          enableSampling,
+          enableSampling(injector),
           statsReceiver,
           forwardAfterService
         )
-      case _ => Filter.identity
+      case _ =>
+        Filter.identity
     }
   }
 
   @Provides
   @Singleton
   @DarkTrafficService
-  def provideDarkTrafficService(
+  final def provideDarkTrafficService(
+    injector: Injector,
     statsReceiver: StatsReceiver
   ): Option[Service[Request, Response]] = {
 
-    destFlag.get match {
-      case Some(dest) =>
-        val clientStatsReceiver = statsReceiver.scope("clnt", "dark_traffic_filter")
-
-        Some(
-          Http.client.withSession
-            .acquisitionTimeout(acquisitionTimeout)
-            .withStatsReceiver(clientStatsReceiver)
-            .withRequestTimeout(requestTimeout)
-            .newService(dest, label)
-        )
-      case _ => None
+    destFlag.get.map { dest =>
+      val clientStatsReceiver =
+        statsReceiver.scope("clnt", "dark_traffic_filter")
+      configureHttpClient(
+        injector,
+        defaultHttpClient(clientStatsReceiver)
+      ).newService(dest, label)
     }
   }
 
@@ -94,18 +96,27 @@ abstract class DarkTrafficFilterModule extends TwitterModule {
   @Provides
   @Singleton
   @CanonicalResourceFilter
-  def provideCanonicalResourceFilter: Filter[Request, Response, Request, Response] = {
+  final def provideCanonicalResourceFilter: Filter[Request, Response, Request, Response] = {
     Filter.mk[Request, Response, Request, Response] { (request, service) =>
-      RouteInfo(request).foreach { info =>
-        val nameOrPath = if (info.name.nonEmpty) {
-          info.name
-        } else {
-          info.path
-        }
-        request.headerMap
-          .set(HttpHeaders.CanonicalResource, s"${request.method.toString}_${nameOrPath}")
+      for (info <- RouteInfo(request)) {
+        val nameOrPath =
+          if (info.name.nonEmpty) info.name
+          else info.path
+        request
+          .headerMap
+          .set(
+            HttpHeaders.CanonicalResource,
+            s"${request.method.toString}_$nameOrPath")
       }
       service(request)
     }
   }
+
+  /* Private */
+
+  private[this] def defaultHttpClient(
+    statsReceiver: StatsReceiver
+  ): Http.Client =
+    Http.client
+      .withStatsReceiver(statsReceiver)
 }
