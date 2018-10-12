@@ -2,7 +2,6 @@ package com.twitter.finatra.thrift
 
 import com.google.inject.Module
 import com.twitter.conversions.time._
-import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{ListeningServer, NullServer, ThriftMux}
 import com.twitter.finatra.thrift.modules.{ExceptionManagerModule, ThriftResponseClassifierModule}
 import com.twitter.finatra.thrift.response.ThriftResponseClassifier
@@ -76,7 +75,6 @@ trait ThriftServer extends TwitterServer {
       configureThriftServer(
         ThriftMux.server
           .withLabel(thriftServerNameFlag())
-          .withStatsReceiver(injector.instance[StatsReceiver])
           .withResponseClassifier(injector.instance[ThriftResponseClassifier])
       )
 

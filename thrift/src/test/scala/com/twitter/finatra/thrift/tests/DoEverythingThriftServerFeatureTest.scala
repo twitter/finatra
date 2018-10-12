@@ -293,7 +293,17 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     }
   }
 
+  test("Stats scope") {
+    val question = Question("fail")
+    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+    assert(server.inMemoryStatsReceiver.counters == Map(Seq("per_method_stats", "ask", "success") -> 1))
+  }
+
   private def await[T](f: Future[T]): T = {
     Await.result(f, 2.seconds)
+  }
+
+  override protected def beforeEach(): Unit = {
+    server.inMemoryStatsReceiver.clear()
   }
 }
