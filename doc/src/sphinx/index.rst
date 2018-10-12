@@ -127,13 +127,14 @@ Useful Links
 ------------
 
 .. toctree::
+   :maxdepth: 2
 
-  user-guide/index
-  Scaladocs <https://twitter.github.io/finatra/scaladocs/index.html>
-  Finagle Blog <https://finagle.github.io/blog/>
-  presentations/index
-  Forum <https://groups.google.com/forum/#!forum/finatra-users>
-  Changelog
+   user-guide/index
+   Scaladocs <https://twitter.github.io/finatra/scaladocs/index.html>
+   Finagle Blog <https://finagle.github.io/blog/>
+   presentations/index
+   Forum <https://groups.google.com/forum/#!forum/finatra-users>
+   changelog
 
 Contributing
 ------------
