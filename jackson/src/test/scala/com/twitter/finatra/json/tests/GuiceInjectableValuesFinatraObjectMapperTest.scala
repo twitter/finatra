@@ -91,12 +91,6 @@ class GuiceInjectableValuesFinatraObjectMapperTest extends Test with Mockito {
     }
   }
 
-  test("Too many binding annotations") {
-    intercept[Exception] {
-      parse[CaseClassTooManyBindingAnnotations]("""{}""")
-    }
-  }
-
   private def parse[T: Manifest](string: String): T = {
     mapper.parse[T](string)
   }
