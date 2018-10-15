@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* finatra-thrift: Set the bound `StatsReceiver` in the underlying Finagle `ThriftMux` server
+  in the `c.t.finatra.thrift.ThriftServer`. This prevented testing of underlying Finagle server
+  stats as the `InMemoryStatsReceiver` used by the `EmbeddedThriftServer` was not properly passed
+  all the way through the stack. ``PHAB_ID=D228494``
+
 Changed
 ~~~~~~~
 

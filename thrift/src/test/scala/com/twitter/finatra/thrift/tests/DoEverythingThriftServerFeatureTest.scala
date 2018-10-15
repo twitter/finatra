@@ -293,10 +293,27 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     }
   }
 
-  test("Stats scope") {
+  test("Basic server stats") {
+    await(client123.uppercase("Hi")) should equal("HI")
+    server.assertCounter("srv/thrift/sent_bytes")(_ > 0)
+    server.assertCounter("srv/thrift/received_bytes")(_ > 0)
+    server.assertCounter("srv/thrift/requests", 1L)
+    server.assertCounter("srv/thrift/success", 1L)
+  }
+
+  test("Per-method stats scope") {
     val question = Question("fail")
     await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
-    assert(server.inMemoryStatsReceiver.counters == Map(Seq("per_method_stats", "ask", "success") -> 1))
+    server.assertCounter("per_method_stats/ask/success", 1L)
+    server.assertCounter("per_method_stats/ask/failures", 0L)
+  }
+
+  test("Per-endpoint stats scope") {
+    val question = Question("fail")
+    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+    server.assertCounter("srv/thrift/ask/requests", 1L)
+    server.assertCounter("srv/thrift/ask/success", 1L)
+    server.assertCounter("srv/thrift/ask/failures", 0L)
   }
 
   private def await[T](f: Future[T]): T = {

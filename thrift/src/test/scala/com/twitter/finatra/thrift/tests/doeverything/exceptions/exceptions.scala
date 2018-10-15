@@ -1,5 +1,7 @@
 package com.twitter.finatra.thrift.tests.doeverything.exceptions
 
-class BarException extends Exception
+import scala.util.control.NoStackTrace
 
-class FooException extends Exception
+class BarException extends Exception with NoStackTrace
+
+class FooException extends Exception with NoStackTrace

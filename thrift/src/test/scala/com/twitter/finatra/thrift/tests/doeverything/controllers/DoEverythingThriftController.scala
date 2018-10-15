@@ -14,6 +14,7 @@ import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 import org.slf4j.MDC
 import scala.collection.JavaConverters._
+import scala.util.control.NoStackTrace
 
 @Singleton
 class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: String)
@@ -26,7 +27,7 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
     storeForTesting()
     info("In uppercase method.")
     if (args.msg == "fail") {
-      Future.exception(new Exception("oops"))
+      Future.exception(new Exception("oops") with NoStackTrace)
     } else {
       Future.value(args.msg.toUpperCase)
     }
@@ -47,11 +48,11 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
       case "unknownClientIdError" => throw new UnknownClientIdError("unknown client id error")
       case "requestException" => throw new RequestException
       case "timeoutException" => throw new RequestTimeoutException(1.second, "timeout exception")
-      case "unhandledException" => throw new Exception("unhandled exception")
+      case "unhandledException" => throw new Exception("unhandled exception") with NoStackTrace
       // should be handled by BarExceptionMapper and FooExceptionMapper
       case "barException" => throw new BarException
       case "fooException" => throw new FooException
-      case "unhandledSourcedException" => throw new ChannelException
+      case "unhandledSourcedException" => throw new ChannelException with NoStackTrace
       // should be handled by root mapper, ThrowableExceptionMapper
       case "unhandledThrowable" => throw new Throwable("unhandled throwable")
       case _ => Future.value("no specified exception")
