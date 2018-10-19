@@ -27,6 +27,7 @@ class DoEverythingThriftServer extends ThriftServer {
     server
       .withMonitor(NullMonitor)
       .withTracer(NullTracer)
+      .withPerEndpointStats
   }
 
   override def configureThrift(router: ThriftRouter): Unit = {

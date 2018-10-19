@@ -23,7 +23,7 @@ trait HttpTest {
     ("com.twitter.server.resolverMap", name + "=" + httpServer.externalHttpHostAndPort)
   }
 
-  def urlEncode(str: String) = {
+  def urlEncode(str: String): String = {
     URLEncoder
       .encode(str, "UTF-8")
       .replaceAll("\\+", "%20")

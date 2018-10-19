@@ -81,12 +81,15 @@ For example, instead of setting the `-thrift.port` flag, you can override the fo
 
 .. code:: scala
 
+    import com.twitter.finatra.thrift.ThriftServer
+    import com.twitter.finatra.thrift.routing.ThriftRouter
+
     class ExampleServer extends ThriftServer {
 
-      override val defaultFinatraThriftPort: String = ":9090"
+      override val defaultThriftPort: String = ":9090"
 
       override def configureThrift(router: ThriftRouter): Unit = {
-        ...
+        ???
       }
     }
 
@@ -98,11 +101,16 @@ For more information on using and setting command-line flags see `Flags <../gett
 Finagle Server Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you want to further configure the underlying `Finagle <https://github.com/twitter/finagle>`__ server you can override `configureThriftServer` in your server to set additional configuration on, or override the default configuration of your server.
+If you want to further configure the underlying `Finagle <https://github.com/twitter/finagle>`__ server you can override `configureThriftServer` in your server
+to specify additional configuration on (or override the default configuration of) the underlying Finagle server.
 
 For example:
 
 .. code:: scala
+
+    import com.twitter.finagle.ThriftMux
+    import com.twitter.finatra.thrift.ThriftServer
+    import com.twitter.finatra.thrift.routing.ThriftRouter
 
     class ExampleServer extends ThriftServer {
 
@@ -112,15 +120,49 @@ For example:
 
       override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
         server
-          .withMaxRequestSize(...)
+          .withMaxRequestSize(???)
           .withAdmissionControl.concurrencyLimit(
-            maxConcurrentRequests = ...,
-            maxWaiters = ...)
+            maxConcurrentRequests = ???,
+            maxWaiters = ???)
       }
     }
 
 
-For more information on `Finagle <https://github.com/twitter/finagle>`__ server configuration see the documentation `here <https://twitter.github.io/finagle/guide/Configuration.html>`__; specifically the server documentation `here <https://twitter.github.io/finagle/guide/Servers.html>`__.
+For more information on `Finagle <https://github.com/twitter/finagle>`__ server configuration see the documentation `here <https://twitter.github.io/finagle/guide/Configuration.html>`__;
+specifically the server documentation `here <https://twitter.github.io/finagle/guide/Servers.html>`__.
+
+Server-side Response Classification
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To configure server-side `Response Classification <https://twitter.github.io/finagle/guide/Servers.html#response-classification>`__ you could choose to
+set the classifier directly on the underlying Finagle server by overriding the `configureThriftServer` in your server, e.g.,
+
+.. code:: scala
+
+    override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
+        server.withResponseClassifier(???)
+    }
+
+However, since the server-side ResponseClassifier could affect code not just at the Finagle level, we actually recommend overriding the specific framework module,
+`ThriftResponseClassifierModule` instead. This binds an instance of an `ThriftResponseClassifier <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/response/ThriftResponseClassifier.scala>`__
+to the object graph that is then available to be injected into things like the Thrift `StatsFilter <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala>`__
+for a more accurate reporting of metrics that takes into account server-side response classification.
+
+For example, in your `ThriftServer` you would do:
+
+.. code:: scala
+
+    import com.google.inject.Module
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
+    class ExampleServer extends ThriftServer {
+
+      override thriftResponseClassifierModule: Module = ???
+    }
+
+The bound value is also then `set on the underlying Finagle server <https://github.com/twitter/finatra/blob/9d7b430ce469d1542b603938e3ec24cf6ff79d64/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala#L71>`__
+before serving.
 
 Testing
 -------

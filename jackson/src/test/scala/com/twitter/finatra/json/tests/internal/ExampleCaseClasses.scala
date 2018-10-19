@@ -318,8 +318,6 @@ case class CaseClassInjectString(@Inject string: String)
 
 case class CaseClassTooManyInjectableAnnotations(@Inject @QueryParam string: String)
 
-case class CaseClassTooManyBindingAnnotations(@Inject @Named("foo") @Named("bar") string: String)
-
 case class CaseClassWithCustomDecimalFormat(
   @JsonDeserialize(using = classOf[MyBigDecimalDeserializer])
   myBigDecimal: BigDecimal,

@@ -1,8 +1,11 @@
 package com.twitter.finatra.thrift
 
+import com.google.inject.Module
 import com.twitter.conversions.time._
+import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{ListeningServer, NullServer, ThriftMux}
-import com.twitter.finatra.thrift.modules.ExceptionManagerModule
+import com.twitter.finatra.thrift.modules.{ExceptionManagerModule, ThriftResponseClassifierModule}
+import com.twitter.finatra.thrift.response.ThriftResponseClassifier
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.server.{PortUtils, TwitterServer}
@@ -20,11 +23,14 @@ private object ThriftServer {
 
 trait ThriftServer extends TwitterServer {
 
-  addFrameworkModules(ExceptionManagerModule)
+  /** Add Framework Modules */
+  addFrameworkModules(
+    ExceptionManagerModule,
+    thriftResponseClassifierModule)
 
-  protected def defaultFinatraThriftPort: String = ":9999"
+  protected def defaultThriftPort: String = ":9999"
   private val thriftPortFlag =
-    flag("thrift.port", defaultFinatraThriftPort, "External Thrift server port")
+    flag("thrift.port", defaultThriftPort, "External Thrift server port")
 
   protected def defaultThriftShutdownTimeout: Duration = 1.minute
   private val thriftShutdownTimeoutFlag = flag(
@@ -70,6 +76,8 @@ trait ThriftServer extends TwitterServer {
       configureThriftServer(
         ThriftMux.server
           .withLabel(thriftServerNameFlag())
+          .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
+          .withResponseClassifier(injector.instance[ThriftResponseClassifier])
       )
 
     thriftServer = router.services.service
@@ -102,12 +110,18 @@ trait ThriftServer extends TwitterServer {
   /* Protected */
 
   /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing a [[ThriftResponseClassifier]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides a [[ThriftResponseClassifier]] implementation.
+   */
+  protected def thriftResponseClassifierModule: Module = ThriftResponseClassifierModule
+
+  /**
    * This method allows for further configuration of the thrift server for parameters not exposed by
    * this trait or for overriding defaults provided herein, e.g.,
    *
    * override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
    *   server
-   *     .withResponseClassifier(...)
    *     .withMaxReusableBufferSize(...)
    * }
    *

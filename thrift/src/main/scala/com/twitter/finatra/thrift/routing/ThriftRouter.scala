@@ -176,12 +176,8 @@ class ThriftRouter @Inject()(
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
-  def add(controller: Class[_], service: Class[_]): ThriftRouter = {
-    add(
-      controller,
-      service,
-      ThriftMux.server.params.apply[Thrift.param.ProtocolFactory].protocolFactory
-    )
+  def add(controller: Class[_]): ThriftRouter = {
+    add(controller, ThriftMux.server.params.apply[Thrift.param.ProtocolFactory].protocolFactory)
   }
 
   /**
@@ -193,11 +189,7 @@ class ThriftRouter @Inject()(
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
-  def add(
-    controller: Class[_],
-    service: Class[_],
-    protocolFactory: TProtocolFactory
-  ): ThriftRouter = {
+  def add(controller: Class[_], protocolFactory: TProtocolFactory): ThriftRouter = {
     add {
       val instance = injector.instance(controller)
       val iface: Class[_] = instance.getClass.getInterfaces.head // MyService$ServiceIface

@@ -1,5 +1,6 @@
 package com.twitter.finatra.http.internal.server
 
+import com.google.inject.Module
 import com.twitter.app.Flag
 import com.twitter.conversions.storage._
 import com.twitter.conversions.time._
@@ -7,6 +8,8 @@ import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{Http, ListeningServer, NullServer, Service}
+import com.twitter.finatra.http.modules.HttpResponseClassifierModule
+import com.twitter.finatra.http.response.HttpResponseClassifier
 import com.twitter.inject.annotations.Lifecycle
 import com.twitter.inject.conversions.string._
 import com.twitter.inject.server.{PortUtils, TwitterServer}
@@ -21,6 +24,9 @@ private object BaseHttpServer {
 }
 
 private[http] trait BaseHttpServer extends TwitterServer {
+
+  /** Add Framework Modules */
+  addFrameworkModule(httpResponseClassifierModule)
 
   protected def defaultHttpPort: String = ":8888"
   private val httpPortFlag = flag("http.port", defaultHttpPort, "External HTTP server port")
@@ -66,6 +72,13 @@ private[http] trait BaseHttpServer extends TwitterServer {
 
   /* Protected */
 
+  /**
+   * Default [[com.twitter.inject.TwitterModule]] for providing an [[HttpResponseClassifier]].
+   *
+   * @return a [[com.twitter.inject.TwitterModule]] which provides an [[HttpResponseClassifier]] implementation.
+   */
+  protected def httpResponseClassifierModule: Module = HttpResponseClassifierModule
+
   protected def httpService: Service[Request, Response] = {
     NullService
   }
@@ -82,7 +95,6 @@ private[http] trait BaseHttpServer extends TwitterServer {
    *
    * override def configureHttpServer(server: Http.Server): Http.Server = {
    *  server
-   *    .withResponseClassifier(...)
    *    .withMaxInitialLineSize(2048)
    * }
    *
@@ -100,7 +112,6 @@ private[http] trait BaseHttpServer extends TwitterServer {
    *
    * override def configureHttpsServer(server: Http.Server): Http.Server = {
    *  server
-   *    .withResponseClassifier(...)
    *    .withMaxInitialLineSize(2048)
    *    .withTransport.tls(....)
    * }
@@ -150,6 +161,7 @@ private[http] trait BaseHttpServer extends TwitterServer {
           baseHttpServer
             .withLabel(httpServerNameFlag())
             .withStatsReceiver(injector.instance[StatsReceiver])
+            .withResponseClassifier(injector.instance[HttpResponseClassifier])
         )
 
       httpServer = serverBuilder.serve(port, httpService)
@@ -174,6 +186,7 @@ private[http] trait BaseHttpServer extends TwitterServer {
           baseHttpServer
             .withLabel(httpsServerNameFlag())
             .withStatsReceiver(injector.instance[StatsReceiver])
+            .withResponseClassifier(injector.instance[HttpResponseClassifier])
         )
 
       httpsServer = serverBuilder.serve(port, httpService)

@@ -15,8 +15,7 @@ class DoEverythingCombinedServerFeatureTest extends FeatureTest {
     twitterServer = new DoEverythingCombinedServer,
     disableTestLogging = true,
     flags = Map("https.port" -> ":0") // for testing `EmbeddedHttpServer.logStartup` method
-  )
-  with ThriftClient
+  ) with ThriftClient
 
   lazy val client: Adder[Future] = server.thriftClient[Adder[Future]](clientId = "client123")
 

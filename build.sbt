@@ -4,12 +4,12 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.9.1"
+val releaseVersion = "18.10.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
-  scalaVersion := "2.12.6",
-  crossScalaVersions := Seq("2.11.12", "2.12.6"),
+  scalaVersion := "2.12.7",
+  crossScalaVersions := Seq("2.11.12", "2.12.7"),
   scalaModuleInfo := scalaModuleInfo.value.map(_.withOverrideScalaVersion(true)),
   fork in Test := true,
   javaOptions in Test ++= travisTestJavaOptions

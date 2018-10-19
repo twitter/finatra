@@ -1,11 +1,10 @@
 package com.twitter.streaming
 
-import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.Response
 import com.twitter.finatra.http.{EmbeddedHttpServer, StreamingJsonTestHelper}
 import com.twitter.finatra.httpclient.RequestBuilder
 import com.twitter.inject.server.FeatureTest
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, Reader}
 import com.twitter.util.Await
 
 class StreamingServerFeatureTest extends FeatureTest {
@@ -35,7 +34,7 @@ class StreamingServerFeatureTest extends FeatureTest {
 
   implicit class RichResponse(val self: Response) {
     def asyncStrings = {
-      AsyncStream.fromReader(self.reader) map {
+      Reader.toAsyncStream(self.reader).map {
         case Buf.Utf8(str) =>
           str
       }

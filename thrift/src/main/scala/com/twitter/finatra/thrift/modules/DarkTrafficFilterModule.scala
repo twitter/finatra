@@ -1,15 +1,14 @@
 package com.twitter.finatra.thrift.modules
 
 import com.google.inject.Provides
+import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.ThriftServiceIface.Filterable
+import com.twitter.finagle.thrift.service.Filterable
 import com.twitter.finagle.thrift.{ClientId, ServiceIfaceBuilder}
-import com.twitter.finagle.{Thrift, ThriftMux}
 import com.twitter.finatra.annotations.DarkTrafficFilterType
 import com.twitter.finatra.thrift.filters.DarkTrafficFilter
 import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
-import com.twitter.inject.TwitterModule
-import com.twitter.util.{Monitor, NullMonitor}
+import com.twitter.inject.{Injector, TwitterModule}
 import javax.inject.Singleton
 import scala.reflect.ClassTag
 
@@ -28,17 +27,6 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
   val label: String = "service"
 
   /**
-   * Enable thrift mux for this connection.
-   *
-   * Note: Both server and client must have mux enabled otherwise
-   * a nondescript ChannelClosedException will be seen.
-   *
-   * What is ThriftMux?
-   * https://twitter.github.io/finagle/guide/FAQ.html?highlight=thriftmux#what-is-thriftmux
-   */
-  protected val mux: Boolean = true
-
-  /**
    * Forward the dark request after the service has processed the request
    * instead of concurrently.
    */
@@ -47,64 +35,65 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
   /**
    * Function to determine if the request should be "sampled", e.g.
    * sent to the dark service.
+   *
+   * @param injector the [[com.twitter.inject.Injector]] for use in determining if a given request
+   *                 should be forwarded or not.
    */
-  def enableSampling: ThriftRequest[_] => Boolean
+  def enableSampling(injector: Injector): ThriftRequest[_] => Boolean
 
   /**
-   * Function to add a user-defined Monitor, c.t.finagle.DefaultMonitor will be installed
-   * implicitly which handles all exceptions caught in stack. Exceptions aren't handled by
-   * user-defined monitor propagated to the default monitor.
+   * Override to specify further configuration of the underlying Finagle [[ThriftMux.Client]].
    *
-   * NullMonitor has no influence on DefaultMonitor behavior here
+   * @param injector  the [[com.twitter.inject.Injector]] for use in configuring the underlying client.
+   * @param client    the default configured [[ThriftMux.Client]].
+   *
+   * @return a configured instance of the [[ThriftMux.Client]]
    */
-  protected def monitor: Monitor = NullMonitor
+  protected def configureThriftMuxClient(
+    injector: Injector,
+    client: ThriftMux.Client
+  ): ThriftMux.Client = client
 
   @Provides
   @Singleton
   @DarkTrafficFilterType
-  final def providesDarkTrafficFilter(statsReceiver: StatsReceiver): ThriftFilter = {
+  final def providesDarkTrafficFilter(
+    injector: Injector,
+    statsReceiver: StatsReceiver
+  ): ThriftFilter = {
     destFlag.get match {
       case Some(dest) =>
-        val clientStatsReceiver = statsReceiver.scope("clnt", "dark_traffic_filter")
+        val clientStatsReceiver =
+          statsReceiver.scope("clnt", "dark_traffic_filter")
         val clientId = ClientId(clientIdFlag())
 
-        val service = newServiceIface(dest, clientId, clientStatsReceiver)
+        val service =
+          configureThriftMuxClient(
+            injector,
+            defaultThriftMuxClient(clientId, clientStatsReceiver)
+          ).newServiceIface[ServiceIface](dest, label)
 
         new DarkTrafficFilter[ServiceIface](
           service,
-          enableSampling,
+          enableSampling(injector),
           forwardAfterService,
           statsReceiver
         )
-
-      case _ => ThriftFilter.Identity
+      case _ =>
+        ThriftFilter.Identity
     }
   }
 
   /* Private */
 
-  private def newServiceIface(
-    dest: String,
+  private[this] def defaultThriftMuxClient(
     clientId: ClientId,
     statsReceiver: StatsReceiver
-  ): ServiceIface = {
+  ): ThriftMux.Client = {
 
-    val thriftClient =
-      if (mux) {
-        ThriftMux.client
-          .withStatsReceiver(statsReceiver)
-          .withClientId(clientId)
-          .withMonitor(monitor)
-          .withPerEndpointStats
-      } else {
-        Thrift.client
-          .withStatsReceiver(statsReceiver)
-          .withClientId(clientId)
-          .withMonitor(monitor)
-          .withPerEndpointStats
-      }
-
-    thriftClient
-      .newServiceIface[ServiceIface](dest, label)
+    ThriftMux.client
+      .withStatsReceiver(statsReceiver)
+      .withClientId(clientId)
+      .withPerEndpointStats
   }
 }
