@@ -7,6 +7,13 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Fixed
+~~~~~
+
+* finatra-http: Fix registration of HTTP Routes in the Library registry to properly account
+  for Routes that duplicate a URI with a different HTTP verb. That is, a Route should be considered
+  unique per URI + HTTP verb combination. ``PHAB_ID=D232014``
+
 18.10.0
 -------
 

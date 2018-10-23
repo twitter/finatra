@@ -112,32 +112,6 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     val registry = json("registry").asInstanceOf[Map[String, Any]]
     registry.contains("library") should be(true)
     registry("library").asInstanceOf[Map[String, String]].contains("finatra") should be(true)
-
-    val finatra = registry("library")
-      .asInstanceOf[Map[String, Any]]("finatra")
-      .asInstanceOf[Map[String, Any]]
-    finatra.contains("http") should be(true)
-
-    val http = finatra("http").asInstanceOf[Map[String, Any]]
-    http.contains("filters") should be(true)
-    http.contains("routes") should be(true)
-
-    val routes = http("routes").asInstanceOf[Map[String, Any]]
-    routes.size should be > 0
-
-    routes.foreach { case (_, data) =>
-      data.isInstanceOf[Map[_, _]] should be(true)
-      val routeJsonInformation = data.asInstanceOf[Map[String, Any]]
-      routeJsonInformation.contains("constant") should be(true)
-      routeJsonInformation.contains("method") should be(true)
-      routeJsonInformation.contains("admin") should be(true)
-      routeJsonInformation.contains("path") should be(true)
-      if (routeJsonInformation("path").asInstanceOf[String].contains(":")) {
-        routeJsonInformation.contains("capture_names") should be(true)
-      }
-      routeJsonInformation.contains("callback") should be(true)
-      routeJsonInformation.contains("class") should be(true)
-    }
   }
 
   test("GET /admin/external/filtered") {

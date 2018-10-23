@@ -38,7 +38,7 @@ import scala.collection.mutable.ArrayBuffer
  * @param prefix The current routing state's path prefix
  * @param buildFilter The current routing state's filter factory function
  */
-private[http] case class RouteContext(prefix: String, buildFilter: (Injector) => HttpFilter)
+private[http] case class RouteContext(prefix: String, buildFilter: Injector => HttpFilter)
 
 /* Mutable */
 private trait RouteState {
@@ -93,11 +93,13 @@ private[http] class PrefixedDSL(prefix: String) extends RouteDSL {
 private[http] trait RouteDSL extends RouteState { self =>
   private[http] val routeBuilders = ArrayBuffer[RouteBuilder[_, _]]()
   private[http] val annotations = getClass.getDeclaredAnnotations
+  private[http] val clazz = getClass
 
   def filter[FilterType <: HttpFilter: Manifest]: FilteredDSL[FilterType] = contextWrapper {
     new FilteredDSL[FilterType] {
       override private[http] val routeBuilders = self.routeBuilders
       override private[http] val annotations = self.annotations
+      override private[http] val clazz = self.clazz
       override private[http] lazy val contextVar = self.contextVar
     }
   }
@@ -106,10 +108,11 @@ private[http] trait RouteDSL extends RouteState { self =>
     new FilteredDSL[HttpFilter] {
       override private[http] val routeBuilders = self.routeBuilders
       override private[http] val annotations = self.annotations
+      override private[http] val clazz = self.clazz
       override private[http] lazy val contextVar = self.contextVar
       override protected def getBuildFilterFunc(
-        currentFunc: (Injector) => HttpFilter
-      ): (Injector) => HttpFilter = { (injector: Injector) =>
+        currentFunc: Injector => HttpFilter
+      ): Injector => HttpFilter = { injector: Injector =>
         currentFunc(injector).andThen(next)
       }
     }
@@ -119,6 +122,7 @@ private[http] trait RouteDSL extends RouteState { self =>
     new PrefixedDSL(value) {
       override private[http] val routeBuilders = self.routeBuilders
       override private[http] val annotations = self.annotations
+      override private[http] val clazz = self.clazz
       override private[http] lazy val contextVar = self.contextVar
     }
   }
@@ -230,7 +234,7 @@ private[http] trait RouteDSL extends RouteState { self =>
         method,
         prefixRoute(route),
         name,
-        this.getClass,
+        clazz,
         admin,
         index,
         callback,
