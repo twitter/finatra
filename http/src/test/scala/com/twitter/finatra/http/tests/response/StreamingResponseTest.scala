@@ -21,8 +21,6 @@ class StreamingResponseTest extends Test {
     }
   }
 
-  private def await[T](awaitable: Awaitable[T]): T = Await.result(awaitable, 5.seconds)
-
   private def fromStream(closable: Closable, stream: AsyncStream[Buf]): Response = {
     val streamingResponse = StreamingResponse(identity[Buf], closeOnFinish = closable)(stream)
     await(streamingResponse.toFutureFinagleResponse)

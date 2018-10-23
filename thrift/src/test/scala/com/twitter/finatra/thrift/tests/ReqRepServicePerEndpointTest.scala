@@ -1,13 +1,12 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
 import com.twitter.finagle.Filter.TypeAgnostic
 import com.twitter.finagle.thrift.ClientId
 import com.twitter.finagle.{Filter, Service, mux}
 import com.twitter.inject.Test
 import com.twitter.io.Buf
 import com.twitter.scrooge.HeaderMap
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Future
 import java.nio.charset.{StandardCharsets => JChar}
 
 object ReqRepServicePerEndpointTest {
@@ -94,10 +93,6 @@ abstract class ReqRepServicePerEndpointTest extends Test {
         }
       }
     }
-  }
-
-  protected def await[T](f: Future[T]): T = {
-    Await.result(f, 5.seconds)
   }
 
   /** assumes UTF-8 encoding */

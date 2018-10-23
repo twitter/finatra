@@ -7,6 +7,19 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+* inject-core: (BREAKING API CHANGE) Remove `c.t.inject.TestMixin#sleep`. We do not want to
+  promote this usage of Thread blocking in testing utilities. Add a new testing function:
+  `c.t.inject.TestMixin#await` which will perform `Await.result` on a given `c.t.util.Awaitable`.
+  This function was duplicated across tests in the codebase. We also introduce an overridable default
+  timeout on the underlying `Await.result` call: `c.t.inject.TestMixin#defaultAwaitTimeout`.
+  ``PHAB_ID=D231717``
+
 Fixed
 ~~~~~
 
@@ -14,16 +27,14 @@ Fixed
   for Routes that duplicate a URI with a different HTTP verb. That is, a Route should be considered
   unique per URI + HTTP verb combination. ``PHAB_ID=D232014``
 
+Closed
+~~~~~~
+
 18.10.0
 -------
 
-Fixed
+Added
 ~~~~~
-
-* finatra-thrift: Set the bound `StatsReceiver` in the underlying Finagle `ThriftMux` server
-  in the `c.t.finatra.thrift.ThriftServer`. This prevented testing of underlying Finagle server
-  stats as the `InMemoryStatsReceiver` used by the `EmbeddedThriftServer` was not properly passed
-  all the way through the stack. ``PHAB_ID=D228494``
 
 Changed
 ~~~~~~~
@@ -51,8 +62,22 @@ Changed
 * finatra-thrift: Rename `defaultFinatraThriftPort` to `defaultThriftPort`.
   ``PHAB_ID=D224735``
 
+Fixed
+~~~~~
+
+* finatra-thrift: Set the bound `StatsReceiver` in the underlying Finagle `ThriftMux` server
+  in the `c.t.finatra.thrift.ThriftServer`. This prevented testing of underlying Finagle server
+  stats as the `InMemoryStatsReceiver` used by the `EmbeddedThriftServer` was not properly passed
+  all the way through the stack. ``PHAB_ID=D228494``
+
+Closed
+~~~~~~
+
 18.9.1
 ------
+
+Added
+~~~~~
 
 Changed
 ~~~~~~~
@@ -62,6 +87,12 @@ Changed
 
 * http/thrift: Update Library registry route information to include controller
   class name. ``PHAB_ID=D216425``
+
+Fixed
+~~~~~
+
+Closed
+~~~~~~
 
 18.9.0
 ------
