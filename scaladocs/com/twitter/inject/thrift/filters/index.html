@@ -240,7 +240,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ThriftClientFilterBuilder.html"><span class="name deprecated" title="Deprecated: (Since version 2018-01-12) Use ThriftMethodBuilderClientModule and ThriftMethodBuilder">ThriftClientFilterBuilder</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="" href="ThriftClientFilterBuilder.html"><span class="name deprecated" title="Deprecated: (Since version 2018-01-12) Use ThriftMethodBuilderClientModule and ThriftMethodBuilder">ThriftClientFilterBuilder</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -266,21 +266,42 @@
 configuring common filters.</p><div class="fullcomment"><div class="comment cmt"><p>A <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html" class="extype" name="com.twitter.finagle.Filter">com.twitter.finagle.Filter</a> chain builder which provides helper functions for installing and
 configuring common filters.</p><p>Filters configured via the helper methods, e.g., <a href="ThriftClientFilterChain.html#withRetryPolicy(retryPolicy:com.twitter.finagle.service.RetryPolicy[(Req,com.twitter.util.Try[Rep])],retryMsg:((Req,com.twitter.util.Try[Rep]),com.twitter.util.Duration)=&gt;String):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withRetryPolicy">withRetryPolicy</a>, <a href="ThriftClientFilterChain.html#withTimeout(duration:com.twitter.util.tunable.Tunable[org.joda.time.Duration]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withTimeout">withTimeout</a>, <a href="ThriftClientFilterChain.html#withRequestTimeout(duration:com.twitter.util.tunable.Tunable[org.joda.time.Duration]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withRequestTimeout">withRequestTimeout</a>,
 <a href="ThriftClientFilterChain.html#withMethodLatency:com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withMethodLatency">withMethodLatency</a>, <a href="ThriftClientFilterChain.html#withExceptionFilter[T&lt;:com.twitter.finagle.Filter[Req,Rep,Req,Rep]](implicitevidence$3:Manifest[T]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#withExceptionFilter">withExceptionFilter</a>, will be composed in a specific order, (from top-down, assuming requests/responses
-enter and exit through the top):</p><p>+------------------------+
-| latencyFilter          |
-+------------------------+
-| exceptionFilter        |
-+------------------------+
-| timeoutFilter          |
-+------------------------+
-| retryFilter            |
-+------------------------+
-| requestTimeoutFilter   |
-+------------------------+
-| concurrencyLimitFilter |
-+------------------------+
-| filterChain            |
-+------------------------+</p><p>where, the <code>filterChain</code> is the chain of filters added in the order of calls to <a href="ThriftClientFilterChain.html#filtered[T&lt;:com.twitter.finagle.Filter[Req,Rep,Req,Rep]](implicitevidence$1:Manifest[T]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#filtered">filtered</a>.
+enter and exit through the top):</p><p>+------------------------+</p><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> latencyFilter          </p></th></tr>
+      </thead>
+      
+    </table><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> exceptionFilter        </p></th></tr>
+      </thead>
+      
+    </table><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> timeoutFilter          </p></th></tr>
+      </thead>
+      
+    </table><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> retryFilter            </p></th></tr>
+      </thead>
+      
+    </table><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> requestTimeoutFilter   </p></th></tr>
+      </thead>
+      
+    </table><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> concurrencyLimitFilter </p></th></tr>
+      </thead>
+      
+    </table><table class="doctbl">
+      <thead>
+        <tr><th class="doctbl-left"><p> filterChain            </p></th></tr>
+      </thead>
+      
+    </table><p>where, the <code>filterChain</code> is the chain of filters added in the order of calls to <a href="ThriftClientFilterChain.html#filtered[T&lt;:com.twitter.finagle.Filter[Req,Rep,Req,Rep]](implicitevidence$1:Manifest[T]):com.twitter.inject.thrift.filters.ThriftClientFilterChain[Req,Rep]" class="extmbr" name="com.twitter.inject.thrift.filters.ThriftClientFilterChain#filtered">filtered</a>.
 </p></div><dl class="paramcmts block"><dt class="tparam">Req</dt><dd class="cmt"><p>Request type for this filter chain</p></dd><dt class="tparam">Rep</dt><dd class="cmt"><p>Response type for this filter chain</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@deprecated</span>
               

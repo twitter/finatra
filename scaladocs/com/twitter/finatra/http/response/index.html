@@ -314,6 +314,10 @@
                         <a class="class" href="ErrorsResponse.html" title=""></a>
                         <a href="ErrorsResponse.html" title="">ErrorsResponse</a>
                       </li><li class="current-entities indented5">
+                        <a class="object" href="HttpResponseClassifier$.html" title=""></a>
+                        <a class="class" href="HttpResponseClassifier.html" title="A wrapper around a com.twitter.finagle.service.ResponseClassifier to allow for binding a specific type of ResponseClassifier to the object graph."></a>
+                        <a href="HttpResponseClassifier.html" title="A wrapper around a com.twitter.finagle.service.ResponseClassifier to allow for binding a specific type of ResponseClassifier to the object graph.">HttpResponseClassifier</a>
+                      </li><li class="current-entities indented5">
                         <a class="object" href="ResponseBuilder$.html" title=""></a>
                         <a class="class" href="ResponseBuilder.html" title=""></a>
                         <a href="ResponseBuilder.html" title="">ResponseBuilder</a>
@@ -424,10 +428,29 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ErrorsResponse.html"><span class="name">ErrorsResponse</span></a><span class="params">(<span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ErrorsResponse.html"><span class="name">ErrorsResponse</span></a><span class="params">(<span name="errors">errors: <span class="extype" name="scala.Seq">Seq</span>[<span class="extype" name="scala.Predef.String">String</span>]</span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       
+    </li><li name="com.twitter.finatra.http.response.HttpResponseClassifier" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="HttpResponseClassifierextendsPartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]withProductwithSerializable"></a><a id="HttpResponseClassifier:HttpResponseClassifier"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/index.html#HttpResponseClassifierextendsPartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]withProductwithSerializable" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a title="A wrapper around a com.twitter.finagle.service.ResponseClassifier to allow for binding a specific type of ResponseClassifier to the object graph." href="HttpResponseClassifier.html"><span class="name">HttpResponseClassifier</span></a><span class="params">(<span name="underlying">underlying: <span class="extype" name="com.twitter.finagle.service.ResponseClassifier">ResponseClassifier</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/PartialFunction.html#scala.PartialFunction" class="extype" name="scala.PartialFunction">PartialFunction</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/ReqRep.html#com.twitter.finagle.service.ReqRep" class="extype" name="com.twitter.finagle.service.ReqRep">ReqRep</a>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/ResponseClass.html#com.twitter.finagle.service.ResponseClass" class="extype" name="com.twitter.finagle.service.ResponseClass">ResponseClass</a>] with <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">A wrapper around a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/index.html#ResponseClassifier=PartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]" class="extype" name="com.twitter.finagle.service">com.twitter.finagle.service.ResponseClassifier</a> to allow
+for binding a specific type of <span class="extype" name="ResponseClassifier">ResponseClassifier</span> to the object graph.</p><div class="fullcomment"><div class="comment cmt"><p>A wrapper around a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/index.html#ResponseClassifier=PartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]" class="extype" name="com.twitter.finagle.service">com.twitter.finagle.service.ResponseClassifier</a> to allow
+for binding a specific type of <span class="extype" name="ResponseClassifier">ResponseClassifier</span> to the object graph.
+</p></div><dl class="paramcmts block"><dt class="param">underlying</dt><dd class="cmt"><p>the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/index.html#ResponseClassifier=PartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]" class="extype" name="com.twitter.finagle.service">com.twitter.finagle.service.ResponseClassifier</a> to wrap.</p></dd></dl></div>
     </li><li name="com.twitter.finatra.http.response.ResponseBuilder" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ResponseBuilderextendsLogging"></a><a id="ResponseBuilder:ResponseBuilder"></a>
       <span class="permalink">
@@ -480,7 +503,23 @@
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <a title="" href="ErrorsResponse$.html"><span class="name">ErrorsResponse</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ErrorsResponse$.html"><span class="name">ErrorsResponse</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.http.response.HttpResponseClassifier" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="HttpResponseClassifier"></a><a id="HttpResponseClassifier:HttpResponseClassifier"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/http/response/index.html#HttpResponseClassifier" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="HttpResponseClassifier$.html"><span class="name">HttpResponseClassifier</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

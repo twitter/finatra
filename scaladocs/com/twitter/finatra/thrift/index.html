@@ -325,6 +325,22 @@
       </span>
       
       
+    </li><li name="com.twitter.finatra.thrift.response" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="response"></a><a id="response:response"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/index.html#response" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a title="" href="response/index.html"><span class="name">response</span></a>
+      </span>
+      
+      
     </li><li name="com.twitter.finatra.thrift.routing" visbl="pub" class="indented5 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="routing"></a><a id="routing:routing"></a>
       <span class="permalink">
@@ -374,6 +390,10 @@
       
       
     </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="class" href="AbstractThriftFilter.html" title="AbstractThriftFilter for Java usage."></a>
+                        <a href="AbstractThriftFilter.html" title="AbstractThriftFilter for Java usage.">AbstractThriftFilter</a>
+                      </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="class" href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java"></a>
                         <a href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java">AbstractThriftServer</a>
@@ -492,7 +512,23 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.AbstractThriftServer" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+              <ol><li name="com.twitter.finatra.thrift.AbstractThriftFilter" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="AbstractThriftFilterextendsThriftFilter"></a><a id="AbstractThriftFilter:AbstractThriftFilter"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/index.html#AbstractThriftFilterextendsThriftFilter" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="AbstractThriftFilter for Java usage." href="AbstractThriftFilter.html"><span class="name">AbstractThriftFilter</span></a><span class="result"> extends <a href="ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">AbstractThriftFilter for Java usage.</p>
+    </li><li name="com.twitter.finatra.thrift.AbstractThriftServer" visbl="pub" class="indented0 " data-isabs="true" fullComment="no" group="Ungrouped">
       <a id="AbstractThriftServerextendsThriftServer"></a><a id="AbstractThriftServer:AbstractThriftServer"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/thrift/index.html#AbstractThriftServerextendsThriftServer" title="Permalink">
@@ -555,11 +591,11 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <a title="A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T." href="ThriftFilter.html"><span class="name">ThriftFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+        <a title="A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T." href="ThriftFilter.html"><span class="name">ThriftFilter</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
       </span>
       
       <p class="shortcomment cmt">A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T.</p><div class="fullcomment"><div class="comment cmt"><p>A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T.  Such filters
-can operate on any ThriftRequest.</p><p>TODO: Deprecate in favor of <span class="extype" name="Filter.TypeAgnostic">Filter.TypeAgnostic</span>
+can operate on any ThriftRequest.</p><p>Java classes can extend ThriftFilter using AbstractThriftFilter. See above.</p><p>TODO: Deprecate in favor of <span class="extype" name="Filter.TypeAgnostic">Filter.TypeAgnostic</span>
 </p></div></div>
     </li><li name="com.twitter.finatra.thrift.ThriftRequest" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="ThriftRequest[T]extendsProductwithSerializable"></a><a id="ThriftRequest[T]:ThriftRequest[T]"></a>
@@ -573,7 +609,7 @@ can operate on any ThriftRequest.</p><p>TODO: Deprecate in favor of <span class=
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ThriftRequest.html"><span class="name">ThriftRequest</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/TraceId.html#com.twitter.finagle.tracing.TraceId" class="extype" name="com.twitter.finagle.tracing.TraceId">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.12.6/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a>]</span>, <span name="args">args: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.6/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.6/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <a title="" href="ThriftRequest.html"><span class="name">ThriftRequest</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/TraceId.html#com.twitter.finagle.tracing.TraceId" class="extype" name="com.twitter.finagle.tracing.TraceId">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a>]</span>, <span name="args">args: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       
       

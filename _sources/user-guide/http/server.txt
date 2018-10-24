@@ -181,6 +181,9 @@ For example, instead of setting the `-http.port` flag, you can override the foll
 
 .. code:: scala
 
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
     class ExampleServer extends HttpServer {
 
       override val defaultHttpPort: String = ":8080"
@@ -204,12 +207,15 @@ To do so you would override the `protected def jacksonModule` in your server.
 
 .. code:: scala
 
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
     class ExampleServer extends HttpServer {
 
       override def jacksonModule = MyCustomJacksonModule
 
       override def configureHttp(router: HttpRouter): Unit = {
-        ...
+        ???
       }
     }
 
@@ -225,29 +231,68 @@ class, e.g.,
 Finagle Server Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you want to further configure the underlying `Finagle <https://github.com/twitter/finagle>`__ server you can override `configureHttpServer` (or `configureHttpsServer`) in your server and to additional configuration on, or override the default configuration of the underlying Finagle server.
+If you want to further configure the underlying `Finagle <https://github.com/twitter/finagle>`__ server you can override `configureHttpServer` (or `configureHttpsServer`)
+in your server to specify additional configuration on (or override the default configuration of) the underlying Finagle server.
 
 For example:
 
 .. code:: scala
 
+    import com.twitter.finagle.Http
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
     class ExampleServer extends HttpServer {
 
       override def configureHttp(router: HttpRouter): Unit = {
-        ...
+        ???
       }
 
       override def configureHttpServer(server: Http.Server): Http.Server = {
         server
-          .withMaxRequestSize(...)
+          .withMaxRequestSize(???)
           .withAdmissionControl.concurrencyLimit(
-            maxConcurrentRequests = ...,
-            maxWaiters = ...
+            maxConcurrentRequests = ???,
+            maxWaiters = ???
       }
     }
 
 
-For more information on `Finagle <https://github.com/twitter/finagle>`__ server configuration see the documentation `here <https://twitter.github.io/finagle/guide/Configuration.html>`__; specifically the server documentation `here <https://twitter.github.io/finagle/guide/Servers.html>`__.
+For more information on `Finagle <https://github.com/twitter/finagle>`__ server configuration see the documentation `here <https://twitter.github.io/finagle/guide/Configuration.html>`__;
+specifically the server documentation `here <https://twitter.github.io/finagle/guide/Servers.html>`__.
+
+Server-side Response Classification
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To configure server-side `Response Classification <https://twitter.github.io/finagle/guide/Servers.html#response-classification>`__ you could choose to
+set the classifier directly on the underlying Finagle server by overriding the `configureHttpServer` (or `configureHttpsServer`) in your server, e.g.,
+
+.. code:: scala
+
+    override def configureHttpServer(server: Http.Server): Http.Server = {
+        server.withResponseClassifier(???)
+    }
+
+However, since the server-side ResponseClassifier could affect code not just at the Finagle level, we actually recommend overriding the specific `framework module <#framework-modules>`__,
+`HttpResponseClassifierModule` instead. This binds an instance of an `HttpResponseClassifier <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/response/HttpResponseClassifier.scala>`__
+to the object graph that is then available to be injected into things like the HTTP `StatsFilter <https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/filters/StatsFilter.scala>`__
+for a more accurate reporting of metrics that takes into account server-side response classification.
+
+For example, in your `HttpServer` you would do:
+
+.. code:: scala
+
+    import com.google.inject.Module
+    import com.twitter.finatra.http.HttpServer
+    import com.twitter.finatra.http.routing.HttpRouter
+
+    class ExampleServer extends HttpServer {
+
+      override httpResponseClassifierModule: Module = ???
+    }
+
+The bound value is also then `set on the underlying Finagle server <https://github.com/twitter/finatra/blob/9d7b430ce469d1542b603938e3ec24cf6ff79d64/http/src/main/scala/com/twitter/finatra/http/internal/server/BaseHttpServer.scala#L150>`__
+before serving.
 
 Testing
 -------
