@@ -26,7 +26,7 @@ class StreamingResponseTest extends Test {
     await(streamingResponse.toFutureFinagleResponse)
   }
 
-  private def burnLoop(reader: Reader[Buf]): Future[Unit] = reader.read(Int.MaxValue).flatMap {
+  private def burnLoop(reader: Reader[Buf]): Future[Unit] = reader.read().flatMap {
     case Some(_) => burnLoop(reader)
     case None => Future.Unit
   }
