@@ -10,7 +10,7 @@ import org.joda.time.DateTime
 /**
  * A Datetime deserializer with improved exception handling (compared to jackson-datatype-joda)
  */
-private[finatra] object FinatraDatetimeDeserializer
+private[finatra] object JodaDatetimeDeserializer
     extends StdDeserializer[DateTime](classOf[DateTime]) {
 
   def deserialize(jp: JsonParser, ctxt: DeserializationContext): DateTime = {
@@ -35,8 +35,8 @@ private[finatra] object FinatraDatetimeDeserializer
               case _ =>
                 new DateTime(value.toLong)
             }
-        case _ =>
-          throw ctxt.mappingException(handledType())
+        case token =>
+          throw ctxt.wrongTokenException(jp, handledType(), token, null)
       }
     } catch {
       case e: IllegalArgumentException =>

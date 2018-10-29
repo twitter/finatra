@@ -2,17 +2,16 @@ package com.twitter.finatra.json.internal.caseclass.utils
 
 import com.fasterxml.jackson.core.ObjectCodec
 import com.fasterxml.jackson.databind.deser.impl.ValueInjector
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException
 import com.fasterxml.jackson.databind.{DeserializationContext, JavaType, PropertyName}
 import com.google.inject.{BindingAnnotation, ConfigurationException, Key}
 import com.twitter.finagle.http.Request
-import com.twitter.finatra.json.internal.caseclass.exceptions.{
-  JsonInjectException,
-  JsonInjectionNotSupportedException
-}
+import com.twitter.finatra.json.internal.caseclass.exceptions.{JsonInjectException, JsonInjectionNotSupportedException}
 import com.twitter.finatra.json.internal.caseclass.jackson.ImmutableAnnotations
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection.InjectableAnnotations
 import com.twitter.finatra.request.{FormParam, Header, QueryParam, RouteParam}
+import com.twitter.inject.Logging
 import java.lang.annotation.Annotation
 import javax.inject.Inject
 
@@ -32,7 +31,7 @@ private[json] class FieldInjection(
   javaType: JavaType,
   parentClass: Class[_],
   annotations: Seq[Annotation]
-) {
+) extends Logging {
 
   private lazy val guiceKey = {
     val bindingAnnotations = filterIfAnnotationPresent[BindingAnnotation](annotations)
@@ -66,14 +65,13 @@ private[json] class FieldInjection(
   /* Public */
 
   def inject(context: DeserializationContext, codec: ObjectCodec): Option[Object] = {
-
     try {
       Option(context.findInjectableValue(guiceKey, beanProperty, /* beanInstance = */ null))
     } catch {
-      case e: IllegalStateException =>
-        throw new JsonInjectionNotSupportedException(parentClass, name)
+      case _: InvalidDefinitionException =>
+        throw JsonInjectionNotSupportedException(parentClass, name)
       case e: ConfigurationException =>
-        throw new JsonInjectException(parentClass, name, guiceKey, e)
+        throw JsonInjectException(parentClass, name, guiceKey, e)
     }
   }
 

@@ -7,20 +7,25 @@ import com.twitter.finatra.json.internal.caseclass.validation.{
   ValidationProvider
 }
 
-private[finatra] class FinatraCaseClassDeserializers(
+private object CaseClassDeserializers {
+  val PRODUCT: Class[Product] = classOf[Product]
+  val OPTION: Class[Option[_]] = classOf[Option[_]]
+  val LIST: Class[List[_]] = classOf[List[_]]
+}
+
+private[finatra] class CaseClassDeserializers(
   validationProvider: ValidationProvider = DefaultValidationProvider
 ) extends Deserializers.Base {
-  val PRODUCT = classOf[Product]
-  val OPTION = classOf[Option[_]]
-  val LIST = classOf[List[_]]
+
+  import CaseClassDeserializers._
 
   override def findBeanDeserializer(
     javaType: JavaType,
     config: DeserializationConfig,
     beanDesc: BeanDescription
-  ) = {
+  ): CaseClassDeserializer = {
     if (maybeIsCaseClass(javaType.getRawClass))
-      new FinatraCaseClassDeserializer(javaType, config, beanDesc, validationProvider)
+      new CaseClassDeserializer(javaType, config, beanDesc, validationProvider)
     else
       null
   }

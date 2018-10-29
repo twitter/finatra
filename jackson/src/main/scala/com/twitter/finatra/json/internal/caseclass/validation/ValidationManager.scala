@@ -73,7 +73,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
 
   private def isValid[V](value: V, validator: Validator[_, V]): ValidationResult = {
     value match {
-      case (option: Option[_]) =>
+      case _: Option[_] =>
         isValidOption(value.asInstanceOf[Option[V]], validator)
       case _ =>
         validator.isValid(value)
@@ -118,7 +118,7 @@ class ValidationManager(validationMessageResolver: ValidationMessageResolver)
         .getConstructor(validationMessageResolver.getClass, annotation.annotationType())
         .newInstance(validationMessageResolver, annotation)
     } catch {
-      case e: NoSuchMethodException =>
+      case _: NoSuchMethodException =>
         throw new IllegalArgumentException(
           "Validator [%s] does not contain a two-arg constructor with parameter types: [%s, %s]"
             .format(validatorClass, validationMessageResolver.getClass, annotation.annotationType())

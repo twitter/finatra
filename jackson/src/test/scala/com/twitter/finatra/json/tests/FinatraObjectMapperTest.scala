@@ -45,9 +45,9 @@ class FinatraObjectMapperTest extends Test with Logging {
   DateTimeZone.setDefault(DateTimeZone.UTC)
 
   /* Class under test */
-  val mapper = FinatraObjectMapper.create()
+  private[this] val mapper = FinatraObjectMapper.create()
   /* Test Injector */
-  val injector =
+  private[this] val injector =
     TestInjector(FinatraJacksonModule).create
 
   test("simple tests#parse super simple") {
@@ -55,10 +55,10 @@ class FinatraObjectMapperTest extends Test with Logging {
     foo should equal(SimplePerson("Steve"))
   }
 
-  val steve =
+  private val steve =
     Person(id = 1, name = "Steve", age = Some(20), age_with_default = Some(20), nickname = "ace")
 
-  val steveJson =
+  private val steveJson =
     """{
        "id" : 1,
        "name" : "Steve",
@@ -70,7 +70,7 @@ class FinatraObjectMapperTest extends Test with Logging {
 
   test("get PropertyNamingStrategy") {
     val namingStrategy = mapper.propertyNamingStrategy
-    namingStrategy should not be (null)
+    namingStrategy should not be null
   }
 
   test("simple tests#parse simple") {
@@ -291,7 +291,7 @@ class FinatraObjectMapperTest extends Test with Logging {
   ) {
     val objMapper = new ObjectMapper with ScalaObjectMapper
     objMapper.registerModule(DefaultScalaModule)
-    objMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.LowerCaseWithUnderscoresStrategy)
+    objMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.SnakeCaseStrategy)
 
     val response = objMapper.writeValueAsString(NamingStrategyJsonProperty("abc"))
     response should equal("""{"long_field_name":"abc"}""")
@@ -430,13 +430,13 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("Injection when using FinatraObjectMapper.create#Inject not found field") {
-    intercept[CaseClassMappingException] {
+    intercept[JsonInjectionNotSupportedException] {
       parse[ClassWithFooClassInject]("""{}""")
     }
   }
 
   test("Injection when using FinatraObjectMapper.create#Inject request field") {
-    intercept[CaseClassMappingException] {
+    intercept[JsonInjectionNotSupportedException] {
       parse[ClassWithQueryParamDateTimeInject]("""{}""")
     }
   }
@@ -505,7 +505,6 @@ class FinatraObjectMapperTest extends Test with Logging {
   }
 
   test("wrapped values#deser Map[Long, String]") {
-    pending
     val obj = parse[Map[Long, String]]("""{"11111111":"asdf"}""")
     val expected = Map(11111111L -> "asdf")
     obj should equal(expected)
@@ -621,15 +620,15 @@ class FinatraObjectMapperTest extends Test with Logging {
     }
   }
 
-  test("A case class with lazy fields  generates a JSON object with those fields evaluated") {
+  test("A case class with lazy fields generates a JSON object with those fields evaluated") {
     generate(CaseClassWithLazyVal(1)) should be("""{"id":1,"woo":"yeah"}""")
   }
 
-  test("A case class with lazy fields  is parsable from a JSON object without those fields") {
+  test("A case class with lazy fields is parsable from a JSON object without those fields") {
     parse[CaseClassWithLazyVal]("""{"id":1}""") should be(CaseClassWithLazyVal(1))
   }
 
-  test("A case class with lazy fields  is not parsable from an incomplete JSON object") {
+  test("A case class with lazy fields is not parsable from an incomplete JSON object") {
     intercept[Exception] {
       parse[CaseClassWithLazyVal]("""{}""")
     }
@@ -683,7 +682,6 @@ class FinatraObjectMapperTest extends Test with Logging {
   test(
     "A case class with an overloaded field generates a JSON object with the nullary version of that field"
   ) {
-    pending //fails on java 7. ok for now since we don't need this functionality
     generate(CaseClassWithOverloadedField(1)) should be("""{"id":1}""")
   }
 
@@ -992,12 +990,12 @@ class FinatraObjectMapperTest extends Test with Logging {
     seq.sorted should equal(Seq(1L, 2L, 3L))
   }
 
-  test("old#parse seq of longs") {
+  test("parse seq of longs") {
     val ids = parse[Seq[Long]]("[3,1,2]")
     ids.sorted should equal(Seq(1L, 2L, 3L))
   }
 
-  test("old#handle options and defaults in case class") {
+  test("handle options and defaults in case class") {
     val bob = parse[Person]("""
       {
         "id" :1,
@@ -1008,7 +1006,7 @@ class FinatraObjectMapperTest extends Test with Logging {
     bob should equal(Person(1, "Bob", Some(21), None, "unknown"))
   }
 
-  test("old#missing required field") {
+  test("missing required field") {
     intercept[CaseClassMappingException] {
       parse[Person]("""
         {
@@ -1017,11 +1015,28 @@ class FinatraObjectMapperTest extends Test with Logging {
     }
   }
 
-  test("old#nulls will not render") {
+  test("incorrectly specified required field") {
+    intercept[CaseClassMappingException] {
+      parse[PersonWithThings]("""
+        {
+          "id" :1,
+          "name" : "Bob",
+          "age" : 21,
+          "things" : {
+            "foo" : [
+              "IhaveNoKey"
+            ]
+          }
+        }
+        """)
+    }
+  }
+
+  test("nulls will not render") {
     generate(Person(1, null, null, null)) should equal("""{"id":1,"nickname":"unknown"}""")
   }
 
-  test("old#string wrapper deserialization") {
+  test("string wrapper deserialization") {
     val parsedValue = parse[ObjWithTestId]("""
     {
       "id": "5"
@@ -1035,12 +1050,12 @@ class FinatraObjectMapperTest extends Test with Logging {
     parsedValue.id.toString should equal(expectedValue.id.toString)
   }
 
-  test("old#parse input stream") {
+  test("parse input stream") {
     val is = new ByteArrayInputStream("""{"foo": "bar"}""".getBytes)
     mapper.parse[Blah](is) should equal(Blah("bar"))
   }
 
-  test("old#Logging Trait fields should be ignored") {
+  test("Logging Trait fields should be ignored") {
     generate(Group3("123")) should be("""{"id":"123"}""")
   }
 
@@ -1279,16 +1294,21 @@ class FinatraObjectMapperTest extends Test with Logging {
     }
   }
 
-  private def assertObjectParseException(e: CaseClassMappingException, withErrors: Seq[String]) = {
+  private def assertObjectParseException(
+    e: CaseClassMappingException,
+    withErrors: Seq[String]
+  ): Unit = {
     trace(e.errors.mkString("\n"))
     clearStackTrace(e.errors)
 
-    val actualMessages = e.errors map { _.getMessage }
+    val actualMessages = e.errors.map(_.getMessage)
     JsonDiff.jsonDiff(actualMessages, withErrors)
   }
 
-  private def clearStackTrace(exceptions: Seq[CaseClassValidationException]) = {
-    exceptions map { _.setStackTrace(Array()) }
+  private def clearStackTrace(
+    exceptions: Seq[CaseClassValidationException]
+  ): Seq[CaseClassValidationException] = {
+    exceptions.foreach(_.setStackTrace(Array()))
     exceptions
   }
 

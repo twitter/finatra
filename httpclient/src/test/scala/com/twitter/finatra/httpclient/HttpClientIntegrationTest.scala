@@ -12,14 +12,14 @@ import com.twitter.util.Await
 
 class HttpClientIntegrationTest extends IntegrationTest {
 
-  val inMemoryHttpService = new InMemoryHttpService()
+  private[this] val inMemoryHttpService = new InMemoryHttpService()
 
   override val injector: Injector =
     TestInjector(modules = Seq(MyHttpClientModule, FinatraJacksonModule))
       .bind[Service[Request, Response]].toInstance(inMemoryHttpService)
       .create
 
-  val httpClient = injector.instance[HttpClient]
+  private[this] val httpClient = injector.instance[HttpClient]
 
   override def afterEach(): Unit = {
     resetResettables(inMemoryHttpService)
@@ -43,7 +43,7 @@ class HttpClientIntegrationTest extends IntegrationTest {
     Await.result(httpClient.executeJson[JsonNode](request)).toString should be("{}")
   }
 
-  test("executeJson w/ unexpected response") {
+  test("executeJson#unexpected response") {
     val errorResponse = Response(Status.InternalServerError)
     inMemoryHttpService.mockGet("/foo", errorResponse)
     val request = RequestBuilder.get("/foo")
@@ -53,7 +53,7 @@ class HttpClientIntegrationTest extends IntegrationTest {
     }
   }
 
-  test("executeJson w/ expected response but unparsable body") {
+  test("executeJson#expected response but un-parsable body") {
     val mockResponse = Response(Status.Ok)
     mockResponse.setContentString("{}")
     inMemoryHttpService.mockGet("/foo", mockResponse)
@@ -65,7 +65,7 @@ class HttpClientIntegrationTest extends IntegrationTest {
     assert(e.getMessage.contains("com.fasterxml.jackson.databind.exc.MismatchedInputException"))
   }
 
-  test("get") {
+  test("get#deprecated") {
     val mockResponse = Response(Status.Ok)
     mockResponse.setContentString("{}")
     inMemoryHttpService.mockGet("/foo", mockResponse)
@@ -78,5 +78,4 @@ class HttpClientIntegrationTest extends IntegrationTest {
     override val hostname = "hostname123"
     override val defaultHeaders = Map("a" -> "b")
   }
-
 }

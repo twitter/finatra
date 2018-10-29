@@ -11,8 +11,8 @@ import com.google.inject.{Injector, Provides}
 import com.twitter.finatra.annotations.{CamelCaseMapper, SnakeCaseMapper}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.caseclass.guice.GuiceInjectableValues
-import com.twitter.finatra.json.internal.caseclass.jackson.FinatraCaseClassModule
-import com.twitter.finatra.json.internal.serde.{FinatraSerDeSimpleModule, LongKeyDeserializers}
+import com.twitter.finatra.json.internal.caseclass.jackson.CaseClassModule
+import com.twitter.finatra.json.internal.serde.{SerDeSimpleModule, LongKeyDeserializers}
 import com.twitter.inject.TwitterModule
 import javax.inject.Singleton
 import scala.collection.JavaConverters._
@@ -95,10 +95,10 @@ class FinatraJacksonModule extends TwitterModule {
 
   /** Jackson Modules to load */
   protected def defaultJacksonModules: Seq[JacksonModule] =
-    Seq(new JodaModule, DefaultScalaModule, LongKeyDeserializers, FinatraSerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
+    Seq(new JodaModule, DefaultScalaModule, LongKeyDeserializers, SerDeSimpleModule) //FinatraModule's need to be added 'last' so they can override existing deser's
 
   protected def finatraCaseClassModule: Option[JacksonModule] = {
-    Some(FinatraCaseClassModule)
+    Some(CaseClassModule)
   }
 
   protected def numbersAsStrings: Boolean = false

@@ -13,6 +13,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-jackson: Move away from deprecated code and update error handling and exceptions post
+  Jackson 2.9.x upgrade. ``PHAB_ID=D229601``
+
 * inject-core: (BREAKING API CHANGE) Remove `c.t.inject.TestMixin#sleep`. We do not want to
   promote this usage of Thread blocking in testing utilities. Add a new testing function:
   `c.t.inject.TestMixin#await` which will perform `Await.result` on a given `c.t.util.Awaitable`.
@@ -39,7 +42,7 @@ Added
 Changed
 ~~~~~~~
 
-* finatra-http, finatra-thrift: Make HTTP and Thrift StatsFitlers "Response Classification"
+* finatra-http, finatra-thrift: Make HTTP and Thrift StatsFilters "Response Classification"
   aware. ``PHAB_ID=D219116``
 
 * finatra-http, finatra-thrift: (BREAKING API CHANGE) Update the `DarkTrafficFilterModule` in

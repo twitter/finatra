@@ -748,11 +748,6 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpGet("/implicitOkAndException", andExpect = BadRequest)
   }
 
-  test("slow") {
-    pending // manually run to test fix for go/jira/CSL-565
-    server.httpGet("/slow", andExpect = Ok)
-  }
-
   test("nack") {
     val ff = intercept[Throwable] {
       server.httpGet("/nack", andExpect = ServiceUnavailable)
@@ -953,17 +948,15 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test(
     "POST json user with missing required field when message body reader uses intermediate JsonNode"
   ) {
-    pending //IllegalArgumentException (ObjectMapper.java:2774)
     server.httpPost("/userWithMessageBodyReader", """
           {
           }
-      """, andExpect = BadRequest, withErrors = Seq("name is a required field"))
+      """, andExpect = BadRequest, withErrors = Seq("name: field is required"))
   }
 
   test(
     "POST json user with method validation error when message body reader uses intermediate JsonNode"
   ) {
-    pending //IllegalArgumentException (ObjectMapper.java:2774)
     server.httpPost(
       "/userWithMessageBodyReader",
       """

@@ -10,8 +10,6 @@ case class JsonInjectException(
   key: Key[_],
   cause: Throwable
 ) extends Exception(
-      "Unable to inject field '" + fieldName + "' with " + key +
-        " into class " + parentClass,
-      cause
-    )
-    with NoStackTrace
+  s"Unable to inject field '$fieldName' with $key into class $parentClass",
+  cause
+) with NoStackTrace
