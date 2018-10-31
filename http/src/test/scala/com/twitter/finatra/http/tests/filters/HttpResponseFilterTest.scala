@@ -4,58 +4,23 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.http.{Request, Response}
 import com.twitter.finatra.http.filters.HttpResponseFilter
 import com.twitter.inject.Test
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Future
+import org.scalatest.Assertion
 
 class HttpResponseFilterTest extends Test {
 
-  val respFilter = new HttpResponseFilter[Request]
-  val rfc7231Regex =
+  private[this] val respFilter = new HttpResponseFilter[Request]
+  private[this] val rfc7231Regex =
     """^(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d\d (?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d\d:\d\d:\d\d GMT$"""
 
-  val host = "www.twitter.com"
-
-  def mkRequest: Request = {
-    val request = Request()
-    request.host_=(host)
-    request
-  }
-
-  def mkService(location: Option[String] = None) = {
-    Service.mk[Request, Response] { request =>
-      val response = Response()
-      response.setStatusCode(200)
-      response.setContentString("test header")
-      location.foreach(response.location_=)
-      Future(response)
-    }
-  }
-
-  def assertLocation(
-    request: Request,
-    service: Service[Request, Response],
-    expectedLocation: Option[String]
-  ) = {
-    Await.result(respFilter.apply(request, service)).location should be(expectedLocation)
-  }
-
-  def checkResponse(
-    request: Request,
-    service: Service[Request, Response],
-    expectedLocation: Option[String]
-  ) = {
-    try {
-      assertLocation(request, service, expectedLocation)
-    } finally {
-      service.close()
-    }
-  }
+  private[this] val host = "www.twitter.com"
 
   test("test response header") {
     val service = mkService()
     val request = mkRequest
 
     try {
-      val response = Await.result(respFilter.apply(request, service))
+      val response = await(respFilter.apply(request, service))
       response.version should equal(request.version)
       response.server should equal(Some("Finatra"))
       response.contentType should equal(Some("application/octet-stream"))
@@ -175,5 +140,40 @@ class HttpResponseFilterTest extends Test {
     val request = mkRequest
     val service = mkService(Some(location))
     checkResponse(request, service, Some("http://www.twitter.com?query#fragment"))
+  }
+
+  private[this] def mkRequest: Request = {
+    val request = Request()
+    request.host_=(host)
+    request
+  }
+
+  private[this] def mkService(location: Option[String] = None): Service[Request, Response] = {
+    Service.mk[Request, Response] { _ =>
+      val response = Response().statusCode(200)
+      response.setContentString("test header")
+      location.foreach(response.location_=)
+      Future(response)
+    }
+  }
+
+  private[this] def assertLocation(
+    request: Request,
+    service: Service[Request, Response],
+    expectedLocation: Option[String]
+  ): Assertion = {
+    await(respFilter.apply(request, service)).location should be(expectedLocation)
+  }
+
+  private[this] def checkResponse(
+    request: Request,
+    service: Service[Request, Response],
+    expectedLocation: Option[String]
+  ): Assertion = {
+    try {
+      assertLocation(request, service, expectedLocation)
+    } finally {
+      service.close()
+    }
   }
 }
