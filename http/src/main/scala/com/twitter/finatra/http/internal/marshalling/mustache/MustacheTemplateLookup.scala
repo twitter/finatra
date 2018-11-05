@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.internal.marshalling.mustache
 
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
-import com.twitter.finatra.response.Mustache
+import com.twitter.finatra.http.response.Mustache
 import com.twitter.inject.conversions.map._
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Singleton
@@ -33,7 +33,7 @@ private[finatra] class MustacheTemplateLookup {
   /* Private */
 
   /**
-    * @throws IllegalArgumentException if obj does not have [[com.twitter.finatra.response.Mustache]] annotation
+    * @throws IllegalArgumentException if obj does not have [[com.twitter.finatra.http.response.Mustache]] annotation
     */
   private def lookupViaAnnotation(obj: Any): MustacheTemplate = {
     classToTemplateNameCache.atomicGetOrElseUpdate(obj.getClass, {

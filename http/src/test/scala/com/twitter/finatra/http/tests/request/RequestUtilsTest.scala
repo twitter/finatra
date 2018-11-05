@@ -3,8 +3,8 @@ package com.twitter.finatra.http.tests.request
 import com.twitter.finagle.http.{HeaderMap, Request}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
+import com.twitter.finatra.http.request.ContentType
 import com.twitter.finatra.http.request.RequestUtils
-import com.twitter.finatra.request.ContentType
 import com.twitter.inject.{Mockito, Test}
 import java.net.URI
 

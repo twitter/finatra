@@ -13,6 +13,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-http: Move `request.ContentType` and `response.Mustache` Java annotations to 
+  `com.twitter.finatra.http` package namespace. ``PHAB_ID=D237485``
+
 * finatra-jackson: Move away from deprecated code and update error handling and exceptions post
   Jackson 2.9.x upgrade. ``PHAB_ID=D229601``
 

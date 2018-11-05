@@ -1,4 +1,4 @@
-package com.twitter.finatra.response;
+package com.twitter.finatra.http.response;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
