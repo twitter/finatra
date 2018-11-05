@@ -13,7 +13,10 @@ Added
 Changed
 ~~~~~~~
 
-* finatra-http: Move `request.ContentType` and `response.Mustache` Java annotations to 
+* finatra-thrift: (BREAKING API CHANGE) Update `DarkTrafficFilter#handleFailedInvocation` to accept
+  the request type for more fidelity in handling the failure. ``PHAB_ID=D237484``
+
+* finatra-http: Move `request.ContentType` and `response.Mustache` Java annotations to
   `com.twitter.finatra.http` package namespace. ``PHAB_ID=D237485``
 
 * finatra-jackson: Move away from deprecated code and update error handling and exceptions post
