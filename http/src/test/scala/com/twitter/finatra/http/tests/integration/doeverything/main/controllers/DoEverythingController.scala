@@ -104,6 +104,14 @@ class DoEverythingController @Inject()(
     }
   }
 
+  filter[ForbiddenFilter] {
+    prefix("/1.1") {
+      get("/forbiddenByFilterPrefilter-nested") { request: Request =>
+        "ok!"
+      }
+    }
+  }
+
   get("/forwarded") { request: Request =>
     forward(request, "/forwarded/get")
   }

@@ -95,27 +95,19 @@ private[http] trait RouteDSL extends RouteState { self =>
   private[http] val annotations = getClass.getDeclaredAnnotations
   private[http] val clazz = getClass
 
-  def filter[FilterType <: HttpFilter: Manifest]: FilteredDSL[FilterType] = contextWrapper {
-    new FilteredDSL[FilterType] {
-      override private[http] val routeBuilders = self.routeBuilders
-      override private[http] val annotations = self.annotations
-      override private[http] val clazz = self.clazz
-      override private[http] lazy val contextVar = self.contextVar
-    }
+  def filter[FilterType <: HttpFilter : Manifest]: FilteredDSL[FilterType] = contextWrapper {
+    mkFilterDSL[FilterType]()
+  }
+
+  /*
+    Version of filter[FilterType] that takes in a call-by-name
+   */
+  def filter[FilterType <: HttpFilter : Manifest](f: => Unit): Unit = contextWrapper {
+    filter[FilterType].apply(f)
   }
 
   def filter(next: HttpFilter): FilteredDSL[HttpFilter] = contextWrapper {
-    new FilteredDSL[HttpFilter] {
-      override private[http] val routeBuilders = self.routeBuilders
-      override private[http] val annotations = self.annotations
-      override private[http] val clazz = self.clazz
-      override private[http] lazy val contextVar = self.contextVar
-      override protected def getBuildFilterFunc(
-        currentFunc: Injector => HttpFilter
-      ): Injector => HttpFilter = { injector: Injector =>
-        currentFunc(injector).andThen(next)
-      }
-    }
+    mkFilterDSL(Some(next))
   }
 
   def prefix(value: String): PrefixedDSL = contextWrapper {
@@ -251,4 +243,21 @@ private[http] trait RouteDSL extends RouteState { self =>
       case _ => route
     }
   }
+
+  private def mkFilterDSL[FilterType <: HttpFilter : Manifest](instance: Option[FilterType] = None) =
+    new FilteredDSL[FilterType] {
+      override private[http] val routeBuilders = self.routeBuilders
+      override private[http] val annotations = self.annotations
+      override private[http] val clazz = self.clazz
+      override private[http] lazy val contextVar = self.contextVar
+
+      override protected def getBuildFilterFunc(
+        currentFunc: Injector => HttpFilter
+      ): Injector => HttpFilter = { injector: Injector =>
+        instance match {
+          case Some(f) => currentFunc(injector).andThen(f)
+          case None => super.getBuildFilterFunc(currentFunc)(injector)
+        }
+      }
+    }
 }
