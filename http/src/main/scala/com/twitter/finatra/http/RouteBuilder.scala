@@ -19,7 +19,7 @@ private[http] class RouteBuilder[RequestType: Manifest, ResponseType: Manifest](
   routeDsl: RouteContext
 ) {
 
-  def build(callbackConverter: CallbackConverter, injector: Injector) =
+  def build(callbackConverter: CallbackConverter, injector: Injector): Route =
     Route(
       name = name,
       method = method,

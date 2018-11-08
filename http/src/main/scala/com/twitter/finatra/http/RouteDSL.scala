@@ -2,9 +2,10 @@ package com.twitter.finatra.http
 
 import com.twitter.finagle.Filter
 import com.twitter.finagle.http.Method._
-import com.twitter.finagle.http.{Method, RouteIndex}
+import com.twitter.finagle.http._
 import com.twitter.inject.Injector
 import com.twitter.util.Var
+
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -127,37 +128,59 @@ private[http] trait RouteDSL extends RouteState { self =>
     }
   }
 
+  private val NoopCallback: Request => Response = _ => response.SimpleResponse(Status.Ok)
+
   def get[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Get, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(Get, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   def post[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Post, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(Post, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   def put[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Put, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(Put, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   def delete[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Delete, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(Delete, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   def options[RequestType: Manifest, ResponseType: Manifest](
     route: String,
@@ -171,33 +194,53 @@ private[http] trait RouteDSL extends RouteState { self =>
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Patch, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(Patch, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   def head[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Head, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(Head, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   def trace[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(Trace, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(Trace, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   def any[RequestType: Manifest, ResponseType: Manifest](
     route: String,
     name: String = "",
     admin: Boolean = false,
-    index: Option[RouteIndex] = None
-  )(callback: RequestType => ResponseType): Unit =
-    add(AnyMethod, route, name, admin, index, callback)
+    index: Option[RouteIndex] = None,
+    registerOptionsRoute: Boolean = false
+  )(callback: RequestType => ResponseType): Unit = {
+      add(AnyMethod, route, name, admin, index, callback)
+      if (registerOptionsRoute) {
+        options(route, name, admin, index)(NoopCallback)
+      }
+    }
 
   /* Protected */
 
