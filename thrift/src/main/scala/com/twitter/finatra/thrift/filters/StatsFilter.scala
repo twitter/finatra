@@ -11,8 +11,6 @@ import com.twitter.util.{Future, Memoize, Throw, Try}
 import javax.inject.{Inject, Singleton}
 
 private object StatsFilter {
-  val url = "https://twitter.github.io/finatra/user-guide/thrift/exceptions.html#exceptionmappingfilter"
-
   /** INTENDED FOR INTERNAL USE ONLY */
   object ThriftMethodStats {
     def apply(stats: StatsReceiver): ThriftMethodStats =
@@ -60,10 +58,10 @@ private object StatsFilter {
  * }}}
  *
  *
- * @note It is expected that this Filter occurs "BEFORE" the [[ExceptionMappingFilter]] in a
- *       given filter chain, e.g., `StatsFilter.andThen(ExceptionMappingFilter)`. It is expected
- *       that there SHOULD be a returned response because the [[ExceptionMappingFilter]] should
- *       return give a non-exception response.
+ * @note It is expected that this Filter is inserted ABOVE the [[ExceptionMappingFilter]] in a
+ *       given filter chain, e.g., `StatsFilter.andThen(ExceptionMappingFilter)`.
+ *       For the response flow, [[StatsFilter]] would happen AFTER [[ExceptionMappingFilter]] and
+ *       calculate mapped result.
  *
  * @param statsReceiver      the [[com.twitter.finagle.stats.StatsReceiver]] to which
  *                           to record stats.
@@ -151,11 +149,6 @@ class StatsFilter @Inject()(
     response: Try[_]): Unit = {
     response match {
       case Throw(e) =>
-        warn(
-          s"Uncaught exception: ${e.getClass.getName}. " +
-            s"Please ensure ${classOf[ExceptionMappingFilter].getName} is installed. " +
-            s"For more details see: $url"
-        )
         exceptionCounter.incr()
         exceptionStatsReceiver.counter(e.getClass.getName).incr()
         if (success) stats.successesScope.counter(e.getClass.getName).incr()
