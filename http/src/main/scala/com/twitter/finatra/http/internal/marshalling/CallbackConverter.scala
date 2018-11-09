@@ -110,7 +110,7 @@ private[http] class CallbackConverter @Inject()(
       request: Request =>
         val response = Response(Version.Http11, Status.Ok)
         response.content = mapper.writeValueAsBuf(requestCallback(request))
-        response.headerMap.add(Fields.ContentType, responseBuilder.jsonContentType)
+        response.headerMap.addUnsafe(Fields.ContentType, responseBuilder.jsonContentType)
         Future.value(response)
     } else if (runtimeClassEq[ResponseType, ScalaFuture[_]]) {
       if (isScalaFutureOption[ResponseType]) {
@@ -140,9 +140,14 @@ private[http] class CallbackConverter @Inject()(
     content: Buf,
     contentType: String
   ): Response = {
+    assert(
+      contentType == responseBuilder.jsonContentType || 
+      contentType == responseBuilder.plainTextContentType
+    )
+
     val orig = Response(status)
     orig.content = content
-    orig.headerMap.add(Fields.ContentType, contentType)
+    orig.headerMap.addUnsafe(Fields.ContentType, contentType)
     orig
   }
 
