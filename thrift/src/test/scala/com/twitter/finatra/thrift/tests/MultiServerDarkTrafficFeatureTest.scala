@@ -12,13 +12,16 @@ class MultiServerDarkTrafficFeatureTest
   extends Test
   with ThriftTest {
 
-  private[this] val darkDoEverythingThriftServer = new EmbeddedThriftServer(new DoEverythingThriftServer)
+  private[this] val darkDoEverythingThriftServer = new EmbeddedThriftServer(
+    new DoEverythingThriftServer,
+    disableTestLogging = true)
   private[this] val liveDoEverythingThriftServer = new EmbeddedThriftServer(
     new DoEverythingThriftServer,
     flags = Map(
       "thrift.dark.service.dest" -> s"/$$/inet/${PortUtils.loopbackAddress}/${darkDoEverythingThriftServer.thriftPort()}",
       "thrift.dark.service.clientId" -> "client123"
-    )
+    ),
+    disableTestLogging = true
   )
 
   private[this] lazy val client123: DoEverything[Future] =

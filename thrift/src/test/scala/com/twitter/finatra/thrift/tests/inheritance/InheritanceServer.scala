@@ -9,7 +9,7 @@ object InheritanceServerMain extends InheritanceServer
 class InheritanceServer extends ThriftServer {
   override val name = "inherited-server"
 
-  protected def configureThrift(router: ThriftRouter) = {
+  protected def configureThrift(router: ThriftRouter): Unit = {
     router
       .add[ServiceBController]
   }

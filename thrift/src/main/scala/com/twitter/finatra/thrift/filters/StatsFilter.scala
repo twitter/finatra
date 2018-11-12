@@ -124,37 +124,56 @@ class StatsFilter @Inject()(
     request: ThriftRequest[T],
     service: Service[ThriftRequest[T], U]
   ): Future[U] = {
-    val methodStats = perMethodStats(request.methodName)
+    val stats: Option[ThriftMethodStats] =
+      if (request.methodName == null) None
+      else Some(perMethodStats(request.methodName))
 
-    timeFuture(methodStats.latencyStat)(service(request)).respond { response =>
-      responseClassifier.applyOrElse(
-        ReqRep(request, response),
-        ResponseClassifier.Default
-      ) match {
-        case ResponseClass.Failed(_) =>
-          methodStats.failuresCounter.incr()
-          countExceptions(success = false, methodStats, response)
-        case ResponseClass.Successful(_) =>
-          methodStats.successCounter.incr()
-          countExceptions(success = true, methodStats, response)
-      }
+    executeRequest(stats, request, service).respond { response =>
+      handleResponse(stats, request, response)
     }
   }
 
   /* Private */
 
-  private[this] def countExceptions(
-    success: Boolean,
-    stats: ThriftMethodStats,
-    response: Try[_]): Unit = {
-    response match {
-      case Throw(e) =>
-        exceptionCounter.incr()
-        exceptionStatsReceiver.counter(e.getClass.getName).incr()
-        if (success) stats.successesScope.counter(e.getClass.getName).incr()
-        else stats.failuresScope.counter(e.getClass.getName).incr()
-      case _ =>
-        // do nothing
+  private def executeRequest[T, U](
+    stats: Option[ThriftMethodStats],
+    request: ThriftRequest[T],
+    service: Service[ThriftRequest[T], U]): Future[U] = {
+
+    stats
+      .map(perMethodStats => timeFuture(perMethodStats.latencyStat)(service(request)))
+      .getOrElse(service(request))
+  }
+
+  private def handleResponse[T, U](
+    stats: Option[ThriftMethodStats],
+    request: ThriftRequest[T],
+    response: Try[U]): Unit = {
+    responseClassifier.applyOrElse(
+      ReqRep(request, response),
+      ResponseClassifier.Default
+    ) match {
+      case ResponseClass.Failed(_) =>
+        stats.foreach(_.failuresCounter.incr())
+        countExceptions(stats, success = false, response)
+      case ResponseClass.Successful(_) =>
+        stats.foreach(_.successCounter.incr())
+        countExceptions(stats, success = true, response)
     }
+  }
+
+  private def countExceptions(
+    stats: Option[ThriftMethodStats],
+    success: Boolean,
+    response: Try[_]): Unit = response match {
+    case Throw(e) =>
+      exceptionCounter.incr()
+      exceptionStatsReceiver.counter(e.getClass.getName).incr()
+      stats.foreach { perMethodStats =>
+        if (success) perMethodStats.successesScope.counter(e.getClass.getName).incr()
+        else perMethodStats.failuresScope.counter(e.getClass.getName).incr()
+      }
+    case _ =>
+      // do nothing
   }
 }

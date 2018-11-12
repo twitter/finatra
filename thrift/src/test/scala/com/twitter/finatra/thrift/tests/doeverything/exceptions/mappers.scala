@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests.doeverything.exceptions
 
-import com.google.inject.Singleton
+import javax.inject.Singleton
 import com.twitter.doeverything.thriftscala.{Answer, DoEverythingException}
 import com.twitter.finatra.thrift.exceptions.ExceptionMapper
 import com.twitter.util.Future

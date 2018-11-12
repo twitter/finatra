@@ -4,14 +4,14 @@ import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.filters._
-import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
+import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
 
 object CalculatorServerMain extends CalculatorServer
 
 class CalculatorServer extends ThriftServer {
   override val name = "calculator-server"
 
-  override def modules = Seq(ClientIdWhitelistModule)
+  override def modules = Seq(new ClientIdAcceptlistModule("/clients.yml"))
 
   override def configureThrift(router: ThriftRouter): Unit = {
     router
@@ -21,7 +21,7 @@ class CalculatorServer extends ThriftServer {
       .filter[AccessLoggingFilter]
       .filter[StatsFilter]
       .filter[ExceptionMappingFilter]
-      .filter[ClientIdWhitelistFilter]
+      .filter[ClientIdAcceptlistFilter]
       .exceptionMapper[FinatraThriftExceptionMapper]
       .add[CalculatorController]
   }

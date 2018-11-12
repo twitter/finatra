@@ -128,10 +128,10 @@ E.g., for the `UserFilter` defined above (shown with common filters in a recomme
     import com.twitter.finatra.thrift.ThriftServer
     import com.twitter.finatra.thrift.routing.ThriftRouter
     import com.twitter.finatra.thrift.filters._
-    import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
+    import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
 
     class Server extends ThriftServer {
-      override def modules: Seq[Module] = Seq(ClientIdWhitelistModule)
+      override def modules: Seq[Module] = Seq(ClientIdAcceptlistModule)
 
       override def configureThrift(router: ThriftRouter): Unit = {
         router

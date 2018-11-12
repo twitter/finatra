@@ -1,7 +1,7 @@
 package com.twitter.finatra.thrift.internal.exceptions
 
-import com.google.inject.Singleton
 import com.twitter.util.Future
+import javax.inject.Singleton
 import scala.util.control.NonFatal
 
 /**

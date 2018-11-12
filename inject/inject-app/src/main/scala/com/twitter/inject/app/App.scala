@@ -124,7 +124,7 @@ trait App extends com.twitter.app.App with Logging {
 
   /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */
   protected def addFrameworkModules(modules: Module*): Unit = {
-    modules foreach addFrameworkModule
+    modules.foreach(addFrameworkModule)
   }
 
   /** ONLY INTENDED FOR USE BY THE FRAMEWORK. */

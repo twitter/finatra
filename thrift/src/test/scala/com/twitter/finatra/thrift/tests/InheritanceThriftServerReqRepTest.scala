@@ -13,7 +13,8 @@ import com.twitter.util.Future
 
 class InheritanceThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
   private val server = new EmbeddedThriftServer(
-    twitterServer = new InheritanceThriftTwitterServer(TestClientRequestHeaderKey)
+    twitterServer = new InheritanceThriftTwitterServer(TestClientRequestHeaderKey),
+    disableTestLogging = true
   )
 
   private val muxCtxtsFilter = muxContextsFilter

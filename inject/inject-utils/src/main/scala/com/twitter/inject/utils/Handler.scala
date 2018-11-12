@@ -1,5 +1,5 @@
 package com.twitter.inject.utils
 
-trait Handler {
+abstract class Handler {
   def handle(): Unit
 }

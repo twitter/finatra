@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Stage;
 
+import org.apache.thrift.TApplicationException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +21,15 @@ import com.twitter.finagle.http.Response;
 import com.twitter.finagle.http.Status;
 import com.twitter.finatra.thrift.EmbeddedThriftServer;
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingJavaThriftServer;
+import com.twitter.finatra.thrift.thriftjava.ClientError;
+import com.twitter.finatra.thrift.thriftjava.ClientErrorCause;
+import com.twitter.finatra.thrift.thriftjava.NoClientIdError;
+import com.twitter.finatra.thrift.thriftjava.ServerError;
+import com.twitter.finatra.thrift.thriftjava.ServerErrorCause;
+import com.twitter.finatra.thrift.thriftjava.UnknownClientIdError;
 import com.twitter.util.Await;
+import com.twitter.util.Duration;
+import com.twitter.util.Future;
 
 public class DoEverythingJavaThriftServerFeatureTest extends Assert {
 
@@ -28,11 +37,20 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
         new EmbeddedThriftServer(
             new DoEverythingJavaThriftServer(),
             Collections.singletonMap("magicNum", "57"),
-            Stage.DEVELOPMENT);
+            Stage.DEVELOPMENT,
+            true);
     private static final DoEverything.ServiceIface THRIFT_CLIENT =
             SERVER.thriftClient(
                 "client123",
                 ClassTag$.MODULE$.apply(DoEverything.ServiceIface.class));
+    private static final DoEverything.ServiceIface UNSUPPORTED_THRIFT_CLIENT =
+            SERVER.thriftClient(
+                "unsupported",
+                ClassTag$.MODULE$.apply(DoEverything.ServiceIface.class));
+    private static final DoEverything.ServiceIface NO_ID_THRIFT_CLIENT =
+        SERVER.thriftClient(
+            null,
+            ClassTag$.MODULE$.apply(DoEverything.ServiceIface.class));
 
     @AfterClass
     public static void tearDown() throws Exception {
@@ -61,7 +79,9 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
                 + ".andThen(com.twitter.finatra.thrift.filters.TraceIdMDCFilter)"
                 + ".andThen(com.twitter.finatra.thrift.filters.ThriftMDCFilter)"
                 + ".andThen(com.twitter.finatra.thrift.filters.AccessLoggingFilter)"
-                + ".andThen(com.twitter.finatra.thrift.filters.StatsFilter)",
+                + ".andThen(com.twitter.finatra.thrift.filters.StatsFilter)"
+                + ".andThen(com.twitter.finatra.thrift.filters.ExceptionMappingFilter)"
+                + ".andThen(com.twitter.finatra.thrift.filters.JavaClientIdAcceptlistFilter)",
             filters.asText());
         JsonNode methods = thriftNode.get("methods");
 
@@ -79,36 +99,175 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
     /** test uppercase endpoint */
     @Test
     public void testUppercase() throws Exception {
-        assertEquals("HI", Await.result(THRIFT_CLIENT.uppercase("Hi")));
+        assertEquals("HI", await(THRIFT_CLIENT.uppercase("Hi")));
     }
 
     /** test uppercase endpoint fails */
     @Test
+    @SuppressWarnings("unchecked")
     public void testUppercaseFailure() throws Exception {
         try {
-            Await.result(THRIFT_CLIENT.uppercase("fail"));
+            await(THRIFT_CLIENT.uppercase("fail"));
             fail("Expected exception " + Exception.class + " never thrown");
         } catch (Exception e) {
             // expected
+            assertEquals(ServerError.class.getName(), e.getClass().getName());
+            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
+        }
+    }
+
+    /** test echo endpoint fails */
+    @Test
+    public void testUnsupportedThriftClient() throws Exception {
+        try {
+            await(UNSUPPORTED_THRIFT_CLIENT.echo("Hi"));
+            fail("Expected exception " + Exception.class + " never thrown");
+        } catch (Exception e) {
+            // expected
+            assertEquals(UnknownClientIdError.class.getName(), e.getClass().getName());
+            assertEquals("unknown client id", e.getMessage());
+        }
+    }
+
+    /** test echo endpoint fails */
+    @Test
+    public void testNoIdThriftClient() throws Exception {
+        try {
+            await(NO_ID_THRIFT_CLIENT.echo("Hi"));
+            fail("Expected exception " + Exception.class + " never thrown");
+        } catch (Exception e) {
+            // expected
+            assertEquals(NoClientIdError.class.getName(), e.getClass().getName());
+            assertEquals("The request did not contain a Thrift client id", e.getMessage());
         }
     }
 
     /** test echo endpoint */
     @Test
     public void testEcho() throws Exception {
-        assertEquals("hello", Await.result(THRIFT_CLIENT.echo("hello")));
+        assertEquals("hello", await(THRIFT_CLIENT.echo("hello")));
+    }
+
+    /** test echo endpoint */
+    @Test
+    public void testEchoTApplicationException() throws Exception {
+      // echo method doesn't define throws ClientError Exception
+      // we should receive TApplicationException
+      try {
+        await(THRIFT_CLIENT.echo("clientError"));
+        fail("Expected exception " + TApplicationException.class + " never thrown");
+      } catch (Exception e) {
+          // expected
+          assertEquals(TApplicationException.class.getName(), e.getClass().getName());
+          assertTrue(
+              e.getMessage().contains("ClientError(errorCause:BAD_REQUEST, message:client error)"));
+      }
+    }
+
+    /** test echo2 endpoint */
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testEcho2() {
+      // should be caught by FinatraJavaThriftExceptionMapper
+      try {
+        await(THRIFT_CLIENT.echo2("clientError"));
+        fail("Expected exception " + Exception.class + " never thrown");
+      } catch (Exception e) {
+        // expected
+        assertEquals(ClientError.class.getName(), e.getClass().getName());
+        assertEquals(ClientErrorCause.BAD_REQUEST, ((ClientError) e).getErrorCause());
+      }
+    }
+
+    /** RequestException mapping */
+    @Test
+    public void testRequestExceptionMapping() {
+        try {
+            await(THRIFT_CLIENT.echo2("requestException"));
+            fail("Expected exception " + Exception.class + " never thrown");
+        } catch (Exception e) {
+            // expected
+            assertEquals(ServerError.class.getName(), e.getClass().getName());
+            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
+        }
+    }
+
+    /** TimeoutException mapping */
+    @Test
+    public void testTimeoutExceptionMapping() {
+        try {
+            await(THRIFT_CLIENT.echo2("timeoutException"));
+            fail("Expected exception " + Exception.class + " never thrown");
+        } catch (Exception e) {
+            // expected
+            assertEquals(ClientError.class.getName(), e.getClass().getName());
+            assertEquals(ClientErrorCause.REQUEST_TIMEOUT, ((ClientError) e).getErrorCause());
+        }
+    }
+
+    /** BarExceptionMapper Mapping */
+    @Test
+    public void testBarExceptionMapping() throws Exception {
+        // should be caught by BarExceptionMapper
+        assertEquals("BarException caught", await(THRIFT_CLIENT.echo2("barException")));
+    }
+
+    /** FooExceptionMapper Mapping */
+    @Test
+    public void testFooExceptionMapping() throws Exception {
+        // should be caught by FooExceptionMapper
+        assertEquals("FooException caught", await(THRIFT_CLIENT.echo2("fooException")));
+    }
+
+    /** UnhandledSourcedException Mapping */
+    @Test
+    public void testUnhandledSourcedExceptionMapping() throws Exception {
+        try {
+            await(THRIFT_CLIENT.echo2("unhandledSourcedException"));
+            fail("Expected exception " + Exception.class + " never thrown");
+        } catch (Exception e) {
+            // expected
+            assertEquals(ServerError.class.getName(), e.getClass().getName());
+            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
+        }
+    }
+
+    /** UnhandledException Mapping */
+    @Test
+    public void testUnhandledExceptionMapping() throws Exception {
+        try {
+            await(THRIFT_CLIENT.echo2("unhandledException"));
+            fail("Expected exception " + Exception.class + " never thrown");
+        } catch (Exception e) {
+            // expected
+            assertEquals(ServerError.class.getName(), e.getClass().getName());
+            assertEquals(ServerErrorCause.INTERNAL_SERVER_ERROR, ((ServerError) e).getErrorCause());
+        }
+    }
+
+    /** UnhandledThrowable Mapping */
+    @Test
+    public void testUnhandledThrowableMapping() throws Exception {
+        try {
+            await(THRIFT_CLIENT.echo2("unhandledThrowable"));
+            fail("Expected exception " + Exception.class + " never thrown");
+        } catch (Exception e) {
+            // expected
+            assertEquals(TApplicationException.class.getName(), e.getClass().getName());
+            assertTrue(e.getMessage().contains("unhandled throwable"));
+        }
     }
 
     /** test magicNum endpoint */
     @Test
     public void testMagicNum() throws Exception {
-        assertEquals("57", Await.result(THRIFT_CLIENT.magicNum()));
+        assertEquals("57", await(THRIFT_CLIENT.magicNum()));
     }
 
     /** test moreThanTwentyTwoArgs endpoint */
     @Test
     public void testMoreThanTwentyTwoArgs() throws Exception {
-        assertEquals("handled", Await.result(THRIFT_CLIENT.moreThanTwentyTwoArgs(
+        assertEquals("handled", await(THRIFT_CLIENT.moreThanTwentyTwoArgs(
             "one",
             "two",
             "three",
@@ -138,11 +297,23 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
     @Test
     public void testAsk() throws Exception {
         final Answer answer =
-                Await.result(
-                        THRIFT_CLIENT.ask(
-                                new Question("What is the meaning of life?")));
+            await(THRIFT_CLIENT.ask(new Question("What is the meaning of life?")));
         assertEquals(
                 "The answer to the question: `What is the meaning of life?` is 42.",
                 answer.getText());
+    }
+
+    /** test ask endpoint */
+    @Test
+    public void testAskFail() throws Exception {
+      final Answer answer =
+          await(THRIFT_CLIENT.ask(new Question("fail")));
+      assertEquals(
+          "DoEverythingException caught",
+          answer.getText());
+    }
+
+    private <T> T await(Future<T> future) throws Exception {
+      return Await.result(future, Duration.fromSeconds(2));
     }
 }

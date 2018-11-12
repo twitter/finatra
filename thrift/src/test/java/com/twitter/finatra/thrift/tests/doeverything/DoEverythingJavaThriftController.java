@@ -4,8 +4,18 @@ import javax.inject.Inject;
 
 import com.twitter.doeverything.thriftjava.Answer;
 import com.twitter.doeverything.thriftjava.DoEverything;
+import com.twitter.doeverything.thriftjava.DoEverythingException;
 import com.twitter.doeverything.thriftjava.Question;
+import com.twitter.finagle.RequestException;
+import com.twitter.finagle.RequestTimeoutException;
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.BarException;
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.FooException;
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.TestChannelException;
+import com.twitter.finatra.thrift.thriftjava.ClientError;
+import com.twitter.finatra.thrift.thriftjava.ClientErrorCause;
+import com.twitter.finatra.thrift.thriftjava.UnknownClientIdError;
 import com.twitter.inject.annotations.Flag;
+import com.twitter.util.Duration;
 import com.twitter.util.Future;
 
 class DoEverythingJavaThriftController implements DoEverything.ServiceIface {
@@ -27,13 +37,39 @@ class DoEverythingJavaThriftController implements DoEverything.ServiceIface {
 
     @Override
     public Future<String> echo(String msg) {
-        return Future.value(msg);
+        if ("clientError".equals(msg)) {
+            return Future.exception(new ClientError(ClientErrorCause.BAD_REQUEST, "client error"));
+        } else {
+            return Future.value(msg);
+        }
     }
-
 
     @Override
     public Future<String> echo2(String msg) {
-        return Future.value(msg);
+        if ("clientError".equals(msg)) {
+            return Future.exception(new ClientError(ClientErrorCause.BAD_REQUEST, "client error"));
+        } else if ("unknownClientIdError".equals(msg)) {
+            return Future.exception(new UnknownClientIdError("unknown client id error"));
+        } else if ("requestException".equals(msg)) {
+            return Future.exception(new RequestException());
+        } else if ("timeoutException".equals(msg)) {
+            return Future.exception(
+                new RequestTimeoutException(
+                    Duration.fromSeconds(1),
+                    "timeout exception"));
+        } else if ("unhandledException".equals(msg)) {
+            return Future.exception(new Exception("unhandled exception"));
+        } else if ("barException".equals(msg)) {
+            return Future.exception(new BarException());
+        } else if ("fooException".equals(msg)) {
+            return Future.exception(new FooException());
+        } else if ("unhandledSourcedException".equals(msg)) {
+            return Future.exception(new TestChannelException());
+        } else if ("unhandledThrowable".equals(msg)) {
+            return Future.exception(new Throwable("unhandled throwable"));
+        } else {
+            return Future.value(msg);
+        }
     }
 
     @Override
@@ -71,10 +107,12 @@ class DoEverythingJavaThriftController implements DoEverything.ServiceIface {
 
     @Override
     public Future<Answer> ask(Question question) {
-        return Future.value(
-                new Answer(
-                        String.format(
-                                "The answer to the question: `%s` is 42.",
-                                question.getText())));
+        if ("fail".equals(question.getText())) {
+            return Future.exception(new DoEverythingException("This is a test."));
+        } else {
+            return Future.value(
+                new Answer("The answer to the question: `"
+                    + question.getText() + "` is 42."));
+        }
     }
 }

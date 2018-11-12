@@ -15,7 +15,8 @@ public class DoEverythingJavaThriftServerStartupTest {
         new EmbeddedThriftServer(
             new DoEverythingJavaThriftServer(),
             Collections.emptyMap(),
-            Stage.PRODUCTION);
+            Stage.PRODUCTION,
+            true);
 
     /** Test server startup */
     @Test
