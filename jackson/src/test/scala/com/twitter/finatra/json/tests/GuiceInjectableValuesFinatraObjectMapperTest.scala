@@ -11,12 +11,12 @@ import net.codingwell.scalaguice.typeLiteral
 
 class GuiceInjectableValuesFinatraObjectMapperTest extends Test with Mockito {
 
-  val injector = mock[Injector]
+  val injector: Injector = mock[Injector]
 
   /* Class under test */
-  val mapper = FinatraObjectMapper.create(injector)
+  private[this] val mapper: FinatraObjectMapper = FinatraObjectMapper.create(injector)
 
-  override def afterEach() = {
+  override def afterEach(): Unit = {
     super.afterEach()
     reset(injector)
   }

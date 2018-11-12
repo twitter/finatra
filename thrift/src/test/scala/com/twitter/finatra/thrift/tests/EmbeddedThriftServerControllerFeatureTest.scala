@@ -175,8 +175,4 @@ class EmbeddedThriftServerControllerFeatureTest extends FeatureTest {
       )
     ) should equal("foo")
   }
-
-  private def await[T](f: Future[T]): T = {
-    Await.result(f, 2.seconds)
-  }
 }

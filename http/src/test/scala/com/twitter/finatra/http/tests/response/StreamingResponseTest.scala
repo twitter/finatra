@@ -5,7 +5,7 @@ import com.twitter.conversions.time._
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.http.response.StreamingResponse
 import com.twitter.inject.Test
-import com.twitter.io.Reader.ReaderDiscarded
+import com.twitter.io.ReaderDiscardedException
 import com.twitter.io.{Buf, Reader}
 import com.twitter.util._
 
@@ -21,14 +21,12 @@ class StreamingResponseTest extends Test {
     }
   }
 
-  private def await[T](awaitable: Awaitable[T]): T = Await.result(awaitable, 5.seconds)
-
   private def fromStream(closable: Closable, stream: AsyncStream[Buf]): Response = {
     val streamingResponse = StreamingResponse(identity[Buf], closeOnFinish = closable)(stream)
     await(streamingResponse.toFutureFinagleResponse)
   }
 
-  private def burnLoop(reader: Reader[Buf]): Future[Unit] = reader.read(Int.MaxValue).flatMap {
+  private def burnLoop(reader: Reader[Buf]): Future[Unit] = reader.read().flatMap {
     case Some(_) => burnLoop(reader)
     case None => Future.Unit
   }
@@ -57,8 +55,8 @@ class StreamingResponseTest extends Test {
     item +:: infiniteStream(item)
   }
 
-  test("write failures with ReaderDiscarded") {
-    failWriteWith(new ReaderDiscarded)
+  test("write failures with ReaderDiscardedException") {
+    failWriteWith(new ReaderDiscardedException)
   }
 
   test("write failures with other exception") {

@@ -1,4 +1,4 @@
-package com.twitter.finatra.request;
+package com.twitter.finatra.http.request;
 
 import com.twitter.finagle.http.MediaType;
 

@@ -7,21 +7,51 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
-18.10.0
+18.11.0
 -------
 
-Fixed
+Added
 ~~~~~
-
-* finatra-thrift: Set the bound `StatsReceiver` in the underlying Finagle `ThriftMux` server
-  in the `c.t.finatra.thrift.ThriftServer`. This prevented testing of underlying Finagle server
-  stats as the `InMemoryStatsReceiver` used by the `EmbeddedThriftServer` was not properly passed
-  all the way through the stack. ``PHAB_ID=D228494``
 
 Changed
 ~~~~~~~
 
-* finatra-http, finatra-thrift: Make HTTP and Thrift StatsFitlers "Response Classification"
+* finatra-thrift: (BREAKING API CHANGE) Update `DarkTrafficFilter#handleFailedInvocation` to accept
+  the request type for more fidelity in handling the failure. ``PHAB_ID=D237484``
+
+* finatra-http: Move `request.ContentType` and `response.Mustache` Java annotations to
+  `com.twitter.finatra.http` package namespace. ``PHAB_ID=D237485``
+
+* finatra-jackson: Move away from deprecated code and update error handling and exceptions post
+  Jackson 2.9.x upgrade. ``PHAB_ID=D229601``
+
+* inject-core: (BREAKING API CHANGE) Remove `c.t.inject.TestMixin#sleep`. We do not want to
+  promote this usage of Thread blocking in testing utilities. Add a new testing function:
+  `c.t.inject.TestMixin#await` which will perform `Await.result` on a given `c.t.util.Awaitable`.
+  This function was duplicated across tests in the codebase. We also introduce an overridable default
+  timeout on the underlying `Await.result` call: `c.t.inject.TestMixin#defaultAwaitTimeout`.
+  ``PHAB_ID=D231717``
+
+Fixed
+~~~~~
+
+* finatra-http: Fix registration of HTTP Routes in the Library registry to properly account
+  for Routes that duplicate a URI with a different HTTP verb. That is, a Route should be considered
+  unique per URI + HTTP verb combination. ``PHAB_ID=D232014``
+
+Closed
+~~~~~~
+
+18.10.0
+-------
+
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+* finatra-http, finatra-thrift: Make HTTP and Thrift StatsFilters "Response Classification"
   aware. ``PHAB_ID=D219116``
 
 * finatra-http, finatra-thrift: (BREAKING API CHANGE) Update the `DarkTrafficFilterModule` in
@@ -44,8 +74,22 @@ Changed
 * finatra-thrift: Rename `defaultFinatraThriftPort` to `defaultThriftPort`.
   ``PHAB_ID=D224735``
 
+Fixed
+~~~~~
+
+* finatra-thrift: Set the bound `StatsReceiver` in the underlying Finagle `ThriftMux` server
+  in the `c.t.finatra.thrift.ThriftServer`. This prevented testing of underlying Finagle server
+  stats as the `InMemoryStatsReceiver` used by the `EmbeddedThriftServer` was not properly passed
+  all the way through the stack. ``PHAB_ID=D228494``
+
+Closed
+~~~~~~
+
 18.9.1
 ------
+
+Added
+~~~~~
 
 Changed
 ~~~~~~~
@@ -55,6 +99,12 @@ Changed
 
 * http/thrift: Update Library registry route information to include controller
   class name. ``PHAB_ID=D216425``
+
+Fixed
+~~~~~
+
+Closed
+~~~~~~
 
 18.9.0
 ------

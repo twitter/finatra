@@ -3,7 +3,7 @@ package com.twitter.finatra.http.response
 import com.twitter.concurrent.AsyncStream
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.inject.Logging
-import com.twitter.io.Reader.ReaderDiscarded
+import com.twitter.io.ReaderDiscardedException
 import com.twitter.io.{Buf, Writer}
 import com.twitter.util._
 
@@ -146,7 +146,7 @@ class StreamingResponse[T, U] private (
       debug("Success writing to chunked response")
     case Throw(e) =>
       e match {
-        case _: ReaderDiscarded =>
+        case _: ReaderDiscardedException =>
           info(s"Failure writing to chunked response: ${e.getMessage}")
         case NonFatal(nf) =>
           error("Unexpected failure writing to chunked response", nf)

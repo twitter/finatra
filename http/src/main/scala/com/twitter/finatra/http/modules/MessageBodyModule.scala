@@ -8,7 +8,7 @@ import com.twitter.finatra.http.internal.marshalling.{
 }
 import com.twitter.finatra.http.marshalling.{DefaultMessageBodyReader, DefaultMessageBodyWriter}
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
-import com.twitter.finatra.response.Mustache
+import com.twitter.finatra.http.response.Mustache
 import com.twitter.inject.{Injector, InjectorModule, TwitterModule}
 
 /**

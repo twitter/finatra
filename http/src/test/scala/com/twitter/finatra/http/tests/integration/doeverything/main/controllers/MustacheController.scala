@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.controllers
 
 import com.twitter.finagle.http.{MediaType, Request}
 import com.twitter.finatra.http.Controller
-import com.twitter.finatra.response.Mustache
+import com.twitter.finatra.http.response.Mustache
 
 @Mustache("testHtml")
 case class HTMLView(age: Int, name: String, friends: Seq[String])

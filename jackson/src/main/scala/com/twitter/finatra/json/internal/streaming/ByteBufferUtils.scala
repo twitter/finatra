@@ -29,7 +29,7 @@ private[finatra] object ByteBufferUtils extends Logging {
     result
   }
 
-  def debugBuffer(byteBuffer: ByteBuffer) = {
+  def debugBuffer(byteBuffer: ByteBuffer): Unit = {
     if (logger.isDebugEnabled) {
       val copy = byteBuffer.duplicate()
       copy.position(0)

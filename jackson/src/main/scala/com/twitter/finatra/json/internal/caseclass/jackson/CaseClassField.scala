@@ -16,7 +16,7 @@ import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
 import com.twitter.finatra.json.internal.caseclass.reflection.DefaultMethodUtils.defaultFunction
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection
-import com.twitter.finatra.request.{QueryParam, Header, FormParam}
+import com.twitter.finatra.request.{FormParam, Header, QueryParam}
 import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.inject.Logging
@@ -81,7 +81,9 @@ private[finatra] object CaseClassField {
     }
   }
 
-  private def deserializerOrNone(annotations: Array[Annotation]): Option[JsonDeserializer[Object]] = {
+  private def deserializerOrNone(
+    annotations: Array[Annotation]
+  ): Option[JsonDeserializer[Object]] = {
     for {
       jsonDeserializer <- findAnnotation[JsonDeserialize](annotations)
       if jsonDeserializer.using != classOf[JsonDeserializer.None]
@@ -111,14 +113,14 @@ private[finatra] case class CaseClassField(
 
   /* Public */
 
-  lazy val missingValue = {
+  lazy val missingValue: AnyRef = {
     if (javaType.isPrimitive)
       ClassUtil.defaultValue(javaType.getRawClass)
     else
       null
   }
 
-  val validationAnnotations =
+  val validationAnnotations: Seq[Annotation] =
     filterIfAnnotationPresent[Validation](annotations)
 
   /**
@@ -132,9 +134,14 @@ private[finatra] case class CaseClassField(
    * @return The parsed object for this field
    * @throws CaseClassValidationException with reason for the parsing error
    */
-  def parse(context: DeserializationContext, codec: ObjectCodec, objectJsonNode: JsonNode): Object = {
+  def parse(
+    context: DeserializationContext,
+    codec: ObjectCodec,
+    objectJsonNode: JsonNode
+  ): Object = {
     if (fieldInjection.isInjectable)
-      fieldInjection.inject(context, codec) orElse defaultValue getOrElse throwRequiredFieldException()
+      fieldInjection
+        .inject(context, codec).orElse(defaultValue).getOrElse(throwRequiredFieldException())
     else {
       val fieldJsonNode = objectJsonNode.get(name)
       if (fieldJsonNode != null && !fieldJsonNode.isNull)
@@ -227,20 +234,11 @@ private[finatra] case class CaseClassField(
     annotation: Annotation
   ): Option[AttributeInfo] = annotation match {
     case queryParam: QueryParam =>
-      Some(
-        AttributeInfo(
-          "queryParam",
-          queryParam.value.getOrElse(fieldName)))
+      Some(AttributeInfo("queryParam", queryParam.value.getOrElse(fieldName)))
     case formParam: FormParam =>
-      Some(
-        AttributeInfo(
-          "formParam",
-          formParam.value.getOrElse(fieldName)))
+      Some(AttributeInfo("formParam", formParam.value.getOrElse(fieldName)))
     case header: Header =>
-      Some(
-        AttributeInfo(
-          "header",
-          header.value.getOrElse(fieldName)))
+      Some(AttributeInfo("header", header.value.getOrElse(fieldName)))
     case _ =>
       None
   }

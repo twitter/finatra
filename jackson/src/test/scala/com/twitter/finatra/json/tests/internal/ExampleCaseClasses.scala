@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.ValueNode
 import com.twitter.finatra.request._
 import com.twitter.finatra.response.JsonCamelCase
-import com.twitter.finatra.validation.{InvalidValidationInternal, Min, NotEmpty, ValidationResult}
+import com.twitter.finatra.validation.{InvalidValidationInternal, Min, NotEmpty, Size, ValidationResult}
 import com.twitter.inject.Logging
 import com.twitter.inject.domain.WrappedValue
 import com.twitter.{util => ctu}
-import javax.inject.{Inject, Named}
+import javax.inject.Inject
 import org.joda.time.DateTime
 import scala.annotation.meta.param
 import scala.math.BigDecimal.RoundingMode
@@ -178,6 +178,16 @@ case class PersonWithLogging(
 case class PersonWithDottedName(id: Int, @JsonProperty("name.last") lastName: String)
 
 case class SimplePerson(name: String)
+
+case class PersonWithThings(
+  id: Int,
+  name: String,
+  age: Option[Int],
+  @Size(min = 1, max = 10) things: Map[String, Things]
+)
+
+case class Things(
+  @Size(min = 1, max = 2) names: Seq[String])
 
 @JsonCamelCase
 case class CamelCaseSimplePerson(myName: String)

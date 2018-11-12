@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.internal.marshalling.mustache
 
 import com.twitter.finatra.http.internal.marshalling.mustache.{MustacheTemplate, MustacheTemplateLookup}
 import com.twitter.finatra.http.marshalling.mustache.MustacheBodyComponent
-import com.twitter.finatra.response.Mustache
+import com.twitter.finatra.http.response.Mustache
 import com.twitter.inject.Test
 
 class MustacheTemplateLookupTest extends Test {

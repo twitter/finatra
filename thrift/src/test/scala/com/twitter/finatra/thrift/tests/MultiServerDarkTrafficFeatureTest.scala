@@ -1,13 +1,12 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finagle.stats.InMemoryStatsReceiver
 import com.twitter.finatra.thrift.{ThriftTest, EmbeddedThriftServer}
 import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
 import com.twitter.inject.Test
 import com.twitter.inject.server.PortUtils
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Future
 
 class MultiServerDarkTrafficFeatureTest
   extends Test
@@ -123,9 +122,5 @@ class MultiServerDarkTrafficFeatureTest
     darkDoEverythingThriftServer.close()
     liveDoEverythingThriftServer.close()
     super.afterAll()
-  }
-
-  private def await[T](f: Future[T]): T = {
-    Await.result(f, 2.seconds)
   }
 }

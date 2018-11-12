@@ -5,7 +5,6 @@ import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.exceptions.{BadRequestException, NotAcceptableException}
 import com.twitter.finatra.http.fileupload.{FinagleRequestFileUpload, MultipartItem}
-import com.twitter.finatra.request.ContentType
 import com.twitter.inject.conversions.string._
 import java.net.URI
 

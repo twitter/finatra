@@ -1,31 +1,24 @@
 package com.twitter.finatra.http.filters
 
 import com.twitter.conversions.time._
-import com.twitter.finagle.http.{Request, Response}
+import com.twitter.finagle.http.{MediaType, Message, Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.HttpHeaders
 import com.twitter.finatra.http.request.RequestUtils
 import com.twitter.inject.Logging
 import com.twitter.util.{Future, Return, ScheduledThreadPoolTimer, Throw, Try}
 import java.net.URI
-import java.util.{Locale, TimeZone}
 import javax.inject.Singleton
-import org.apache.commons.lang.time.FastDateFormat
 
 /**
  * HttpResponseFilter does the following:
- * - sets the 'Server' and 'Date' response headers
- * - turns a 'partial' Location header into a full URL
+ *  - sets the 'Server' and 'Date' response headers
+ *  - turns a 'partial' Location header into a full URL
  */
 @Singleton
 class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] with Logging {
 
   // optimized
-  private val dateFormat = FastDateFormat.getInstance(
-    HttpHeaders.RFC7231DateFormat,
-    TimeZone.getTimeZone("GMT"),
-    Locale.ENGLISH
-  )
   @volatile private var currentDateValue: String = getCurrentDateValue
   new ScheduledThreadPoolTimer(poolSize = 1, name = "HttpDateUpdater", makeDaemons = true)
     .schedule(1.second) {
@@ -48,23 +41,22 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] with Lo
    * Sets the HTTP Date and Server header values. If there is no Content-type header in the response, but a non-zero
    * content length, we also set to the generic: application/octet-stream content type on the response.
    *
-   * @see Date: <a href="https://tools.ietf.org/html/rfc7231#section-7.1.1.2">Section 7.1.1.2 of RFC 7231</a>
-   * @see Server: <a href="https://tools.ietf.org/html/rfc7231#section-7.4.2">Section 7.4.2 of RFC 7231</a>
-   * @see Content-Type: <a href="https://tools.ietf.org/html/rfc7231#section-3.1.1.5">Section 3.1.1.5 of RFC 7231</a>
    * @param response - the response on which to set the header values.
+   *
+   * @see Date: [[https://tools.ietf.org/html/rfc7231#section-7.1.1.2 Section 7.1.1.2 of RFC 7231]]
+   * @see Server: [[https://tools.ietf.org/html/rfc7231#section-7.4.2 Section 7.4.2 of RFC 7231]]
+   * @see Content-Type: [[https://tools.ietf.org/html/rfc7231#section-3.1.1.5 Section 3.1.1.5 of RFC 7231]]
    */
-  private def setResponseHeaders(response: Response) = {
-    response.headerMap.set(HttpHeaders.Server, "Finatra")
-    response.headerMap.set(HttpHeaders.Date, currentDateValue)
+  private def setResponseHeaders(response: Response): Unit = {
+    response.headerMap.setUnsafe(HttpHeaders.Server, "Finatra")
+    response.headerMap.setUnsafe(HttpHeaders.Date, currentDateValue)
     if (response.contentType.isEmpty && response.length != 0) {
       // see: https://www.w3.org/Protocols/rfc2616/rfc2616-sec7.html#sec7.2.1
-      response.headerMap.set(HttpHeaders.ContentType, "application/octet-stream")
+      response.headerMap.setUnsafe(HttpHeaders.ContentType, MediaType.OctetStream)
     }
   }
 
-  private def getCurrentDateValue: String = {
-    dateFormat.format(System.currentTimeMillis())
-  }
+  private def getCurrentDateValue: String = Message.httpDateFormat(System.currentTimeMillis())
 
   private def updateLocationHeader(request: R, response: Response): Unit = {
     for (existingLocation <- response.location) {
@@ -74,7 +66,7 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] with Lo
             s"Response location header value $existingLocation is not a valid URI. ${e.getMessage}"
           )
         case Return(uri) if uri.getScheme == null =>
-          response.headerMap.set(
+          response.headerMap.setUnsafe(
             HttpHeaders.Location,
             RequestUtils.normalizedURIWithoutScheme(uri, request)
           )

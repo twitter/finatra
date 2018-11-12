@@ -15,7 +15,7 @@ private[json] object JacksonTypes {
     else if (scalaType.isMap)
       typeFactory.constructMapLikeType(
         scalaType.runtimeClass,
-        javaType(typeFactory, scalaType.typeArguments(0)),
+        javaType(typeFactory, scalaType.typeArguments.head),
         javaType(typeFactory, scalaType.typeArguments(1))
       )
     else if (scalaType.isCollection)
@@ -30,8 +30,7 @@ private[json] object JacksonTypes {
           .create(scalaType.runtimeClass, javaType(typeFactory, scalaType.typeArguments.head))
       )
     else
-      typeFactory.constructParametrizedType(
-        scalaType.runtimeClass,
+      typeFactory.constructParametricType(
         scalaType.runtimeClass,
         javaTypes(typeFactory, scalaType.typeArguments): _*
       )

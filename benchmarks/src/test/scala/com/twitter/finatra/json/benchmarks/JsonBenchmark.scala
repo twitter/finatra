@@ -5,7 +5,7 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import com.twitter.finatra.StdBenchAnnotations
 import com.twitter.finatra.benchmarks.domain.{TestDemographic, TestFormat}
 import com.twitter.finatra.json.FinatraObjectMapper
-import com.twitter.finatra.json.internal.serde.FinatraSerDeSimpleModule
+import com.twitter.finatra.json.internal.serde.SerDeSimpleModule
 import com.twitter.finatra.json.modules.FinatraJacksonModule
 import java.io.ByteArrayInputStream
 import org.joda.time.DateTime
@@ -47,7 +47,7 @@ class JsonBenchmark extends StdBenchAnnotations {
 
       // omit FinatraCaseClassModule
       override def defaultJacksonModules =
-        Seq(new JodaModule, DefaultScalaModule, FinatraSerDeSimpleModule)
+        Seq(new JodaModule, DefaultScalaModule, SerDeSimpleModule)
     }
     val scalaObjectMapper = mapperModule.provideScalaObjectMapper(injector = null)
     new FinatraObjectMapper(scalaObjectMapper)

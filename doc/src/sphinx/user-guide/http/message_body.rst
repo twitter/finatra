@@ -256,7 +256,7 @@ For more information on referencing files in Finatra, see the
 .. _c.t.finatra.http.marshalling.MessageBodyComponent: https://github.com/twitter/finatra/blob/develop/http/src/main/scala/com/twitter/finatra/http/marshalling/MessageBodyComponent.scala
 
 .. |@Mustache| replace:: ``@Mustache``
-.. _@Mustache: https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/response/Mustache.java
+.. _@Mustache: https://github.com/twitter/finatra/blob/develop/http/src/main/java/com.twitter.finatra.http.response.Mustache.java
 
 .. |web-dashboard| replace:: `web-dashboard`
 .. _web-dashboard: https://github.com/twitter/finatra/tree/develop/examples/web-dashboard

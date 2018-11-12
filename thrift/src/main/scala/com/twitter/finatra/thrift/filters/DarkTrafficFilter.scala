@@ -49,7 +49,8 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
     }
   }
 
-  override protected def handleFailedInvocation(t: Throwable): Unit = {
+  protected def handleFailedInvocation[Req](request: Req, t: Throwable): Unit = {
+    debug(s"Request: $request to dark traffic service failed.")
     error(t.getMessage, t)
   }
 

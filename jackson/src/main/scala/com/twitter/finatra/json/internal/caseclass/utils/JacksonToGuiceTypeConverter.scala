@@ -6,8 +6,14 @@ import java.lang.reflect.Type
 
 private[internal] object JacksonToGuiceTypeConverter {
 
-  // Inspired by net.codingwell.scalaguice.typeOf
-  // See: https://github.com/codingwell/scala-guice/blob/v3.0.2/src/main/scala/net/codingwell/package.scala#L26
+  /**
+   * Translates a [[com.fasterxml.jackson.databind.JavaType]] into a [[java.lang.reflect.Type]].
+   *
+   * Inspired by `net.codingwell.scalaguice.typeOf`
+   * @see [[https://github.com/codingwell/scala-guice/blob/v3.0.2/src/main/scala/net/codingwell/package.scala#L26]]
+   * @param javaType the [[com.fasterxml.jackson.databind.JavaType]] to translate
+   * @return the [[java.lang.reflect.Type]] that corresponds to the given [[com.fasterxml.jackson.databind.JavaType]]
+   */
   def typeOf(javaType: JavaType): Type = {
     def toWrapper(c: Type) = c match {
       case java.lang.Byte.TYPE => classOf[java.lang.Byte]
@@ -35,9 +41,9 @@ private[internal] object JacksonToGuiceTypeConverter {
       case args =>
         javaType.getRawClass match {
           case c: Class[_] if c.getEnclosingClass == null =>
-            Types.newParameterizedType(c, args.map(typeOf(_)): _*)
+            Types.newParameterizedType(c, args.map(typeOf): _*)
           case c: Class[_] =>
-            Types.newParameterizedTypeWithOwner(c.getEnclosingClass, c, args.map(typeOf(_)): _*)
+            Types.newParameterizedTypeWithOwner(c.getEnclosingClass, c, args.map(typeOf): _*)
         }
     }
   }

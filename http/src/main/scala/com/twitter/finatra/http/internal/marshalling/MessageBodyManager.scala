@@ -3,7 +3,7 @@ package com.twitter.finatra.http.internal.marshalling
 import com.google.inject.internal.MoreTypes.ParameterizedTypeImpl
 import com.twitter.finagle.http.Request
 import com.twitter.finatra.http.marshalling._
-import com.twitter.finatra.response.Mustache
+import com.twitter.finatra.http.response.Mustache
 import com.twitter.inject.Injector
 import com.twitter.inject.TypeUtils.singleTypeParam
 import com.twitter.inject.conversions.map._

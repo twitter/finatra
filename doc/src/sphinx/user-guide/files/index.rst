@@ -94,7 +94,7 @@ When you set the `-local.doc.root` flag, the MustacheModule will instead load te
 Rendering
 ^^^^^^^^^
 
-The framework will use mustache to render callback return types that are annotated with the `@Mustache <https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/response/Mustache.java>`__ annotation.
+The framework will use mustache to render callback return types that are annotated with the `@Mustache <https://github.com/twitter/finatra/blob/develop/http/src/main/java/com/twitter/finatra/http/response/Mustache.java>`__ annotation.
 
 .. code:: scala
 

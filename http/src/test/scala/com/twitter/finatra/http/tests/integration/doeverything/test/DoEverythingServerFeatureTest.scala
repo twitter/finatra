@@ -112,32 +112,6 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     val registry = json("registry").asInstanceOf[Map[String, Any]]
     registry.contains("library") should be(true)
     registry("library").asInstanceOf[Map[String, String]].contains("finatra") should be(true)
-
-    val finatra = registry("library")
-      .asInstanceOf[Map[String, Any]]("finatra")
-      .asInstanceOf[Map[String, Any]]
-    finatra.contains("http") should be(true)
-
-    val http = finatra("http").asInstanceOf[Map[String, Any]]
-    http.contains("filters") should be(true)
-    http.contains("routes") should be(true)
-
-    val routes = http("routes").asInstanceOf[Map[String, Any]]
-    routes.size should be > 0
-
-    routes.foreach { case (_, data) =>
-      data.isInstanceOf[Map[_, _]] should be(true)
-      val routeJsonInformation = data.asInstanceOf[Map[String, Any]]
-      routeJsonInformation.contains("constant") should be(true)
-      routeJsonInformation.contains("method") should be(true)
-      routeJsonInformation.contains("admin") should be(true)
-      routeJsonInformation.contains("path") should be(true)
-      if (routeJsonInformation("path").asInstanceOf[String].contains(":")) {
-        routeJsonInformation.contains("capture_names") should be(true)
-      }
-      routeJsonInformation.contains("callback") should be(true)
-      routeJsonInformation.contains("class") should be(true)
-    }
   }
 
   test("GET /admin/external/filtered") {
@@ -774,11 +748,6 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     server.httpGet("/implicitOkAndException", andExpect = BadRequest)
   }
 
-  test("slow") {
-    pending // manually run to test fix for go/jira/CSL-565
-    server.httpGet("/slow", andExpect = Ok)
-  }
-
   test("nack") {
     val ff = intercept[Throwable] {
       server.httpGet("/nack", andExpect = ServiceUnavailable)
@@ -979,17 +948,15 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
   test(
     "POST json user with missing required field when message body reader uses intermediate JsonNode"
   ) {
-    pending //IllegalArgumentException (ObjectMapper.java:2774)
     server.httpPost("/userWithMessageBodyReader", """
           {
           }
-      """, andExpect = BadRequest, withErrors = Seq("name is a required field"))
+      """, andExpect = BadRequest, withErrors = Seq("name: field is required"))
   }
 
   test(
     "POST json user with method validation error when message body reader uses intermediate JsonNode"
   ) {
-    pending //IllegalArgumentException (ObjectMapper.java:2774)
     server.httpPost(
       "/userWithMessageBodyReader",
       """

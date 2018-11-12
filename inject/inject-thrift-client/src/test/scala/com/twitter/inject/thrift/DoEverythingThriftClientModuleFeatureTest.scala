@@ -1,6 +1,5 @@
 package com.twitter.inject.thrift
 
-import com.twitter.conversions.time._
 import com.twitter.finagle.http.Request
 import com.twitter.finagle.http.Status._
 import com.twitter.finagle.ServiceClosedException
@@ -11,7 +10,7 @@ import com.twitter.inject.thrift.DoEverythingThriftClientModuleFeatureTest._
 import com.twitter.inject.thrift.integration.basic.{EchoThriftClientModule1, EchoThriftClientModule2, EchoThriftClientModule3, MyEchoService}
 import com.twitter.inject.thrift.integration.{TestHttpServer, TestThriftServer}
 import com.twitter.test.thriftscala.EchoService
-import com.twitter.util.{Await, Future}
+import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 object DoEverythingThriftClientModuleFeatureTest {
@@ -94,10 +93,6 @@ class DoEverythingThriftClientModuleFeatureTest extends FeatureTest with HttpTes
     httpServer2.close()
     httpServer3.close()
     super.afterAll()
-  }
-
-  private def await[T](f: Future[T]): T = {
-    Await.result(f, 5.seconds)
   }
 
   // test EchoService[Future]
