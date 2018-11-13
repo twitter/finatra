@@ -461,10 +461,10 @@ per_method_stats/foo/success <span class="num">0</span>
 per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class="num">43.0</span>]</pre></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd><dt>Note</dt><dd><span class="cmt"><p>It is expected that this Filter occurs &quot;BEFORE&quot; the <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> in a
-      given filter chain, e.g., <code>StatsFilter.andThen(ExceptionMappingFilter)</code>. It is expected
-      that there SHOULD be a returned response because the <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> should
-      return give a non-exception response.</p></span></dd></dl></div>
+        </dd><dt>Note</dt><dd><span class="cmt"><p>It is expected that this Filter is inserted ABOVE the <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> in a
+      given filter chain, e.g., <code>StatsFilter.andThen(ExceptionMappingFilter)</code>.
+      For the response flow, <a href="StatsFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter">StatsFilter</a> would happen AFTER <a href="ExceptionMappingFilter.html" class="extype" name="com.twitter.finatra.thrift.filters.ExceptionMappingFilter">ExceptionMappingFilter</a> and
+      calculate mapped result.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.filters.ThriftMDCFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ThriftMDCFilterextendsThriftFilter"></a><a id="ThriftMDCFilter:ThriftMDCFilter"></a>
       <span class="permalink">

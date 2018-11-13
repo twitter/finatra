@@ -551,7 +551,7 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.json.internal.caseclass.jackson.JacksonUtils#errorMessage" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.json.internal.caseclass.jackson.JacksonUtils#errorMessage" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="errorMessage(e:com.fasterxml.jackson.core.JsonProcessingException):String"></a><a id="errorMessage(JsonProcessingException):String"></a>
       <span class="permalink">
       <a href="../../../../../../../com/twitter/finatra/json/internal/caseclass/jackson/JacksonUtils$.html#errorMessage(e:com.fasterxml.jackson.core.JsonProcessingException):String" title="Permalink">
@@ -566,7 +566,9 @@
         <span class="name">errorMessage</span><span class="params">(<span name="e">e: <span class="extype" name="com.fasterxml.jackson.core.JsonProcessingException">JsonProcessingException</span></span>)</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      
+      <p class="shortcomment cmt">Converts a JsonProcessingException to a informative error message that can be returned
+to callers.</p><div class="fullcomment"><div class="comment cmt"><p>Converts a JsonProcessingException to a informative error message that can be returned
+to callers. The goal is to not leak internals of the underlying types.</p></div><dl class="paramcmts block"><dt class="param">e</dt><dd class="cmt"><p>the <span class="extype" name="JsonProcessingException">JsonProcessingException</span> to convert into a <span class="extype" name="String">String</span> message</p></dd><dt>returns</dt><dd class="cmt"><p>a useful <span class="extype" name="String">String</span> error message</p></dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#errorResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="errorResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="errorResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">

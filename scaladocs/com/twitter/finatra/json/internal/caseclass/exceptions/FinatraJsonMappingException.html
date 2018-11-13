@@ -234,7 +234,10 @@
 
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Exception for handling Finatra-specific errors that may otherwise be valid
-in the eyes of Jackson.</p></div><div class="toggleContainer block">
+in the eyes of Jackson.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>the given <span class="extype" name="msg">msg</span> generally passes all the way up the stack to the caller of
+      the method throwing this Exception, thus care should be taken to not leak any
+      internal implementation details.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -299,7 +302,7 @@ in the eyes of Jackson.</p></div><div class="toggleContainer block">
         <span class="name">FinatraJsonMappingException</span><span class="params">(<span name="msg">msg: <span class="extype" name="scala.Predef.String">String</span></span>)</span>
       </span>
       
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>gets presented to the end user, so don't leak implementation details.</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">msg</dt><dd class="cmt"><p>exception message.</p></dd></dl></div>
     </li></ol>
             </div>
 
