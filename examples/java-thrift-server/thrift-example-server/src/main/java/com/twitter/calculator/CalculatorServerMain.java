@@ -1,6 +1,6 @@
 package com.twitter.calculator;
 
-final class CalculatorServerMain {
+public final class CalculatorServerMain {
     private CalculatorServerMain() {
         // Private constructor to satisfy checkstyle error:
         // "Utility classes should not have a public or default constructor)."

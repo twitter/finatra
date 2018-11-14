@@ -1,9 +1,9 @@
 package com.twitter.finatra.thrift.tests.doeverything.exceptions
 
-import javax.inject.Singleton
 import com.twitter.doeverything.thriftscala.{Answer, DoEverythingException}
 import com.twitter.finatra.thrift.exceptions.ExceptionMapper
 import com.twitter.util.Future
+import javax.inject.Singleton
 
 @Singleton
 class BarExceptionMapper extends ExceptionMapper[BarException, String] {

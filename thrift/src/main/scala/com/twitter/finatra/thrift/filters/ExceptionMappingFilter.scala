@@ -7,8 +7,10 @@ import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
 /**
- * A filter handles exceptions.
- * Note: should be as close to the start of the filter chain as possible
+ * A [[ThriftFilter]] which handles exceptions by rescuing the exception and passing
+ * it to the [[ExceptionManager]] to handle it.
+ *
+ * @note This Filter SHOULD be as close to the start of the Filter chain as possible
  */
 @Singleton
 class ExceptionMappingFilter @Inject()(

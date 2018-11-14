@@ -391,7 +391,7 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
       val declaredMethods: Array[Method] = controller.getDeclaredMethods
       info(
         "Adding methods\n" +
-          declaredMethods.map(methodName => s"$serviceName.$methodName").mkString("\n")
+          declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
       )
 
       registerGlobalFilter(typeAgnosticFilter, thriftFilter)
