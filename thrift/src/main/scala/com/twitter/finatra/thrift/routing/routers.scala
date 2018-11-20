@@ -5,18 +5,14 @@ import com.twitter.finagle.thrift.{RichServerParam, ThriftService, ToThriftServi
 import com.twitter.finagle.{Filter, Service, Thrift, ThriftMux}
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
+import com.twitter.finatra.thrift.internal.ThriftMethodService
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Registrar}
-import com.twitter.finatra.thrift.internal.{
-  ThriftMethodService,
-  ThriftRequestUnwrapFilter,
-  ThriftRequestWrapFilter
-}
 import com.twitter.inject.TypeUtils._
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging}
 import com.twitter.scrooge.ThriftMethod
+import java.lang.reflect.{Method => JMethod}
 import java.lang.annotation.{Annotation => JavaAnnotation}
-import java.lang.reflect.Method
 import javax.inject.{Inject, Singleton}
 import org.apache.thrift.protocol.TProtocolFactory
 import scala.collection.mutable.{Map => MutableMap}
@@ -100,7 +96,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
     extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: ThriftService = NullThriftService
-  protected[this] var thriftFilter: ThriftFilter = ThriftFilter.Identity
+  protected[this] var filters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
 
   private[finatra] val methods = MutableMap[ThriftMethod, ThriftMethodService[_, _]]()
 
@@ -118,7 +114,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter[FilterType <: ThriftFilter: Manifest]: ThriftRouter = {
+  def filter[FilterType <: Filter.TypeAgnostic: Manifest]: ThriftRouter = {
     filter(injector.instance[FilterType])
   }
 
@@ -130,7 +126,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter[FilterType <: ThriftFilter: Manifest, Ann <: JavaAnnotation: Manifest]
+  def filter[FilterType <: Filter.TypeAgnostic: Manifest, Ann <: JavaAnnotation: Manifest]
     : ThriftRouter = {
     filter(injector.instance[FilterType, Ann])
   }
@@ -143,7 +139,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter(clazz: Class[_ <: ThriftFilter]): ThriftRouter = {
+  def filter(clazz: Class[_ <: Filter.TypeAgnostic]): ThriftRouter = {
     filter(injector.instance(clazz))
   }
 
@@ -155,9 +151,9 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter(filter: ThriftFilter): ThriftRouter = {
+  def filter(filter: Filter.TypeAgnostic): ThriftRouter = {
     assert(underlying == NullThriftService, "'filter' must be called before 'add'.")
-    thriftFilter = thriftFilter.andThen(filter)
+    filters = filters.andThen(filter)
     this
   }
 
@@ -187,7 +183,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
         )
       } else {
         for (m <- controller.methods) {
-          m.setFilter(thriftFilter)
+          m.setFilter(filters)
           methods += (m.method -> m)
         }
         info(
@@ -196,8 +192,8 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
             .mkString("\n")
         )
       }
-      registerMethods(controller.getClass, methods.toMap.values.toSeq)
-      registerGlobalFilter(thriftFilter)
+      registerMethods(controller.getClass, controller.methods.map(_.method))
+      registerGlobalFilter(filters)
       underlying = controller.toThriftService
     }
     this
@@ -205,12 +201,12 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
 
   private[this] def registerMethods(
     clazz: Class[_],
-    methods: Seq[ThriftMethodService[_, _]]
+    methods: Seq[ThriftMethod]
   ): Unit =
     methods.foreach(thriftMethodRegistrar.register(clazz, _))
 
-  private[this] def registerGlobalFilter(thriftFilter: ThriftFilter): Unit = {
-    if (thriftFilter ne ThriftFilter.Identity) {
+  private[this] def registerGlobalFilter(thriftFilter: Filter.TypeAgnostic): Unit = {
+    if (thriftFilter ne Filter.TypeAgnostic.Identity) {
       libraryRegistry
         .withSection("thrift")
         .put("filters", thriftFilter.toString)
@@ -225,8 +221,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
  * should use the [[com.twitter.finatra.thrift.routing.ThriftRouter]] directly.
  *
  * @note routing over Java generated code DOES NOT support per-method stats since the generated
- *       Java code does not yet support "service-per-method". As thus the [[ThriftRequest#methodName]]
- *       will always BE NULL.
+ *       Java code does not yet support "service-per-method".
  *
  * @see [[com.twitter.finatra.thrift.routing.ThriftRouter]]
  */
@@ -235,8 +230,8 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
     extends BaseThriftRouter[JavaThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: Service[Array[Byte], Array[Byte]] = NilService
-  private[this] var thriftFilter: ThriftFilter = ThriftFilter.Identity
-  private[this] var typeAgnosticFilter: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
+  private[this] var beforeFilters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
+  private[this] var filters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
 
   /* Public */
 
@@ -250,7 +245,7 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter[FilterType <: ThriftFilter: Manifest]: JavaThriftRouter = {
+  def filter[FilterType <: Filter.TypeAgnostic: Manifest]: JavaThriftRouter = {
     this.filter(injector.instance[FilterType])
   }
 
@@ -262,7 +257,7 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter[FilterType <: ThriftFilter: Manifest, Ann <: JavaAnnotation: Manifest]
+  def filter[FilterType <: Filter.TypeAgnostic: Manifest, Ann <: JavaAnnotation: Manifest]
     : JavaThriftRouter = {
     this.filter(injector.instance[FilterType, Ann])
   }
@@ -275,7 +270,7 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter(clazz: Class[_ <: ThriftFilter]): JavaThriftRouter = {
+  def filter(clazz: Class[_ <: Filter.TypeAgnostic]): JavaThriftRouter = {
     this.filter(injector.instance(clazz))
   }
 
@@ -287,9 +282,9 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter(filter: ThriftFilter): JavaThriftRouter = {
+  def filter(filter: Filter.TypeAgnostic): JavaThriftRouter = {
     assert(underlying == NilService, "'filter' must be called before 'add'.")
-    thriftFilter = thriftFilter.andThen(filter)
+    filters = filters.andThen(filter)
     this
   }
 
@@ -323,7 +318,7 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
    * }}}
    */
   def beforeFilter(filter: Filter.TypeAgnostic): JavaThriftRouter = {
-    typeAgnosticFilter = typeAgnosticFilter.andThen(filter)
+    beforeFilters = beforeFilters.andThen(filter)
     this
   }
 
@@ -369,15 +364,6 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
 
       val serviceName = deriveServiceName(serviceClazz)
 
-      // Applies the same filter chain per every method in the Service,
-      // thus "per-method" metrics are scoped to the service name
-      val filters = new Filter.TypeAgnostic {
-        def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] =
-          new ThriftRequestWrapFilter[Req, Rep](null)
-            .andThen(thriftFilter.toFilter[Req, Rep])
-            .andThen(new ThriftRequestUnwrapFilter[Req, Rep])
-      }
-
       // instantiate service
       val serviceInstance: Service[Array[Byte], Array[Byte]] =
         serviceConstructor
@@ -388,15 +374,15 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
           )
           .asInstanceOf[Service[Array[Byte], Array[Byte]]]
 
-      val declaredMethods: Array[Method] = controller.getDeclaredMethods
+      val declaredMethods: Array[JMethod] = controller.getDeclaredMethods
       info(
         "Adding methods\n" +
           declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
       )
 
-      registerGlobalFilter(typeAgnosticFilter, thriftFilter)
+      registerGlobalFilter(beforeFilters, filters)
       registerMethods(serviceName, controller, declaredMethods.toSeq)
-      underlying = typeAgnosticFilter.andThen(serviceInstance)
+      underlying = beforeFilters.andThen(serviceInstance)
     }
     this
   }
@@ -406,26 +392,26 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
   private[this] def registerMethods(
     serviceName: String,
     clazz: Class[_],
-    methods: Seq[Method]
+    methods: Seq[JMethod]
   ): Unit =
     methods.foreach(thriftMethodRegistrar.register(serviceName, clazz, _))
 
   private[this] def registerGlobalFilter(
-    typeAgnosticFilter: Filter.TypeAgnostic,
-    thriftFilter: ThriftFilter
+    beforeFilters: Filter.TypeAgnostic,
+    filters: Filter.TypeAgnostic
   ): Unit = {
-    val filterString = if (thriftFilter ne ThriftFilter.Identity) {
-      if (typeAgnosticFilter ne Filter.TypeAgnostic.Identity)
-        s"${typeAgnosticFilter.toString}.andThen(${thriftFilter.toString})"
-      else thriftFilter.toString
-    } else if (typeAgnosticFilter ne Filter.TypeAgnostic.Identity) {
-      typeAgnosticFilter.toString
+    val filterString = if (filters ne Filter.TypeAgnostic.Identity) {
+      if (beforeFilters ne Filter.TypeAgnostic.Identity)
+        s"${beforeFilters.toString}.andThen(${filters.toString})"
+      else filters.toString
+    } else if (beforeFilters ne Filter.TypeAgnostic.Identity) {
+      beforeFilters.toString
     } else ""
 
     if (filterString.nonEmpty) {
       libraryRegistry
         .withSection("thrift")
-        .put("filters", thriftFilter.toString)
+        .put("filters", filters.toString)
     }
   }
 }

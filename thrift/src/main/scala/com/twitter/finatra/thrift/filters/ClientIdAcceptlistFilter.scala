@@ -1,9 +1,8 @@
 package com.twitter.finatra.thrift.filters
 
 import com.twitter.finagle.stats.{Counter, StatsReceiver}
-import com.twitter.finagle.thrift.ClientId
-import com.twitter.finagle.Service
-import com.twitter.finatra.thrift.{ThriftFilter, ThriftRequest}
+import com.twitter.finagle.thrift.{ClientId, MethodMetadata}
+import com.twitter.finagle.{Filter, Service}
 import com.twitter.util.Future
 import javax.inject.{Inject, Singleton}
 
@@ -24,7 +23,7 @@ object ClientIdAcceptlistFilter {
 class ClientIdAcceptlistFilter @Inject()(
   acceptList: Set[ClientId],
   statsReceiver: StatsReceiver)
-  extends ThriftFilter {
+  extends Filter.TypeAgnostic {
   import com.twitter.finatra.thrift.thriftscala
   import ClientIdAcceptlistFilter._
 
@@ -35,40 +34,43 @@ class ClientIdAcceptlistFilter @Inject()(
   protected[this] val noClientIdStats: StatsReceiver = clientRequestStats.scope("no_client_id")
   protected[this] val noClientIdCounter: Counter = clientRequestStats.counter("no_client_id")
 
-  private[this] val unknownClientIdException =
+  protected val unknownClientIdException =
     Future.exception(new thriftscala.UnknownClientIdError("unknown client id"))
-  private[this] val noClientIdException =
+  protected val noClientIdException =
     Future.exception(new thriftscala.NoClientIdError("The request did not contain a Thrift client id"))
 
-  /* Public */
 
-  def apply[T, U](
-    request: ThriftRequest[T],
-    service: Service[ThriftRequest[T], U]
-  ): Future[U] = {
-    request.clientId match {
-      case None =>
-        incrementStats(noClientIdStats, noClientIdCounter, request)
-        noClientIdException
-      case Some(clientId) if acceptList.contains(clientId) =>
-        service(request)
-      case _ =>
-        incrementStats(unknownStats, unknownCounter, request)
-        unknownClientIdException
+  def toFilter[T, U]: Filter[T, U, T, U] = new Filter[T, U, T, U] {
+    def apply(
+      request: T,
+      service: Service[T, U]
+    ): Future[U] = {
+      ClientId.current match {
+        case None =>
+          incrementStats(noClientIdStats, noClientIdCounter, request)
+          noClientIdException
+        case Some(clientId) if acceptList.contains(clientId) =>
+          service(request)
+        case _ =>
+          incrementStats(unknownStats, unknownCounter, request)
+          unknownClientIdException
+      }
     }
-  }
 
-  /* Private */
+    protected[this] def incrementStats(
+      scopedStats: StatsReceiver,
+      counter: Counter,
+      request: T
+    ): Unit = {
+      counter.incr()
 
-  protected[this] def incrementStats[T](
-    scopedStats: StatsReceiver,
-    counter: Counter,
-    request: ThriftRequest[T]
-  ): Unit = {
-    counter.incr()
-
-    for (clientId <- request.clientId) {
-      scopedStats.scope(request.methodName).counter(clientId.name).incr()
+      for (clientId <- ClientId.current) {
+        val scope = MethodMetadata.current match {
+          case Some(m) => scopedStats.scope(m.methodName)
+          case None => scopedStats
+        }
+        scope.counter(clientId.name).incr()
+      }
     }
   }
 }
@@ -88,26 +90,8 @@ class JavaClientIdAcceptlistFilter @Inject()(
   extends ClientIdAcceptlistFilter(acceptList, statsReceiver) {
   import com.twitter.finatra.thrift.thriftjava
 
-  private[this] val unknownClientIdException =
+  override protected val unknownClientIdException =
     Future.exception(new thriftjava.UnknownClientIdError("unknown client id"))
-  private[this] val noClientIdException =
+  override protected val noClientIdException =
     Future.exception(new thriftjava.NoClientIdError("The request did not contain a Thrift client id"))
-
-  /* Public */
-
-  override def apply[T, Rep](
-    request: ThriftRequest[T],
-    service: Service[ThriftRequest[T], Rep]
-  ): Future[Rep] = {
-    request.clientId match {
-      case None =>
-        incrementStats(noClientIdStats, noClientIdCounter, request)
-        noClientIdException
-      case Some(clientId) if acceptList.contains(clientId) =>
-        service(request)
-      case _ =>
-        incrementStats(unknownStats, unknownCounter, request)
-        unknownClientIdException
-    }
-  }
 }

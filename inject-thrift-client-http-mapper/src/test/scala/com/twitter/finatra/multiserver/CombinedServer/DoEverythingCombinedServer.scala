@@ -1,12 +1,13 @@
 package com.twitter.finatra.multiserver.CombinedServer
 
 import com.twitter.conversions.time._
+import com.twitter.finagle.Filter
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.routing.HttpRouter
 import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.routing.ThriftRouter
-import com.twitter.finatra.thrift.{ThriftFilter, ThriftServer}
+import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.util.Duration
 
 object DoEverythingCombinedServerMain extends DoEverythingCombinedServer
@@ -35,7 +36,7 @@ class DoEverythingCombinedServer extends HttpServer with ThriftServer {
       .filter[ThriftMDCFilter]
       .filter(classOf[AccessLoggingFilter])
       .filter[StatsFilter]
-      .filter(ThriftFilter.Identity)
+      .filter(Filter.TypeAgnostic.Identity)
       .add[DoEverythingCombinedThriftController]
   }
 }

@@ -7,6 +7,19 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+* finatra-thrift: `c.t.finagle.Filter.TypeAgnostic` filters are now the standard type of filter
+  that can be added by configuring a `ThriftRouter`. `c.t.finatra.thrift.ThriftFilter` has been
+  deprecated. ``PHAB_ID=D238666``
+
+* finatra-thrift: `c.t.finatra.thrift.ThriftRequest` has been deprecated. All of the information
+  contained in a ThriftRequest can be found in other ways:
+    `methodName` -> `Method.current.get.name`
+    `traceId`    -> `Trace.id`
+    `clientId`   -> `ClientId.current`
+  ``PHAB_ID=D238666``
+
 18.11.0
 -------
 
@@ -16,10 +29,10 @@ Added
 Changed
 ~~~~~~~
 
-* finatra-thrift: Fixes and improvements for better Java support. ExceptionMappingFilter now 
-  works properly with generated Java controllers, added an exception mapper for the exceptions 
-  defined in `finatra_thrift_exceptions.thrift` which works on the geneated Java code for these 
-  exceptions. Better Java API separation to make usage less error prone and confusing. 
+* finatra-thrift: Fixes and improvements for better Java support. ExceptionMappingFilter now
+  works properly with generated Java controllers, added an exception mapper for the exceptions
+  defined in `finatra_thrift_exceptions.thrift` which works on the geneated Java code for these
+  exceptions. Better Java API separation to make usage less error prone and confusing.
   ``PHAB_ID=D237483``
 
 * finatra-thrift: (BREAKING API CHANGE) Update `DarkTrafficFilter#handleFailedInvocation` to accept

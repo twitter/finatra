@@ -74,8 +74,7 @@ public class DoEverythingJavaThriftServerFeatureTest extends Assert {
         JsonNode json = objectMapper.readValue(response.getContentString(), JsonNode.class);
         JsonNode thriftNode = json.path("registry").path("library").path("finatra").path("thrift");
         JsonNode filters = thriftNode.get("filters");
-        assertEquals(
-            "com.twitter.finatra.thrift.filters.LoggingMDCFilter"
+        assertEquals("com.twitter.finatra.thrift.filters.LoggingMDCFilter"
                 + ".andThen(com.twitter.finatra.thrift.filters.TraceIdMDCFilter)"
                 + ".andThen(com.twitter.finatra.thrift.filters.ThriftMDCFilter)"
                 + ".andThen(com.twitter.finatra.thrift.filters.AccessLoggingFilter)"

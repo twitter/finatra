@@ -1,31 +1,31 @@
 package com.twitter.finatra.thrift.internal.routing
 
-import com.twitter.finatra.thrift.internal.ThriftMethodService
 import com.twitter.inject.internal.LibraryRegistry
+import com.twitter.scrooge.ThriftMethod
 import java.lang.reflect.Method
 
 /** Performs registration of Thrift domain entities in a LibraryRegistry */
 private[thrift] class Registrar(registry: LibraryRegistry) {
 
-  def register(clazz: Class[_], thriftMethodService: ThriftMethodService[_, _]): Unit = {
+  def register(clazz: Class[_], method: ThriftMethod): Unit = {
     registry.put(
-      Seq(thriftMethodService.method.name, "service_name"),
-      thriftMethodService.method.serviceName
+      Seq(method.name, "service_name"),
+      method.serviceName
     )
-    registry.put(Seq(thriftMethodService.method.name, "class"), clazz.getName)
+    registry.put(Seq(method.name, "class"), clazz.getName)
     registry.put(
-      Seq(thriftMethodService.method.name, "args_codec"),
-      thriftMethodService.method.argsCodec.getClass.getName
+      Seq(method.name, "args_codec"),
+      method.argsCodec.getClass.getName
     )
     registry.put(
-      Seq(thriftMethodService.method.name, "response_codec"),
-      thriftMethodService.method.responseCodec.getClass.getName
+      Seq(method.name, "response_codec"),
+      method.responseCodec.getClass.getName
     )
 
-    if (thriftMethodService.method.annotations.nonEmpty) {
+    if (method.annotations.nonEmpty) {
       registry.put(
-        Seq(thriftMethodService.method.name, "annotations"),
-        thriftMethodService.method.annotations.map { case (k, v) => s"$k = $v" }.mkString(",")
+        Seq(method.name, "annotations"),
+        method.annotations.map { case (k, v) => s"$k = $v" }.mkString(",")
       )
     }
   }

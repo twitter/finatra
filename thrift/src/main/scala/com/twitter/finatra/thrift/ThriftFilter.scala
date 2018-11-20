@@ -1,51 +1,38 @@
 package com.twitter.finatra.thrift
 
-import com.twitter.finagle.{Filter, Service}
+import com.twitter.finagle.thrift.{ClientId, MethodMetadata}
+import com.twitter.finagle.tracing.Trace
+import com.twitter.finagle.{Filter, Service, SimpleFilter}
 import com.twitter.util.Future
 
+@deprecated("Use Filter.TypeAgnostic", "2018-11-20")
 object ThriftFilter {
   val Identity = new ThriftFilter {
-    def apply[T, Rep](request: ThriftRequest[T], svc: Service[ThriftRequest[T], Rep]) = svc(request)
-    override def andThen(next: ThriftFilter): ThriftFilter = next
-    override def toString: String = s"${ThriftFilter.getClass.getName}Identity"
+    override def toString: String = "ThriftFilter.Identity"
+    override def apply[T, U](
+      request: ThriftRequest[T],
+      service: Service[ThriftRequest[T], U]
+    ): Future[U] = service(request)
   }
 }
 
 /** AbstractThriftFilter for Java usage. */
+@deprecated("Use Filter.TypeAgnostic", "2018-11-20")
 abstract class AbstractThriftFilter extends ThriftFilter
 
-/**
- * A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T.  Such filters
- * can operate on any ThriftRequest.
- *
- * Java classes can extend ThriftFilter using AbstractThriftFilter. See above.
- *
- * TODO: Deprecate in favor of [[Filter.TypeAgnostic]]
- */
-trait ThriftFilter { self =>
-
-  def apply[T, Rep](request: ThriftRequest[T], svc: Service[ThriftRequest[T], Rep]): Future[Rep]
-
-  final def toFilter[T, Rep]: Filter[ThriftRequest[T], Rep, ThriftRequest[T], Rep] =
-    new Filter[ThriftRequest[T], Rep, ThriftRequest[T], Rep] {
-      override def apply(
-        request: ThriftRequest[T],
-        svc: Service[ThriftRequest[T], Rep]
-      ): Future[Rep] = self.apply(request, svc)
-    }
-
-  def andThen(next: ThriftFilter): ThriftFilter =
-    if (next eq ThriftFilter.Identity) {
-      this
-    } else {
-      new ThriftFilter {
-        override def apply[T, Rep](
-          request: ThriftRequest[T],
-          svc: Service[ThriftRequest[T], Rep]
-        ): Future[Rep] = self.apply(request, next.toFilter[T, Rep].andThen(svc))
-        override def toString: String = s"${self.toString}.andThen($next)"
+@deprecated("Use Filter.TypeAgnostic", "2018-11-20")
+trait ThriftFilter extends Filter.TypeAgnostic { legacy =>
+  def apply[T, U](request: ThriftRequest[T], service: Service[ThriftRequest[T], U]): Future[U]
+  override def toFilter[T, U]: Filter[T, U, T, U] = new SimpleFilter[T, U] {
+    override def apply(request: T, service: Service[T, U]): Future[U] = {
+      val methodName = MethodMetadata.current match {
+        case Some(mm) => mm.methodName
+        case None => null
       }
+      legacy.apply(
+        ThriftRequest(methodName, Trace.id, ClientId.current, request),
+        Service.mk { request: ThriftRequest[T] => service(request.args) }
+      )
     }
-
-  override def toString: String = getClass.getName
+  }
 }
