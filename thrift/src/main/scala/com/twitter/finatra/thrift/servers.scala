@@ -10,10 +10,12 @@ import com.twitter.finatra.thrift.modules.{ExceptionManagerModule, ThriftRespons
 import com.twitter.finatra.thrift.response.ThriftResponseClassifier
 import com.twitter.finatra.thrift.routing.{JavaThriftRouter, ThriftRouter}
 import com.twitter.inject.annotations.Lifecycle
+import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.server.{PortUtils, TwitterServer}
 import com.twitter.util.{Await, Duration}
 
 private object ThriftServerTrait {
+
   /**
    * Sentinel used to indicate no announcement.
    */
@@ -56,8 +58,11 @@ trait ThriftServerTrait extends TwitterServer {
   /** Server Announcement */
   protected def defaultThriftAnnouncement: String = ThriftServerTrait.NoThriftAnnouncement
   private val thriftAnnounceFlag: Flag[String] =
-    flag[String]("thrift.announce", defaultThriftAnnouncement,
-      "Address for announcing Thrift server. Empty string indicates no announcement.")
+    flag[String](
+      "thrift.announce",
+      defaultThriftAnnouncement,
+      "Address for announcing Thrift server. Empty string indicates no announcement."
+    )
 
   /* Private Mutable State */
 
@@ -80,7 +85,8 @@ trait ThriftServerTrait extends TwitterServer {
         ThriftMux.server
           .withLabel(thriftServerNameFlag())
           .withStatsReceiver(injector.instance[StatsReceiver].scope("srv"))
-          .withResponseClassifier(injector.instance[ThriftResponseClassifier]))
+          .withResponseClassifier(injector.instance[ThriftResponseClassifier])
+      )
     )
 
     onExit {
@@ -143,9 +149,9 @@ trait ThriftServerTrait extends TwitterServer {
 trait ThriftServer extends ThriftServerTrait {
 
   /** This Server does not return a `Service[Array[Byte], Array[Byte]]` */
-  final protected val service: Service[Array[Byte], Array[Byte]] = NilService
+  protected final def service: Service[Array[Byte], Array[Byte]] = NilService
 
-  override final protected def build(addr: String, server: ThriftMux.Server): ListeningServer = {
+  override protected final def build(addr: String, server: ThriftMux.Server): ListeningServer = {
     val router = injector.instance[ThriftRouter]
     server.serveIface(addr, router.thriftService)
   }
@@ -166,14 +172,35 @@ trait ThriftServer extends ThriftServerTrait {
 
 /** AbstractThriftServer for usage from Java or with generated Java code */
 abstract class AbstractThriftServer extends ThriftServerTrait {
-  final protected def service: Service[Array[Byte], Array[Byte]] = {
+  protected final def service: Service[Array[Byte], Array[Byte]] = {
     val router = injector.instance[JavaThriftRouter]
-    router.service
+    registerService(
+      configureService(router.service))
   }
 
   /* Abstract */
 
   protected def configureThrift(router: JavaThriftRouter): Unit
+
+  /* Protected */
+
+  /**
+   * Override to provide further configuration to the `Service[Array[Byte], Array[Byte]]` served.
+   * For example, to add "global" filters over the resultant `Service[Array[Byte], Array[Byte]]`.
+   *
+   * E.g.
+   *
+   * {{{
+   *   override protected def configureService(
+   *     service: Service[Array[Byte], Array[Byte]]
+   *   ): Service[Array[Byte], Array[Byte]] = {
+   *      injector.instance[MyGreatServiceFilter].andThen(service)
+   *   }
+   * }}}
+   */
+  protected def configureService(
+    service: Service[Array[Byte], Array[Byte]]
+  ): Service[Array[Byte], Array[Byte]] = service
 
   /* Lifecycle */
 
@@ -182,5 +209,18 @@ abstract class AbstractThriftServer extends ThriftServerTrait {
     super.postInjectorStartup()
 
     configureThrift(injector.instance[JavaThriftRouter])
+  }
+
+  /* Private */
+
+  /** The service may be filtered and thus we want to fully capture in the registry the resultant service */
+  private[this] def registerService[Req, Rep](
+    service: Service[Req, Rep]
+  ): Service[Req, Rep] = {
+    injector
+      .instance[LibraryRegistry]
+      .withSection("thrift")
+      .put("service", service.toString)
+    service
   }
 }

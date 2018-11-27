@@ -7,6 +7,7 @@ import com.google.inject.Module;
 
 import com.twitter.app.Flaggable;
 import com.twitter.finagle.Filter;
+import com.twitter.finagle.Service;
 import com.twitter.finagle.ThriftMux;
 import com.twitter.finagle.tracing.NullTracer$;
 import com.twitter.finatra.annotations.DarkTrafficFilterType;
@@ -61,6 +62,13 @@ public class DoEverythingJavaThriftServer extends AbstractThriftServer {
     }
 
     @Override
+    public Service<byte[], byte[]> configureService(Service<byte[], byte[]> service) {
+        return injector()
+            .instance(Filter.TypeAgnostic.class, DarkTrafficFilterType.class)
+            .andThen(service);
+    }
+
+    @Override
     public void warmup() {
         handle(DoEverythingJavaThriftWarmupHandler.class);
     }
@@ -75,7 +83,6 @@ public class DoEverythingJavaThriftServer extends AbstractThriftServer {
             .filter(StatsFilter.class)
             .filter(ExceptionMappingFilter.class)
             .filter(JavaClientIdAcceptlistFilter.class)
-            .beforeFilter(Filter.TypeAgnostic.class, DarkTrafficFilterType.class)
             .exceptionMapper(FinatraJavaThriftExceptionMapper.class)
             .exceptionMapper(DoEverythingJavaExceptionMapper.class)
             .exceptionMapper(FooExceptionMapper.class)

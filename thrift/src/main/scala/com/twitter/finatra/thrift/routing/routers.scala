@@ -78,6 +78,14 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
     f
     done = true
   }
+
+  protected[this] def registerGlobalFilter(thriftFilter: Filter.TypeAgnostic): Unit = {
+    if (thriftFilter ne Filter.TypeAgnostic.Identity) {
+      libraryRegistry
+        .withSection("thrift")
+        .put("filters", thriftFilter.toString)
+    }
+  }
 }
 
 private object ThriftRouter {
@@ -224,13 +232,13 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
  *       Java code does not yet support "service-per-method".
  *
  * @see [[com.twitter.finatra.thrift.routing.ThriftRouter]]
+ * @see [[com.twitter.finatra.thrift.routing.BaseThriftRouter]]
  */
 @Singleton
 class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionManager)
     extends BaseThriftRouter[JavaThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: Service[Array[Byte], Array[Byte]] = NilService
-  private[this] var beforeFilters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
   private[this] var filters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
 
   /* Public */
@@ -285,40 +293,6 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
   def filter(filter: Filter.TypeAgnostic): JavaThriftRouter = {
     assert(underlying == NilService, "'filter' must be called before 'add'.")
     filters = filters.andThen(filter)
-    this
-  }
-
-  /**
-   * Add a global filter of type [[Filter.TypeAgnostic]] over the resultant `Service[Array[Byte], Array[Byte]`.
-   * This filter is added "before" the service such that it is hit first for requests and last
-   * for responses.
-   *
-   * That is,
-   *
-   * {{{
-   *  Request --> Filter --> Request --> Service --> Response --> Filter --> Response
-   * }}}
-   */
-  def beforeFilter(
-    filter: Class[_ <: Filter.TypeAgnostic],
-    annotation: Class[_ <: JavaAnnotation]
-  ): JavaThriftRouter = {
-    this.beforeFilter(injector.instance(filter, annotation))
-  }
-
-  /**
-   * Add a global filter of type [[Filter.TypeAgnostic]] over the resultant `Service[Array[Byte], Array[Byte]`.
-   * This filter is added "before" the service such that it is hit first for requests and last
-   * for responses.
-   *
-   * That is,
-   *
-   * {{{
-   *  Request --> Filter --> Request --> Service --> Response --> Filter --> Response
-   * }}}
-   */
-  def beforeFilter(filter: Filter.TypeAgnostic): JavaThriftRouter = {
-    beforeFilters = beforeFilters.andThen(filter)
     this
   }
 
@@ -380,9 +354,9 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
           declaredMethods.map(method => s"$serviceName.${method.getName}").mkString("\n")
       )
 
-      registerGlobalFilter(beforeFilters, filters)
+      registerGlobalFilter(filters)
       registerMethods(serviceName, controller, declaredMethods.toSeq)
-      underlying = beforeFilters.andThen(serviceInstance)
+      underlying = serviceInstance
     }
     this
   }
@@ -395,23 +369,4 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
     methods: Seq[JMethod]
   ): Unit =
     methods.foreach(thriftMethodRegistrar.register(serviceName, clazz, _))
-
-  private[this] def registerGlobalFilter(
-    beforeFilters: Filter.TypeAgnostic,
-    filters: Filter.TypeAgnostic
-  ): Unit = {
-    val filterString = if (filters ne Filter.TypeAgnostic.Identity) {
-      if (beforeFilters ne Filter.TypeAgnostic.Identity)
-        s"${beforeFilters.toString}.andThen(${filters.toString})"
-      else filters.toString
-    } else if (beforeFilters ne Filter.TypeAgnostic.Identity) {
-      beforeFilters.toString
-    } else ""
-
-    if (filterString.nonEmpty) {
-      libraryRegistry
-        .withSection("thrift")
-        .put("filters", filters.toString)
-    }
-  }
 }

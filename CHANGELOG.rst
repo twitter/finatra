@@ -7,8 +7,17 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
 Changed
 ~~~~~~~
+
+* finatra-thrift: Remove `c.t.finatra.thrift.routing.JavaThriftRouter#beforeFilter`. This method
+  adds too much confusion to the Router API and users are encouraged to instead apply their
+  TypeAgnostic Filters directly to the resultant `Service[-R, +R]`  by overriding the
+  `c.t.finatra.thrift.AbstractThriftServer#configureService` method instead. ``PHAB_ID=D245424``
+
 * finatra-thrift: `c.t.finagle.Filter.TypeAgnostic` filters are now the standard type of filter
   that can be added by configuring a `ThriftRouter`. `c.t.finatra.thrift.ThriftFilter` has been
   deprecated. ``PHAB_ID=D238666``
@@ -19,6 +28,12 @@ Changed
     `traceId`    -> `Trace.id`
     `clientId`   -> `ClientId.current`
   ``PHAB_ID=D238666``
+
+Fixed
+~~~~~
+
+Closed
+~~~~~~
 
 18.11.0
 -------
