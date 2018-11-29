@@ -66,7 +66,7 @@ class HttpResponseFilter[R <: Request] extends SimpleFilter[R, Response] with Lo
             s"Response location header value $existingLocation is not a valid URI. ${e.getMessage}"
           )
         case Return(uri) if uri.getScheme == null =>
-          response.headerMap.setUnsafe(
+          response.headerMap.set(
             HttpHeaders.Location,
             RequestUtils.normalizedURIWithoutScheme(uri, request)
           )
