@@ -2,7 +2,6 @@ package com.twitter.finatra.thrift.exceptions
 
 import com.twitter.finagle.TimeoutException
 import com.twitter.inject.Logging
-import com.twitter.scrooge.ThriftException
 import com.twitter.util.Future
 import javax.inject.Singleton
 import scala.util.control.NonFatal
@@ -97,13 +96,13 @@ import scala.util.control.NonFatal
  * @see [[https://twitter.github.io/finagle/guide/Protocols.html#using-finagle-thrift Using Finagle Thrift]]
  */
 @Singleton
-class FinatraThriftExceptionMapper
-    extends ExceptionMapper[Exception, ThriftException]
+final class FinatraThriftExceptionMapper
+    extends ExceptionMapper[Exception, Nothing]
     with Logging {
 
   import com.twitter.finatra.thrift.thriftscala
 
-  def handleException(throwable: Exception): Future[ThriftException] = {
+  def handleException(throwable: Exception): Future[Nothing] = {
     throwable match {
       case e: TimeoutException =>
         Future.exception(
@@ -218,13 +217,13 @@ class FinatraThriftExceptionMapper
  * @see [[https://twitter.github.io/finagle/guide/Protocols.html#using-finagle-thrift Using Finagle Thrift]]
  */
 @Singleton
-class FinatraJavaThriftExceptionMapper
-    extends ExceptionMapper[Exception, ThriftException]
+final class FinatraJavaThriftExceptionMapper
+    extends ExceptionMapper[Exception, Nothing]
     with Logging {
 
   import com.twitter.finatra.thrift.thriftjava
 
-  def handleException(throwable: Exception): Future[ThriftException] = {
+  def handleException(throwable: Exception): Future[Nothing] = {
     throwable match {
       case e: TimeoutException =>
         Future.exception(new thriftjava.ClientError(

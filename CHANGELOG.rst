@@ -13,6 +13,11 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: `c.t.finatra.thrift.exceptions.FinatraThriftExceptionMapper` and
+  `c.t.finatra.thrift.exceptions.FinatraJavaThriftExceptionMapper` now extend
+  `ExceptionManager[Throwable, Nothing]` since the return type was never used. They are
+  now also final. ``PHAB_ID=D249011``
+
 * finatra-thrift: Remove `c.t.finatra.thrift.routing.JavaThriftRouter#beforeFilter`. This method
   adds too much confusion to the Router API and users are encouraged to instead apply their
   TypeAgnostic Filters directly to the resultant `Service[-R, +R]`  by overriding the
