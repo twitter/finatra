@@ -12,7 +12,8 @@ import com.twitter.util.Future
 
 class DoEverythingThriftServerReqRepTest extends ReqRepServicePerEndpointTest {
   private val server = new EmbeddedThriftServer(
-    twitterServer = new DoEverythingThriftTwitterServer(TestClientRequestHeaderKey)
+    twitterServer = new DoEverythingThriftTwitterServer(TestClientRequestHeaderKey),
+    disableTestLogging = true
   )
 
   private val muxCtxtsFilter = muxContextsFilter

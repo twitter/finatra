@@ -9,7 +9,9 @@ import com.twitter.util.{Await, Future}
 
 class InheritanceServerFeatureTest extends FeatureTest {
 
-  protected val server = new EmbeddedThriftServer(new InheritanceServer)
+  protected val server = new EmbeddedThriftServer(
+    new InheritanceServer,
+    disableTestLogging = true)
 
   val client123 = server.thriftClient[ServiceB[Future]](clientId = "client123")
 

@@ -8,7 +8,10 @@ import com.twitter.inject.server.FeatureTest
 class DoEverythingThriftServerStartupTest extends FeatureTest {
 
   override val server =
-    new EmbeddedThriftServer(twitterServer = new DoEverythingThriftServer, stage = Stage.PRODUCTION)
+    new EmbeddedThriftServer(
+      twitterServer = new DoEverythingThriftServer,
+      disableTestLogging = true,
+      stage = Stage.PRODUCTION)
 
   test("Server start healthy") {
     server.assertHealthy()

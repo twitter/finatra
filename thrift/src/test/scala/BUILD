@@ -1,7 +1,59 @@
-junit_tests(
-    sources = rglobs("com/twitter/finatra/thrift/tests/*.scala"),
+scala_library(
+    name = "doeverything-exceptions",
+    sources = globs(
+        "com/twitter/finatra/thrift/tests/doeverything/exceptions/*.scala",
+    ),
     compiler_option_sets = {"fatal_warnings"},
     dependencies = [
+        "finagle/finagle-core/src/main/scala",
+        "finatra/thrift/src/main/scala",
+        "finatra/thrift/src/test/thrift:doeverything-thrift-scala",
+    ],
+)
+
+scala_library(
+    name = "test-deps",
+    sources = globs("com/twitter/finatra/thrift/*.scala"),
+    compiler_option_sets = {"fatal_warnings"},
+    provides = scala_artifact(
+        org = "com.twitter",
+        name = "finatra-thrift-tests",
+        repo = artifactory,
+    ),
+    dependencies = [
+        "3rdparty/jvm/com/google/inject:guice",
+        "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
+        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
+        "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
+        "3rdparty/jvm/net/codingwell:scala-guice",
+        "3rdparty/jvm/org/scalatest",
+        "finagle/finagle-core/src/main/scala",
+        "finagle/finagle-thriftmux/src/main/scala",
+        "finatra/inject/inject-server/src/main/scala",
+        "finatra/inject/inject-server/src/test/scala:test-deps",
+        "twitter-server/server/src/main/scala",
+        "util/util-stats/src/main/scala",
+    ],
+    exports = [
+        "3rdparty/jvm/net/codingwell:scala-guice",
+    ],
+)
+
+junit_tests(
+    sources = globs(
+        "com/twitter/finatra/thrift/tests/*.scala",
+        "com/twitter/finatra/thrift/tests/doeverything/*.scala",
+        "com/twitter/finatra/thrift/tests/doeverything/controllers/*.scala",
+        "com/twitter/finatra/thrift/tests/doeverything/modules/*.scala",
+        "com/twitter/finatra/thrift/tests/exceptions/*.scala",
+        "com/twitter/finatra/thrift/tests/inheritance/*.scala",
+        "com/twitter/finatra/thrift/tests/inheritance/controllers/*.scala",
+        "com/twitter/finatra/thrift/tests/noninjection/*.scala",
+        "com/twitter/finatra/thrift/tests/*.scala",
+    ),
+    compiler_option_sets = {"fatal_warnings"},
+    dependencies = [
+        ":doeverything-exceptions",
         ":test-deps",
         "3rdparty/jvm/com/google/inject:guice",
         "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
@@ -39,33 +91,5 @@ junit_tests(
         "util/util-logging/src/main/scala",
         "util/util-slf4j-api/src/main/scala",
         "util/util-stats/src/main/scala",
-    ],
-)
-
-scala_library(
-    name = "test-deps",
-    sources = globs("com/twitter/finatra/thrift/*.scala"),
-    compiler_option_sets = {"fatal_warnings"},
-    provides = scala_artifact(
-        org = "com.twitter",
-        name = "finatra-thrift-tests",
-        repo = artifactory,
-    ),
-    dependencies = [
-        "3rdparty/jvm/com/google/inject:guice",
-        "3rdparty/jvm/com/google/inject/extensions:guice-assistedinject",
-        "3rdparty/jvm/com/google/inject/extensions:guice-multibindings",
-        "3rdparty/jvm/com/google/inject/extensions:guice-testlib",
-        "3rdparty/jvm/net/codingwell:scala-guice",
-        "3rdparty/jvm/org/scalatest",
-        "finagle/finagle-core/src/main/scala",
-        "finagle/finagle-thriftmux/src/main/scala",
-        "finatra/inject/inject-server/src/main/scala",
-        "finatra/inject/inject-server/src/test/scala:test-deps",
-        "twitter-server/server/src/main/scala",
-        "util/util-stats/src/main/scala",
-    ],
-    exports = [
-        "3rdparty/jvm/net/codingwell:scala-guice",
     ],
 )

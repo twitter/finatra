@@ -158,6 +158,16 @@ trait TwitterServer
     injector.instance[T].handle()
   }
 
+  /**
+   * Utility to run a [[com.twitter.inject.utils.Handler]]. This is generally used for running
+   * a warmup handler in [[TwitterServer.warmup]].
+   *
+   * @see [[com.twitter.inject.utils.Handler]]
+   */
+  protected def handle(clazz: Class[_ <: Handler]): Unit = {
+    injector.instance(clazz).handle()
+  }
+
   /* Overrides */
 
   override final def main(): Unit = {

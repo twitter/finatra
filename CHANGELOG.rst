@@ -7,6 +7,44 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+18.12.0
+-------
+
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+* finatra-thrift: `c.t.finatra.thrift.exceptions.FinatraThriftExceptionMapper` and
+  `c.t.finatra.thrift.exceptions.FinatraJavaThriftExceptionMapper` now extend
+  `ExceptionManager[Throwable, Nothing]` since the return type was never used. They are
+  now also final. ``PHAB_ID=D249011``
+
+* finatra-thrift: Remove `c.t.finatra.thrift.routing.JavaThriftRouter#beforeFilter`. This method
+  adds too much confusion to the Router API and users are encouraged to instead apply their
+  TypeAgnostic Filters directly to the resultant `Service[-R, +R]`  by overriding the
+  `c.t.finatra.thrift.AbstractThriftServer#configureService` method instead. ``PHAB_ID=D245424``
+
+* finatra-thrift: `c.t.finagle.Filter.TypeAgnostic` filters are now the standard type of filter
+  that can be added by configuring a `ThriftRouter`. `c.t.finatra.thrift.ThriftFilter` has been
+  deprecated. ``PHAB_ID=D238666``
+
+* finatra-thrift: `c.t.finatra.thrift.ThriftRequest` has been deprecated. All of the information
+  contained in a ThriftRequest can be found in other ways:
+    `methodName` -> `Method.current.get.name`
+    `traceId`    -> `Trace.id`
+    `clientId`   -> `ClientId.current`
+  ``PHAB_ID=D238666``
+
+Fixed
+~~~~~
+
+* finatra-http: Validate headers to prevent header injection vulnerability. ``PHAB_ID=D246889`` 
+
+Closed
+~~~~~~
+
 18.11.0
 -------
 
@@ -15,6 +53,12 @@ Added
 
 Changed
 ~~~~~~~
+
+* finatra-thrift: Fixes and improvements for better Java support. ExceptionMappingFilter now
+  works properly with generated Java controllers, added an exception mapper for the exceptions
+  defined in `finatra_thrift_exceptions.thrift` which works on the geneated Java code for these
+  exceptions. Better Java API separation to make usage less error prone and confusing.
+  ``PHAB_ID=D237483``
 
 * finatra-thrift: (BREAKING API CHANGE) Update `DarkTrafficFilter#handleFailedInvocation` to accept
   the request type for more fidelity in handling the failure. ``PHAB_ID=D237484``

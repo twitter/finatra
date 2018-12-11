@@ -1,7 +1,7 @@
 package com.twitter.finatra.thrift.internal.exceptions
 
-import com.google.inject.Singleton
 import com.twitter.util.Future
+import javax.inject.Singleton
 import scala.util.control.NonFatal
 
 /**
@@ -13,9 +13,9 @@ import scala.util.control.NonFatal
  */
 @Singleton
 private[thrift] class ThrowableExceptionMapper
-    extends AbstractFrameworkExceptionMapper[Throwable, Throwable] {
+    extends AbstractFrameworkExceptionMapper[Throwable, Nothing] {
 
-  def handle(throwable: Throwable): Future[Throwable] = throwable match {
+  def handle(throwable: Throwable): Future[Nothing] = throwable match {
     case NonFatal(e) => Future.exception(e)
   }
 }

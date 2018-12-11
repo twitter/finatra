@@ -166,6 +166,13 @@ class DoEverythingServerFeatureTest extends FeatureTest with Mockito {
     )
   }
 
+  test("/forbiddenByFilter (nested prefixed outer)") {
+    server.httpGet(
+      "/1.1/forbiddenByFilterPrefilter-nested",
+      andExpect = Forbidden
+    )
+  }
+
   test("/appendMultiplePrefixed (prefixed)") {
     server.httpGet(
       "/1.1/appendMultiplePrefixed",

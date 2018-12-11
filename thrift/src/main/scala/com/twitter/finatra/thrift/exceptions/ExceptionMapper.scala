@@ -5,7 +5,7 @@ import com.twitter.util.Future
 /**
  * An ExceptionMapper converts a `T`-typed throwable to a Future[Rep].
  */
-trait ExceptionMapper[T <: Throwable, Rep] {
+abstract class ExceptionMapper[T <: Throwable, Rep] {
 
   /**
    * Handles an exception of type [[T]] and maps it to a new Future

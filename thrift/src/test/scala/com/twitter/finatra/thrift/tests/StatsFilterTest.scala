@@ -1,11 +1,11 @@
 package com.twitter.finatra.thrift.tests
 
 import com.twitter.conversions.time._
+import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finagle.Service
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}
+import com.twitter.finagle.thrift.MethodMetadata
 import com.twitter.finagle.stats.InMemoryStatsReceiver
-import com.twitter.finagle.tracing.Trace
-import com.twitter.finatra.thrift.ThriftRequest
 import com.twitter.finatra.thrift.filters.StatsFilter
 import com.twitter.finatra.thrift.response.ThriftResponseClassifier
 import com.twitter.inject.Test
@@ -20,53 +20,55 @@ class StatsFilterTest extends Test {
     super.afterEach()
   }
 
+  def newFilter(responseClassifier: ThriftResponseClassifier) = {
+    new StatsFilter(statsReceiver, responseClassifier)
+  }
+
   test("successful request") {
-    val statsFilter = new StatsFilter(
-      statsReceiver,
+    val statsFilter = newFilter(
       ThriftResponseClassifier.ThriftExceptionsAsFailures
     )
 
-    val request = ThriftRequest("foo", Trace.nextId, None, "Hello, world!")
-    val service = Service.mk[ThriftRequest[String], String] { _ =>
+    val request = "Hello, world!"
+    val service = statsFilter.andThen(Service.mk[String, String] { _ =>
       Future.value("Hello, world!")
-    }
+    })
 
     withService(service) {
-      Await.ready(statsFilter.apply(request, service), 2.seconds)
+      Await.ready(service(request), 2.seconds)
       // top-level exceptions
       statsReceiver.counters(List("exceptions")) should equal(0)
       // per method failures
-      statsReceiver.counters(List("per_method_stats", "foo", "failures")) should equal(0)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(0)
       // per method success
-      statsReceiver.counters(List("per_method_stats", "foo", "success")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(1)
       // per method latency_ms
-      statsReceiver.stats.get(List("per_method_stats", "foo", "latency_ms")) should not be None
+      statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
     }
   }
 
   test("failed request") {
-    val statsFilter = new StatsFilter(
-      statsReceiver,
+    val statsFilter = newFilter(
       ThriftResponseClassifier.ThriftExceptionsAsFailures
     )
 
-    val request = ThriftRequest("foo", Trace.nextId, None, "Hello, world!")
-    val service = Service.mk[ThriftRequest[String], String] { _ =>
+    val request = "Hello, world!"
+    val service = statsFilter.andThen(Service.mk[String, String] { _ =>
       Future.exception(new Exception("oops"))
-    }
+    })
 
     withService(service) {
-      Await.ready(statsFilter.apply(request, service), 2.seconds)
+      Await.ready(service(request), 2.seconds)
       // top-level exceptions
       statsReceiver.counters(List("exceptions")) should equal(1)
       statsReceiver.counters(List("exceptions", "java.lang.Exception")) should equal(1)
       // per method failures
-      statsReceiver.counters(List("per_method_stats", "foo", "failures")) should equal(1)
-      statsReceiver.counters(List("per_method_stats", "foo", "failures", "java.lang.Exception")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures", "java.lang.Exception")) should equal(1)
       // per method success
-      statsReceiver.counters(List("per_method_stats", "foo", "success")) should equal(0)
+      statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(0)
       // per method latency_ms
-      statsReceiver.stats.get(List("per_method_stats", "foo", "latency_ms")) should not be None
+      statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
     }
   }
 
@@ -78,28 +80,27 @@ class StatsFilterTest extends Test {
       }
     )
 
-    val statsFilter = new StatsFilter(
-      statsReceiver,
+    val statsFilter = newFilter(
       thriftResponseClassifier
     )
 
-    val request = ThriftRequest("foo", Trace.nextId, None, "Hello, world!")
-    val service = Service.mk[ThriftRequest[String], String] { _ =>
+    val request = "Hello, world!"
+    val service = statsFilter.andThen(Service.mk[String, String] { _ =>
       Future.exception(new IllegalArgumentException("oops"))
-    }
+    })
 
     withService(service) {
-      Await.ready(statsFilter.apply(request, service), 2.seconds)
+      Await.ready(service(request), 2.seconds)
       // top-level exceptions
       statsReceiver.counters(List("exceptions")) should equal(1)
       statsReceiver.counters(List("exceptions", "java.lang.IllegalArgumentException")) should equal(1)
       // per method failures
-      statsReceiver.counters(List("per_method_stats", "foo", "failures")) should equal(0)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(0)
       // per method success
-      statsReceiver.counters(List("per_method_stats", "foo", "success")) should equal(1)
-      statsReceiver.counters(List("per_method_stats", "foo", "success", "java.lang.IllegalArgumentException")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "success", "java.lang.IllegalArgumentException")) should equal(1)
       // per method latency_ms
-      statsReceiver.stats.get(List("per_method_stats", "foo", "latency_ms")) should not be None
+      statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
     }
   }
 
@@ -111,32 +112,33 @@ class StatsFilterTest extends Test {
       }
     )
 
-    val statsFilter = new StatsFilter(
-      statsReceiver,
+    val statsFilter = newFilter(
       thriftResponseClassifier
     )
 
-    val request = ThriftRequest("foo", Trace.nextId, None, "Hello, world!")
-    val service = Service.mk[ThriftRequest[String], String] { _ =>
+    val request = "Hello, world!"
+    val service = statsFilter.andThen(Service.mk[String, String] { _ =>
       Future.value("oops")
-    }
+    })
 
     withService(service) {
-      Await.ready(statsFilter.apply(request, service), 2.seconds)
+      Await.ready(service(request), 2.seconds)
       // top-level exceptions -- no exception is recorded
       statsReceiver.counters(List("exceptions")) should equal(0)
       // per method failures
-      statsReceiver.counters(List("per_method_stats", "foo", "failures")) should equal(1)
+      statsReceiver.counters(List("per_method_stats", "echo", "failures")) should equal(1)
       // per method success
-      statsReceiver.counters(List("per_method_stats", "foo", "success")) should equal(0)
+      statsReceiver.counters(List("per_method_stats", "echo", "success")) should equal(0)
       // per method latency_ms
-      statsReceiver.stats.get(List("per_method_stats", "foo", "latency_ms")) should not be None
+      statsReceiver.stats.get(List("per_method_stats", "echo", "latency_ms")) should not be None
     }
   }
 
-  private[this] def withService[T](service: Service[ThriftRequest[T], T])(fn: => Unit): Unit = {
+  private[this] val methodMeta = MethodMetadata(DoEverything.Echo)
+
+  private[this] def withService[T](service: Service[T, T])(fn: => Unit): Unit = {
     try {
-      fn
+      methodMeta.asCurrent(fn)
     } finally {
       service.close()
     }

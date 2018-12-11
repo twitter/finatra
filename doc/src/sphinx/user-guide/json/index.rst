@@ -12,7 +12,7 @@ Features
 -  Usable outside of the Finatra framework.
 -  `FinatraObjectMapper <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala>`__ which provides additional Scala friendly methods not found in the `ScalaObjectMapper`.
 -  `Guice module <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala>`__ for injecting the `FinatraObjectMapper` with support for customization e.g. snake\_case vs. camelCase.
--  Custom `case class deserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala>`__ which overcomes limitations in `jackson-module-scala <https://github.com/FasterXML/jackson-module-scala>`__.
+-  Custom `case class deserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/CaseClassDeserializer.scala>`__ which overcomes limitations in `jackson-module-scala <https://github.com/FasterXML/jackson-module-scala>`__.
 -  Support for `case class` validations which accumulate errors (without failing fast) during JSON parsing.
 -  Integration with Finatra `HTTP routing <routing.html>`__ to support binding and validation of query params, route params, and headers.
 -  Utilities for comparing JSON.
@@ -25,13 +25,13 @@ The default configuration of Jackson is provided by the `FinatraObjectMapper <ht
 
 The following Jackson integrations are provided by default:
 
--  `Joda Module <https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java>`__
--  `Scala Module <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java>`__
+-  `JodaModule <https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java>`__
+-  `DefaultScalaModule <https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/DefaultScalaModule.scala>`__
 -  `LongKeyDeserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala>`__: allows for deserializing maps with long keys.
--  `Wrapped Value Serializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala>`__
--  `Duration Millis Serializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/DurationMillisSerializer.scala>`__
--  `Improved DateTime Deserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala>`__
--  `Improved `case class Deserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala>`__: See details `below <#improved-case-class-deserializer>`__.
+-  `WrappedValueSerializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala>`__: more information on "WrappedValues" `here <https://docs.scala-lang.org/overviews/core/value-classes.html>`__.
+-  `JodaDurationMillisSerializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/JodaDurationMillisSerializer.scala>`__
+-  `Improved JodaDateTimeDeserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/JodaDatetimeDeserializer.scala>`__
+-  `Improved CaseClassDeserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/CaseClassDeserializer.scala>`__: See details `below <#improved-case-class-deserializer>`__.
 
 Customization
 -------------
@@ -47,7 +47,7 @@ To override defaults or provide other config options, specify your own module (u
 
 For an example of extending the `FinatraJacksonModule` see `Adding a Custom Serializer or Deserializer`_.
 
-See the `Framework Modules <http/server.html#framework-modules>`__ section for more information on customizing server framework modules.
+See the `Framework Modules <../http/server.html#framework-modules>`__ section for more information on customizing server framework modules.
 
 Adding a Custom Serializer or Deserializer
 ------------------------------------------
@@ -90,13 +90,13 @@ For example,
       }
     }
 
-For more information see the Jackson documentation for `Custom Serializer <http://wiki.fasterxml.com/JacksonHowToCustomSerializers>`__ or `Custom De-serializers <http://wiki.fasterxml.com/JacksonHowToCustomDeserializers>`__.
+For more information see the Jackson documentation for `Custom Serializers <https://github.com/FasterXML/jackson-docs/wiki/JacksonHowToCustomSerializers>`__.
 
 
 Improved `case class` deserializer
 ------------------------------------
 
-Finatra provides a custom `case class deserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala>`__ which overcomes limitations in jackson-scala-module:
+Finatra provides a custom `case class deserializer <https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/CaseClassDeserializer.scala>`__ which overcomes limitations in jackson-scala-module:
 
 -  Throws a `JsonException` when required fields are missing from the parsed JSON.
 -  Use default values when fields are missing in the incoming JSON.

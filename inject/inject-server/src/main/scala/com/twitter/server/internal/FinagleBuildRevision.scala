@@ -3,7 +3,6 @@ package com.twitter.server.internal
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.inject.{Injector, Logging}
 import scala.util.control.NonFatal
-import com.twitter.util.U64._
 
 object FinagleBuildRevision extends Logging {
 
@@ -23,7 +22,7 @@ object FinagleBuildRevision extends Logging {
 
   private[server] def convertBuildRevision(revision: String): Long = {
     try {
-      revision.take(10).toU64Long
+      java.lang.Long.parseUnsignedLong(revision.take(10), 16)
     } catch {
       case NonFatal(e) =>
         error(s"Unable to convert Finagle build revision to long: ${e.getMessage}")

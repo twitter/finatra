@@ -8,11 +8,11 @@ import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
 import com.twitter.finatra.thrift.filters.{
   AccessLoggingFilter,
-  ClientIdWhitelistFilter,
+  ClientIdAcceptlistFilter,
   ExceptionMappingFilter,
   StatsFilter
 }
-import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
+import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.EmbeddedThriftServerControllerFeatureTest._
 import com.twitter.finatra.thrift.thriftscala.{NoClientIdError, UnknownClientIdError}
@@ -24,14 +24,14 @@ import com.twitter.util.{Await, Future}
 object EmbeddedThriftServerControllerFeatureTest {
 
   class ConverterControllerServer extends ThriftServer {
-    override val modules = Seq(ClientIdWhitelistModule)
+    override val modules = Seq(new ClientIdAcceptlistModule("/clients.yml"))
 
     override def configureThrift(router: ThriftRouter): Unit = {
       router
         .filter(classOf[AccessLoggingFilter])
         .filter[StatsFilter]
         .filter[ExceptionMappingFilter]
-        .filter[ClientIdWhitelistFilter]
+        .filter[ClientIdAcceptlistFilter]
         .exceptionMapper[FinatraThriftExceptionMapper]
         .add[ConverterController]
     }
@@ -54,7 +54,8 @@ object EmbeddedThriftServerControllerFeatureTest {
 }
 
 class EmbeddedThriftServerControllerFeatureTest extends FeatureTest {
-  override val server = new EmbeddedThriftServer(new ConverterControllerServer)
+  override val server =
+    new EmbeddedThriftServer(new ConverterControllerServer, disableTestLogging = true)
 
   /* Higher-kinded interface type */
   val client123: Converter[Future] =

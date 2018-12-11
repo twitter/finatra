@@ -61,6 +61,9 @@ class EmbeddedThriftServer(
   def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage) =
     this(twitterServer, flags = flags.asScala.toMap, stage = stage)
 
+  def this(twitterServer: Ports, flags: java.util.Map[String, String], stage: Stage, disableTestLogging: Boolean) =
+    this(twitterServer, flags = flags.asScala.toMap, stage = stage, disableTestLogging = disableTestLogging)
+
   /* Public */
 
   /** The assigned external "thrift" port for the underlying embedded ThriftServer */

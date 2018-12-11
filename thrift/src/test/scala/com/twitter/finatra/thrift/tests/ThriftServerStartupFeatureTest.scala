@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.finatra.thrift.modules.ClientIdWhitelistModule
+import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
 import com.twitter.finatra.thrift.tests.doeverything.controllers.DoNothingController
 import com.twitter.finatra.thrift.{EmbeddedThriftServer, ThriftServer}
@@ -12,13 +12,14 @@ class ThriftServerStartupFeatureTest extends Test {
 
   test("fail startup") {
     val server = new EmbeddedThriftServer(new ThriftServer {
-      override val modules = Seq(ClientIdWhitelistModule)
+        override val modules = Seq(new ClientIdAcceptlistModule("/clients.yml"))
 
-      override def configureThrift(router: ThriftRouter): Unit = {
-        router.add[DoNothingController]
-        router.add[DoNothingController] // can't add two services
-      }
-    })
+        override def configureThrift(router: ThriftRouter): Unit = {
+          router.add[DoNothingController]
+          router.add[DoNothingController] // can't add two services
+        }
+      },
+      disableTestLogging = true)
 
     try {
       intercept[AssertionError] {
@@ -31,13 +32,14 @@ class ThriftServerStartupFeatureTest extends Test {
 
   test("use default thrift port") {
     val server = new EmbeddedTwitterServer(new ThriftServer {
-      override val modules = Seq(ClientIdWhitelistModule)
+        override val modules = Seq(new ClientIdAcceptlistModule("/clients.yml"))
 
-      override def configureThrift(router: ThriftRouter): Unit = {
-        router
-          .add[DoNothingController]
-      }
-    })
+        override def configureThrift(router: ThriftRouter): Unit = {
+          router
+            .add[DoNothingController]
+        }
+      },
+      disableTestLogging = true)
 
     try {
       server.start()
@@ -51,14 +53,15 @@ class ThriftServerStartupFeatureTest extends Test {
 
   test("start with directly instantiated controller") {
     val server = new EmbeddedTwitterServer(new ThriftServer {
-      override val modules = Seq(ClientIdWhitelistModule)
+        override val modules = Seq(new ClientIdAcceptlistModule("/clients.yml"))
 
-      override def configureThrift(router: ThriftRouter): Unit = {
-        router
-        // directly instantiate controller and add it to the router
-          .add(new DoNothingController())
-      }
-    })
+        override def configureThrift(router: ThriftRouter): Unit = {
+          router
+          // directly instantiate controller and add it to the router
+            .add(new DoNothingController())
+        }
+      },
+      disableTestLogging = true)
 
     try {
       server.start()

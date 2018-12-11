@@ -26,5 +26,4 @@ trait Controller extends Logging { self: ToThriftService =>
     methods += thriftMethodService
     thriftMethodService
   }
-
 }

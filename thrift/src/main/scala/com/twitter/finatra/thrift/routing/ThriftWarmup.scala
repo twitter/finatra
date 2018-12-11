@@ -7,7 +7,23 @@ import com.twitter.scrooge.ThriftMethod
 import com.twitter.util.{Await, Future, Try}
 import javax.inject.Inject
 
-class ThriftWarmup @Inject()(router: ThriftRouter) extends Logging {
+private object ThriftWarmup {
+  /**  Function curried as the default arg for the responseCallback: M#SuccessType => Unit parameter. */
+  val unitFunction: AnyRef => Unit = _ => Unit
+}
+
+/**
+ * A utility for performing requests through a configured [[ThriftRouter]] for the purpose of
+ * warming up the `ThriftServer`.
+ *
+ * @note This is only for use with generated Scala code which uses the [[ThriftRouter]].
+ *
+ * @param router the configured [[com.twitter.finatra.thrift.routing.ThriftRouter]]
+ */
+class ThriftWarmup @Inject()(
+  router: ThriftRouter
+) extends Logging {
+  import ThriftWarmup._
 
   /* Public */
 
@@ -24,7 +40,7 @@ class ThriftWarmup @Inject()(router: ThriftRouter) extends Logging {
    * @tparam M - type of the [[com.twitter.scrooge.ThriftMethod]]
    */
   def send[M <: ThriftMethod](method: M, args: M#Args, times: Int = 1)(
-    responseCallback: Try[M#SuccessType] => Unit = unitFunction _
+    responseCallback: Try[M#SuccessType] => Unit = unitFunction
   ): Unit = {
 
     for (_ <- 1 to times) {
@@ -41,19 +57,14 @@ class ThriftWarmup @Inject()(router: ThriftRouter) extends Logging {
   /* Private */
 
   private def executeRequest[M <: ThriftMethod](method: M, args: M#Args): Try[M#SuccessType] = {
-    Try { Await.result(routeRequest(method, args)) }
+    Try(Await.result(routeRequest(method, args)))
   }
 
   private def routeRequest[M <: ThriftMethod](method: M, args: M#Args): Future[M#SuccessType] = {
-    val service = router.methods(method).asInstanceOf[ThriftMethodService[M#Args, M#SuccessType]]
+    val service =
+      router
+        .thriftMethodService(method)
+        .asInstanceOf[ThriftMethodService[M#Args, M#SuccessType]]
     service(args)
   }
-
-  /**
-   * Function curried as the default arg for the responseCallback: M#SuccessType => Unit parameter.
-   *
-   * @param a - [[AnyRef]]
-   * @return Unit
-   */
-  private[this] def unitFunction(a: AnyRef): Unit = ()
 }
