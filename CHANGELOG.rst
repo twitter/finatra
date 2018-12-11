@@ -16,6 +16,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: `c.t.finatra.thrift.internal.ThriftMethodService` is now
+  private. ``PHAB_ID=D251186``
+
 * finatra-thrift: `c.t.finatra.thrift.exceptions.FinatraThriftExceptionMapper` and
   `c.t.finatra.thrift.exceptions.FinatraJavaThriftExceptionMapper` now extend
   `ExceptionManager[Throwable, Nothing]` since the return type was never used. They are
