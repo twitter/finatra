@@ -7,6 +7,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+18.12.0
+-------
+
 Added
 ~~~~~
 
@@ -36,6 +39,8 @@ Changed
 
 Fixed
 ~~~~~
+
+* finatra-http: Validate headers to prevent header injection vulnerability. ``PHAB_ID=D246889`` 
 
 Closed
 ~~~~~~
