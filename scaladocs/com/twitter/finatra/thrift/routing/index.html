@@ -231,12 +231,16 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ThriftRouter.html" title=""></a>
-                        <a href="ThriftRouter.html" title="">ThriftRouter</a>
+                        <a class="class" href="JavaThriftRouter.html" title="Builds a com.twitter.finagle.Service."></a>
+                        <a href="JavaThriftRouter.html" title="Builds a com.twitter.finagle.Service.">JavaThriftRouter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ThriftWarmup.html" title=""></a>
-                        <a href="ThriftWarmup.html" title="">ThriftWarmup</a>
+                        <a class="class" href="ThriftRouter.html" title="Builds a com.twitter.finagle.thrift.ThriftService."></a>
+                        <a href="ThriftRouter.html" title="Builds a com.twitter.finagle.thrift.ThriftService.">ThriftRouter</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="ThriftWarmup.html" title="A utility for performing requests through a configured ThriftRouter for the purpose of warming up the ThriftServer."></a>
+                        <a href="ThriftWarmup.html" title="A utility for performing requests through a configured ThriftRouter for the purpose of warming up the ThriftServer.">ThriftWarmup</a>
                       </li><li name="com.twitter.finatra.thrift.thriftjava" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="thriftjava"></a><a id="thriftjava:thriftjava"></a>
       <span class="permalink">
@@ -308,10 +312,10 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.routing.ThriftRouter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ThriftRouterextendsLogging"></a><a id="ThriftRouter:ThriftRouter"></a>
+              <ol><li name="com.twitter.finatra.thrift.routing.JavaThriftRouter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="JavaThriftRouterextendsBaseThriftRouter[com.twitter.finatra.thrift.routing.JavaThriftRouter]"></a><a id="JavaThriftRouter:JavaThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/index.html#ThriftRouterextendsLogging" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/index.html#JavaThriftRouterextendsBaseThriftRouter[com.twitter.finatra.thrift.routing.JavaThriftRouter]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -320,14 +324,38 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ThriftRouter.html"><span class="name">ThriftRouter</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="Builds a com.twitter.finagle.Service." href="JavaThriftRouter.html"><span class="name">JavaThriftRouter</span></a><span class="result"> extends <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter">BaseThriftRouter</span>[<a href="JavaThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.JavaThriftRouter">JavaThriftRouter</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <p class="shortcomment cmt">Builds a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Builds a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a>.</p><p>A <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> specifically for use with generated Java code. Users of generated Scala code
+should use the <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">com.twitter.finatra.thrift.routing.ThriftRouter</a> directly.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftWarmup" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+        </dd><dt>Note</dt><dd><span class="cmt"><p>routing over Java generated code DOES NOT support per-method stats since the generated
+      Java code does not yet support &quot;service-per-method&quot;.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">com.twitter.finatra.thrift.routing.ThriftRouter</a></p></span><span class="cmt"><p><span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter">com.twitter.finatra.thrift.routing.BaseThriftRouter</span></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="ThriftRouterextendsBaseThriftRouter[com.twitter.finatra.thrift.routing.ThriftRouter]"></a><a id="ThriftRouter:ThriftRouter"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/index.html#ThriftRouterextendsBaseThriftRouter[com.twitter.finatra.thrift.routing.ThriftRouter]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="Builds a com.twitter.finagle.thrift.ThriftService." href="ThriftRouter.html"><span class="name">ThriftRouter</span></a><span class="result"> extends <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter">BaseThriftRouter</span>[<a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a>]</span>
+      </span>
+      
+      <p class="shortcomment cmt">Builds a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftService.html" class="extype" name="com.twitter.finagle.thrift.ThriftService">com.twitter.finagle.thrift.ThriftService</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Builds a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftService.html" class="extype" name="com.twitter.finagle.thrift.ThriftService">com.twitter.finagle.thrift.ThriftService</a>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@Singleton</span><span class="args">()</span>
+              
+        </dd><dt>Note</dt><dd><span class="cmt"><p>this is only intended for use with generated Scala code. Users of generated Java code
+      are encouraged to use the <a href="JavaThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.JavaThriftRouter">JavaThriftRouter</a>.</p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftWarmup" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ThriftWarmupextendsLogging"></a><a id="ThriftWarmup:ThriftWarmup"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/thrift/routing/index.html#ThriftWarmupextendsLogging" title="Permalink">
@@ -339,10 +367,13 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <a title="" href="ThriftWarmup.html"><span class="name">ThriftWarmup</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <a title="A utility for performing requests through a configured ThriftRouter for the purpose of warming up the ThriftServer." href="ThriftWarmup.html"><span class="name">ThriftWarmup</span></a><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       
-      
+      <p class="shortcomment cmt">A utility for performing requests through a configured <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> for the purpose of
+warming up the <code>ThriftServer</code>.</p><div class="fullcomment"><div class="comment cmt"><p>A utility for performing requests through a configured <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> for the purpose of
+warming up the <code>ThriftServer</code>.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This is only for use with generated Scala code which uses the <a href="ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a>.</p></span></dd></dl></div>
     </li></ol>
             </div>
 

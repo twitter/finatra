@@ -151,12 +151,20 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
+                        <a class="class" href="ClientIdAcceptlistModule.html" title=""></a>
+                        <a href="ClientIdAcceptlistModule.html" title="">ClientIdAcceptlistModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
                         <a class="object" href="ClientIdWhitelistModule$.html" title=""></a>
                         <a href="ClientIdWhitelistModule$.html" title="">ClientIdWhitelistModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">DarkTrafficFilterModule</a>
+                        <a class="class" href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph."></a>
+                        <a href="" title="A TwitterModule which configures and binds a DarkTrafficFilter to the object graph.">DarkTrafficFilterModule</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="JavaDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph."></a>
+                        <a href="JavaDarkTrafficFilterModule.html" title="A TwitterModule which configures and binds a JavaDarkTrafficFilter to the object graph.">JavaDarkTrafficFilterModule</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="object" href="ThriftResponseClassifierModule$.html" title=""></a>
@@ -184,16 +192,20 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">DarkTrafficFilterModule</span><span class="tparams">[<span name="ServiceIface">ServiceIface &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule.ServiceIface">ServiceIface</span>]</span>]</span><span class="result"> extends <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></span>
+        <span class="name">DarkTrafficFilterModule</span><span class="tparams">[<span name="ServiceIface">ServiceIface &lt;: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/Filterable.html#com.twitter.finagle.thrift.service.Filterable" class="extype" name="com.twitter.finagle.thrift.service.Filterable">Filterable</a>[<span class="extype" name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule.ServiceIface">ServiceIface</span>]</span>]</span><span class="result"> extends <span class="extype" name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule">AbstractDarkTrafficFilterModule</span></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A <span class="extype" name="TwitterModule">TwitterModule</span> which configures and binds a <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> to the object graph.
+</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>This is only applicable in Scala as it uses generated Scala classes and expects to configure
+      the <span class="extype" name="DarkTrafficFilter">DarkTrafficFilter</span> over a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html" class="extype" name="com.twitter.finagle.Service">com.twitter.finagle.Service</a> that is generated from
+      Finagle via generated Scala code. Users of generated Java code should use the
+      <a href="JavaDarkTrafficFilterModule.html" class="extype" name="com.twitter.finatra.thrift.modules.JavaDarkTrafficFilterModule">JavaDarkTrafficFilterModule</a>.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule">AbstractDarkTrafficFilterModule</span>, <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a>, <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a>, <a href="../../../inject/TwitterModuleLifecycle.html" class="extype" name="com.twitter.inject.TwitterModuleLifecycle">TwitterModuleLifecycle</a>, <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a>, <span class="extype" name="com.google.inject.AbstractModule">AbstractModule</span>, <span class="extype" name="com.google.inject.Module">Module</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -219,7 +231,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule"><span>DarkTrafficFilterModule</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule"><span>DarkTrafficFilterModule</span></li><li class="in" name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule"><span>AbstractDarkTrafficFilterModule</span></li><li class="in" name="com.twitter.inject.TwitterModule"><span>TwitterModule</span></li><li class="in" name="com.twitter.inject.TwitterBaseModule"><span>TwitterBaseModule</span></li><li class="in" name="com.twitter.inject.TwitterModuleLifecycle"><span>TwitterModuleLifecycle</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.inject.TwitterModuleFlags"><span>TwitterModuleFlags</span></li><li class="in" name="com.google.inject.AbstractModule"><span>AbstractModule</span></li><li class="in" name="com.google.inject.Module"><span>Module</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -262,10 +274,10 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule#enableSampling" visbl="pub" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="enableSampling(injector:com.twitter.inject.Injector):com.twitter.finatra.thrift.ThriftRequest[_]=&gt;Boolean"></a><a id="enableSampling(Injector):(ThriftRequest[_])⇒Boolean"></a>
+              <ol><li name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule#enableSampling" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="enableSampling(injector:com.twitter.inject.Injector):Any=&gt;Boolean"></a><a id="enableSampling(Injector):(Any)⇒Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#enableSampling(injector:com.twitter.inject.Injector):com.twitter.finatra.thrift.ThriftRequest[_]=&gt;Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#enableSampling(injector:com.twitter.inject.Injector):Any=&gt;Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -274,13 +286,13 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">enableSampling</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: (<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[_]) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+        <span class="name">enableSampling</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span><span class="result">: (<a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a>) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Function to determine if the request should be &quot;sampled&quot;, e.g.</p><div class="fullcomment"><div class="comment cmt"><p>Function to determine if the request should be &quot;sampled&quot;, e.g.
 sent to the dark service.
 </p></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> for use in determining if a given request
-                should be forwarded or not.</p></dd></dl></div>
+                should be forwarded or not.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li></ol>
             </div>
 
@@ -680,6 +692,38 @@ sent to the dark service.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../../google/inject/index.html" class="extype" name="com.google.inject">com.google.inject</a>] </dd><dt>Definition Classes</dt><dd>AbstractModule</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#clientIdFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clientIdFlag:com.twitter.app.Flag[String]"></a><a id="clientIdFlag:Flag[String]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#clientIdFlag:com.twitter.app.Flag[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clientIdFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#clientIdFlagName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="clientIdFlagName:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#clientIdFlagName:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clientIdFlagName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Name of the flag which captures the value for the Thrift ClientId to pass to the dark service</p><div class="fullcomment"><div class="comment cmt"><p>Name of the flag which captures the value for the Thrift ClientId to pass to the dark service</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -760,7 +804,7 @@ the application <code>onExit</code> function to be executed on graceful shutdown
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractModule → Module</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule#configureThriftMuxClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#configureThriftMuxClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureThriftMuxClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client"></a><a id="configureThriftMuxClient(Injector,Client):Client"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#configureThriftMuxClient(injector:com.twitter.inject.Injector,client:com.twitter.finagle.ThriftMux.Client):com.twitter.finagle.ThriftMux.Client" title="Permalink">
@@ -775,8 +819,7 @@ the application <code>onExit</code> function to be executed on graceful shutdown
         <span class="name">configureThriftMuxClient</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>
       </span>
       
-      <p class="shortcomment cmt">Override to specify further configuration of the underlying Finagle <span class="extype" name="ThriftMux.Client">ThriftMux.Client</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Override to specify further configuration of the underlying Finagle <span class="extype" name="ThriftMux.Client">ThriftMux.Client</span>.
-</p></div><dl class="paramcmts block"><dt class="param">injector</dt><dd class="cmt"><p>the <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">com.twitter.inject.Injector</a> for use in configuring the underlying client.</p></dd><dt class="param">client</dt><dd class="cmt"><p>the default configured <span class="extype" name="ThriftMux.Client">ThriftMux.Client</span>.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured instance of the <span class="extype" name="ThriftMux.Client">ThriftMux.Client</span></p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
     </li><li name="com.google.inject.AbstractModule#convertToTypes" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="convertToTypes(x$1:com.google.inject.matcher.Matcher[_&gt;:com.google.inject.TypeLiteral[_]],x$2:com.google.inject.spi.TypeConverter):Unit"></a><a id="convertToTypes(Matcher[_&gt;:TypeLiteral[_]],TypeConverter):Unit"></a>
       <span class="permalink">
@@ -974,6 +1017,70 @@ provided as an application argument (as they have no default value to be used).
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#defaultClientId" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultClientId:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#defaultClientId:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultClientId</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#defaultThriftMuxClient" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="defaultThriftMuxClient(clientId:com.twitter.finagle.thrift.ClientId,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.ThriftMux.Client"></a><a id="defaultThriftMuxClient(ClientId,StatsReceiver):Client"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#defaultThriftMuxClient(clientId:com.twitter.finagle.thrift.ClientId,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.ThriftMux.Client" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">defaultThriftMuxClient</span><span class="params">(<span name="clientId">clientId: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#destFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="destFlag:com.twitter.app.Flag[String]"></a><a id="destFlag:Flag[String]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#destFlag:com.twitter.app.Flag[String]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">destFlag</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/app/Flag.html#com.twitter.app.Flag" class="extype" name="com.twitter.app.Flag">Flag</a>[<span class="extype" name="scala.Predef.String">String</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#destFlagName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="destFlagName:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#destFlagName:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">destFlagName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Name of the flag which captures the destination to which to send dark traffic.</p><div class="fullcomment"><div class="comment cmt"><p>Name of the flag which captures the destination to which to send dark traffic.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
@@ -1161,7 +1268,7 @@ a value provided as an application argument (as they have no default value to be
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a href="../../../inject/index.html" class="extype" name="com.twitter.inject">com.twitter.inject</a>] </dd><dt>Definition Classes</dt><dd><a href="../../../inject/TwitterModuleFlags.html" class="extype" name="com.twitter.inject.TwitterModuleFlags">TwitterModuleFlags</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule#forwardAfterService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#forwardAfterService" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="forwardAfterService:Boolean"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#forwardAfterService:Boolean" title="Permalink">
@@ -1170,14 +1277,16 @@ a value provided as an application argument (as they have no default value to be
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">forwardAfterService</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
       </span>
       
       <p class="shortcomment cmt">Forward the dark request after the service has processed the request
-instead of concurrently.</p>
+instead of concurrently.</p><div class="fullcomment"><div class="comment cmt"><p>Forward the dark request after the service has processed the request
+instead of concurrently.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
     </li><li name="com.twitter.inject.TwitterBaseModule#frameworkModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="frameworkModules:Seq[com.google.inject.Module]"></a><a id="frameworkModules:Seq[Module]"></a>
       <span class="permalink">
@@ -1586,7 +1695,7 @@ instead of concurrently.</p>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule#label" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#label" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="label:String"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#label:String" title="Permalink">
@@ -1595,13 +1704,13 @@ instead of concurrently.</p>
     </span>
       <span class="modifier_kind">
         <span class="modifier"></span>
-        <span class="kind">val</span>
+        <span class="kind">def</span>
       </span>
       <span class="symbol">
         <span class="name">label</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Name of dark service client for use in metrics.</p>
+      <p class="shortcomment cmt">Name of dark service client for use in metrics.</p><div class="fullcomment"><div class="comment cmt"><p>Name of dark service client for use in metrics.</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
@@ -1669,6 +1778,22 @@ due to install being deferred until after flag parsing occurs.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule#newFilter" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="newFilter(dest:String,client:com.twitter.finagle.ThriftMux.Client,injector:com.twitter.inject.Injector,stats:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Filter.TypeAgnostic"></a><a id="newFilter(String,Client,Injector,StatsReceiver):TypeAgnostic"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#newFilter(dest:String,client:com.twitter.finagle.ThriftMux.Client,injector:com.twitter.inject.Injector,stats:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Filter.TypeAgnostic" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">newFilter</span><span class="params">(<span name="dest">dest: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="client">client: <span class="extype" name="com.twitter.finagle.ThriftMux.Client">Client</span></span>, <span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="stats">stats: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule">DarkTrafficFilterModule</a> → AbstractDarkTrafficFilterModule</dd></dl></div>
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
@@ -1707,10 +1832,10 @@ due to install being deferred until after flag parsing occurs.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.modules.DarkTrafficFilterModule#providesDarkTrafficFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="providesDarkTrafficFilter(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.thrift.ThriftFilter"></a><a id="providesDarkTrafficFilter(Injector,StatsReceiver):ThriftFilter"></a>
+    </li><li name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule#providesDarkTrafficFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="providesDarkTrafficFilter(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Filter.TypeAgnostic"></a><a id="providesDarkTrafficFilter(Injector,StatsReceiver):TypeAgnostic"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#providesDarkTrafficFilter(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finatra.thrift.ThriftFilter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/modules/DarkTrafficFilterModule.html#providesDarkTrafficFilter(injector:com.twitter.inject.Injector,statsReceiver:com.twitter.finagle.stats.StatsReceiver):com.twitter.finagle.Filter.TypeAgnostic" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1719,10 +1844,10 @@ due to install being deferred until after flag parsing occurs.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">providesDarkTrafficFilter</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
+        <span class="name">providesDarkTrafficFilter</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AbstractDarkTrafficFilterModule</dd><dt>Annotations</dt><dd>
                 <span class="name">@Provides</span><span class="args">()</span>
               
                 <span class="name">@Singleton</span><span class="args">()</span>
@@ -2134,7 +2259,9 @@ due to install being deferred until after flag parsing occurs.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.inject.TwitterModule">
+        <div class="parent" name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule">
+              <h3>Inherited from <span class="extype" name="com.twitter.finatra.thrift.modules.AbstractDarkTrafficFilterModule">AbstractDarkTrafficFilterModule</span></h3>
+            </div><div class="parent" name="com.twitter.inject.TwitterModule">
               <h3>Inherited from <a href="../../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">TwitterModule</a></h3>
             </div><div class="parent" name="com.twitter.inject.TwitterBaseModule">
               <h3>Inherited from <a href="../../../inject/TwitterBaseModule.html" class="extype" name="com.twitter.inject.TwitterBaseModule">TwitterBaseModule</a></h3>

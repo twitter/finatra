@@ -287,12 +287,12 @@
                         <a href="ThriftRequest.html" title="ThriftRequest was created to provide some metadata about a request.">ThriftRequest</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="" title="ThriftServer for usage from Scala"></a>
-                        <a href="" title="ThriftServer for usage from Scala">ThriftServer</a>
+                        <a class="trait" href="ThriftServer.html" title="ThriftServer for usage from Scala"></a>
+                        <a href="ThriftServer.html" title="ThriftServer for usage from Scala">ThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="ThriftServerTrait.html" title="A Basic ThriftServer."></a>
-                        <a href="ThriftServerTrait.html" title="A Basic ThriftServer.">ThriftServerTrait</a>
+                        <a class="trait" href="" title="A Basic ThriftServer."></a>
+                        <a href="" title="A Basic ThriftServer.">ThriftServerTrait</a>
                       </li>
               </ul>
             </div>
@@ -302,8 +302,8 @@
       <div id="definition">
         <div class="big-circle trait">t</div>
         <p id="owner"><a href="../../../index.html" class="extype" name="com">com</a>.<a href="../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></p>
-        <h1>ThriftServer<span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html" title="Permalink">
+        <h1>ThriftServerTrait<span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
@@ -316,17 +316,23 @@
         <span class="kind">trait</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftServer</span><span class="result"> extends <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></span>
+        <span class="name">ThriftServerTrait</span><span class="result"> extends <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>ThriftServer for usage from Scala</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A Basic ThriftServer. To implement, override</p><pre><span class="kw">protected</span> <span class="kw">def</span> service: Service[<span class="std">Array</span>[<span class="std">Byte</span>], <span class="std">Array</span>[<span class="std">Byte</span>]]</pre><p>with your <code>Service[Array[Byte], Array[Byte]]</code> implementation.
+</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a>, <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a>, <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span>, <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#com.twitter.logging.Logging" class="extype" name="com.twitter.logging.Logging">Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Stats.html#com.twitter.server.Stats" class="extype" name="com.twitter.server.Stats">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Admin.html#com.twitter.server.Admin" class="extype" name="com.twitter.server.Admin">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/AdminHttpServer.html#com.twitter.server.AdminHttpServer" class="extype" name="com.twitter.server.AdminHttpServer">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Hooks.html#com.twitter.server.Hooks" class="extype" name="com.twitter.server.Hooks">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Linters.html#com.twitter.server.Linters" class="extype" name="com.twitter.server.Linters">Linters</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Slf4jBridge.html#com.twitter.server.Slf4jBridge" class="extype" name="com.twitter.server.Slf4jBridge">Slf4jBridge</a>, <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/app/App.html#com.twitter.app.App" class="extype" name="com.twitter.app.App">App</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably.html#com.twitter.util.CloseAwaitably" class="extype" name="com.twitter.util.CloseAwaitably">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably0.html#com.twitter.util.CloseAwaitably0" class="extype" name="com.twitter.util.CloseAwaitably0">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
-        </div></div>
+          <div class="superTypes hiddenContent"><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a>, <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span>, <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a>, <span class="extype" name="com.twitter.inject.server.DeprecatedLogging">DeprecatedLogging</span>, <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#com.twitter.logging.Logging" class="extype" name="com.twitter.logging.Logging">Logging</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html#com.twitter.server.TwitterServer" class="extype" name="com.twitter.server.TwitterServer">TwitterServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Stats.html#com.twitter.server.Stats" class="extype" name="com.twitter.server.Stats">Stats</a>, <span class="extype" name="com.twitter.server.Lifecycle">Lifecycle</span>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Admin.html#com.twitter.server.Admin" class="extype" name="com.twitter.server.Admin">Admin</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/AdminHttpServer.html#com.twitter.server.AdminHttpServer" class="extype" name="com.twitter.server.AdminHttpServer">AdminHttpServer</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Hooks.html#com.twitter.server.Hooks" class="extype" name="com.twitter.server.Hooks">Hooks</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Linters.html#com.twitter.server.Linters" class="extype" name="com.twitter.server.Linters">Linters</a>, <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Slf4jBridge.html#com.twitter.server.Slf4jBridge" class="extype" name="com.twitter.server.Slf4jBridge">Slf4jBridge</a>, <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a>, <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/app/App.html#com.twitter.app.App" class="extype" name="com.twitter.app.App">App</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably.html#com.twitter.util.CloseAwaitably" class="extype" name="com.twitter.util.CloseAwaitably">CloseAwaitably</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/CloseAwaitably0.html#com.twitter.util.CloseAwaitably0" class="extype" name="com.twitter.util.CloseAwaitably0">CloseAwaitably0</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable.html#com.twitter.util.Awaitable" class="extype" name="com.twitter.util.Awaitable">Awaitable</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a>], <a href="https://twitter.github.io/util/docs/com/twitter/util/Closable.html#com.twitter.util.Closable" class="extype" name="com.twitter.util.Closable">Closable</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+        </div><div class="toggleContainer block">
+            <span class="toggle">
+              Known Subclasses
+            </span>
+            <div class="subClasses hiddenContent"><a href="AbstractThriftServer.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServer">AbstractThriftServer</a>, <a href="ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a></div>
+          </div></div>
         
 
       <div id="mbrsel">
@@ -351,7 +357,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.thrift.ThriftServer"><span>ThriftServer</span></li><li class="in" name="com.twitter.finatra.thrift.ThriftServerTrait"><span>ThriftServerTrait</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.inject.server.DeprecatedLogging"><span>DeprecatedLogging</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.server.Slf4jBridge"><span>Slf4jBridge</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.thrift.ThriftServerTrait"><span>ThriftServerTrait</span></li><li class="in" name="com.twitter.inject.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Lifecycle.Warmup"><span>Warmup</span></li><li class="in" name="com.twitter.inject.server.Ports"><span>Ports</span></li><li class="in" name="com.twitter.inject.server.DeprecatedLogging"><span>DeprecatedLogging</span></li><li class="in" name="com.twitter.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.server.TwitterServer"><span>TwitterServer</span></li><li class="in" name="com.twitter.server.Stats"><span>Stats</span></li><li class="in" name="com.twitter.server.Lifecycle"><span>Lifecycle</span></li><li class="in" name="com.twitter.server.Admin"><span>Admin</span></li><li class="in" name="com.twitter.server.AdminHttpServer"><span>AdminHttpServer</span></li><li class="in" name="com.twitter.server.Hooks"><span>Hooks</span></li><li class="in" name="com.twitter.server.Linters"><span>Linters</span></li><li class="in" name="com.twitter.server.Slf4jBridge"><span>Slf4jBridge</span></li><li class="in" name="com.twitter.inject.app.App"><span>App</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.app.App"><span>App</span></li><li class="in" name="com.twitter.util.CloseAwaitably"><span>CloseAwaitably</span></li><li class="in" name="com.twitter.util.CloseAwaitably0"><span>CloseAwaitably0</span></li><li class="in" name="com.twitter.util.Awaitable"><span>Awaitable</span></li><li class="in" name="com.twitter.util.Closable"><span>Closable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -375,10 +381,10 @@
 
         <div class="values members">
               <h3>Abstract Value Members</h3>
-              <ol><li name="com.twitter.finatra.thrift.ThriftServer#configureThrift" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
-      <a id="configureThrift(router:com.twitter.finatra.thrift.routing.ThriftRouter):Unit"></a><a id="configureThrift(ThriftRouter):Unit"></a>
+              <ol><li name="com.twitter.finatra.thrift.ThriftServerTrait#service" visbl="prt" class="indented0 " data-isabs="true" fullComment="yes" group="Ungrouped">
+      <a id="service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]"></a><a id="service:Service[Array[Byte],Array[Byte]]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#configureThrift(router:com.twitter.finatra.thrift.routing.ThriftRouter):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -387,10 +393,10 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">configureThrift</span><span class="params">(<span name="router">router: <a href="routing/ThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">service</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Override with an implementation to serve a Thrift Service</p><div class="fullcomment"><div class="comment cmt"><p>Override with an implementation to serve a Thrift Service</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li></ol>
             </div>
 
@@ -400,7 +406,7 @@
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -416,7 +422,7 @@
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html###():Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -432,7 +438,7 @@
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -448,7 +454,7 @@
     </li><li name="com.twitter.app.App#MinGrace" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="MinGrace:com.twitter.util.Duration"></a><a id="MinGrace:Duration"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#MinGrace:com.twitter.util.Duration" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#MinGrace:com.twitter.util.Duration" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -464,7 +470,7 @@
     </li><li name="com.twitter.server.AdminHttpServer#addAdminRoute" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit"></a><a id="addAdminRoute(Route):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#addAdminRoute(route:com.twitter.server.AdminHttpServer.Route):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -480,7 +486,7 @@
     </li><li name="com.twitter.server.AdminHttpServer#addAdminRoutes" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit"></a><a id="addAdminRoutes(Seq[Route]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#addAdminRoutes(newRoutes:Seq[com.twitter.server.AdminHttpServer.Route]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -496,7 +502,7 @@
     </li><li name="com.twitter.inject.app.App#addFrameworkModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkModule(module:com.google.inject.Module):Unit"></a><a id="addFrameworkModule(Module):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#addFrameworkModule(module:com.google.inject.Module):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#addFrameworkModule(module:com.google.inject.Module):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -514,7 +520,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.inject.app.App#addFrameworkModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkModules(modules:com.google.inject.Module*):Unit"></a><a id="addFrameworkModules(Module*):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#addFrameworkModules(modules:com.google.inject.Module*):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#addFrameworkModules(modules:com.google.inject.Module*):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -530,7 +536,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.inject.app.App#addFrameworkOverrideModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit"></a><a id="addFrameworkOverrideModules(Module*):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#addFrameworkOverrideModules(modules:com.google.inject.Module*):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -546,7 +552,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.server.AdminHttpServer#adminBoundAddress" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminBoundAddress:java.net.InetSocketAddress"></a><a id="adminBoundAddress:InetSocketAddress"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#adminBoundAddress:java.net.InetSocketAddress" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#adminBoundAddress:java.net.InetSocketAddress" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -562,7 +568,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.server.AdminHttpServer#adminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminHttpServer:com.twitter.finagle.ListeningServer"></a><a id="adminHttpServer:ListeningServer"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#adminHttpServer:com.twitter.finagle.ListeningServer" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#adminHttpServer:com.twitter.finagle.ListeningServer" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -581,7 +587,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.server.AdminHttpServer#adminPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]"></a><a id="adminPort:Flag[InetSocketAddress]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#adminPort:com.twitter.app.Flag[java.net.InetSocketAddress]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -597,7 +603,7 @@ is overriding the default methods using a val instead of a def
     </li><li name="com.twitter.inject.server.TwitterServer#afterPostWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="afterPostWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#afterPostWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#afterPostWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -621,7 +627,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.app.App#allowUndefinedFlags" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="allowUndefinedFlags:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#allowUndefinedFlags:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#allowUndefinedFlags:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -637,7 +643,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.logging.Logging#appendFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="appendFlag:com.twitter.app.Flag[Boolean]"></a><a id="appendFlag:Flag[Boolean]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#appendFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#appendFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -653,7 +659,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.app.App#args" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="args:Array[String]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#args:Array[String]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#args:Array[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -669,7 +675,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -685,7 +691,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.logging.Logging#asyncFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asyncFlag:com.twitter.app.Flag[Boolean]"></a><a id="asyncFlag:Flag[Boolean]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#asyncFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#asyncFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -701,7 +707,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.logging.Logging#asyncMaxSizeFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asyncMaxSizeFlag:com.twitter.app.Flag[Int]"></a><a id="asyncMaxSizeFlag:Flag[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#asyncMaxSizeFlag:com.twitter.app.Flag[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#asyncMaxSizeFlag:com.twitter.app.Flag[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -717,7 +723,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.inject.server.TwitterServer#await" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="await(awaitables:com.twitter.util.Awaitable[_]*):Unit"></a><a id="await(Awaitable[_]*):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#await(awaitables:com.twitter.util.Awaitable[_]*):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#await(awaitables:com.twitter.util.Awaitable[_]*):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -733,7 +739,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
     </li><li name="com.twitter.inject.server.TwitterServer#await" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit"></a><a id="await[T&lt;:Awaitable[_]](T):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#await[T&lt;:com.twitter.util.Awaitable[_]](awaitable:T):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -750,7 +756,7 @@ registered <span class="extype" name="Awaitable">Awaitable</span> exits it will 
     </li><li name="com.twitter.inject.server.TwitterServer#beforePostWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="beforePostWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#beforePostWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#beforePostWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -771,15 +777,15 @@ registered <span class="extype" name="Awaitable">Awaitable</span> exits it will 
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.beforePostWarmup()</code> in any overridden definition of this
 method. Failure to do so may cause your server to not completely startup.</p></span>, <span class="cmt"><p>It is NOT expected that you block in this method as you will prevent completion
 of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/Lifecycle$$Warmup.html#prebindWarmup():Unit" class="extype" name="com.twitter.server.Lifecycle.Warmup">com.twitter.server.Lifecycle.Warmup#prebindWarmup</a></p></span><span class="cmt"><p><a href="../../inject/app/App.html#beforePostWarmup():Unit" class="extmbr" name="com.twitter.inject.app.App#beforePostWarmup">com.twitter.inject.app.App#beforePostWarmup</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftServer#build" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#build" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="build(addr:String,server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ListeningServer"></a><a id="build(String,Server):ListeningServer"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#build(addr:String,server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ListeningServer" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#build(addr:String,server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ListeningServer" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
@@ -789,11 +795,11 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
       <p class="shortcomment cmt">Construct a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a> from the given String addr
 and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.</p><div class="fullcomment"><div class="comment cmt"><p>Construct a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a> from the given String addr
 and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.
-</p></div><dl class="paramcmts block"><dt class="param">addr</dt><dd class="cmt"><p>the <span class="extype" name="String">String</span> address to bind the resultant <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd><dt class="param">server</dt><dd class="cmt"><p>the configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.</p></dd><dt>returns</dt><dd class="cmt"><p>a constructed <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">addr</dt><dd class="cmt"><p>the <span class="extype" name="String">String</span> address to bind the resultant <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd><dt class="param">server</dt><dd class="cmt"><p>the configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</span> stack.</p></dd><dt>returns</dt><dd class="cmt"><p>a constructed <span class="extype" name="ListeningServer">ListeningServer</span>.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#clone():Object" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -817,7 +823,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.app.App#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]"></a><a id="close(Time):Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#close(deadline:com.twitter.util.Time):com.twitter.util.Future[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -833,7 +839,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.util.Closable#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]"></a><a id="close(Duration):Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#close(after:com.twitter.util.Duration):com.twitter.util.Future[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -849,7 +855,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.util.Closable#close" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="close():com.twitter.util.Future[Unit]"></a><a id="close():Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#close():com.twitter.util.Future[Unit]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#close():com.twitter.util.Future[Unit]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -865,7 +871,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.util.CloseAwaitably0#closeAwaitably" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]"></a><a id="closeAwaitably(⇒Future[Unit]):Future[Unit]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#closeAwaitably(f:=&gt;com.twitter.util.Future[U]):com.twitter.util.Future[U]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -881,7 +887,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.app.App#closeOnExit" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="closeOnExit(closable:com.twitter.util.Closable):Unit"></a><a id="closeOnExit(Closable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#closeOnExit(closable:com.twitter.util.Closable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#closeOnExit(closable:com.twitter.util.Closable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -897,7 +903,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.app.App#closeOnExitLast" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="closeOnExitLast(closable:com.twitter.util.Closable):Unit"></a><a id="closeOnExitLast(Closable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#closeOnExitLast(closable:com.twitter.util.Closable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#closeOnExitLast(closable:com.twitter.util.Closable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -913,7 +919,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.server.AdminHttpServer#configureAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureAdminHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server"></a><a id="configureAdminHttpServer(Server):Server"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#configureAdminHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#configureAdminHttpServer(server:com.twitter.finagle.Http.Server):com.twitter.finagle.Http.Server" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -929,7 +935,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureLoggerFactories():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#configureLoggerFactories():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#configureLoggerFactories():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -945,7 +951,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#configureThriftServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureThriftServer(server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ThriftMux.Server"></a><a id="configureThriftServer(Server):Server"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#configureThriftServer(server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ThriftMux.Server" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#configureThriftServer(server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ThriftMux.Server" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -963,11 +969,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
   server
     .withMaxReusableBufferSize(...)
 }
-</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$$Server.html" class="extype" name="com.twitter.finagle.ThriftMux.Server">com.twitter.finagle.ThriftMux.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured ThriftMux.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="param">server</dt><dd class="cmt"><p>- the <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ThriftMux$$Server.html" class="extype" name="com.twitter.finagle.ThriftMux.Server">com.twitter.finagle.ThriftMux.Server</a> to configure.</p></dd><dt>returns</dt><dd class="cmt"><p>a configured ThriftMux.Server.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -983,7 +989,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#debug(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#debug(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -999,7 +1005,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="debug(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#debug(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1015,7 +1021,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(message:=&gt;Any):Unit"></a><a id="debug(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#debug(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#debug(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1031,7 +1037,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.inject.Logging#debugFutureResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]"></a><a id="debugFutureResult[T](String)(⇒Future[T]):Future[T]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#debugFutureResult[T](msg:String)(func:=&gt;com.twitter.util.Future[T]):com.twitter.util.Future[T]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1048,7 +1054,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.util.logging.Logging#debugResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debugResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="debugResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#debugResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#debugResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1064,7 +1070,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.server.AdminHttpServer#defaultAdminPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultAdminPort:Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultAdminPort:Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultAdminPort:Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1080,7 +1086,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.logging.Logging#defaultAppend" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultAppend:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultAppend:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultAppend:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1096,7 +1102,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.app.App#defaultCloseGracePeriod" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultCloseGracePeriod:com.twitter.util.Duration"></a><a id="defaultCloseGracePeriod:Duration"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultCloseGracePeriod:com.twitter.util.Duration" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultCloseGracePeriod:com.twitter.util.Duration" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1112,7 +1118,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.logging.Logging#defaultFormatter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultFormatter:com.twitter.logging.Formatter"></a><a id="defaultFormatter:Formatter"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultFormatter:com.twitter.logging.Formatter" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultFormatter:com.twitter.logging.Formatter" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1128,7 +1134,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.logging.Logging#defaultLogLevel" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultLogLevel:com.twitter.logging.Level"></a><a id="defaultLogLevel:Level"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultLogLevel:com.twitter.logging.Level" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultLogLevel:com.twitter.logging.Level" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1144,7 +1150,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.logging.Logging#defaultOutput" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultOutput:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultOutput:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultOutput:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1160,7 +1166,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.logging.Logging#defaultRollPolicy" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultRollPolicy:com.twitter.logging.Policy"></a><a id="defaultRollPolicy:Policy"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultRollPolicy:com.twitter.logging.Policy" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultRollPolicy:com.twitter.logging.Policy" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1176,7 +1182,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.logging.Logging#defaultRotateCount" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultRotateCount:Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultRotateCount:Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultRotateCount:Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1192,7 +1198,7 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#defaultThriftAnnouncement" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultThriftAnnouncement:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultThriftAnnouncement:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultThriftAnnouncement:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1204,11 +1210,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftAnnouncement</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Server Announcement</p><div class="fullcomment"><div class="comment cmt"><p>Server Announcement</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Server Announcement</p><div class="fullcomment"><div class="comment cmt"><p>Server Announcement</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#defaultThriftPort" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultThriftPort:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultThriftPort:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultThriftPort:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1220,11 +1226,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftPort</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Thrift Port</p><div class="fullcomment"><div class="comment cmt"><p>Thrift Port</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Thrift Port</p><div class="fullcomment"><div class="comment cmt"><p>Thrift Port</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#defaultThriftServerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultThriftServerName:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultThriftServerName:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultThriftServerName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1236,11 +1242,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftServerName</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <p class="shortcomment cmt">Server Name</p><div class="fullcomment"><div class="comment cmt"><p>Server Name</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Server Name</p><div class="fullcomment"><div class="comment cmt"><p>Server Name</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#defaultThriftShutdownTimeout" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="defaultThriftShutdownTimeout:com.twitter.util.Duration"></a><a id="defaultThriftShutdownTimeout:Duration"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#defaultThriftShutdownTimeout:com.twitter.util.Duration" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#defaultThriftShutdownTimeout:com.twitter.util.Duration" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1252,11 +1258,11 @@ this trait or for overriding defaults provided herein, e.g.,</p><p>override def 
         <span class="name">defaultThriftShutdownTimeout</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>
       </span>
       
-      <p class="shortcomment cmt">Shutdown Timeout</p><div class="fullcomment"><div class="comment cmt"><p>Shutdown Timeout</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+      <p class="shortcomment cmt">Shutdown Timeout</p><div class="fullcomment"><div class="comment cmt"><p>Shutdown Timeout</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#disableAdminHttpServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="disableAdminHttpServer:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#disableAdminHttpServer:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#disableAdminHttpServer:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1274,7 +1280,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1290,7 +1296,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1306,7 +1312,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="error(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#error(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1322,7 +1328,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(message:=&gt;Any,cause:Throwable):Unit"></a><a id="error(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#error(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#error(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1338,7 +1344,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="error(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#error(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#error(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1354,7 +1360,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#error" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="error(message:=&gt;Any):Unit"></a><a id="error(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#error(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#error(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1370,7 +1376,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.util.logging.Logging#errorResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="errorResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="errorResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#errorResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#errorResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1386,7 +1392,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(reason:String,details:=&gt;String):Unit"></a><a id="exitOnError(String,⇒String):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#exitOnError(reason:String,details:=&gt;String):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#exitOnError(reason:String,details:=&gt;String):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1402,7 +1408,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(reason:String):Unit"></a><a id="exitOnError(String):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#exitOnError(reason:String):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#exitOnError(reason:String):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1418,7 +1424,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#exitOnError" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="exitOnError(throwable:Throwable):Unit"></a><a id="exitOnError(Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#exitOnError(throwable:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#exitOnError(throwable:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1434,7 +1440,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.inject.server.TwitterServer#failfastOnFlagsNotParsed" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="failfastOnFlagsNotParsed:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#failfastOnFlagsNotParsed:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#failfastOnFlagsNotParsed:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1450,7 +1456,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#finalize():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1472,7 +1478,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.app.App#flag" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="flag:com.twitter.app.Flags"></a><a id="flag:Flags"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#flag:com.twitter.app.Flags" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#flag:com.twitter.app.Flags" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1488,7 +1494,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1507,7 +1513,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.server.Lifecycle#group" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="group:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#group:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#group:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1523,7 +1529,7 @@ Note: Disabling the admin server allows services to be deployed into environment
     </li><li name="com.twitter.inject.server.TwitterServer#handle" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit"></a><a id="handle(Class[_&lt;:Handler]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1541,7 +1547,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.inject.server.TwitterServer#handle" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit"></a><a id="handle[T&lt;:Handler]()(Manifest[T]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1559,7 +1565,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.logging.Logging#handlers" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handlers:List[()=&gt;com.twitter.logging.Handler]"></a><a id="handlers:List[()⇒Handler]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#handlers:List[()=&gt;com.twitter.logging.Handler]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#handlers:List[()=&gt;com.twitter.logging.Handler]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1575,7 +1581,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#hashCode():Int" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1594,7 +1600,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.inject.server.Ports#httpExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpExternalPort:Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#httpExternalPort:Option[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#httpExternalPort:Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1610,7 +1616,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.inject.server.Ports#httpsExternalPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="httpsExternalPort:Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#httpsExternalPort:Option[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#httpsExternalPort:Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1626,7 +1632,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.logging.Logging#inferClassNamesFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="inferClassNamesFlag:com.twitter.app.Flag[Boolean]"></a><a id="inferClassNamesFlag:Flag[Boolean]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#inferClassNamesFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#inferClassNamesFlag:com.twitter.app.Flag[Boolean]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1642,7 +1648,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#info(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1658,7 +1664,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(message:=&gt;Any,cause:Throwable):Unit"></a><a id="info(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#info(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#info(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1674,7 +1680,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="info(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#info(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#info(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1690,7 +1696,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#info" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="info(message:=&gt;Any):Unit"></a><a id="info(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#info(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#info(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1706,7 +1712,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#infoResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="infoResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="infoResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#infoResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#infoResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1722,7 +1728,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.app.App#init" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="init(f:=&gt;Unit):Unit"></a><a id="init(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#init(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#init(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1738,7 +1744,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.inject.app.App#injector" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="injector:com.twitter.inject.Injector"></a><a id="injector:Injector"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#injector:com.twitter.inject.Injector" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#injector:com.twitter.inject.Injector" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1754,7 +1760,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isDebugEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isDebugEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isDebugEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1770,7 +1776,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isDebugEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isDebugEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1786,7 +1792,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isErrorEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isErrorEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isErrorEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isErrorEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isErrorEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1802,7 +1808,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isErrorEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isErrorEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isErrorEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isErrorEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1818,7 +1824,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isInfoEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInfoEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isInfoEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isInfoEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isInfoEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1834,7 +1840,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isInfoEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInfoEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isInfoEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isInfoEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1850,7 +1856,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1866,7 +1872,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.CloseAwaitably0#isReady" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean"></a><a id="isReady(CanAwait):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isReady(implicitpermit:com.twitter.util.Awaitable.CanAwait):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1882,7 +1888,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isTraceEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isTraceEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isTraceEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isTraceEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isTraceEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1898,7 +1904,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isTraceEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isTraceEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isTraceEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isTraceEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1914,7 +1920,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isWarnEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isWarnEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isWarnEnabled(Marker):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isWarnEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isWarnEnabled(marker:org.slf4j.Marker):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1930,7 +1936,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.util.logging.Logging#isWarnEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isWarnEnabled:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#isWarnEnabled:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#isWarnEnabled:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1946,7 +1952,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.inject.app.App#javaModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="javaModules:java.util.Collection[com.google.inject.Module]"></a><a id="javaModules:Collection[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#javaModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#javaModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1962,7 +1968,7 @@ a warmup handler in <a href="../../inject/server/TwitterServer.html#warmup():Uni
     </li><li name="com.twitter.inject.app.App#javaOverrideModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="javaOverrideModules:java.util.Collection[com.google.inject.Module]"></a><a id="javaOverrideModules:Collection[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#javaOverrideModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#javaOverrideModules:java.util.Collection[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1980,7 +1986,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.logging.Logging#levelFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]"></a><a id="levelFlag:Flag[Level]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#levelFlag:com.twitter.app.Flag[com.twitter.logging.Level]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -1996,7 +2002,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.server.TwitterServer#libraryName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="libraryName:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#libraryName:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#libraryName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2014,7 +2020,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.server.Linters#linterRules" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="linterRules:Seq[com.twitter.util.lint.Rule]"></a><a id="linterRules:Seq[Rule]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#linterRules:Seq[com.twitter.util.lint.Rule]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#linterRules:Seq[com.twitter.util.lint.Rule]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2030,7 +2036,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.app.App#loadModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadModules():com.twitter.inject.app.internal.InstalledModules"></a><a id="loadModules():InstalledModules"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#loadModules():com.twitter.inject.app.internal.InstalledModules" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#loadModules():com.twitter.inject.app.internal.InstalledModules" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2046,7 +2052,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#loadServiceBindings" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]"></a><a id="loadServiceBindings:Seq[Binding[_]]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#loadServiceBindings:Seq[com.twitter.app.LoadService.Binding[_]]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2062,7 +2068,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#logger:com.twitter.util.logging.Logger" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#logger:com.twitter.util.logging.Logger" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2078,7 +2084,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.logging.Logging#loggerFactories" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loggerFactories:List[com.twitter.logging.LoggerFactory]"></a><a id="loggerFactories:List[LoggerFactory]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2094,7 +2100,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.util.logging.Logging#loggerName" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="loggerName:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#loggerName:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#loggerName:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2110,7 +2116,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.server.TwitterServer#main" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="main():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#main():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#main():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2126,7 +2132,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#main" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="main(args:Array[String]):Unit"></a><a id="main(Array[String]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#main(args:Array[String]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#main(args:Array[String]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2142,7 +2148,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.app.App#modules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="modules:Seq[com.google.inject.Module]"></a><a id="modules:Seq[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#modules:Seq[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#modules:Seq[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2158,7 +2164,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#name" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="name:String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#name:String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#name:String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2174,7 +2180,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2190,7 +2196,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#nonExitingMain" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="nonExitingMain(args:Array[String]):Unit"></a><a id="nonExitingMain(Array[String]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#nonExitingMain(args:Array[String]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#nonExitingMain(args:Array[String]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2206,7 +2212,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#notify():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2225,7 +2231,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2244,7 +2250,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#onExit" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="onExit(f:=&gt;Unit):Unit"></a><a id="onExit(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#onExit(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#onExit(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2260,7 +2266,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.logging.Logging#outputFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="outputFlag:com.twitter.app.Flag[String]"></a><a id="outputFlag:Flag[String]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#outputFlag:com.twitter.app.Flag[String]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#outputFlag:com.twitter.app.Flag[String]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2276,7 +2282,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.inject.app.App#overrideModules" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="overrideModules:Seq[com.google.inject.Module]"></a><a id="overrideModules:Seq[Module]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#overrideModules:Seq[com.google.inject.Module]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#overrideModules:Seq[com.google.inject.Module]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2294,7 +2300,7 @@ If you think you need this in your main server you are most likely doing somethi
     </li><li name="com.twitter.app.App#parseArgs" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="parseArgs(args:Array[String]):Unit"></a><a id="parseArgs(Array[String]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#parseArgs(args:Array[String]):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#parseArgs(args:Array[String]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2307,10 +2313,10 @@ If you think you need this in your main server you are most likely doing somethi
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftServer#postInjectorStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.TwitterServer#postInjectorStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postInjectorStartup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#postInjectorStartup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#postInjectorStartup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2323,7 +2329,7 @@ If you think you need this in your main server you are most likely doing somethi
       </span>
       
       <p class="shortcomment cmt">After creation of the Injector.</p><div class="fullcomment"><div class="comment cmt"><p>After creation of the Injector. Before any other lifecycle methods.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.postInjectorStartup()</code> in any overridden definition of this
@@ -2332,7 +2338,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#postWarmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#postWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#postWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2351,7 +2357,7 @@ instantiate any awaitable it is expected that you add the Awaitable (or
 instantiate any awaitable it is expected that you add the Awaitable (or
 <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ListeningServer.html" class="extype" name="com.twitter.finagle.ListeningServer">com.twitter.finagle.ListeningServer</a>) to the list of Awaitables using the
 <span class="extype" name="await[T">&lt;: Awaitable[_</span>(awaitable: T): Unit]] function.
-</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a> → <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>Annotations</dt><dd>
                 <span class="name">@<a href="../../inject/annotations/Lifecycle.html" class="extype" name="com.twitter.inject.annotations.Lifecycle">Lifecycle</a></span><span class="args">()</span>
               
         </dd><dt>Note</dt><dd><span class="cmt"><p>You MUST call <code>super.postWarmup()</code> in any overridden definition of this
@@ -2360,7 +2366,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.app.App#postmain" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="postmain(f:=&gt;Unit):Unit"></a><a id="postmain(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#postmain(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#postmain(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2376,7 +2382,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.server.Lifecycle.Warmup#prebindWarmup" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="prebindWarmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#prebindWarmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#prebindWarmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2392,7 +2398,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.app.App#premain" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="premain(f:=&gt;Unit):Unit"></a><a id="premain(⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#premain(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#premain(f:=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2406,9 +2412,9 @@ of the server lifecycle.</p></span></dd></dl></div>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>App</dd></dl></div>
     </li><li name="com.twitter.util.CloseAwaitably0#ready" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type"></a><a id="ready(Duration)(CanAwait):ThriftServer.this.type"></a>
+      <a id="ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type"></a><a id="ready(Duration)(CanAwait):ThriftServerTrait.this.type"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#ready(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):CloseAwaitably0.this.type" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2417,14 +2423,14 @@ of the server lifecycle.</p></span></dd></dl></div>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">ready</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a>.this.type</span>
+        <span class="name">ready</span><span class="params">(<span name="timeout">timeout: <a href="https://twitter.github.io/util/docs/com/twitter/util/Duration.html#com.twitter.util.Duration" class="extype" name="com.twitter.util.Duration">Duration</a></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="permit">permit: <span class="extype" name="com.twitter.util.Awaitable.CanAwait">CanAwait</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a>.this.type</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>CloseAwaitably0 → Awaitable</dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#resolveFinagleClientsOnStartup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="resolveFinagleClientsOnStartup:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#resolveFinagleClientsOnStartup:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#resolveFinagleClientsOnStartup:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2440,7 +2446,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.util.CloseAwaitably0#result" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U"></a><a id="result(Duration)(CanAwait):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#result(timeout:com.twitter.util.Duration)(implicitpermit:com.twitter.util.Awaitable.CanAwait):U" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2456,7 +2462,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#rollPolicyFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]"></a><a id="rollPolicyFlag:Flag[Policy]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#rollPolicyFlag:com.twitter.app.Flag[com.twitter.logging.Policy]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2472,7 +2478,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.logging.Logging#rotateCountFlag" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="rotateCountFlag:com.twitter.app.Flag[Int]"></a><a id="rotateCountFlag:Flag[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#rotateCountFlag:com.twitter.app.Flag[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#rotateCountFlag:com.twitter.app.Flag[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2488,7 +2494,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.server.Admin#routes" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="routes:Seq[com.twitter.server.AdminHttpServer.Route]"></a><a id="routes:Seq[Route]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#routes:Seq[com.twitter.server.AdminHttpServer.Route]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#routes:Seq[com.twitter.server.AdminHttpServer.Route]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2504,7 +2510,7 @@ of the server lifecycle.</p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#run" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="run():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#run():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#run():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2517,26 +2523,10 @@ of the server lifecycle.</p></span></dd></dl></div>
       </span>
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a> → <a href="../../inject/app/App.html" class="extype" name="com.twitter.inject.app.App">App</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="../../inject/server/TwitterServer.html#start():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#start">com.twitter.inject.server.TwitterServer#start</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftServer#service" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]"></a><a id="service:Service[Array[Byte],Array[Byte]]"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#service:com.twitter.finagle.Service[Array[Byte],Array[Byte]]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier">final </span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">service</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>], <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>
-      </span>
-      
-      <p class="shortcomment cmt">This Server does not return a <code>Service[Array[Byte], Array[Byte]]</code></p><div class="fullcomment"><div class="comment cmt"><p>This Server does not return a <code>Service[Array[Byte], Array[Byte]]</code></p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a> → <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#setup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="setup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#setup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#setup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2562,7 +2552,7 @@ when the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable
     </li><li name="com.twitter.server.TwitterServer#shutdownTimer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="shutdownTimer:com.twitter.util.Timer"></a><a id="shutdownTimer:Timer"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#shutdownTimer:com.twitter.util.Timer" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#shutdownTimer:com.twitter.util.Timer" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2578,7 +2568,7 @@ when the <a href="https://twitter.github.io/util/docs/com/twitter/util/Awaitable
     </li><li name="com.twitter.inject.server.TwitterServer#start" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="start():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#start():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#start():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2603,7 +2593,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.server.Stats#statsReceiver" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="statsReceiver:com.twitter.finagle.stats.StatsReceiver"></a><a id="statsReceiver:StatsReceiver"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#statsReceiver:com.twitter.finagle.stats.StatsReceiver" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#statsReceiver:com.twitter.finagle.stats.StatsReceiver" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2619,7 +2609,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.inject.server.TwitterServer#statsReceiverModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="statsReceiverModule:com.google.inject.Module"></a><a id="statsReceiverModule:Module"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#statsReceiverModule:com.google.inject.Module" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#statsReceiverModule:com.google.inject.Module" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2636,7 +2626,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.server.TwitterServer#suppressGracefulShutdownErrors" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="suppressGracefulShutdownErrors:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#suppressGracefulShutdownErrors:Boolean" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#suppressGracefulShutdownErrors:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2652,7 +2642,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2668,7 +2658,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#thriftPort" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="thriftPort:Option[Int]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#thriftPort:Option[Int]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#thriftPort:Option[Int]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2680,11 +2670,11 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
         <span class="name">thriftPort</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a> → <a href="../../inject/server/Ports.html" class="extype" name="com.twitter.inject.server.Ports">Ports</a></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#thriftResponseClassifierModule" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="thriftResponseClassifierModule:com.google.inject.Module"></a><a id="thriftResponseClassifierModule:Module"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#thriftResponseClassifierModule:com.google.inject.Module" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#thriftResponseClassifierModule:com.google.inject.Module" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2697,11 +2687,11 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
       </span>
       
       <p class="shortcomment cmt">Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <span class="extype" name="ThriftResponseClassifier">ThriftResponseClassifier</span>.</p><div class="fullcomment"><div class="comment cmt"><p>Default <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> for providing a <span class="extype" name="ThriftResponseClassifier">ThriftResponseClassifier</span>.
-</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <span class="extype" name="ThriftResponseClassifier">ThriftResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>a <a href="../../inject/TwitterModule.html" class="extype" name="com.twitter.inject.TwitterModule">com.twitter.inject.TwitterModule</a> which provides a <span class="extype" name="ThriftResponseClassifier">ThriftResponseClassifier</span> implementation.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#time[T](formatStr:String)(func:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#time[T](formatStr:String)(func:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2717,7 +2707,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#toString():String" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2733,7 +2723,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2749,7 +2739,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#trace(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#trace(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2765,7 +2755,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="trace(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#trace(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2781,7 +2771,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(message:=&gt;Any):Unit"></a><a id="trace(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#trace(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#trace(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2797,7 +2787,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.util.logging.Logging#traceResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="traceResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="traceResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#traceResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#traceResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2813,7 +2803,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#wait():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2835,7 +2825,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2857,7 +2847,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2881,7 +2871,7 @@ these threads manually, e.g., by using a <a href="https://twitter.github.io/util
     </li><li name="com.twitter.inject.server.TwitterServer#warmup" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmup():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#warmup():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#warmup():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2899,7 +2889,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.server.Lifecycle.Warmup#warmupComplete" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warmupComplete():Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#warmupComplete():Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#warmupComplete():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2915,7 +2905,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="warn(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#warn(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2931,7 +2921,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(message:=&gt;Any,cause:Throwable):Unit"></a><a id="warn(⇒Any,Throwable):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#warn(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#warn(message:=&gt;Any,cause:Throwable):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2947,7 +2937,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit"></a><a id="warn(Marker,⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#warn(marker:org.slf4j.Marker,message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2963,7 +2953,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warn" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warn(message:=&gt;Any):Unit"></a><a id="warn(⇒Any):Unit"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#warn(message:=&gt;Any):Unit" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#warn(message:=&gt;Any):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -2979,7 +2969,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
     </li><li name="com.twitter.util.logging.Logging#warnResult" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="warnResult[T](message:=&gt;String)(fn:=&gt;T):T"></a><a id="warnResult[T](⇒String)(⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#warnResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#warnResult[T](message:=&gt;String)(fn:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3003,7 +2993,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
               <ol><li name="com.twitter.inject.server.DeprecatedLogging#log" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="log:com.twitter.logging.Logger"></a><a id="log:Logger"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#log:com.twitter.logging.Logger" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/ThriftServerTrait.html#log:com.twitter.logging.Logger" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -3024,9 +3014,7 @@ Override, but do not call <code>super.warmup()</code> as you will trigger a lint
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finatra.thrift.ThriftServerTrait">
-              <h3>Inherited from <a href="ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a></h3>
-            </div><div class="parent" name="com.twitter.inject.server.TwitterServer">
+        <div class="parent" name="com.twitter.inject.server.TwitterServer">
               <h3>Inherited from <a href="../../inject/server/TwitterServer.html" class="extype" name="com.twitter.inject.server.TwitterServer">TwitterServer</a></h3>
             </div><div class="parent" name="com.twitter.server.Lifecycle.Warmup">
               <h3>Inherited from <span class="extype" name="com.twitter.server.Lifecycle.Warmup">Warmup</span></h3>

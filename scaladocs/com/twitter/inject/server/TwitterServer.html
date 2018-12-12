@@ -324,7 +324,7 @@ occur causing your server to either function improperly or outright fail.</p><p>
             <span class="toggle">
               Known Subclasses
             </span>
-            <div class="subClasses hiddenContent"><a href="../../finatra/thrift/AbstractThriftServer.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServer">AbstractThriftServer</a>, <a href="../../finatra/thrift/ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a>, <a href="AbstractTwitterServer.html" class="extype" name="com.twitter.inject.server.AbstractTwitterServer">AbstractTwitterServer</a></div>
+            <div class="subClasses hiddenContent"><a href="../../finatra/thrift/AbstractThriftServer.html" class="extype" name="com.twitter.finatra.thrift.AbstractThriftServer">AbstractThriftServer</a>, <a href="../../finatra/thrift/ThriftServer.html" class="extype" name="com.twitter.finatra.thrift.ThriftServer">ThriftServer</a>, <a href="../../finatra/thrift/ThriftServerTrait.html" class="extype" name="com.twitter.finatra.thrift.ThriftServerTrait">ThriftServerTrait</a>, <a href="AbstractTwitterServer.html" class="extype" name="com.twitter.inject.server.AbstractTwitterServer">AbstractTwitterServer</a></div>
           </div></div>
         
 
@@ -1395,6 +1395,24 @@ Note: Disabling the admin server allows services to be deployed into environment
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Lifecycle</dd></dl></div>
+    </li><li name="com.twitter.inject.server.TwitterServer#handle" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit"></a><a id="handle(Class[_&lt;:Handler]):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/inject/server/TwitterServer.html#handle(clazz:Class[_&lt;:com.twitter.inject.utils.Handler]):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">handle</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">Handler</a>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Utility to run a <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>.</p><div class="fullcomment"><div class="comment cmt"><p>Utility to run a <a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a>. This is generally used for running
+a warmup handler in <a href="#warmup():Unit" class="extmbr" name="com.twitter.inject.server.TwitterServer#warmup">TwitterServer.warmup</a>.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>See also</dt><dd><span class="cmt"><p><a href="../utils/Handler.html" class="extype" name="com.twitter.inject.utils.Handler">com.twitter.inject.utils.Handler</a></p></span></dd></dl></div>
     </li><li name="com.twitter.inject.server.TwitterServer#handle" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="handle[T&lt;:com.twitter.inject.utils.Handler]()(implicitevidence$1:Manifest[T]):Unit"></a><a id="handle[T&lt;:Handler]()(Manifest[T]):Unit"></a>
       <span class="permalink">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Thrift Server Definition &#8212; Finatra 18.11.0 documentation</title>
+    <title>Thrift Server Definition &#8212; Finatra 18.12.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.11.0',
+        VERSION:     '18.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.11.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.12.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Defining Thrift Controllers" href="controllers.html" />
     <link rel="prev" title="Scrooge and Finagle" href="basics.html" />
@@ -71,18 +71,21 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p id="thrift-server">Note: the most up-to-date examples are located in the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/examples">finatra/examples</a> project.</p>
-<p>See <a class="reference external" href="https://github.com/twitter/finatra/tree/master/examples/thrift-server">examples/thrift-server</a> for an example Thrift Server.</p>
+  <p id="thrift-server">Note: the most up-to-date examples are located in the <a class="reference external" href="https://github.com/twitter/finatra/tree/master/examples">finatra/examples</a>
+project.</p>
+<p>See <a class="reference external" href="https://github.com/twitter/finatra/tree/master/examples/thrift-server">examples/thrift-server</a>
+for an example <cite>ThriftServer</cite>.</p>
 <div class="section" id="thrift-server-definition">
 <h1>Thrift Server Definition<a class="headerlink" href="#thrift-server-definition" title="Permalink to this headline">¶</a></h1>
-<p>To start, add a dependency on the <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a> library. We also recommend using <a class="reference external" href="http://logback.qos.ch/">Logback</a> as your <a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g.,</p>
-<p>with sbt:</p>
+<p>To start, add a dependency on the <a class="reference external" href="http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.twitter%22%20AND%20a%3A%22finatra-thrift_2.12%22">finatra-thrift</a>
+library. We also recommend using <a class="reference external" href="http://logback.qos.ch/">Logback</a> as your
+<a class="reference external" href="http://www.slf4j.org/manual.html">SLF4J</a> implementation. E.g., with sbt:</p>
 <pre class="literal-block">
-&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;18.11.0&quot;
+&quot;com.twitter&quot; %% &quot;finatra-thrift&quot; % &quot;18.12.0&quot;
 &quot;ch.qos.logback&quot; % &quot;logback-classic&quot; % versions.logback,
 </pre>
 <p>For more information on logging with Finatra see: <a class="reference external" href="../logging/index.html#introduction-to-logging-with-finatra">Introduction to Logging With Finatra</a>.</p>
-<p>Create a new class that extends <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala">c.t.finatra.thrift.ThriftServer</a>:</p>
+<p>Create a new class that extends <a class="reference external" href="https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L143">c.t.finatra.thrift.ThriftServer</a>:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 
@@ -96,9 +99,23 @@ class ExampleServer extends ThriftServer {
 }
 </pre></div>
 </div>
+<p>Or in Java, that extends the <a class="reference external" href="https://github.com/twitter/finatra/blob/700e741f41368d9bc2ba76489e0641c4cfb8545a/thrift/src/main/scala/com/twitter/finatra/thrift/servers.scala#L168">c.t.finatra.thrift.AbstractThriftServer</a>:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.AbstractThriftServer;
+import com.twitter.finatra.thrift.routing.JavaThriftRouter;
+
+public class ExampleServer extends AbstractThriftServer {
+
+  @Override
+  public void configureThrift(JavaThriftRouter router) {
+    ...
+  }
+}
+</pre></div>
+</div>
 <p>A more complete example includes adding Modules, a Controller, and Filters.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule
 import com.twitter.finatra.thrift.ThriftServer
+import com.twitter.finatra.thrift.filters.{LoggingMDCFilter, TraceIdMDCFilter}
 import com.twitter.finatra.thrift.routing.ThriftRouter
 
 object ExampleServerMain extends ExampleServer
@@ -117,20 +134,96 @@ class ExampleServer extends ThriftServer {
 }
 </pre></div>
 </div>
-<p>This should look familiar as the structure is similar to creating an <a class="reference external" href="../http/server.html">HttpServer</a>.  The server can be thought of as a collection of <a class="reference external" href="controllers.html">controllers</a> composed with <a class="reference external" href="filters.html">filters</a>.
-Additionally, a server can define <a class="reference external" href="../getting-started/modules.html">modules</a> for providing instances to the object graph.</p>
+<p>in Java:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>import DoEverythingModule;
+import com.google.common.collect.ImmutableList;
+import com.google.inject.Module;
+import com.twitter.finatra.thrift.AbstractThriftServer;
+import com.twitter.finatra.thrift.filters.LoggingMDCFilter;
+import com.twitter.finatra.thrift.filters.TraceIdMDCFilter;
+import com.twitter.finatra.thrift.routing.JavaThriftRouter;
+import java.util.Collection;
+
+public class ExampleServer extends AbstractThriftServer {
+
+  @Override
+  public Collection&lt;Module&gt; javaModules() {
+    return ImmutableList.&lt;Module&gt;of(new DoEverythingModule());
+  }
+
+  @Override
+  public void configureThrift(JavaThriftRouter router) {
+    router
+      .filter(LoggingMDCFilter.class)
+      .filter(TraceIdMDCFilter.class)
+      .add(ExampleThriftController.class);
+  }
+}
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Note: to add <a class="reference external" href="../getting-started/modules.html">Modules</a> to your Java server override the
+<cite>javaModules()</cite> method.</p>
+</div>
+<p>This should look familiar as the structure is similar to creating an <a class="reference external" href="../http/server.html">HttpServer</a>.
+The server can be thought of as a collection of <a class="reference external" href="controllers.html">controllers</a> composed with
+<a class="reference external" href="filters.html">filters</a>. Additionally, a server can define <a class="reference external" href="../getting-started/modules.html">modules</a>
+for providing instances to the object graph.</p>
+<div class="section" id="using-generated-java-code">
+<h2>Using Generated Java Code<a class="headerlink" href="#using-generated-java-code" title="Permalink to this headline">¶</a></h2>
+<p>Finatra assumes that users are using the <a class="reference external" href="https://twitter.github.io/scrooge/">Scrooge Thrift code generator</a>
+for generating code from a Thrift IDL. <a class="reference external" href="https://twitter.github.io/scrooge/">Scrooge</a> allows for
+code generation in multiple languages but Finatra supports either generated Java or generated Scala
+code only.</p>
+<p>If you choose to use generated Java code for your service (instead of generated Scala), you MUST
+extend the <cite>AbstractThriftServer</cite> and configure the <cite>JavaThriftRouter</cite>.</p>
+<p>Most typically this is done when the server is being written in Java but is not exclusively so. This
+means:</p>
+<ul class="simple">
+<li>if you write your server in Scala you can use either generated Java or generated Scala code.</li>
+<li>if you write your server in Java you MUST use generated Java code.</li>
+</ul>
+</div>
 <div class="section" id="naming-convention">
 <h2>Naming Convention<a class="headerlink" href="#naming-convention" title="Permalink to this headline">¶</a></h2>
-<p>The Finatra convention is to create a Scala <a class="reference external" href="https://twitter.github.io/scala_school/basics2.html#object">object</a> with a name ending in &#8220;Main&#8221; that extends your server class.
-The server class can be used in testing as this allows your server to be instantiated multiple times in tests without worrying about static state persisting across test runs in the same JVM.
-The static object, e.g., <cite>ExampleServerMain</cite>, which contains the static main method for the server would then be used as the <a class="reference external" href="https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html">application entry point</a> for running the server in all other cases.</p>
+<p>The Finatra convention is to create a Scala <a class="reference external" href="https://twitter.github.io/scala_school/basics2.html#object">object</a>
+with a name ending in &#8220;Main&#8221; that extends your server class. The server <em>class</em> can be used in
+testing as this allows your server to be instantiated multiple times in tests without worrying about
+static state persisting across test runs in the same JVM.</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>object ExampleServerMain extends ExampleServer
+</pre></div>
+</div>
+<p>The static object, e.g., <cite>ExampleServerMain</cite>, which then contains a static main method for the server
+would then be used as the <a class="reference external" href="https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html">application entry point</a>
+for running the server in all other cases.</p>
+<div class="section" id="java-naming-convention">
+<h3>Java Naming Convention<a class="headerlink" href="#java-naming-convention" title="Permalink to this headline">¶</a></h3>
+<p>In Java you would create a separate &#8220;main&#8221; class which defines a main method and accepts args
+for flag parsing:</p>
+<div class="code java highlight-text"><div class="highlight"><pre><span></span>public final class ExampleServerMain {
+    private ExampleServerMain() {
+    }
+
+    public static void main(String[] args) {
+        new ExampleServer().main(args);
+    }
+}
+</pre></div>
+</div>
+<p>This would be the class used as the <a class="reference external" href="https://docs.oracle.com/javase/tutorial/deployment/jar/appman.html">application entry point</a>
+for running the server.</p>
+</div>
 </div>
 <div class="section" id="override-default-behavior">
 <h2>Override Default Behavior<a class="headerlink" href="#override-default-behavior" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="flags">
 <h3>Flags<a class="headerlink" href="#flags" title="Permalink to this headline">¶</a></h3>
-<p>Some deployment environments may make it difficult to set <a class="reference external" href="../getting-started/flags.html">Flag values</a> with command line arguments. If this is the case, Finatra&#8217;s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala">ThriftServer</a>&#8216;s core flags can be set from code.</p>
-<p>For example, instead of setting the <cite>-thrift.port</cite> flag, you can override the following method in your server.</p>
+<p>Some deployment environments may make it difficult to set <a class="reference external" href="../getting-started/flags.html">Flag values</a>
+with command line arguments. If this is the case, Finatra&#8217;s <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/ThriftServer.scala">ThriftServer</a>&#8216;s
+core flags can be set from code.</p>
+<p>For example, instead of setting the <cite>-thrift.port</cite> flag, you can override the following method in
+your server.</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.finatra.thrift.routing.ThriftRouter
 
@@ -149,8 +242,9 @@ class ExampleServer extends ThriftServer {
 </div>
 <div class="section" id="finagle-server-configuration">
 <h3>Finagle Server Configuration<a class="headerlink" href="#finagle-server-configuration" title="Permalink to this headline">¶</a></h3>
-<p>If you want to further configure the underlying <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a> server you can override <cite>configureThriftServer</cite> in your server
-to specify additional configuration on (or override the default configuration of) the underlying Finagle server.</p>
+<p>If you want to further configure the underlying <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a>
+server you can override <cite>configureThriftServer</cite> in your server to specify additional configuration
+on (or override the default configuration of) the underlying Finagle server.</p>
 <p>For example:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.finagle.ThriftMux
 import com.twitter.finatra.thrift.ThriftServer
@@ -172,21 +266,25 @@ class ExampleServer extends ThriftServer {
 }
 </pre></div>
 </div>
-<p>For more information on <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a> server configuration see the documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Configuration.html">here</a>;
-specifically the server documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html">here</a>.</p>
+<p>For more information on <a class="reference external" href="https://github.com/twitter/finagle">Finagle</a> server configuration see
+the documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Configuration.html">here</a>; specifically
+the server documentation <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html">here</a>.</p>
 </div>
 <div class="section" id="server-side-response-classification">
 <h3>Server-side Response Classification<a class="headerlink" href="#server-side-response-classification" title="Permalink to this headline">¶</a></h3>
-<p>To configure server-side <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html#response-classification">Response Classification</a> you could choose to
-set the classifier directly on the underlying Finagle server by overriding the <cite>configureThriftServer</cite> in your server, e.g.,</p>
+<p>To configure server-side <a class="reference external" href="https://twitter.github.io/finagle/guide/Servers.html#response-classification">Response Classification</a>
+you could choose to set the classifier directly on the underlying Finagle server by overriding the
+<cite>configureThriftServer</cite> in your server, e.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>override def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server.withResponseClassifier(???)
 }
 </pre></div>
 </div>
-<p>However, since the server-side ResponseClassifier could affect code not just at the Finagle level, we actually recommend overriding the specific framework module,
-<cite>ThriftResponseClassifierModule</cite> instead. This binds an instance of an <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/response/ThriftResponseClassifier.scala">ThriftResponseClassifier</a>
-to the object graph that is then available to be injected into things like the Thrift <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">StatsFilter</a>
+<p>However, since the server-side ResponseClassifier could affect code not just at the Finagle level,
+we actually recommend overriding the specific framework module, <cite>ThriftResponseClassifierModule</cite>
+instead. This binds an instance of an <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/response/ThriftResponseClassifier.scala">ThriftResponseClassifier</a>
+to the object graph that is then available to be injected into things like the Thrift
+<a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/filters/StatsFilter.scala">StatsFilter</a>
 for a more accurate reporting of metrics that takes into account server-side response classification.</p>
 <p>For example, in your <cite>ThriftServer</cite> you would do:</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.google.inject.Module
@@ -205,7 +303,8 @@ before serving.</p>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<p>For information on testing a Thrift server see the Thrift Server <a class="reference external" href="../testing/feature_tests.html#thrift-server">Feature Tests</a> section.</p>
+<p>For information on testing a Thrift server see the Thrift Server <a class="reference external" href="../testing/feature_tests.html#thrift-server">Feature Tests</a>
+section.</p>
 </div>
 </div>
 
@@ -231,7 +330,11 @@ before serving.</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Thrift Server Definition</a><ul>
-<li><a class="reference internal" href="#naming-convention">Naming Convention</a></li>
+<li><a class="reference internal" href="#using-generated-java-code">Using Generated Java Code</a></li>
+<li><a class="reference internal" href="#naming-convention">Naming Convention</a><ul>
+<li><a class="reference internal" href="#java-naming-convention">Java Naming Convention</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#override-default-behavior">Override Default Behavior</a><ul>
 <li><a class="reference internal" href="#flags">Flags</a></li>
 <li><a class="reference internal" href="#finagle-server-configuration">Finagle Server Configuration</a></li>

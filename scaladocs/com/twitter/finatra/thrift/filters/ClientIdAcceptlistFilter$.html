@@ -133,10 +133,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.thriftscala" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="thriftscala"></a><a id="thriftscala:thriftscala"></a>
+    </li><li name="com.twitter.finatra.thrift.filters" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filters"></a><a id="filters:filters"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/index.html#thriftscala" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/index.html#filters" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -145,108 +145,54 @@
         <span class="kind">package</span>
       </span>
       <span class="symbol">
-        <a title="" href="index.html"><span class="name">thriftscala</span></a>
+        <a title="" href="index.html"><span class="name">filters</span></a>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService" visbl="pub" class="indented6 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="EmptyExceptionsService"></a><a id="EmptyExceptionsService:EmptyExceptionsService"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/index.html#EmptyExceptionsService" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a title="To generate Exceptions, scrooge uses finagle-core, which pants does not provide to thrift libraries which do not define services (structs-only definitions generally do not need finagle)." href="EmptyExceptionsService$.html"><span class="name">EmptyExceptionsService</span></a><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/GeneratedThriftService.html#com.twitter.finagle.thrift.GeneratedThriftService" class="extype" name="com.twitter.finagle.thrift.GeneratedThriftService">GeneratedThriftService</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">To generate Exceptions, scrooge uses finagle-core, which pants does not provide
-to thrift libraries which do not define services (structs-only definitions generally
-do not need finagle).</p><div class="fullcomment"><div class="comment cmt"><p>To generate Exceptions, scrooge uses finagle-core, which pants does not provide
-to thrift libraries which do not define services (structs-only definitions generally
-do not need finagle). Therefore, we define an empty service to cause the finagle-core
-dep to be introduced.</p><p>see DPB-7778
-</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.thrift.thriftscala">thriftscala</a></dd></dl></div>
-    </li><li class="current-entities indented6">
+    </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="EmptyExceptionsService$$BaseServiceIface.html" title=""></a>
-                        <a href="EmptyExceptionsService$$BaseServiceIface.html" title="">BaseServiceIface</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="AccessLoggingFilter.html" title="AccessLoggingFilter attempts to follow the Common Log Format as closely as possible."></a>
+                        <a href="AccessLoggingFilter.html" title="AccessLoggingFilter attempts to follow the Common Log Format as closely as possible.">AccessLoggingFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="EmptyExceptionsService$$Filter.html" title=""></a>
-                        <a href="EmptyExceptionsService$$Filter.html" title="">Filter</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="BaseDarkTrafficFilter.html" title=""></a>
+                        <a href="BaseDarkTrafficFilter.html" title="">BaseDarkTrafficFilter</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="" title="Visible for testing"></a>
+                        <a class="class" href="ClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients."></a>
+                        <a href="ClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients.">ClientIdAcceptlistFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="EmptyExceptionsService$$FinagledClient.html" title=""></a>
-                        <a href="EmptyExceptionsService$$FinagledClient.html" title="">FinagledClient</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain."></a>
+                        <a href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain.">DarkTrafficFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="EmptyExceptionsService$$FinagledService.html" title=""></a>
-                        <a href="EmptyExceptionsService$$FinagledService.html" title="">FinagledService</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it."></a>
+                        <a href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it.">ExceptionMappingFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="trait" href="EmptyExceptionsService$$FutureIface.html" title=""></a>
-                        <a href="EmptyExceptionsService$$FutureIface.html" title="">FutureIface</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="JavaClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients."></a>
+                        <a href="JavaClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients.">JavaClientIdAcceptlistFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="EmptyExceptionsService$$MethodIface.html" title=""></a>
-                        <a href="EmptyExceptionsService$$MethodIface.html" title="">MethodIface</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code."></a>
+                        <a href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code.">JavaDarkTrafficFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$MethodIfaceBuilder$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$MethodIfaceBuilder$.html" title="">MethodIfaceBuilder</a>
-                      </li><li class="current-entities indented6">
-                        <a class="object" href="EmptyExceptionsService$$MethodPerEndpoint$.html" title=""></a>
-                        <a class="trait" href="EmptyExceptionsService$$MethodPerEndpoint.html" title=""></a>
-                        <a href="EmptyExceptionsService$$MethodPerEndpoint.html" title="">MethodPerEndpoint</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="LoggingMDCFilter.html" title=""></a>
+                        <a href="LoggingMDCFilter.html" title="">LoggingMDCFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$MethodPerEndpointBuilder$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$MethodPerEndpointBuilder$.html" title="">MethodPerEndpointBuilder</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="StatsFilter.html" title="Tracks &quot;per method&quot; statistics scoped under per_method_stats/&lt;method&gt; including:"></a>
+                        <a href="StatsFilter.html" title="Tracks &quot;per method&quot; statistics scoped under per_method_stats/&lt;method&gt; including:">StatsFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$ReqRepMethodPerEndpoint$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ReqRepMethodPerEndpoint$.html" title="">ReqRepMethodPerEndpoint</a>
-                      </li><li class="current-entities indented6">
+                        <a class="class" href="ThriftMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed."></a>
+                        <a href="ThriftMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed.">ThriftMDCFilter</a>
+                      </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$ReqRepMethodPerEndpointBuilder$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ReqRepMethodPerEndpointBuilder$.html" title="">ReqRepMethodPerEndpointBuilder</a>
-                      </li><li class="current-entities indented6">
-                        <a class="object" href="EmptyExceptionsService$$ReqRepServicePerEndpoint$.html" title=""></a>
-                        <a class="trait" href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" title="">ReqRepServicePerEndpoint</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="object" href="" title=""></a>
-                        <a href="" title="">ReqRepServicePerEndpointBuilder</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$ReqRepThriftServiceBuilder$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ReqRepThriftServiceBuilder$.html" title="">ReqRepThriftServiceBuilder</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="class" href="EmptyExceptionsService$$ServiceIface.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ServiceIface.html" title="">ServiceIface</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$ServiceIfaceBuilder$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ServiceIfaceBuilder$.html" title="">ServiceIfaceBuilder</a>
-                      </li><li class="current-entities indented6">
-                        <a class="object" href="EmptyExceptionsService$$ServicePerEndpoint$.html" title=""></a>
-                        <a class="trait" href="EmptyExceptionsService$$ServicePerEndpoint.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ServicePerEndpoint.html" title="">ServicePerEndpoint</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$ServicePerEndpointBuilder$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ServicePerEndpointBuilder$.html" title="">ServicePerEndpointBuilder</a>
-                      </li><li class="current-entities indented6">
-                        <span class="separator"></span>
-                        <a class="object" href="EmptyExceptionsService$$ThriftServiceBuilder$.html" title=""></a>
-                        <a href="EmptyExceptionsService$$ThriftServiceBuilder$.html" title="">ThriftServiceBuilder</a>
+                        <a class="class" href="TraceIdMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed."></a>
+                        <a href="TraceIdMDCFilter.html" title="Note: Any MDC filter must be used in conjunction with the LoggingMDCFilter to ensure that diagnostic context is properly managed.">TraceIdMDCFilter</a>
                       </li>
               </ul>
             </div>
@@ -254,32 +200,34 @@ dep to be introduced.</p><p>see DPB-7778
           <div id="content">
             <body class="object value">
       <div id="definition">
-        <div class="big-circle object">o</div>
-        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a>.<a href="index.html" class="extype" name="com.twitter.finatra.thrift.thriftscala">thriftscala</a>.<a href="EmptyExceptionsService$.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService">EmptyExceptionsService</a></p>
-        <h1>ReqRepServicePerEndpointBuilder<span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html" title="Permalink">
+        <a href="ClientIdAcceptlistFilter.html" title="See companion class"><div class="big-circle object-companion-class">o</div></a>
+        <p id="owner"><a href="../../../../index.html" class="extype" name="com">com</a>.<a href="../../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a>.<a href="index.html" class="extype" name="com.twitter.finatra.thrift.filters">filters</a></p>
+        <h1><a href="ClientIdAcceptlistFilter.html" title="See companion class">ClientIdAcceptlistFilter</a><span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span></h1>
-        <h3><span class="morelinks"></span></h3>
+        <h3><span class="morelinks"><div>
+            Companion <a href="ClientIdAcceptlistFilter.html" title="See companion class">class ClientIdAcceptlistFilter</a>
+          </div></span></h3>
       </div>
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier">implicit </span>
+        <span class="modifier"></span>
         <span class="kind">object</span>
       </span>
       <span class="symbol">
-        <span class="name">ReqRepServicePerEndpointBuilder</span><span class="result"> extends <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/ReqRepServicePerEndpointBuilder.html#com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder" class="extype" name="com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder">ReqRepServicePerEndpointBuilder</a>[<a href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint">ReqRepServicePerEndpoint</a>]</span>
+        <span class="name">ClientIdAcceptlistFilter</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Visible for testing</p></div><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/ReqRepServicePerEndpointBuilder.html#com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder" class="extype" name="com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder">ReqRepServicePerEndpointBuilder</a>[<a href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint">ReqRepServicePerEndpoint</a>], <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/ServicePerEndpointBuilder.html#com.twitter.finagle.thrift.service.ServicePerEndpointBuilder" class="extype" name="com.twitter.finagle.thrift.service.ServicePerEndpointBuilder">ServicePerEndpointBuilder</a>[<a href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint">ReqRepServicePerEndpoint</a>], <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -305,7 +253,7 @@ dep to be introduced.</p><p>see DPB-7778
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpointBuilder"><span>ReqRepServicePerEndpointBuilder</span></li><li class="in" name="com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder"><span>ReqRepServicePerEndpointBuilder</span></li><li class="in" name="com.twitter.finagle.thrift.service.ServicePerEndpointBuilder"><span>ServicePerEndpointBuilder</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.thrift.filters.ClientIdAcceptlistFilter"><span>ClientIdAcceptlistFilter</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -335,7 +283,7 @@ dep to be introduced.</p><p>see DPB-7778
                 <li name="scala.AnyRef#!=" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="!=(x$1:Any):Boolean"></a><a id="!=(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#!=(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#!=(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -351,7 +299,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef###" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="##():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html###():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html###():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -367,7 +315,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#==" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="==(x$1:Any):Boolean"></a><a id="==(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#==(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#==(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -380,10 +328,26 @@ dep to be introduced.</p><p>see DPB-7778
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.filters.ClientIdAcceptlistFilter#StatsScope" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StatsScope:String"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#StatsScope:String" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">StatsScope</span><span class="result">: <span class="extype" name="java.lang.String">String</span></span>
+      </span>
+      
+      
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#asInstanceOf[T0]:T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#asInstanceOf[T0]:T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -399,7 +363,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#clone():Object" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#clone():Object" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -423,7 +387,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#eq" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a><a id="eq(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#eq(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -439,7 +403,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#equals" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="equals(x$1:Any):Boolean"></a><a id="equals(Any):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#equals(x$1:Any):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#equals(x$1:Any):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -455,7 +419,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#finalize():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#finalize():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -477,7 +441,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#getClass" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="getClass():Class[_]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#getClass():Class[_]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#getClass():Class[_]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -496,7 +460,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#hashCode():Int" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#hashCode():Int" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -515,7 +479,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.Any#isInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isInstanceOf[T0]:Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#isInstanceOf[T0]:Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#isInstanceOf[T0]:Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -531,7 +495,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#ne" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a><a id="ne(AnyRef):Boolean"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#ne(x$1:AnyRef):Boolean" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -547,7 +511,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#notify" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notify():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#notify():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#notify():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -566,7 +530,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#notifyAll" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="notifyAll():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#notifyAll():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#notifyAll():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -582,26 +546,10 @@ dep to be introduced.</p><p>see DPB-7778
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpointBuilder#servicePerEndpoint" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="servicePerEndpoint(thriftService:com.twitter.finagle.Service[com.twitter.finagle.thrift.ThriftClientRequest,Array[Byte]],clientParam:com.twitter.finagle.thrift.RichClientParam):com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint"></a><a id="servicePerEndpoint(Service[ThriftClientRequest,Array[Byte]],RichClientParam):ReqRepServicePerEndpoint"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#servicePerEndpoint(thriftService:com.twitter.finagle.Service[com.twitter.finagle.thrift.ThriftClientRequest,Array[Byte]],clientParam:com.twitter.finagle.thrift.RichClientParam):com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">servicePerEndpoint</span><span class="params">(<span name="thriftService">thriftService: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftClientRequest.html#com.twitter.finagle.thrift.ThriftClientRequest" class="extype" name="com.twitter.finagle.thrift.ThriftClientRequest">ThriftClientRequest</a>, <span class="extype" name="scala.Array">Array</span>[<a href="http://www.scala-lang.org/api/2.12.7/scala/Byte.html#scala.Byte" class="extype" name="scala.Byte">Byte</a>]]</span>, <span name="clientParam">clientParam: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/RichClientParam.html#com.twitter.finagle.thrift.RichClientParam" class="extype" name="com.twitter.finagle.thrift.RichClientParam">RichClientParam</a></span>)</span><span class="result">: <a href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint">ReqRepServicePerEndpoint</a></span>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpointBuilder">ReqRepServicePerEndpointBuilder</a> → ServicePerEndpointBuilder</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#synchronized[T0](x$1:=&gt;T0):T0" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -617,7 +565,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#toString():String" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#toString():String" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -633,7 +581,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#wait():Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#wait():Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -655,7 +603,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long,x$2:Int):Unit"></a><a id="wait(Long,Int):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#wait(x$1:Long,x$2:Int):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -677,7 +625,7 @@ dep to be introduced.</p><p>see DPB-7778
     </li><li name="scala.AnyRef#wait" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait(x$1:Long):Unit"></a><a id="wait(Long):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/thriftscala/EmptyExceptionsService$$ReqRepServicePerEndpointBuilder$.html#wait(x$1:Long):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/ClientIdAcceptlistFilter$.html#wait(x$1:Long):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -708,11 +656,7 @@ dep to be introduced.</p><p>see DPB-7778
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder">
-              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/ReqRepServicePerEndpointBuilder.html#com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder" class="extype" name="com.twitter.finagle.thrift.service.ReqRepServicePerEndpointBuilder">ReqRepServicePerEndpointBuilder</a>[<a href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint">ReqRepServicePerEndpoint</a>]</h3>
-            </div><div class="parent" name="com.twitter.finagle.thrift.service.ServicePerEndpointBuilder">
-              <h3>Inherited from <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/service/ServicePerEndpointBuilder.html#com.twitter.finagle.thrift.service.ServicePerEndpointBuilder" class="extype" name="com.twitter.finagle.thrift.service.ServicePerEndpointBuilder">ServicePerEndpointBuilder</a>[<a href="EmptyExceptionsService$$ReqRepServicePerEndpoint.html" class="extype" name="com.twitter.finatra.thrift.thriftscala.EmptyExceptionsService.ReqRepServicePerEndpoint">ReqRepServicePerEndpoint</a>]</h3>
-            </div><div class="parent" name="scala.AnyRef">
+        <div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></h3>

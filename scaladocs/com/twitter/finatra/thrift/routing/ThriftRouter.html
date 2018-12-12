@@ -151,12 +151,16 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">ThriftRouter</a>
+                        <a class="class" href="JavaThriftRouter.html" title="Builds a com.twitter.finagle.Service."></a>
+                        <a href="JavaThriftRouter.html" title="Builds a com.twitter.finagle.Service.">JavaThriftRouter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ThriftWarmup.html" title=""></a>
-                        <a href="ThriftWarmup.html" title="">ThriftWarmup</a>
+                        <a class="class" href="" title="Builds a com.twitter.finagle.thrift.ThriftService."></a>
+                        <a href="" title="Builds a com.twitter.finagle.thrift.ThriftService.">ThriftRouter</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="ThriftWarmup.html" title="A utility for performing requests through a configured ThriftRouter for the purpose of warming up the ThriftServer."></a>
+                        <a href="ThriftWarmup.html" title="A utility for performing requests through a configured ThriftRouter for the purpose of warming up the ThriftServer.">ThriftWarmup</a>
                       </li>
               </ul>
             </div>
@@ -180,19 +184,21 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftRouter</span><span class="result"> extends <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <span class="name">ThriftRouter</span><span class="result"> extends <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter">BaseThriftRouter</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a>]</span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Annotations</dt><dd>
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Builds a <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftService.html" class="extype" name="com.twitter.finagle.thrift.ThriftService">com.twitter.finagle.thrift.ThriftService</a>.
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
                 <span class="name">@Singleton</span><span class="args">()</span>
               
-        </dd></dl><div class="toggleContainer block">
+        </dd><dt>Note</dt><dd><span class="cmt"><p>this is only intended for use with generated Scala code. Users of generated Java code
+      are encouraged to use the <a href="JavaThriftRouter.html" class="extype" name="com.twitter.finatra.thrift.routing.JavaThriftRouter">JavaThriftRouter</a>.</p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter">BaseThriftRouter</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a>], <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -218,7 +224,7 @@
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.thrift.routing.ThriftRouter"><span>ThriftRouter</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.thrift.routing.ThriftRouter"><span>ThriftRouter</span></li><li class="in" name="com.twitter.finatra.thrift.routing.BaseThriftRouter"><span>BaseThriftRouter</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -239,9 +245,9 @@
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
               <ol><li name="com.twitter.finatra.thrift.routing.ThriftRouter#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(exceptionManager:com.twitter.finatra.thrift.exceptions.ExceptionManager,statsReceiver:com.twitter.finagle.stats.StatsReceiver,injector:com.twitter.inject.Injector):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="&lt;init&gt;:ThriftRouter"></a>
+      <a id="&lt;init&gt;(injector:com.twitter.inject.Injector,exceptionManager:com.twitter.finatra.thrift.exceptions.ExceptionManager):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="&lt;init&gt;:ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#&lt;init&gt;(exceptionManager:com.twitter.finatra.thrift.exceptions.ExceptionManager,statsReceiver:com.twitter.finagle.stats.StatsReceiver,injector:com.twitter.inject.Injector):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#&lt;init&gt;(injector:com.twitter.inject.Injector,exceptionManager:com.twitter.finatra.thrift.exceptions.ExceptionManager):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -250,7 +256,7 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftRouter</span><span class="params">(<span name="exceptionManager">exceptionManager: <a href="../exceptions/ExceptionManager.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionManager">ExceptionManager</a></span>, <span name="statsReceiver">statsReceiver: <a href="https://twitter.github.io/util/docs/com/twitter/finagle/stats/StatsReceiver.html#com.twitter.finagle.stats.StatsReceiver" class="extype" name="com.twitter.finagle.stats.StatsReceiver">StatsReceiver</a></span>, <span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>)</span>
+        <span class="name">ThriftRouter</span><span class="params">(<span name="injector">injector: <a href="../../../inject/Injector.html" class="extype" name="com.twitter.inject.Injector">Injector</a></span>, <span name="exceptionManager">exceptionManager: <a href="../exceptions/ExceptionManager.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionManager">ExceptionManager</a></span>)</span>
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
@@ -316,40 +322,6 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add(controller:Class[_],protocolFactory:org.apache.thrift.protocol.TProtocolFactory):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="add(Class[_],TProtocolFactory):ThriftRouter"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#add(controller:Class[_],protocolFactory:org.apache.thrift.protocol.TProtocolFactory):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="params">(<span name="controller">controller: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>, <span name="protocolFactory">protocolFactory: <span class="extype" name="org.apache.thrift.protocol.TProtocolFactory">TProtocolFactory</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Add controller used for all requests for usage from Java.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests for usage from Java.</p><p><a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a single controller, so <code>add</code> may only be called once.
-</p></div><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>We do not apply filters per-method but instead all filters are applied across the service.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add(controller:Class[_]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="add(Class[_]):ThriftRouter"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#add(controller:Class[_]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">add</span><span class="params">(<span name="controller">controller: <span class="extype" name="scala.Predef.Class">Class</span>[_]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
-      </span>
-      
-      <p class="shortcomment cmt">Add controller used for all requests for usage from Java</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests for usage from Java</p><p><a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a single controller, so <code>add</code> may only be called once.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="add(controller:com.twitter.finatra.thrift.Controllerwithcom.twitter.finagle.thrift.ToThriftService):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="add(ControllerwithToThriftService):ThriftRouter"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#add(controller:com.twitter.finatra.thrift.Controllerwithcom.twitter.finagle.thrift.ToThriftService):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
@@ -364,7 +336,8 @@
         <span class="name">add</span><span class="params">(<span name="controller">controller: <a href="../Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ToThriftService.html#com.twitter.finagle.thrift.ToThriftService" class="extype" name="com.twitter.finagle.thrift.ToThriftService">ToThriftService</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
-      <p class="shortcomment cmt">Add controller used for all requests</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests</p><p><a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a single controller, so <code>add</code> may only be called once.
+      <p class="shortcomment cmt">Add controller used for all requests.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests. <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a single controller,
+so <code>add</code> may only be called once.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.finagle.thrift.ToThriftService](implicitevidence$6:Manifest[C]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="add[C&lt;:ControllerwithToThriftService](Manifest[C]):ThriftRouter"></a>
@@ -399,6 +372,22 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#assertController" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="assertController(f:=&gt;Unit):Unit"></a><a id="assertController(⇒Unit):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#assertController(f:=&gt;Unit):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">assertController</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -632,10 +621,10 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#exceptionMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="exceptionMapper[T&lt;:Throwable](clazz:Class[_&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_]]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="exceptionMapper[T&lt;:Throwable](Class[_&lt;:ExceptionMapper[T,_]]):ThriftRouter"></a>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#exceptionMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exceptionMapper[T&lt;:Throwable](clazz:Class[_&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_]]):Router"></a><a id="exceptionMapper[T&lt;:Throwable](Class[_&lt;:ExceptionMapper[T,_]]):ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#exceptionMapper[T&lt;:Throwable](clazz:Class[_&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_]]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#exceptionMapper[T&lt;:Throwable](clazz:Class[_&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_]]):Router" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -644,15 +633,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exceptionMapper</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.exceptionMapper.T">T</span>, _]]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">exceptionMapper</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.exceptionMapper.T">T</span>, _]]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add exception mapper used for the corresponding exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Add exception mapper used for the corresponding exceptions.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/exceptions.html" target="_blank">user guide</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#exceptionMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="exceptionMapper[T&lt;:Throwable](mapper:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_])(implicitevidence$2:Manifest[T]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="exceptionMapper[T&lt;:Throwable](ExceptionMapper[T,_])(Manifest[T]):ThriftRouter"></a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseThriftRouter</dd><dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/exceptions.html" target="_blank">user guide</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#exceptionMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exceptionMapper[T&lt;:Throwable](mapper:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_])(implicitevidence$2:Manifest[T]):Router"></a><a id="exceptionMapper[T&lt;:Throwable](ExceptionMapper[T,_])(Manifest[T]):ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#exceptionMapper[T&lt;:Throwable](mapper:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_])(implicitevidence$2:Manifest[T]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#exceptionMapper[T&lt;:Throwable](mapper:com.twitter.finatra.thrift.exceptions.ExceptionMapper[T,_])(implicitevidence$2:Manifest[T]):Router" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -661,15 +650,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exceptionMapper</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="params">(<span name="mapper">mapper: <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.exceptionMapper.T">T</span>, _]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.exceptionMapper.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">exceptionMapper</span><span class="tparams">[<span name="T">T &lt;: <span class="extype" name="scala.Throwable">Throwable</span></span>]</span><span class="params">(<span name="mapper">mapper: <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a>[<span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.exceptionMapper.T">T</span>, _]</span>)</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.exceptionMapper.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add exception mapper used for the corresponding exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Add exception mapper used for the corresponding exceptions.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/exceptions.html" target="_blank">user guide</a></p></span></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#exceptionMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="exceptionMapper[T&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[_,_]](implicitevidence$1:Manifest[T]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="exceptionMapper[T&lt;:ExceptionMapper[_,_]](Manifest[T]):ThriftRouter"></a>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseThriftRouter</dd><dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/exceptions.html" target="_blank">user guide</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#exceptionMapper" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="exceptionMapper[T&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[_,_]](implicitevidence$1:Manifest[T]):Router"></a><a id="exceptionMapper[T&lt;:ExceptionMapper[_,_]](Manifest[T]):ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#exceptionMapper[T&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[_,_]](implicitevidence$1:Manifest[T]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#exceptionMapper[T&lt;:com.twitter.finatra.thrift.exceptions.ExceptionMapper[_,_]](implicitevidence$1:Manifest[T]):Router" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -678,15 +667,15 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">exceptionMapper</span><span class="tparams">[<span name="T">T &lt;: <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a>[_, _]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.exceptionMapper.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">exceptionMapper</span><span class="tparams">[<span name="T">T &lt;: <a href="../exceptions/ExceptionMapper.html" class="extype" name="com.twitter.finatra.thrift.exceptions.ExceptionMapper">ExceptionMapper</a>[_, _]</span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.exceptionMapper.T">T</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add exception mapper used for the corresponding exceptions.</p><div class="fullcomment"><div class="comment cmt"><p>Add exception mapper used for the corresponding exceptions.
-</p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/exceptions.html" target="_blank">user guide</a></p></span></dd></dl></div>
+</p></div><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseThriftRouter</dd><dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/exceptions.html" target="_blank">user guide</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#filter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="filter(filter:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter(ThriftFilter):ThriftRouter"></a>
+      <a id="filter(filter:com.twitter.finagle.Filter.TypeAgnostic):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter(TypeAgnostic):ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter(filter:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter(filter:com.twitter.finagle.Filter.TypeAgnostic):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -695,16 +684,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="filter">filter: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">filter</span><span class="params">(<span name="filter">filter: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add global filter used for all requests.</p><div class="fullcomment"><div class="comment cmt"><p>Add global filter used for all requests.</p><p>The filter is appended after other <code>Filters</code> that have already been added
 via <code>filter</code>.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>The <a href="https://twitter.github.io/finatra/user-guide/thrift/filters.html" target="_blank">user guide</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#filter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="filter(clazz:Class[_&lt;:com.twitter.finatra.thrift.ThriftFilter]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter(Class[_&lt;:ThriftFilter]):ThriftRouter"></a>
+      <a id="filter(clazz:Class[_&lt;:com.twitter.finagle.Filter.TypeAgnostic]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter(Class[_&lt;:TypeAgnostic]):ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter(clazz:Class[_&lt;:com.twitter.finatra.thrift.ThriftFilter]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter(clazz:Class[_&lt;:com.twitter.finagle.Filter.TypeAgnostic]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -713,16 +702,16 @@ via <code>filter</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">filter</span><span class="params">(<span name="clazz">clazz: <span class="extype" name="scala.Predef.Class">Class</span>[_ &lt;: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add global filter used for all requests.</p><div class="fullcomment"><div class="comment cmt"><p>Add global filter used for all requests.</p><p>The filter is appended after other <code>Filters</code> that have already been added
 via <code>filter</code>.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>The <a href="https://twitter.github.io/finatra/user-guide/thrift/filters.html" target="_blank">user guide</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#filter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[FilterType],implicitevidence$5:Manifest[Ann]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter[FilterType&lt;:ThriftFilter,Ann&lt;:Annotation](Manifest[FilterType],Manifest[Ann]):ThriftRouter"></a>
+      <a id="filter[FilterType&lt;:com.twitter.finagle.Filter.TypeAgnostic,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[FilterType],implicitevidence$5:Manifest[Ann]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter[FilterType&lt;:TypeAgnostic,Ann&lt;:Annotation](Manifest[FilterType],Manifest[Ann]):ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[FilterType],implicitevidence$5:Manifest[Ann]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter[FilterType&lt;:com.twitter.finagle.Filter.TypeAgnostic,Ann&lt;:java.lang.annotation.Annotation](implicitevidence$4:Manifest[FilterType],implicitevidence$5:Manifest[Ann]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -731,16 +720,16 @@ via <code>filter</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="tparams">[<span name="FilterType">FilterType &lt;: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>, <span name="Ann">Ann &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.FilterType">FilterType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.Ann">Ann</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">filter</span><span class="tparams">[<span name="FilterType">FilterType &lt;: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>, <span name="Ann">Ann &lt;: <span class="extype" name="java.lang.annotation.Annotation">Annotation</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.FilterType">FilterType</span>]</span>, <span name="arg1">arg1: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.Ann">Ann</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add global filter used for all requests that are annotated with Annotation Type.</p><div class="fullcomment"><div class="comment cmt"><p>Add global filter used for all requests that are annotated with Annotation Type.</p><p>The filter is appended after other <code>Filters</code> that have already been added
 via <code>filter</code>.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>The <a href="https://twitter.github.io/finatra/user-guide/thrift/filters.html" target="_blank">user guide</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#filter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter](implicitevidence$3:Manifest[FilterType]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter[FilterType&lt;:ThriftFilter](Manifest[FilterType]):ThriftRouter"></a>
+      <a id="filter[FilterType&lt;:com.twitter.finagle.Filter.TypeAgnostic](implicitevidence$3:Manifest[FilterType]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="filter[FilterType&lt;:TypeAgnostic](Manifest[FilterType]):ThriftRouter"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter[FilterType&lt;:com.twitter.finatra.thrift.ThriftFilter](implicitevidence$3:Manifest[FilterType]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filter[FilterType&lt;:com.twitter.finagle.Filter.TypeAgnostic](implicitevidence$3:Manifest[FilterType]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -749,12 +738,28 @@ via <code>filter</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">filter</span><span class="tparams">[<span name="FilterType">FilterType &lt;: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.FilterType">FilterType</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">filter</span><span class="tparams">[<span name="FilterType">FilterType &lt;: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.filter.FilterType">FilterType</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
       </span>
       
       <p class="shortcomment cmt">Add global filter used for all requests.</p><div class="fullcomment"><div class="comment cmt"><p>Add global filter used for all requests.</p><p>The filter is appended after other <code>Filters</code> that have already been added
 via <code>filter</code>.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>The <a href="https://twitter.github.io/finatra/user-guide/thrift/filters.html" target="_blank">user guide</a></p></span></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#filters" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="filters:com.twitter.finagle.Filter.TypeAgnostic"></a><a id="filters:TypeAgnostic"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#filters:com.twitter.finagle.Filter.TypeAgnostic" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">filters</span><span class="result">: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd></dl></div>
     </li><li name="scala.AnyRef#finalize" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="finalize():Unit"></a>
       <span class="permalink">
@@ -1071,6 +1076,22 @@ via <code>filter</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#libraryRegistry" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="libraryRegistry:com.twitter.inject.internal.LibraryRegistry"></a><a id="libraryRegistry:LibraryRegistry"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#libraryRegistry:com.twitter.inject.internal.LibraryRegistry" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">libraryRegistry</span><span class="result">: <a href="../../../inject/internal/LibraryRegistry.html" class="extype" name="com.twitter.inject.internal.LibraryRegistry">LibraryRegistry</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#logger" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="logger:com.twitter.util.logging.Logger"></a><a id="logger:Logger"></a>
       <span class="permalink">
@@ -1157,6 +1178,22 @@ via <code>filter</code>.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#registerGlobalFilter" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="registerGlobalFilter(thriftFilter:com.twitter.finagle.Filter.TypeAgnostic):Unit"></a><a id="registerGlobalFilter(TypeAgnostic):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#registerGlobalFilter(thriftFilter:com.twitter.finagle.Filter.TypeAgnostic):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">registerGlobalFilter</span><span class="params">(<span name="thriftFilter">thriftFilter: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -1173,6 +1210,54 @@ via <code>filter</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#thriftMethodRegistrar" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="thriftMethodRegistrar:com.twitter.finatra.thrift.internal.routing.Registrar"></a><a id="thriftMethodRegistrar:Registrar"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#thriftMethodRegistrar:com.twitter.finatra.thrift.internal.routing.Registrar" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">lazy val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thriftMethodRegistrar</span><span class="result">: <span class="extype" name="com.twitter.finatra.thrift.internal.routing.Registrar">Registrar</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#thriftMethodService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="thriftMethodService(method:com.twitter.scrooge.ThriftMethod):com.twitter.finatra.thrift.internal.ThriftMethodService[_,_]"></a><a id="thriftMethodService(ThriftMethod):ThriftMethodService[_,_]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#thriftMethodService(method:com.twitter.scrooge.ThriftMethod):com.twitter.finatra.thrift.internal.ThriftMethodService[_,_]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thriftMethodService</span><span class="params">(<span name="method">method: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>)</span><span class="result">: <a href="../internal/ThriftMethodService.html" class="extype" name="com.twitter.finatra.thrift.internal.ThriftMethodService">ThriftMethodService</a>[_, _]</span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#thriftService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="thriftService:com.twitter.finagle.thrift.ThriftService"></a><a id="thriftService:ThriftService"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#thriftService:com.twitter.finagle.thrift.ThriftService" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">thriftService</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ThriftService.html#com.twitter.finagle.thrift.ThriftService" class="extype" name="com.twitter.finagle.thrift.ThriftService">ThriftService</a></span>
+      </span>
+      
+      
     </li><li name="com.twitter.inject.Logging#time" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="time[T](formatStr:String)(func:=&gt;T):T"></a><a id="time[T](String)(⇒T):T"></a>
       <span class="permalink">
@@ -1443,7 +1528,9 @@ via <code>filter</code>.
         </div>
 
         <div id="inheritedMembers">
-        <div class="parent" name="com.twitter.inject.Logging">
+        <div class="parent" name="com.twitter.finatra.thrift.routing.BaseThriftRouter">
+              <h3>Inherited from <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter">BaseThriftRouter</span>[<a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a>]</h3>
+            </div><div class="parent" name="com.twitter.inject.Logging">
               <h3>Inherited from <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
             </div><div class="parent" name="com.twitter.util.logging.Logging">
               <h3>Inherited from <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a></h3>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Jackson Integration &#8212; Finatra 18.11.0 documentation</title>
+    <title>Jackson Integration &#8212; Finatra 18.12.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.11.0',
+        VERSION:     '18.12.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.11.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 18.12.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="JSON Integration with Routing" href="routing.html" />
     <link rel="prev" title="HTTP Server Warmup" href="../http/warmup.html" />
@@ -81,7 +81,7 @@ for JSON support. Note that the <a class="reference external" href="https://gith
 <li>Usable outside of the Finatra framework.</li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a> which provides additional Scala friendly methods not found in the <cite>ScalaObjectMapper</cite>.</li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/modules/FinatraJacksonModule.scala">Guice module</a> for injecting the <cite>FinatraObjectMapper</cite> with support for customization e.g. snake_case vs. camelCase.</li>
-<li>Custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala">case class deserializer</a> which overcomes limitations in <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala">jackson-module-scala</a>.</li>
+<li>Custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/CaseClassDeserializer.scala">case class deserializer</a> which overcomes limitations in <a class="reference external" href="https://github.com/FasterXML/jackson-module-scala">jackson-module-scala</a>.</li>
 <li>Support for <cite>case class</cite> validations which accumulate errors (without failing fast) during JSON parsing.</li>
 <li>Integration with Finatra <a class="reference external" href="routing.html">HTTP routing</a> to support binding and validation of query params, route params, and headers.</li>
 <li>Utilities for comparing JSON.</li>
@@ -93,13 +93,13 @@ for JSON support. Note that the <a class="reference external" href="https://gith
 <p>The default configuration of Jackson is provided by the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/FinatraObjectMapper.scala">FinatraObjectMapper</a>.</p>
 <p>The following Jackson integrations are provided by default:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java">Joda Module</a></li>
-<li><a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/java/com/fasterxml/jackson/module/scala/ScalaModule.java">Scala Module</a></li>
+<li><a class="reference external" href="https://github.com/FasterXML/jackson-datatype-joda/blob/master/src/main/java/com/fasterxml/jackson/datatype/joda/JodaModule.java">JodaModule</a></li>
+<li><a class="reference external" href="https://github.com/FasterXML/jackson-module-scala/blob/master/src/main/scala/com/fasterxml/jackson/module/scala/DefaultScalaModule.scala">DefaultScalaModule</a></li>
 <li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/LongKeyDeserializer.scala">LongKeyDeserializer</a>: allows for deserializing maps with long keys.</li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala">Wrapped Value Serializer</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/DurationMillisSerializer.scala">Duration Millis Serializer</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/FinatraDatetimeDeserializer.scala">Improved DateTime Deserializer</a></li>
-<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala">Improved `case class Deserializer</a>: See details <a class="reference external" href="#improved-case-class-deserializer">below</a>.</li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/wrapped/WrappedValueSerializer.scala">WrappedValueSerializer</a>: more information on &#8220;WrappedValues&#8221; <a class="reference external" href="https://docs.scala-lang.org/overviews/core/value-classes.html">here</a>.</li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/JodaDurationMillisSerializer.scala">JodaDurationMillisSerializer</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/serde/JodaDatetimeDeserializer.scala">Improved JodaDateTimeDeserializer</a></li>
+<li><a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/CaseClassDeserializer.scala">Improved CaseClassDeserializer</a>: See details <a class="reference external" href="#improved-case-class-deserializer">below</a>.</li>
 </ul>
 </div>
 <div class="section" id="customization">
@@ -112,7 +112,7 @@ for JSON support. Note that the <a class="reference external" href="https://gith
 </pre></div>
 </div>
 <p>For an example of extending the <cite>FinatraJacksonModule</cite> see <a class="reference internal" href="#adding-a-custom-serializer-or-deserializer">Adding a Custom Serializer or Deserializer</a>.</p>
-<p>See the <a class="reference external" href="http/server.html#framework-modules">Framework Modules</a> section for more information on customizing server framework modules.</p>
+<p>See the <a class="reference external" href="../http/server.html#framework-modules">Framework Modules</a> section for more information on customizing server framework modules.</p>
 </div>
 <div class="section" id="adding-a-custom-serializer-or-deserializer">
 <h2>Adding a Custom Serializer or Deserializer<a class="headerlink" href="#adding-a-custom-serializer-or-deserializer" title="Permalink to this headline">¶</a></h2>
@@ -152,11 +152,11 @@ object CustomJacksonModule extends FinatraJacksonModule {
 }
 </pre></div>
 </div>
-<p>For more information see the Jackson documentation for <a class="reference external" href="http://wiki.fasterxml.com/JacksonHowToCustomSerializers">Custom Serializer</a> or <a class="reference external" href="http://wiki.fasterxml.com/JacksonHowToCustomDeserializers">Custom De-serializers</a>.</p>
+<p>For more information see the Jackson documentation for <a class="reference external" href="https://github.com/FasterXML/jackson-docs/wiki/JacksonHowToCustomSerializers">Custom Serializers</a>.</p>
 </div>
 <div class="section" id="improved-case-class-deserializer">
 <h2>Improved <cite>case class</cite> deserializer<a class="headerlink" href="#improved-case-class-deserializer" title="Permalink to this headline">¶</a></h2>
-<p>Finatra provides a custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/FinatraCaseClassDeserializer.scala">case class deserializer</a> which overcomes limitations in jackson-scala-module:</p>
+<p>Finatra provides a custom <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/jackson/src/main/scala/com/twitter/finatra/json/internal/caseclass/jackson/CaseClassDeserializer.scala">case class deserializer</a> which overcomes limitations in jackson-scala-module:</p>
 <ul class="simple">
 <li>Throws a <cite>JsonException</cite> when required fields are missing from the parsed JSON.</li>
 <li>Use default values when fields are missing in the incoming JSON.</li>

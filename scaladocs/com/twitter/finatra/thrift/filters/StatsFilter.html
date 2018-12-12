@@ -151,20 +151,32 @@
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
     </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="AccessLoggingFilter.html" title=""></a>
-                        <a href="AccessLoggingFilter.html" title="">AccessLoggingFilter</a>
+                        <a class="class" href="AccessLoggingFilter.html" title="AccessLoggingFilter attempts to follow the Common Log Format as closely as possible."></a>
+                        <a href="AccessLoggingFilter.html" title="AccessLoggingFilter attempts to follow the Common Log Format as closely as possible.">AccessLoggingFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ClientIdWhitelistFilter.html" title=""></a>
-                        <a href="ClientIdWhitelistFilter.html" title="">ClientIdWhitelistFilter</a>
+                        <a class="class" href="BaseDarkTrafficFilter.html" title=""></a>
+                        <a href="BaseDarkTrafficFilter.html" title="">BaseDarkTrafficFilter</a>
+                      </li><li class="current-entities indented5">
+                        <a class="object" href="ClientIdAcceptlistFilter$.html" title="Visible for testing"></a>
+                        <a class="class" href="ClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients."></a>
+                        <a href="ClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients.">ClientIdAcceptlistFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finatra.thrift.ThriftFilter and thus works in a Finatra ThriftRouter filter chain."></a>
-                        <a href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finatra.thrift.ThriftFilter and thus works in a Finatra ThriftRouter filter chain.">DarkTrafficFilter</a>
+                        <a class="class" href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain."></a>
+                        <a href="DarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic and thus works in a Finatra ThriftRouter filter chain.">DarkTrafficFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
-                        <a class="class" href="ExceptionMappingFilter.html" title="A filter handles exceptions."></a>
-                        <a href="ExceptionMappingFilter.html" title="A filter handles exceptions.">ExceptionMappingFilter</a>
+                        <a class="class" href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it."></a>
+                        <a href="ExceptionMappingFilter.html" title="A ThriftFilter which handles exceptions by rescuing the exception and passing it to the ExceptionManager to handle it.">ExceptionMappingFilter</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="JavaClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients."></a>
+                        <a href="JavaClientIdAcceptlistFilter.html" title="Utility to reject requests from unknown clients.">JavaClientIdAcceptlistFilter</a>
+                      </li><li class="current-entities indented5">
+                        <span class="separator"></span>
+                        <a class="class" href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code."></a>
+                        <a href="JavaDarkTrafficFilter.html" title="An implementation of com.twitter.finagle.exp.AbstractDarkTrafficFilter which extends com.twitter.finagle.Filter.TypeAgnostic for use with generated Java code.">JavaDarkTrafficFilter</a>
                       </li><li class="current-entities indented5">
                         <span class="separator"></span>
                         <a class="class" href="LoggingMDCFilter.html" title=""></a>
@@ -204,7 +216,7 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">StatsFilter</span><span class="result"> extends <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a> with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
+        <span class="name">StatsFilter</span><span class="result"> extends <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span> with <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
       </span>
       </h4>
 
@@ -226,7 +238,7 @@ per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class=
           <span class="toggle">
             Linear Supertypes
           </span>
-          <div class="superTypes hiddenContent"><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
+          <div class="superTypes hiddenContent"><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a>, <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span>, <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.12.7/scala/Any.html#scala.Any" class="extype" name="scala.Any">Any</a></div>
         </div></div>
         
 
@@ -252,7 +264,7 @@ per_method_stats/foo/latency_ms <span class="num">43.000000</span> [<span class=
                   <span class="filtertype">Inherited<br />
                   </span>
                   <ol id="linearization">
-                    <li class="in" name="com.twitter.finatra.thrift.filters.StatsFilter"><span>StatsFilter</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.finatra.thrift.ThriftFilter"><span>ThriftFilter</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                    <li class="in" name="com.twitter.finatra.thrift.filters.StatsFilter"><span>StatsFilter</span></li><li class="in" name="com.twitter.inject.Logging"><span>Logging</span></li><li class="in" name="com.twitter.util.logging.Logging"><span>Logging</span></li><li class="in" name="com.twitter.finagle.Filter.TypeAgnostic"><span>TypeAgnostic</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                   </ol>
                 </div><div class="ancestors">
               <span class="filtertype"></span>
@@ -370,10 +382,10 @@ is defaulted to <span class="extype" name="ThriftResponseClassifier.ThriftExcept
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftFilter#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="andThen(next:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftFilter"></a><a id="andThen(ThriftFilter):ThriftFilter"></a>
+    </li><li name="com.twitter.finagle.Filter.TypeAgnostic#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[Req,Rep](factory:com.twitter.finagle.ServiceFactory[Req,Rep]):com.twitter.finagle.ServiceFactory[Req,Rep]"></a><a id="andThen[Req,Rep](ServiceFactory[Req,Rep]):ServiceFactory[Req,Rep]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#andThen(next:com.twitter.finatra.thrift.ThriftFilter):com.twitter.finatra.thrift.ThriftFilter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#andThen[Req,Rep](factory:com.twitter.finagle.ServiceFactory[Req,Rep]):com.twitter.finagle.ServiceFactory[Req,Rep]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -382,14 +394,14 @@ is defaulted to <span class="extype" name="ThriftResponseClassifier.ThriftExcept
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">andThen</span><span class="params">(<span name="next">next: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>)</span><span class="result">: <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></span>
+        <span class="name">andThen</span><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="params">(<span name="factory">factory: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ServiceFactory.html#com.twitter.finagle.ServiceFactory" class="extype" name="com.twitter.finagle.ServiceFactory">ServiceFactory</a>[<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Rep">Rep</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/ServiceFactory.html#com.twitter.finagle.ServiceFactory" class="extype" name="com.twitter.finagle.ServiceFactory">ServiceFactory</a>[<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Rep">Rep</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.filters.StatsFilter#apply" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply[T,U](request:com.twitter.finatra.thrift.ThriftRequest[T],service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest[T],U]):com.twitter.util.Future[U]"></a><a id="apply[T,U](ThriftRequest[T],Service[ThriftRequest[T],U]):Future[U]"></a>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeAgnostic</dd></dl></div>
+    </li><li name="com.twitter.finagle.Filter.TypeAgnostic#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[Req,Rep](svc:com.twitter.finagle.Service[Req,Rep]):com.twitter.finagle.Service[Req,Rep]"></a><a id="andThen[Req,Rep](Service[Req,Rep]):Service[Req,Rep]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#apply[T,U](request:com.twitter.finatra.thrift.ThriftRequest[T],service:com.twitter.finagle.Service[com.twitter.finatra.thrift.ThriftRequest[T],U]):com.twitter.util.Future[U]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#andThen[Req,Rep](svc:com.twitter.finagle.Service[Req,Rep]):com.twitter.finagle.Service[Req,Rep]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -398,22 +410,42 @@ is defaulted to <span class="extype" name="ThriftResponseClassifier.ThriftExcept
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="params">(<span name="request">request: <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.apply.T">T</span>]</span>, <span name="service">service: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.apply.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.apply.U">U</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/util/docs/com/twitter/util/Future.html#com.twitter.util.Future" class="extype" name="com.twitter.util.Future">Future</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.apply.U">U</span>]</span>
+        <span class="name">andThen</span><span class="tparams">[<span name="Req">Req</span>, <span name="Rep">Rep</span>]</span><span class="params">(<span name="svc">svc: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Rep">Rep</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Req">Req</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.Rep">Rep</span>]</span>
       </span>
       
-      <p class="shortcomment cmt">The application of the <span class="extype" name="ResponseClassifier">ResponseClassifier</span> differs from the Finagle default.</p><div class="fullcomment"><div class="comment cmt"><p>The application of the <span class="extype" name="ResponseClassifier">ResponseClassifier</span> differs from the Finagle default. This class attempts
-to preserve information in the emitted metrics. That is, if an exception is returned, even if it
-is classified as a &quot;success&quot;, we incr the the exception counter(s) (in addition to the &quot;success&quot;
-or &quot;failures&quot; counters). Conversely, if a response (non-exception) is returned which is classified
-as a &quot;failure&quot;, we incr the &quot;failures&quot; counter but we do not incr any exception counter.</p><pre>                 *-----------------*---------------------------*
-                 |              Returned Response              |
-*----------------*-----------------*---------------------------*
-| Classification |    RESPONSE     |        EXCEPTION          |
-*----------------*-----------------*---------------------------*
-|  SUCCESSFUL    | success.incr()  | success.incr(), exc.incr()|
-*----------------*-----------------*---------------------------*
-|    FAILED      | failed.incr()   | failed.incr(), exc.incr() |
-*----------------*-----------------*---------------------------*</pre></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter">StatsFilter</a> → <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/StatsFilter.html" class="extype" name="com.twitter.finagle.service.StatsFilter">com.twitter.finagle.service.StatsFilter</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/service/index.html#ResponseClassifier=PartialFunction[com.twitter.finagle.service.ReqRep,com.twitter.finagle.service.ResponseClass]" class="extype" name="com.twitter.finagle.service">com.twitter.finagle.service.ResponseClassifier</a></p></span></dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeAgnostic</dd></dl></div>
+    </li><li name="com.twitter.finagle.Filter.TypeAgnostic#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen[ReqIn,RepOut,ReqOut,RepIn](next:com.twitter.finagle.Filter[ReqIn,RepOut,ReqOut,RepIn]):com.twitter.finagle.Filter[ReqIn,RepOut,ReqOut,RepIn]"></a><a id="andThen[ReqIn,RepOut,ReqOut,RepIn](Filter[ReqIn,RepOut,ReqOut,RepIn]):Filter[ReqIn,RepOut,ReqOut,RepIn]"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#andThen[ReqIn,RepOut,ReqOut,RepIn](next:com.twitter.finagle.Filter[ReqIn,RepOut,ReqOut,RepIn]):com.twitter.finagle.Filter[ReqIn,RepOut,ReqOut,RepIn]" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="tparams">[<span name="ReqIn">ReqIn</span>, <span name="RepOut">RepOut</span>, <span name="ReqOut">ReqOut</span>, <span name="RepIn">RepIn</span>]</span><span class="params">(<span name="next">next: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.ReqIn">ReqIn</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.RepOut">RepOut</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.ReqOut">ReqOut</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.RepIn">RepIn</span>]</span>)</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.ReqIn">ReqIn</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.RepOut">RepOut</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.ReqOut">ReqOut</span>, <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic.andThen.RepIn">RepIn</span>]</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeAgnostic</dd></dl></div>
+    </li><li name="com.twitter.finagle.Filter.TypeAgnostic#andThen" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="andThen(next:com.twitter.finagle.Filter.TypeAgnostic):com.twitter.finagle.Filter.TypeAgnostic"></a><a id="andThen(TypeAgnostic):TypeAgnostic"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#andThen(next:com.twitter.finagle.Filter.TypeAgnostic):com.twitter.finagle.Filter.TypeAgnostic" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">andThen</span><span class="params">(<span name="next">next: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeAgnostic</dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <span class="permalink">
@@ -1097,23 +1129,23 @@ as a &quot;failure&quot;, we incr the &quot;failures&quot; counter but we do not
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd><a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftFilter#toFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="toFilter[T,Rep]:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest[T],Rep,com.twitter.finatra.thrift.ThriftRequest[T],Rep]"></a><a id="toFilter[T,Rep]:Filter[ThriftRequest[T],Rep,ThriftRequest[T],Rep]"></a>
+    </li><li name="com.twitter.finatra.thrift.filters.StatsFilter#toFilter" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="toFilter[T,U]:com.twitter.finagle.Filter[T,U,T,U]"></a><a id="toFilter[T,U]:Filter[T,U,T,U]"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#toFilter[T,Rep]:com.twitter.finagle.Filter[com.twitter.finatra.thrift.ThriftRequest[T],Rep,com.twitter.finatra.thrift.ThriftRequest[T],Rep]" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#toFilter[T,U]:com.twitter.finagle.Filter[T,U,T,U]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
       <span class="modifier_kind">
-        <span class="modifier">final </span>
+        <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">toFilter</span><span class="tparams">[<span name="T">T</span>, <span name="Rep">Rep</span>]</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.Rep">Rep</span>, <a href="../ThriftRequest.html" class="extype" name="com.twitter.finatra.thrift.ThriftRequest">ThriftRequest</a>[<span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.T">T</span>], <span class="extype" name="com.twitter.finatra.thrift.ThriftFilter.toFilter.Rep">Rep</span>]</span>
+        <span class="name">toFilter</span><span class="tparams">[<span name="T">T</span>, <span name="U">U</span>]</span><span class="result">: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Filter.html#com.twitter.finagle.Filter" class="extype" name="com.twitter.finagle.Filter">Filter</a>[<span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.toFilter.T">T</span>, <span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.toFilter.U">U</span>, <span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.toFilter.T">T</span>, <span class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter.toFilter.U">U</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.ThriftFilter#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.filters.StatsFilter">StatsFilter</a> → TypeAgnostic</dd></dl></div>
+    </li><li name="com.twitter.finagle.Filter.TypeAgnostic#toString" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toString():String"></a>
       <span class="permalink">
       <a href="../../../../../com/twitter/finatra/thrift/filters/StatsFilter.html#toString():String" title="Permalink">
@@ -1128,7 +1160,7 @@ as a &quot;failure&quot;, we incr the &quot;failures&quot; counter but we do not
         <span class="name">toString</span><span class="params">()</span><span class="result">: <span class="extype" name="scala.Predef.String">String</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a> → AnyRef → Any</dd></dl></div>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>TypeAgnostic → AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#trace" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="trace(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="trace(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -1371,8 +1403,8 @@ as a &quot;failure&quot;, we incr the &quot;failures&quot; counter but we do not
               <h3>Inherited from <a href="../../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></h3>
             </div><div class="parent" name="com.twitter.util.logging.Logging">
               <h3>Inherited from <a href="https://twitter.github.io/util/docs/com/twitter/util/logging/Logging.html#com.twitter.util.logging.Logging" class="extype" name="com.twitter.util.logging.Logging">Logging</a></h3>
-            </div><div class="parent" name="com.twitter.finatra.thrift.ThriftFilter">
-              <h3>Inherited from <a href="../ThriftFilter.html" class="extype" name="com.twitter.finatra.thrift.ThriftFilter">ThriftFilter</a></h3>
+            </div><div class="parent" name="com.twitter.finagle.Filter.TypeAgnostic">
+              <h3>Inherited from <span class="extype" name="com.twitter.finagle.Filter.TypeAgnostic">TypeAgnostic</span></h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></h3>
             </div><div class="parent" name="scala.Any">

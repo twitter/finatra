@@ -267,8 +267,8 @@
                         <a href="AbstractThriftFilter.html" title="AbstractThriftFilter for Java usage.">AbstractThriftFilter</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java"></a>
-                        <a href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java">AbstractThriftServer</a>
+                        <a class="class" href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code"></a>
+                        <a href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code">AbstractThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
                         <a class="trait" href="Controller.html" title=""></a>
@@ -279,16 +279,20 @@
                         <a href="ThriftClientExceptionMapper.html" title="">ThriftClientExceptionMapper</a>
                       </li><li class="current-entities indented4">
                         <a class="object" href="ThriftFilter$.html" title=""></a>
-                        <a class="trait" href="ThriftFilter.html" title="A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T."></a>
-                        <a href="ThriftFilter.html" title="A ThriftFilter is a SimpleFilter[ThriftRequest[T], Rep] which is polymorphic in T.">ThriftFilter</a>
+                        <a class="trait" href="ThriftFilter.html" title=""></a>
+                        <a href="ThriftFilter.html" title="">ThriftFilter</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="class" href="" title=""></a>
-                        <a href="" title="">ThriftRequest</a>
+                        <a class="class" href="" title="ThriftRequest was created to provide some metadata about a request."></a>
+                        <a href="" title="ThriftRequest was created to provide some metadata about a request.">ThriftRequest</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="ThriftServer.html" title=""></a>
-                        <a href="ThriftServer.html" title="">ThriftServer</a>
+                        <a class="trait" href="ThriftServer.html" title="ThriftServer for usage from Scala"></a>
+                        <a href="ThriftServer.html" title="ThriftServer for usage from Scala">ThriftServer</a>
+                      </li><li class="current-entities indented4">
+                        <span class="separator"></span>
+                        <a class="trait" href="ThriftServerTrait.html" title="A Basic ThriftServer."></a>
+                        <a href="ThriftServerTrait.html" title="A Basic ThriftServer.">ThriftServerTrait</a>
                       </li>
               </ul>
             </div>
@@ -312,12 +316,20 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">ThriftRequest</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/TraceId.html#com.twitter.finagle.tracing.TraceId" class="extype" name="com.twitter.finagle.tracing.TraceId">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a>]</span>, <span name="args">args: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
+        <span class="name deprecated" title="Deprecated: (Since version 2018-11-10) Access the metadata contained in this class directly">ThriftRequest</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="methodName">methodName: <span class="extype" name="scala.Predef.String">String</span></span>, <span name="traceId">traceId: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/TraceId.html#com.twitter.finagle.tracing.TraceId" class="extype" name="com.twitter.finagle.tracing.TraceId">TraceId</a></span>, <span name="clientId">clientId: <a href="http://www.scala-lang.org/api/2.12.7/scala/Option.html#scala.Option" class="extype" name="scala.Option">Option</a>[<a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html#com.twitter.finagle.thrift.ClientId" class="extype" name="com.twitter.finagle.thrift.ClientId">ClientId</a>]</span>, <span name="args">args: <span class="extype" name="com.twitter.finatra.thrift.ThriftRequest.T">T</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/Product.html#scala.Product" class="extype" name="scala.Product">Product</a> with <a href="http://www.scala-lang.org/api/2.12.7/scala/Serializable.html#scala.Serializable" class="extype" name="scala.Serializable">Serializable</a></span>
       </span>
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>ThriftRequest was created to provide some metadata about a request. However
+all of this data can be accessed elsewhere:
+   methodName -&gt; MethodMetadata.current.get.methodName
+   traceId    -&gt; Trace.id
+   clientId   -&gt; ClientId.current
+</p></div><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-11-10)</i> Access the metadata contained in this class directly</p></dd><dt>See also</dt><dd><span class="cmt"><p><span class="extype" name="com.twitter.finagle.thrift.MethodMetadata">com.twitter.finagle.thrift.MethodMetadata</span></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ClientId.html" class="extype" name="com.twitter.finagle.thrift.ClientId">com.twitter.finagle.thrift.ClientId</a></p></span><span class="cmt"><p><a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/tracing/TraceId.html" class="extype" name="com.twitter.finagle.tracing.TraceId">com.twitter.finagle.tracing.TraceId</a></p></span></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
