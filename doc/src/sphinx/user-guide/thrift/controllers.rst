@@ -3,7 +3,7 @@
 Defining Thrift Controllers
 ===========================
 
-A *Thrift Controller* is an implementation of your thrift service. To create the controller, extend the `c.t.finatra.thrift.Controller <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala>`__ trait and mix-in the `Scrooge <https://twitter.github.io/scrooge/>`__-generated `BaseServiceIface` trait for your service. Scrooge generates a `ServiceIface` which is a case class containing a `Service` for each thrift method over the corresponding `Args` and `SuccessType` structures for the method that extends from the `BaseServiceIface` trait. E.g,
+A *Thrift Controller* is an implementation of your thrift service. To create the controller, extend the `c.t.finatra.thrift.Controller <https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala>`__ abstract class and mix-in the `Scrooge <https://twitter.github.io/scrooge/>`__-generated `BaseServiceIface` trait for your service. Scrooge generates a `ServiceIface` which is a case class containing a `Service` for each thrift method over the corresponding `Args` and `SuccessType` structures for the method that extends from the `BaseServiceIface` trait. E.g,
 
 .. code:: scala
 

@@ -16,6 +16,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: `c.t.finatra.thrift.Controller` is now an abstract class
+  rather than a trait. ``PHAB_ID=D251314``
+
 * finatra-thrift: `c.t.finatra.thrift.internal.ThriftMethodService` is now
   private. ``PHAB_ID=D251186``
 
@@ -43,7 +46,7 @@ Changed
 Fixed
 ~~~~~
 
-* finatra-http: Validate headers to prevent header injection vulnerability. ``PHAB_ID=D246889`` 
+* finatra-http: Validate headers to prevent header injection vulnerability. ``PHAB_ID=D246889``
 
 Closed
 ~~~~~~

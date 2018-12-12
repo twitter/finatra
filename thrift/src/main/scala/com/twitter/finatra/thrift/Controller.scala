@@ -7,7 +7,7 @@ import com.twitter.inject.Logging
 import com.twitter.scrooge.ThriftMethod
 import scala.collection.mutable.ListBuffer
 
-trait Controller extends Logging { self: ToThriftService =>
+abstract class Controller extends Logging { self: ToThriftService =>
   private[thrift] val methods = new ListBuffer[ThriftMethodService[_, _]]
 
   protected def handle[Args, Success](
