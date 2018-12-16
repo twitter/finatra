@@ -42,7 +42,7 @@ class ThriftWarmup @Inject()(
   def send[M <: ThriftMethod](method: M, args: M#Args, times: Int = 1)(
     responseCallback: Try[M#SuccessType] => Unit = unitFunction
   ): Unit = {
-
+    if (!router.isConfigured) throw new IllegalStateException("Thrift warmup requires a properly configured router")
     for (_ <- 1 to times) {
       time(s"Warmup ${prettyStr(method)} completed in %sms.") {
         val response = executeRequest(method, args)

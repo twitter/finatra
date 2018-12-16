@@ -22,6 +22,7 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
   exceptionManager: ExceptionManager
 ) extends Logging { this: Router =>
 
+  def isConfigured: Boolean = done
   private[this] var done: Boolean = false
 
   /**

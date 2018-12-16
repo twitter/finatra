@@ -16,6 +16,10 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: Instead of failing (potentially silently)
+  `c.t.finatra.thrift.routing.ThriftWarmup` now explicitly checks that it is
+  using a properly configured `c.t.finatra.thrift.routing.Router` ``PHAB_ID=D253603``
+
 * finatra-thrift: `c.t.finatra.thrift.Controller` is now an abstract class
   rather than a trait. ``PHAB_ID=D251314``
 
