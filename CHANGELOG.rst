@@ -7,6 +7,14 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Changed
+~~~~~~~
+
+* finatra-inject: `c.t.finatra.inject.server.PortUtils` has been modified to
+  work with `c.t.f.ListeningServer` only. Methods which worked with the
+  now-removed `c.t.f.b.Server` have been modified or removed.
+  ``PHAB_ID=D254339``
+
 18.12.0
 -------
 

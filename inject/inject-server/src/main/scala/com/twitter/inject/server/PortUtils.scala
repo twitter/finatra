@@ -2,7 +2,6 @@ package com.twitter.inject.server
 
 import com.twitter.app.Flaggable
 import com.twitter.finagle.ListeningServer
-import com.twitter.finagle.builder.{Server => BuilderServer}
 import java.net.{InetAddress, InetSocketAddress, SocketAddress}
 
 /**
@@ -39,13 +38,8 @@ object PortUtils {
     socketAddress.asInstanceOf[InetSocketAddress].getPort
   }
 
-  /** Returns the Integer representation of the given [[BuilderServer]] */
-  def getPort(server: BuilderServer): Int = {
-    getSocketAddress(server).asInstanceOf[InetSocketAddress].getPort
-  }
-
-  /** Returns the bound address of the given [[BuilderServer]] */
-  def getSocketAddress(server: BuilderServer): SocketAddress = {
+  /** Returns the bound address of the given [[ListeningServer]] */
+  def getSocketAddress(server: ListeningServer): SocketAddress = {
     server.boundAddress
   }
 
