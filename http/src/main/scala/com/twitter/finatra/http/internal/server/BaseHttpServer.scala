@@ -2,7 +2,7 @@ package com.twitter.finatra.http.internal.server
 
 import com.google.inject.Module
 import com.twitter.app.Flag
-import com.twitter.conversions.storage._
+import com.twitter.conversions.StorageUnitOps._
 import com.twitter.conversions.time._
 import com.twitter.finagle.http.service.NullService
 import com.twitter.finagle.http.{Request, Response}
