@@ -1,6 +1,6 @@
 package com.twitter.finatra.http
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.inject.server.{EmbeddedTwitterServer, PortUtils, Ports, info}
 import com.twitter.util.Closable

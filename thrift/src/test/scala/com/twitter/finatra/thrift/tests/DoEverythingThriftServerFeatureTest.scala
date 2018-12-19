@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.tracing.Trace

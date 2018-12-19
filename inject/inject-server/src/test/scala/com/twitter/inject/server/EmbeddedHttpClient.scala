@@ -1,6 +1,6 @@
 package com.twitter.inject.server
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.{Http, Service}
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finagle.http.codec.HttpCodec

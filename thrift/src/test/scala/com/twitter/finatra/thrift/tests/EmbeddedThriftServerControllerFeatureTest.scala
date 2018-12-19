@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.converter.thriftscala.Converter
 import com.twitter.converter.thriftscala.Converter.Uppercase
 import com.twitter.finagle.{Filter, Service}

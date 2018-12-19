@@ -1,7 +1,7 @@
 package com.twitter.inject.server
 
 import com.google.inject.Module
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
 import com.twitter.inject.annotations.Lifecycle

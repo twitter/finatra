@@ -1,6 +1,6 @@
 package com.twitter.inject.tests
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.inject.{Test, WhenReadyMixin}
 import com.twitter.util.Future
 import org.scalatest.concurrent.ScalaFutures._

@@ -2,7 +2,7 @@ package com.twitter.finatra.http.tests.integration.doeverything.main.modules
 
 import com.google.inject.Provides
 import com.google.inject.name.{Named, Names}
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.http.tests.integration.doeverything.main.services.{
   ComplexServiceFactory,
   MultiService,

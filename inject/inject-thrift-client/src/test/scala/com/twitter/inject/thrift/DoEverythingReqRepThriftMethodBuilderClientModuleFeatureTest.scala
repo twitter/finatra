@@ -1,6 +1,6 @@
 package com.twitter.inject.thrift
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.Status.Ok
 import com.twitter.finatra.http.{EmbeddedHttpServer, HttpTest}
 import com.twitter.finatra.thrift.EmbeddedThriftServer

@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.thrift.EmbeddedThriftServer
 import com.twitter.finatra.thrift.tests.inheritance.InheritanceServer
 import com.twitter.inject.server.FeatureTest

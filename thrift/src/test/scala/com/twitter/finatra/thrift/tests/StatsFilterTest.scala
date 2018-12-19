@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.finagle.Service
 import com.twitter.finagle.service.{ReqRep, ResponseClass, ResponseClassifier}

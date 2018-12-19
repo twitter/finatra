@@ -1,7 +1,7 @@
 package com.twitter.finatra.http.tests.response
 
 import com.twitter.concurrent.AsyncStream
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.{Response, Status}
 import com.twitter.finatra.http.response.StreamingResponse
 import com.twitter.inject.Test

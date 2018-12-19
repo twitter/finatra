@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests.doeverything
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.DoEverything
 import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
 import com.twitter.finagle.{ListeningServer, NullServer, Service, ThriftMux}

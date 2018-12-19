@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests.exceptions
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.{CancelledRequestException, Failure, RequestTimeoutException}
 import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
 import com.twitter.finatra.thrift.thriftscala.{

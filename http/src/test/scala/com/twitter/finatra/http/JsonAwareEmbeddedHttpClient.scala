@@ -1,7 +1,7 @@
 package com.twitter.finatra.http
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.{Request, Response, Status}
 import com.twitter.finatra.json.{FinatraObjectMapper, JsonDiff}
 import com.twitter.inject.server.{EmbeddedHttpClient, _}

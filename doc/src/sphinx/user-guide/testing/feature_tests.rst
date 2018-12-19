@@ -52,7 +52,7 @@ from the |EmbeddedThriftServer|_.
 .. code:: scala
 
     import com.example.thriftscala.ExampleThrift
-    import com.twitter.conversions.time._
+    import com.twitter.conversions.DurationOps._
     import com.twitter.finatra.thrift.EmbeddedThriftServer
     import com.twitter.inject.server.FeatureTest
     import com.twitter.util.Await
@@ -136,7 +136,7 @@ could close the client in the ScalaTest `afterAll` lifecycle block. E.g.,
 .. code:: scala
 
     import com.example.thriftscala.ExampleThrift
-    import com.twitter.conversions.time._
+    import com.twitter.conversions.DurationOps._
     import com.twitter.finatra.thrift.EmbeddedThriftServer
     import com.twitter.inject.server.FeatureTest
     import com.twitter.util.Await
@@ -167,7 +167,7 @@ then you can feature test by constructing an `EmbeddedHttpServer with ThriftClie
 .. code:: scala
 
     import com.example.thriftscala.ExampleThrift
-    import com.twitter.conversions.time._
+    import com.twitter.conversions.DurationOps._
     import com.twitter.finatra.http.EmbeddedHttpServer
     import com.twitter.finatra.thrift.ThriftClient
     import com.twitter.inject.server.FeatureTest

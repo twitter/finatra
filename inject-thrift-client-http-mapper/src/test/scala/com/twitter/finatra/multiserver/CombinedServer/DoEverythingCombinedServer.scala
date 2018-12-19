@@ -1,6 +1,6 @@
 package com.twitter.finatra.multiserver.CombinedServer
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.Filter
 import com.twitter.finatra.http.HttpServer
 import com.twitter.finatra.http.filters.CommonFilters
