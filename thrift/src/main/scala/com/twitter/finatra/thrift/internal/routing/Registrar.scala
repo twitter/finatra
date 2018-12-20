@@ -1,5 +1,6 @@
 package com.twitter.finatra.thrift.internal.routing
 
+import com.twitter.finagle.Filter
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.scrooge.ThriftMethod
 import java.lang.reflect.Method
@@ -7,7 +8,7 @@ import java.lang.reflect.Method
 /** Performs registration of Thrift domain entities in a LibraryRegistry */
 private[thrift] class Registrar(registry: LibraryRegistry) {
 
-  def register(clazz: Class[_], method: ThriftMethod): Unit = {
+  def register(clazz: Class[_], method: ThriftMethod, filters: Filter.TypeAgnostic): Unit = {
     registry.put(
       Seq(method.name, "service_name"),
       method.serviceName
@@ -28,9 +29,16 @@ private[thrift] class Registrar(registry: LibraryRegistry) {
         method.annotations.map { case (k, v) => s"$k = $v" }.mkString(",")
       )
     }
+
+    if (filters ne Filter.TypeAgnostic.Identity) {
+      registry.put(
+        Seq(method.name, "filters"),
+        filters.toString
+      )
+    }
   }
 
-  def register(serviceName: String, clazz: Class[_], method: Method): Unit = {
+  def registerJavaMethod(serviceName: String, clazz: Class[_], method: Method): Unit = {
     registry.put(Seq(method.getName, "service_name"), serviceName)
     registry.put(Seq(method.getName, "class"), clazz.getName)
     if (method.getParameterTypes.nonEmpty) {

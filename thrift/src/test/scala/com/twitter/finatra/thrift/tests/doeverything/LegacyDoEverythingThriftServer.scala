@@ -7,15 +7,16 @@ import com.twitter.finatra.thrift.exceptions.FinatraThriftExceptionMapper
 import com.twitter.finatra.thrift.filters._
 import com.twitter.finatra.thrift.modules.ClientIdAcceptlistModule
 import com.twitter.finatra.thrift.routing.ThriftRouter
-import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
-import com.twitter.finatra.thrift.tests.doeverything.exceptions.{ReqRepBarExceptionMapper, ReqRepDoEverythingExceptionMapper, ReqRepFooExceptionMapper}
-import com.twitter.finatra.thrift.tests.doeverything.modules.DoEverythingThriftServerDarkTrafficFilterModule
+import com.twitter.finatra.thrift.tests.doeverything.controllers.LegacyDoEverythingThriftController
+import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarExceptionMapper, DoEverythingExceptionMapper, FooExceptionMapper}
+import com.twitter.finatra.thrift.tests.doeverything.modules.LegacyDoEverythingThriftServerDarkTrafficFilterModule
 import com.twitter.finatra.thrift.ThriftServer
 import com.twitter.util.NullMonitor
 
-object DoEverythingThriftServerMain extends DoEverythingThriftServer
+object LegacyDoEverythingThriftServerMain extends LegacyDoEverythingThriftServer
 
-class DoEverythingThriftServer extends ThriftServer {
+@deprecated("These tests exist to ensure legacy functionaly still operates. Do not use them for guidance", "2018-12-20")
+class LegacyDoEverythingThriftServer extends ThriftServer {
   override val name = "example-server"
 
   flag("magicNum", "26", "Magic number")
@@ -23,7 +24,7 @@ class DoEverythingThriftServer extends ThriftServer {
   override val modules =
     Seq(
       new ClientIdAcceptlistModule("/clients.yml"),
-      new DoEverythingThriftServerDarkTrafficFilterModule)
+      new LegacyDoEverythingThriftServerDarkTrafficFilterModule)
 
   override protected def configureThriftServer(server: ThriftMux.Server): ThriftMux.Server = {
     server
@@ -44,10 +45,10 @@ class DoEverythingThriftServer extends ThriftServer {
       .filter(Filter.TypeAgnostic.Identity)
       .filter[Filter.TypeAgnostic, DarkTrafficFilterType]
       .exceptionMapper[FinatraThriftExceptionMapper]
-      .exceptionMapper[ReqRepBarExceptionMapper]
-      .exceptionMapper[ReqRepFooExceptionMapper]
-      .exceptionMapper[ReqRepDoEverythingExceptionMapper]
-      .add[DoEverythingThriftController]
+      .exceptionMapper[BarExceptionMapper]
+      .exceptionMapper[FooExceptionMapper]
+      .exceptionMapper[DoEverythingExceptionMapper]
+      .add[LegacyDoEverythingThriftController]
   }
 
   override protected def warmup(): Unit = {

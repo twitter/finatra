@@ -1,10 +1,9 @@
 package com.twitter.finatra.thrift.tests.doeverything.controllers
 
-import com.twitter.conversions.DurationOps._
+import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, DoEverythingException}
 import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
-import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.{ChannelException, Filter, RequestException, RequestTimeoutException, Service, SimpleFilter}
+import com.twitter.finagle.{ChannelException, RequestException, RequestTimeoutException}
 import com.twitter.finatra.thrift.Controller
 import com.twitter.finatra.thrift.tests.doeverything.exceptions.{BarException, FooException}
 import com.twitter.finatra.thrift.thriftscala.{ClientError, UnknownClientIdError}
@@ -18,23 +17,14 @@ import scala.collection.JavaConverters._
 import scala.util.control.NoStackTrace
 
 @Singleton
-class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: String, stats: StatsReceiver)
-    extends Controller(DoEverything) {
-
-  private[this] val echos = stats.counter("echo_calls")
-
-  private[this] val countEchoFilter = new Filter.TypeAgnostic {
-    def toFilter[Req, Rep]: Filter[Req, Rep, Req, Rep] = new SimpleFilter[Req, Rep]{
-      def apply(request: Req, service: Service[Req, Rep]): Future[Rep] = {
-        echos.incr()
-        service(request)
-      }
-    }
-  }
+@deprecated("These tests exist to ensure legacy functionaly still operates. Do not use them for guidance", "2018-12-20")
+class LegacyDoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: String)
+    extends Controller with DoEverything.BaseServiceIface
+    {
 
   private[this] var storedMDC: Option[Map[String, String]] = None
 
-  handle(Uppercase) { args: Uppercase.Args =>
+  override val uppercase = handle(Uppercase) { args: Uppercase.Args =>
     storeForTesting()
     info("In uppercase method.")
     if (args.msg == "fail") {
@@ -44,7 +34,7 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
     }
   }
 
-  handle(Echo).filtered(countEchoFilter) { args: Echo.Args =>
+  override val echo = handle(Echo) { args: Echo.Args =>
     if (args.msg == "clientError") {
       Future.exception(ClientError(BadRequest, "client error"))
     } else {
@@ -52,7 +42,7 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
     }
   }
 
-  handle(Echo2).filtered(countEchoFilter) { args: Echo2.Args =>
+  override val echo2 = handle(Echo2) { args: Echo2.Args =>
     args.msg match {
       // should be handled by FinatraExceptionMapper
       case "clientError" => throw new ClientError(BadRequest, "client error")
@@ -60,7 +50,7 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
       case "requestException" => throw new RequestException
       case "timeoutException" => throw new RequestTimeoutException(1.second, "timeout exception")
       case "unhandledException" => throw new Exception("unhandled exception") with NoStackTrace
-      // should be handled by ReqRepBarExceptionMapper and ReqRepFooExceptionMapper
+      // should be handled by BarExceptionMapper and FooExceptionMapper
       case "barException" => throw new BarException
       case "fooException" => throw new FooException
       case "unhandledSourcedException" => throw new ChannelException with NoStackTrace
@@ -70,16 +60,16 @@ class DoEverythingThriftController @Inject()(@Flag("magicNum") magicNumValue: St
     }
   }
 
-  handle(MagicNum) { args: MagicNum.Args =>
+  override val magicNum = handle(MagicNum) { args: MagicNum.Args =>
     Future.value(magicNumValue)
   }
 
-  handle(MoreThanTwentyTwoArgs) {
+  override val moreThanTwentyTwoArgs = handle(MoreThanTwentyTwoArgs) {
     args: MoreThanTwentyTwoArgs.Args =>
       Future.value("handled")
   }
 
-  handle(Ask) { args: Ask.Args =>
+  override val ask = handle(Ask) { args: Ask.Args =>
     val question = args.question
     if (question.text.equals("fail")) {
       Future.exception(new DoEverythingException("This is a test."))

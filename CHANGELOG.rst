@@ -10,14 +10,47 @@ Unreleased
 Added
 ~~~~~
 
-Changed
-~~~~~~~
-
 * inject-core, inject-server: Remove deprecated `WordSpec` testing utilities. The framework
   default ScalaTest testing style is `FunSuite` though users are free to mix their testing
   style of choice with the framework provided test mixins as per the
   `documentation <https://twitter.github.io/finatra/user-guide/testing/mixins.html>`__.
   ``PHAB_ID=D255094``
+
+* finatra-thrift: `c.t.finatra.thrift.Controllers` now support per-method filtering and
+  access to headers via `c.t.scrooge.{Request, Response}` wrappers. To use this new
+  functionality, create a `Controller` which extends the
+  `c.t.finatra.thrift.Controller(SomeThriftService)` abstract class instead of constructing a
+  Controller that mixes in the `SomeThriftService.BaseServiceIface` trait. With this, you can now
+  provide implementations in form of `c.t.scrooge.Request`/`c.t.scrooge.Response` wrappers by calling
+  the `handle(ThriftMethod)` method. Note that a `Controller` constructed this way cannot also
+  extend a `BaseServiceIface`.
+
+    handle(SomeMethod).filtered(someFilter).withFn { req: Request[SomeMethod.Args] =>
+      val requestHeaders = req.headers
+      // .. implementation here
+
+      // response: Future[Response[SomeMethod.SuccessType]]
+    }
+
+  Note that if `Request`/`Response` based implementations are used the types on any
+  existing `ExceptionMappers` should be adjusted accordingly. Also, if a `DarkTrafficFilterModule`
+  was previously used, it must be swapped out for a `ReqRepDarkTrafficFilterModule`
+  ``PHAB_ID=D236724``
+
+Changed
+~~~~~~~
+
+* finatra-thrift: For services that wish to support dark traffic over
+  `c.t.scrooge.Request`/`c.t.scrooge.Response`-based services, a new dark traffic module is
+  available: `c.t.finatra.thrift.modules.ReqRepDarkTrafficFilterModule` ``PHAB_ID=D236724``
+
+* finatra-thrift: Creating a `c.t.finatra.thrift.Controller` that extends a
+  `ThriftService.BaseServiceIface` has been deprecated. See the related bullet point in "Added" with
+  the corresponding PHAB_ID to this one for how to migrate. ``PHAB_ID=D236724``
+
+* finatra-thrift: Instead of failing (potentially silently)
+  `c.t.finatra.thrift.routing.ThriftWarmup` now explicitly checks that it is
+  using a properly configured `c.t.finatra.thrift.routing.Router` ``PHAB_ID=D253603``
 
 * finatra-inject: `c.t.finatra.inject.server.PortUtils` has been modified to
   work with `c.t.f.ListeningServer` only. Methods which worked with the
@@ -42,10 +75,6 @@ Added
 
 Changed
 ~~~~~~~
-
-* finatra-thrift: Instead of failing (potentially silently)
-  `c.t.finatra.thrift.routing.ThriftWarmup` now explicitly checks that it is
-  using a properly configured `c.t.finatra.thrift.routing.Router` ``PHAB_ID=D253603``
 
 * finatra-thrift: `c.t.finatra.thrift.Controller` is now an abstract class
   rather than a trait. ``PHAB_ID=D251314``

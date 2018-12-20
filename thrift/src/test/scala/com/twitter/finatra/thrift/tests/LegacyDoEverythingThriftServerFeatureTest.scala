@@ -1,13 +1,13 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.DurationOps._
+import com.twitter.conversions.time._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.tracing.Trace
 import com.twitter.finagle.{Filter, Service}
 import com.twitter.finatra.thrift.EmbeddedThriftServer
-import com.twitter.finatra.thrift.tests.doeverything.DoEverythingThriftServer
-import com.twitter.finatra.thrift.tests.doeverything.controllers.DoEverythingThriftController
+import com.twitter.finatra.thrift.tests.doeverything.LegacyDoEverythingThriftServer
+import com.twitter.finatra.thrift.tests.doeverything.controllers.LegacyDoEverythingThriftController
 import com.twitter.finatra.thrift.thriftscala.{ClientError, NoClientIdError, ServerError, UnknownClientIdError}
 import com.twitter.inject.server.FeatureTest
 import com.twitter.io.Buf
@@ -16,9 +16,10 @@ import com.twitter.util.{Await, Future}
 import org.apache.thrift.TApplicationException
 import scala.util.parsing.json.JSON
 
-class DoEverythingThriftServerFeatureTest extends FeatureTest {
+@deprecated("These tests exist to ensure legacy functionaly still operates. Do not use them for guidance", "2018-12-20")
+class LegacyDoEverythingThriftServerFeatureTest extends FeatureTest {
   override val server = new EmbeddedThriftServer(
-    twitterServer = new DoEverythingThriftServer,
+    twitterServer = new LegacyDoEverythingThriftServer,
     disableTestLogging = true,
     flags = Map("magicNum" -> "57")
   )
@@ -169,11 +170,11 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   // should be caught by ReqRepBarExceptionMapper
   test("BarException mapping") {
-    await(client123.echo2("barException")) should equal("ReqRep BarException caught")
+    await(client123.echo2("barException")) should equal("BarException caught")
   }
   // should be caught by ReqRepFooExceptionMapper
   test("FooException mapping") {
-    await(client123.echo2("fooException")) should equal("ReqRep FooException caught")
+    await(client123.echo2("fooException")) should equal("FooException caught")
   }
 
   test("ThriftException#UnhandledSourcedException mapping") {
@@ -234,7 +235,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   test("ask fail") {
     val question = Question("fail")
-    await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
+    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
   }
 
   test("MDC filtering") {
@@ -247,7 +248,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
     response should equal("HI")
 
-    val MDC = server.injector.instance[DoEverythingThriftController].getStoredMDC
+    val MDC = server.injector.instance[LegacyDoEverythingThriftController].getStoredMDC
     MDC should not be None
     MDC.get.size should equal(3)
 
@@ -303,25 +304,17 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   test("Per-method stats scope") {
     val question = Question("fail")
-    await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
+    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
     server.assertCounter("per_method_stats/ask/success", 1L)
     server.assertCounter("per_method_stats/ask/failures", 0L)
   }
 
   test("Per-endpoint stats scope") {
     val question = Question("fail")
-    await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
+    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
     server.assertCounter("srv/thrift/ask/requests", 1L)
     server.assertCounter("srv/thrift/ask/success", 1L)
     server.assertCounter("srv/thrift/ask/failures", 0L)
-  }
-
-  test("per-endpoint filtering") {
-    // The echo counter is applied to the two echo endpoints
-    await(client123.echo("a"))
-    await(client123.echo2("a"))
-    await(client123.uppercase("a"))
-    server.assertCounter("echo_calls", 2L)
   }
 
   private def await[T](f: Future[T]): T = {
