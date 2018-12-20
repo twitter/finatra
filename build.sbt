@@ -275,8 +275,6 @@ lazy val injectCoreTestJarSources =
     "com/twitter/inject/Test",
     "com/twitter/inject/TestMixin",
     "com/twitter/inject/TwitterTestModule",
-    "com/twitter/inject/WordSpecIntegrationTest",
-    "com/twitter/inject/WordSpecTest",
     "org/specs2/matcher/ScalaTestExpectations")
 lazy val injectCore = (project in file("inject/inject-core"))
   .settings(projectSettings)
@@ -406,8 +404,7 @@ lazy val injectServerTestJarSources =
     "com/twitter/inject/server/EmbeddedTwitterServer",
     "com/twitter/inject/server/FeatureTest",
     "com/twitter/inject/server/FeatureTestMixin",
-    "com/twitter/inject/server/package",
-    "com/twitter/inject/server/WordSpecFeatureTest")
+    "com/twitter/inject/server/package")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
   .settings(

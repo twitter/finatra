@@ -69,7 +69,7 @@ the maintainers will help out during code review.
 We've standardized on using the [ScalaTest testing framework][scalatest].
 Because ScalaTest has such a big surface area, we use a restricted subset of it
 in our tests to keep them easy to read.  We've chosen the `Matchers` API, and we
-use the [`WordSpec` mixin][wordspec]. Please mixin our [Test trait][test-trait]
+use the [`FunSuite` mixin][funsuite]. Please mixin our [Test trait][test-trait]
 to get these defaults.
 
 Note that while you will see a [Travis CI][travis-ci] status message in your
@@ -200,13 +200,13 @@ Scaladocs. Please file an [issue](https://github.com/twitter/finatra/issues).
 [finagle-repo]: https://github.com/twitter/finagle 
 [util-repo]: https://github.com/twitter/util
 [effectivescala]: https://twitter.github.io/effectivescala/ 
-[wordspec]: http://doc.scalatest.org/2.2.1/#org.scalatest.WordSpec 
+[funsuite]: http://doc.scalatest.org/2.2.1/#org.scalatest.FunSuite
 [scalatest]: http://www.scalatest.org/ 
-[scala-style-guide]: http://docs.scala-lang.org/style/scaladoc.html 
-[sbt]: http://www.scala-sbt.org/
+[scala-style-guide]: https://docs.scala-lang.org/style/index.html
+[sbt]: https://www.scala-sbt.org/
 [travis-ci]: https://travis-ci.org/twitter/finatra 
 [test-trait]: https://github.com/twitter/finatra/blob/develop/inject/inject-core/src/test/scala/com/twitter/inject/Test.scala
-[scaladoc]: http://docs.scala-lang.org/style/scaladoc.html
+[scaladoc]: https://docs.scala-lang.org/style/scaladoc.html
 [scalacheck]: https://www.scalacheck.org/
 [gendrivenprop]: http://www.scalatest.org/user_guide/generator_driven_property_checks
 

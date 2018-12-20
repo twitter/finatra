@@ -42,14 +42,13 @@ in Finatra revolves around the following definitions:
 `ScalaTest <http://www.scalatest.org/>`__
 -----------------------------------------
 
-The Finatra testing framework is in transition from the `WordSpec <http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec>`__
-ScalaTest `testing style <http://www.scalatest.org/user_guide/selecting_a_style>`__ to `FunSuite <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__
-for framework testing and to facilitate the types of testing outlined above we have several testing
-traits to aid in creating simple and powerful tests.
+The Finatra testing framework uses the Twitter recommended ScalaTest `testing style <http://www.scalatest.org/user_guide/selecting_a_style>`__ `FunSuite <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSuite>`__ for framework testing and to 
+facilitate the types of testing outlined above we have several testing traits to aid in creating simple 
+and powerful tests.
 
 For more information on `ScalaTest <http://www.scalatest.org/>`__, see the `ScalaTest User Guide <http://www.scalatest.org/user_guide>`__.
 
-To make use of another ScalaTest test style, such as `FunSpec <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec>`__ 
+To make use of another ScalaTest testing style, such as `FunSpec <http://doc.scalatest.org/3.0.0/#org.scalatest.FunSpec>`__ 
 or others, see `Test Mixins <mixins.html>`__.
 
 More Information

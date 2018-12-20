@@ -7,13 +7,28 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
 Changed
 ~~~~~~~
+
+* inject-core, inject-server: Remove deprecated `WordSpec` testing utilities. The framework
+  default ScalaTest testing style is `FunSuite` though users are free to mix their testing
+  style of choice with the framework provided test mixins as per the
+  `documentation <https://twitter.github.io/finatra/user-guide/testing/mixins.html>`__.
+  ``PHAB_ID=D255094``
 
 * finatra-inject: `c.t.finatra.inject.server.PortUtils` has been modified to
   work with `c.t.f.ListeningServer` only. Methods which worked with the
   now-removed `c.t.f.b.Server` have been modified or removed.
   ``PHAB_ID=D254339``
+
+Fixed
+~~~~~
+
+Closed
+~~~~~~
 
 18.12.0
 -------
