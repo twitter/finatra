@@ -1,0 +1,7 @@
+owners:
+  - messaging-group:ldap
+  - scosenza
+  - dbress
+  - adams
+watchers:
+  - ds-messaging@twitter.com

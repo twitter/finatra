@@ -36,6 +36,10 @@ Closed
 Added
 ~~~~~
 
+* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration 
+  between Kafka Streams and Finatra which we've been using internally at Twitter 
+  for the last year. The library is not currently open-source.
+
 Changed
 ~~~~~~~
 

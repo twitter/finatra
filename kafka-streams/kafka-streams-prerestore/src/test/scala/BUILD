@@ -1,0 +1,21 @@
+junit_tests(
+    sources = rglobs("*.scala"),
+    compiler_option_sets = {"fatal_warnings"},
+    strict_deps = False,
+    dependencies = [
+        "3rdparty/jvm/ch/qos/logback:logback-classic",
+        "3rdparty/jvm/org/apache/kafka:kafka-clients-test",
+        "3rdparty/jvm/org/apache/kafka:kafka-streams",
+        "3rdparty/jvm/org/apache/kafka:kafka-streams-test",
+        "3rdparty/jvm/org/apache/kafka:kafka-test",
+        "3rdparty/jvm/org/apache/zookeeper:zookeeper-client",
+        "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
+        "finatra/http/src/test/scala:test-deps",
+        "finatra/inject/inject-core/src/test/scala:test-deps",
+        "finatra/inject/inject-server/src/test/scala:test-deps",
+        "finatra/kafka-streams/kafka-streams-prerestore/src/main/scala",
+        "finatra/kafka-streams/kafka-streams-prerestore/src/test/resources",
+        "finatra/kafka-streams/kafka-streams/src/test/scala:test-deps",
+        "finatra/kafka/src/test/scala:test-deps",
+    ],
+)
