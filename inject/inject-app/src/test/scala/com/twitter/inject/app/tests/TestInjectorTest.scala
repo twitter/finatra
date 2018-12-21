@@ -4,8 +4,11 @@ import com.google.inject.name.Names
 import com.twitter.app.GlobalFlag
 import com.twitter.inject.annotations.{Flag, Flags}
 import com.twitter.inject.app.TestInjector
-import com.twitter.inject.{Test, TwitterModule}
+import com.twitter.inject.{Test, TwitterModule, TypeUtils}
+import com.twitter.util.Future
 import javax.inject.Inject
+import scala.language.higherKinds
+import scala.reflect.runtime.universe._
 
 object testBooleanGlobalFlag
     extends GlobalFlag[Boolean](false, "Test boolean global flag defaulted to false")
@@ -17,24 +20,8 @@ object testMapGlobalFlag
       "Test map global flag defaulted to Map.empty"
     )
 
-object BooleanFlagModule extends TwitterModule {
-  flag[Boolean]("x", false, "default to false")
-}
-
-object TestBindModule extends TwitterModule {
-  flag[Boolean]("bool", false, "default is false")
-
-  override protected def configure(): Unit = {
-    bind[String, Up].toInstance("Hello, world!")
-    bind[Baz].toInstance(new Baz(10))
-    bind[Baz](Names.named("five")).toInstance(new Baz(5))
-    bind[Baz](Names.named("six")).toInstance(new Baz(6))
-    bind[Boolean](Flags.named("bool")).toInstance(true)
-  }
-}
-
 class FooWithInject @Inject()(@Flag("x") x: Boolean) {
-  def bar = x
+  def bar: Boolean = x
 }
 
 class Bar {
@@ -42,6 +29,12 @@ class Bar {
   val booleanGlobalFlag = testBooleanGlobalFlag()
   val stringGlobalFlag = testStringGlobalFlag()
   val mapGlobalFlag = testMapGlobalFlag()
+}
+
+trait DoEverything[+MM[_]] {
+  def uppercase(msg: String): MM[String]
+  def echo(msg: String): MM[String]
+  def magicNum(): MM[String]
 }
 
 trait TestTrait {
@@ -82,6 +75,34 @@ class ThirtyThree extends Number {
   override def longValue(): Long = int.toLong
 }
 
+class DoEverythingImpl42 extends DoEverything[Future] {
+  override def uppercase(msg: String): Future[String] = {
+    Future.value(msg.toUpperCase)
+  }
+
+  override def echo(msg: String): Future[String] = {
+    Future.value(msg)
+  }
+
+  override def magicNum(): Future[String] = {
+    Future.value("42")
+  }
+}
+
+class DoEverythingImpl137 extends DoEverything[Future] {
+  override def uppercase(msg: String): Future[String] = {
+    Future.value(msg.toUpperCase)
+  }
+
+  override def echo(msg: String): Future[String] = {
+    Future.value(msg)
+  }
+
+  override def magicNum(): Future[String] = {
+    Future.value("137")
+  }
+}
+
 trait Processor {
   def process: String
 }
@@ -95,6 +116,26 @@ class ProcessorB extends Processor {
 }
 
 class Baz(val value: Int)
+
+
+object BooleanFlagModule extends TwitterModule {
+  flag[Boolean]("x", false, "default to false")
+}
+
+object TestBindModule extends TwitterModule {
+  flag[Boolean]("bool", false, "default is false")
+
+  override protected def configure(): Unit = {
+    bind[String, Up].toInstance("Hello, world!")
+    bind[Baz].toInstance(new Baz(10))
+    bind[Baz](Names.named("five")).toInstance(new Baz(5))
+    bind[Baz](Names.named("six")).toInstance(new Baz(6))
+    bind[Boolean](Flags.named("bool")).toInstance(true)
+    // need to explicitly provide a Manifest for the higher kinded type
+    bind[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).toInstance(new DoEverythingImpl42)
+  }
+}
+
 
 class TestInjectorTest extends Test {
 
@@ -142,21 +183,9 @@ class TestInjectorTest extends Test {
     injector.instance[Baz]("five").value should equal(5)
     injector.instance[Baz](Names.named("six")).value should equal(6)
     injector.instance[String, Up] should equal("Hello, world!")
-  }
-
-  test("bind deprecated") {
-    val injector = TestInjector(modules = Seq(TestBindModule))
-      .bind[Baz](new Baz(100))
-      .bind[String, Up]("Goodbye, world!")
-      .bind[String](Names.named("foo"), "bar")
-      .bind[String](Flags.named("cat.flag"), "Kat")
-      .create
-
-    injector.instance[Baz].value should equal(100)
-    injector.instance[String, Up] should equal("Goodbye, world!")
-    injector.instance[String]("foo") should equal("bar")
-    injector.instance[String](Names.named("foo")) should equal("bar")
-    injector.instance[String](Flags.named("cat.flag")) should be("Kat")
+    // need to explicitly provide a Manifest here for the higher kinded type
+    // note: this is not always necessary
+    await(injector.instance[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("42")
   }
 
   test("bind") {
@@ -191,6 +220,10 @@ class TestInjectorTest extends Test {
       .bind[String].annotatedWith[Down].toInstance("Goodbye, world!")
       .bind[String].annotatedWith(classOf[Up]).toInstance("Very important Up String")
       .bind[String].annotatedWith(Flags.named("cat.flag")).toInstance("Kat")
+
+      // need to explicitly provide a TypeTag here for the higher kinded type
+      // note: this is not always necessary
+      .bind[DoEverything[Future]](typeTag[DoEverything[Future]]).toInstance(new DoEverythingImpl137)
       .create
 
     injector.instance[TestTrait].foobar() should be("TestTraitImpl1")
@@ -211,6 +244,10 @@ class TestInjectorTest extends Test {
     injector.instance[String](classOf[Up]) should equal("Very important Up String")
     injector.instance[String, Up] should equal("Very important Up String")
     injector.instance[String](Flags.named("cat.flag")) should be("Kat")
+
+    // need to explicitly provide a Manifest here for the higher kinded type
+    // note: this is not always necessary
+    await(injector.instance[DoEverything[Future]](TypeUtils.asManifest[DoEverything[Future]]).magicNum()) should equal("137")
   }
 
   test("bindClass") {
@@ -267,11 +304,11 @@ class TestInjectorTest extends Test {
   test("bind fails after injector is called") {
     val testInjector =
       TestInjector(modules = Seq(TestBindModule))
-        .bind[Baz](new Baz(100))
+        .bind[Baz].toInstance(new Baz(100))
     val injector = testInjector.create
 
     intercept[IllegalStateException] {
-      testInjector.bind[String, Up]("Goodbye, world!")
+      testInjector.bind[String].annotatedWith[Up].toInstance("Goodbye, world!")
     }
     injector.instance[Baz].value should equal(100)
     injector.instance[String, Up] should equal("Hello, world!")

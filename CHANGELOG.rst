@@ -10,12 +10,6 @@ Unreleased
 Added
 ~~~~~
 
-* inject-core, inject-server: Remove deprecated `WordSpec` testing utilities. The framework
-  default ScalaTest testing style is `FunSuite` though users are free to mix their testing
-  style of choice with the framework provided test mixins as per the
-  `documentation <https://twitter.github.io/finatra/user-guide/testing/mixins.html>`__.
-  ``PHAB_ID=D255094``
-
 * finatra-thrift: `c.t.finatra.thrift.Controllers` now support per-method filtering and
   access to headers via `c.t.scrooge.{Request, Response}` wrappers. To use this new
   functionality, create a `Controller` which extends the
@@ -37,8 +31,32 @@ Added
   was previously used, it must be swapped out for a `ReqRepDarkTrafficFilterModule`
   ``PHAB_ID=D236724``
 
+* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
+  between Kafka Streams and Finatra which we've been using internally at Twitter
+  for the last year. The library is not currently open-source.
+
 Changed
 ~~~~~~~
+
+* inject-app: Remove deprecated `bind[T]` DSL methods from `c.t.inject.app.BindDSL`.
+
+  Instead of:
+
+  .. code:: scala
+
+    injector.bind[T](instance)
+    injector.bind[T, Ann](instance)
+    injector.bind[T](ann, instance)
+
+  Users should instead use the more expressive forms of these methods, e.g.,:
+
+  .. code:: scala
+
+    injector.bind[T].toInstance(instance)
+    injector.bind[T].annotatedWith[Ann].toInstance(instance)
+    injector.bind[T].annotatedWith(ann).toInstance(instance)
+
+  which more closely mirrors the scala-guice binding DSL. ``PHAB_ID=D255591``
 
 * finatra-thrift: For services that wish to support dark traffic over
   `c.t.scrooge.Request`/`c.t.scrooge.Response`-based services, a new dark traffic module is
@@ -47,6 +65,12 @@ Changed
 * finatra-thrift: Creating a `c.t.finatra.thrift.Controller` that extends a
   `ThriftService.BaseServiceIface` has been deprecated. See the related bullet point in "Added" with
   the corresponding PHAB_ID to this one for how to migrate. ``PHAB_ID=D236724``
+
+* inject-core, inject-server: Remove deprecated `WordSpec` testing utilities. The framework
+  default ScalaTest testing style is `FunSuite` though users are free to mix their testing
+  style of choice with the framework provided test mixins as per the
+  `documentation <https://twitter.github.io/finatra/user-guide/testing/mixins.html>`__.
+  ``PHAB_ID=D255094``
 
 * finatra-thrift: Instead of failing (potentially silently)
   `c.t.finatra.thrift.routing.ThriftWarmup` now explicitly checks that it is
@@ -68,10 +92,6 @@ Closed
 
 Added
 ~~~~~
-
-* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration 
-  between Kafka Streams and Finatra which we've been using internally at Twitter 
-  for the last year. The library is not currently open-source.
 
 Changed
 ~~~~~~~

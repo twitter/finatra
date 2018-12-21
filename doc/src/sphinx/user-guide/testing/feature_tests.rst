@@ -246,8 +246,8 @@ For example, we could define a "base" testing trait:
           override val overrideModules = Seq(???)
         },
         flags = flags
-      ).bind[Foo](bar)
-       .bind[Baz](bazImpl)
+      ).bind[Foo].toInstance(bar)
+       .bind[Baz].toInstance(bazImpl)
     }
 
 This "base" trait can define a method for obtaining a properly configured Embedded server for test
