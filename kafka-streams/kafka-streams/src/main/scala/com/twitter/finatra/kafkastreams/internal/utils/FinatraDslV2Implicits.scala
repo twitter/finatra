@@ -168,6 +168,32 @@ trait FinatraDslV2Implicits extends ScalaStreamsImplicits {
   /* ---------------------------------------- */
   implicit class FinatraKStream[K: ClassTag](inner: KStreamS[K, Int]) extends Logging {
 
+    /**
+     * For each unique key, sum the values in the stream that occurred within a given time window
+     * and store those values in a StateStore named stateStore.
+     *
+     * A TimeWindow is a tumbling window of fixed length defined by the windowSize parameter.
+     *
+     * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
+     *
+     * After a window is closed it is forwarded out of this transformer with a
+     * [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.WindowClosed]]
+     *
+     * If a record arrives after a window is closed it is immediately forwarded out of this
+     * transformer with a [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.Restatement]]
+     *
+     * @param stateStore the name of the StateStore used to maintain the counts.
+     * @param windowSize splits the stream of data into buckets of data of windowSize,
+     *                   based on the timestamp of each message.
+     * @param allowedLateness allow messages that are upto this amount late to be added to the
+     *                        store, otherwise they are emitted as restatements.
+     * @param queryableAfterClose allow state to be queried upto this amount after the window is
+     *                            closed.
+     * @param keyRangeStart The minimum value that will be stored in the key based on binary sort order.
+     * @param keySerde Serde for the keys in the StateStore.
+     * @return a stream of Keys for a particular timewindow, and the sum of the values for that key
+     *         within a particular timewindow.
+     */
     def sum(
       stateStore: String,
       windowSize: Duration,
@@ -268,6 +294,37 @@ trait FinatraDslV2Implicits extends ScalaStreamsImplicits {
     inner: KStreamS[CompositeKeyType, Int])
       extends Logging {
 
+    /**
+     * For each unique composite key, sum the values in the stream that occurred within a given time window.
+     *
+     * A composite key is a multi part key that can be efficiently range scanned using the
+     * primary key, or the primary key and the secondary key.
+     *
+     * A TimeWindow is a tumbling window of fixed length defined by the windowSize parameter.
+     *
+     * A Window is closed after event time passes the end of a TimeWindow + allowedLateness.
+     *
+     * After a window is closed it is forwarded out of this transformer with a
+     * [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.WindowClosed]]
+     *
+     * If a record arrives after a window is closed it is immediately forwarded out of this
+     * transformer with a [[WindowedValue.resultState]] of [[com.twitter.finatra.streams.transformer.domain.Restatement]]
+     *
+     * @param stateStore          the name of the StateStore used to maintain the counts.
+     * @param windowSize          splits the stream of data into buckets of data of windowSize,
+     *                            based on the timestamp of each message.
+     * @param allowedLateness     allow messages that are upto this amount late to be added to the
+     *                            store, otherwise they are emitted as restatements.
+     * @param queryableAfterClose allow state to be queried upto this amount after the window is
+     *                            closed.
+     * @param emitOnClose         whether or not to emit a record when the window is closed.
+     * @param compositeKeyRangeStart The minimum value that will be stored in the key based on binary sort order.
+     * @param compositeKeySerde serde for the composite key in the StateStore.
+     * @tparam PrimaryKey the type for the primary key
+     * @tparam SecondaryKey the type for the secondary key
+     *
+     * @return
+     */
     def compositeSum[PrimaryKey, SecondaryKey](
       stateStore: String,
       windowSize: Duration,

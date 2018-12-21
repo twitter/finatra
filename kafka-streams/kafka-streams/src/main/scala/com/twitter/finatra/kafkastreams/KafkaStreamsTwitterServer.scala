@@ -36,6 +36,26 @@ import org.apache.kafka.streams.{
   Topology
 }
 
+/**
+ * A [[com.twitter.server.TwitterServer]] that supports configuring a KafkaStreams topology.
+ *
+ * To use, override the [[configureKafkaStreams]] method to setup your topology.
+ *
+ * {{{
+ *   import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
+ *
+ *   object MyKafkaStreamsTwitterServerMain extends MyKafkaStreamsTwitterServer
+ *
+ *   class MyKafkaStreamsTwitterServer extends KafkaStreamsTwitterServer {
+ *
+ *   override def configureKafkaStreams(streamsBuilder: StreamsBuilder): Unit = {
+ *     streamsBuilder.asScala
+ *       .stream("dp-it-devel-tweetid-to-interaction")(
+ *         Consumed.`with`(ScalaSerdes.Long, ScalaSerdes.Thrift[MigratorInteraction])
+ *       )
+ *   }
+ * }}}
+ */
 abstract class KafkaStreamsTwitterServer
     extends TwitterServer
     with KafkaFlagUtils
@@ -104,6 +124,16 @@ abstract class KafkaStreamsTwitterServer
 
   /* Abstract Protected */
 
+  /**
+   * Callback method which is executed after the injector is created and before any other lifecycle
+   * methods.
+   *
+   * Use the provided StreamsBuilder to create your KafkaStreams topology.
+   *
+   * @note It is NOT expected that you block in this method as you will prevent completion
+   * of the server lifecycle.
+   * @param builder
+   */
   protected def configureKafkaStreams(builder: StreamsBuilder): Unit
 
   /* Protected */
@@ -155,6 +185,35 @@ abstract class KafkaStreamsTwitterServer
     })
   }
 
+  /**
+   * Callback method which is executed after the injector is created and before KafkaStreams is
+   * configured.
+   *
+   * Use the provided KafkaStreamsConfig and augment to configure your KafkaStreams topology.
+   *
+   * Example:
+   *
+   * {{{
+   *   override def streamsProperties(config: KafkaStreamsConfig): KafkaStreamsConfig = {
+   *     super
+   *       .streamsProperties(config)
+   *       .retries(60)
+   *       .retryBackoff(1.second)
+   *       .consumer.sessionTimeout(10.seconds)
+   *       .consumer.heartbeatInterval(1.second)
+   *       .producer.retries(300)
+   *       .producer.retryBackoff(1.second)
+   *       .producer.requestTimeout(2.minutes)
+   *       .producer.transactionTimeout(2.minutes)
+   *       .producer.batchSize(500.kilobytes)
+   *   }
+   * }}}
+   *
+   *
+   * @param config the default KafkaStreamsConfig defined at [[createKafkaStreamsProperties]]
+   *
+   * @return a KafkaStreamsConfig with your additional configurations applied.
+   */
   protected def streamsProperties(config: KafkaStreamsConfig): KafkaStreamsConfig = config
 
   protected[finatra] def createKafkaStreamsProperties(): Properties = {

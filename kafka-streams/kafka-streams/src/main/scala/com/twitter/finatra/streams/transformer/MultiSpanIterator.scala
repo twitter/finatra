@@ -7,10 +7,12 @@ package com.twitter.finatra.streams.transformer
  * For example:
  *
  * Passing in an Iterator(1, 1, 1, 2, 2, 3) with a span function of `identity` will yield:
+ * {{{
  * Iterator(
  *   Iterator(1,1,1),
  *   Iterator(2,2),
  *   Iterator(3))
+ *   }}}
  *
  * If there are multiple elements that have the same span, but they are not contiguous then
  * they will be returned in separate subiterators.
@@ -18,11 +20,13 @@ package com.twitter.finatra.streams.transformer
  * For example:
  *
  * Passing in an Iterator(1,2,1,2) with a span function of `identity` will yield:
+ * {{{
  * Iterator(
  *   Iterator(1),
  *   Iterator(2),
  *   Iterator(1),
  *   Iterator(2))
+ *   }}}
  *
  * Contiguous is defined by the Iterator.span function:
  *

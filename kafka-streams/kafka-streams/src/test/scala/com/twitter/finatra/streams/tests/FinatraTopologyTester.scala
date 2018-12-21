@@ -25,22 +25,22 @@ import org.joda.time.{DateTime, DateTimeUtils}
 object FinatraTopologyTester {
 
   /**
-   * FinatraTopologyTester is provides some useful testing utilities integrating Kafka's
-   * TopologyTestDriver and a Finatra Streams server
+   * FinatraTopologyTester is provides useful testing utilities integrating Kafka's
+   * [[TopologyTestDriver]] and a Finatra Streams server.
    *
    * @param kafkaApplicationId    The application.id of the Kafka Streams server being tested.
    *                              The application.id is used to name the changelog topics, so we recommend
    *                              setting this value to the same value used in your production service
    * @param server                A KafkaStreamsTwitterServer containing the streams topology to be
-   *                              tested
+   *                              tested.
    * @param startingWallClockTime The starting wall clock time for each individual test. Note, that
    *                              publishing a message using TopologyTesterTopic#pipeInput will use
    *                              the current mocked wall clock time unless an explicit publish time
-   *                              is specified
-   * @param flags                 Additional application level flags that you may have
+   *                              is specified.
+   * @param flags                 Additional application level flags that you may have.
    * @param thriftQueryable       Enable if your service is exposing queryable state using the
-   *                              com.twitter.finatra.streams.queryable.thrift.QueryableState trait
-   * @param overrideModules       Finatra override modules which redefine production bindings
+   *                              com.twitter.finatra.streams.queryable.thrift.QueryableState trait.
+   * @param overrideModules       Finatra override modules which redefine production bindings.
    */
   def apply(
     kafkaApplicationId: String,

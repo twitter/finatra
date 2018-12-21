@@ -27,7 +27,14 @@ import org.joda.time.DateTime
 import scala.reflect.ClassTag
 
 /**
- * A KafkaStreams Transformer offering an upgraded API over the built in Transformer interface
+ * A KafkaStreams Transformer offering an upgraded API over the built in Transformer interface.
+ *
+ * This Transformer differs from the built in Transformer interface by exposing an [onMesssage]
+ * interface that is used to process incoming messages.  Within [onMessage] you may use the
+ * processorContext to emit 0 or more records.
+ *
+ * This transformer also manages watermarks(see [WatermarkManager]), and extends [OnWatermark] which
+ * allows you to track the passage of event time.
  *
  * Note: In time, this class will be merged with FinatraTransformer
  *
@@ -59,6 +66,14 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
 
   /* Abstract */
 
+  /**
+   * Callback method which is called for every message in the stream this Transformer is attached to.
+   * Implementers of this method may emit 0 or more records by using the processorContext.
+   *
+   * @param messageTime the time of the message
+   * @param key the key of the message
+   * @param value the value of the message
+   */
   protected[finatra] def onMessage(messageTime: Time, key: InputKey, value: InputValue): Unit
 
   /* Protected */

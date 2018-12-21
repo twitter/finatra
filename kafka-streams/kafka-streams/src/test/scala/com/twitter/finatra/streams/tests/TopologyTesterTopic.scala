@@ -8,6 +8,16 @@ import org.apache.kafka.streams.test.ConsumerRecordFactory
 import org.joda.time.{DateTime, DateTimeUtils}
 import org.scalatest.Matchers
 
+/**
+ * Used to read/write from Kafka topics in the topology tester.
+ *
+ * @param topologyTestDriver the topology test driver
+ * @param name the name of the topic
+ * @param keySerde the serde for the key
+ * @param valSerde the serde for the value
+ * @tparam K the type of the key
+ * @tparam V the type of the value
+ */
 class TopologyTesterTopic[K, V](
   topologyTestDriver: => TopologyTestDriver,
   name: String,

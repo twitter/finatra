@@ -4,6 +4,9 @@ import com.github.nscala_time.time.DurationBuilder
 import com.twitter.util.Duration
 import org.joda.time.{DateTime, DateTimeUtils}
 
+/**
+ * Helper class to modify the timestamps that will be used in FinatraStreams tests.
+ */
 trait TimeTraveler {
   def setTime(now: String): Unit = {
     setTime(new DateTime(now))

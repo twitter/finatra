@@ -11,6 +11,10 @@ import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 import org.apache.kafka.common.security.auth.SecurityProtocol
 import org.apache.kafka.streams.StreamsConfig
 
+/**
+ * Builder for setting various [[StreamsConfig]] parameters, see that class for documentation on
+ * each parameter.
+ */
 class KafkaStreamsConfig(
   streamsConfigMap: Map[String, String] = Map.empty,
   producerConfigMap: Map[String, String] = Map.empty,

@@ -64,7 +64,7 @@ object FinatraTransformer {
  * Note: Timers that fire at the same time MAY NOT fire in the order which they were added
  *
  * Example Timer Key Structures (w/ corresponding CountsStore Key Structures)
- *
+ * {{{
  * ImpressionsCounter (w/ TimerKey storing TweetId)
  * TimeWindowedKey(2018-08-04T10:00:00.000Z-20)
  * Timer(          2018-08-04T12:00:00.000Z-Expire-2018-08-04T10:00:00.000Z-20
@@ -91,6 +91,7 @@ object FinatraTransformer {
  * @tparam TimerKey    Type of the timer key
  * @tparam OutputKey   Type of the output keys
  * @tparam OutputValue Type of the output values
+ * }}}
  */
 //TODO: Create variant for when there are no timers (e.g. avoid the extra time params and need to specify a timer store
 @Beta

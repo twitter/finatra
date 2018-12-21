@@ -19,6 +19,22 @@ import org.slf4j.event.Level
 import scala.collection.JavaConverters._
 import scala.util.control.NonFatal
 
+/**
+ * Used to read/write from Kafka topics created on local brokers during testing.
+ *
+ * @param topic the topic to write to
+ * @param keySerde the serde for the key
+ * @param valSerde the serde for the value
+ * @param _kafkaCluster the kafka cluster to use to produce/consume from
+ * @param partitions the number of partitions for this topic
+ * @param replication tge replication factor for this topic
+ * @param autoConsume whether or not to automatically consume messages off this topic(useful for logging)
+ * @param autoCreate whether or not to automatically create this topic on the brokers
+ * @param logPublishes whether or not to publish logs
+ * @param allowPublishes whether or not this topic allows publishes
+ * @tparam K the type of the key
+ * @tparam V the type of the value
+ */
 case class KafkaTopic[K, V](
   topic: String,
   keySerde: Serde[K],
