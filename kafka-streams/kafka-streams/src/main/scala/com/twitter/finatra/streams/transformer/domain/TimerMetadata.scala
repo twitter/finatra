@@ -11,6 +11,12 @@ object TimerMetadata {
   }
 }
 
+/**
+ * Metadata used to convey the purpose of a
+ * [[com.twitter.finatra.streams.transformer.internal.domain.Timer]].
+ *
+ * [[TimerMetadata]] represents the following Timer actions: [[EmitEarly]], [[Close]], [[Expire]]
+ */
 class TimerMetadata(val value: Byte) {
   override def equals(obj: scala.Any): Boolean = {
     obj match {

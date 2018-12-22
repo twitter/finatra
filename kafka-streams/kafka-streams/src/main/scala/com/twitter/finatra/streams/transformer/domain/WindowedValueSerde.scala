@@ -10,6 +10,11 @@ object WindowedValueSerde {
   }
 }
 
+/**
+ * Serde for the [[WindowedValue]] class.
+ *
+ * @param inner Serde for [[WindowedValue.value]].
+ */
 class WindowedValueSerde[V](inner: Serde[V]) extends AbstractSerde[WindowedValue[V]] {
 
   private val innerDeserializer = inner.deserializer()
