@@ -22,7 +22,7 @@ class HttpClientIntegrationTest extends IntegrationTest {
   private[this] val httpClient = injector.instance[HttpClient]
 
   override def afterEach(): Unit = {
-    resetResettables(inMemoryHttpService)
+    inMemoryHttpService.reset()
   }
 
   test("execute") {

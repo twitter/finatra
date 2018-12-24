@@ -1,7 +1,6 @@
 package com.twitter.inject.server
 
 import com.twitter.inject.{Injector, IntegrationTestMixin}
-import com.twitter.util.{Await, Future}
 import org.scalatest.{Suite, SuiteMixin}
 import scala.util.control.NonFatal
 
@@ -28,23 +27,6 @@ trait FeatureTestMixin
 
   def printStats = true
 
-  override protected def beforeAll(): Unit = {
-    if (server.isStarted && hasBoundFields) {
-      throw new Exception(
-        "ERROR: Server started before integrationTestModule added. " +
-          "@Bind will not work unless references to the server are lazy, or within a ScalaTest " +
-          "lifecycle method or test method, or the integrationTestModule is manually added as " +
-          "an override module."
-      )
-    }
-
-    if (hasBoundFields) {
-      assert(server.isInjectable)
-      server.injectableServer.addFrameworkOverrideModules(integrationTestModule)
-    }
-    super.beforeAll()
-  }
-
   override protected def afterEach(): Unit = {
     super.afterEach()
     if (server.isInjectable) {
@@ -68,11 +50,4 @@ trait FeatureTestMixin
       }
     }
   }
-
-  implicit class RichFuture[T](future: Future[T]) {
-    def value: T = {
-      Await.result(future)
-    }
-  }
-
 }

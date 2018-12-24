@@ -38,6 +38,10 @@ Added
 Changed
 ~~~~~~~
 
+* inject-core, inject-server: Remove deprecated `@Bind` support from test mixins. Users should
+  instead prefer using the `bind[T] <https://twitter.github.io/finatra/user-guide/testing/bind_dsl.html>`__
+  DSL in tests. ``PHAB_ID=D250325``
+
 * inject-app: Remove deprecated `bind[T]` DSL methods from `c.t.inject.app.BindDSL`.
 
   Instead of:

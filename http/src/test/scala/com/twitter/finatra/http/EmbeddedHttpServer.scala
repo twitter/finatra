@@ -1091,6 +1091,7 @@ class EmbeddedHttpServer(
   }
 
   private def matchesAdminRoute(method: Method, path: String): Boolean = {
+    start() // ensure we have started the server and thus added admin routes.
     path.startsWith(HttpRouter.FinatraAdminPrefix) ||
       adminHttpRouteMatchesPath(method -> path)
   }
