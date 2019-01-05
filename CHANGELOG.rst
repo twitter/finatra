@@ -10,6 +10,13 @@ Unreleased
 Added
 ~~~~~
 
+* inject-server: Add lint rule to alert when deprecated `util-logging` JUL flags from the
+  `c.t.inject.server.DeprecatedLogging` trait are user defined. This trait was mixed-in
+  only for backwards compatibility when TwitterServer was moved to the slf4j-api and the flags are
+  not expected to be configured. By default, `util-app` based applications will fail to start if
+  they are passed a flag value at startup which they do not define. Users should instead configure
+  their chosen slf4j-api logging implementation directly. ``PHAB_ID=D256489``
+
 * finatra-thrift: `c.t.finatra.thrift.Controllers` now support per-method filtering and
   access to headers via `c.t.scrooge.{Request, Response}` wrappers. To use this new
   functionality, create a `Controller` which extends the

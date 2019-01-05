@@ -1,6 +1,7 @@
 package com.twitter.inject.server
 
 import com.google.inject.Module
+import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.client.ClientRegistry
 import com.twitter.inject.Logging
@@ -74,12 +75,12 @@ abstract class AbstractTwitterServer extends TwitterServer
  * @see [[https://twitter.github.io/finatra/user-guide/twitter-server/index.html Creating an Injectable TwitterServer]]
  */
 trait TwitterServer
-  extends App
-  with com.twitter.server.TwitterServer
-  with DeprecatedLogging
-  with Ports
-  with Warmup
-  with Logging {
+    extends App
+    with com.twitter.server.TwitterServer
+    with DeprecatedLogging
+    with Ports
+    with Warmup
+    with Logging {
 
   addFrameworkModules(
     statsReceiverModule,
@@ -362,5 +363,64 @@ private[server] trait DeprecatedLogging extends com.twitter.logging.Logging { se
   @deprecated("For backwards compatibility only.", "2017-10-06")
   override lazy val log: com.twitter.logging.Logger = com.twitter.logging.Logger(name)
 
-  override def configureLoggerFactories(): Unit = {}
+  // lint if any com.twitter.logging.Logging flags are set
+  premain {
+    val flgs: Seq[Flag[_]] =
+      Seq(
+        inferClassNamesFlag,
+        outputFlag,
+        levelFlag,
+        asyncFlag,
+        asyncMaxSizeFlag,
+        rollPolicyFlag,
+        appendFlag,
+        rotateCountFlag
+      )
+
+    val userDefinedFlgs: Seq[Flag[_]] = flgs.collect {
+      case flg: Flag[_] if flg.isDefined => flg
+    }
+
+    if (userDefinedFlgs.nonEmpty && !userDefinedFlgsAllowed) {
+      GlobalRules.get.add(
+        Rule(
+          Category.Configuration,
+          "Unsupported util-logging (JUL) flag set",
+          """By default, Finatra uses the slf4j-api for logging and as such setting util-logging
+            | flags is not expected to have any effect. Setting these flags may cause your server to
+            | fail startup in the future. Logging configuration should always match your chosen logging
+            | implementation.
+            | See: https://twitter.github.io/finatra/user-guide/logging/index.html.""".stripMargin
+        ) {
+          userDefinedFlgs.map(flg => Issue(s"-${flg.name}"))
+        }
+      )
+    }
+  }
+
+  /** If slf4j-jdk14 is being used, it is acceptable to have user defined values for these flags */
+  private[this] def userDefinedFlgsAllowed: Boolean = {
+    try {
+      Class.forName("org.slf4j.impl.JDK14LoggerFactory", false, this.getClass.getClassLoader)
+      true
+    } catch {
+      case _: ClassNotFoundException => false
+    }
+  }
+
+  /**
+   * [[com.twitter.logging.Logging.configureLoggerFactories()]] removes all added JUL handlers
+   * and adds only handlers defined by [[com.twitter.logging.Logging.loggerFactories]].
+   *
+   * `Logging.configureLoggerFactories` would thus remove the installed SLF4J BridgeHandler
+   * from [[com.twitter.server.TwitterServer]]. Therefore, we override with a no-op to prevent the
+   * SLF4J BridgeHandler from being removed.
+   *
+   * @note Subclasses MUST override this method with an implementation that configures the
+   *       `com.twitter.logging.Logger` if they want to use their configured logger factories via
+   *       the util-logging style of configuration.
+   *
+   * @see [[https://www.slf4j.org/legacy.html#jul-to-slf4j jul-to-slf4j bridge]]
+   */
+  override protected def configureLoggerFactories(): Unit = {}
 }
