@@ -59,29 +59,31 @@ class FinatraKeyValueStore[K: ClassTag, V](override val name: String, statsRecei
   private var keyDeserializer: Deserializer[K] = _
   private var valueDeserializer: Deserializer[V] = _
   private var numEntriesGauge: Gauge = _
-  private var initLatencyStat: Stat = _
-  private var closeLatencyStat: Stat = _
-  private var putLatencyStat: Stat = _
-  private var putIfAbsentLatencyStat: Stat = _
-  private var putAllLatencyStat: Stat = _
-  private var deleteLatencyStat: Stat = _
-  private var flushLatencyStat: Stat = _
-  private var persistentLatencyStat: Stat = _
-  private var isOpenLatencyStat: Stat = _
-  private var getLatencyStat: Stat = _
-  private var rangeLatencyStat: Stat = _
-  private var allLatencyStat: Stat = _
-  private var approximateNumEntriesLatencyStat: Stat = _
-  private var deleteRangeLatencyStat: Stat = _
-  private var finatraDeleteLatencyStat: Stat = _
-  private var deleteWithoutGettingPriorValueLatencyStat: Stat = _
-  private var finatraRangeLatencyStat: Stat = _
-  private var deleteRangeExperimentalLatencyStat: Stat = _
+
+  /* Private Stats */
+  private val initLatencyStat = latencyStat(InitLatencyStatName)
+  private val closeLatencyStat = latencyStat(CloseLatencyStatName)
+  private val putLatencyStat = latencyStat(PutLatencyStatName)
+  private val putIfAbsentLatencyStat = latencyStat(PutIfAbsentLatencyStatName)
+  private val putAllLatencyStat = latencyStat(PutAllLatencyStatName)
+  private val deleteLatencyStat = latencyStat(DeleteLatencyStatName)
+  private val flushLatencyStat = latencyStat(FlushLatencyStatName)
+  private val persistentLatencyStat = latencyStat(PersistentLatencyStatName)
+  private val isOpenLatencyStat = latencyStat(IsOpenLatencyStatName)
+  private val getLatencyStat = latencyStat(GetLatencyStatName)
+  private val rangeLatencyStat = latencyStat(RangeLatencyStatName)
+  private val allLatencyStat = latencyStat(AllLatencyStatName)
+  private val approximateNumEntriesLatencyStat = latencyStat(ApproximateNumEntriesLatencyStatName)
+  private val deleteRangeLatencyStat = latencyStat(DeleteRangeLatencyStatName)
+  private val finatraDeleteLatencyStat = latencyStat(FinatraDeleteLatencyStatName)
+  private val deleteWithoutGettingPriorValueLatencyStat = latencyStat(
+    DeleteWithoutGettingPriorValueLatencyStatName)
+  private val finatraRangeLatencyStat = latencyStat(FinatraRangeLatencyStatName)
+  private val deleteRangeExperimentalLatencyStat = latencyStat(
+    DeleteRangeExperimentalLatencyStatName)
 
   /* Public */
   override def init(processorContext: ProcessorContext, root: StateStore): Unit = {
-    initLatencyStat = storeStatsScope.scope(InitLatencyStatName).stat(latencyStatName)
-
     meterLatency(initLatencyStat) {
       _keyValueStore = processorContext
         .getStateStore(name)
@@ -104,30 +106,6 @@ class FinatraKeyValueStore[K: ClassTag, V](override val name: String, statsRecei
 
       numEntriesGauge =
         storeStatsScope.addGauge(s"approxNumEntries")(_keyValueStore.approximateNumEntries)
-      closeLatencyStat = storeStatsScope.scope(CloseLatencyStatName).stat(latencyStatName)
-      putLatencyStat = storeStatsScope.scope(PutLatencyStatName).stat(latencyStatName)
-      putIfAbsentLatencyStat =
-        storeStatsScope.scope(PutIfAbsentLatencyStatName).stat(latencyStatName)
-      putAllLatencyStat = storeStatsScope.scope(PutAllLatencyStatName).stat(latencyStatName)
-      deleteLatencyStat = storeStatsScope.scope(DeleteLatencyStatName).stat(latencyStatName)
-      flushLatencyStat = storeStatsScope.scope(FlushLatencyStatName).stat(latencyStatName)
-      persistentLatencyStat = storeStatsScope.scope(PersistentLatencyStatName).stat(latencyStatName)
-      isOpenLatencyStat = storeStatsScope.scope(IsOpenLatencyStatName).stat(latencyStatName)
-      getLatencyStat = storeStatsScope.scope(GetLatencyStatName).stat(latencyStatName)
-      rangeLatencyStat = storeStatsScope.scope(RangeLatencyStatName).stat(latencyStatName)
-      allLatencyStat = storeStatsScope.scope(AllLatencyStatName).stat(latencyStatName)
-      approximateNumEntriesLatencyStat =
-        storeStatsScope.scope(ApproximateNumEntriesLatencyStatName).stat(latencyStatName)
-      deleteRangeLatencyStat =
-        storeStatsScope.scope(DeleteRangeLatencyStatName).stat(latencyStatName)
-      finatraDeleteLatencyStat =
-        storeStatsScope.scope(FinatraDeleteLatencyStatName).stat(latencyStatName)
-      deleteWithoutGettingPriorValueLatencyStat =
-        storeStatsScope.scope(DeleteWithoutGettingPriorValueLatencyStatName).stat(latencyStatName)
-      finatraRangeLatencyStat =
-        storeStatsScope.scope(FinatraRangeLatencyStatName).stat(latencyStatName)
-      deleteRangeExperimentalLatencyStat =
-        storeStatsScope.scope(DeleteRangeExperimentalLatencyStatName).stat(latencyStatName)
     }
   }
 
@@ -169,12 +147,13 @@ class FinatraKeyValueStore[K: ClassTag, V](override val name: String, statsRecei
   override def persistent(): Boolean =
     meterLatency(persistentLatencyStat)(keyValueStore.persistent())
 
-  override def isOpen: Boolean = meterLatency(isOpenLatencyStat)(keyValueStore.isOpen)
+  override def isOpen: Boolean =
+    _keyValueStore != null && meterLatency(isOpenLatencyStat)(keyValueStore.isOpen)
 
-  override def get(k: K): V = meterLatency(getLatencyStat)(keyValueStore.get(k))
+  override def get(key: K): V = meterLatency(getLatencyStat)(keyValueStore.get(key))
 
-  override def range(k: K, k1: K): KeyValueIterator[K, V] =
-    meterLatency(rangeLatencyStat)(keyValueStore.range(k, k1))
+  override def range(from: K, to: K): KeyValueIterator[K, V] =
+    meterLatency(rangeLatencyStat)(keyValueStore.range(from, to))
 
   override def all(): KeyValueIterator[K, V] = meterLatency(allLatencyStat)(keyValueStore.all())
 
@@ -317,5 +296,11 @@ class FinatraKeyValueStore[K: ClassTag, V](override val name: String, statsRecei
       "FinatraTransformer.getKeyValueStore must be called once outside of onMessage"
     )
     _keyValueStore
+  }
+
+  private def latencyStat(name: String): Stat = {
+    storeStatsScope
+      .scope(name)
+      .stat(latencyStatName)
   }
 }

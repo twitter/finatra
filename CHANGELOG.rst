@@ -95,6 +95,10 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-kafka-streams: Fix bug where KeyValueStore#isOpen was throwing an
+  exception when called on an uninitialized key value store
+  ``PHAB_ID=D257635``
+
 Closed
 ~~~~~~
 

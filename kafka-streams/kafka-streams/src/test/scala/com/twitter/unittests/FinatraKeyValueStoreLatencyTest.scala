@@ -100,7 +100,10 @@ class FinatraKeyValueStoreLatencyTest extends Test {
   }
 
   test("Series of store operations") { // TODO: test deleteRangeExperimental()
+    keyValueStore.isOpen should be(false)
+
     keyValueStore.init(context, null)
+    keyValueStore.isOpen should be(true)
     assertNonzeroLatency(FinatraKeyValueStore.InitLatencyStatName)
 
     assert(keyValueStore.isOpen())
