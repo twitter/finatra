@@ -6,6 +6,7 @@ import com.twitter.finatra.streams.transformer.domain._
 import com.twitter.util.Duration
 import org.apache.kafka.streams.state.KeyValueIterator
 
+@deprecated("Use AggregatorTransformer", "1/7/2019")
 class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
   commitInterval: Duration,
   compositeKeyRangeStart: CK,
@@ -43,7 +44,7 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
 
   override def onMessage(time: Time, compositeKey: CK, count: Int): Unit = {
     val windowedCompositeKey = TimeWindowed.forSize(time.hourMillis, windowSizeMillis, compositeKey)
-    if (windowedCompositeKey.isLate(allowedLatenessMillis, watermark)) {
+    if (windowedCompositeKey.isLate(allowedLatenessMillis, Watermark(watermark))) {
       restatementsCounter.incr()
       forward(windowedCompositeKey.map { _ =>
         compositeKey.primary

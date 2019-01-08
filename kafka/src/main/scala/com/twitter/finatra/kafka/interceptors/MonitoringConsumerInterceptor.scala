@@ -92,6 +92,7 @@ class MonitoringConsumerInterceptor extends ConsumerInterceptor[Any, Any] {
       .stat(statName)
   }
 
+  //TODO: Optimize map lookup which is a hotspot during profiling
   private def updateLagStat(now: Long, topic: String, timestamp: Long, statName: String): Unit = {
     val lag = now - timestamp
     if (lag >= 0) {

@@ -18,6 +18,8 @@ object TimerMetadata {
  * [[TimerMetadata]] represents the following Timer actions: [[EmitEarly]], [[Close]], [[Expire]]
  */
 class TimerMetadata(val value: Byte) {
+  require(value >= 0)
+
   override def equals(obj: scala.Any): Boolean = {
     obj match {
       case other: TimerMetadata => value == other.value

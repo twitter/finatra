@@ -1,15 +1,18 @@
 package com.twitter.finatra.streams.flags
 
 import com.twitter.conversions.DurationOps._
+import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.streams.flags.FinatraTransformerFlags._
-import com.twitter.inject.server.TwitterServer
 
 object FinatraTransformerFlags {
   val AutoWatermarkInterval = "finatra.streams.watermarks.auto.interval"
   val EmitWatermarkPerMessage = "finatra.streams.watermarks.per.message"
 }
 
-trait FinatraTransformerFlags extends TwitterServer {
+/**
+ * A trait providing flags for configuring FinatraTransformers
+ */
+trait FinatraTransformerFlags extends KafkaStreamsTwitterServer {
 
   protected val autoWatermarkIntervalFlag = flag(
     AutoWatermarkInterval,

@@ -178,10 +178,10 @@ case class FinatraTopologyTester private (
 
   /**
    * Get a Finatra windowed key value store by name
-   * @param name
-   * @tparam K
-   * @tparam V
-   * @return
+   * @param name Name of the store
+   * @tparam K Key type of the store
+   * @tparam V Value type of the store
+   * @return KeyValueStore used for time windowed keys
    */
   def getFinatraWindowedStore[K, V](name: String): KeyValueStore[TimeWindowed[K], V] = {
     getKeyValueStore[TimeWindowed[K], V](name)
@@ -189,13 +189,26 @@ case class FinatraTopologyTester private (
 
   /**
    * Get a Finatra timer key value store by name
-   * @param name
-   * @tparam K
-   * @tparam V
-   * @return
+   * @param name Name of the store
+   * @tparam K Key type of the store
+   * @tparam V Value type of the store
+   * @return KeyValueStore used for timer entries
    */
   def getFinatraTimerStore[K](name: String): KeyValueStore[Timer[K], Array[Byte]] = {
     getKeyValueStore[Timer[K], Array[Byte]](name)
+  }
+
+  /**
+   * Get a Finatra windowed timer store by name
+   * @param name Name of the store
+   * @tparam K Key type of the store
+   * @tparam V Value type of the store
+   * @return KeyValueStore used for time windowed timer entries
+   */
+  def getFinatraWindowedTimerStore[K](
+    name: String
+  ): KeyValueStore[Timer[TimeWindowed[K]], Array[Byte]] = {
+    getFinatraTimerStore[TimeWindowed[K]](name)
   }
 
   def reset(): Unit = {

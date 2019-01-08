@@ -52,7 +52,7 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
     if (FinatraRocksDBConfig.SharedBlockCache == null) {
       val blockCacheSize =
         getBytesOrDefault(configs, FinatraRocksDBConfig.RocksDbBlockCacheSizeConfig, 100.megabytes)
-      val numShardBits = 1 //TODO: Increase if needed for multi-threaded queryable state access
+      val numShardBits = 1 //TODO: Make configurable so this can be increased for multi-threaded queryable state access
       FinatraRocksDBConfig.SharedBlockCache = new LRUCache(blockCacheSize, numShardBits)
     }
 
@@ -64,10 +64,10 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
       .setTableFormatConfig(tableConfig)
 
     options
-      .setWriteBufferSize(1.gigabyte.inBytes)
+      .setDbWriteBufferSize(0)
+      .setWriteBufferSize(1.gigabyte.inBytes) //TODO: Make configurable with default value equal to RocksDB default (which is much lower than 1 GB!)
       .setMinWriteBufferNumberToMerge(1)
       .setMaxWriteBufferNumber(2)
-      .setDbWriteBufferSize(0)
 
     options
       .setBytesPerSync(1048576) //See: https://github.com/facebook/rocksdb/wiki/Setup-Options-and-Basic-Tuning#other-general-options

@@ -1,220 +1,59 @@
 package com.twitter.finatra.streams.stores
+import com.twitter.finatra.streams.transformer.domain.TimerResult
+import org.apache.kafka.streams.processor.TaskId
+import org.apache.kafka.streams.state.{KeyValueIterator, KeyValueStore}
 
-import com.twitter.finagle.stats.{Gauge, Stat, StatsReceiver}
-import com.twitter.finatra.kafkastreams.internal.utils.ReflectionUtils
-import com.twitter.finatra.streams.stores.FinatraKeyValueStore._
-import com.twitter.finatra.streams.transformer.IteratorImplicits
-import com.twitter.finatra.streams.transformer.domain.{DeleteTimer, RetainTimer, TimerResult}
-import com.twitter.inject.Logging
-import java.util
-import java.util.concurrent.TimeUnit
-import org.apache.kafka.common.serialization.{Deserializer, Serializer}
-import org.apache.kafka.streams.KeyValue
-import org.apache.kafka.streams.processor.{ProcessorContext, StateStore}
-import org.apache.kafka.streams.state.internals.{
-  MeteredKeyValueBytesStore,
-  RocksDBStore,
-  RocksKeyValueIterator
-}
-import org.apache.kafka.streams.state.{KeyValueIterator, KeyValueStore, StateSerdes}
-import org.rocksdb.{RocksDB, WriteOptions}
-import scala.collection.JavaConverters._
-import scala.reflect.ClassTag
-
-object FinatraKeyValueStore {
-  val InitLatencyStatName = "init"
-  val CloseLatencyStatName = "close"
-  val PutLatencyStatName = "put"
-  val PutIfAbsentLatencyStatName = "put_if_absent"
-  val PutAllLatencyStatName = "put_all"
-  val DeleteLatencyStatName = "delete"
-  val FlushLatencyStatName = "flush"
-  val PersistentLatencyStatName = "persistent"
-  val IsOpenLatencyStatName = "is_open"
-  val GetLatencyStatName = "get"
-  val RangeLatencyStatName = "range"
-  val AllLatencyStatName = "all"
-  val ApproximateNumEntriesLatencyStatName = "approximate_num_entries"
-  val DeleteRangeLatencyStatName = "delete_range"
-  val FinatraDeleteLatencyStatName = "finatra_delete"
-  val DeleteWithoutGettingPriorValueLatencyStatName = "delete_without_getting_prior_value"
-  val FinatraRangeLatencyStatName = "finatra_range"
-  val DeleteRangeExperimentalLatencyStatName = "delete_range_experimental"
-}
-
-class FinatraKeyValueStore[K: ClassTag, V](override val name: String, statsReceiver: StatsReceiver)
-    extends KeyValueStore[K, V]
-    with Logging
-    with IteratorImplicits {
-
-  private val latencyStatName: String = "latency_us"
-  private val storeStatsScope: StatsReceiver = statsReceiver.scope("stores").scope(name)
-
-  /* Private Mutable */
-  private var _keyValueStore: MeteredKeyValueBytesStore[K, V] = _
-  private var rocksDb: RocksDB = _
-  private var writeOptions: WriteOptions = _
-  private var serdes: StateSerdes[K, V] = _
-  private var keySerializer: Serializer[K] = _
-  private var keyDeserializer: Deserializer[K] = _
-  private var valueDeserializer: Deserializer[V] = _
-  private var numEntriesGauge: Gauge = _
-
-  /* Private Stats */
-  private val initLatencyStat = latencyStat(InitLatencyStatName)
-  private val closeLatencyStat = latencyStat(CloseLatencyStatName)
-  private val putLatencyStat = latencyStat(PutLatencyStatName)
-  private val putIfAbsentLatencyStat = latencyStat(PutIfAbsentLatencyStatName)
-  private val putAllLatencyStat = latencyStat(PutAllLatencyStatName)
-  private val deleteLatencyStat = latencyStat(DeleteLatencyStatName)
-  private val flushLatencyStat = latencyStat(FlushLatencyStatName)
-  private val persistentLatencyStat = latencyStat(PersistentLatencyStatName)
-  private val isOpenLatencyStat = latencyStat(IsOpenLatencyStatName)
-  private val getLatencyStat = latencyStat(GetLatencyStatName)
-  private val rangeLatencyStat = latencyStat(RangeLatencyStatName)
-  private val allLatencyStat = latencyStat(AllLatencyStatName)
-  private val approximateNumEntriesLatencyStat = latencyStat(ApproximateNumEntriesLatencyStatName)
-  private val deleteRangeLatencyStat = latencyStat(DeleteRangeLatencyStatName)
-  private val finatraDeleteLatencyStat = latencyStat(FinatraDeleteLatencyStatName)
-  private val deleteWithoutGettingPriorValueLatencyStat = latencyStat(
-    DeleteWithoutGettingPriorValueLatencyStatName)
-  private val finatraRangeLatencyStat = latencyStat(FinatraRangeLatencyStatName)
-  private val deleteRangeExperimentalLatencyStat = latencyStat(
-    DeleteRangeExperimentalLatencyStatName)
-
-  /* Public */
-  override def init(processorContext: ProcessorContext, root: StateStore): Unit = {
-    meterLatency(initLatencyStat) {
-      _keyValueStore = processorContext
-        .getStateStore(name)
-        .asInstanceOf[MeteredKeyValueBytesStore[K, V]]
-
-      serdes = ReflectionUtils.getField[StateSerdes[K, V]](_keyValueStore, "serdes")
-      keySerializer = serdes.keySerializer()
-      keyDeserializer = serdes.keyDeserializer()
-      valueDeserializer = serdes.valueDeserializer()
-
-      _keyValueStore.inner() match {
-        case rocksDbStore: RocksDBStore =>
-          rocksDb = ReflectionUtils.getField[RocksDB](rocksDbStore, "db")
-        case _ =>
-          throw new Exception("FinatraTransformer only supports RocksDB State Stores")
-      }
-
-      writeOptions = new WriteOptions
-      writeOptions.setDisableWAL(true)
-
-      numEntriesGauge =
-        storeStatsScope.addGauge(s"approxNumEntries")(_keyValueStore.approximateNumEntries)
-    }
-  }
-
-  override def close(): Unit = {
-    meterLatency(closeLatencyStat) {
-      if (numEntriesGauge != null) {
-        numEntriesGauge.remove()
-      }
-      numEntriesGauge = null
-
-      _keyValueStore = null
-      rocksDb = null
-
-      if (writeOptions != null) {
-        writeOptions.close()
-        writeOptions = null
-      }
-
-      serdes = null
-      keySerializer = null
-      keyDeserializer = null
-      valueDeserializer = null
-    }
-  }
-
-  override def put(key: K, value: V): Unit =
-    meterLatency(putLatencyStat)(keyValueStore.put(key, value))
-
-  override def putIfAbsent(k: K, v: V): V =
-    meterLatency(putIfAbsentLatencyStat)(keyValueStore.putIfAbsent(k, v))
-
-  override def putAll(list: util.List[KeyValue[K, V]]): Unit =
-    meterLatency(putAllLatencyStat)(keyValueStore.putAll(list))
-
-  override def delete(k: K): V = meterLatency(deleteLatencyStat)(keyValueStore.delete(k))
-
-  override def flush(): Unit = meterLatency(flushLatencyStat)(keyValueStore.flush())
-
-  override def persistent(): Boolean =
-    meterLatency(persistentLatencyStat)(keyValueStore.persistent())
-
-  override def isOpen: Boolean =
-    _keyValueStore != null && meterLatency(isOpenLatencyStat)(keyValueStore.isOpen)
-
-  override def get(key: K): V = meterLatency(getLatencyStat)(keyValueStore.get(key))
-
-  override def range(from: K, to: K): KeyValueIterator[K, V] =
-    meterLatency(rangeLatencyStat)(keyValueStore.range(from, to))
-
-  override def all(): KeyValueIterator[K, V] = meterLatency(allLatencyStat)(keyValueStore.all())
-
-  override def approximateNumEntries(): Long =
-    meterLatency(approximateNumEntriesLatencyStat)(keyValueStore.approximateNumEntries())
-
-  /* Finatra Additions */
-
-  // TODO: Avoid reading all keys into memory
-  def deleteRange(from: K, to: K, maxDeletes: Int = 25000): TimerResult[K] = {
-    meterLatency(deleteRangeLatencyStat) {
-      val iterator = range(from, to)
-      try {
-        val keysToDelete =
-          iterator.asScala
-            .take(maxDeletes)
-            .map(_.key)
-            .toArray
-
-        delete(keysToDelete)
-        deleteOrRetainTimer(iterator)
-      } finally {
-        iterator.close()
-      }
-    }
-  }
+trait FinatraKeyValueStore[K, V] extends KeyValueStore[K, V] {
 
   /**
-   * An optimized version of delete that performs multiple deletes in a batch instead
-   * of deleting each key one at a time
-   *
-   * Note: A RocksDB delete is equivalent to a put with a null value
-   *
-   * TODO: Avoid reading all keys into memory
-   *
-   * @param keys Keys to delete
-   **/
-  def delete(keys: Iterable[K]): Unit = {
-    meterLatency(finatraDeleteLatencyStat) {
-      val keysWithNullValue = keys.toSeq
-        .map(key => new KeyValue[K, V](key, null.asInstanceOf[V]))
+   * The task id associated with this store
+   */
+  def taskId: TaskId
 
-      keyValueStore.putAll(keysWithNullValue.asJava)
-    }
-  }
+  /**
+   * Get an iterator over a given range of keys. This iterator must be closed after use.
+   * The returned iterator must be safe from {@link java.util.ConcurrentModificationException}s
+   * and must not return null values. No ordering guarantees are provided.
+   *
+   * @param from            The first key that could be in the range
+   * @param to              The last key that could be in the range
+   * @param allowStaleReads Allow stale reads when querying a caching key value store. If set to false,
+   *                        each query will trigger a flush of the cache.
+   *
+   * @return The iterator for this range.
+   *
+   * @throws NullPointerException       If null is used for from or to.
+   * @throws InvalidStateStoreException if the store is not initialized
+   */
+  def range(from: K, to: K, allowStaleReads: Boolean): KeyValueIterator[K, V]
 
-  // Optimization which avoid getting the prior value which keyValueStore.delete does :-/
-  final def deleteWithoutGettingPriorValue(key: K): Unit = {
-    meterLatency(deleteWithoutGettingPriorValueLatencyStat) {
-      keyValueStore.put(key, null.asInstanceOf[V])
-    }
-  }
+  @deprecated("no longer supported", "1/7/2019")
+  def deleteRange(from: K, to: K, maxDeletes: Int = 25000): TimerResult[K]
 
-  final def getOrDefault(key: K, default: => V): V = {
-    val existing = keyValueStore.get(key)
-    if (existing == null) {
-      default
-    } else {
-      existing
-    }
-  }
+  /**
+   * Delete the value from the store (if there is one)
+   * Note: This version of delete avoids getting the prior value which keyValueStore.delete does
+   *
+   * @param key The key
+   *
+   * @return The old value or null if there is no such key.
+   *
+   * @throws NullPointerException If null is used for key.
+   */
+  def deleteWithoutGettingPriorValue(key: K): Unit
+
+  /**
+   * Get the value corresponding to this key or return the specified default value if no key is found
+   *
+   * @param key The key to fetch
+   * @param default The default value to return if key is not found in the store
+   *
+   * @return The value associated with the key or the default value if the key is not found
+   *
+   * @throws NullPointerException       If null is used for key.
+   * @throws InvalidStateStoreException if the store is not initialized
+   */
+  def getOrDefault(key: K, default: => V): V
 
   /**
    * A range scan starting from bytes.
@@ -225,16 +64,24 @@ class FinatraKeyValueStore[K: ClassTag, V](override val name: String, statsRecei
    * Enabling "prefix seek mode" can be done by calling options.useFixedLengthPrefixExtractor. When enabled, prefix scans can take advantage of a prefix based bloom filter for better seek performance
    * See: https://github.com/facebook/rocksdb/wiki/Prefix-Seek-API-Changes
    */
-  def range(fromBytes: Array[Byte]): KeyValueIterator[K, V] = {
-    meterLatency(finatraRangeLatencyStat) {
-      val iterator = rocksDb.newIterator() //TODO: Save off iterators to make sure they are all closed...
-      iterator.seek(fromBytes)
+  def range(fromBytes: Array[Byte]): KeyValueIterator[K, V]
 
-      new RocksKeyValueIterator(iterator, keyDeserializer, valueDeserializer, keyValueStore.name)
-    }
-  }
+  /**
+   * Get an iterator over a given range of keys. This iterator must be closed after use.
+   * The returned iterator must be safe from {@link java.util.ConcurrentModificationException}s
+   * and must not return null values. No ordering guarantees are provided.
+   *
+   * @param fromBytesInclusive Inclusive bytes to start the range scan
+   * @param toBytesExclusive Exclusive bytes to end the range scan
+   *
+   * @return The iterator for this range.
+   *
+   * @throws NullPointerException       If null is used for from or to.
+   * @throws InvalidStateStoreException if the store is not initialized
+   */
+  def range(fromBytesInclusive: Array[Byte], toBytesExclusive: Array[Byte]): KeyValueIterator[K, V]
 
-  /*
+  /**
      Removes the database entries in the range ["begin_key", "end_key"), i.e.,
      including "begin_key" and excluding "end_key". Returns OK on success, and
      a non-OK status on error. It is not an error if no keys exist in the range
@@ -250,57 +97,28 @@ class FinatraKeyValueStore[K: ClassTag, V](override val name: String, statsRecei
 
      Consider setting ReadOptions::ignore_range_deletions = true to speed
      up reads for key(s) that are known to be unaffected by range deletions.
+
+     Note: Changelog entries will not be deleted, so this method is best used
+     when relying on retention.ms to delete entries from the changelog
    */
-  def deleteRangeExperimental(
+  def deleteRangeExperimentalWithNoChangelogUpdates(
     beginKeyInclusive: Array[Byte],
     endKeyExclusive: Array[Byte]
-  ): Unit = {
-    assert(
-      false,
-      "This method can only be used after integrating with the changelog (which currently occurs in ChangeLoggingKeyValueBytesStore)"
-    )
-    meterLatency(deleteRangeExperimentalLatencyStat) {
-      rocksDb.deleteRange(beginKeyInclusive, endKeyExclusive)
-    }
+  ): Unit
+
+  /*
+     Note: We define equals and hashcode so we can store Finatra Key Value stores in maps for
+     retrieval when implementing queryable state
+   */
+
+  override def equals(other: Any): Boolean = other match {
+    case that: FinatraKeyValueStore[_, _] =>
+      taskId == that.taskId &&
+        name == that.name()
+    case _ => false
   }
 
-  /* Private */
-
-  private def meterLatency[T](stat: Stat)(operation: => T): T = {
-    Stat.time[T](stat, TimeUnit.MICROSECONDS) {
-      try {
-        operation
-      } catch {
-        case e: Throwable =>
-          error("Failure operation", e)
-          throw e
-      }
-    }
-  }
-
-  private def deleteOrRetainTimer(
-    iterator: KeyValueIterator[K, _],
-    onDeleteTimer: => Unit = () => ()
-  ): TimerResult[K] = {
-    if (iterator.hasNext) {
-      RetainTimer(stateStoreCursor = iterator.peekNextKeyOpt, throttled = true)
-    } else {
-      onDeleteTimer
-      DeleteTimer()
-    }
-  }
-
-  private def keyValueStore: KeyValueStore[K, V] = {
-    assert(
-      _keyValueStore != null,
-      "FinatraTransformer.getKeyValueStore must be called once outside of onMessage"
-    )
-    _keyValueStore
-  }
-
-  private def latencyStat(name: String): Stat = {
-    storeStatsScope
-      .scope(name)
-      .stat(latencyStatName)
+  override def hashCode(): Int = {
+    31 * taskId.hashCode() + name.hashCode
   }
 }

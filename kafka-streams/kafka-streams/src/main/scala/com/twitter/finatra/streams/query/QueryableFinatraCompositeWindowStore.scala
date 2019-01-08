@@ -41,10 +41,25 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
 
   /* Public */
 
+  /**
+   * Get a range of composite keys and return them combined in a map. If the primary key for the
+   * composite keys is non-local to this Kafka Streams instance, return an exception indicating
+   * which instance is hosting this primary key
+   *
+   * @param primaryKey The primary key for the data being queried (e.g. a UserId)
+   * @param startCompositeKey The starting composite key being queried (e.g. UserId-ClickType)
+   * @param endCompositeKey The ending composite key being queried (e.g. UserId-ClickType)
+   * @param allowStaleReads Allow stale reads when querying a caching key value store. If set to false,
+   *                        each query will trigger a flush of the cache.
+   * @param startTime The start time of the windows being queried
+   * @param endTime The end time of the windows being queried
+   * @return A time windowed map of composite keys to their values
+   */
   def get(
     primaryKey: PK,
     startCompositeKey: CompositeKey[PK, SK],
     endCompositeKey: CompositeKey[PK, SK],
+    allowStaleReads: Boolean,
     startTime: Option[DateTimeMillis] = None,
     endTime: Option[DateTimeMillis] = None
   ): Map[WindowStartTime, scala.collection.Map[SK, V]] = {
@@ -59,7 +74,7 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
 
     var windowStartTime = startWindowRange
     while (windowStartTime <= endWindowRange) {
-      queryWindow(startCompositeKey, endCompositeKey, windowStartTime, resultMap)
+      queryWindow(startCompositeKey, endCompositeKey, windowStartTime, allowStaleReads, resultMap)
       windowStartTime = windowStartTime + windowSizeMillis
     }
 
@@ -72,6 +87,7 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
     startCompositeKey: CompositeKey[PK, SK],
     endCompositeKey: CompositeKey[PK, SK],
     windowStartTime: DateTimeMillis,
+    allowStaleReads: Boolean,
     resultMap: scala.collection.mutable.Map[Long, scala.collection.mutable.Map[SK, V]]
   ): Unit = {
     trace(s"QueryWindow $startCompositeKey to $endCompositeKey ${windowStartTime.iso8601}")
@@ -80,12 +96,13 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
     for (store <- FinatraStoresGlobalManager.getWindowedCompositeStores[PK, SK, V](storeName)) {
       val iterator = store.range(
         TimeWindowed.forSize(startMs = windowStartTime, windowSizeMillis, startCompositeKey),
-        TimeWindowed.forSize(startMs = windowStartTime, windowSizeMillis, endCompositeKey)
+        TimeWindowed.forSize(startMs = windowStartTime, windowSizeMillis, endCompositeKey),
+        allowStaleReads = allowStaleReads
       )
 
       while (iterator.hasNext) {
         val entry = iterator.next()
-        info(s"$store\t$entry")
+        trace(s"$store\t$entry")
         val innerMap =
           resultMap.getOrElseUpdate(entry.key.startMs, scala.collection.mutable.Map[SK, V]())
         innerMap += (entry.key.value.secondary -> entry.value)

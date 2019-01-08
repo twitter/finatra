@@ -5,6 +5,10 @@ import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.{LoadedStatsReceiver, StatsReceiver}
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.finatra.streams.config.DefaultTopicConfig
+import com.twitter.finatra.streams.stores.internal.{
+  FinatraKeyValueStoreImpl,
+  FinatraStoresGlobalManager
+}
 import com.twitter.finatra.streams.stores.FinatraKeyValueStore
 import com.twitter.finatra.streams.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.streams.transformer.FinatraTransformer.TimerTime
@@ -223,7 +227,7 @@ abstract class FinatraTransformer[InputKey, InputValue, StoreKey, TimerKey, Outp
   final protected def getKeyValueStore[KK: ClassTag, VV](
     name: String
   ): FinatraKeyValueStore[KK, VV] = {
-    val store = new FinatraKeyValueStore[KK, VV](name, statsReceiver)
+    val store = new FinatraKeyValueStoreImpl[KK, VV](name, statsReceiver)
     val previousStore = finatraKeyValueStores.put(name, store)
     FinatraStoresGlobalManager.addStore(store)
     assert(previousStore.isEmpty, s"getKeyValueStore was called for store $name more than once")

@@ -26,6 +26,7 @@ scala_library(
     strict_deps = False,
     dependencies = [
         ":rocksdb-5.14.2",
+        "3rdparty/jvm/it/unimi/dsi:fastutil",
         "3rdparty/jvm/org/agrona",
         "3rdparty/jvm/org/apache/kafka:kafka-clients",
         "3rdparty/jvm/org/apache/kafka:kafka-streams",

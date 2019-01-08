@@ -7,6 +7,7 @@ import org.apache.kafka.streams.processor.Punctuator
  *
  * *Note* if you extend this class you probably do not want to override 'punctuate'
  */
+@deprecated("no longer supported", "1/7/2019")
 trait AdvancedPunctuator extends Punctuator {
 
   private var lastPunctuateTimeMillis = Long.MinValue

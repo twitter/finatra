@@ -10,6 +10,15 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: SumAggregator and CompositeSumAggregator only support enhanced window
+  aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create 
+  an AggregatorTransformer class that can perform arbitrary aggregations. ``PHAB_ID=D257138``
+
+* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
+  between Kafka Streams and Finatra which we've been using internally at Twitter
+  for the last year. The library is not currently open-source.
+  ``PHAB_ID=D248408``
+
 * inject-server: Add lint rule to alert when deprecated `util-logging` JUL flags from the
   `c.t.inject.server.DeprecatedLogging` trait are user defined. This trait was mixed-in
   only for backwards compatibility when TwitterServer was moved to the slf4j-api and the flags are
@@ -37,10 +46,6 @@ Added
   existing `ExceptionMappers` should be adjusted accordingly. Also, if a `DarkTrafficFilterModule`
   was previously used, it must be swapped out for a `ReqRepDarkTrafficFilterModule`
   ``PHAB_ID=D236724``
-
-* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
-  between Kafka Streams and Finatra which we've been using internally at Twitter
-  for the last year. The library is not currently open-source.
 
 Changed
 ~~~~~~~
