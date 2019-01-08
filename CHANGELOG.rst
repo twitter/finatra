@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-jackson: Added @Pattern annotation to support to finatra/jackson for regex pattern
+  validation on string values
+
 * inject-server: Add lint rule to alert when deprecated `util-logging` JUL flags from the
   `c.t.inject.server.DeprecatedLogging` trait are user defined. This trait was mixed-in
   only for backwards compatibility when TwitterServer was moved to the slf4j-api and the flags are
