@@ -25,15 +25,19 @@ class CompositeSumServerTopologyFeatureTest extends TopologyFeatureTest {
   private val wordAndCountTopic =
     topologyTester.topic("key-and-type", ScalaSerdes.Int, ScalaSerdes.Int)
 
+  private val windowSize = 1.hour
   private val hourlyWordAndCountTopic =
     topologyTester.topic(
       "key-to-hourly-counts",
-      FixedTimeWindowedSerde(ScalaSerdes.Int, duration = 1.hour),
+      FixedTimeWindowedSerde(ScalaSerdes.Int, duration = windowSize),
       WindowedValueSerde(Serdes.String()))
 
   test("windowed word count test 1") {
     val countStore = topologyTester
-      .queryableFinatraWindowStore[SampleCompositeKey, Int]("CountsStore", SampleCompositeKeySerde)
+      .queryableFinatraWindowStore[SampleCompositeKey, Int](
+        "CountsStore",
+        windowSize,
+        SampleCompositeKeySerde)
 
     wordAndCountTopic.pipeInput(1, 1)
     assertCurrentHourContains(countStore, SampleCompositeKey(1, 1), 1)
@@ -66,7 +70,10 @@ class CompositeSumServerTopologyFeatureTest extends TopologyFeatureTest {
     key: SampleCompositeKey,
     expectedValue: Int
   ): Unit = {
-    countStore.get(key, 1.hour, topologyTester.currentHour.getMillis) should equal(
-      Some(expectedValue))
+    countStore.get(
+      key,
+      Some(topologyTester.currentHour.getMillis),
+      Some(topologyTester.currentHour.getMillis)) should equal(
+      Map(topologyTester.currentHour.getMillis -> expectedValue))
   }
 }

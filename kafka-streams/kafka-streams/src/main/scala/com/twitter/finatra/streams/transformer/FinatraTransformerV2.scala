@@ -6,6 +6,7 @@ import com.twitter.finatra.kafka.utils.ConfigUtils
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.finatra.streams.flags.FinatraTransformerFlags
 import com.twitter.finatra.streams.stores.FinatraKeyValueStore
+import com.twitter.finatra.streams.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.streams.transformer.FinatraTransformer.TimerTime
 import com.twitter.finatra.streams.transformer.domain.{Time, Watermark}
 import com.twitter.finatra.streams.transformer.internal.{OnClose, OnInit}
@@ -31,12 +32,12 @@ import scala.reflect.ClassTag
  *
  * This Transformer differs from the built in Transformer interface by exposing an [onMesssage]
  * interface that is used to process incoming messages.  Within [onMessage] you may use the
- * processorContext to emit 0 or more records.
+ * [forward] method to emit 0 or more records.
  *
  * This transformer also manages watermarks(see [WatermarkManager]), and extends [OnWatermark] which
  * allows you to track the passage of event time.
  *
- * Note: In time, this class will be merged with FinatraTransformer
+ * Note: In time, this class will replace the deprecated FinatraTransformer class
  *
  * @tparam InputKey    Type of the input keys
  * @tparam InputValue  Type of the input values
@@ -131,6 +132,7 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
 
     for ((name, store) <- finatraKeyValueStores) {
       store.close()
+      FinatraStoresGlobalManager.removeStore(store)
     }
 
     onClose()
@@ -142,6 +144,7 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     val store = new FinatraKeyValueStore[KK, VV](name, statsReceiver)
     val previousStore = finatraKeyValueStores.put(name, store)
     assert(previousStore.isEmpty, s"getKeyValueStore was called for store $name more than once")
+    FinatraStoresGlobalManager.addStore(store)
 
     // Initialize stores that are still using the "lazy val store" pattern
     if (processorContext != null) {

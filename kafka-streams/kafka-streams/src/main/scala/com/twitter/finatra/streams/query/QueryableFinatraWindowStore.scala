@@ -5,24 +5,33 @@ import com.twitter.finatra.streams.queryable.thrift.partitioning.{
   KafkaPartitioner,
   StaticServiceShardPartitioner
 }
-import com.twitter.finatra.streams.transformer.FinatraTransformer.WindowStartTime
+import com.twitter.finatra.streams.stores.FinatraKeyValueStore
+import com.twitter.finatra.streams.stores.internal.FinatraStoresGlobalManager
+import com.twitter.finatra.streams.transformer.FinatraTransformer.{DateTimeMillis, WindowStartTime}
 import com.twitter.finatra.streams.transformer.domain.{Time, TimeWindowed}
 import com.twitter.inject.Logging
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.{Serde, Serializer}
-import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
-import org.joda.time.{DateTime, DateTimeUtils}
+import org.joda.time.DateTimeUtils
+import scala.collection.JavaConverters._
 
 class QueryableFinatraWindowStore[K, V](
-  store: => ReadOnlyKeyValueStore[TimeWindowed[K], V],
+  storeName: String,
+  windowSize: Duration,
   keySerde: Serde[K],
   numShards: Int,
   numQueryablePartitions: Int,
   currentShardId: Int)
     extends Logging {
+
+  // The number of windows to query before and/or after specified start and end times
+  private val defaultWindowMultiplier = 3
+
   private val keySerializer = keySerde.serializer()
 
   private val currentServiceShardId = ServiceShardId(currentShardId)
+
+  private val windowSizeMillis = windowSize.inMillis
 
   private val partitioner = new KafkaPartitioner(
     StaticServiceShardPartitioner(numShards = numShards),
@@ -31,48 +40,37 @@ class QueryableFinatraWindowStore[K, V](
 
   def get(
     key: K,
-    windowSize: Duration,
-    startTime: Option[Long],
-    endTime: Option[Long]
+    startTime: Option[Long] = None,
+    endTime: Option[Long] = None
   ): Map[WindowStartTime, V] = {
-    val windowSizeMillis = windowSize.inMillis
+    throwIfNonLocalKey(key, keySerializer)
 
     val endWindowRange = endTime.getOrElse(
       TimeWindowed.windowStart(
         messageTime = Time(DateTimeUtils.currentTimeMillis),
-        sizeMs = windowSizeMillis
-      ) + windowSizeMillis
-    )
+        sizeMs = windowSizeMillis) + defaultWindowMultiplier * windowSizeMillis)
 
-    val startWindowRange = startTime.getOrElse(endWindowRange - (3 * windowSizeMillis))
+    val startWindowRange =
+      startTime.getOrElse(endWindowRange - (defaultWindowMultiplier * windowSizeMillis))
 
-    val windowedMap = Map.newBuilder[Long, V]
-    val numWindows = (endWindowRange - startWindowRange) / windowSizeMillis
-    windowedMap.sizeHint(numWindows.toInt)
-
-    trace(s"Start: ${new DateTime(startWindowRange)}. End: ${new DateTime(endWindowRange)}")
+    val windowedMap = new java.util.TreeMap[DateTimeMillis, V]
 
     var currentWindowStart = startWindowRange
     while (currentWindowStart <= endWindowRange) {
-      get(key, windowSize, currentWindowStart) match {
-        case Some(value) =>
-          trace(s"GOT $value")
-          windowedMap += (currentWindowStart -> value)
-        case None =>
+      val windowedKey = TimeWindowed.forSize(currentWindowStart, windowSize.inMillis, key)
+
+      //TODO: Use store.taskId to find exact store where the key is assigned
+      for (store <- stores) {
+        val result = store.get(windowedKey)
+        if (result != null) {
+          windowedMap.put(currentWindowStart, result)
+        }
       }
 
       currentWindowStart = currentWindowStart + windowSizeMillis
     }
 
-    windowedMap.result()
-  }
-
-  def get(key: K, windowSize: Duration, timestamp: Long): Option[V] = {
-    throwIfNonLocalKey(key, keySerializer)
-
-    val windowedKey = TimeWindowed.forSize(timestamp, windowSize.inMillis, key)
-    trace(s"Get $windowedKey")
-    Option(store.get(windowedKey))
+    windowedMap.asScala.toMap
   }
 
   private def throwIfNonLocalKey(key: K, keySerializer: Serializer[K]): Unit = {
@@ -81,5 +79,9 @@ class QueryableFinatraWindowStore[K, V](
     if (partitionsToQuery.head != currentServiceShardId) {
       throw new Exception(s"Non local key. Query $partitionsToQuery")
     }
+  }
+
+  private def stores: Iterable[FinatraKeyValueStore[TimeWindowed[K], V]] = {
+    FinatraStoresGlobalManager.getWindowedStores(storeName)
   }
 }

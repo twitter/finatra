@@ -6,6 +6,7 @@ import com.twitter.finagle.stats.{LoadedStatsReceiver, StatsReceiver}
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.finatra.streams.config.DefaultTopicConfig
 import com.twitter.finatra.streams.stores.FinatraKeyValueStore
+import com.twitter.finatra.streams.stores.internal.FinatraStoresGlobalManager
 import com.twitter.finatra.streams.transformer.FinatraTransformer.TimerTime
 import com.twitter.finatra.streams.transformer.domain.{
   DeleteTimer,
@@ -213,6 +214,7 @@ abstract class FinatraTransformer[InputKey, InputValue, StoreKey, TimerKey, Outp
 
     for ((name, store) <- finatraKeyValueStores) {
       store.close()
+      FinatraStoresGlobalManager.removeStore(store)
     }
 
     onClose()
@@ -223,6 +225,7 @@ abstract class FinatraTransformer[InputKey, InputValue, StoreKey, TimerKey, Outp
   ): FinatraKeyValueStore[KK, VV] = {
     val store = new FinatraKeyValueStore[KK, VV](name, statsReceiver)
     val previousStore = finatraKeyValueStores.put(name, store)
+    FinatraStoresGlobalManager.addStore(store)
     assert(previousStore.isEmpty, s"getKeyValueStore was called for store $name more than once")
 
     // Initialize stores that are still using the "lazy val store" pattern

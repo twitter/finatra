@@ -92,6 +92,13 @@ Changed
   now-removed `c.t.f.b.Server` have been modified or removed.
   ``PHAB_ID=D254339``
 
+* finatra-kafka-streams: Finatra Queryable State methods currently require the window size 
+  to be passed into query methods for windowed key value stores. This is unnecessary, as 
+  the queryable state class can be passed the window size at construction time. We also now 
+  save off all FinatraKeyValueStores in a global manager class to allow query services 
+  (e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer 
+  is using. ``PHAB_ID=D256920``
+
 Fixed
 ~~~~~
 
