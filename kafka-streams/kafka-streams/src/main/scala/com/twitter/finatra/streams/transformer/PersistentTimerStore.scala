@@ -39,25 +39,30 @@ class PersistentTimerStore[TimerKey](
   }
 
   final override def onWatermark(watermark: Watermark): Unit = {
-    debug(s"onWatermark $watermark nextTimerTime ${nextTimerTime.iso8601Millis}")
+    if (watermark.timeMillis < 10000) {
+      warn(s"onWatermark too small $watermark")
+    } else {
+      trace(s"onWatermark $watermark nextTimerTime ${nextTimerTime.iso8601Millis}")
+    }
+
     if (watermark.timeMillis >= nextTimerTime) {
-      debug(s"Calling fireTimers($watermark)")
+      trace(s"Calling fireTimers($watermark)")
       fireTimers(watermark)
     }
     currentWatermark = watermark
   }
 
   def addTimer(time: Time, metadata: TimerMetadata, key: TimerKey): Unit = {
-    trace(f"${"AddTimer:"}%-20s ${metadata.getClass.getSimpleName}%-12s Key $key Timer $time")
-
     if (time.millis < currentWatermark.timeMillis) {
-      info(s"Directly firing $metadata $key since $time < $currentWatermark")
+      info(
+        f"${"DirectlyFireTimer:"}%-20s ${metadata.getClass.getSimpleName}%-12s Key $key Timer $time since $time < $currentWatermark")
+
       onTimer(time, metadata, key)
     } else {
+      debug(f"${"AddTimer:"}%-20s ${metadata.getClass.getSimpleName}%-12s Key $key Timer $time")
       timersStore.put(
-        key = Timer(time = time.millis, metadata = metadata, key = key),
-        value = Array.emptyByteArray
-      )
+        Timer(time = time.millis, metadata = metadata, key = key),
+        Array.emptyByteArray)
 
       if (time.millis < nextTimerTime) {
         setNextTimerTime(time.millis)
@@ -133,9 +138,7 @@ class PersistentTimerStore[TimerKey](
   }
 
   private def fireAndDeleteTimer(timer: Timer[TimerKey]): Unit = {
-    debug(
-      s"fireAndDeleteTimer ${timer.metadata.getClass.getName} key: ${timer.key} timerTime: ${timer.time.iso8601Millis}"
-    )
+    trace(s"fireAndDeleteTimer $timer")
     onTimer(Time(timer.time), timer.metadata, timer.key)
     timersStore.deleteWithoutGettingPriorValue(timer)
   }

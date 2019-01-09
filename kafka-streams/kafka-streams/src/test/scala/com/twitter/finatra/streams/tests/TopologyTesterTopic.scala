@@ -45,10 +45,19 @@ class TopologyTesterTopic[K, V](
 
   def assertOutput(key: K, value: V, time: DateTime = null): Unit = {
     val outputRecord = readOutput()
-    assert(outputRecord.key() == key)
-    assert(outputRecord.value() == value)
-    if (time != null) {
-      assert(outputRecord.timestamp.toLong.iso8601Millis == time.getMillis.iso8601Millis)
+    assert(outputRecord != null, "No output record is available for this assertion")
+
+    if (key != outputRecord.key() || value != outputRecord.value()) {
+      assert((outputRecord.key.toString -> outputRecord.value.toString) == (key -> value))
+    }
+
+    if (time != null && outputRecord.timestamp.toLong.iso8601Millis != time.getMillis.iso8601Millis) {
+      assert(
+        Tuple3(
+          outputRecord.key(),
+          outputRecord.value(),
+          outputRecord.timestamp.toLong.iso8601Millis) ==
+          Tuple3(key, value, time.getMillis.iso8601Millis))
     }
   }
 }

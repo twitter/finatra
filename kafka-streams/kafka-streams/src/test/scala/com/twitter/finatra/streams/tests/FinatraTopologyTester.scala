@@ -8,13 +8,15 @@ import com.twitter.finatra.kafka.modules.KafkaBootstrapModule
 import com.twitter.finatra.kafka.test.utils.InMemoryStatsUtil
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.test.TestDirectoryUtils
+import com.twitter.finatra.streams.converters.time._
 import com.twitter.finatra.streams.flags.FinatraTransformerFlags
 import com.twitter.finatra.streams.query.{
   QueryableFinatraKeyValueStore,
   QueryableFinatraWindowStore
 }
 import com.twitter.finatra.streams.transformer.domain.TimeWindowed
-import com.twitter.inject.{AppAccessor, Injector, TwitterModule}
+import com.twitter.finatra.streams.transformer.internal.domain.Timer
+import com.twitter.inject.{AppAccessor, Injector, Logging, TwitterModule}
 import com.twitter.util.Duration
 import java.util.Properties
 import org.apache.kafka.common.serialization.Serde
@@ -150,7 +152,8 @@ case class FinatraTopologyTester private (
   topology: Topology,
   inMemoryStatsReceiver: InMemoryStatsReceiver,
   injector: Injector,
-  startingWallClockTime: DateTime) {
+  startingWallClockTime: DateTime)
+    extends Logging {
 
   private val inMemoryStatsUtil = new InMemoryStatsUtil(inMemoryStatsReceiver)
   private var _driver: TopologyTestDriver = _
@@ -171,6 +174,41 @@ case class FinatraTopologyTester private (
     driver
       .getStateStore(name)
       .asInstanceOf[KeyValueStore[K, V]]
+  }
+
+  /**
+   * Get a Finatra windowed key value store by name
+   * @param name Name of the store
+   * @tparam K Key type of the store
+   * @tparam V Value type of the store
+   * @return KeyValueStore used for time windowed keys
+   */
+  def getFinatraWindowedStore[K, V](name: String): KeyValueStore[TimeWindowed[K], V] = {
+    getKeyValueStore[TimeWindowed[K], V](name)
+  }
+
+  /**
+   * Get a Finatra timer key value store by name
+   * @param name Name of the store
+   * @tparam K Key type of the store
+   * @tparam V Value type of the store
+   * @return KeyValueStore used for timer entries
+   */
+  def getFinatraTimerStore[K](name: String): KeyValueStore[Timer[K], Array[Byte]] = {
+    getKeyValueStore[Timer[K], Array[Byte]](name)
+  }
+
+  /**
+   * Get a Finatra windowed timer store by name
+   * @param name Name of the store
+   * @tparam K Key type of the store
+   * @tparam V Value type of the store
+   * @return KeyValueStore used for time windowed timer entries
+   */
+  def getFinatraWindowedTimerStore[K](
+    name: String
+  ): KeyValueStore[Timer[TimeWindowed[K]], Array[Byte]] = {
+    getFinatraTimerStore[TimeWindowed[K]](name)
   }
 
   def reset(): Unit = {
@@ -218,7 +256,7 @@ case class FinatraTopologyTester private (
   }
 
   def priorHour(hoursBack: Int): DateTime = {
-    currentMinute.minusHours(hoursBack)
+    currentHour.minusHours(hoursBack)
   }
 
   def advanceWallClockTime(duration: Duration): DateTime = {
@@ -230,11 +268,11 @@ case class FinatraTopologyTester private (
   }
 
   def queryableFinatraKeyValueStore[PK, K, V](
-    keyValueStore: KeyValueStore[K, V],
+    storeName: String,
     primaryKeySerde: Serde[PK]
   ): QueryableFinatraKeyValueStore[PK, K, V] = {
     new QueryableFinatraKeyValueStore[PK, K, V](
-      keyValueStore,
+      storeName,
       primaryKeySerde = primaryKeySerde,
       numShards = 1,
       numQueryablePartitions = 1,
@@ -242,27 +280,18 @@ case class FinatraTopologyTester private (
     )
   }
 
-  def queryableFinatraKeyValueStore[PK, K, V](
-    storeName: String,
-    primaryKeySerde: Serde[PK]
-  ): QueryableFinatraKeyValueStore[PK, K, V] = {
-    val keyValueStore = _driver.getKeyValueStore[K, V](storeName)
-    queryableFinatraKeyValueStore(keyValueStore, primaryKeySerde)
-  }
-
   def queryableFinatraWindowStore[K, V](
     storeName: String,
+    windowSize: Duration,
     keySerde: Serde[K]
   ): QueryableFinatraWindowStore[K, V] = {
-    val keyValueStore = _driver.getKeyValueStore[TimeWindowed[K], V](storeName)
-
     new QueryableFinatraWindowStore[K, V](
-      keyValueStore,
+      storeName,
+      windowSize = windowSize,
       keySerde = keySerde,
       numShards = 1,
       numQueryablePartitions = 1,
-      currentShardId = 0
-    )
+      currentShardId = 0)
   }
 
   def stats: InMemoryStatsUtil = inMemoryStatsUtil
@@ -271,6 +300,7 @@ case class FinatraTopologyTester private (
 
   private def advanceWallClockTime(durationMillis: Long): DateTime = {
     DateTimeUtils.setCurrentMillisFixed(DateTimeUtils.currentTimeMillis() + durationMillis)
+    debug(s"Advance wall clock to ${DateTimeUtils.currentTimeMillis().iso8601Millis}")
     _driver.advanceWallClockTime(durationMillis)
     now
   }

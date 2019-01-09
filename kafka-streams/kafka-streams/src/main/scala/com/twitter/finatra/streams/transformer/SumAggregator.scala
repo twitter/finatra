@@ -6,7 +6,7 @@ import com.twitter.finatra.streams.transformer.domain._
 import com.twitter.util.Duration
 import org.apache.kafka.streams.state.KeyValueIterator
 
-//TODO: DRY With CompositeSumAggregator
+@deprecated("Use AggregatorTransformer")
 class SumAggregator[K, V](
   commitInterval: Duration,
   keyRangeStart: K,
@@ -48,7 +48,7 @@ class SumAggregator[K, V](
     )
 
     val count = countToAggregate(key, value)
-    if (windowedKey.isLate(allowedLatenessMillis, watermark)) {
+    if (windowedKey.isLate(allowedLatenessMillis, Watermark(watermark))) {
       restatementsCounter.incr()
       forward(windowedKey, WindowedValue(Restatement, count))
     } else {

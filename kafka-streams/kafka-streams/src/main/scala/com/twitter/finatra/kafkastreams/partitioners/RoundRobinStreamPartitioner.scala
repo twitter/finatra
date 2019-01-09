@@ -8,6 +8,7 @@ import org.apache.kafka.streams.processor.StreamPartitioner
  * @tparam K the key on the stream
  * @tparam V the value on the stream
  */
+@deprecated("no longer supported", "1/7/2019")
 class RoundRobinStreamPartitioner[K, V] extends StreamPartitioner[K, V] {
 
   private var nextPartitionId: Int = 0

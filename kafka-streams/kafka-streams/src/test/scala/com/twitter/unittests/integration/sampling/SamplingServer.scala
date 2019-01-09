@@ -1,8 +1,7 @@
-
 package com.twitter.unittests.integration.sampling
 
-import com.twitter.conversions.StorageUnitOps._
 import com.twitter.conversions.DurationOps._
+import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
 import com.twitter.finatra.kafkastreams.config.FinatraRocksDBConfig.{
@@ -11,37 +10,32 @@ import com.twitter.finatra.kafkastreams.config.FinatraRocksDBConfig.{
   RocksDbLZ4Config
 }
 import com.twitter.finatra.kafkastreams.config.{FinatraRocksDBConfig, KafkaStreamsConfig}
+import com.twitter.finatra.kafkastreams.dsl.FinatraDslSampling
 import com.twitter.finatra.streams.flags.FinatraTransformerFlags.{
   AutoWatermarkInterval,
   EmitWatermarkPerMessage
 }
-import com.twitter.finatra.streams.flags.{FinatraTransformerFlags, RocksDbFlags}
+import com.twitter.finatra.streams.flags.RocksDbFlags
+import com.twitter.unittests.integration.sampling.SamplingServer._
 import org.apache.kafka.common.record.CompressionType
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream._
-import com.twitter.unittests.integration.sampling.SamplingServer._
 
 object SamplingServer {
-  val sampleSize = 5
   val tweetToImpressingUserTopic = "tweet-id-to-impressing-user-id"
   val sampleName = "TweetImpressors"
 }
 
-class SamplingServer
-    extends KafkaStreamsTwitterServer
-    with RocksDbFlags
-    with FinatraTransformerFlags {
+class SamplingServer extends KafkaStreamsTwitterServer with RocksDbFlags with FinatraDslSampling {
 
   override def configureKafkaStreams(streamsBuilder: StreamsBuilder): Unit = {
     streamsBuilder.asScala
-      .stream(topic = tweetToImpressingUserTopic)(
-        Consumed
-          .`with`(ScalaSerdes.Long, ScalaSerdes.Long)
-      )
+      .stream(topic = tweetToImpressingUserTopic)(Consumed
+        .`with`(ScalaSerdes.Long, ScalaSerdes.Long))
       .sample(
         toSampleKey = (tweetId, _) => tweetId,
         toSampleValue = (_, impressorId) => impressorId,
-        sampleSize = sampleSize,
+        sampleSize = 5,
         expirationTime = Some(1.minute),
         sampleName = sampleName,
         sampleKeySerde = ScalaSerdes.Long,

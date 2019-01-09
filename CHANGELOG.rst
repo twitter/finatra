@@ -13,6 +13,21 @@ Added
 * finatra-jackson: Added @Pattern annotation to support to finatra/jackson for regex pattern
   validation on string values
 
+19.1.0
+-------
+
+Added
+~~~~~
+
+* finatra-kafka-streams: SumAggregator and CompositeSumAggregator only support enhanced window
+  aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create
+  an AggregatorTransformer class that can perform arbitrary aggregations. ``PHAB_ID=D257138``
+
+* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
+  between Kafka Streams and Finatra which we've been using internally at Twitter
+  for the last year. The library is not currently open-source.
+  ``PHAB_ID=D248408``
+
 * inject-server: Add lint rule to alert when deprecated `util-logging` JUL flags from the
   `c.t.inject.server.DeprecatedLogging` trait are user defined. This trait was mixed-in
   only for backwards compatibility when TwitterServer was moved to the slf4j-api and the flags are
@@ -40,10 +55,6 @@ Added
   existing `ExceptionMappers` should be adjusted accordingly. Also, if a `DarkTrafficFilterModule`
   was previously used, it must be swapped out for a `ReqRepDarkTrafficFilterModule`
   ``PHAB_ID=D236724``
-
-* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
-  between Kafka Streams and Finatra which we've been using internally at Twitter
-  for the last year. The library is not currently open-source.
 
 Changed
 ~~~~~~~
@@ -94,6 +105,13 @@ Changed
   work with `c.t.f.ListeningServer` only. Methods which worked with the
   now-removed `c.t.f.b.Server` have been modified or removed.
   ``PHAB_ID=D254339``
+
+* finatra-kafka-streams: Finatra Queryable State methods currently require the window size
+  to be passed into query methods for windowed key value stores. This is unnecessary, as
+  the queryable state class can be passed the window size at construction time. We also now
+  save off all FinatraKeyValueStores in a global manager class to allow query services
+  (e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer
+  is using. ``PHAB_ID=D256920``
 
 Fixed
 ~~~~~

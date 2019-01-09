@@ -2,7 +2,7 @@ package com.twitter.unittests
 
 import com.twitter.finagle.stats.NullStatsReceiver
 import com.twitter.finatra.json.JsonDiff
-import com.twitter.finatra.streams.stores.FinatraKeyValueStore
+import com.twitter.finatra.streams.stores.internal.FinatraKeyValueStoreImpl
 import com.twitter.finatra.streams.transformer.PersistentTimerStore
 import com.twitter.finatra.streams.transformer.domain.{Expire, Time, TimerMetadata, Watermark}
 import com.twitter.finatra.streams.transformer.internal.domain.{Timer, TimerSerde}
@@ -24,7 +24,7 @@ class PersistentTimerStoreTest extends Test {
 
   private var context: InternalMockProcessorContext = _
 
-  private val keyValueStore = new FinatraKeyValueStore[Timer[TimerKey], Array[Byte]](
+  private val keyValueStore = new FinatraKeyValueStoreImpl[Timer[TimerKey], Array[Byte]](
     name = "TimerStore",
     statsReceiver = NullStatsReceiver
   )

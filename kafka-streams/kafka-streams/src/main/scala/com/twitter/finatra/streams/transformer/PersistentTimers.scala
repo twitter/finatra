@@ -43,13 +43,12 @@ trait PersistentTimers extends OnWatermark with OnInit {
     val store = new PersistentTimerStore[TimerKey](
       timersStore = getKeyValueStore[Timer[TimerKey], Array[Byte]](timerStoreName),
       onTimer = onTimer,
-      maxTimerFiresPerWatermark = maxTimerFiresPerWatermark
-    )
+      maxTimerFiresPerWatermark = maxTimerFiresPerWatermark)
 
     assert(
       timerStoresMap.put(timerStoreName, store).isEmpty,
-      s"getPersistentTimerStore already called for $timerStoreName"
-    )
+      s"getPersistentTimerStore already called for $timerStoreName")
+
     timerStores.add(store)
 
     store

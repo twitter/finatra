@@ -20,11 +20,15 @@ class WindowedTweetWordCountServerTopologyFeatureTest extends TopologyFeatureTes
     topologyTester.topic("word-and-count", Serdes.String(), ScalaSerdes.Int)
 
   private val hourlyWordAndCountTopic =
-    topologyTester.topic("word-to-hourly-counts", Serdes.String,  WindowedValueSerde(ScalaSerdes.Int))
-
+    topologyTester.topic(
+      "word-to-hourly-counts",
+      Serdes.String,
+      WindowedValueSerde(ScalaSerdes.Int))
 
   test("windowed word count test 1") {
-    val countStore = topologyTester.queryableFinatraWindowStore[String,  Int]("CountsStore", Serdes.String())
+    val countStore =
+      topologyTester
+        .queryableFinatraWindowStore[String, Int]("CountsStore", 1.hour, Serdes.String())
 
     wordAndCountTopic.pipeInput("bob", 1)
     assertCurrentHourContains(countStore, "bob", 1)
@@ -38,7 +42,10 @@ class WindowedTweetWordCountServerTopologyFeatureTest extends TopologyFeatureTes
   private def assertCurrentHourContains(
     countStore: QueryableFinatraWindowStore[String, Int],
     key: String,
-    expectedValue: Int): Unit = {
-    countStore.get(key, 1.hour, topologyTester.currentHour.getMillis) should equal(Some(expectedValue))
+    expectedValue: Int
+  ): Unit = {
+    val currentHourOpt = Some(topologyTester.currentHour.getMillis)
+    countStore.get(key, startTime = currentHourOpt, endTime = currentHourOpt) should
+      equal(Map(topologyTester.currentHour.getMillis -> expectedValue))
   }
 }

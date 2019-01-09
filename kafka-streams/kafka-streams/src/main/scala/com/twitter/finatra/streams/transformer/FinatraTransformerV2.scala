@@ -6,6 +6,10 @@ import com.twitter.finatra.kafka.utils.ConfigUtils
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
 import com.twitter.finatra.streams.flags.FinatraTransformerFlags
 import com.twitter.finatra.streams.stores.FinatraKeyValueStore
+import com.twitter.finatra.streams.stores.internal.{
+  FinatraKeyValueStoreImpl,
+  FinatraStoresGlobalManager
+}
 import com.twitter.finatra.streams.transformer.FinatraTransformer.TimerTime
 import com.twitter.finatra.streams.transformer.domain.{Time, Watermark}
 import com.twitter.finatra.streams.transformer.internal.{OnClose, OnInit}
@@ -23,7 +27,7 @@ import org.apache.kafka.streams.processor.{
   Punctuator,
   To
 }
-import org.joda.time.DateTime
+import scala.collection.mutable
 import scala.reflect.ClassTag
 
 /**
@@ -31,12 +35,12 @@ import scala.reflect.ClassTag
  *
  * This Transformer differs from the built in Transformer interface by exposing an [onMesssage]
  * interface that is used to process incoming messages.  Within [onMessage] you may use the
- * processorContext to emit 0 or more records.
+ * [forward] method to emit 0 or more records.
  *
  * This transformer also manages watermarks(see [WatermarkManager]), and extends [OnWatermark] which
  * allows you to track the passage of event time.
  *
- * Note: In time, this class will be merged with FinatraTransformer
+ * Note: In time, this class will replace the deprecated FinatraTransformer class
  *
  * @tparam InputKey    Type of the input keys
  * @tparam InputValue  Type of the input values
@@ -54,7 +58,7 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     with OnClose
     with ProcessorContextLogging {
 
-  private val finatraKeyValueStores =
+  protected[streams] val finatraKeyValueStoresMap: mutable.Map[String, FinatraKeyValueStore[_, _]] =
     scala.collection.mutable.Map[String, FinatraKeyValueStore[_, _]]()
 
   private var watermarkManager: WatermarkManager[InputKey, InputValue] = _
@@ -86,10 +90,9 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     watermarkManager = new WatermarkManager[InputKey, InputValue](
       onWatermark = this,
       watermarkAssignor = watermarkAssignor,
-      emitWatermarkPerMessage = emitWatermarkPerMessage(_context)
-    )
+      emitWatermarkPerMessage = shouldEmitWatermarkPerMessage(_context))
 
-    for ((name, store) <- finatraKeyValueStores) {
+    for ((name, store) <- finatraKeyValueStoresMap) {
       store.init(processorContext, null)
     }
 
@@ -114,11 +117,14 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
   }
 
   final override def transform(k: InputKey, v: InputValue): (OutputKey, OutputValue) = {
-    debug(s"onMessage ${_context.timestamp.iso8601Millis} $k -> $v")
-    val time = Time(_context.timestamp())
-    watermarkManager.onMessage(time, _context.topic(), k, v)
-    onMessage(time, k, v)
+    /* Note: It's important to save off the message time before watermarkManager.onMessage is called
+       which can trigger persistent timers to fire, which can cause messages to be forwarded, which
+       can cause context.timestamp to be mutated to the forwarded message timestamp :-( */
+    val messageTime = Time(_context.timestamp())
 
+    debug(s"onMessage $watermark MessageTime(${messageTime.millis.iso8601Millis}) $k -> $v")
+    watermarkManager.onMessage(messageTime, _context.topic(), k, v)
+    onMessage(messageTime, k, v)
     null
   }
 
@@ -129,8 +135,9 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     }
     watermarkManager.close()
 
-    for ((name, store) <- finatraKeyValueStores) {
+    for ((name, store) <- finatraKeyValueStoresMap) {
       store.close()
+      FinatraStoresGlobalManager.removeStore(store)
     }
 
     onClose()
@@ -139,9 +146,11 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
   final protected def getKeyValueStore[KK: ClassTag, VV](
     name: String
   ): FinatraKeyValueStore[KK, VV] = {
-    val store = new FinatraKeyValueStore[KK, VV](name, statsReceiver)
-    val previousStore = finatraKeyValueStores.put(name, store)
+    val store = new FinatraKeyValueStoreImpl[KK, VV](name, statsReceiver)
+
+    val previousStore = finatraKeyValueStoresMap.put(name, store)
     assert(previousStore.isEmpty, s"getKeyValueStore was called for store $name more than once")
+    FinatraStoresGlobalManager.addStore(store)
 
     // Initialize stores that are still using the "lazy val store" pattern
     if (processorContext != null) {
@@ -152,12 +161,17 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
   }
 
   final protected def forward(key: OutputKey, value: OutputValue): Unit = {
-    trace(f"${"Forward:"}%-20s $key $value")
+    debug(s"Forward ${_context.timestamp().iso8601Millis} $key $value")
     _context.forward(key, value)
   }
 
   final protected def forward(key: OutputKey, value: OutputValue, timestamp: Long): Unit = {
-    trace(f"${"Forward:"}%-20s $key $value @${new DateTime(timestamp)}")
+    if (timestamp <= 10000) {
+      warn(s"Forward SMALL TIMESTAMP: $timestamp $key $value")
+    } else {
+      debug(s"Forward ${timestamp.iso8601Millis} $key $value")
+    }
+
     _context.forward(key, value, To.all().withTimestamp(timestamp))
   }
 
@@ -175,12 +189,11 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     )
   }
 
-  private def emitWatermarkPerMessage(processorContext: ProcessorContext): Boolean = {
+  private def shouldEmitWatermarkPerMessage(processorContext: ProcessorContext): Boolean = {
     ConfigUtils
       .getConfigOrElse(
-        processorContext.appConfigs,
-        FinatraTransformerFlags.EmitWatermarkPerMessage,
-        "false"
-      ).toBoolean
+        configs = processorContext.appConfigs,
+        key = FinatraTransformerFlags.EmitWatermarkPerMessage,
+        default = "false").toBoolean
   }
 }

@@ -5,13 +5,16 @@ import com.twitter.finatra.streams.queryable.thrift.partitioning.{
   KafkaPartitioner,
   StaticServiceShardPartitioner
 }
+import com.twitter.finatra.streams.stores.FinatraKeyValueStore
+import com.twitter.finatra.streams.stores.internal.FinatraStoresGlobalManager
 import com.twitter.inject.Logging
+import java.util.NoSuchElementException
 import org.apache.kafka.common.serialization.Serde
-import org.apache.kafka.streams.state.{KeyValueIterator, ReadOnlyKeyValueStore}
+import org.apache.kafka.streams.state.KeyValueIterator
 
 //TODO: DRY with window store
 class QueryableFinatraKeyValueStore[PK, K, V](
-  store: => ReadOnlyKeyValueStore[K, V],
+  storeName: String,
   primaryKeySerde: Serde[PK],
   numShards: Int,
   numQueryablePartitions: Int,
@@ -40,7 +43,16 @@ class QueryableFinatraKeyValueStore[PK, K, V](
     throwIfNonLocalKey(primaryKey)
 
     trace(s"Get $key")
-    Option(store.get(key))
+
+    //TODO: Use store.taskId to find exact store where the key is assigned
+    for (store <- stores) {
+      val result = store.get(key)
+      if (result != null) {
+        return Some(result)
+      }
+    }
+
+    None
   }
 
   /**
@@ -57,9 +69,17 @@ class QueryableFinatraKeyValueStore[PK, K, V](
    * @throws InvalidStateStoreException if the store is not initialized
    */
   def range(primaryKey: PK, from: K, to: K): KeyValueIterator[K, V] = {
-    // TODO assert from <= to?
     throwIfNonLocalKey(primaryKey)
-    store.range(from, to)
+
+    //TODO: Use store.taskId to find exact store where the key is assigned
+    for (store <- stores) {
+      val result = store.range(from, to)
+      if (result.hasNext) {
+        return result
+      }
+    }
+
+    EmptyKeyValueIterator
   }
 
   private def throwIfNonLocalKey(primaryKey: PK): Unit = {
@@ -68,5 +88,21 @@ class QueryableFinatraKeyValueStore[PK, K, V](
     if (partitionsToQuery.head != currentServiceShardId) {
       throw new Exception(s"Non local key. Query $partitionsToQuery")
     }
+  }
+
+  private def stores: Iterable[FinatraKeyValueStore[K, V]] = {
+    FinatraStoresGlobalManager.getStores[K, V](storeName)
+  }
+
+  private object EmptyKeyValueIterator extends KeyValueIterator[K, V] {
+    override def hasNext = false
+
+    override def close(): Unit = {}
+
+    override def peekNextKey = throw new NoSuchElementException
+
+    override def next = throw new NoSuchElementException
+
+    override def remove(): Unit = {}
   }
 }

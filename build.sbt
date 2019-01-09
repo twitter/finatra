@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "19.1.0-SNAPSHOT"
+val releaseVersion = "19.1.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -57,6 +57,7 @@ lazy val versions = new {
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
   val commonsLang = "2.6"
+  val fastutil = "8.1.1"
   val guava = "19.0"
   val guice = "4.0"
   val jackson = "2.9.6"
@@ -908,6 +909,7 @@ lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
     moduleName := "finatra-kafka-streams",
     ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
     libraryDependencies ++= Seq(
+      "it.unimi.dsi" % "fastutil" % versions.fastutil,
       "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
       "org.agrona" % "agrona" % versions.agrona,
       "org.apache.kafka" %% "kafka-streams-scala" % versions.kafka % "compile->compile;test->test",

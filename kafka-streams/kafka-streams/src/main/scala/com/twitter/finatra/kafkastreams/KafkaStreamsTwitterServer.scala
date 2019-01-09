@@ -1,8 +1,8 @@
 package com.twitter.finatra.kafkastreams
 
 import com.twitter.app.Flag
-import com.twitter.conversions.StorageUnitOps._
 import com.twitter.conversions.DurationOps._
+import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafka.interceptors.{
   InstanceMetadataProducerInterceptor,
@@ -16,7 +16,6 @@ import com.twitter.finatra.kafkastreams.internal.ScalaStreamsImplicits
 import com.twitter.finatra.kafkastreams.internal.listeners.FinatraStateRestoreListener
 import com.twitter.finatra.kafkastreams.internal.serde.AvoidDefaultSerde
 import com.twitter.finatra.kafkastreams.internal.stats.KafkaStreamsFinagleMetricsReporter
-import com.twitter.finatra.kafkastreams.internal.utils.FinatraDslV2Implicits
 import com.twitter.finatra.kafkastreams.utils.KafkaFlagUtils
 import com.twitter.finatra.streams.interceptors.KafkaStreamsMonitoringConsumerInterceptor
 import com.twitter.inject.server.TwitterServer
@@ -59,8 +58,7 @@ import org.apache.kafka.streams.{
 abstract class KafkaStreamsTwitterServer
     extends TwitterServer
     with KafkaFlagUtils
-    with ScalaStreamsImplicits
-    with FinatraDslV2Implicits {
+    with ScalaStreamsImplicits {
 
   // Required configs
   protected[kafkastreams] val applicationId =
