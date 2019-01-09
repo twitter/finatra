@@ -13,11 +13,20 @@ private[finatra] object PatternValidator {
   }
 }
 
+/**
+  * Validates whether given [[CharSequence]] value matches with the specified regular expression
+  *
+  * @example {{{
+  *            case class ExampleRequest(@Pattern(regexp= "exampleRegex" exampleValue : String))
+  *         }}}
+  */
 private[finatra] class PatternValidator(validationMessageResolver: ValidationMessageResolver,
                                         annotation: Pattern)
   extends Validator[Pattern, Any](validationMessageResolver, annotation) {
 
   private val regexp: String = annotation.regexp()
+
+  /* Public */
 
   override def isValid(value: Any): ValidationResult = {
     value match {
@@ -31,6 +40,8 @@ private[finatra] class PatternValidator(validationMessageResolver: ValidationMes
         throw new IllegalArgumentException(s"Class [${value.getClass}}] is not supported by ${this.getClass}")
     }
   }
+
+  /* Private */
 
   private def validationResult(value: Traversable[_]): ValidationResult = {
     ValidationResult.validate(
