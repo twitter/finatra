@@ -37,7 +37,7 @@ class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChe
     )
   }
 
-  test("fail validation when regex not matches for some items in array") {
+  test("fail validation when regex not matches for array type") {
     val failValue = for {
       size <- Gen.choose(1, 5)
     } yield Array.fill(size) {
@@ -46,15 +46,9 @@ class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChe
     forAll(failValue) {
       value =>
         validate[NumberPatternArrayExample](value) should equal(
-          Invalid(errorMessage(value.toString, "[0-9]+"), ErrorCode.PatternNotMatched("[]", "[0-9]+"))
+          Invalid(errorMessage(value.toString, "[0-9]+"), ErrorCode.PatternNotMatched(value mkString ",", "[0-9]+"))
         )
     }
-  }
-
-  test("fail validation when given regex empty") {
-    validate[EmptyPatternExample]("1234") should equal(
-      Invalid(PatternValidator.errorMessage(messageResolver), ErrorCode.PatternCannotBeEmpty)
-    )
   }
 
   test("it should throw exception for invalid class type") {

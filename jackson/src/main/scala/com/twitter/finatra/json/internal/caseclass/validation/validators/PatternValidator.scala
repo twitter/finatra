@@ -33,24 +33,14 @@ private[finatra] class PatternValidator(validationMessageResolver: ValidationMes
   }
 
   private def validationResult(value: Traversable[_]): ValidationResult = {
-    if (regexp.isEmpty) {
-      return ValidationResult.Invalid(errorMessage(validationMessageResolver), ErrorCode.PatternCannotBeEmpty)
-    }
-    if (value.forall(x => validate(x.toString))) {
-      ValidationResult.Valid
-    } else {
-      ValidationResult.validate(
-        condition = false,
-        errorMessage(validationMessageResolver, value, regexp),
-        errorCode("[]", regexp)
-      )
-    }
+    ValidationResult.validate(
+      value.forall(x => validate(x.toString)),
+      errorMessage(validationMessageResolver, value, regexp),
+      errorCode(value, regexp)
+    )
   }
 
   private def validationResult(value: String): ValidationResult = {
-    if (regexp.isEmpty) {
-      return ValidationResult.Invalid(errorMessage(validationMessageResolver), ErrorCode.PatternCannotBeEmpty)
-    }
     ValidationResult.validate(
       validate(value),
       errorMessage(validationMessageResolver, value, regexp),
@@ -63,11 +53,14 @@ private[finatra] class PatternValidator(validationMessageResolver: ValidationMes
     regex.findFirstIn(value) match {
       case None => false
       case _ => true
-
     }
   }
 
   private def errorCode(value: String, regex: String) = {
     ErrorCode.PatternNotMatched(value, regex)
+  }
+
+  private def errorCode(value: Traversable[_], regex: String) = {
+    ErrorCode.PatternNotMatched(value mkString ",", regex)
   }
 }
