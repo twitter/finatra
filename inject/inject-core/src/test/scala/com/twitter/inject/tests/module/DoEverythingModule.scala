@@ -3,7 +3,7 @@ package com.twitter.inject.tests.module
 import com.google.inject.name.{Named, Names}
 import com.google.inject.spi.TypeConverter
 import com.google.inject.{Provides, TypeLiteral}
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.inject.tests.Prod
 import com.twitter.inject.{Injector, TwitterModule}
 import java.util.Properties

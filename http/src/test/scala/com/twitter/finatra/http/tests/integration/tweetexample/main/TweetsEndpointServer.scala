@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.tweetexample.main
 
-import com.twitter.conversions.storage._
+import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finatra.http.{HttpServer, Tls}
 import com.twitter.finatra.http.filters.CommonFilters
 import com.twitter.finatra.http.tests.integration.tweetexample.main.controllers.{AdminController, TweetsController}

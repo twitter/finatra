@@ -2,7 +2,7 @@ package com.twitter.finatra.thrift
 
 import com.google.inject.Module
 import com.twitter.app.Flag
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.service.NilService
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finagle.{ListeningServer, NullServer, Service, ThriftMux}

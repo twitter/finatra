@@ -1,0 +1,32 @@
+<configuration>
+    <appender name="TEST" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%.-3level %-100logger %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Main Twitter Config -->
+    <logger name="com.twitter" level="info"/>
+    <logger name="com.twitter.finatra.http.filters.AccessLoggingFilter" level="warn"/>
+    <logger name="com.twitter.finatra.messaging" level="debug"/>
+    <logger name="com.twitter.finatra.kafka" level="debug"/>
+    <logger name="org.apache.kafka.streams.state.internals" level="debug"/>
+
+    <logger name="com.twitter.finagle.tracing.DefaultTracer$" level="warn"/>
+    <logger name="com.twitter.finagle.tracing.DefaultTracer" level="warn"/>
+
+    <logger name="org.apache.zookeeper" level="error"/>
+
+    <logger name="kafka" level="warn"/>
+    <logger name="kafka.server.KafkaConfig" level="warn"/>
+    <logger name="org.apache.kafka.clients.NetworkClient" level="error"/>
+    <logger name="com.twitter.finagle.toggle.TwitterToggleMap" level="error"/>
+    <logger name="com.twitter.finagle.loadbalancer.ShardIdAwareRoundRobinBalancer" level="debug"/>
+
+    <logger name="kafka.server.BrokerMetadataCheckpoint" level="error"/>
+
+    <!-- Root Logger -->
+    <root level="warn">
+        <appender-ref ref="TEST"/>
+    </root>
+</configuration>

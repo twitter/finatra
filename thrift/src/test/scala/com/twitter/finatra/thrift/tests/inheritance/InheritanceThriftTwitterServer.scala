@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests.inheritance
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.{Filter, ListeningServer, NullServer, Service, ThriftMux}
 import com.twitter.finatra.thrift.tests.ReqRepServicePerEndpointTest._
 import com.twitter.inject.server.{PortUtils, Ports}

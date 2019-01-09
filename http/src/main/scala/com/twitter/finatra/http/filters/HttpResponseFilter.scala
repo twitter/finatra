@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.filters
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.{MediaType, Message, Request, Response}
 import com.twitter.finagle.{Service, SimpleFilter}
 import com.twitter.finatra.http.HttpHeaders

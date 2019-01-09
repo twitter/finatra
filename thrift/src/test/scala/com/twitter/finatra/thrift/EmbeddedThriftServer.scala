@@ -8,7 +8,7 @@ import scala.collection.JavaConverters._
 
 /**
  * EmbeddedThriftServer allows a [[com.twitter.server.TwitterServer]] serving thrift endpoints to be started
- * locally (on ephemeral ports), and tested through it's thrift interface.
+ * locally (on ephemeral ports), and tested through its thrift interface.
  *
  * @param twitterServer The twitter server to be started locally for integration testing.
  * @param flags Command line Flags (e.g. "foo"->"bar" will be translated into -foo=bar). See: [[com.twitter.app.Flag]].

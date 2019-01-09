@@ -1,6 +1,6 @@
 package com.twitter.finatra.http.tests.integration.darktraffic.main
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.Http
 import com.twitter.finagle.http.Method.{Delete, Post}
 import com.twitter.finagle.http.Request

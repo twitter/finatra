@@ -1,6 +1,6 @@
 package com.twitter.inject.server.tests
 
-import com.twitter.finagle.builder.Server
+import com.twitter.finagle.ListeningServer
 import com.twitter.inject.Test
 import com.twitter.inject.server.PortUtils
 import com.twitter.util.Awaitable.CanAwait
@@ -9,8 +9,8 @@ import java.net.InetSocketAddress
 
 class PortUtilsTest extends Test {
 
-  test("PortUtils#getPort for Server") {
-    val server = new Server {
+  test("PortUtils#getPort for ListeningServer") {
+    val server = new ListeningServer {
 
       /**
        * The address to which this server is bound.

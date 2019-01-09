@@ -4,7 +4,7 @@ import scoverage.ScoverageKeys
 concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)
 
 // All Twitter library releases are date versioned as YY.MM.patch
-val releaseVersion = "18.12.0"
+val releaseVersion = "19.1.0"
 
 lazy val buildSettings = Seq(
   version := releaseVersion,
@@ -51,21 +51,26 @@ lazy val versions = new {
   // All Twitter library releases are date versioned as YY.MM.patch
   val twLibVersion = releaseVersion
 
+  val agrona = "0.9.22"
+  val bijectionCore = "0.9.5"
   val commonsCodec = "1.9"
   val commonsFileupload = "1.3.1"
   val commonsIo = "2.4"
   val commonsLang = "2.6"
+  val fastutil = "8.1.1"
   val guava = "19.0"
   val guice = "4.0"
   val jackson = "2.9.6"
   val jodaConvert = "1.2"
   val jodaTime = "2.5"
   val junit = "4.12"
+  val kafka = "2.0.1"
   val libThrift = "0.10.0"
   val logback = "1.1.7"
   val mockito = "1.9.5"
   val mustache = "0.8.18"
   val nscalaTime = "2.14.0"
+  val rocksdbjni = "5.14.2"
   val scalaCheck = "1.13.4"
   val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
@@ -213,7 +218,7 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   httpclient,
   injectApp,
   injectCore,
-  injectLogback,  
+  injectLogback,
   injectModules,
   injectRequestScope,
   injectServer,
@@ -223,6 +228,12 @@ lazy val finatraModules = Seq[sbt.ProjectReference](
   injectThriftClientHttpMapper,
   injectUtils,
   jackson,
+  kafka,
+  kafkaStreams,
+  kafkaStreamsPrerestore,
+  kafkaStreamsStaticPartitioning,
+  kafkaStreamsQueryableThriftClient,
+  kafkaStreamsQueryableThrift,
   thrift,
   utils)
 
@@ -275,8 +286,6 @@ lazy val injectCoreTestJarSources =
     "com/twitter/inject/Test",
     "com/twitter/inject/TestMixin",
     "com/twitter/inject/TwitterTestModule",
-    "com/twitter/inject/WordSpecIntegrationTest",
-    "com/twitter/inject/WordSpecTest",
     "org/specs2/matcher/ScalaTestExpectations")
 lazy val injectCore = (project in file("inject/inject-core"))
   .settings(projectSettings)
@@ -406,8 +415,7 @@ lazy val injectServerTestJarSources =
     "com/twitter/inject/server/EmbeddedTwitterServer",
     "com/twitter/inject/server/FeatureTest",
     "com/twitter/inject/server/FeatureTestMixin",
-    "com/twitter/inject/server/package",
-    "com/twitter/inject/server/WordSpecFeatureTest")
+    "com/twitter/inject/server/package")
 lazy val injectServer = (project in file("inject/inject-server"))
   .settings(projectSettings)
   .settings(
@@ -757,12 +765,180 @@ lazy val injectThriftClientHttpMapper = (project in file("inject-thrift-client-h
     injectThriftClient % "test->test;compile->compile",
     thrift % "test->test;test->compile")
 
+lazy val kafkaStreamsExclusionRules = Seq(
+  ExclusionRule("javax.ws.rs", "javax.ws.rs-api"),
+  ExclusionRule("log4j", "log4j"),
+  ExclusionRule("org.slf4j", "slf4j-log4j12"))
+
+lazy val kafkaTestJarSources =
+  Seq("com/twitter/finatra/kafka/test/EmbeddedKafka",
+    "com/twitter/finatra/kafka/test/KafkaTopic",
+    "com/twitter/finatra/kafka/test/utils/ThreadUtils",
+    "com/twitter/finatra/kafka/test/utils/PollUtils",
+    "com/twitter/finatra/kafka/test/utils/InMemoryStatsUtil",
+    "com/twitter/finatra/kafka/test/KafkaFeatureTest",
+    "com/twitter/finatra/kafka/test/KafkaStateStore")
+lazy val kafka = (project in file("kafka"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-kafka",
+    moduleName := "finatra-kafka",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-core" % versions.twLibVersion,
+      "com.twitter" %% "finagle-exp" % versions.twLibVersion,
+      "com.twitter" %% "finagle-thrift" % versions.twLibVersion,
+      "com.twitter" %% "scrooge-serializer" % versions.twLibVersion,
+      "com.twitter" %% "util-core" % versions.twLibVersion,
+      "org.apache.kafka" %% "kafka" % versions.kafka % "compile->compile;test->test",
+      "org.apache.kafka" %% "kafka" % versions.kafka % "test" classifier "test",
+      "org.apache.kafka" % "kafka-clients" % versions.kafka % "test->test",
+      "org.apache.kafka" % "kafka-clients" % versions.kafka % "test" classifier "test",
+      "org.apache.kafka" % "kafka-streams" % versions.kafka % "compile->compile;test->test",
+      "org.apache.kafka" % "kafka-streams" % versions.kafka % "test" classifier "test",
+      "org.apache.kafka" % "kafka-streams-test-utils" % versions.kafka % "compile->compile;test->test",
+      "org.apache.kafka" % "kafka-streams-test-utils" % versions.kafka % "test" classifier "test",
+      "org.slf4j" % "slf4j-api" % versions.slf4j % "compile->compile;test->test"
+    ),
+    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    excludeDependencies ++= kafkaStreamsExclusionRules,
+    scroogeThriftIncludeFolders in Test := Seq(file("src/test/thrift")),
+    scroogeLanguages in Test := Seq("scala"),
+    excludeFilter in unmanagedResources := "BUILD",
+    publishArtifact in Test := true,
+    mappings in (Test, packageBin) := {
+      val previous = (mappings in (Test, packageBin)).value
+      previous.filter(mappingContainsAnyPath(_, kafkaTestJarSources))
+    },
+    mappings in (Test, packageDoc) := {
+      val previous = (mappings in (Test, packageDoc)).value
+      previous.filter(mappingContainsAnyPath(_, kafkaTestJarSources))
+    },
+    mappings in (Test, packageSrc) := {
+      val previous = (mappings in (Test, packageSrc)).value
+      previous.filter(mappingContainsAnyPath(_, kafkaTestJarSources))
+    }
+  ).dependsOn(
+    injectCore % "test->test;compile->compile",
+    injectSlf4j % "test->test;compile->compile",
+    injectUtils % "test->test;compile->compile",
+    jackson % "test->test",
+    utils % "test->test;compile->compile")
+
+lazy val kafkaStreamsQueryableThriftClient = (project in file("kafka-streams/kafka-streams-queryable-thrift-client"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-kafka-streams-queryable-thrift-client",
+    moduleName := "finatra-kafka-streams-queryable-thrift-client",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+    libraryDependencies ++= Seq(
+      "com.twitter" %% "finagle-serversets" % versions.twLibVersion
+    ),
+    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    excludeDependencies ++= kafkaStreamsExclusionRules,
+    excludeFilter in unmanagedResources := "BUILD"
+  ).dependsOn(
+    injectCore % "test->test;compile->compile",
+    injectSlf4j % "test->test;compile->compile",
+    injectUtils % "test->test;compile->compile",
+    thrift % "test->test;compile->compile",
+    utils % "test->test;compile->compile")
+
+lazy val kafkaStreamsStaticPartitioning = (project in file("kafka-streams/kafka-streams-static-partitioning"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-kafka-streams-static-partitioning",
+    moduleName := "finatra-kafka-streams-static-partitioning",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    excludeDependencies ++= kafkaStreamsExclusionRules,
+    excludeFilter in unmanagedResources := "BUILD"
+  ).dependsOn(
+    injectCore % "test->test;compile->compile",
+    injectSlf4j % "test->test;compile->compile",
+    injectUtils % "test->test;compile->compile",
+    kafkaStreams % "test->test;compile->compile",
+    kafkaStreamsQueryableThriftClient % "test->test;compile->compile",
+    thrift % "test->test;compile->compile",
+    utils % "test->test;compile->compile")
+
+lazy val kafkaStreamsPrerestore = (project in file("kafka-streams/kafka-streams-prerestore"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-kafka-streams-prerestore",
+    moduleName := "finatra-kafka-streams-prerestore",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    excludeDependencies ++= kafkaStreamsExclusionRules,
+    excludeFilter in unmanagedResources := "BUILD"
+  ).dependsOn(
+    injectCore % "test->test;compile->compile",
+    injectSlf4j % "test->test;compile->compile",
+    injectUtils % "test->test;compile->compile",
+    kafkaStreams % "test->test;compile->compile",
+    kafkaStreamsStaticPartitioning % "test->test;compile->compile",
+    thrift % "test->test;compile->compile",
+    utils % "test->test;compile->compile")
+
+lazy val kafkaStreamsQueryableThrift = (project in file("kafka-streams/kafka-streams-queryable-thrift"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-kafka-streams-queryable-thrift",
+    moduleName := "finatra-kafka-streams-queryable-thrift",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    excludeDependencies ++= kafkaStreamsExclusionRules,
+    scroogeThriftIncludeFolders in Compile := Seq(file("src/test/thrift")),
+    scroogeLanguages in Compile := Seq("java", "scala"),
+    scroogeLanguages in Test := Seq("java", "scala"),
+    excludeFilter in unmanagedResources := "BUILD"
+  ).dependsOn(
+    injectCore % "test->test;compile->compile",
+    injectSlf4j % "test->test;compile->compile",
+    injectUtils % "test->test;compile->compile",
+    kafkaStreams % "test->test;compile->compile",
+    kafkaStreamsQueryableThriftClient %  "test->test;compile->compile",
+    kafkaStreamsStaticPartitioning % "test->test;compile->compile",
+    thrift % "test->test;compile->compile",
+    utils % "test->test;compile->compile")
+
+lazy val kafkaStreams = (project in file("kafka-streams/kafka-streams"))
+  .settings(projectSettings)
+  .settings(
+    name := "finatra-kafka-streams",
+    moduleName := "finatra-kafka-streams",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*",
+    libraryDependencies ++= Seq(
+      "it.unimi.dsi" % "fastutil" % versions.fastutil,
+      "jakarta.ws.rs" % "jakarta.ws.rs-api" % "2.1.3",
+      "org.agrona" % "agrona" % versions.agrona,
+      "org.apache.kafka" %% "kafka-streams-scala" % versions.kafka % "compile->compile;test->test",
+      "org.rocksdb" % "rocksdbjni" % versions.rocksdbjni % "provided;compile->compile;test->test",
+      "org.apache.kafka" % "kafka-streams" % versions.kafka % "compile->compile;test->test",
+      "org.apache.kafka" % "kafka-streams" % versions.kafka % "test" classifier "test",
+    ),
+    excludeDependencies in Test ++= kafkaStreamsExclusionRules,
+    excludeDependencies ++= kafkaStreamsExclusionRules,
+    excludeFilter in unmanagedResources := "BUILD",
+    publishArtifact in Test := true
+  ).dependsOn(
+    injectCore % "test->test;compile->compile",
+    injectLogback % "test->test",
+    injectSlf4j % "test->test;compile->compile",
+    injectUtils % "test->test;compile->compile",
+    jackson % "test->test;compile->compile",
+    kafka % "test->test;compile->compile",
+    kafkaStreamsQueryableThriftClient % "test->test;compile->compile",
+    thrift % "test->test",
+    utils % "test->test;compile->compile")
+
+
 lazy val site = (project in file("doc"))
   .enablePlugins(SphinxPlugin)
   .settings(
-      baseSettings ++ buildSettings ++ Seq(
-        scalacOptions in doc ++= Seq("-doc-title", "Finatra", "-doc-version", version.value),
-        includeFilter in Sphinx := ("*.html" | "*.png" | "*.svg" | "*.js" | "*.css" | "*.gif" | "*.txt")))
+    baseSettings ++ buildSettings ++ Seq(
+      scalacOptions in doc ++= Seq("-doc-title", "Finatra", "-doc-version", version.value),
+      includeFilter in Sphinx := ("*.html" | "*.png" | "*.svg" | "*.js" | "*.css" | "*.gif" | "*.txt")))
 
 // START EXAMPLES
 

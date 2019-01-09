@@ -1,6 +1,6 @@
 package com.twitter.inject.thrift.modules
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.ThriftMux
 import com.twitter.finagle.service.RetryBudget
 import com.twitter.inject.{Injector, Logging}

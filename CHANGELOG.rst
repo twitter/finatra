@@ -7,6 +7,116 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.1.0
+-------
+
+Added
+~~~~~
+
+* finatra-kafka-streams: SumAggregator and CompositeSumAggregator only support enhanced window
+  aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create 
+  an AggregatorTransformer class that can perform arbitrary aggregations. ``PHAB_ID=D257138``
+
+* finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
+  between Kafka Streams and Finatra which we've been using internally at Twitter
+  for the last year. The library is not currently open-source.
+  ``PHAB_ID=D248408``
+
+* inject-server: Add lint rule to alert when deprecated `util-logging` JUL flags from the
+  `c.t.inject.server.DeprecatedLogging` trait are user defined. This trait was mixed-in
+  only for backwards compatibility when TwitterServer was moved to the slf4j-api and the flags are
+  not expected to be configured. By default, `util-app` based applications will fail to start if
+  they are passed a flag value at startup which they do not define. Users should instead configure
+  their chosen slf4j-api logging implementation directly. ``PHAB_ID=D256489``
+
+* finatra-thrift: `c.t.finatra.thrift.Controllers` now support per-method filtering and
+  access to headers via `c.t.scrooge.{Request, Response}` wrappers. To use this new
+  functionality, create a `Controller` which extends the
+  `c.t.finatra.thrift.Controller(SomeThriftService)` abstract class instead of constructing a
+  Controller that mixes in the `SomeThriftService.BaseServiceIface` trait. With this, you can now
+  provide implementations in form of `c.t.scrooge.Request`/`c.t.scrooge.Response` wrappers by calling
+  the `handle(ThriftMethod)` method. Note that a `Controller` constructed this way cannot also
+  extend a `BaseServiceIface`.
+
+    handle(SomeMethod).filtered(someFilter).withFn { req: Request[SomeMethod.Args] =>
+      val requestHeaders = req.headers
+      // .. implementation here
+
+      // response: Future[Response[SomeMethod.SuccessType]]
+    }
+
+  Note that if `Request`/`Response` based implementations are used the types on any
+  existing `ExceptionMappers` should be adjusted accordingly. Also, if a `DarkTrafficFilterModule`
+  was previously used, it must be swapped out for a `ReqRepDarkTrafficFilterModule`
+  ``PHAB_ID=D236724``
+
+Changed
+~~~~~~~
+
+* inject-core, inject-server: Remove deprecated `@Bind` support from test mixins. Users should
+  instead prefer using the `bind[T] <https://twitter.github.io/finatra/user-guide/testing/bind_dsl.html>`__
+  DSL in tests. ``PHAB_ID=D250325``
+
+* inject-app: Remove deprecated `bind[T]` DSL methods from `c.t.inject.app.BindDSL`.
+
+  Instead of:
+
+  .. code:: scala
+
+    injector.bind[T](instance)
+    injector.bind[T, Ann](instance)
+    injector.bind[T](ann, instance)
+
+  Users should instead use the more expressive forms of these methods, e.g.,:
+
+  .. code:: scala
+
+    injector.bind[T].toInstance(instance)
+    injector.bind[T].annotatedWith[Ann].toInstance(instance)
+    injector.bind[T].annotatedWith(ann).toInstance(instance)
+
+  which more closely mirrors the scala-guice binding DSL. ``PHAB_ID=D255591``
+
+* finatra-thrift: For services that wish to support dark traffic over
+  `c.t.scrooge.Request`/`c.t.scrooge.Response`-based services, a new dark traffic module is
+  available: `c.t.finatra.thrift.modules.ReqRepDarkTrafficFilterModule` ``PHAB_ID=D236724``
+
+* finatra-thrift: Creating a `c.t.finatra.thrift.Controller` that extends a
+  `ThriftService.BaseServiceIface` has been deprecated. See the related bullet point in "Added" with
+  the corresponding PHAB_ID to this one for how to migrate. ``PHAB_ID=D236724``
+
+* inject-core, inject-server: Remove deprecated `WordSpec` testing utilities. The framework
+  default ScalaTest testing style is `FunSuite` though users are free to mix their testing
+  style of choice with the framework provided test mixins as per the
+  `documentation <https://twitter.github.io/finatra/user-guide/testing/mixins.html>`__.
+  ``PHAB_ID=D255094``
+
+* finatra-thrift: Instead of failing (potentially silently)
+  `c.t.finatra.thrift.routing.ThriftWarmup` now explicitly checks that it is
+  using a properly configured `c.t.finatra.thrift.routing.Router` ``PHAB_ID=D253603``
+
+* finatra-inject: `c.t.finatra.inject.server.PortUtils` has been modified to
+  work with `c.t.f.ListeningServer` only. Methods which worked with the
+  now-removed `c.t.f.b.Server` have been modified or removed.
+  ``PHAB_ID=D254339``
+
+* finatra-kafka-streams: Finatra Queryable State methods currently require the window size 
+  to be passed into query methods for windowed key value stores. This is unnecessary, as 
+  the queryable state class can be passed the window size at construction time. We also now 
+  save off all FinatraKeyValueStores in a global manager class to allow query services 
+  (e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer 
+  is using. ``PHAB_ID=D256920``
+
+Fixed
+~~~~~
+
+* finatra-kafka-streams: Fix bug where KeyValueStore#isOpen was throwing an
+  exception when called on an uninitialized key value store
+  ``PHAB_ID=D257635``
+
+Closed
+~~~~~~
+
 18.12.0
 -------
 
@@ -15,6 +125,12 @@ Added
 
 Changed
 ~~~~~~~
+
+* finatra-thrift: `c.t.finatra.thrift.Controller` is now an abstract class
+  rather than a trait. ``PHAB_ID=D251314``
+
+* finatra-thrift: `c.t.finatra.thrift.internal.ThriftMethodService` is now
+  private. ``PHAB_ID=D251186``
 
 * finatra-thrift: `c.t.finatra.thrift.exceptions.FinatraThriftExceptionMapper` and
   `c.t.finatra.thrift.exceptions.FinatraJavaThriftExceptionMapper` now extend
@@ -40,7 +156,7 @@ Changed
 Fixed
 ~~~~~
 
-* finatra-http: Validate headers to prevent header injection vulnerability. ``PHAB_ID=D246889`` 
+* finatra-http: Validate headers to prevent header injection vulnerability. ``PHAB_ID=D246889``
 
 Closed
 ~~~~~~

@@ -4,7 +4,7 @@ import com.google.inject.Provides
 import com.twitter.app.Flag
 import com.twitter.finagle.{Filter, ThriftMux}
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finagle.thrift.service.Filterable
+import com.twitter.finagle.thrift.service.{Filterable, ReqRepServicePerEndpointBuilder}
 import com.twitter.finagle.thrift.{ClientId, ServiceIfaceBuilder}
 import com.twitter.finatra.annotations.DarkTrafficFilterType
 import com.twitter.finatra.thrift.filters.{DarkTrafficFilter, JavaDarkTrafficFilter}
@@ -116,7 +116,37 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
       client.newServiceIface[ServiceIface](dest, label),
       enableSampling(injector),
       forwardAfterService,
-      stats
+      stats,
+      lookupByMethod = false
+    )
+  }
+}
+
+abstract class ReqRepDarkTrafficFilterModule[MethodIface <: Filterable[MethodIface]: ClassTag](
+  implicit serviceBuilder: ReqRepServicePerEndpointBuilder[MethodIface]
+) extends AbstractDarkTrafficFilterModule {
+
+  /**
+   * Function to determine if the request should be "sampled", e.g.
+   * sent to the dark service.
+   *
+   * @param injector the [[com.twitter.inject.Injector]] for use in determining if a given request
+   *                 should be forwarded or not.
+   */
+  protected def enableSampling(injector: Injector): Any => Boolean
+
+  protected def newFilter(
+    dest: String,
+    client: ThriftMux.Client,
+    injector: Injector,
+    stats: StatsReceiver
+  ): DarkTrafficFilter[MethodIface] = {
+    new DarkTrafficFilter[MethodIface](
+      client.servicePerEndpoint[MethodIface](dest, label),
+      enableSampling(injector),
+      forwardAfterService,
+      stats,
+      lookupByMethod = true
     )
   }
 }

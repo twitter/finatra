@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, Question}
 import com.twitter.finagle.http.Status
 import com.twitter.finagle.tracing.Trace
@@ -167,13 +167,13 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
     }
   }
 
-  // should be caught by BarExceptionMapper
+  // should be caught by ReqRepBarExceptionMapper
   test("BarException mapping") {
-    await(client123.echo2("barException")) should equal("BarException caught")
+    await(client123.echo2("barException")) should equal("ReqRep BarException caught")
   }
-  // should be caught by FooExceptionMapper
+  // should be caught by ReqRepFooExceptionMapper
   test("FooException mapping") {
-    await(client123.echo2("fooException")) should equal("FooException caught")
+    await(client123.echo2("fooException")) should equal("ReqRep FooException caught")
   }
 
   test("ThriftException#UnhandledSourcedException mapping") {
@@ -234,7 +234,7 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   test("ask fail") {
     val question = Question("fail")
-    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+    await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
   }
 
   test("MDC filtering") {
@@ -303,17 +303,25 @@ class DoEverythingThriftServerFeatureTest extends FeatureTest {
 
   test("Per-method stats scope") {
     val question = Question("fail")
-    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+    await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
     server.assertCounter("per_method_stats/ask/success", 1L)
     server.assertCounter("per_method_stats/ask/failures", 0L)
   }
 
   test("Per-endpoint stats scope") {
     val question = Question("fail")
-    await(client123.ask(question)) should equal(Answer("DoEverythingException caught"))
+    await(client123.ask(question)) should equal(Answer("ReqRep DoEverythingException caught"))
     server.assertCounter("srv/thrift/ask/requests", 1L)
     server.assertCounter("srv/thrift/ask/success", 1L)
     server.assertCounter("srv/thrift/ask/failures", 0L)
+  }
+
+  test("per-endpoint filtering") {
+    // The echo counter is applied to the two echo endpoints
+    await(client123.echo("a"))
+    await(client123.echo2("a"))
+    await(client123.uppercase("a"))
+    server.assertCounter("echo_calls", 2L)
   }
 
   private def await[T](f: Future[T]): T = {

@@ -63,25 +63,35 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
     darkServiceIface: ServiceIface,
     override protected val enableSampling: Any => Boolean,
     forwardAfterService: Boolean,
-    override val statsReceiver: StatsReceiver
+    override val statsReceiver: StatsReceiver,
+    lookupByMethod: Boolean = false
 ) extends BaseDarkTrafficFilter(forwardAfterService, statsReceiver) {
 
   private val serviceIfaceClass = implicitly[ClassTag[ServiceIface]].runtimeClass
+
+  private def getService(methodName: String) = {
+    if (lookupByMethod) {
+      val field = serviceIfaceClass.getDeclaredMethod(methodName)
+      field.invoke(this.darkServiceIface)
+    } else {
+      val field = serviceIfaceClass.getDeclaredField(methodName)
+      field.setAccessible(true)
+      field.get(this.darkServiceIface)
+    }
+  }
 
   /**
    * The [[com.twitter.finagle.Filter.TypeAgnostic]] filter chain works on a Service[T, Rep].
    * The method name is extracted from the local context.
    * @param request - the request to send to dark service
    * @tparam T - the request type
-   * @tparam U - the response type param of the service call.
+   * @tparam Rep - the response type param of the service call.
    * @return a [[com.twitter.util.Future]] over the Rep type.
    */
   protected def invokeDarkService[T, Rep](request: T): Future[Rep] = {
     MethodMetadata.current match {
       case Some(mm) =>
-        val field = serviceIfaceClass.getDeclaredField(mm.methodName)
-        field.setAccessible(true)
-        val service = field.get(this.darkServiceIface).asInstanceOf[Service[T, Rep]]
+        val service = getService(mm.methodName).asInstanceOf[Service[T, Rep]]
         service(request)
       case None =>
         val t = new IllegalStateException("DarkTrafficFilter invoked without method data")
@@ -100,13 +110,9 @@ class DarkTrafficFilter[ServiceIface: ClassTag](
  * @param darkService Service to which to send requests. Expected to be
  *                 `Service[ThriftClientRequest, Array[Byte]]` which is the return
  *                 from `ThriftMux.newService`.
- * @param enableSampling if function returns true, the request will be forwarded.
+ * @param enableSamplingFn if function returns true, the request will be forwarded.
  * @param forwardAfterService forward the request after the initial service has processed the request
  * @param statsReceiver keeps stats for requests forwarded, skipped and failed.
- *
- * @tparam T this Filter's request type, which is expected to be Array[Byte] at runtime.
- * @tparam U this Filter's and the dark service's response type, which is expected to both
- *           be Array[Byte] at runtime.
  *
  * @see [[com.twitter.finagle.ThriftMux.newService]]
  * @see [[com.twitter.finagle.exp.AbstractDarkTrafficFilter]]

@@ -1,6 +1,6 @@
 package com.twitter.inject.tests.utils
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.{FailedFastException, IndividualRequestTimeoutException}
 import com.twitter.inject.Test
 import com.twitter.inject.utils.ExceptionUtils

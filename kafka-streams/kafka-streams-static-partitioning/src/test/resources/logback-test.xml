@@ -1,0 +1,65 @@
+<configuration>
+    <appender name="TEST" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date %.-3level %-25logger{0} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="MAIN" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%red(%date [%thread] %.-3level %-25logger{0} %msg%n)</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.twitter.finatra.kafkastreams.integration"
+            additivity="false">
+        <appender-ref ref="TEST"/>
+    </logger>
+
+    <logger name="com.twitter.finatra.kafka.test"
+            level="debug"
+            additivity="false">
+        <appender-ref ref="TEST"/>
+    </logger>
+
+    <logger name="ch.qos.logback"
+            level="error"
+            additivity="false">
+        <appender-ref ref="TEST"/>
+    </logger>
+
+    <logger name="com.twitter.finatra.kafkastreams.integration.wordcount_windowed.PreRestoreWindowedWordCountServer"
+            level="info"
+            additivity="false">
+        <appender-ref ref="MAIN"/>
+    </logger>
+
+    <logger name="kafka"
+            level="warn"
+            additivity="false">
+        <appender-ref ref="MAIN"/>
+    </logger>
+
+    <logger name="kafka.log"
+            level="warn"
+            additivity="false">
+        <appender-ref ref="MAIN"/>
+    </logger>
+
+    <!-- Main Twitter Config -->
+    <logger name="com.twitter" level="info"/>
+    <logger name="org.apache.kafka" level="warn"/>
+    <logger name="com.twitter.server" level="warn"/>
+    <logger name="com.twitter.finatra" level="debug"/>
+
+    <logger name="org.apache.zookeeper" level="error"/>
+    <logger name="kafka.server.KafkaConfig" level="warn"/>
+    <logger name="org.apache.kafka.clients.NetworkClient" level="error"/>
+    <logger name="com.twitter.finagle.toggle.TwitterToggleMap" level="error"/>
+    <logger name="kafka.server.BrokerMetadataCheckpoint" level="error"/>
+
+    <!-- Root Logger -->
+    <root level="warn">
+        <appender-ref ref="MAIN"/>
+    </root>
+</configuration>

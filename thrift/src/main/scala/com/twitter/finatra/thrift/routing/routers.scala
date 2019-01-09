@@ -5,24 +5,26 @@ import com.twitter.finagle.thrift.{RichServerParam, ThriftService, ToThriftServi
 import com.twitter.finagle.{Filter, Service, Thrift, ThriftMux}
 import com.twitter.finatra.thrift._
 import com.twitter.finatra.thrift.exceptions.{ExceptionManager, ExceptionMapper}
-import com.twitter.finatra.thrift.internal.ThriftMethodService
 import com.twitter.finatra.thrift.internal.routing.{NullThriftService, Registrar}
 import com.twitter.inject.TypeUtils._
 import com.twitter.inject.internal.LibraryRegistry
 import com.twitter.inject.{Injector, Logging}
-import com.twitter.scrooge.ThriftMethod
+import com.twitter.scrooge.{Request, Response, ThriftMethod}
 import java.lang.reflect.{Method => JMethod}
 import java.lang.annotation.{Annotation => JavaAnnotation}
 import javax.inject.{Inject, Singleton}
 import org.apache.thrift.protocol.TProtocolFactory
-import scala.collection.mutable.{Map => MutableMap}
 
 private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Router]](
   injector: Injector,
-  exceptionManager: ExceptionManager
-) extends Logging { this: Router =>
+  exceptionManager: ExceptionManager)
+    extends Logging { this: Router =>
 
-  private[this] var done: Boolean = false
+  def isConfigured: Boolean = configurationComplete
+
+  // There is no guarantee that this is always accessed from the same thread
+  @volatile
+  private[this] var configurationComplete: Boolean = false
 
   /**
    * Add exception mapper used for the corresponding exceptions.
@@ -49,14 +51,15 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/exceptions.html user guide]]
    */
-  def exceptionMapper[T <: Throwable](clazz: Class[_ <: ExceptionMapper[T, _]]): Router = {
-    val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_, _]])
-    val throwableType = singleTypeParam(mapperType)
-    exceptionMapper(injector.instance(clazz))(
-      Manifest.classType(Class.forName(throwableType.getTypeName))
-    )
-    this
-  }
+  def exceptionMapper[T <: Throwable](clazz: Class[_ <: ExceptionMapper[T, _]]): Router =
+    preConfig("Exception mappers must be added before a controller is added") {
+      val mapperType = superTypeFromClass(clazz, classOf[ExceptionMapper[_, _]])
+      val throwableType = singleTypeParam(mapperType)
+      exceptionMapper(injector.instance(clazz))(
+        Manifest.classType(Class.forName(throwableType.getTypeName))
+      )
+      this
+    }
 
   /* Protected */
 
@@ -69,14 +72,33 @@ private[routing] abstract class BaseThriftRouter[Router <: BaseThriftRouter[Rout
         .withSection("thrift", "methods")
     )
 
-  protected def assertController(f: => Unit): Unit = {
-    assert(
-      !done,
+  /**
+   * Ensure that `f` is only run prior to configuring a controller and setting up a thrift service.
+   */
+  protected def preConfig[T](what: String)(f: => T): T = {
+    assert(!configurationComplete, what)
+    f
+  }
+
+  /**
+   * Ensure that `f` is only run after a controller has been configured
+   */
+  protected def postConfig[T](what: String)(f: => T): T = {
+    assert(configurationComplete, what)
+    f
+  }
+
+  /**
+   * Ensures that configuring a controller happens only once and provides a consistent message
+   */
+  protected def assertController[T](f: => T): T = {
+    val message =
       s"${this.getClass.getSimpleName}#add cannot be called multiple times, as we don't " +
         s"currently support serving multiple thrift services via the same router."
-    )
-    f
-    done = true
+
+    val result = preConfig(message)(f)
+    configurationComplete = true
+    result
   }
 
   protected[this] def registerGlobalFilter(thriftFilter: Filter.TypeAgnostic): Unit = {
@@ -104,15 +126,28 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
     extends BaseThriftRouter[ThriftRouter](injector, exceptionManager) {
 
   private[this] var underlying: ThriftService = NullThriftService
+
+  // This map of routes is generated based on the controller and set once.
+  private[this] var routes: Map[ThriftMethod, ScroogeServiceImpl] = _
+
   protected[this] var filters: Filter.TypeAgnostic = Filter.TypeAgnostic.Identity
 
-  private[finatra] val methods = MutableMap[ThriftMethod, ThriftMethodService[_, _]]()
+  private[finatra] def routeWarmup[M <: ThriftMethod](
+    m: M
+  ): Service[Request[M#Args], Response[M#SuccessType]] =
+    postConfig("Router has not been configured with a controller") {
+      routes.get(m) match {
+        case Some(s) => s.asInstanceOf[Service[Request[M#Args], Response[M#SuccessType]]]
+        case None => throw new IllegalArgumentException(s"No route for method $m")
+      }
+    }
 
   /* Public */
 
-  def thriftService: ThriftService = this.underlying
-
-  def thriftMethodService(method: ThriftMethod): ThriftMethodService[_, _] = this.methods(method)
+  def thriftService: ThriftService =
+    postConfig("Router has not been configured with a controller") {
+      this.underlying
+    }
 
   /**
    * Add global filter used for all requests.
@@ -134,8 +169,10 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter[FilterType <: Filter.TypeAgnostic: Manifest, Ann <: JavaAnnotation: Manifest]
-    : ThriftRouter = {
+  def filter[
+    FilterType <: Filter.TypeAgnostic: Manifest,
+    Ann <: JavaAnnotation: Manifest
+  ]: ThriftRouter = {
     filter(injector.instance[FilterType, Ann])
   }
 
@@ -159,11 +196,11 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter(filter: Filter.TypeAgnostic): ThriftRouter = {
-    assert(underlying == NullThriftService, "'filter' must be called before 'add'.")
-    filters = filters.andThen(filter)
-    this
-  }
+  def filter(filter: Filter.TypeAgnostic): ThriftRouter =
+    preConfig("'filter' must be called before 'add'.") {
+      filters = filters.andThen(filter)
+      this
+    }
 
   /**
    * Instantiate and add thrift controller used for all requests.
@@ -172,7 +209,7 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
-  def add[C <: Controller with ToThriftService: Manifest]: ThriftRouter = {
+  def add[C <: Controller: Manifest]: Unit = {
     val controller = injector.instance[C]
     add(controller)
   }
@@ -183,37 +220,88 @@ class ThriftRouter @Inject()(injector: Injector, exceptionManager: ExceptionMana
    *
    * @see the [[https://twitter.github.io/finatra/user-guide/thrift/controllers.html user guide]]
    */
-  def add(controller: Controller with ToThriftService): ThriftRouter = {
+  def add(controller: Controller): Unit = {
     assertController {
-      if (controller.methods.isEmpty) {
-        error(
-          s"${controller.getClass.getName} contains no visible methods. For more details see: ${ThriftRouter.url}"
-        )
-      } else {
-        for (m <- controller.methods) {
-          m.setFilter(filters)
-          methods += (m.method -> m)
-        }
-        info(
-          "Adding methods\n" + controller.methods
-            .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
-            .mkString("\n")
-        )
+      val reg = injector
+        .instance[LibraryRegistry]
+        .withSection("thrift", "methods")
+
+      registerGlobalFilter(reg, filters)
+
+      underlying = controller.config match {
+        case c: Controller.ControllerConfig => addController(controller, c)
+        case c: Controller.LegacyConfig => addLegacyController(controller, c)
       }
-      registerMethods(controller.getClass, controller.methods.map(_.method))
-      registerGlobalFilter(filters)
-      underlying = controller.toThriftService
     }
-    this
   }
 
-  private[this] def registerMethods(
-    clazz: Class[_],
-    methods: Seq[ThriftMethod]
-  ): Unit =
-    methods.foreach(thriftMethodRegistrar.register(clazz, _))
+  private[this] def addController(
+    controller: Controller,
+    conf: Controller.ControllerConfig
+  ): ThriftService = {
+    if (!conf.isValid) {
+      val expectStr = conf.methods.map(_.method.name).mkString("{,", ", ", "}")
+      val message =
+        s"${controller.getClass.getSimpleName} for service " +
+          s"${conf.gen.getClass.getSimpleName} is misconfigured. " +
+          s"Expected exactly one implementation for each of $expectStr but found:\n" +
+          conf.methods.map(m => s" - ${m.method.name}").mkString("\n")
+      error(message)
+    }
 
-  private[this] def registerGlobalFilter(thriftFilter: Filter.TypeAgnostic): Unit = {
+    routes = conf.methods.map { cm =>
+      val method: ThriftMethod = cm.method
+      val service = cm.impl.asInstanceOf[Service[Request[method.Args], Response[method.SuccessType]]]
+      thriftMethodRegistrar.register(controller.getClass, method, cm.filters)
+
+      method -> filters.andThen(cm.filters).andThen(service).asInstanceOf[ScroogeServiceImpl]
+    }.toMap
+
+    info(
+      "Adding methods\n" + routes.keys
+        .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
+        .mkString("\n")
+    )
+
+    conf.gen.unsafeBuildFromMethods(routes).toThriftService
+  }
+
+  private[this] def addLegacyController(
+    controller: Controller,
+    conf: Controller.LegacyConfig
+  ): ThriftService = {
+    if (conf.methods.isEmpty) {
+      error(
+        s"${controller.getClass.getName} contains no visible methods. " +
+          s"For more details see: ${ThriftRouter.url}"
+      )
+    } else {
+      routes = conf.methods.map { methodService =>
+        val method = methodService.method
+        thriftMethodRegistrar.register(controller.getClass, method, Filter.TypeAgnostic.Identity)
+        methodService.setFilter(filters)
+
+        // Convert to a ScroogeServiceImpl for issuing warmup requests
+        val castedService = methodService.asInstanceOf[Service[method.Args, method.SuccessType]]
+        val reqRepService = Service.mk[Request[method.Args], Response[method.SuccessType]] { req =>
+          castedService(req.args).map(Response[method.SuccessType])
+        }
+        method -> reqRepService.asInstanceOf[ScroogeServiceImpl]
+      }.toMap
+
+      info(
+        "Adding methods\n" + conf.methods
+          .map(method => s"${controller.getClass.getSimpleName}.${method.name}")
+          .mkString("\n")
+      )
+    }
+    controller.asInstanceOf[ToThriftService].toThriftService
+  }
+
+  private[this] def registerGlobalFilter(
+    registry: LibraryRegistry,
+    thriftFilter: Filter.TypeAgnostic
+  ): Unit = {
     if (thriftFilter ne Filter.TypeAgnostic.Identity) {
       libraryRegistry
         .withSection("thrift")
@@ -243,7 +331,10 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
 
   /* Public */
 
-  def service: Service[Array[Byte], Array[Byte]] = this.underlying
+  def service: Service[Array[Byte], Array[Byte]] =
+    postConfig("Router has not been configured with a controller") {
+      this.underlying
+    }
 
   /**
    * Add global filter used for all requests.
@@ -265,8 +356,10 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter[FilterType <: Filter.TypeAgnostic: Manifest, Ann <: JavaAnnotation: Manifest]
-    : JavaThriftRouter = {
+  def filter[
+    FilterType <: Filter.TypeAgnostic: Manifest,
+    Ann <: JavaAnnotation: Manifest
+  ]: JavaThriftRouter = {
     this.filter(injector.instance[FilterType, Ann])
   }
 
@@ -290,11 +383,11 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
    *
    * @see The [[https://twitter.github.io/finatra/user-guide/thrift/filters.html user guide]]
    */
-  def filter(filter: Filter.TypeAgnostic): JavaThriftRouter = {
-    assert(underlying == NilService, "'filter' must be called before 'add'.")
-    filters = filters.andThen(filter)
-    this
-  }
+  def filter(filter: Filter.TypeAgnostic): JavaThriftRouter =
+    preConfig("'filter' must be called before add") {
+      filters = filters.andThen(filter)
+      this
+    }
 
   /**
    * Add controller used for all requests for usage from Java. The [[ThriftRouter]] only supports
@@ -368,5 +461,5 @@ class JavaThriftRouter @Inject()(injector: Injector, exceptionManager: Exception
     clazz: Class[_],
     methods: Seq[JMethod]
   ): Unit =
-    methods.foreach(thriftMethodRegistrar.register(serviceName, clazz, _))
+    methods.foreach(thriftMethodRegistrar.registerJavaMethod(serviceName, clazz, _))
 }

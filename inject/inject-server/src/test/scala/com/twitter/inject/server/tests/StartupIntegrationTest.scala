@@ -2,7 +2,7 @@ package com.twitter.inject.server.tests
 
 import com.google.inject.AbstractModule
 import com.twitter.app.CloseException
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.http.Status
 import com.twitter.inject.app.App
 import com.twitter.inject.server.{EmbeddedTwitterServer, Ports, TwitterServer}

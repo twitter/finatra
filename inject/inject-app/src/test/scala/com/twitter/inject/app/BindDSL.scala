@@ -15,66 +15,6 @@ import scala.reflect.runtime.universe._
 private[twitter] trait BindDSL { self =>
 
   /**
-   * Bind an instance of type [T] to the object graph of the underlying server.
-   * This will REPLACE any previously bound instance of the given type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T type of the instance to bind.
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  @deprecated("Use bind[T].toInstance(T)", "2018-03-17")
-  def bind[T: TypeTag](instance: T): self.type = {
-    addInjectionServiceModule(new TwitterModule {
-      override def configure(): Unit = {
-        bind(asManifest[T]).toInstance(instance)
-      }
-    })
-    self
-  }
-
-  /**
-   * Bind an instance of type [T] annotated with Annotation type [A] to the object
-   * graph of the underlying server. This will REPLACE any previously bound instance of
-   * the given type bound with the given annotation type.
-   *
-   * @param instance - to bind instance.
-   * @tparam T type of the instance to bind.
-   * @tparam Ann type of the Annotation used to bind the instance.
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  @deprecated("Use bind[T].annotatedWith[Ann].toInstance(T)", "2018-03-17")
-  def bind[T: TypeTag, Ann <: Annotation: TypeTag](instance: T): self.type = {
-    addInjectionServiceModule(new TwitterModule {
-      override def configure(): Unit = {
-        bind(asManifest[T], asManifest[Ann]).toInstance(instance)
-      }
-    })
-    self
-  }
-
-  /**
-   * Bind an instance of type [T] annotated with the given Annotation value to the object
-   * graph of the underlying server. This will REPLACE any previously bound instance of
-   * the given type bound with the given annotation.
-   *
-   * @param annotation [[java.lang.annotation.Annotation]] instance value
-   * @param instance to bind instance.
-   * @tparam T type of the instance to bind.
-   *
-   * @see [[https://twitter.github.io/finatra/user-guide/testing/index.html#feature-tests Feature Tests]]
-   */
-  @deprecated("Use bind[T].annotatedWith(annotation).toInstance(T)", "2018-03-17")
-  def bind[T: TypeTag](annotation: Annotation, instance: T): self.type = {
-    addInjectionServiceModule(new TwitterModule {
-      override def configure(): Unit = {
-        bind(asManifest[T]).annotatedWith(annotation).toInstance(instance)
-      }
-    })
-    self
-  }
-
-  /**
    * Supports a DSL for binding a type [[T]] in different ways.
    * {{{
    *   bind[T].to[U <: T]

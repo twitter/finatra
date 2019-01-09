@@ -40,6 +40,11 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     )
   )
 
+  override def beforeAll(): Unit = {
+    super.beforeAll()
+    server.start()
+  }
+
   override def afterAll(): Unit = {
     greeterThriftServer.close()
     echoThriftServer.close()
