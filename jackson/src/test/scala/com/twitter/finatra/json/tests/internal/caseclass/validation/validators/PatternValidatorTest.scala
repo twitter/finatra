@@ -7,11 +7,8 @@ import org.scalacheck.Gen
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 
 case class NumberPatternExample(@Pattern(regexp = "[0-9]+") stringValue: String)
-
 case class NumberPatternArrayExample(@Pattern(regexp = "[0-9]+") stringValue: Array[String])
-
 case class EmptyPatternExample(@Pattern(regexp = "") stringValue: String)
-
 
 class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChecks {
 
@@ -37,13 +34,8 @@ class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChe
     )
   }
 
-  test("fail validation when regex not matches for array type") {
-    val failValue = for {
-      size <- Gen.choose(1, 5)
-    } yield Array.fill(size) {
-      "invalid"
-    }
-    forAll(failValue) {
+  test("fail validation when regex not matches for a invalid value in array type") {
+    forAll(Traversable("invalid", "6666")) {
       value =>
         validate[NumberPatternArrayExample](value) should equal(
           Invalid(errorMessage(value.toString, "[0-9]+"), ErrorCode.PatternNotMatched(value mkString ",", "[0-9]+"))
