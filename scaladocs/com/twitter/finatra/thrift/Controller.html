@@ -165,22 +165,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.internal" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="internal"></a><a id="internal:internal"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/index.html#internal" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="internal/index.html"><span class="name">internal</span></a>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.modules" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="modules"></a><a id="modules:modules"></a>
       <span class="permalink">
@@ -271,7 +255,7 @@
                         <a href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code">AbstractThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="" title=""></a>
+                        <a class="class" href="" title=""></a>
                         <a href="" title="">Controller</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
@@ -298,9 +282,9 @@
             </div>
           </div>
           <div id="content">
-            <body class="trait type">
+            <body class="class type">
       <div id="definition">
-        <div class="big-circle trait">t</div>
+        <div class="big-circle class">c</div>
         <p id="owner"><a href="../../../index.html" class="extype" name="com">com</a>.<a href="../../index.html" class="extype" name="com.twitter">twitter</a>.<a href="../index.html" class="extype" name="com.twitter.finatra">finatra</a>.<a href="index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></p>
         <h1>Controller<span class="permalink">
       <a href="../../../../com/twitter/finatra/thrift/Controller.html" title="Permalink">
@@ -312,8 +296,8 @@
 
       <h4 id="signature" class="signature">
       <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">trait</span>
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
       </span>
       <span class="symbol">
         <span class="name">Controller</span><span class="result"> extends <a href="../../inject/Logging.html" class="extype" name="com.twitter.inject.Logging">Logging</a></span>
@@ -321,7 +305,7 @@
       </h4>
 
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ToThriftService.html#com.twitter.finagle.thrift.ToThriftService" class="extype" name="com.twitter.finagle.thrift.ToThriftService">ToThriftService</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Self Type</dt><dd><a href="" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">
             Linear Supertypes
           </span>
@@ -369,9 +353,67 @@
 
       <div id="template">
         <div id="allMembers">
-        
+        <div id="constructors" class="members">
+              <h3>Instance Constructors</h3>
+              <ol><li name="com.twitter.finatra.thrift.Controller#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="&lt;init&gt;(gen:com.twitter.finagle.thrift.GeneratedThriftService):com.twitter.finatra.thrift.Controller"></a><a id="&lt;init&gt;:Controller"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/Controller.html#&lt;init&gt;(gen:com.twitter.finagle.thrift.GeneratedThriftService):com.twitter.finatra.thrift.Controller" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Controller</span><span class="params">(<span name="gen">gen: <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/GeneratedThriftService.html#com.twitter.finagle.thrift.GeneratedThriftService" class="extype" name="com.twitter.finagle.thrift.GeneratedThriftService">GeneratedThriftService</a></span>)</span>
+      </span>
+      
+      
+    </li><li name="com.twitter.finatra.thrift.Controller#&lt;init&gt;" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;():com.twitter.finatra.thrift.Controller"></a><a id="&lt;init&gt;:Controller"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/Controller.html#&lt;init&gt;():com.twitter.finatra.thrift.Controller" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2018-12-20) Construct controllers with a GeneratedThriftService">Controller</span><span class="params">()</span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-12-20)</i> Construct controllers with a GeneratedThriftService</p></dd></dl></div>
+    </li></ol>
+            </div>
 
-        
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="com.twitter.finatra.thrift.Controller.MethodDSL" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MethodDSL[M&lt;:com.twitter.scrooge.ThriftMethod]extendsAnyRef"></a><a id="MethodDSL[M&lt;:ThriftMethod]:MethodDSL[M]"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/Controller.html#MethodDSL[M&lt;:com.twitter.scrooge.ThriftMethod]extendsAnyRef" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a title="The MethodDSL child class is responsible for capturing the state of the applied filter chains and implementation." href="Controller$MethodDSL.html"><span class="name">MethodDSL</span></a><span class="tparams">[<span name="M">M &lt;: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.12.7/scala/AnyRef.html#scala.AnyRef" class="extype" name="scala.AnyRef">AnyRef</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">The MethodDSL child class is responsible for capturing the state of the applied filter chains
+and implementation.</p>
+    </li></ol>
+            </div>
 
         
 
@@ -466,6 +508,22 @@
     </span>)</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.Controller#config" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="config:com.twitter.finatra.thrift.Controller.Config"></a><a id="config:Config"></a>
+      <span class="permalink">
+      <a href="../../../../com/twitter/finatra/thrift/Controller.html#config:com.twitter.finatra.thrift.Controller.Config" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">config</span><span class="result">: <span class="extype" name="com.twitter.finatra.thrift.Controller.Config">Config</span></span>
+      </span>
+      
+      
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">
@@ -717,9 +775,9 @@
               
         </dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.Controller#handle" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="handle[Args,Success](method:com.twitter.scrooge.ThriftMethod)(f:method.FunctionType)(implicitargsEv:Args=:=method.Args,implicitsuccessEv:Success=:=method.SuccessType,implicitserviceFnEv:method.ServiceIfaceServiceType=:=com.twitter.finagle.Service[Args,Success]):com.twitter.finatra.thrift.internal.ThriftMethodService[Args,Success]"></a><a id="handle[Args,Success](ThriftMethod)(FunctionType)(=:=[Args,Args],=:=[Success,SuccessType],=:=[ServiceIfaceServiceType,Service[Args,Success]]):ThriftMethodService[Args,Success]"></a>
+      <a id="handle[M&lt;:com.twitter.scrooge.ThriftMethod](m:M):Controller.this.MethodDSL[M]"></a><a id="handle[M&lt;:ThriftMethod](M):MethodDSL[M]"></a>
       <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/Controller.html#handle[Args,Success](method:com.twitter.scrooge.ThriftMethod)(f:method.FunctionType)(implicitargsEv:Args=:=method.Args,implicitsuccessEv:Success=:=method.SuccessType,implicitserviceFnEv:method.ServiceIfaceServiceType=:=com.twitter.finagle.Service[Args,Success]):com.twitter.finatra.thrift.internal.ThriftMethodService[Args,Success]" title="Permalink">
+      <a href="../../../../com/twitter/finatra/thrift/Controller.html#handle[M&lt;:com.twitter.scrooge.ThriftMethod](m:M):Controller.this.MethodDSL[M]" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -728,10 +786,14 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">handle</span><span class="tparams">[<span name="Args">Args</span>, <span name="Success">Success</span>]</span><span class="params">(<span name="method">method: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>)</span><span class="params">(<span name="f">f: <span class="extype" name="com.twitter.scrooge.ThriftMethod.FunctionType">FunctionType</span></span>)</span><span class="params">(<span class="implicit">implicit </span><span name="argsEv">argsEv: <span class="extype" name="scala.Predef.=:=">=:=</span>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Args">Args</span>, <span class="extype" name="com.twitter.scrooge.ThriftMethod.Args">Args</span>]</span>, <span name="successEv">successEv: <span class="extype" name="scala.Predef.=:=">=:=</span>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Success">Success</span>, <span class="extype" name="com.twitter.scrooge.ThriftMethod.SuccessType">SuccessType</span>]</span>, <span name="serviceFnEv">serviceFnEv: <span class="extype" name="scala.Predef.=:=">=:=</span>[<span class="extype" name="com.twitter.scrooge.ThriftMethod.ServiceIfaceServiceType">ServiceIfaceServiceType</span>, <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/Service.html#com.twitter.finagle.Service" class="extype" name="com.twitter.finagle.Service">Service</a>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Args">Args</span>, <span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Success">Success</span>]]</span>)</span><span class="result">: <a href="internal/ThriftMethodService.html" class="extype" name="com.twitter.finatra.thrift.internal.ThriftMethodService">ThriftMethodService</a>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Args">Args</span>, <span class="extype" name="com.twitter.finatra.thrift.Controller.handle.Success">Success</span>]</span>
+        <span class="name">handle</span><span class="tparams">[<span name="M">M &lt;: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>]</span><span class="params">(<span name="m">m: <span class="extype" name="com.twitter.finatra.thrift.Controller.handle.M">M</span></span>)</span><span class="result">: <a href="Controller$MethodDSL.html" class="extype" name="com.twitter.finatra.thrift.Controller.MethodDSL">MethodDSL</a>[<span class="extype" name="com.twitter.finatra.thrift.Controller.handle.M">M</span>]</span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
+      <p class="shortcomment cmt">Have the controller handle a thrift method with optionally applied filters and an
+implementation.</p><div class="fullcomment"><div class="comment cmt"><p>Have the controller handle a thrift method with optionally applied filters and an
+implementation. All thrift methods that a ThriftSerivce handles must be registered using
+this method to properly construct a Controller.
+</p></div><dl class="paramcmts block"><dt class="param">m</dt><dd class="cmt"><p>The thrift method to handle.</p></dd></dl><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd></dl></div>
     </li><li name="scala.AnyRef#hashCode" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="hashCode():Int"></a>
       <span class="permalink">

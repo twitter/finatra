@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Defining Thrift Controllers &#8212; Finatra 18.12.0 documentation</title>
+    <title>Defining Thrift Controllers &#8212; Finatra 19.1.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '18.12.0',
+        VERSION:     '19.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="top" title="Finatra 18.12.0 documentation" href="../../index.html" />
+    <link rel="top" title="Finatra 19.1.0 documentation" href="../../index.html" />
     <link rel="up" title="User’s Guide" href="../index.html" />
     <link rel="next" title="Filtering Thrift Requests" href="filters.html" />
     <link rel="prev" title="Thrift Server Definition" href="server.html" />
@@ -73,20 +73,10 @@
             
   <div class="section" id="defining-thrift-controllers">
 <span id="thrift-controllers"></span><h1>Defining Thrift Controllers<a class="headerlink" href="#defining-thrift-controllers" title="Permalink to this headline">¶</a></h1>
-<p>A <em>Thrift Controller</em> is an implementation of your thrift service. To create the controller, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala">c.t.finatra.thrift.Controller</a> trait and mix-in the <a class="reference external" href="https://twitter.github.io/scrooge/">Scrooge</a>-generated <cite>BaseServiceIface</cite> trait for your service. Scrooge generates a <cite>ServiceIface</cite> which is a case class containing a <cite>Service</cite> for each thrift method over the corresponding <cite>Args</cite> and <cite>SuccessType</cite> structures for the method that extends from the <cite>BaseServiceIface</cite> trait. E.g,</p>
-<div class="code scala highlight-text"><div class="highlight"><pre><span></span>case class ServiceIface(
-  fetchBlob: Service[FetchBlob.Args, FetchBlob.SuccessType]
-) extends BaseServiceIface
-</pre></div>
-</div>
-<p>For Thrift Controllers we use the <cite>BaseServiceIface</cite> trait since we are not able to extend the <cite>ServiceIface</cite> case class.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The generated <cite>BaseServiceIface</cite> was deprecated on 2017-11-07, but Finatra still only supports <cite>BaseServiceIface</cite> and it is safe to ignore the deprecation warning until Finatra supports <cite>ServicePerEndpoint</cite>.</p>
-</div>
-<div class="section" id="handle-thriftmethod-dsl">
-<h2><cite>handle(ThriftMethod)</cite> DSL<a class="headerlink" href="#handle-thriftmethod-dsl" title="Permalink to this headline">¶</a></h2>
-<p>The Finatra <cite>c.t.finatra.thrift.Controller</cite> provides a DSL with which you can easily implement your thrift service methods via the <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L12">handle(ThriftMethod)</a> function which takes a callback from <cite>ThriftMethod.Args =&gt; Future[ThriftMethod.SuccessType]</cite>.</p>
+<p>A <em>Thrift Controller</em> is an implementation of your thrift service. To create the Controller, extend the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala">c.t.finatra.thrift.Controller</a> with the generated thrift service as its argument. Scrooge generates a <cite>GeneratedThriftService</cite> which is a class containing information about the various <cite>ThriftMethods</cite> and types that this service defines. Each <cite>ThriftMethod</cite> defines an <cite>Args</cite> type and <cite>SuccessType</cite> type. When creating a <cite>Controller</cite>, you must provide exactly one implementation for each method defined in your Thrift service using the <cite>handle(ThriftMethod)</cite> DSL.</p>
+<div class="section" id="implementing-methods-with-handle-thriftmethod">
+<h2>Implementing methods with <cite>handle(ThriftMethod)</cite><a class="headerlink" href="#implementing-methods-with-handle-thriftmethod" title="Permalink to this headline">¶</a></h2>
+<p>The Finatra <cite>c.t.finatra.thrift.Controller</cite> provides a DSL with which you can implement your thrift service methods via the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L124">handle(ThriftMethod)</a> function. Using this DSL, you can apply <cite>TypeAgnostic</cite> <cite>Filters</cite> to handling of methods as well as provide an implementation in the form of a function from <cite>ThriftMethod.Args =&gt; Future[ThriftMethod.SuccessType]</cite>, <cite>Request[ThriftMethod.Args] =&gt; Future[Response[ThriftMethod.SuccessType]]</cite> or <cite>Service[Request[ThriftMethod.Args], Response[ThriftMethod.Args]]</cite>.</p>
 <p>For example, given the following thrift IDL: <cite>example_service.thrift</cite></p>
 <div class="highlight-text"><div class="highlight"><pre><span></span>namespace java com.twitter.example.thriftjava
 #@namespace scala com.twitter.example.thriftscala
@@ -100,7 +90,7 @@ service ExampleService {
   ) throws (
     1: finatra_thrift_exceptions.ServerError serverError,
     2: finatra_thrift_exceptions.UnknownClientIdError unknownClientIdError
-    3: finatra_thrift_exceptions.NoClientIdError noClientIdError
+    3: finatra_thrift_exceptions.NoClientIdError kClientError
   )
 }
 </pre></div>
@@ -111,23 +101,41 @@ import com.twitter.finatra.thrift.Controller
 import com.twitter.util.Future
 
 class ExampleThriftController
-  extends Controller
-  with ExampleService.BaseServiceIface {
+  extends Controller(ExampleService) {
 
-  override val add1 = handle(Add1) { args: Add1.Args =&gt;
+  val addFilter: Filter.TypeAgnostic = { ... }
+
+  handle(Add1).filtered(addFilter) { args: Add1.Args =&gt;
     Future(args.num + 1)
   }
 }
 </pre></div>
 </div>
-<p>The <cite>handle(ThriftMethod)</cite> function may seem magical but it serves an important purpose. By implementing your service method via this function, it allows the framework to apply the configured filter chain defined in your <a class="reference external" href="../build-new-thrift-server#server-definition">server definition</a> to your method implementation (passed as the callback to <cite>handle(ThriftMethod)</cite>).</p>
-<p>That is to say, the <cite>handle(ThriftMethod)</cite> function captures your method implementation then exposes it for the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala">ThriftRouter</a> to combine with the configured filter chain to build the <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html">Finagle Service</a> that represents your server.</p>
+<p>The <cite>handle(ThriftMethod)</cite> function may seem magical but it serves an important purpose. By implementing your service method via this function, it allows the framework to apply the configured global filter chain defined in your <a class="reference external" href="../build-new-thrift-server#server-definition">server definition</a> to your method implementation (passed as the callback to <cite>handle(ThriftMethod)</cite>).</p>
+<p>That is to say, the <cite>handle(ThriftMethod)</cite> function captures filters that you apply to that particular method plus your method implementation and then exposes it for the <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/routing/ThriftRouter.scala">ThriftRouter</a> to combine with the configured global filter chain to build the <a class="reference external" href="https://twitter.github.io/finagle/guide/ServicesAndFilters.html">Finagle Service</a> that represents your server.</p>
 <p>See the <a class="reference external" href="filters.html">Filters</a> section for more information on adding filters to your server definition.</p>
-<p>Note, in the example above we implement the <cite>ExampleService.BaseServiceIface#add1</cite> method to satisfy the <cite>ExampleService.BaseServiceIface</cite> interface &#8211; however, the framework will not call the <cite>add1</cite> method in this way as it uses the implementation of the thrift method captured by the <cite>handle(ThriftMethod)</cite> function (as mentioned above this in order to apply the configured filter chain to requests). Thus if you were to directly call <cite>ExampleThriftController.add1(request)</cite> this would by-pass any configured <a class="reference external" href="filters.html">filters</a> from the server definition.</p>
+<p>When creating a Controller to handle a <cite>ThriftSerice</cite>, all methods defined in the thrift service must have one and only one implementation - that is, there should be exactly one call to <cite>handle(ThriftMethod)</cite> for each thrift method defined. Anything else will result in the Finatra service failing at runtime.</p>
 </div>
-<div class="section" id="ensure-you-override-using-val">
-<h2>Ensure you override using <cite>val</cite><a class="headerlink" href="#ensure-you-override-using-val" title="Permalink to this headline">¶</a></h2>
-<p>You will see above that we use <cite>override val</cite> since the computed <a class="reference external" href="https://github.com/twitter/finatra/blob/develop/thrift/src/main/scala/com/twitter/finatra/thrift/internal/ThriftMethodService.scala">ThriftMethodService</a> instance returned <a class="reference external" href="https://github.com/twitter/finatra/blob/c6e4716f082c0c8790d06d9e1664aacbd0c3fede/thrift/src/main/scala/com/twitter/finatra/thrift/Controller.scala#L26">is effectively constant</a>. However, you MUST override as a <cite>val</cite> when using the <cite>handle(ThriftMethod)</cite> function as using a <cite>def</cite> here will cause indeterminate behavior that will be hard to debug.</p>
+<div class="section" id="scrooge-request-and-response-wrappers">
+<h2>Scrooge <cite>Request</cite> and <cite>Response</cite> Wrappers<a class="headerlink" href="#scrooge-request-and-response-wrappers" title="Permalink to this headline">¶</a></h2>
+<p>By providing an implementation that is aware of the Scrooge-generated <cite>Request</cite> and <cite>Response</cite> wrappers, header data is available. Using the earlier <cite>ExampleThrift</cite>, we can construct a Controller that examines header information like this:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.ExampleService
+import com.twitter.finatra.thrift.Controller
+import com.twitter.util.Future
+import com.twitter.scrooge.{Request, Response}
+
+class ExampleThriftController extends Controller(ExampleService) {
+
+  handle(Add1).withFn { request: Request[Add1.Args] =&gt;
+    val num = request.args.num
+    val headers = request.headers
+
+    log(s&quot;Add1 called with $num and headers: $headers&quot;)
+    Future(Response(num + 1))
+  }
+}
+</pre></div>
+</div>
 </div>
 <div class="section" id="add-the-controller-to-the-server">
 <h2>Add the Controller to the Server<a class="headerlink" href="#add-the-controller-to-the-server" title="Permalink to this headline">¶</a></h2>
@@ -142,31 +150,51 @@ Controller:</p>
 }
 </pre></div>
 </div>
-<p>Please note that Finatra only currently supports adding a <strong>single</strong> Thrift controller to the <cite>ThriftRouter</cite>. The expectation is that you are implementing a single Thrift <em>service</em> and thus a single <cite>BaseServiceIface</cite> which is implementable in a single controller.</p>
+<p>Please note that Finatra only currently supports adding a <strong>single</strong> Thrift Controller to the <cite>ThriftRouter</cite>. The expectation is that you are implementing a single Thrift <em>service</em> and thus a single <cite>ThriftService</cite>.</p>
 </div>
 <div class="section" id="but-i-don-t-want-to-write-all-of-my-code-inside-of-one-controller-class">
 <h2>But I don&#8217;t want to write all of my code inside of one Controller class<a class="headerlink" href="#but-i-don-t-want-to-write-all-of-my-code-inside-of-one-controller-class" title="Permalink to this headline">¶</a></h2>
 <p>Don&#8217;t worry. You don&#8217;t have to.</p>
-<p>The only requirement is a single class which implements the service&#8217;s <cite>BaseServiceIface</cite>. Nothing specifies that <em>this</em> class needs to contain all of your service implementation or logic.</p>
-<p>If you want to modularize or componentize to have a better separation of concerns in your code, your <cite>BaseServiceIface</cite> implementation can be easily written to inject other services or handlers such that complicated logic can be handled in other classes as is generally good practice. E.g.,</p>
+<p>The only requirement is a single class which implements the service&#8217;s defined thrift methods. Nothing specifies that <em>this</em> class needs to contain all of your service implementation or logic.</p>
+<p>If you want to modularize or componentize to have a better separation of concerns in your code, your <cite>Controller</cite> implementation can be easily written to inject other services or handlers such that complicated logic can be handled in other classes as is generally good practice. E.g.,</p>
 <div class="code scala highlight-text"><div class="highlight"><pre><span></span>class ExampleThriftController @Inject() (
   add1Service: Add1Service,
   add2Service: Add2Service,
-) extends Controller
-  with ExampleService.BaseServiceIface {
+) extends Controller(ExampleService) {
 
-      override val add1 = handle(Add1) { args: Add1.Args =&gt;
-        add1Service.add1(args)
-      }
+  // add1Service must be of a unique type for injection but also extends:
+  // Service[Request[Add1.Args], Response[Add1.SuccessType]]
+  // which is what the withService method is looking for.
+  handle(Add1).withService(add1Service)
 
-      override val add2 = handle(Add2) { args: Add2.Args =&gt;
-        add2Service.add2(args)
-      }
-    }
+  handle(Add2).withService(add2Service)
+}
 </pre></div>
 </div>
-<p>In the above example the <cite>BaseServiceIface</cite> implementation merely calls the methods of other classes to provide the service&#8217;s Thrift Controller method implementations.</p>
-<p>How you structure and call other classes from the <cite>BaseServiceIface</cite> implementation is completely up to you to implement in whatever way makes sense for your service or team.</p>
+<p>In the above example the <cite>Controller</cite> implementation forwards handling of the various methods to the injected services directly.</p>
+<p>How you structure and call other classes from the <cite>Controller</cite> implementation is completely up to you to implement in whatever way makes sense for your service or team.</p>
+</div>
+<div class="section" id="deprecated-legacy-controller-information">
+<h2>Deprecated/Legacy Controller Information<a class="headerlink" href="#deprecated-legacy-controller-information" title="Permalink to this headline">¶</a></h2>
+<p>Prior to constructing a <cite>Controller</cite> by extending <cite>Controller(GeneratedThriftSerivce)</cite>, a Controller was constructed by creating a class that extended <cite>Controller with GeneratedThriftSerivce.BaseServiceIface</cite>. Constructing a Controller this way is still possible but deprecated.</p>
+<p>Since a legacy-style <cite>Controller</cite> extends the <cite>BaseServiceIface</cite> directly, it must provide implementations for each of the thrift methods, but it also must still use the <cite>handle(ThriftMethod)</cite> method to make Finatra aware of which methods are being served for reporting and filtering reasons. If this is not done, none of the configured global filters will be applied (including things like per-method stats).</p>
+<p>It is important that when constructing the overrides for the <cite>BaseServiceIface</cite>, they must be implemented as a <cite>val</cite> instead of a <cite>def</cite>. If they&#8217;re <cite>defs</cite>, the service/filters will be re-created for each incoming request, incurring very serious overhead.</p>
+<p>Legacy style Controllers cannot use per-method filtering or have access to headers via Scrooge&#8217;s <cite>Request</cite> and <cite>Response</cite> types.</p>
+<p>A properly configured legacy-style Controller looks like this:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>import com.twitter.example.thriftscala.ExampleService
+import com.twitter.finatra.thrift.Controller
+import com.twitter.util.Future
+
+class ExampleThriftController
+  extends Controller with ExampleService.BaseServiceIface {
+
+  // Note that this is a val instead of a def
+  override val add1 = handle(Add1) { args: Add1.Args =&gt;
+    Future(args.num + 1)
+  }
+}
+</pre></div>
+</div>
 </div>
 <div class="section" id="more-information">
 <h2>More information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
@@ -196,10 +224,11 @@ Controller:</p>
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Defining Thrift Controllers</a><ul>
-<li><a class="reference internal" href="#handle-thriftmethod-dsl"><cite>handle(ThriftMethod)</cite> DSL</a></li>
-<li><a class="reference internal" href="#ensure-you-override-using-val">Ensure you override using <cite>val</cite></a></li>
+<li><a class="reference internal" href="#implementing-methods-with-handle-thriftmethod">Implementing methods with <cite>handle(ThriftMethod)</cite></a></li>
+<li><a class="reference internal" href="#scrooge-request-and-response-wrappers">Scrooge <cite>Request</cite> and <cite>Response</cite> Wrappers</a></li>
 <li><a class="reference internal" href="#add-the-controller-to-the-server">Add the Controller to the Server</a></li>
 <li><a class="reference internal" href="#but-i-don-t-want-to-write-all-of-my-code-inside-of-one-controller-class">But I don&#8217;t want to write all of my code inside of one Controller class</a></li>
+<li><a class="reference internal" href="#deprecated-legacy-controller-information">Deprecated/Legacy Controller Information</a></li>
 <li><a class="reference internal" href="#more-information">More information</a></li>
 </ul>
 </li>
@@ -235,7 +264,7 @@ Controller:</p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2018 Twitter, Inc.
+    &copy; Copyright 2013-2019 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

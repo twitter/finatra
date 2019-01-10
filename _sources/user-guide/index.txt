@@ -73,6 +73,13 @@ Clients
 
 - :doc:`thrift/clients`
 
+Kafka Streams
+-------------
+
+- :doc:`kafka-streams/index`
+- :doc:`kafka-streams/examples`
+- :doc:`kafka-streams/testing`
+
 Testing
 -------
 
@@ -124,6 +131,9 @@ Testing
    thrift/exceptions
    thrift/warmup
    thrift/clients
+   kafka-streams/index
+   kafka-streams/examples
+   kafka-streams/testing
    testing/index
    testing/embedded
    testing/feature_tests

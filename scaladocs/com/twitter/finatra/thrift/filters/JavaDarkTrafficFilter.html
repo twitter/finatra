@@ -309,7 +309,7 @@
       
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">darkService</dt><dd class="cmt"><p>Service to which to send requests. Expected to be
                 <code>Service[ThriftClientRequest, Array[Byte]]</code> which is the return
-                from <code>ThriftMux.newService</code>.</p></dd><dt class="param">forwardAfterService</dt><dd class="cmt"><p>forward the request after the initial service has processed the request</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>keeps stats for requests forwarded, skipped and failed.</p></dd></dl></div>
+                from <code>ThriftMux.newService</code>.</p></dd><dt class="param">enableSamplingFn</dt><dd class="cmt"><p>if function returns true, the request will be forwarded.</p></dd><dt class="param">forwardAfterService</dt><dd class="cmt"><p>forward the request after the initial service has processed the request</p></dd><dt class="param">statsReceiver</dt><dd class="cmt"><p>keeps stats for requests forwarded, skipped and failed.</p></dd></dl></div>
     </li></ol>
             </div>
 

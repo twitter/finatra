@@ -969,10 +969,10 @@ warming up the <code>ThriftServer</code>.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftWarmup#send" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="send[M&lt;:com.twitter.scrooge.ThriftMethod](method:M,args:M#Args,times:Int)(responseCallback:com.twitter.util.Try[M#SuccessType]=&gt;Unit):Unit"></a><a id="send[M&lt;:ThriftMethod](M,send.M.Args,Int)((Try[send.M.SuccessType])⇒Unit):Unit"></a>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftWarmup#sendRequest" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="sendRequest[M&lt;:com.twitter.scrooge.ThriftMethod](method:M,req:com.twitter.scrooge.Request[M#Args],times:Int)(responseCallback:com.twitter.util.Try[com.twitter.scrooge.Response[M#SuccessType]]=&gt;Unit):Unit"></a><a id="sendRequest[M&lt;:ThriftMethod](M,Request[sendRequest.M.Args],Int)((Try[Response[sendRequest.M.SuccessType]])⇒Unit):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftWarmup.html#send[M&lt;:com.twitter.scrooge.ThriftMethod](method:M,args:M#Args,times:Int)(responseCallback:com.twitter.util.Try[M#SuccessType]=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftWarmup.html#sendRequest[M&lt;:com.twitter.scrooge.ThriftMethod](method:M,req:com.twitter.scrooge.Request[M#Args],times:Int)(responseCallback:com.twitter.util.Try[com.twitter.scrooge.Response[M#SuccessType]]=&gt;Unit):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -981,14 +981,14 @@ warming up the <code>ThriftServer</code>.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">send</span><span class="tparams">[<span name="M">M &lt;: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>]</span><span class="params">(<span name="method">method: <span class="extype" name="com.twitter.finatra.thrift.routing.ThriftWarmup.send.M">M</span></span>, <span name="args">args: <span class="extype" name="com.twitter.scrooge.ThriftMethod.Args">send.M.Args</span></span>, <span name="times">times: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">1</span></span>)</span><span class="params">(<span name="responseCallback">responseCallback: (<a href="https://twitter.github.io/util/docs/com/twitter/util/Try.html#com.twitter.util.Try" class="extype" name="com.twitter.util.Try">Try</a>[<span class="extype" name="com.twitter.scrooge.ThriftMethod.SuccessType">send.M.SuccessType</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a> = <span class="symbol">unitFunction</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">sendRequest</span><span class="tparams">[<span name="M">M &lt;: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>]</span><span class="params">(<span name="method">method: <span class="extype" name="com.twitter.finatra.thrift.routing.ThriftWarmup.sendRequest.M">M</span></span>, <span name="req">req: <span class="extype" name="com.twitter.scrooge.Request">Request</span>[<span class="extype" name="com.twitter.scrooge.ThriftMethod.Args">sendRequest.M.Args</span>]</span>, <span name="times">times: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">1</span></span>)</span><span class="params">(<span name="responseCallback">responseCallback: (<a href="https://twitter.github.io/util/docs/com/twitter/util/Try.html#com.twitter.util.Try" class="extype" name="com.twitter.util.Try">Try</a>[<span class="extype" name="com.twitter.scrooge.Response">Response</span>[<span class="extype" name="com.twitter.scrooge.ThriftMethod.SuccessType">sendRequest.M.SuccessType</span>]]) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a> = <span class="symbol">unitFunction</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Send a request to warmup services that are not yet externally receiving traffic.</p><div class="fullcomment"><div class="comment cmt"><p>Send a request to warmup services that are not yet externally receiving traffic.
-</p></div><dl class="paramcmts block"><dt class="tparam">M</dt><dd class="cmt"><p>- type of the <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span></p></dd><dt class="param">method</dt><dd class="cmt"><p>- <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span> to send request through</p></dd><dt class="param">args</dt><dd class="cmt"><p>- <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span>.Args to send</p></dd><dt class="param">times</dt><dd class="cmt"><p>- number of times to send the request</p></dd><dt class="param">responseCallback</dt><dd class="cmt"><p>- callback called for every response where assertions can be made. NOTE: be aware that
-                        failed assertions that throws Exceptions could prevent a server from restarting. This is
-                        generally when dependent services are unresponsive causing the warm-up request(s) to fail.
-                        As such, you should wrap your warm-up calls in these situations in a try/catch {}.</p></dd></dl></div>
+</p></div><dl class="paramcmts block"><dt class="tparam">M</dt><dd class="cmt"><p>- type of the <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span></p></dd><dt class="param">method</dt><dd class="cmt"><p>- <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span> to send request through</p></dd><dt class="param">req</dt><dd class="cmt"><p>- <span class="extype" name="com.twitter.scrooge.Request">com.twitter.scrooge.Request</span> to send</p></dd><dt class="param">times</dt><dd class="cmt"><p>- number of times to send the request</p></dd><dt class="param">responseCallback</dt><dd class="cmt"><p>- callback called for every response where assertions can be made.</p></dd></dl><dl class="attributes block"> <dt>Note</dt><dd><span class="cmt"><p>be aware that in the response callback, failed assertions that throw Exceptions could
+      prevent a server from  restarting. This is generally when dependent services are
+      unresponsive causing the warm-up request(s) to fail. As such, you should wrap your
+      warm-up calls in these situations in a try/catch {}.</p></span></dd></dl></div>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a><a id="synchronized[T0](⇒T0):T0"></a>
       <span class="permalink">
@@ -1292,6 +1292,29 @@ warming up the <code>ThriftServer</code>.
                 <span class="name">@deprecated</span>
               
         </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-03-20)</i> This is now a no-op.</p></dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.ThriftWarmup#send" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="send[M&lt;:com.twitter.scrooge.ThriftMethod](method:M,args:M#Args,times:Int)(responseCallback:com.twitter.util.Try[M#SuccessType]=&gt;Unit):Unit"></a><a id="send[M&lt;:ThriftMethod](M,send.M.Args,Int)((Try[send.M.SuccessType])⇒Unit):Unit"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftWarmup.html#send[M&lt;:com.twitter.scrooge.ThriftMethod](method:M,args:M#Args,times:Int)(responseCallback:com.twitter.util.Try[M#SuccessType]=&gt;Unit):Unit" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2018-12-20) Use Request/Response based functionality">send</span><span class="tparams">[<span name="M">M &lt;: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>]</span><span class="params">(<span name="method">method: <span class="extype" name="com.twitter.finatra.thrift.routing.ThriftWarmup.send.M">M</span></span>, <span name="args">args: <span class="extype" name="com.twitter.scrooge.ThriftMethod.Args">send.M.Args</span></span>, <span name="times">times: <a href="http://www.scala-lang.org/api/2.12.7/scala/Int.html#scala.Int" class="extype" name="scala.Int">Int</a> = <span class="symbol">1</span></span>)</span><span class="params">(<span name="responseCallback">responseCallback: (<a href="https://twitter.github.io/util/docs/com/twitter/util/Try.html#com.twitter.util.Try" class="extype" name="com.twitter.util.Try">Try</a>[<span class="extype" name="com.twitter.scrooge.ThriftMethod.SuccessType">send.M.SuccessType</span>]) ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a> = <span class="symbol">unitFunction</span></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+      </span>
+      
+      <p class="shortcomment cmt">Send a request to warmup services that are not yet externally receiving traffic.</p><div class="fullcomment"><div class="comment cmt"><p>Send a request to warmup services that are not yet externally receiving traffic.
+</p></div><dl class="paramcmts block"><dt class="tparam">M</dt><dd class="cmt"><p>- type of the <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span></p></dd><dt class="param">method</dt><dd class="cmt"><p>- <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span> to send request through</p></dd><dt class="param">args</dt><dd class="cmt"><p>- <span class="extype" name="com.twitter.scrooge.ThriftMethod">com.twitter.scrooge.ThriftMethod</span>.Args to send</p></dd><dt class="param">times</dt><dd class="cmt"><p>- number of times to send the request</p></dd><dt class="param">responseCallback</dt><dd class="cmt"><p>- callback called for every response where assertions can be made.</p></dd></dl><dl class="attributes block"> <dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2018-12-20)</i> Use Request/Response based functionality</p></dd><dt>Note</dt><dd><span class="cmt"><p>be aware that in the response callback, failed assertions that throw Exceptions could
+      prevent a server from  restarting. This is generally when dependent services are
+      unresponsive causing the warm-up request(s) to fail. As such, you should wrap your
+      warm-up calls in these situations in a try/catch {}.</p></span></dd></dl></div>
     </li></ol>
             </div>
         </div>

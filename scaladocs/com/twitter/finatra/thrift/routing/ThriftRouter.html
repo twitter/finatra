@@ -322,9 +322,9 @@
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add(controller:com.twitter.finatra.thrift.Controllerwithcom.twitter.finagle.thrift.ToThriftService):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="add(ControllerwithToThriftService):ThriftRouter"></a>
+      <a id="add(controller:com.twitter.finatra.thrift.Controller):Unit"></a><a id="add(Controller):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#add(controller:com.twitter.finatra.thrift.Controllerwithcom.twitter.finagle.thrift.ToThriftService):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#add(controller:com.twitter.finatra.thrift.Controller):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -333,16 +333,16 @@
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">add</span><span class="params">(<span name="controller">controller: <a href="../Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ToThriftService.html#com.twitter.finagle.thrift.ToThriftService" class="extype" name="com.twitter.finagle.thrift.ToThriftService">ToThriftService</a></span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">add</span><span class="params">(<span name="controller">controller: <a href="../Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Add controller used for all requests.</p><div class="fullcomment"><div class="comment cmt"><p>Add controller used for all requests. <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a single controller,
 so <code>add</code> may only be called once.
 </p></div><dl class="attributes block"> <dt>See also</dt><dd><span class="cmt"><p>the <a href="https://twitter.github.io/finatra/user-guide/thrift/controllers.html" target="_blank">user guide</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#add" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.finagle.thrift.ToThriftService](implicitevidence$6:Manifest[C]):com.twitter.finatra.thrift.routing.ThriftRouter"></a><a id="add[C&lt;:ControllerwithToThriftService](Manifest[C]):ThriftRouter"></a>
+      <a id="add[C&lt;:com.twitter.finatra.thrift.Controller](implicitevidence$6:Manifest[C]):Unit"></a><a id="add[C&lt;:Controller](Manifest[C]):Unit"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#add[C&lt;:com.twitter.finatra.thrift.Controllerwithcom.twitter.finagle.thrift.ToThriftService](implicitevidence$6:Manifest[C]):com.twitter.finatra.thrift.routing.ThriftRouter" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#add[C&lt;:com.twitter.finatra.thrift.Controller](implicitevidence$6:Manifest[C]):Unit" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -351,7 +351,7 @@ so <code>add</code> may only be called once.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">add</span><span class="tparams">[<span name="C">C &lt;: <a href="../Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a> with <a href="https://twitter.github.io/finagle/docs/com/twitter/finagle/thrift/ToThriftService.html#com.twitter.finagle.thrift.ToThriftService" class="extype" name="com.twitter.finagle.thrift.ToThriftService">ToThriftService</a></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.add.C">C</span>]</span>)</span><span class="result">: <a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a></span>
+        <span class="name">add</span><span class="tparams">[<span name="C">C &lt;: <a href="../Controller.html" class="extype" name="com.twitter.finatra.thrift.Controller">Controller</a></span>]</span><span class="params">(<span class="implicit">implicit </span><span name="arg0">arg0: <span class="extype" name="scala.Predef.Manifest">Manifest</span>[<span class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter.add.C">C</span>]</span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
       <p class="shortcomment cmt">Instantiate and add thrift controller used for all requests.</p><div class="fullcomment"><div class="comment cmt"><p>Instantiate and add thrift controller used for all requests.</p><p><a href="" class="extype" name="com.twitter.finatra.thrift.routing.ThriftRouter">ThriftRouter</a> only supports a single controller, so <code>add</code> may only be called once.
@@ -373,9 +373,9 @@ so <code>add</code> may only be called once.
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#assertController" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="assertController(f:=&gt;Unit):Unit"></a><a id="assertController(⇒Unit):Unit"></a>
+      <a id="assertController[T](f:=&gt;T):T"></a><a id="assertController[T](⇒T):T"></a>
       <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#assertController(f:=&gt;Unit):Unit" title="Permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#assertController[T](f:=&gt;T):T" title="Permalink">
         <i class="material-icons"></i>
       </a>
     </span>
@@ -384,10 +384,12 @@ so <code>add</code> may only be called once.
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">assertController</span><span class="params">(<span name="f">f: ⇒ <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>)</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
+        <span class="name">assertController</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.assertController.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.assertController.T">T</span></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
+      <p class="shortcomment cmt">Ensures that configuring a controller happens only once and provides a consistent message
+</p><div class="fullcomment"><div class="comment cmt"><p>Ensures that configuring a controller happens only once and provides a consistent message
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
     </li><li name="scala.AnyRef#clone" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a><a id="clone():AnyRef"></a>
       <span class="permalink">
@@ -900,6 +902,22 @@ via <code>filter</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[this] </dd><dt>Definition Classes</dt><dd>Logging</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#isConfigured" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="isConfigured:Boolean"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#isConfigured:Boolean" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isConfigured</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Boolean.html#scala.Boolean" class="extype" name="scala.Boolean">Boolean</a></span>
+      </span>
+      
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#isDebugEnabled" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="isDebugEnabled(marker:org.slf4j.Marker):Boolean"></a><a id="isDebugEnabled(Marker):Boolean"></a>
       <span class="permalink">
@@ -1178,6 +1196,41 @@ via <code>filter</code>.
                 <span class="name">@native</span><span class="args">()</span>
               
         </dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#postConfig" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="postConfig[T](what:String)(f:=&gt;T):T"></a><a id="postConfig[T](String)(⇒T):T"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#postConfig[T](what:String)(f:=&gt;T):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">postConfig</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="what">what: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.postConfig.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.postConfig.T">T</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Ensure that <code>f</code> is only run after a controller has been configured
+</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that <code>f</code> is only run after a controller has been configured
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
+    </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#preConfig" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="preConfig[T](what:String)(f:=&gt;T):T"></a><a id="preConfig[T](String)(⇒T):T"></a>
+      <span class="permalink">
+      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#preConfig[T](what:String)(f:=&gt;T):T" title="Permalink">
+        <i class="material-icons"></i>
+      </a>
+    </span>
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">preConfig</span><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="what">what: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="params">(<span name="f">f: ⇒ <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.preConfig.T">T</span></span>)</span><span class="result">: <span class="extype" name="com.twitter.finatra.thrift.routing.BaseThriftRouter.preConfig.T">T</span></span>
+      </span>
+      
+      <p class="shortcomment cmt">Ensure that <code>f</code> is only run prior to configuring a controller and setting up a thrift service.</p><div class="fullcomment"><div class="comment cmt"><p>Ensure that <code>f</code> is only run prior to configuring a controller and setting up a thrift service.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.routing.BaseThriftRouter#registerGlobalFilter" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="registerGlobalFilter(thriftFilter:com.twitter.finagle.Filter.TypeAgnostic):Unit"></a><a id="registerGlobalFilter(TypeAgnostic):Unit"></a>
       <span class="permalink">
@@ -1226,22 +1279,6 @@ via <code>filter</code>.
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>BaseThriftRouter</dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#thriftMethodService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="thriftMethodService(method:com.twitter.scrooge.ThriftMethod):com.twitter.finatra.thrift.internal.ThriftMethodService[_,_]"></a><a id="thriftMethodService(ThriftMethod):ThriftMethodService[_,_]"></a>
-      <span class="permalink">
-      <a href="../../../../../com/twitter/finatra/thrift/routing/ThriftRouter.html#thriftMethodService(method:com.twitter.scrooge.ThriftMethod):com.twitter.finatra.thrift.internal.ThriftMethodService[_,_]" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">def</span>
-      </span>
-      <span class="symbol">
-        <span class="name">thriftMethodService</span><span class="params">(<span name="method">method: <span class="extype" name="com.twitter.scrooge.ThriftMethod">ThriftMethod</span></span>)</span><span class="result">: <a href="../internal/ThriftMethodService.html" class="extype" name="com.twitter.finatra.thrift.internal.ThriftMethodService">ThriftMethodService</a>[_, _]</span>
-      </span>
-      
-      
     </li><li name="com.twitter.finatra.thrift.routing.ThriftRouter#thriftService" visbl="pub" class="indented0 " data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="thriftService:com.twitter.finagle.thrift.ThriftService"></a><a id="thriftService:ThriftService"></a>
       <span class="permalink">

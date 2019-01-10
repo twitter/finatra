@@ -763,7 +763,7 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AdminHttpServer</dd></dl></div>
-    </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureLoggerFactories():Unit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/inject/server/AbstractTwitterServer.html#configureLoggerFactories():Unit" title="Permalink">
@@ -778,7 +778,14 @@ of the server lifecycle.</p></span></dd><dt>See also</dt><dd><span class="cmt"><
         <span class="name">configureLoggerFactories</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DeprecatedLogging → Logging</dd></dl></div>
+      <p class="shortcomment cmt"><span class="extype" name="com.twitter.logging.Logging.configureLoggerFactories()">com.twitter.logging.Logging.configureLoggerFactories()</span> removes all added JUL handlers
+and adds only handlers defined by <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" class="extype" name="com.twitter.logging.Logging">com.twitter.logging.Logging.loggerFactories</a>.</p><div class="fullcomment"><div class="comment cmt"><p><span class="extype" name="com.twitter.logging.Logging.configureLoggerFactories()">com.twitter.logging.Logging.configureLoggerFactories()</span> removes all added JUL handlers
+and adds only handlers defined by <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" class="extype" name="com.twitter.logging.Logging">com.twitter.logging.Logging.loggerFactories</a>.</p><p><code>Logging.configureLoggerFactories</code> would thus remove the installed SLF4J BridgeHandler
+from <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a>. Therefore, we override with a no-op to prevent the
+SLF4J BridgeHandler from being removed.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>DeprecatedLogging → Logging</dd><dt>Note</dt><dd><span class="cmt"><p>Subclasses MUST override this method with an implementation that configures the
+      <code>com.twitter.logging.Logger</code> if they want to use their configured logger factories via
+      the util-logging style of configuration.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://www.slf4j.org/legacy.html#jul-to-slf4j" target="_blank">jul-to-slf4j bridge</a></p></span></dd></dl></div>
     </li><li name="com.twitter.util.logging.Logging#debug" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="debug(marker:org.slf4j.Marker,message:=&gt;Any,cause:Throwable):Unit"></a><a id="debug(Marker,⇒Any,Throwable):Unit"></a>
       <span class="permalink">

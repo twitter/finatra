@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Changelog &#8212; Finatra 18.12.0 documentation</title>
+    <title>Changelog &#8212; Finatra 19.1.0 documentation</title>
     
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '18.12.0',
+        VERSION:     '19.1.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Finatra 18.12.0 documentation" href="index.html" />
+    <link rel="top" title="Finatra 19.1.0 documentation" href="index.html" />
     <link rel="prev" title="Finatra Presentations" href="presentations/index.html" />
    
   
@@ -73,13 +73,131 @@
 <h2>Unreleased<a class="headerlink" href="#unreleased" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="id1">
-<h2>18.12.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>19.1.0<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="added">
 <h3>Added<a class="headerlink" href="#added" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">finatra-kafka-streams: SumAggregator and CompositeSumAggregator only support enhanced window
+aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create
+an AggregatorTransformer class that can perform arbitrary aggregations. <code class="docutils literal"><span class="pre">PHAB_ID=D257138</span></code></p>
+</li>
+<li><p class="first">finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
+between Kafka Streams and Finatra which we&#8217;ve been using internally at Twitter
+for the last year. The library is not currently open-source.
+<code class="docutils literal"><span class="pre">PHAB_ID=D248408</span></code></p>
+</li>
+<li><p class="first">inject-server: Add lint rule to alert when deprecated <cite>util-logging</cite> JUL flags from the
+<cite>c.t.inject.server.DeprecatedLogging</cite> trait are user defined. This trait was mixed-in
+only for backwards compatibility when TwitterServer was moved to the slf4j-api and the flags are
+not expected to be configured. By default, <cite>util-app</cite> based applications will fail to start if
+they are passed a flag value at startup which they do not define. Users should instead configure
+their chosen slf4j-api logging implementation directly. <code class="docutils literal"><span class="pre">PHAB_ID=D256489</span></code></p>
+</li>
+<li><p class="first">finatra-thrift: <cite>c.t.finatra.thrift.Controllers</cite> now support per-method filtering and
+access to headers via <cite>c.t.scrooge.{Request, Response}</cite> wrappers. To use this new
+functionality, create a <cite>Controller</cite> which extends the
+<cite>c.t.finatra.thrift.Controller(SomeThriftService)</cite> abstract class instead of constructing a
+Controller that mixes in the <cite>SomeThriftService.BaseServiceIface</cite> trait. With this, you can now
+provide implementations in form of <cite>c.t.scrooge.Request</cite>/<cite>c.t.scrooge.Response</cite> wrappers by calling
+the <cite>handle(ThriftMethod)</cite> method. Note that a <cite>Controller</cite> constructed this way cannot also
+extend a <cite>BaseServiceIface</cite>.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>handle(SomeMethod).filtered(someFilter).withFn { req: Request[SomeMethod.Args] =&gt;</dt>
+<dd><p class="first">val requestHeaders = req.headers
+// .. implementation here</p>
+<p class="last">// response: Future[Response[SomeMethod.SuccessType]]</p>
+</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>Note that if <cite>Request</cite>/<cite>Response</cite> based implementations are used the types on any
+existing <cite>ExceptionMappers</cite> should be adjusted accordingly. Also, if a <cite>DarkTrafficFilterModule</cite>
+was previously used, it must be swapped out for a <cite>ReqRepDarkTrafficFilterModule</cite>
+<code class="docutils literal"><span class="pre">PHAB_ID=D236724</span></code></p>
+</li>
+</ul>
 </div>
 <div class="section" id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Permalink to this headline">¶</a></h3>
 <ul>
+<li><p class="first">inject-core, inject-server: Remove deprecated <cite>&#64;Bind</cite> support from test mixins. Users should
+instead prefer using the <a class="reference external" href="https://twitter.github.io/finatra/user-guide/testing/bind_dsl.html">bind[T]</a>
+DSL in tests. <code class="docutils literal"><span class="pre">PHAB_ID=D250325</span></code></p>
+</li>
+<li><p class="first">inject-app: Remove deprecated <cite>bind[T]</cite> DSL methods from <cite>c.t.inject.app.BindDSL</cite>.</p>
+<p>Instead of:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>injector.bind[T](instance)
+injector.bind[T, Ann](instance)
+injector.bind[T](ann, instance)
+</pre></div>
+</div>
+<p>Users should instead use the more expressive forms of these methods, e.g.,:</p>
+<div class="code scala highlight-text"><div class="highlight"><pre><span></span>injector.bind[T].toInstance(instance)
+injector.bind[T].annotatedWith[Ann].toInstance(instance)
+injector.bind[T].annotatedWith(ann).toInstance(instance)
+</pre></div>
+</div>
+<p>which more closely mirrors the scala-guice binding DSL. <code class="docutils literal"><span class="pre">PHAB_ID=D255591</span></code></p>
+</li>
+<li><p class="first">finatra-thrift: For services that wish to support dark traffic over
+<cite>c.t.scrooge.Request</cite>/<cite>c.t.scrooge.Response</cite>-based services, a new dark traffic module is
+available: <cite>c.t.finatra.thrift.modules.ReqRepDarkTrafficFilterModule</cite> <code class="docutils literal"><span class="pre">PHAB_ID=D236724</span></code></p>
+</li>
+<li><p class="first">finatra-thrift: Creating a <cite>c.t.finatra.thrift.Controller</cite> that extends a
+<cite>ThriftService.BaseServiceIface</cite> has been deprecated. See the related bullet point in &#8220;Added&#8221; with
+the corresponding PHAB_ID to this one for how to migrate. <code class="docutils literal"><span class="pre">PHAB_ID=D236724</span></code></p>
+</li>
+<li><p class="first">inject-core, inject-server: Remove deprecated <cite>WordSpec</cite> testing utilities. The framework
+default ScalaTest testing style is <cite>FunSuite</cite> though users are free to mix their testing
+style of choice with the framework provided test mixins as per the
+<a class="reference external" href="https://twitter.github.io/finatra/user-guide/testing/mixins.html">documentation</a>.
+<code class="docutils literal"><span class="pre">PHAB_ID=D255094</span></code></p>
+</li>
+<li><p class="first">finatra-thrift: Instead of failing (potentially silently)
+<cite>c.t.finatra.thrift.routing.ThriftWarmup</cite> now explicitly checks that it is
+using a properly configured <cite>c.t.finatra.thrift.routing.Router</cite> <code class="docutils literal"><span class="pre">PHAB_ID=D253603</span></code></p>
+</li>
+<li><p class="first">finatra-inject: <cite>c.t.finatra.inject.server.PortUtils</cite> has been modified to
+work with <cite>c.t.f.ListeningServer</cite> only. Methods which worked with the
+now-removed <cite>c.t.f.b.Server</cite> have been modified or removed.
+<code class="docutils literal"><span class="pre">PHAB_ID=D254339</span></code></p>
+</li>
+<li><p class="first">finatra-kafka-streams: Finatra Queryable State methods currently require the window size
+to be passed into query methods for windowed key value stores. This is unnecessary, as
+the queryable state class can be passed the window size at construction time. We also now
+save off all FinatraKeyValueStores in a global manager class to allow query services
+(e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer
+is using. <code class="docutils literal"><span class="pre">PHAB_ID=D256920</span></code></p>
+</li>
+</ul>
+</div>
+<div class="section" id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>finatra-kafka-streams: Fix bug where KeyValueStore#isOpen was throwing an
+exception when called on an uninitialized key value store
+<code class="docutils literal"><span class="pre">PHAB_ID=D257635</span></code></li>
+</ul>
+</div>
+<div class="section" id="closed">
+<h3>Closed<a class="headerlink" href="#closed" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>18.12.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>Added<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id4">
+<h3>Changed<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><p class="first">finatra-thrift: <cite>c.t.finatra.thrift.Controller</cite> is now an abstract class
+rather than a trait. <code class="docutils literal"><span class="pre">PHAB_ID=D251314</span></code></p>
+</li>
+<li><p class="first">finatra-thrift: <cite>c.t.finatra.thrift.internal.ThriftMethodService</cite> is now
+private. <code class="docutils literal"><span class="pre">PHAB_ID=D251186</span></code></p>
+</li>
 <li><p class="first">finatra-thrift: <cite>c.t.finatra.thrift.exceptions.FinatraThriftExceptionMapper</cite> and
 <cite>c.t.finatra.thrift.exceptions.FinatraJavaThriftExceptionMapper</cite> now extend
 <cite>ExceptionManager[Throwable, Nothing]</cite> since the return type was never used. They are
@@ -105,23 +223,23 @@ contained in a ThriftRequest can be found in other ways:</p>
 </li>
 </ul>
 </div>
-<div class="section" id="fixed">
-<h3>Fixed<a class="headerlink" href="#fixed" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Fixed<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Validate headers to prevent header injection vulnerability. <code class="docutils literal"><span class="pre">PHAB_ID=D246889</span></code></li>
 </ul>
 </div>
-<div class="section" id="closed">
-<h3>Closed<a class="headerlink" href="#closed" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Closed<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id2">
-<h2>18.11.0<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
-<h3>Added<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h2>18.11.0<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id8">
+<h3>Added<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id4">
-<h3>Changed<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id9">
+<h3>Changed<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Fixes and improvements for better Java support. ExceptionMappingFilter now
 works properly with generated Java controllers, added an exception mapper for the exceptions
@@ -142,25 +260,25 @@ timeout on the underlying <cite>Await.result</cite> call: <cite>c.t.inject.TestM
 <code class="docutils literal"><span class="pre">PHAB_ID=D231717</span></code></li>
 </ul>
 </div>
-<div class="section" id="id5">
-<h3>Fixed<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id10">
+<h3>Fixed<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Fix registration of HTTP Routes in the Library registry to properly account
 for Routes that duplicate a URI with a different HTTP verb. That is, a Route should be considered
 unique per URI + HTTP verb combination. <code class="docutils literal"><span class="pre">PHAB_ID=D232014</span></code></li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h3>Closed<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id11">
+<h3>Closed<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id7">
-<h2>18.10.0<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id8">
-<h3>Added<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id12">
+<h2>18.10.0<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id13">
+<h3>Added<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id9">
-<h3>Changed<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id14">
+<h3>Changed<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">finatra-http, finatra-thrift: Make HTTP and Thrift StatsFilters &#8220;Response Classification&#8221;
 aware. <code class="docutils literal"><span class="pre">PHAB_ID=D219116</span></code></p>
@@ -185,8 +303,8 @@ deprecating the API. <code class="docutils literal"><span class="pre">PHAB_ID=D2
 </li>
 </ul>
 </div>
-<div class="section" id="id10">
-<h3>Fixed<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id15">
+<h3>Fixed<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Set the bound <cite>StatsReceiver</cite> in the underlying Finagle <cite>ThriftMux</cite> server
 in the <cite>c.t.finatra.thrift.ThriftServer</cite>. This prevented testing of underlying Finagle server
@@ -194,43 +312,22 @@ stats as the <cite>InMemoryStatsReceiver</cite> used by the <cite>EmbeddedThrift
 all the way through the stack. <code class="docutils literal"><span class="pre">PHAB_ID=D228494</span></code></li>
 </ul>
 </div>
-<div class="section" id="id11">
-<h3>Closed<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="id12">
-<h2>18.9.1<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id13">
-<h3>Added<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id14">
-<h3>Changed<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>finatra-thrift: Allow java classes to extend ThriftFilter via AbstractThriftFilter.
-<code class="docutils literal"><span class="pre">PHAB_ID=D221534</span></code></li>
-<li>http/thrift: Update Library registry route information to include controller
-class name. <code class="docutils literal"><span class="pre">PHAB_ID=D216425</span></code></li>
-</ul>
-</div>
-<div class="section" id="id15">
-<h3>Fixed<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
-</div>
 <div class="section" id="id16">
 <h3>Closed<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="id17">
-<h2>18.9.0<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<h2>18.9.1<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id18">
 <h3>Added<a class="headerlink" href="#id18" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="id19">
 <h3>Changed<a class="headerlink" href="#id19" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>inject-core: Remove unnecessary Await.result Future.Value in TestMixin. <code class="docutils literal"><span class="pre">PHAB_ID=D208995</span></code></li>
-<li>finatra-http: (BREAKING API CHANGE) <code class="docutils literal"><span class="pre">c.t.io.Reader</span></code> and <code class="docutils literal"><span class="pre">c.t.io.Writer</span></code> are now abstracted
-over the type they produce/consume (<code class="docutils literal"><span class="pre">Reader[A]</span></code> and <code class="docutils literal"><span class="pre">Writer[A]</span></code>) and are no longer fixed to
-<code class="docutils literal"><span class="pre">Buf</span></code>. <code class="docutils literal"><span class="pre">PHAB_ID=D195638</span></code></li>
+<li>finatra-thrift: Allow java classes to extend ThriftFilter via AbstractThriftFilter.
+<code class="docutils literal"><span class="pre">PHAB_ID=D221534</span></code></li>
+<li>http/thrift: Update Library registry route information to include controller
+class name. <code class="docutils literal"><span class="pre">PHAB_ID=D216425</span></code></li>
 </ul>
 </div>
 <div class="section" id="id20">
@@ -241,12 +338,33 @@ over the type they produce/consume (<code class="docutils literal"><span class="
 </div>
 </div>
 <div class="section" id="id22">
-<h2>18.8.0<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h2>
+<h2>18.9.0<a class="headerlink" href="#id22" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id23">
 <h3>Added<a class="headerlink" href="#id23" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="id24">
 <h3>Changed<a class="headerlink" href="#id24" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>inject-core: Remove unnecessary Await.result Future.Value in TestMixin. <code class="docutils literal"><span class="pre">PHAB_ID=D208995</span></code></li>
+<li>finatra-http: (BREAKING API CHANGE) <code class="docutils literal"><span class="pre">c.t.io.Reader</span></code> and <code class="docutils literal"><span class="pre">c.t.io.Writer</span></code> are now abstracted
+over the type they produce/consume (<code class="docutils literal"><span class="pre">Reader[A]</span></code> and <code class="docutils literal"><span class="pre">Writer[A]</span></code>) and are no longer fixed to
+<code class="docutils literal"><span class="pre">Buf</span></code>. <code class="docutils literal"><span class="pre">PHAB_ID=D195638</span></code></li>
+</ul>
+</div>
+<div class="section" id="id25">
+<h3>Fixed<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id26">
+<h3>Closed<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="id27">
+<h2>18.8.0<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id28">
+<h3>Added<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id29">
+<h3>Changed<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: (BREAKING API CHANGE) Typical TLS Configuration for an HTTPS server has been
 moved into a trait, <code class="docutils literal"><span class="pre">c.t.finatra.http.Tls</span></code> which also defines the relevant flags (and
@@ -264,27 +382,27 @@ recommended that users ensure to either mix in the provided Tls trait or provide
 <li>finatra-utils: Remove deprecated <code class="docutils literal"><span class="pre">c.t.f.utils.Handler</span></code>. <code class="docutils literal"><span class="pre">PHAB_ID=D192288</span></code></li>
 </ul>
 </div>
-<div class="section" id="id25">
-<h3>Fixed<a class="headerlink" href="#id25" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id30">
+<h3>Fixed<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id26">
-<h3>Closed<a class="headerlink" href="#id26" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id31">
+<h3>Closed<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id27">
-<h2>18.7.0<a class="headerlink" href="#id27" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id28">
-<h3>Added<a class="headerlink" href="#id28" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id32">
+<h2>18.7.0<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id33">
+<h3>Added<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-utils: Add &#8216;toLoggable&#8217; implicit from Array[Byte] to String.
 <code class="docutils literal"><span class="pre">PHAB_ID=D182262</span></code></li>
 </ul>
 </div>
-<div class="section" id="id29">
-<h3>Changed<a class="headerlink" href="#id29" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id34">
+<h3>Changed<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id30">
-<h3>Fixed<a class="headerlink" href="#id30" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id35">
+<h3>Fixed<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Fix infinite loop introduced by <code class="docutils literal"><span class="pre">PHAB</span> <span class="pre">D180166</span></code>. Fix underlying issue of the
 <code class="docutils literal"><span class="pre">ResponseBuilder</span></code> requiring a stored <code class="docutils literal"><span class="pre">RouteInfo</span></code> for classifying exceptions for stating.
@@ -296,14 +414,14 @@ all <code class="docutils literal"><span class="pre">c.t.finagle.Failure</span><
 during location header overwriting<code class="docutils literal"><span class="pre">PHAB_ID=D191448</span></code></li>
 </ul>
 </div>
-<div class="section" id="id31">
-<h3>Closed<a class="headerlink" href="#id31" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id36">
+<h3>Closed<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id32">
-<h2>18.6.0<a class="headerlink" href="#id32" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id33">
-<h3>Added<a class="headerlink" href="#id33" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id37">
+<h2>18.6.0<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id38">
+<h3>Added<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra: Add HTTP route, Thrift method, and Filter information to the Library registry.
 <code class="docutils literal"><span class="pre">PHAB_ID=D177583</span></code></li>
@@ -311,16 +429,16 @@ during location header overwriting<code class="docutils literal"><span class="pr
 metrics about the underlying queue. <code class="docutils literal"><span class="pre">PHAB_ID=D173278</span></code></li>
 </ul>
 </div>
-<div class="section" id="id34">
-<h3>Changed<a class="headerlink" href="#id34" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id39">
+<h3>Changed<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-slf4j: Move the SLF4J API logging bridges from <code class="docutils literal"><span class="pre">inject-slf4j</span></code> to <code class="docutils literal"><span class="pre">inject-app</span></code>
 and <code class="docutils literal"><span class="pre">inject-server</span></code>. This allows code in the inject framework to be mostly useful in
 environments where having the bridges on the classpath causes issues. <code class="docutils literal"><span class="pre">PHAB_ID=D179652</span></code></li>
 </ul>
 </div>
-<div class="section" id="id35">
-<h3>Fixed<a class="headerlink" href="#id35" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id40">
+<h3>Fixed<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Fail startup for incorrect Controller callback functions. Controller route callback
 functions that do not specify an input parameter or specify an incorrect input parameter should
@@ -336,20 +454,20 @@ and it should be clear if a new mapper is desired that it is specifically for ch
 exceptions are handled. <code class="docutils literal"><span class="pre">PHAB_ID=D172456</span></code></li>
 </ul>
 </div>
-<div class="section" id="id36">
-<h3>Closed<a class="headerlink" href="#id36" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id41">
+<h3>Closed<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id37">
-<h2>18.5.0<a class="headerlink" href="#id37" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id38">
-<h3>Added<a class="headerlink" href="#id38" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id42">
+<h2>18.5.0<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id43">
+<h3>Added<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>examples: Add external TwitterServer example. <code class="docutils literal"><span class="pre">PHAB_ID=D161204</span></code></li>
 </ul>
 </div>
-<div class="section" id="id39">
-<h3>Changed<a class="headerlink" href="#id39" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id44">
+<h3>Changed<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-utils: Remove deprecated <code class="docutils literal"><span class="pre">c.t.inject.RootMonitor</span></code>.
 <code class="docutils literal"><span class="pre">PHAB_ID=D161036</span></code></li>
@@ -357,8 +475,8 @@ exceptions are handled. <code class="docutils literal"><span class="pre">PHAB_ID
 isolate routes added to the admin. <code class="docutils literal"><span class="pre">PHAB_ID=D157818</span></code></li>
 </ul>
 </div>
-<div class="section" id="id40">
-<h3>Fixed<a class="headerlink" href="#id40" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id45">
+<h3>Fixed<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">inject-slf4j, finatra-http: Fix <code class="docutils literal"><span class="pre">c.t.inject.logging.FinagleMDCAdapter</span></code> to initialize
 properly. We were lazily initializing the backing <code class="docutils literal"><span class="pre">java.util.Map</span></code>
@@ -401,14 +519,14 @@ creating injector. <code class="docutils literal"><span class="pre">PHAB_ID=D160
 </li>
 </ul>
 </div>
-<div class="section" id="id41">
-<h3>Closed<a class="headerlink" href="#id41" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id46">
+<h3>Closed<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id42">
-<h2>18.4.0<a class="headerlink" href="#id42" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id43">
-<h3>Added<a class="headerlink" href="#id43" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id47">
+<h2>18.4.0<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id48">
+<h3>Added<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Added the ability for requests to have a maximum
 forward depth to
@@ -451,8 +569,8 @@ write to the stream.
 <code class="docutils literal"><span class="pre">PHAB_ID=D147925</span></code></li>
 </ul>
 </div>
-<div class="section" id="id44">
-<h3>Changed<a class="headerlink" href="#id44" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id49">
+<h3>Changed<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">inject-app: Update and improve the test <code class="docutils literal"><span class="pre">#bind[T]</span></code> DSL. The testing
 <code class="docutils literal"><span class="pre">#bind[T]</span></code> DSL is lacking in
@@ -532,17 +650,17 @@ underlying Finagle
 </li>
 </ul>
 </div>
-<div class="section" id="id45">
-<h3>Fixed<a class="headerlink" href="#id45" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id50">
+<h3>Fixed<a class="headerlink" href="#id50" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id46">
-<h3>Closed<a class="headerlink" href="#id46" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id51">
+<h3>Closed<a class="headerlink" href="#id51" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id47">
-<h2>18.3.0<a class="headerlink" href="#id47" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id48">
-<h3>Added<a class="headerlink" href="#id48" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id52">
+<h2>18.3.0<a class="headerlink" href="#id52" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id53">
+<h3>Added<a class="headerlink" href="#id53" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-server: Add a lint rule in
 <code class="docutils literal"><span class="pre">c.t.inject.server.TwitterServer#warmup</span></code>. If a server does not
@@ -567,8 +685,8 @@ of an <code class="docutils literal"><span class="pre">&#64;Flag</span></code> a
 <code class="docutils literal"><span class="pre">PHAB_ID=D140831</span></code></li>
 </ul>
 </div>
-<div class="section" id="id49">
-<h3>Changed<a class="headerlink" href="#id49" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id54">
+<h3>Changed<a class="headerlink" href="#id54" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: <code class="docutils literal"><span class="pre">ReaderDiscarded</span></code> failures writing in
 <code class="docutils literal"><span class="pre">c.t.f.http.StreamingResponse</span></code> now only log
@@ -589,8 +707,8 @@ Use <code class="docutils literal"><span class="pre">c.t.inject.annotations.Flag
 <code class="docutils literal"><span class="pre">PHAB_ID=D140831</span></code></li>
 </ul>
 </div>
-<div class="section" id="id50">
-<h3>Fixed<a class="headerlink" href="#id50" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id55">
+<h3>Fixed<a class="headerlink" href="#id55" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-thrift-client: Fix for duplicate stack client registration.
 The
@@ -607,14 +725,14 @@ camelCase, e.g., &#8220;getTweets&#8221; for reflection lookup on generated
 <code class="docutils literal"><span class="pre">c.t.inject.thrift.ThriftMethodBuilder</span></code>. <code class="docutils literal"><span class="pre">PHAB_ID=D138499</span></code></li>
 </ul>
 </div>
-<div class="section" id="id51">
-<h3>Closed<a class="headerlink" href="#id51" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id56">
+<h3>Closed<a class="headerlink" href="#id56" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id52">
-<h2>18.2.0<a class="headerlink" href="#id52" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id53">
-<h3>Added<a class="headerlink" href="#id53" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id57">
+<h2>18.2.0<a class="headerlink" href="#id57" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id58">
+<h3>Added<a class="headerlink" href="#id58" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-thrift-client: Add methods to
 <code class="docutils literal"><span class="pre">c.t.inject.thrift.filters.ThriftClientFilterChain</span></code> to allow
@@ -630,8 +748,8 @@ building ThriftMux clients using the <code class="docutils literal"><span class=
 <code class="docutils literal"><span class="pre">PHAB_ID=D128196</span></code></li>
 </ul>
 </div>
-<div class="section" id="id54">
-<h3>Changed<a class="headerlink" href="#id54" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id59">
+<h3>Changed<a class="headerlink" href="#id59" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-thrift: Update <code class="docutils literal"><span class="pre">c.t.inject.thrift.PossibleRetryable</span></code> to specify a
 ResponseClassifier and update usages in inject-thrift-client to use it. <code class="docutils literal"><span class="pre">PHAB_ID=D134328</span></code></li>
@@ -641,17 +759,17 @@ Update documentation. Rename <code class="docutils literal"><span class="pre">Se
 named <code class="docutils literal"><span class="pre">ThriftMethodBuilderClientModule</span></code>. <code class="docutils literal"><span class="pre">PHAB_ID=D129891</span></code></li>
 </ul>
 </div>
-<div class="section" id="id55">
-<h3>Fixed<a class="headerlink" href="#id55" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id60">
+<h3>Fixed<a class="headerlink" href="#id60" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id56">
-<h3>Closed<a class="headerlink" href="#id56" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id61">
+<h3>Closed<a class="headerlink" href="#id61" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id57">
-<h2>18.1.0<a class="headerlink" href="#id57" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id58">
-<h3>Added<a class="headerlink" href="#id58" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id62">
+<h2>18.1.0<a class="headerlink" href="#id62" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id63">
+<h3>Added<a class="headerlink" href="#id63" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Add support for building all types of Finagle Thrift clients to the underlying
 embedded TwitterServer with the <code class="docutils literal"><span class="pre">c.t.finatra.thrift.ThriftClient</span></code> test utility.
@@ -662,8 +780,8 @@ See: <a class="reference external" href="https://twitter.github.io/scrooge/Finag
 <code class="docutils literal"><span class="pre">PHAB_ID=D122366</span></code></li>
 </ul>
 </div>
-<div class="section" id="id59">
-<h3>Changed<a class="headerlink" href="#id59" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id64">
+<h3>Changed<a class="headerlink" href="#id64" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Change visibility of internal class
 <code class="docutils literal"><span class="pre">c.t.finatra.http.internal.marshalling.RequestInjectableValues</span></code>
@@ -671,29 +789,29 @@ to be correctly specified as private to the <code class="docutils literal"><span
 <code class="docutils literal"><span class="pre">PHAB_ID=D127975</span></code></li>
 </ul>
 </div>
-<div class="section" id="id60">
-<h3>Fixed<a class="headerlink" href="#id60" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id65">
+<h3>Fixed<a class="headerlink" href="#id65" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Ensure we close resources in the <code class="docutils literal"><span class="pre">ResponseBuilder</span></code>.
 Addresses <a class="reference external" href="https://github.com/twitter/finatra/issues/440">#440</a>. <code class="docutils literal"><span class="pre">PHAB_ID=D120779</span></code></li>
 </ul>
 </div>
-<div class="section" id="id61">
-<h3>Closed<a class="headerlink" href="#id61" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id66">
+<h3>Closed<a class="headerlink" href="#id66" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id62">
-<h2>17.12.0<a class="headerlink" href="#id62" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id63">
-<h3>Added<a class="headerlink" href="#id63" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id67">
+<h2>17.12.0<a class="headerlink" href="#id67" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id68">
+<h3>Added<a class="headerlink" href="#id68" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Add tests for new Scrooge
 <code class="docutils literal"><span class="pre">ReqRepServicePerEndpoint</span></code>
 functionality. <code class="docutils literal"><span class="pre">PHAB_ID=D107397</span></code></li>
 </ul>
 </div>
-<div class="section" id="id64">
-<h3>Changed<a class="headerlink" href="#id64" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id69">
+<h3>Changed<a class="headerlink" href="#id69" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: add a <code class="docutils literal"><span class="pre">multipart</span> <span class="pre">=</span> <span class="pre">true</span></code> arg to
 <code class="docutils literal"><span class="pre">EmbeddedHttpServer.httpMultipartFormPost</span></code>
@@ -709,20 +827,20 @@ client.
 <code class="docutils literal"><span class="pre">PHAB_ID=D112024</span></code></li>
 </ul>
 </div>
-<div class="section" id="id65">
-<h3>Fixed<a class="headerlink" href="#id65" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id70">
+<h3>Fixed<a class="headerlink" href="#id70" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id66">
-<h3>Closed<a class="headerlink" href="#id66" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id71">
+<h3>Closed<a class="headerlink" href="#id71" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id67">
-<h2>17.11.0<a class="headerlink" href="#id67" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id68">
-<h3>Added<a class="headerlink" href="#id68" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id72">
+<h2>17.11.0<a class="headerlink" href="#id72" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id73">
+<h3>Added<a class="headerlink" href="#id73" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id69">
-<h3>Changed<a class="headerlink" href="#id69" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id74">
+<h3>Changed<a class="headerlink" href="#id74" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>EmbeddedTwitterServer, EmbeddedHttpServer, and EmbeddedThriftServer
 flags
@@ -730,22 +848,22 @@ and args parameters changed to call-by-name.
 `<code class="docutils literal"><span class="pre">PHAB_ID=</span></code>D104733`</li>
 </ul>
 </div>
-<div class="section" id="id70">
-<h3>Fixed<a class="headerlink" href="#id70" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id75">
+<h3>Fixed<a class="headerlink" href="#id75" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-server: Ensure EmbeddedTwitterServer has started before trying
 to
 close httpAdminClient. <code class="docutils literal"><span class="pre">PHAB_ID=D111294</span></code></li>
 </ul>
 </div>
-<div class="section" id="id71">
-<h3>Closed<a class="headerlink" href="#id71" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id76">
+<h3>Closed<a class="headerlink" href="#id76" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id72">
-<h2>17.10.0<a class="headerlink" href="#id72" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id73">
-<h3>Added<a class="headerlink" href="#id73" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id77">
+<h2>17.10.0<a class="headerlink" href="#id77" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id78">
+<h3>Added<a class="headerlink" href="#id78" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-core: Remove deprecated <code class="docutils literal"><span class="pre">c.t.inject.TestMixin#resetMocks</span></code>.
 Properly
@@ -772,8 +890,8 @@ that use the &#64;Named binding annotation. <code class="docutils literal"><span
 <code class="docutils literal"><span class="pre">PHAB_ID=D91949</span></code></li>
 </ul>
 </div>
-<div class="section" id="id74">
-<h3>Changed<a class="headerlink" href="#id74" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id79">
+<h3>Changed<a class="headerlink" href="#id79" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Move <code class="docutils literal"><span class="pre">FileResolver</span></code> to finatra/utils.
 <code class="docutils literal"><span class="pre">PHAB_ID=D103536</span></code></li>
@@ -815,8 +933,8 @@ instead of the
 HashedWheelTimer. <code class="docutils literal"><span class="pre">PHAB_ID=D88025</span></code></li>
 </ul>
 </div>
-<div class="section" id="id75">
-<h3>Fixed<a class="headerlink" href="#id75" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id80">
+<h3>Fixed<a class="headerlink" href="#id80" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Parameterized route callback inputs fail because the
 lookup of a
@@ -840,14 +958,14 @@ e.g., when <code class="docutils literal"><span class="pre">&#64;Max</span></cod
 applied to a String field. <code class="docutils literal"><span class="pre">PHAB_ID=D95306</span></code></li>
 </ul>
 </div>
-<div class="section" id="id76">
-<h3>Closed<a class="headerlink" href="#id76" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id81">
+<h3>Closed<a class="headerlink" href="#id81" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id77">
-<h2>2.13.0<a class="headerlink" href="#id77" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id78">
-<h3>Added<a class="headerlink" href="#id78" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id82">
+<h2>2.13.0<a class="headerlink" href="#id82" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id83">
+<h3>Added<a class="headerlink" href="#id83" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-server: Add ability to fail embedded server startup on lint
 rule violation.
@@ -858,8 +976,8 @@ fail
 the running test. <code class="docutils literal"><span class="pre">PHAB_ID=D82399</span></code></li>
 </ul>
 </div>
-<div class="section" id="id79">
-<h3>Changed<a class="headerlink" href="#id79" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id84">
+<h3>Changed<a class="headerlink" href="#id84" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: No longer depend on bijection-util. <code class="docutils literal"><span class="pre">PHAB_ID=D86640</span></code></li>
 <li>finatra-jackson: Deprecate
@@ -872,17 +990,17 @@ Users are encouraged to use the Jackson PropertyNamingStrategy
 constants directly. <code class="docutils literal"><span class="pre">PHAB_ID=D81707</span></code></li>
 </ul>
 </div>
-<div class="section" id="id80">
-<h3>Fixed<a class="headerlink" href="#id80" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id85">
+<h3>Fixed<a class="headerlink" href="#id85" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id81">
-<h3>Closed<a class="headerlink" href="#id81" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id86">
+<h3>Closed<a class="headerlink" href="#id86" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id82">
-<h2>2.12.0<a class="headerlink" href="#id82" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id83">
-<h3>Added<a class="headerlink" href="#id83" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id87">
+<h2>2.12.0<a class="headerlink" href="#id87" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id88">
+<h3>Added<a class="headerlink" href="#id88" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-jackson: Add support for injecting a snake case
 FinatraObjectMapper by annotating
@@ -890,8 +1008,8 @@ parameters with a new &#64;SnakeCaseMapper binding annotation.
 <code class="docutils literal"><span class="pre">PHAB_ID=D7798</span></code></li>
 </ul>
 </div>
-<div class="section" id="id84">
-<h3>Changed<a class="headerlink" href="#id84" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id89">
+<h3>Changed<a class="headerlink" href="#id89" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Add close hook when constructing a StreamingResponse
 to allow for resource
@@ -906,40 +1024,40 @@ performance and
 RetryUtil.retryFuture should be used instead. <code class="docutils literal"><span class="pre">PHAB_ID=D73949</span></code></li>
 </ul>
 </div>
-<div class="section" id="id85">
-<h3>Fixed<a class="headerlink" href="#id85" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id86">
-<h3>Closed<a class="headerlink" href="#id86" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="id87">
-<h2>2.11.0<a class="headerlink" href="#id87" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id88">
-<h3>Added<a class="headerlink" href="#id88" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="id89">
-<h3>Changed<a class="headerlink" href="#id89" title="Permalink to this headline">¶</a></h3>
-</div>
 <div class="section" id="id90">
 <h3>Fixed<a class="headerlink" href="#id90" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>finatra-jackson: Fix JSON deserialization of scala.util.Either type
-in FinatraObjectMapper
-for Scala 2.12. <code class="docutils literal"><span class="pre">RB_ID=917699</span></code></li>
-</ul>
 </div>
 <div class="section" id="id91">
 <h3>Closed<a class="headerlink" href="#id91" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="id92">
-<h2>2.10.0<a class="headerlink" href="#id92" title="Permalink to this headline">¶</a></h2>
+<h2>2.11.0<a class="headerlink" href="#id92" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id93">
 <h3>Added<a class="headerlink" href="#id93" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="id94">
 <h3>Changed<a class="headerlink" href="#id94" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id95">
+<h3>Fixed<a class="headerlink" href="#id95" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>finatra-jackson: Fix JSON deserialization of scala.util.Either type
+in FinatraObjectMapper
+for Scala 2.12. <code class="docutils literal"><span class="pre">RB_ID=917699</span></code></li>
+</ul>
+</div>
+<div class="section" id="id96">
+<h3>Closed<a class="headerlink" href="#id96" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="id97">
+<h2>2.10.0<a class="headerlink" href="#id97" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id98">
+<h3>Added<a class="headerlink" href="#id98" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id99">
+<h3>Changed<a class="headerlink" href="#id99" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Increase composability and flexibility of RouteDSL.
 <code class="docutils literal"><span class="pre">RB_ID=912095</span></code></li>
@@ -956,8 +1074,8 @@ to FunSuite ScalaTest
 testing style. <code class="docutils literal"><span class="pre">RB_ID=910680</span></code></li>
 </ul>
 </div>
-<div class="section" id="id95">
-<h3>Fixed<a class="headerlink" href="#id95" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id100">
+<h3>Fixed<a class="headerlink" href="#id100" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Correctly return a JsonParseException when the
 incoming JSON is not parsable
@@ -971,17 +1089,17 @@ as String, e.g., when parsing a query parameter.<code class="docutils literal"><
 <code class="docutils literal"><span class="pre">RB_ID=910862</span></code></li>
 </ul>
 </div>
-<div class="section" id="id96">
-<h3>Closed<a class="headerlink" href="#id96" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id101">
+<h3>Closed<a class="headerlink" href="#id101" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id97">
-<h2>2.9.0<a class="headerlink" href="#id97" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id98">
-<h3>Added<a class="headerlink" href="#id98" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id102">
+<h2>2.9.0<a class="headerlink" href="#id102" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id103">
+<h3>Added<a class="headerlink" href="#id103" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id99">
-<h3>Changed<a class="headerlink" href="#id99" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id104">
+<h3>Changed<a class="headerlink" href="#id104" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-core: (BREAKING API CHANGE) Allow for binding of higher-kinded
 types when testing. Deprecated <code class="docutils literal"><span class="pre">&#64;Bind</span></code> mechanism for replacing bound types in an object
@@ -1065,21 +1183,21 @@ instead of <code class="docutils literal"><span class="pre">ThriftMethod.Result<
 <code class="docutils literal"><span class="pre">ThriftWarmup</span></code>, <code class="docutils literal"><span class="pre">PossiblyRetryable</span></code>. <code class="docutils literal"><span class="pre">RB_ID=908846</span></code></li>
 </ul>
 </div>
-<div class="section" id="id100">
-<h3>Fixed<a class="headerlink" href="#id100" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id105">
+<h3>Fixed<a class="headerlink" href="#id105" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Correctly support adding Java AbstractController by
 instance. <code class="docutils literal"><span class="pre">RB_ID=910502</span></code></li>
 </ul>
 </div>
-<div class="section" id="id101">
-<h3>Closed<a class="headerlink" href="#id101" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id106">
+<h3>Closed<a class="headerlink" href="#id106" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id102">
-<h2>2.8.0<a class="headerlink" href="#id102" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id103">
-<h3>Added<a class="headerlink" href="#id103" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id107">
+<h2>2.8.0<a class="headerlink" href="#id107" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id108">
+<h3>Added<a class="headerlink" href="#id108" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Add Java support for declaring admin routes.
 <code class="docutils literal"><span class="pre">RB_ID=906264</span></code></li>
@@ -1106,8 +1224,8 @@ common prefix for a set of routes declaratively inside a
 controller. <code class="docutils literal"><span class="pre">RB_ID=894695</span></code></li>
 </ul>
 </div>
-<div class="section" id="id104">
-<h3>Changed<a class="headerlink" href="#id104" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id109">
+<h3>Changed<a class="headerlink" href="#id109" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>inject-core: Add back JUNitRUnner to <code class="docutils literal"><span class="pre">c.t.inject.Test</span></code> and
 <code class="docutils literal"><span class="pre">c.t.inject.WordSpecTest</span></code>
@@ -1148,8 +1266,8 @@ to depend on just the <code class="docutils literal"><span class="pre">specs2-mo
 <code class="docutils literal"><span class="pre">PHAB_ID=D18011</span></code></li>
 </ul>
 </div>
-<div class="section" id="id105">
-<h3>Fixed<a class="headerlink" href="#id105" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id110">
+<h3>Fixed<a class="headerlink" href="#id110" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Fix issue where added admin routes did not have their
 HTTP method
@@ -1179,14 +1297,14 @@ inject-server).
 <code class="docutils literal"><span class="pre">RB_ID=901153</span></code></li>
 </ul>
 </div>
-<div class="section" id="id106">
-<h3>Closed<a class="headerlink" href="#id106" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id111">
+<h3>Closed<a class="headerlink" href="#id111" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id107">
-<h2>2.7.0<a class="headerlink" href="#id107" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id108">
-<h3>Added<a class="headerlink" href="#id108" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id112">
+<h2>2.7.0<a class="headerlink" href="#id112" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id113">
+<h3>Added<a class="headerlink" href="#id113" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Add built-in support for Scala
 <code class="docutils literal"><span class="pre">scala.concurrent.Future</span></code>. The
@@ -1203,28 +1321,28 @@ defined filters
 on the &#8220;forwarded to&#8221; route. <code class="docutils literal"><span class="pre">RB_ID=883224</span></code></li>
 </ul>
 </div>
-<div class="section" id="id109">
-<h3>Changed<a class="headerlink" href="#id109" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id114">
+<h3>Changed<a class="headerlink" href="#id114" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id110">
-<h3>Fixed<a class="headerlink" href="#id110" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id115">
+<h3>Fixed<a class="headerlink" href="#id115" title="Permalink to this headline">¶</a></h3>
 </div>
-<div class="section" id="id111">
-<h3>Closed<a class="headerlink" href="#id111" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id116">
+<h3>Closed<a class="headerlink" href="#id116" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id112">
-<h2>2.6.0<a class="headerlink" href="#id112" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id113">
-<h3>Added<a class="headerlink" href="#id113" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id117">
+<h2>2.6.0<a class="headerlink" href="#id117" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id118">
+<h3>Added<a class="headerlink" href="#id118" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra: Move the OSS documentation to internal code repository to be
 co-located with
 source code. <code class="docutils literal"><span class="pre">RB_ID=881112</span></code></li>
 </ul>
 </div>
-<div class="section" id="id114">
-<h3>Changed<a class="headerlink" href="#id114" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id119">
+<h3>Changed<a class="headerlink" href="#id119" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Decompose the <code class="docutils literal"><span class="pre">ThrowableExceptionMapper</span></code> to allow
 users to more easily replace
@@ -1294,22 +1412,22 @@ instead.
 ``RB_ID=890205&#8217;&#8216;</li>
 </ul>
 </div>
-<div class="section" id="id115">
-<h3>Fixed<a class="headerlink" href="#id115" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id120">
+<h3>Fixed<a class="headerlink" href="#id120" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Allow 0,1,t,f as valid boolean values for QueryParam
 case class requests.
 <code class="docutils literal"><span class="pre">RB_ID=881939</span></code></li>
 </ul>
 </div>
-<div class="section" id="id116">
-<h3>Closed<a class="headerlink" href="#id116" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id121">
+<h3>Closed<a class="headerlink" href="#id121" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id117">
-<h2>2.5.0<a class="headerlink" href="#id117" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id118">
-<h3>Added<a class="headerlink" href="#id118" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id122">
+<h2>2.5.0<a class="headerlink" href="#id122" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id123">
+<h3>Added<a class="headerlink" href="#id123" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Add DarkTrafficFilterModule symmetric with
 thrift/DarkTrafficFilterModule. Add DarkTrafficService annotation in
@@ -1317,8 +1435,8 @@ finatra-utils and a filter function used for requests annotated with
 Annotation Type in order to add DarkTrafficFilter. <code class="docutils literal"><span class="pre">RB_ID=878079</span></code></li>
 </ul>
 </div>
-<div class="section" id="id119">
-<h3>Changed<a class="headerlink" href="#id119" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id124">
+<h3>Changed<a class="headerlink" href="#id124" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra: No longer need to add an additional resolver that points to
 maven.twttr.com. <code class="docutils literal"><span class="pre">RB_ID=878967</span></code></li>
@@ -1360,8 +1478,8 @@ thus more of the initialization logging is bridged to the slf4j-api.
 <code class="docutils literal"><span class="pre">RB_ID=870913</span></code></li>
 </ul>
 </div>
-<div class="section" id="id120">
-<h3>Fixed<a class="headerlink" href="#id120" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id125">
+<h3>Fixed<a class="headerlink" href="#id125" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-jackson: Test jar is missing files. Classes in the test
 <code class="docutils literal"><span class="pre">c.t.finatra.validation</span></code> package were not properly marked for
@@ -1369,14 +1487,14 @@ inclusion in the finatra-jackson tests jar. They&#8217;ve now been added.
 <code class="docutils literal"><span class="pre">RB_ID=878755</span></code></li>
 </ul>
 </div>
-<div class="section" id="id121">
-<h3>Closed<a class="headerlink" href="#id121" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id126">
+<h3>Closed<a class="headerlink" href="#id126" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id122">
-<h2>2.4.0<a class="headerlink" href="#id122" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id123">
-<h3>Added<a class="headerlink" href="#id123" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id127">
+<h2>2.4.0<a class="headerlink" href="#id127" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id128">
+<h3>Added<a class="headerlink" href="#id128" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Enhanced support for Java Thrift services.
 <code class="docutils literal"><span class="pre">RB_ID=868254</span></code></li>
@@ -1386,8 +1504,8 @@ System
 property. <code class="docutils literal"><span class="pre">RB_ID=867344</span></code></li>
 </ul>
 </div>
-<div class="section" id="id124">
-<h3>Changed<a class="headerlink" href="#id124" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id129">
+<h3>Changed<a class="headerlink" href="#id129" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Simplify ExceptionMapper configuration and usage.
 We are dropping the need for a specialized DefaultExceptionMapper
@@ -1474,21 +1592,21 @@ Logging.
 <code class="docutils literal"><span class="pre">com.twitter.finatra.http</span></code>. <code class="docutils literal"><span class="pre">RB_ID=866487</span></code></li>
 </ul>
 </div>
-<div class="section" id="id125">
-<h3>Fixed<a class="headerlink" href="#id125" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id130">
+<h3>Fixed<a class="headerlink" href="#id130" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Fix issue with unimplemented methods in
 NonValidatingHttpHeadersResponse. <code class="docutils literal"><span class="pre">RB_ID=868480</span></code></li>
 </ul>
 </div>
-<div class="section" id="id126">
-<h3>Closed<a class="headerlink" href="#id126" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id131">
+<h3>Closed<a class="headerlink" href="#id131" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id127">
-<h2>2.3.0<a class="headerlink" href="#id127" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id128">
-<h3>Added<a class="headerlink" href="#id128" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id132">
+<h2>2.3.0<a class="headerlink" href="#id132" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id133">
+<h3>Added<a class="headerlink" href="#id133" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Add non-guice method to add controller to
 ThriftRouter <code class="docutils literal"><span class="pre">RB_ID=863977</span></code></li>
@@ -1500,8 +1618,8 @@ filter chain. This will allow users to play incoming requests to a
 configured &#8220;dark&#8221; service. <code class="docutils literal"><span class="pre">RB_ID=852338</span></code></li>
 </ul>
 </div>
-<div class="section" id="id129">
-<h3>Changed<a class="headerlink" href="#id129" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id134">
+<h3>Changed<a class="headerlink" href="#id134" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Performance improvements from latest micro-benchmarking
 run.</li>
@@ -1511,21 +1629,21 @@ run.</li>
 ThriftClientFilterBuilder. <code class="docutils literal"><span class="pre">RB_ID=857286</span></code></li>
 </ul>
 </div>
-<div class="section" id="id130">
-<h3>Fixed<a class="headerlink" href="#id130" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id135">
+<h3>Fixed<a class="headerlink" href="#id135" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Add content headers for EmbeddedHttpServer #httpDelete
 and #httpPatch methods. <code class="docutils literal"><span class="pre">RB_ID=862200</span></code></li>
 </ul>
 </div>
-<div class="section" id="id131">
-<h3>Closed<a class="headerlink" href="#id131" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id136">
+<h3>Closed<a class="headerlink" href="#id136" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
-<div class="section" id="id132">
-<h2>2.2.0<a class="headerlink" href="#id132" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id133">
-<h3>Added<a class="headerlink" href="#id133" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id137">
+<h2>2.2.0<a class="headerlink" href="#id137" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id138">
+<h3>Added<a class="headerlink" href="#id138" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Add python namespace to
 finatra_thrift_exceptions.thrift. <code class="docutils literal"><span class="pre">RB_ID=844668</span></code></li>
@@ -1534,8 +1652,8 @@ for defining routes which will answer
 to &#8220;any&#8221; HTTP method. <code class="docutils literal"><span class="pre">RB_ID=830429</span></code></li>
 </ul>
 </div>
-<div class="section" id="id134">
-<h3>Changed<a class="headerlink" href="#id134" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id139">
+<h3>Changed<a class="headerlink" href="#id139" title="Permalink to this headline">¶</a></h3>
 <ul>
 <li><p class="first">finatra: Address lifecycle around com.twitter.inject.app.App#appMain.</p>
 </li>
@@ -1672,8 +1790,8 @@ logging configurations for best practices. <code class="docutils literal"><span 
 for details. <code class="docutils literal"><span class="pre">RB_ID=828898</span></code></li>
 </ul>
 </div>
-<div class="section" id="id135">
-<h3>Fixed<a class="headerlink" href="#id135" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id140">
+<h3>Fixed<a class="headerlink" href="#id140" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-examples: Add sbt-revolver to the hello-world example. Fixes
 <a class="reference external" href="https://github.com/twitter/finatra/issues/209">GH-209</a>.
@@ -1682,8 +1800,8 @@ for details. <code class="docutils literal"><span class="pre">RB_ID=828898</span
 in their route callbacks. <code class="docutils literal"><span class="pre">RB_ID=834467</span></code></li>
 </ul>
 </div>
-<div class="section" id="id136">
-<h3>Closed<a class="headerlink" href="#id136" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id141">
+<h3>Closed<a class="headerlink" href="#id141" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/twitter/finatra/issues/276">GH-276</a>.
 <code class="docutils literal"><span class="pre">RB_ID=836819</span></code></li>
@@ -1694,12 +1812,12 @@ in their route callbacks. <code class="docutils literal"><span class="pre">RB_ID
 </ul>
 </div>
 </div>
-<div class="section" id="id137">
-<h2>2.1.6<a class="headerlink" href="#id137" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id142">
+<h2>2.1.6<a class="headerlink" href="#id142" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.1.5...finatra-2.1.6">Full
 Changelog</a></p>
-<div class="section" id="id138">
-<h3>Added<a class="headerlink" href="#id138" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id143">
+<h3>Added<a class="headerlink" href="#id143" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-thrift: Add ThriftWarmup for thrift servers. <code class="docutils literal"><span class="pre">RB_ID=820771</span></code></li>
 <li>finatra-inject/inject-server: Register framework in Library registry.
@@ -1710,8 +1828,8 @@ Changelog</a></p>
 <code class="docutils literal"><span class="pre">RB_ID=811126</span></code></li>
 </ul>
 </div>
-<div class="section" id="id139">
-<h3>Changed<a class="headerlink" href="#id139" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id144">
+<h3>Changed<a class="headerlink" href="#id144" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra/twitter-server: Update to register TwitterServer as library
 in /admin/registry.json. <code class="docutils literal"><span class="pre">RB_ID=825129</span></code></li>
@@ -1720,24 +1838,24 @@ of twitter-server&#8217;s prebindWarmup event. <code class="docutils literal"><s
 <li>finatra-http: Move HttpServer to new Http stack API. <code class="docutils literal"><span class="pre">RB_ID=812718</span></code></li>
 </ul>
 </div>
-<div class="section" id="id140">
-<h3>Fixed<a class="headerlink" href="#id140" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id145">
+<h3>Fixed<a class="headerlink" href="#id145" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra: Revert sbt-scoverage plugin to 1.2.0. <code class="docutils literal"><span class="pre">RB_ID=812098</span></code></li>
 <li>finatra-http: Ensure headers are set correctly in requests and
 responses. <code class="docutils literal"><span class="pre">RB_ID=813969</span></code></li>
 </ul>
 </div>
-<div class="section" id="id141">
-<h3>Closed<a class="headerlink" href="#id141" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id146">
+<h3>Closed<a class="headerlink" href="#id146" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="v2-1-5-2016-03-15">
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.1.5">v2.1.5</a> (2016-03-15)<a class="headerlink" href="#v2-1-5-2016-03-15" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.1.4...v2.1.5">Full
 Changelog</a></p>
-<div class="section" id="id142">
-<h3>Added<a class="headerlink" href="#id142" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id147">
+<h3>Added<a class="headerlink" href="#id147" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http: Ability to access the finagle request in the
 ResponseBuilder
@@ -1747,8 +1865,8 @@ admin UI. <code class="docutils literal"><span class="pre">RB_ID=808272</span></
 <li>finatra: Added PULL_REQUEST_TEMPLATE <code class="docutils literal"><span class="pre">RB_ID=808946</span></code></li>
 </ul>
 </div>
-<div class="section" id="id143">
-<h3>Changed<a class="headerlink" href="#id143" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id148">
+<h3>Changed<a class="headerlink" href="#id148" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra: Move to <code class="docutils literal"><span class="pre">develop</span></code> branch as default branch for Github.
 <code class="docutils literal"><span class="pre">RB_ID=810088</span></code></li>
@@ -1756,8 +1874,8 @@ admin UI. <code class="docutils literal"><span class="pre">RB_ID=808272</span></
 code. <code class="docutils literal"><span class="pre">RB_ID=809803</span></code></li>
 </ul>
 </div>
-<div class="section" id="id144">
-<h3>Fixed<a class="headerlink" href="#id144" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id149">
+<h3>Fixed<a class="headerlink" href="#id149" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>finatra-http; finatra-thrift: Slf4JBridgeModule is added by default
 and no
@@ -1775,15 +1893,15 @@ validations. <code class="docutils literal"><span class="pre">RB_ID=809821</span
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.1.4">v2.1.4</a> (2016-02-25)<a class="headerlink" href="#v2-1-4-2016-02-25" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.1.3...v2.1.4">Full
 Changelog</a></p>
-<div class="section" id="id145">
-<h3>Fixed<a class="headerlink" href="#id145" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id150">
+<h3>Fixed<a class="headerlink" href="#id150" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Some Scaladoc links are broken on twitter.github.io/finatra <a class="reference external" href="https://github.com/twitter/finatra/issues/298">Github
 Issue 298</a></li>
 </ul>
 </div>
-<div class="section" id="id146">
-<h3>Closed<a class="headerlink" href="#id146" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id151">
+<h3>Closed<a class="headerlink" href="#id151" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>LoggingMDCFilter lacks documentation <a class="reference external" href="https://github.com/twitter/finatra/issues/303">Github Issue
 303</a></li>
@@ -1798,8 +1916,8 @@ Issue 298</a></li>
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.1.3">v2.1.3</a> (2016-02-05)<a class="headerlink" href="#v2-1-3-2016-02-05" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.1.2...v2.1.3">Full
 Changelog</a></p>
-<div class="section" id="id147">
-<h3>Closed<a class="headerlink" href="#id147" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id152">
+<h3>Closed<a class="headerlink" href="#id152" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Is it possible to have different modules listen in different ports?
 <a class="reference external" href="https://github.com/twitter/finatra/issues/295">Github Issue 295</a></li>
@@ -1822,15 +1940,15 @@ Changelog</a></p>
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.1.2">v2.1.2</a> (2015-12-09)<a class="headerlink" href="#v2-1-2-2015-12-09" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.1.1...v2.1.2">Full
 Changelog</a></p>
-<div class="section" id="id148">
-<h3>Fixed<a class="headerlink" href="#id148" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id153">
+<h3>Fixed<a class="headerlink" href="#id153" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Missing Scaladoc <a class="reference external" href="https://github.com/twitter/finatra/issues/279">Github Issue
 279</a></li>
 </ul>
 </div>
-<div class="section" id="id149">
-<h3>Closed<a class="headerlink" href="#id149" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id154">
+<h3>Closed<a class="headerlink" href="#id154" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Finatra + Protobuf <a class="reference external" href="https://github.com/twitter/finatra/issues/277">Github Issue
 277</a></li>
@@ -1850,8 +1968,8 @@ cannot be cast to ch.qos.logback.classic.util.LogbackMDCAdapter
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.1.1">v2.1.1</a> (2015-10-29)<a class="headerlink" href="#v2-1-1-2015-10-29" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.1.0...v2.1.1">Full
 Changelog</a></p>
-<div class="section" id="id150">
-<h3>Closed<a class="headerlink" href="#id150" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id155">
+<h3>Closed<a class="headerlink" href="#id155" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Update Startup Test on doc <a class="reference external" href="https://github.com/twitter/finatra/issues/261">Github Issue
 261</a></li>
@@ -1887,8 +2005,8 @@ Changelog</a></p>
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.0.1">v2.0.1</a> (2015-09-21)<a class="headerlink" href="#v2-0-1-2015-09-21" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.0.0...v2.0.1">Full
 Changelog</a></p>
-<div class="section" id="id151">
-<h3>Closed<a class="headerlink" href="#id151" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id156">
+<h3>Closed<a class="headerlink" href="#id156" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Split code into packages/modules <a class="reference external" href="https://github.com/twitter/finatra/issues/254">Github Issue
 254</a></li>
@@ -1912,8 +2030,8 @@ Changelog</a></p>
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.0.0">v2.0.0</a> (2015-09-09)<a class="headerlink" href="#v2-0-0-2015-09-09" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.0.0.M2...v2.0.0">Full
 Changelog</a></p>
-<div class="section" id="id152">
-<h3>Closed<a class="headerlink" href="#id152" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id157">
+<h3>Closed<a class="headerlink" href="#id157" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Singleton classes <a class="reference external" href="https://github.com/twitter/finatra/issues/236">Github Issue
 236</a></li>
@@ -1986,8 +2104,8 @@ Issue 217</a>
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.0.0.M2">v2.0.0.M2</a> (2015-06-12)<a class="headerlink" href="#v2-0-0-m2-2015-06-12" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/v2.0.0.M1...v2.0.0.M2">Full
 Changelog</a></p>
-<div class="section" id="id153">
-<h3>Closed<a class="headerlink" href="#id153" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id158">
+<h3>Closed<a class="headerlink" href="#id158" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Issue with POST request <a class="reference external" href="https://github.com/twitter/finatra/issues/214">Github Issue
 214</a></li>
@@ -2077,8 +2195,8 @@ every class <a class="reference external" href="https://github.com/twitter/finat
 <h2><a class="reference external" href="https://github.com/twitter/finatra/tree/v2.0.0.M1">v2.0.0.M1</a> (2015-04-30)<a class="headerlink" href="#v2-0-0-m1-2015-04-30" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.6.0...v2.0.0.M1">Full
 Changelog</a></p>
-<div class="section" id="id154">
-<h3>Closed<a class="headerlink" href="#id154" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id159">
+<h3>Closed<a class="headerlink" href="#id159" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>UNRESOLVED DEPENDENCIES <a class="reference external" href="https://github.com/twitter/finatra/issues/199">Github Issue
 199</a></li>
@@ -2095,12 +2213,12 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id155">
-<h2>1.6.0<a class="headerlink" href="#id155" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id160">
+<h2>1.6.0<a class="headerlink" href="#id160" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.5.4...1.6.0">Full
 Changelog</a></p>
-<div class="section" id="id156">
-<h3>Closed<a class="headerlink" href="#id156" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id161">
+<h3>Closed<a class="headerlink" href="#id161" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Finatra 1.5.4 with finagle-stats 6.22.0 throws an exception <a class="reference external" href="https://github.com/twitter/finatra/issues/184">Github
 Issue 184</a></li>
@@ -2192,12 +2310,12 @@ an extension <a class="reference external" href="https://github.com/twitter/fina
 </ul>
 </div>
 </div>
-<div class="section" id="id157">
-<h2>1.5.4<a class="headerlink" href="#id157" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id162">
+<h2>1.5.4<a class="headerlink" href="#id162" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.5.3...1.5.4">Full
 Changelog</a></p>
-<div class="section" id="id158">
-<h3>Closed<a class="headerlink" href="#id158" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id163">
+<h3>Closed<a class="headerlink" href="#id163" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Could add support for Windows? <a class="reference external" href="https://github.com/twitter/finatra/issues/145">Github Issue
 145</a></li>
@@ -2228,12 +2346,12 @@ Issue 144</a>
 </ul>
 </div>
 </div>
-<div class="section" id="id159">
-<h2>1.5.3<a class="headerlink" href="#id159" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id164">
+<h2>1.5.3<a class="headerlink" href="#id164" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.5.2...1.5.3">Full
 Changelog</a></p>
-<div class="section" id="id160">
-<h3>Closed<a class="headerlink" href="#id160" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id165">
+<h3>Closed<a class="headerlink" href="#id165" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Response body truncated <a class="reference external" href="https://github.com/twitter/finatra/issues/120">Github Issue
 120</a></li>
@@ -2264,12 +2382,12 @@ Issue 117</a>
 </ul>
 </div>
 </div>
-<div class="section" id="id161">
-<h2>1.5.2<a class="headerlink" href="#id161" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id166">
+<h2>1.5.2<a class="headerlink" href="#id166" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.5.1...1.5.2">Full
 Changelog</a></p>
-<div class="section" id="id162">
-<h3>Closed<a class="headerlink" href="#id162" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id167">
+<h3>Closed<a class="headerlink" href="#id167" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>multipart/form-data regression <a class="reference external" href="https://github.com/twitter/finatra/issues/101">Github Issue
 101</a></li>
@@ -2290,12 +2408,12 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id163">
-<h2>1.5.1<a class="headerlink" href="#id163" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id168">
+<h2>1.5.1<a class="headerlink" href="#id168" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.5.0a...1.5.1">Full
 Changelog</a></p>
-<div class="section" id="id164">
-<h3>Closed<a class="headerlink" href="#id164" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id169">
+<h3>Closed<a class="headerlink" href="#id169" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>1.7.x <a class="reference external" href="https://github.com/twitter/finatra/issues/96">Github Issue
 96</a></li>
@@ -2331,20 +2449,20 @@ Issue 91</a></li>
 <h2>1.5.0a<a class="headerlink" href="#a" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.5.0...1.5.0a">Full
 Changelog</a></p>
-<div class="section" id="id165">
-<h3>Closed<a class="headerlink" href="#id165" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id170">
+<h3>Closed<a class="headerlink" href="#id170" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>0 deprecation/warnings <a class="reference external" href="https://github.com/twitter/finatra/issues/17">Github Issue
 17</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id166">
-<h2>1.5.0<a class="headerlink" href="#id166" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id171">
+<h2>1.5.0<a class="headerlink" href="#id171" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.4.1...1.5.0">Full
 Changelog</a></p>
-<div class="section" id="id167">
-<h3>Closed<a class="headerlink" href="#id167" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id172">
+<h3>Closed<a class="headerlink" href="#id172" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>filters for select routes only <a class="reference external" href="https://github.com/twitter/finatra/issues/85">Github Issue
 85</a></li>
@@ -2368,12 +2486,12 @@ Issue 82</a>
 </ul>
 </div>
 </div>
-<div class="section" id="id168">
-<h2>1.4.1<a class="headerlink" href="#id168" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id173">
+<h2>1.4.1<a class="headerlink" href="#id173" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.4.0...finatra-1.4.1">Full
 Changelog</a></p>
-<div class="section" id="id169">
-<h3>Closed<a class="headerlink" href="#id169" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id174">
+<h3>Closed<a class="headerlink" href="#id174" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>1.4.1 <a class="reference external" href="https://github.com/twitter/finatra/issues/72">Github Issue
 72</a></li>
@@ -2395,12 +2513,12 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id170">
-<h2>1.4.0<a class="headerlink" href="#id170" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id175">
+<h2>1.4.0<a class="headerlink" href="#id175" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.4.0...1.4.0">Full
 Changelog</a></p>
-<div class="section" id="id171">
-<h3>Closed<a class="headerlink" href="#id171" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id176">
+<h3>Closed<a class="headerlink" href="#id176" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>port back apache&#8217;s multiupload handler <a class="reference external" href="https://github.com/twitter/finatra/issues/43">Github Issue
 43</a></li>
@@ -2413,32 +2531,32 @@ Issue 42</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id172">
-<h2>1.4.0<a class="headerlink" href="#id172" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id177">
+<h2>1.4.0<a class="headerlink" href="#id177" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.3.9...finatra-1.4.0">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id173">
-<h2>1.3.9<a class="headerlink" href="#id173" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id178">
+<h2>1.3.9<a class="headerlink" href="#id178" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.9...1.3.9">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id174">
-<h2>1.3.9<a class="headerlink" href="#id174" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id179">
+<h2>1.3.9<a class="headerlink" href="#id179" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.3.8...finatra-1.3.9">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id175">
-<h2>1.3.8<a class="headerlink" href="#id175" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id180">
+<h2>1.3.8<a class="headerlink" href="#id180" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.8...1.3.8">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id176">
-<h2>1.3.8<a class="headerlink" href="#id176" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id181">
+<h2>1.3.8<a class="headerlink" href="#id181" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/1.3.7...finatra-1.3.8">Full
 Changelog</a></p>
-<div class="section" id="id177">
-<h3>Closed<a class="headerlink" href="#id177" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id182">
+<h3>Closed<a class="headerlink" href="#id182" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Make mustache factory use baseTemplatePath local docroot and template
 path <a class="reference external" href="https://github.com/twitter/finatra/issues/56">Github Issue
@@ -2453,22 +2571,22 @@ mustacheFactory <a class="reference external" href="https://github.com/twitter/f
 </ul>
 </div>
 </div>
-<div class="section" id="id178">
-<h2>1.3.7<a class="headerlink" href="#id178" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id183">
+<h2>1.3.7<a class="headerlink" href="#id183" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.7...1.3.7">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id179">
-<h2>1.3.7<a class="headerlink" href="#id179" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id184">
+<h2>1.3.7<a class="headerlink" href="#id184" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.4...finatra-1.3.7">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id180">
-<h2>1.3.4<a class="headerlink" href="#id180" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id185">
+<h2>1.3.4<a class="headerlink" href="#id185" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.3...finatra-1.3.4">Full
 Changelog</a></p>
-<div class="section" id="id181">
-<h3>Closed<a class="headerlink" href="#id181" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id186">
+<h3>Closed<a class="headerlink" href="#id186" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>handle param routing for static file handling <a class="reference external" href="https://github.com/twitter/finatra/issues/55">Github Issue
 55</a></li>
@@ -2496,8 +2614,8 @@ from any other action without a redirect <a class="reference external" href="htt
 </ul>
 </div>
 </div>
-<div class="section" id="id182">
-<h2>1.3.3<a class="headerlink" href="#id182" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id187">
+<h2>1.3.3<a class="headerlink" href="#id187" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.2...finatra-1.3.3">Full
 Changelog</a></p>
 <p><strong>Merged pull requests:</strong></p>
@@ -2507,8 +2625,8 @@ Changelog</a></p>
 (<a class="reference external" href="https://github.com/bmdhacks">bmdhacks</a>)</li>
 </ul>
 </div>
-<div class="section" id="id183">
-<h2>1.3.2<a class="headerlink" href="#id183" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id188">
+<h2>1.3.2<a class="headerlink" href="#id188" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.1...finatra-1.3.2">Full
 Changelog</a></p>
 <p><strong>Merged pull requests:</strong></p>
@@ -2521,29 +2639,29 @@ Changelog</a></p>
 (<a class="reference external" href="https://github.com/sprsquish">sprsquish</a>)</li>
 </ul>
 </div>
-<div class="section" id="id184">
-<h2>1.3.1<a class="headerlink" href="#id184" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id189">
+<h2>1.3.1<a class="headerlink" href="#id189" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.3.0...finatra-1.3.1">Full
 Changelog</a></p>
-<div class="section" id="id185">
-<h3>Closed<a class="headerlink" href="#id185" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id190">
+<h3>Closed<a class="headerlink" href="#id190" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>./finatra update-readme no longer works <a class="reference external" href="https://github.com/twitter/finatra/issues/34">Github Issue
 34</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id186">
-<h2>1.3.0<a class="headerlink" href="#id186" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id191">
+<h2>1.3.0<a class="headerlink" href="#id191" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.2.2...finatra-1.3.0">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id187">
-<h2>1.2.2<a class="headerlink" href="#id187" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id192">
+<h2>1.2.2<a class="headerlink" href="#id192" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.2.0...finatra-1.2.2">Full
 Changelog</a></p>
-<div class="section" id="id188">
-<h3>Closed<a class="headerlink" href="#id188" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id193">
+<h3>Closed<a class="headerlink" href="#id193" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>./finatra generator doesnt work on linux <a class="reference external" href="https://github.com/twitter/finatra/issues/24">Github Issue
 24</a></li>
@@ -2563,17 +2681,17 @@ development mode. <a class="reference external" href="https://github.com/twitter
 </ul>
 </div>
 </div>
-<div class="section" id="id189">
-<h2>1.2.0<a class="headerlink" href="#id189" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id194">
+<h2>1.2.0<a class="headerlink" href="#id194" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.1.1...finatra-1.2.0">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id190">
-<h2>1.1.1<a class="headerlink" href="#id190" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id195">
+<h2>1.1.1<a class="headerlink" href="#id195" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.1.0...finatra-1.1.1">Full
 Changelog</a></p>
-<div class="section" id="id191">
-<h3>Closed<a class="headerlink" href="#id191" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id196">
+<h3>Closed<a class="headerlink" href="#id196" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Custom error handlers <a class="reference external" href="https://github.com/twitter/finatra/issues/29">Github Issue
 29</a></li>
@@ -2586,41 +2704,41 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id192">
-<h2>1.1.0<a class="headerlink" href="#id192" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id197">
+<h2>1.1.0<a class="headerlink" href="#id197" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.0.3...finatra-1.1.0">Full
 Changelog</a></p>
-<div class="section" id="id193">
-<h3>Closed<a class="headerlink" href="#id193" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id198">
+<h3>Closed<a class="headerlink" href="#id198" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Publish to Maven Central <a class="reference external" href="https://github.com/twitter/finatra/issues/23">Github Issue
 23</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id194">
-<h2>1.0.3<a class="headerlink" href="#id194" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id199">
+<h2>1.0.3<a class="headerlink" href="#id199" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.0.2...finatra-1.0.3">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id195">
-<h2>1.0.2<a class="headerlink" href="#id195" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id200">
+<h2>1.0.2<a class="headerlink" href="#id200" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.0.1...finatra-1.0.2">Full
 Changelog</a></p>
-<div class="section" id="id196">
-<h3>Closed<a class="headerlink" href="#id196" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id201">
+<h3>Closed<a class="headerlink" href="#id201" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Serve static files <a class="reference external" href="https://github.com/twitter/finatra/issues/28">Github Issue
 28</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id197">
-<h2>1.0.1<a class="headerlink" href="#id197" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id202">
+<h2>1.0.1<a class="headerlink" href="#id202" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-1.0.0...finatra-1.0.1">Full
 Changelog</a></p>
-<div class="section" id="id198">
-<h3>Closed<a class="headerlink" href="#id198" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id203">
+<h3>Closed<a class="headerlink" href="#id203" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>Unable to retrieve post parameters <a class="reference external" href="https://github.com/twitter/finatra/issues/26">Github Issue
 26</a></li>
@@ -2636,24 +2754,24 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id199">
-<h2>1.0.0<a class="headerlink" href="#id199" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id204">
+<h2>1.0.0<a class="headerlink" href="#id204" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.3.4...finatra-1.0.0">Full
 Changelog</a></p>
-<div class="section" id="id200">
-<h3>Closed<a class="headerlink" href="#id200" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id205">
+<h3>Closed<a class="headerlink" href="#id205" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>an config <a class="reference external" href="https://github.com/twitter/finatra/issues/12">Github Issue
 12</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id201">
-<h2>0.3.4<a class="headerlink" href="#id201" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id206">
+<h2>0.3.4<a class="headerlink" href="#id206" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.3.3...finatra-0.3.4">Full
 Changelog</a></p>
-<div class="section" id="id202">
-<h3>Closed<a class="headerlink" href="#id202" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id207">
+<h3>Closed<a class="headerlink" href="#id207" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>do a perf review <a class="reference external" href="https://github.com/twitter/finatra/issues/13">Github Issue
 13</a></li>
@@ -2662,17 +2780,17 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id203">
-<h2>0.3.3<a class="headerlink" href="#id203" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id208">
+<h2>0.3.3<a class="headerlink" href="#id208" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.3.2...finatra-0.3.3">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id204">
-<h2>0.3.2<a class="headerlink" href="#id204" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id209">
+<h2>0.3.2<a class="headerlink" href="#id209" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.2.4...finatra-0.3.2">Full
 Changelog</a></p>
-<div class="section" id="id205">
-<h3>Closed<a class="headerlink" href="#id205" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id210">
+<h3>Closed<a class="headerlink" href="#id210" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>allow insertion of userland filters into the finagle stack <a class="reference external" href="https://github.com/twitter/finatra/issues/15">Github
 Issue 15</a></li>
@@ -2681,8 +2799,8 @@ Issue 15</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id206">
-<h2>0.2.4<a class="headerlink" href="#id206" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id211">
+<h2>0.2.4<a class="headerlink" href="#id211" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.2.3...finatra-0.2.4">Full
 Changelog</a></p>
 <p><strong>Merged pull requests:</strong></p>
@@ -2692,8 +2810,8 @@ Changelog</a></p>
 (<a class="reference external" href="https://github.com/franklinhu">franklinhu</a>)</li>
 </ul>
 </div>
-<div class="section" id="id207">
-<h2>0.2.3<a class="headerlink" href="#id207" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id212">
+<h2>0.2.3<a class="headerlink" href="#id212" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.2.1...finatra-0.2.3">Full
 Changelog</a></p>
 <p><strong>Merged pull requests:</strong></p>
@@ -2703,8 +2821,8 @@ Changelog</a></p>
 (<a class="reference external" href="https://github.com/franklinhu">franklinhu</a>)</li>
 </ul>
 </div>
-<div class="section" id="id208">
-<h2>0.2.1<a class="headerlink" href="#id208" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id213">
+<h2>0.2.1<a class="headerlink" href="#id213" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.2.0...finatra-0.2.1">Full
 Changelog</a></p>
 <p><strong>Merged pull requests:</strong></p>
@@ -2714,12 +2832,12 @@ Changelog</a></p>
 (<a class="reference external" href="https://github.com/franklinhu">franklinhu</a>)</li>
 </ul>
 </div>
-<div class="section" id="id209">
-<h2>0.2.0<a class="headerlink" href="#id209" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id214">
+<h2>0.2.0<a class="headerlink" href="#id214" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.10...finatra-0.2.0">Full
 Changelog</a></p>
-<div class="section" id="id210">
-<h3>Closed<a class="headerlink" href="#id210" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id215">
+<h3>Closed<a class="headerlink" href="#id215" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>regexed routes <a class="reference external" href="https://github.com/twitter/finatra/issues/11">Github Issue
 11</a></li>
@@ -2734,22 +2852,22 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id211">
-<h2>0.1.10<a class="headerlink" href="#id211" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id216">
+<h2>0.1.10<a class="headerlink" href="#id216" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.9...finatra-0.1.10">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id212">
-<h2>0.1.9<a class="headerlink" href="#id212" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id217">
+<h2>0.1.9<a class="headerlink" href="#id217" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.8...finatra-0.1.9">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id213">
-<h2>0.1.8<a class="headerlink" href="#id213" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id218">
+<h2>0.1.8<a class="headerlink" href="#id218" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.7...finatra-0.1.8">Full
 Changelog</a></p>
-<div class="section" id="id214">
-<h3>Closed<a class="headerlink" href="#id214" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id219">
+<h3>Closed<a class="headerlink" href="#id219" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>mvn package doesnt fully package <a class="reference external" href="https://github.com/twitter/finatra/issues/16">Github Issue
 16</a></li>
@@ -2760,64 +2878,64 @@ Changelog</a></p>
 </ul>
 </div>
 </div>
-<div class="section" id="id215">
-<h2>0.1.7<a class="headerlink" href="#id215" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id220">
+<h2>0.1.7<a class="headerlink" href="#id220" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.6...finatra-0.1.7">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id216">
-<h2>0.1.6<a class="headerlink" href="#id216" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id221">
+<h2>0.1.6<a class="headerlink" href="#id221" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.5...finatra-0.1.6">Full
 Changelog</a></p>
-<div class="section" id="id217">
-<h3>Closed<a class="headerlink" href="#id217" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id222">
+<h3>Closed<a class="headerlink" href="#id222" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>unbreak file upload/form support <a class="reference external" href="https://github.com/twitter/finatra/issues/10">Github Issue
 10</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id218">
-<h2>0.1.5<a class="headerlink" href="#id218" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id223">
+<h2>0.1.5<a class="headerlink" href="#id223" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.3...finatra-0.1.5">Full
 Changelog</a></p>
-<div class="section" id="id219">
-<h3>Closed<a class="headerlink" href="#id219" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id224">
+<h3>Closed<a class="headerlink" href="#id224" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>add logging <a class="reference external" href="https://github.com/twitter/finatra/issues/4">Github Issue
 4</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id220">
-<h2>0.1.3<a class="headerlink" href="#id220" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id225">
+<h2>0.1.3<a class="headerlink" href="#id225" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.2...finatra-0.1.3">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id221">
-<h2>0.1.2<a class="headerlink" href="#id221" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id226">
+<h2>0.1.2<a class="headerlink" href="#id226" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.1...finatra-0.1.2">Full
 Changelog</a></p>
-<div class="section" id="id222">
-<h3>Closed<a class="headerlink" href="#id222" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id227">
+<h3>Closed<a class="headerlink" href="#id227" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>unbreak cookie support <a class="reference external" href="https://github.com/twitter/finatra/issues/9">Github Issue
 9</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="id223">
-<h2>0.1.1<a class="headerlink" href="#id223" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id228">
+<h2>0.1.1<a class="headerlink" href="#id228" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.1.0...finatra-0.1.1">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id224">
-<h2>0.1.0<a class="headerlink" href="#id224" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id229">
+<h2>0.1.0<a class="headerlink" href="#id229" title="Permalink to this headline">¶</a></h2>
 <p><a class="reference external" href="https://github.com/twitter/finatra/compare/finatra-0.0.1...finatra-0.1.0">Full
 Changelog</a></p>
 </div>
-<div class="section" id="id225">
-<h2>0.0.1<a class="headerlink" href="#id225" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id230">
+<h2>0.0.1<a class="headerlink" href="#id230" title="Permalink to this headline">¶</a></h2>
 <p><strong>Merged pull requests:</strong></p>
 <ul class="simple">
 <li>Fix synchronization/correctness issues <a class="reference external" href="https://github.com/twitter/finatra/pull/3">Github Issue
@@ -2856,372 +2974,379 @@ Changelog</a></p>
   <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
 <li><a class="reference internal" href="#unreleased">Unreleased</a></li>
-<li><a class="reference internal" href="#id1">18.12.0</a><ul>
+<li><a class="reference internal" href="#id1">19.1.0</a><ul>
 <li><a class="reference internal" href="#added">Added</a></li>
 <li><a class="reference internal" href="#changed">Changed</a></li>
 <li><a class="reference internal" href="#fixed">Fixed</a></li>
 <li><a class="reference internal" href="#closed">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">18.11.0</a><ul>
+<li><a class="reference internal" href="#id2">18.12.0</a><ul>
 <li><a class="reference internal" href="#id3">Added</a></li>
 <li><a class="reference internal" href="#id4">Changed</a></li>
 <li><a class="reference internal" href="#id5">Fixed</a></li>
 <li><a class="reference internal" href="#id6">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id7">18.10.0</a><ul>
+<li><a class="reference internal" href="#id7">18.11.0</a><ul>
 <li><a class="reference internal" href="#id8">Added</a></li>
 <li><a class="reference internal" href="#id9">Changed</a></li>
 <li><a class="reference internal" href="#id10">Fixed</a></li>
 <li><a class="reference internal" href="#id11">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id12">18.9.1</a><ul>
+<li><a class="reference internal" href="#id12">18.10.0</a><ul>
 <li><a class="reference internal" href="#id13">Added</a></li>
 <li><a class="reference internal" href="#id14">Changed</a></li>
 <li><a class="reference internal" href="#id15">Fixed</a></li>
 <li><a class="reference internal" href="#id16">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id17">18.9.0</a><ul>
+<li><a class="reference internal" href="#id17">18.9.1</a><ul>
 <li><a class="reference internal" href="#id18">Added</a></li>
 <li><a class="reference internal" href="#id19">Changed</a></li>
 <li><a class="reference internal" href="#id20">Fixed</a></li>
 <li><a class="reference internal" href="#id21">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id22">18.8.0</a><ul>
+<li><a class="reference internal" href="#id22">18.9.0</a><ul>
 <li><a class="reference internal" href="#id23">Added</a></li>
 <li><a class="reference internal" href="#id24">Changed</a></li>
 <li><a class="reference internal" href="#id25">Fixed</a></li>
 <li><a class="reference internal" href="#id26">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id27">18.7.0</a><ul>
+<li><a class="reference internal" href="#id27">18.8.0</a><ul>
 <li><a class="reference internal" href="#id28">Added</a></li>
 <li><a class="reference internal" href="#id29">Changed</a></li>
 <li><a class="reference internal" href="#id30">Fixed</a></li>
 <li><a class="reference internal" href="#id31">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id32">18.6.0</a><ul>
+<li><a class="reference internal" href="#id32">18.7.0</a><ul>
 <li><a class="reference internal" href="#id33">Added</a></li>
 <li><a class="reference internal" href="#id34">Changed</a></li>
 <li><a class="reference internal" href="#id35">Fixed</a></li>
 <li><a class="reference internal" href="#id36">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id37">18.5.0</a><ul>
+<li><a class="reference internal" href="#id37">18.6.0</a><ul>
 <li><a class="reference internal" href="#id38">Added</a></li>
 <li><a class="reference internal" href="#id39">Changed</a></li>
 <li><a class="reference internal" href="#id40">Fixed</a></li>
 <li><a class="reference internal" href="#id41">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id42">18.4.0</a><ul>
+<li><a class="reference internal" href="#id42">18.5.0</a><ul>
 <li><a class="reference internal" href="#id43">Added</a></li>
 <li><a class="reference internal" href="#id44">Changed</a></li>
 <li><a class="reference internal" href="#id45">Fixed</a></li>
 <li><a class="reference internal" href="#id46">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id47">18.3.0</a><ul>
+<li><a class="reference internal" href="#id47">18.4.0</a><ul>
 <li><a class="reference internal" href="#id48">Added</a></li>
 <li><a class="reference internal" href="#id49">Changed</a></li>
 <li><a class="reference internal" href="#id50">Fixed</a></li>
 <li><a class="reference internal" href="#id51">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id52">18.2.0</a><ul>
+<li><a class="reference internal" href="#id52">18.3.0</a><ul>
 <li><a class="reference internal" href="#id53">Added</a></li>
 <li><a class="reference internal" href="#id54">Changed</a></li>
 <li><a class="reference internal" href="#id55">Fixed</a></li>
 <li><a class="reference internal" href="#id56">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id57">18.1.0</a><ul>
+<li><a class="reference internal" href="#id57">18.2.0</a><ul>
 <li><a class="reference internal" href="#id58">Added</a></li>
 <li><a class="reference internal" href="#id59">Changed</a></li>
 <li><a class="reference internal" href="#id60">Fixed</a></li>
 <li><a class="reference internal" href="#id61">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id62">17.12.0</a><ul>
+<li><a class="reference internal" href="#id62">18.1.0</a><ul>
 <li><a class="reference internal" href="#id63">Added</a></li>
 <li><a class="reference internal" href="#id64">Changed</a></li>
 <li><a class="reference internal" href="#id65">Fixed</a></li>
 <li><a class="reference internal" href="#id66">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id67">17.11.0</a><ul>
+<li><a class="reference internal" href="#id67">17.12.0</a><ul>
 <li><a class="reference internal" href="#id68">Added</a></li>
 <li><a class="reference internal" href="#id69">Changed</a></li>
 <li><a class="reference internal" href="#id70">Fixed</a></li>
 <li><a class="reference internal" href="#id71">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id72">17.10.0</a><ul>
+<li><a class="reference internal" href="#id72">17.11.0</a><ul>
 <li><a class="reference internal" href="#id73">Added</a></li>
 <li><a class="reference internal" href="#id74">Changed</a></li>
 <li><a class="reference internal" href="#id75">Fixed</a></li>
 <li><a class="reference internal" href="#id76">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id77">2.13.0</a><ul>
+<li><a class="reference internal" href="#id77">17.10.0</a><ul>
 <li><a class="reference internal" href="#id78">Added</a></li>
 <li><a class="reference internal" href="#id79">Changed</a></li>
 <li><a class="reference internal" href="#id80">Fixed</a></li>
 <li><a class="reference internal" href="#id81">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id82">2.12.0</a><ul>
+<li><a class="reference internal" href="#id82">2.13.0</a><ul>
 <li><a class="reference internal" href="#id83">Added</a></li>
 <li><a class="reference internal" href="#id84">Changed</a></li>
 <li><a class="reference internal" href="#id85">Fixed</a></li>
 <li><a class="reference internal" href="#id86">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id87">2.11.0</a><ul>
+<li><a class="reference internal" href="#id87">2.12.0</a><ul>
 <li><a class="reference internal" href="#id88">Added</a></li>
 <li><a class="reference internal" href="#id89">Changed</a></li>
 <li><a class="reference internal" href="#id90">Fixed</a></li>
 <li><a class="reference internal" href="#id91">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id92">2.10.0</a><ul>
+<li><a class="reference internal" href="#id92">2.11.0</a><ul>
 <li><a class="reference internal" href="#id93">Added</a></li>
 <li><a class="reference internal" href="#id94">Changed</a></li>
 <li><a class="reference internal" href="#id95">Fixed</a></li>
 <li><a class="reference internal" href="#id96">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id97">2.9.0</a><ul>
+<li><a class="reference internal" href="#id97">2.10.0</a><ul>
 <li><a class="reference internal" href="#id98">Added</a></li>
 <li><a class="reference internal" href="#id99">Changed</a></li>
 <li><a class="reference internal" href="#id100">Fixed</a></li>
 <li><a class="reference internal" href="#id101">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id102">2.8.0</a><ul>
+<li><a class="reference internal" href="#id102">2.9.0</a><ul>
 <li><a class="reference internal" href="#id103">Added</a></li>
 <li><a class="reference internal" href="#id104">Changed</a></li>
 <li><a class="reference internal" href="#id105">Fixed</a></li>
 <li><a class="reference internal" href="#id106">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id107">2.7.0</a><ul>
+<li><a class="reference internal" href="#id107">2.8.0</a><ul>
 <li><a class="reference internal" href="#id108">Added</a></li>
 <li><a class="reference internal" href="#id109">Changed</a></li>
 <li><a class="reference internal" href="#id110">Fixed</a></li>
 <li><a class="reference internal" href="#id111">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id112">2.6.0</a><ul>
+<li><a class="reference internal" href="#id112">2.7.0</a><ul>
 <li><a class="reference internal" href="#id113">Added</a></li>
 <li><a class="reference internal" href="#id114">Changed</a></li>
 <li><a class="reference internal" href="#id115">Fixed</a></li>
 <li><a class="reference internal" href="#id116">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id117">2.5.0</a><ul>
+<li><a class="reference internal" href="#id117">2.6.0</a><ul>
 <li><a class="reference internal" href="#id118">Added</a></li>
 <li><a class="reference internal" href="#id119">Changed</a></li>
 <li><a class="reference internal" href="#id120">Fixed</a></li>
 <li><a class="reference internal" href="#id121">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id122">2.4.0</a><ul>
+<li><a class="reference internal" href="#id122">2.5.0</a><ul>
 <li><a class="reference internal" href="#id123">Added</a></li>
 <li><a class="reference internal" href="#id124">Changed</a></li>
 <li><a class="reference internal" href="#id125">Fixed</a></li>
 <li><a class="reference internal" href="#id126">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id127">2.3.0</a><ul>
+<li><a class="reference internal" href="#id127">2.4.0</a><ul>
 <li><a class="reference internal" href="#id128">Added</a></li>
 <li><a class="reference internal" href="#id129">Changed</a></li>
 <li><a class="reference internal" href="#id130">Fixed</a></li>
 <li><a class="reference internal" href="#id131">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id132">2.2.0</a><ul>
+<li><a class="reference internal" href="#id132">2.3.0</a><ul>
 <li><a class="reference internal" href="#id133">Added</a></li>
 <li><a class="reference internal" href="#id134">Changed</a></li>
 <li><a class="reference internal" href="#id135">Fixed</a></li>
 <li><a class="reference internal" href="#id136">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id137">2.1.6</a><ul>
+<li><a class="reference internal" href="#id137">2.2.0</a><ul>
 <li><a class="reference internal" href="#id138">Added</a></li>
 <li><a class="reference internal" href="#id139">Changed</a></li>
 <li><a class="reference internal" href="#id140">Fixed</a></li>
 <li><a class="reference internal" href="#id141">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#v2-1-5-2016-03-15">v2.1.5 (2016-03-15)</a><ul>
-<li><a class="reference internal" href="#id142">Added</a></li>
-<li><a class="reference internal" href="#id143">Changed</a></li>
-<li><a class="reference internal" href="#id144">Fixed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v2-1-4-2016-02-25">v2.1.4 (2016-02-25)</a><ul>
+<li><a class="reference internal" href="#id142">2.1.6</a><ul>
+<li><a class="reference internal" href="#id143">Added</a></li>
+<li><a class="reference internal" href="#id144">Changed</a></li>
 <li><a class="reference internal" href="#id145">Fixed</a></li>
 <li><a class="reference internal" href="#id146">Closed</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#v2-1-5-2016-03-15">v2.1.5 (2016-03-15)</a><ul>
+<li><a class="reference internal" href="#id147">Added</a></li>
+<li><a class="reference internal" href="#id148">Changed</a></li>
+<li><a class="reference internal" href="#id149">Fixed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#v2-1-4-2016-02-25">v2.1.4 (2016-02-25)</a><ul>
+<li><a class="reference internal" href="#id150">Fixed</a></li>
+<li><a class="reference internal" href="#id151">Closed</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#v2-1-3-2016-02-05">v2.1.3 (2016-02-05)</a><ul>
-<li><a class="reference internal" href="#id147">Closed</a></li>
+<li><a class="reference internal" href="#id152">Closed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#v2-1-2-2015-12-09">v2.1.2 (2015-12-09)</a><ul>
-<li><a class="reference internal" href="#id148">Fixed</a></li>
-<li><a class="reference internal" href="#id149">Closed</a></li>
+<li><a class="reference internal" href="#id153">Fixed</a></li>
+<li><a class="reference internal" href="#id154">Closed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#v2-1-1-2015-10-29">v2.1.1 (2015-10-29)</a><ul>
-<li><a class="reference internal" href="#id150">Closed</a></li>
+<li><a class="reference internal" href="#id155">Closed</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#v2-1-0-2015-10-01">v2.1.0 (2015-10-01)</a></li>
 <li><a class="reference internal" href="#v2-0-1-2015-09-21">v2.0.1 (2015-09-21)</a><ul>
-<li><a class="reference internal" href="#id151">Closed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v2-0-0-2015-09-09">v2.0.0 (2015-09-09)</a><ul>
-<li><a class="reference internal" href="#id152">Closed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v2-0-0-m2-2015-06-12">v2.0.0.M2 (2015-06-12)</a><ul>
-<li><a class="reference internal" href="#id153">Closed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v2-0-0-m1-2015-04-30">v2.0.0.M1 (2015-04-30)</a><ul>
-<li><a class="reference internal" href="#id154">Closed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id155">1.6.0</a><ul>
 <li><a class="reference internal" href="#id156">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id157">1.5.4</a><ul>
+<li><a class="reference internal" href="#v2-0-0-2015-09-09">v2.0.0 (2015-09-09)</a><ul>
+<li><a class="reference internal" href="#id157">Closed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#v2-0-0-m2-2015-06-12">v2.0.0.M2 (2015-06-12)</a><ul>
 <li><a class="reference internal" href="#id158">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id159">1.5.3</a><ul>
-<li><a class="reference internal" href="#id160">Closed</a></li>
+<li><a class="reference internal" href="#v2-0-0-m1-2015-04-30">v2.0.0.M1 (2015-04-30)</a><ul>
+<li><a class="reference internal" href="#id159">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id161">1.5.2</a><ul>
-<li><a class="reference internal" href="#id162">Closed</a></li>
+<li><a class="reference internal" href="#id160">1.6.0</a><ul>
+<li><a class="reference internal" href="#id161">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id163">1.5.1</a><ul>
-<li><a class="reference internal" href="#id164">Closed</a></li>
+<li><a class="reference internal" href="#id162">1.5.4</a><ul>
+<li><a class="reference internal" href="#id163">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#a">1.5.0a</a><ul>
+<li><a class="reference internal" href="#id164">1.5.3</a><ul>
 <li><a class="reference internal" href="#id165">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id166">1.5.0</a><ul>
+<li><a class="reference internal" href="#id166">1.5.2</a><ul>
 <li><a class="reference internal" href="#id167">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id168">1.4.1</a><ul>
+<li><a class="reference internal" href="#id168">1.5.1</a><ul>
 <li><a class="reference internal" href="#id169">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id170">1.4.0</a><ul>
-<li><a class="reference internal" href="#id171">Closed</a></li>
+<li><a class="reference internal" href="#a">1.5.0a</a><ul>
+<li><a class="reference internal" href="#id170">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id172">1.4.0</a></li>
-<li><a class="reference internal" href="#id173">1.3.9</a></li>
-<li><a class="reference internal" href="#id174">1.3.9</a></li>
-<li><a class="reference internal" href="#id175">1.3.8</a></li>
-<li><a class="reference internal" href="#id176">1.3.8</a><ul>
-<li><a class="reference internal" href="#id177">Closed</a></li>
+<li><a class="reference internal" href="#id171">1.5.0</a><ul>
+<li><a class="reference internal" href="#id172">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id178">1.3.7</a></li>
-<li><a class="reference internal" href="#id179">1.3.7</a></li>
-<li><a class="reference internal" href="#id180">1.3.4</a><ul>
-<li><a class="reference internal" href="#id181">Closed</a></li>
+<li><a class="reference internal" href="#id173">1.4.1</a><ul>
+<li><a class="reference internal" href="#id174">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id182">1.3.3</a></li>
-<li><a class="reference internal" href="#id183">1.3.2</a></li>
-<li><a class="reference internal" href="#id184">1.3.1</a><ul>
-<li><a class="reference internal" href="#id185">Closed</a></li>
+<li><a class="reference internal" href="#id175">1.4.0</a><ul>
+<li><a class="reference internal" href="#id176">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id186">1.3.0</a></li>
-<li><a class="reference internal" href="#id187">1.2.2</a><ul>
-<li><a class="reference internal" href="#id188">Closed</a></li>
+<li><a class="reference internal" href="#id177">1.4.0</a></li>
+<li><a class="reference internal" href="#id178">1.3.9</a></li>
+<li><a class="reference internal" href="#id179">1.3.9</a></li>
+<li><a class="reference internal" href="#id180">1.3.8</a></li>
+<li><a class="reference internal" href="#id181">1.3.8</a><ul>
+<li><a class="reference internal" href="#id182">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id189">1.2.0</a></li>
-<li><a class="reference internal" href="#id190">1.1.1</a><ul>
-<li><a class="reference internal" href="#id191">Closed</a></li>
+<li><a class="reference internal" href="#id183">1.3.7</a></li>
+<li><a class="reference internal" href="#id184">1.3.7</a></li>
+<li><a class="reference internal" href="#id185">1.3.4</a><ul>
+<li><a class="reference internal" href="#id186">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id192">1.1.0</a><ul>
+<li><a class="reference internal" href="#id187">1.3.3</a></li>
+<li><a class="reference internal" href="#id188">1.3.2</a></li>
+<li><a class="reference internal" href="#id189">1.3.1</a><ul>
+<li><a class="reference internal" href="#id190">Closed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id191">1.3.0</a></li>
+<li><a class="reference internal" href="#id192">1.2.2</a><ul>
 <li><a class="reference internal" href="#id193">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id194">1.0.3</a></li>
-<li><a class="reference internal" href="#id195">1.0.2</a><ul>
+<li><a class="reference internal" href="#id194">1.2.0</a></li>
+<li><a class="reference internal" href="#id195">1.1.1</a><ul>
 <li><a class="reference internal" href="#id196">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id197">1.0.1</a><ul>
+<li><a class="reference internal" href="#id197">1.1.0</a><ul>
 <li><a class="reference internal" href="#id198">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id199">1.0.0</a><ul>
-<li><a class="reference internal" href="#id200">Closed</a></li>
+<li><a class="reference internal" href="#id199">1.0.3</a></li>
+<li><a class="reference internal" href="#id200">1.0.2</a><ul>
+<li><a class="reference internal" href="#id201">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id201">0.3.4</a><ul>
-<li><a class="reference internal" href="#id202">Closed</a></li>
+<li><a class="reference internal" href="#id202">1.0.1</a><ul>
+<li><a class="reference internal" href="#id203">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id203">0.3.3</a></li>
-<li><a class="reference internal" href="#id204">0.3.2</a><ul>
+<li><a class="reference internal" href="#id204">1.0.0</a><ul>
 <li><a class="reference internal" href="#id205">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id206">0.2.4</a></li>
-<li><a class="reference internal" href="#id207">0.2.3</a></li>
-<li><a class="reference internal" href="#id208">0.2.1</a></li>
-<li><a class="reference internal" href="#id209">0.2.0</a><ul>
+<li><a class="reference internal" href="#id206">0.3.4</a><ul>
+<li><a class="reference internal" href="#id207">Closed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id208">0.3.3</a></li>
+<li><a class="reference internal" href="#id209">0.3.2</a><ul>
 <li><a class="reference internal" href="#id210">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id211">0.1.10</a></li>
-<li><a class="reference internal" href="#id212">0.1.9</a></li>
-<li><a class="reference internal" href="#id213">0.1.8</a><ul>
-<li><a class="reference internal" href="#id214">Closed</a></li>
+<li><a class="reference internal" href="#id211">0.2.4</a></li>
+<li><a class="reference internal" href="#id212">0.2.3</a></li>
+<li><a class="reference internal" href="#id213">0.2.1</a></li>
+<li><a class="reference internal" href="#id214">0.2.0</a><ul>
+<li><a class="reference internal" href="#id215">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id215">0.1.7</a></li>
-<li><a class="reference internal" href="#id216">0.1.6</a><ul>
-<li><a class="reference internal" href="#id217">Closed</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#id218">0.1.5</a><ul>
+<li><a class="reference internal" href="#id216">0.1.10</a></li>
+<li><a class="reference internal" href="#id217">0.1.9</a></li>
+<li><a class="reference internal" href="#id218">0.1.8</a><ul>
 <li><a class="reference internal" href="#id219">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id220">0.1.3</a></li>
-<li><a class="reference internal" href="#id221">0.1.2</a><ul>
+<li><a class="reference internal" href="#id220">0.1.7</a></li>
+<li><a class="reference internal" href="#id221">0.1.6</a><ul>
 <li><a class="reference internal" href="#id222">Closed</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id223">0.1.1</a></li>
-<li><a class="reference internal" href="#id224">0.1.0</a></li>
-<li><a class="reference internal" href="#id225">0.0.1</a></li>
+<li><a class="reference internal" href="#id223">0.1.5</a><ul>
+<li><a class="reference internal" href="#id224">Closed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id225">0.1.3</a></li>
+<li><a class="reference internal" href="#id226">0.1.2</a><ul>
+<li><a class="reference internal" href="#id227">Closed</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id228">0.1.1</a></li>
+<li><a class="reference internal" href="#id229">0.1.0</a></li>
+<li><a class="reference internal" href="#id230">0.0.1</a></li>
 </ul>
 </li>
 </ul>
@@ -3253,7 +3378,7 @@ Changelog</a></p>
   
 
   <div class="footer">
-    &copy; Copyright 2013-2018 Twitter, Inc.
+    &copy; Copyright 2013-2019 Twitter, Inc.
     Created using <a href="http://sphinx.pocoo.org/">Sphinx</div>
   
   </body>

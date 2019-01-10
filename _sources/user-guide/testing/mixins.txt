@@ -11,12 +11,6 @@ You can use this ScalaTest test style by extending either:
 -  |c.t.inject.IntegrationTest|_
 -  |c.t.inject.server.FeatureTest|_
 
-There are also deprecated versions which mix-in the `WordSpec <http://doc.scalatest.org/3.0.0/#org.scalatest.WordSpec>`__ testing style:
-
--  `c.t.inject.WordSpecTest`
--  `c.t.inject.WordSpecIntegrationTest`
--  `c.t.inject.server.WordSpecFeatureTest`
-
 However, you are free to choose a ScalaTest testing style that suits your team by using the test mixin companion classes directly and mix in your preferred ScalaTest style:
 
 -  |c.t.inject.TestMixin|_

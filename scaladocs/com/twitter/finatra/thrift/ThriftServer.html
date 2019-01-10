@@ -165,22 +165,6 @@
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
-    </li><li name="com.twitter.finatra.thrift.internal" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="internal"></a><a id="internal:internal"></a>
-      <span class="permalink">
-      <a href="../../../../com/twitter/finatra/thrift/index.html#internal" title="Permalink">
-        <i class="material-icons"></i>
-      </a>
-    </span>
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">package</span>
-      </span>
-      <span class="symbol">
-        <a title="" href="internal/index.html"><span class="name">internal</span></a>
-      </span>
-      
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="index.html" class="extype" name="com.twitter.finatra.thrift">thrift</a></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.modules" visbl="pub" class="indented5 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="modules"></a><a id="modules:modules"></a>
       <span class="permalink">
@@ -271,7 +255,7 @@
                         <a href="AbstractThriftServer.html" title="AbstractThriftServer for usage from Java or with generated Java code">AbstractThriftServer</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
-                        <a class="trait" href="Controller.html" title=""></a>
+                        <a class="class" href="Controller.html" title=""></a>
                         <a href="Controller.html" title="">Controller</a>
                       </li><li class="current-entities indented4">
                         <span class="separator"></span>
@@ -926,7 +910,7 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
       </span>
       
       <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>AdminHttpServer</dd></dl></div>
-    </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="pub" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
+    </li><li name="com.twitter.inject.server.DeprecatedLogging#configureLoggerFactories" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureLoggerFactories():Unit"></a>
       <span class="permalink">
       <a href="../../../../com/twitter/finatra/thrift/ThriftServer.html#configureLoggerFactories():Unit" title="Permalink">
@@ -941,7 +925,14 @@ and configured <span class="extype" name="ThriftMux.Server">ThriftMux.Server</sp
         <span class="name">configureLoggerFactories</span><span class="params">()</span><span class="result">: <a href="http://www.scala-lang.org/api/2.12.7/scala/Unit.html#scala.Unit" class="extype" name="scala.Unit">Unit</a></span>
       </span>
       
-      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>DeprecatedLogging → Logging</dd></dl></div>
+      <p class="shortcomment cmt"><span class="extype" name="com.twitter.logging.Logging.configureLoggerFactories()">com.twitter.logging.Logging.configureLoggerFactories()</span> removes all added JUL handlers
+and adds only handlers defined by <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" class="extype" name="com.twitter.logging.Logging">com.twitter.logging.Logging.loggerFactories</a>.</p><div class="fullcomment"><div class="comment cmt"><p><span class="extype" name="com.twitter.logging.Logging.configureLoggerFactories()">com.twitter.logging.Logging.configureLoggerFactories()</span> removes all added JUL handlers
+and adds only handlers defined by <a href="https://twitter.github.io/util/docs/com/twitter/logging/Logging.html#loggerFactories:List[com.twitter.logging.LoggerFactory]" class="extype" name="com.twitter.logging.Logging">com.twitter.logging.Logging.loggerFactories</a>.</p><p><code>Logging.configureLoggerFactories</code> would thus remove the installed SLF4J BridgeHandler
+from <a href="https://twitter.github.io/twitter-server/docs/com/twitter/server/TwitterServer.html" class="extype" name="com.twitter.server.TwitterServer">com.twitter.server.TwitterServer</a>. Therefore, we override with a no-op to prevent the
+SLF4J BridgeHandler from being removed.
+</p></div><dl class="attributes block"> <dt>Attributes</dt><dd>protected </dd><dt>Definition Classes</dt><dd>DeprecatedLogging → Logging</dd><dt>Note</dt><dd><span class="cmt"><p>Subclasses MUST override this method with an implementation that configures the
+      <code>com.twitter.logging.Logger</code> if they want to use their configured logger factories via
+      the util-logging style of configuration.</p></span></dd><dt>See also</dt><dd><span class="cmt"><p><a href="https://www.slf4j.org/legacy.html#jul-to-slf4j" target="_blank">jul-to-slf4j bridge</a></p></span></dd></dl></div>
     </li><li name="com.twitter.finatra.thrift.ThriftServerTrait#configureThriftServer" visbl="prt" class="indented0 " data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="configureThriftServer(server:com.twitter.finagle.ThriftMux.Server):com.twitter.finagle.ThriftMux.Server"></a><a id="configureThriftServer(Server):Server"></a>
       <span class="permalink">
