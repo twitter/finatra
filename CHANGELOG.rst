@@ -7,6 +7,21 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+Added
+~~~~~
+
+Changed
+~~~~~~~
+
+Fixed
+~~~~~
+
+* finatra: Remove extraneous dependency on old `javax.servlet` ServletAPI dependency.
+  The fixes #478. ``PHAB_ID=D259671``
+
+Closed
+~~~~~~
+
 19.1.0
 -------
 

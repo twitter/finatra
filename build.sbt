@@ -74,7 +74,6 @@ lazy val versions = new {
   val scalaCheck = "1.13.4"
   val scalaGuice = "4.1.0"
   val scalaTest = "3.0.0"
-  val servletApi = "2.5"
   val slf4j = "1.7.21"
   val snakeyaml = "1.12"
   val specs2 = "2.4.17"
@@ -645,7 +644,6 @@ lazy val http = project
       "com.twitter" %% "finagle-exp" % versions.twLibVersion,
       "com.twitter" %% "finagle-http" % versions.twLibVersion,
       "commons-fileupload" % "commons-fileupload" % versions.commonsFileupload,
-      "javax.servlet" % "servlet-api" % versions.servletApi,
       "com.novocode" % "junit-interface" % "0.11" % Test
     ),
     unmanagedResourceDirectories in Test += baseDirectory(
