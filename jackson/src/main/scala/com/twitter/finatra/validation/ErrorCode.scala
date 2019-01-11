@@ -25,4 +25,5 @@ object ErrorCode {
   case class ValueOutOfRange(value: Number, min: Long, max: Long) extends ErrorCode
   case class ValueTooLarge(maxValue: Long, value: Number) extends ErrorCode
   case class ValueTooSmall(minValue: Long, value: Number) extends ErrorCode
+  case class PatternNotMatched(value: String, regex: String) extends ErrorCode
 }

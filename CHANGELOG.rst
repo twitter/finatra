@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-jackson: Added @Pattern annotation to support finatra/jackson for regex pattern
+  validation on string values. ``PHAB_ID=D259719``
+
 Changed
 ~~~~~~~
 
@@ -23,7 +26,7 @@ Closed
 ~~~~~~
 
 19.1.0
--------
+------
 
 Added
 ~~~~~

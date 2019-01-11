@@ -21,4 +21,5 @@ package object validation {
   type TimeGranularity =
     com.twitter.finatra.json.internal.caseclass.validation.validators.TimeGranularityInternal @param
   type UUID = com.twitter.finatra.json.internal.caseclass.validation.validators.UUIDInternal @param
+  type Pattern = com.twitter.finatra.json.internal.caseclass.validation.validators.PatternInternal @param
 }
