@@ -13,6 +13,18 @@ Added
 * finatra-jackson: Added @Pattern annotation to support to finatra/jackson for regex pattern
   validation on string values
 
+Changed
+~~~~~~~
+
+Fixed
+~~~~~
+
+* finatra: Remove extraneous dependency on old `javax.servlet` ServletAPI dependency.
+  The fixes #478. ``PHAB_ID=D259671``
+
+Closed
+~~~~~~
+
 19.1.0
 -------
 
