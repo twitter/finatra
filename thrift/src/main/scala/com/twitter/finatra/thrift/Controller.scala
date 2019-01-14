@@ -52,9 +52,9 @@ abstract class Controller private (val config: Controller.Config) extends Loggin
    */
   class MethodDSL[M <: ThriftMethod] (val m: M, chain: Filter.TypeAgnostic) {
 
-    private[this] def nonLegacy[T](f: ControllerConfig => T): T = config match {
-      case cc: ControllerConfig => f(cc)
-      case _: LegacyConfig => throw new IllegalStateException("Legacy controllers cannot use method DSLs")
+    private[this] def nonLegacy[T](f: ControllerConfig => T): T = {
+      assert(config.isInstanceOf[ControllerConfig], "Legacy controllers cannot use method DSLs")
+      f(config.asInstanceOf[ControllerConfig])
     }
 
     /**

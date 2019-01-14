@@ -16,6 +16,11 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: If a Controller is not configured with exactly one endpoint
+  per method, it will throw an AssertionError instead of logging an error message.
+  An attempt to use non-legacy functionality with a legacy Controller will throw
+  an AssertionError. ``PHAB_ID=D260230``
+
 Fixed
 ~~~~~
 
@@ -32,7 +37,7 @@ Added
 ~~~~~
 
 * finatra-kafka-streams: SumAggregator and CompositeSumAggregator only support enhanced window
-  aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create 
+  aggregations for the sum operation. Deprecate SumAggregator and CompositeSumAggregator and create
   an AggregatorTransformer class that can perform arbitrary aggregations. ``PHAB_ID=D257138``
 
 * finatra-streams: Open-source Finatra Streams. Finatra Streams is an integration
@@ -118,11 +123,11 @@ Changed
   now-removed `c.t.f.b.Server` have been modified or removed.
   ``PHAB_ID=D254339``
 
-* finatra-kafka-streams: Finatra Queryable State methods currently require the window size 
-  to be passed into query methods for windowed key value stores. This is unnecessary, as 
-  the queryable state class can be passed the window size at construction time. We also now 
-  save off all FinatraKeyValueStores in a global manager class to allow query services 
-  (e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer 
+* finatra-kafka-streams: Finatra Queryable State methods currently require the window size
+  to be passed into query methods for windowed key value stores. This is unnecessary, as
+  the queryable state class can be passed the window size at construction time. We also now
+  save off all FinatraKeyValueStores in a global manager class to allow query services
+  (e.g. thrift) to access the same KeyValueStore implementation that the FinatraTransformer
   is using. ``PHAB_ID=D256920``
 
 Fixed

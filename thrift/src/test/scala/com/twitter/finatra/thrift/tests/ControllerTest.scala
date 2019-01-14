@@ -89,15 +89,15 @@ class ControllerTest extends Test {
           Future.value(Response(req.args.msg))
         }
 
-        intercept[IllegalStateException] {
+        intercept[AssertionError] {
           dsl.filtered(Filter.TypeAgnostic.Identity) { args: Echo.Args => Future.value(args.msg) }
         }
 
-        intercept[IllegalStateException] {
+        intercept[AssertionError] {
           dsl.withFn(fn)
         }
 
-        intercept[IllegalStateException] {
+        intercept[AssertionError] {
           dsl.withService(Service.mk(fn))
         }
         true
