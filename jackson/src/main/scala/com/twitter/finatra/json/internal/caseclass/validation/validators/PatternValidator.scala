@@ -1,15 +1,14 @@
 package com.twitter.finatra.json.internal.caseclass.validation.validators
 
 import com.twitter.finatra.json.internal.caseclass.validation.validators.PatternValidator._
+import com.twitter.finatra.validation.ValidationResult.{Invalid, Valid}
 import com.twitter.finatra.validation._
+import com.twitter.util.{Return, Throw, Try}
+import scala.util.matching.Regex
 
 private[finatra] object PatternValidator {
   def errorMessage(resolver: ValidationMessageResolver, value: Any, regex: String): String = {
     resolver.resolve(classOf[Pattern], value, regex)
-  }
-
-  def errorMessage(resolver: ValidationMessageResolver): String = {
-    resolver.resolve(classOf[Pattern])
   }
 }
 
@@ -26,29 +25,32 @@ private[finatra] class PatternValidator(
     extends Validator[Pattern, Any](validationMessageResolver, annotation) {
 
   private val regexp: String = annotation.regexp()
-  private val regex = regexp.r
+  private val regex: Try[Regex] = Try(regexp.r)
 
   /* Public */
 
   override def isValid(value: Any): ValidationResult = {
-    value match {
-      case arrayValue: Array[_] =>
-        validationResult(arrayValue)
-      case traversableValue: Traversable[_] =>
-        validationResult(traversableValue)
-      case stringValue: String =>
-        validationResult(stringValue)
-      case _ =>
-        throw new IllegalArgumentException(
-          s"Class [${value.getClass}}] is not supported by ${this.getClass}")
-    }
+    val validateRegexResult = validateRegex
+    if (validateRegexResult.isValid) {
+      value match {
+        case arrayValue: Array[_] =>
+          validationResult(arrayValue)
+        case traversableValue: Traversable[_] =>
+          validationResult(traversableValue)
+        case stringValue: String =>
+          validationResult(stringValue)
+        case _ =>
+          throw new IllegalArgumentException(
+            s"Class [${value.getClass}}] is not supported by ${this.getClass}")
+      }
+    } else validateRegexResult
   }
 
   /* Private */
 
   private def validationResult(value: Traversable[_]): ValidationResult = {
     ValidationResult.validate(
-      value.forall(x => validate(x.toString)),
+      value.forall(x => validateValue(x.toString)),
       errorMessage(validationMessageResolver, value, regexp),
       errorCode(value, regexp)
     )
@@ -56,17 +58,28 @@ private[finatra] class PatternValidator(
 
   private def validationResult(value: String): ValidationResult = {
     ValidationResult.validate(
-      validate(value),
+      validateValue(value),
       errorMessage(validationMessageResolver, value, regexp),
       errorCode(value, regexp)
     )
   }
 
-  private def validate(value: String): Boolean = {
-    regex.findFirstIn(value) match {
+  // validate the value after validate the regex
+  private def validateValue(value: String): Boolean = {
+    regex.get().findFirstIn(value) match {
       case None => false
       case _ => true
     }
+  }
+
+  private def validateRegex: ValidationResult =
+    regex match {
+      case Return(_) => Valid
+      case Throw(ex) => Invalid(ex.getClass.getName, errorCode(ex, regexp))
+    }
+
+  private def errorCode(t: Throwable, regex: String) = {
+    ErrorCode.PatternSyntaxError(t.getMessage, regex)
   }
 
   private def errorCode(value: String, regex: String) = {

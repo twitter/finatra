@@ -58,11 +58,11 @@ class PatternValidatorTest extends ValidatorTest with GeneratorDrivenPropertyChe
   }
 
   test("fail validation when regex is invalid") {
-    intercept[Exception] {
-      validate[InvalidPatternExample](value = "123") should equal(
-        Invalid(errorMessage("123", "([)"), ErrorCode.PatternNotMatched("123", "([)"))
+    validate[InvalidPatternExample](value = "123") should equal(
+      Invalid("java.util.regex.PatternSyntaxException",
+        ErrorCode.PatternSyntaxError("Unclosed character class near index 2\n([)\n  ^", "([)")
       )
-    }
+    )
   }
 
   private def validate[C: Manifest](value: Any): ValidationResult = {
