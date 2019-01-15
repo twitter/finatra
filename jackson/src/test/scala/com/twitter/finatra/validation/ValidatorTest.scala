@@ -23,10 +23,14 @@ class ValidatorTest extends Test {
   }
 
   def getValidationAnnotations(clazz: Class[_], paramName: String): Seq[Annotation] = {
+    val constructorParams = parseConstructorParams(clazz)
+    val annotations = findAnnotations(clazz)
+
     for {
-      (param, annotations) <- parseConstructorParams(clazz).zip(constructorAnnotations(clazz))
+      param <- constructorParams
+      paramAnnotations = annotations(param.name)
       if param.name.equals(paramName)
-      annotation <- annotations
+      annotation <- paramAnnotations
       if validationManager.isValidationAnnotation(annotation)
     } yield annotation
   }
@@ -40,7 +44,10 @@ class ValidatorTest extends Test {
     findAnnotation(annotationClass, annotations)
   }
 
-  def findAnnotation[A <: Annotation](annotationClass: Class[A], annotations: Seq[Annotation]): A = {
+  def findAnnotation[A <: Annotation](
+    annotationClass: Class[A],
+    annotations: Seq[Annotation]
+  ): A = {
     AnnotationUtils.findAnnotation(annotationClass, annotations) match {
       case Some(annotation) =>
         annotation.asInstanceOf[A]

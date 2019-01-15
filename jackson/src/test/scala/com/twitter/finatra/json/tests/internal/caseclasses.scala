@@ -362,6 +362,19 @@ case class WithoutJsonPropertyAnnotation(foo: String)
 
 case class NamingStrategyJsonProperty(@JsonProperty longFieldName: String)
 
+trait CaseClassTrait {
+  @JsonProperty("fedoras")
+  @Size(min = 1, max = 2)
+  def names: Seq[String]
+
+  @Min(1L)
+  def age: Int
+}
+case class CaseClassTraitImpl(
+  names: Seq[String],
+  @JsonProperty("oldness") age: Int
+) extends CaseClassTrait
+
 package object internal {
 
   case class SimplePersonInPackageObject( // not recommended but used here for testing use case

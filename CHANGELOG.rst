@@ -24,6 +24,25 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-jackson: Support inherited annotations in case class deserialization. Case class
+  deserialization support does not properly find inherited Jackson annotations. This means
+  that code like this:
+
+  ```
+  trait MyTrait {
+    @JsonProperty("differentName")
+    def name: String
+  }
+  case class MyCaseClass(name: String) extends MyTrait
+  ```
+
+  would not properly expect an incoming field with name `differentName` to parse into the
+  case class `name` field. This commit provides support for capturing inherited annotations
+  on case class fields. Annotations processed in order, thus if the same annotation appears
+  in the class hierarchy multiple times, the value configured on the class will win otherwise
+  will be in the order of trait linearization with the "last" declaration prevailing.
+  ``PHAB_ID=D260376``
+
 * finatra: Remove extraneous dependency on old `javax.servlet` ServletAPI dependency.
   The fixes #478. ``PHAB_ID=D259671``
 

@@ -7,8 +7,8 @@ private[finatra] object AnnotationUtils {
   def filterIfAnnotationPresent[A <: Annotation: Manifest](
     annotations: Seq[Annotation]
   ): Seq[Annotation] = {
-    annotations filter { annot =>
-      isAnnotationPresent[A](annot)
+    annotations.filter { annotation =>
+      isAnnotationPresent[A](annotation)
     }
   }
 
@@ -16,7 +16,7 @@ private[finatra] object AnnotationUtils {
     filterSet: Set[Class[_ <: Annotation]],
     annotations: Seq[Annotation]
   ): Seq[Annotation] = {
-    annotations filter { annotation =>
+    annotations.filter { annotation =>
       filterSet.contains(annotation.annotationType)
     }
   }
@@ -25,13 +25,13 @@ private[finatra] object AnnotationUtils {
     target: Class[_ <: Annotation],
     annotations: Seq[Annotation]
   ): Option[Annotation] = {
-    annotations find { annotation =>
+    annotations.find { annotation =>
       annotation.annotationType() == target
     }
   }
 
   def findAnnotation[A <: Annotation: Manifest](annotations: Seq[Annotation]): Option[A] = {
-    annotations collectFirst {
+    annotations.collectFirst {
       case annotation if annotationEquals[A](annotation) =>
         annotation.asInstanceOf[A]
     }

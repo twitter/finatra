@@ -7,13 +7,14 @@ import com.fasterxml.jackson.databind.`type`.TypeFactory
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.node.TreeTraversingParser
 import com.fasterxml.jackson.databind.util.ClassUtil
-import com.twitter.finatra.json.internal.caseclass.exceptions.CaseClassValidationException.PropertyPath
 import com.twitter.finatra.json.internal.caseclass.exceptions.{
   CaseClassValidationException,
   FinatraJsonMappingException
 }
-import com.twitter.finatra.json.internal.caseclass.reflection.CaseClassSigParser
-import com.twitter.finatra.json.internal.caseclass.reflection.DefaultMethodUtils.defaultFunction
+import com.twitter.finatra.json.internal.caseclass.reflection.{
+  CaseClassSigParser,
+  DefaultMethodUtils
+}
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
 import com.twitter.finatra.json.internal.caseclass.utils.FieldInjection
 import com.twitter.finatra.request.{FormParam, Header, QueryParam}
@@ -21,6 +22,7 @@ import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.inject.Logging
 import com.twitter.inject.conversions.string._
+import com.twitter.util.{Return, Try}
 import java.lang.annotation.Annotation
 import scala.annotation.tailrec
 import scala.language.existentials
@@ -33,56 +35,121 @@ private[finatra] object CaseClassField {
     namingStrategy: PropertyNamingStrategy,
     typeFactory: TypeFactory
   ): Seq[CaseClassField] = {
-    val allAnnotations = constructorAnnotations(clazz)
     val constructorParams = CaseClassSigParser.parseConstructorParams(clazz)
     assert(
-      allAnnotations.size == constructorParams.size,
+      clazz.getConstructors.head.getParameterCount == constructorParams.size,
       "Non-static inner 'case classes' not supported"
     )
+
+    val annotationsMap: Map[String, Seq[Annotation]] = findAnnotations(clazz)
 
     val companionObject = Class.forName(clazz.getName + "$").getField("MODULE$").get(null)
     val companionObjectClass = companionObject.getClass
 
-    for {
-      (constructorParam, idx) <- constructorParams.zipWithIndex
-      annotations = allAnnotations(idx)
-      name = jsonNameForField(annotations, namingStrategy, constructorParam.name)
-      deserializer = deserializerOrNone(annotations)
-    } yield {
+    for ((constructorParam, idx) <- constructorParams.zipWithIndex) yield {
+      val fieldAnnotations: Seq[Annotation] = annotationsMap.getOrElse(constructorParam.name, Nil)
+      val name = jsonNameForField(fieldAnnotations, namingStrategy, constructorParam.name)
+      val deserializer = deserializerOrNone(fieldAnnotations)
+
       CaseClassField(
         name = name,
         javaType = JacksonTypes.javaType(typeFactory, constructorParam.scalaType),
         parentClass = clazz,
-        defaultFuncOpt = defaultFunction(companionObjectClass, companionObject, idx),
-        annotations = annotations,
+        defaultFuncOpt =
+          DefaultMethodUtils.defaultFunction(companionObjectClass, companionObject, idx),
+        annotations = fieldAnnotations,
         deserializer = deserializer
       )
     }
   }
 
-  private[finatra] def constructorAnnotations(clazz: Class[_]): Seq[Array[Annotation]] = {
-    clazz.getConstructors.head.getParameterAnnotations.toSeq
+  /** Finds the sequence of Annotations per field in the clazz, keyed by field name */
+  private[finatra] def findAnnotations(clazz: Class[_]): Map[String, Seq[Annotation]] = {
+    // for case classes, the annotations are only visible on the constructor.
+    val clazzAnnotationsArray: Array[Array[Annotation]] =
+      clazz.getConstructors.head.getParameterAnnotations
+    val clazzFields = clazz.getDeclaredFields
+
+    val clazzAnnotations: Map[String, Seq[Annotation]] = (for {
+      (field, index) <- clazzFields.zipWithIndex
+    } yield {
+      Try(clazzAnnotationsArray.apply(index)) match {
+        case Return(annotations) if annotations.nonEmpty =>
+          field.getName -> annotations.toSeq
+        case _ =>
+          field.getName -> Nil
+      }
+    }).toMap
+
+    val inheritedAnnotations: Map[String, Seq[Annotation]] =
+      findDeclaredMethodAnnotations(clazz, Map.empty[String, Seq[Annotation]])
+
+    // Merge the two maps: if the same annotation for a given field occurs in both lists, we keep
+    // the clazz annotation to in effect "override" what was specified by inheritance. That is, it
+    // is not expected that annotations are ever additive (in the sense that you can configure a
+    // single field through multiple declarations of the same annotation) but rather either-or.
+    clazzAnnotations.map {
+      case (field: String, annotations: Seq[Annotation]) =>
+        val inherited: Seq[Annotation] =
+          inheritedAnnotations.getOrElse(field, Nil)
+        // want to prefer what is coming in from clazz annotations over inherited
+        field -> mergeAnnotationLists(annotations, inherited)
+    }
   }
 
-  private def jsonNameForField(
+  private[this] def findDeclaredMethodAnnotations(
+    clazz: Class[_],
+    found: Map[String, Seq[Annotation]]
+  ): Map[String, Seq[Annotation]] = {
+    // clazz declared method annotations
+    val interfaceDeclaredAnnotations: Map[String, Seq[Annotation]] =
+      clazz.getDeclaredMethods
+        .map { method =>
+          method.getName -> method.getDeclaredAnnotations.toSeq
+        }.toMap.map {
+          case (key, values) =>
+            key -> mergeAnnotationLists(values, found.getOrElse(key, Seq.empty[Annotation]))
+        }
+
+    // interface declared method annotations
+    clazz.getInterfaces.foldLeft(interfaceDeclaredAnnotations) {
+      (acc: Map[String, Seq[Annotation]], interface: Class[_]) =>
+        acc.map {
+          case (key, values) =>
+            key -> mergeAnnotationLists(
+              values,
+              findDeclaredMethodAnnotations(interface, acc).getOrElse(key, Seq.empty[Annotation]))
+        }
+    }
+  }
+
+  /** Prefer values in A over B */
+  private[this] def mergeAnnotationLists(
+    a: Seq[Annotation],
+    b: Seq[Annotation]
+  ): Seq[Annotation] = {
+    a ++ b.filterNot(bAnnotation => a.exists(_.annotationType() == bAnnotation.annotationType()))
+  }
+
+  private[this] def jsonNameForField(
     annotations: Seq[Annotation],
     namingStrategy: PropertyNamingStrategy,
     name: String
   ): String = {
     findAnnotation[JsonProperty](annotations) match {
-      case Some(jsonProperty) if jsonProperty.value.nonEmpty => jsonProperty.value
+      case Some(jsonProperty) if jsonProperty.value.nonEmpty =>
+        jsonProperty.value
       case _ =>
-        val decodedName = NameTransformer.decode(name) //decode unicode escaped field names
-        namingStrategy.nameForField( //apply json naming strategy (e.g. snake_case)
+        val decodedName = NameTransformer.decode(name) // decode unicode escaped field names
+        namingStrategy.nameForField( // apply json naming strategy (e.g. snake_case)
           /* config = */ null,
           /* field = */ null,
-          /* defaultName = */ decodedName
-        )
+          /* defaultName = */ decodedName)
     }
   }
 
-  private def deserializerOrNone(
-    annotations: Array[Annotation]
+  private[this] def deserializerOrNone(
+    annotations: Seq[Annotation]
   ): Option[JsonDeserializer[Object]] = {
     for {
       jsonDeserializer <- findAnnotation[JsonDeserialize](annotations)
@@ -98,8 +165,8 @@ private[finatra] case class CaseClassField(
   parentClass: Class[_],
   defaultFuncOpt: Option[() => Object],
   annotations: Seq[Annotation],
-  deserializer: Option[JsonDeserializer[Object]]
-) extends Logging {
+  deserializer: Option[JsonDeserializer[Object]])
+    extends Logging {
 
   private val isOption = javaType.getRawClass == classOf[Option[_]]
   private val isString = javaType.getRawClass == classOf[String]
@@ -107,7 +174,7 @@ private[finatra] case class CaseClassField(
   private val fieldInjection = new FieldInjection(name, javaType, parentClass, annotations)
   private lazy val firstTypeParam = javaType.containedType(0)
   private lazy val requiredFieldException = CaseClassValidationException(
-    PropertyPath.leaf(attributeName),
+    CaseClassValidationException.PropertyPath.leaf(attributeName),
     Invalid(s"$attributeType is required", ErrorCode.RequiredFieldMissing)
   )
 
@@ -213,10 +280,7 @@ private[finatra] case class CaseClassField(
   private case class AttributeInfo(`type`: String, fieldName: String)
 
   @tailrec
-  private def findAttributeInfo(
-    fieldName: String,
-    annotations: Seq[Annotation]
-  ): AttributeInfo = {
+  private def findAttributeInfo(fieldName: String, annotations: Seq[Annotation]): AttributeInfo = {
     if (annotations.isEmpty) {
       AttributeInfo("field", fieldName)
     } else {
