@@ -16,6 +16,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka: Add lookupBootstrapServers function that takes timeout as a parameter.
+  ``PHAB_ID=D256997``
+
 * finatra-thrift: If a Controller is not configured with exactly one endpoint
   per method, it will throw an AssertionError instead of logging an error message.
   An attempt to use non-legacy functionality with a legacy Controller will throw
