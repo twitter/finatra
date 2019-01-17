@@ -86,7 +86,13 @@ private[modules] abstract class AbstractDarkTrafficFilterModule
 }
 
 /**
- * A [[TwitterModule]] which configures and binds a [[DarkTrafficFilter]] to the object graph.
+ * A [[TwitterModule]] which configures and binds a [[DarkTrafficFilter]] to the object graph, for
+ * use with [[Controllers]] constructed using the legacy method.
+ *
+ * @note This [[DarkTrafficFilter]] module is to be used with [[Controllers]] which are constructed using
+ *       the deprecated method of extending the `BaseServiceIface` of the generated Thrift service.
+ *       For services that construct their Controllers by extending
+ *       `Controller(GeneratedThriftService)`, use the [[ReqRepDarkTrafficFilter]] instead
  *
  * @note This is only applicable in Scala as it uses generated Scala classes and expects to configure
  *       the [[DarkTrafficFilter]] over a [[com.twitter.finagle.Service]] that is generated from
@@ -122,6 +128,19 @@ abstract class DarkTrafficFilterModule[ServiceIface <: Filterable[ServiceIface]:
   }
 }
 
+/**
+ * A [[TwitterModule]] which configures and binds a [[DarkTrafficFilter]] to the object graph.
+ *
+ * @note This [[DarkTrafficFilter]] module is to be used with [[Controllers]] which are constructed by
+ *       extending `Controller(GeneratedThriftService)`. For Controllers that are constructed using
+ *       the deprecated method of extending `Controller with GeneratedThriftService.BaseServiceIface`,
+ *       Use the [[DarkTrafficFilterModule]] above.
+ *
+ * @note This is only applicable in Scala as it uses generated Scala classes and expects to configure
+ *       the [[DarkTrafficFilter]] over a [[com.twitter.finagle.Service]] that is generated from
+ *       Finagle via generated Scala code. Users of generated Java code should use the
+ *       [[JavaDarkTrafficFilterModule]].
+ */
 abstract class ReqRepDarkTrafficFilterModule[MethodIface <: Filterable[MethodIface]: ClassTag](
   implicit serviceBuilder: ReqRepServicePerEndpointBuilder[MethodIface]
 ) extends AbstractDarkTrafficFilterModule {
@@ -140,7 +159,7 @@ abstract class ReqRepDarkTrafficFilterModule[MethodIface <: Filterable[MethodIfa
     client: ThriftMux.Client,
     injector: Injector,
     stats: StatsReceiver
-  ): DarkTrafficFilter[MethodIface] = {
+  ): Filter.TypeAgnostic = {
     new DarkTrafficFilter[MethodIface](
       client.servicePerEndpoint[MethodIface](dest, label),
       enableSampling(injector),

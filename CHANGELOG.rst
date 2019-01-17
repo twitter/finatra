@@ -16,6 +16,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-thrift: The return type of `ReqRepDarkTrafficFilterModule#newFilter` has been changed from
+  `DarkTrafficFilter[MethodIface]` to `Filter.TypeAgnostic`. ``PHAB_ID=D261868``
+
 * finatra-kafka: Add lookupBootstrapServers function that takes timeout as a parameter.
   ``PHAB_ID=D256997``
 
