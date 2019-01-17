@@ -264,7 +264,8 @@ specifically the server documentation `here <https://twitter.github.io/finagle/g
 Server-side Response Classification
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To configure server-side `Response Classification <https://twitter.github.io/finagle/guide/Servers.html#response-classification>`__ you could choose to
+The default Response Classifier for HTTP servers is `HttpResponseClassifier.ServerErrorsAsFailures <https://github.com/twitter/finatra/blob/8b448065f5f74c1eedd744bd15618cbf932ea1bc/http/src/main/scala/com/twitter/finatra/http/response/HttpResponseClassifier.scala#L15>`__,
+which classifies any HTTP 5xx response code as a failure. To configure server-side `Response Classification <https://twitter.github.io/finagle/guide/Servers.html#response-classification>`__ you could choose to
 set the classifier directly on the underlying Finagle server by overriding the `configureHttpServer` (or `configureHttpsServer`) in your server, e.g.,
 
 .. code:: scala
