@@ -35,6 +35,15 @@ Changed
   - `rocksdb.log.keep.file.num` Maximal info log files to be kept.
   ``PHAB_ID=D259579``
 
+* finatra-kafka: Add admin routes for properties and topology information
+  - `/admin/kafka/streams/properties` Dumps the
+    `KafkaStreamsTwitterServer#properties` as plain text in the TwitterServer
+    admin page.
+  - `/admin/kafka/streams/topology` Dumps the
+    `KafkaStreamsTwitterServer#topology` as plain text in the TwitterServer
+    admin page.
+  ``PHAB_ID=D259597``
+
 Fixed
 ~~~~~
 

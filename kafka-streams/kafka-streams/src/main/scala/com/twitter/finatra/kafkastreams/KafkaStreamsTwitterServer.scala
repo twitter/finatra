@@ -13,6 +13,7 @@ import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafkastreams.config.{FinatraRocksDBConfig, KafkaStreamsConfig}
 import com.twitter.finatra.kafkastreams.domain.ProcessingGuarantee
 import com.twitter.finatra.kafkastreams.internal.ScalaStreamsImplicits
+import com.twitter.finatra.kafkastreams.internal.admin.AdminRoutes
 import com.twitter.finatra.kafkastreams.internal.listeners.FinatraStateRestoreListener
 import com.twitter.finatra.kafkastreams.internal.serde.AvoidDefaultSerde
 import com.twitter.finatra.kafkastreams.internal.stats.KafkaStreamsFinagleMetricsReporter
@@ -146,6 +147,7 @@ abstract class KafkaStreamsTwitterServer
     super.postInjectorStartup()
     properties = createKafkaStreamsProperties()
     topology = createKafkaStreamsTopology()
+    addAdminRoutes(AdminRoutes(properties, topology))
   }
 
   override protected def postWarmup(): Unit = {
