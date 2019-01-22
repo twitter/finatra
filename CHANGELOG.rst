@@ -30,6 +30,9 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-kafka-streams: Improve watermark assignment/propagation upon reading the first
+  message and when caching key value stores are used. ``PHAB_ID=D262054``
+
 * finatra-jackson: Support inherited annotations in case class deserialization. Case class
   deserialization support does not properly find inherited Jackson annotations. This means
   that code like this:

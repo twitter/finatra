@@ -1,18 +1,16 @@
 package com.twitter.finatra.kafkastreams.processors.internal
 
 import com.twitter.finatra.kafkastreams.internal.utils.ProcessorContextLogging
-import com.twitter.finatra.streams.transformer.internal.{OnClose, OnInit}
+import com.twitter.finatra.streams.transformer.internal.{OnClose, OnFlush, OnInit}
 import com.twitter.util.Duration
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.processor.{Cancellable, PunctuationType, Punctuator}
 
-trait Flushing extends OnInit with OnClose with ProcessorContextLogging {
+trait Flushing extends OnInit with OnClose with OnFlush with ProcessorContextLogging {
 
   @volatile private var commitPunctuatorCancellable: Cancellable = _
 
   protected def commitInterval: Duration
-
-  protected def onFlush(): Unit = {}
 
   //TODO: Create and use frameworkOnInit for framework use
   override def onInit(): Unit = {

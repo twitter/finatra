@@ -18,6 +18,7 @@ trait CachingKeyValueStores[K, V, K1, V1] extends FlushingTransformer[K, V, K1, 
   protected def finatraKeyValueStoresMap: mutable.Map[String, FinatraKeyValueStore[_, _]]
 
   override def onFlush(): Unit = {
+    super.onFlush()
     finatraKeyValueStoresMap.values.foreach(_.flush())
   }
 

@@ -11,7 +11,6 @@ junit_tests(
         "3rdparty/jvm/org/apache/kafka:kafka-test",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-client",
         "3rdparty/jvm/org/apache/zookeeper:zookeeper-server",
-        "finatra-internal/streams/examples/tweet-word-count/src/main/scala",
         "finatra/inject/inject-app/src/main/scala",
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-core/src/test/scala:test-deps",

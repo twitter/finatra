@@ -12,7 +12,7 @@ import com.twitter.finatra.streams.stores.internal.{
 }
 import com.twitter.finatra.streams.transformer.FinatraTransformer.TimerTime
 import com.twitter.finatra.streams.transformer.domain.{Time, Watermark}
-import com.twitter.finatra.streams.transformer.internal.{OnClose, OnInit}
+import com.twitter.finatra.streams.transformer.internal.{OnClose, OnFlush, OnInit}
 import com.twitter.finatra.streams.transformer.watermarks.internal.WatermarkManager
 import com.twitter.finatra.streams.transformer.watermarks.{
   DefaultWatermarkAssignor,
@@ -56,17 +56,17 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     with OnInit
     with OnWatermark
     with OnClose
+    with OnFlush
     with ProcessorContextLogging {
 
   protected[streams] val finatraKeyValueStoresMap: mutable.Map[String, FinatraKeyValueStore[_, _]] =
     scala.collection.mutable.Map[String, FinatraKeyValueStore[_, _]]()
 
-  private var watermarkManager: WatermarkManager[InputKey, InputValue] = _
-
   /* Private Mutable */
 
   @volatile private var _context: ProcessorContext = _
   @volatile private var watermarkTimerCancellable: Cancellable = _
+  @volatile private var watermarkManager: WatermarkManager[InputKey, InputValue] = _
 
   /* Abstract */
 
@@ -88,6 +88,8 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     _context = processorContext
 
     watermarkManager = new WatermarkManager[InputKey, InputValue](
+      taskId = processorContext.taskId(),
+      transformerName = this.getClass.getSimpleName,
       onWatermark = this,
       watermarkAssignor = watermarkAssignor,
       emitWatermarkPerMessage = shouldEmitWatermarkPerMessage(_context))
@@ -112,6 +114,11 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     onInit()
   }
 
+  override def onFlush(): Unit = {
+    super.onFlush()
+    watermarkManager.callOnWatermarkIfChanged()
+  }
+
   override def onWatermark(watermark: Watermark): Unit = {
     trace(s"onWatermark $watermark")
   }
@@ -122,8 +129,8 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
        can cause context.timestamp to be mutated to the forwarded message timestamp :-( */
     val messageTime = Time(_context.timestamp())
 
-    debug(s"onMessage $watermark MessageTime(${messageTime.millis.iso8601Millis}) $k -> $v")
     watermarkManager.onMessage(messageTime, _context.topic(), k, v)
+    debug(s"onMessage LastEmitted $watermark MessageTime $messageTime $k -> $v")
     onMessage(messageTime, k, v)
     null
   }
@@ -175,7 +182,7 @@ abstract class FinatraTransformerV2[InputKey, InputValue, OutputKey, OutputValue
     _context.forward(key, value, To.all().withTimestamp(timestamp))
   }
 
-  final protected def watermark: Watermark = {
+  final protected[finatra] def watermark: Watermark = {
     watermarkManager.watermark
   }
 
