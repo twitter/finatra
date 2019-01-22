@@ -27,6 +27,14 @@ Changed
   An attempt to use non-legacy functionality with a legacy Controller will throw
   an AssertionError. ``PHAB_ID=D260230``
 
+* finatra-kafka: Add flags for controlling rocksdb internal LOG file growth.
+  - `rocksdb.log.info.level` Allows the setting of rocks log levels
+    `DEBUG_LEVEL`, `INFO_LEVEL`, `WARN_LEVEL`, `ERROR_LEVEL`, `FATAL_LEVEL`,
+    `HEADER_LEVEL`.
+  - `rocksdb.log.max.file.size` The maximal size of the info log file.
+  - `rocksdb.log.keep.file.num` Maximal info log files to be kept.
+  ``PHAB_ID=D259579``
+
 Fixed
 ~~~~~
 

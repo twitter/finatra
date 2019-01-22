@@ -36,4 +36,29 @@ trait RocksDbFlags extends TwitterServer {
       help =
         "Enable RocksDB LZ4 compression. (See https://github.com/facebook/rocksdb/wiki/Compression)"
     )
+
+  protected val rocksDbInfoLogLevel =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbInfoLogLevel,
+      default = "INFO_LEVEL",
+      help =
+        """Level of logging for rocksdb LOG file.
+          |DEBUG_LEVEL, INFO_LEVEL, WARN_LEVEL, ERROR_LEVEL, FATAL_LEVEL, HEADER_LEVEL""".stripMargin
+    )
+
+  protected val rocksDbMaxLogFileSize =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbMaxLogFileSize,
+      default = 50.megabytes,
+      help =
+        s"""Specify the maximal size of the info log file. If the log file is larger then
+           |${FinatraRocksDBConfig.RocksDbKeepLogFileNum} a new log file will be created.""".stripMargin
+    )
+
+  protected val rocksDbKeepLogFileNum =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbKeepLogFileNum,
+      default = 10,
+      help = "Maximal info log files to be kept."
+    )
 }

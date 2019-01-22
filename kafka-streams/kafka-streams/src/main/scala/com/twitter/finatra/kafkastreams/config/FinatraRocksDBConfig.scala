@@ -28,6 +28,9 @@ object FinatraRocksDBConfig {
   val RocksDbLZ4Config = "rocksdb.lz4"
   val RocksDbEnableStatistics = "rocksdb.statistics"
   val RocksDbStatCollectionPeriodMs = "rocksdb.statistics.collection.period.ms"
+  val RocksDbInfoLogLevel = "rocksdb.log.info.level"
+  val RocksDbMaxLogFileSize = "rocksdb.log.max.file.size"
+  val RocksDbKeepLogFileNum = "rocksdb.log.keep.file.num"
 
   // BlockCache to be shared by all RocksDB instances created on this instance. Note: That a single Kafka Streams instance may get multiple tasks assigned to it
   // and each stateful task will have a separate RocksDB instance created. This cache will be shared across all the tasks.
@@ -93,8 +96,19 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
       options.setCompressionType(CompressionType.LZ4_COMPRESSION)
     }
 
+    val infoLogLevel = InfoLogLevel.valueOf(getStringOrDefault(
+      configs,
+      FinatraRocksDBConfig.RocksDbInfoLogLevel, "DEBUG_LEVEL").toUpperCase)
     options
-      .setInfoLogLevel(InfoLogLevel.DEBUG_LEVEL)
+      .setInfoLogLevel(infoLogLevel)
+
+    val maxLogFileSize =
+      getBytesOrDefault(configs, FinatraRocksDBConfig.RocksDbMaxLogFileSize, 50.megabytes)
+    options.setMaxLogFileSize(maxLogFileSize)
+
+    val keepLogFileNum =
+      getIntOrDefault(configs, FinatraRocksDBConfig.RocksDbKeepLogFileNum, 10)
+    options.setKeepLogFileNum(keepLogFileNum)
 
     if (configs.get(FinatraRocksDBConfig.RocksDbEnableStatistics) == "true") {
       val statistics = new Statistics
@@ -131,6 +145,15 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
     val valueString = configs.get(key)
     if (valueString != null) {
       valueString.toString.toInt
+    } else {
+      default
+    }
+  }
+
+  private def getStringOrDefault(configs: util.Map[String, AnyRef], key: String, default: String): String = {
+    val valueString = configs.get(key)
+    if (valueString != null) {
+      valueString.toString
     } else {
       default
     }
