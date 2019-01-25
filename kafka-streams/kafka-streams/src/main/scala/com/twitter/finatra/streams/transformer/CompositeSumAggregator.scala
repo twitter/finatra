@@ -3,7 +3,9 @@ package com.twitter.finatra.streams.transformer
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.streams.transformer.FinatraTransformer.WindowStartTime
 import com.twitter.finatra.streams.transformer.domain._
+import com.twitter.finatra.streams.transformer.internal.StateStoreImplicits
 import com.twitter.util.Duration
+import org.apache.kafka.streams.processor.PunctuationType
 import org.apache.kafka.streams.state.KeyValueIterator
 
 @deprecated("Use AggregatorTransformer", "1/7/2019")
@@ -21,12 +23,13 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
     extends FinatraTransformer[
       CK,
       Int,
-      TimeWindowed[CK],
-      WindowStartTime,
       TimeWindowed[K],
       WindowedValue[
         scala.collection.Map[A, Int]
-      ]](timerStoreName = timerStoreName, statsReceiver = statsReceiver, cacheTimers = true) {
+      ]](statsReceiver = statsReceiver)
+    with PersistentTimers
+    with StateStoreImplicits
+    with IteratorImplicits {
 
   private val windowSizeMillis = windowSize.inMillis
   private val allowedLatenessMillis = allowedLateness.inMillis
@@ -41,10 +44,15 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
   private val putLatencyStat = statsReceiver.stat("putLatency")
 
   private val stateStore = getKeyValueStore[TimeWindowed[CK], Int](stateStoreName)
+  private val timerStore = getPersistentTimerStore[WindowStartTime](
+    timerStoreName,
+    onEventTimer,
+    PunctuationType.STREAM_TIME
+  )
 
   override def onMessage(time: Time, compositeKey: CK, count: Int): Unit = {
     val windowedCompositeKey = TimeWindowed.forSize(time.hourMillis, windowSizeMillis, compositeKey)
-    if (windowedCompositeKey.isLate(allowedLatenessMillis, Watermark(watermark))) {
+    if (windowedCompositeKey.isLate(allowedLatenessMillis, Watermark(watermark.timeMillis))) {
       restatementsCounter.incr()
       forward(windowedCompositeKey.map { _ =>
         compositeKey.primary
@@ -59,9 +67,9 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
       if (newCount == count) {
         val closeTime = windowedCompositeKey.startMs + windowSizeMillis + allowedLatenessMillis
         if (emitOnClose) {
-          addEventTimeTimer(Time(closeTime), Close, windowedCompositeKey.startMs)
+          timerStore.addTimer(Time(closeTime), Close, windowedCompositeKey.startMs)
         }
-        addEventTimeTimer(
+        timerStore.addTimer(
           Time(closeTime + queryableAfterCloseMillis),
           Expire,
           windowedCompositeKey.startMs
@@ -77,16 +85,14 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
    * TimeWindowedKey(2018-08-04T10:00:00.000Z-40-retweet)   -> 4
    */
   //Note: We use the cursor even for deletes to skip tombstones that may otherwise slow down the range scan
-  override def onEventTimer(
+  private def onEventTimer(
     time: Time,
     timerMetadata: TimerMetadata,
-    windowStartMs: WindowStartTime,
-    cursor: Option[TimeWindowed[CK]]
-  ): TimerResult[TimeWindowed[CK]] = {
+    windowStartMs: WindowStartTime
+  ): Unit = {
     debug(s"onEventTimer $time $timerMetadata")
     val windowIterator = stateStore.range(
-      cursor getOrElse TimeWindowed
-        .forSize(windowStartMs, windowSizeMillis, compositeKeyRangeStart),
+      TimeWindowed.forSize(windowStartMs, windowSizeMillis, compositeKeyRangeStart),
       TimeWindowed.forSize(windowStartMs + 1, windowSizeMillis, compositeKeyRangeStart)
     )
 
@@ -104,7 +110,7 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
   private def onClosed(
     windowStartMs: Long,
     windowIterator: KeyValueIterator[TimeWindowed[CK], Int]
-  ): TimerResult[TimeWindowed[CK]] = {
+  ): Unit = {
     windowIterator
       .groupBy(
         primaryKey = timeWindowed => timeWindowed.value.primary,
@@ -121,14 +127,12 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
           )
       }
 
-    deleteOrRetainTimer(windowIterator, onDeleteTimer = closedCounter.incr())
+    closedCounter.incr()
   }
 
   //Note: We call "put" w/ a null value instead of calling "delete" since "delete" also gets the previous value :-/
   //TODO: Consider performing deletes in a transaction so that queryable state sees all or no keys per "primary key"
-  private def onExpired(
-    windowIterator: KeyValueIterator[TimeWindowed[CK], Int]
-  ): TimerResult[TimeWindowed[CK]] = {
+  private def onExpired(windowIterator: KeyValueIterator[TimeWindowed[CK], Int]): Unit = {
     windowIterator
       .take(maxActionsPerTimer)
       .foreach {
@@ -137,6 +141,6 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
           stateStore.put(timeWindowedCompositeKey, null.asInstanceOf[Int])
       }
 
-    deleteOrRetainTimer(windowIterator, onDeleteTimer = expiredCounter.incr())
+    expiredCounter.incr()
   }
 }

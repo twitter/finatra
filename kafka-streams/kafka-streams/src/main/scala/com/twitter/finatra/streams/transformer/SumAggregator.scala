@@ -3,8 +3,10 @@ package com.twitter.finatra.streams.transformer
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.streams.transformer.FinatraTransformer.WindowStartTime
 import com.twitter.finatra.streams.transformer.domain._
+import com.twitter.finatra.streams.transformer.internal.StateStoreImplicits
 import com.twitter.util.Duration
 import org.apache.kafka.streams.state.KeyValueIterator
+import org.apache.kafka.streams.processor.PunctuationType
 
 @deprecated("Use AggregatorTransformer")
 class SumAggregator[K, V](
@@ -24,11 +26,12 @@ class SumAggregator[K, V](
       K,
       V,
       TimeWindowed[K],
-      WindowStartTime,
-      TimeWindowed[K],
       WindowedValue[
         Int
-      ]](timerStoreName = timerStoreName, statsReceiver = statsReceiver, cacheTimers = true) {
+      ]](statsReceiver = statsReceiver)
+    with PersistentTimers
+    with StateStoreImplicits
+    with IteratorImplicits {
 
   private val windowSizeMillis = windowSize.inMillis
   private val allowedLatenessMillis = allowedLateness.inMillis
@@ -39,6 +42,11 @@ class SumAggregator[K, V](
   private val expiredCounter = statsReceiver.counter("expiredWindows")
 
   private val stateStore = getKeyValueStore[TimeWindowed[K], Int](stateStoreName)
+  private val timerStore = getPersistentTimerStore[WindowStartTime](
+    timerStoreName,
+    onEventTimer,
+    PunctuationType.STREAM_TIME
+  )
 
   override def onMessage(time: Time, key: K, value: V): Unit = {
     val windowedKey = TimeWindowed.forSize(
@@ -48,7 +56,7 @@ class SumAggregator[K, V](
     )
 
     val count = countToAggregate(key, value)
-    if (windowedKey.isLate(allowedLatenessMillis, Watermark(watermark))) {
+    if (windowedKey.isLate(allowedLatenessMillis, Watermark(watermark.timeMillis))) {
       restatementsCounter.incr()
       forward(windowedKey, WindowedValue(Restatement, count))
     } else {
@@ -56,21 +64,24 @@ class SumAggregator[K, V](
       if (newCount == count) {
         val closeTime = windowedKey.startMs + windowSizeMillis + allowedLatenessMillis
         if (emitOnClose) {
-          addEventTimeTimer(Time(closeTime), Close, windowedKey.startMs)
+          timerStore.addTimer(Time(closeTime), Close, windowedKey.startMs)
         }
-        addEventTimeTimer(Time(closeTime + queryableAfterCloseMillis), Expire, windowedKey.startMs)
+        timerStore.addTimer(
+          Time(closeTime + queryableAfterCloseMillis),
+          Expire,
+          windowedKey.startMs
+        )
       }
     }
   }
 
-  override def onEventTimer(
+  private def onEventTimer(
     time: Time,
     timerMetadata: TimerMetadata,
-    windowStartMs: WindowStartTime,
-    cursor: Option[TimeWindowed[K]]
-  ): TimerResult[TimeWindowed[K]] = {
+    windowStartMs: WindowStartTime
+  ): Unit = {
     val hourlyWindowIterator = stateStore.range(
-      cursor getOrElse TimeWindowed.forSize(windowStartMs, windowSizeMillis, keyRangeStart),
+      TimeWindowed.forSize(windowStartMs, windowSizeMillis, keyRangeStart),
       TimeWindowed.forSize(windowStartMs + 1, windowSizeMillis, keyRangeStart)
     )
 
@@ -88,7 +99,7 @@ class SumAggregator[K, V](
   private def onClosed(
     windowStartMs: Long,
     windowIterator: KeyValueIterator[TimeWindowed[K], Int]
-  ): TimerResult[TimeWindowed[K]] = {
+  ): Unit = {
     windowIterator
       .take(maxActionsPerTimer)
       .foreach {
@@ -96,12 +107,10 @@ class SumAggregator[K, V](
           forward(key = key, value = WindowedValue(resultState = WindowClosed, value = value))
       }
 
-    deleteOrRetainTimer(windowIterator, closedCounter.incr())
+    closedCounter.incr()
   }
 
-  private def onExpired(
-    windowIterator: KeyValueIterator[TimeWindowed[K], Int]
-  ): TimerResult[TimeWindowed[K]] = {
+  private def onExpired(windowIterator: KeyValueIterator[TimeWindowed[K], Int]): Unit = {
     windowIterator
       .take(maxActionsPerTimer)
       .foreach {
@@ -109,6 +118,6 @@ class SumAggregator[K, V](
           stateStore.deleteWithoutGettingPriorValue(key)
       }
 
-    deleteOrRetainTimer(windowIterator, expiredCounter.incr())
+    expiredCounter.incr()
   }
 }

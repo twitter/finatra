@@ -16,6 +16,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Combine FinatraTransformer with FinatraTransformerV2. ``PHAB_ID=D254411``
+
 * finatra-thrift: The return type of `ReqRepDarkTrafficFilterModule#newFilter` has been changed from
   `DarkTrafficFilter[MethodIface]` to `Filter.TypeAgnostic`. ``PHAB_ID=D261868``
 

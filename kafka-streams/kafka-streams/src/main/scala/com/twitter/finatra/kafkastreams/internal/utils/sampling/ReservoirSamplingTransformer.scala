@@ -7,7 +7,7 @@ import com.twitter.finatra.streams.transformer.domain.{
   Time,
   TimerMetadata
 }
-import com.twitter.finatra.streams.transformer.{FinatraTransformerV2, PersistentTimers}
+import com.twitter.finatra.streams.transformer.{FinatraTransformer, PersistentTimers}
 import com.twitter.util.Duration
 import org.apache.kafka.streams.processor.PunctuationType
 import scala.reflect.ClassTag
@@ -31,7 +31,7 @@ class ReservoirSamplingTransformer[
   countStoreName: String,
   sampleStoreName: String,
   timerStoreName: String)
-    extends FinatraTransformerV2[Key, Value, SampleKey, SampleValue](statsReceiver = statsReceiver)
+    extends FinatraTransformer[Key, Value, SampleKey, SampleValue](statsReceiver = statsReceiver)
     with PersistentTimers {
 
   private val numExpiredCounter = statsReceiver.counter("numExpired")

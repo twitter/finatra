@@ -3,17 +3,17 @@ package com.twitter.unittests.integration.finatratransformer
 import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.streams.transformer.domain.{Expire, Time, TimerMetadata}
-import com.twitter.finatra.streams.transformer.{FinatraTransformerV2, PersistentTimers}
-import com.twitter.unittests.integration.finatratransformer.WordLengthFinatraTransformerV2._
+import com.twitter.finatra.streams.transformer.{FinatraTransformer, PersistentTimers}
+import com.twitter.unittests.integration.finatratransformer.WordLengthFinatraTransformer._
 import com.twitter.util.Duration
 import org.apache.kafka.streams.processor.PunctuationType
 
-object WordLengthFinatraTransformerV2 {
+object WordLengthFinatraTransformer {
   val delayedMessageTime: Duration = 5.seconds
 }
 
-class WordLengthFinatraTransformerV2(statsReceiver: StatsReceiver, timerStoreName: String)
-    extends FinatraTransformerV2[String, String, String, String](statsReceiver)
+class WordLengthFinatraTransformer(statsReceiver: StatsReceiver, timerStoreName: String)
+    extends FinatraTransformer[String, String, String, String](statsReceiver)
     with PersistentTimers {
 
   private val timerStore =

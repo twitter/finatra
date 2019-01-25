@@ -23,7 +23,7 @@ a fully functional service can be written by simply configuring the Kafka Stream
 Transformers
 ~~~~~~~~~~~~
 
-Implement custom `transformers <https://kafka.apache.org/21/javadoc/org/apache/kafka/streams/kstream/Transformer.html>`__ using `FinatraTransformerV2 <https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/streams/transformer/FinatraTransformerV2.scala>`__.
+Implement custom `transformers <https://kafka.apache.org/21/javadoc/org/apache/kafka/streams/kstream/Transformer.html>`__ using `FinatraTransformer <https://github.com/twitter/finatra/blob/develop/kafka-streams/kafka-streams/src/main/scala/com/twitter/finatra/streams/transformer/FinatraTransformer.scala>`__.
 
 Aggregations
 ^^^^^^^^^^^^

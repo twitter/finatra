@@ -55,7 +55,7 @@ class AggregatorTransformer[K, V, Aggregate](
   queryableAfterClose: Duration,
   emitUpdatedEntriesOnCommit: Boolean,
   val commitInterval: Duration)
-    extends FinatraTransformerV2[K, V, TimeWindowed[K], WindowedValue[Aggregate]](statsReceiver)
+    extends FinatraTransformer[K, V, TimeWindowed[K], WindowedValue[Aggregate]](statsReceiver)
     with CachingKeyValueStores[K, V, TimeWindowed[K], WindowedValue[Aggregate]]
     with PersistentTimers {
 

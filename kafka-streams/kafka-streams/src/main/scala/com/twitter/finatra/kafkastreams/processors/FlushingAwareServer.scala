@@ -7,7 +7,7 @@ import com.twitter.util.Duration
 /**
  * FlushingAwareServer must be mixed in to servers that rely on manually controlling when a flush/commit occurs.
  * As such, this trait will be needed when using the following classes, FlushingProcessor, FlushingTransformer,
- * AsyncProcessor, AsyncTransformer, FinatraTransformer, and FinatraTransformerV2
+ * AsyncProcessor, AsyncTransformer, and FinatraTransformer
  *
  * This trait sets 'kafka.commit.interval' to 'Duration.Top' to disable the normal Kafka Streams commit process.
  * As such the only commits that will occur are triggered manually, thus allowing us to control when flush/commit

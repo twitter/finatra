@@ -15,7 +15,7 @@ import org.apache.kafka.test.{InternalMockProcessorContext, NoOpRecordCollector,
 import org.hamcrest.{BaseMatcher, Description}
 import org.mockito.{Matchers, Mockito}
 
-class FinatraTransformerV2Test extends Test with com.twitter.inject.Mockito {
+class FinatraTransformerTest extends Test with com.twitter.inject.Mockito {
   val firstMessageTimestamp = 100000
   val firstKey = "key1"
   val firstValue = "value1"
@@ -26,7 +26,7 @@ class FinatraTransformerV2Test extends Test with com.twitter.inject.Mockito {
 
   test("watermark processing when forwarding from onMessage") {
     val transformer =
-      new FinatraTransformerV2[String, String, String, String](NullStatsReceiver) {
+      new FinatraTransformer[String, String, String, String](NullStatsReceiver) {
         override def onMessage(messageTime: Time, key: String, value: String): Unit = {
           forward(key, value, watermark.timeMillis)
         }
@@ -52,7 +52,7 @@ class FinatraTransformerV2Test extends Test with com.twitter.inject.Mockito {
 
   test("watermark processing when forwarding from caching flush listener") {
     val transformer =
-      new FinatraTransformerV2[String, String, String, String](NullStatsReceiver)
+      new FinatraTransformer[String, String, String, String](NullStatsReceiver)
       with CachingKeyValueStores[String, String, String, String] {
         private val cache = getCachingKeyValueStore[String, String]("mystore")
 
