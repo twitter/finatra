@@ -16,6 +16,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-jackson: Fix `CaseClassField` annotation reflection for Scala 2.12. ``PHAB_ID=D264423``
+
 * finatra-kafka-streams: Combine FinatraTransformer with FinatraTransformerV2. ``PHAB_ID=D254411``
 
 * finatra-thrift: The return type of `ReqRepDarkTrafficFilterModule#newFilter` has been changed from

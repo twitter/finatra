@@ -68,16 +68,30 @@ private[finatra] object CaseClassField {
     // for case classes, the annotations are only visible on the constructor.
     val clazzAnnotationsArray: Array[Array[Annotation]] =
       clazz.getConstructors.head.getParameterAnnotations
-    val clazzFields = clazz.getDeclaredFields
+
+    val clazzConstructorParamNames: Array[String] =
+      clazz.getConstructors.head.getParameters.map(_.getName)
+    val clazzDeclaredFieldNames: Array[String] = clazz.getDeclaredFields.map(_.getName)
+
+    /*  NOTE: we want to prefer using the constructor Array[Parameter] names, however in Scala 2.11
+        Parameters don't have actual names (only "arg" + index), so we fall back to relying on
+        the declared fields found via reflection -- which conversely is incorrect in Scala 2.12
+        for this purpose. */
+    val clazzFields: Array[String] =
+      if (clazzConstructorParamNames.exists(!_.startsWith("arg"))) {
+        clazzConstructorParamNames
+      } else {
+        clazzDeclaredFieldNames
+      }
 
     val clazzAnnotations: Map[String, Seq[Annotation]] = (for {
       (field, index) <- clazzFields.zipWithIndex
     } yield {
       Try(clazzAnnotationsArray.apply(index)) match {
         case Return(annotations) if annotations.nonEmpty =>
-          field.getName -> annotations.toSeq
+          field -> annotations.toSeq
         case _ =>
-          field.getName -> Nil
+          field -> Nil
       }
     }).toMap
 
@@ -208,7 +222,9 @@ private[finatra] case class CaseClassField(
   ): Object = {
     if (fieldInjection.isInjectable)
       fieldInjection
-        .inject(context, codec).orElse(defaultValue).getOrElse(throwRequiredFieldException())
+        .inject(context, codec)
+        .orElse(defaultValue)
+        .getOrElse(throwRequiredFieldException())
     else {
       val fieldJsonNode = objectJsonNode.get(name)
       if (fieldJsonNode != null && !fieldJsonNode.isNull)

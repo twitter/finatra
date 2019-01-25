@@ -64,5 +64,9 @@ case class TestTraitImpl(
   @JsonDeserialize(contentAs = classOf[BigDecimal], using = classOf[BigDecimalDeserializer])
   double: BigDecimal,
   @JsonIgnore ignoreMe: String
-) extends TestTrait
+) extends TestTrait {
+
+  lazy val testFoo: String = "foo"
+  lazy val testBar: String = "bar"
+}
 
