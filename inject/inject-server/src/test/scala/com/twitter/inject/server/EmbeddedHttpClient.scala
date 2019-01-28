@@ -73,7 +73,7 @@ private[twitter] class EmbeddedHttpClient private[twitter] (
       .withStreaming(_streamResponses)
       .withLabel(label)
   if (tls) {
-    client = client.withTlsWithoutValidation
+    client = configureTls(client)
   }
 
   private[twitter] val service: Service[Request, Response] =
@@ -195,6 +195,9 @@ private[twitter] class EmbeddedHttpClient private[twitter] (
   }
 
   protected def disableLogging(suppress: Boolean): Boolean = suppress || this._disableLogging
+
+  protected[twitter] def configureTls(client: Http.Client): Http.Client =
+    client.withTlsWithoutValidation
 
   /* Private */
 

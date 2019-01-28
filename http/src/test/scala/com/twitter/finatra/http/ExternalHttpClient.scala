@@ -26,6 +26,9 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
   /** Provide an override to the underlying server's mapper */
   def mapperOverride: Option[FinatraObjectMapper]
 
+  /** Provide an override to the external HTTPS client */
+  private[twitter] def httpsClientOverride: Option[JsonAwareEmbeddedHttpClient] = None
+
   /* Overrides */
 
   /** Logs the external http and/or https host and port of the underlying EmbeddedHttpServer */
@@ -119,7 +122,7 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
     client
   }
 
-  final lazy val httpsClient: JsonAwareEmbeddedHttpClient = {
+  final lazy val httpsClient: JsonAwareEmbeddedHttpClient = httpsClientOverride.getOrElse {
     val client = new JsonAwareEmbeddedHttpClient(
       "httpsClient",
       httpsExternalPort(),
