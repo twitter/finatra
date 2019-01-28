@@ -25,6 +25,7 @@ import org.rocksdb.{
 object FinatraRocksDBConfig {
 
   val RocksDbBlockCacheSizeConfig = "rocksdb.block.cache.size"
+  val RocksDbBlockCacheShardBitsConfig = "rocksdb.block.cache.shard.bits"
   val RocksDbLZ4Config = "rocksdb.lz4"
   val RocksDbEnableStatistics = "rocksdb.statistics"
   val RocksDbStatCollectionPeriodMs = "rocksdb.statistics.collection.period.ms"
@@ -44,6 +45,9 @@ object FinatraRocksDBConfig {
   }
 }
 
+/**
+ * Maintains the RocksDB configuration used by Kafka Streams.
+ */
 class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
 
   //See https://github.com/facebook/rocksdb/wiki/Setup-Options-and-Basic-Tuning#other-general-options
@@ -55,7 +59,7 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
     if (FinatraRocksDBConfig.SharedBlockCache == null) {
       val blockCacheSize =
         getBytesOrDefault(configs, FinatraRocksDBConfig.RocksDbBlockCacheSizeConfig, 100.megabytes)
-      val numShardBits = 1 //TODO: Make configurable so this can be increased for multi-threaded queryable state access
+      val numShardBits = getIntOrDefault(configs, FinatraRocksDBConfig.RocksDbBlockCacheShardBitsConfig, 1)
       FinatraRocksDBConfig.SharedBlockCache = new LRUCache(blockCacheSize, numShardBits)
     }
 

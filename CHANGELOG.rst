@@ -10,6 +10,10 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Adding missing ScalaDocs. Adding metric for elapsed state
+  restore time. RocksDB configuration now contains a flag for adjusting the number
+  of cache shard bits, `rocksdb.block.cache.shard.bits`. ``PHAB_ID=D255771``
+
 * finatra-jackson: Added @Pattern annotation to support finatra/jackson for regex pattern
   validation on string values. ``PHAB_ID=D259719``
 

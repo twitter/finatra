@@ -96,6 +96,11 @@ class WordCountServerFeatureTest extends KafkaStreamsMultiServerFeatureTest {
 
     val serverAfterRestart = createServer()
     serverAfterRestart.start()
+    val serverAfterRestartStats = InMemoryStatsUtil(serverAfterRestart.injector)
+    serverAfterRestartStats.waitForGaugeUntil(
+      "kafka/stream/finatra_state_restore_listener/restore_time_elapsed_ms",
+      _ >= 0
+    )
 
     textLinesTopic.publish(1L -> "world world")
     wordsWithCountsTopic.consumeAsManyMessagesUntilMap(Map("world" -> 5L))
