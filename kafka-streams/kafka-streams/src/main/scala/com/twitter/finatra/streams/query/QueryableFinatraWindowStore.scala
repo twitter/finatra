@@ -31,7 +31,7 @@ class QueryableFinatraWindowStore[K, V](
 
   private val currentServiceShardId = ServiceShardId(currentShardId)
 
-  private val windowSizeMillis = windowSize.inMillis
+  private val queryWindowSize = windowSize * defaultWindowMultiplier
 
   private val partitioner = new KafkaPartitioner(
     StaticServiceShardPartitioner(numShards = numShards),
@@ -46,28 +46,29 @@ class QueryableFinatraWindowStore[K, V](
     throwIfNonLocalKey(key, keySerializer)
 
     val endWindowRange = endTime.getOrElse(
-      TimeWindowed.windowStart(
-        messageTime = Time(DateTimeUtils.currentTimeMillis),
-        sizeMs = windowSizeMillis) + defaultWindowMultiplier * windowSizeMillis)
+      TimeWindowed
+        .windowStart(messageTime = Time(DateTimeUtils.currentTimeMillis), size = windowSize)
+        .+(queryWindowSize)
+        .millis)
 
     val startWindowRange =
-      startTime.getOrElse(endWindowRange - (defaultWindowMultiplier * windowSizeMillis))
+      startTime.getOrElse(endWindowRange - queryWindowSize.inMillis)
 
     val windowedMap = new java.util.TreeMap[DateTimeMillis, V]
 
-    var currentWindowStart = startWindowRange
-    while (currentWindowStart <= endWindowRange) {
-      val windowedKey = TimeWindowed.forSize(currentWindowStart, windowSize.inMillis, key)
+    var currentWindowStart = Time(startWindowRange)
+    while (currentWindowStart.millis <= endWindowRange) {
+      val windowedKey = TimeWindowed.forSize(currentWindowStart, windowSize, key)
 
       //TODO: Use store.taskId to find exact store where the key is assigned
       for (store <- stores) {
         val result = store.get(windowedKey)
         if (result != null) {
-          windowedMap.put(currentWindowStart, result)
+          windowedMap.put(currentWindowStart.millis, result)
         }
       }
 
-      currentWindowStart = currentWindowStart + windowSizeMillis
+      currentWindowStart = currentWindowStart + windowSize
     }
 
     windowedMap.asScala.toMap

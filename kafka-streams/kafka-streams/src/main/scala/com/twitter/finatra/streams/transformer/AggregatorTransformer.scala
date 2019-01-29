@@ -50,7 +50,7 @@ class AggregatorTransformer[K, V, Aggregate](
   allowedLateness: Duration,
   initializer: () => Aggregate,
   aggregator: ((K, V), Aggregate) => Aggregate,
-  customWindowStart: (Time, K, V) => Long,
+  customWindowStart: (Time, K, V) => Time,
   emitOnClose: Boolean = false,
   queryableAfterClose: Duration,
   emitUpdatedEntriesOnCommit: Boolean,
@@ -89,14 +89,14 @@ class AggregatorTransformer[K, V, Aggregate](
 
   override def onMessage(time: Time, key: K, value: V): Unit = {
     val windowedKey = TimeWindowed.forSize(
-      startMs = windowStart(time, key, value),
-      sizeMs = windowSizeMillis,
+      start = windowStart(time, key, value),
+      size = windowSize,
       value = key)
 
-    if (windowedKey.isLate(allowedLatenessMillis, watermark)) {
+    if (windowedKey.isLate(allowedLateness, watermark)) {
       restatement(time, key, value, windowedKey)
     } else {
-      addWindowTimersIfNew(windowedKey.startMs)
+      addWindowTimersIfNew(windowedKey.start.millis)
 
       val currentAggregateValue = stateStore.getOrDefault(windowedKey, initializer())
       stateStore.put(windowedKey, aggregator((key, value), currentAggregateValue))
@@ -165,7 +165,7 @@ class AggregatorTransformer[K, V, Aggregate](
   ): Unit = {
     while (windowIterator.hasNext) {
       val entry = windowIterator.next()
-      assert(entry.key.startMs == windowStartTime)
+      assert(entry.key.start.millis == windowStartTime)
       forward(
         key = entry.key,
         value = WindowedValue(resultState = WindowClosed, value = entry.value),
@@ -192,11 +192,11 @@ class AggregatorTransformer[K, V, Aggregate](
     longSerializer.serialize("", windowStartMs)
   }
 
-  private def windowStart(time: Time, key: K, value: V): Long = {
+  private def windowStart(time: Time, key: K, value: V): Time = {
     if (customWindowStart != null) {
       customWindowStart(time, key, value)
     } else {
-      TimeWindowed.windowStart(time, windowSizeMillis)
+      TimeWindowed.windowStart(time, windowSize)
     }
   }
 

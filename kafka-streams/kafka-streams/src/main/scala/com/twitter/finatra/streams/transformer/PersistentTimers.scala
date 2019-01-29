@@ -13,8 +13,8 @@ import scala.reflect.ClassTag
  * Per-Key Persistent Timers inspired by Flink's ProcessFunction:
  * https://ci.apache.org/projects/flink/flink-docs-stable/dev/stream/operators/process_function.html
  *
- * Note: Timers are based on a sorted RocksDB KeyValueStore
- * Note: Timers that fire at the same time MAY NOT fire in the order which they were added
+ * @note Timers are based on a sorted RocksDB KeyValueStore
+ * @note Timers that fire at the same time MAY NOT fire in the order which they were added
  */
 @Beta
 trait PersistentTimers extends OnWatermark with OnInit {

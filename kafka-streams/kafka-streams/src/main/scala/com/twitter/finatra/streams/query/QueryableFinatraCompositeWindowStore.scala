@@ -1,5 +1,6 @@
 package com.twitter.finatra.streams.query
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finatra.streams.converters.time._
 import com.twitter.finatra.streams.queryable.thrift.domain.ServiceShardId
 import com.twitter.finatra.streams.queryable.thrift.partitioning.{
@@ -90,13 +91,13 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
     allowStaleReads: Boolean,
     resultMap: scala.collection.mutable.Map[Long, scala.collection.mutable.Map[SK, V]]
   ): Unit = {
-    trace(s"QueryWindow $startCompositeKey to $endCompositeKey ${windowStartTime.iso8601}")
+    trace(s"QueryWindow $startCompositeKey to $endCompositeKey ${windowStartTime.asInstanceOf[Long].iso8601}")
 
     //TODO: Use store.taskId to find exact store where the key is assigned
     for (store <- FinatraStoresGlobalManager.getWindowedCompositeStores[PK, SK, V](storeName)) {
       val iterator = store.range(
-        TimeWindowed.forSize(startMs = windowStartTime, windowSizeMillis, startCompositeKey),
-        TimeWindowed.forSize(startMs = windowStartTime, windowSizeMillis, endCompositeKey),
+        TimeWindowed.forSize(start = Time(windowStartTime), windowSize, startCompositeKey),
+        TimeWindowed.forSize(start = Time(windowStartTime), windowSize, endCompositeKey),
         allowStaleReads = allowStaleReads
       )
 
@@ -104,7 +105,7 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
         val entry = iterator.next()
         trace(s"$store\t$entry")
         val innerMap =
-          resultMap.getOrElseUpdate(entry.key.startMs, scala.collection.mutable.Map[SK, V]())
+          resultMap.getOrElseUpdate(entry.key.start.millis, scala.collection.mutable.Map[SK, V]())
         innerMap += (entry.key.value.secondary -> entry.value)
       }
     }
@@ -116,9 +117,10 @@ class QueryableFinatraCompositeWindowStore[PK, SK, V](
     windowSizeMillis: DateTimeMillis
   ): (DateTimeMillis, DateTimeMillis) = {
     val endWindowRange = endTime.getOrElse {
-      TimeWindowed.windowStart(
-        messageTime = Time(DateTimeUtils.currentTimeMillis),
-        sizeMs = windowSizeMillis) + defaultWindowMultiplier * windowSizeMillis
+      TimeWindowed
+        .windowStart(messageTime = Time(DateTimeUtils.currentTimeMillis), size = windowSize)
+        .+(windowSizeMillis.millis * defaultWindowMultiplier)
+        .millis
     }
 
     val startWindowRange =

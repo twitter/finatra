@@ -1,11 +1,13 @@
 package com.twitter.finatra.streams.transformer.internal
 
+import com.twitter.finatra.streams.transformer.domain.Time
+
 //TODO: Need method called by processing timer so that watermarks can be emitted without input records
 class WatermarkTracker {
   private var _watermark: Long = 0L
   reset()
 
-  def watermark: Long = _watermark
+  def watermark: Time = Time(_watermark)
 
   def reset(): Unit = {
     _watermark = 0L

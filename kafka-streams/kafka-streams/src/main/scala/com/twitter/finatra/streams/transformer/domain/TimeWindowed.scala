@@ -5,30 +5,30 @@ import org.joda.time.{DateTime, DateTimeConstants}
 
 object TimeWindowed {
 
-  def forSize[V](startMs: Long, sizeMs: Long, value: V): TimeWindowed[V] = {
-    TimeWindowed(startMs, startMs + sizeMs, value)
+  def forSize[V](start: Time, size: Duration, value: V): TimeWindowed[V] = {
+    TimeWindowed(start, start + size, value)
   }
 
-  def forSizeFromMessageTime[V](messageTime: Time, sizeMs: Long, value: V): TimeWindowed[V] = {
-    val windowStartMs = windowStart(messageTime, sizeMs)
-    TimeWindowed(windowStartMs, windowStartMs + sizeMs, value)
+  def forSizeFromMessageTime[V](messageTime: Time, size: Duration, value: V): TimeWindowed[V] = {
+    val startWindow = windowStart(messageTime, size)
+    TimeWindowed(startWindow, startWindow + size, value)
   }
 
-  def hourly[V](startMs: Long, value: V): TimeWindowed[V] = {
-    TimeWindowed(startMs, startMs + DateTimeConstants.MILLIS_PER_HOUR, value)
+  def hourly[V](start: Time, value: V): TimeWindowed[V] = {
+    TimeWindowed(start, Time(start.millis + DateTimeConstants.MILLIS_PER_HOUR), value)
   }
 
-  def windowStart(messageTime: Time, sizeMs: Long): Long = {
-    (messageTime.millis / sizeMs) * sizeMs
+  def windowStart(messageTime: Time, size: Duration): Time = {
+    Time((messageTime.millis / size.inMillis) * size.inMillis)
   }
 }
 
 /**
  * A time windowed value specified by a start and end time
- * @param startMs the start timestamp of the window (inclusive)
- * @param endMs   the end timestamp of the window (exclusive)
+ * @param start the start time of the window (inclusive)
+ * @param end   the end time of the window (exclusive)
  */
-case class TimeWindowed[V](startMs: Long, endMs: Long, value: V) {
+case class TimeWindowed[V](start: Time, end: Time, value: V) {
 
   /**
    * Determine if this windowed value is late given the allowedLateness configuration and the
@@ -38,15 +38,15 @@ case class TimeWindowed[V](startMs: Long, endMs: Long, value: V) {
    * @param watermark a watermark used to determine if this windowed value is late
    * @return If the windowed value is late
    */
-  def isLate(allowedLateness: Long, watermark: Watermark): Boolean = {
-    watermark.timeMillis > endMs + allowedLateness
+  def isLate(allowedLateness: Duration, watermark: Watermark): Boolean = {
+    watermark.timeMillis > end.millis + allowedLateness.inMillis
   }
 
   /**
    * Determine the start of the next fixed window interval
    */
-  def nextInterval(time: Long, duration: Duration): Long = {
-    val intervalStart = math.max(startMs, time)
+  def nextInterval(time: Time, duration: Duration): Time = {
+    val intervalStart = Time(math.max(start.millis, time.millis))
     Time.nextInterval(intervalStart, duration)
   }
 
@@ -60,20 +60,20 @@ case class TimeWindowed[V](startMs: Long, endMs: Long, value: V) {
   /**
    * The size of this windowed value in milliseconds
    */
-  def sizeMillis: Long = endMs - startMs
+  def sizeMillis: Long = end.millis - start.millis
 
   final override val hashCode: Int = {
     var result = value.hashCode()
-    result = 31 * result + (startMs ^ (startMs >>> 32)).toInt
-    result = 31 * result + (endMs ^ (endMs >>> 32)).toInt
+    result = 31 * result + (start.millis ^ (start.millis >>> 32)).toInt
+    result = 31 * result + (end.millis ^ (end.millis >>> 32)).toInt
     result
   }
 
   final override def equals(obj: scala.Any): Boolean = {
     obj match {
       case other: TimeWindowed[V] =>
-        startMs == other.startMs &&
-          endMs == other.endMs &&
+        start == other.start &&
+          end == other.end &&
           value == other.value
       case _ =>
         false
@@ -81,6 +81,6 @@ case class TimeWindowed[V](startMs: Long, endMs: Long, value: V) {
   }
 
   override def toString: String = {
-    s"TimeWindowed(${new DateTime(startMs)}-${new DateTime(endMs)}-$value)"
+    s"TimeWindowed(${new DateTime(start.millis)}-${new DateTime(end.millis)}-$value)"
   }
 }

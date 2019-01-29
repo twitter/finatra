@@ -111,7 +111,7 @@ trait FinatraDslWindowedAggregations
       aggregateSerde: Serde[Aggregate],
       initializer: () => Aggregate,
       aggregator: ((K, V), Aggregate) => Aggregate,
-      windowStart: (Time, K, V) => Long = null,
+      windowStart: (Time, K, V) => Time = null,
       emitOnClose: Boolean = true,
       emitUpdatedEntriesOnCommit: Boolean = false,
       windowSizeRetentionMultiplier: Int = 2
@@ -290,7 +290,7 @@ trait FinatraDslWindowedAggregations
         windowStart = {
           case (time, key, timeWindowedCount) =>
             assert(timeWindowedCount.sizeMillis == windowSizeMillis)
-            timeWindowedCount.startMs
+            timeWindowedCount.start
         },
         emitOnClose = emitOnClose,
         emitUpdatedEntriesOnCommit = emitUpdatedEntriesOnCommit,

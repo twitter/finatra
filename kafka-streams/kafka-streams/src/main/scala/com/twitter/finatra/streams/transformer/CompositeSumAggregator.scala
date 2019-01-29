@@ -1,5 +1,6 @@
 package com.twitter.finatra.streams.transformer
 
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.streams.transformer.FinatraTransformer.WindowStartTime
 import com.twitter.finatra.streams.transformer.domain._
@@ -31,10 +32,6 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
     with StateStoreImplicits
     with IteratorImplicits {
 
-  private val windowSizeMillis = windowSize.inMillis
-  private val allowedLatenessMillis = allowedLateness.inMillis
-  private val queryableAfterCloseMillis = queryableAfterClose.inMillis
-
   private val restatementsCounter = statsReceiver.counter("numRestatements")
   private val deletesCounter = statsReceiver.counter("numDeletes")
 
@@ -51,8 +48,8 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
   )
 
   override def onMessage(time: Time, compositeKey: CK, count: Int): Unit = {
-    val windowedCompositeKey = TimeWindowed.forSize(time.hourMillis, windowSizeMillis, compositeKey)
-    if (windowedCompositeKey.isLate(allowedLatenessMillis, Watermark(watermark.timeMillis))) {
+    val windowedCompositeKey = TimeWindowed.forSize(time.hour, windowSize, compositeKey)
+    if (windowedCompositeKey.isLate(allowedLateness, Watermark(watermark.timeMillis))) {
       restatementsCounter.incr()
       forward(windowedCompositeKey.map { _ =>
         compositeKey.primary
@@ -65,14 +62,14 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
         putStat = putLatencyStat
       )
       if (newCount == count) {
-        val closeTime = windowedCompositeKey.startMs + windowSizeMillis + allowedLatenessMillis
+        val closeTime = windowedCompositeKey.start + windowSize + allowedLateness
         if (emitOnClose) {
-          timerStore.addTimer(Time(closeTime), Close, windowedCompositeKey.startMs)
+          timerStore.addTimer(closeTime, Close, windowedCompositeKey.start.millis)
         }
         timerStore.addTimer(
-          Time(closeTime + queryableAfterCloseMillis),
+          closeTime + queryableAfterClose,
           Expire,
-          windowedCompositeKey.startMs
+          windowedCompositeKey.start.millis
         )
       }
     }
@@ -91,14 +88,15 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
     windowStartMs: WindowStartTime
   ): Unit = {
     debug(s"onEventTimer $time $timerMetadata")
+    val windowStart = Time(windowStartMs)
     val windowIterator = stateStore.range(
-      TimeWindowed.forSize(windowStartMs, windowSizeMillis, compositeKeyRangeStart),
-      TimeWindowed.forSize(windowStartMs + 1, windowSizeMillis, compositeKeyRangeStart)
+      TimeWindowed.forSize(windowStart, windowSize, compositeKeyRangeStart),
+      TimeWindowed.forSize(windowStart + 1.millis, windowSize, compositeKeyRangeStart)
     )
 
     try {
       if (timerMetadata == Close) {
-        onClosed(windowStartMs, windowIterator)
+        onClosed(windowStart, windowIterator)
       } else {
         onExpired(windowIterator)
       }
@@ -108,7 +106,7 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
   }
 
   private def onClosed(
-    windowStartMs: Long,
+    windowStart: Time,
     windowIterator: KeyValueIterator[TimeWindowed[CK], Int]
   ): Unit = {
     windowIterator
@@ -122,7 +120,7 @@ class CompositeSumAggregator[K, A, CK <: CompositeKey[K, A]](
       .foreach {
         case (key, countsMap) =>
           forward(
-            key = TimeWindowed.forSize(windowStartMs, windowSizeMillis, key),
+            key = TimeWindowed.forSize(windowStart, windowSize, key),
             value = WindowedValue(resultState = WindowClosed, value = countsMap)
           )
       }

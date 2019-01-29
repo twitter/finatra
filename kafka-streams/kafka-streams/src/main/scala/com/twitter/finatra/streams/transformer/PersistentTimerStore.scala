@@ -26,12 +26,12 @@ class PersistentTimerStore[TimerKey](
 
   def onInit(): Unit = {
     setNextTimerTime(Long.MaxValue)
-    currentWatermark = Watermark(0)
+    currentWatermark = Watermark(0L)
 
     val iterator = timersStore.all()
     try {
       if (iterator.hasNext) {
-        setNextTimerTime(iterator.next.key.time)
+        setNextTimerTime(iterator.next.key.time.millis)
       }
     } finally {
       iterator.close()
@@ -61,7 +61,7 @@ class PersistentTimerStore[TimerKey](
     } else {
       debug(f"${"AddTimer:"}%-20s ${metadata.getClass.getSimpleName}%-12s Key $key Timer $time")
       timersStore.put(
-        Timer(time = time.millis, metadata = metadata, key = key),
+        Timer(time = time, metadata = metadata, key = key),
         Array.emptyByteArray)
 
       if (time.millis < nextTimerTime) {
@@ -97,7 +97,7 @@ class PersistentTimerStore[TimerKey](
       while (timerIterator.hasNext && !timerIteratorState.done) {
         currentTimer = timerIterator.next().key
 
-        if (watermark.timeMillis >= currentTimer.time) {
+        if (watermark.timeMillis >= currentTimer.time.millis) {
           fireAndDeleteTimer(currentTimer)
           numTimerFires += 1
           if (numTimerFires >= maxTimerFiresPerWatermark) {
@@ -109,11 +109,11 @@ class PersistentTimerStore[TimerKey](
       }
 
       if (timerIteratorState == FoundTimerAfterWatermark) {
-        setNextTimerTime(currentTimer.time)
+        setNextTimerTime(currentTimer.time.millis)
       } else if (timerIteratorState == ExceededMaxTimers && timerIterator.hasNext) {
-        setNextTimerTime(timerIterator.next().key.time)
+        setNextTimerTime(timerIterator.next().key.time.millis)
         debug(
-          s"Exceeded $maxTimerFiresPerWatermark max timer fires per watermark. LastTimerFired: ${currentTimer.time.iso8601Millis} NextTimer: ${nextTimerTime.iso8601Millis}"
+          s"Exceeded $maxTimerFiresPerWatermark max timer fires per watermark. LastTimerFired: ${currentTimer.time.millis.iso8601Millis} NextTimer: ${nextTimerTime.iso8601Millis}"
         )
       } else {
         assert(!timerIterator.hasNext)
@@ -139,7 +139,7 @@ class PersistentTimerStore[TimerKey](
 
   private def fireAndDeleteTimer(timer: Timer[TimerKey]): Unit = {
     trace(s"fireAndDeleteTimer $timer")
-    onTimer(Time(timer.time), timer.metadata, timer.key)
+    onTimer(timer.time, timer.metadata, timer.key)
     timersStore.deleteWithoutGettingPriorValue(timer)
   }
 

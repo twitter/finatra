@@ -2,7 +2,7 @@ package com.twitter.finatra.streams.transformer.internal.domain
 
 import com.google.common.primitives.Longs
 import com.twitter.finatra.kafka.serde.AbstractSerde
-import com.twitter.finatra.streams.transformer.domain.TimerMetadata
+import com.twitter.finatra.streams.transformer.domain.{Time, TimerMetadata}
 import java.nio.ByteBuffer
 import org.apache.kafka.common.serialization.Serde
 
@@ -19,6 +19,11 @@ object TimerSerde {
   }
 }
 
+/**
+ * Serde for the [[Timer]] class.
+ *
+ * @param inner Serde for [[Timer.key]].
+ */
 class TimerSerde[K](inner: Serde[K]) extends AbstractSerde[Timer[K]] {
 
   private val TimerTimeSizeBytes = Longs.BYTES
@@ -29,7 +34,7 @@ class TimerSerde[K](inner: Serde[K]) extends AbstractSerde[Timer[K]] {
 
   final override def deserialize(bytes: Array[Byte]): Timer[K] = {
     val bb = ByteBuffer.wrap(bytes)
-    val time = bb.getLong()
+    val time = Time(bb.getLong())
     val metadata = TimerMetadata(bb.get)
 
     val keyBytes = new Array[Byte](bb.remaining())
@@ -44,7 +49,7 @@ class TimerSerde[K](inner: Serde[K]) extends AbstractSerde[Timer[K]] {
     val timerBytes = new Array[Byte](TimerTimeSizeBytes + MetadataSizeBytes + keyBytes.length)
 
     val bb = ByteBuffer.wrap(timerBytes)
-    bb.putLong(timer.time)
+    bb.putLong(timer.time.millis)
     bb.put(timer.metadata.value)
     bb.put(keyBytes)
     timerBytes

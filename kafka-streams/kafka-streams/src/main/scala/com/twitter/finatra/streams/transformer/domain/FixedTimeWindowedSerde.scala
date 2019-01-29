@@ -37,20 +37,24 @@ class FixedTimeWindowedSerde[K](val inner: Serde[K], windowSize: Duration)
     bb.get(keyBytes)
     val endMs = startMs + windowSizeMillis
 
-    TimeWindowed(startMs = startMs, endMs = endMs, innerDeserializer.deserialize(topic, keyBytes))
+    TimeWindowed(
+      start = Time(startMs),
+      end = Time(endMs),
+      innerDeserializer.deserialize(topic, keyBytes)
+    )
   }
 
   final override def serialize(timeWindowedKey: TimeWindowed[K]): Array[Byte] = {
     assert(
-      timeWindowedKey.startMs + windowSizeMillis == timeWindowedKey.endMs,
-      s"TimeWindowed element being serialized has end time which is not consistent with the FixedTimeWindowedSerde window size of $windowSize. ${timeWindowedKey.startMs + windowSizeMillis} != ${timeWindowedKey.endMs}"
+      timeWindowedKey.start + windowSize == timeWindowedKey.end,
+      s"TimeWindowed element being serialized has end time which is not consistent with the FixedTimeWindowedSerde window size of $windowSize. ${timeWindowedKey.start + windowSize} != ${timeWindowedKey.end}"
     )
 
     val keyBytes = innerSerializer.serialize(topic, timeWindowedKey.value)
     val windowAndKeyBytesSize = new Array[Byte](WindowStartTimeSizeBytes + keyBytes.length)
 
     val bb = ByteBuffer.wrap(windowAndKeyBytesSize)
-    bb.putLong(timeWindowedKey.startMs)
+    bb.putLong(timeWindowedKey.start.millis)
     bb.put(keyBytes)
     bb.array()
   }

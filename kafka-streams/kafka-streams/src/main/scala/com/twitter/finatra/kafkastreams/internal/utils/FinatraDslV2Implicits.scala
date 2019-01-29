@@ -100,7 +100,7 @@ trait FinatraDslV2Implicits extends ScalaStreamsImplicits {
           queryableAfterClose = queryableAfterClose,
           countToAggregate = (key, count) => count,
           windowStart = (messageTime, key, value) =>
-            TimeWindowed.windowStart(messageTime, windowSize.inMillis)
+            TimeWindowed.windowStart(messageTime, windowSize)
         )
 
       inner.transform(transformerSupplier, stateStore, timerStore.name)
@@ -148,7 +148,7 @@ trait FinatraDslV2Implicits extends ScalaStreamsImplicits {
             emitOnClose = emitOnClose,
             queryableAfterClose = queryableAfterClose,
             countToAggregate = (key, windowedValue) => windowedValue.value,
-            windowStart = (messageTime, key, windowedValue) => windowedValue.startMs
+            windowStart = (messageTime, key, windowedValue) => windowedValue.start
           )
         ).asInstanceOf[() => Transformer[
         K,

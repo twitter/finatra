@@ -22,7 +22,7 @@ class WordLengthFinatraTransformer(statsReceiver: StatsReceiver, timerStoreName:
   override def onMessage(messageTime: Time, key: String, value: String): Unit = {
     forward(key, "onMessage " + key + " " + key.length)
 
-    val time = messageTime.plus(delayedMessageTime)
+    val time = messageTime + delayedMessageTime
 
     timerStore.addTimer(time, Expire, key)
   }

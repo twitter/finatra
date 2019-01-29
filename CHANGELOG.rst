@@ -22,6 +22,11 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: `c.t.finatra.streams.transformer.domain.Time` is now the canonical
+   representation of time for watermarks and timers. `RichLong` implicit from
+   `com.twitter.finatra.streams.converters.time` has been renamed to `RichFinatraKafkaStreamsLong`.
+   ``PHAB_ID=D255736``
+
 * finatra-jackson: Fix `CaseClassField` annotation reflection for Scala 2.12. ``PHAB_ID=D264423``
 
 * finatra-kafka-streams: Combine FinatraTransformer with FinatraTransformerV2. ``PHAB_ID=D254411``

@@ -49,7 +49,7 @@ class ReservoirSamplingTransformer[
 
     for (eTime <- expirationTime) {
       if (isFirstTimeSampleKeySeen(totalCount)) {
-        timerStore.addTimer(messageTime.plus(eTime), Expire, sampleKey)
+        timerStore.addTimer(messageTime + eTime, Expire, sampleKey)
       }
     }
 
