@@ -24,7 +24,7 @@ class ValidatorTest extends Test {
 
   def getValidationAnnotations(clazz: Class[_], paramName: String): Seq[Annotation] = {
     val constructorParams = parseConstructorParams(clazz)
-    val annotations = findAnnotations(clazz)
+    val annotations = findAnnotations(clazz, constructorParams)
 
     for {
       param <- constructorParams

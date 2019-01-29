@@ -13,6 +13,7 @@ import com.twitter.finatra.json.internal.caseclass.exceptions.{
 }
 import com.twitter.finatra.json.internal.caseclass.reflection.{
   CaseClassSigParser,
+  ConstructorParam,
   DefaultMethodUtils
 }
 import com.twitter.finatra.json.internal.caseclass.utils.AnnotationUtils._
@@ -22,7 +23,6 @@ import com.twitter.finatra.validation.ValidationResult._
 import com.twitter.finatra.validation.{ErrorCode, Validation}
 import com.twitter.inject.Logging
 import com.twitter.inject.conversions.string._
-import com.twitter.util.{Return, Try}
 import java.lang.annotation.Annotation
 import scala.annotation.tailrec
 import scala.language.existentials
@@ -35,13 +35,14 @@ private[finatra] object CaseClassField {
     namingStrategy: PropertyNamingStrategy,
     typeFactory: TypeFactory
   ): Seq[CaseClassField] = {
-    val constructorParams = CaseClassSigParser.parseConstructorParams(clazz)
+    val constructorParams: Seq[ConstructorParam] = CaseClassSigParser.parseConstructorParams(clazz)
     assert(
       clazz.getConstructors.head.getParameterCount == constructorParams.size,
       "Non-static inner 'case classes' not supported"
     )
 
-    val annotationsMap: Map[String, Seq[Annotation]] = findAnnotations(clazz)
+    // field name to list of parsed annotations
+    val annotationsMap: Map[String, Seq[Annotation]] = findAnnotations(clazz, constructorParams)
 
     val companionObject = Class.forName(clazz.getName + "$").getField("MODULE$").get(null)
     val companionObjectClass = companionObject.getClass
@@ -64,37 +65,23 @@ private[finatra] object CaseClassField {
   }
 
   /** Finds the sequence of Annotations per field in the clazz, keyed by field name */
-  private[finatra] def findAnnotations(clazz: Class[_]): Map[String, Seq[Annotation]] = {
+  private[finatra] def findAnnotations(
+    clazz: Class[_],
+    constructorParams: Seq[ConstructorParam]
+  ): Map[String, Seq[Annotation]] = {
     // for case classes, the annotations are only visible on the constructor.
-    val clazzAnnotationsArray: Array[Array[Annotation]] =
+    val clazzConstructorAnnotations: Array[Array[Annotation]] =
       clazz.getConstructors.head.getParameterAnnotations
 
-    val clazzConstructorParamNames: Array[String] =
-      clazz.getConstructors.head.getParameters.map(_.getName)
-    val clazzDeclaredFieldNames: Array[String] = clazz.getDeclaredFields.map(_.getName)
-
-    /*  NOTE: we want to prefer using the constructor Array[Parameter] names, however in Scala 2.11
-        Parameters don't have actual names (only "arg" + index), so we fall back to relying on
-        the declared fields found via reflection -- which conversely is incorrect in Scala 2.12
-        for this purpose. */
-    val clazzFields: Array[String] =
-      if (clazzConstructorParamNames.exists(!_.startsWith("arg"))) {
-        clazzConstructorParamNames
-      } else {
-        clazzDeclaredFieldNames
-      }
-
+    // find case class field annotations
     val clazzAnnotations: Map[String, Seq[Annotation]] = (for {
-      (field, index) <- clazzFields.zipWithIndex
+      (field, index) <- constructorParams.zipWithIndex
+      fieldAnnotations = clazzConstructorAnnotations(index)
     } yield {
-      Try(clazzAnnotationsArray.apply(index)) match {
-        case Return(annotations) if annotations.nonEmpty =>
-          field -> annotations.toSeq
-        case _ =>
-          field -> Nil
-      }
+      field.name -> fieldAnnotations.toSeq
     }).toMap
 
+    // find inherited annotations
     val inheritedAnnotations: Map[String, Seq[Annotation]] =
       findDeclaredMethodAnnotations(clazz, Map.empty[String, Seq[Annotation]])
 
