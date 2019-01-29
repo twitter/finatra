@@ -52,6 +52,10 @@ Changed
     admin page.
   ``PHAB_ID=D259597``
 
+* inject-server: EmbeddedTwitterServer that fails to start will now continue to
+  throw the startup failure on calls to methods that require a successfully started server.
+  ``PHAB_ID=D265543``
+
 Fixed
 ~~~~~
 
