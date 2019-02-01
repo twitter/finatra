@@ -1,5 +1,5 @@
 package com.twitter.finatra.streams.stores
-import com.twitter.finatra.streams.transformer.domain.TimerResult
+import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.processor.TaskId
 import org.apache.kafka.streams.state.{KeyValueIterator, KeyValueStore}
 
@@ -25,10 +25,18 @@ trait FinatraKeyValueStore[K, V] extends KeyValueStore[K, V] {
    * @throws NullPointerException       If null is used for from or to.
    * @throws InvalidStateStoreException if the store is not initialized
    */
+  @throws[InvalidStateStoreException]
   def range(from: K, to: K, allowStaleReads: Boolean): KeyValueIterator[K, V]
 
-  @deprecated("no longer supported", "1/7/2019")
-  def deleteRange(from: K, to: K, maxDeletes: Int = 25000): TimerResult[K]
+  /**
+   * Removes the database entries in the range ["from", "to"), i.e.,
+   * including "from" and excluding "to". It is not an error if no keys exist
+   * in the range ["from", "to").
+   *
+   * @throws InvalidStateStoreException if the store is not initialized
+   */
+  @throws[InvalidStateStoreException]
+  def deleteRange(from: K, to: K): Unit
 
   /**
    * Delete the value from the store (if there is one)

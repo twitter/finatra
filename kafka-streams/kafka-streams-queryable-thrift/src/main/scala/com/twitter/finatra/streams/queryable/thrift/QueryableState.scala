@@ -40,14 +40,6 @@ trait QueryableState extends StaticPartitioning {
       currentShardId = currentShard())
   }
 
-  @deprecated("Use queryableFinatraWindowStore without a windowSize", "1/7/2019")
-  protected def queryableFinatraWindowStore[K, V](
-    storeName: String,
-    primaryKeySerde: Serde[K]
-  ): QueryableFinatraWindowStore[K, V] = {
-    queryableFinatraWindowStore(storeName, null, primaryKeySerde)
-  }
-
   protected def queryableFinatraCompositeWindowStore[PK, SK, V](
     storeName: String,
     windowSize: Duration,

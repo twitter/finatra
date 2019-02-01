@@ -9,7 +9,7 @@ class InMemoryKeyValueFlushingStoreBuilder[K, V](
   keySerde: Serde[K],
   valueSerde: Serde[V],
   time: Time = Time.SYSTEM)
-    extends FinatraAbstractStoreBuilder[K, V, KeyValueStore[K, V]](name, keySerde, valueSerde, time) {
+    extends AbstractStoreBuilder[K, V, KeyValueStore[K, V]](name, keySerde, valueSerde, time) {
 
   override def build(): KeyValueStore[K, V] = {
     val inMemoryKeyValueStore = new InMemoryKeyValueStore[K, V](name, keySerde, valueSerde)

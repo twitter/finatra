@@ -22,6 +22,8 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Delete deprecated and unused classes. ``PHAB_ID=D267921``
+
 * finatra-kafka-streams: `c.t.finatra.streams.transformer.domain.Time` is now the canonical
    representation of time for watermarks and timers. `RichLong` implicit from
    `com.twitter.finatra.streams.converters.time` has been renamed to `RichFinatraKafkaStreamsLong`.

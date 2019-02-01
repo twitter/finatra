@@ -2,7 +2,6 @@ package com.twitter.finatra.streams.stores.internal
 
 import com.twitter.finagle.stats.{Gauge, StatsReceiver}
 import com.twitter.finatra.streams.stores.{CachingFinatraKeyValueStore, FinatraKeyValueStore}
-import com.twitter.finatra.streams.transformer.domain.TimerResult
 import com.twitter.inject.Logging
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import java.util
@@ -204,9 +203,9 @@ class CachingFinatraKeyValueStoreImpl[K: ClassTag, V](
     keyValueStore.deleteRangeExperimentalWithNoChangelogUpdates(beginKeyInclusive, endKeyExclusive)
   }
 
-  override def deleteRange(from: K, to: K, maxDeletes: Int): TimerResult[K] = {
+  override def deleteRange(from: K, to: K): Unit = {
     flushObjectCache()
-    keyValueStore.deleteRange(from, to, maxDeletes)
+    keyValueStore.deleteRange(from, to)
   }
 
   override def approximateNumEntries(): Long = {

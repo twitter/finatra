@@ -9,11 +9,6 @@ trait ProcessorContextLogging {
 
   private val _logger = Logger(getClass)
 
-  @deprecated("Use error, warn, info, debug, or trace methods directly")
-  protected def logger: Logger = {
-    _logger
-  }
-
   protected def processorContext: ProcessorContext
 
   final protected[this] def error(message: => Any): Unit = {

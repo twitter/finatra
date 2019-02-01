@@ -5,7 +5,6 @@ import com.twitter.finatra.kafkastreams.internal.utils.ReflectionUtils
 import com.twitter.finatra.streams.stores.FinatraKeyValueStore
 import com.twitter.finatra.streams.stores.internal.FinatraKeyValueStoreImpl._
 import com.twitter.finatra.streams.transformer.IteratorImplicits
-import com.twitter.finatra.streams.transformer.domain.{DeleteTimer, RetainTimer, TimerResult}
 import com.twitter.inject.Logging
 import java.util
 import java.util.Comparator
@@ -14,14 +13,9 @@ import org.apache.kafka.common.serialization.{Deserializer, Serializer}
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.processor.{ProcessorContext, StateStore, TaskId}
-import org.apache.kafka.streams.state.internals.{
-  MeteredKeyValueBytesStore,
-  RocksDBStore,
-  RocksKeyValueIterator
-}
+import org.apache.kafka.streams.state.internals.{MeteredKeyValueBytesStore, RocksDBStore, RocksKeyValueIterator}
 import org.apache.kafka.streams.state.{KeyValueIterator, KeyValueStore, StateSerdes}
 import org.rocksdb.{RocksDB, WriteOptions}
-import scala.collection.JavaConverters._
 import scala.reflect.ClassTag
 
 object FinatraKeyValueStoreImpl {
@@ -175,19 +169,13 @@ case class FinatraKeyValueStoreImpl[K: ClassTag, V](
 
   /* Finatra Additions */
 
-  @deprecated("no longer supported", "1/7/2019")
-  override def deleteRange(from: K, to: K, maxDeletes: Int = 25000): TimerResult[K] = {
+  override def deleteRange(from: K, to: K): Unit = {
     meterLatency(deleteRangeLatencyStat) {
       val iterator = range(from, to)
       try {
-        val keysToDelete = iterator.asScala
-          .take(maxDeletes)
-          .map(keyValue => new KeyValue(keyValue.key, null.asInstanceOf[V]))
-          .toList
-          .asJava
-
-        putAll(keysToDelete)
-        deleteOrRetainTimer(iterator)
+        while (iterator.hasNext) {
+          delete(iterator.next.key)
+        }
       } finally {
         iterator.close()
       }
@@ -266,19 +254,6 @@ case class FinatraKeyValueStoreImpl[K: ClassTag, V](
           error("Failure operation", e)
           throw e
       }
-    }
-  }
-
-  @deprecated
-  private def deleteOrRetainTimer(
-    iterator: KeyValueIterator[K, _],
-    onDeleteTimer: => Unit = () => ()
-  ): TimerResult[K] = {
-    if (iterator.hasNext) {
-      RetainTimer(stateStoreCursor = iterator.peekNextKeyOpt, throttled = true)
-    } else {
-      onDeleteTimer
-      DeleteTimer()
     }
   }
 

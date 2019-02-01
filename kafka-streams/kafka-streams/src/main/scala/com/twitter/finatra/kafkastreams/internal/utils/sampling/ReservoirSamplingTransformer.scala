@@ -66,9 +66,7 @@ class ReservoirSamplingTransformer[
     sampleStore
       .deleteRange(
         IndexedSampleKey.rangeStart(key),
-        IndexedSampleKey.rangeEnd(key),
-        maxDeletes = sampleSize
-      )
+        IndexedSampleKey.rangeEnd(key))
 
     numExpiredCounter.incr()
   }
