@@ -5,7 +5,8 @@ import org.apache.kafka.streams.processor.ProcessorContext
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 
-trait ProcessorContextLogging {
+//TODO: Change viability to [kafkastreams] after deleting deprecated dependent code
+private[finatra] trait ProcessorContextLogging {
 
   private val _logger = Logger(getClass)
 

@@ -2,11 +2,10 @@ package com.twitter.finatra.kafkastreams.internal.utils.sampling
 
 import com.google.common.primitives.Ints
 import com.twitter.finatra.kafka.serde.AbstractSerde
-import com.twitter.finatra.streams.transformer.domain.IndexedSampleKey
 import java.nio.ByteBuffer
 import org.apache.kafka.common.serialization.Serde
 
-object IndexedSampleKeySerde {
+private[kafkastreams] object IndexedSampleKeySerde {
 
   /**
    * Indexed sample key adds one Integer to the bytes
@@ -14,7 +13,7 @@ object IndexedSampleKeySerde {
   val IndexSize: Int = Ints.BYTES
 }
 
-class IndexedSampleKeySerde[SampleKey](sampleKeySerde: Serde[SampleKey])
+private[kafkastreams] class IndexedSampleKeySerde[SampleKey](sampleKeySerde: Serde[SampleKey])
     extends AbstractSerde[IndexedSampleKey[SampleKey]] {
 
   private val sampleKeySerializer = sampleKeySerde.serializer()

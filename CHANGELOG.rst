@@ -22,6 +22,9 @@ Added
 Changed
 ~~~~~~~
 
+* finatra-kafka-streams: Refactor package names. All classes moved from
+  com.twitter.finatra.streams to com.twitter.finatra.kafkastreams. ``PHAB_ID=D268027``
+
 * finatra-kafka-streams: Delete deprecated and unused classes. ``PHAB_ID=D267921``
 
 * finatra-kafka-streams: `c.t.finatra.streams.transformer.domain.Time` is now the canonical

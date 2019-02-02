@@ -4,8 +4,8 @@ import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import java.util
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.common.MetricName
-import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 import org.apache.kafka.common.metrics.KafkaMetric
+import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 
 object KafkaStreamsFinagleMetricsReporter {
 
@@ -108,7 +108,7 @@ object KafkaStreamsFinagleMetricsReporter {
  * Kafka-Streams specific MetricsReporter which adds some additional logic on top of the metrics
  * reporter used for Kafka consumers and producers
  */
-class KafkaStreamsFinagleMetricsReporter extends KafkaFinagleMetricsReporter {
+private[kafkastreams] class KafkaStreamsFinagleMetricsReporter extends KafkaFinagleMetricsReporter {
 
   private var includeProcessorNodeId = false
   private var includeGlobalTableMetrics = false

@@ -2,7 +2,7 @@ package com.twitter.finatra.kafkastreams.integration.wordcount
 
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.KafkaStreamsTwitterServer
-import com.twitter.finatra.streams.prerestore.PreRestoreState
+import com.twitter.finatra.kafkastreams.prerestore.PreRestoreState
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.{Consumed, Materialized, Produced, Serialized}

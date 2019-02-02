@@ -1,13 +1,9 @@
 package com.twitter.finatra.kafkastreams.internal.utils.sampling
 
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.streams.transformer.domain.{
-  Expire,
-  IndexedSampleKey,
-  Time,
-  TimerMetadata
-}
-import com.twitter.finatra.streams.transformer.{FinatraTransformer, PersistentTimers}
+import com.twitter.finatra.kafkastreams.transformer.FinatraTransformer
+import com.twitter.finatra.kafkastreams.transformer.domain.{Expire, Time, TimerMetadata}
+import com.twitter.finatra.kafkastreams.transformer.stores.PersistentTimers
 import com.twitter.util.Duration
 import org.apache.kafka.streams.processor.PunctuationType
 import scala.reflect.ClassTag

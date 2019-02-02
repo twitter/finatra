@@ -18,7 +18,7 @@ import scala.collection.mutable.{Map => MutableMap}
  *   https://github.com/facebook/rocksdb/wiki/Statistics
  *   https://github.com/facebook/rocksdb/blob/master/include/rocksdb/statistics.h
  */
-class RocksDBStatsCallback(statsReceiver: StatsReceiver)
+private[kafkastreams] class RocksDBStatsCallback(statsReceiver: StatsReceiver)
     extends StatisticsCollectorCallback
     with Logging {
 

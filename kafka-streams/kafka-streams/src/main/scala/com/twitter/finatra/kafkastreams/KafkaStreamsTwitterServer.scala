@@ -4,21 +4,17 @@ import com.twitter.app.Flag
 import com.twitter.conversions.DurationOps._
 import com.twitter.conversions.StorageUnitOps._
 import com.twitter.finagle.stats.StatsReceiver
-import com.twitter.finatra.kafka.interceptors.{
-  InstanceMetadataProducerInterceptor,
-  MonitoringConsumerInterceptor,
-  PublishTimeProducerInterceptor
-}
+import com.twitter.finatra.kafka.interceptors.{InstanceMetadataProducerInterceptor, MonitoringConsumerInterceptor, PublishTimeProducerInterceptor}
 import com.twitter.finatra.kafka.stats.KafkaFinagleMetricsReporter
 import com.twitter.finatra.kafkastreams.config.{FinatraRocksDBConfig, KafkaStreamsConfig}
 import com.twitter.finatra.kafkastreams.domain.ProcessingGuarantee
-import com.twitter.finatra.kafkastreams.internal.ScalaStreamsImplicits
 import com.twitter.finatra.kafkastreams.internal.admin.AdminRoutes
+import com.twitter.finatra.kafkastreams.internal.interceptors.KafkaStreamsMonitoringConsumerInterceptor
 import com.twitter.finatra.kafkastreams.internal.listeners.FinatraStateRestoreListener
 import com.twitter.finatra.kafkastreams.internal.serde.AvoidDefaultSerde
 import com.twitter.finatra.kafkastreams.internal.stats.KafkaStreamsFinagleMetricsReporter
-import com.twitter.finatra.kafkastreams.utils.KafkaFlagUtils
-import com.twitter.finatra.streams.interceptors.KafkaStreamsMonitoringConsumerInterceptor
+import com.twitter.finatra.kafkastreams.internal.utils.KafkaFlagUtils
+import com.twitter.finatra.kafkastreams.utils.ScalaStreamsImplicits
 import com.twitter.inject.server.TwitterServer
 import com.twitter.util.Duration
 import java.util.Properties
@@ -28,13 +24,7 @@ import org.apache.kafka.clients.consumer.{ConsumerConfig, OffsetResetStrategy}
 import org.apache.kafka.common.metrics.Sensor.RecordingLevel
 import org.apache.kafka.streams.KafkaStreams.{State, StateListener}
 import org.apache.kafka.streams.processor.internals.DefaultKafkaClientSupplier
-import org.apache.kafka.streams.{
-  KafkaClientSupplier,
-  KafkaStreams,
-  StreamsBuilder,
-  StreamsConfig,
-  Topology
-}
+import org.apache.kafka.streams.{KafkaClientSupplier, KafkaStreams, StreamsBuilder, StreamsConfig, Topology}
 
 /**
  * A [[com.twitter.server.TwitterServer]] that supports configuring a KafkaStreams topology.

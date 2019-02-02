@@ -1,12 +1,8 @@
 package com.twitter.finatra.streams.queryable.thrift
 
 import com.twitter.app.Flag
-import com.twitter.finatra.streams.partitioning.StaticPartitioning
-import com.twitter.finatra.streams.query.{
-  QueryableFinatraCompositeWindowStore,
-  QueryableFinatraKeyValueStore,
-  QueryableFinatraWindowStore
-}
+import com.twitter.finatra.kafkastreams.partitioning.StaticPartitioning
+import com.twitter.finatra.kafkastreams.query.{QueryableFinatraCompositeWindowStore, QueryableFinatraKeyValueStore, QueryableFinatraWindowStore}
 import com.twitter.util.Duration
 import org.apache.kafka.common.serialization.Serde
 
