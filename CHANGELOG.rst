@@ -74,6 +74,14 @@ Changed
 Fixed
 ~~~~~
 
+* finatra-kafka-streams: `FinatraTopologyTester` did not set
+  `TopologyTestDriver#initialWallClockTimeMs` on initialization causing diverging wall clock time
+  when `TopologyTestDriver#advanceWallClockTime` advanced time. The divergence was between
+  system time set by `org.joda.time.DateTimeUtils.setCurrentMillisFixed` and internal mock timer
+  `TopologyTestDriver#mockWallClockTime`. `FinatraTopologyTester.inMemoryStatsReceiver` is reset on
+  `TopologyFeatureTest#beforeEach` for all test that extend `TopologyFeatureTest`.
+  ``PHAB_ID=D269013``
+
 * finatra-kafka-streams: Improve watermark assignment/propagation upon reading the first
   message and when caching key value stores are used. ``PHAB_ID=D262054``
 

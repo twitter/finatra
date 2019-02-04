@@ -208,9 +208,9 @@ case class FinatraTopologyTester private (
   }
 
   def reset(): Unit = {
+    inMemoryStatsReceiver.clear()
     close()
     createTopologyTester()
-    DateTimeUtils.setCurrentMillisFixed(startingWallClockTime.getMillis)
   }
 
   def close(): Unit = {
@@ -302,6 +302,8 @@ case class FinatraTopologyTester private (
   }
 
   private def createTopologyTester(): Unit = {
-    _driver = new TopologyTestDriver(topology, properties)
+    DateTimeUtils.setCurrentMillisFixed(startingWallClockTime.getMillis)
+    debug(s"Creating TopologyTestDriver with wall clock ${DateTimeUtils.currentTimeMillis().iso8601Millis}")
+    _driver = new TopologyTestDriver(topology, properties, startingWallClockTime.getMillis)
   }
 }
