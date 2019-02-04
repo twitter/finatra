@@ -29,7 +29,7 @@ import scala.collection.mutable
  * [[com.twitter.finatra.http.HttpServer.messageBodyModule]].
  *
  * When the MessageBodyManager is obtained from the injector (which is configured with the framework
- * [[com.twitter.finatra.http.modules.MessageBodyModule]] the framework default implementations for
+ * [[com.twitter.finatra.http.modules.MessageBodyModule]]) the framework default implementations for
  * the reader and writer will be provided accordingly (along with the configured server injector).
  *
  * @param injector the configured [[com.twitter.inject.Injector]] for the server.

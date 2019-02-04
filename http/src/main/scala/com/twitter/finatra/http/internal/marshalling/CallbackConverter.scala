@@ -6,23 +6,22 @@ import com.twitter.finatra.http.internal.marshalling.CallbackConverter.url
 import com.twitter.finatra.http.response.{ResponseBuilder, StreamingResponse}
 import com.twitter.finatra.json.FinatraObjectMapper
 import com.twitter.finatra.json.internal.streaming.JsonStreamParser
-import com.twitter.io.Buf
+import com.twitter.io.{Buf, Reader}
 import com.twitter.util.{Future, FuturePool, Promise}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext => ScalaExecutionContext, Future => ScalaFuture}
 import scala.util.{Failure, Success}
 
 private object CallbackConverter {
-  val url = "https://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing"
+  val url =
+    "https://twitter.github.io/finatra/user-guide/http/controllers.html#controllers-and-routing"
 }
-
 
 private[http] class CallbackConverter @Inject()(
   messageBodyManager: MessageBodyManager,
   responseBuilder: ResponseBuilder,
   mapper: FinatraObjectMapper,
-  jsonStreamParser: JsonStreamParser
-) {
+  jsonStreamParser: JsonStreamParser) {
 
   /* Public */
 
@@ -75,6 +74,12 @@ private[http] class CallbackConverter @Inject()(
       val streamingResponse =
         StreamingResponse.jsonArray(toBuf = mapper.writeValueAsBuf, asyncStream = asyncStream)
 
+      streamingResponse.toFutureFinagleResponse
+    } else if (runtimeClassEq[ResponseType, Reader[_]]) { request: Request =>
+      val reader = requestCallback(request).asInstanceOf[Reader[_]]
+      val streamingResponse = StreamingResponse.jsonArray(
+        toBuf = mapper.writeValueAsBuf,
+        asyncStream = Reader.toAsyncStream(reader))
       streamingResponse.toFutureFinagleResponse
     } else if (runtimeClassEq[ResponseType, Future[_]]) { request: Request =>
       requestCallback(request).asInstanceOf[Future[_]].map(createHttpResponse(request))
@@ -141,8 +146,8 @@ private[http] class CallbackConverter @Inject()(
     contentType: String
   ): Response = {
     assert(
-      contentType == responseBuilder.jsonContentType || 
-      contentType == responseBuilder.plainTextContentType
+      contentType == responseBuilder.jsonContentType ||
+        contentType == responseBuilder.plainTextContentType
     )
 
     val orig = Response(status)
@@ -190,8 +195,11 @@ private[http] class CallbackConverter @Inject()(
     typeArgs.head.runtimeClass == classOf[Option[_]]
   }
 
-  private def toTwitterFuture[A](scalaFuture: ScalaFuture[A])
-    (implicit executor: ScalaExecutionContext): Future[A] = {
+  private def toTwitterFuture[A](
+    scalaFuture: ScalaFuture[A]
+  )(
+    implicit executor: ScalaExecutionContext
+  ): Future[A] = {
     val p = new Promise[A]()
     scalaFuture.onComplete {
       case Success(value) => p.setValue(value)
@@ -209,10 +217,8 @@ private[http] class CallbackConverter @Inject()(
   private[this] val immediatePoolExcCtx = new ExecutionContext(FuturePool.immediatePool)
 
   /** ExecutionContext adapter using a FuturePool; see bijection/TwitterExecutionContext */
-  private[this] class ExecutionContext(
-   pool: FuturePool,
-   report: Throwable => Unit
-  ) extends ScalaExecutionContext {
+  private[this] class ExecutionContext(pool: FuturePool, report: Throwable => Unit)
+      extends ScalaExecutionContext {
     def this(pool: FuturePool) = this(pool, ExecutionContext.ignore)
     override def execute(runnable: Runnable): Unit = {
       pool(runnable.run())

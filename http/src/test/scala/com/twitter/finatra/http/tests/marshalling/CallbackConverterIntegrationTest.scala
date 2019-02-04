@@ -206,16 +206,16 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val converted = callbackConverter.convertToFutureResponse(asyncStreamRequest)
 
-    val response = Await.result(converted(request))
+    val response = await(converted(request))
     assertOk(response, "List(1, 2)")
   }
 
   test("AsyncStream response") {
     val converted = callbackConverter.convertToFutureResponse(asyncStreamResponse)
 
-    val response = Await.result(converted(Request()))
+    val response = await(converted(Request()))
     response.status should equal(Status.Ok)
-    Await.result(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
+    await(Reader.readAll(response.reader)).utf8str should equal("[1,2,3]")
   }
 
   test("AsyncStream request and response") {
@@ -228,9 +228,17 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
 
     val converted = callbackConverter.convertToFutureResponse(asyncStreamRequestAndResponse)
 
-    val response = Await.result(converted(request))
+    val response = await(converted(request))
     response.status should equal(Status.Ok)
-    Await.result(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+    await(Reader.readAll(response.reader)).utf8str should equal("""["1","2"]""")
+  }
+
+  test("Reader response") {
+    val converted = callbackConverter.convertToFutureResponse(readerResponse)
+
+    val response = await(converted(Request()))
+    response.status should equal(Status.Ok)
+    await(Reader.readAll(response.reader)).utf8str should equal("[1.1,2.2,3.3]")
   }
 
   test("Null") {
@@ -369,18 +377,22 @@ class CallbackConverterIntegrationTest extends IntegrationTest with Mockito {
     AsyncStream(1, 2, 3)
   }
 
+  def readerResponse(request: Request): Reader[Double] = {
+    Reader.fromSeq(Seq(1.1, 2.2, 3.3))
+  }
+
   private def assertOk(response: Response, expectedBody: String): Unit = {
     response.status should equal(Status.Ok)
     response.contentString should equal(expectedBody)
   }
 
   private def assertOk(convertedFunc: (Request) => Future[Response], withBody: String): Unit = {
-    val response = Await.result(convertedFunc(Request()))
+    val response = await(convertedFunc(Request()))
     assertOk(response, withBody)
   }
 
   private def assertStatus(convertedFunc: (Request) => Future[Response], expectedStatus: Status): Unit = {
-    val response = Await.result(convertedFunc(Request()))
+    val response = await(convertedFunc(Request()))
     response.status should equal(expectedStatus)
   }
 }

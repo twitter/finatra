@@ -10,6 +10,9 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-http: Added support to serve `c.t.io.Reader` as a streaming response in
+  `c.t.finatra.http.internal.marshalling.CallbackConverter`. ``PHAB_ID=D266863``
+
 * finatra-kafka: Expose endOffsets() in FinagleKafkaConsumer. ``PHAB_ID=D263573``
 
 * finatra-kafka-streams: Adding missing ScalaDocs. Adding metric for elapsed state
