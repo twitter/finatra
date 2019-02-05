@@ -14,6 +14,7 @@ scala_library(
         "3rdparty/jvm/com/twitter/bijection:core",
         "finagle/finagle-serversets",
         "finatra/inject/inject-thrift-client",
+        "finatra/kafka-streams/kafka-streams-queryable-thrift-client/src/main/java:pants-workaround",
     ],
     exports = [
         "3rdparty/jvm/com/twitter/bijection:core",

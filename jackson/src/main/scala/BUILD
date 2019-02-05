@@ -33,6 +33,7 @@ scala_library(
         "finatra/inject/inject-core/src/main/scala",
         "finatra/inject/inject-slf4j/src/main/scala",
         "finatra/inject/inject-utils/src/main/scala",
+        "finatra/jackson/src/main/java:pants-workaround",
         "finatra/jackson/src/main/resources",
         "util/util-app/src/main/scala",
         "util/util-core/src/main/scala",
