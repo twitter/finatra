@@ -10,35 +10,35 @@ import org.apache.kafka.streams.processor.{Cancellable, ProcessorContext, Punctu
 class HeartBeatServer extends KafkaStreamsTwitterServer {
   override val name = "heartbeat"
 
+  private val transformerSupplier: () => Transformer[Long, Long, (Long, Long)] = () =>
+    new Transformer[Long, Long, (Long, Long)] {
+      private val transformCounter = streamsStatsReceiver.counter("transform")
+
+      private var heartBeatPunctuatorCancellable: Cancellable = _
+
+      override def close(): Unit = {
+        if (heartBeatPunctuatorCancellable != null) {
+          heartBeatPunctuatorCancellable.cancel()
+        }
+      }
+
+      override def init(processorContext: ProcessorContext): Unit = {
+        heartBeatPunctuatorCancellable = processorContext.schedule(
+          1.second.inMillis,
+          PunctuationType.WALL_CLOCK_TIME,
+          new HeartBeatPunctuator(processorContext, streamsStatsReceiver))
+      }
+
+      override def transform(k: Long, v: Long): (Long, Long) = {
+        transformCounter.incr()
+        (k, v)
+      }
+  }
+
   override protected def configureKafkaStreams(builder: StreamsBuilder): Unit = {
     builder.asScala
       .stream[Long, Long]("input-topic")(Consumed.`with`(ScalaSerdes.Long, ScalaSerdes.Long))
-      .transform(
-        () =>
-          new Transformer[Long, Long, (Long, Long)] {
-            private val transformCounter = streamsStatsReceiver.counter("transform")
-
-            private var heartBeatPunctuatorCancellable: Cancellable = _
-
-            override def close(): Unit = {
-              if (heartBeatPunctuatorCancellable != null) {
-                heartBeatPunctuatorCancellable.cancel()
-              }
-            }
-
-            override def init(processorContext: ProcessorContext): Unit = {
-              heartBeatPunctuatorCancellable = processorContext.schedule(
-                1.second.inMillis,
-                PunctuationType.WALL_CLOCK_TIME,
-                new HeartBeatPunctuator(processorContext, streamsStatsReceiver))
-            }
-
-            override def transform(k: Long, v: Long): (Long, Long) = {
-              transformCounter.incr()
-              (k, v)
-            }
-          }
-      )
+      .transform[Long, Long](transformerSupplier)
       .to("output-topic")(Produced.`with`(ScalaSerdes.Long, ScalaSerdes.Long))
   }
 }
