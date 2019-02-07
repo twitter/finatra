@@ -7,7 +7,6 @@ import com.twitter.finatra.http.internal.request.RequestWithRouteParams
 import com.twitter.finatra.http.internal.routing.Route._
 import com.twitter.util.Future
 import java.lang.annotation.Annotation
-import scala.language.existentials
 import scala.reflect.ClassTag
 
 private[http] object Route {

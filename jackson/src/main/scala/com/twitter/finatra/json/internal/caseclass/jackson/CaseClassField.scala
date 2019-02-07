@@ -25,7 +25,6 @@ import com.twitter.inject.Logging
 import com.twitter.inject.conversions.string._
 import java.lang.annotation.Annotation
 import scala.annotation.tailrec
-import scala.language.existentials
 import scala.reflect.NameTransformer
 
 private[finatra] object CaseClassField {
