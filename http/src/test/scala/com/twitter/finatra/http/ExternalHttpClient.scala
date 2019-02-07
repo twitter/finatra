@@ -111,14 +111,7 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
       mapper,
       disableLogging = self.disableLogging
     )
-    closeOnExit {
-      if (isStarted) {
-        Closable.make { deadline =>
-          info(s"Closing embedded http client: ${client.label}", disableLogging)
-          client.close(deadline)
-        }
-      } else Closable.nop
-    }
+    closeOnExit(client)
     client
   }
 
@@ -133,14 +126,16 @@ private[twitter] trait ExternalHttpClient { self: EmbeddedTwitterServer =>
       mapper,
       disableLogging = self.disableLogging
     )
-    closeOnExit {
-      if (isStarted) {
-        Closable.make { deadline =>
-          info(s"Closing embedded http client: ${client.label}", disableLogging)
-          client.close(deadline)
-        }
-      } else Closable.nop
-    }
+    closeOnExit(client)
     client
+  }
+
+  final def closeOnExit(client: JsonAwareEmbeddedHttpClient): Unit = closeOnExit {
+    if (isStarted) {
+      Closable.make { deadline =>
+        info(s"Closing embedded http client: ${client.label}", disableLogging)
+        client.close(deadline)
+      }
+    } else Closable.nop
   }
 }

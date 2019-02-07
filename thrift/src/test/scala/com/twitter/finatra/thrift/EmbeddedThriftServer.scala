@@ -18,7 +18,7 @@ import scala.collection.JavaConverters._
  *              we default to Stage.DEVELOPMENT. This makes it possible to only mock objects that are used in a given test,
  *              at the expense of not checking that the entire object graph is valid. As such, you should always have at
  *              least one Stage.PRODUCTION test for your service (which eagerly creates all classes at startup).
- * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually run external
+ * @param useSocksProxy Use a tunneled socks proxy for external service discovery/calls (useful for manually running external
  *                      integration tests that connect to external services).
  * @param thriftPortFlag Name of the flag that defines the external thrift port for the server.
  * @param verbose Enable verbose logging during test runs.
