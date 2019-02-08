@@ -14,11 +14,15 @@ private[finatra] class JsonStreamParser @Inject()(mapper: FinatraObjectMapper) {
   }
 
   def parseArray[T: Manifest](bufs: AsyncStream[Buf]): AsyncStream[T] = {
-    val jsonDecoder = new JsonArrayChunker()
-    for {
-      buf <- bufs
-      jsonArrayDelimitedBuf <- AsyncStream.fromSeq(jsonDecoder.decode(buf))
-      parsedElem = mapper.parse[T](jsonArrayDelimitedBuf)
-    } yield parsedElem
+    Reader.toAsyncStream(parseJson(Reader.fromAsyncStream(bufs)))
+  }
+
+  def parseJson[T: Manifest](reader: Reader[Buf]): Reader[T] = {
+    val asyncJsonParser = new AsyncJsonParser
+    reader.flatMap { buf =>
+      val bufs: Seq[Buf] = asyncJsonParser.feedAndParse(buf)
+      val values: Seq[T] = bufs.map(mapper.parse[T])
+      Reader.fromSeq(values)
+    }
   }
 }
