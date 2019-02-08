@@ -10,6 +10,11 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka: Adding an implicit implementation of
+  `c.t.app.Flaggable[c.t.finatra.kafka.domain.SeekStrategy]`
+  and `c.t.app.Flaggable[org.apache.kafka.clients.consumer.OffsetResetStrategy]`.
+  ``PHAB_ID=D271098``
+
 * finatra-http: Added support to serve `c.t.io.Reader` as a streaming response in
   `c.t.finatra.http.internal.marshalling.CallbackConverter`. ``PHAB_ID=D266863``
 
