@@ -32,6 +32,8 @@ object FinatraRocksDBConfig {
   val RocksDbInfoLogLevel = "rocksdb.log.info.level"
   val RocksDbMaxLogFileSize = "rocksdb.log.max.file.size"
   val RocksDbKeepLogFileNum = "rocksdb.log.keep.file.num"
+  val RocksDbCacheIndexAndFilterBlocks = "rocksdb.cache.index.and.filter.blocks"
+  val RocksDbCachePinL0IndexAndFilterBlocks = "rocksdb.cache.pin.l0.index.and.filter.blocks"
 
   // BlockCache to be shared by all RocksDB instances created on this instance. Note: That a single Kafka Streams instance may get multiple tasks assigned to it
   // and each stateful task will have a separate RocksDB instance created. This cache will be shared across all the tasks.
@@ -67,6 +69,12 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
     tableConfig.setBlockSize(16 * 1024)
     tableConfig.setBlockCache(FinatraRocksDBConfig.SharedBlockCache)
     tableConfig.setFilter(new BloomFilter(10))
+    tableConfig.setCacheIndexAndFilterBlocks(
+      getBooleanOrDefault(configs, FinatraRocksDBConfig.RocksDbCacheIndexAndFilterBlocks, true))
+
+    tableConfig.setPinL0FilterAndIndexBlocksInCache(
+      getBooleanOrDefault(configs, FinatraRocksDBConfig.RocksDbCachePinL0IndexAndFilterBlocks, true))
+
     options
       .setTableFormatConfig(tableConfig)
 
@@ -158,6 +166,19 @@ class FinatraRocksDBConfig extends RocksDBConfigSetter with Logging {
     val valueString = configs.get(key)
     if (valueString != null) {
       valueString.toString
+    } else {
+      default
+    }
+  }
+
+  private def getBooleanOrDefault(
+    configs: util.Map[String, AnyRef],
+    key: String,
+    default: Boolean
+  ): Boolean = {
+    val valueString = configs.get(key)
+    if (valueString != null) {
+      valueString.toString.toBoolean
     } else {
       default
     }

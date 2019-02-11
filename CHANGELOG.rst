@@ -10,6 +10,10 @@ Unreleased
 Added
 ~~~~~
 
+* finatra-kafka-streams: Added two RocksDB flags related to block cache tuning,
+  `cache_index_and_filter_blocks` and `pin_l0_filter_and_index_blocks_in_cache`.
+  ``PHAB_ID=D269516``
+
 * finatra-kafka: Adding an implicit implementation of
   `c.t.app.Flaggable[c.t.finatra.kafka.domain.SeekStrategy]`
   and `c.t.app.Flaggable[org.apache.kafka.clients.consumer.OffsetResetStrategy]`.
