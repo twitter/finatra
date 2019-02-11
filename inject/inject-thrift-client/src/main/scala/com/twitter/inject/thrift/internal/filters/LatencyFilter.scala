@@ -1,6 +1,6 @@
 package com.twitter.inject.thrift.internal.filters
 
-import com.twitter.finagle.{WriteException, BackupRequestLost, Service, SimpleFilter}
+import com.twitter.finagle.{FailureFlags, Service, SimpleFilter}
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.util.{Throw, Try, Stopwatch, Future}
 import java.util.concurrent.TimeUnit
@@ -27,14 +27,8 @@ private[thrift] class LatencyFilter[Req, Rep](
 
   // Based on `c.t.finagle.service.StatsFilter#isBlackholeResponse`
   private def isBlackHoleResponse(rep: Try[Rep]): Boolean = rep match {
-    case Throw(BackupRequestLost) | Throw(WriteException(BackupRequestLost)) =>
+    case Throw(f: FailureFlags[_]) if f.isFlagged(FailureFlags.Ignorable) =>
       // We blackhole this request. It doesn't count for anything.
-      // After the Failure() patch, this should no longer need to
-      // be a special case.
-      //
-      // In theory, we should probably unwind the whole cause
-      // chain to look for a BackupRequestLost, but in practice it
-      // is wrapped only once.
       true
     case _ =>
       false

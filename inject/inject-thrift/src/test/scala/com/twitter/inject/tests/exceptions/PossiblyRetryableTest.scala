@@ -2,7 +2,6 @@ package com.twitter.inject.tests.exceptions
 
 import com.twitter.finagle.mux.ClientDiscardedRequestException
 import com.twitter.finagle.{
-  BackupRequestLost,
   CancelledConnectionException,
   CancelledRequestException,
   Failure,
@@ -21,7 +20,6 @@ class PossiblyRetryableTest extends Test {
       with com.twitter.inject.exceptions.NonRetryableException
 
   test("test isCancellation") {
-    assertIsCancellation(BackupRequestLost)
     assertIsCancellation(new CancelledRequestException)
     assertIsCancellation(new CancelledConnectionException(new Exception("cause")))
     assertIsCancellation(new ClientDiscardedRequestException("cause"))
@@ -30,7 +28,6 @@ class PossiblyRetryableTest extends Test {
   }
 
   test("test isNonRetryable") {
-    assertIsNonRetryable(BackupRequestLost)
     assertIsNonRetryable(Failure("int", FailureFlags.Ignorable))
   }
 
