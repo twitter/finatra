@@ -142,7 +142,7 @@ E.g., for the `UserFilter` defined above (shown with common filters in a recomme
           .filter[AccessLoggingFilter]
           .filter[StatsFilter]
           .filter[ExceptionMappingFilter]
-          .filter[ClientIdWhitelistFilter]
+          .filter[ClientIdAcceptlistFilter]
           .filter[FinagleRequestScopeFilter]
           .filter[UserFilter]
           .exceptionMapper[FinatraThriftExceptionMapper]

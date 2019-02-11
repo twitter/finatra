@@ -133,10 +133,10 @@ class EmbeddedThriftServerControllerFeatureTest extends FeatureTest {
     e.getMessage should include("oops")
   }
 
-  test("blacklist") {
-    val notWhitelistClient = server.thriftClient[Converter[Future]](clientId = "not_on_whitelist")
+  test("denylist") {
+    val notAcceptlistClient = server.thriftClient[Converter[Future]](clientId = "not_on_acceptlist")
     assertFailedFuture[UnknownClientIdError] {
-      notWhitelistClient.uppercase("Hi")
+      notAcceptlistClient.uppercase("Hi")
     }
   }
 

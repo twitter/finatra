@@ -12,13 +12,13 @@ class CalculatorServerFeatureTest extends FeatureTest {
 
   val client = server.thriftClient[Calculator[Future]](clientId = "client123")
 
-  test("whitelist#clients allowed") {
+  test("acceptlist#clients allowed") {
     await(client.increment(1)) should equal(2)
     await(client.addNumbers(1, 2)) should equal(3)
     await(client.addStrings("1", "2")) should equal("3")
   }
 
-  test("blacklist#clients blocked with UnknownClientIdException") {
+  test("denylist#clients blocked with UnknownClientIdException") {
     val clientWithUnknownId = server.thriftClient[Calculator[Future]](clientId = "unlisted-client")
     intercept[UnknownClientIdError] { 
       await(clientWithUnknownId.increment(2)) 
