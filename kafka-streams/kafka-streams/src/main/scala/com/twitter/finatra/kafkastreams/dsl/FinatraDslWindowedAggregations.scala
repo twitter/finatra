@@ -1,8 +1,8 @@
 package com.twitter.finatra.kafkastreams.dsl
 
 import com.twitter.app.Flag
-import com.twitter.conversions.storage._
-import com.twitter.conversions.time._
+import com.twitter.conversions.StorageUnitOps._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.stats.StatsReceiver
 import com.twitter.finatra.kafka.serde.ScalaSerdes
 import com.twitter.finatra.kafkastreams.config.FinatraTransformerFlags

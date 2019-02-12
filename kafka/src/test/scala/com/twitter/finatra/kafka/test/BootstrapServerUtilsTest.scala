@@ -1,6 +1,6 @@
 package com.twitter.finatra.kafka.test
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.finagle.{Addr, Dtab, Name, NameTree, Path}
 import com.twitter.finatra.kafka.{utils => KafkaUtils}
 import com.twitter.inject.Test

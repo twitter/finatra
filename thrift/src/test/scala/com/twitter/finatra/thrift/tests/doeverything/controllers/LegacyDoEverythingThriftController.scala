@@ -1,6 +1,6 @@
 package com.twitter.finatra.thrift.tests.doeverything.controllers
 
-import com.twitter.conversions.time._
+import com.twitter.conversions.DurationOps._
 import com.twitter.doeverything.thriftscala.{Answer, DoEverything, DoEverythingException}
 import com.twitter.doeverything.thriftscala.DoEverything.{Ask, Echo, Echo2, MagicNum, MoreThanTwentyTwoArgs, Uppercase}
 import com.twitter.finagle.{ChannelException, RequestException, RequestTimeoutException}
