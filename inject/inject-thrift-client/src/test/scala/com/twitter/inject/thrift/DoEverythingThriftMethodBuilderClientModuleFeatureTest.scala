@@ -82,7 +82,7 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     server.assertStat("route/hi/GET/response_size", Seq(5))
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/requests", 3)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/success", 1)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hi/failures", 2)
@@ -100,7 +100,7 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     server.assertStat("route/hello/GET/response_size", Seq(9))
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/requests", 3)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/success", 1)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/hello/failures", 2)
@@ -122,7 +122,7 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     server.assertStat("route/bye/GET/response_size", Seq(20))
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/requests", 3)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/success", 1)
     server.assertCounter("clnt/greeter-thrift-client/Greeter/bye/failures", 2)
@@ -155,7 +155,7 @@ class DoEverythingThriftMethodBuilderClientModuleFeatureTest extends FeatureTest
     server.assertStat("route/echo/GET/response_size", Seq(9))
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/echo-thrift-client/EchoService/echo/requests", 1)
     server.assertCounter("clnt/echo-thrift-client/EchoService/echo/success", 1)
     server.assertCounter("clnt/echo-thrift-client/EchoService/echo/failures", 0)

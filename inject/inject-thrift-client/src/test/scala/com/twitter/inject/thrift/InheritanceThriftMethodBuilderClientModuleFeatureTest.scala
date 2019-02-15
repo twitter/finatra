@@ -47,7 +47,7 @@ class InheritanceThriftMethodBuilderClientModuleFeatureTest
     server.httpGet(path = "/echo?msg=Hello!", andExpect = Ok, withBody = "Hello!")
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/serviceB-thrift-client/ServiceA/echo/requests", 1)
     server.assertCounter("clnt/serviceB-thrift-client/ServiceA/echo/success", 1)
     server.assertCounter("clnt/serviceB-thrift-client/ServiceA/echo/failures", 0)
@@ -63,7 +63,7 @@ class InheritanceThriftMethodBuilderClientModuleFeatureTest
     server.httpGet(path = "/ping", andExpect = Ok, withBody = "pong")
 
     // per-method -- all the requests in this test were to the same method
-    /* assert counters added by ThriftServiceIface#statsFilter */
+    /* assert counters added by ThriftServicePerEndpoint#statsFilter */
     server.assertCounter("clnt/serviceB-thrift-client/ServiceB/ping/requests", 1)
     server.assertCounter("clnt/serviceB-thrift-client/ServiceB/ping/success", 1)
     server.assertCounter("clnt/serviceB-thrift-client/ServiceB/ping/failures", 0)

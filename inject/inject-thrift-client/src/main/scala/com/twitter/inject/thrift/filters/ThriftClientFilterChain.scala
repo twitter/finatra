@@ -66,7 +66,7 @@ import org.joda.time.Duration
  * @tparam Req Request type for this filter chain
  * @tparam Rep Response type for this filter chain
  * @see [[com.twitter.inject.thrift.filters.ThriftClientFilterBuilder]]
- * @see [[com.twitter.finagle.thrift.ThriftServiceIface]]
+ * @see [[com.twitter.finagle.thrift.service.ThriftServicePerEndpoint]]
  */
 @deprecated("Use ThriftMethodBuilderClientModule and ThriftMethodBuilder", "2018-01-12")
 class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
@@ -90,7 +90,7 @@ class ThriftClientFilterChain[Req <: ThriftStruct, Rep](
 
   private val scopedStatsReceiver = scopeStatsReceiver()
 
-  /** @see [[com.twitter.finagle.thrift.ThriftServiceIface#statsFilter]] */
+  /** @see [[com.twitter.finagle.thrift.service.ThriftServicePerEndpoint#statsFilter]] */
   // method invocations - incremented every time we call/invoke the method.
   /** Example scope: clnt/thrift/Adder/add1String/method/invocations */
   private val invocationsCounter = scopedStatsReceiver.counter("invocations")
