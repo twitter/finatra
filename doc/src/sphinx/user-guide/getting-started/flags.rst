@@ -17,11 +17,22 @@ of "*environment*\ " string within code, e.g.
 
 .. code:: bash
 
-	if (env == "production") { ... }
+  if (env == "production") { ... }
 
 It is generally good practice to make Flags *granular* controls that are  fully orthogonal to one
 another. They can then be independently managed for each deploy and this scales consistently as the
 number of supported  "environments" scales.
+
+Global Flags
+------------
+
+`TwitterUtil <https://github.com/twitter/util>`__ `Flags <https://github.com/twitter/util/blob/1dd3e6228162c78498338b1c3aa11afe2f8cee22/util-app/src/main/scala/com/twitter/app/Flag.scala>`__
+also has the concept of a "global" flag. That is, a flag that is "global" to the JVM process (as it is
+generally defined as a Scala object). In the discussion of Flags with Finatra we **do not** mean
+"global" flags unless it is explicitly stated.
+
+See the `scaladoc <http://twitter.github.io/util/docs/com/twitter/app/GlobalFlag.html>`__ for
+`c.t.app.GlobalFlag` for more information.
 
 But I have a lot of Flags
 -------------------------
