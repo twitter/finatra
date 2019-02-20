@@ -11,6 +11,10 @@ Added
 ~~~~~
 * finatra-kafka: Expose timeout duration in FinagleKafkaConsumerBuilder dest(). ``PHAB_ID=D269701``
 
+* finatra-kafka-streams: Expose all existing RocksDb configurations. See
+  `c.t.f.k.config.FinatraRocksDBConfig` for details on flag names,
+  descriptions and default values. ``PHAB_ID=D272068``
+
 * finatra-kafka-streams: Added two RocksDB flags related to block cache tuning,
   `cache_index_and_filter_blocks` and `pin_l0_filter_and_index_blocks_in_cache`.
   ``PHAB_ID=D269516``

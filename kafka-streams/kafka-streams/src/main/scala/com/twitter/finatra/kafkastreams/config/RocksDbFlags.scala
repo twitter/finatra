@@ -1,86 +1,211 @@
 package com.twitter.finatra.kafkastreams.config
 
-import com.twitter.conversions.StorageUnitOps._
+import com.twitter.app.Flag
 import com.twitter.inject.server.TwitterServer
+import com.twitter.util.StorageUnit
 
 trait RocksDbFlags extends TwitterServer {
 
-  protected val rocksDbCountsStoreBlockCacheSize =
+  protected val rocksDbCountsStoreBlockCacheSize: Flag[StorageUnit] =
     flag(
       name = FinatraRocksDBConfig.RocksDbBlockCacheSizeConfig,
-      default = 200.megabytes,
-      help =
-        """Size of the rocksdb block cache per task. We recommend that this should be about 1/3 of
-          |your total memory budget. The remaining free memory can be left for the OS page cache""".stripMargin
+      default = FinatraRocksDBConfig.RocksDbBlockCacheSizeConfigDefault,
+      help = FinatraRocksDBConfig.RocksDbBlockCacheSizeConfigDoc
     )
 
-  protected val rocksDbEnableStatistics =
+  protected val rocksDbBlockCacheShardBitsConfig: Flag[Int] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbBlockCacheShardBitsConfig,
+      default = FinatraRocksDBConfig.RocksDbBlockCacheShardBitsConfigDefault,
+      help = FinatraRocksDBConfig.RocksDbBlockCacheShardBitsConfigDoc
+    )
+
+  protected val rocksDbEnableStatistics: Flag[Boolean] =
     flag(
       name = FinatraRocksDBConfig.RocksDbEnableStatistics,
-      default = false,
-      help =
-        """Enable RocksDB statistics. Note: RocksDB Statistics could add 5-10% degradation in performance
-          |(See https://github.com/facebook/rocksdb/wiki/Statistics)""".stripMargin
+      default = FinatraRocksDBConfig.RocksDbEnableStatisticsDefault,
+      help = FinatraRocksDBConfig.RocksDbEnableStatisticsDoc
     )
 
-  protected val rocksDbStatCollectionPeriodMs =
+  protected val rocksDbStatCollectionPeriodMs: Flag[Int] =
     flag(
       name = FinatraRocksDBConfig.RocksDbStatCollectionPeriodMs,
-      default = 60000,
-      help = "Set the period in milliseconds for stats collection."
+      default = FinatraRocksDBConfig.RocksDbStatCollectionPeriodMsDefault,
+      help = FinatraRocksDBConfig.RocksDbStatCollectionPeriodMsDoc
     )
 
-  protected val rocksDbEnableLZ4 =
+  protected val rocksDbEnableLZ4: Flag[Boolean] =
     flag(
       name = FinatraRocksDBConfig.RocksDbLZ4Config,
-      default = false,
-      help =
-        "Enable RocksDB LZ4 compression. (See https://github.com/facebook/rocksdb/wiki/Compression)"
+      default = FinatraRocksDBConfig.RocksDbLZ4ConfigDefault,
+      help = FinatraRocksDBConfig.RocksDbLZ4ConfigDoc
     )
 
-  protected val rocksDbInfoLogLevel =
+  protected val rocksDbInfoLogLevel: Flag[String] =
     flag(
       name = FinatraRocksDBConfig.RocksDbInfoLogLevel,
-      default = "INFO_LEVEL",
-      help =
-        """Level of logging for rocksdb LOG file.
-          |DEBUG_LEVEL, INFO_LEVEL, WARN_LEVEL, ERROR_LEVEL, FATAL_LEVEL, HEADER_LEVEL""".stripMargin
+      default = FinatraRocksDBConfig.RocksDbInfoLogLevelDefault,
+      help = FinatraRocksDBConfig.RocksDbInfoLogLevelDoc
     )
 
-  protected val rocksDbMaxLogFileSize =
+  protected val rocksDbMaxLogFileSize: Flag[StorageUnit] =
     flag(
       name = FinatraRocksDBConfig.RocksDbMaxLogFileSize,
-      default = 50.megabytes,
-      help =
-        s"""Specify the maximal size of the info log file. If the log file is larger then
-           |${FinatraRocksDBConfig.RocksDbKeepLogFileNum} a new log file will be created.""".stripMargin
+      default = FinatraRocksDBConfig.RocksDbMaxLogFileSizeDefault,
+      help = FinatraRocksDBConfig.RocksDbMaxLogFileSizeDoc
     )
 
-  protected val rocksDbKeepLogFileNum =
+  protected val rocksDbKeepLogFileNum: Flag[Int] =
     flag(
       name = FinatraRocksDBConfig.RocksDbKeepLogFileNum,
-      default = 10,
-      help = "Maximal info log files to be kept."
+      default = FinatraRocksDBConfig.RocksDbKeepLogFileNumDefault,
+      help = FinatraRocksDBConfig.RocksDbKeepLogFileNumDoc
     )
 
-  protected val rocksDbCacheIndexAndFilterBlocks =
+  protected val rocksDbCacheIndexAndFilterBlocks: Flag[Boolean] =
     flag(
       name = FinatraRocksDBConfig.RocksDbCacheIndexAndFilterBlocks,
-      default = true,
-      help =
-        """Store index and filter blocks into the block cache. This bounds the memory usage,
-          | which is desirable when running in a container.
-          |(See https://github.com/facebook/rocksdb/wiki/Memory-usage-in-RocksDB#indexes-and-filter-blocks)""".stripMargin
+      default = FinatraRocksDBConfig.RocksDbCacheIndexAndFilterBlocksDefault,
+      help = FinatraRocksDBConfig.RocksDbCacheIndexAndFilterBlocksDoc
     )
 
-  protected val rocksDbCachePinL0IndexAndFilterBlocks =
+  protected val rocksDbCachePinL0IndexAndFilterBlocks: Flag[Boolean] =
     flag(
       name = FinatraRocksDBConfig.RocksDbCachePinL0IndexAndFilterBlocks,
-      default = true,
-      help =
-        """Pin level-0 file's index and filter blocks in block cache, to avoid them from being evicted.
-          | This setting is generally recommended to be turned on along to minimize the negative
-          | performance impact resulted by turning on RocksDbCacheIndexAndFilterBlocks.
-          |(See https://github.com/facebook/rocksdb/wiki/Block-Cache#caching-index-and-filter-blocks)""".stripMargin
+      default = FinatraRocksDBConfig.RocksDbCachePinL0IndexAndFilterBlocksDefault,
+      help = FinatraRocksDBConfig.RocksDbCachePinL0IndexAndFilterBlocksDoc
+    )
+
+  protected val rocksDbTableConfigBlockSize: Flag[StorageUnit] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbTableConfigBlockSize,
+      default = FinatraRocksDBConfig.RocksDbTableConfigBlockSizeDefault,
+      help = FinatraRocksDBConfig.RocksDbTableConfigBlockSizeDoc
+    )
+
+  protected val rocksDbTableConfigBoomFilterKeyBits: Flag[Int] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbTableConfigBoomFilterKeyBits,
+      default = FinatraRocksDBConfig.RocksDbTableConfigBoomFilterKeyBitsDefault,
+      help = FinatraRocksDBConfig.RocksDbTableConfigBoomFilterKeyBitsDoc
+    )
+
+  protected val rocksDbTableConfigBoomFilterMode: Flag[Boolean] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbTableConfigBoomFilterMode,
+      default = FinatraRocksDBConfig.RocksDbTableConfigBoomFilterModeDefault,
+      help = FinatraRocksDBConfig.RocksDbTableConfigBoomFilterModeDoc
+    )
+
+  protected val rocksDbDatabaseWriteBufferSize: Flag[StorageUnit] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbDatabaseWriteBufferSize,
+      default = FinatraRocksDBConfig.RocksDbDatabaseWriteBufferSizeDefault,
+      help = FinatraRocksDBConfig.RocksDbDatabaseWriteBufferSizeDoc
+    )
+
+  protected val rocksDbWriteBufferSize: Flag[StorageUnit] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbWriteBufferSize,
+      default = FinatraRocksDBConfig.RocksDbWriteBufferSizeDefault,
+      help = FinatraRocksDBConfig.RocksDbWriteBufferSizeDoc
+    )
+
+  protected val rocksDbMinWriteBufferNumberToMerge: Flag[Int] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbMinWriteBufferNumberToMerge,
+      default = FinatraRocksDBConfig.RocksDbMinWriteBufferNumberToMergeDefault,
+      help = FinatraRocksDBConfig.RocksDbMinWriteBufferNumberToMergeDoc
+    )
+
+  protected val rocksDbMaxWriteBufferNumber: Flag[Int] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbMaxWriteBufferNumber,
+      default = FinatraRocksDBConfig.RocksDbMaxWriteBufferNumberDefault,
+      help = FinatraRocksDBConfig.RocksDbMaxWriteBufferNumberDoc
+    )
+
+  protected val rocksDbBytesPerSync: Flag[StorageUnit] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbBytesPerSync,
+      default = FinatraRocksDBConfig.RocksDbBytesPerSyncDefault,
+      help = FinatraRocksDBConfig.RocksDbBytesPerSyncDoc
+    )
+
+  protected val rocksDbMaxBackgroundCompactions: Flag[Int] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbMaxBackgroundCompactions,
+      default = FinatraRocksDBConfig.RocksDbMaxBackgroundCompactionsDefault,
+      help = FinatraRocksDBConfig.RocksDbMaxBackgroundCompactionsDoc
+    )
+
+  protected val rocksDbMaxBackgroundFlushes: Flag[Int] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbMaxBackgroundFlushes,
+      default = FinatraRocksDBConfig.RocksDbMaxBackgroundFlushesDefault,
+      help = FinatraRocksDBConfig.RocksDbMaxBackgroundFlushesDoc
+    )
+
+  protected val rocksDbIncreaseParallelism: Flag[Int] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbIncreaseParallelism,
+      default = FinatraRocksDBConfig.RocksDbIncreaseParallelismDefault(),
+      help = FinatraRocksDBConfig.RocksDbIncreaseParallelismDoc
+    )
+
+  protected val rocksDbInplaceUpdateSupport: Flag[Boolean] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbInplaceUpdateSupport,
+      default = FinatraRocksDBConfig.RocksDbInplaceUpdateSupportDefault,
+      help = FinatraRocksDBConfig.RocksDbInplaceUpdateSupportDoc
+    )
+
+  protected val rocksDbAllowConcurrentMemtableWrite: Flag[Boolean] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbAllowConcurrentMemtableWrite,
+      default = FinatraRocksDBConfig.RocksDbAllowConcurrentMemtableWriteDefault,
+      help = FinatraRocksDBConfig.RocksDbAllowConcurrentMemtableWriteDoc
+    )
+
+  protected val rocksDbEnableWriteThreadAdaptiveYield: Flag[Boolean] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbEnableWriteThreadAdaptiveYield,
+      default = FinatraRocksDBConfig.RocksDbEnableWriteThreadAdaptiveYieldDefault,
+      help = FinatraRocksDBConfig.RocksDbEnableWriteThreadAdaptiveYieldDoc
+    )
+
+  protected val rocksDbCompactionStyle: Flag[String] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbCompactionStyle,
+      default = FinatraRocksDBConfig.RocksDbCompactionStyleDefault,
+      help = FinatraRocksDBConfig.RocksDbCompactionStyleDoc
+    )
+
+  protected val rocksDbCompactionStyleOptimize: Flag[Boolean] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbCompactionStyleOptimize,
+      default = FinatraRocksDBConfig.RocksDbCompactionStyleOptimizeDefault,
+      help = FinatraRocksDBConfig.RocksDbCompactionStyleOptimizeDoc
+    )
+
+  protected val rocksDbMaxBytesForLevelBase: Flag[StorageUnit] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbMaxBytesForLevelBase,
+      default = FinatraRocksDBConfig.RocksDbMaxBytesForLevelBaseDefault,
+      help = FinatraRocksDBConfig.RocksDbMaxBytesForLevelBaseDoc
+    )
+
+  protected val rocksDbLevelCompactionDynamicLevelBytes: Flag[Boolean] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbLevelCompactionDynamicLevelBytes,
+      default = FinatraRocksDBConfig.RocksDbLevelCompactionDynamicLevelBytesDefault,
+      help = FinatraRocksDBConfig.RocksDbLevelCompactionDynamicLevelBytesDoc
+    )
+
+  protected val rocksDbCompactionStyleMemtableBudget: Flag[StorageUnit] =
+    flag(
+      name = FinatraRocksDBConfig.RocksDbCompactionStyleMemtableBudget,
+      default = FinatraRocksDBConfig.RocksDbCompactionStyleMemtableBudgetDefault,
+      help = FinatraRocksDBConfig.RocksDbCompactionStyleMemtableBudgetDoc
     )
 }
