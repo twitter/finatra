@@ -7,6 +7,9 @@ Note that ``RB_ID=#`` and ``PHAB_ID=#`` correspond to associated message in comm
 Unreleased
 ----------
 
+19.2.0
+-------
+
 Added
 ~~~~~
 * finatra-kafka: Expose timeout duration in FinagleKafkaConsumerBuilder dest(). ``PHAB_ID=D269701``
